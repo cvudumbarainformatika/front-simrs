@@ -1,0 +1,71 @@
+// app global css in SCSS form
+@import './theme.scss';
+@import './customs.scss';
+@import './text-sizes.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&display=swap');
+
+// @font-face {
+//   font-family: customfont;
+//   src: url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&display=swap');
+// }
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+p, pre{
+  margin: 0 !important;
+}
+h1,h2,h3,h4,h5 {
+  line-height: 0 !important;
+  margin-block-start: .75em;
+  margin-block-end: .75em;
+}
+.page-light {
+  background-color: $grey-3;
+}
+
+.page-dark {
+  background-color: $dark-page;
+}
+
+.title-desc {
+  color: $grey;
+  font-size: 12px;
+}
+
+
+.my-card {
+  width: 700px;
+}
+
+.container-padding {
+  @media(max-width: $breakpoint-lg-max){
+    padding-left: 150px;
+    padding-right: 150px;
+  }
+  @media(max-width: $breakpoint-sm-min){
+      padding-left: 10px;
+      padding-right: 10px;
+  }
+}
+
+
+// =====================================================MOBILE
+@media(max-width:800px){
+  .my-card {
+    width: 100%;
+  }
+}
+
+// =====================================================DESKTOP ONLY
+.deskt-only {
+  // @media(max-width: $breakpoint-lg-max){
+  //   display: block;
+  // }
+  @media(max-width: $breakpoint-sm-min){
+    display: none;
+  }
+
+}

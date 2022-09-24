@@ -1,0 +1,9 @@
+<template>
+  <q-page>
+    <q-card>
+      <q-card-section>
+        sadfasda
+      </q-card-section>
+    </q-card>
+  </q-page>
+</template>
