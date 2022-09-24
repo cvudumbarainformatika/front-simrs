@@ -29,7 +29,7 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
 
-      'axios', 'global-components', 'router'
+      'axios', 'global-components', 'other-components', 'router'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
