@@ -1,5 +1,8 @@
 <template>
-  <q-page ref="printRef">
+  <q-page
+    id="printMe"
+    ref="printRef"
+  >
     <q-markup-table
       separator="cell"
       dense
@@ -43,9 +46,39 @@
         </tr>
       </tbody>
     </q-markup-table>
+    <button v-print="printObj">
+      Print the entire page
+    </button>
   </q-page>
 </template>
 <script setup>
+// import { ref } from 'vue'
+
+// let stylesHtml = ''
+// for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+//   stylesHtml += node.outerHTML
+// }
+
+// const printLoading = ref(true)
+// const printObj = ref(
+//   {
+//     id: 'printMe',
+//     popTitle: 'good print',
+//     // extraCss: stylesHtml,
+//     // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+//     beforeOpenCallback (vue) {
+//       vue.printLoading = true
+//       console.log('before callback', vue)
+//     },
+//     openCallback (vue) {
+//       vue.printLoading = false
+//       console.log('open callback', vue)
+//     },
+//     closeCallback (vue) {
+//       console.log('close cllback', vue)
+//     }
+//   }
+// )
 // import { useRoute } from 'vue-router'
 
 // const route = useRoute()
@@ -76,6 +109,6 @@
 // WinPrint.close()
 // window.document.close()
 // window.focus()
-window.print()
+// window.print()
 // window.close()
 </script>

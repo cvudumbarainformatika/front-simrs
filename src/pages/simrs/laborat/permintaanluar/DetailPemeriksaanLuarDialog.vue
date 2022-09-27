@@ -14,6 +14,7 @@
 
       <q-card-section
         v-if="items.length > 0"
+        id="printMe"
         style="max-height: 50vh"
         class="scroll"
       >
@@ -194,7 +195,7 @@
           flat
           label="Print"
           color="primary"
-          @click="printDialog"
+          :print="'#printMe'"
         />
       </q-card-actions>
     </q-card>
@@ -216,8 +217,8 @@ defineProps({
   }
 })
 
-function printDialog() {
-  console.log(printedRef.value)
-  window.print()
-}
+// function printDialog() {
+//   console.log(printedRef.value)
+//   window.print()
+// }
 </script>

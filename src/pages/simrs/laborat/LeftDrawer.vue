@@ -84,7 +84,7 @@ const miniState = ref(true)
 const menus = ref([
   { route: 'lab.dashboard', path: '/admin/laborat/dashboard', label: 'Dashboard', icon: 'icon-mat-dashboard' },
   { route: 'lab.laborat', path: '/admin/laborat/table', label: 'Laboratorium', icon: 'icon-mat-dvr' },
-  { route: 'lab.permintaan_luar', path: '/admin/laborat/permintaan-luar/table', label: 'Permintaan Luar', icon: 'icon-mat-transfer_within_a_station' }
+  { route: 'lab.permintaan-luar', path: '/admin/laborat/permintaan-luar', label: 'Permintaan Luar', icon: 'icon-mat-transfer_within_a_station' }
 ])
 const $q = useQuasar()
 // const mobile = $q.screen.lt.md

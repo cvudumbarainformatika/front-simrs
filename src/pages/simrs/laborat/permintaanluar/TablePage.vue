@@ -1,11 +1,5 @@
 <template>
-  <q-page padding>
-    <app-title-admin
-      title="Permintaan Laborat (Luar )"
-      subtitle="Manage Data Permintaan Laborat dari Luar "
-      tooltip-add="Form Penerimaan Luar"
-    />
-
+  <q-page>
     <q-card
       bordered
       flat
@@ -22,6 +16,7 @@
           :loading="store.loading"
           :to-search="store.params.q"
           :default-btn="false"
+          :add-data="false"
           row-image="image"
           @set-order="store.setOder"
           @set-row="store.setPerPage"
@@ -29,6 +24,7 @@
           @delete-ids="store.deletesData"
           @delete="store.deletesData"
           @find="store.setSearch"
+          @search="store.enterSearch"
           @refresh="store.refreshTable"
         >
           <template #col-akhirx>
@@ -124,6 +120,7 @@
     <!-- dialog -->
     <!-- dialog -->
     <DetailPemeriksaanLuarDialogVue
+      id="printMe"
       v-model="modalDetailOpen"
       :items="pemeriksaanLaborat"
       :total="totalPemeriksaanLaborat"
@@ -136,11 +133,12 @@ import { onMounted, ref } from 'vue'
 import { usePermintaanLuarLaboratTable } from 'src/stores/simrs/penunjang/laborat/permintaanluar/table'
 import DetailPemeriksaanLuarDialogVue from './DetailPemeriksaanLuarDialog.vue'
 import { humanDate } from 'src/modules/formatter'
-import { api } from 'src/boot/axios'
-import { useRouter } from 'vue-router'
+import { api, SERV } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
+// import { useRouter } from 'vue-router'
 
 const store = usePermintaanLuarLaboratTable()
-const router = useRouter()
+// const router = useRouter()
 
 onMounted(() => {
   store.getDataTable()
@@ -157,9 +155,42 @@ const modalDetailOpen = ref(false)
 const pemeriksaanLaborat = ref([])
 const totalPemeriksaanLaborat = ref(0)
 
-function printPengantar() {
-  const routeData = router.resolve({ name: 'print.page', params: { slug: 'permintaan-laborat-luar' } })
-  window.open(routeData.href, '_blank')
+// const printObj = ref(
+//   {
+//     url: 'http://localhost:9000/print/page/permintaan-laborat-luar',
+//     beforeOpenCallback (vue) {
+//       console.log('打开之前')
+//     },
+//     openCallback (vue) {
+//       console.log('执行了打印')
+//     },
+//     closeCallback (vue) {
+//       console.log('关闭了打印工具')
+//     }
+//   }
+// )
+
+// const printObj = ref(
+//   {
+//     url: 'http://localhost/api.laborat/public',
+//     beforeOpenCallback (vue) {
+//       console.log('打开之前')
+//     },
+//     openCallback (vue) {
+//       console.log('执行了打印')
+//     },
+//     closeCallback (vue) {
+//       console.log('关闭了打印工具')
+//     }
+//   }
+// )
+
+function printPengantar(row) {
+  console.log(SERV, row)
+  if (!row.pemeriksaan_laborat) {
+    return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+  }
+  window.open(SERV + `/print/page?data=permintaan-laborat-luar&q=${row.nota}`, '_blank', 'width=50%')
 }
 
 async function previewLaborat(x) {

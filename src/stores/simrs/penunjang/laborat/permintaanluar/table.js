@@ -36,6 +36,10 @@ export const usePermintaanLuarLaboratTable = defineStore('permintaan_luar_labora
     },
     setSearch (val) {
       this.params.q = val
+      // this.getDataTable()
+    },
+    enterSearch(val) {
+      // this.params.q = val
       this.getDataTable()
     },
     setOder (payload) {

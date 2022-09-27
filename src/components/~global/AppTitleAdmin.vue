@@ -3,7 +3,7 @@
     <div class="flex items-center">
       <div class="icon q-mr-md">
         <q-icon
-          name="icon-mat-dvr"
+          name="icon-mat-transfer_within_a_station"
           size="lg"
         />
       </div>
@@ -16,13 +16,13 @@
         </div>
       </div>
     </div>
-    <!-- <div>
+    <div>
       <q-btn
-        v-if="route.params.id"
+        v-if="route.params.page==='form'"
         round
         elevated
         color="primary"
-        icon="arrow_back"
+        icon="icon-mat-arrow_back"
         size="sm"
         @click="prev"
       >
@@ -37,21 +37,21 @@
         color="primary"
         icon="icon-mat-add"
         size="sm"
-        :to="router.replace({path:to})"
+        @click="goTo"
       >
         <q-tooltip>
           {{ tooltipAdd }}
         </q-tooltip>
       </q-btn>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup>
-// import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 // const emits = defineEmits('prev')
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Title'
@@ -71,13 +71,21 @@ defineProps({
   to: {
     type: String,
     default: ''
+  },
+  params: {
+    type: String,
+    default: 'form'
   }
 })
 
-// const router = useRouter()
-// const route = useRoute()
+const router = useRouter()
+const route = useRoute()
 
-// function prev() {
-//   router.go(-1)
-// }
+function prev() {
+  router.replace({ path: props.to })
+}
+
+function goTo() {
+  router.replace({ name: 'lab.permintaan-luar', params: { page: 'form' } })
+}
 </script>

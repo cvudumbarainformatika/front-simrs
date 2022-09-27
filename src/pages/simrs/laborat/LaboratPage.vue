@@ -58,6 +58,7 @@
           :to-search="store.params.q"
           :default-btn="false"
           :total="store.total"
+          :add-data="false"
           row-image="image"
           @set-order="store.setOder"
           @set-row="store.setPerPage"
@@ -65,6 +66,7 @@
           @delete-ids="store.deletesData"
           @delete="store.deletesData"
           @find="store.setSearch"
+          @search="store.enterSearch"
           @refresh="store.refreshTable"
         >
           <template #header-left-after-search>

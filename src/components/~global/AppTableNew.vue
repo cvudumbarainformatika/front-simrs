@@ -17,6 +17,7 @@
             clearable
             dense
             placeholder="Search..."
+            @keydown.enter.prevent="searchEnter"
           >
             <template #prepend>
               <q-icon
@@ -149,6 +150,7 @@
         </q-btn>
         <!-- data baru -->
         <q-btn
+          v-if="addData"
           class="q-ml-sm"
           unelevated
           round
@@ -385,6 +387,7 @@ import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 const props = defineProps({
+  addData: { type: Boolean, default: true },
   title: { type: String, default: 'Title' },
   loading: { type: Boolean, default: false },
   columns: { type: Array, default: () => [] },
@@ -400,7 +403,7 @@ const props = defineProps({
   isChecked: { type: Boolean, default: false },
   defaultBtn: { type: Boolean, default: true }
 })
-const emits = defineEmits(['newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'delete', 'refresh'])
+const emits = defineEmits(['newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 
 // const per_page = ref(5)
 const refCellTable = ref(null)
@@ -475,6 +478,11 @@ const setCheck = (x) => {
     selected.value = []
   }
 }
+
+function searchEnter(evt) {
+  emits('search', evt.target.value)
+}
+
 function deleteData () {
   $q.dialog({
     title: 'Peringatan',

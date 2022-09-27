@@ -62,7 +62,8 @@ const pathImg = SERV + '/storage/'
 
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios
-  app.config.globalProperties.$SERV = SERVER
+  app.config.globalProperties.$SERVER = SERVER
+  app.config.globalProperties.$SERV = SERV
   app.config.globalProperties.$api = api
   app.config.globalProperties.$pathImg = pathImg
   // getApp()
@@ -74,4 +75,4 @@ const setToken = (token) => {
 }
 const deleteToken = () => delete api.defaults.headers.common.Authorization
 
-export { axios, api, pathImg, setToken, deleteToken, SERVER }
+export { axios, api, pathImg, setToken, deleteToken, SERVER, SERV }

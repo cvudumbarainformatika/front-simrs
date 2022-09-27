@@ -37,6 +37,9 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
     },
     setSearch (val) {
       this.params.q = val
+    },
+    enterSearch(val) {
+      this.params.q = val
       this.getDataTable()
     },
     setOder (payload) {

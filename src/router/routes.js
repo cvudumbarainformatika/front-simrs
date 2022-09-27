@@ -19,18 +19,43 @@ const routes = [
           {
             path: '/admin/laborat/dashboard',
             name: 'lab.dashboard',
-            component: () => import(/* webpackChunkName: "lab.dashboard" */'pages/simrs/laborat/DashboardPage.vue')
+            component: () => import('pages/simrs/laborat/DashboardPage.vue')
           },
           {
             path: '/admin/laborat/table',
             name: 'lab.laborat',
-            component: () => import(/* webpackChunkName: "lab.laborat" */'pages/simrs/laborat/IndexPage.vue')
+            component: () => import('pages/simrs/laborat/IndexPage.vue')
           },
           {
-            path: '/admin/laborat/permintaan-luar/table',
-            name: 'lab.permintaan_luar',
-            component: () => import(/* webpackChunkName: "lab.permintaan-luar" */'pages/simrs/laborat/permintaanluar/IndexPage.vue')
+            path: '/admin/laborat/permintaan-luar',
+            component: () => import('pages/simrs/laborat/permintaanluar/LayoutKhusus.vue'),
+            children: [
+              {
+                path: '/admin/laborat/permintaan-luar/:page?',
+                name: 'lab.permintaan-luar',
+                component: () => import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
+              }
+              // {
+              //   path: '/admin/laborat/permintaan-luar/form',
+              //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
+              // }
+            ]
           }
+          // {
+          //   path: '/admin/laborat/permintaan-luar',
+          //   name: 'lab.permintaan-luar',
+          //   component: () => import('pages/simrs/laborat/permintaanluar/LayoutKhusus.vue'),
+          // }
+          // {
+          //   path: '/admin/laborat/permintaan-luar/table',
+          //   name: 'lab.permintaan_luar',
+          //   component: () => import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
+          // },
+          // {
+          //   path: '/admin/laborat/permintaan-luar/form',
+          //   name: 'lab.permintaan_luar.form',
+          //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
+          // }
         ]
       }
     ]
