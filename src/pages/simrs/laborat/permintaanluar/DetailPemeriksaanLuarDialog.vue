@@ -53,7 +53,6 @@
           <tbody>
             <template
               v-for="(item, i) in items"
-              :key="i"
             >
               <template v-if="item.name===''">
                 <tr
@@ -104,7 +103,10 @@
                 </tr>
               </template>
               <template v-else>
-                <tr class="bg-grey-3">
+                <tr
+                  :key="i"
+                  class="bg-grey-3"
+                >
                   <td
                     colspan="4"
                   >
