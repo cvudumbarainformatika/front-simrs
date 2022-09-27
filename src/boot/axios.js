@@ -4,8 +4,9 @@ import { getLocalToken } from 'src/modules/storage'
 import { notifErr } from 'src/modules/utils'
 // import { setCssVar } from 'quasar'
 
-const SERV = 'http://192.168.10.135/api.laborat/public'
+// const SERV = 'http://192.168.10.135/api.laborat/public'
 // const SERV = 'http://localhost/api.laborat/public'
+const SERV = 'http://localhost/api.simrs/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
 const SERVER = SERV + '/api'
 
@@ -75,4 +76,4 @@ const setToken = (token) => {
 }
 const deleteToken = () => delete api.defaults.headers.common.Authorization
 
-export { axios, api, pathImg, setToken, deleteToken, SERVER, SERV }
+export { axios, api, pathImg, setToken, deleteToken, SERV, SERVER }

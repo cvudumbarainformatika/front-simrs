@@ -138,7 +138,7 @@ import { notifErrVue } from 'src/modules/utils'
 // import { useRouter } from 'vue-router'
 
 const store = usePermintaanLuarLaboratTable()
-// const router = useRouter()
+// // const router = useRouter()
 
 onMounted(() => {
   store.getDataTable()
