@@ -42,6 +42,8 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
     agamas: [],
     pekerjaans: [],
     perusahaans: [],
+    pemeriksaans: [],
+    pemeriksaanPakets: [],
     loading: false,
     edited: false
   }),
@@ -146,6 +148,23 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
       await api.get('/v1/perusahaan').then((resp) => {
         console.log('perusahaan', resp)
         this.perusahaans = resp.data
+      })
+    },
+    async getMasterPemeriksaanGroup() {
+      await api.get('/v1/master_laborat_group').then((resp) => {
+        const obj = resp.data
+        // const c = Object.keys(obj).map((key) => [key, obj[key]])
+        const c = Object.keys(obj).map((key) => (
+          {
+            title: key,
+            children: obj[key]
+          }
+        ))
+        const nonPaket = c.filter(x => x.title === '').map(y => y.children)
+        const paket = c.filter(x => x.title !== '')
+        // const c = Object.entries(obj)
+        console.log('pemeriksaans', paket)
+        this.pemeriksaans = nonPaket[0]
       })
     }
 
