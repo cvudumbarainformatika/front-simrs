@@ -20,6 +20,7 @@
     :loading="loading"
     lazy-rules
     :rules="[anotherValid]"
+    behavior="menu"
     @filter="filterFn"
     @focus="getFocus"
     @input-value="setModel"
@@ -106,5 +107,7 @@ function createValue (val, done) {
 </script>
 
 <style lang="scss" scoped>
-
+.q-item--active{
+  background-color: $grey-3;
+}
 </style>

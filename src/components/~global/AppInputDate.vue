@@ -16,8 +16,6 @@
     :readonly="readonly"
     :model-value="modelProp"
     @click="showDate"
-    @focus="showDate"
-    @update:model-value="closeDate()"
   >
     <template
       v-if="icon!==null"
@@ -37,10 +35,11 @@
       >
         <!-- <q-menu v-model="showing"> -->
         <q-date
+          v-if="typeDate"
           v-model="modelProp"
           mask="YYYY-MM-DD"
           today-btn
-          @input="closeDate()"
+          @update:model-value="closeDate()"
         >
           <div class="row items-center justify-end">
             <q-btn
@@ -51,6 +50,19 @@
             />
           </div>
         </q-date>
+        <q-time
+          v-else
+          v-model="modelProp"
+        >
+          <div class="row items-center justify-end">
+            <q-btn
+              v-close-popup
+              label="Close"
+              color="primary"
+              flat
+            />
+          </div>
+        </q-time>
         <!-- </q-menu> -->
       </q-popup-proxy>
     </template>
@@ -84,6 +96,10 @@ const props = defineProps({
   validator: {
     type: String,
     default: null
+  },
+  typeDate: {
+    type: Boolean,
+    default: true
   },
   valid: { type: Boolean, default: false },
   autofocus: { type: Boolean, default: false },
@@ -123,9 +139,11 @@ function anotherValid (val) {
 }
 
 function closeDate () {
+  console.log('hide', refPopup.value)
   refPopup.value.hide()
 }
 function showDate () {
+  console.log('show', refPopup.value)
   refPopup.value.show()
 //   showing.value = true
 }

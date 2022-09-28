@@ -7,66 +7,118 @@
             <div class="col-md-6 col-lg-6 col-xl-6 col-xs-12">
               <div class="row q-col-gutter-md">
                 <app-input
+                  v-model="store.form.nota"
                   label="Nota (auto)"
                   readonly
+                  outlined
                   style="width:40%"
                 />
                 <app-input
+                  v-model="store.form.nosurat"
                   label="Nomor Surat"
                   outlined
                   style="width:60%"
                 />
                 <app-input
+                  v-model="store.form.noktp"
                   label="Nomor KTP"
                   style="width:70%"
+                  outlined
                 />
                 <app-input
+                  v-model="store.form.nama"
                   label="Nama"
-                  style="width:100%"
+                  style="width:90%"
+                  outlined
                 />
                 <app-input
+                  v-model="store.form.temp_lahir"
                   label="Tempat Lahir"
                   style="width:40%"
+                  outlined
                 />
-                <app-input
+                <app-input-date
+                  :model="store.form.tgl_lahir"
                   label="Tgl Lahir"
                   style="width:40%"
+                  outlined
+                  @set-model="(val)=> store.setForm('tgl_lahir', val)"
                 />
-                <app-input
-                  label="sampel diambil"
+                <app-input-date
+                  :model="store.form.sampel_diambil"
+                  label="Sampel diambil"
                   style="width:40%"
+                  outlined
+                  @set-model="(val)=> store.setForm('sampel_diambil', val)"
                 />
-                <app-input
-                  label="jam"
+                <app-input-date
+                  :model="store.form.jam_sampel_diambil"
+                  label="Jam Sampel diambil"
                   style="width:40%"
+                  outlined
+                  :type-date="false"
+                  @set-model="(val)=> store.setForm('jam_sampel_diambil', val)"
                 />
+                <div class="row items-center">
+                  <q-radio
+                    v-model="store.form.kelamin"
+                    size="sm"
+                    val="Laki-laki"
+                    label="Laki-laki"
+                  />
+                  <q-radio
+                    v-model="store.form.kelamin"
+                    size="sm"
+                    val="Perempuan"
+                    label="Perempuan"
+                  />
+                </div>
                 <app-input
-                  label="sampel selesai"
-                  style="width:40%"
-                />
-                <app-input
-                  label="jam"
-                  style="width:40%"
-                />
-                <app-input
-                  label="kelamin"
-                  style="width:40%"
-                />
-                <app-input
-                  label="alamat"
+                  v-model="store.form.alamat"
+                  label="Alamat"
                   style="width:100%"
+                  outlined
                 />
-                <app-input
-                  label="agama"
-                  style="width:40%"
+                <app-autocomplete
+                  v-model="store.form.agama"
+                  outlined
+                  label="Agama"
+                  autocomplete="rs2"
+                  option-value="rs2"
+                  option-label="rs2"
+                  :source="store.agamas"
+                  @get-source="store.getAgama"
+                  @set-model="(val)=>{store.setForm('agama', val)}"
                 />
-                <app-input
-                  label="pekerjaan"
-                  style="width:40%"
+                <app-autocomplete
+                  v-model="store.form.kode_pekerjaan"
+                  outlined
+                  label="Pekerjaan"
+                  autocomplete="rs2"
+                  option-value="rs1"
+                  option-label="rs2"
+                  :source="store.pekerjaans"
+                  @get-source="store.getPekerjaan"
+                  @set-model="(val)=>{store.setForm('pekerjaan', val)}"
                 />
-                <app-input
+                <q-select
+                  v-model="store.jenispembayaran"
+                  outlined
+                  :options="options"
                   label="Jenis Pembayaran"
-                  style="width:40%"
+                  dense
+                  style="width:30%"
+                />
+                <app-autocomplete
+                  v-model="store.form.perusahaan_id"
+                  outlined
+                  label="Perusahaan"
+                  autocomplete="perusahaan"
+                  option-value="id"
+                  :option-label="val => Object(val) === val && 'perusahaan' in val ? `${val.perusahaan}`:null"
+                  :source="store.perusahaans"
+                  @get-source="store.getPerusahaan"
+                  @set-model="(val)=>{store.setForm('perusahaan', val)}"
                 />
                 <app-input
                   label="No Telp"
@@ -74,7 +126,7 @@
                 />
                 <app-input
                   label="Dokter Pengirim"
-                  style="width:70%"
+                  style="width:40%"
                 />
               </div>
             </div>
@@ -136,7 +188,18 @@
   </q-page>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { usePermintaanLuarForm } from 'src/stores/simrs/penunjang/laborat/permintaanluar/form'
+import { onMounted, ref } from 'vue'
 
 const tab = ref('mails')
+const options = ref(['Perorangan', 'Perusahaan'])
+const store = usePermintaanLuarForm()
+
+onMounted(() => {
+  store.setToday()
+  store.getAgama()
+  store.getPekerjaan()
+  store.getPerusahaan()
+})
+
 </script>
