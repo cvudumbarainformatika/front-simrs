@@ -196,6 +196,7 @@
               flat
               icon="icon-mat-visibility"
               color="grey-8"
+              :loading="loadingEye && eye===row"
               @click="previewLaborat(row)"
             >
               <q-tooltip>
@@ -406,39 +407,47 @@ function getSistemBayar(row) {
   return 'kosong'
 }
 
-async function previewLaborat(x) {
-  console.log(x)
-  let details = []
-  let mentah = []
-  await api.get(`/v1/transaksi_laborats_details?nota=${x.rs2}`).then((resp) => {
-    if (resp.data) {
-      let x = []
-      x = resp.data.map(x =>
-        ({
-          pemeriksaan_laborat: x.pemeriksaan_laborat,
-          biaya: parseInt(x.rs6) + parseInt(x.rs13),
-          subtotal: (parseInt(x.rs6) + parseInt(x.rs13)) * parseInt(x.rs5)
-        })
-      )
-      details = x
-      mentah = resp.data
-      for (let i = 0; i < mentah.length; i++) {
-        const obj = mentah[i].pemeriksaan_laborat
-        obj.biaya = details[i].biaya
-        obj.jumlah = mentah[i].rs5
-        obj.subtotal = details[i].subtotal
-      }
-    }
-  })
+const loadingEye = ref(false)
+const eye = ref(null)
 
-  // const unique = [...new Set(details)]
-  const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
-  pemeriksaanLaborat.value = gr
-  // console.log('mentah', mentah)
-  // console.log('mapping', gr)
-  // console.log('details', details)
-  totalPemeriksaanLaborat.value = getTotal(gr)
-  modalDetailOpen.value = true
+async function previewLaborat(x) {
+  loadingEye.value = true
+  eye.value = x
+  try {
+    let details = []
+    let mentah = []
+    await api.get(`/v1/transaksi_laborats_details?nota=${x.rs2}`).then((resp) => {
+      if (resp.data) {
+        let x = []
+        x = resp.data.map(x =>
+          ({
+            pemeriksaan_laborat: x.pemeriksaan_laborat,
+            biaya: parseInt(x.rs6) + parseInt(x.rs13),
+            subtotal: (parseInt(x.rs6) + parseInt(x.rs13)) * parseInt(x.rs5)
+          })
+        )
+        details = x
+        mentah = resp.data
+        for (let i = 0; i < mentah.length; i++) {
+          const obj = mentah[i].pemeriksaan_laborat
+          obj.biaya = details[i].biaya
+          obj.jumlah = mentah[i].rs5
+          obj.subtotal = details[i].subtotal
+        }
+      }
+    })
+
+    // const unique = [...new Set(details)]
+    const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
+    pemeriksaanLaborat.value = gr
+    totalPemeriksaanLaborat.value = getTotal(gr)
+    modalDetailOpen.value = true
+    loadingEye.value = false
+    eye.value = null
+  } catch (error) {
+    loadingEye.value = false
+    eye.value = null
+  }
 }
 
 function groupBy(list, keyGetter) {

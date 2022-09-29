@@ -53,6 +53,7 @@
         <q-time
           v-else
           v-model="modelProp"
+          format24h
         >
           <div class="row items-center justify-end">
             <q-btn

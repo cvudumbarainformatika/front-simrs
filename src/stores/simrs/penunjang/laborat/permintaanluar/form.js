@@ -5,6 +5,7 @@ import {
 } from 'boot/axios'
 // import { routerInstance } from 'src/boot/router'
 import { notifSuccess } from 'src/modules/utils'
+import { date } from 'quasar'
 // import { useAuthStore } from './auth'
 // import { Dialog } from 'quasar'
 
@@ -57,16 +58,14 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
     setForm (name, val) {
       this.form[name] = val
     },
-    async saveForm () {
+    async saveForm (arr) {
       this.loading = true
+      this.setForm('details', arr)
       try {
-        const resp = await api.post('/v1/surveyor/store', this.form)
+        const resp = await api.post('/v1/transaksi_laborat_luar/store', this.form)
         console.log('save data', resp)
         notifSuccess(resp)
-        // ini untuk panggil data table
-        // const table = useSurveyorTable()
-        // table.getDataTable()
-        this.resetFORM()
+
         this.loading = false
         return new Promise((resolve) => {
           resolve(resp)
@@ -105,8 +104,8 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
         this.setForm(columns[i], '')
       }
       this.setToday()
-      // this.setForm('gender', 'L')
-      // this.setForm('agama', 'Islam')
+      this.setForm('kelamin', 'Laki-laki')
+      this.setForm('jam_sampel_diambil', '07:00')
     },
     newData () {
       this.resetFORM()
@@ -123,13 +122,22 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
       this.isOpen = !this.isOpen
     },
     setToday () {
-      const date = new Date()
-      const year = date.getFullYear()
-      const month = ('0' + (date.getMonth() + 1)).slice(-2)
-      const day = ('0' + (date.getDate())).slice(-2)
+      const tgl = new Date()
+      const year = tgl.getFullYear()
+      const month = ('0' + (tgl.getMonth() + 1)).slice(-2)
+      const day = ('0' + (tgl.getDate())).slice(-2)
       const formatDb = year + '-' + month + '-' + day
+      const formatUniq = date.formatDate(tgl, 'YYMMDD')
       this.form.tgl_lahir = formatDb
       this.form.sampel_diambil = formatDb
+      this.uniqueId(formatUniq)
+    },
+
+    uniqueId (val) {
+      // const dateString = val.toString(36)
+      const randomness = Math.random().toString(36).substring(2, 9)
+      // const uniq = dateString + randomness
+      this.form.nota = val + '/' + randomness + '-L'
     },
 
     async getAgama() {
@@ -154,17 +162,17 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
       await api.get('/v1/master_laborat_group').then((resp) => {
         const obj = resp.data
         // const c = Object.keys(obj).map((key) => [key, obj[key]])
-        const c = Object.keys(obj).map((key) => (
-          {
-            title: key,
-            children: obj[key]
-          }
-        ))
-        const nonPaket = c.filter(x => x.title === '').map(y => y.children)
-        const paket = c.filter(x => x.title !== '')
-        // const c = Object.entries(obj)
-        console.log('pemeriksaans', paket)
-        this.pemeriksaans = nonPaket[0]
+        // const c = Object.keys(obj).map((key) => (
+        //   {
+        //     title: key,
+        //     children: obj[key]
+        //   }
+        // ))
+        // const nonPaket = c.filter(x => x.title === '').map(y => y.children)
+        // const paket = c.filter(x => x.title !== '')
+        // console.log('pemeriksaans', paket)
+        // this.pemeriksaans = nonPaket[0]
+        this.pemeriksaans = obj
       })
     }
 
