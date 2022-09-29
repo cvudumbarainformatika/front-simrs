@@ -176,22 +176,161 @@
                   animated
                 >
                   <q-tab-panel name="Pemeriksaan">
-                    <div class="searchings">
-                      <app-autocomplete
-                        v-model="search"
-                        cl
+                    <div class="row q-col-gutter-lg searchings">
+                      <q-select
+                        v-model="searchNonPaket"
+                        dense
                         outlined
-                        valid
-                        label="Pemeriksaan (Non Paket)"
-                        autocomplete="rs2-rs1"
+                        use-input
+                        :option-value="obj=>obj"
+                        option-label="rs2"
+                        label="Cari Pemeriksaan (Non Paket)"
+                        :options="optNonPaket"
+                        behavior="menu"
+                        hide-dropdown-icon
+                        style="width:50%"
+                        @filter="filterNonPaket"
+                        @update:model-value="val=>insertList(false, val)"
+                      >
+                        <template
+                          v-if="searchNonPaket"
+                          #append
+                        >
+                          <q-icon
+                            name="icon-mat-cancel"
+                            class="cursor-pointer"
+                            @click.stop.prevent="searchNonPaket = null"
+                          />
+                        </template>
+                        <template #no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Data tidak ditemukan
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                        <template #option="scope">
+                          <q-item v-bind="scope.itemProps">
+                            <q-item-section>
+                              <q-item-label>
+                                {{ scope.opt.rs21===''? scope.opt.rs2 : scope.opt.rs21 }} -
+                                <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.rs3 + scope.opt.rs4) }}</span>
+                              </q-item-label>
+                              <!-- <q-item-label caption>
+                                <strong>Nip : </strong> {{ scope.opt.nip }}
+                              </q-item-label> -->
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                      <q-select
+                        v-model="searchPaket"
+                        dense
+                        outlined
+                        use-input
                         option-value="rs1"
                         option-label="rs2"
-                        :source="store.pemeriksaans"
+                        label="Cari Pemeriksaan (Paket)"
+                        :options="optPaket"
+                        behavior="menu"
+                        hide-dropdown-icon
                         style="width:50%"
-                        @get-source="store.getMasterPemeriksaanGroup"
-                        @set-model="inputToList"
-                      />
-                      {{ details }}
+                        @filter="filterPaket"
+                        @update:model-value="val=>insertList(false, val)"
+                      >
+                        <template
+                          v-if="searchNonPaket"
+                          #append
+                        >
+                          <q-icon
+                            name="icon-mat-cancel"
+                            class="cursor-pointer"
+                            @click.stop.prevent="searchNonPaket = null"
+                          />
+                        </template>
+                        <template #no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Data tidak ditemukan
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                        <template #option="scope">
+                          <q-item v-bind="scope.itemProps">
+                            <q-item-section>
+                              <q-item-label>
+                                {{ scope.opt.rs2 }} - <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.rs3 + scope.opt.rs4) }}</span>
+                              </q-item-label>
+                              <!-- <q-item-label caption>
+                                <strong>Nip : </strong> {{ scope.opt.nip }}
+                              </q-item-label> -->
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                    <div class="list--details q-mt-lg">
+                      <q-toolbar class="bg-primary text-white shadow-2">
+                        <q-toolbar-title>List Permintaan</q-toolbar-title>
+                      </q-toolbar>
+                      <q-list
+                        bordered
+                        dense
+                      >
+                        <div
+                          v-if="details.length===0"
+                          class="column flex-center"
+                          style="height:300px"
+                        >
+                          Belum Ada Data
+                        </div>
+                        <q-expansion-item
+                          v-for="(item, i) in details"
+                          :key="i"
+                        >
+                          <template #header>
+                            <q-item-section avatar>
+                              <q-avatar
+                                color="primary"
+                                text-color="white"
+                              >
+                                A
+                              </q-avatar>
+                            </q-item-section>
+
+                            <q-item-section>
+                              <q-item-label>{{ item.rs2 }}</q-item-label>
+                              <q-item-label
+                                caption
+                                lines="1"
+                              >
+                                Tarif Sarana : {{ formatRp(item.rs3) }}, Tarif Layanan : {{ formatRp(item.rs4) }}
+                              </q-item-label>
+                            </q-item-section>
+
+                            <q-item-section side>
+                              <q-icon
+                                name="icon-mat-delete_sweep"
+                                color="negative"
+                                @click="deleteDetails(i)"
+                              />
+                            </q-item-section>
+                          </template>
+                          <q-card
+                            class="bg-grey-2"
+                          >
+                            <q-item
+                              v-ripple
+                              clickable
+                              class="q-px-lg"
+                            >
+                              <q-item-section>
+                                Item
+                              </q-item-section>
+                            </q-item>
+                          </q-card>
+                        </q-expansion-item>
+                      </q-list>
                     </div>
                   </q-tab-panel>
 
@@ -211,8 +350,10 @@
   </q-page>
 </template>
 <script setup>
+import { api } from 'src/boot/axios'
 import { usePermintaanLuarForm } from 'src/stores/simrs/penunjang/laborat/permintaanluar/form'
 import { onMounted, ref } from 'vue'
+import { formatRp } from 'src/modules/formatter'
 
 const tab = ref('Pemeriksaan')
 const options = ref(['Perorangan', 'Perusahaan'])
@@ -220,7 +361,10 @@ const store = usePermintaanLuarForm()
 
 const details = ref([])
 
-const search = ref('')
+const searchNonPaket = ref('')
+const optNonPaket = ref([])
+const searchPaket = ref('')
+const optPaket = ref([])
 // const nonPaket = ref(null)
 
 onMounted(() => {
@@ -228,16 +372,70 @@ onMounted(() => {
   store.getAgama()
   store.getPekerjaan()
   store.getPerusahaan()
-  store.getMasterPemeriksaanGroup()
+  // store.getMasterPemeriksaanGroup()
 })
 
-function inputToList(val) {
-  const arr = store.pemeriksaans
-  const temp = arr.filter(x => x.rs2 === val)[0]
-  if (temp) {
-    details.value.push(temp)
-    search.value = ''
+function insertList(paket, val) {
+  if (val) {
+    details.value.push(val)
   }
+
+  console.log('from list', val)
+}
+
+function deleteDetails(index) {
+  details.value.splice(index, 1)
+}
+
+async function filterNonPaket (val, update) {
+  if (!val) {
+    update(() => {
+      optNonPaket.value = []
+    })
+    return
+  }
+  const params = {
+    params: {
+      q: val,
+      p: 'non'
+    }
+  }
+  const resp = await api.get('/v1/master_laborat_group', params)
+  console.log('cari non paket', resp)
+  update(
+    () => (optNonPaket.value = resp.data),
+    ref => {
+      if (val !== '' && ref.options.length) {
+        ref.setOptionIndex(-1)
+        ref.moveOptionSelection(1, true)
+      }
+    }
+  )
+}
+async function filterPaket (val, update) {
+  if (!val) {
+    update(() => {
+      optPaket.value = []
+    })
+    return
+  }
+  const params = {
+    params: {
+      q: val,
+      p: 'paket'
+    }
+  }
+  const resp = await api.get('/v1/master_laborat_group', params)
+  console.log('cari non paket', resp)
+  update(
+    () => (optPaket.value = resp.data),
+    ref => {
+      if (val !== '' && ref.options.length) {
+        ref.setOptionIndex(-1)
+        ref.moveOptionSelection(1, true)
+      }
+    }
+  )
 }
 
 </script>
