@@ -83,17 +83,6 @@
           </template>
           <template #custom-btn="{row}">
             <q-btn
-              round
-              flat
-              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-lock_open'"
-              :color="row.akhir === '1'?'primary':'negative'"
-            >
-              <q-tooltip>
-                Permintaan dikunci
-              </q-tooltip>
-            </q-btn>
-
-            <q-btn
               v-if="row.akhir === '1' && row.akhirx==='1'"
               round
               flat
@@ -112,6 +101,31 @@
               label="Pengantar"
               @click="printPengantar(row)"
             />
+            <!-- <q-btn
+              round
+              flat
+              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-lock_open'"
+              :color="row.akhir === '1'?'primary':'negative'"
+            >
+              <q-tooltip>
+                Permintaan dikunci
+              </q-tooltip>
+            </q-btn> -->
+
+            <!-- DELETE BUTTTON STRICT -->
+            <q-btn
+              v-if="row.akhirx !=='1' && row.lunas !== '1'"
+              round
+              flat
+              icon="icon-mat-delete_sweep"
+              color="negative"
+              class="q-ml-sm"
+              @click="deleteData(row)"
+            >
+              <q-tooltip>
+                Hapus Data
+              </q-tooltip>
+            </q-btn>
           </template>
         </app-table>
       </q-card-section>
@@ -135,10 +149,13 @@ import DetailPemeriksaanLuarDialogVue from './DetailPemeriksaanLuarDialog.vue'
 import { humanDate } from 'src/modules/formatter'
 import { api, SERV } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
+import { useQuasar } from 'quasar'
+import AppDialogAlert from 'src/components/~global/AppDialogAlert.vue'
 // import { useRouter } from 'vue-router'
 
 const store = usePermintaanLuarLaboratTable()
 // // const router = useRouter()
+const $q = useQuasar()
 
 onMounted(() => {
   store.getDataTable()
@@ -155,35 +172,22 @@ const modalDetailOpen = ref(false)
 const pemeriksaanLaborat = ref([])
 const totalPemeriksaanLaborat = ref(0)
 
-// const printObj = ref(
-//   {
-//     url: 'http://localhost:9000/print/page/permintaan-laborat-luar',
-//     beforeOpenCallback (vue) {
-//       console.log('打开之前')
-//     },
-//     openCallback (vue) {
-//       console.log('执行了打印')
-//     },
-//     closeCallback (vue) {
-//       console.log('关闭了打印工具')
-//     }
-//   }
-// )
-
-// const printObj = ref(
-//   {
-//     url: 'http://localhost/api.laborat/public',
-//     beforeOpenCallback (vue) {
-//       console.log('打开之前')
-//     },
-//     openCallback (vue) {
-//       console.log('执行了打印')
-//     },
-//     closeCallback (vue) {
-//       console.log('关闭了打印工具')
-//     }
-//   }
-// )
+function deleteData(row) {
+  $q.dialog({
+    component: AppDialogAlert,
+    componentProps: {
+      msg: `Apakah Data dengan Nota ${row.nota} Benar-benar akan dihapus?`,
+      color: 'negative'
+    }
+  }).onOk(() => {
+    console.log('OK')
+    store.deleteData(row.nota)
+  }).onCancel(() => {
+    console.log('Cancel')
+  }).onDismiss(() => {
+    console.log('Called on OK or Cancel')
+  })
+}
 
 function printPengantar(row) {
   console.log(SERV, row)

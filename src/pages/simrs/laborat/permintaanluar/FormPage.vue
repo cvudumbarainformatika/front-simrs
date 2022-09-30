@@ -107,11 +107,11 @@
                   valid
                   label="Pekerjaan"
                   autocomplete="rs2"
-                  option-value="rs1"
+                  option-value="rs2"
                   option-label="rs2"
                   :source="store.pekerjaans"
                   @get-source="store.getPekerjaan"
-                  @set-model="(val)=>{store.setForm('pekerjaan', val)}"
+                  @set-model="(val)=>{store.setForm('kode_pekerjaan', val)}"
                 />
                 <q-select
                   v-model="store.form.jenispembayaran"

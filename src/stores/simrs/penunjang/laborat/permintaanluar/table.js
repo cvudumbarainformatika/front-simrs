@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 // import { routerInstance } from 'src/boot/router'
 // import { notifErr, notifSuccess } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
@@ -82,18 +83,17 @@ export const usePermintaanLuarLaboratTable = defineStore('permintaan_luar_labora
         this.loading = false
       }
       this.loading = false
+    },
+    async deleteData (payload) {
+      const params = { nota: payload }
+      try {
+        await api.post('/v1/transaksi_laborat_luar/destroy', params).then(resp => {
+          notifSuccess(resp)
+          this.getDataTable()
+        })
+      } catch (error) {
+        console.log('err laborat_luar', error.response)
+      }
     }
-    // async deletesData (payload) {
-    //   const params = { id: payload }
-    //   try {
-    //     await api.post('/v1/laborat/destroy', params).then(resp => {
-    //       notifSuccess(resp)
-    //       this.getDataTable()
-    //     })
-    //   } catch (error) {
-    //     console.log('err laborat', error.response)
-    //     notifErr(error.response)
-    //   }
-    // }
   }
 })
