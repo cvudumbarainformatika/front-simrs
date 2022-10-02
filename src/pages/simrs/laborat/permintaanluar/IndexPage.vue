@@ -3,6 +3,9 @@
     <div v-if="route.params.page === 'form'">
       <FormPage />
     </div>
+    <div v-else-if="route.params.page === 'catatan'">
+      <CatatanDokter />
+    </div>
     <div
       v-else
     >
@@ -30,4 +33,5 @@ console.log(route)
 
 const TablePage = defineAsyncComponent(() => import('./TablePage.vue'))
 const FormPage = defineAsyncComponent(() => import('./FormPage.vue'))
+const CatatanDokter = defineAsyncComponent(() => import('./CatatanDokter.vue'))
 </script>

@@ -367,7 +367,10 @@
             label="Reset"
             color="dark"
           />
-          <app-btn label="Simpan Data" />
+          <app-btn
+            :loading="store.loading"
+            label="Simpan Data"
+          />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -518,14 +521,18 @@ function simpanData() {
     return notifErrVue('Harap masukkan Data permintaan terlebih dahulu')
   }
 
-  store.saveForm(details.value)
+  store.saveForm(details.value).then(() => {
+    resetForm()
+  })
 }
 
 const refForm = ref(null)
+
 function resetForm() {
+  console.log(refForm.value)
   store.newData()
   details.value = []
-  refForm.value.resetValidations()
+  refForm.value.resetValidation()
 }
 </script>
 

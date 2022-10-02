@@ -40,18 +40,22 @@
               </q-avatar>
             </div>
           </template>
-          <template #cell-atas-nama="{row}">
-            <div class="text-weight-bold">
-              {{ row.nama }}
+          <template
+            #cell-atas-nama="{row}"
+          >
+            <div style="width:300px">
+              <div class="text-weight-bold">
+                {{ row.nama }}
+              </div>
+              <div class="f-12 text-grey-8 text-italic ellipsis">
+                {{ row.alamat }}
+              </div>
+              <q-badge
+                round
+                color="primary"
+                :label="row.kelamin"
+              />
             </div>
-            <div class="f-12 text-grey-8 text-italic ">
-              {{ row.alamat }}
-            </div>
-            <q-badge
-              round
-              color="primary"
-              :label="row.kelamin"
-            />
           </template>
           <template #cell-permintaan="{row}">
             <div>No.Nota : <i class="text-primary">{{ row.nota }}</i></div>
@@ -86,14 +90,40 @@
               v-if="row.akhir === '1' && row.akhirx==='1'"
               round
               flat
+              icon="icon-mat-edit"
+              color="grey-8"
+              @click="catatanDokter(row)"
+            >
+              <q-tooltip>
+                Catatan Dokter
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              round
+              flat
+              icon="icon-mat-visibility"
+              color="grey-8"
+              :loading="loadingEye && eye===row"
+              class="q-mr-sm"
+              @click="previewLaborat(row)"
+            >
+              <q-tooltip>
+                Lihat Detail Permintaan Pemeriksaan
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              v-if="row.akhir === '1' && row.akhirx==='1'"
+              round
+              flat
               icon="icon-mat-print"
               color="grey-8"
-              @click="previewLaborat(row)"
+              @click="printHasil(row)"
             >
               <q-tooltip>
                 Cetak Hasil
               </q-tooltip>
             </q-btn>
+
             <app-btn
               v-else
               rounded
@@ -101,16 +131,6 @@
               label="Pengantar"
               @click="printPengantar(row)"
             />
-            <!-- <q-btn
-              round
-              flat
-              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-lock_open'"
-              :color="row.akhir === '1'?'primary':'negative'"
-            >
-              <q-tooltip>
-                Permintaan dikunci
-              </q-tooltip>
-            </q-btn> -->
 
             <!-- DELETE BUTTTON STRICT -->
             <q-btn
@@ -134,7 +154,6 @@
     <!-- dialog -->
     <!-- dialog -->
     <DetailPemeriksaanLuarDialogVue
-      id="printMe"
       v-model="modalDetailOpen"
       :items="pemeriksaanLaborat"
       :total="totalPemeriksaanLaborat"
@@ -145,16 +164,17 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { usePermintaanLuarLaboratTable } from 'src/stores/simrs/penunjang/laborat/permintaanluar/table'
+// import { useDetailsLaboratLuar } from 'src/stores/simrs/penunjang/laborat/permintaanluar/details'
 import DetailPemeriksaanLuarDialogVue from './DetailPemeriksaanLuarDialog.vue'
 import { humanDate } from 'src/modules/formatter'
 import { api, SERV } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
 import { useQuasar } from 'quasar'
 import AppDialogAlert from 'src/components/~global/AppDialogAlert.vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const store = usePermintaanLuarLaboratTable()
-// // const router = useRouter()
+const router = useRouter()
 const $q = useQuasar()
 
 onMounted(() => {
@@ -197,10 +217,31 @@ function printPengantar(row) {
   window.open(SERV + `/print/page?data=permintaan-laborat-luar&q=${row.nota}`, '_blank', 'width=50%')
 }
 
+// const storeDetails = useDetailsLaboratLuar()
+
+function catatanDokter(row) {
+  // console.log(SERV, row)
+  if (!row.pemeriksaan_laborat) {
+    return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+  }
+  // storeDetails.getRow(row)
+  router.push({ name: 'lab.permintaan-luar', params: { page: 'catatan' }, query: { nota: row.nota } })
+}
+function printHasil(row) {
+  console.log(SERV, row)
+  if (!row.pemeriksaan_laborat) {
+    return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+  }
+  window.open(SERV + `/print/page?data=hasil-permintaan-laborat-luar&q=${row.nota}`, '_blank', 'width=50%')
+}
+
+const loadingEye = ref(false)
+const eye = ref(null)
+
 async function previewLaborat(x) {
-  // console.log('coba', x)
+  loadingEye.value = true
+  eye.value = x
   pemeriksaanLaborat.value = []
-  loading.value = true
   let details = []
   let mentah = []
   try {
@@ -229,20 +270,22 @@ async function previewLaborat(x) {
         }
         // console.log('mapping', x)
         // const unique = [...new Set(details)]
-        const gr = groupBy(details, paket => paket.kd_lab)
+        const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
         pemeriksaanLaborat.value = gr
         console.log('mentah', mentah)
         // console.log('mapping', gr)
         // console.log('details', details)
         totalPemeriksaanLaborat.value = getTotal(gr)
         modalDetailOpen.value = true
-        loading.value = false
+        loadingEye.value = false
+        eye.value = null
       }
 
       modalDetailOpen.value = true
     })
   } catch (error) {
-    loading.value = false
+    loadingEye.value = false
+    eye.value = null
     modalDetailOpen.value = true
   }
 }

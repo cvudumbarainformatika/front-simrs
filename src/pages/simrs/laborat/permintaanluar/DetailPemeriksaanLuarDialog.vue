@@ -179,7 +179,7 @@
         </q-markup-table>
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section v-else>
         <div class="column">
           Tidak Ada Item Pemeriksaan
         </div>
@@ -190,7 +190,7 @@
         <q-btn
           v-close-popup
           flat
-          label="Decline"
+          label="Cancel"
           color="primary"
         />
         <q-btn

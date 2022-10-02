@@ -18,20 +18,7 @@
     </div>
     <div>
       <q-btn
-        v-if="route.params.page==='form'"
-        round
-        elevated
-        color="primary"
-        icon="icon-mat-arrow_back"
-        size="sm"
-        @click="prev"
-      >
-        <q-tooltip>
-          {{ tooltipPrev }}
-        </q-tooltip>
-      </q-btn>
-      <q-btn
-        v-else
+        v-if="route.params.page===''"
         round
         elevated
         color="primary"
@@ -41,6 +28,19 @@
       >
         <q-tooltip>
           {{ tooltipAdd }}
+        </q-tooltip>
+      </q-btn>
+      <q-btn
+        v-else
+        round
+        elevated
+        color="primary"
+        icon="icon-mat-arrow_back"
+        size="sm"
+        @click="prev"
+      >
+        <q-tooltip>
+          {{ tooltipPrev }}
         </q-tooltip>
       </q-btn>
     </div>
