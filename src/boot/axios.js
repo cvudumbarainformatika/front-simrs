@@ -5,6 +5,7 @@ import { notifErr } from 'src/modules/utils'
 // import { setCssVar } from 'quasar'
 
 const SERV = 'http://192.168.10.135/api.laborat/public'
+// const SERV = 'http://192.168.10.242:3500'
 // const SERV = 'http://localhost/api.laborat/public'
 // const SERV = 'http://localhost/api.simrs/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
