@@ -1,23 +1,65 @@
 <template>
   <q-card>
-    <q-card-section class="bg-primary text-white">
-      <div class="text-h6">
-        Pemeriksaan Hari ini
-      </div>
-      <div class="text-subtitle2">
-        by John Doe
+    <q-card-section
+      :class="`bg-${color} text-${colorTxt}`"
+    >
+      <div class="row items-center justify-between">
+        <div class="txt">
+          <div
+            v-if="!loading"
+            class="text-h4"
+          >
+            {{ nilai }}
+          </div>
+          <div v-else>
+            <q-skeleton animation="pulse-y" />
+          </div>
+          <div>Hari ini</div>
+        </div>
+        <div class="icone">
+          <q-icon
+            size="60px"
+            :name="icon"
+          />
+        </div>
       </div>
     </q-card-section>
 
     <q-separator />
 
-    <q-card-actions align="right">
-      <q-btn flat>
-        Action 1
-      </q-btn>
-      <q-btn flat>
-        Action 2
-      </q-btn>
-    </q-card-actions>
+    <q-card-section align="right">
+      <div class="text-subtitle">
+        {{ subtitle }}
+      </div>
+    </q-card-section>
   </q-card>
 </template>
+
+<script setup>
+defineProps({
+  color: {
+    type: String,
+    default: 'primary'
+  },
+  subtitle: {
+    type: String,
+    default: 'Pemeriksaan Laborat'
+  },
+  nilai: {
+    type: Number,
+    default: 0
+  },
+  icon: {
+    type: String,
+    default: 'icon-mat-insights'
+  },
+  colorTxt: {
+    type: String,
+    default: 'white'
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
+</script>
