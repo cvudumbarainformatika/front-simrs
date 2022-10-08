@@ -208,6 +208,7 @@
               flat
               :icon="row.rs18 === '1'?'icon-mat-lock':'icon-mat-lock_open'"
               :color="row.rs18 === '1'?'primary':'negative'"
+              :loading="loadingKey && x===row"
               @click="kunciPermintaan(row)"
             >
               <q-tooltip>
@@ -256,11 +257,12 @@ import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/tra
 import { humanDate, diffDate, dateBOD } from 'src/modules/formatter'
 import DetailPemeriksaanDialog from './DetailPemeriksaanDialog.vue'
 import { api } from 'src/boot/axios'
+import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 const store = useTransaksiLaboratTable()
 
 store.getDataTable()
-// store.getTotalTable()
+
 const selectBy = ref(1)
 const modalDetailOpen = ref(false)
 const optionSelectBy = ref([
@@ -277,8 +279,12 @@ function changeSelected(val) {
 }
 
 function getProgress(row) {
-  const progress = 0
-  return progress
+  const kunci = row.rs18 === '1'
+  const progress = row.rs28 === '1'
+  if (!kunci) {
+    return 'Belum terkirim ke LIS'
+  }
+  return progress ? 'complete' : 'Menunggu Hasil ...'
 }
 
 function getNoRm(row) {
@@ -422,6 +428,7 @@ async function previewLaborat(x) {
         x = resp.data.map(x =>
           ({
             pemeriksaan_laborat: x.pemeriksaan_laborat,
+            hasil: x.rs21,
             biaya: parseInt(x.rs6) + parseInt(x.rs13),
             subtotal: (parseInt(x.rs6) + parseInt(x.rs13)) * parseInt(x.rs5)
           })
@@ -439,6 +446,7 @@ async function previewLaborat(x) {
 
     // const unique = [...new Set(details)]
     const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
+    console.log(gr)
     pemeriksaanLaborat.value = gr
     totalPemeriksaanLaborat.value = getTotal(gr)
     modalDetailOpen.value = true
@@ -484,15 +492,22 @@ function getTotal(arr) {
   return total
 }
 
+const x = ref(null)
+const loadingKey = ref(false)
+
 async function kunciPermintaan(row) {
+  if (row.rs18 === '1') {
+    return notifErrVue('Maaf permintaan ini sudah terkunci dan terkirim ke LIS')
+  }
+  // console.log(row)
+  x.value = row
+  loadingKey.value = true
   try {
     const resp = await api.get(`/v1/transaksi_laborats_details?nota=${row.rs2}`)
-    const permintaan = resp.data.map(x =>
-      ({
-        kode: x.pemeriksaan_laborat.rs1,
-        nama: x.pemeriksaan_laborat.rs2
-      })
-    )
+    const permintaans = resp.data.map(x => x.pemeriksaan_laborat.rs1)
+
+    const kodeLab = permintaans.join('~')
+
     const form = {
       PATIENT_NO: getNoRm(row),
       ONO: row.rs2,
@@ -502,7 +517,7 @@ async function kunciPermintaan(row) {
       SEX: getKelamin(row),
       ADDRESS: getAlamat(row),
       DIAGNOSA: '-',
-      GLOBAL_COMMENT: '',
+      GLOBAL_COMMENT: 'laborat-dalam',
       DATE_ORDER: row.rs3,
       DOCTOR: row.dokter.rs1,
       DOCTOR_NAME: row.dokter.rs2,
@@ -512,18 +527,31 @@ async function kunciPermintaan(row) {
       ROOM_NAME: getRuangan(row),
       COMPANY: '',
       COMPANY_NAME: 'RSUD MOCH SALEH',
-      KODE_PRODUCT: permintaan[0].kode,
+      KODE_PRODUCT: kodeLab,
       TYPE_PATIENT: '',
       IS_CITO: '', // nanti disediakan di rs51.rs12 jika ada permintaan
       STATUS: 'N'
     }
 
     // const token = null
-    // await api.post()
-    console.log(form)
+    try {
+      await api.post('/v1/transaksi_laborats_kunci_dan_kirim_ke_lis', form).then(response => {
+        console.log('kirim ke list')
+        notifSuccessVue('Data Success terkirim Ke LIS')
+        x.value = null
+        loadingKey.value = false
+      })
+    } catch (error) {
+      x.value = null
+      loadingKey.value = false
+    }
+
+    // console.log(form)
     // await
   } catch (error) {
     console.log(error)
+    x.value = null
+    loadingKey.value = false
   }
 
   // const tanggal = row.rs3

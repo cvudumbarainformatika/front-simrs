@@ -134,7 +134,7 @@
 
             <!-- DELETE BUTTTON STRICT -->
             <q-btn
-              v-if="row.akhirx !=='1' && row.lunas !== '1'"
+              v-if="row.akhir !=='1' && row.lunas !== '1'"
               round
               flat
               icon="icon-mat-delete_sweep"
@@ -144,6 +144,18 @@
             >
               <q-tooltip>
                 Hapus Data
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              round
+              flat
+              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-lock_open'"
+              :color="row.akhir === '1'?'primary':'negative'"
+              :loading="eye=== row && loadingLis"
+              @click="kunciPermintaan(row)"
+            >
+              <q-tooltip>
+                Kunci Permintaan & kirim ke list
               </q-tooltip>
             </q-btn>
           </template>
@@ -168,7 +180,7 @@ import { usePermintaanLuarLaboratTable } from 'src/stores/simrs/penunjang/labora
 import DetailPemeriksaanLuarDialogVue from './DetailPemeriksaanLuarDialog.vue'
 import { humanDate } from 'src/modules/formatter'
 import { api, SERV } from 'src/boot/axios'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useQuasar } from 'quasar'
 import AppDialogAlert from 'src/components/~global/AppDialogAlert.vue'
 import { useRouter } from 'vue-router'
@@ -322,5 +334,30 @@ function getTotal(arr) {
   const total = paket.reduce((prev, cur) => prev + cur)
 
   return total
+}
+
+const loadingLis = ref(false)
+
+async function kunciPermintaan(x) {
+  loadingLis.value = true
+  eye.value = x
+  console.log('kirim permintaan', x)
+  if (x.akhir === '') {
+    try {
+      await api.get(`/v1/transaksi_laborats_luar_kunci_dan_kiri_ke_lis?nota=${x.nota}`).then(resp => {
+        console.log('send to list', resp)
+        loadingLis.value = false
+        eye.value = null
+        notifSuccessVue('Data Success terkirim Ke LIS')
+      })
+    } catch (error) {
+      loadingLis.value = false
+      eye.value = null
+    }
+  } else {
+    notifErrVue('Maaf permintaan ini sudah terkunci dan terkirim ke LIS')
+    loadingLis.value = false
+    eye.value = null
+  }
 }
 </script>

@@ -74,7 +74,7 @@
                   <td
                     class="text-right"
                   >
-                    kosong
+                    {{ val.hasil }}
                   </td>
                   <td
                     class="text-right"
@@ -135,7 +135,7 @@
                   <td
                     class="text-right"
                   >
-                    kosong
+                    {{ val.hasil }}
                   </td>
                   <td
                     class="text-right"
@@ -178,15 +178,15 @@
         <q-btn
           v-close-popup
           flat
-          label="Decline"
+          label="Tutup"
           color="primary"
         />
-        <q-btn
+        <!-- <q-btn
           v-close-popup
           flat
           label="Accept"
           color="primary"
-        />
+        /> -->
       </q-card-actions>
     </q-card>
   </q-dialog>
