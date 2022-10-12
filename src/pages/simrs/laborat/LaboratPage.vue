@@ -206,13 +206,18 @@
             <q-btn
               round
               flat
-              :icon="row.rs18 === '1'?'icon-mat-lock':'icon-mat-lock_open'"
+              :icon="row.rs18 === '1'?'icon-mat-lock':'icon-mat-send'"
               :color="row.rs18 === '1'?'primary':'negative'"
               :loading="loadingKey && x===row"
               @click="kunciPermintaan(row)"
             >
               <q-tooltip>
-                Kunci Permintaan
+                <div v-if="row.rs18 !== '1'">
+                  Kirim Permintaan ke LIS
+                </div>
+                <div v-else>
+                  Permintaan Terkunci
+                </div>
               </q-tooltip>
             </q-btn>
           </template>
@@ -280,7 +285,7 @@ function changeSelected(val) {
 
 function getProgress(row) {
   const kunci = row.rs18 === '1'
-  const progress = row.rs28 === '1'
+  const progress = row.rs21
   if (!kunci) {
     return 'Belum terkirim ke LIS'
   }
@@ -540,6 +545,7 @@ async function kunciPermintaan(row) {
         notifSuccessVue('Data Success terkirim Ke LIS')
         x.value = null
         loadingKey.value = false
+        row.rs18 = '1'
       })
     } catch (error) {
       x.value = null
