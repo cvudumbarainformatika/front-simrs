@@ -149,13 +149,18 @@
             <q-btn
               round
               flat
-              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-lock_open'"
+              :icon="row.akhir === '1'?'icon-mat-lock':'icon-mat-send'"
               :color="row.akhir === '1'?'primary':'negative'"
               :loading="eye=== row && loadingLis"
               @click="kunciPermintaan(row)"
             >
               <q-tooltip>
-                Kunci Permintaan & kirim ke list
+                <div v-if="row.akhir !== '1'">
+                  Kunci Permintaan & kirim ke list
+                </div>
+                <div v-else>
+                  Permintaan terkunci
+                </div>
               </q-tooltip>
             </q-btn>
           </template>
@@ -266,6 +271,7 @@ async function previewLaborat(x) {
           ({
             pemeriksaan_laborat: x.pemeriksaan_laborat,
             kd_lab: x.kd_lab,
+            hasil: x.hasil,
             // biaya: parseInt(x.rs6) + parseInt(x.rs13),
             biaya: parseInt(x.tarif_pelayanan) + parseInt(x.tarif_sarana),
             subtotal: (parseInt(x.tarif_pelayanan) + parseInt(x.tarif_sarana)) * parseInt(x.jml)
@@ -348,6 +354,8 @@ async function kunciPermintaan(x) {
         console.log('send to list', resp)
         loadingLis.value = false
         eye.value = null
+        // store.getDataTable()
+        x.akhir = '1'
         notifSuccessVue('Data Success terkirim Ke LIS')
       })
     } catch (error) {

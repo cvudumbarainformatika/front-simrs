@@ -78,7 +78,7 @@
                   <td
                     class="text-right"
                   >
-                    kosong
+                    {{ val.hasil ? val.hasil : '-' }}
                   </td>
                   <td
                     class="text-right"
@@ -142,7 +142,7 @@
                   <td
                     class="text-right"
                   >
-                    kosong
+                    {{ val.hasil ? val.hasil : '-' }}
                   </td>
                   <td
                     class="text-right"
