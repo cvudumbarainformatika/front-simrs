@@ -111,83 +111,51 @@ function onSubmit () {
   background-repeat: no-repeat, repeat;
   background-size: cover;
 }
-// .card-login {
-//   width:30vw;
-//   min-height:30vh;
-//   overflow: hidden;
-//   position: relative;
-//   // border: 4px solid $grey-6;
-//     // &::before {
-//     //   content: "";
-//     //   width:360px;
-//     //   height:200px;
-//     //   position: absolute;
-//     //   border-radius: 0 0 50% 50%;
-//     //   background: linear-gradient(-45deg, $secondary, $primary);
-//     //   overflow: hidden;
-//     // }
-
-//     .login-sec {
-//       background: linear-gradient(-45deg, $secondary, $primary);
-//       height: 100%;
-//     }
-//     .form-login {
-//       width:70%;
-//       min-height:100px;
-//       background-color: #fff;
-//       border-radius:5px;
-//     }
-// }
-
-// @media(max-width:800px){
-//     .card-login {
-//         width: 100vw;
-//         height:100vh;
-//         border-radius: 0px;
-//           &::before {
-//             width: 100vw;
-//           }
-
-//           .form-login {
-//             width:80%;
-//             margin-top:80px;
-//             min-height:100px;
-//             background-color: #fff;
-//             border-radius:5px;
-//           }
-
-//           .login-sec {
-//             background: linear-gradient(-45deg, $secondary, $primary);
-//             height: 100vh;
-//           }
-//     }
-// }
-
 .card-login {
-  width:420px;
-  left: 30%;
-  min-height:480px;
+  width: 360px;
+  min-height: 600px;
   overflow: hidden;
   position: relative;
-    &::before {
-      content: "";
-      width:420px;
-      height:230px;
-      position: absolute;
-      border-radius: 0 0 50% 50%;
-      background: linear-gradient(-45deg, $secondary, $primary);
-      overflow: hidden;
-    }
+
+  &::before {
+    content: "";
+    width: 366px;
+    height: 224px;
+    position: absolute;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 23%;
+    border-bottom-left-radius: 50%;
+    background: linear-gradient(-45deg, $secondary, $primary);
+    overflow: hidden;
+  }
+
+  &::after {
+    content: "";
+    width: 239px;
+    height: 129px;
+    position: absolute;
+    top: 473px;
+    left: 198px;
+    border-top-style: groove;
+    border-top-left-radius: 98%;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 12%;
+    background: linear-gradient(-45deg, $secondary, $primary);
+    overflow: hidden;
+  }
 }
-@media(max-width:800px){
-    .card-login {
-        left: 0;
-        width: 100vw;
-        height:100vh;
-        border-radius: 0px;
-          &::before {
-            width: 100vw;
-          }
+
+@media(max-width:800px) {
+  .card-login {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0px;
+
+    &::before {
+      width: 100vw;
     }
+  }
 }
 </style>

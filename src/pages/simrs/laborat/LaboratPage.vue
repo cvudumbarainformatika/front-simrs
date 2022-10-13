@@ -362,7 +362,7 @@ function getAlamat(row) {
     alamat = kp.pasien.rs4 + ' - ' + kp.pasien.rs6
   } else {
     if (krw) {
-      alamat = krw.pasien.rs4 + ' - ' + kp.pasien.rs6
+      alamat = krw.pasien.rs4 + ' - ' + krw.pasien.rs6
     }
   }
   return alamat
@@ -508,6 +508,11 @@ async function kunciPermintaan(row) {
   // console.log(row)
   x.value = row
   loadingKey.value = true
+  // console.log(row)
+  // console.log(getNama(row))
+  // console.log(getAlamat(row))
+  // console.log(getBOD(row))
+  // notifSuccessVue('Data Success terkirim Ke LIS')
   try {
     const resp = await api.get(`/v1/transaksi_laborats_details?nota=${row.rs2}`)
     const permintaans = resp.data.map(x => x.pemeriksaan_laborat.rs1)
@@ -518,7 +523,7 @@ async function kunciPermintaan(row) {
       PATIENT_NO: getNoRm(row),
       ONO: row.rs2,
       PATIENT_NAME: getNama(row),
-      IDENTITY_N: '',
+      IDENTITY_N: '-',
       BOD: getBOD(row),
       SEX: getKelamin(row),
       ADDRESS: getAlamat(row),
@@ -527,15 +532,15 @@ async function kunciPermintaan(row) {
       DATE_ORDER: row.rs3,
       DOCTOR: row.dokter.rs1,
       DOCTOR_NAME: row.dokter.rs2,
-      CLASS: '',
-      CLASS_NAME: '',
+      CLASS: '-',
+      CLASS_NAME: '-',
       ROOM: row.rs23,
       ROOM_NAME: getRuangan(row),
-      COMPANY: '',
+      COMPANY: '-',
       COMPANY_NAME: 'RSUD MOCH SALEH',
       KODE_PRODUCT: kodeLab,
-      TYPE_PATIENT: '',
-      IS_CITO: '', // nanti disediakan di rs51.rs12 jika ada permintaan
+      TYPE_PATIENT: '-',
+      IS_CITO: '0', // nanti disediakan di rs51.rs12 jika ada permintaan
       STATUS: 'N'
     }
 
@@ -552,16 +557,10 @@ async function kunciPermintaan(row) {
       x.value = null
       loadingKey.value = false
     }
-
-    // console.log(form)
-    // await
   } catch (error) {
     console.log(error)
     x.value = null
     loadingKey.value = false
   }
-
-  // const tanggal = row.rs3
-  // const nota = row.rs2
 }
 </script>
