@@ -289,7 +289,7 @@ function getProgress(row) {
   if (!kunci) {
     return 'Belum terkirim ke LIS'
   }
-  return progress ? 'complete' : 'Menunggu Hasil ...'
+  return progress ? 'Complete' : 'Menunggu Hasil ...'
 }
 
 function getNoRm(row) {
@@ -422,6 +422,7 @@ const loadingEye = ref(false)
 const eye = ref(null)
 
 async function previewLaborat(x) {
+  console.log(x)
   loadingEye.value = true
   eye.value = x
   try {
