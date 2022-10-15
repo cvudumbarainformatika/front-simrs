@@ -7,6 +7,9 @@
         <!-- <div class="title-table q-pr-sm f-14 text-bold">
           {{ title }}
         </div> -->
+        <slot
+          name="header-left-before-search"
+        />
         <div>
           <q-input
             v-model="search"

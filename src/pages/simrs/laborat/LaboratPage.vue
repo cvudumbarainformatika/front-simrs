@@ -17,26 +17,6 @@
           </div>
         </div>
       </div>
-      <!-- <div>
-        <q-btn
-          v-if="route.params.id"
-          round
-          elevated
-          color="primary"
-          icon="arrow_back"
-          size="sm"
-          @click="prev"
-        />
-        <q-btn
-          v-else
-          round
-          elevated
-          color="primary"
-          icon="add"
-          size="sm"
-          :to="`/admin/berita/form/${'add'}`"
-        />
-      </div> -->
     </div>
 
     <!-- content -->
@@ -69,6 +49,24 @@
           @search="store.enterSearch"
           @refresh="store.refreshTable"
         >
+          <template #header-left-before-search>
+            <div class="q-mr-sm">
+              <q-select
+                v-model="filterBy"
+                dense
+                outlined
+                option-value="id"
+                option-label="nama"
+                behavior="menu"
+                map-options
+                emit-value
+                :options="optionFiltertBy"
+                label="Cari Berdasarkan:"
+                style="min-width:200px"
+                @update:model-value="changeFiltered"
+              />
+            </div>
+          </template>
           <template #header-left-after-search>
             <div class="q-ml-sm">
               <q-select
@@ -87,27 +85,6 @@
               />
             </div>
           </template>
-
-          <!-- header -->
-          <!-- <template #col-nama>
-            Nama Pasien
-          </template>
-          <template #col-rs2>
-            No. Nota
-          </template>
-          <template #col-rs3>
-            Tanggal
-          </template>
-          <template #col-rs23>
-            Poli/Ruangan
-          </template>
-          <template #col-rs1>
-            No. Reg Kunjungan
-          </template>
-          <template #col-norm>
-            No. RM
-          </template> -->
-          <!-- cell -->
 
           <template #cell-default-img="{row}">
             <div class="row">
@@ -140,24 +117,6 @@
           </template>
           <template #cell-status="{row}">
             {{ getProgress(row) }}
-            <!-- <q-badge
-              round
-              color="primary"
-              :label="getUsia(row)+ ' Thn'"
-            /> -->
-            <!-- <q-linear-progress
-              size="25px"
-              :value="progress"
-              color="accent"
-            >
-              <div class="absolute-full flex flex-center">
-                <q-badge
-                  color="white"
-                  text-color="accent"
-                  :label="progressLabel"
-                />
-              </div>
-            </q-linear-progress> -->
           </template>
           <template #cell-detail="{row}">
             <div class="column">
@@ -221,28 +180,6 @@
               </q-tooltip>
             </q-btn>
           </template>
-
-          <!-- <template #cell-rs3="{row}">
-            {{ humanDate(row.rs3) }}
-          </template>
-          <template #cell-norm="{row}">
-            {{ getNoRm(row) }}
-          </template>
-          <template #cell-nama="{row}">
-            {{ getNama(row) }}
-          </template>
-          <template #cell-Kunci="{row}">
-            {{ row.rs18 }}
-          </template>
-          <template #cell-rs23="{row}">
-            {{ getRuangan(row) }}
-          </template>
-          <template #cell-tipe="{row}">
-            {{ getLamaBaru(row) }}
-          </template>
-          <template #cell-dokter="{row}">
-            {{ row.dokter? row.dokter.rs2:'No Name' }}
-          </template> -->
         </app-table-new>
       </q-card-section>
     </q-card>
@@ -269,18 +206,28 @@ const store = useTransaksiLaboratTable()
 store.getDataTable()
 
 const selectBy = ref(1)
+const filterBy = ref(1)
 const modalDetailOpen = ref(false)
+
 const optionSelectBy = ref([
   { id: 1, nama: 'Pasien Hari ini' },
   { id: 2, nama: 'Pasien Hari ini Sudah' },
   { id: 3, nama: 'Pasien Lalu' },
   { id: 4, nama: 'Pasien Lalu Sudah' }
 ])
+const optionFiltertBy = ref([
+  { id: 1, nama: 'Nama Pasien' },
+  { id: 2, nama: 'No. RM' },
+  { id: 3, nama: 'Nota' }
+])
 const pemeriksaanLaborat = ref([])
 const totalPemeriksaanLaborat = ref(0)
 
 function changeSelected(val) {
   store.setPeriode(val)
+}
+function changeFiltered(val) {
+  store.setFilterBy(val)
 }
 
 function getProgress(row) {
@@ -296,10 +243,10 @@ function getNoRm(row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
-    return kp.rs2
+    return row.pasien_kunjungan_poli.rs1
   } else {
     if (krw) {
-      return krw.rs2
+      return row.pasien_kunjungan_rawat_inap.rs1
     }
   }
   return 'kosong'
@@ -308,10 +255,10 @@ function getNama(row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
-    return kp.pasien.rs2
+    return row.pasien_kunjungan_poli.rs2
   } else {
     if (krw) {
-      return krw.pasien.rs2
+      return row.pasien_kunjungan_rawat_inap.rs2
     }
   }
   return 'kosong'
@@ -320,10 +267,10 @@ function getKelamin(row) {
   const kp = row.kunjungan_poli
   const krw = row.kunjungan_rawat_inap
   if (kp) {
-    return kp.pasien.rs17
+    return row.pasien_kunjungan_poli.rs17
   } else {
     if (krw) {
-      return krw.pasien.rs17
+      return row.pasien_kunjungan_rawat_inap.rs17
     }
   }
   return '-'
@@ -333,10 +280,10 @@ function getUsia(row) {
   const krw = row.kunjungan_rawat_inap
   let usia = 0
   if (kp) {
-    usia = kp.pasien.rs16
+    usia = row.pasien_kunjungan_poli.rs16
   } else {
     if (krw) {
-      usia = krw.pasien.rs16
+      usia = row.pasien_kunjungan_rawat_inap.rs16
     }
   }
   return diffDate(usia)
@@ -346,10 +293,10 @@ function getBOD(row) {
   const krw = row.kunjungan_rawat_inap
   let BOD = 0
   if (kp) {
-    BOD = kp.pasien.rs16
+    BOD = row.pasien_kunjungan_poli.rs16
   } else {
     if (krw) {
-      BOD = krw.pasien.rs16
+      BOD = row.pasien_kunjungan_rawat_inap.rs16
     }
   }
   return dateBOD(BOD)
@@ -359,10 +306,10 @@ function getAlamat(row) {
   const krw = row.kunjungan_rawat_inap
   let alamat = '-'
   if (kp) {
-    alamat = kp.pasien.rs4 + ' - ' + kp.pasien.rs6
+    alamat = row.pasien_kunjungan_poli.rs4 + ' - ' + row.pasien_kunjungan_poli.rs6
   } else {
     if (krw) {
-      alamat = krw.pasien.rs4 + ' - ' + krw.pasien.rs6
+      alamat = row.pasien_kunjungan_rawat_inap.rs4 + ' - ' + row.pasien_kunjungan_rawat_inap.rs6
     }
   }
   return alamat
@@ -377,10 +324,10 @@ function getLamaBaru(row) {
   const krw = row.kunjungan_rawat_inap
   let status = 0
   if (kp) {
-    status = kp.pasien.rs31
+    status = row.pasien_kunjungan_poli.rs31
   } else {
     if (krw) {
-      status = krw.pasien.rs31
+      status = row.pasien_kunjungan_rawat_inap.rs31
     }
   }
   if (status > 1) { return 'Lama' }
@@ -403,14 +350,11 @@ function getSistemBayar(row) {
   const poli = row.poli
   const krw = row.kunjungan_rawat_inap
   if (poli) {
-    if (row.kunjungan_poli) {
-      return row.kunjungan_poli.sistem_bayar.rs2
-    }
-    return 'tdk ada'
+    return row.sb_kunjungan_poli.rs2
   } else {
     if (krw) {
       if (row.kunjungan_rawat_inap) {
-        return row.kunjungan_rawat_inap.sistem_bayar.rs2
+        return row.sb_kunjungan_rawat_inap.rs2
       }
       return 'tdk ada'
     }

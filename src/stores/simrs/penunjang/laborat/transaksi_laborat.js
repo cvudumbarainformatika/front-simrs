@@ -13,6 +13,7 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
     loading: false,
     params: {
       periode: 1,
+      filter_by: 1,
       q: '',
       page: 1,
       per_page: 12,
@@ -37,6 +38,9 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
     },
     setSearch (val) {
       this.params.q = val
+    },
+    setFilterBy (val) {
+      this.params.filter_by = val
     },
     enterSearch(val) {
       this.params.q = val
@@ -80,11 +84,12 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
         this.meta = resp.data
         // this.setColumns(resp.data.data)
         this.loading = false
+        this.getTotalTable()
       }
       this.loading = false
-      this.getTotalTable()
     },
-    async getTotalTable () {
+    async getTotalTable() {
+      this.total = 0
       const params = { params: this.params }
       const resp = await api.get('/v1/transaksi_laborats/total', params)
       console.log('total', resp)
