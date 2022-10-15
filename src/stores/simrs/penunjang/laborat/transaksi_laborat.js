@@ -75,6 +75,7 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
       this.getDataTable()
     },
     async getDataTable () {
+      this.total = 0
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('/v1/transaksi_laborats', params)
@@ -84,12 +85,11 @@ export const useTransaksiLaboratTable = defineStore('transaksi_laborat_table', {
         this.meta = resp.data
         // this.setColumns(resp.data.data)
         this.loading = false
-        this.getTotalTable()
       }
       this.loading = false
+      this.getTotalTable()
     },
     async getTotalTable() {
-      this.total = 0
       const params = { params: this.params }
       const resp = await api.get('/v1/transaksi_laborats/total', params)
       console.log('total', resp)
