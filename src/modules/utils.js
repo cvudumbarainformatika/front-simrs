@@ -93,4 +93,61 @@ const waitLoad = (cond) => {
   }
 }
 
-export { notifSuccess, notifErr, notifErrVue, notifSuccessVue, waitLoad }
+const notifNegativeCenterVue = (msg) => {
+  Notify.create({
+    message: msg,
+    icon: 'icon-eva-message-circle-outline',
+    position: 'center',
+    color: 'negative',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'yellow',
+        handler: () => {
+          /* console.log('wooow') */
+        }
+      }
+    ]
+  })
+}
+const uniqueId = () => {
+  const dateString = Date.now().toString(36)
+  const randomness = Math.random().toString(36).substring(2, 7)
+  return dateString + randomness
+}
+
+const filterDuplicateArrays = (array) => {
+  const data = array.filter((value, index, self) => {
+    return self.indexOf(value) === index
+  })
+  return data
+}
+
+const findWithAttr = (array, attr, value) => {
+  for (let i = 0; i < array.length; i += 1) {
+    if (array[i][attr] === value) {
+      return i
+    }
+  }
+  return -1
+}
+
+const changeArrayIndex = (array, from, to) => {
+  const toIn = array.indexOf(to)
+  const fromIn = array.indexOf(from)
+  const element = array.splice(fromIn, 1)[0]
+  array.splice(toIn, 0, element)
+}
+
+export {
+  notifSuccess,
+  uniqueId,
+  notifErr,
+  notifErrVue,
+  notifSuccessVue,
+  waitLoad,
+  filterDuplicateArrays,
+  findWithAttr,
+  changeArrayIndex,
+  notifNegativeCenterVue
+}
