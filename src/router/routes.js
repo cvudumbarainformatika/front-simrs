@@ -35,28 +35,13 @@ const routes = [
                 name: 'lab.permintaan-luar',
                 component: () => import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
               }
-              // {
-              //   path: '/admin/laborat/permintaan-luar/form',
-              //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
-              // }
             ]
           }
-          // {
-          //   path: '/admin/laborat/permintaan-luar',
-          //   name: 'lab.permintaan-luar',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/LayoutKhusus.vue'),
-          // }
-          // {
-          //   path: '/admin/laborat/permintaan-luar/table',
-          //   name: 'lab.permintaan_luar',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
-          // },
-          // {
-          //   path: '/admin/laborat/permintaan-luar/form',
-          //   name: 'lab.permintaan_luar.form',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
-          // }
         ]
+      },
+      {
+        path: '/admin/settings',
+        component: () => import('pages/simrs/settings/IndexPage.vue')
       }
     ]
   },
