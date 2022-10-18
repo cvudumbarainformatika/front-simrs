@@ -42,6 +42,11 @@ const routes = [
       {
         path: '/admin/settings',
         component: () => import('pages/simrs/settings/IndexPage.vue')
+      },
+      {
+        path: '/admin/settings/menu',
+        name: 'settings.menu',
+        component: () => import('pages/simrs/settings/menu/IndexPage.vue')
       }
     ]
   },
