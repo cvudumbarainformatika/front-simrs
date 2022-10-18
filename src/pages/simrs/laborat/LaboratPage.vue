@@ -196,7 +196,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/transaksi_laborat'
-import { humanDate, diffDate, dateBOD } from 'src/modules/formatter'
+import { humanDate, diffDate, dateBOD, dateLIS } from 'src/modules/formatter'
 import DetailPemeriksaanDialog from './DetailPemeriksaanDialog.vue'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
@@ -446,6 +446,7 @@ const x = ref(null)
 const loadingKey = ref(false)
 
 async function kunciPermintaan(row) {
+  console.log(row)
   if (row.rs18 === '1') {
     return notifErrVue('Maaf permintaan ini sudah terkunci dan terkirim ke LIS')
   }
@@ -469,11 +470,11 @@ async function kunciPermintaan(row) {
       PATIENT_NAME: getNama(row),
       IDENTITY_N: '-',
       BOD: getBOD(row),
-      SEX: getKelamin(row),
+      SEX: getKelamin(row) === 'Laki-laki' ? '1' : '2',
       ADDRESS: getAlamat(row),
       DIAGNOSA: '-',
       GLOBAL_COMMENT: 'laborat-dalam',
-      DATE_ORDER: row.rs3,
+      DATE_ORDER: dateLIS(row.tanggal),
       DOCTOR: row.dokter.rs1,
       DOCTOR_NAME: row.dokter.rs2,
       CLASS: '-',
@@ -489,10 +490,14 @@ async function kunciPermintaan(row) {
     }
 
     // const token = null
+    // console.log(form)
     try {
       await api.post('/v1/transaksi_laborats_kunci_dan_kirim_ke_lis', form).then(response => {
-        console.log('kirim ke list')
-        notifSuccessVue('Data Success terkirim Ke LIS')
+        // console.log('kirim ke list')
+        // console.log(JSON.parse(resp.data.message))
+        const msg = response.data.message
+        console.log(msg)
+        notifSuccessVue(msg)
         x.value = null
         loadingKey.value = false
         row.rs18 = '1'
