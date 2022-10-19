@@ -124,8 +124,8 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
               return
             }
             if (resp.status === 200) {
-              console.log('Detail length', resp.data)
-              if (resp.data) {
+              console.log('Detail length', resp.data.length)
+              if (resp.data.length) {
                 console.log('with detail', resp.data)
                 this.items = resp.data[0].details
                 this.setColumns(resp.data[0].details)

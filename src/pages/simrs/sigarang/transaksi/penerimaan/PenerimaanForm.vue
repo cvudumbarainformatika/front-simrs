@@ -49,6 +49,7 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input
+                  ref="refPengirim"
                   v-model="store.form.pengirim"
                   input-class="text-left"
                   :valid="pengirim"
@@ -64,6 +65,7 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input-date
+                  ref="refTempo"
                   :model="store.form.tempo"
                   icon="icon-mat-event"
                   :valid="tempo"
@@ -125,6 +127,7 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input-date
+                  ref="refTanggalSurat"
                   :model="store.form.tanggal_surat"
                   icon="icon-mat-event"
                   :valid="tglSurat"
@@ -159,6 +162,7 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input
+                  ref="refNomorSurat"
                   v-model="store.form.surat"
                   input-class="text-left"
                   :valid="surat"
@@ -353,6 +357,11 @@ const surat = ref(false)
 const tempo = ref(true)
 const statusPembelian = ref(false)
 const tglSurat = ref(false)
+
+const refPengirim = ref(null)
+const refTempo = ref(null)
+const refTanggalSurat = ref(null)
+const refNomorSurat = ref(null)
 // const diterima = ref(false)
 const validate = val => {
   const apem = validasi()
@@ -380,8 +389,15 @@ const validasi = (val) => {
   pilihSurat.value = !!store.option_surat
   surat.value = !!form.surat
   tglSurat.value = !!form.tanggal_surat
+
+  refPengirim.value.$refs.refInput.validate()
+  refNomorSurat.value.$refs.refInput.validate()
+  refTempo.value.$refs.refInputDate.validate()
+  refTanggalSurat.value.$refs.refInputDate.validate()
   // diterima.value = !!form.qty
   console.log(
+    // refPengirim.value.$refs,
+    // refPengirim.value.$refs.refInput,
     // 'diterima', diterima.value,
     'pemesanan', pemesanan.value,
     'pengirim', pengirim.value,

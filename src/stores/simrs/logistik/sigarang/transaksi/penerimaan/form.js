@@ -75,7 +75,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     setReff () {
       const slug = 'TRM-' + uniqueId()
       this.setForm('reff', slug)
-      routerInstance.replace({ name: 'transaksi.penerimaan', params: { slug } })
+      routerInstance.replace({ name: 'sigarang.transaksi.penerimaan', params: { slug } })
     },
     setSearch (val) {
       // console.log(val)
