@@ -2,10 +2,15 @@
   <div class="layout--laborat">
     <leftDrawer />
     <div class="page--laborat">
-      <router-view v-slot="{ Component }">
+      <router-view
+        v-slot="{ Component }"
+        class="transition"
+      >
         <transition
-          name="fade"
-          mode="out-in"
+          :name="transition.pageTransition.name"
+          :mode="transition.pageTransition.mode"
+          @after-enter="afterEnter"
+          @after-leave="afterLeave"
         >
           <component :is="Component" />
         </transition>
@@ -15,5 +20,14 @@
 </template>
 
 <script setup>
+import { useTransitionStore } from 'src/stores/app/transition'
 import LeftDrawer from './LeftDrawer.vue'
+
+const transition = useTransitionStore()
+const afterEnter = () => {
+  window.scrollTo(0, 0)
+}
+const afterLeave = () => {
+  transition.setPageTransition('default')
+}
 </script>

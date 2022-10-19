@@ -76,7 +76,7 @@ const afterLeave = () => {
 </script>
 
 <style lang="scss">
-$duration: 0.5s;
+$duration: 0.2s;
 .transition {
   overflow: hidden;
 }
@@ -95,7 +95,7 @@ $duration: 0.5s;
 .router-view-enter-active {
   transition: transform $duration ease-in-out;
   z-index: 2;
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 .router-view-enter-to {
   z-index: 2;
@@ -116,6 +116,6 @@ $duration: 0.5s;
 }
 .router-view-back-leave-to {
   z-index: 2;
-  transform: translateX(100%);
+  transform: translateX(-100%);
 }
 </style>
