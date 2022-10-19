@@ -32,7 +32,11 @@
           <app-setting-card url="settings.menu" />
         </div>
         <div class="col">
-          <app-setting-card icon="icon-mat-person_2" />
+          <app-setting-card
+            title="Setting Pengguna"
+            subtitle="Pengaturan data Pengguna Aplikasi"
+            icon="icon-mat-person_2"
+          />
         </div>
       </div>
     </div>
