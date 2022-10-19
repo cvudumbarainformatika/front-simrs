@@ -30,7 +30,10 @@
               <q-item-section>
                 <q-item-label>{{ scope.opt.nama }}</q-item-label>
                 <q-item-label caption>
-                  <strong>NiP : </strong> {{ scope.opt.nip }}
+                  <strong>NIP : </strong> {{ scope.opt.nip }}
+                </q-item-label>
+                <q-item-label caption>
+                  <strong>status : </strong> {{ scope.opt.aktif }}
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -126,9 +129,9 @@ async function filterOptions (val, update) {
     }
   }
   const resp = await api.get('v1/pegawai/find', params)
-  console.log('retur ', resp.data.data)
+  console.log('pegawai ', resp.data)
   update(
-    () => (options.value = resp.data.data),
+    () => (options.value = resp.data),
     ref => {
       if (val !== '' && ref.options.length) {
         ref.setOptionIndex(-1)

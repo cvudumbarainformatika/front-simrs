@@ -7,9 +7,9 @@
       </q-page>
     </div>
     <div v-else>
-      <q-card>
+      <!-- <q-card>
         <app-no-selected-page />
-      </q-card>
+      </q-card> -->
     </div>
   </q-page>
 </template>
@@ -21,9 +21,11 @@ import MenuTransaksi from './MenuTransaksi.vue'
 const route = useRoute()
 const path = computed(() => route.path)
 let slug = routerInstance.currentRoute.value.params.slug
+console.log('slug', slug)
+// if(slug)
 let name = routerInstance.currentRoute.value.name
-if (name === 'transaksi') {
-  name = 'transaksi.pemesanan'
+if (name === 'sigarang.transaksi') {
+  name = 'sigarang.transaksi.pemesanan'
   slug = 'apem'
 }
 routerInstance.replace({ name, params: { slug } })

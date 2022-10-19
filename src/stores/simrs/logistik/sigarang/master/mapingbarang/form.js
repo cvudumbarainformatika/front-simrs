@@ -62,7 +62,7 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
       return new Promise(resolve => {
         api.get('v1/barang108/barang108')
           .then(resp => {
-            this.barang108s = resp.data.data
+            this.barang108s = resp.data
             // console.log('barang 108', resp.data.data)
             resolve(resp)
           })
@@ -72,8 +72,8 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
       return new Promise(resolve => {
         api.get('v1/barangrs/barangrs')
           .then(resp => {
-            this.barangrses = resp.data.data
-            // console.log('barang rs', resp.data.data)
+            this.barangrses = resp.data
+            // console.log('barang rs', resp.data)
             resolve(resp)
           })
       })
@@ -82,7 +82,7 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
       return new Promise(resolve => {
         api.get('v1/satuan/satuan')
           .then(resp => {
-            this.satuans = resp.data.data
+            this.satuans = resp.data
             // console.log('satuan', resp.data.data)
             resolve(resp)
           })

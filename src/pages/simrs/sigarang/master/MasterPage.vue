@@ -3,13 +3,13 @@
     <MenuPage />
     <div v-if="path!=='/master'">
       <q-page>
-        <router-view></router-view>
+        <router-view />
       </q-page>
     </div>
     <div v-else>
-      <q-card>
+      <!-- <q-card>
         <app-no-selected-page />
-      </q-card>
+      </q-card> -->
     </div>
   </q-page>
 </template>
@@ -21,8 +21,8 @@ import MenuPage from './MenuPage.vue'
 const route = useRoute()
 const path = computed(() => route.path)
 let name = routerInstance.currentRoute.value.name
-if (name === 'master') {
-  name = 'master.gedung'
+if (name === 'sigarang.master') {
+  name = 'sigarang.master.gedung'
 }
 routerInstance.replace({ name })
 </script>

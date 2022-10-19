@@ -14,7 +14,7 @@ const store = useTransaksiPenerimaanForm()
 store.searchPemesanan()
 const slug = 'TRM-' + uniqueId()
 store.setForm('reff', slug)
-routerInstance.replace({ name: 'transaksi.penerimaan', params: { slug } })
+routerInstance.replace({ name: 'sigarang.transaksi.penerimaan', params: { slug } })
 // store.getDataPenerimaan().then(data => {
 //   console.log('data', data)
 //   if (data !== undefined) {

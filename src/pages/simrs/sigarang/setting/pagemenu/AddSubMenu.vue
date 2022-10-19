@@ -5,7 +5,12 @@
         Nama Menu
       </div>
       <div class="col-8">
-        <app-input v-model="namaSubMenu" outlined autofocus label="Input Nama Menu" />
+        <app-input
+          v-model="namaSubMenu"
+          outlined
+          autofocus
+          label="Input Nama Menu"
+        />
       </div>
     </div>
     <div class="row items-center q-mb-sm">
@@ -13,7 +18,11 @@
         Nama Route
       </div>
       <div class="col-8">
-        <app-input v-model="routeMenu" outlined label="Input Nama Route" />
+        <app-input
+          v-model="routeMenu"
+          outlined
+          label="Input Nama Route"
+        />
       </div>
     </div>
     <div class="row items-center q-mb-sm">
@@ -21,15 +30,32 @@
         Link Menu
       </div>
       <div class="col-8">
-        <app-input v-model="linkSubMenu" outlined label="Input Link Menu" @keyup.enter="emits('simpan')" />
+        <app-input
+          v-model="linkSubMenu"
+          outlined
+          label="Input Link Menu"
+          @keyup.enter="emits('simpan')"
+        />
       </div>
     </div>
     <div class="row">
       <div class="col text-right">
-        <app-btn v-close-popup label="Batal" color="dark" :disable="loading" @click="emits('batal')" />
+        <app-btn
+          v-close-popup
+          label="Batal"
+          color="dark"
+          :disable="loading"
+          @click="emits('batal')"
+        />
       </div>
       <div class="col  text-right">
-        <app-btn v-close-popup label="Simpan" color="primary" :loading="loading" @click="emits('simpan')" />
+        <app-btn
+          v-close-popup
+          label="Simpan"
+          color="primary"
+          :loading="loading"
+          @click="emits('simpan')"
+        />
       </div>
     </div>
   </div>

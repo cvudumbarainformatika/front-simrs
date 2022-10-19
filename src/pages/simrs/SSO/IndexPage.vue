@@ -96,20 +96,23 @@
         </q-card>
       </div>
       <div class="col-md-3 col-xs-12">
-        <q-card class="bg-green-10 text-white q-mb-md cursor-pointer model-two">
+        <q-card
+          class="bg-green-10 text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('/sigarang/dashboard')"
+        >
           <div class="q-pa-md">
             <div class="column ">
               <div class="flex items-center justify-between">
                 <div class="icon-b">
-                  <q-icon name="icon-mat-medication_liquid" />
+                  <q-icon name="icon-mat-inventory_2" />
                 </div>
                 <div class="text-h4 text-weight-light">
-                  E-CLY
+                  E-LG
                 </div>
               </div>
               <q-separator class="bg-white q-my-sm" />
               <div class="text-h5 text-weight-light">
-                e-Clinic
+                e-Logistik
               </div>
             </div>
           </div>

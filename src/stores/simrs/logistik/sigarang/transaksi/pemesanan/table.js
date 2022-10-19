@@ -107,21 +107,15 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
     // api related function
 
     // ambil
-    getDataTable (val) {
+    getDataTable () {
       this.loading = true
-      console.log(val)
-      // if (val === undefined) {
-      //   this.params.reff = routerInstance.currentRoute.value.params.slug
-      // } else {
-      //   this.params.reff = val
-      // }
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
           .get('v1/transaksi/pemesanan/draft', params)
           .then((resp) => {
             this.loading = false
-            console.log('data ', resp.data)
+            console.log('data ', resp)
             // console.log('data[0] ', resp.data.data[0])
             if (resp.data.message === 'completed') {
               console.log(resp)
@@ -130,11 +124,12 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
               return
             }
             if (resp.status === 200) {
-              if (resp.data.data[0] !== undefined) {
+              console.log('Detail length', resp.data)
+              if (resp.data) {
                 console.log('with detail', resp.data)
-                this.items = resp.data.data[0].details
-                this.setColumns(resp.data.data[0].details)
-                this.setForm(resp.data.data[0])
+                this.items = resp.data[0].details
+                this.setColumns(resp.data[0].details)
+                this.setForm(resp.data[0])
                 console.log('ada')
                 resolve('ada')
               } else {

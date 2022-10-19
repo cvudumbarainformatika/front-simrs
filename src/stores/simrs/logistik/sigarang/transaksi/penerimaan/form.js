@@ -219,7 +219,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         api.get('v1/transaksi/penerimaan/cari-pemesanan', params)
           .then(resp => {
             this.loading = false
-            // console.log('cari pemesanans', resp.data)
+            console.log('cari pemesanans', resp)
             console.log('pemesanan ini', this.pemesanan)
             this.pemesanans = resp.data
             resolve(resp)

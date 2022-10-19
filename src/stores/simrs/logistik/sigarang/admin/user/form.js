@@ -39,7 +39,7 @@ export const useUserFormStore = defineStore('user_form', {
       this.isOpen = !this.isOpen
     },
     newData () {
-      routerInstance.replace({ name: 'admin.pegawai' })
+      routerInstance.replace({ name: 'sigarang.admin.pegawai' })
     },
     editData (val) {
       this.edited = true

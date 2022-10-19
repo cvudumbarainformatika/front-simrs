@@ -5,7 +5,7 @@
     </div>
     <div class="col-10">
       <div v-if="store.pegawai===null">
-        <app-no-selected-page text="Belum ada data yang dipilih" />
+        <app-no-selected-page text="Belum ada data pegawai yang dipilih" />
       </div>
       <div v-else>
         <RegistrationForm />

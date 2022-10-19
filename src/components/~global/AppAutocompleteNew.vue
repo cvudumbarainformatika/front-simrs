@@ -10,7 +10,7 @@
     no-error-icon
     use-input
     hide-dropdown-icon
-    :option-label="typeof(props.optionLabel)==='object'? optionLabel[0] : optionLabel"
+    :option-label="typeof optionLabel === 'object' ? optionLabel[0]: optionLabel"
     :option-value="optionValue"
     :disable="disable"
     :model-value="modelProp"
@@ -29,7 +29,7 @@
     @clear="bersihkan"
   >
     <template
-      v-if="diModel"
+      v-if="modelProp"
       #append
     >
       <q-icon
@@ -47,7 +47,7 @@
               :key="i"
             >
               <q-item-label>{{ scope.opt[item] }}</q-item-label>
-              <q-item-label>{{ oLabel }}</q-item-label>
+              <!-- <q-item-label>{{ oLabel }}</q-item-label> -->
             </div>
           </div>
           <div v-if="typeof(props.optionLabel)==='string'">
@@ -59,7 +59,7 @@
     <template #no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results
+          No results prop
         </q-item-section>
       </q-item>
     </template>
@@ -80,7 +80,7 @@ const props = defineProps({
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
-  model: { type: [String, Number], default: '' }
+  model: { type: String, default: '' }
 
 })
 const optionx = ref([])
@@ -98,13 +98,13 @@ const modelProp = computed({
   set (val) { emits('set-model', val) }
 })
 
-const oLabel = computed(() => {
-  const balik = props.optionLabel.forEach(data => {
-    const temp = ' ' + data
-    return temp
-  })
-  return balik
-})
+// const oLabel = computed(() => {
+//   const balik = props.optionLabel.forEach(data => {
+//     const temp = ' ' + data
+//     return temp
+//   })
+//   return balik
+// })
 
 const bersihkan = val => {
   diModel.value = null

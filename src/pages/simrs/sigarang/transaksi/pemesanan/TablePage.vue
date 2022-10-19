@@ -98,7 +98,7 @@
                 <div class="col-5">
                   <div class="row q-col-gutter-md q-mb-sm">
                     <div class="col-12">
-                      <app-autocomplete
+                      <app-autocomplete-new
                         :model="store.form.kontrak"
                         :valid="kontrak"
                         outlined
@@ -116,7 +116,7 @@
                   </div>
                   <div class="row q-col-gutter-md q-mb-sm">
                     <div class="col-12">
-                      <app-autocomplete
+                      <app-autocomplete-new
                         :model="store.form.kode_rs"
                         :valid="kodeRs"
                         outlined
@@ -173,7 +173,7 @@
                     <div class="col-12 text-right">
                       <app-btn
                         label="Tutup Pemesanan"
-                        :loading="store.loading"
+                        :loading="store.loadingFinish"
                         :disable="store.isOpen"
                         @click="onFisnish"
                       />
@@ -318,12 +318,12 @@
                     class="q-mx-sm"
                     label="Batal"
                     color="dark"
-                    :loading="store.loading"
+                    :disable="store.loading"
                     @click="onCancel"
                   />
                   <app-btn
                     label="Tambah"
-                    :loading="store.loading"
+                    :loading="store.loadingTambah"
                     @click="onSubmit"
                   />
                 </td>
@@ -392,14 +392,14 @@ const onFisnish = () => {
     store.setForm('total', jumlah)
 
     const slug = 'TRP-' + uniqueId()
-
+    store.loadingFinish = true
     store.saveForm().then(() => {
       table.setParam('reff', slug)
       console.log('onFinish ', slug)
       table.resetData()
       store.resetFORM()
       store.setForm('reff', slug)
-      routerInstance.replace({ name: 'transaksi.pemesanan', params: { slug } })
+      routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
       table.getDataTable(slug)
     })
   } else {
@@ -430,6 +430,7 @@ const onSubmit = () => {
     // store.setForm('status', 1)
     // store.form.qty = jumlah
     // console.log('form ', store.form)
+    store.loadingTambah = true
     store.saveForm().then(() => {
       // if (formReff.value != null) { formReff.value.resetValidation() }
       table.getDataTable()

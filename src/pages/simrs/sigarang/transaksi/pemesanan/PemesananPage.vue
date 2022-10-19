@@ -15,14 +15,14 @@ const slug = 'TRP-' + uniqueId()
 const oldSlug = routerInstance.currentRoute.value.params.slug
 table.setParam('reff', oldSlug)
 table.getDataTable().then(data => {
-  console.log('resolved', data)
+  console.log('Pemesanan resolved', data)
   if (data === 'ada') {
     console.log('oldSlug')
-    routerInstance.replace({ name: 'transaksi.pemesanan', params: { slug: oldSlug } })
+    routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: oldSlug } })
     table.setParam('reff', oldSlug)
   } else {
     console.log('slug')
-    routerInstance.replace({ name: 'transaksi.pemesanan', params: { slug } })
+    routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
     store.resetFORM()
     table.setParam('reff', slug)
   }

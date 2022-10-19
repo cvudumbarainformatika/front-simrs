@@ -1,95 +1,189 @@
 <template>
   <q-dialog>
-    <app-card class="my-card" title="Form Pemesanan Barang" desc="From Pemesanan barang kepada Supplier terkontrak "
-      style="min-width: 800px;">
+    <app-card
+      class="my-card"
+      title="Form Pemesanan Barang"
+      desc="From Pemesanan barang kepada Supplier terkontrak "
+      style="min-width: 800px;"
+    >
       <template #content>
-        <q-form ref="formReff" @submit="onSubmit" @reset="onReset">
+        <q-form
+          ref="formReff"
+          @submit="onSubmit"
+          @reset="onReset"
+        >
           <div class="row q-col-gutter-md q-mb-sm">
             <div class="col-5">
               <div class="row q-col-gutter-md q-mb-sm">
                 <div class="col-12">
-                  <app-autocomplete :model="store.form.kontrak" outlined label="Nomor Kontrak" autocomplete="nokontrak"
-                    option-value="nokontrak" :option-label="['nokontrak','namaperusahaan']"
-                    :source="store.kontrakPekerjaans" @clear="clearkontrak" @on-select="store.kontrakSelected" />
+                  <app-autocomplete
+                    :model="store.form.kontrak"
+                    outlined
+                    label="Nomor Kontrak"
+                    autocomplete="nokontrak"
+                    option-value="nokontrak"
+                    :option-label="['nokontrak','namaperusahaan']"
+                    :source="store.kontrakPekerjaans"
+                    @clear="clearkontrak"
+                    @on-select="store.kontrakSelected"
+                  />
                 </div>
               </div>
               <div class="row q-col-gutter-md q-mb-sm">
                 <div class="col-12">
-                  <app-autocomplete :model="store.form.kode_rs" outlined label="Nama Barang RS" autocomplete="nama"
-                    option-value="kode" option-label="nama" :source="mappingBarang.barangrses"
-                    @on-select="store.barangSelected" @clear="clearBarangRs" @set-model="modelSet" />
+                  <app-autocomplete
+                    :model="store.form.kode_rs"
+                    outlined
+                    label="Nama Barang RS"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :source="mappingBarang.barangrses"
+                    @on-select="store.barangSelected"
+                    @clear="clearBarangRs"
+                    @set-model="modelSet"
+                  />
                 </div>
               </div>
               <div class="row q-col-gutter-md q-mb-sm">
                 <div class="col-12 ">
-                  <app-input input-class="text-right" v-model="store.form.qty" valid
-                    @update:model-value="store.updateHarga" label="Jumlah Pemesanan*" outlined />
+                  <app-input
+                    v-model="store.form.qty"
+                    input-class="text-right"
+                    valid
+                    label="Jumlah Pemesanan*"
+                    outlined
+                    @update:model-value="store.updateHarga"
+                  />
                 </div>
               </div>
               <div class="row q-col-gutter-md q-mb-sm">
                 <div class="col-12">
-                  <app-input v-model="store.form.harga" valid @update:model-value="store.updateHarga" prefix="Rp "
-                    label="Harga Pembelian*" currency outlined />
+                  <app-input
+                    v-model="store.form.harga"
+                    valid
+                    prefix="Rp "
+                    label="Harga Pembelian*"
+                    currency
+                    outlined
+                    @update:model-value="store.updateHarga"
+                  />
                 </div>
               </div>
             </div>
             <div class="col-7">
               <div class="row q-mb-sm">
-                <div class="col col-5">Tanggal Pemesanan</div>
-                <div class="col text-right">{{store.tanggalTampil}} </div>
+                <div class="col col-5">
+                  Tanggal Pemesanan
+                </div>
+                <div class="col text-right">
+                  {{ store.tanggalTampil }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Nomor Pemesanan</div>
-                <div class="col text-right">{{store.form.nomor}} </div>
+                <div class="col col-5">
+                  Nomor Pemesanan
+                </div>
+                <div class="col text-right">
+                  {{ store.form.nomor }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Perusahaan</div>
-                <div class="col text-right">{{store.namaPerusahaan ? store.namaPerusahaan : '-'}}</div>
+                <div class="col col-5">
+                  Perusahaan
+                </div>
+                <div class="col text-right">
+                  {{ store.namaPerusahaan ? store.namaPerusahaan : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Kode RS</div>
-                <div class="col text-right">{{store.barangrs.length ? store.barangrs[0].kode : '-'}}</div>
+                <div class="col col-5">
+                  Kode RS
+                </div>
+                <div class="col text-right">
+                  {{ store.barangrs.length ? store.barangrs[0].kode : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Nama Barang</div>
-                <div class="col text-right">{{store.barangrs.length ? store.barangrs[0].nama : '-'}}</div>
+                <div class="col col-5">
+                  Nama Barang
+                </div>
+                <div class="col text-right">
+                  {{ store.barangrs.length ? store.barangrs[0].nama : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Kode 108</div>
-                <div class="col text-right">{{store.barang108.length ? store.barang108[0].kode : '-'}}</div>
+                <div class="col col-5">
+                  Kode 108
+                </div>
+                <div class="col text-right">
+                  {{ store.barang108.length ? store.barang108[0].kode : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Uraian 108</div>
-                <div class="col text-right">{{store.barang108.length ? store.barang108[0].uraian : '-'}}</div>
+                <div class="col col-5">
+                  Uraian 108
+                </div>
+                <div class="col text-right">
+                  {{ store.barang108.length ? store.barang108[0].uraian : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Satuan</div>
-                <div class="col text-right">{{store.satuan.length ? store.satuan[0].nama : '-'}}</div>
+                <div class="col col-5">
+                  Satuan
+                </div>
+                <div class="col text-right">
+                  {{ store.satuan.length ? store.satuan[0].nama : '-' }}
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Stok Gudang</div>
-                <div class="col text-right">value</div>
+                <div class="col col-5">
+                  Stok Gudang
+                </div>
+                <div class="col text-right">
+                  value
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col col-5">Stok Minmum Gudang</div>
-                <div class="col text-right">value</div>
+                <div class="col col-5">
+                  Stok Minmum Gudang
+                </div>
+                <div class="col text-right">
+                  value
+                </div>
               </div>
               <div class="row q-mb-sm">
-                <div class="col-5 col-5">Jumlah yang Harus dibeli</div>
-                <div class="col text-right">{{store.form.qty ? store.form.qty : 0}}</div>
+                <div class="col-5 col-5">
+                  Jumlah yang Harus dibeli
+                </div>
+                <div class="col text-right">
+                  {{ store.form.qty ? store.form.qty : 0 }}
+                </div>
               </div>
               <div class="row q-mb-sm ">
-                <div class="col col-5"><strong>Sub Total</strong></div>
-                <div class="col text-right"><strong>{{store.form.sub_total ? formatRp(store.form.sub_total) :
-                0}}</strong></div>
+                <div class="col col-5">
+                  <strong>Sub Total</strong>
+                </div>
+                <div class="col text-right">
+                  <strong>{{ store.form.sub_total ? formatRp(store.form.sub_total) :
+                    0 }}</strong>
+                </div>
               </div>
             </div>
           </div>
 
           <q-separator class="q-my-md" />
           <div class="text-right">
-            <app-btn type="reset" color="dark" label="Cancel" class="q-mr-md" />
-            <app-btn label="Simpan" :loading="store.loading" />
+            <app-btn
+              type="reset"
+              color="dark"
+              label="Cancel"
+              class="q-mr-md"
+            />
+            <app-btn
+              label="Simpan"
+              :loading="store.loading"
+            />
           </div>
         </q-form>
       </template>

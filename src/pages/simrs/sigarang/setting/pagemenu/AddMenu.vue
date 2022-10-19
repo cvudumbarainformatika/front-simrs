@@ -5,7 +5,12 @@
         Nama Menu
       </div>
       <div class="col-8">
-        <app-input v-model="namaMenu" outlined autofocus label="Input Nama Menu" />
+        <app-input
+          v-model="namaMenu"
+          outlined
+          autofocus
+          label="Input Nama Menu"
+        />
       </div>
     </div>
     <div class="row items-center q-mb-sm">
@@ -13,7 +18,12 @@
         Icon Menu
       </div>
       <div class="col-8">
-        <app-input v-model="iconMenu" outlined label="Input Icon Menu" hint="example : icon-mat-close" />
+        <app-input
+          v-model="iconMenu"
+          outlined
+          label="Input Icon Menu"
+          hint="example : icon-mat-close"
+        />
       </div>
     </div>
     <div class="row items-center q-mb-sm">
@@ -21,15 +31,32 @@
         Link Menu
       </div>
       <div class="col-8">
-        <app-input v-model="linkMenu" outlined label="Input Link Menu" @keyup.enter="emist('simpan')" />
+        <app-input
+          v-model="linkMenu"
+          outlined
+          label="Input Link Menu"
+          @keyup.enter="emist('simpan')"
+        />
       </div>
     </div>
     <div class="row">
       <div class="col text-right">
-        <app-btn v-close-popup label="Batal" color="dark" :disable="loading" @click="emist('batal')" />
+        <app-btn
+          v-close-popup
+          label="Batal"
+          color="dark"
+          :disable="loading"
+          @click="emist('batal')"
+        />
       </div>
       <div class="col  text-right">
-        <app-btn v-close-popup label="Simpan" color="primary" :loading="loading" @click="emist('simpan')" />
+        <app-btn
+          v-close-popup
+          label="Simpan"
+          color="primary"
+          :loading="loading"
+          @click="emist('simpan')"
+        />
       </div>
     </div>
   </div>

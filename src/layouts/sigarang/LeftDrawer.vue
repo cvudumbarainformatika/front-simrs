@@ -1,10 +1,16 @@
 <template>
-  <q-drawer show-if-above :width="70">
+  <q-drawer
+    show-if-above
+    :width="70"
+  >
     <!-- logo -->
     <div class="absolute-top">
-      <div class=" flex flex-center" style="height: 60px;">
+      <div
+        class=" flex flex-center"
+        style="height: 60px;"
+      >
         <q-avatar size="40px">
-          <img src="~assets/logos/logo-rs.png">
+          <img src="~assets/logos/logo-rsud.png">
         </q-avatar>
       </div>
     </div>
@@ -12,16 +18,34 @@
         class="fit"
         style="height:calc(100%-50px) ;padding-top:50px"
       > -->
-    <div class="flex column flex-center full-height" style="height:calc(100%-60px) ">
-      <router-link v-for="(menu, i) in menus" :key="i" :to="`/${menu.link}`" replace
-        class="sidebar flex flex-center item item-link" :active-class="dark? 'active-dark' : 'active'" exact>
+    <div
+      class="flex column flex-center full-height"
+      style="height:calc(100%-60px) "
+    >
+      <router-link
+        v-for="(menu, i) in menus"
+        :key="i"
+        :to="`/${menu.link}`"
+        replace
+        class="sidebar flex flex-center item item-link"
+        :active-class="dark? 'active-dark' : 'active'"
+        exact
+      >
         <div class="item-content">
-          <q-tooltip class="bg-primary" anchor="center right" self="center left" :offset="[5, 5]">
+          <q-tooltip
+            class="bg-primary"
+            anchor="center right"
+            self="center left"
+            :offset="[5, 5]"
+          >
             <strong class="">{{ menu.name }}</strong>
             (
             <q-icon name="icon-mat-keyboard_arrow_right" />)
           </q-tooltip>
-          <q-icon :name="menu.icon" size="25px" />
+          <q-icon
+            :name="menu.icon"
+            size="25px"
+          />
         </div>
       </router-link>
     </div>
@@ -42,7 +66,8 @@ const props = defineProps({
     default: false
   },
   menus: {
-    type: Array
+    type: Array,
+    default: () => []
   }
 })
 
@@ -86,9 +111,9 @@ a.router-link-exact-active-dark,
 a.active-dark {
   margin-left: 10px;
   border-radius: 10px 0px 0px 10px;
-  color: $white;
+  color: white;
   background-color: $dark-light;
-  border-left: 3px solid $white;
+  border-left: 3px solid white;
 }
 
 .just-shadow {

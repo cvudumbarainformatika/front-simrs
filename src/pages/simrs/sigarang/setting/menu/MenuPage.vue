@@ -65,6 +65,6 @@ const setting = useSettingsStore()
 .aktif-dark {
   margin-left: 10px;
   border-radius: 10px 0px 0px 10px;
-  border-left: 3px solid $white;
+  border-left: 3px solid white;
 }
 </style>

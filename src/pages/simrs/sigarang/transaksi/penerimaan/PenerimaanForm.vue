@@ -26,7 +26,7 @@
                 Nomor Pemesanan
               </div>
               <div class="col-md-6 col-xs-12">
-                <app-autocomplete
+                <app-autocomplete-new
                   :model="store.form.nomor"
                   :valid="pemesanan"
                   outlined

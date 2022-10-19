@@ -139,7 +139,26 @@ const changeArrayIndex = (array, from, to) => {
   array.splice(toIn, 0, element)
 }
 
+const notifCenterVue = (msg) => {
+  Notify.create({
+    message: msg,
+    icon: 'icon-eva-message-circle-outline',
+    position: 'center',
+    color: 'primary',
+    actions: [
+      {
+        label: 'Dismiss',
+        color: 'yellow',
+        handler: () => {
+          /* console.log('wooow') */
+        }
+      }
+    ]
+  })
+}
+
 export {
+  notifCenterVue,
   notifSuccess,
   uniqueId,
   notifErr,

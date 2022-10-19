@@ -1,9 +1,23 @@
 <template>
-  <q-footer bordered class="bg-white shadow-1">
-    <q-tabs v-model="tab" active-color="primary" indicator-color="transparent" class="text-grey-10">
+  <q-footer
+    bordered
+    class="bg-white shadow-1"
+  >
+    <q-tabs
+      v-model="tab"
+      active-color="primary"
+      indicator-color="transparent"
+      class="text-grey-10"
+    >
       <!-- :to="{ name: tab.url }" -->
-      <q-route-tab v-for="(tabb, i) in menus" :key="'tab' + i" :to="{ name: tabb.name }" :name="tabb.name"
-        :icon="tabb.icon" no-caps>
+      <q-route-tab
+        v-for="(tabb, i) in menus"
+        :key="'tab' + i"
+        :to="{ name: tabb.name }"
+        :name="tabb.name"
+        :icon="tabb.icon"
+        no-caps
+      >
         <!-- <div class="f-10">
           {{ tab.name }}
         </div> -->
@@ -20,7 +34,8 @@ const props = defineProps({
     default: false
   },
   menus: {
-    type: Array
+    type: Array,
+    default: () => []
   }
 })
 // const menus = ref([

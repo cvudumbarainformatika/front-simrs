@@ -24,7 +24,9 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       order_by: 'id',
       sort: 'desc'
     },
-    loading: false
+    loading: false,
+    loadingTambah: false,
+    loadingFinish: false
   }),
   actions: {
     // local related actions
@@ -115,9 +117,13 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.isOpen = true
     },
     kontrakSelected (val) {
+      // console.log('kontrak', !this.kontrakPekerjaans.length)
+      if (!val || !this.kontrakPekerjaans.length) return
       const result = this.kontrakPekerjaans.filter(data => {
         return data.nokontrak === val
       })
+      // console.log('kontrak val', val)
+      // console.log('kontrak all', this.kontrakPekerjaans)
       // console.log('kontrak selected', result[0])
       this.form.kode_perusahaan = result[0].kodeperusahaan
       this.namaPerusahaan = result[0].namaperusahaan
@@ -129,6 +135,9 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     barangSelected (val) {
       this.newData()
       const mappingBarang = useMasterMapingBarangForm()
+      // console.log('barang rs', mappingBarang.barangrses)
+      // console.log('barang 108', mappingBarang.barang108s)
+      // console.log('satuan', mappingBarang.satuans)
       this.barangrs = mappingBarang.barangrses.filter(data => {
         return data.kode === val
       })
@@ -156,8 +165,11 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       return new Promise((resolve, reject) => {
         api.get('v1/kontrak-pengerjaan/kontrak-aktif', params)
           .then(resp => {
+            // console.log('kontrak', resp.data)
             this.loadingKontrak = false
-            this.kontrakPekerjaans = resp.data.data
+            if (resp.status === 200) {
+              this.kontrakPekerjaans = resp.data
+            }
             resolve(resp)
           }).catch(err => {
             this.loadingKontrak = false
@@ -171,7 +183,8 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       return new Promise(resolve => {
         api.get('v1/mapingbarang/maping', params)
           .then(resp => {
-            this.mapingBarangs = resp.data.data
+            // console.log('maping barang', resp.data)
+            this.mapingBarangs = resp.data
             // console.log(resp.data)
             resolve(resp)
           })
@@ -195,9 +208,14 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
             resolve(resp)
             this.loading = false
             this.isOpen = false
+
+            this.loadingTambah = false
+            this.loadingFinish = false
           })
           .catch((err) => {
+            this.loadingTambah = false
             this.isOpen = false
+            this.loadingFinish = false
             this.loading = false
             reject(err)
           })
