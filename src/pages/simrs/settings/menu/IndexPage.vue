@@ -3,6 +3,16 @@
     <div class="text-h6  q-py-lg">
       Settings Menu
     </div>
+    <q-separator class="q-my-lg" />
+    <div class="q-py-md">
+      <q-btn
+        round
+        color="primary"
+        icon="icon-mat-add"
+        size="sm"
+        @click="addMenu"
+      />
+    </div>
     <div class="row q-col-gutter-lg">
       <div class="col-md-4">
         <q-list bordered>
@@ -12,6 +22,9 @@
             v-ripple
             class="q-my-sm"
             clickable
+            :active="link === contact.id"
+            active-class="my-menu-link"
+            @click="link = contact.id"
           >
             <q-item-section avatar>
               <q-avatar
@@ -19,35 +32,6 @@
                 text-color="white"
               >
                 {{ contact.letter }}
-              </q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label>{{ contact.name }}</q-item-label>
-              <q-item-label
-                caption
-                lines="1"
-              >
-                {{ contact.email }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator />
-          <q-item-label header>
-            Offline
-          </q-item-label>
-
-          <q-item
-            v-for="contact in offline"
-            :key="contact.id"
-            v-ripple
-            class="q-mb-sm"
-            clickable
-          >
-            <q-item-section avatar>
-              <q-avatar>
-                <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`">
               </q-avatar>
             </q-item-section>
 
@@ -96,11 +80,21 @@ const contacts = ref(
     letter: 'S'
   }]
 )
+
+const link = ref(1)
+function addMenu() {
+  console.log('menu')
+}
 </script>
 
 <style lang="scss" scoped>
 .pad-xxxl {
   padding-left:15%;
   padding-right:15%;
+}
+
+.my-menu-link{
+  color: white;
+  background: #F2C037;
 }
 </style>
