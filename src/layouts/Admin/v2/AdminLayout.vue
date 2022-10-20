@@ -40,14 +40,20 @@
     /> -->
 
     <q-page-container>
-      <transition
-        :name="transition.pageTransition.name"
-        :mode="transition.pageTransition.mode"
-        @after-enter="afterEnter"
-        @after-leave="afterLeave"
+      <router-view
+        v-slot="{ Component }"
+        class="transition"
       >
-        <router-view class="transition" />
-      </transition>
+        <transition
+          :name="transition.pageTransition.name"
+          :mode="transition.pageTransition.mode"
+          @after-enter="afterEnter"
+          @after-leave="afterLeave"
+        >
+          <!-- <router-view class="transition" /> -->
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>
@@ -55,15 +61,17 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useTransitionStore } from 'src/stores/app/transition'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const $q = useQuasar()
-const mobile = $q.screen.lt.md
-console.log(mobile)
+// const mobile = $q.screen.lt.md
+// console.log(mobile)
 const dark = computed(() => {
   return $q.dark.isActive
 })
 
+const route = useRoute()
 const transition = useTransitionStore()
 
 const afterEnter = () => {
@@ -72,6 +80,12 @@ const afterEnter = () => {
 const afterLeave = () => {
   transition.setPageTransition('default')
 }
+
+watch(route, (to) => {
+  // console.log('route', route)
+  console.log('to', to.fullPath)
+  // transition.setPageTransition('back')
+}, { flush: 'pre', immediate: true, deep: true })
 
 </script>
 

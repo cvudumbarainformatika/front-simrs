@@ -12,6 +12,7 @@
           @after-enter="afterEnter"
           @after-leave="afterLeave"
         >
+          <!-- <router-view class="transition" /> -->
           <component :is="Component" />
         </transition>
       </router-view>
