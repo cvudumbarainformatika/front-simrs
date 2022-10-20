@@ -1,8 +1,13 @@
 <template>
-  <q-page class="q-pa-sm">
-    <MenuTransaksi />
-    <div v-if="path!=='/transaksi'">
-      <q-page>
+  <q-page class="q-pb-sm">
+    <div class="fixed top menu-bar">
+      <MenuTransaksi />
+    </div>
+    <div
+      v-if="path!=='/transaksi'"
+      class="q-pt-lg"
+    >
+      <q-page class="q-pt-sm q-px-sm">
         <router-view />
       </q-page>
     </div>
@@ -31,3 +36,11 @@ if (name === 'sigarang.transaksi') {
 routerInstance.replace({ name, params: { slug } })
 
 </script>
+<style lang="scss" scoped>
+.menu-bar{
+  width: calc(100%);
+  z-index: 100;
+  overflow: hidden;
+  background-color: $grey-1;
+}
+</style>

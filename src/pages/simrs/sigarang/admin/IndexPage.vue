@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm">
+  <q-page>
     <Suspense>
       <!-- main content -->
       <AsyncComp />
