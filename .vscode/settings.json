@@ -21,5 +21,6 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.autoSave": "onWindowChange",
-  "beautify.config": ""
+  "beautify.config": "",
+  "workbench.colorTheme": "GitHub Dark"
 }

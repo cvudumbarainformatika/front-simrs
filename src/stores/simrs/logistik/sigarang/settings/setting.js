@@ -4,6 +4,7 @@ import { useMasterBarangRSForm } from '../master/barangrs/form'
 import { useMasterMapingBarangForm } from '../master/mapingbarang/form'
 import { useMasterPenggunaRuangForm } from '../master/penggunaruang/form'
 import { useTransaksiPemensananForm } from '../transaksi/pemesanan/form'
+import { useTransaksiPermintaanForm } from '../transaksi/permintaan/form'
 
 export const useSettingsStore = defineStore('setting_store', {
   state: () => ({
@@ -36,6 +37,9 @@ export const useSettingsStore = defineStore('setting_store', {
       const mapingpengguna = useMasterPenggunaRuangForm()
       mapingpengguna.getDataPenggunas()
       mapingpengguna.getDataRuangs()
+
+      const permintaan = useTransaksiPermintaanForm()
+      permintaan.getPenggunas()
     },
     pilihItem (data) {
       console.log('pilih item', data)

@@ -119,7 +119,7 @@
           </q-card>
         </div>
       </q-card-section>
-      <q-card-section style="width:450px;">
+      <q-card-section style="width:550px;">
         <div class="row q-mb-sm">
           <app-btn
             v-if="addsub===false"

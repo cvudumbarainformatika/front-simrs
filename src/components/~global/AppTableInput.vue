@@ -267,7 +267,7 @@
             >
               <div
                 class="flex column flex-center bg-loading-bg__table"
-                style="height: 300px"
+                style="height: 200px"
               >
                 <div>
                   <q-icon

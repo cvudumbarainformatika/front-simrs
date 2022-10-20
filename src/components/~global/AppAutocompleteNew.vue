@@ -59,7 +59,7 @@
     <template #no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results prop
+          No results
         </q-item-section>
       </q-item>
     </template>
