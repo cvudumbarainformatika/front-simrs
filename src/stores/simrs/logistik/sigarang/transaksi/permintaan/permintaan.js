@@ -17,11 +17,32 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     }
   }),
   actions: {
-    setPage(val) {},
-    setPerPage(val) {},
-    refreshTable() {},
-    setSearch(val) {},
-    setOder(val) {},
+
+    setPage(payload) {
+      // console.log('setPage', payload)
+      this.params.page = payload
+      // this.getDataTable()
+    },
+    setPerPage(payload) {
+      this.params.per_page = payload
+      this.params.page = 1
+      // this.getDataTable()
+    },
+    refreshTable() {
+      this.params.page = 1
+      // this.getDataTable()
+    },
+    setSearch(val) {
+      this.params.q = val
+      // this.getDataTable()
+    },
+    setOder(payload) {
+      this.params.order_by = payload
+      this.params.sort === 'desc'
+        ? (this.params.sort = 'asc')
+        : (this.params.sort = 'desc')
+      // this.getDataTable()
+    },
     deletesData(val) {}
   }
 })

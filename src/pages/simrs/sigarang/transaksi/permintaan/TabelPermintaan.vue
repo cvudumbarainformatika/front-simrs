@@ -78,6 +78,69 @@
                 </div>
               </th>
             </tr>
+            <tr>
+              <td>
+                <div class="bold" />
+              </td>
+              <td>
+                <div class="bold">
+                  Kode barang
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  <app-autocomplete-new
+                    :model="table.form.kode_rs"
+                    :valid="kodeRs"
+                    outlined
+                    label="Nama Barang RS"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :source="mapingbarang.barangrses"
+                    @on-select="barangSelected"
+                    @clear="clearBarangRs"
+                    @set-model="modelSet"
+                  />
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  satuan
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  Stok User
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  Stok Alokasi
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  maks stok
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  jumlah minta
+                </div>
+              </td>
+              <td>
+                <div class="bold">
+                  Gudang
+                </div>
+              </td>
+
+              <td>
+                <div class="bold">
+                  Alasan PNM
+                </div>
+              </td>
+            </tr>
           </template>
         </app-table-input>
       </template>
@@ -85,9 +148,18 @@
   </div>
 </template>
 <script setup>
+import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
+
+const mapingbarang = useMasterMapingBarangForm()
+
+const barangSelected = val => {}
+const clearBarangRs = () => {}
+const modelSet = val => {
+  console.log(val)
+}
 </script>
