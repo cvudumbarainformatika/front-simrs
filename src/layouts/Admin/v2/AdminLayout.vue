@@ -47,8 +47,6 @@
         <transition
           :name="transition.pageTransition.name"
           :mode="transition.pageTransition.mode"
-          @after-enter="afterEnter"
-          @after-leave="afterLeave"
         >
           <!-- <router-view class="transition" /> -->
           <component :is="Component" />
@@ -74,23 +72,23 @@ const dark = computed(() => {
 const route = useRoute()
 const transition = useTransitionStore()
 
-const afterEnter = () => {
-  window.scrollTo(0, 0)
-}
-const afterLeave = () => {
-  transition.setPageTransition('default')
-}
+// const afterEnter = () => {
+//   window.scrollTo(0, 0)
+// }
+// const afterLeave = () => {
+//   transition.setPageTransition('default')
+// }
 
 watch(route, (to) => {
   // console.log('route', route)
-  console.log('to', to.fullPath)
+  console.log('to', to)
   // transition.setPageTransition('back')
 }, { flush: 'pre', immediate: true, deep: true })
 
 </script>
 
 <style lang="scss">
-$duration: 0.2s;
+$duration: 0.1s;
 .transition {
   overflow: hidden;
 }

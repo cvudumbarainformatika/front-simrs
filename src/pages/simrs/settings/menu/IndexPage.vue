@@ -31,24 +31,27 @@
                 color="secondary"
                 text-color="white"
               >
-                L
+                {{ menu.nama.charAt(0) }}
               </q-avatar>
             </q-item-section>
 
             <q-item-section>
               <q-item-label>{{ menu.nama }}</q-item-label>
               <q-item-label
-                caption
+                class="f-10"
                 lines="1"
               >
-                jghjhg
+                description
               </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
       </div>
       <div class="col-md-8">
-        Submenu
+        <submenu-lists
+          :menu="link"
+          :items="store.items"
+        />
       </div>
     </div>
 
@@ -71,6 +74,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useTableMenu } from 'src/stores/simrs/settings/menu/table'
+import SubmenuLists from './SubmenuLists.vue'
 
 const link = ref(1)
 

@@ -49,8 +49,8 @@ import AppSettingCard from 'src/components/~global/AppSettingCard.vue'
 
 <style lang="scss" scoped>
 .padding-xxxl {
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 20%;
+  padding-right: 20%;
 }
 
 </style>

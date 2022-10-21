@@ -9,6 +9,7 @@ const routes = [
       {
         path: '/admin/sso',
         name: 'admin.sso',
+        meta: { transition: 'fade', mode: '' },
         component: () => import(/* webpackChunkName: "admin.sso" */'pages/simrs/SSO/IndexPage.vue')
       },
       {
@@ -19,6 +20,7 @@ const routes = [
           {
             path: '/admin/laborat/dashboard',
             name: 'lab.dashboard',
+            meta: { transition: 'fade', mode: '' },
             component: () => import('pages/simrs/laborat/DashboardPage.vue')
           },
           {
