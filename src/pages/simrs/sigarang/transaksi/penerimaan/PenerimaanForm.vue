@@ -7,6 +7,30 @@
       <template #content>
         <div class="row q-col-gutter-md q-mb-sm">
           <div class="col-md-6 col-xs-12">
+            <div class="row q-col-gutter-md q-mb-sm">
+              <div class="col-md-4 col-xs-12">
+                Tanggal
+              </div>
+              <div class="col-md-6 col-xs-12">
+                {{ store.tanggalTampil }}
+              </div>
+            </div>
+            <div class="row q-col-gutter-md q-mb-sm">
+              <div class="col-md-4 col-xs-12">
+                Penyedia
+              </div>
+              <div class="col-md-6 col-xs-12">
+                {{ store.form.namaPerusahaan ? store.form.namaPerusahaan : '-' }}
+              </div>
+            </div>
+            <div class="row q-col-gutter-md q-mb-sm">
+              <div class="col-md-4 col-xs-12">
+                Nomor Kontrak
+              </div>
+              <div class="col-md-6 col-xs-12">
+                {{ store.form.kontrak ? store.form.kontrak : '-' }}
+              </div>
+            </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
                 Nomor Penerimaan
@@ -61,23 +85,6 @@
 
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
-                Batas Akhir Pembayaran (tempo)
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <app-input-date
-                  ref="refTempo"
-                  :model="store.form.tempo"
-                  icon="icon-mat-event"
-                  :valid="tempo"
-                  outlined
-                  label="Tempo"
-                  @set-model="setModel"
-                />
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div class="col-md-4 col-xs-12">
                 Status pembelian
               </div>
               <div class="col-md-6 col-xs-12">
@@ -85,7 +92,7 @@
                   v-model="store.form.status_pembelian"
                   :valid="statusPembelian"
                   outlined
-                  label="Pilih surat*"
+                  label="Status Pembelian*"
                   autocomplete="nama"
                   option-value="id"
                   :loading="store.loading"
@@ -96,79 +103,82 @@
             </div>
           </div>
           <div class="col-md-6 col-xs-12">
-            <div class="row q-col-gutter-md q-mb-sm">
-              <div class="col-md-4 col-xs-12">
-                Tanggal
-              </div>
-              <div class="col-md-6 col-xs-12">
-                {{ store.tanggalTampil }}
-              </div>
-            </div>
-            <div class="row q-col-gutter-md q-mb-sm">
-              <div class="col-md-4 col-xs-12">
-                Penyedia
-              </div>
-              <div class="col-md-6 col-xs-12">
-                {{ store.form.namaPerusahaan ? store.form.namaPerusahaan : '-' }}
-              </div>
-            </div>
-            <div class="row q-col-gutter-md q-mb-sm">
-              <div class="col-md-4 col-xs-12">
-                Nomor Kontrak
-              </div>
-              <div class="col-md-6 col-xs-12">
-                {{ store.form.kontrak ? store.form.kontrak : '-' }}
-              </div>
-            </div>
-
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
-                Tanggal Surat
+                Tanggal Surat Jalan
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input-date
                   ref="refTanggalSurat"
                   :model="store.form.tanggal_surat"
                   icon="icon-mat-event"
-                  :valid="tglSurat"
                   outlined
                   label="Tanggal*"
                   @set-model="setSurat"
                 />
               </div>
             </div>
+
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
-                Jenis Surat
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <app-autocomplete-new
-                  v-model="store.option_surat"
-                  outlined
-                  label="Pilih surat*"
-                  :valid="pilihSurat"
-                  autocomplete="nama"
-                  option-value="id"
-                  :loading="store.loading"
-                  option-label="nama"
-                  :source="store.surats"
-                  @on-select="store.suratSelected"
-                />
-              </div>
-            </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div class="col-md-4 col-xs-12">
-                Nomor Surat / Faktur
+                Nomor Surat Jalan
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-input
                   ref="refNomorSurat"
-                  v-model="store.form.surat"
+                  v-model="store.form.surat_jalan"
                   input-class="text-left"
-                  :valid="surat"
                   label="Nomor Surat*"
                   outlined
-                  @update:model-value="store.inputSurat"
+                />
+                <!-- @update:model-value="store.inputSurat" -->
+              </div>
+            </div>
+
+            <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div class="col-md-4 col-xs-12">
+                Tanggal Faktur
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <app-input-date
+                  ref="refTanggalFaktur"
+                  :model="store.form.tanggal_faktur"
+                  icon="icon-mat-event"
+                  outlined
+                  label="Tanggal*"
+                  @set-model="setFaktur"
+                />
+              </div>
+            </div>
+
+            <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div class="col-md-4 col-xs-12">
+                Nomor Faktur
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <app-input
+                  ref="refNomorFaktur"
+                  v-model="store.form.faktur"
+                  input-class="text-left"
+                  label="Nomor Faktur*"
+                  outlined
+                />
+                <!-- @update:model-value="store.inputSurat" -->
+              </div>
+            </div>
+
+            <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div class="col-md-4 col-xs-12">
+                Batas Akhir Pembayaran (tempo)
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <app-input-date
+                  ref="refTempo"
+                  :model="store.form.tempo"
+                  icon="icon-mat-event"
+                  outlined
+                  label="Tempo"
+                  @set-model="setModel"
                 />
               </div>
             </div>
@@ -300,6 +310,9 @@ const setModel = val => {
 const setSurat = val => {
   store.setForm('tanggal_surat', val)
 }
+const setFaktur = val => {
+  store.setForm('tanggal_faktur', val)
+}
 
 const clearPemesanan = () => {
   store.setForm('nomor', null)
@@ -346,6 +359,7 @@ const init = val => {
 
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
+  console.log('ref', refNomorSurat.value.$refs.refInput)
   console.log('init', val)
 }
 
@@ -354,7 +368,8 @@ const pemesanan = ref(false)
 const pengirim = ref(false)
 const pilihSurat = ref(false)
 const surat = ref(false)
-const tempo = ref(true)
+// const faktur = ref(false)
+// const tempo = ref(true)
 const statusPembelian = ref(false)
 const tglSurat = ref(false)
 
@@ -362,6 +377,8 @@ const refPengirim = ref(null)
 const refTempo = ref(null)
 const refTanggalSurat = ref(null)
 const refNomorSurat = ref(null)
+const refNomorFaktur = ref(null)
+const refTanggalFaktur = ref(null)
 // const diterima = ref(false)
 const validate = val => {
   const apem = validasi()
@@ -386,14 +403,27 @@ const validasi = (val) => {
   pemesanan.value = !!form.nomor
   pengirim.value = !!form.pengirim
   statusPembelian.value = !!form.status_pembelian
-  pilihSurat.value = !!store.option_surat
+  pilihSurat.value = !!(form.surat_jalan || form.faktur)
   surat.value = !!form.surat
   tglSurat.value = !!form.tanggal_surat
-
+  console.log('pilih surat', refTempo.value.$refs.refInputDate)
+  if (refNomorFaktur.value.$refs.refInput.modelValue) {
+    refTanggalFaktur.value.$refs.refInputDate.validate()
+    refTempo.value.$refs.refInputDate.validate()
+    refNomorFaktur.value.$refs.refInput.validate()
+    // reset validation
+    refNomorSurat.value.$refs.refInput.resetValidation()
+    refTanggalSurat.value.$refs.refInputDate.resetValidation()
+  }
+  if (refNomorSurat.value.$refs.refInput.modelValue) {
+    refNomorSurat.value.$refs.refInput.validate()
+    refTanggalSurat.value.$refs.refInputDate.validate()
+    // reset validation
+    refTanggalFaktur.value.$refs.refInputDate.resetValidation()
+    refTempo.value.$refs.refInputDate.resetValidation()
+    refNomorFaktur.value.$refs.refInput.resetValidation()
+  }
   refPengirim.value.$refs.refInput.validate()
-  refNomorSurat.value.$refs.refInput.validate()
-  refTempo.value.$refs.refInputDate.validate()
-  refTanggalSurat.value.$refs.refInputDate.validate()
   // diterima.value = !!form.qty
   console.log(
     // refPengirim.value.$refs,

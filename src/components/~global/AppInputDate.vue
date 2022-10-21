@@ -24,6 +24,7 @@
       <q-icon
         :name="icon"
         size="18px"
+        @click="showDate"
       />
     </template>
     <template #prepend>
