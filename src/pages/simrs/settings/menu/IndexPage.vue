@@ -15,7 +15,10 @@
     </div>
     <div class="row q-col-gutter-lg">
       <div class="col-md-4">
-        <q-list bordered>
+        <q-list
+          bordered
+          class="bg-white"
+        >
           <q-item
             v-for="menu in store.items"
             :key="menu.id"
