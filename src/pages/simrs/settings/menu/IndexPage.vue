@@ -10,81 +10,79 @@
         color="primary"
         icon="icon-mat-add"
         size="sm"
-        @click="addMenu"
+        @click="store.addNew"
       />
     </div>
     <div class="row q-col-gutter-lg">
       <div class="col-md-4">
         <q-list bordered>
           <q-item
-            v-for="contact in contacts"
-            :key="contact.id"
+            v-for="menu in store.items"
+            :key="menu.id"
             v-ripple
             class="q-my-sm"
             clickable
-            :active="link === contact.id"
+            :active="link === menu.id"
             active-class="my-menu-link"
-            @click="link = contact.id"
+            @click="link = menu.id"
           >
             <q-item-section avatar>
               <q-avatar
-                color="primary"
+                color="secondary"
                 text-color="white"
               >
-                {{ contact.letter }}
+                L
               </q-avatar>
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>{{ contact.name }}</q-item-label>
+              <q-item-label>{{ menu.nama }}</q-item-label>
               <q-item-label
                 caption
                 lines="1"
               >
-                {{ contact.email }}
+                jghjhg
               </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
       </div>
       <div class="col-md-8">
-        w
+        Submenu
       </div>
     </div>
+
+    <!-- q-dialog -->
+    <app-dialog-form
+      v-model="store.dialog"
+      title="Form Tambah Menu"
+      :loading="store.loading"
+      @save-form="store.saveForm"
+    >
+      <app-input
+        v-model="store.form.nama"
+        label="Menu"
+        outlined
+      />
+    </app-dialog-form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const contacts = ref(
-  [{
-    id: 1,
-    name: 'Ruddy Jedrzej',
-    email: 'rjedrzej0@discuz.net',
-    letter: 'R'
-  }, {
-    id: 2,
-    name: 'Mallorie Alessandrini',
-    email: 'malessandrini1@marketwatch.com',
-    letter: 'M'
-  }, {
-    id: 3,
-    name: 'Elisabetta Wicklen',
-    email: 'ewicklen2@microsoft.com',
-    letter: 'E'
-  }, {
-    id: 4,
-    name: 'Seka Fawdrey',
-    email: 'sfawdrey3@wired.com',
-    letter: 'S'
-  }]
-)
+import { onMounted, ref } from 'vue'
+import { useTableMenu } from 'src/stores/simrs/settings/menu/table'
 
 const link = ref(1)
-function addMenu() {
-  console.log('menu')
-}
+
+const store = useTableMenu()
+
+onMounted(() => {
+  store.getData()
+})
+
+// function saveForm() {
+//   console.log('form derih dialog')
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -95,6 +93,6 @@ function addMenu() {
 
 .my-menu-link{
   color: white;
-  background: #F2C037;
+  background: $primary;
 }
 </style>
