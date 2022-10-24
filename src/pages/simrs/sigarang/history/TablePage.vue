@@ -35,6 +35,9 @@
             <template #cell-tanggal_surat="{row}">
               {{ dateFullFormat(row.tanggal_surat) }}
             </template>
+            <template #cell-tanggal_faktur="{row}">
+              {{ dateFullFormat(row.tanggal_faktur) }}
+            </template>
             <template #cell-asal="{row}">
               {{ row.asal.nama }}
             </template>
@@ -60,7 +63,10 @@
               Tanggal
             </template>
             <template #col-tanggal_surat>
-              Tanggal Surat / Faktur
+              Tanggal Surat Jalan
+            </template>
+            <template #col-tanggal_faktur>
+              Tanggal Faktur
             </template>
             <template #col-kontrak>
               Nomor Kontrak

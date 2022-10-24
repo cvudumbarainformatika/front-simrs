@@ -37,6 +37,7 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       // console.log('columns', this.columns)
     },
     setData (data) {
+      console.log('detail ', data)
       this.header = data
       this.setColumns(data.details)
       this.items = data.details

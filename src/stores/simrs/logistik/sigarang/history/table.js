@@ -91,7 +91,7 @@ export const useHistoryTable = defineStore('history_table', {
 
     // ambil data
     getDataTransactions () {
-      this.rows = []
+      this.items = []
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         this.loading = true
@@ -99,9 +99,11 @@ export const useHistoryTable = defineStore('history_table', {
           .then(resp => {
             this.loading = false
             if (resp.status === 200) {
-              // console.log('resp', resp.data)
-              this.setColumns(resp.data.data)
-              this.items = resp.data.data
+              console.log('resp history', resp.data)
+              if (resp.data.data.length) {
+                this.setColumns(resp.data.data)
+                this.items = resp.data.data
+              }
               this.setData(resp.data.meta)
 
               // this.meta = resp.data.meta
