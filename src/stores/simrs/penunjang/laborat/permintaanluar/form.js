@@ -160,6 +160,7 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
     },
     async getMasterPemeriksaanGroup() {
       await api.get('/v1/master_laborat_group').then((resp) => {
+        console.log('master pemeriksaan', resp)
         const obj = resp.data
         // const c = Object.keys(obj).map((key) => [key, obj[key]])
         // const c = Object.keys(obj).map((key) => (

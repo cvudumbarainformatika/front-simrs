@@ -150,6 +150,17 @@
             />
           </template>
           <template #custom-btn="{row}">
+            <!-- <q-btn
+              round
+              flat
+              icon="icon-mat-print"
+              color="grey-8"
+              @click="printHasil(row)"
+            >
+              <q-tooltip>
+                Print Hasil Pemeriksaan
+              </q-tooltip>
+            </q-btn> -->
             <q-btn
               round
               flat
@@ -512,4 +523,12 @@ async function kunciPermintaan(row) {
     loadingKey.value = false
   }
 }
+
+// function printHasil(row) {
+//   console.log(SERV, row)
+//   // if (!row.pemeriksaan_laborat) {
+//   //   return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+//   // }
+//   window.open(SERV + `/print/page?data=hasil-permintaan-laborat-dalam&q=${row.rs2}`, '_blank', 'width=70%')
+// }
 </script>

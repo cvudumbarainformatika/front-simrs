@@ -4,7 +4,7 @@
       <div class="col-md-12 col-lg-12 col-xl-12 col-xs-12">
         <div class="tempat-widget">
           <div class="row q-col-gutter-md">
-            <div class="col-md-2 col-lg-2 col-xl-4 col-xs-12">
+            <div class="col-md-2 col-lg-2 col-xl-2 col-xs-12">
               <WidgetComp
                 :nilai="parseInt(store.labHariIni) + parseInt(store.labLuarHariIni)"
                 :loading="store.loading"
