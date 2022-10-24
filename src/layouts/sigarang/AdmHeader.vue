@@ -1,7 +1,7 @@
 <template>
+  <!-- reveal -->
   <q-header
     :bordered="!mobile"
-    reveal
     :class="dark?'bg-dark':'bg-white text-dark'"
   >
     <div
