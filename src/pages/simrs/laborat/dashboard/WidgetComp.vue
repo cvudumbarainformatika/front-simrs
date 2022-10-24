@@ -31,6 +31,9 @@
       <div class="text-subtitle">
         {{ subtitle }}
       </div>
+      <div class="f-10 text-grey">
+        {{ subtitle2 }}
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -42,6 +45,10 @@ defineProps({
     default: 'primary'
   },
   subtitle: {
+    type: String,
+    default: 'Pemeriksaan Laborat'
+  },
+  subtitle2: {
     type: String,
     default: 'Pemeriksaan Laborat'
   },

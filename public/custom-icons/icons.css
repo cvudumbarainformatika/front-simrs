@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?14c77205114569958cd8eb97cdae442e") format("woff"),
-url("./icons.woff2?14c77205114569958cd8eb97cdae442e") format("woff2");
+    src: url("./icons.woff?6f41a1dc8b25b6a039b4dd7cfeb98b85") format("woff"),
+url("./icons.woff2?6f41a1dc8b25b6a039b4dd7cfeb98b85") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -390,9 +390,39 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-google:before {
     content: "\f17d";
 }
-.icon-my-key:before {
+.icon-my-how_to_reg:before {
     content: "\f17e";
 }
-.icon-my-word:before {
+.icon-my-key:before {
     content: "\f17f";
+}
+.icon-my-local_hospital:before {
+    content: "\f180";
+}
+.icon-my-local_pharmacy:before {
+    content: "\f181";
+}
+.icon-my-medical_information:before {
+    content: "\f182";
+}
+.icon-my-medical_services:before {
+    content: "\f183";
+}
+.icon-my-medication_liquid:before {
+    content: "\f184";
+}
+.icon-my-medication:before {
+    content: "\f185";
+}
+.icon-my-monitor_heart:before {
+    content: "\f186";
+}
+.icon-my-personal_injury:before {
+    content: "\f187";
+}
+.icon-my-point_of_sale:before {
+    content: "\f188";
+}
+.icon-my-word:before {
+    content: "\f189";
 }

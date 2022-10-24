@@ -1,5 +1,6 @@
 <template>
   <q-input
+    id="ref-input"
     ref="refInput"
     dense
     :filled="!outlined?filled:!filled"
@@ -8,7 +9,6 @@
     :placeholder="placeholder"
     :hide-bottom-space="true"
     no-error-icon
-    lazy-rules
     :rules="[anotherValid]"
     :type="typeInput"
     :autocomplete="type==='password'?'off':'on'"
@@ -96,6 +96,7 @@ const props = defineProps({
 })
 
 const refInput = ref(null)
+defineExpose({ refInput })
 const typeInput = ref(props.type)
 
 onMounted(() => {

@@ -7,12 +7,12 @@
       <q-card-section>
         <span class="text-weight-bold f-16">Konfirmasi</span>
       </q-card-section>
-      <q-card-section :class="`bg-${color} text-white`">
+      <q-card-section :class="`bg-${props.color} text-white`">
         <div
           class="column flex-center"
           style="min-height:100px"
         >
-          {{ msg }}
+          {{ props.msg }}
         </div>
       </q-card-section>
       <q-card-actions align="right">
@@ -34,7 +34,7 @@
 <script setup>
 import { useDialogPluginComponent } from 'quasar'
 
-defineProps({
+const props = defineProps({
   msg: {
     type: String,
     default: 'Ini Text Message'

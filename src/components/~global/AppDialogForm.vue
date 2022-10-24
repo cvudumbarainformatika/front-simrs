@@ -16,7 +16,9 @@
       </q-card-section>
 
       <q-separator class="q-my-md" />
-      <q-form @submit="saveForm">
+      <q-form
+        @submit="saveForm"
+      >
         <q-card-section>
           <slot />
         </q-card-section>
@@ -42,6 +44,7 @@
 </template>
 
 <script setup>
+
 defineProps({
   title: {
     type: String,

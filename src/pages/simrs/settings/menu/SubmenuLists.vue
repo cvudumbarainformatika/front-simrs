@@ -1,9 +1,31 @@
 <template>
   <div>
     <div class="bg-white q-pa-lg">
-      Submenu  {{ title }}
+      <div class="row items-center">
+        <div class="text-h6 my-flex-1">
+          Submenu  {{ title }}
+        </div>
+        <q-btn
+          v-if="items.length > 0"
+          round
+          icon="icon-mat-add"
+          size="sm"
+          padding="sm"
+          color="primary"
+          @click="emits('addSubmenu', menuId)"
+        />
+      </div>
+      <q-separator class="q-my-md" />
       <div class="submenus">
-        {{ submenus }}
+        <div
+          v-if="submenus.length === 0"
+          class="column flex-center"
+        >
+          SubMenu Belum Ada
+        </div>
+        <div v-else>
+          {{ submenus }}
+        </div>
       </div>
     </div>
   </div>
@@ -15,7 +37,7 @@ import { computed } from 'vue'
 const props = defineProps({
   menu: {
     type: [String, Number],
-    default: 1
+    default: 0
   },
   items: {
     type: Array,
@@ -23,18 +45,30 @@ const props = defineProps({
   }
 })
 
+const emits = defineEmits(['addSubmenu'])
+
 const submenus = computed(() => {
   let arr = []
-  if (!props.menu) return arr
-  if (props.items.length > 0) arr = props.items.filter(x => x.id === props.menu)[0].submenu
+  // const id = props.items[props.menu].id
+  if (props.menu.length === 0) return arr
+  if (props.items.length > 0) arr = props.items[props.menu].submenu
   return arr
 })
 const title = computed(() => {
   let txt = ''
-  if (!props.menu) return txt
-  if (props.items.length > 0) txt = props.items.filter(x => x.id === props.menu)[0].nama
+  // const id = props.items[props.menu].id
+  if (props.menu.length === 0) return txt
+  if (props.items.length > 0) txt = props.items[props.menu].nama
   return txt
 })
+const menuId = computed(() => {
+  let txt = 0
+  // const id = props.items[props.menu].id
+  if (props.menu.length === 0) return txt
+  if (props.items.length > 0) txt = props.items[props.menu].id
+  return txt
+})
+
 </script>
 
 <style lang="scss" scoped>
