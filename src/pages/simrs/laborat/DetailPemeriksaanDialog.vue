@@ -69,7 +69,7 @@
                     class="text-left"
                     :colspan="item.name==='' || (item.name!=='' && n===0)?1:0"
                   >
-                    {{ val.pemeriksaan_laborat.rs2 }}
+                    {{ val.pemeriksaan_laborat.rs2 }} <span class="text-negative text-italic f-10"> - {{ val.pemeriksaan_laborat.rs1 }}</span>
                   </td>
                   <td
                     class="text-right"
@@ -129,7 +129,7 @@
                     {{ n+1 }}
                   </td>
                   <td>
-                    {{ val.pemeriksaan_laborat.rs2 }}
+                    {{ val.pemeriksaan_laborat.rs2 }} <span class="text-negative text-italic f-10"> - {{ val.pemeriksaan_laborat.rs1 }}</span>
                   </td>
 
                   <td
