@@ -35,7 +35,7 @@
         v-else
         rounded
         elevated
-        color="secondary"
+        color="dark"
         icon="icon-mat-arrow_back"
         :label="labelBack"
         size="sm"
