@@ -39,6 +39,19 @@
         />
       </div>
     </div>
+    <div class="row items-center q-mb-sm">
+      <div class="col-4">
+        Route Name
+      </div>
+      <div class="col-8">
+        <app-input
+          v-model="RouteName"
+          outlined
+          label="Input Nama Route Menu"
+          @keyup.enter="emist('simpan')"
+        />
+      </div>
+    </div>
     <div class="row">
       <div class="col text-right">
         <app-btn
@@ -67,9 +80,10 @@ const props = defineProps({
   nama: { type: String, default: '' },
   icon: { type: String, default: 'icon-mat' },
   link: { type: String, default: '' },
+  value: { type: String, default: '' },
   loading: { type: Boolean, default: false }
 })
-const emist = defineEmits(['batal', 'simpan', 'updatenama', 'updateicon', 'updatelink'])
+const emist = defineEmits(['batal', 'simpan', 'updatenama', 'updateicon', 'updateroute', 'updatelink'])
 const namaMenu = computed({
   get () { return props.nama },
   set (val) { emist('updatenama', val) }
@@ -82,4 +96,9 @@ const linkMenu = computed({
   get () { return props.link },
   set (val) { emist('updatelink', val) }
 })
+const RouteName = computed({
+  get () { return props.value },
+  set (val) { emist('updateroute', val) }
+})
+
 </script>

@@ -24,6 +24,8 @@
             :icon="iconMenu"
             :link="linkMenu"
             :loading="setting.loading"
+            :value="value"
+            @updateroute="uRouteMenu"
             @updatenama="uNamaMenu"
             @updateicon="uIconMenu"
             @updatelink="uLinkMenu"
@@ -81,6 +83,8 @@
                             :icon="iconMenu"
                             :link="linkMenu"
                             :loading="setting.loading"
+                            :value="value"
+                            @updateroute="uValue"
                             @updatenama="uNamaMenu"
                             @updateicon="uIconMenu"
                             @updatelink="uLinkMenu"
@@ -259,9 +263,11 @@ const index = computed(() => {
 const namaMenu = ref(null)
 const iconMenu = ref('icon-mat-')
 const linkMenu = ref(null)
+const value = ref(null)
 const uNamaMenu = val => { namaMenu.value = val }
 const uIconMenu = val => { iconMenu.value = val }
 const uLinkMenu = val => { linkMenu.value = val }
+const uValue = val => { value.value = val }
 
 // sub menu
 const subMenus = ref([])
@@ -291,7 +297,7 @@ const pilihMenu = (val, index) => {
   console.log(val)
 }
 const tambahMenu = () => {
-  const temp = { name: namaMenu.value, icon: iconMenu.value, link: linkMenu.value, value: linkMenu.value, subMenus: [] }
+  const temp = { name: namaMenu.value, icon: iconMenu.value, link: linkMenu.value, value: value.value, subMenus: [] }
   setting.menus.push(temp)
   save()
   console.log(temp)
@@ -309,12 +315,13 @@ const beforeEdit = (val, index) => {
   namaMenu.value = val.name
   iconMenu.value = val.icon
   linkMenu.value = val.link
+  value.value = val.value
   subMenu.value = val.submenus
   indexEdit = index
 }
 
 const saveEdit = val => {
-  const temp = { name: namaMenu.value, value: namaMenu.value.toLowerCase(), icon: iconMenu.value, link: linkMenu.value, submenus: subMenu.value }
+  const temp = { name: namaMenu.value, value: value.value, icon: iconMenu.value, link: linkMenu.value, submenus: subMenu.value }
   setting.menus[indexEdit] = temp
   curentmenu.value = temp.name
   save()

@@ -30,6 +30,7 @@
         class="sidebar flex flex-center item item-link"
         :active-class="dark? 'active-dark' : 'active'"
         exact
+        @click="menuClick(menu)"
       >
         <div class="item-content">
           <q-tooltip
@@ -60,6 +61,8 @@
 // import { useRoute } from 'vue-router'
 // const path = computed(() => useRoute().name)
 
+import { routerInstance } from 'src/boot/router'
+
 const props = defineProps({
   dark: {
     type: Boolean,
@@ -70,6 +73,23 @@ const props = defineProps({
     default: () => []
   }
 })
+const menuClick = val => {
+  console.log('menu', val)
+  // const gaPunya = val.submenus
+  console.log('name', !!val.submenus)
+  if (val.value === 'sigarang.transaksi') {
+    const nama = val.submenus[0].value
+    routerInstance.replace({ name: nama, params: { slug: '-' } })
+  } else if (val.submenus) {
+    console.log('masuk', val.submenus)
+    const nama = val.submenus[0].value
+    routerInstance.replace({ name: nama })
+  } else {
+    console.log('ga masuk', val.submenus)
+    const nama = val.value
+    routerInstance.replace({ name: nama })
+  }
+}
 
 // function activated (val) {
 //   if (val) {

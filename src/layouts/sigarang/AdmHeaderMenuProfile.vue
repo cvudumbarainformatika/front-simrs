@@ -5,7 +5,7 @@
     :offset="[0,10]"
   >
     <q-list style="min-width: 131px">
-      <q-item
+      <!-- <q-item
         v-close-popup
         clickable
       >
@@ -16,8 +16,8 @@
           />
         </q-item-section>
         <q-item-section>Profile</q-item-section>
-      </q-item>
-      <q-item
+      </q-item> -->
+      <!-- <q-item
         v-close-popup
         clickable
       >
@@ -28,7 +28,7 @@
           />
         </q-item-section>
         <q-item-section>Settings</q-item-section>
-      </q-item>
+      </q-item> -->
       <q-separator />
       <q-item
         v-close-popup

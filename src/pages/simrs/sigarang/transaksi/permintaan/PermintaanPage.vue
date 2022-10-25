@@ -18,10 +18,17 @@ import { routerInstance } from 'src/boot/router'
 import { uniqueId } from 'src/modules/utils'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import TabelPermintaan from './TabelPermintaan.vue'
+import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 
 const store = useTransaksiPermintaanForm()
+const table = useTransaksiPermintaanTable()
 
 store.getPenggunas()
+store.getPenanggungJawabs()
+store.getPenggunaRuang()
+table.getDepo()
+table.getRuang()
+table.getMapingDepo()
 
 const slug = 'TPN-' + uniqueId()
 store.setForm('reff', slug)

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
 
 export const useTransaksiPermintaanTable = defineStore('table_transaksi_permintaan', {
   state: () => ({
@@ -8,6 +9,13 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     columns: [],
     columnHide: [],
     form: {},
+    nama: {
+      satuan: 'barang belum dipilih',
+      gudang: 'barang belum dipili'
+    },
+    depos: [],
+    mapingDepos: [],
+    ruangs: [],
     params: {
       q: '',
       page: 1,
@@ -17,7 +25,12 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     }
   }),
   actions: {
-
+    setForm(key, val) {
+      this.form[key] = val
+    },
+    setNama(key, val) {
+      this.nama[key] = val
+    },
     setPage(payload) {
       // console.log('setPage', payload)
       this.params.page = payload
@@ -43,6 +56,61 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
         : (this.params.sort = 'desc')
       // this.getDataTable()
     },
-    deletesData(val) {}
+    deletesData(val) {},
+    // api related function
+    getDepo() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.get('v1/gudang/depo')
+          .then(resp => {
+            this.loading = false
+            console.log('depo', resp)
+            if (resp.status === 200) {
+              this.depos = resp.data
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getRuang() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.get('v1/ruang/all-ruang')
+          .then(resp => {
+            this.loading = false
+            console.log('depo', resp)
+            if (resp.status === 200) {
+              this.ruangs = resp.data
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getMapingDepo() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.get('v1/mapingdepo/maping')
+          .then(resp => {
+            this.loading = false
+            console.log('mapingDepo', resp)
+            if (resp.status === 200) {
+              this.mapingDepos = resp.data
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    }
   }
 })
