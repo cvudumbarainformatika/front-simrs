@@ -160,21 +160,37 @@ export const usePermintaanLuarForm = defineStore('permintaan_luar_form', {
     },
     async getMasterPemeriksaanGroup() {
       await api.get('/v1/master_laborat_group').then((resp) => {
-        console.log('master pemeriksaan', resp)
-        const obj = resp.data
-        // const c = Object.keys(obj).map((key) => [key, obj[key]])
-        // const c = Object.keys(obj).map((key) => (
-        //   {
-        //     title: key,
-        //     children: obj[key]
-        //   }
-        // ))
-        // const nonPaket = c.filter(x => x.title === '').map(y => y.children)
-        // const paket = c.filter(x => x.title !== '')
-        // console.log('pemeriksaans', paket)
-        // this.pemeriksaans = nonPaket[0]
-        this.pemeriksaans = obj
+        // console.log('master pemeriksaan', resp)
+        const arr = resp.data
+        const arr2 = arr.length > 0 ? resp.data.map(x =>
+          ({
+            paket: x.rs21 !== '' ? x.rs21 : x.rs2,
+            nama: x.rs2,
+            jenis: x.rs21 !== '' ? 'PAKET' : 'NON-PAKET',
+            biaya: parseInt(x.rs3) + parseInt(x.rs4),
+            kode: x.rs1,
+            aslix: x
+          })
+        ) : []
+        const groupped = this.groupBy(arr2, paket => paket.paket)
+        this.pemeriksaans = groupped
+        console.log('group pemeriksaan', groupped)
       })
+    },
+
+    groupBy(list, keyGetter) {
+      const map = new Map()
+      list.forEach((item) => {
+        const key = keyGetter(item)
+        const collection = map.get(key)
+        if (!collection) {
+          map.set(key, [item])
+        } else {
+          collection.push(item)
+        }
+      })
+      const arr = Array.from(map, ([name, value]) => ({ name, value }))
+      return arr
     }
 
   }

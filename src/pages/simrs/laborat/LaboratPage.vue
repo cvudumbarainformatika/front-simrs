@@ -150,7 +150,7 @@
             />
           </template>
           <template #custom-btn="{row}">
-            <!-- <q-btn
+            <q-btn
               round
               flat
               icon="icon-mat-print"
@@ -160,7 +160,7 @@
               <q-tooltip>
                 Print Hasil Pemeriksaan
               </q-tooltip>
-            </q-btn> -->
+            </q-btn>
             <q-btn
               round
               flat
@@ -209,7 +209,7 @@ import { ref } from 'vue'
 import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/transaksi_laborat'
 import { humanDate, diffDate, dateBOD, dateLIS } from 'src/modules/formatter'
 import DetailPemeriksaanDialog from './DetailPemeriksaanDialog.vue'
-import { api } from 'src/boot/axios'
+import { api, SERV } from 'src/boot/axios'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 const store = useTransaksiLaboratTable()
@@ -407,7 +407,7 @@ async function previewLaborat(x) {
 
     // const unique = [...new Set(details)]
     const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
-    console.log(gr)
+    console.log('groupped', gr)
     pemeriksaanLaborat.value = gr
     totalPemeriksaanLaborat.value = getTotal(gr)
     modalDetailOpen.value = true
@@ -524,11 +524,11 @@ async function kunciPermintaan(row) {
   }
 }
 
-// function printHasil(row) {
-//   console.log(SERV, row)
-//   // if (!row.pemeriksaan_laborat) {
-//   //   return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
-//   // }
-//   window.open(SERV + `/print/page?data=hasil-permintaan-laborat-dalam&q=${row.rs2}`, '_blank', 'width=70%')
-// }
+function printHasil(row) {
+  // console.log(SERV, row)
+  // if (!row.pemeriksaan_laborat) {
+  //   return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+  // }
+  window.open(SERV + `/print/page?data=hasil-permintaan-laborat-dalam&q=${row.rs2}`, '_blank', 'width=70%')
+}
 </script>

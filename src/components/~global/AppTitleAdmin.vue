@@ -18,11 +18,12 @@
     </div>
     <div>
       <q-btn
-        v-if="route.params.page===''"
-        round
+        v-if="route.params.page==='' || !route.params.page"
+        rounded
         elevated
         color="primary"
         icon="icon-mat-add"
+        :label="labelAdd"
         size="sm"
         @click="goTo"
       >
@@ -32,10 +33,11 @@
       </q-btn>
       <q-btn
         v-else
-        round
+        rounded
         elevated
-        color="primary"
+        color="secondary"
         icon="icon-mat-arrow_back"
+        :label="labelBack"
         size="sm"
         @click="prev"
       >
@@ -75,11 +77,21 @@ const props = defineProps({
   params: {
     type: String,
     default: 'form'
+  },
+  labelAdd: {
+    type: String,
+    default: 'Data Baru'
+  },
+  labelBack: {
+    type: String,
+    default: 'Kembali Ke Table'
   }
+
 })
 
 const router = useRouter()
 const route = useRoute()
+console.log('apptitleadmin', route)
 
 function prev() {
   router.replace({ path: props.to })
