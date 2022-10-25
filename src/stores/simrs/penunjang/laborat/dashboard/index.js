@@ -53,12 +53,14 @@ export const useDashboardLaborat = defineStore('dashboard_laborat', {
       const today = dateDbFormat(new Date())
       if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].z ? arr.filter(item => item.x === today)[0].z : 0
       this.transLabHariIni = jml
+      console.log('transLabHariIni', jml)
     },
     jmlTransLabLuarHariIni(arr) {
       let jml = 0
       const today = dateDbFormat(new Date())
       if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].z ? arr.filter(item => item.x === today)[0].z : 0
       this.transLabLuarHariIni = jml
+      console.log('transLabLuarHariIni', jml)
     }
   }
 })
