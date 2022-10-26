@@ -20,15 +20,15 @@ export const useDashboardLaborat = defineStore('dashboard_laborat', {
       this.loading = true
       try {
         await api.get('/v1/dashboard_laborat').then(resp => {
-          console.log(resp)
+          console.log('dashboard', resp)
           this.itemLabs = resp.data.lab
           this.itemLabLuars = resp.data.lab_luar
-          this.jumlahLabHariIni(resp.data.lab) // jumlah pemeriksaan
-          this.jumlahLabLuarHariIni(resp.data.lab_luar) // jumlah pemeriksaan luar
-          this.jmlTransLabHariIni(resp.data.lab) // jumlah transaksi lab dalam
-          this.jmlTransLabLuarHariIni(resp.data.lab_luar) // jumlah transaksi lab luar
+          this.jumlahLabHariIni(this.itemLabs) // jumlah pemeriksaan
+          this.jumlahLabLuarHariIni(this.itemLabLuars) // jumlah pemeriksaan luar
+          // console.log('mapping', this.labLuarHariIni)
+          // this.transLabHariIni = this.jmlTransLabHariIni(resp.data.lab) // jumlah transaksi lab dalam
+          // this.transLabLuarHariIni = this.jmlTransLabLuarHariIni(resp.data.lab_luar) // jumlah transaksi lab luar
           this.loading = false
-          // console.log('mapping', this.itemLabs)
         })
       } catch (error) {
         this.loading = false
@@ -36,31 +36,40 @@ export const useDashboardLaborat = defineStore('dashboard_laborat', {
     },
     // jumlah Pemeriksaan
     jumlahLabHariIni(arr) {
-      let jml = 0
+      // let jml = 0
       const today = dateDbFormat(new Date())
-      if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].y ? arr.filter(item => item.x === today)[0].y : 0
-      this.labHariIni = jml
+      if (arr.length > 0) {
+        this.labHariIni = arr.filter(item => item.x === today)[0].y
+        this.transLabHariIni = arr.filter(item => item.x === today)[0].z
+      } else {
+        this.labHariIni = 0
+        this.transLabHariIni = 0
+      }
     },
     jumlahLabLuarHariIni(arr) {
-      let jml = 0
       const today = dateDbFormat(new Date())
-      if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].y ? arr.filter(item => item.x === today)[0].y : 0
-      this.labLuarHariIni = jml
-    },
-    // Jumlah Transaksi
-    jmlTransLabHariIni(arr) {
-      let jml = 0
-      const today = dateDbFormat(new Date())
-      if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].z ? arr.filter(item => item.x === today)[0].z : 0
-      this.transLabHariIni = jml
-      console.log('transLabHariIni', jml)
-    },
-    jmlTransLabLuarHariIni(arr) {
-      let jml = 0
-      const today = dateDbFormat(new Date())
-      if (arr.length > 0) jml = arr.filter(item => item.x === today)[0].z ? arr.filter(item => item.x === today)[0].z : 0
-      this.transLabLuarHariIni = jml
-      console.log('transLabLuarHariIni', jml)
+      if (arr.length > 0) {
+        this.labLuarHariIni = arr.filter(item => item.x === today)[0].y
+        this.transLabLuarHariIni = arr.filter(item => item.x === today)[0].z
+      } else {
+        this.labLuarHariIni = 0
+        this.transLabLuarHariIni = 0
+      }
     }
+    // Jumlah Transaksi
+    // jmlTransLabHariIni(arr) {
+    //   let jml = 0
+    //   const today = dateDbFormat(new Date())
+    //   if (arr.length > 0) jml = arr.filter(item => item.x === today) ? arr.filter(item => item.x === today)[0].z : 0
+    //   return jml
+    //   // console.log('transLabHariIni', jml)
+    // },
+    // jmlTransLabLuarHariIni(arr) {
+    //   let jml = 0
+    //   const today = dateDbFormat(new Date())
+    //   if (arr.length > 0) jml = arr.filter(item => item.x === today) ? arr.filter(item => item.x === today)[0].z : 0
+    //   return jml
+    //   // console.log('transLabLuarHariIni', jml)
+    // }
   }
 })

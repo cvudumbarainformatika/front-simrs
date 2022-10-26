@@ -244,10 +244,11 @@ function changeFiltered(val) {
 function getProgress(row) {
   const kunci = row.rs18 === '1'
   const progress = row.rs21
+  const complete = row.rs26 === '1'
   if (!kunci) {
     return 'Belum terkirim ke LIS'
   }
-  return progress ? 'Complete' : 'Menunggu Hasil ...'
+  return progress || complete ? 'Complete' : 'Menunggu Hasil ...'
 }
 
 function getNoRm(row) {
