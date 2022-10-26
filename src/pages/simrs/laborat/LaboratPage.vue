@@ -244,10 +244,11 @@ function changeFiltered(val) {
 function getProgress(row) {
   const kunci = row.rs18 === '1'
   const progress = row.rs21
+  const complete = row.rs26 === '1'
   if (!kunci) {
     return 'Belum terkirim ke LIS'
   }
-  return progress ? 'Complete' : 'Menunggu Hasil ...'
+  return progress || complete ? 'Complete' : 'Menunggu Hasil ...'
 }
 
 function getNoRm(row) {
@@ -377,7 +378,7 @@ const loadingEye = ref(false)
 const eye = ref(null)
 
 async function previewLaborat(x) {
-  console.log(x)
+  console.log('preview', x)
   loadingEye.value = true
   eye.value = x
   try {
@@ -407,7 +408,7 @@ async function previewLaborat(x) {
 
     // const unique = [...new Set(details)]
     const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
-    console.log('groupped', gr)
+    // console.log('groupped', gr)
     pemeriksaanLaborat.value = gr
     totalPemeriksaanLaborat.value = getTotal(gr)
     modalDetailOpen.value = true

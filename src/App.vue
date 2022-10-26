@@ -36,7 +36,7 @@ channel.subscribed(() => {
     if (items.length > 0) {
       const item = items.filter(x => x.rs2 === e.message.__key)
       if (item.length > 0) {
-        item[0].akhirx = '1'
+        item[0].rs26 = '1'
       }
     }
   }
