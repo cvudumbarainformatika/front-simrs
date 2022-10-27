@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { uniqueId } from 'src/modules/utils'
+import { useTransaksiPermintaanTable } from './permintaan'
 
 export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan', {
   state: () => ({
@@ -11,7 +13,9 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     },
     nama: {
       penanggungjawab: 'pengguna belum dipilih',
-      ruang: 'pengguna belum dipilih'
+      ruang: 'pengguna belum dipilih',
+      gudang: 'barang belum dipilih',
+      satuan: 'barang belum dipilih'
     },
     tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     penggunas: [],
@@ -19,6 +23,15 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     penanggungjawabs: []
   }),
   actions: {
+    setNoPermintaan() {
+      const m = 'SPMT-' + uniqueId()
+      this.setForm('no_permintaan', m)
+    },
+    setNewReff() {
+      const baru = 'TPN-' + uniqueId()
+      this.setForm('reff', baru)
+      useTransaksiPermintaanTable().setParam('reff', baru)
+    },
     setForm(key, val) {
       this.form[key] = val
     },
@@ -30,6 +43,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
 
     setSearch(val) {},
     pilihPenanggungjawab(val) {},
+    // api related function
     getPenanggungJawabs() {
       return new Promise((resolve) => {
         api.get('v1/pengguna/penanggungjawab').then((resp) => {
@@ -42,9 +56,11 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
       })
     },
     getPenggunaRuang() {
+      this.loading = true
       return new Promise((resolve) => {
         api.get('v1/penggunaruang/pengguna-ruang').then((resp) => {
           console.log('pengguna Ruang', resp.data)
+          this.loading = false
           if (resp.status === 200) {
             this.penggunaruangs = resp.data
             resolve(resp)
@@ -53,8 +69,10 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
       })
     },
     getPenggunas() {
+      this.loading = true
       return new Promise((resolve) => {
         api.get('v1/pengguna/pengguna-ruang').then((resp) => {
+          this.loading = false
           console.log('pengguna permintaan', resp.data)
           if (resp.status === 200) {
             this.penggunas = resp.data

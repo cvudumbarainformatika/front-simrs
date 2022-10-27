@@ -356,6 +356,7 @@
             :colspan="adaInput ? spanCol : 1"
           >
             <q-btn
+              v-if="bisaEdit"
               flat
               class=""
               size="sm"
@@ -372,7 +373,7 @@
               </q-tooltip>
             </q-btn>
             <q-btn
-              v-if="selected.length < 2"
+              v-if="selected.length < 2 && bisaDelete"
               flat
               class=""
               size="sm"
@@ -392,12 +393,36 @@
         </tr>
       </tbody>
       <tbody v-else>
-        <tr>
+        <tr v-if="!items.length > 0 && !inputCol">
           <td
             :colspan="
               rowImage === null
                 ? filterColumn.length + 2
                 : filterColumn.length + 3
+            "
+          >
+            <div
+              class="flex column flex-center bg-loading-bg__table"
+              style="height: 400px"
+            >
+              <div>
+                <q-spinner-cube
+                  color="primary"
+                  size="40px"
+                />
+              </div>
+              <div class="text-primary q-mt-sm">
+                harap bersabar, menunggu...
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr v-if="!items.length > 0 && !nputCol">
+          <td
+            :colspan="
+              rowImage === null
+                ? filterColumn.length + 2 + inputCol
+                : filterColumn.length + 3 + inputCol
             "
           >
             <div
@@ -446,6 +471,8 @@ const props = defineProps({
   orderBy: { type: String, default: 'id' },
   sort: { type: String, default: 'desc' },
   toSearch: { type: String, default: '' },
+  bisaEdit: { type: Boolean, default: true },
+  bisaDelete: { type: Boolean, default: true },
   isChecked: { type: Boolean, default: false },
   addInput: { type: Boolean, default: false },
   adaInput: { type: Boolean, default: false },
