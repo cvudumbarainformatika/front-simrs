@@ -234,6 +234,10 @@
                               </q-item-label>
                               <q-item-label :class="scope.opt.value[0].jenis==='NON-PAKET'?'text-grey-5':''">
                                 <strong>  {{ scope.opt.value[0].jenis }} </strong>
+                                <span
+                                  v-if="scope.opt.value[0].jenis==='NON-PAKET'"
+                                  class="text-primary"
+                                >  - {{ scope.opt.value[0].kode }} </span>
                               </q-item-label>
                             </q-item-section>
                           </q-item>
