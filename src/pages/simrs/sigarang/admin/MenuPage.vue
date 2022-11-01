@@ -1,8 +1,12 @@
 <template>
   <!-- <q-card> -->
-  <q-bar elevated>
+  <q-bar
+    elevated
+    dark
+  >
     <div class="vertical-top ">
       <q-btn
+        class="menu-button"
         icon="icon-mat-menu"
         flat
         :color=" setting.dark ? 'white' : 'primary' "

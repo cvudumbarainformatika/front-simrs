@@ -233,6 +233,12 @@ const routes = [
             name: 'sigarang.transaksi.permintaan',
             component: () =>
               import('pages/simrs/sigarang/transaksi/permintaan/IndexPage.vue')
+          },
+          {
+            path: '/sigarang/transaksi/verifpermintaan',
+            name: 'sigarang.transaksi.verifpermintaan',
+            component: () =>
+              import('pages/simrs/sigarang/transaksi/verifpermintaan/IndexPage.vue')
           }
         ]
       },

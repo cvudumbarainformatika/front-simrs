@@ -7,7 +7,7 @@
       v-if="path!=='/sigarang/admin'"
       class="q-pt-lg"
     >
-      <q-page class="q-pt-sm">
+      <q-page class="q-pt-sm halaman">
         <router-view />
       </q-page>
     </div>

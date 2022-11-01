@@ -7,7 +7,7 @@
       v-if="path!=='/transaksi'"
       class="q-pt-lg"
     >
-      <q-page class="q-pt-sm q-px-sm">
+      <q-page class="q-pt-sm q-px-sm halaman">
         <router-view />
       </q-page>
     </div>
@@ -37,6 +37,9 @@ routerInstance.replace({ name, params: { slug } })
 
 </script>
 <style lang="scss" scoped>
+.halaman{
+  margin-left: 25px;
+}
 .menu-bar{
   width: calc(100%);
   z-index: 100;

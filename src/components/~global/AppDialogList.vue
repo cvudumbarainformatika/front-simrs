@@ -2,9 +2,9 @@
   <q-menu
     persistent
     auto-close
-    transition-show="jump-right"
-    transition-hide="jump-left"
-    :offset="[12, -7]"
+    transition-show="slide-right"
+    transition-hide="slide-left"
+    :offset="[-4, -7]"
   >
     <q-card style="position:relative;">
       <q-bar>

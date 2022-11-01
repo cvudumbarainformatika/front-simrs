@@ -1,6 +1,9 @@
 <template>
   <!-- <q-card> -->
-  <q-bar elevated>
+  <q-bar
+    elevated
+    dark
+  >
     <div class="vertical-top ">
       <q-btn
         icon="icon-mat-menu"
@@ -8,6 +11,7 @@
         :color=" setting.dark ? 'bg-dark text-white' : 'primary' "
         round
         size="15px"
+        class="menu-button"
       >
         <app-dialog-list
           position="left"

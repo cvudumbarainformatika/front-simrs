@@ -14,6 +14,7 @@
         size="15px"
         :disable="setting.transaksiLoading"
         :loading="setting.transaksiLoading"
+        class="menu-button"
       >
         <app-dialog-list
           position="left"
@@ -52,6 +53,8 @@ const setting = useSettingsStore()
 // {  name: 'setting', icon: 'icon-mat-settings', link: 'setting' }
 // ])
 </script>
-<style lang="scss" scoped>
-
+<style lang="scss">
+.menu-button{
+  margin-left:-15px ;
+}
 </style>

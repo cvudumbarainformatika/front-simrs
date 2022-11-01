@@ -1,0 +1,3 @@
+<template>
+  Verif permintaan
+</template>
