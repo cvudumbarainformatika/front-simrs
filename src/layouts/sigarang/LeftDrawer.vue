@@ -19,6 +19,7 @@
         style="height:calc(100%-50px) ;padding-top:50px"
       > -->
     <div
+      v-if="menus.length"
       class="flex column flex-center full-height"
       style="height:calc(100%-60px) "
     >
@@ -49,6 +50,62 @@
           />
         </div>
       </router-link>
+    </div>
+    <!-- Skleleton -->
+    <div
+      v-if="!menus.length"
+      class="flex column flex-center full-height"
+      style="height:calc(100%-60px) "
+    >
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
+      <div class="sidebar flex flex-center item item-link">
+        <q-skeleton
+          animation="pulse"
+          width="25px"
+          height="25px"
+        />
+      </div>
     </div>
     <!-- </q-scroll-area> -->
 

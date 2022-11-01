@@ -27,8 +27,9 @@ import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/t
 // import TabelPermintaan from './TabelPermintaan.vue'
 import TabelTujuanPermintaan from './TabelTujuanPermintaan.vue'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
+import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 // import { onMounted } from 'vue'
-
+const setting = useSettingsStore()
 const store = useTransaksiPermintaanForm()
 const table = useTransaksiPermintaanTable()
 
@@ -43,7 +44,9 @@ table.getMapingDepo()
 const slug = 'TPN-' + uniqueId()
 const oldSlug = routerInstance.currentRoute.value.params.slug
 table.setParam('reff', oldSlug)
+setting.transaksiLoading = true
 table.getDataTable().then(data => {
+  setting.transaksiLoading = false
   console.log('Pemesanan resolved', data)
   if (data === 'ada') {
     store.setForm('reff', oldSlug)

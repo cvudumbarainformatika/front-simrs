@@ -1,4 +1,5 @@
 <template>
+  <!-- <q-card> -->
   <q-bar elevated>
     <div class="vertical-top ">
       <q-btn
@@ -15,6 +16,7 @@
       </q-btn>
     </div>
   </q-bar>
+  <!-- </q-card> -->
 </template>
 <script setup>
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'

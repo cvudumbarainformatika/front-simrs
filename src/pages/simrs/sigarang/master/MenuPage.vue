@@ -1,10 +1,11 @@
 <template>
+  <!-- <q-card> -->
   <q-bar elevated>
     <div class="vertical-top ">
       <q-btn
         icon="icon-mat-menu"
         flat
-        :color=" setting.dark ? 'white' : 'primary' "
+        :color=" setting.dark ? 'bg-dark text-white' : 'primary' "
         round
         size="15px"
       >
@@ -15,6 +16,7 @@
       </q-btn>
     </div>
   </q-bar>
+  <!-- </q-card> -->
 </template>
 <script setup>
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'

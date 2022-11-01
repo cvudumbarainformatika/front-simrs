@@ -41,6 +41,6 @@ routerInstance.replace({ name, params: { slug } })
   width: calc(100%);
   z-index: 100;
   overflow: hidden;
-  background-color: $grey-1;
+  // background-color: $grey-1;
 }
 </style>

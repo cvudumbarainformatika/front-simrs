@@ -8,6 +8,7 @@ import { useTransaksiPermintaanForm } from '../transaksi/permintaan/form'
 
 export const useSettingsStore = defineStore('setting_store', {
   state: () => ({
+    transaksiLoading: false,
     nama: 'sigarang',
     levels: [],
     menus: [],

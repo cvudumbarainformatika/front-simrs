@@ -1,21 +1,34 @@
 <template>
-  <q-bar elevated>
+  <!-- <q-card> -->
+  <!-- elevated -->
+  <q-bar
+    dark
+  >
     <div class="vertical-top ">
       <!-- <q-icon name="icon-mat-menu" :color=" setting.dark ? 'white' : 'primary' " size="25px" @click="openDialog" /> -->
       <q-btn
         icon="icon-mat-menu"
         flat
-        :color=" setting.dark ? 'white' : 'primary' "
+        :color="setting.dark ? 'white' : 'primary' "
         round
         size="15px"
+        :disable="setting.transaksiLoading"
+        :loading="setting.transaksiLoading"
       >
         <app-dialog-list
           position="left"
           :menus="menus.submenus"
         />
+        <template #loading>
+          <!-- class="on-left" -->
+          <q-spinner-hourglass
+            size="18px"
+          />
+        </template>
       </q-btn>
     </div>
   </q-bar>
+  <!-- </q-card> -->
 </template>
 <script setup>
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
