@@ -52,7 +52,7 @@ export const useSettingsStore = defineStore('setting_store', {
       return new Promise((resolve, reject) => {
         api.get('v1/setting/index')
           .then(resp => {
-            console.log('setting', resp)
+            // console.log('setting', resp)
             this.menus = resp.data[0].menus
             this.levels = resp.data[0].levels
             this.themes = resp.data[0].themes

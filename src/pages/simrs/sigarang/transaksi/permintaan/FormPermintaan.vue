@@ -242,6 +242,25 @@ const barangSelected = val => {
 
   const depo = table.mapingDepos.filter(data => { return data.kode_rs === val })
   console.log('depo', depo)
+  const nama = depo.map(data => {
+    let temp = data.gudang.nama.split(' ')
+
+    if (temp.length > 2) {
+      for (let i = 0; i < temp.length; i++) {
+        temp[i] = temp[i].charAt(0)
+      }
+      data.noPer = temp.join('')
+      return data
+    } else {
+      temp = temp[1]
+    }
+    data.noPer = temp
+    return data
+  })
+  console.log('nama', nama)
+  const ap = store.nomor.split('-')
+  console.log('ap', ap)
+  store.setForm('no_permintaan', ap[0] + '/' + nama[0].noPer + '/' + ap[1])
   if (depo.length) {
     store.setForm('dari', depo[0].kode_gudang)
     store.setNama('gudang', depo[0].gudang.nama)

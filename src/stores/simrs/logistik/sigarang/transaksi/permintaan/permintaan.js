@@ -19,6 +19,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       'kode_satuan',
       'created_at',
       'updated_at',
+      'jumlah_disetujui',
       'permintaanruangan_id'
     ],
     form: {},
@@ -105,7 +106,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       store.setForm('reff', data.reff)
       store.setForm('kode_penanggungjawab', data.kode_penanggungjawab)
       store.setForm('kode_pengguna', data.kode_pengguna)
-      store.setForm('no_permintaan', data.no_permintaan)
+      // store.setForm('no_permintaan', data.no_permintaan)
 
       const peng = store.penggunas.filter((apem) => {
         return apem.kode === data.kode_pengguna
@@ -144,6 +145,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       changeArrayIndex(this.columns, 'jumlah', 'alasan')
       changeArrayIndex(this.columns, 'gudang', 'alasan')
       changeArrayIndex(this.columns, 'ruang', 'alasan')
+      console.log('set kolom', payload, this.columns)
       // pindah harga ke dekat jumlah / qty
       // this.pindah("harga", "qty");
       // this.pindah("satuan", "kode_satuan");
@@ -173,21 +175,43 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
               console.log('Detail length', resp.data)
               if (resp.data.length) {
                 console.log('with detail', resp.data)
-                this.items = resp.data[0].details
-                this.setColumns(resp.data[0].details)
-                this.setForm(resp.data[0])
-                this.assignForm(resp.data[0])
-                const mapKey = Object.keys(resp.data[0].gudang)
-                mapKey.forEach((data, i) => {
-                  const apem = this.depos.filter(x => { return x.kode === data })
-                  console.log('depo', this.depos)
-                  console.log('map gudang', apem)
-                  this.mapGudang[i] = {
-                    gudang: titleCase(apem[0].nama),
-                    items: resp.data[0].gudang[data]
+                const apem = resp.data
+                this.setForm(apem[apem.length - 1])
+                this.assignForm(apem[apem.length - 1])
+                apem.forEach((data, i) => {
+                  console.log('data', data)
+                  if (data) {
+                    const mapKey = Object.keys(data.gudang)
+                    console.log('mapkey', mapKey)
+                    mapKey.forEach((lupis) => {
+                      const apem = this.depos.filter(x => { return x.kode === lupis })
+                      this.setColumns(data.gudang[lupis])
+                      console.log('LUPIS', data.gudang[lupis])
+                      console.log('map gudang', apem)
+                      this.mapGudang[i] = {
+                        header: data,
+                        gudang: titleCase(apem[0].nama),
+                        items: data.gudang[lupis]
+                      }
+                    // console.log(resp.data[0].gudang[data])
+                    })
                   }
-                  // console.log(resp.data[0].gudang[data])
                 })
+                // this.items = resp.data[0].details
+                // this.setColumns(resp.data[0].details)
+                // this.setForm(resp.data[0])
+                // this.assignForm(resp.data[0])
+                // const mapKey = Object.keys(resp.data[0].gudang)
+                // mapKey.forEach((data, i) => {
+                //   const apem = this.depos.filter(x => { return x.kode === data })
+                //   console.log('depo', this.depos)
+                //   console.log('map gudang', apem)
+                //   this.mapGudang[i] = {
+                //     gudang: titleCase(apem[0].nama),
+                //     items: resp.data[0].gudang[data]
+                //   }
+                // console.log(resp.data[0].gudang[data])
+                // })
 
                 console.log('ada', this.mapGudang)
                 // console.log('gud', resp.data[0].gudang)
@@ -212,9 +236,25 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
           .get('v1/gudang/depo')
           .then((resp) => {
             this.loading = false
-            console.log('depo', resp)
             if (resp.status === 200) {
+              const nama = resp.data.map(data => {
+                let temp = data.nama.split(' ')
+
+                if (temp.length > 2) {
+                  for (let i = 0; i < temp.length; i++) {
+                    temp[i] = temp[i].charAt(0)
+                  }
+                  data.noPer = temp.join('')
+                  return data
+                } else {
+                  temp = temp[1]
+                }
+                data.noPer = temp
+                return data
+              })
               this.depos = resp.data
+              console.log('nama', nama)
+              console.log('depo', resp.data)
             }
             resolve(resp)
           })

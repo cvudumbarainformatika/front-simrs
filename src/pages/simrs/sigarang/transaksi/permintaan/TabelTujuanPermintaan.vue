@@ -15,7 +15,7 @@
             Nomor Permintaan
           </div>
           <div class="col-md-8 col-xs-12">
-            {{ store.form.no_permintaan }}
+            {{ map.header.no_permintaan }}
           </div>
         </div>
         <div class="row q-col-gutter-md q-mb-sm items-center">

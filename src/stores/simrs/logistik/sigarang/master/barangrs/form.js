@@ -75,7 +75,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
           .then(resp => {
             if (resp.status === 200) {
               this.satuans = resp.data.data
-              console.log('satuan', resp.data)
+              // console.log('satuan', resp.data)
             }
           })
       })

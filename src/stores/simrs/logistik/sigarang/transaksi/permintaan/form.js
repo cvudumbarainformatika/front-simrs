@@ -11,6 +11,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
+    nomor: null,
     nama: {
       penanggungjawab: 'pengguna belum dipilih',
       ruang: 'pengguna belum dipilih',
@@ -25,7 +26,8 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
   actions: {
     setNoPermintaan() {
       const m = 'SPMT-' + uniqueId()
-      this.setForm('no_permintaan', m)
+      this.nomor = m
+      // this.setForm('no_permintaan', m)
     },
     setNewReff() {
       const baru = 'TPN-' + uniqueId()
@@ -47,7 +49,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     getPenanggungJawabs() {
       return new Promise((resolve) => {
         api.get('v1/pengguna/penanggungjawab').then((resp) => {
-          console.log('Pj permintaan', resp.data)
+          // console.log('Pj permintaan', resp.data)
           if (resp.status === 200) {
             this.penanggungjawabs = resp.data
             resolve(resp)
@@ -59,7 +61,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
       this.loading = true
       return new Promise((resolve) => {
         api.get('v1/penggunaruang/pengguna-ruang').then((resp) => {
-          console.log('pengguna Ruang', resp.data)
+          // console.log('pengguna Ruang', resp.data)
           this.loading = false
           if (resp.status === 200) {
             this.penggunaruangs = resp.data
@@ -73,7 +75,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
       return new Promise((resolve) => {
         api.get('v1/pengguna/pengguna-ruang').then((resp) => {
           this.loading = false
-          console.log('pengguna permintaan', resp.data)
+          // console.log('pengguna permintaan', resp.data)
           if (resp.status === 200) {
             this.penggunas = resp.data
             resolve(resp)
