@@ -21,7 +21,29 @@ const notifErr = (resp) => {
 
   //   if (status === 200) {
 
-  if (status === 422) {
+  if (status === 402) {
+    console.log('anyar mas', resp)
+    storage.setLocalToken(resp.data.token)
+    localStorage.setItem('token2', resp.data.token)
+    // return next()resp.status
+    if (resp.config.url !== '/v1/auth/profile') {
+      Notify.create({
+        message: 'ada kesalahan, harap ulangi',
+        icon: 'icon-eva-message-circle-outline',
+        position: 'bottom-right',
+        color: 'negative',
+        actions: [
+          {
+            label: 'Dismiss',
+            color: 'yellow',
+            handler: () => {
+              /* console.log('wooow') */
+            }
+          }
+        ]
+      })
+    };
+  } else if (status === 422) {
     const msgs = resp.data
     for (const key in msgs) {
       Notify.create({

@@ -5,6 +5,7 @@
         <q-card
           v-ripple
           class="bg-primary text-white full-height cursor-pointer q-hoverable"
+          @click="goTo('/pegawai')"
         >
           <div
             class="feature-item c-p column flex-center "

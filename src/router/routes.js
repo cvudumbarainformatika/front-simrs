@@ -79,6 +79,33 @@ const routes = [
     ]
   },
 
+  // Pegawai
+  {
+    path: '/pegawai',
+    component: () => import('layouts/pegawai/AdminLayout.vue'),
+    meta: { requireAuth: true },
+    children: [
+      { path: '', redirect: '/pegawai/dashboard' },
+      {
+        path: '/pegawai/dashboard',
+        name: 'pegawai.dashboard',
+        component: () => import('pages/simrs/pegawai/IndexPage.vue')
+      },
+      {
+        path: '/pegawai/absensi',
+        name: 'pegawai.absensi',
+        component: () => import('pages/simrs/pegawai/absensi/IndexPage.vue'),
+        children: [
+          {
+            path: '/pegawai/absensi/jadwal',
+            name: 'pegawai.absensi.jadwal',
+            component: () =>
+              import('pages/simrs/pegawai/absensi/jadwal/IndexPage.vue')
+          }
+        ]
+      }
+    ]
+  },
   // sigarang
 
   {
@@ -238,7 +265,9 @@ const routes = [
             path: '/sigarang/transaksi/verifpermintaan',
             name: 'sigarang.transaksi.verifpermintaan',
             component: () =>
-              import('pages/simrs/sigarang/transaksi/verifpermintaan/IndexPage.vue')
+              import(
+                'pages/simrs/sigarang/transaksi/verifpermintaan/IndexPage.vue'
+              )
           }
         ]
       },
