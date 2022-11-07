@@ -47,12 +47,12 @@
             transition-hide="slide-down"
             :offset="[0,0]"
           >
-            <q-card>
+            <q-card style="width:150px;">
               <q-card-section>
                 <div class="text-weight-bold f-12">
                   {{ menu.nama }}
                 </div>
-                <q-separator class="q-mx-sm" />
+                <q-separator class="q-my-sm" />
 
                 <div
                   v-for="(submenu,n) in menu.submenus"
