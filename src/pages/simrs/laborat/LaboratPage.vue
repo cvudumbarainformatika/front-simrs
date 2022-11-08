@@ -153,6 +153,17 @@
             <q-btn
               round
               flat
+              icon="icon-mat-print"
+              color="grey-8"
+              @click="printHasil(row)"
+            >
+              <q-tooltip>
+                Print Hasil Pemeriksaan
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              round
+              flat
               icon="icon-mat-visibility"
               color="grey-8"
               :loading="loadingEye && eye===row"
@@ -196,9 +207,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/transaksi_laborat'
-import { humanDate, diffDate, dateBOD } from 'src/modules/formatter'
+import { humanDate, diffDate, dateBOD, dateLIS } from 'src/modules/formatter'
 import DetailPemeriksaanDialog from './DetailPemeriksaanDialog.vue'
-import { api } from 'src/boot/axios'
+import { api, SERV } from 'src/boot/axios'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 const store = useTransaksiLaboratTable()
@@ -233,10 +244,11 @@ function changeFiltered(val) {
 function getProgress(row) {
   const kunci = row.rs18 === '1'
   const progress = row.rs21
+  const complete = row.rs26 === '1'
   if (!kunci) {
     return 'Belum terkirim ke LIS'
   }
-  return progress ? 'Complete' : 'Menunggu Hasil ...'
+  return progress || complete ? 'Complete' : 'Menunggu Hasil ...'
 }
 
 function getNoRm(row) {
@@ -366,7 +378,7 @@ const loadingEye = ref(false)
 const eye = ref(null)
 
 async function previewLaborat(x) {
-  console.log(x)
+  console.log('preview', x)
   loadingEye.value = true
   eye.value = x
   try {
@@ -396,7 +408,7 @@ async function previewLaborat(x) {
 
     // const unique = [...new Set(details)]
     const gr = groupBy(details, paket => paket.pemeriksaan_laborat.rs21)
-    console.log(gr)
+    // console.log('groupped', gr)
     pemeriksaanLaborat.value = gr
     totalPemeriksaanLaborat.value = getTotal(gr)
     modalDetailOpen.value = true
@@ -446,6 +458,7 @@ const x = ref(null)
 const loadingKey = ref(false)
 
 async function kunciPermintaan(row) {
+  console.log(row)
   if (row.rs18 === '1') {
     return notifErrVue('Maaf permintaan ini sudah terkunci dan terkirim ke LIS')
   }
@@ -469,11 +482,11 @@ async function kunciPermintaan(row) {
       PATIENT_NAME: getNama(row),
       IDENTITY_N: '-',
       BOD: getBOD(row),
-      SEX: getKelamin(row),
+      SEX: getKelamin(row) === 'Laki-laki' ? '1' : '2',
       ADDRESS: getAlamat(row),
       DIAGNOSA: '-',
       GLOBAL_COMMENT: 'laborat-dalam',
-      DATE_ORDER: row.rs3,
+      DATE_ORDER: dateLIS(row.tanggal),
       DOCTOR: row.dokter.rs1,
       DOCTOR_NAME: row.dokter.rs2,
       CLASS: '-',
@@ -489,10 +502,14 @@ async function kunciPermintaan(row) {
     }
 
     // const token = null
+    // console.log(form)
     try {
       await api.post('/v1/transaksi_laborats_kunci_dan_kirim_ke_lis', form).then(response => {
-        console.log('kirim ke list')
-        notifSuccessVue('Data Success terkirim Ke LIS')
+        // console.log('kirim ke list')
+        // console.log(JSON.parse(resp.data.message))
+        const msg = response.data.message
+        console.log(msg)
+        notifSuccessVue(msg)
         x.value = null
         loadingKey.value = false
         row.rs18 = '1'
@@ -506,5 +523,13 @@ async function kunciPermintaan(row) {
     x.value = null
     loadingKey.value = false
   }
+}
+
+function printHasil(row) {
+  // console.log(SERV, row)
+  // if (!row.pemeriksaan_laborat) {
+  //   return notifErrVue('Maaf, Pemeriksaan ini Tidak Ada')
+  // }
+  window.open(SERV + `/print/page?data=hasil-permintaan-laborat-dalam&q=${row.rs2}`, '_blank', 'width=70%')
 }
 </script>

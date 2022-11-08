@@ -187,7 +187,7 @@
                         outlined
                         use-input
                         :option-value="obj=>obj"
-                        option-label="rs2"
+                        option-label="name"
                         label="Cari Pemeriksaan"
                         :options="optNonPaket"
                         behavior="menu"
@@ -215,7 +215,7 @@
                           </q-item>
                         </template>
                         <template #option="scope">
-                          <q-item v-bind="scope.itemProps">
+                          <!-- <q-item v-bind="scope.itemProps">
                             <q-item-section>
                               <q-item-label>
                                 {{ scope.opt.rs2 }}
@@ -223,6 +223,21 @@
                               </q-item-label>
                               <q-item-label :class="scope.opt.rs21===''?'text-grey-5':''">
                                 <strong>  {{ scope.opt.rs21===''? ' NON PAKET' : ' PAKET -' + scope.opt.rs21 }} </strong>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item> -->
+                          <q-item v-bind="scope.itemProps">
+                            <q-item-section>
+                              <q-item-label>
+                                {{ scope.opt.name }}
+                                -  <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.value[0].biaya) }}</span>
+                              </q-item-label>
+                              <q-item-label :class="scope.opt.value[0].jenis==='NON-PAKET'?'text-grey-5':''">
+                                <strong>  {{ scope.opt.value[0].jenis }} </strong>
+                                <span
+                                  v-if="scope.opt.value[0].jenis==='NON-PAKET'"
+                                  class="text-primary"
+                                >  - {{ scope.opt.value[0].kode }} </span>
                               </q-item-label>
                             </q-item-section>
                           </q-item>
@@ -413,13 +428,21 @@ onMounted(() => {
 
 function insertList(val) {
   if (val) {
-    if (val.rs21 === '') {
-      details.value.push(val)
-    } else {
-      const group = store.pemeriksaans.filter(x => x.rs21 === val.rs21)
+    // if (val.rs21 === '') {
+    //   details.value.push(val)
+    // } else {
+    //   const group = store.pemeriksaans.filter(x => x.rs21 === val.rs21)
+    //   for (let i = 0; i < group.length; i++) {
+    //     details.value.push(group[i])
+    //   }
+    // }
+    if (val.value.length > 0) {
+      const group = val.value
       for (let i = 0; i < group.length; i++) {
-        details.value.push(group[i])
+        details.value.push(group[i].aslix)
       }
+    } else {
+      details.value.push(val.value[0].aslix)
     }
   }
 
@@ -464,18 +487,10 @@ async function filterNonPaket (val, update) {
     })
     return
   }
-  // const params = {
-  //   params: {
-  //     q: val,
-  //     p: 'non'
-  //   }
-  // }
-  // const resp = await api.get('/v1/master_laborat_group', params)
-  // console.log('cari non paket', resp)
   update(
     () => {
       const needle = val.toLowerCase()
-      const arr = 'rs2-rs21'
+      const arr = 'name'
       const splits = arr.split('-')
       const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
       const filteredData = multiFilter(store.pemeriksaans, splits, needle)
@@ -489,32 +504,6 @@ async function filterNonPaket (val, update) {
     }
   )
 }
-// async function filterPaket (val, update) {
-//   console.log(val)
-//   if (!val) {
-//     update(() => {
-//       optPaket.value = []
-//     })
-//     return
-//   }
-//   const params = {
-//     params: {
-//       q: val,
-//       p: 'paket'
-//     }
-//   }
-//   const resp = await api.get('/v1/master_laborat_group', params)
-//   console.log('cari paket', resp)
-//   update(
-//     () => (optPaket.value = resp.data)
-//     // ref => {
-//     //   if (val !== '' && ref.options.length) {
-//     //     ref.setOptionIndex(-1)
-//     //     ref.moveOptionSelection(1, true)
-//     //   }
-//     // }
-//   )
-// }
 
 function simpanData() {
   if (details.value.length === 0) {

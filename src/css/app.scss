@@ -41,6 +41,10 @@ h1,h2,h3,h4,h5 {
   width: 700px;
 }
 
+.my-flex-1 {
+  flex: 1;
+}
+
 .container-padding {
   @media(max-width: $breakpoint-lg-max){
     padding-left: 150px;

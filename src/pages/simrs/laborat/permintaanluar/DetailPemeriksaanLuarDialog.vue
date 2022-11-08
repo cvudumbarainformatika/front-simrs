@@ -37,6 +37,9 @@
                 Hasil
               </th>
               <th class="text-right">
+                Nilai Normal
+              </th>
+              <th class="text-right">
                 Satuan
               </th>
               <th class="text-right">
@@ -83,7 +86,12 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.pemeriksaan_laborat.rs22 }}
+                    {{ val.pemeriksaan_laborat.nilainormal }}
+                  </td>
+                  <td
+                    class="text-right"
+                  >
+                    {{ val.pemeriksaan_laborat.satuan }}
                   </td>
                   <td
                     class="text-right"
@@ -147,7 +155,12 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.pemeriksaan_laborat.rs22 }}
+                    {{ val.pemeriksaan_laborat.nilainormal }}
+                  </td>
+                  <td
+                    class="text-right"
+                  >
+                    {{ val.pemeriksaan_laborat.satuan }}
                   </td>
                   <td
                     class="text-right"
@@ -193,12 +206,12 @@
           label="Cancel"
           color="primary"
         />
-        <q-btn
+        <!-- <q-btn
           flat
           label="Print"
           color="primary"
           :print="'#printMe'"
-        />
+        /> -->
       </q-card-actions>
     </q-card>
   </q-dialog>

@@ -32,6 +32,9 @@
                 Hasil
               </th>
               <th class="text-right">
+                Nilai Normal
+              </th>
+              <th class="text-right">
                 Satuan
               </th>
               <th class="text-right">
@@ -69,17 +72,22 @@
                     class="text-left"
                     :colspan="item.name==='' || (item.name!=='' && n===0)?1:0"
                   >
-                    {{ val.pemeriksaan_laborat.rs2 }}
+                    {{ val.pemeriksaan_laborat.rs2 }} <span class="text-negative text-italic f-10"> - {{ val.pemeriksaan_laborat.rs1 }}</span>
                   </td>
                   <td
                     class="text-right"
                   >
-                    {{ val.hasil }}
+                    {{ val.rs27 }} {{ val.hasil }}
                   </td>
                   <td
                     class="text-right"
                   >
-                    {{ val.pemeriksaan_laborat.rs22 }}
+                    {{ val.pemeriksaan_laborat.nilainormal }}
+                  </td>
+                  <td
+                    class="text-right"
+                  >
+                    {{ val.pemeriksaan_laborat.satuan }}
                   </td>
                   <td
                     class="text-right"
@@ -101,7 +109,7 @@
               <template v-else>
                 <tr class="bg-grey-3">
                   <td
-                    colspan="4"
+                    colspan="5"
                   >
                     {{ item.name }}
                   </td>
@@ -129,7 +137,7 @@
                     {{ n+1 }}
                   </td>
                   <td>
-                    {{ val.pemeriksaan_laborat.rs2 }}
+                    {{ val.pemeriksaan_laborat.rs2 }} <span class="text-negative text-italic f-10"> - {{ val.pemeriksaan_laborat.rs1 }}</span>
                   </td>
 
                   <td
@@ -140,7 +148,12 @@
                   <td
                     class="text-right"
                   >
-                    {{ val.pemeriksaan_laborat.rs22 }}
+                    {{ val.pemeriksaan_laborat.nilainormal }}
+                  </td>
+                  <td
+                    class="text-right"
+                  >
+                    {{ val.pemeriksaan_laborat.satuan }}
                   </td>
                   <td
                     class="text-right"
@@ -156,7 +169,7 @@
             </template>
             <tr class="bg-primary text-white">
               <td
-                colspan="5"
+                colspan="6"
                 class="text-right"
               >
                 TOTAL :

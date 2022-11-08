@@ -106,16 +106,19 @@ function onSubmit () {
 
 <style lang="scss" scoped>
 
+$grad:#187DC1;
+// $yel:#FFC257;
 .bg-img {
-  background-image: url("../../assets/images/bg.png");
+  background-image: url("../../assets/images/bg2.jpg");
   background-repeat: no-repeat, repeat;
   background-size: cover;
 }
 .card-login {
   width: 360px;
-  min-height: 600px;
+  min-height: 530px;
   overflow: hidden;
   position: relative;
+  border:5px solid $warning;
 
   &::before {
     content: "";
@@ -126,23 +129,24 @@ function onSubmit () {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 23%;
     border-bottom-left-radius: 50%;
-    background: linear-gradient(-45deg, $secondary, $primary);
+    background: linear-gradient(45deg, $grad, $primary);
     overflow: hidden;
   }
 
   &::after {
     content: "";
+    z-index: 1;
     width: 239px;
     height: 129px;
     position: absolute;
-    top: 473px;
+    top: 420px;
     left: 198px;
     border-top-style: groove;
     border-top-left-radius: 98%;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 50%;
     border-bottom-left-radius: 12%;
-    background: linear-gradient(-45deg, $secondary, $primary);
+    background: linear-gradient(45deg, $grad, $primary);
     overflow: hidden;
   }
 }
@@ -152,6 +156,7 @@ function onSubmit () {
     width: 100vw;
     height: 100vh;
     border-radius: 0px;
+    border:none;
 
     &::before {
       width: 100vw;

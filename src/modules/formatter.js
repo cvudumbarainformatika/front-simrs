@@ -6,6 +6,9 @@ const dateDbFormat = (val) => {
 const dateBOD = (val) => {
   return date.formatDate(val, 'YYYYMMDD')
 }
+const dateLIS = (val) => {
+  return date.formatDate(val, 'YYYYMMDDHHmmss')
+}
 const dateUnix = (val) => {
   return date.formatDate(val, 'X')
 }
@@ -59,4 +62,15 @@ const olahUang = (val) => {
   }
 }
 
-export { dateDbFormat, humanDate, diffDate, dateBOD, dateUnix, formatRp, olahUang, dateFullFormat, titleCase }
+export {
+  dateDbFormat,
+  humanDate,
+  diffDate,
+  dateBOD,
+  dateUnix,
+  formatRp,
+  olahUang,
+  dateFullFormat,
+  titleCase,
+  dateLIS
+}

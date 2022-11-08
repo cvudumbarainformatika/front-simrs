@@ -9,10 +9,8 @@ const routes = [
       {
         path: '/admin/sso',
         name: 'admin.sso',
-        component: () =>
-          import(
-            /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/IndexPage.vue'
-          )
+        meta: { transition: 'fade', mode: '' },
+        component: () => import(/* webpackChunkName: "admin.sso" */'pages/simrs/SSO/IndexPage.vue')
       },
       {
         path: '/admin/laborat',
@@ -22,6 +20,7 @@ const routes = [
           {
             path: '/admin/laborat/dashboard',
             name: 'lab.dashboard',
+            meta: { transition: 'fade', mode: '' },
             component: () => import('pages/simrs/laborat/DashboardPage.vue')
           },
           {
@@ -40,28 +39,18 @@ const routes = [
                 component: () =>
                   import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
               }
-              // {
-              //   path: '/admin/laborat/permintaan-luar/form',
-              //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
-              // }
             ]
           }
-          // {
-          //   path: '/admin/laborat/permintaan-luar',
-          //   name: 'lab.permintaan-luar',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/LayoutKhusus.vue'),
-          // }
-          // {
-          //   path: '/admin/laborat/permintaan-luar/table',
-          //   name: 'lab.permintaan_luar',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
-          // },
-          // {
-          //   path: '/admin/laborat/permintaan-luar/form',
-          //   name: 'lab.permintaan_luar.form',
-          //   component: () => import('pages/simrs/laborat/permintaanluar/FormPage.vue')
-          // }
         ]
+      },
+      {
+        path: '/admin/settings',
+        component: () => import('pages/simrs/settings/IndexPage.vue')
+      },
+      {
+        path: '/admin/settings/menu',
+        name: 'settings.menu',
+        component: () => import('pages/simrs/settings/menu/IndexPage.vue')
       }
     ]
   },
