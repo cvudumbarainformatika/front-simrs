@@ -1,13 +1,13 @@
 <template>
   <div class="q-pa-md">
     <app-card
-      title="Prota Libur Tahunan"
-      desc="Halaman Prota Libur Tahunan"
+      title="Hari Libur Tahunan"
+      desc="Halaman Input Hari Libur Tahunan"
     >
       <template #content>
         <div class="row q-col-gutter-lg q-mb-lg items-center">
           <div class="col-md-8 col-sm-12 text-italic">
-            Pilih Tahun prota (untuk melihat prota tahun sebelumnya)
+            Pilih Tahun (untuk melihat hari libur tahun sebelumnya)
           </div>
           <div class="col-md-4 col-sm-12">
             <app-autocomplete

@@ -10,7 +10,10 @@ const routes = [
         path: '/admin/sso',
         name: 'admin.sso',
         meta: { transition: 'fade', mode: '' },
-        component: () => import(/* webpackChunkName: "admin.sso" */'pages/simrs/SSO/IndexPage.vue')
+        component: () =>
+          import(
+            /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/IndexPage.vue'
+          )
       },
       {
         path: '/admin/laborat',
@@ -79,6 +82,19 @@ const routes = [
         path: '/pegawai/dashboard',
         name: 'pegawai.dashboard',
         component: () => import('pages/simrs/pegawai/IndexPage.vue')
+      },
+      {
+        path: '/pegawai/master',
+        name: 'pegawai.master',
+        component: () => import('pages/simrs/pegawai/master/IndexPage.vue'),
+        children: [
+          {
+            path: '/pegawai/master/cuti',
+            name: 'pegawai.master.cuti',
+            component: () =>
+              import('pages/simrs/pegawai/master/cuti/IndexPage.vue')
+          }
+        ]
       },
       {
         path: '/pegawai/absensi',

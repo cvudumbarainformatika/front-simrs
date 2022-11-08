@@ -2,8 +2,8 @@
   <q-dialog>
     <app-card
       class="my-card"
-      title="Form Beban"
-      desc="Input data Beban"
+      title="Form Input"
+      desc="Input Hari Libur"
     >
       <template #content>
         <q-form
@@ -13,20 +13,20 @@
         >
           <div class="row q-col-gutter-md">
             <div class="col-md-6 col-xs-12">
+              <app-input-date
+                v-model="store.form.tgl_libur"
+                label="Tanggal Libur"
+                outlined
+                autofocus
+                @set-model="store.setTanggal"
+              />
+            </div>
+            <div class="col-md-6 col-xs-12">
               <app-input
                 v-model="store.form.nama"
                 label="Nama Hari Libur"
                 valid
                 outlined
-                autofocus
-              />
-            </div>
-            <div class="col-md-6 col-xs-12">
-              <app-input-date
-                v-model="store.form.tgl_libur"
-                label="Tanggal Libur"
-                outlined
-                @set-model="store.setTanggal"
               />
             </div>
           </div>

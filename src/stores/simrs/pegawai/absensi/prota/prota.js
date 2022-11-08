@@ -96,6 +96,8 @@ export const UseProtaAbsensiLiburStore = defineStore('prota_absensi_libur', {
       if (!payload) return
       const thumb = payload.map((x) => Object.keys(x))
       this.columns = thumb[0]
+      this.columns.sort()
+      this.columns.reverse()
       // console.log('columns', this.columns)
     },
 
