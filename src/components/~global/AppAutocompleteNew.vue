@@ -80,7 +80,7 @@ const props = defineProps({
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
-  model: { type: String, default: '' }
+  model: { type: [String, Number], default: '' }
 
 })
 const optionx = ref([])

@@ -70,7 +70,8 @@ export const UseProtaAbsensiLiburStore = defineStore('prota_absensi_libur', {
       this.deleteId = payload
       // console.log('id', payload)
       this.deleteProta()
-    }, // local table related function
+    },
+    // local table related function
     setSearch(val) {
       this.params.q = val
       this.getProta()

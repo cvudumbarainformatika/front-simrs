@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mt-sm q-ml-sm">
+  <q-page class="q-mt-md q-mx-lg">
     <app-card
       title="Input Jadwal"
       desc="Input Jadwal masuk pegawai selama satu minggu"
