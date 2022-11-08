@@ -23,6 +23,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.absensi.jadwal',
             icon: 'icon-mat-dataset',
             link: 'pegawai/absensi/jadwal'
+          },
+          {
+            nama: 'Prota',
+            name: 'pegawai.absensi.prota',
+            icon: 'icon-mat-dataset',
+            link: 'pegawai/absensi/prota'
           }
         ]
       }

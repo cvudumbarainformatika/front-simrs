@@ -101,6 +101,12 @@ const routes = [
             name: 'pegawai.absensi.jadwal',
             component: () =>
               import('pages/simrs/pegawai/absensi/jadwal/IndexPage.vue')
+          },
+          {
+            path: '/pegawai/absensi/prota',
+            name: 'pegawai.absensi.prota',
+            component: () =>
+              import('pages/simrs/pegawai/absensi/prota/IndexPage.vue')
           }
         ]
       }

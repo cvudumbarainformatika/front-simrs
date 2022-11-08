@@ -21,6 +21,9 @@
     lazy-rules
     :rules="[anotherValid]"
     behavior="menu"
+    transition-show="jump-up"
+    transition-hide="jump-down"
+    @update:model-value="updateModel"
     @filter="filterFn"
     @focus="getFocus"
     @input-value="setModel"
@@ -38,7 +41,7 @@
 
 <script setup>
 import { ref } from 'vue'
-const emits = defineEmits(['getSource', 'setModel', 'onEnter', 'setSearch'])
+const emits = defineEmits(['selected', 'getSource', 'setModel', 'onEnter', 'setSearch'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { type: String, default: 'Label' },
@@ -86,6 +89,9 @@ function filterFn (val, update) {
       ref.moveOptionSelection(1, true) // focus the first selectable option and do not update the input-value
     }
   })
+}
+function updateModel (val) {
+  emits('selected', val)
 }
 function setModel (val) {
   emits('setModel', val)

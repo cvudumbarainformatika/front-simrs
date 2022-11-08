@@ -10,7 +10,7 @@ const dateUnix = (val) => {
   return date.formatDate(val, 'X')
 }
 const humanDate = (val) => {
-  return date.formatDate(val, 'DD MMM YYYY')
+  return date.formatDate(val, 'DD MMMM YYYY')
 }
 const diffDate = (val) => {
   const date1 = new Date()

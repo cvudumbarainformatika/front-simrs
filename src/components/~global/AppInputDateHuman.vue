@@ -38,7 +38,7 @@
         <q-date
           v-if="typeDate"
           v-model="modelProp"
-          mask="YYYY-MM-DD"
+          mask="DD MMMM YYYY"
           today-btn
           @update:model-value="closeDate()"
         >
