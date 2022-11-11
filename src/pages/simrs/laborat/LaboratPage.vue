@@ -497,7 +497,7 @@ async function kunciPermintaan(row) {
       COMPANY_NAME: 'RSUD MOCH SALEH',
       KODE_PRODUCT: kodeLab,
       TYPE_PATIENT: '-',
-      IS_CITO: '0', // nanti disediakan di rs51.rs12 jika ada permintaan
+      IS_CITO: row.cito, // nanti disediakan di rs51.rs12 jika ada permintaan
       STATUS: 'N'
     }
 
