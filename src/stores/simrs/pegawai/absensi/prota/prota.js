@@ -136,8 +136,10 @@ export const UseProtaAbsensiLiburStore = defineStore('prota_absensi_libur', {
             const data = resp.data.data
             console.log('get Prota', resp)
             // console.log('data Prota', data)
-            this.setColumns(data)
-            this.setItems(data)
+            if (data.length) {
+              this.setColumns(data)
+              this.setItems(data)
+            }
             resolve(resp)
             this.setMeta(resp.data)
           })

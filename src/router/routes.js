@@ -114,6 +114,12 @@ const routes = [
               import('pages/simrs/pegawai/absensi/prota/IndexPage.vue')
           },
           {
+            path: '/pegawai/absensi/qrcode',
+            name: 'pegawai.absensi.qrcode',
+            component: () =>
+              import('pages/simrs/pegawai/absensi/qrcode/IndexPage.vue')
+          },
+          {
             path: '/pegawai/absensi/extra',
             name: 'pegawai.absensi.extra',
             component: () =>

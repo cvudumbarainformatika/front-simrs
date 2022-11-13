@@ -35,6 +35,9 @@ const formatRp = (value) => {
 const dateFullFormat = (val) => {
   return date.formatDate(val, 'DD MMMM YYYY')
 }
+const dateHalfFormat = (val) => {
+  return date.formatDate(val, 'DD MM YYYY')
+}
 
 function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ')
@@ -63,6 +66,7 @@ const olahUang = (val) => {
 }
 
 export {
+  dateHalfFormat,
   dateDbFormat,
   humanDate,
   diffDate,

@@ -1,7 +1,8 @@
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
 
-const host = '192.168.150.103'
+const host = '192.168.101.79'
+// const host = '192.168.150.103'
 
 window.Pusher = Pusher
 
@@ -19,6 +20,7 @@ window.Echo = new Echo({
 })
 
 const channel = window.Echo.channel('public.playground.1')
+const qrcodeChannel = window.Echo.channel('qrcode')
 
 // const socket = () => {
 //   let msg = null
@@ -31,4 +33,4 @@ const channel = window.Echo.channel('public.playground.1')
 //   return msg
 // }
 
-export { channel }
+export { channel, qrcodeChannel }

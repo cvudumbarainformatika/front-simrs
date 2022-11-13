@@ -50,6 +50,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.absensi.extra',
             icon: 'icon-mat-fingerprint',
             link: 'pegawai/absensi/extra'
+          },
+          {
+            nama: 'QrCode',
+            name: 'pegawai.absensi.qrcode',
+            icon: 'icon-mat-fingerprint',
+            link: 'pegawai/absensi/qrcode'
           }
         ]
       }

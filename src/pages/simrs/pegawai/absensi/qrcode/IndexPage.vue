@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./JadwalPage.vue')
+  import('./QrCodePage.vue')
 )
 </script>

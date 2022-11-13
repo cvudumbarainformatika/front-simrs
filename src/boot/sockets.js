@@ -2,7 +2,8 @@ import { boot } from 'quasar/wrappers'
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
 
-const host = '192.168.101.242'
+const host = '192.168.101.79'
+// const host = '192.168.101.242'
 
 window.Pusher = Pusher
 

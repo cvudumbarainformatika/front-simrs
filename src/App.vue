@@ -7,7 +7,7 @@
 import { useQuasar } from 'quasar'
 
 import customIcons from 'src/custom-icons/custom-icons'
-import { channel } from 'src/modules/sockets'
+import { channel, qrcodeChannel } from 'src/modules/sockets'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from './stores/simrs/penunjang/laborat/transaksi_laborat'
 
@@ -17,6 +17,7 @@ $q.iconSet.set(customIcons)
 document.body.setAttribute(['data-theme'], 'custom')
 
 // websocket
+// lab
 const labLuar = usePermintaanLuarLaboratTable()
 const labDalam = useTransaksiLaboratTable()
 channel.subscribed(() => {
@@ -40,5 +41,12 @@ channel.subscribed(() => {
       }
     }
   }
+})
+
+// qrCode
+qrcodeChannel.subscribed(() => {
+  console.log('Chanel QRCODE')
+}).listen('.newQr', e => {
+  console.log('string qr', e)
 })
 </script>

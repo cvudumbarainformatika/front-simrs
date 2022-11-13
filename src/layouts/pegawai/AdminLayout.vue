@@ -69,7 +69,7 @@ const pegawai = usePegawaiApplicationStore()
 const leftDrawerOpen = ref(false)
 const rightDrawerOpen = ref(false)
 const $q = useQuasar()
-const mobile = $q.screen.lt.md
+const mobile = $q.screen.lt.sm
 const dark = computed(() => {
   return $q.dark.isActive
 })
