@@ -17,7 +17,7 @@
 // import { ref } from 'vue'
 import QRious from 'qrious'
 import { notifErrVue } from 'src/modules/utils'
-import { qrcodeChannel } from 'src/modules/sockets'
+// import { qrcodeChannel } from 'src/modules/sockets'
 import { useQrCodeStore } from 'src/stores/simrs/pegawai/absensi/qrcode/qrcode'
 // const qrString = ref('')
 const store = useQrCodeStore()
@@ -46,10 +46,11 @@ const generate = () => {
   }
   console.log('gnerate qr')
 }
-qrcodeChannel.subscribed(() => {
-  console.log('Chanel QRCODE Page Qr')
-}).listen('newQr', e => {
-  console.log('string qr pageQr', e)
-})
+
+// qrcodeChannel.subscribed(() => {
+//   console.log('Chanel QRCODE Page Qr')
+// }).listen('newQr', e => {
+//   console.log('string qr pageQr', e)
+// })
 
 </script>

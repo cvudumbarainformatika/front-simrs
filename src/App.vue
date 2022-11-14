@@ -46,7 +46,7 @@ channel.subscribed(() => {
 // qrCode
 qrcodeChannel.subscribed(() => {
   console.log('Chanel QRCODE')
-}).listen('.newQr', e => {
+}).listen('newQr', (e) => {
   console.log('string qr', e)
 })
 </script>
