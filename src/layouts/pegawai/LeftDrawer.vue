@@ -44,7 +44,7 @@
             anchor="top right"
             self="top left"
             transition-show="slide-down"
-            transition-hide="slide-down"
+            transition-hide="slide-right"
             :offset="[0,0]"
           >
             <q-card style="width:150px;">

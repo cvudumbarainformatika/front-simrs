@@ -7,6 +7,8 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
   state: () => ({
     loading: false,
     isOpen: false, // for open / close modal
+    edited: false,
+    checkBoxValue: [],
     items: [],
     meta: {},
     columns: [],
@@ -17,7 +19,38 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
       'user_id',
       'status',
       'ruang_id',
-      'kategory_id'
+      'kategory_id',
+      'hari_01',
+      'hari_02',
+      'hari_03',
+      'hari_04',
+      'hari_05',
+      'hari_06',
+      'hari_07',
+      'jam01',
+      'jam02',
+      'jam03',
+      'jam04',
+      'jam05',
+      'jam06',
+      'jam07',
+      'jam_01',
+      'jam_02',
+      'jam_03',
+      'jam_04',
+      'jam_05',
+      'jam_06',
+      'jam_07',
+      'kedua',
+      'keempat',
+      'keenam',
+      'kelima',
+      'ketiga',
+      'ketujuh',
+      'pertama',
+      'ruang_id',
+      'status',
+      'updated_at'
     ],
     form: {},
     deleteId: null,
@@ -50,12 +83,34 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
   actions: {
     resetFORM() {
       this.form = {}
-      const columns = ['user_id', 'kategory_id', 'ruang_id']
+      const columns = [
+        'user_id',
+        'kategory_id',
+        'ruang_id'
+      ]
+      const hari = [
+        'hari_01',
+        'hari_02',
+        'hari_03',
+        'hari_04',
+        'hari_05',
+        'hari_06',
+        'hari_07',
+        'jam_01',
+        'jam_02',
+        'jam_03',
+        'jam_04',
+        'jam_05',
+        'jam_06',
+        'jam_07'
+      ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      this.form.jadwal = {}
-      this.days.forEach(data => {
+      for (let i = 0; i < hari.length; i++) {
+        this.setForm(hari[i], false)
+      }
+      this.days.forEach((data) => {
         if (data.shift) delete data.shift
       })
     },
@@ -106,6 +161,7 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
       if (!payload) return
       const thumb = payload.map((x) => Object.keys(x))
       this.columns = thumb[0]
+      this.columns.push('jadwal')
       this.columns.sort()
       changeArrayIndex(this.columns, 'pegawai', 'jadwal')
       changeArrayIndex(this.columns, 'ruang', 'jadwal')
@@ -123,6 +179,9 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
 
     newData() {
       this.resetFORM()
+      this.checkBoxValue = []
+      this.kategori = null
+      this.tanggals = []
       this.edited = false
       this.isOpen = !this.isOpen
     },
@@ -130,8 +189,26 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
       this.edited = true
       const keys = Object.keys(val)
       keys.forEach((key, index) => {
-        this.setForm(key, val[key])
+        if (val[key] !== null) {
+          this.setForm(key, val[key])
+        }
       })
+      if (val.kategory_id !== null) {
+        this.kategori = val.kategory_id
+      } else {
+        this.kategori = 3
+        // this.tanggals = val.jadwal
+        // val.jadwal.forEach((data, index) => {
+        //   if (data !== null) {
+        //     this.checkBoxValue.push(index)
+        //   }
+        //   // console.log('data', data)
+        //   // console.log('index', index)
+        // })
+      }
+      console.log('value to edit', val)
+      console.log('the form', this.form)
+      // console.log('the key', keys)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -156,10 +233,39 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
     // autocomplete pilih kategori jadwal
     kategoriJadwalSelected(val) {
       this.kategori = val
-      if (val !== 3) {
+      if (val === 1) {
         this.form.kategory_id = val
-        const t = this.kategories.filter(data => { return data.id === val })
-        this.form.jadwal = t[0]
+        const t = this.kategories.filter((data) => {
+          return data.id === val
+        })
+        this.form.hari_01 = t[0].hari_01
+        this.form.hari_02 = t[0].hari_02
+        this.form.hari_03 = t[0].hari_03
+        this.form.hari_04 = t[0].hari_04
+        this.form.hari_05 = t[0].hari_05
+        this.form.jam_01 = t[0].jam_01
+        this.form.jam_02 = t[0].jam_01
+        this.form.jam_03 = t[0].jam_01
+        this.form.jam_04 = t[0].jam_01
+        this.form.jam_05 = t[0].jam_02
+      }
+      if (val === 2) {
+        this.form.kategory_id = val
+        const t = this.kategories.filter((data) => {
+          return data.id === val
+        })
+        this.form.hari_01 = t[0].hari_01
+        this.form.hari_02 = t[0].hari_02
+        this.form.hari_03 = t[0].hari_03
+        this.form.hari_04 = t[0].hari_04
+        this.form.hari_05 = t[0].hari_05
+        this.form.hari_06 = t[0].hari_06
+        this.form.jam_01 = t[0].jam_01
+        this.form.jam_02 = t[0].jam_01
+        this.form.jam_03 = t[0].jam_01
+        this.form.jam_04 = t[0].jam_01
+        this.form.jam_05 = t[0].jam_01
+        this.form.jam_06 = t[0].jam_01
       }
     },
     kategoriJadwalCleared() {
@@ -175,7 +281,9 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
     },
     // set jam shift
     setShift(tgl, i) {
-      const kateg = this.kategories.filter(data => { return data.id === this.form.kategory_id })
+      const kateg = this.kategories.filter((data) => {
+        return data.id === this.form.kategory_id
+      })
       this.tanggals[i].masuk = kateg[0].jam_reguler.masuk
       this.tanggals[i].pulang = kateg[0].jam_reguler.pulang
       // console.log('kateg', kateg[0])
@@ -287,7 +395,7 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
             this.loading = false
             // console.log('kategori', resp)
             this.kategories = resp.data
-            this.shifts = this.kategories.filter(data => {
+            this.shifts = this.kategories.filter((data) => {
               const nam = data.nama.split(' ')
               // console.log('nam', nam[0])
               return nam[0] === 'Shift'
@@ -311,6 +419,7 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
             this.loading = false
             // console.log('Hari', resp)
             this.days = resp.data
+            this.resetFORM()
             resolve(resp)
           })
           .catch((err) => {
@@ -368,18 +477,65 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
       })
     },
     saveForm() {
-      if (this.kategori === 3) {
-        this.form.jadwal = this.tanggals
-      }
-      // console.log('form', this.form)
+      // const data = {
+      //   ruang_id: 13,
+      //   user_id: 6,
+      //   jadwal: [
+      //     {
+      //       id: 1,
+      //       nama: 'Senin',
+      //       name: 'Monday',
+      //       shift: {
+      //         id: 3,
+      //         masuk: '07:00:00',
+      //         pulang: '14:00:00'
+      //       }
+      //     },
+      //     {
+      //       id: 2,
+      //       nama: 'Selasa',
+      //       name: 'Tuesday',
+      //       shift: {
+      //         id: 3,
+      //         masuk: '07:00:00',
+      //         pulang: '14:00:00'
+      //       }
+      //     },
+      //     {
+      //       id: 3,
+      //       nama: 'Rabu',
+      //       name: 'Wednesday',
+      //       shift: {
+      //         id: 3,
+      //         masuk: '07:00:00',
+      //         pulang: '14:00:00'
+      //       }
+      //     },
+      //     {
+      //       id: 4,
+      //       nama: 'Kamis',
+      //       name: 'Thursday',
+      //       shift: {
+      //         id: 3,
+      //         masuk: '07:00:00',
+      //         pulang: '14:00:00'
+      //       }
+      //     }
+      //   ]
+      // }
+      // if (this.kategori === 3) {
+      //   this.form.jadwal = this.tanggals
+      // }
+      console.log('form', this.form)
       this.loading = true
 
       return new Promise((resolve, reject) => {
         api
+          // .post('v1/pegawai/absensi/jadwal/store', data)
           .post('v1/pegawai/absensi/jadwal/store', this.form)
           .then((resp) => {
             this.loading = false
-            // console.log('save jadwal', resp)
+            console.log('save jadwal', resp)
             notifSuccess(resp)
             this.getDataTable()
             this.resetFORM()

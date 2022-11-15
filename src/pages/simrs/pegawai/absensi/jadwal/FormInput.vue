@@ -176,7 +176,8 @@
             >
               <div class="col-1 text-center">
                 <q-checkbox
-                  v-model="daySelected"
+                  ref="refChkbox"
+                  v-model="store.haries"
                   :val="i"
                   @update:model-value="checkBox"
                 />
@@ -198,15 +199,36 @@
                       v-model="store.tanggals[i].shift"
                       :val="shift.jam_reguler"
                       dense
+                      :color="warna(shift)"
                       @update:model-value="RadioSel"
                     />
                   </div>
                   <div class="col-8">
                     <div class="row">
-                      {{ shift.nama }}
+                      <q-chip
+                        :color="warna(shift)"
+                        text-color="white"
+                        style="width:85px; padding:2px;"
+                        dense
+                        square
+                      >
+                        <div class="f-12">
+                          {{ shift.nama }}
+                        </div>
+                      </q-chip>
                     </div>
                     <div class="row">
-                      {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
+                      <q-chip
+                        :color="warna(shift)"
+                        text-color="white"
+                        style="width:85px; padding:2px;"
+                        dense
+                        square
+                      >
+                        <div class="f-12">
+                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
+                        </div>
+                      </q-chip>
                     </div>
                   </div>
                 </div>
@@ -242,12 +264,34 @@ const formatJam = data => {
   const temp = data.split(':')
   return temp[0] + ':' + temp[1]
 }
-const daySelected = ref([])
 const shiftSelected = ref(null)
+
+const warna = data => {
+  // console.log('warna ', data.nama)
+  if (data.nama === 'Shift Pagi') {
+    return 'light-blue-6'
+  } else if (data.nama === 'Shift Siang') {
+    return 'deep-orange-10'
+  } else if (data.nama === 'Shift malam') {
+    return 'dark'
+  } else if (data.nama === 'Shift subuh') {
+    return 'blue-grey-8'
+  } else {
+    return 'positive'
+  }
+}
+
+const refChkbox = ref(null)
+const daySelected = ref([])
+if (store.edited === true) {
+  console.log('page form Input edited true', store.checkBoxValue)
+  daySelected.value = store.checkBoxValue
+}
 const checkBox = (value, event) => {
   if (value.length) {
     store.tanggals = []
     value.forEach(data => {
+      store.setForm('hari_0' + data + 1, store.days[data].id)
       store.tanggals[data] = store.days[data]
       if (store.tanggals[data].created_at) {
         delete store.tanggals[data].created_at
@@ -262,7 +306,7 @@ const checkBox = (value, event) => {
   console.log('tanggal', store.tanggals)
   console.log('model', daySelected.value)
   console.log('value', value)
-  console.log('event', event)
+  // console.log('event', event)
 }
 const RadioSel = (value, event) => {
   console.log('model', shiftSelected.value)
@@ -271,18 +315,20 @@ const RadioSel = (value, event) => {
   // console.log('event', event)
 }
 const onSubmit = () => {
-  store.saveForm().then(() => {
-    if (formReff.value != null) { formReff.value.resetValidation() }
+  store.saveForm()
+    .then(() => {
+      if (formReff.value != null) { formReff.value.resetValidation() }
 
-    store.setOpen()
-  }).catch(() => {
-    store.setOpen()
-  })
+      store.setOpen()
+    }).catch(() => {
+      store.setOpen()
+    })
 }
 const onReset = () => {
   formReff.value.resetValidation()
   store.setOpen()
 }
+// onSubmit()
 </script>
 <style lang="scss" scoped>
 .itu{
