@@ -64,6 +64,7 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
     kategori: null,
     kategories: [],
     days: [],
+    haries: [],
     tanggals: [],
     pagies: [],
     siangs: [],
@@ -235,40 +236,18 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
       this.kategori = val
       if (val === 1) {
         this.form.kategory_id = val
-        const t = this.kategories.filter((data) => {
-          return data.id === val
-        })
-        this.form.hari_01 = t[0].hari_01
-        this.form.hari_02 = t[0].hari_02
-        this.form.hari_03 = t[0].hari_03
-        this.form.hari_04 = t[0].hari_04
-        this.form.hari_05 = t[0].hari_05
-        this.form.jam_01 = t[0].jam_01
-        this.form.jam_02 = t[0].jam_01
-        this.form.jam_03 = t[0].jam_01
-        this.form.jam_04 = t[0].jam_01
-        this.form.jam_05 = t[0].jam_02
+        this.haries = [0, 1, 2, 3, 4]
       }
       if (val === 2) {
         this.form.kategory_id = val
-        const t = this.kategories.filter((data) => {
-          return data.id === val
-        })
-        this.form.hari_01 = t[0].hari_01
-        this.form.hari_02 = t[0].hari_02
-        this.form.hari_03 = t[0].hari_03
-        this.form.hari_04 = t[0].hari_04
-        this.form.hari_05 = t[0].hari_05
-        this.form.hari_06 = t[0].hari_06
-        this.form.jam_01 = t[0].jam_01
-        this.form.jam_02 = t[0].jam_01
-        this.form.jam_03 = t[0].jam_01
-        this.form.jam_04 = t[0].jam_01
-        this.form.jam_05 = t[0].jam_01
-        this.form.jam_06 = t[0].jam_01
+        this.haries = [0, 1, 2, 3, 4, 5]
+      }
+      if (val === 3) {
+        this.haries = []
       }
     },
     kategoriJadwalCleared() {
+      this.haries = []
       this.kategori = null
     },
 
@@ -281,11 +260,11 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
     },
     // set jam shift
     setShift(tgl, i) {
-      const kateg = this.kategories.filter((data) => {
-        return data.id === this.form.kategory_id
-      })
-      this.tanggals[i].masuk = kateg[0].jam_reguler.masuk
-      this.tanggals[i].pulang = kateg[0].jam_reguler.pulang
+      // const kateg = this.kategories.filter((data) => {
+      //   return data.id === this.form.kategory_id
+      // })
+      // this.tanggals[i].masuk = kateg[0].jam_reguler.masuk
+      // this.tanggals[i].pulang = kateg[0].jam_reguler.pulang
       // console.log('kateg', kateg[0])
       // console.log('tgl i', this.tanggals[i])
       // console.log('tgl', tgl)
@@ -393,7 +372,7 @@ export const useAbsensiJadwalStore = defineStore('jadwal_absensi', {
           .get('v1/pegawai/absensi/jadwal/kategori')
           .then((resp) => {
             this.loading = false
-            // console.log('kategori', resp)
+            console.log('kategori', resp.data)
             this.kategories = resp.data
             this.shifts = this.kategories.filter((data) => {
               const nam = data.nama.split(' ')

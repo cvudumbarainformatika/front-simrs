@@ -71,44 +71,21 @@
               v-if="store.form.kategory_id===1 "
               class="col-12"
             >
-              <div class="row q-col-gutter-md q-mt-sm">
+              <div
+                v-for="(day, i) in store.days"
+                :key="i"
+                class="row q-col-gutter-md q-mt-sm items-center"
+              >
+                <div class="col-1 text-center">
+                  <q-checkbox
+                    ref="refChkbox"
+                    v-model="store.haries"
+                    :val="i"
+                    @update:model-value="checkBox"
+                  />
+                </div>
                 <div class="col-2">
-                  {{ store.kategories[0].pertama.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[0].jam_reguler.masuk }} - {{ store.kategories[0].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[0].kedua.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[0].jam_reguler.masuk }} - {{ store.kategories[0].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[0].ketiga.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[0].jam_reguler.masuk }} - {{ store.kategories[0].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[0].keempat.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[0].jam_reguler.masuk }} - {{ store.kategories[0].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[0].kelima.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[0].jam_jumat.masuk }} - {{ store.kategories[0].jam_jumat.pulang }}
+                  {{ day.nama }}
                 </div>
               </div>
             </div>
@@ -116,52 +93,21 @@
               v-if="store.form.kategory_id===2 "
               class="col-12"
             >
-              <div class="row q-col-gutter-md q-mt-sm">
+              <div
+                v-for="(day, i) in store.days"
+                :key="i"
+                class="row q-col-gutter-md q-mt-sm items-center"
+              >
+                <div class="col-1 text-center">
+                  <q-checkbox
+                    ref="refChkbox"
+                    v-model="store.haries"
+                    :val="i"
+                    @update:model-value="checkBox"
+                  />
+                </div>
                 <div class="col-2">
-                  {{ store.kategories[1].pertama.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[1].kedua.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[1].ketiga.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[1].keempat.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[1].kelima.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
-                </div>
-              </div>
-              <div class="row q-col-gutter-md q-mt-sm">
-                <div class="col-2">
-                  {{ store.kategories[1].keenam.nama }}
-                </div>
-                <div class="col-5">
-                  jam : {{ store.kategories[1].jam_reguler.masuk }} - {{ store.kategories[1].jam_reguler.pulang }}
+                  {{ day.nama }}
                 </div>
               </div>
             </div>
@@ -169,20 +115,21 @@
           <div
             v-if="store.kategori===3"
           >
-            <!-- Senin -->
             <div
+              v-for="(day, i) in store.days"
+              :key="i"
               class="row q-col-gutter-md q-mt-sm items-center"
             >
               <div class="col-1 text-center">
                 <q-checkbox
-                  ref="refSenin"
-                  v-model="store.form.hari_01"
-                  val="1"
-                  true-value="1"
+                  ref="refChkbox"
+                  v-model="store.haries"
+                  :val="i"
+                  @update:model-value="checkBox"
                 />
               </div>
               <div class="col-2">
-                Senin
+                {{ day.nama }}
               </div>
               <div
                 v-for="(shift, n) in store.shifts"
@@ -190,387 +137,16 @@
                 class="col-2"
               >
                 <div
-                  v-if="store.form.hari_01"
+                  v-if="store.tanggals[i]"
                   class="row items-center"
                 >
                   <div class="col-4">
                     <q-radio
-                      v-model="store.form.jam_01"
-                      :val="shift.jam_01"
+                      v-model="store.tanggals[i].shift"
+                      :val="shift.jam_reguler"
                       dense
                       :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Selasa -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refSelasa"
-                  v-model="store.form.hari_02"
-                  true-value="2"
-                />
-              </div>
-              <div class="col-2">
-                Selasa
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_02"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_02"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Rabu -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refRabu"
-                  v-model="store.form.hari_03"
-                  true-value="3"
-                />
-              </div>
-              <div class="col-2">
-                Rabu
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_03"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_03"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Kamis -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refKamis"
-                  v-model="store.form.hari_04"
-                  true-value="4"
-                />
-              </div>
-              <div class="col-2">
-                Kamis
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_04"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_04"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Jum'at -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refJumat"
-                  v-model="store.form.hari_05"
-                  true-value="5"
-                />
-              </div>
-              <div class="col-2">
-                Jum'at
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_05"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_05"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Sabtu -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refSabtu"
-                  v-model="store.form.hari_06"
-                  true-value="6"
-                />
-              </div>
-              <div class="col-2">
-                Sabtu
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_06"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_06"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ shift.nama }}
-                        </div>
-                      </q-chip>
-                    </div>
-                    <div class="row">
-                      <q-chip
-                        :color="warna(shift)"
-                        text-color="white"
-                        style="width:85px; padding:2px;"
-                        dense
-                        square
-                      >
-                        <div class="f-12">
-                          {{ formatJam(shift.jam_reguler.masuk) }} - {{ formatJam(shift.jam_reguler.pulang) }}
-                        </div>
-                      </q-chip>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Minggu -->
-            <div
-              class="row q-col-gutter-md q-mt-sm items-center"
-            >
-              <div class="col-1 text-center">
-                <q-checkbox
-                  ref="refMinggu"
-                  v-model="store.form.hari_07"
-                  true-value="7"
-                />
-              </div>
-              <div class="col-2">
-                Minggu
-              </div>
-              <div
-                v-for="(shift, n) in store.shifts"
-                :key="n"
-                class="col-2"
-              >
-                <div
-                  v-if="store.form.hari_07"
-                  class="row items-center"
-                >
-                  <div class="col-4">
-                    <q-radio
-                      v-model="store.form.jam_07"
-                      :val="shift.jam_01"
-                      dense
-                      :color="warna(shift)"
+                      @update:model-value="RadioSel"
                     />
                   </div>
                   <div class="col-8">
@@ -652,13 +228,13 @@ const warna = data => {
 }
 
 // const refChkbox = ref(null)
-const refSenin = ref(null)
-const refSelasa = ref(null)
-const refRabu = ref(null)
-const refKamis = ref(null)
-const refJumat = ref(null)
-const refSabtu = ref(null)
-const refMinggu = ref(null)
+// const refSenin = ref(null)
+// const refSelasa = ref(null)
+// const refRabu = ref(null)
+// const refKamis = ref(null)
+// const refJumat = ref(null)
+// const refSabtu = ref(null)
+// const refMinggu = ref(null)
 const daySelected = ref([])
 watch(store.form, () => {
   console.log('watch edited', store.edited)
@@ -667,7 +243,8 @@ if (store.edited === true) {
   console.log('page form Input edited true', store.checkBoxValue)
   daySelected.value = store.checkBoxValue
 }
-// const checkBox = (value, event) => {
+const checkBox = (value, event) => {
+  console.log(store.shifts)
 //   if (value.length) {
 //     store.tanggals = []
 //     value.forEach(data => {
@@ -687,13 +264,13 @@ if (store.edited === true) {
 //   console.log('model', daySelected.value)
 //   console.log('value', value)
 //   // console.log('event', event)
-// }
-// const RadioSel = (value, event) => {
+}
+const RadioSel = (value, event) => {
 //   console.log('model', shiftSelected.value)
 //   console.log('tanggal', store.tanggals)
 //   console.log('value', value)
 //   // console.log('event', event)
-// }
+}
 const onSubmit = () => {
   store.saveForm()
     .then(() => {
