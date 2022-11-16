@@ -31,10 +31,10 @@
           </div>
           <div class="row q-col-gutter-sm q-mt-xs items-center">
             <!-- masuk -->
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-4 col-sm-4">
               Jam Masuk
             </div>
-            <div class="col-xs-12 col-sm-1">
+            <div class="col-xs-4 col-sm-1 text-center">
               <q-btn
                 icon="icon-mat-access_time"
                 round
@@ -69,7 +69,7 @@
                 </q-popup-proxy>
               </q-btn>
             </div>
-            <div class="col-xs-12 col-sm-3">
+            <div class="col-xs-12 col-sm-3 text-center">
               <div class="q-mr-sm">
                 <q-badge color="positive">
                   {{ store.form.masuk }}
@@ -79,10 +79,10 @@
           </div>
           <div class="row q-col-gutter-sm q-mt-xs items-center">
             <!-- pulang -->
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-4 col-sm-4">
               Jam Pulang
             </div>
-            <div class="col-xs-12 col-sm-1">
+            <div class="col-xs-4 col-sm-1 text-center">
               <q-btn
                 icon="icon-mat-access_time"
                 round
@@ -117,7 +117,7 @@
                 </q-popup-proxy>
               </q-btn>
             </div>
-            <div class="col-xs-12 col-sm-3">
+            <div class="col-xs-12 col-sm-3 text-center">
               <div class="q-mr-sm">
                 <q-badge color="negative">
                   {{ store.form.pulang }}
@@ -126,10 +126,10 @@
             </div>
           </div>
           <div class="row q-col-gutter-sm q-mt-xs items-center">
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-3 col-sm-4">
               warna
             </div>
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-3 col-sm-4">
               <!-- <app-autocomplete
                 v-model="store.form.warna"
                 label="Pilih warna"
@@ -158,7 +158,7 @@
                 <!-- @change="val => changeColor(i, val)" -->
               </q-btn>
             </div>
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-6 col-sm-4">
               <q-card
                 flat
                 class="text-white"
