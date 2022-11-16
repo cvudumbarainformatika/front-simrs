@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
   state: () => ({
     loading: true,
-    isOpen: true,
+    isOpen: false,
     items: [],
     meta: {},
     columns: [],
@@ -19,15 +20,7 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
-    },
-    colors: [
-      { nama: 'slate 300', value: '#cbd5e1' },
-      { nama: 'slate 500', value: '#64748b' },
-      { nama: 'slate 800', value: '#1e293b' },
-      { nama: 'rose 300', value: '#fda4af' },
-      { nama: 'rose 500', value: '#f43f5e' },
-      { nama: 'rose 800', value: '#9f1239' }
-    ]
+    }
   }),
   actions: {
     resetFORM() {
@@ -110,6 +103,7 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
+      console.log('edit', val)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -157,6 +151,40 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
             resolve(resp)
           })
           .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    saveForm() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/pegawai/absensi/kategori/store', this.form)
+          .then(resp => {
+            console.log('save kategory', resp)
+            notifSuccess(resp)
+            this.loading = false
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    deleteData() {
+      this.loading = true
+      const data = { id: this.deleteId }
+      return new Promise((resolve, reject) => {
+        api.post('v1/pegawai/absensi/kategori/destroy', data)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch(err => {
             this.loading = false
             reject(err)
           })

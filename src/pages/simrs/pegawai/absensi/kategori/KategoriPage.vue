@@ -44,6 +44,19 @@
           <template #cell-pulang="{row}">
             {{ formatJam(row.pulang) }}
           </template>
+          <template #cell-warna="{row}">
+            <q-card
+              flat
+              class="text-white"
+              :style="`background-color: ${row.warna };`"
+            >
+              <q-card-section>
+                <div :style="`color: ${row.warna };`">
+                  {{ row.warna }}
+                </div>
+              </q-card-section>
+            </q-card>
+          </template>
           <template #col-nama>
             <div>Nama Kategori</div>
           </template>

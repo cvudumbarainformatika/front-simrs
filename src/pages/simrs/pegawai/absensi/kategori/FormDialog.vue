@@ -139,15 +139,23 @@
                 :source="store.colors"
               /> -->
               <q-btn
-                icon="icon-mat-access_time"
+                icon="icon-mat-palette"
                 round
                 flat
                 color="primary"
               >
-                <q-color
-                  :model-value="list.value"
-                  @change="val => changeColor(i, val)"
-                />
+                <q-menu
+                  anchor="top right"
+                  self="top left"
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-color
+                    v-model="store.form.warna"
+                    format-model="hex"
+                  />
+                </q-menu>
+                <!-- @change="val => changeColor(i, val)" -->
               </q-btn>
             </div>
             <div class="col-xs-12 col-sm-4">
@@ -156,7 +164,11 @@
                 class="text-white"
                 :style="`background-color: ${store.form.warna };`"
               >
-                <q-card-section>{{ store.form.warna }}</q-card-section>
+                <q-card-section>
+                  <div :style="`color: ${store.form.warna };`">
+                    {{ store.form.warna }}
+                  </div>
+                </q-card-section>
               </q-card>
             </div>
           </div>
@@ -175,9 +187,10 @@
                 </div>
                 <div class="col-6">
                   <app-input
-                    v-model="store.form.jam"
+                    v-model="store.form.menit"
                     label="menit"
                     type="number"
+                    valid
                   />
                 </div>
               </div>
@@ -207,12 +220,11 @@ import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/absensi/kategor
 const store = useKategoriJadwalStore()
 
 const onSubmit = () => {
-  // store.saveForm().then(() => {
-
-  //   store.setOpen()
-  // }).catch(() => {
-  //   store.setOpen()
-  // })
+  store.saveForm().then(() => {
+    store.setOpen()
+  }).catch(() => {
+    store.setOpen()
+  })
 }
 const onReset = () => {
   store.setOpen()
