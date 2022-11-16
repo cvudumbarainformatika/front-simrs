@@ -120,6 +120,12 @@ const routes = [
               import('pages/simrs/pegawai/absensi/qrcode/IndexPage.vue')
           },
           {
+            path: '/pegawai/absensi/kategori',
+            name: 'pegawai.absensi.kategori',
+            component: () =>
+              import('pages/simrs/pegawai/absensi/kategori/IndexPage.vue')
+          },
+          {
             path: '/pegawai/absensi/extra',
             name: 'pegawai.absensi.extra',
             component: () =>

@@ -1,0 +1,73 @@
+<template>
+  <div class="q-px-lg q-pt-md">
+    <app-card
+      title="Kategori Jadwal"
+      desc="Halaman Input Kategori Jadwal Absensi"
+    >
+      <template #content>
+        <app-table
+          title="Data Prota"
+          :columns="store.columns"
+          :column-hide="store.columnHide"
+          :items="store.items"
+          :meta="store.meta"
+          :per-page="store.params.per_page"
+          :order-by="store.params.order_by"
+          :sort="store.params.sort"
+          :loading="store.loading"
+          :to-search="store.params.q"
+          @goto="store.setPage"
+          @set-row="store.setPerPage"
+          @refresh="store.refreshTable"
+          @find="store.setSearch"
+          @set-order="store.setOder"
+          @new-data="store.newData"
+          @edit-data="store.editData"
+          @delete="store.deletesData"
+        >
+          <template #col-durasi>
+            <div>Durasi per-minggu</div>
+          </template>
+          <template #cell-durasi="{row}">
+            <div class="row">
+              <div class="col-6">
+                {{ row.jam }} jam
+              </div>
+              <div class="col-6">
+                : {{ row.menit }} menit
+              </div>
+            </div>
+          </template>
+          <template #cell-masuk="{row}">
+            {{ formatJam(row.masuk) }}
+          </template>
+          <template #cell-pulang="{row}">
+            {{ formatJam(row.pulang) }}
+          </template>
+          <template #col-nama>
+            <div>Nama Kategori</div>
+          </template>
+          <template #col-masuk>
+            <div>Jam Masuk</div>
+          </template>
+          <template #col-pulang>
+            <div>Jam Pulang</div>
+          </template>
+        </app-table>
+      </template>
+    </app-card>
+    <FormDialog v-model="store.isOpen" />
+  </div>
+</template>
+<script setup>
+import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/absensi/kategori/kategori'
+import FormDialog from './FormDialog.vue'
+const store = useKategoriJadwalStore()
+
+const formatJam = data => {
+  const temp = data.split(':')
+  return temp[0] + ' : ' + temp[1]
+}
+store.getInitialData()
+
+</script>

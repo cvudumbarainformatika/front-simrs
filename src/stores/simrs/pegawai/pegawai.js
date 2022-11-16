@@ -40,6 +40,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             link: 'pegawai/absensi/jadwal'
           },
           {
+            nama: 'Kategori Jadwal',
+            name: 'pegawai.absensi.kategori',
+            icon: 'icon-mat-fingerprint',
+            link: 'pegawai/absensi/kategori'
+          },
+          {
             nama: 'Prota',
             name: 'pegawai.absensi.prota',
             icon: 'icon-mat-fingerprint',
