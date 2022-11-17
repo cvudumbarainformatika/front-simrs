@@ -1,6 +1,15 @@
 <template>
   <q-page class="q-pa-lg">
-    <q-input label="alamat" />
+    <q-input
+      v-model="id"
+      label="alamat"
+    />
+    <q-btn
+      label="pura-pura scan"
+      no-caps
+      color="primary"
+      @click="mockScan"
+    />
     {{ seconds }}
     <div v-if="!store.newQr">
       <app-no-data />
@@ -24,6 +33,7 @@
 <script setup>
 // import { ref } from 'vue'
 import QRious from 'qrious'
+import { api } from 'src/boot/axios'
 import { qrcodeChannel } from 'src/modules/sockets'
 import { notifErrVue } from 'src/modules/utils'
 // import { qrcodeChannel } from 'src/modules/sockets'
@@ -31,6 +41,18 @@ import { useQrCodeStore } from 'src/stores/simrs/pegawai/absensi/qrcode/qrcode'
 import { onMounted, ref } from 'vue'
 // const qrString = ref('')
 const store = useQrCodeStore()
+const id = ref('')
+const mockScan = () => {
+  const temp = { qr: id.value }
+  console.log('id', id.value)
+  return new Promise(resolve => {
+    api.post('v1/pegawai/absensi/qr/scan', temp)
+      .then(resp => {
+        console.log(resp)
+        resolve(resp)
+      })
+  })
+}
 store.getQrCode().then(data => {
   console.log(' has data ', data)
   if (data === 'has data') {
