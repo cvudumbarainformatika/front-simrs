@@ -7,7 +7,7 @@
 import { useQuasar } from 'quasar'
 
 import customIcons from 'src/custom-icons/custom-icons'
-import { channel, qrcodeChannel } from 'src/modules/sockets'
+import { channel } from 'src/modules/sockets'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from './stores/simrs/penunjang/laborat/transaksi_laborat'
 
@@ -44,9 +44,9 @@ channel.subscribed(() => {
 })
 
 // qrCode
-qrcodeChannel.subscribed(() => {
-  console.log('Chanel QRCODE')
-}).listen('newQr', (e) => {
-  console.log('string qr', e)
-})
+// qrcodeChannel.subscribed(() => {
+//   console.log('Chanel QRCODE')
+// }).listen('.qr-baru', (e) => {
+//   console.log('string qr', e)
+// })
 </script>

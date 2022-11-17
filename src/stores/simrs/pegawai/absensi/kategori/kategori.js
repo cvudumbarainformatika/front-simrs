@@ -10,9 +10,6 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
     meta: {},
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
-    katogories: [],
-    proxyMasuk: '07:00',
-    proxyPulang: '14:00',
     form: {},
     params: {
       q: '',
@@ -20,7 +17,10 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
-    }
+    },
+    katogories: [],
+    proxyMasuk: '07:00',
+    proxyPulang: '14:00'
   }),
   actions: {
     resetFORM() {
