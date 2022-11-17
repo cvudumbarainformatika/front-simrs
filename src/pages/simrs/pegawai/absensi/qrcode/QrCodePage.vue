@@ -83,6 +83,8 @@ qrcodeChannel.subscribed(() => {
   console.log('Chanel QRCODE Page Qr')
 }).listen('.qr-baru', e => {
   console.log('string qr pageQr', e)
+  store.newQr = e.message.code
+  generate()
   timer = 60
 })
 store.setComputerId()
