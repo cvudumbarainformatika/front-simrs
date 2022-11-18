@@ -5,10 +5,16 @@
       label="alamat"
     />
     <q-btn
-      label="pura-pura scan"
+      label="pura-pura scan masuk"
       no-caps
       color="primary"
       @click="mockScan"
+    />
+    <q-btn
+      label="pura-pura scan pulang"
+      no-caps
+      color="negative"
+      @click="mockScanOut"
     />
     {{ seconds }}
     <div v-if="!store.newQr">
@@ -43,7 +49,24 @@ import { onMounted, ref } from 'vue'
 const store = useQrCodeStore()
 const id = ref('')
 const mockScan = () => {
-  const temp = { qr: id.value }
+  const temp = {
+    qr: id.value,
+    absen: 'masuk'
+  }
+  console.log('id', id.value)
+  return new Promise(resolve => {
+    api.post('v1/pegawai/absensi/qr/scan', temp)
+      .then(resp => {
+        console.log(resp)
+        resolve(resp)
+      })
+  })
+}
+const mockScanOut = () => {
+  const temp = {
+    qr: id.value,
+    absen: 'pulang'
+  }
   console.log('id', id.value)
   return new Promise(resolve => {
     api.post('v1/pegawai/absensi/qr/scan', temp)
