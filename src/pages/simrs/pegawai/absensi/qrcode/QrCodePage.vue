@@ -24,9 +24,9 @@
       >
         <canvas id="qrcode" />
       </div>
-      <div v-if="store.loading">
+      <!-- <div v-if="store.loading">
         <app-loading />
-      </div>
+      </div> -->
     </div>
   </q-page>
 </template>
