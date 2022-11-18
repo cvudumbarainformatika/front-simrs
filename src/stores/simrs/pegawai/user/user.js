@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
+export const useUserStore = defineStore('store_user', {
   state: () => ({
     loading: true,
     isOpen: false,
@@ -17,22 +17,27 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       page: 1,
       per_page: 10,
       order_by: 'created_at',
-      sort: 'desc'
+      sort: 'asc'
     },
-    katogories: [],
-    proxyMasuk: '07:00',
-    proxyPulang: '14:00'
+    // custom for this store
+    pegawaies: []
   }),
   actions: {
     resetFORM() {
       this.form = {}
-      const columns = ['nama', 'warna', 'jam', 'menit']
+      const columns = [
+        'nama',
+        'username',
+        'device',
+        'status',
+        'id',
+        'email',
+        'pegawai_id'
+      ]
 
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      this.setForm('masuk', '07:00')
-      this.setForm('pulang', '14:00')
     },
     setForm(key, payload) {
       this.form[key] = payload
@@ -78,7 +83,7 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       this.getDataTable()
     },
     setColumns(payload) {
-      this.columns = ['nama', 'masuk', 'pulang', 'warna', 'durasi']
+      this.columns = ['nama', 'username', 'status', 'ganti']
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
@@ -116,23 +121,18 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
         }
       })
     },
-    // update form masuk
-    updateMasuk() {
-      this.form.masuk = this.proxyMasuk
-    },
-    saveMasuk() {
-      this.proxyMasuk = this.form.masuk
-    },
-    // update form pulang
-    updatePulang() {
-      this.form.pulang = this.proxyPulang
-    },
-    savePulang() {
-      this.proxyPulang = this.form.pulang
-    },
-    // initial data
     getInitialData() {
       this.getDataTable()
+      this.getPegawai()
+    },
+    // this custom store
+
+    // autocomplete pilih pegawai
+    pegawaiSelected(val) {
+      this.setForm('pegawai_id', val)
+    },
+    pegawaiCleared() {
+      this.setForm('pegawai_id', null)
     },
     // api related function
     // get data tabel
@@ -141,10 +141,10 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/pegawai/absensi/kategori/index', params)
+          .get('v1/user/user', params)
           .then((resp) => {
             this.loading = false
-            console.log('store kategori', resp.data)
+            console.log('store user', resp.data)
             this.items = resp.data.data
             this.setColumns(resp.data.data)
             this.meta = resp.data
@@ -157,18 +157,54 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
           })
       })
     },
+    getPegawai() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/pegawai/master/pegawai')
+          .then((resp) => {
+            this.loading = false
+            // console.log('pegawai', resp)
+            this.pegawaies = resp.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    updateStatus() {
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api
+          .post('v1/user/status', this.form)
+          .then((resp) => {
+            console.log('update status', resp)
+            notifSuccess(resp)
+            this.loading = false
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
     saveForm() {
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.post('v1/pegawai/absensi/kategori/store', this.form)
-          .then(resp => {
+        api
+          .post('v1/', this.form)
+          .then((resp) => {
             console.log('save kategory', resp)
             notifSuccess(resp)
             this.loading = false
             this.getDataTable()
             resolve(resp)
           })
-          .catch(err => {
+          .catch((err) => {
             this.loading = false
             reject(err)
           })
@@ -178,14 +214,15 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
       this.loading = true
       const data = { id: this.deleteId }
       return new Promise((resolve, reject) => {
-        api.post('v1/pegawai/absensi/kategori/destroy', data)
-          .then(resp => {
+        api
+          .post('v1//destroy', data)
+          .then((resp) => {
             this.loading = false
             notifSuccess(resp)
             this.getDataTable()
             resolve(resp)
           })
-          .catch(err => {
+          .catch((err) => {
             this.loading = false
             reject(err)
           })

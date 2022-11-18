@@ -97,6 +97,19 @@ const routes = [
         ]
       },
       {
+        path: '/pegawai/user',
+        name: 'pegawai.user',
+        component: () => import('src/pages/simrs/pegawai/user/IndexPage.vue'),
+        children: [
+          {
+            path: '/pegawai/user/list',
+            name: 'pegawai.user.list',
+            component: () =>
+              import('pages/simrs/pegawai/user/list/IndexPage.vue')
+          }
+        ]
+      },
+      {
         path: '/pegawai/absensi',
         name: 'pegawai.absensi',
         component: () => import('pages/simrs/pegawai/absensi/IndexPage.vue'),

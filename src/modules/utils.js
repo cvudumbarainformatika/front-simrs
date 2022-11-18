@@ -68,8 +68,9 @@ const notifErr = (resp) => {
       ]
     })
   } else {
+    const msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
     Notify.create({
-      message: 'Ada Kesalahan Harap ulangi',
+      message: msgs,
       icon: 'icon-eva-message-circle-outline',
       position: 'top-right',
       color: 'negative',

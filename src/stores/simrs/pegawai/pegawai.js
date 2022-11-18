@@ -28,6 +28,21 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
       },
       {
         id: 3,
+        nama: 'User',
+        name: 'pegawai.user',
+        icon: 'icon-mat-dataset',
+        link: 'pegawai/absensi',
+        submenus: [
+          {
+            nama: 'List User',
+            name: 'pegawai.user.list',
+            icon: 'icon-mat-dataset',
+            link: 'pegawai/user/list'
+          }
+        ]
+      },
+      {
+        id: 4,
         nama: 'Absensi',
         name: 'pegawai.absensi',
         icon: 'icon-mat-fingerprint',
