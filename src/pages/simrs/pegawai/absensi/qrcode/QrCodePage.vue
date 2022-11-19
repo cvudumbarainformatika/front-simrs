@@ -85,6 +85,7 @@ store.getQrCode().then(data => {
 const generate = () => {
   if (store.newQr !== '') {
     if (store.newQr !== '\n') {
+      // eslint-disable-next-line no-unused-vars
       const temp = new QRious({
         level: 'H',
         padding: 25,
@@ -92,7 +93,7 @@ const generate = () => {
         element: document.getElementById('qrcode'),
         value: store.newQr
       })
-      console.log(temp)
+      // console.log(temp)
     } else {
       notifErrVue('input value cannot has anter')
     }

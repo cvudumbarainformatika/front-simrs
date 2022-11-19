@@ -22,7 +22,7 @@ export const useQrCodeStore = defineStore('qr_code_store', {
     getQrCode() {
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.get('v1/pegawai/absensi/qr/get-qr')
+        api.get('v1/qrcode/get-qr')
           .then(resp => {
             this.loading = false
             console.log(resp)
@@ -43,7 +43,7 @@ export const useQrCodeStore = defineStore('qr_code_store', {
       const data = { id: this.id }
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.post('v1/pegawai/absensi/qr/store', data)
+        api.post('v1/qrcode/store', data)
           .then(resp => {
             this.loading = false
             console.log('qr resp', resp)
