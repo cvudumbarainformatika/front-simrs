@@ -76,6 +76,8 @@ import { computed, onMounted, ref } from 'vue'
 // const qrString = ref('')
 const store = useQrCodeStore()
 const user = ref(null)
+const jadwal = ref(null)
+const absen = ref(null)
 // const mockuser = ref({ id: 1, nip: '012001141074', nip_baru: '', nik: '', nama: 'dr. BAMBANG AGUS SUWIGNYO, MMKes', alamat: 'Jalan Ir. Sutami No.48 RT.002/RW.003\r\nKelurahan Jrebeng Kidul\r\nKecamatan Wonoasih\r\nKota Probolinggo', kelamin: 'Laki-Laki', templahir: 'Probolinggo', tgllahir: '1960-07-15', jenispegawai: 'Struktural', flag: 'P01', jabatan: 'J00001', profesi: '', jabatan_tmb: '', golruang: 'G00015', pendidikan: 'P00009', aktif: 'TIDAK AKTIF', foto: 'foto-012001141074.bmp', bagian: 'B00001', ruang: '', tgl_masuk: '2010-11-19', tgl_tmt: null, id_simrs: null, kategoripegawai: 'MTX000', pass: 'sasa123', alamat_detil: 'Jalan Ir. Sutami No.48 RT.002/RW.003\r\nKelurahan Jrebeng Kidul\r\nKecamatan Wonoasih\r\nKota Probolinggo', rt: '', rw: '', kelurahan: '', kecamatan: '', kota: '', agama: '', tmt_cpns: '0000-00-00', gaji_total: '', gaji_pokok: '', kel_ttg: '', th_mk_tmb: 0, bln_mk_tmb: 0, jurusan: '', flagpas: '1', telp: null, email: null, id_absen: '', jadwalkerja: '' })
 const path = computed(() => {
   const pla = user.value ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + user.value.nip + '/' + user.value.foto : ''
@@ -140,8 +142,17 @@ qrcodeChannel.subscribed(() => {
   console.log('Chanel QRCODE Page Qr')
 }).listen('.qr-baru', e => {
   console.log('string qr pageQr', e)
-  store.newQr = e.message.data.code
-  user.value = e.message.user
+  if (e.message.data) { store.newQr = e.message.data.code }
+  if (e.message.user) { user.value = e.message.user }
+  if (e.message.jadwal) {
+    jadwal.value = e.message.jadwal
+    absen.value = 'ada'
+    console.log(e.message.jadwal)
+  }
+  if (e.message.message) {
+    absen.value = 'tidak ada'
+    console.log(e.message.message)
+  }
   generate()
   timer = 60
 })
