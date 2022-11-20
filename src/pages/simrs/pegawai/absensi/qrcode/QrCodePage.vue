@@ -16,16 +16,19 @@
       color="negative"
       @click="mockScanOut"
     /> -->
-    {{ seconds }}
+    <!-- {{ seconds }} -->
     <div class="row q-col-gutter-md">
       <div class="col-sm-6 col-md-6 col-lg-6">
         <div v-if="!store.newQr">
           <app-no-data />
         </div>
-        <div v-if="store.newQr">
-          <div class="q-pa-lg f-10">
+        <div
+          v-if="store.newQr"
+          class="q-mt-lg"
+        >
+          <!-- <div class="q-pa-lg f-10">
             {{ store.newQr }}
-          </div>
+          </div> -->
           <!-- v-if="!store.loading" -->
           <div
             class="flex flex-center"
@@ -119,7 +122,7 @@ const generate = () => {
       const temp = new QRious({
         level: 'H',
         padding: 25,
-        size: 400,
+        size: 500,
         element: document.getElementById('qrcode'),
         value: store.newQr
       })
