@@ -25,7 +25,7 @@ export const useQrCodeStore = defineStore('qr_code_store', {
         api.get('v1/qrcode/get-qr')
           .then(resp => {
             this.loading = false
-            console.log(resp)
+            // console.log(resp)
             if (Object.keys(resp.data).length) {
               this.newQr = resp.data.code
               resolve('has data')
@@ -46,7 +46,7 @@ export const useQrCodeStore = defineStore('qr_code_store', {
         api.post('v1/qrcode/store', data)
           .then(resp => {
             this.loading = false
-            console.log('qr resp', resp)
+            // console.log('qr resp', resp)
             this.newQr = resp.data.code
             resolve(resp)
           })

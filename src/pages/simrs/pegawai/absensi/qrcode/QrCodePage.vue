@@ -151,7 +151,7 @@ const path = computed(() => {
 //   })
 // }
 store.getQrCode().then(data => {
-  console.log(' has data ', data)
+  // console.log(' has data ', data)
   if (data === 'has data') {
     generate()
   }
@@ -184,7 +184,7 @@ const generate = () => {
 qrcodeChannel.subscribed(() => {
   console.log('Chanel QRCODE Page Qr')
 }).listen('.qr-baru', e => {
-  console.log('string qr pageQr', e)
+  // console.log('string qr pageQr', e)
   if (e.message.data) { store.newQr = e.message.data.code }
   if (e.message.user) { user.value = e.message.user }
   if (e.message.jadwal) {
