@@ -38,6 +38,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.user.list',
             icon: 'icon-mat-dataset',
             link: 'pegawai/user/list'
+          },
+          {
+            nama: 'Tidak Masuk',
+            name: 'pegawai.user.libur',
+            icon: 'icon-mat-dataset',
+            link: 'pegawai/user/libur'
           }
         ]
       },

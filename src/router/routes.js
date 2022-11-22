@@ -106,6 +106,12 @@ const routes = [
             name: 'pegawai.user.list',
             component: () =>
               import('pages/simrs/pegawai/user/list/IndexPage.vue')
+          },
+          {
+            path: '/pegawai/user/libur',
+            name: 'pegawai.user.libur',
+            component: () =>
+              import('pages/simrs/pegawai/user/libur/IndexPage.vue')
           }
         ]
       },

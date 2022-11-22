@@ -24,7 +24,10 @@ export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
     user: {},
     rekaps: [],
     jadwals: [],
-    tanggals: []
+    tanggals: [],
+    weeks: [],
+    weeksData: [],
+    telat: 0
   }),
   actions: {
     // table related functions
@@ -48,6 +51,22 @@ export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
     setJadwal() {
       this.jadwalOpen = !this.jadwalOpen
     },
+    setWeeks(data) {
+      const temp = Object.keys(data)
+      this.weeks = temp
+      this.weeks.forEach(week => {
+        this.weeksData[week] = [null, null, null, null, null, null, null]
+        data[week].forEach((tanggal, index) => {
+          const d = new Date(tanggal.tanggal)
+          tanggal.day = d.getDay()
+          const iian = d.getDay() === 0 ? 6 : d.getDay() - 1
+          this.weeksData[week][iian] = tanggal
+        })
+        // console.log(data[week])
+      })
+
+      console.log('data', this.weeksData)
+    },
     getInitialData() {
       // this.getRekapAbsensiByUser()
     },
@@ -61,6 +80,8 @@ export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
           console.log('rekap absen', resp)
           this.rekaps = resp.data.data
           this.tanggals = resp.data.tanggals
+          this.telat = resp.data.telat
+          this.setWeeks(resp.data.weeks)
           resolve(resp)
         }).catch(err => {
           this.loading = false

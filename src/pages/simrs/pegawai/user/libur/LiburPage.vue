@@ -1,0 +1,95 @@
+<template>
+  <div class="q-px-lg q-pt-md">
+    <app-card
+      title="Data Pegawai Tidak Masuk"
+      desc="Halaman Pegawai yang Tidak hadir ke tempat kerja"
+    >
+      <template #content>
+        <app-table
+          :columns="store.columns"
+          :column-hide="store.columnHide"
+          :items="store.items"
+          :meta="store.meta"
+          :per-page="store.params.per_page"
+          :order-by="store.params.order_by"
+          :sort="store.params.sort"
+          :loading="store.loading"
+          :to-search="store.params.q"
+          :default-btn="false"
+          @goto="store.setPage"
+          @set-row="store.setPerPage"
+          @refresh="store.refreshTable"
+          @find="store.setSearch"
+          @set-order="store.setOder"
+          @new-data="store.newData"
+          @edit-data="store.editData"
+          @delete="store.deletesData"
+        >
+          <template #col-nama>
+            <div>Nama</div>
+          </template>
+          <template #cell-flag="{row}">
+            <div v-if="row.flag==='DL'">
+              <q-chip
+                color="blue-grey"
+                text-color="white"
+                class="chip"
+                dense
+                square
+              >
+                <div class="f-12 text-center">
+                  Dinas Luar
+                </div>
+              </q-chip>
+            </div>
+            <div v-if="row.flag==='CUTI'">
+              <q-chip
+                color="cyan"
+                text-color="white"
+                class="chip"
+                dense
+                square
+              >
+                <div class="f-12 text-center">
+                  Cuti
+                </div>
+              </q-chip>
+            </div>
+            <div v-if="row.flag==='IJIN'">
+              <q-chip
+                color="deep-orange"
+                text-color="white"
+                class="chip"
+                dense
+                square
+              >
+                <div class="f-12 text-center">
+                  Ijin
+                </div>
+              </q-chip>
+            </div>
+            <div v-if="row.flag==='SAKIT'">
+              <q-chip
+                color="grey"
+                text-color="white"
+                class="chip"
+                dense
+                square
+              >
+                <div class="f-12 text-center">
+                  SAKIT
+                </div>
+              </q-chip>
+            </div>
+          </template>
+        </app-table>
+      </template>
+    </app-card>
+  </div>
+</template>
+<script setup>
+import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
+
+const store = useLiburAbsenStore()
+store.getInitialData()
+</script>
