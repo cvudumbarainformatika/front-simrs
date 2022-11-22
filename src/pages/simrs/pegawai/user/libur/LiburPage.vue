@@ -40,6 +40,24 @@
           <template #col-alasan>
             <div>Alasan</div>
           </template>
+          <template #cell-nama="{row}">
+            <div>{{ row.user.nama }}</div>
+          </template>
+          <template #cell-image="{row}">
+            <div v-if="row.image">
+              <q-img
+                :src="pathImg + row.image"
+                class="cursor-pointer"
+                @click="imgClick(pathImg + row.image)"
+              />
+            </div>
+            <div v-if="!row.image">
+              <q-img
+                src="~assets/images/no-image.png"
+                class=""
+              />
+            </div>
+          </template>
           <template #cell-flag="{row}">
             <div v-if="row.flag==='DL'">
               <q-chip
@@ -98,12 +116,19 @@
       </template>
     </app-card>
     <FormDialog v-model="store.isOpen" />
+    <ImageDialog v-model="store.expand" />
   </div>
 </template>
 <script setup>
 import FormDialog from './FormDialog.vue'
+import ImageDialog from './ImageDialog.vue'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
+import { pathImg } from 'src/boot/axios'
 
 const store = useLiburAbsenStore()
 store.getInitialData()
+const imgClick = val => {
+  store.image = val
+  store.setExpand()
+}
 </script>

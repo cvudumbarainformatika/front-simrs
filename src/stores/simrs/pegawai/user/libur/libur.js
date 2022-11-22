@@ -25,7 +25,9 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       { nama: 'Sakit', value: 'SAKIT' },
       { nama: 'Ijin', value: 'IJIN' },
       { nama: 'Cuti', value: 'CUTI' }
-    ]
+    ],
+    image: '',
+    expand: false
   }),
   actions: {
     resetFORM() {
@@ -132,6 +134,9 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       this.setParam('q', val)
       this.getUser()
     },
+    setExpand() {
+      this.expand = !this.expand
+    },
     // api related function
     // get data tabel
     getDataTable() {
@@ -142,7 +147,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
-            console.log('store user', resp.data)
+            console.log('data table', resp.data)
             this.items = resp.data.data
             this.setColumns(resp.data.data)
             this.meta = resp.data
@@ -181,7 +186,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       data.append('flag', this.form.flag)
       if (this.form.alasan) data.append('alasan', this.form.alasan)
       if (this.form.image) data.append('gambar', this.form.image)
-      console.log('image', data)
+      console.log('image', this.form)
       return new Promise((resolve, reject) => {
         api
           .post('v1/libur/store', data, {

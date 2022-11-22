@@ -18,7 +18,7 @@
           </div>
           <div class="col-sm-8 col-xs-12">
             <app-autocomplete-new
-              v-model="store.form.user"
+              v-model="store.form.user_id"
               label="cari pegawai terdaftar"
               autocomplete="nama"
               option-label="nama"
@@ -84,7 +84,7 @@
               label="cari tipe"
               autocomplete="nama"
               option-label="nama"
-              option-value="id"
+              option-value="value"
               :source="store.flags"
               :loading="store.loading"
             />
