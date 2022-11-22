@@ -30,8 +30,8 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
         id: 3,
         nama: 'User',
         name: 'pegawai.user',
-        icon: 'icon-mat-dataset',
-        link: 'pegawai/absensi',
+        icon: 'icon-mat-group',
+        link: 'pegawai/user',
         submenus: [
           {
             nama: 'List User',

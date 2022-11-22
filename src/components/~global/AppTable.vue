@@ -7,7 +7,7 @@
         <!-- <div class="title-table q-pr-sm f-14 text-bold">
           {{ title }}
         </div> -->
-        <div>
+        <div v-if="adaCari">
           <q-input
             v-model="search"
             outlined
@@ -150,7 +150,7 @@
         </q-btn>
         <!-- data baru -->
         <q-btn
-          v-if="addData"
+          v-if="addData && adaTambah"
           class="q-ml-sm"
           unelevated
           round
@@ -304,6 +304,7 @@
           <td class="text-right">
             <div v-if="defaultBtn">
               <q-btn
+                v-if="adaEdit"
                 flat
                 class=""
                 size="sm"
@@ -320,7 +321,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="selected.length < 2"
+                v-if="selected.length < 2 && adaDelete"
                 flat
                 class=""
                 size="sm"
@@ -399,7 +400,11 @@ const props = defineProps({
   sort: { type: String, default: 'desc' },
   toSearch: { type: String, default: '' },
   isChecked: { type: Boolean, default: false },
-  defaultBtn: { type: Boolean, default: true }
+  defaultBtn: { type: Boolean, default: true },
+  adaEdit: { type: Boolean, default: true },
+  adaDelete: { type: Boolean, default: true },
+  adaTambah: { type: Boolean, default: true },
+  adaCari: { type: Boolean, default: true }
 })
 const emits = defineEmits(['newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 

@@ -15,6 +15,8 @@
           :sort="store.params.sort"
           :loading="store.loading"
           :to-search="store.params.q"
+          :default-btn="false"
+          :ada-tambah="false"
           @goto="store.setPage"
           @set-row="store.setPerPage"
           @refresh="store.refreshTable"
@@ -31,18 +33,62 @@
             <div>Nama</div>
           </template>
           <template #col-ganti>
-            <div>Ganti Device</div>
+            <div class="text-center">
+              More Actions
+            </div>
           </template>
           <template #col-status>
             <div>Status</div>
           </template>
           <!-- cell -->
           <template #cell-ganti="{row}">
-            <app-btn
-              label="Ganti Device"
-              dense
-              @click="changeDevice(row)"
-            />
+            <div class="text-center">
+              <q-btn
+                flat
+                color="primary"
+                icon="icon-mat-swap_horiz"
+                dense
+                rounded
+                @click="changeDevice(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Ganti Device
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                flat
+                color="primary"
+                icon="icon-mat-event"
+                dense
+                rounded
+                @click="detailJadwal(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Lihat Jadwal
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                flat
+                color="primary"
+                icon="icon-mat-summarize"
+                dense
+                rounded
+                @click="detailRekap(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Lihat Rekap Absensi
+                </q-tooltip>
+              </q-btn>
+            </div>
           </template>
           <template #cell-status="{row}">
             <div v-if="row.status===null">
@@ -57,7 +103,19 @@
                   none
                 </div>
               </q-chip>
-              {{ row.status }}
+            </div>
+            <div v-if="row.status===''">
+              <q-chip
+                color="green"
+                text-color="white"
+                class="chip"
+                dense
+                square
+              >
+                <div class="f-12 text-center">
+                  siap absen
+                </div>
+              </q-chip>
             </div>
             <div v-if="row.status==='2'">
               <q-chip
@@ -77,16 +135,36 @@
       </template>
     </app-card>
     <FormChangeDevice v-model="store.isOpen" />
+    <RekapPage v-model="rekap.rekapOpen" />
+    <JadwalPage v-model="rekap.jadwalOpen" />
   </div>
 </template>
 <script setup>
 import FormChangeDevice from './FormChangeDevice.vue'
 import { useUserStore } from 'src/stores/simrs/pegawai/user/user'
-import { Dialog } from 'quasar'
+import { useRekapAbesensiUserStore } from 'src/stores/simrs/pegawai/user/rekap/rekap'
+import { date, Dialog } from 'quasar'
+import RekapPage from './rekap/RekapPage.vue'
+import JadwalPage from './rekap/JadwalPage.vue'
 const store = useUserStore()
+const rekap = useRekapAbesensiUserStore()
 
 store.getInitialData()
-
+const detailJadwal = (val) => {
+  rekap.setJadwal()
+  rekap.setUser(val)
+  rekap.setParams('id', val.id)
+  rekap.getJadwalByUser()
+  console.log('detail jadwal', val)
+}
+const detailRekap = (val) => {
+  const month = date.formatDate(Date.now(), 'MM')
+  rekap.setRekap()
+  rekap.setUser(val)
+  rekap.setParams('id', val.id)
+  rekap.setParams('month', month)
+  rekap.getRekapAbsensiByUser()
+}
 const changeDevice = val => {
   Dialog.create({
     title: 'Konfirmasi',
