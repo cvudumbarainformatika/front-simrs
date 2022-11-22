@@ -28,6 +28,18 @@
           <template #col-nama>
             <div>Nama</div>
           </template>
+          <template #col-flag>
+            <div>Tipe</div>
+          </template>
+          <template #col-tanggal>
+            <div>Tanggal</div>
+          </template>
+          <template #col-image>
+            <div>Gambar</div>
+          </template>
+          <template #col-alasan>
+            <div>Alasan</div>
+          </template>
           <template #cell-flag="{row}">
             <div v-if="row.flag==='DL'">
               <q-chip
@@ -85,9 +97,11 @@
         </app-table>
       </template>
     </app-card>
+    <FormDialog v-model="store.isOpen" />
   </div>
 </template>
 <script setup>
+import FormDialog from './FormDialog.vue'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
 
 const store = useLiburAbsenStore()

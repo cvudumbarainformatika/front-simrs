@@ -126,6 +126,12 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     getInitialData() {
       this.getDataTable()
     },
+    // custom for this store
+    searchUser(val) {
+      console.log('search user', val)
+      this.setParam('q', val)
+      this.getUser()
+    },
     // api related function
     // get data tabel
     getDataTable() {
@@ -133,7 +139,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/user/user', params)
+          .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
             console.log('store user', resp.data)
@@ -149,13 +155,42 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           })
       })
     },
-    saveForm() {
+    getUser() {
       this.loading = true
+      const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .post('v1/', this.form)
+          .get('v1/user/user', params)
           .then((resp) => {
-            console.log('save kategory', resp)
+            this.loading = false
+            console.log('store user', resp.data)
+            this.users = resp.data.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    saveForm() {
+      this.loading = true
+      const data = new FormData()
+      data.append('user_id', this.form.user_id)
+      data.append('tanggal', this.form.tanggal)
+      data.append('flag', this.form.flag)
+      if (this.form.alasan) data.append('alasan', this.form.alasan)
+      if (this.form.image) data.append('gambar', this.form.image)
+      console.log('image', data)
+      return new Promise((resolve, reject) => {
+        api
+          .post('v1/libur/store', data, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then((resp) => {
+            console.log('save libur', resp)
             notifSuccess(resp)
             this.loading = false
             this.getDataTable()
