@@ -22,7 +22,8 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     },
     // custom for this store
     monthNum: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-    bulan: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+    bulan: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+    users: []
   }),
   actions: {
     resetFORM() {
@@ -85,13 +86,74 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     //   this.getDataTable()
     // },
     setColumns(payload) {
-      this.columns = ['nama', 'username', 'status', 'ganti']
+      // this.columns = [
+      //   'nama',
+      //   'satu',
+      //   'dua',
+      //   'tiga',
+      //   'empat',
+      //   'lima',
+      //   'enam',
+      //   'tujuh',
+      //   'delapan',
+      //   'sembilan',
+      //   'sepuluh',
+      //   'sebelas',
+      //   'duabelas',
+      //   'tigabelas',
+      //   'empatbelas',
+      //   'limabelas',
+      //   'enambelas',
+      //   'tujuhbelas',
+      //   'delapanbelas',
+      //   'sembilanbelas',
+      //   'duapuluh',
+      //   'duapuluhsatu',
+      //   'duapuluhdua',
+      //   'duapuluhtiga',
+      //   'duapuluhempat',
+      //   'duapuluhlima',
+      //   'duapuluhenam',
+      //   'duapuluhtujuh',
+      //   'duapuluhdelapan',
+      //   'duapuluhsembilan',
+      //   'tigapuluh',
+      //   'tigapuluhsatu'
+
+      // ]
+      this.columns = [
+        'nama', 'telat'
+      ]
+      for (let index = 0; index < 31; index++) {
+        this.columns[index + 2] = index < 9 ? '0' + (index + 1) : index.toString()
+      }
+
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
+    },
+    setData(payload) {
+      this.users.forEach(user => {
+        console.log('cari id', payload[user.id])
+        if (payload[user.id]) {
+          // console.log('ada lengt', payload[user.id])
+          payload[user.id].forEach(data => {
+            user[data.day] = data
+          })
+        }
+        if (payload.apem) {
+          payload.apem.forEach(apem => {
+            if (user.id === apem.user_id) {
+              user.telat = apem.telat
+            }
+          })
+        }
+      })
+      this.items = this.users
+      // console.log('set data', this.users)
     },
 
     // refreshTable() {
@@ -124,12 +186,15 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       })
     },
     getInitialData() {
-      this.getDataTable()
+      this.getUsers().then(() => {
+        this.getDataTable()
+      })
     },
     // this custom store
     refreshTable() {
       const month = date.formatDate(Date.now(), 'MM')
-      this.setParams('month', month)
+      // const month = date.formatDate('2022/3/1', 'MM')
+      this.setParam('month', month)
       console.log('moth', month)
       this.getDataTable()
     },
@@ -149,10 +214,28 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
           .then((resp) => {
             this.loading = false
             console.log('index absensi', resp.data)
-            this.items = resp.data.data
-            this.setColumns(resp.data.data)
-            this.meta = resp.data
+            this.setData(resp.data)
+            this.setColumns(resp.data)
+            // this.meta = resp.data
             this.resetFORM()
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getUsers() {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/user/all', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('store user', resp.data)
+            this.users = resp.data
             resolve(resp)
           })
           .catch((err) => {
