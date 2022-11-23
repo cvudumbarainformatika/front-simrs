@@ -159,10 +159,10 @@ const detailJadwal = (val) => {
 }
 const detailRekap = (val) => {
   const month = date.formatDate(Date.now(), 'MM')
+  rekap.setParams('month', month)
   rekap.setRekap()
   rekap.setUser(val)
   rekap.setParams('id', val.id)
-  rekap.setParams('month', month)
   rekap.getRekapAbsensiByUser()
 }
 const changeDevice = val => {

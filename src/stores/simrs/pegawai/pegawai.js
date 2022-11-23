@@ -44,6 +44,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.user.libur',
             icon: 'icon-mat-dataset',
             link: 'pegawai/user/libur'
+          },
+          {
+            nama: 'Rekap Absen',
+            name: 'pegawai.user.rekapabsen',
+            icon: 'icon-mat-dataset',
+            link: 'pegawai/user/rekapabsen'
           }
         ]
       },
