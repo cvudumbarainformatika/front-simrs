@@ -68,7 +68,7 @@
           style="width: fit-content;"
         >
           <div
-            :style="`background-color: ${jadwal ? jadwal.data.kategory.warna : 'grey-7'};`"
+            :style="`background-color: ${jadwal ? jadwal.data ? jadwal.data.kategory.warna :'grey-7' : 'grey-7'};`"
             class="f-14 text-weight-bold text-center"
           >
             <div
