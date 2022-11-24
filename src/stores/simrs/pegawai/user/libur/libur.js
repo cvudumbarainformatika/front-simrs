@@ -24,7 +24,8 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       { nama: 'Dinas Luar', value: 'DL' },
       { nama: 'Sakit', value: 'SAKIT' },
       { nama: 'Ijin', value: 'IJIN' },
-      { nama: 'Cuti', value: 'CUTI' }
+      { nama: 'Cuti', value: 'CUTI' },
+      { nama: 'Extra', value: 'EXTRA' }
     ],
     image: '',
     expand: false

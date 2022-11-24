@@ -44,17 +44,21 @@ const notifErr = (resp) => {
       })
     };
   } else if (status === 422) {
-    const msgs = resp.data.message
-    Notify.create({
-      message: msgs,
-      icon: 'icon-eva-message-circle-outline',
-      position: 'top-right',
-      color: 'negative',
-      actions: [
-        { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
-      ]
-      // for (const key in msgs) {
-      // }
+    const keys = Object.keys(resp.data)
+    // const msgs = resp.data.message
+    console.log('key', keys)
+    keys.forEach(msg => {
+      Notify.create({
+        message: resp.data[msg],
+        icon: 'icon-eva-message-circle-outline',
+        position: 'top-right',
+        color: 'negative',
+        actions: [
+          { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+        ]
+        // for (const key in msgs) {
+        // }
+      })
     })
   } else if (status === 409) {
     const msgs = resp.data.message

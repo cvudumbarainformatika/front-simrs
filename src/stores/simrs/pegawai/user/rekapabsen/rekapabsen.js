@@ -23,7 +23,10 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     // custom for this store
     monthNum: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
     bulan: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-    users: []
+    users: [],
+    protas: [],
+    liburs: [],
+    kategories: []
   }),
   actions: {
     resetFORM() {
@@ -86,41 +89,6 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     //   this.getDataTable()
     // },
     setColumns(payload) {
-      // this.columns = [
-      //   'nama',
-      //   'satu',
-      //   'dua',
-      //   'tiga',
-      //   'empat',
-      //   'lima',
-      //   'enam',
-      //   'tujuh',
-      //   'delapan',
-      //   'sembilan',
-      //   'sepuluh',
-      //   'sebelas',
-      //   'duabelas',
-      //   'tigabelas',
-      //   'empatbelas',
-      //   'limabelas',
-      //   'enambelas',
-      //   'tujuhbelas',
-      //   'delapanbelas',
-      //   'sembilanbelas',
-      //   'duapuluh',
-      //   'duapuluhsatu',
-      //   'duapuluhdua',
-      //   'duapuluhtiga',
-      //   'duapuluhempat',
-      //   'duapuluhlima',
-      //   'duapuluhenam',
-      //   'duapuluhtujuh',
-      //   'duapuluhdelapan',
-      //   'duapuluhsembilan',
-      //   'tigapuluh',
-      //   'tigapuluhsatu'
-
-      // ]
       this.columns = [
         'nama', 'telat'
       ]
@@ -148,6 +116,27 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
           payload.apem.forEach(apem => {
             if (user.id === apem.user_id) {
               user.telat = apem.telat
+              user.total = apem.total
+            }
+          })
+        }
+        if (this.protas.length) {
+          this.protas.forEach(prota => {
+            if (user[prota.day]) {
+              user[prota.day].prota = prota
+            } else {
+              user[prota.day] = { prota }
+            }
+          })
+        }
+        if (this.liburs.length) {
+          this.liburs.forEach(libur => {
+            if (user.id === libur.user_id) {
+              if (user[libur.day]) {
+                user[libur.day].libur = libur
+              } else {
+                user[libur.day] = { libur }
+              }
             }
           })
         }
@@ -186,7 +175,10 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       })
     },
     getInitialData() {
+      this.getKatgory()
       this.getUsers().then(() => {
+        this.getProta()
+        this.getLibur()
         this.getDataTable()
       })
     },
@@ -196,11 +188,15 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       // const month = date.formatDate('2022/3/1', 'MM')
       this.setParam('month', month)
       console.log('moth', month)
+      this.getProta()
+      this.getLibur()
       this.getDataTable()
     },
     setPage(payload) {
       // console.log('setPage', payload)
       this.params.month = payload
+      this.getProta()
+      this.getLibur()
       this.getDataTable()
     },
     // api related function
@@ -236,6 +232,60 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
             this.loading = false
             console.log('store user', resp.data)
             this.users = resp.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getProta() {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/pegawai/absensi/prota/all', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('store prota', resp.data)
+            this.protas = resp.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getKatgory() {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/pegawai/absensi/kategori/all', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('store kategori', resp.data)
+            this.kategories = resp.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
+    getLibur() {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/libur/month', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('store libur', resp.data)
+            this.liburs = resp.data
             resolve(resp)
           })
           .catch((err) => {
