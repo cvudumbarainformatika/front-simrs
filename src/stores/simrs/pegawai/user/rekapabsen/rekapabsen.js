@@ -206,13 +206,13 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/pegawai/absensi/index', params)
+          .get('v1/pegawai/absensi/rekap', params)
           .then((resp) => {
             this.loading = false
             console.log('index absensi', resp.data)
             this.setData(resp.data)
             this.setColumns(resp.data)
-            // this.meta = resp.data
+            this.meta = resp.data.meta
             this.resetFORM()
             resolve(resp)
           })

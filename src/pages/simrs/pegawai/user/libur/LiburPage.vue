@@ -43,6 +43,9 @@
           <template #cell-nama="{row}">
             <div>{{ row.user.nama }}</div>
           </template>
+          <template #cell-tanggal="{row}">
+            <div>{{ dateFullFormat( row.tanggal) }}</div>
+          </template>
           <template #cell-image="{row}">
             <div v-if="row.image">
               <q-img
@@ -124,6 +127,7 @@ import FormDialog from './FormDialog.vue'
 import ImageDialog from './ImageDialog.vue'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
 import { pathImg } from 'src/boot/axios'
+import { dateFullFormat } from 'src/modules/formatter'
 
 const store = useLiburAbsenStore()
 store.getInitialData()
