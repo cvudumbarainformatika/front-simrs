@@ -159,7 +159,7 @@ const detailJadwal = (val) => {
 }
 const detailRekap = (val) => {
   const month = date.formatDate(Date.now(), 'MM')
-  rekap.setParams('month', month)
+  rekap.setParams('bulan', month)
   rekap.setRekap()
   rekap.setUser(val)
   rekap.setParams('id', val.id)

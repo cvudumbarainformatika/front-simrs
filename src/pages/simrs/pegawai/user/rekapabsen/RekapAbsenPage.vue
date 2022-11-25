@@ -3,11 +3,50 @@
   <div class="q-px-lg q-pt-md">
     <q-card>
       <q-card-section>
-        <div class="f-14 text-weight-bold">
-          Rekap Absensi Pegawai
-        </div>
-        <div class="title-desc">
-          Halaman Rekap Absensi per bulan
+        <div class="full-width row justify-between items-center content-between">
+          <div class="bg-white col-grow">
+            <div
+              class="flex flex-column items-center flex-center"
+            >
+              <div class="col text-left">
+                <div class="f-14 text-weight-bold">
+                  Rekap Absensi Pegawai
+                </div>
+                <div class="title-desc">
+                  Halaman Rekap Absensi per bulan
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white col-grow">
+            <div
+              class="flex flex-column items-center flex-center"
+            >
+              <div class="col text-right q-mr-lg">
+                <div class="text-right">
+                  <div class="row items-center text-right">
+                    <q-btn
+                      flat
+                      color="grey"
+                      round
+                      icon="icon-mat-chevron_left"
+                      @click="prev"
+                    />
+                    <div class="q-px-md">
+                      {{ namaBulan }} {{ store.params.bulan }}
+                    </div>
+                    <q-btn
+                      flat
+                      color="grey"
+                      round
+                      icon="icon-mat-chevron_right"
+                      @click="next"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </q-card-section>
       <q-separator />
@@ -145,9 +184,33 @@
 </template>
 <script setup>
 import { useRekapAbsensiPegawaiStore } from 'src/stores/simrs/pegawai/user/rekapabsen/rekapabsen'
+import { computed } from 'vue'
 import ChoiceComponent from './ChoiceComponent.vue'
 import LegendComponent from './LegendComponent.vue'
 
 const store = useRekapAbsensiPegawaiStore()
 store.getInitialData()
+
+const namaBulan = computed(() => {
+  return store.bulan[store.params.bulan - 1]
+})
+let num = store.params.bulan
+const prev = () => {
+  console.log('prev', num)
+  if (num <= 1) {
+    num = 12
+  } else {
+    num = num - 1
+  }
+  store.setParam('bulan', num)
+}
+const next = () => {
+  console.log('next', num)
+  if (num >= 12) {
+    num = 1
+  } else {
+    num = num + 1
+  }
+  store.setParam('bulan', num)
+}
 </script>

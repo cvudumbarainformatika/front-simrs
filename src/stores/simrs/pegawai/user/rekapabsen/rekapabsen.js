@@ -18,7 +18,9 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       page: 1,
       per_page: 10,
       order_by: 'created_at',
-      sort: 'asc'
+      sort: 'asc',
+      bulan: date.formatDate(Date.now(), 'MM'),
+      tahun: date.formatDate(Date.now(), 'YYYY')
     },
     // custom for this store
     monthNum: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
@@ -194,7 +196,7 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     },
     setPage(payload) {
       // console.log('setPage', payload)
-      this.params.month = payload
+      this.params.bulan = payload
       this.getProta()
       this.getLibur()
       this.getDataTable()

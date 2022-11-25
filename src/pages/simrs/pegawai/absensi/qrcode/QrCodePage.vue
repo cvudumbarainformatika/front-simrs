@@ -1,90 +1,6 @@
 <!-- eslint-disable no-unused-vars -->
 <template>
-  <!-- <q-page class="q-pa-lg">
-    <div class="row ">
-      <div class="col-sm-6 col-md-6 col-lg-6 bg-white ">
-        <q-card
-          bordered
-        >
-          <div class="row items-center q-ml-md q-mt-lg">
-            <div class="col-2" />
-            <div class="col-3">
-              <q-img
-                src="~assets/logos/logo-rsud.png"
-                height="70px"
-                ratio="1"
-                fit="contain"
-              />
-            </div>
-            <div class="col-6">
-              <div class="row f-14 text-weight-bold">
-                UOBK RUSD Dr. MUHAMMAD SALEH
-              </div>
-              <div class="row f-12 text-weight-bold">
-                KOTA PROBOLINGGO
-              </div>
-            </div>
-          </div>
-          <q-card-section v-if="!store.newQr">
-            <div>
-              <app-no-data />
-            </div>
-          </q-card-section>
-          <q-card-section
-            v-if="store.newQr"
-            class="q-ma-md"
-          >
-            <div
-              class="flex flex-center justify-center"
-            >
-              <div class="apem">
-                <div class="row">
-                  <canvas id="qrcode" />
-                </div>
-                <div class="row bg-primary">
-                  <div class="col-12 text-center text-white f-16 q-py-md">
-                    Scan untuk Absen
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div
-        class="col-sm-6 col-md-6 col-lg-6 bg-grey-7 text-center"
-      >
-        <div
-          class="q-ma-lg bg-grey-7"
-        >
-          <div
-            class="f-14 text-weight-bold text-center"
-          >
-            <div
-              :class="jadwal ? jadwal.absen === 'masuk' ? 'text-positive' : 'text-negative' : '' "
-            >
-              {{ user ? user.nama : 'no one scan me yet' }}
-            </div>
-          </div>
-          <q-img
-            v-if="user"
-            :src="path"
-            height="450px"
-            ratio="1"
-            fit="scale-down"
-          />
-          <q-img
-            v-if="!user"
-            :src="path"
-            height="450px"
-            style="min-width: 200px;"
-            ratio="1"
-            fit="cover"
-          />
-        </div>
-      </div>
-    </div>
-  </q-page> -->
+
   <q-page class="bg-white">
     <div class="full-width row justify-between items-center content-between">
       <div class="bg-white col-grow">
@@ -269,7 +185,7 @@ const jadwal = ref(null)
 const absen = ref(null)
 // eslint-disable-next-line no-unused-vars
 const path = computed(() => {
-  const pla = user.value ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + user.value.nip + '/' + user.value.foto : 'images/actor.svg'
+  const pla = user.value ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + user.value.nip + '/' + user.value.foto : 'images/matsaleh.jpg'
   return pla
 })
 store.getQrCode().then(data => {

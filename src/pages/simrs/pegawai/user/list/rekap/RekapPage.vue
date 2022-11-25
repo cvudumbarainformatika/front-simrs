@@ -188,7 +188,7 @@ import { useRekapAbesensiUserStore } from 'src/stores/simrs/pegawai/user/rekap/r
 const rekap = useRekapAbesensiUserStore()
 const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
 const namaBulan = computed(() => {
-  return bulan[rekap.params.month - 1]
+  return bulan[rekap.params.bulan - 1]
 })
 // const eventsFn = (date) => {
 //   rekap.tanggals.forEach(tanggal => {

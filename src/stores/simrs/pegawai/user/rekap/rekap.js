@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
@@ -16,7 +17,9 @@ export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
       page: 1,
       per_page: 10,
       order_by: 'created_at',
-      sort: 'asc'
+      sort: 'asc',
+      bulan: date.formatDate(Date.now(), 'MM'),
+      tahun: date.formatDate(Date.now(), 'YYYY')
     },
     // custom for this store
     rekapOpen: false,
