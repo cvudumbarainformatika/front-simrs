@@ -195,7 +195,12 @@ const notifCenterVue = (msg) => {
   })
 }
 
+const daysInMonth = (month, year) => {
+  return new Date(year, month, 0).getDate()
+}
+
 export {
+  daysInMonth,
   notifCenterVue,
   notifSuccess,
   uniqueId,

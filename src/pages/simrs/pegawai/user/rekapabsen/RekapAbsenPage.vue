@@ -183,6 +183,7 @@
   </div>
 </template>
 <script setup>
+import { daysInMonth } from 'src/modules/utils'
 import { useRekapAbsensiPegawaiStore } from 'src/stores/simrs/pegawai/user/rekapabsen/rekapabsen'
 import { computed } from 'vue'
 import ChoiceComponent from './ChoiceComponent.vue'
@@ -195,8 +196,10 @@ const namaBulan = computed(() => {
   return store.bulan[store.params.bulan - 1]
 })
 let num = store.params.bulan
+
 const prev = () => {
   console.log('prev', num)
+  console.log('jumlah hari', daysInMonth(store.params.bulan, store.params.tahun))
   if (num <= 1) {
     num = 12
   } else {
@@ -206,6 +209,7 @@ const prev = () => {
 }
 const next = () => {
   console.log('next', num)
+  console.log('jumlah hari', daysInMonth(store.params.bulan, store.params.tahun))
   if (num >= 12) {
     num = 1
   } else {
