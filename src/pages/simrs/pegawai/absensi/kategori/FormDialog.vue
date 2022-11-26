@@ -74,6 +74,16 @@
                 <q-badge color="positive">
                   {{ store.form.masuk }}
                 </q-badge>
+                <q-tooltip
+                  class="bg-primary"
+                  anchor="center right"
+                  self="center left"
+                  :offset="[5, 5]"
+                >
+                  <strong class="">Klick tombol disamping</strong>
+                  (
+                  <q-icon name="icon-mat-keyboard_arrow_left" />)
+                </q-tooltip>
               </div>
             </div>
           </div>

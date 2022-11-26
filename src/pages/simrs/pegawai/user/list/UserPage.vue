@@ -113,7 +113,7 @@
                 square
               >
                 <div class="f-12 text-center">
-                  siap absen
+                  bisa login
                 </div>
               </q-chip>
             </div>

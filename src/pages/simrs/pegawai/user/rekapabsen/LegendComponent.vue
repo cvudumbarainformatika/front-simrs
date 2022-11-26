@@ -6,10 +6,11 @@
     <div class="row q-mb-md items-center">
       <div class="q-mr-md text-center">
         <div class="q-mr-sm">
-          <q-btn
+          <q-avatar
             color="red"
+            text-color="white"
             dense
-            round
+            size="24px"
             icon="icon-mat-close"
           />
         </div>
@@ -19,10 +20,11 @@
       </div>
       <div class="q-mr-md text-center">
         <div class="q-mr-sm">
-          <q-btn
+          <q-avatar
             color="primary"
+            text-color="white"
+            size="24px"
             dense
-            round
             icon="icon-mat-done_all"
           />
         </div>
@@ -33,10 +35,11 @@
       </div>
       <div class="q-mr-md text-center">
         <div class="q-mr-sm">
-          <q-btn
+          <q-avatar
             color="orange"
+            text-color="white"
+            size="24px"
             dense
-            round
             icon="icon-mat-done"
           />
         </div>

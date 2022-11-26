@@ -95,7 +95,7 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
         'nama', 'telat'
       ]
       for (let index = 0; index < 31; index++) {
-        this.columns[index + 2] = index < 9 ? '0' + (index + 1) : index.toString()
+        this.columns[index + 2] = index < 9 ? '0' + (index + 1) : (index + 1).toString()
       }
 
       // if (!payload) return
@@ -176,6 +176,23 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
         }
       })
     },
+    resetUser() {
+      const newUser = []
+      this.users.forEach((user, index) => {
+        newUser[index] = {
+          id: user.id,
+          username: user.username,
+          nama: user.nama,
+          email: user.email,
+          pegawai_id: user.pegawai_id,
+          device: user.device,
+          status: user.status
+        }
+      })
+
+      console.log('new user', newUser)
+      this.users = newUser
+    },
     getInitialData() {
       this.getKatgory()
       this.getUsers().then(() => {
@@ -188,15 +205,23 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     refreshTable() {
       const month = date.formatDate(Date.now(), 'MM')
       // const month = date.formatDate('2022/3/1', 'MM')
-      this.setParam('month', month)
+      this.setParam('bulan', month)
       console.log('moth', month)
       this.getProta()
       this.getLibur()
       this.getDataTable()
     },
-    setPage(payload) {
-      // console.log('setPage', payload)
-      this.params.bulan = payload
+    // setPage(payload) {
+    //   // console.log('setPage', payload)
+    //   this.params.bulan = payload
+    //   this.getProta()
+    //   this.getLibur()
+    //   this.getDataTable()
+    // },
+
+    setPerPage(payload) {
+      this.params.per_page = payload
+      this.params.page = 1
       this.getProta()
       this.getLibur()
       this.getDataTable()

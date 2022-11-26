@@ -33,7 +33,7 @@
                       @click="prev"
                     />
                     <div class="q-px-md">
-                      {{ namaBulan }} {{ store.params.bulan }}
+                      {{ namaBulan }}
                     </div>
                     <q-btn
                       flat
@@ -81,7 +81,7 @@
             <div>Terlambat</div>
           </template>
           <template #cell-telat="{row}">
-            {{ row.telat }} dari {{ row.total }}
+            {{ row.telat ? row.telat : 0 }} dari {{ row.total ? row.total:0 }}
             ({{ isNaN( (row.telat/row.total*100).toPrecision(4)) ? 0 : (row.telat/row.total*100).toPrecision(4) }}) %
           </template>
           <template #cell-01="{row}">
@@ -193,7 +193,7 @@ const store = useRekapAbsensiPegawaiStore()
 store.getInitialData()
 
 const namaBulan = computed(() => {
-  return store.bulan[store.params.bulan - 1]
+  return store.bulan[parseInt(store.params.bulan) - 1]
 })
 let num = store.params.bulan
 
@@ -205,16 +205,29 @@ const prev = () => {
   } else {
     num = num - 1
   }
-  store.setParam('bulan', num)
+  const formatted = num < 10 ? '0' + num : num
+  console.log('prev', formatted)
+  store.setParam('bulan', formatted)
+  store.resetUser()
+  store.getProta()
+  store.getLibur()
+  store.getDataTable()
 }
 const next = () => {
   console.log('next', num)
   console.log('jumlah hari', daysInMonth(store.params.bulan, store.params.tahun))
+  // console.log('next', num)
   if (num >= 12) {
     num = 1
   } else {
     num = num + 1
   }
-  store.setParam('bulan', num)
+  const formatted = num < 10 ? '0' + num : num
+  console.log('prev', formatted)
+  store.setParam('bulan', formatted)
+  store.resetUser()
+  store.getProta()
+  store.getLibur()
+  store.getDataTable()
 }
 </script>
