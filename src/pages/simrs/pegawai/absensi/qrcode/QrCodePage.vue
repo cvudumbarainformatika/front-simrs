@@ -1,6 +1,5 @@
 <!-- eslint-disable no-unused-vars -->
 <template>
-
   <q-page class="bg-white">
     <div class="full-width row justify-between items-center content-between">
       <div class="bg-white col-grow">
@@ -145,12 +144,12 @@
                       </q-chip>
                       <br>
                       <div class="f-22 q-mt-md">
-                        Selamat Jalan<br>
+                        Selamat Beristirahat<br>
                       </div>
                       <span class="f-16">
-                        Semoga pekerjaan hari ini<br>
-                        menjadi rezeki yang berkah<br>
-                        untuk keluarga<br>
+                        Semoga lelah pekerjaan hari ini<br>
+                        dicatat sebagai amal ibadah<br>
+
                       </span>
                       <span class="f-20">
                         Semoga selamat sampai ke rumah
@@ -242,6 +241,7 @@ qrcodeChannel.subscribed(() => {
       absen.value = 'ada'
       // console.log(e.message.jadwal)
     }
+    if (e.message.user) { user.value = e.message.user }
     if (e.message.message) {
       absen.value = 'tidak ada'
     // console.log(e.message.message)

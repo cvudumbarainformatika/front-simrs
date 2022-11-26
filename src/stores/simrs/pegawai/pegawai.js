@@ -60,12 +60,12 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
         icon: 'icon-mat-fingerprint',
         link: 'pegawai/absensi',
         submenus: [
-          {
-            nama: 'Jadwal',
-            name: 'pegawai.absensi.jadwal',
-            icon: 'icon-mat-fingerprint',
-            link: 'pegawai/absensi/jadwal'
-          },
+          // {
+          //   nama: 'Jadwal',
+          //   name: 'pegawai.absensi.jadwal',
+          //   icon: 'icon-mat-fingerprint',
+          //   link: 'pegawai/absensi/jadwal'
+          // },
           {
             nama: 'Kategori Jadwal',
             name: 'pegawai.absensi.kategori',
@@ -77,19 +77,19 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.absensi.prota',
             icon: 'icon-mat-fingerprint',
             link: 'pegawai/absensi/prota'
-          },
-          {
-            nama: 'Extra',
-            name: 'pegawai.absensi.extra',
-            icon: 'icon-mat-fingerprint',
-            link: 'pegawai/absensi/extra'
-          },
-          {
-            nama: 'QrCode',
-            name: 'pegawai.absensi.qrcode',
-            icon: 'icon-mat-fingerprint',
-            link: 'pegawai/absensi/qrcode'
           }
+          // {
+          //   nama: 'Extra',
+          //   name: 'pegawai.absensi.extra',
+          //   icon: 'icon-mat-fingerprint',
+          //   link: 'pegawai/absensi/extra'
+          // },
+          // {
+          //   nama: 'QrCode',
+          //   name: 'pegawai.absensi.qrcode',
+          //   icon: 'icon-mat-fingerprint',
+          //   link: 'pegawai/absensi/qrcode'
+          // }
         ]
       }
     ]
