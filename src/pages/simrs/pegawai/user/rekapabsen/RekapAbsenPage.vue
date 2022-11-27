@@ -34,8 +34,57 @@
                       :loading="store.loading"
                       @click="prev"
                     />
-                    <div class="q-px-md">
-                      {{ namaBulan }}
+                    <div class="q-px-md cursor-pointer">
+                      <div class="fit row  justify-evenly">
+                        {{ namaBulan }}
+                      </div>
+                      <div class="fit row  justify-evenly">
+                        {{ store.params.tahun }}
+                      </div>
+                      <q-menu
+                        transition-show="flip-right"
+                        transition-hide="flip-left"
+                      >
+                        <q-card>
+                          <q-card-section>
+                            <div class="fit row no-wrap justify-evenly items-center content-center">
+                              <div>
+                                <app-autocomplete
+                                  v-model="monthSelected"
+                                  autocomplete="nama"
+                                  option-label="nama"
+                                  option-value="value"
+                                  :source="months"
+                                  label="Pilih bulan"
+                                />
+                              </div>
+                              <div>
+                                <app-autocomplete
+                                  v-model="yearSelected"
+                                  :source="years"
+                                  label="Pilih tahun"
+                                />
+                              </div>
+                            </div>
+                          </q-card-section>
+                          <q-card-actions align="right">
+                            <app-btn
+                              v-close-popup
+                              label="cancel"
+                              class="q-mr-sm"
+                              color="dark"
+                            />
+                            <app-btn
+                              v-close-popup
+                              label="submit"
+                              class="q-mr-sm"
+                              color="primary"
+                              :loading="store.loading"
+                              @click="submit"
+                            />
+                          </q-card-actions>
+                        </q-card>
+                      </q-menu>
                     </div>
                     <q-btn
                       flat
@@ -285,7 +334,7 @@
 <script setup>
 // import { daysInMonth } from 'src/modules/utils'
 import { useRekapAbsensiPegawaiStore } from 'src/stores/simrs/pegawai/user/rekapabsen/rekapabsen'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import ChoiceComponent from './ChoiceComponent.vue'
 import LegendComponent from './LegendComponent.vue'
 
@@ -295,13 +344,6 @@ const namaBulan = computed(() => {
   return store.bulan[parseInt(store.params.bulan) - 1]
 })
 let num = store.params.bulan
-// const jumlahHari = computed(() => {
-//   // const formatted = num < 10 ? '0' + num : num
-//   const formatted = store.params.bulan
-//   // console.log('jumlah hari', daysInMonth(formatted, store.params.tahun))
-//   console.log('jumlah hari', formatted)
-//   return daysInMonth(formatted, store.params.tahun)
-// })
 
 const prev = () => {
   console.log('prev', num)
@@ -335,5 +377,47 @@ const next = () => {
   store.getProta()
   store.getLibur()
   store.getDataTable()
+}
+
+// pilih range bulan dan tahun
+const months = ref([
+  { nama: 'Januari', value: '01' },
+  { nama: 'Februari', value: '02' },
+  { nama: 'Maret', value: '03' },
+  { nama: 'April', value: '04' },
+  { nama: 'Mei', value: '05' },
+  { nama: 'Juni', value: '06' },
+  { nama: 'Juli', value: '07' },
+  { nama: 'Agustus', value: '08' },
+  { nama: 'September', value: '09' },
+  { nama: 'Oktober', value: '10' },
+  { nama: 'November', value: '11' },
+  { nama: 'Desember', value: '12' }
+
+])
+const curY = parseInt(store.params.tahun)
+const years = ref([])
+for (let index = 0; index < 11; index++) {
+  years.value[index] = curY - 5 + index
+}
+
+const monthSelected = ref(null)
+const yearSelected = ref(null)
+
+const submit = () => {
+  store.setParam('bulan', monthSelected.value)
+  store.setParam('tahun', yearSelected.value)
+  // emits('onSubmit', { bulan: monthSelected.value, tahun: yearSelected.value })
+
+  store.resetUser()
+  store.getProta()
+  store.getLibur()
+  store.getDataTable().then(() => {
+    monthSelected.value = null
+    yearSelected.value = null
+  })
+  // console.log('cury', parseInt(curY))
+  // console.log('bulan', monthSelected.value)
+  // console.log('tahun', yearSelected.value)
 }
 </script>

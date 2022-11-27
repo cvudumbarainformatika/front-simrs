@@ -6,8 +6,8 @@
     <div class="row q-mb-md items-center">
       <div class="q-mr-md text-center">
         <div class="q-mr-sm">
+          <!-- color="red" -->
           <q-avatar
-            color="red"
             text-color="white"
             dense
             size="24px"

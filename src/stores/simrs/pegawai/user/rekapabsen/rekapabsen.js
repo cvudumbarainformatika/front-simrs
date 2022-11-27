@@ -190,6 +190,8 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
           status: user.status
         }
       })
+      this.protas = []
+      this.liburs = []
 
       console.log('new user', newUser)
       this.users = newUser
@@ -204,13 +206,18 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     },
     // this custom store
     refreshTable() {
-      const month = date.formatDate(Date.now(), 'MM')
+      // const month = date.formatDate(Date.now(), 'MM')
+      // const tahun = date.formatDate(Date.now(), 'YYYY')
       // const month = date.formatDate('2022/3/1', 'MM')
-      this.setParam('bulan', month)
-      console.log('moth', month)
-      this.getProta()
-      this.getLibur()
-      this.getDataTable()
+      // this.setParam('bulan', month)
+      // this.setParam('tahun ', tahun)
+      // console.log('moth', month)
+      this.resetUser()
+      this.getUsers().then(() => {
+        this.getProta()
+        this.getLibur()
+        this.getDataTable()
+      })
     },
     // setPage(payload) {
     //   // console.log('setPage', payload)

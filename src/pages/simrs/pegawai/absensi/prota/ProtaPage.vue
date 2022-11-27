@@ -1,8 +1,8 @@
 <template>
   <div class="q-px-lg q-pt-md">
     <app-card
-      title="Hari Libur Tahunan"
-      desc="Halaman Input Hari Libur Tahunan"
+      title="Hari Libur Nasional Tahunan"
+      desc="Halaman Input Hari Libur Nasional Tahunan"
     >
       <template #content>
         <div class="row q-col-gutter-lg q-mb-lg items-center">

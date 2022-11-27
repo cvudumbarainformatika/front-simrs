@@ -10,8 +10,8 @@
     </div>
 
     <div v-if="!data">
+      <!-- color="red" -->
       <q-avatar
-        color="red"
         text-color="white"
         dense
         size="24px"

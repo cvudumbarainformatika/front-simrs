@@ -73,7 +73,7 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             link: 'pegawai/absensi/kategori'
           },
           {
-            nama: 'Prota',
+            nama: 'Libur Nasional',
             name: 'pegawai.absensi.prota',
             icon: 'icon-mat-fingerprint',
             link: 'pegawai/absensi/prota'

@@ -45,8 +45,9 @@
           <app-calender-new
             :data="rekap.rekaps"
             :loading="rekap.loading"
-            @on-prev="prev"
-            @on-next="next"
+            @on-prev="submit"
+            @on-next="submit"
+            @on-submit="submit"
           />
         </div>
         <!-- <div class="row q-col.gutter-sm">
@@ -184,6 +185,7 @@
 <script setup>
 // import { computed } from 'vue'
 // import { dateHalfFormat } from 'src/modules/formatter'
+import { date } from 'quasar'
 import { useRekapAbesensiUserStore } from 'src/stores/simrs/pegawai/user/rekap/rekap'
 
 const rekap = useRekapAbesensiUserStore()
@@ -197,20 +199,29 @@ const rekap = useRekapAbesensiUserStore()
 //   })
 //   console.log(rekap.tanggals)
 // }
-const prev = val => {
+// const prev = val => {
+//   rekap.setParams('bulan', val.bulan)
+//   rekap.setParams('tahun', val.tahun)
+//   rekap.getRekapAbsensiByUser()
+//   console.log('prev', val)
+// }
+// const next = val => {
+//   rekap.setParams('bulan', val.bulan)
+//   rekap.setParams('tahun', val.tahun)
+//   rekap.getRekapAbsensiByUser()
+//   console.log('next', val)
+// }
+const submit = val => {
   rekap.setParams('bulan', val.bulan)
   rekap.setParams('tahun', val.tahun)
   rekap.getRekapAbsensiByUser()
-  console.log('prev', val)
+  // console.log('submit', val)
 }
-const next = val => {
-  rekap.setParams('bulan', val.bulan)
-  rekap.setParams('tahun', val.tahun)
-  rekap.getRekapAbsensiByUser()
-  console.log('next', val)
-}
+
 const deleteParamsId = () => {
   rekap.delParams('id')
+  rekap.setParams('bulan', date.formatDate(Date.now(), 'MM'))
+  rekap.setParams('tahun', date.formatDate(Date.now(), 'YYYY'))
   rekap.rekaps = []
   rekap.tanggals = []
   rekap.telat = 0

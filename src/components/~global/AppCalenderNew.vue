@@ -19,8 +19,62 @@
                 @click="prev"
               />
               <div class="date">
-                <!-- <h1>{{ thisMonthName }}</h1> -->
-                <p>{{ today }}</p>
+                <h1 class="cursor-pointer">
+                  {{ monthName }}
+                  <!-- <q-menu
+                    transition-show="flip-right"
+                    transition-hide="flip-left"
+                  >
+                    bulan
+                  </q-menu> -->
+                </h1>
+                <p class="cursor-pointer">
+                  {{ fullYear }}
+                </p>
+                <q-menu
+                  transition-show="flip-right"
+                  transition-hide="flip-left"
+                >
+                  <q-card>
+                    <q-card-section>
+                      <div class="fit row no-wrap justify-evenly items-center content-center">
+                        <div>
+                          <app-autocomplete
+                            v-model="monthSelected"
+                            autocomplete="nama"
+                            option-label="nama"
+                            option-value="value"
+                            :source="months"
+                            label="Pilih bulan"
+                          />
+                        </div>
+                        <div>
+                          <app-autocomplete
+                            v-model="yearSelected"
+                            :source="years"
+                            label="Pilih tahun"
+                          />
+                        </div>
+                      </div>
+                    </q-card-section>
+                    <q-card-actions align="right">
+                      <app-btn
+                        v-close-popup
+                        label="cancel"
+                        class="q-mr-sm"
+                        color="dark"
+                      />
+                      <app-btn
+                        v-close-popup
+                        label="submit"
+                        class="q-mr-sm"
+                        color="primary"
+                        :loading="props.loading"
+                        @click="submit"
+                      />
+                    </q-card-actions>
+                  </q-card>
+                </q-menu>
               </div>
               <q-btn
                 round
@@ -50,7 +104,11 @@
                 @click="setClick(day,i)"
               >
                 {{ day?day.num:1 }}
-                <q-menu v-if="day.data || day.libur || day.prota">
+                <q-menu
+                  v-if="day.data || day.libur || day.prota"
+                  transition-show="flip-right"
+                  transition-hide="flip-left"
+                >
                   <div v-if="day.data">
                     <div class="row">
                       <q-chip
@@ -146,24 +204,62 @@ const props = defineProps({
   data: { type: Object, default: () => {} },
   loading: { type: Boolean, default: false }
 })
-const emits = defineEmits(['onPrev', 'onNext'])
+const emits = defineEmits(['onPrev', 'onNext', 'onSubmit'])
 
 const tgl = new Date()
 // console.log('tgl now', tgl.getDay())
-// const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+// pilih range bulan dan tahun
+const months = ref([
+  { nama: 'Januari', value: '01' },
+  { nama: 'Februari', value: '02' },
+  { nama: 'Maret', value: '03' },
+  { nama: 'April', value: '04' },
+  { nama: 'Mei', value: '05' },
+  { nama: 'Juni', value: '06' },
+  { nama: 'Juli', value: '07' },
+  { nama: 'Agustus', value: '08' },
+  { nama: 'September', value: '09' },
+  { nama: 'Oktober', value: '10' },
+  { nama: 'November', value: '11' },
+  { nama: 'Desember', value: '12' }
 
+])
+const curY = date.formatDate(tgl, 'YYYY')
+const years = ref([])
+for (let index = 0; index < 11; index++) {
+  years.value[index] = curY - 5 + index
+}
+
+const monthSelected = ref(null)
+const yearSelected = ref(null)
+
+const submit = () => {
+  emits('onSubmit', { bulan: monthSelected.value, tahun: yearSelected.value })
+  const mth = parseInt(monthSelected.value) - 1
+  tgl.setFullYear(yearSelected.value, mth, 1)
+
+  setThisMonts()
+  monthSelected.value = null
+  yearSelected.value = null
+  // console.log('cury', parseInt(curY))
+  // console.log('bulan', monthSelected.value)
+  // console.log('tahun', yearSelected.value)
+}
+/// /////////////////////////////////////////
 const getDaysInMonth = (year, month) => {
   return new Date(year, month + 1, 0).getDate()
 }
 
 const days = ref([])
 // const thisMonthName = ref(months[tgl.getMonth()])
-const today = ref(date.formatDate(tgl, 'MMMM YYYY'))
+const monthName = ref(date.formatDate(tgl, 'MMMM'))
+const fullYear = ref(date.formatDate(tgl, 'YYYY'))
 const setThisMonts = () => {
-  console.log(props.data)
+  // console.log(props.data)
   days.value = []
   // thisMonthName.value = months[tgl.getMonth()]
-  today.value = date.formatDate(tgl, 'MMMM YYYY')
+  monthName.value = date.formatDate(tgl, 'MMMM')
+  fullYear.value = date.formatDate(tgl, 'YYYY')
   const thisYear = tgl.getFullYear()
   const thisMonth = tgl.getMonth()
   // set ke tanggal 1
@@ -240,9 +336,9 @@ const next = () => {
 
 // @click days
 const setClick = (day, i) => {
-  console.log(day, i)
+  // console.log(day, i)
   const existingClass = day.class.split(' ')
-  console.log('existing', existingClass)
+  // console.log('existing', existingClass)
   if (existingClass.length > 0 && existingClass[0] !== '') {
     const a = existingClass.filter(cla => {
       return cla === 'prev-date'
@@ -263,7 +359,7 @@ watch(() => props.data, (data) => {
   })
   if (data.tanggals) {
     data.data.forEach(apem => {
-      console.log('tanggal', apem.tanggal)
+      // console.log('tanggal', apem.tanggal)
       const index = temp.indexOf(apem.tanggal)
       const hari = date.formatDate(apem.tanggal, 'dddd') === 'Minggu'
       if (apem.terlambat === 'no') {
@@ -274,13 +370,13 @@ watch(() => props.data, (data) => {
         days.value[index].style = `color: ${apem.kategory.warna};`
       }
       days.value[index].data = apem
-      console.log('watch', index)
+      // console.log('watch', index)
     })
   }
   if (data.libur) {
     if (data.libur.length) {
       data.libur.forEach(libur => {
-        console.log('tanggal', libur.tanggal)
+        // console.log('tanggal', libur.tanggal)
         const index = temp.indexOf(libur.tanggal)
         const hari = date.formatDate(libur.tanggal, 'dddd') === 'Minggu'
         days.value[index].class = hari ? 'text-red cursor-pointer bg-primary' : 'text-white cursor-pointer bg-primary'
@@ -291,7 +387,7 @@ watch(() => props.data, (data) => {
   if (data.prota) {
     if (data.prota.length) {
       data.prota.forEach(prota => {
-        console.log('tanggal', prota.tgl_libur)
+        // console.log('tanggal', prota.tgl_libur)p0
         const index = temp.indexOf(prota.tgl_libur)
         days.value[index].class = 'text-red cursor-pointer '
         days.value[index].prota = prota
