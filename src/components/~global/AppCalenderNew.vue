@@ -50,48 +50,81 @@
                 @click="setClick(day,i)"
               >
                 {{ day?day.num:1 }}
-                <q-menu v-if="day.data">
-                  <div class="row">
-                    <q-chip
-                      :style="`color: ${day.data.kategory.warna};`"
-                      class="chip-able"
-                      dense
-                      square
-                      outline
+                <q-menu v-if="day.data || day.libur || day.prota">
+                  <div v-if="day.data">
+                    <div class="row">
+                      <q-chip
+                        :style="`color: ${day.data.kategory.warna};`"
+                        class="chip-able"
+                        dense
+                        square
+                        outline
+                      >
+                        <div class="f-12">
+                          {{ day.data.kategory.nama }}
+                        </div>
+                      </q-chip>
+                    </div>
+                    <div class="row">
+                      <q-chip
+                        :style="`color: ${day.data.kategory.warna};`"
+                        class="chip-able"
+                        dense
+                        square
+                        outline
+                      >
+                        <div class="f-12">
+                          masuk : {{ day.data.masuk }}
+                        </div>
+                      </q-chip>
+                    </div>
+                    <div
+                      v-if="day.data.terlambat==='yes'"
+                      class="row"
                     >
-                      <div class="f-12">
-                        {{ day.data.kategory.nama }}
-                      </div>
-                    </q-chip>
+                      <q-chip
+                        :style="`color: ${day.data.kategory.warna};`"
+                        class="chip-able"
+                        dense
+                        square
+                        outline
+                      >
+                        <div class="f-12">
+                          terlambat : {{ day.data.diff }}
+                        </div>
+                      </q-chip>
+                    </div>
                   </div>
-                  <div class="row">
-                    <q-chip
-                      :style="`color: ${day.data.kategory.warna};`"
-                      class="chip-able"
-                      dense
-                      square
-                      outline
-                    >
-                      <div class="f-12">
-                        masuk : {{ day.data.masuk }}
-                      </div>
-                    </q-chip>
+                  <div v-if="day.libur">
+                    <div class="row">
+                      <q-chip
+                        color="primary"
+                        text-color="white"
+                        class="chip-able"
+                        dense
+                        square
+                      >
+                        <div class="f-12">
+                          {{ day.libur.flag }}
+                        </div>
+                      </q-chip>
+                    </div>
                   </div>
-                  <div
-                    v-if="day.data.terlambat==='yes'"
-                    class="row"
-                  >
-                    <q-chip
-                      :style="`color: ${day.data.kategory.warna};`"
-                      class="chip-able"
-                      dense
-                      square
-                      outline
-                    >
-                      <div class="f-12">
-                        terlambat : {{ day.data.diff }}
-                      </div>
-                    </q-chip>
+                  <div v-if="day.prota">
+                    <div class="row">
+                      <q-chip
+                        color="red-14"
+                        text-color="white"
+                        class="chip-able"
+                        dense
+                        square
+                        outline
+                      >
+                        <div class="f-12">
+                          {{ day.prota.nama }}
+                        </div>
+                      </q-chip>
+                    </div>
                   </div>
                 </q-menu>
               </div>
@@ -219,8 +252,6 @@ const setClick = (day, i) => {
     })
     if (a.length > 0)prev()
     if (b.length > 0)next()
-    console.log('a', a[0])
-    console.log('b', b[0])
   }
 }
 watch(() => props.data, (data) => {
@@ -245,6 +276,27 @@ watch(() => props.data, (data) => {
       days.value[index].data = apem
       console.log('watch', index)
     })
+  }
+  if (data.libur) {
+    if (data.libur.length) {
+      data.libur.forEach(libur => {
+        console.log('tanggal', libur.tanggal)
+        const index = temp.indexOf(libur.tanggal)
+        const hari = date.formatDate(libur.tanggal, 'dddd') === 'Minggu'
+        days.value[index].class = hari ? 'text-red cursor-pointer bg-primary' : 'text-white cursor-pointer bg-primary'
+        days.value[index].libur = libur
+      })
+    }
+  }
+  if (data.prota) {
+    if (data.prota.length) {
+      data.prota.forEach(prota => {
+        console.log('tanggal', prota.tgl_libur)
+        const index = temp.indexOf(prota.tgl_libur)
+        days.value[index].class = 'text-red cursor-pointer '
+        days.value[index].prota = prota
+      })
+    }
   }
 })
 </script>
