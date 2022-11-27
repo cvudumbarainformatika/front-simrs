@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { daysInMonth, notifSuccess } from 'src/modules/utils'
 
 export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', {
   state: () => ({
@@ -94,7 +94,8 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       this.columns = [
         'nama', 'telat'
       ]
-      for (let index = 0; index < 31; index++) {
+      const jumlahHari = daysInMonth(this.params.bulan, this.params.tahun)
+      for (let index = 0; index < jumlahHari; index++) {
         this.columns[index + 2] = index < 9 ? '0' + (index + 1) : (index + 1).toString()
       }
 
@@ -107,7 +108,7 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     },
     setData(payload) {
       this.users.forEach(user => {
-        console.log('cari id', payload[user.id])
+        // console.log('cari id', payload[user.id])
         if (payload[user.id]) {
           // console.log('ada lengt', payload[user.id])
           payload[user.id].forEach(data => {

@@ -4,7 +4,7 @@ import { api } from 'src/boot/axios'
 
 export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
   state: () => ({
-    loading: true,
+    loading: false,
     isOpen: false,
     items: [],
     meta: {},
@@ -81,7 +81,7 @@ export const useRekapAbesensiUserStore = defineStore('rekap_absensi_user', {
         api.get('v1/pegawai/absensi/jadwal/rekap-per-user', params).then(resp => {
           this.loading = false
           console.log('rekap absen', resp)
-          this.rekaps = resp.data.data
+          this.rekaps = resp.data
           this.tanggals = resp.data.tanggals
           this.telat = resp.data.telat
           this.setWeeks(resp.data.weeks)

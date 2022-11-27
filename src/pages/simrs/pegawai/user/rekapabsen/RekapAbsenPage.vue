@@ -30,6 +30,8 @@
                       color="grey"
                       round
                       icon="icon-mat-chevron_left"
+                      :disable="store.loading"
+                      :loading="store.loading"
                       @click="prev"
                     />
                     <div class="q-px-md">
@@ -40,8 +42,13 @@
                       color="grey"
                       round
                       icon="icon-mat-chevron_right"
+                      :disable="store.loading"
+                      :loading="store.loading"
                       @click="next"
                     />
+                    <!-- <div class="q-px-md">
+                      {{ jumlahHari }}
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -85,97 +92,190 @@
             ({{ isNaN( (row.telat/row.total*100).toPrecision(4)) ? 0 : (row.telat/row.total*100).toPrecision(4) }}) %
           </template>
           <template #cell-01="{row}">
-            <ChoiceComponent :data="row['01']" />
+            <ChoiceComponent
+              :data="row['01']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'01'"
+            />
           </template>
           <template #cell-02="{row}">
-            <ChoiceComponent :data="row['02']" />
+            <ChoiceComponent
+              :data="row['02']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'02'"
+            />
           </template>
           <template #cell-03="{row}">
-            <ChoiceComponent :data="row['03']" />
+            <ChoiceComponent
+              :data="row['03']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'03'"
+            />
           </template>
           <template #cell-04="{row}">
-            <ChoiceComponent :data="row['04']" />
+            <ChoiceComponent
+              :data="row['04']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'04'"
+            />
           </template>
           <template #cell-05="{row}">
-            <ChoiceComponent :data="row['05']" />
+            <ChoiceComponent
+              :data="row['05']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'05'"
+            />
           </template>
           <template #cell-06="{row}">
-            <ChoiceComponent :data="row['06']" />
+            <ChoiceComponent
+              :data="row['06']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'06'"
+            />
           </template>
           <template #cell-07="{row}">
-            <ChoiceComponent :data="row['07']" />
+            <ChoiceComponent
+              :data="row['07']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'07'"
+            />
           </template>
           <template #cell-08="{row}">
-            <ChoiceComponent :data="row['08']" />
+            <ChoiceComponent
+              :data="row['08']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'08'"
+            />
           </template>
           <template #cell-09="{row}">
-            <ChoiceComponent :data="row['09']" />
+            <ChoiceComponent
+              :data="row['09']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'09'"
+            />
           </template>
           <template #cell-10="{row}">
-            <ChoiceComponent :data="row['10']" />
+            <ChoiceComponent
+              :data="row['10']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'10'"
+            />
           </template>
           <template #cell-11="{row}">
-            <ChoiceComponent :data="row['11']" />
+            <ChoiceComponent
+              :data="row['11']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'11'"
+            />
           </template>
           <template #cell-12="{row}">
-            <ChoiceComponent :data="row['12']" />
+            <ChoiceComponent
+              :data="row['12']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'12'"
+            />
           </template>
           <template #cell-13="{row}">
-            <ChoiceComponent :data="row['13']" />
+            <ChoiceComponent
+              :data="row['13']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'13'"
+            />
           </template>
           <template #cell-14="{row}">
-            <ChoiceComponent :data="row['14']" />
+            <ChoiceComponent
+              :data="row['14']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'14'"
+            />
           </template>
           <template #cell-15="{row}">
-            <ChoiceComponent :data="row['15']" />
+            <ChoiceComponent
+              :data="row['15']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'15'"
+            />
           </template>
           <template #cell-16="{row}">
-            <ChoiceComponent :data="row['16']" />
+            <ChoiceComponent
+              :data="row['16']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'16'"
+            />
           </template>
           <template #cell-17="{row}">
-            <ChoiceComponent :data="row['17']" />
+            <ChoiceComponent
+              :data="row['17']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'17'"
+            />
           </template>
           <template #cell-18="{row}">
-            <ChoiceComponent :data="row['18']" />
+            <ChoiceComponent
+              :data="row['18']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'18'"
+            />
           </template>
           <template #cell-19="{row}">
-            <ChoiceComponent :data="row['19']" />
+            <ChoiceComponent
+              :data="row['19']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'19'"
+            />
           </template>
           <template #cell-20="{row}">
-            <ChoiceComponent :data="row['20']" />
+            <ChoiceComponent
+              :data="row['20']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'20'"
+            />
           </template>
           <template #cell-21="{row}">
-            <ChoiceComponent :data="row['21']" />
+            <ChoiceComponent
+              :data="row['21']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'21'"
+            />
           </template>
           <template #cell-22="{row}">
-            <ChoiceComponent :data="row['22']" />
+            <ChoiceComponent
+              :data="row['22']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'22'"
+            />
           </template>
           <template #cell-23="{row}">
-            <ChoiceComponent :data="row['23']" />
+            <ChoiceComponent
+              :data="row['23']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'23'"
+            />
           </template>
           <template #cell-24="{row}">
-            <ChoiceComponent :data="row['24']" />
+            <ChoiceComponent
+              :data="row['24']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'24'"
+            />
           </template>
           <template #cell-25="{row}">
-            <ChoiceComponent :data="row['25']" />
+            <ChoiceComponent
+              :data="row['25']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'25'"
+            />
           </template>
           <template #cell-26="{row}">
-            <ChoiceComponent :data="row['26']" />
+            <ChoiceComponent
+              :data="row['26']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'26'"
+            />
           </template>
           <template #cell-27="{row}">
-            <ChoiceComponent :data="row['27']" />
+            <ChoiceComponent
+              :data="row['27']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'27'"
+            />
           </template>
           <template #cell-28="{row}">
-            <ChoiceComponent :data="row['28']" />
+            <ChoiceComponent
+              :data="row['28']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'28'"
+            />
           </template>
           <template #cell-29="{row}">
-            <ChoiceComponent :data="row['29']" />
+            <ChoiceComponent
+              :data="row['29']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'29'"
+            />
           </template>
           <template #cell-30="{row}">
-            <ChoiceComponent :data="row['30']" />
+            <ChoiceComponent
+              :data="row['30']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'30'"
+            />
           </template>
           <template #cell-31="{row}">
-            <ChoiceComponent :data="row['31']" />
+            <ChoiceComponent
+              :data="row['31']"
+              :tgl="store.params.tahun+'/'+store.params.bulan+'/'+'31'"
+            />
           </template>
         </app-table>
       </q-card-section>
@@ -183,7 +283,7 @@
   </div>
 </template>
 <script setup>
-import { daysInMonth } from 'src/modules/utils'
+// import { daysInMonth } from 'src/modules/utils'
 import { useRekapAbsensiPegawaiStore } from 'src/stores/simrs/pegawai/user/rekapabsen/rekapabsen'
 import { computed } from 'vue'
 import ChoiceComponent from './ChoiceComponent.vue'
@@ -191,21 +291,27 @@ import LegendComponent from './LegendComponent.vue'
 
 const store = useRekapAbsensiPegawaiStore()
 store.getInitialData()
-
 const namaBulan = computed(() => {
   return store.bulan[parseInt(store.params.bulan) - 1]
 })
 let num = store.params.bulan
+// const jumlahHari = computed(() => {
+//   // const formatted = num < 10 ? '0' + num : num
+//   const formatted = store.params.bulan
+//   // console.log('jumlah hari', daysInMonth(formatted, store.params.tahun))
+//   console.log('jumlah hari', formatted)
+//   return daysInMonth(formatted, store.params.tahun)
+// })
 
 const prev = () => {
   console.log('prev', num)
-  console.log('jumlah hari', daysInMonth(store.params.bulan, store.params.tahun))
-  if (num <= 1) {
+  if (parseInt(num) <= 1) {
     num = 12
   } else {
-    num = num - 1
+    num = parseInt(num) - 1
   }
-  const formatted = num < 10 ? '0' + num : num
+  const formatted = parseInt(num) < 10 ? '0' + num : num
+  // console.log('jumlah hari', daysInMonth(formatted, store.params.tahun))
   console.log('prev', formatted)
   store.setParam('bulan', formatted)
   store.resetUser()
@@ -215,14 +321,14 @@ const prev = () => {
 }
 const next = () => {
   console.log('next', num)
-  console.log('jumlah hari', daysInMonth(store.params.bulan, store.params.tahun))
-  // console.log('next', num)
-  if (num >= 12) {
+  // console.log('next', parseInt(num))
+  if (parseInt(num) >= 12) {
     num = 1
   } else {
-    num = num + 1
+    num = parseInt(num) + 1
   }
-  const formatted = num < 10 ? '0' + num : num
+  const formatted = parseInt(num) < 10 ? '0' + num : num
+  // console.log('jumlah hari', daysInMonth(formatted, store.params.tahun))
   console.log('prev', formatted)
   store.setParam('bulan', formatted)
   store.resetUser()

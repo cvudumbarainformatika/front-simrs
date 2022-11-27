@@ -1,7 +1,6 @@
 <template>
   <q-dialog
     persistent
-    maximized
     transition-show="slide-up"
     transition-hide="slide-down"
   >
@@ -21,26 +20,20 @@
         </q-btn>
       </q-bar>
 
-      <q-card-section class="q-pa-lg">
+      <q-card-section class="q-pa-md">
         <div class="text-h5 text-weight-bold">
           Rekap Absensi {{ rekap.user.nama }}
-        </div>
-        <div class="text-h6">
-          Bulan {{ namaBulan }}
         </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none q-pa-lg">
-        <div class="row q-mb-md">
-          <div class="col-1" />
-          <div class="col-6">
-            <q-card>
-              <q-card-section>
-                {{ rekap.user.nama }} terlambat {{ rekap.telat }} dari {{ rekap.tanggals.length }} kali absen
-                ({{ isNaN((rekap.telat/rekap.tanggals.length*100).toPrecision(4)) ? 0 : (rekap.telat/rekap.tanggals.length*100).toPrecision(4) }}%)
-              </q-card-section>
-            </q-card>
-          </div>
+        <div class="fit row justify-center q-mb-md">
+          <q-card>
+            <q-card-section>
+              {{ rekap.user.nama }} terlambat {{ rekap.telat }} dari {{ rekap.tanggals.length }} kali absen
+              ({{ isNaN((rekap.telat/rekap.tanggals.length*100).toPrecision(4)) ? 0 : (rekap.telat/rekap.tanggals.length*100).toPrecision(4) }}%)
+            </q-card-section>
+          </q-card>
         </div>
         <div
           v-if="rekap.loading"
@@ -48,7 +41,15 @@
         >
           <app-loading />
         </div>
-        <div class="row q-col.gutter-sm">
+        <div class="fit row justify-center">
+          <app-calender-new
+            :data="rekap.rekaps"
+            :loading="rekap.loading"
+            @on-prev="prev"
+            @on-next="next"
+          />
+        </div>
+        <!-- <div class="row q-col.gutter-sm">
           <div class="col-2" />
           <div class="col-1">
             Senin
@@ -165,7 +166,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <q-date
           v-model="date"
           minimal
@@ -181,22 +182,33 @@
   </q-dialog>
 </template>
 <script setup>
-import { computed } from 'vue'
-import { dateHalfFormat } from 'src/modules/formatter'
+// import { computed } from 'vue'
+// import { dateHalfFormat } from 'src/modules/formatter'
 import { useRekapAbesensiUserStore } from 'src/stores/simrs/pegawai/user/rekap/rekap'
 
 const rekap = useRekapAbesensiUserStore()
-const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
-const namaBulan = computed(() => {
-  return bulan[rekap.params.bulan - 1]
-})
+// const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+// const namaBulan = computed(() => {
+//   return bulan[rekap.params.bulan - 1]
+// })
 // const eventsFn = (date) => {
 //   rekap.tanggals.forEach(tanggal => {
 //     if (tanggal === date) return true
 //   })
 //   console.log(rekap.tanggals)
 // }
-
+const prev = val => {
+  rekap.setParams('bulan', val.bulan)
+  rekap.setParams('tahun', val.tahun)
+  rekap.getRekapAbsensiByUser()
+  console.log('prev', val)
+}
+const next = val => {
+  rekap.setParams('bulan', val.bulan)
+  rekap.setParams('tahun', val.tahun)
+  rekap.getRekapAbsensiByUser()
+  console.log('next', val)
+}
 const deleteParamsId = () => {
   rekap.delParams('id')
   rekap.rekaps = []

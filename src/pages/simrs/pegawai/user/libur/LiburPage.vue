@@ -41,7 +41,7 @@
             <div>Alasan</div>
           </template>
           <template #cell-nama="{row}">
-            <div>{{ row.user.nama }}</div>
+            <div>{{ row.user? row.user.nama:'tidak ada nama' }}</div>
           </template>
           <template #cell-tanggal="{row}">
             <div>{{ dateFullFormat( row.tanggal) }}</div>

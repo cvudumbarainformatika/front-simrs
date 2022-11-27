@@ -88,6 +88,21 @@
                   Lihat Rekap Absensi
                 </q-tooltip>
               </q-btn>
+              <!-- <q-btn
+                flat
+                color="red"
+                icon="icon-mat-summarize"
+                dense
+                rounded
+                @click="bukaKalender(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Lihat Rekap Absensi
+                </q-tooltip>
+              </q-btn> -->
             </div>
           </template>
           <template #cell-status="{row}">
@@ -137,6 +152,7 @@
     <FormChangeDevice v-model="store.isOpen" />
     <RekapPage v-model="rekap.rekapOpen" />
     <JadwalPage v-model="rekap.jadwalOpen" />
+    <!-- <app-calender-new v-model="store.calender" /> -->
   </div>
 </template>
 <script setup>
@@ -165,6 +181,10 @@ const detailRekap = (val) => {
   rekap.setParams('id', val.id)
   rekap.getRekapAbsensiByUser()
 }
+// const bukaKalender = val => {
+//   store.setCalender()
+//   console.log(val)
+// }
 const changeDevice = val => {
   Dialog.create({
     title: 'Konfirmasi',

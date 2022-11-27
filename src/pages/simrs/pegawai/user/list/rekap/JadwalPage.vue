@@ -1,7 +1,6 @@
 <template>
   <q-dialog
     persistent
-    maximized
     transition-show="slide-up"
     transition-hide="slide-down"
   >
@@ -45,30 +44,52 @@
             <q-card-section>
               <div
                 v-if="jadwal.status==='1'"
-                class="row q-col-gutter-md text-white"
+                class="fit row no-wrap justify-start items-center content-center q-col-gutter-sm text-white"
               >
-                <div class="col-2">
+                <div class="col-auto ">
                   {{ jadwal.hari }}
                 </div>
-                <div class="col-2">
+                <div class="col-auto">
                   Libur
                 </div>
               </div>
               <div
                 v-if="jadwal.status==='2'"
-                class="row q-col-gutter-md text-white"
+                class="fit row no-wrap justify-evenly items-center content-center q-col-gutter-sm text-white"
               >
-                <div class="col-2">
+                <div class="">
                   {{ jadwal.hari }}
                 </div>
-                <div class="col-2">
+                <div class="">
                   {{ jadwal.kategory.nama }}
                 </div>
-                <div class="col-2">
-                  Absen Masuk : {{ jadwal.masuk }}
+                <div class="">
+                  <!-- :style="`background-color: ${jadwal.kategory.warna};`" -->
+                  <!-- text-color="white" -->
+                  <q-chip
+                    color="white"
+                    class="chip-able"
+                    dense
+                    square
+                    outline
+                  >
+                    <div class="f-12 text-center">
+                      Absen Masuk : {{ jadwal.masuk }}
+                    </div>
+                  </q-chip>
                 </div>
-                <div class="col-2">
-                  Absen Pulang : {{ jadwal.pulang }}
+                <div class="">
+                  <q-chip
+                    color="white"
+                    class="chip-able"
+                    dense
+                    square
+                    outline
+                  >
+                    <div class="f-12 text-center">
+                      Absen Pulang : {{ jadwal.pulang }}
+                    </div>
+                  </q-chip>
                 </div>
               </div>
               <!-- {{ jadwal }} -->

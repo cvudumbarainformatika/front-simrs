@@ -51,7 +51,7 @@
         <q-chip
           color="red"
           text-color="white"
-          class="chip"
+          class="chip-able"
           dense
           square
         >
@@ -67,7 +67,7 @@
         <q-chip
           color="info"
           text-color="white"
-          class="chip"
+          class="chip-able"
           dense
           square
         >
@@ -84,14 +84,15 @@ import { date } from 'quasar'
 import { computed } from 'vue'
 
 const props = defineProps({
-  data: { type: Object, default: () => {} }
+  data: { type: Object, default: () => {} },
+  tgl: { type: String, default: date.formatDate(Date.now(), 'YYYY/MM/DD') }
 })
 const sun = computed(() => {
   let day = false
-  if (props.data) {
-    day = date.formatDate(props.data.tanggal, 'dddd') === 'Minggu'
-  }
-  console.log('day', day)
+  // if (props.data) {
+  // }
+  day = date.formatDate(props.tgl, 'dddd') === 'Minggu'
+  // console.log('day', day)
   return day
 })
 </script>

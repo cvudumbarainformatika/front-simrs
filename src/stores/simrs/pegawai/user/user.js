@@ -20,7 +20,8 @@ export const useUserStore = defineStore('store_user', {
       sort: 'asc'
     },
     // custom for this store
-    pegawaies: []
+    pegawaies: [],
+    calender: true
   }),
   actions: {
     resetFORM() {
@@ -126,7 +127,9 @@ export const useUserStore = defineStore('store_user', {
       this.getPegawai()
     },
     // this custom store
-
+    setCalender() {
+      this.calender = !this.calender
+    },
     // autocomplete pilih pegawai
     pegawaiSelected(val) {
       this.setForm('pegawai_id', val)
