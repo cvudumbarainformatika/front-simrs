@@ -396,7 +396,7 @@
 </template>
 
 <script setup>
-import { useAbsensiJadwalStore } from 'src/stores/simrs/pegawai/absensi/jadwal/jadwal'
+import { useAbsensiJadwalStore } from 'src/stores/simrs/pegawai/master/jadwal/jadwal'
 import { dateHalfFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 // import { ref } from 'vue'

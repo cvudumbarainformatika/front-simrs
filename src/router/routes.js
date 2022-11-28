@@ -93,6 +93,18 @@ const routes = [
             name: 'pegawai.master.cuti',
             component: () =>
               import('pages/simrs/pegawai/master/cuti/IndexPage.vue')
+          },
+          {
+            path: '/pegawai/master/prota',
+            name: 'pegawai.master.prota',
+            component: () =>
+              import('pages/simrs/pegawai/master/prota/IndexPage.vue')
+          },
+          {
+            path: '/pegawai/master/kategori',
+            name: 'pegawai.master.kategori',
+            component: () =>
+              import('pages/simrs/pegawai/master/kategori/IndexPage.vue')
           }
         ]
       },
@@ -133,22 +145,10 @@ const routes = [
               import('pages/simrs/pegawai/absensi/jadwal/IndexPage.vue')
           },
           {
-            path: '/pegawai/absensi/prota',
-            name: 'pegawai.absensi.prota',
-            component: () =>
-              import('pages/simrs/pegawai/absensi/prota/IndexPage.vue')
-          },
-          {
             path: '/pegawai/absensi/qrcode',
             name: 'pegawai.absensi.qrcode',
             component: () =>
               import('pages/simrs/pegawai/absensi/qrcode/IndexPage.vue')
-          },
-          {
-            path: '/pegawai/absensi/kategori',
-            name: 'pegawai.absensi.kategori',
-            component: () =>
-              import('pages/simrs/pegawai/absensi/kategori/IndexPage.vue')
           },
           {
             path: '/pegawai/absensi/extra',

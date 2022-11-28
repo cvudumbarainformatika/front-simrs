@@ -23,6 +23,18 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
             name: 'pegawai.master.cuti',
             icon: 'icon-mat-dataset',
             link: 'pegawai/master/cuti'
+          },
+          {
+            nama: 'Kategori Jadwal',
+            name: 'pegawai.master.kategori',
+            icon: 'icon-mat-fingerprint',
+            link: 'pegawai/master/kategori'
+          },
+          {
+            nama: 'Libur Nasional',
+            name: 'pegawai.master.prota',
+            icon: 'icon-mat-fingerprint',
+            link: 'pegawai/master/prota'
           }
         ]
       },
@@ -66,18 +78,6 @@ export const usePegawaiApplicationStore = defineStore('aplikasi_kepegawaian', {
           //   icon: 'icon-mat-fingerprint',
           //   link: 'pegawai/absensi/jadwal'
           // },
-          {
-            nama: 'Kategori Jadwal',
-            name: 'pegawai.absensi.kategori',
-            icon: 'icon-mat-fingerprint',
-            link: 'pegawai/absensi/kategori'
-          },
-          {
-            nama: 'Libur Nasional',
-            name: 'pegawai.absensi.prota',
-            icon: 'icon-mat-fingerprint',
-            link: 'pegawai/absensi/prota'
-          }
           // {
           //   nama: 'Extra',
           //   name: 'pegawai.absensi.extra',

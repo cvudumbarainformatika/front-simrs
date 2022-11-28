@@ -58,7 +58,7 @@
 </template>
 <script setup>
 import { humanDate } from 'src/modules/formatter'
-import { UseProtaAbsensiLiburStore } from 'src/stores/simrs/pegawai/absensi/prota/prota'
+import { UseProtaAbsensiLiburStore } from 'src/stores/simrs/pegawai/master/prota/prota'
 import FormInputVue from './FormInput.vue'
 
 const prota = UseProtaAbsensiLiburStore()

@@ -51,7 +51,7 @@
 
 <script setup>
 import { date } from 'quasar'
-import { UseProtaAbsensiLiburStore } from 'src/stores/simrs/pegawai/absensi/prota/prota'
+import { UseProtaAbsensiLiburStore } from 'src/stores/simrs/pegawai/master/prota/prota'
 import { ref } from 'vue'
 const store = UseProtaAbsensiLiburStore()
 const formReff = ref(null)

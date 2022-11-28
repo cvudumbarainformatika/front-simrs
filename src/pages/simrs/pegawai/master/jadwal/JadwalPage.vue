@@ -179,7 +179,7 @@
 </template>
 <script setup>
 import FormInputVue from './FormInputManual.vue'
-import { useAbsensiJadwalStore } from 'src/stores/simrs/pegawai/absensi/jadwal/jadwal'
+import { useAbsensiJadwalStore } from 'src/stores/simrs/pegawai/master/jadwal/jadwal'
 
 const store = useAbsensiJadwalStore()
 

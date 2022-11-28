@@ -225,7 +225,7 @@
   </q-dialog>
 </template>
 <script setup>
-import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/absensi/kategori/kategori'
+import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/master/kategori/kategori'
 
 const store = useKategoriJadwalStore()
 

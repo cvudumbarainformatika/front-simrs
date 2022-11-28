@@ -73,7 +73,7 @@
   </div>
 </template>
 <script setup>
-import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/absensi/kategori/kategori'
+import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/master/kategori/kategori'
 import FormDialog from './FormDialog.vue'
 const store = useKategoriJadwalStore()
 
