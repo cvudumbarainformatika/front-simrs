@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { titleCase } from 'src/modules/formatter'
-import { changeArrayIndex, findWithAttr, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan', {
   state: () => ({
@@ -64,20 +64,23 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     },
     setColumns(payload) {
       console.log('payload', payload)
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0].sort()
-      changeArrayIndex(this.columns, 'kode_rs', 'alasan')
-      changeArrayIndex(this.columns, 'barangrs', 'alasan')
-      changeArrayIndex(this.columns, 'satuan', 'alasan')
-      changeArrayIndex(this.columns, 'jumlah', 'alasan')
-      changeArrayIndex(this.columns, 'gudang', 'alasan')
-      changeArrayIndex(this.columns, 'ruang', 'alasan')
+      this.columns = ['kode_rs', 'barangrs', 'satuan', 'jumlah', 'jumlah_disetujui', 'alasan']
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0].sort()
+      // changeArrayIndex(this.columns, 'kode_rs', 'alasan')
+      // changeArrayIndex(this.columns, 'barangrs', 'alasan')
+      // changeArrayIndex(this.columns, 'satuan', 'alasan')
+      // changeArrayIndex(this.columns, 'jumlah', 'alasan')
+      // changeArrayIndex(this.columns, 'gudang', 'alasan')
+      // changeArrayIndex(this.columns, 'ruang', 'alasan')
       // pindah harga ke dekat jumlah / qty
       // this.pindah("harga", "qty");
       // this.pindah("satuan", "kode_satuan");
       // console.log('columns', this.columns)
     },
     permintaanSelected(val) {
+      this.mapGudang = []
+      this.permintaan = {}
       console.log('permintaan selected ', val)
       this.setForm('no_permintaan', val)
       const i = findWithAttr(this.permintaans, 'no_permintaan', val)

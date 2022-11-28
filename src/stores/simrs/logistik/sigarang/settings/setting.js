@@ -11,7 +11,171 @@ export const useSettingsStore = defineStore('setting_store', {
     transaksiLoading: false,
     nama: 'sigarang',
     levels: [],
-    menus: [],
+    menus: [
+      {
+        icon: 'icon-mat-dashboard',
+        link: 'sigarang/dashboard',
+        name: 'Dashboard',
+        value: 'sigarang.dashboard'
+      },
+      {
+        icon: 'icon-mat-dataset',
+        link: 'sigarang/master',
+        name: 'Master',
+        value: 'sigarang.master',
+        submenus: [
+          {
+            link: 'sigarang/master/gedung',
+            name: 'Master Gedung',
+            value: 'sigarang.master.gedung'
+          },
+          {
+            link: 'sigarang/master/gudang',
+            name: 'Master Gudang',
+            value: 'sigarang.master.gudang'
+          },
+          {
+            link: 'sigarang/master/ruang',
+            name: 'Master Ruang',
+            value: 'sigarang.master.ruang'
+          },
+          {
+            link: 'sigarang/master/pengguna',
+            name: 'Master Pengguna',
+            value: 'sigarang.master.pengguna'
+          },
+          {
+            link: 'sigarang/master/penggunaruang',
+            name: 'Mapping Pengguna Ruang',
+            value: 'sigarang.master.penggunaruang'
+          },
+          {
+            link: 'sigarang/master/barang108',
+            name: 'Master Barang 108',
+            value: 'sigarang.master.barang108'
+          },
+          {
+            link: 'sigarang/master/barangrs',
+            name: 'Master Barang RS',
+            value: 'sigarang.master.barangrs'
+          },
+          {
+            link: 'sigarang/master/mapingbarang',
+            name: 'Master Mapping RS ke 108',
+            value: 'sigarang.master.mapingbarang'
+          },
+          {
+            link: 'sigarang/master/supplier',
+            name: 'Master Supplier',
+            value: 'sigarang.master.supplier'
+          },
+          {
+            link: 'sigarang/master/satuan',
+            name: 'Master Satuan',
+            value: 'sigarang.master.satuan'
+          },
+          {
+            link: 'sigarang/master/pegawai',
+            name: 'Master Pegawai',
+            value: 'sigarang.master.pegawai'
+          },
+          {
+            link: 'sigarang/master/kontrakpengerjaan',
+            name: 'Master Kontrak Pengerjaan',
+            value: 'sigarang.master.kontrakpengerjaan'
+          }
+        ]
+      },
+      {
+        icon: 'icon-mat-account_circle',
+        link: 'sigarang/admin',
+        name: 'Admin',
+        value: 'sigarang.admin',
+        submenus: [
+          {
+            link: 'sigarang/admin/user',
+            name: 'Data User',
+            value: 'sigarang.admin.user'
+          },
+          {
+            link: 'sigarang/admin/pegawai',
+            name: 'Registrasi Pegawai',
+            value: 'sigarang.admin.pegawai'
+          }
+        ]
+      },
+      {
+        icon: 'icon-mat-sync_alt',
+        link: 'sigarang/transaksi',
+        name: 'Transaksi',
+        value: 'sigarang.transaksi',
+        submenus: [
+          {
+            link: 'sigarang/transaksi/pemesanan/TRP-',
+            name: 'Transaksi Pemesanan',
+            value: 'sigarang.transaksi.pemesanan'
+          },
+          {
+            link: 'sigarang/transaksi/penerimaan/TRM-',
+            name: 'Transaksi Penerimaan',
+            value: 'sigarang.transaksi.penerimaan'
+          },
+          {
+            link: 'sigarang/transaksi/permintaan/TPN-',
+            name: 'Transaksi Permintaan',
+            value: 'sigarang.transaksi.permintaan'
+          },
+          {
+            link: 'sigarang/transaksi/verifpermintaan',
+            name: 'Verif Transaksi Permintaan Ruangan',
+            value: 'sigarang.transaksi.verifpermintaan'
+          }
+        ]
+      },
+      {
+        icon: 'icon-mat-history',
+        link: 'sigarang/history',
+        name: 'History',
+        value: 'sigarang.history',
+        submenus: [
+          {
+            icon: 'icon-mat-inventory_2',
+            name: 'Pemesanan',
+            value: 'Pemesanan'
+          },
+          {
+            icon: 'icon-mat-shopping_bag',
+            name: 'Penerimaan',
+            value: 'Penerimaan'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            name: 'Gudang',
+            value: 'Gudang'
+          }
+        ]
+      },
+      {
+        icon: 'icon-mat-description',
+        link: 'sigarang/laporan',
+        name: 'Laporan',
+        value: 'sigarang.laporan'
+      }
+      // {
+      //   icon: 'icon-mat-settings',
+      //   link: 'sigarang/setting',
+      //   name: 'Setting',
+      //   value: 'sigarang.setting',
+      //   submenus: [
+      //     {
+      //       id: 1,
+      //       icon: 'icon-mat-insert_drive_file',
+      //       name: 'Menu',
+      //       value: 'menu'
+      //     }
+      //   ]
+      // }
+    ],
     themes: [],
     menu: 'menu',
     dark: false,
@@ -53,7 +217,7 @@ export const useSettingsStore = defineStore('setting_store', {
         api.get('v1/setting/index')
           .then(resp => {
             // console.log('setting', resp)
-            this.menus = resp.data[0].menus
+            // this.menus = resp.data[0].menus
             this.levels = resp.data[0].levels
             this.themes = resp.data[0].themes
             resolve(resp)

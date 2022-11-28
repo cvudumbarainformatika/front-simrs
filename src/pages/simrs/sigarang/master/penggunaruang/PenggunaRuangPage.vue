@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm">
+  <q-page class="q-pa-sm q-mb-xl">
     <div>
       <app-card :is-header="false">
         <template #content>

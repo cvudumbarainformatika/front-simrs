@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="q-mb-xl">
     <app-card
       title="Verifikasi Permintaan"
       desc="Form Verifikasi Permintaan Ruangan"
+      class="q-mb-md"
     >
       <template #content>
         <div class="row q-col-gutter-sm q-mb-sm">
@@ -55,7 +56,10 @@
       :key="i"
       class="col-12"
     >
-      <tabelVerifGudang :map="apem" />
+      <tabelVerifGudang
+        :map="apem"
+        @on-submit="onSubmit"
+      />
     </div>
   </div>
 </template>
@@ -66,7 +70,16 @@ import tabelVerifGudang from './TabelVerifGudang.vue'
 const store = useVerifPermintaanRuangan()
 store.getDepo()
 store.getPermintaan()
+
+const onSubmit = val => {
+  console.log('val', val)
+  // console.log('mapGudang', store.mapGudang)
+  // console.log('permintaan', store.permintaan)
+}
+
 const clearPermintaan = () => {
   store.setForm('no_permintaan', null)
+  store.mapGudang = []
+  store.permintaan = {}
 }
 </script>
