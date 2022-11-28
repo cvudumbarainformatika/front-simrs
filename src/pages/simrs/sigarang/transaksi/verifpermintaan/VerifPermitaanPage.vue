@@ -51,7 +51,7 @@
         </div>
       </template>
     </app-card>
-    <div
+    <!-- <div
       v-for="(apem,i) in store.mapGudang"
       :key="i"
       class="col-12"
@@ -59,6 +59,14 @@
       <tabelVerifGudang
         :map="apem"
         @on-submit="onSubmit"
+      />
+    </div> -->
+    <div
+      v-if="Object.keys(store.mapGudang).length"
+      class="col-12"
+    >
+      <tabelVerifGudang
+        :map="store.mapGudang"
       />
     </div>
   </div>
@@ -71,11 +79,11 @@ const store = useVerifPermintaanRuangan()
 store.getDepo()
 store.getPermintaan()
 
-const onSubmit = val => {
-  console.log('val', val)
-  // console.log('mapGudang', store.mapGudang)
-  // console.log('permintaan', store.permintaan)
-}
+// const onSubmit = val => {
+// console.log('val', val)
+// console.log('mapGudang', store.mapGudang)
+// console.log('permintaan', store.permintaan)
+// }
 
 const clearPermintaan = () => {
   store.setForm('no_permintaan', null)

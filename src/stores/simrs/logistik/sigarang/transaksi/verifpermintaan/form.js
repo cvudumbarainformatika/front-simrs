@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { titleCase } from 'src/modules/formatter'
-import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan', {
   state: () => ({
@@ -10,7 +11,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     permintaans: [],
     permintaan: {},
     depos: [],
-    mapGudang: [],
+    mapGudang: {},
     columns: [],
     columnHide: [
       'id',
@@ -86,21 +87,31 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
       const i = findWithAttr(this.permintaans, 'no_permintaan', val)
       if (i >= 0) {
         this.permintaan = this.permintaans[i]
-        // console.log('details', this.permintaan.details)
+        console.log('details', this.permintaan)
         this.setColumns(this.permintaan.details)
-        const mapKey = Object.keys(this.permintaan.gudang)
-        mapKey.forEach((data, i) => {
-          const apem = this.depos.filter((x) => {
-            return x.kode === data
-          })
-          console.log('depo', this.depos)
-          console.log('map gudang', apem)
-          this.mapGudang[i] = {
-            gudang: titleCase(apem[0].nama),
-            items: this.permintaan.gudang[data]
-          }
-          // console.log(this.permintaan.gudang[data])
+        // cari nama depo
+        const apem = this.depos.filter((x) => {
+          return x.kode === this.permintaan.details[0].dari
         })
+        // map ke gudang
+        this.mapGudang = {
+          gudang: titleCase(apem[0].nama),
+          items: this.permintaan.details
+        }
+
+        // const mapKey = Object.keys(this.permintaan.gudang)
+        // mapKey.forEach((data, i) => {
+        //   const apem = this.depos.filter((x) => {
+        //     return x.kode === data
+        //   })
+        //   console.log('depo', this.depos)
+        //   console.log('map gudang', apem)
+        // this.mapGudang[i] = {
+        //   gudang: titleCase(apem[0].nama),
+        //   items: this.permintaan.gudang[data]
+        // }
+        //   // console.log(this.permintaan.gudang[data])
+        // })
         console.log('map gudang all', this.mapGudang)
       } else {
         notifErrVue('Permintaan tidak ditemukan')
@@ -145,6 +156,49 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
             reject(err)
           })
       })
+    },
+    // verivikasi permintaan
+    saveForm() {
+      let lanjut = false
+      this.permintaan.details.forEach(data => {
+        if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
+          notifErrVue('periksa kembali Jumlah disetujui')
+          lanjut = false
+        } else {
+          lanjut = true
+        }
+      })
+      if (lanjut) {
+        this.loading = true
+        const detail = this.permintaan.details.map(data => {
+          const bar = { id: data.id, jumlah_disetujui: data.jumlah_disetujui }
+          return bar
+        })
+        const data = {
+          id: this.permintaan.id,
+          status: 6,
+          details: detail,
+          tanggal_verif: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+        }
+        console.log('permintaan', data)
+        return new Promise((resolve, reject) => {
+          api.post('v1/transaksi/permintaanruangan/update-permintaan', data)
+            .then(resp => {
+              this.loading = false
+              console.log(resp)
+              this.form.no_permintaan = null
+              this.permintaan = {}
+              this.mapGudang = {}
+              this.getPermintaan()
+              notifSuccess(resp.data.message)
+              resolve(resp)
+            })
+            .catch(err => {
+              this.loading = false
+              reject(err)
+            })
+        })
+      }
     }
   }
 })

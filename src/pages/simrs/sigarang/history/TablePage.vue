@@ -32,6 +32,12 @@
             <template #cell-tanggal="{row}">
               {{ dateFullFormat(row.tanggal) }}
             </template>
+            <template #cell-tanggal_verif="{row}">
+              {{ dateFull(row.tanggal_verif) }}
+            </template>
+            <template #cell-tanggal_distribusi="{row}">
+              {{ dateFull(row.tanggal_distribusi) }}
+            </template>
             <template #cell-tanggal_surat="{row}">
               {{ dateFullFormat(row.tanggal_surat) }}
             </template>
@@ -43,6 +49,12 @@
             </template>
             <template #cell-tujuan="{row}">
               {{ row.tujuan.nama }}
+            </template>
+            <template #cell-pengguna="{row}">
+              {{ row.pengguna.jabatan }}
+            </template>
+            <template #cell-pj="{row}">
+              {{ row.pj.jabatan }}
             </template>
             <template #cell-status="{row}">
               <!-- {{row.status}} -->
@@ -101,6 +113,21 @@
             <template #col-status>
               Status
             </template>
+            <template #col-pengguna>
+              Pengguna
+            </template>
+            <template #col-pj>
+              Penanggungjawab
+            </template>
+            <template #col-tanggal_verif>
+              Tanggal Verifikasi
+            </template>
+            <template #col-tanggal_distribusi>
+              Tanggal Distribusi
+            </template>
+            <template #col-no_permintaan>
+              Nomor Permintaan
+            </template>
           </app-table-view>
           <!--
             row-image="image"
@@ -113,7 +140,7 @@
   </q-page>
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
@@ -134,6 +161,18 @@ const color = val => {
       // eslint-disable-next-line no-unreachable
       break
     case 4:
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 5:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 6:
+      return 'green'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 7:
       return 'grey'
       // eslint-disable-next-line no-unreachable
       break
@@ -186,6 +225,18 @@ const label = (status, nama) => {
         break
       case 4:
         return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 5:
+        return 'Menunggu verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 6:
+        return 'Telah di verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 7:
+        return 'Telah di distribusikan'
         // eslint-disable-next-line no-unreachable
         break
 

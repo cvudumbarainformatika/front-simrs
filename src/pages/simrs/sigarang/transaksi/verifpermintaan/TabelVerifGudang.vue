@@ -67,6 +67,9 @@
               v-model="row.jumlah_disetujui"
               dense
               type="number"
+              :rules="[
+                (val)=>(val && val.length>0)||'periksa kembali input'
+              ]"
             />
           </div>
           <div v-if="!edit">
@@ -95,16 +98,18 @@ import { useVerifPermintaanRuangan } from 'src/stores/simrs/logistik/sigarang/tr
 import { ref } from 'vue'
 
 const store = useVerifPermintaanRuangan()
-const props = defineProps({
+defineProps({
   map: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['onSubmit'])
+// const emits = defineEmits(['onSubmit'])
 const refInput = ref(null)
 const edit = ref(false)
 const onSubmit = () => {
-  emits('onSubmit', props.map)
+  refInput.value.validate()
+  store.saveForm()
+  // emits('onSubmit', props.map.items)
   edit.value = false
-  // console.log('val', props.map)
+  console.log('val', refInput.value)
 }
 const onEdit = () => {
   edit.value = true

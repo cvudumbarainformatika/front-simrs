@@ -322,6 +322,54 @@ const routes = [
               import(
                 'pages/simrs/sigarang/transaksi/verifpermintaan/IndexPage.vue'
               )
+          },
+          {
+            path: '/sigarang/transaksi/barangrusak',
+            name: 'sigarang.transaksi.barangrusak',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/barangrusak/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/distribusi',
+            name: 'sigarang.transaksi.distribusi',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/distribusi/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/penerimaanruangan',
+            name: 'sigarang.transaksi.penerimaanruangan',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/penerimaanruangan/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/pengembalian',
+            name: 'sigarang.transaksi.pengembalian',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/pengembalian/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/pemakaianruangan',
+            name: 'sigarang.transaksi.pemakaianruangan',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/pemakaianruangan/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/stockopname',
+            name: 'sigarang.transaksi.stockopname',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/stockopname/IndexPage.vue'
+              )
           }
         ]
       },

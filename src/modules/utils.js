@@ -46,19 +46,39 @@ const notifErr = (resp) => {
   } else if (status === 422) {
     const keys = Object.keys(resp.data)
     // const msgs = resp.data.message
-    console.log('key', keys)
-    keys.forEach(msg => {
-      Notify.create({
-        message: resp.data[msg],
-        icon: 'icon-eva-message-circle-outline',
-        position: 'top-right',
-        color: 'negative',
-        actions: [
-          { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
-        ]
-        // for (const key in msgs) {
-        // }
-      })
+    console.log('keys', keys)
+    keys.forEach(msgkeys => {
+      if (msgkeys === 'errors') {
+        const key = Object.keys(resp.data[msgkeys])
+        console.log('key', key)
+        key.forEach(msgkey => {
+          resp.data[msgkeys][msgkey].forEach(data => {
+            Notify.create({
+              message: data,
+              icon: 'icon-eva-message-circle-outline',
+              position: 'top-right',
+              color: 'negative',
+              actions: [
+                { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+              ]
+              // for (const key in msgs) {
+              // }
+            })
+          })
+        })
+      } else {
+        Notify.create({
+          message: resp.data[msgkeys],
+          icon: 'icon-eva-message-circle-outline',
+          position: 'top-right',
+          color: 'negative',
+          actions: [
+            { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+          ]
+          // for (const key in msgs) {
+          // }
+        })
+      }
     })
   } else if (status === 409) {
     const msgs = resp.data.message

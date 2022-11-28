@@ -86,24 +86,24 @@ export const useSettingsStore = defineStore('setting_store', {
           }
         ]
       },
-      {
-        icon: 'icon-mat-account_circle',
-        link: 'sigarang/admin',
-        name: 'Admin',
-        value: 'sigarang.admin',
-        submenus: [
-          {
-            link: 'sigarang/admin/user',
-            name: 'Data User',
-            value: 'sigarang.admin.user'
-          },
-          {
-            link: 'sigarang/admin/pegawai',
-            name: 'Registrasi Pegawai',
-            value: 'sigarang.admin.pegawai'
-          }
-        ]
-      },
+      // {
+      //   icon: 'icon-mat-account_circle',
+      //   link: 'sigarang/admin',
+      //   name: 'Admin',
+      //   value: 'sigarang.admin',
+      //   submenus: [
+      //     {
+      //       link: 'sigarang/admin/user',
+      //       name: 'Data User',
+      //       value: 'sigarang.admin.user'
+      //     },
+      //     {
+      //       link: 'sigarang/admin/pegawai',
+      //       name: 'Registrasi Pegawai',
+      //       value: 'sigarang.admin.pegawai'
+      //     }
+      //   ]
+      // },
       {
         icon: 'icon-mat-sync_alt',
         link: 'sigarang/transaksi',
@@ -129,6 +129,36 @@ export const useSettingsStore = defineStore('setting_store', {
             link: 'sigarang/transaksi/verifpermintaan',
             name: 'Verif Transaksi Permintaan Ruangan',
             value: 'sigarang.transaksi.verifpermintaan'
+          },
+          {
+            link: 'sigarang/transaksi/distribusi',
+            name: 'Transaksi Distribusi Permintaan Ruangan',
+            value: 'sigarang.transaksi.distribusi'
+          },
+          {
+            link: 'sigarang/transaksi/penerimaanruangan',
+            name: 'Transaksi Penerimaan Ruangan',
+            value: 'sigarang.transaksi.penerimaanruangan'
+          },
+          {
+            link: 'sigarang/transaksi/pemakaianruangan',
+            name: 'Transaksi Pemakaian Ruangan',
+            value: 'sigarang.transaksi.pemakaianruangan'
+          },
+          {
+            link: 'sigarang/transaksi/barangrusak',
+            name: 'Transaksi Barang Rusak',
+            value: 'sigarang.transaksi.barangrusak'
+          },
+          {
+            link: 'sigarang/transaksi/pengembalian',
+            name: 'Transaksi Pengembalian',
+            value: 'sigarang.transaksi.pengembalian'
+          },
+          {
+            link: 'sigarang/transaksi/stockopname',
+            name: 'Transaksi Stock Opname',
+            value: 'sigarang.transaksi.stockopname'
           }
         ]
       },
@@ -152,6 +182,11 @@ export const useSettingsStore = defineStore('setting_store', {
             icon: 'icon-mat-account_balance_wallet',
             name: 'Gudang',
             value: 'Gudang'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            name: 'Permintaan',
+            value: 'Permintaan'
           }
         ]
       },
