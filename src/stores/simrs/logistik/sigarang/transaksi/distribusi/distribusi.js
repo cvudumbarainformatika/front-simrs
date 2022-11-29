@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
   state: () => ({
@@ -24,13 +25,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
     resetFORM() {
       this.form = {}
       const columns = [
-        'nama',
-        'username',
-        'device',
-        'status',
-        'id',
-        'email',
-        'pegawai_id'
+        'id'
       ]
 
       for (let i = 0; i < columns.length; i++) {
@@ -84,7 +79,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tanggal', 'tanggal_distribusi', 'no_permintaan', 'tanggal_verif', 'pengguna', 'pj', 'status', 'aksi']
+      this.columns = ['tanggal', 'tanggal_distribusi', 'no_distribusi', 'no_permintaan', 'tanggal_verif', 'pengguna', 'pj', 'status', 'aksi']
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
@@ -144,6 +139,23 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
           .catch((err) => {
             this.loading = false
             reject(err)
+          })
+      })
+    },
+    saveForm() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            this.getDataTable()
+            this.items.forEach(item => {
+              delete item.highlight
+            })
+            resolve(resp)
+          }).catch(() => {
+            this.loading = false
           })
       })
     }
