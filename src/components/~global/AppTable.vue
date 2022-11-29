@@ -195,6 +195,15 @@
             </div>
           </th>
           <th
+            v-if="rowNo"
+            width="5%"
+            class="text-left"
+          >
+            <div class="">
+              No
+            </div>
+          </th>
+          <th
             v-if="rowImage !== null"
             width="5%"
             class="text-left"
@@ -269,6 +278,8 @@
           v-else
           :key="i"
           class="text-left"
+          :class="clickAble ? item.highlight===true? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
+          @click="clickAble?clicked(item,i):''"
         >
           <td v-if="isChecked">
             <q-checkbox
@@ -278,6 +289,12 @@
               :val="item.id"
               color="teal"
             />
+          </td>
+          <td
+            v-if="rowNo"
+            class="text-left"
+          >
+            {{ i+1 }}
           </td>
           <td
             v-if="rowImage !== null"
@@ -395,6 +412,7 @@ const props = defineProps({
   items: { type: Array, default: () => [] },
   meta: { type: Object, default: () => {} },
   rowImage: { type: String, default: null },
+  rowNo: { type: Boolean, default: false },
   perPage: { type: Number, default: 12 },
   orderBy: { type: String, default: 'id' },
   sort: { type: String, default: 'desc' },
@@ -404,9 +422,10 @@ const props = defineProps({
   adaEdit: { type: Boolean, default: true },
   adaDelete: { type: Boolean, default: true },
   adaTambah: { type: Boolean, default: true },
-  adaCari: { type: Boolean, default: true }
+  adaCari: { type: Boolean, default: true },
+  clickAble: { type: Boolean, default: false }
 })
-const emits = defineEmits(['newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
+const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 
 // const per_page = ref(5)
 const refCellTable = ref(null)
@@ -423,6 +442,9 @@ const search = computed({
   set (newVal) { emits('find', newVal) }
 })
 
+const clicked = (val, i) => {
+  emits('onClick', { item: val, index: i })
+}
 const filterColumn = computed(() => {
   const cols = props.columns ? props.columns : []
   if (cols.length > 0) {
