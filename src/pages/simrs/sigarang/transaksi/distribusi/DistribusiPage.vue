@@ -168,12 +168,10 @@ const distribusikan = val => {
   store.setForm('id', val.id)
   Dialog.create({
     title: 'Konfirmasi',
-    message: 'Distribusikan barang terlampir?'
+    message: 'Distribusikan barang terlampir?',
+    cancel: true
   }).onOk(() => {
     store.saveForm()
-  }).onCancel(() => {
-    store.resetFORM()
-    console.log('cancel', store.form)
   })
   console.log('distribusikan', val)
 }

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { notifSuccess, uniqueId } from 'src/modules/utils'
 
 export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store', {
   state: () => ({
@@ -20,18 +21,26 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       sort: 'asc'
     },
     // custom for this store
-    permintaans: []
+    permintaans: [],
+    details: [],
+    tanggal_distribusi: null
   }),
   actions: {
     resetFORM() {
       this.form = {}
       const columns = [
-        'id'
+        'permintaan_id',
+        'reff',
+        'kode_penanggungjawab',
+        'tanggal'
       ]
 
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('details', [])
+      this.details = []
+      this.tanggal_distribusi = null
     },
     setForm(key, payload) {
       this.form[key] = payload
@@ -119,10 +128,43 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       this.getDataTable()
     },
     // this custom store
+
     distribusiSelected(val) {
+      // 'id',
+      // 'reff',
+      // 'kode_penanggungjawab',
+      // 'tanggal',
+      // 'details'
       const permintaan = this.permintaans.filter(data => { return data.id === val })
+
       if (permintaan.length) {
-        this.form = permintaan[0]
+        this.setForm('permintaan_id', permintaan[0].id)
+        this.setForm('reff', 'RRAGD-' + uniqueId())
+        this.setForm('kode_penanggungjawab', permintaan[0].kode_penanggungjawab)
+        this.setForm('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
+        this.setForm('details', [])
+        this.tanggal_distribusi = permintaan[0].tanggal_distribusi
+        this.details = []
+        permintaan[0].details.forEach((data, i) => {
+          console.log('for each', data, i)
+          const detils = {
+            jumlah: data.jumlah_disetujui,
+            kode_rs: data.kode_rs,
+            barangrs: data.barangrs,
+            kode_satuan: data.kode_satuan,
+            kode_108: data.barangrs.mapingbarang.barang108.kode
+
+          }
+          const detil = {
+            jumlah: data.jumlah_disetujui,
+            kode_rs: data.kode_rs,
+            kode_satuan: data.kode_satuan,
+            kode_108: data.barangrs.mapingbarang.barang108.kode
+
+          }
+          this.details.push(detils)
+          this.form.details.push(detil)
+        })
       }
       console.log('distribusi selected', this.form)
     },
@@ -152,14 +194,12 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
     saveForm() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/penerimaanruangan/update-distribusi', this.form)
+        api.post('v1/transaksi/penerimaanruangan/store', this.form)
           .then(resp => {
             this.loading = false
+            console.log('penerimaan ruangan', resp)
             notifSuccess(resp)
             this.getDataTable()
-            this.items.forEach(item => {
-              delete item.highlight
-            })
             resolve(resp)
           }).catch(() => {
             this.loading = false

@@ -17,7 +17,8 @@
           </div>
           <div class="q-ml-md">
             <app-autocomplete-new
-              v-model="store.form.id"
+              ref="refPermintaan"
+              :model="store.form.permintaan_id"
               label="pilih nomor distribusi"
               autocomplete="no_distribusi"
               option-label="no_distribusi"
@@ -25,6 +26,7 @@
               :source="store.permintaans"
               :loading="store.loading"
               @on-select="store.distribusiSelected"
+              @clear="cleared"
             />
           </div>
         </div>
@@ -33,7 +35,7 @@
             Tanggal distribusi
           </div>
           <div class="q-ml-md">
-            {{ dateFull( store.form.tanggal_distribusi) }}
+            {{ dateFull( store.tanggal_distribusi) }}
           </div>
         </div>
       </q-card-section>
@@ -70,7 +72,7 @@
         </div>
         <q-separator />
         <div
-          v-for="(item, i) in store.form.details"
+          v-for="(item, i) in store.details"
           :key="i"
         >
           <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
@@ -99,7 +101,7 @@
               belum ada
             </div>
             <div class="anak text-center">
-              {{ item.jumlah_disetujui }}
+              {{ item.jumlah }}
             </div>
           </div>
           <q-separator />
@@ -116,6 +118,8 @@
           flat
           dense
           no-caps
+          :loading="store.loading"
+          @click="save"
         />
       </q-card-actions>
     </q-card>
@@ -124,9 +128,26 @@
 <script setup>
 import { dateFull } from 'src/modules/formatter'
 import { usePenerimaanRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaanruangan/penerimaanruangan'
+import { ref } from 'vue'
 
 const store = usePenerimaanRuanganStore()
 store.getInitialData()
+
+const refPermintaan = ref(null)
+const save = () => {
+  // console.log(refPermintaan.value.$refs.refAuto)
+  if (store.form.permintaan_id) {
+    store.saveForm()
+    refPermintaan.value.$refs.refAuto.resetValidation()
+  } else {
+    refPermintaan.value.$refs.refAuto.validate()
+  }
+}
+const cleared = () => {
+  console.log('cleared')
+  store.resetFORM()
+  refPermintaan.value.$refs.refAuto.resetValidation()
+}
 </script>
 <style lang="scss" scoped>
 .anak{

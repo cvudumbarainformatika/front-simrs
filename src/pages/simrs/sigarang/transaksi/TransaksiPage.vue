@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pb-sm">
+  <q-page class="q-pb-lg">
     <!-- <div class="fixed top menu-bar">
       <MenuTransaksi />
     </div> -->
