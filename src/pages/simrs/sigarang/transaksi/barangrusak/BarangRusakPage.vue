@@ -5,7 +5,7 @@
   >
     <div>
       <q-icon
-        name="icon-mat-warning"
+        name="icon-mat-construction"
         color="orange"
         size="60px"
       />

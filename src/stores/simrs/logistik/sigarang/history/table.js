@@ -40,9 +40,9 @@ export const useHistoryTable = defineStore('history_table', {
     },
     pilihTransaksi (val) {
       this.selected = true
-      this.nama = val.value
-      this.title = val.name
-      this.params.nama = val.value
+      this.nama = val.nama
+      this.title = val.nama
+      this.params.nama = val.nama
       // console.log('dipilih ', val)
 
       this.getDataTransactions()

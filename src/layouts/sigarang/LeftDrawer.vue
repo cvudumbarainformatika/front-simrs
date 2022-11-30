@@ -21,9 +21,9 @@
     <div
       v-if="menus.length"
       class="flex column flex-center full-height"
-      style="height:calc(100%-60px) "
+      style="height:calc(100vw-60px) "
     >
-      <router-link
+      <!-- <router-link
         v-for="(menu, i) in menus"
         :key="i"
         :to="`/${menu.link}`"
@@ -49,7 +49,102 @@
             size="25px"
           />
         </div>
-      </router-link>
+      </router-link> -->
+      <div
+        v-for="(menu, i) in menus"
+        :key="i"
+        @mouseenter="hover(menu,i)"
+      >
+        <!-- @mouseleave="leave(menu,i)" -->
+        <q-item
+          ref="refItem"
+          :to="`/${menu.link}`"
+          replace
+          class="sidebar flex flex-center item item-link"
+          :active-class="dark? 'active-dark' : 'active'"
+          exact
+          :active="aktif(path)===menu.name"
+        >
+          <!-- @click="menuClick(menu)" -->
+          <q-menu
+            ref="refMenu"
+            anchor="top right"
+            self="top left"
+            transition-show="slide-down"
+            transition-hide="slide-right"
+            :offset="[0,0]"
+          >
+            <q-card style="width:150px;">
+              <q-card-section>
+                <div class="text-weight-bold f-12">
+                  {{ menu.nama }}
+                </div>
+                <q-separator class="q-my-sm" />
+
+                <div
+                  v-for="(submenu,n) in menu.submenus"
+                  :key="n"
+                >
+                  <div v-if="menu.nama!=='History'">
+                    <div v-if="submenu.link">
+                      <q-item
+                        ref="refSubItem"
+                        :to="`/${submenu.link}`"
+                        replace
+                        class="submenu flex flex-center item item-link"
+                        :active-class="dark? 'active-dark' : 'active'"
+                        :active="path===submenu.name"
+                        exact
+                      >
+                        <!-- {{ aktif(menu.name) }} : {{ path }} -->
+                        <q-item-section>{{ submenu.nama }}</q-item-section>
+                      </q-item>
+                    </div>
+                  </div>
+                  <!-- menu history -->
+                  <div v-if="menu.nama==='History'">
+                    <div v-if="submenu.name ">
+                      <q-item
+                        ref="refSubItemHis"
+                        v-close-popup
+                        v-ripple
+                        :to="`/${menu.link}`"
+                        class="menu"
+                        :active="history.nama===submenu.nama"
+                        :active-class="dark ? 'page-dark text-white active-dark' : ' bg-grey-4 text-primary active'"
+                        clickable
+                        exact
+                        @click="history.pilihTransaksi(submenu)"
+                      >
+                        <q-item-section>
+                          {{ submenu.nama }}
+                        </q-item-section>
+                      </q-item>
+                    </div>
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+          </q-menu>
+          <div class="item-content">
+            <q-tooltip
+              v-if="!menu.submenus.length"
+              class="bg-primary"
+              anchor="center right"
+              self="center left"
+              :offset="[5, 5]"
+            >
+              <strong class="">{{ menu.nama }}</strong>
+              (
+              <q-icon name="icon-mat-keyboard_arrow_right" />)
+            </q-tooltip>
+            <q-icon
+              :name="menu.icon"
+              size="25px"
+            />
+          </div>
+        </q-item>
+      </div>
     </div>
     <!-- Skleleton -->
     <div
@@ -114,11 +209,12 @@
 </template>
 
 <script setup>
-// import { computed } from 'vue'
-// import { useRoute } from 'vue-router'
-// const path = computed(() => useRoute().name)
+import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+const path = computed(() => useRoute().name)
 
-import { routerInstance } from 'src/boot/router'
+// import { routerInstance } from 'src/boot/router'
 
 const props = defineProps({
   dark: {
@@ -130,23 +226,63 @@ const props = defineProps({
     default: () => []
   }
 })
-const menuClick = val => {
-  console.log('menu', val)
-  // const gaPunya = val.submenus
-  console.log('name', !!val.submenus)
-  if (val.value === 'sigarang.transaksi') {
-    const nama = val.submenus[0].value
-    routerInstance.replace({ name: nama, params: { slug: '-' } })
-  } else if (val.submenus) {
-    console.log('masuk', val.submenus)
-    const nama = val.submenus[0].value
-    routerInstance.replace({ name: nama })
-  } else {
-    console.log('ga masuk', val.submenus)
-    const nama = val.value
-    routerInstance.replace({ name: nama })
-  }
+
+const history = useHistoryTable()
+
+const aktif = (apem) => {
+  const temp = apem.split('.')
+  return temp[0] + '.' + temp[1]
 }
+const refItem = ref(null)
+const refMenu = ref(null)
+const prev = ref(0)
+const hover = (menu, i) => {
+  if (menu.submenus.length) {
+    refMenu.value[i].show()
+    if (!refItem.value[i].active) {
+      refMenu.value[i].offset[0] = 16
+      refMenu.value[i].offset[1] = 0
+    } else {
+      refMenu.value[i].offset[0] = 0
+      refMenu.value[i].offset[1] = 0
+    }
+  }
+  // console.log('prev', prev.value)
+  if (i !== prev.value) {
+    leave(prev.value)
+  }
+  // console.log('prev', prev.value, 'i', i)
+  prev.value = i
+
+  // console.log('ref item', refItem.value)
+  // console.log('ref menu', refMenu.value[i])
+}
+const leave = (i) => {
+  refMenu.value[i].hide()
+  // if (menu.submenus.length) {
+  // }
+  // console.log('leave', i)
+  // console.log('ref item ', [i], refItem.value[i].active)
+  // console.log('ref menu', refMenu.value[i])
+}
+
+// const menuClick = val => {
+//   console.log('menu', val)
+//   // const gaPunya = val.submenus
+//   console.log('name', !!val.submenus)
+//   if (val.value === 'sigarang.transaksi') {
+//     const nama = val.submenus[0].value
+//     routerInstance.replace({ name: nama, params: { slug: '-' } })
+//   } else if (val.submenus) {
+//     console.log('masuk', val.submenus)
+//     const nama = val.submenus[0].value
+//     routerInstance.replace({ name: nama })
+//   } else {
+//     console.log('ga masuk', val.submenus)
+//     const nama = val.value
+//     routerInstance.replace({ name: nama })
+//   }
+// }
 
 // function activated (val) {
 //   if (val) {

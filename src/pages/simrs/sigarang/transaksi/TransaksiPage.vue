@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pb-sm">
     <div class="fixed top menu-bar">
-      <MenuTransaksi />
+      <!-- <MenuTransaksi /> -->
     </div>
     <div
       v-if="path!=='/transaksi'"
@@ -22,7 +22,7 @@
 import { routerInstance } from 'src/boot/router'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import MenuTransaksi from './MenuTransaksi.vue'
+// import MenuTransaksi from './MenuTransaksi.vue'
 const route = useRoute()
 const path = computed(() => route.path)
 let slug = routerInstance.currentRoute.value.params.slug
@@ -38,7 +38,7 @@ routerInstance.replace({ name, params: { slug } })
 </script>
 <style lang="scss" scoped>
 .halaman{
-  margin-left: 25px;
+  // margin-left: 5px;
 }
 .menu-bar{
   width: calc(100%);

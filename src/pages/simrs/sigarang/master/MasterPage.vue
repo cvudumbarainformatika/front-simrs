@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pb-sm">
     <div class="fixed top menu-bar">
-      <MenuPage />
+      <!-- <MenuPage /> -->
     </div>
     <div
       v-if="path!=='/master'"
@@ -22,7 +22,7 @@
 import { routerInstance } from 'src/boot/router'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import MenuPage from './MenuPage.vue'
+// import MenuPage from './MenuPage.vue'
 const route = useRoute()
 const path = computed(() => route.path)
 let name = routerInstance.currentRoute.value.name

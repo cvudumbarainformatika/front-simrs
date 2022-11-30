@@ -190,7 +190,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
               this.permintaan = {}
               this.mapGudang = {}
               this.getPermintaan()
-              notifSuccess(resp.data.message)
+              notifSuccess(resp)
               resolve(resp)
             })
             .catch(err => {

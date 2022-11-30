@@ -15,198 +15,204 @@ export const useSettingsStore = defineStore('setting_store', {
       {
         icon: 'icon-mat-dashboard',
         link: 'sigarang/dashboard',
-        name: 'Dashboard',
-        value: 'sigarang.dashboard'
+        nama: 'Dashboard',
+        name: 'sigarang.dashboard',
+        submenus: []
       },
       {
         icon: 'icon-mat-dataset',
         link: 'sigarang/master',
-        name: 'Master',
-        value: 'sigarang.master',
+        nama: 'Master',
+        name: 'sigarang.master',
         submenus: [
           {
             link: 'sigarang/master/gedung',
-            name: 'Master Gedung',
-            value: 'sigarang.master.gedung'
+            nama: 'Master Gedung',
+            name: 'sigarang.master.gedung'
           },
           {
             link: 'sigarang/master/gudang',
-            name: 'Master Gudang',
-            value: 'sigarang.master.gudang'
+            nama: 'Master Gudang',
+            name: 'sigarang.master.gudang'
           },
           {
             link: 'sigarang/master/ruang',
-            name: 'Master Ruang',
-            value: 'sigarang.master.ruang'
+            nama: 'Master Ruang',
+            name: 'sigarang.master.ruang'
           },
           {
             link: 'sigarang/master/pengguna',
-            name: 'Master Pengguna',
-            value: 'sigarang.master.pengguna'
+            nama: 'Master Pengguna',
+            name: 'sigarang.master.pengguna'
           },
           {
             link: 'sigarang/master/penggunaruang',
-            name: 'Mapping Pengguna Ruang',
-            value: 'sigarang.master.penggunaruang'
+            nama: 'Mapping Pengguna Ruang',
+            name: 'sigarang.master.penggunaruang'
           },
           {
             link: 'sigarang/master/barang108',
-            name: 'Master Barang 108',
-            value: 'sigarang.master.barang108'
+            nama: 'Master Barang 108',
+            name: 'sigarang.master.barang108'
           },
           {
             link: 'sigarang/master/barangrs',
-            name: 'Master Barang RS',
-            value: 'sigarang.master.barangrs'
+            nama: 'Master Barang RS',
+            name: 'sigarang.master.barangrs'
           },
           {
             link: 'sigarang/master/mapingbarang',
-            name: 'Master Mapping RS ke 108',
-            value: 'sigarang.master.mapingbarang'
+            nama: 'Master Mapping RS ke 108',
+            name: 'sigarang.master.mapingbarang'
           },
           {
             link: 'sigarang/master/supplier',
-            name: 'Master Supplier',
-            value: 'sigarang.master.supplier'
+            nama: 'Master Supplier',
+            name: 'sigarang.master.supplier'
           },
           {
             link: 'sigarang/master/satuan',
-            name: 'Master Satuan',
-            value: 'sigarang.master.satuan'
+            nama: 'Master Satuan',
+            name: 'sigarang.master.satuan'
           },
           {
             link: 'sigarang/master/pegawai',
-            name: 'Master Pegawai',
-            value: 'sigarang.master.pegawai'
+            nama: 'Master Pegawai',
+            name: 'sigarang.master.pegawai'
           },
           {
             link: 'sigarang/master/kontrakpengerjaan',
-            name: 'Master Kontrak Pengerjaan',
-            value: 'sigarang.master.kontrakpengerjaan'
+            nama: 'Master Kontrak Pengerjaan',
+            name: 'sigarang.master.kontrakpengerjaan'
           }
         ]
       },
       // {
       //   icon: 'icon-mat-account_circle',
       //   link: 'sigarang/admin',
-      //   name: 'Admin',
-      //   value: 'sigarang.admin',
+      //   nama: 'Admin',
+      //   name: 'sigarang.admin',
       //   submenus: [
       //     {
       //       link: 'sigarang/admin/user',
-      //       name: 'Data User',
-      //       value: 'sigarang.admin.user'
+      //       nama: 'Data User',
+      //       name: 'sigarang.admin.user'
       //     },
       //     {
       //       link: 'sigarang/admin/pegawai',
-      //       name: 'Registrasi Pegawai',
-      //       value: 'sigarang.admin.pegawai'
+      //       nama: 'Registrasi Pegawai',
+      //       name: 'sigarang.admin.pegawai'
       //     }
       //   ]
       // },
       {
         icon: 'icon-mat-sync_alt',
         link: 'sigarang/transaksi',
-        name: 'Transaksi',
-        value: 'sigarang.transaksi',
+        nama: 'Transaksi',
+        name: 'sigarang.transaksi',
         submenus: [
           {
             link: 'sigarang/transaksi/pemesanan/TRP-',
-            name: 'Transaksi Pemesanan',
-            value: 'sigarang.transaksi.pemesanan'
+            nama: 'Transaksi Pemesanan',
+            name: 'sigarang.transaksi.pemesanan'
           },
           {
             link: 'sigarang/transaksi/penerimaan/TRM-',
-            name: 'Transaksi Penerimaan',
-            value: 'sigarang.transaksi.penerimaan'
+            nama: 'Transaksi Penerimaan',
+            name: 'sigarang.transaksi.penerimaan'
           },
           {
             link: 'sigarang/transaksi/permintaan/TPN-',
-            name: 'Transaksi Permintaan',
-            value: 'sigarang.transaksi.permintaan'
+            nama: 'Transaksi Permintaan',
+            name: 'sigarang.transaksi.permintaan'
           },
           {
             link: 'sigarang/transaksi/verifpermintaan',
-            name: 'Verif Transaksi Permintaan Ruangan',
-            value: 'sigarang.transaksi.verifpermintaan'
+            nama: 'Verif Transaksi Permintaan Ruangan',
+            name: 'sigarang.transaksi.verifpermintaan'
           },
           {
             link: 'sigarang/transaksi/distribusi',
-            name: 'Transaksi Distribusi Permintaan Ruangan',
-            value: 'sigarang.transaksi.distribusi'
+            nama: 'Transaksi Distribusi Permintaan Ruangan',
+            name: 'sigarang.transaksi.distribusi'
           },
           {
             link: 'sigarang/transaksi/penerimaanruangan',
-            name: 'Transaksi Penerimaan Ruangan',
-            value: 'sigarang.transaksi.penerimaanruangan'
+            nama: 'Transaksi Penerimaan Ruangan',
+            name: 'sigarang.transaksi.penerimaanruangan'
           },
           {
             link: 'sigarang/transaksi/pemakaianruangan',
-            name: 'Transaksi Pemakaian Ruangan',
-            value: 'sigarang.transaksi.pemakaianruangan'
+            nama: 'Transaksi Pemakaian Ruangan',
+            name: 'sigarang.transaksi.pemakaianruangan'
           },
           {
             link: 'sigarang/transaksi/barangrusak',
-            name: 'Transaksi Barang Rusak',
-            value: 'sigarang.transaksi.barangrusak'
+            nama: 'Transaksi Barang Rusak',
+            name: 'sigarang.transaksi.barangrusak'
           },
           {
             link: 'sigarang/transaksi/pengembalian',
-            name: 'Transaksi Pengembalian',
-            value: 'sigarang.transaksi.pengembalian'
+            nama: 'Transaksi Pengembalian',
+            name: 'sigarang.transaksi.pengembalian'
           },
           {
             link: 'sigarang/transaksi/stockopname',
-            name: 'Transaksi Stock Opname',
-            value: 'sigarang.transaksi.stockopname'
+            nama: 'Transaksi Stock Opname',
+            name: 'sigarang.transaksi.stockopname'
           }
         ]
       },
       {
         icon: 'icon-mat-history',
         link: 'sigarang/history',
-        name: 'History',
-        value: 'sigarang.history',
+        nama: 'History',
+        name: 'sigarang.history',
         submenus: [
           {
             icon: 'icon-mat-inventory_2',
-            name: 'Pemesanan',
-            value: 'Pemesanan'
+            link: 'sigarang/history',
+            nama: 'Pemesanan',
+            name: 'sigarang.history.pemesanan'
           },
           {
             icon: 'icon-mat-shopping_bag',
-            name: 'Penerimaan',
-            value: 'Penerimaan'
+            link: 'sigarang/history',
+            nama: 'Penerimaan',
+            name: 'sigarang.history.penerimaan'
           },
           {
             icon: 'icon-mat-account_balance_wallet',
-            name: 'Gudang',
-            value: 'Gudang'
+            link: 'sigarang/history',
+            nama: 'Gudang',
+            name: 'sigarang.history.gudang'
           },
           {
             icon: 'icon-mat-account_balance_wallet',
-            name: 'Permintaan',
-            value: 'Permintaan'
+            link: 'sigarang/history',
+            nama: 'Permintaan',
+            name: 'sigarang.history.permintaan'
           }
         ]
       },
       {
         icon: 'icon-mat-description',
         link: 'sigarang/laporan',
-        name: 'Laporan',
-        value: 'sigarang.laporan'
+        nama: 'Laporan',
+        name: 'sigarang.laporan',
+        submenus: []
       }
       // {
       //   icon: 'icon-mat-settings',
       //   link: 'sigarang/setting',
-      //   name: 'Setting',
-      //   value: 'sigarang.setting',
+      //   nama: 'Setting',
+      //   name: 'sigarang.setting',
       //   submenus: [
       //     {
       //       id: 1,
       //       icon: 'icon-mat-insert_drive_file',
-      //       name: 'Menu',
-      //       value: 'menu'
+      //       nama: 'Menu',
+      //       name: 'menu'
       //     }
       //   ]
       // }

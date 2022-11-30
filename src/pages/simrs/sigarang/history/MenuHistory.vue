@@ -13,7 +13,7 @@
           <q-item
             v-ripple
             class="menu"
-            :active="table.nama===item.value"
+            :active="table.nama===item.name"
             :active-class="setting.dark ? 'page-dark text-white aktif-dark' : ' bg-grey-4 text-primary aktif'"
             clickable
             exact
@@ -23,7 +23,7 @@
             <q-icon :name="item.icon" />
           </q-item-section> -->
             <q-item-section>
-              {{ item.name }}
+              {{ item.nama }}
             </q-item-section>
           </q-item>
         </q-list>

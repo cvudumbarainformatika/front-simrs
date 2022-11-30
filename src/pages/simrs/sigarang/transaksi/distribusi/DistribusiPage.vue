@@ -1,5 +1,5 @@
 <template>
-  <div class="q-px-lg q-pt-md">
+  <div class="q-px-sm q-pt-md">
     <app-card
       title="Tabel Distribusi barang"
       desc="Halaman Distribusi barang"
@@ -180,7 +180,7 @@ const distribusikan = val => {
 const color = val => {
   switch (val) {
     case 5:
-      return 'orange'
+      return 'light-blue'
       // eslint-disable-next-line no-unreachable
       break
     case 6:
@@ -188,6 +188,10 @@ const color = val => {
       // eslint-disable-next-line no-unreachable
       break
     case 7:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 8:
       return 'grey'
       // eslint-disable-next-line no-unreachable
       break
@@ -211,6 +215,10 @@ const label = (status, nama) => {
       break
     case 7:
       return 'Telah di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 8:
+      return 'Telah di diterima ruangan'
       // eslint-disable-next-line no-unreachable
       break
 
