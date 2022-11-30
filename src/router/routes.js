@@ -77,7 +77,8 @@ const routes = [
     component: () => import('layouts/pegawai/AdminLayout.vue'),
     meta: { requireAuth: true },
     children: [
-      { path: '', redirect: '/pegawai/dashboard' },
+      // { path: '', redirect: '/pegawai/dashboard' },
+      { path: '', redirect: '/pegawai/user/list' },
       {
         path: '/pegawai/dashboard',
         name: 'pegawai.dashboard',

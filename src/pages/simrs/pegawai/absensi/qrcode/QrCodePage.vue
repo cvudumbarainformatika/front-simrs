@@ -2,7 +2,7 @@
 <template>
   <q-page class="bg-white">
     <div class="full-width row justify-between items-center content-between">
-      <div class="bg-white col-grow">
+      <div class="bg-white col-6">
         <div
           class="flex flex-column items-center flex-center"
           style="height:100vh;"
@@ -51,20 +51,13 @@
             </div>
           </div>
         </div>
-        <!-- <div class="full-width column justify-center items-center content-between">
-          <div class="bg-red items-center flex-center">
-            merah
-          </div>
-        </div> -->
       </div>
-      <div class="bg-dark col-grow">
-        <!-- <div class="full-width column  justify-center items-center content-center">
-          <div class="bg-blue col-grow"> -->
+      <div class="bg-dark col-6">
         <div
           class="flex flex-column flex-center"
           style="height:100vh;"
         >
-          <div class="col text-right">
+          <div class="col text-right q-mr-md">
             <q-img
               v-if="user"
               :src="path"
@@ -72,16 +65,13 @@
               ratio="1"
               fit="scale-down"
             />
-            <!-- <div class="bg-white "> -->
-            <!-- height="450px" -->
             <q-img
               v-if="!user"
               style="width: 300px;"
               :src="path"
               ratio="1"
-              fit="cover"
+              fit="scale-down"
             />
-            <!-- </div> -->
           </div>
           <div class="col q-mr-lg">
             <div
@@ -169,26 +159,20 @@
 </template>
 <script setup>
 // eslint-disable no-unused-vars
-// import { ref } from 'vue'
+import { useQrCodeStore } from 'src/stores/simrs/pegawai/absensi/qrcode/qrcode'
 import QRious from 'qrious'
-// import { api } from 'src/boot/axios'
 import { qrcodeChannel } from 'src/modules/sockets'
 import { notifErrVue } from 'src/modules/utils'
-// import { qrcodeChannel } from 'src/modules/sockets'
-import { useQrCodeStore } from 'src/stores/simrs/pegawai/absensi/qrcode/qrcode'
 import { computed, onMounted, ref } from 'vue'
-// const qrString = ref('')
 const store = useQrCodeStore()
 const user = ref(null)
 const jadwal = ref(null)
 const absen = ref(null)
-// eslint-disable-next-line no-unused-vars
 const path = computed(() => {
   const pla = user.value ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + user.value.nip + '/' + user.value.foto : 'images/matsaleh.jpg'
   return pla
 })
 store.getQrCode().then(data => {
-  // console.log(' has data ', data)
   if (data === 'has data') {
     generate()
   }
@@ -208,7 +192,6 @@ const generate = () => {
         foreground: 'black',
         foregroundAlpha: 0.8
       })
-      // console.log(temp)
     } else {
       notifErrVue('input value cannot has anter')
     }
