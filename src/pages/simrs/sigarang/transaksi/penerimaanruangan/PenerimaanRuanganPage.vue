@@ -99,8 +99,18 @@
           <q-separator />
         </div>
       </q-card-section>
-      <q-card-actions align="right">
-        button
+      <q-card-actions
+        v-if="store.form.details?Object.keys(store.form.details).length:false"
+        align="right"
+      >
+        <q-btn
+          label="Simpan"
+          icon="icon-mat-save"
+          color="primary"
+          flat
+          dense
+          no-caps
+        />
       </q-card-actions>
     </q-card>
   </div>

@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?92a1356cac5d4aa56ebcd9a55e7a8e24") format("woff"),
-url("./icons.woff2?92a1356cac5d4aa56ebcd9a55e7a8e24") format("woff2");
+    src: url("./icons.woff?65850def66b0b0f196b469f2d92aaef1") format("woff"),
+url("./icons.woff2?65850def66b0b0f196b469f2d92aaef1") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -336,132 +336,135 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-mat-remove:before {
     content: "\f16b";
 }
-.icon-mat-search:before {
+.icon-mat-save:before {
     content: "\f16c";
 }
-.icon-mat-segment:before {
+.icon-mat-search:before {
     content: "\f16d";
 }
-.icon-mat-send:before {
+.icon-mat-segment:before {
     content: "\f16e";
 }
-.icon-mat-settings:before {
+.icon-mat-send:before {
     content: "\f16f";
 }
-.icon-mat-skip_next:before {
+.icon-mat-settings:before {
     content: "\f170";
 }
-.icon-mat-skip_previous:before {
+.icon-mat-skip_next:before {
     content: "\f171";
 }
-.icon-mat-sms_black:before {
+.icon-mat-skip_previous:before {
     content: "\f172";
 }
-.icon-mat-sms_failed:before {
+.icon-mat-sms_black:before {
     content: "\f173";
 }
-.icon-mat-sort:before {
+.icon-mat-sms_failed:before {
     content: "\f174";
 }
-.icon-mat-strikethrough_s:before {
+.icon-mat-sort:before {
     content: "\f175";
 }
-.icon-mat-style:before {
+.icon-mat-strikethrough_s:before {
     content: "\f176";
 }
-.icon-mat-summarize:before {
+.icon-mat-style:before {
     content: "\f177";
 }
-.icon-mat-supervisor_account:before {
+.icon-mat-summarize:before {
     content: "\f178";
 }
-.icon-mat-swap_horiz:before {
+.icon-mat-supervisor_account:before {
     content: "\f179";
 }
-.icon-mat-sync_alt:before {
+.icon-mat-swap_horiz:before {
     content: "\f17a";
 }
-.icon-mat-text_format:before {
+.icon-mat-sync_alt:before {
     content: "\f17b";
 }
-.icon-mat-textsms:before {
+.icon-mat-text_format:before {
     content: "\f17c";
 }
-.icon-mat-thumb_up_off_alt:before {
+.icon-mat-textsms:before {
     content: "\f17d";
 }
-.icon-mat-today:before {
+.icon-mat-thumb_up_off_alt:before {
     content: "\f17e";
 }
-.icon-mat-transfer_within_a_station:before {
+.icon-mat-today:before {
     content: "\f17f";
 }
-.icon-mat-tune:before {
+.icon-mat-transfer_within_a_station:before {
     content: "\f180";
 }
-.icon-mat-tungsten:before {
+.icon-mat-tune:before {
     content: "\f181";
 }
-.icon-mat-undo:before {
+.icon-mat-tungsten:before {
     content: "\f182";
 }
-.icon-mat-vertical_align_bottom:before {
+.icon-mat-undo:before {
     content: "\f183";
 }
-.icon-mat-vertical_align_top:before {
+.icon-mat-vertical_align_bottom:before {
     content: "\f184";
 }
-.icon-mat-visibility_off:before {
+.icon-mat-vertical_align_top:before {
     content: "\f185";
 }
-.icon-mat-visibility:before {
+.icon-mat-visibility_off:before {
     content: "\f186";
 }
-.icon-mat-vpn_key:before {
+.icon-mat-visibility:before {
     content: "\f187";
 }
-.icon-mat-warning:before {
+.icon-mat-vpn_key:before {
     content: "\f188";
 }
-.icon-my-facebook:before {
+.icon-mat-warning:before {
     content: "\f189";
 }
-.icon-my-google:before {
+.icon-my-facebook:before {
     content: "\f18a";
 }
-.icon-my-how_to_reg:before {
+.icon-my-google:before {
     content: "\f18b";
 }
-.icon-my-key:before {
+.icon-my-how_to_reg:before {
     content: "\f18c";
 }
-.icon-my-local_hospital:before {
+.icon-my-key:before {
     content: "\f18d";
 }
-.icon-my-local_pharmacy:before {
+.icon-my-local_hospital:before {
     content: "\f18e";
 }
-.icon-my-medical_information:before {
+.icon-my-local_pharmacy:before {
     content: "\f18f";
 }
-.icon-my-medical_services:before {
+.icon-my-medical_information:before {
     content: "\f190";
 }
-.icon-my-medication_liquid:before {
+.icon-my-medical_services:before {
     content: "\f191";
 }
-.icon-my-medication:before {
+.icon-my-medication_liquid:before {
     content: "\f192";
 }
-.icon-my-monitor_heart:before {
+.icon-my-medication:before {
     content: "\f193";
 }
-.icon-my-personal_injury:before {
+.icon-my-monitor_heart:before {
     content: "\f194";
 }
-.icon-my-point_of_sale:before {
+.icon-my-personal_injury:before {
     content: "\f195";
 }
-.icon-my-word:before {
+.icon-my-point_of_sale:before {
     content: "\f196";
+}
+.icon-my-word:before {
+    content: "\f197";
 }
