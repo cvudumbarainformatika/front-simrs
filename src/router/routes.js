@@ -282,6 +282,12 @@ const routes = [
               import('pages/simrs/sigarang/master/mapingbarang/IndexPage.vue')
           },
           {
+            path: '/sigarang/master/minmaxstok',
+            name: 'sigarang.master.minmaxstok',
+            component: () =>
+              import('pages/simrs/sigarang/master/minmaxstok/IndexPage.vue')
+          },
+          {
             path: '/sigarang/master/kontrakpengerjaan',
             name: 'sigarang.master.kontrakpengerjaan',
             component: () =>

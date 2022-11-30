@@ -36,6 +36,11 @@ export const useSettingsStore = defineStore('setting_store', {
             name: 'sigarang.master.gudang'
           },
           {
+            link: 'sigarang/master/minmaxstok',
+            nama: 'Master Min Max Alokasi stok',
+            name: 'sigarang.master.minmaxstok'
+          },
+          {
             link: 'sigarang/master/ruang',
             nama: 'Master Ruang',
             name: 'sigarang.master.ruang'

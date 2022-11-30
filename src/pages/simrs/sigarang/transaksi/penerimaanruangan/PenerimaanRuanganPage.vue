@@ -56,10 +56,13 @@
             Stok Gudang
           </div>
           <div class="anak text-center">
-            Stok Alokasi
+            Stok Alokasi Gudang
           </div>
           <div class="anak text-center">
-            Stok Maksimum gudang
+            Stok Maksimum Ruangan
+          </div>
+          <div class="anak text-center">
+            Stok Ruangan
           </div>
           <div class="anak text-center">
             Jumlah Distribusi
@@ -82,6 +85,9 @@
             </div>
             <div class="anak text-center">
               {{ item.barangrs.mapingbarang.barang108.uraian }}
+            </div>
+            <div class="anak text-center">
+              belum ada
             </div>
             <div class="anak text-center">
               belum ada
@@ -124,6 +130,6 @@ store.getInitialData()
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/8);
+  width:calc(100vw/9);
 }
 </style>
