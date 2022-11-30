@@ -4,6 +4,7 @@
     style="height:300px"
   >
     <div>
+      halama pemakaian ruangan
       <q-icon
         name="icon-mat-construction"
         color="orange"

@@ -18,8 +18,9 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       per_page: 10,
       order_by: 'created_at',
       sort: 'asc'
-    }
+    },
     // custom for this store
+    permintaans: []
   }),
   actions: {
     resetFORM() {
@@ -118,7 +119,13 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       this.getDataTable()
     },
     // this custom store
-
+    distribusiSelected(val) {
+      const permintaan = this.permintaans.filter(data => { return data.id === val })
+      if (permintaan.length) {
+        this.form = permintaan[0]
+      }
+      console.log('distribusi selected', this.form)
+    },
     // api related function
     // get data tabel
     getDataTable() {
@@ -126,13 +133,13 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/transaksi/penerimaanruangan/get-permintaan-verified', params)
+          .get('v1/transaksi/penerimaanruangan/index', params)
           .then((resp) => {
             this.loading = false
-            console.log('permintaan verified', resp.data)
-            this.items = resp.data.data.data
+            console.log('permintaan distributed', resp.data)
+            this.permintaans = resp.data
             this.setColumns(resp.data)
-            this.meta = resp.data.meta
+            // this.meta = resp.data.meta
             this.resetFORM()
             resolve(resp)
           })

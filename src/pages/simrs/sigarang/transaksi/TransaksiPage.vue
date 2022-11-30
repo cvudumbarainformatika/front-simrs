@@ -1,13 +1,13 @@
 <template>
   <q-page class="q-pb-sm">
-    <div class="fixed top menu-bar">
-      <!-- <MenuTransaksi /> -->
-    </div>
+    <!-- <div class="fixed top menu-bar">
+      <MenuTransaksi />
+    </div> -->
     <div
       v-if="path!=='/transaksi'"
-      class="q-pt-lg"
+      class="q-pt-sm"
     >
-      <q-page class="q-pt-sm q-px-sm halaman">
+      <q-page class=" q-px-sm">
         <router-view />
       </q-page>
     </div>
@@ -37,9 +37,7 @@ routerInstance.replace({ name, params: { slug } })
 
 </script>
 <style lang="scss" scoped>
-.halaman{
-  // margin-left: 5px;
-}
+
 .menu-bar{
   width: calc(100%);
   z-index: 100;
