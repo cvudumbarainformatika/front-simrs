@@ -16,3 +16,9 @@
     </div>
   </div>
 </template>
+<script setup>
+import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
+
+const store = usePemakaianRuanganStore()
+store.getInitialData()
+</script>
