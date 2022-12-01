@@ -141,6 +141,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
         this.setForm('permintaan_id', permintaan[0].id)
         this.setForm('reff', 'RRAGD-' + uniqueId())
         this.setForm('kode_penanggungjawab', permintaan[0].kode_penanggungjawab)
+        this.setForm('kode_pengguna', permintaan[0].kode_pengguna)
         this.setForm('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
         this.setForm('details', [])
         this.tanggal_distribusi = permintaan[0].tanggal_distribusi

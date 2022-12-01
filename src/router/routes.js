@@ -90,6 +90,12 @@ const routes = [
         component: () => import('pages/simrs/pegawai/master/IndexPage.vue'),
         children: [
           {
+            path: '/pegawai/master/jadwal',
+            name: 'pegawai.master.jadwal',
+            component: () =>
+              import('pages/simrs/pegawai/master/jadwal/IndexPage.vue')
+          },
+          {
             path: '/pegawai/master/cuti',
             name: 'pegawai.master.cuti',
             component: () =>
@@ -139,12 +145,7 @@ const routes = [
         name: 'pegawai.absensi',
         component: () => import('pages/simrs/pegawai/absensi/IndexPage.vue'),
         children: [
-          {
-            path: '/pegawai/absensi/jadwal',
-            name: 'pegawai.absensi.jadwal',
-            component: () =>
-              import('pages/simrs/pegawai/absensi/jadwal/IndexPage.vue')
-          },
+
           {
             path: '/pegawai/absensi/qrcode',
             name: 'pegawai.absensi.qrcode',

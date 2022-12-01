@@ -22,7 +22,7 @@
               label="pilih nomor distribusi"
               autocomplete="no_distribusi"
               option-label="no_distribusi"
-              oprion-value="id"
+              option-value="id"
               :source="store.permintaans"
               :loading="store.loading"
               @on-select="store.distribusiSelected"
