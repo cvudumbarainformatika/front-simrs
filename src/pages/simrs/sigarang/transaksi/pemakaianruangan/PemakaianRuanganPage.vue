@@ -80,13 +80,18 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section v-if="items.length">
+      <q-card-section v-if="(!store.items.length && store.loading && store.pj!==null)">
+        <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
+          sedang menghitung data barang yang tersedia
+        </div>
+      </q-card-section>
+      <q-card-section v-if="store.items.length">
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
           <div class="anak text-center">
             Kode barang
           </div>
           <div class="anak text-center">
-            Nama Barang Rs
+            Nama Barang RS
           </div>
           <div class="anak text-center">
             Kode 108
@@ -104,16 +109,61 @@
             Sisa Stok
           </div>
         </div>
+        <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
+          <div class="anak text-center">
+            {{ Object.keys(store.detail).length? store.detail.kode_rs:'barang belum dipilih' }}
+          </div>
+          <div class="anak text-center">
+            <app-autocomplete-new
+              ref="refUs"
+              :model="store.detail.kode_rs"
+              label="pilih Kode barang"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode_rs"
+              :source="store.items"
+              :loading="store.loading"
+              @on-select="store.itemSelectod"
+              @clear="itemCleared"
+            />
+          </div>
+          <div class="anak text-center">
+            {{ Object.keys(store.detail).length? store.detail.kode_108:'barang belum dipilih' }}
+          </div>
+          <div class="anak text-center">
+            {{ Object.keys(store.detail).length? store.detail.uraian:'barang belum dipilih' }}
+          </div>
+          <div class="anak text-center">
+            {{ Object.keys(store.detail).length? store.detail.stokRuangan:'barang belum dipilih' }}
+          </div>
+          <div class="anak text-center">
+            <q-input
+              ref="refInput"
+              v-model="store.detail.jumlah"
+              label="Jumlah pemakaian"
+              hint="tekan enter untuk input"
+              dense
+              type="number"
+              @update:model-value="store.updateJumlah"
+              @keyup.enter="saveInput"
+            />
+          </div>
+          <div class="anak text-center">
+            {{ Object.keys(store.detail).length? store.detail.sisaStok:'barang belum dipilih' }}
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </div>
 </template>
 <script setup>
+// rencana : simpan sementara di local storage
 import { dateFull } from 'src/modules/formatter'
 import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 import { ref } from 'vue'
 const refPj = ref(null)
 const refUs = ref(null)
+const refInput = ref(null)
 const store = usePemakaianRuanganStore()
 store.getInitialData()
 const cleared = () => {
@@ -129,6 +179,12 @@ const penggunaCleared = () => {
   store.user = null
   store.items = []
   refUs.value.$refs.refAuto.resetValidation()
+}
+const itemCleared = () => {
+  store.detail = {}
+}
+const saveInput = () => {
+  console.log('save input')
 }
 </script>
 <style lang="scss" scoped>

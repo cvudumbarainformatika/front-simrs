@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { uniqueId } from 'src/modules/utils'
+import { notifErrVue, uniqueId } from 'src/modules/utils'
 
 export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   state: () => ({
@@ -14,7 +14,8 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     filteredPengguna: [],
     pj: null,
     user: null,
-    details: []
+    details: [],
+    detail: {}
   }),
   actions: {
     resetForm() {
@@ -54,12 +55,39 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       this.items = data.map(item => {
         // {kode_rs: 'RS-00901', jml: '12'}
         const temp = this.mapingbarang.filter(maping => {
+          maping.nama = maping.barangrs.nama
           return item.kode_rs === maping.kode_rs
         })
         temp[0].jumlah = item.jml
+
         return temp[0]
       })
       console.log('items', this.items)
+    },
+    itemSelectod(val) {
+      console.log(val)
+      const temp = this.items.filter(data => {
+        return data.kode_rs === val
+      })
+      console.log('temp', temp)
+      this.detail.kode_rs = val
+      this.detail.kode_108 = temp[0].kode_108
+      this.detail.uraian = temp[0].barang108.uraian
+      this.detail.stokRuangan = parseInt(temp[0].jumlah)
+      this.detail.jumlah = 0
+      this.detail.sisaStok = temp[0].jumlah
+    },
+    updateJumlah(val) {
+      this.detail.sisaStok = this.detail.stokRuangan - parseInt(this.detail.jumlah)
+      if (this.detail.sisaStok < 0) {
+        notifErrVue('sisa stok tidak boleh kurang dari 0')
+        this.detail.jumlah = this.detail.stokRuangan
+        this.detail.sisaStok = this.detail.stokRuangan - parseInt(this.detail.jumlah)
+      }
+      console.log('input', val)
+    },
+    saveInput() {
+      console.log('input saved')
     },
     getItemsData() {
       this.loading = true
