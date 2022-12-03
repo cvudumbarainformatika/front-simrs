@@ -62,8 +62,14 @@ import AdmHeader from './AdmHeader.vue'
 import AdmFooterMenu from './AdmFooterMenu.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
+// import { deleteTempData, getTempData } from 'src/modules/storage'
+// import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
+// import { routerInstance } from 'src/boot/router'
+
 const store = useAuthStore()
 const setting = useSettingsStore()
+// const pemakaianruangan = usePemakaianRuanganStore()
+
 const leftDrawerOpen = ref(false)
 const rightDrawerOpen = ref(false)
 const $q = useQuasar()
@@ -88,9 +94,28 @@ function toggleLeftDrawer () {
 //   // { id: 4, name: 'laporan', icon: 'icon-mat-description', link: 'laporan' },
 //   { id: 5, name: 'Setting', icon: 'icon-mat-settings', link: 'setting' }
 // ])
+// const checkTempdata = () => {
+//   const data = getTempData()
+//   if (data) {
+//     if (data.path === 'sigarang.transaksi.pemakaianruangan') {
+//       Dialog.create({
+//         title: 'Konfirmasi',
+//         message: 'Anda memiliki data yang belum selesai di Transaksi Pemakaian Ruangan.\n Tekan Ambil jika ingin mengambil dan megedit data tersebut. \n Tekan Ambil jika ingin menghapus data tersebut',
+//         ok: { 'no-caps': true, flat: true, label: 'Ambil' },
+//         cancel: { 'no-caps': true, flat: true, color: 'negative', label: 'Hapus' }
+//       }).onOk(() => {
+//         pemakaianruangan.tempData = data.form
+//         routerInstance.replace({ name: data.path })
+//       }).onCancel(() => {
+//         deleteTempData()
+//       })
+//     }
+//   }
+// }
 onMounted(() => {
   store.getUser()
   setting.getAllData()
+  // checkTempdata()
 })
 // function toggleRightDrawer() {
 //   rightDrawerOpen.value = !rightDrawerOpen.value

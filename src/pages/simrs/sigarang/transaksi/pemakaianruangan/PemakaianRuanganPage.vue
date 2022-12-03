@@ -16,7 +16,7 @@
             Nomor Pemakaian
           </div>
           <div class="q-ml-md">
-            {{ store.form.no_pemakaian }}
+            {{ store.form.reff }}
           </div>
         </div>
         <div class="fit row items-center justify-start content-start q-mb-sm">
@@ -72,10 +72,10 @@
             Tanggal Pemakaian
           </div>
           <div
-            v-if="store.form.tanggal_pemakaian"
+            v-if="store.form.tanggal"
             class="q-ml-md"
           >
-            {{ dateFull(store.form.tanggal_pemakaian) }}
+            {{ dateFull(store.form.tanggal) }}
           </div>
         </div>
       </q-card-section>
@@ -152,13 +152,36 @@
             {{ Object.keys(store.detail).length? store.detail.sisaStok:'barang belum dipilih' }}
           </div>
         </div>
+        <div
+          v-for="(detail, i) in store.details"
+          :key="i"
+          class="fit row no-wrap justify-evenly items-center content-center q-my-xs"
+        >
+          <div class="anak text-center">
+            {{ detail }}
+          </div>
+        </div>
       </q-card-section>
+      <q-card-actions
+        v-if="store.details.length"
+        align="right"
+      >
+        <q-btn
+          no-caps
+          label="Simpan"
+          icon="icon-mat-save"
+          flat
+          dense
+        />
+      </q-card-actions>
     </q-card>
   </div>
 </template>
 <script setup>
 // rencana : simpan sementara di local storage
+import { routerInstance } from 'src/boot/router'
 import { dateFull } from 'src/modules/formatter'
+import { setTempData } from 'src/modules/storage'
 import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 import { ref } from 'vue'
 const refPj = ref(null)
@@ -184,7 +207,24 @@ const itemCleared = () => {
   store.detail = {}
 }
 const saveInput = () => {
-  console.log('save input')
+  const path = routerInstance.currentRoute.value.name
+  // const detail = store.detail
+  const temp = {
+    kode_rs: store.detail.kode_rs ? store.detail.kode_rs : '',
+    kode_108: store.detail.kode_108 ? store.detail.kode_108 : '',
+    kode_satuan: store.detail.kode_satuan ? store.detail.kode_satuan : '',
+    jumlah: store.detail.jumlah ? store.detail.jumlah : 0
+  }
+  store.details.push(temp)
+  // store.setForm('details', store.details)
+  const tempData = {
+    path,
+    form: store.form
+  }
+  setTempData(tempData)
+  // console.log('save input', path)
+  // console.log('detail', detail)
+  // console.log('temp', store.form)
 }
 </script>
 <style lang="scss" scoped>

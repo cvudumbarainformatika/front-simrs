@@ -15,23 +15,36 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     pj: null,
     user: null,
     details: [],
-    detail: {}
+    detail: {},
+    tempData: null
   }),
   actions: {
     resetForm() {
       this.form = {}
     },
+    setForm(key, val) {
+      this.form[key] = val
+    },
     setNomorPemakaian() {
-      this.form.no_pemakaian = 'PRSKR-' + uniqueId()
+      if (!this.form.reff) {
+        this.form.reff = 'PRSKR-' + uniqueId()
+      }
     },
     getInitialData() {
       this.getDataMaping()
       this.getDataPengguna()
       this.getDataPenanggungjawab()
+        .then(() => {
+          if (this.tempData !== null) {
+            this.form = this.tempData
+            this.penanggungjawabSelected(this.tempData.kode_penanggungjawab)
+            this.penggunaSelected(this.tempData.kode_pengguna)
+          }
+        })
     },
     penanggungjawabSelected(val) {
       this.setNomorPemakaian()
-      this.form.tanggal_pemakaian = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.kode_penanggungjawab = val
       this.pj = val
       const trimmed = val.slice(0, 8)
@@ -72,6 +85,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       console.log('temp', temp)
       this.detail.kode_rs = val
       this.detail.kode_108 = temp[0].kode_108
+      this.detail.kode_satuan = temp[0].kode_satuan
       this.detail.uraian = temp[0].barang108.uraian
       this.detail.stokRuangan = parseInt(temp[0].jumlah)
       this.detail.jumlah = 0
@@ -87,7 +101,8 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       console.log('input', val)
     },
     saveInput() {
-      console.log('input saved')
+      this.form.details = this.details
+      console.log('input saved', this.form)
     },
     getItemsData() {
       this.loading = true
@@ -103,6 +118,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
             this.loading = false
             console.log('data items', resp)
             this.setItems(resp.data)
+
             resolve(resp)
           })
           .catch(() => {
@@ -118,6 +134,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
             this.loading = false
             // console.log('pj', resp)
             this.penanggungjawabs = resp.data
+
             resolve(resp)
           }).catch(() => {
             this.loading = false
