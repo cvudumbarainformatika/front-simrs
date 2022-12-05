@@ -58,6 +58,7 @@
                 option-value="kode"
                 :source="store.filteredPengguna"
                 :loading="store.loading"
+                valid
                 @on-select="store.penggunaSelected"
                 @clear="penggunaCleared"
               />
@@ -153,12 +154,30 @@
           </div>
         </div>
         <div
-          v-for="(detail, i) in store.details"
+          v-for="(detail, i) in store.displays"
           :key="i"
           class="fit row no-wrap justify-evenly items-center content-center q-my-xs"
         >
           <div class="anak text-center">
-            {{ detail }}
+            {{ detail.kode_rs }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.nama }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.kode_108 }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.uraian }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.stokRuangan }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.jumlah }}
+          </div>
+          <div class="anak text-center">
+            {{ detail.sisaStok }}
           </div>
         </div>
       </q-card-section>
@@ -167,11 +186,13 @@
         align="right"
       >
         <q-btn
+          color="primary"
           no-caps
           label="Simpan"
           icon="icon-mat-save"
           flat
           dense
+          @click="store.saveInput"
         />
       </q-card-actions>
     </q-card>
@@ -205,6 +226,7 @@ const penggunaCleared = () => {
 }
 const itemCleared = () => {
   store.detail = {}
+  refUs.value.$refs.refAuto.resetValidation()
 }
 const saveInput = () => {
   const path = routerInstance.currentRoute.value.name
@@ -213,9 +235,13 @@ const saveInput = () => {
     kode_rs: store.detail.kode_rs ? store.detail.kode_rs : '',
     kode_108: store.detail.kode_108 ? store.detail.kode_108 : '',
     kode_satuan: store.detail.kode_satuan ? store.detail.kode_satuan : '',
-    jumlah: store.detail.jumlah ? store.detail.jumlah : 0
+    jumlah: store.detail.jumlah ? store.detail.jumlah : 0,
+    id: null
   }
+  store.displays.push(store.detail)
   store.details.push(temp)
+  store.detail = {}
+  refUs.value.$refs.refAuto.resetValidation()
   // store.setForm('details', store.details)
   const tempData = {
     path,

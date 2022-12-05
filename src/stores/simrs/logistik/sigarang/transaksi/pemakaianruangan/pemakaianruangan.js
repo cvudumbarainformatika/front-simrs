@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifErrVue, uniqueId } from 'src/modules/utils'
+import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
 
 export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   state: () => ({
@@ -14,6 +14,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     filteredPengguna: [],
     pj: null,
     user: null,
+    displays: [],
     details: [],
     detail: {},
     tempData: null
@@ -21,6 +22,15 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   actions: {
     resetForm() {
       this.form = {}
+    },
+    resetAll() {
+      this.form = {}
+      this.displays = []
+      this.details = []
+      this.detail = {}
+      this.pj = null
+      this.user = null
+      this.filteredPengguna = []
     },
     setForm(key, val) {
       this.form[key] = val
@@ -85,6 +95,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       console.log('temp', temp)
       this.detail.kode_rs = val
       this.detail.kode_108 = temp[0].kode_108
+      this.detail.nama = temp[0].nama
       this.detail.kode_satuan = temp[0].kode_satuan
       this.detail.uraian = temp[0].barang108.uraian
       this.detail.stokRuangan = parseInt(temp[0].jumlah)
@@ -103,6 +114,16 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     saveInput() {
       this.form.details = this.details
       console.log('input saved', this.form)
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/pemakaianruangan/store', this.form)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            this.resetAll()
+            resolve(resp)
+          }).catch(() => { this.loading = false })
+      })
     },
     getItemsData() {
       this.loading = true
