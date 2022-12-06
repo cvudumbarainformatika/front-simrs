@@ -19,6 +19,92 @@ export const useSettingsStore = defineStore('setting_store', {
         name: 'sigarang.dashboard',
         submenus: []
       },
+      // {
+      //   icon: 'icon-mat-account_circle',
+      //   link: 'sigarang/admin',
+      //   nama: 'Admin',
+      //   name: 'sigarang.admin',
+      //   submenus: [
+      //     {
+      //       link: 'sigarang/admin/user',
+      //       nama: 'Data User',
+      //       name: 'sigarang.admin.user'
+      //     },
+      //     {
+      //       link: 'sigarang/admin/pegawai',
+      //       nama: 'Registrasi Pegawai',
+      //       name: 'sigarang.admin.pegawai'
+      //     }
+      //   ]
+      // },
+      {
+        icon: 'icon-mat-sync_alt',
+        link: 'sigarang/transaksi',
+        nama: 'Transaksi',
+        name: 'sigarang.transaksi',
+        submenus: [
+          {
+            link: 'sigarang/transaksi/pemesanan/TRP-',
+            nama: 'Transaksi Pemesanan',
+            name: 'sigarang.transaksi.pemesanan'
+          },
+          {
+            link: 'sigarang/transaksi/penerimaan/TRM-',
+            nama: 'Transaksi Penerimaan',
+            name: 'sigarang.transaksi.penerimaan'
+          },
+          {
+            link: 'sigarang/transaksi/distribusidepo',
+            nama: 'Transaksi Distribusi Depo',
+            name: 'sigarang.transaksi.distribusidepo'
+          },
+          {
+            link: 'sigarang/transaksi/penerimaandepo',
+            nama: 'Transaksi Penerimaan Depo',
+            name: 'sigarang.transaksi.penerimaandepo'
+          },
+          {
+            link: 'sigarang/transaksi/permintaan/TPN-',
+            nama: 'Transaksi Permintaan',
+            name: 'sigarang.transaksi.permintaan'
+          },
+          {
+            link: 'sigarang/transaksi/verifpermintaan',
+            nama: 'Verif Transaksi Permintaan Ruangan',
+            name: 'sigarang.transaksi.verifpermintaan'
+          },
+          {
+            link: 'sigarang/transaksi/distribusi',
+            nama: 'Transaksi Distribusi Permintaan Ruangan',
+            name: 'sigarang.transaksi.distribusi'
+          },
+          {
+            link: 'sigarang/transaksi/penerimaanruangan',
+            nama: 'Transaksi Penerimaan Ruangan',
+            name: 'sigarang.transaksi.penerimaanruangan'
+          },
+          {
+            link: 'sigarang/transaksi/pemakaianruangan',
+            nama: 'Transaksi Pemakaian Ruangan',
+            name: 'sigarang.transaksi.pemakaianruangan'
+          },
+          {
+            link: 'sigarang/transaksi/barangrusak',
+            nama: 'Transaksi Barang Rusak',
+            name: 'sigarang.transaksi.barangrusak'
+          },
+          {
+            link: 'sigarang/transaksi/pengembalian',
+            nama: 'Transaksi Pengembalian',
+            name: 'sigarang.transaksi.pengembalian'
+          },
+          {
+            link: 'sigarang/transaksi/stockopname',
+            nama: 'Transaksi Stock Opname',
+            name: 'sigarang.transaksi.stockopname'
+          }
+        ]
+      },
       {
         icon: 'icon-mat-dataset',
         link: 'sigarang/master',
@@ -37,7 +123,7 @@ export const useSettingsStore = defineStore('setting_store', {
           },
           {
             link: 'sigarang/master/minmaxstok',
-            nama: 'Master Min Max Alokasi stok',
+            nama: 'Master Min Max Stok',
             name: 'sigarang.master.minmaxstok'
           },
           {
@@ -89,82 +175,6 @@ export const useSettingsStore = defineStore('setting_store', {
             link: 'sigarang/master/kontrakpengerjaan',
             nama: 'Master Kontrak Pengerjaan',
             name: 'sigarang.master.kontrakpengerjaan'
-          }
-        ]
-      },
-      // {
-      //   icon: 'icon-mat-account_circle',
-      //   link: 'sigarang/admin',
-      //   nama: 'Admin',
-      //   name: 'sigarang.admin',
-      //   submenus: [
-      //     {
-      //       link: 'sigarang/admin/user',
-      //       nama: 'Data User',
-      //       name: 'sigarang.admin.user'
-      //     },
-      //     {
-      //       link: 'sigarang/admin/pegawai',
-      //       nama: 'Registrasi Pegawai',
-      //       name: 'sigarang.admin.pegawai'
-      //     }
-      //   ]
-      // },
-      {
-        icon: 'icon-mat-sync_alt',
-        link: 'sigarang/transaksi',
-        nama: 'Transaksi',
-        name: 'sigarang.transaksi',
-        submenus: [
-          {
-            link: 'sigarang/transaksi/pemesanan/TRP-',
-            nama: 'Transaksi Pemesanan',
-            name: 'sigarang.transaksi.pemesanan'
-          },
-          {
-            link: 'sigarang/transaksi/penerimaan/TRM-',
-            nama: 'Transaksi Penerimaan',
-            name: 'sigarang.transaksi.penerimaan'
-          },
-          {
-            link: 'sigarang/transaksi/permintaan/TPN-',
-            nama: 'Transaksi Permintaan',
-            name: 'sigarang.transaksi.permintaan'
-          },
-          {
-            link: 'sigarang/transaksi/verifpermintaan',
-            nama: 'Verif Transaksi Permintaan Ruangan',
-            name: 'sigarang.transaksi.verifpermintaan'
-          },
-          {
-            link: 'sigarang/transaksi/distribusi',
-            nama: 'Transaksi Distribusi Permintaan Ruangan',
-            name: 'sigarang.transaksi.distribusi'
-          },
-          {
-            link: 'sigarang/transaksi/penerimaanruangan',
-            nama: 'Transaksi Penerimaan Ruangan',
-            name: 'sigarang.transaksi.penerimaanruangan'
-          },
-          {
-            link: 'sigarang/transaksi/pemakaianruangan',
-            nama: 'Transaksi Pemakaian Ruangan',
-            name: 'sigarang.transaksi.pemakaianruangan'
-          },
-          {
-            link: 'sigarang/transaksi/barangrusak',
-            nama: 'Transaksi Barang Rusak',
-            name: 'sigarang.transaksi.barangrusak'
-          },
-          {
-            link: 'sigarang/transaksi/pengembalian',
-            nama: 'Transaksi Pengembalian',
-            name: 'sigarang.transaksi.pengembalian'
-          },
-          {
-            link: 'sigarang/transaksi/stockopname',
-            nama: 'Transaksi Stock Opname',
-            name: 'sigarang.transaksi.stockopname'
           }
         ]
       },

@@ -348,6 +348,22 @@ const routes = [
               )
           },
           {
+            path: '/sigarang/transaksi/distribusidepo',
+            name: 'sigarang.transaksi.distribusidepo',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/distribusidepo/IndexPage.vue'
+              )
+          },
+          {
+            path: '/sigarang/transaksi/penerimaandepo',
+            name: 'sigarang.transaksi.penerimaandepo',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/transaksi/penerimaandepo/IndexPage.vue'
+              )
+          },
+          {
             path: '/sigarang/transaksi/penerimaanruangan',
             name: 'sigarang.transaksi.penerimaanruangan',
             component: () =>
