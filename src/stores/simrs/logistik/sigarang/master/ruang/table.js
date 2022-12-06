@@ -16,7 +16,7 @@ export const useMasterRuangTable = defineStore('master_ruang_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'uuid', 'namagedung', 'kode', 'created_at', 'updated_at']
+    columnHide: ['id', 'max_per_shift', 'shift', 'uuid', 'namagedung', 'kode', 'created_at', 'updated_at']
   }),
   getters: {
     getterColumns (state) {

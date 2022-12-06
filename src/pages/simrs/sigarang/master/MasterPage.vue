@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pb-sm">
+  <q-page class="q-pb-lg">
     <div class="fixed top menu-bar">
       <!-- <MenuPage /> -->
     </div>
@@ -7,7 +7,7 @@
       v-if="path!=='/master'"
       class="q-pt-lg"
     >
-      <q-page class="q-pt-sm halaman">
+      <q-page class="q-pt-lg halaman">
         <router-view />
       </q-page>
     </div>

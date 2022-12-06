@@ -12,11 +12,11 @@
           @reset="onReset"
         >
           <div class="row q-col-gutter-md">
-            <div class="col-md-3 col-xs-12">
+            <div class="col-sm-3 col-xs-12">
               <app-input
-                v-model="store.form.utama"
+                v-model="store.form.gedung"
                 valid
-                label="Gudang Utama*"
+                label="Gedung*"
                 outlined
                 autofocus
               />
@@ -24,30 +24,41 @@
                 option-value="nomor" :loading="store.loading" option-label="nama" :source="store.gedungs"
                 @on-select="gedungSelected" @clear="clearGedung" @set-model="setModel" autofocus /> -->
             </div>
-            <div class="col-md-2 col-xs-12">
+            <div class="col-sm-2 col-xs-12">
+              <app-input
+                v-model="store.form.lantai"
+                valid
+                label="Lantai*"
+                outlined
+                autofocus
+                :readonly="!store.form.gedung"
+              />
+            </div>
+            <div class="col-sm-2 col-xs-12">
+              <app-input
+                v-model="store.form.gudang"
+                valid
+                label="Gudang*"
+                outlined
+                autofocus
+                :readonly="!store.form.gedung"
+              />
+            </div>
+            <div class="col-sm-2 col-xs-12">
               <app-input
                 v-model="store.form.depo"
                 valid
-                label="Gudang Depo*"
+                label="Depo*"
                 outlined
                 autofocus
-                :readonly="!store.form.utama"
+                :readonly="!store.form.gedung"
               />
               <!-- <app-autocomplete :model="store.form.lantai" outlined label="cari lantai*" autocomplete="nama"
                 option-value="id" :loading="store.loading" option-label="nama" :source="store.lantais"
                 @on-select="lantaiSelected" @clear="clearLantai" autofocus :readonly="!store.form.utama" /> -->
             </div>
-            <div class="col-md-2 col-xs-12">
-              <app-input
-                v-model="store.form.ruang"
-                valid
-                label="Ruang Depo*"
-                outlined
-                autofocus
-                :readonly="!store.form.utama"
-              />
-            </div>
-            <div class="col-md-5 col-xs-12">
+
+            <div class="col-sm-3 col-xs-12">
               <app-input
                 v-model="store.form.nama"
                 label="Nama ruang depo*"

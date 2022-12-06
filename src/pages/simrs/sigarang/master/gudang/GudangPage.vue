@@ -1,7 +1,10 @@
 <template>
   <q-page class="q-pa-sm">
     <div>
-      <app-card :is-header="false">
+      <app-card
+        title="Data Gudang"
+        desc="Data Gudang RSUD Moh Saleh"
+      >
         <template #content>
           <app-table
             title="Data Gudang"
@@ -23,20 +26,23 @@
             @edit-data="store.editData"
             @delete="table.deletesData"
           >
-            <template #col-utama>
-              <div>Gudang Utama</div>
+            <template #col-gedung>
+              <div>Gedung</div>
+            </template>
+            <template #col-gudang>
+              <div>Gudang</div>
             </template>
             <!-- <template #cell-gedung="{row}">
               <div>{{row.namagedung.nama}}</div>
             </template> -->
             <template #col-depo>
-              <div>Gudang Depo</div>
+              <div>Depo</div>
             </template>
-            <template #col-ruang>
-              <div>Ruang Depo</div>
+            <template #col-lantai>
+              <div>Lantai</div>
             </template>
             <template #col-nama>
-              <div>Nama Ruang Depo</div>
+              <div>Nama</div>
             </template>
           </app-table>
           <!--
