@@ -73,7 +73,7 @@ export const useMasterGudangTable = defineStore('master_gudang_table', {
               this.items = resp.data.data
               this.meta = resp.data.meta
               this.setColumns(resp.data.data)
-              console.log(resp.data.data)
+              console.log(resp.data)
               resolve(resp.data.data)
             }
           })

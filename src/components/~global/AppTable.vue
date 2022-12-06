@@ -3,10 +3,10 @@
     <!-- title option table -->
     <div class="flex items-center justify-between q-mb-md">
       <!-- title -->
+      <!-- <div class="title-table q-pr-sm f-14 text-bold">
+        {{ title }}
+      </div> -->
       <div class="col-one flex items-center">
-        <!-- <div class="title-table q-pr-sm f-14 text-bold">
-          {{ title }}
-        </div> -->
         <div v-if="adaCari">
           <q-input
             v-model="search"
@@ -405,7 +405,7 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 const props = defineProps({
   addData: { type: Boolean, default: true },
-  title: { type: String, default: 'Title' },
+  title: { type: String, default: '' },
   loading: { type: Boolean, default: false },
   columns: { type: Array, default: () => [] },
   columnHide: { type: Array, default: () => [] },
