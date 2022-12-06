@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { notifSuccess, waitLoad } from 'src/modules/utils'
 
-export const useStokMaksTable = defineStore('stok_maks_table', {
+export const useMinMaxStokTable = defineStore('stok_maks_table', {
   state: () => ({
     items: [],
     meta: {},

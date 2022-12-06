@@ -3,7 +3,7 @@ import { notifSuccess } from 'src/modules/utils'
 import { api } from 'boot/axios'
 import { useStokMaksTable } from './table'
 
-export const useStokMaksForm = defineStore('stok_maks_form', {
+export const useMinMaxStokForm = defineStore('stok_maks_form', {
   state: () => ({
     isOpen: false,
     form: {
