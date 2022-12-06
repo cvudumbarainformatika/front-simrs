@@ -225,12 +225,12 @@
                 </th>
                 <th>
                   <div class="bold">
-                    <strong>Stok Min Gudang</strong>
+                    <strong>Stok Maks Gudang</strong>
                   </div>
                 </th>
                 <th>
                   <div class="bold">
-                    <strong>Jml yg harus dibeli</strong>
+                    <strong>Jml Maks dibeli</strong>
                   </div>
                 </th>
                 <th>
