@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { notifSuccess, waitLoad } from 'src/modules/utils'
+import { useMinMaxStokForm } from './form'
 
-export const useMinMaxStokTable = defineStore('stok_maks_table', {
+export const useMinMaxStokTable = defineStore('min_maks_stok_table', {
   state: () => ({
     items: [],
     meta: {},
@@ -56,7 +57,13 @@ export const useMinMaxStokTable = defineStore('stok_maks_table', {
       this.params.page = 1
       this.getDataTable()
     },
-
+    getInitialData() {
+      const store = useMinMaxStokForm()
+      store.getDataBarang()
+      store.getDataGudang()
+      store.getDataPengguna()
+      this.getDataTable()
+    },
     // api related function
 
     // ambil
@@ -65,7 +72,7 @@ export const useMinMaxStokTable = defineStore('stok_maks_table', {
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/gudang/index', params)
+          .get('v1/minmaxstok/index', params)
           .then((resp) => {
             waitLoad('done')
             // console.log(resp)
@@ -89,7 +96,7 @@ export const useMinMaxStokTable = defineStore('stok_maks_table', {
       const params = { id: payload }
       return new Promise((resolve, reject) => {
         api
-          .post('v1/gudang/destroy', params)
+          .post('v1/minmaxstok/destroy', params)
           .then((resp) => {
             // console.log(resp)
             notifSuccess(resp)

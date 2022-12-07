@@ -2,12 +2,12 @@
   <q-page class="q-pa-sm">
     <div>
       <app-card
-        title="Data Gudang"
-        desc="Data Gudang RSUD Moh Saleh"
+        title="Data Depo"
+        desc="Data Depo RSUD Moh Saleh"
       >
         <template #content>
           <app-table
-            title="Data Gudang"
+            title="Data Depo"
             :columns="table.columns"
             :column-hide="table.columnHide"
             :items="table.items"

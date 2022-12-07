@@ -118,7 +118,7 @@ export const useSettingsStore = defineStore('setting_store', {
           },
           {
             link: 'sigarang/master/gudang',
-            nama: 'Master Gudang',
+            nama: 'Master Depo',
             name: 'sigarang.master.gudang'
           },
           {

@@ -1,18 +1,21 @@
 import { defineStore } from 'pinia'
 import { notifSuccess } from 'src/modules/utils'
 import { api } from 'boot/axios'
-import { useStokMaksTable } from './table'
+import { useMinMaxStokTable } from './table'
 
-export const useMinMaxStokForm = defineStore('stok_maks_form', {
+export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
   state: () => ({
     isOpen: false,
     form: {
-      utama: null,
-      depo: null,
-      ruang: null,
-      kode: null,
-      nama: null
+      kode_rs: null,
+      kode_pengguna: null,
+      kode_gudang: null,
+      min_stok: 0,
+      max_stok: 0
     },
+    barangs: [],
+    penggunas: [],
+    gudangs: [],
     loading: false
   }),
   actions: {
@@ -20,10 +23,11 @@ export const useMinMaxStokForm = defineStore('stok_maks_form', {
     resetFORM () {
       this.form = {}
       const columns = [
-        'utama',
-        'depo',
-        'ruang',
-        'nama'
+        'kode_rs',
+        'kode_pengguna',
+        'kode_gudang',
+        'min_stok',
+        'max_stok'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
@@ -59,41 +63,73 @@ export const useMinMaxStokForm = defineStore('stok_maks_form', {
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
-    setKode (utama, depo, ruang) {
-      const tGudang = utama === null ? '0' : typeof utama === 'string' ? utama : utama.toString()
-      const tDepo = depo === null ? '0' : typeof depo === 'string' ? depo : depo.toString()
-      const tRuang = ruang === null ? '0' : typeof ruang === 'string' ? ruang : ruang.toString()
-      const rGudang = tGudang.length === 1 ? '0' + tGudang : tGudang
-      const rDepo = tDepo.length === 1 ? '0' + tDepo : tDepo
-      const rRuang = tRuang.length === 1 ? '00' + tRuang : tRuang.length === 2 ? '0' + tRuang : tRuang
-      const kode = 'Gud-' + rGudang + rDepo + rRuang
 
-      this.form.kode = kode
-
-      // console.log('gudang', gedung)
-      // console.log('lantai', lantai)
-      // console.log('ruang', ruang)
-      // console.log('tGedung', tGedung.length)
-      // console.log('tLantai', tLantai.length)
-      // console.log('tRuang', tRuang.length)
-      // console.log('kode', kode)
-      // console.log('kode', this.form.kode)
+    sanitazeForm() {
+      const formini = Object.keys(this.form)
+      formini.forEach((data) => {
+        if (this.form[data] === null) {
+          delete this.form[data]
+        }
+      })
     },
     // api related actions
-
+    // get autoComp data
+    getDataBarang() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/barangrs/barangrs')
+          .then(resp => {
+            this.loading = false
+            console.log('barangrs', resp)
+            this.barangs = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getDataGudang() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/gudang/gudang')
+          .then(resp => {
+            this.loading = false
+            console.log('gudang', resp)
+            this.gudangs = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getDataPengguna() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/pengguna/pengguna-ruang')
+          .then(resp => {
+            this.loading = false
+            console.log('pengguna', resp)
+            this.penggunas = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
     // tambah
     saveForm () {
-      const nama = this.form.nama.toUpperCase()
-      this.form.nama = nama
-      this.setKode(this.form.utama, this.form.depo, this.form.ruang)
+      this.sanitazeForm()
       this.loading = true
       return new Promise((resolve, reject) => {
         api
-          .post('v1/gudang/store', this.form)
+          .post('v1/minmaxstok/store', this.form)
           .then((resp) => {
             // console.log('save data   ', resp)
             notifSuccess(resp)
-            const table = useStokMaksTable()
+            const table = useMinMaxStokTable()
             table.getDataTable()
             this.loading = false
             this.isOpen = false
