@@ -71,6 +71,11 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
         }
       })
     },
+    getRequredDataForm() {
+      this.getDataBarang()
+      this.getDataGudang()
+      this.getDataPengguna()
+    },
     // api related actions
     // get autoComp data
     getDataBarang() {

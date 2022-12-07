@@ -28,23 +28,22 @@
       animated
     >
       <q-tab-panel name="depo">
-        <div class="text-h6">
-          Depo
-        </div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <DepoTable />
       </q-tab-panel>
 
       <q-tab-panel name="pengguna">
-        <div class="text-h6">
-          Pengguna
-        </div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <PenggunaTable />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>
 </template>
 <script setup>
+import { useMinMaxStokForm } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/form'
 import { ref } from 'vue'
+import DepoTable from './depo/DepoTable.vue'
+import PenggunaTable from './pengguna/PenggunaTable.vue'
 
 const tab = ref('depo')
+const store = useMinMaxStokForm()
+store.getRequredDataForm()
 </script>
