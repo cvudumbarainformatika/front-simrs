@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./MinMaxStokPage.vue')
+  import('./FrontPage.vue')
 )
 </script>
