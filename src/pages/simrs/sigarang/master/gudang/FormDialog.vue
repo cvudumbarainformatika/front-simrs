@@ -2,8 +2,8 @@
   <q-dialog>
     <app-card
       style="width:900px"
-      title="Form Ruang"
-      desc="Input data Ruang"
+      title="Form Depo"
+      desc="Input data Depo"
     >
       <template #content>
         <q-form

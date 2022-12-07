@@ -3,7 +3,7 @@
     <app-card
       class="my-card"
       title="Form Minimun dan Maksimum Stok"
-      desc="Input data Minimun dan Maksimum Stok"
+      desc="Input data Minimun dan Maksimum Stok User atau Depo"
     >
       <template #content>
         <q-form
@@ -34,6 +34,7 @@
                 option-value="kode"
                 option-label="jabatan"
                 autocomplete="jabatan"
+                :valid="(store.form.kode_gudang!==null)"
                 :source="store.penggunas"
                 :loading="store.loading"
                 :readonly="(store.form.kode_gudang!==null)"
@@ -49,6 +50,7 @@
                 option-value="kode"
                 option-label="nama"
                 autocomplete="nama"
+                :valid="(store.form.kode_pengguna!==null)"
                 :source="store.gudangs"
                 :loading="store.loading"
                 :readonly="(store.form.kode_pengguna!==null)"
@@ -57,10 +59,10 @@
               />
             </div>
           </div>
-          <div class="row q-col-gutter-md">
+          <div class="row q-col-gutter-md q-mb-sm">
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.min"
+                v-model="store.form.min_stok"
                 valid
                 label="Min Stok"
                 type="number"
@@ -68,7 +70,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.max"
+                v-model="store.form.max_stok"
                 label="Max Stok"
                 type="number"
               />
@@ -130,13 +132,6 @@ const gudangCleared = () => {
 }
 
 const onSubmit = () => {
-  if (store.form.kode_pengguna !== null) {
-    refKodeGudang.value.$refs.refAuto.valid()
-    refKodeGudang.value.$refs.refAuto.resetValidation()
-  }
-  if (store.form.kode_gudang !== null) {
-    refKodePengguna.value.$refs.refAuto.resetValidation()
-  }
   store.saveForm().then(() => {
     if (formReff.value != null) { formReff.value.resetValidation() }
   })

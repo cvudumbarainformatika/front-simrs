@@ -63,9 +63,9 @@ export const useMasterGudangForm = defineStore('master_gudang_form', {
     },
     setKode () {
       const gedung = this.form.gedung
-      const lantai = this.form.lantai
-      const gudang = this.form.gudang
-      const depo = this.form.depo
+      const lantai = this.form.lantai ? this.form.lantai : null
+      const gudang = this.form.gudang ? this.form.gudang : null
+      const depo = this.form.depo ? this.form.depo : null
 
       const tGedung = gedung === null ? '0' : typeof gedung === 'string' ? gedung : gedung.toString()
       const tLantai = lantai === null ? '0' : typeof lantai === 'string' ? lantai : lantai.toString()

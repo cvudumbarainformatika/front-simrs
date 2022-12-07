@@ -46,7 +46,6 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
     },
     setOpen () {
       this.isOpen = !this.isOpen
-      this.getGedungsData()
     },
     newData () {
       this.resetFORM()
@@ -92,7 +91,7 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
     getDataGudang() {
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/gudang/gudang')
+        api.get('v1/gudang/depo')
           .then(resp => {
             this.loading = false
             console.log('gudang', resp)

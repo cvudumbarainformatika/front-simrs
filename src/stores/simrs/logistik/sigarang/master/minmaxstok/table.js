@@ -17,7 +17,7 @@ export const useMinMaxStokTable = defineStore('min_maks_stok_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'kode', 'created_at', 'updated_at']
+    columnHide: ['id', 'kode', 'kode_pengguna', 'kode_gudang', 'created_at', 'updated_at']
   }),
   getters: {
     getterColumns (state) {
@@ -48,8 +48,9 @@ export const useMinMaxStokTable = defineStore('min_maks_stok_table', {
       this.getDataTable()
     },
     setColumns (payload) {
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0]
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0]
+      this.columns = ['kode_rs', 'barang', 'pengguna', 'gudang', 'min_stok', 'max_stok']
       // console.log('columns', this.columns)
     },
 

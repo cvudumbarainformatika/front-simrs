@@ -1,13 +1,12 @@
 <template>
   <q-page class="q-pb-lg">
-    <div class="fixed top menu-bar">
-      <!-- <MenuPage /> -->
-    </div>
+    <!-- <div class="fixed top menu-bar"> -->
+    <!-- <MenuPage /> -->
+    <!-- </div> -->
     <div
       v-if="path!=='/master'"
-      class="q-pt-lg"
     >
-      <q-page class="q-pt-lg halaman">
+      <q-page class="q-pt-sm halaman">
         <router-view />
       </q-page>
     </div>

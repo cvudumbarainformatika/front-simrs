@@ -3,7 +3,7 @@
     <div>
       <app-card
         title="Data Min Max Stok"
-        desc="Data Min Max Stok Depo"
+        desc="Data Min Max Stok Depo dan Pengguna"
       >
         <template #content>
           <app-table
@@ -26,23 +26,36 @@
             @edit-data="store.editData"
             @delete="table.deletesData"
           >
-            <template #col-gedung>
-              <div>Gedung</div>
+            <template #col-kode_rs>
+              <div>Kode Barang</div>
             </template>
+
+            <template #col-barang>
+              <div>Nama Barang</div>
+            </template>
+            <template #cell-barang="{row}">
+              <div>{{ row.barang.nama }}</div>
+            </template>
+
             <template #col-gudang>
-              <div>Gudang</div>
-            </template>
-            <!-- <template #cell-gedung="{row}">
-              <div>{{row.namagedung.nama}}</div>
-            </template> -->
-            <template #col-depo>
               <div>Depo</div>
             </template>
-            <template #col-lantai>
-              <div>Lantai</div>
+            <template #cell-gudang="{row}">
+              <div>{{ row.gudang?row.gudang.nama:'-' }}</div>
             </template>
-            <template #col-nama>
-              <div>Nama</div>
+
+            <template #col-pengguna>
+              <div>Pengguna</div>
+            </template>
+            <template #cell-pengguna="{row}">
+              <div>{{ row.pengguna?row.pengguna.jabatan:'-' }}</div>
+            </template>
+
+            <template #col-min_stok>
+              <div>Stok Minimun</div>
+            </template>
+            <template #col-max_stok>
+              <div>Stok Maksimum</div>
             </template>
           </app-table>
           <!--
