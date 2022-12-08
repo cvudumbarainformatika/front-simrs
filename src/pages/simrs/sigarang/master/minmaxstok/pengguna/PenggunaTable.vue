@@ -6,7 +6,48 @@
         desc="Data Min Max Stok Pengguna"
       >
         <template #content>
-          buatkan fungsi cari depo dan cari nama barang
+          <div class="fit row wrap justify-start">
+            <div class="q-mr-sm">
+              <q-input
+                v-model="store.params.pengguna"
+                outlined
+                class="search-big"
+                borderless
+                debounce="500"
+                dense
+                placeholder="Cari Depo"
+                @update:model-value="store.setPenggunaSearch"
+                @keydown.enter.prevent="store.setPenggunaSearch"
+              >
+                <template #prepend>
+                  <q-icon
+                    name="icon-mat-search"
+                    size="20px"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <div class="q-mr-sm">
+              <q-input
+                v-model="store.params.barang"
+                outlined
+                class="search-big"
+                borderless
+                debounce="500"
+                dense
+                placeholder="Cari barang"
+                @update:model-value="store.setBarangSearch"
+                @keydown.enter.prevent="store.setBarangSearch"
+              >
+                <template #prepend>
+                  <q-icon
+                    name="icon-mat-search"
+                    size="20px"
+                  />
+                </template>
+              </q-input>
+            </div>
+          </div>
           <app-table
             title="Data Gudang"
             :columns="store.columns"

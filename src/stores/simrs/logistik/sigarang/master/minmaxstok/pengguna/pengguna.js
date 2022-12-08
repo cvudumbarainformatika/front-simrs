@@ -10,6 +10,8 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     item: {},
     params: {
       q: '',
+      pengguna: '',
+      barang: '',
       page: 1,
       per_page: 10,
       order_by: 'created_at',
@@ -116,6 +118,18 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     getInitialData() {
       this.getDataBarang()
     },
+
+    // custom for this store
+
+    setBarangSearch (val) {
+      this.params.barang = val
+      this.getDataTable()
+    },
+    setPenggunaSearch (val) {
+      this.params.pengguna = val
+      this.getDataTable()
+    },
+    // api
     // api related function
 
     // table

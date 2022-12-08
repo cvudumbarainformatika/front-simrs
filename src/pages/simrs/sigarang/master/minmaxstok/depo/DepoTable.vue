@@ -9,15 +9,15 @@
           <div class="fit row wrap justify-start">
             <div class="q-mr-sm">
               <q-input
-                v-model="searchDepo"
+                v-model="store.params.depo"
                 outlined
                 class="search-big"
                 borderless
                 debounce="500"
                 dense
                 placeholder="Cari Depo"
-                @update:model-value="depoEnter"
-                @keydown.enter.prevent="depoEnter"
+                @update:model-value="store.setDepoSearch"
+                @keydown.enter.prevent="store.setDepoSearch"
               >
                 <template #prepend>
                   <q-icon
@@ -29,15 +29,15 @@
             </div>
             <div class="q-mr-sm">
               <q-input
-                v-model="searchBarang"
+                v-model="store.params.barang"
                 outlined
                 class="search-big"
                 borderless
                 debounce="500"
                 dense
                 placeholder="Cari barang"
-                @update:model-value="barangEnter"
-                @keydown.enter.prevent="barangEnter"
+                @update:model-value="store.setBarangSearch"
+                @keydown.enter.prevent="store.setBarangSearch"
               >
                 <template #prepend>
                   <q-icon
@@ -114,17 +114,17 @@
 </template>
 <script setup>
 import { useMinMaxDepoStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/depo/depo'
-import { ref } from 'vue'
+// import { ref } from 'vue'
 import formDialog from './FormDialog.vue'
 const store = useMinMaxDepoStockStore()
 store.getDataTable()
 
-const searchDepo = ref('')
-const depoEnter = () => {
-  console.log('depo', searchDepo.value)
-}
-const searchBarang = ref('')
-const barangEnter = () => {
-  console.log('depo', searchBarang.value)
-}
+// const searchDepo = ref('')
+// const depoEnter = () => {
+//   console.log('depo', searchDepo.value)
+// }
+// const searchBarang = ref('')
+// const barangEnter = () => {
+//   console.log('depo', searchBarang.value)
+// }
 </script>
