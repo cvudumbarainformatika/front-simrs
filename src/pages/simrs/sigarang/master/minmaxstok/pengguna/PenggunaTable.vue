@@ -13,7 +13,7 @@
                 outlined
                 class="search-big"
                 borderless
-                debounce="500"
+                debounce="1000"
                 dense
                 placeholder="Cari Depo"
                 @update:model-value="store.setPenggunaSearch"
@@ -33,7 +33,7 @@
                 outlined
                 class="search-big"
                 borderless
-                debounce="500"
+                debounce="1000"
                 dense
                 placeholder="Cari barang"
                 @update:model-value="store.setBarangSearch"
