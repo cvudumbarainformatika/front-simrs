@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { notifSuccess } from 'src/modules/utils'
 import { api } from 'boot/axios'
 import { useMinMaxStokTable } from './table'
+import { useMinMaxDepoStockStore } from './depo/depo'
+import { useMinMaxPenggunaStockStore } from './pengguna/pengguna'
 
 export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
   state: () => ({
@@ -16,7 +18,9 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
     barangs: [],
     penggunas: [],
     gudangs: [],
-    loading: false
+    loading: false,
+    depo: useMinMaxDepoStockStore(),
+    pengguna: useMinMaxPenggunaStockStore()
   }),
   actions: {
     // local related actions
@@ -86,6 +90,8 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             this.loading = false
             console.log('barangrs', resp)
             this.barangs = resp.data
+            this.depo.barangs = resp.data
+            this.pengguna.barangs = resp.data
             resolve(resp)
           })
           .catch(() => {
@@ -101,6 +107,8 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             this.loading = false
             console.log('gudang', resp)
             this.gudangs = resp.data
+            this.depo.gudangs = resp.data
+            this.pengguna.gudangs = resp.data
             resolve(resp)
           })
           .catch(() => {
@@ -116,6 +124,8 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             this.loading = false
             console.log('pengguna', resp)
             this.penggunas = resp.data
+            this.depo.penggunas = resp.data
+            this.pengguna.penggunas = resp.data
             resolve(resp)
           })
           .catch(() => {

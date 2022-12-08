@@ -67,6 +67,10 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       this.isOpen = !this.isOpen
     },
 
+    setBarangs(val) {
+      this.barangs = val
+    },
+
     sanitazeForm() {
       const formini = Object.keys(this.form)
       formini.forEach((data) => {

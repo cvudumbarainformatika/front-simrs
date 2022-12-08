@@ -20,7 +20,7 @@
                 option-value="kode"
                 option-label="nama"
                 autocomplete="nama"
-                :source="frontStore.gudangs"
+                :source="store.gudangs"
                 :loading="store.loading"
                 @on-select="depoSelected"
                 @clear="depoCleared"
@@ -34,7 +34,7 @@
                 option-value="kode"
                 option-label="nama"
                 autocomplete="nama"
-                :source="barangs"
+                :source="store.barangs"
                 :loading="store.loading"
                 @on-select="barangSelected"
                 @clear="barangCleared"
@@ -80,14 +80,11 @@
 
 <script setup>
 import { useMinMaxDepoStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/depo/depo'
-import { useMinMaxStokForm } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/form'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const store = useMinMaxDepoStockStore()
-const frontStore = useMinMaxStokForm()
 const formReff = ref(null)
 const refKodeRs = ref(null)
 const refKodeGudang = ref(null)
-const barangs = ref([])
 
 const barangSelected = (val) => {
   store.form.kode_rs = val
@@ -99,7 +96,6 @@ const barangCleared = () => {
 
 const depoSelected = (val) => {
   store.form.kode_depo = val
-  barangs.value = frontStore.barangs
 }
 const depoCleared = () => {
   store.form.kode_depo = null
@@ -115,4 +111,7 @@ const onReset = () => {
   formReff.value.resetValidation()
   store.setOpen()
 }
+onMounted(() => {
+  console.log('buka cuy')
+})
 </script>

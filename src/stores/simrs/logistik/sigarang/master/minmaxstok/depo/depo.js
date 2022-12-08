@@ -108,6 +108,9 @@ export const useMinMaxDepoStockStore = defineStore('min_max_depo_store', {
       this.params.page = 1
       this.getDataTable()
     },
+    setBarangs(val) {
+      this.barangs = val
+    },
     // initial data
     getInitialData() {
       this.getDataBarang()

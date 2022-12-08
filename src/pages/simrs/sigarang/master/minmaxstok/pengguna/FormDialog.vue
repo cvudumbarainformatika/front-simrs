@@ -20,7 +20,7 @@
                 option-value="kode"
                 option-label="jabatan"
                 autocomplete="jabatan"
-                :source="frontStore.penggunas"
+                :source="store.penggunas"
                 :loading="store.loading"
                 @on-select="penggunaSelected"
                 @clear="penggunaCleared"
@@ -34,7 +34,7 @@
                 option-value="kode"
                 option-label="nama"
                 autocomplete="nama"
-                :source="barangs"
+                :source="store.barangs"
                 :loading="store.loading"
                 @on-select="barangSelected"
                 @clear="barangCleared"
@@ -79,15 +79,12 @@
 </template>
 
 <script setup>
-import { useMinMaxStokForm } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/form'
 import { useMinMaxPenggunaStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/pengguna/pengguna'
 import { ref } from 'vue'
 const store = useMinMaxPenggunaStockStore()
-const frontStore = useMinMaxStokForm()
 const formReff = ref(null)
 const refKodeRs = ref(null)
 const refKodeGudang = ref(null)
-const barangs = ref([])
 
 const barangSelected = (val) => {
   store.form.kode_rs = val
@@ -99,7 +96,6 @@ const barangCleared = () => {
 
 const penggunaSelected = (val) => {
   store.form.kode_pengguna = val
-  barangs.value = frontStore.barangs
 }
 const penggunaCleared = () => {
   store.form.kode_pengguna = null

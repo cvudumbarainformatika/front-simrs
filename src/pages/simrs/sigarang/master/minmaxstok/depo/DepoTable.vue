@@ -14,9 +14,9 @@
                 class="search-big"
                 borderless
                 debounce="500"
-                clearable
                 dense
                 placeholder="Cari Depo"
+                @update:model-value="depoEnter"
                 @keydown.enter.prevent="depoEnter"
               >
                 <template #prepend>
@@ -34,9 +34,9 @@
                 class="search-big"
                 borderless
                 debounce="500"
-                clearable
                 dense
                 placeholder="Cari barang"
+                @update:model-value="barangEnter"
                 @keydown.enter.prevent="barangEnter"
               >
                 <template #prepend>
