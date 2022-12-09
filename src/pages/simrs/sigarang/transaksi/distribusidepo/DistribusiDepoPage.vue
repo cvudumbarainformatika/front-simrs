@@ -73,31 +73,50 @@
         <!-- input -->
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
           <div class="anak text-center">
-            Kode Barang
+            {{ store.input.nama?store.input.nama:'-' }}
           </div>
           <div class="anak text-center">
-            Nama Barang RS
+            <app-autocomplete-new
+              label="pilih barang"
+              :model="store.input.kode_barang"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              :loading="store.loading"
+              :source="store.barangrses"
+              @on-select="barangSelected"
+              @clear="barangCleared"
+            />
           </div>
           <div class="anak text-center">
-            Kode 108
+            {{ store.input.kode_108?store.input.kode_108:'-' }}
           </div>
           <div class="anak text-center">
-            Uraian 108
+            {{ store.input.uraian?store.input.uraian:'-' }}
           </div>
           <div class="anak text-center">
-            Stok Depo
+            {{ store.input.stok_depo?store.input.stok_depo:'-' }}
           </div>
           <div class="anak text-center">
-            Stok Alokasi Depo
+            {{ store.input.stok_alokasi_depo?store.input.stok_alokasi_depo:'-' }}
           </div>
           <div class="anak text-center">
-            Stok Minimum Depo
+            {{ store.input.stok_min_depo?store.input.stok_min_depo:'-' }}
           </div>
           <div class="anak text-center">
-            Stok Maksimum Depo
+            {{ store.input.stok_max_depo?store.input.stok_max_depo:'-' }}
           </div>
           <div class="anak text-center">
-            Jumlah Distribusi
+            <q-input
+              v-model="store.input.jumlah"
+              label="Jumlah"
+              type="number"
+              dense
+              borderless
+              :loading="store.loading"
+              hint="tekan enter untuk input"
+              @keyup.prevent.enter="addInput"
+            />
           </div>
         </div>
         <!-- display -->
@@ -144,6 +163,15 @@ const depoSelected = val => {
 }
 const depoCleared = () => {
   store.setForm('kode_depo', null)
+}
+const barangSelected = val => {
+  store.setInput('kode_barang', val)
+}
+const barangCleared = () => {
+  store.setInput('kode_barang', null)
+}
+const addInput = () => {
+  console.log('add input')
 }
 </script>
 <style lang="scss" scoped>

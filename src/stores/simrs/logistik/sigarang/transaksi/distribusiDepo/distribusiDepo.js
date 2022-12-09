@@ -140,6 +140,9 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     setNoDistribusi() {
       this.setForm('no_distribusi', 'DSTRDP-' + uniqueId())
     },
+    setInput(key, val) {
+      this.input[key] = val
+    },
     resetInput() {
       this.input = {}
     },
@@ -150,7 +153,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/transaksi/distribusidepo/get-permintaan-verified', params)
+          .get('v1/transaksi/distribusidepo/index', params)
           .then((resp) => {
             this.loading = false
             console.log('data table', resp.data)
@@ -172,7 +175,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/gudang/depo')
           .then(resp => {
             this.loading = false
-            console.log('depo', resp)
+            // console.log('depo', resp)
             this.depos = resp.data
             resolve(resp)
           })
@@ -188,7 +191,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/barangrs/barangrs')
           .then(resp => {
             this.loading = false
-            console.log('barangrs', resp)
+            // console.log('barangrs', resp)
             this.barangrses = resp.data
             resolve(resp)
           })
@@ -204,7 +207,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/mapingbarang/mapingwith')
           .then(resp => {
             this.loading = false
-            console.log('maping barang', resp)
+            // console.log('maping barang', resp)
             this.mappingBarangs = resp.data
             resolve(resp)
           })
@@ -220,7 +223,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/minmaxdepostok/all')
           .then(resp => {
             this.loading = false
-            console.log('minmaxdepo', resp)
+            // console.log('minmaxdepo', resp)
             this.minmMxDepos = resp.data
             resolve(resp)
           })
@@ -233,7 +236,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     saveForm() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/distribusidepo/update-distribusi', this.form)
+        api.post('v1/transaksi/distribusidepo/store', this.form)
           .then(resp => {
             this.loading = false
             notifSuccess(resp)
