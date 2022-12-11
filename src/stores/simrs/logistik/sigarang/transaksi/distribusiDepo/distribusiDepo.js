@@ -21,17 +21,19 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     // custom for this store
     form: {
       no_distribusi: null,
-      kode_depo: null
+      kode_depo: null,
+      details: []
     },
     input: {
       kode_barang: null,
       jumlah: 0
     },
+    detail: {},
     displays: [],
     depos: [],
     barangrses: [],
     mappingBarangs: [],
-    minmMxDepos: []
+    minMaxDepos: []
   }),
   actions: {
     resetFORM() {
@@ -44,8 +46,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.form.details = []
     },
-
     setForm(key, payload) {
       this.form[key] = payload
     },
@@ -146,6 +148,15 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     resetInput() {
       this.input = {}
     },
+    setDetail(key, val) {
+      this.detail[key] = val
+    },
+    resetAll() {
+      this.resetFORM()
+      this.resetInput()
+      this.displays = []
+      this.detail = {}
+    },
     // api related function
     // get data tabel
     getDataTable() {
@@ -223,8 +234,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/minmaxdepostok/all')
           .then(resp => {
             this.loading = false
-            // console.log('minmaxdepo', resp)
-            this.minmMxDepos = resp.data
+            console.log('minmaxdepo', resp)
+            this.minMaxDepos = resp.data
             resolve(resp)
           })
           .catch(() => {

@@ -73,7 +73,7 @@
         <!-- input -->
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
           <div class="anak text-center">
-            {{ store.input.nama?store.input.nama:'-' }}
+            {{ store.input.kode_barang?store.input.kode_barang:'-' }}
           </div>
           <div class="anak text-center">
             <app-autocomplete-new
@@ -160,12 +160,35 @@ const store = useDistribusiDepoStore()
 store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)
+  const minmax = store.minMaxDepos.filter(data => {
+    return data.kode_depo === val
+  })
+  console.log('min max', minmax)
 }
 const depoCleared = () => {
   store.setForm('kode_depo', null)
 }
 const barangSelected = val => {
   store.setInput('kode_barang', val)
+  const barang = store.mappingBarangs.filter(sel => {
+    return sel.kode_rs === val
+  })
+  const minmax = store.minMaxDepos.filter(data => {
+    return data.kode_depo === store.form.kode_depo
+  })
+  const minMaxBarang = minmax.filter(data => {
+    return data.kode_rs === val
+  })
+  store.setInput('kode_108', barang[0].kode_108)
+  store.setInput('uraian', barang[0].barang108.uraian)
+  store.setInput('stok_min_depo', minMaxBarang[0].min_stok)
+  store.setInput('stok_max_depo', minMaxBarang[0].max_stok)
+  store.setDetail('kode_rs', val)
+  store.setDetail('kode_108', barang[0].kode_108)
+  store.setDetail('kode_satuan', barang[0].kode_satuan)
+
+  console.log('min max', minMaxBarang)
+  console.log('barang', barang)
 }
 const barangCleared = () => {
   store.setInput('kode_barang', null)
