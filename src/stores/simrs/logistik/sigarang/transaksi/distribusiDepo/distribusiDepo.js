@@ -234,7 +234,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/minmaxdepostok/all')
           .then(resp => {
             this.loading = false
-            console.log('minmaxdepo', resp)
+            // console.log('minmaxdepo', resp)
             this.minMaxDepos = resp.data
             resolve(resp)
           })
