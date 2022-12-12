@@ -134,10 +134,10 @@
             Uraian 108
           </div>
           <div class="anak text-center">
-            Stok Depo
+            Stok Gudang
           </div>
           <div class="anak text-center">
-            Stok Alokasi Depo
+            Stok Alokasi Gudang
           </div>
           <div class="anak text-center">
             Stok Minimum Depo
