@@ -55,10 +55,10 @@
             Uraian 108
           </div>
           <div class="anak text-center">
-            Stok Depo
+            Stok Gudang
           </div>
           <div class="anak text-center">
-            Stok Alokasi Depo
+            Stok Alokasi Gudang
           </div>
           <div class="anak text-center">
             Stok Minimum Depo
@@ -95,7 +95,7 @@
             {{ store.input.uraian?store.input.uraian:'-' }}
           </div>
           <div class="anak text-center">
-            {{ store.input.stok_depo?store.input.stok_depo:'-' }}
+            {{ store.input.stok_gudang?store.input.stok_gudang:'-' }}
           </div>
           <div class="anak text-center">
             {{ store.input.stok_alokasi_depo?store.input.stok_alokasi_depo:'-' }}
@@ -179,6 +179,15 @@ const barangSelected = val => {
   const minMaxBarang = minmax.filter(data => {
     return data.kode_rs === val
   })
+  const stok = store.stoks.filter(data => {
+    return data.kode_rs === val
+  })
+
+  // const toDistribute = store.distribusies.filter(data=>{
+
+  // })
+
+  store.setInput('stok_gudang', stok[0].sisa_stok)
   store.setInput('kode_108', barang[0].kode_108)
   store.setInput('uraian', barang[0].barang108.uraian)
   store.setInput('stok_min_depo', minMaxBarang[0].min_stok)

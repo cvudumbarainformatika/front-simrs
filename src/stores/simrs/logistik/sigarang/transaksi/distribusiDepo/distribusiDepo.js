@@ -33,7 +33,9 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     depos: [],
     barangrses: [],
     mappingBarangs: [],
-    minMaxDepos: []
+    minMaxDepos: [],
+    stoks: [],
+    distribusies: []
   }),
   actions: {
     resetFORM() {
@@ -137,6 +139,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.getBarangRs()
       this.getMappingBarang()
       this.getMinMaxDepo()
+      this.getCurrentStok()
+      this.getToDistributed()
     },
     // this custom store
     setNoDistribusi() {
@@ -179,6 +183,25 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           })
       })
     },
+    // get data distribusi yang belum di terima
+    getToDistributed() {
+      this.loading = true
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/transaksi/distribusidepo/distribusi', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('data disribusi', resp.data)
+            this.distribusies = resp.data
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
     // get data depo
     getDataDepo() {
       this.loading = true
@@ -188,6 +211,22 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             this.loading = false
             // console.log('depo', resp)
             this.depos = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    // get data stok
+    getCurrentStok() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/stok/all-current')
+          .then(resp => {
+            this.loading = false
+            console.log('stok', resp)
+            this.stoks = resp.data
             resolve(resp)
           })
           .catch(() => {
