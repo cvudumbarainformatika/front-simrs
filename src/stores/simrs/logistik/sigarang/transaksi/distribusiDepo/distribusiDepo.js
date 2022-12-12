@@ -28,10 +28,16 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       kode_barang: null,
       jumlah: 0
     },
-    detail: {},
+    detail: {
+      kode_rs: null,
+      kode_satuan: null,
+      kode_108: null,
+      jumlah: 0
+    },
     displays: [],
     depos: [],
     barangrses: [],
+    barangrHasStoks: [],
     mappingBarangs: [],
     minMaxDepos: [],
     stoks: [],
@@ -145,12 +151,24 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     // this custom store
     setNoDistribusi() {
       this.setForm('no_distribusi', 'DSTRDP-' + uniqueId())
+      this.setForm('reff', 'reff-' + uniqueId())
     },
     setInput(key, val) {
       this.input[key] = val
     },
     resetInput() {
-      this.input = {}
+      this.input = {
+        kode_barang: null,
+        jumlah: 0
+      }
+    },
+    resetDetail() {
+      this.detail = {
+        kode_rs: null,
+        kode_satuan: null,
+        kode_108: null,
+        jumlah: 0
+      }
     },
     setDetail(key, val) {
       this.detail[key] = val
@@ -160,6 +178,33 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.resetInput()
       this.displays = []
       this.detail = {}
+    },
+    filterBarangHasStok() {
+      if (this.barangrses.length) {
+        const ape = this.stoks.map(stok => {
+          const temp = this.barangrses.filter(data => {
+            return data.kode === stok.kode_rs
+          })
+          // console.log('temp', temp)
+          return temp[0]
+        })
+        this.barangrHasStoks = ape
+        // console.log('apem', ape)
+      } else {
+        setTimeout(() => {
+          if (this.barangrses.length) {
+            const ape = this.stoks.map(stok => {
+              const temp = this.barangrses.filter(data => {
+                return data.kode_rs === stok.kode_rs
+              })
+              // console.log('temp', temp)
+              return temp[0]
+            })
+            this.barangrHasStoks = ape
+            // console.log('apem', ape)
+          }
+        }, 2000)
+      }
     },
     // api related function
     // get data tabel
@@ -227,6 +272,15 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             this.loading = false
             console.log('stok', resp)
             this.stoks = resp.data
+            if (this.barangrses.length) {
+              this.filterBarangHasStok()
+            } else {
+              setTimeout(() => {
+                if (this.barangrses.length) {
+                  this.filterBarangHasStok()
+                }
+              }, 1500)
+            }
             resolve(resp)
           })
           .catch(() => {
@@ -291,9 +345,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             this.loading = false
             notifSuccess(resp)
             this.getDataTable()
-            this.items.forEach(item => {
-              delete item.highlight
-            })
+            this.resetAll()
             resolve(resp)
           }).catch(() => {
             this.loading = false
