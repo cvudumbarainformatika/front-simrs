@@ -1,17 +1,205 @@
 <template>
-  <div
-    class="flex column flex-center bg-loading-bg__table"
-    style="height:300px"
-  >
-    <div>
-      <q-icon
-        name="icon-mat-construction"
-        color="orange"
-        size="60px"
-      />
-    </div>
-    <div class="text-negative text-weight-bold q-mt-sm">
-      Sedang dalam proses pengerjaan
-    </div>
+  <div>
+    <q-card>
+      <q-card-section>
+        <div class="f-14 text-weight-bold">
+          Penerimaan Depo
+        </div>
+        <div class="title-desc">
+          Halaman Penerimaan oleh Depo
+        </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <div class="row items-center q-mb-sm">
+          <div class="col-2 q-mr-sm">
+            Nomor Distribusi
+          </div>
+          <div class="col">
+            <app-autocomplete-new
+              ref="refDistribusi"
+              label="pilih nomor distribusi"
+              :model="store.form.id"
+              autocomplete="no_distribusi"
+              option-label="no_distribusi"
+              option-value="id"
+              :loading="store.loading"
+              :source="store.toDistribute"
+              @on-select="disSelected"
+              @clear="disCleared"
+            />
+          </div>
+        </div>
+        <div class="row items-center q-mb-sm">
+          <div class="col-2 q-mr-sm">
+            Depo Tujuan
+          </div>
+          <div class="col">
+            <div v-if="!Object.keys(store.display).length">
+              -
+            </div>
+            <div v-if="Object.keys(store.display).length">
+              <q-chip
+                color="primary"
+                text-color="white"
+                class="chip-able"
+                dense
+                square
+              >
+                <div class="f-12">
+                  {{ store.display.depo.nama }}
+                </div>
+              </q-chip>
+            </div>
+            <!-- {{ Object.keys(store.display).length ? store.display.depo.nama:'-' }} -->
+          </div>
+        </div>
+        <div class="row items-center q-mb-sm">
+          <div class="col-2 q-mr-sm">
+            tanggal
+          </div>
+          <div class="col">
+            {{ store.tanggalDisplay }}
+          </div>
+        </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section v-if="!Object.keys(store.display).length">
+        <app-no-data />
+      </q-card-section>
+      <q-card-section v-if="Object.keys(store.display).length">
+        <!-- header -->
+        <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
+          <div class="anak text-center">
+            Kode Barang
+          </div>
+          <div class="anak text-center">
+            Nama Barang RS
+          </div>
+          <div class="anak text-center">
+            Kode 108
+          </div>
+          <div class="anak text-center">
+            Uraian 108
+          </div>
+          <div class="anak text-center">
+            Stok Gudang
+          </div>
+          <div class="anak text-center">
+            Stok Minimum Depo
+          </div>
+          <div class="anak text-center">
+            Stok Maksimum Depo
+          </div>
+          <div class="anak text-center">
+            Jumlah Distribusi
+          </div>
+        </div>
+        <q-separator />
+        <!-- details -->
+
+        <div
+          v-for="(data,i) in store.display.details"
+          :key="i"
+          class="fit row no-wrap justify-evenly items-center content-center q-my-xs"
+        >
+          <div class="disp text-center">
+            {{ data.kode_rs }}
+          </div>
+          <div class="disp text-center">
+            {{ data.barangrs.nama }}
+          </div>
+          <div class="disp text-center">
+            {{ data.kode_108 }}
+          </div>
+          <div class="disp text-center">
+            {{ data.barang108.uraian }}
+          </div>
+          <div class="disp text-center">
+            {{ data.stok_gudang }}
+          </div>
+          <div class="disp text-center">
+            {{ data.min_stok }}
+          </div>
+          <div class="disp text-center">
+            {{ data.max_stok }}
+          </div>
+          <div class="disp text-center">
+            <q-chip
+              color="primary"
+              text-color="white"
+              class="chip-able"
+              dense
+              square
+              outline
+            >
+              <div class="f-12">
+                {{ data.jumlah }}
+              </div>
+            </q-chip>
+          </div>
+        </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-actions align="right">
+        <q-btn
+          class="q-mr-lg"
+          flat
+          color="primary"
+          label="Terima"
+          no-caps
+          icon="icon-mat-save"
+          @click="store.saveForm"
+        />
+      </q-card-actions>
+      <q-separator />
+    </q-card>
   </div>
 </template>
+<script setup>
+import { notifNegativeCenterVue } from 'src/modules/utils'
+import { usePenerimaanDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaandepo/penerimaadepo'
+import { ref } from 'vue'
+
+const store = usePenerimaanDepoStore()
+store.getInitialData()
+
+const refDistribusi = ref(null)
+const disSelected = (val) => {
+  if (!store.minMaxDepos.length || !store.stoks.length) {
+    notifNegativeCenterVue('data masih sedang dalam perjalanan, mohon tunggu dan ulangi pilih nomor distribusi beberapa saat lagi')
+    return
+  }
+  store.setForm('id', val)
+  const disp = store.toDistribute.filter(data => {
+    return data.id === val
+  })
+  store.display = disp[0]
+  store.display.details.forEach(data => {
+    const mm = store.minMaxDepos.filter(minmax => {
+      return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
+    })
+    data.min_stok = mm[0].min_stok
+    data.max_stok = mm[0].max_stok
+    // console.log('mm', mm)
+    const stk = store.stoks.filter(stok => {
+      return data.kode_rs === stok.kode_rs
+    })
+    data.stok_gudang = stk[0].sisa_stok
+  })
+  console.log('display', store.display)
+}
+const disCleared = () => {
+  store.setForm('id', null)
+  store.display = {}
+  refDistribusi.value.$refs.refAuto.resetValidation()
+}
+</script>
+<style lang="scss" scoped>
+.anak{
+  width:calc(100vw/8);
+}
+.disp{
+  width:calc(100vw/8);
+}
+</style>

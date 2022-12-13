@@ -269,7 +269,7 @@ const barangSelected = val => {
   const toDistribute = store.distribusies.filter(data => {
     return data.kode_rs === val
   })
-  console.log('to dis', toDistribute)
+  // console.log('to dis', toDistribute)
   if (stok.length) {
     store.setInput('stok_gudang', stok[0].sisa_stok)
     store.setForm('no_penerimaan', stok[0].no_penerimaan)
@@ -300,9 +300,9 @@ const barangSelected = val => {
   }
   store.setDetail('kode_rs', val)
 
-  console.log('min max', minMaxBarang)
-  console.log('barang', barang)
-  console.log('stok', stok)
+  // console.log('min max', minMaxBarang)
+  // console.log('barang', barang)
+  // console.log('stok', stok)
 }
 const barangCleared = () => {
   store.resetInput()
@@ -314,7 +314,7 @@ const index = ref(null)
 const refInput = ref(null)
 const refBarang = ref(null)
 const addInput = () => {
-  console.log('ref barang', refBarang.value.$refs.refAuto)
+  // console.log('ref barang', refBarang.value.$refs.refAuto)
   if (store.input.stok_alokasi_depo > 0) {
     if (parseInt(store.input.jumlah) <= parseInt(store.input.stok_alokasi_depo) && parseInt(store.input.jumlah) > 0) {
       store.setDetail('jumlah', store.input.jumlah)
@@ -330,7 +330,7 @@ const addInput = () => {
       store.resetDetail()
       refBarang.value.$refs.refAuto.resetValidation()
       refBarang.value.$refs.refAuto.focus()
-      console.log('add input', store.form)
+      // console.log('add input', store.form)
     } else if (parseInt(store.input.jumlah) <= 0) {
       notifErrVue('jumlah distribusi tidak valid')
     } else {
@@ -343,9 +343,9 @@ const addInput = () => {
 
 // edit
 const editData = apem => {
-  console.log('index', apem, index)
-  console.log('display', store.displays[index.value])
-  console.log('form', store.form.details[index.value])
+  // console.log('index', apem, index)
+  // console.log('display', store.displays[index.value])
+  // console.log('form', store.form.details[index.value])
   edit.value = true
   index.value = apem
   store.input = store.displays[index.value]
@@ -367,10 +367,10 @@ const deleteData = index => {
     // apem
     store.displays.splice(index, 1)
     store.form.details.splice(index, 1)
-    console.log('form', store.form)
+    // console.log('form', store.form)
   })
-  console.log('display', store.displays[index])
-  console.log('form', store.form.details[index])
+  // console.log('display', store.displays[index])
+  // console.log('form', store.form.details[index])
 }
 </script>
 <style lang="scss" scoped>

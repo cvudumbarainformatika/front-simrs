@@ -126,7 +126,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', val)
+      // console.log('edit', val)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -216,7 +216,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           .get('v1/transaksi/distribusidepo/index', params)
           .then((resp) => {
             this.loading = false
-            console.log('data table', resp.data)
+            // console.log('data table', resp.data)
             this.items = resp.data.data.data
             this.setColumns(resp.data)
             this.meta = resp.data.meta
@@ -237,7 +237,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           .get('v1/transaksi/distribusidepo/distribusi', params)
           .then((resp) => {
             this.loading = false
-            console.log('data disribusi', resp.data)
+            // console.log('data disribusi', resp.data)
             this.distribusies = resp.data
             resolve(resp)
           })
@@ -270,7 +270,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/stok/all-current')
           .then(resp => {
             this.loading = false
-            console.log('stok', resp)
+            // console.log('stok', resp)
             this.stoks = resp.data
             if (this.barangrses.length) {
               this.filterBarangHasStok()
