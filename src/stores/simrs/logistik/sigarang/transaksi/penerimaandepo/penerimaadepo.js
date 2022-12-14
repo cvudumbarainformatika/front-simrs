@@ -123,6 +123,9 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
             this.getToDistributed()
             resolve(resp)
           })
+          .catch(() => {
+            this.loading = false
+          })
       })
     }
   }

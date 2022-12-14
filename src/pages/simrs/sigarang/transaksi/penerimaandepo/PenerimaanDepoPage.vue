@@ -149,7 +149,7 @@
           label="Terima"
           no-caps
           icon="icon-mat-save"
-          @click="store.saveForm"
+          @click="saveForm"
         />
       </q-card-actions>
       <q-separator />
@@ -193,6 +193,13 @@ const disCleared = () => {
   store.setForm('id', null)
   store.display = {}
   refDistribusi.value.$refs.refAuto.resetValidation()
+}
+const saveForm = () => {
+  store.saveForm().then(() => {
+    store.setForm('id', null)
+    store.display = {}
+    refDistribusi.value.$refs.refAuto.resetValidation()
+  })
 }
 </script>
 <style lang="scss" scoped>
