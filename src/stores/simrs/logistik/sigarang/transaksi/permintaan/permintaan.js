@@ -30,6 +30,8 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     depos: [],
     mapingDepos: [],
     ruangs: [],
+    minMaxPenggunas: [],
+    stoks: [],
     params: {
       q: '',
       page: 1,
@@ -152,6 +154,40 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       // console.log('columns', this.columns)
     },
 
+    // get data minMaxPengguna
+    getMinMaxPengguna() {
+      this.loading = true
+      return new Promise(resolve => {
+        // api.get('v1/minmaxpenggunastok/all')
+        api.post('v1/minmaxpenggunastok/spesifik', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('minmaxpengguna', resp)
+            this.minMaxPenggunas = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    // get data stok
+    getCurrentStok() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/stok/all-current')
+          .then(resp => {
+            this.loading = false
+            console.log('stok', resp)
+            this.stoks = resp.data
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
     deletesData(val) {},
     // api related function
     // ambil data permintaan belum selesai

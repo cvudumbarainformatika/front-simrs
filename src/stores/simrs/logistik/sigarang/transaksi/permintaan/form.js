@@ -21,7 +21,9 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     penggunas: [],
     penggunaruangs: [],
-    penanggungjawabs: []
+    penanggungjawabs: [],
+    minMaxPenggunas: {},
+    stok: {}
   }),
   actions: {
     setNoPermintaan() {
@@ -81,6 +83,24 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
             resolve(resp)
           }
         })
+      })
+    },
+
+    // get data minMaxPengguna
+    getMinMaxPengguna() {
+      this.loading = true
+      return new Promise(resolve => {
+        // api.get('v1/minmaxpenggunastok/all')
+        api.post('v1/minmaxpenggunastok/spesifik', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('minmaxpengguna', resp)
+            this.minMaxPenggunas = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
       })
     }
   }

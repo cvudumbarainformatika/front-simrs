@@ -40,6 +40,8 @@ store.getPenggunaRuang()
 store.setNoPermintaan()
 table.getRuang()
 table.getMapingDepo()
+table.getCurrentStok()
+// table.getMinMaxPengguna()
 
 const slug = 'TPN-' + uniqueId()
 const oldSlug = routerInstance.currentRoute.value.params.slug

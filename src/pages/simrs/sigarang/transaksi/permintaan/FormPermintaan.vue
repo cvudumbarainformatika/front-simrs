@@ -157,7 +157,7 @@
                 Stok User
               </div>
               <div class="col-md-9 col-xs-12">
-                Belum ada
+                {{ store.stok.sisa_stok?store.stok.sisa_stok:0 }}
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
@@ -173,7 +173,7 @@
                 Maks Stok
               </div>
               <div class="col-md-9 col-xs-12">
-                Belum ada
+                {{ store.minMaxPenggunas.max_stok?store.minMaxPenggunas.max_stok:0 }}
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
@@ -223,14 +223,16 @@ const pilihPengguna = (val) => {
     store.setNama('ruang', 'ruang tidak ditemukan')
   }
 
-  console.log('val', val)
-  console.log('peng', peng)
-  console.log('pj', pj)
-  console.log('ruang', ruang)
+  // console.log('val', val)
+  // console.log('peng', peng)
+  // console.log('pj', pj)
+  // console.log('ruang', ruang)
 }
 
 const barangSelected = val => {
   store.setForm('kode_rs', val)
+
+  store.getMinMaxPengguna()
 
   const apem = mapingbarang.barangrses.filter(data => { return data.kode === val })
 
@@ -241,7 +243,7 @@ const barangSelected = val => {
   }
 
   const depo = table.mapingDepos.filter(data => { return data.kode_rs === val })
-  console.log('depo', depo)
+  // console.log('depo', depo)
   const nama = depo.map(data => {
     let temp = data.gudang.nama.split(' ')
 
@@ -259,7 +261,7 @@ const barangSelected = val => {
   })
   console.log('nama', nama)
   const ap = store.nomor.split('-')
-  console.log('ap', ap)
+  // console.log('ap', ap)
   store.setForm('no_permintaan', ap[0] + '/' + nama[0].noPer + '/' + ap[1])
   if (depo.length) {
     store.setForm('dari', depo[0].kode_gudang)
@@ -269,8 +271,23 @@ const barangSelected = val => {
     store.setNama('gudang', 'gudang tidak ditemukan')
   }
 
-  console.log('epem', apem)
-  console.log('epem', mapingbarang.satuans[0])
+  // console.log('epem', apem)
+  // console.log('epem', mapingbarang.satuans[0])
+
+  // cari stok user
+  const stok = table.stoks.filter(data => {
+    return data.kode_rs === val && data.kode_ruang === store.form.dari
+  })
+  if (stok.length) store.stok = stok[0]
+  // cari alokasi
+  // const minMax = table.minMaxPenggunas.filter(data => {
+  //   return data.kode_pengguna === store.form.kode_pengguna && data.kode_rs === val
+  // })
+
+  console.log('stok', stok)
+  // console.log('minMax', minMax)
+  console.log('val', val)
+  // console.log('table.minMaxPenggunas', table.minMaxPenggunas)
 }
 const clearBarangRs = () => {
   store.setForm('kode_rs', null)
