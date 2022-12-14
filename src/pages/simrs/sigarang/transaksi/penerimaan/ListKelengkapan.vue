@@ -11,7 +11,7 @@
               option-label="nomor"
               autocomplete="nomor"
               outlined
-              :source="kelengkapan.pemesanans"
+              :source="kelengkapan.penerimaans"
               :loading="kelengkapan.loading"
               @on-select="kelengkapan.pemesananSelected"
             />

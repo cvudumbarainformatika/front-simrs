@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { notifSuccess, uniqueId } from 'src/modules/utils'
+import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
 import { api } from 'boot/axios'
 // import { useTransaksiPemesananTable } from './table'
 import { dateFullFormat, olahUang } from 'src/modules/formatter'
@@ -26,7 +26,10 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     },
     loading: false,
     loadingTambah: false,
-    loadingFinish: false
+    loadingFinish: false,
+    minMaxDepos: [],
+    stoks: [],
+    stok: {}
   }),
   actions: {
     // local related actions
@@ -93,6 +96,14 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.isOpen = false
     },
     updateHarga () {
+      if (this.stok.maxBeli) {
+        if (this.stok.maxBeli > 0) {
+          if (parseInt(this.form.qty) > this.stok.maxBeli) {
+            notifErrVue('Jumlah Pembelian tidak boleh melebihi jumlah maksimal pembelian')
+            this.form.qty = this.stok.maxBeli
+          }
+        }
+      }
       this.form.sub_total = (this.form.harga ? olahUang(this.form.harga) : 0) * (this.form.qty ? this.form.qty : 0)
       this.setToday()
     },
@@ -154,7 +165,29 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.form.kode_108 = maping[0].kode_108
       this.form.kode_satuan = maping[0].kode_satuan
 
-      // console.log('barang', val)
+      const dataStok = this.stoks.filter(s => {
+        return s.kode_rs === val
+      })
+      const minMax = this.minMaxDepos.filter(s => {
+        return s.kode_rs === val && s.kode_depo === 'Gd-00000000' // hardcode kode gudang besar
+      })
+      if (dataStok.length) {
+        this.stok.sisaStok = dataStok[0].sisa_stok
+      }
+      if (minMax.length) {
+        this.stok.max_stok = minMax[0].max_stok
+      }
+      if (this.stok.max_stok && this.stok.sisaStok) {
+        this.stok.maxBeli = this.stok.max_stok - this.stok.sisaStok
+      } else if (!this.stok.max_stok && this.stok.sisaStok) {
+        this.stok.maxBeli = null
+      } else if (this.stok.max_stok && !this.stok.sisaStok) {
+        this.stok.maxBeli = this.stok.max_stok
+      } else {
+        this.stok.maxBeli = null
+      }
+      console.log('dataStok', dataStok)
+      console.log('minmax', minMax)
       // console.log('maping', maping)
     },
     // api related actions
@@ -187,6 +220,39 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
             this.mapingBarangs = resp.data
             // console.log(resp.data)
             resolve(resp)
+          })
+      })
+    },
+    // get data minMaxDepo
+    getMinMaxDepo() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/minmaxdepostok/all')
+          .then(resp => {
+            this.loading = false
+            // console.log('minmaxdepo', resp)
+            this.minMaxDepos = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    // get data stok
+    getCurrentStok() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/stok/current-by-gudang')
+          .then(resp => {
+            this.loading = false
+            console.log('stok', resp)
+            this.stoks = resp.data
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
           })
       })
     },

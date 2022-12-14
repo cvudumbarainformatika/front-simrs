@@ -71,9 +71,6 @@
             <template #col-qty>
               <div>Jumlah Pesanan</div>
             </template>
-            <!-- <template #cell-qty="{row}">
-  <div>{{row.qty}}</div>
-</template> -->
             <template #col-harga>
               <div>Harga Pesanan</div>
             </template>
@@ -131,18 +128,6 @@
                       />
                     </div>
                   </div>
-                  <!-- <div class="row q-col-gutter-md q-mb-sm">
-                    <div class="col-12 ">
-                      <app-input input-class="text-right" v-model="store.form.qty" valid
-                        @update:model-value="store.updateHarga" label="Jumlah Pemesanan*" outlined />
-                    </div>
-                  </div>
-                  <div class="row q-col-gutter-md q-mb-sm">
-                    <div class="col-12">
-                      <app-input v-model="store.form.harga" valid @update:model-value="store.updateHarga" prefix="Rp "
-                        label="Harga Pembelian*" currency outlined />
-                    </div>
-                  </div> -->
                 </div>
                 <div class="col-7">
                   <div class="row q-mb-sm">
@@ -200,9 +185,6 @@
                     <strong>kode</strong>
                   </div>
                 </th>
-                <!-- <th>
-                  <div class="bold"><strong>Nama barang</strong></div>
-                </th> -->
                 <th>
                   <div class="bold">
                     <strong>108</strong>
@@ -291,17 +273,17 @@
                 </td>
                 <td>
                   <div class="bold">
-                    value
+                    {{ store.stok.sisaStok?store.stok.sisaStok:0 }}
                   </div>
                 </td>
                 <td>
                   <div class="bold">
-                    value
+                    {{ store.stok.max_stok?store.stok.max_stok:0 }}
                   </div>
                 </td>
                 <td>
                   <div class="bold">
-                    value
+                    {{ store.stok.maxBeli?store.stok.maxBeli:0 }}
                   </div>
                 </td>
 
@@ -350,13 +332,13 @@ import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/ma
 import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
 import { useTransaksiPemesananTable } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/table'
 import { ref } from 'vue'
-// uniqueId
-// import formDialog from './SusForm.vue'
 const table = useTransaksiPemesananTable()
 const store = useTransaksiPemensananForm()
 const mappingBarang = useMasterMapingBarangForm()
 store.setToday()
 table.getDataTable()
+store.getCurrentStok()
+store.getMinMaxDepo()
 // store.getKontrakPekerjaan()
 const kontrak = ref(false)
 const kodeRs = ref(false)
