@@ -39,6 +39,29 @@
       />
     </template>
     <template #option="scope">
+      <!-- <div
+        v-bind="scope.itemProps"
+        class="q-px-sm q-py-xs"
+      >
+        <div v-if="typeof(props.optionLabel)==='object'">
+          <div
+            v-for="(item, i) in props.optionLabel"
+            :key="i"
+          >
+            <div
+              class="ellipsis"
+            >
+              {{ scope.opt[item] }}
+            </div>
+          </div>
+        </div>
+        <div
+          v-else
+          class="ellipsis"
+        >
+          {{ scope.opt[optionLabel] }}
+        </div>
+      </div> -->
       <q-item v-bind="scope.itemProps">
         <q-item-section>
           <div v-if="typeof(props.optionLabel)==='object'">
@@ -46,11 +69,19 @@
               v-for="(item, i) in props.optionLabel"
               :key="i"
             >
-              <q-item-label>{{ scope.opt[item] }}</q-item-label>
-              <!-- <q-item-label>{{ oLabel }}</q-item-label> -->
+              <q-item-label>
+                <div
+                  class="ellipsis"
+                >
+                  {{ scope.opt[item] }}
+                </div>
+              </q-item-label>
             </div>
           </div>
-          <div v-if="typeof(props.optionLabel)==='string'">
+          <div
+            v-if="typeof(props.optionLabel)==='string'"
+            class="ellipsis"
+          >
             {{ scope.opt[optionLabel] }}
           </div>
         </q-item-section>
@@ -62,6 +93,11 @@
           No results
         </q-item-section>
       </q-item>
+    </template>
+    <template #selected-item="scope">
+      <div class="ellipsis">
+        {{ scope.opt[optionLabel] }}
+      </div>
     </template>
   </q-select>
 </template>

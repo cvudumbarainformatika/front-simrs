@@ -380,4 +380,13 @@ const deleteData = index => {
 .disp{
   width:calc(100vw/9);
 }
+
+// .q-field__control-container {
+//   .q-field__native{
+//     span {
+//       color: red;
+//     }
+//   }
+// }
+
 </style>
