@@ -180,10 +180,12 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.detail = {}
     },
     filterBarangHasStok() {
+      console.log('type', Object.keys(this.stoks))
       if (this.barangrses.length) {
-        const ape = this.stoks.map(stok => {
+        const keys = Object.keys(this.stoks)
+        const ape = keys.map(key => {
           const temp = this.barangrses.filter(data => {
-            return data.kode === stok.kode_rs
+            return data.kode === this.stoks[key].kode_rs
           })
           // console.log('temp', temp)
           return temp[0]
@@ -270,7 +272,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/stok/all-current')
           .then(resp => {
             this.loading = false
-            // console.log('stok', resp)
+            console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
               this.filterBarangHasStok()

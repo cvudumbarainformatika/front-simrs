@@ -262,17 +262,17 @@ const barangSelected = val => {
   const minMaxBarang = minmax.filter(data => {
     return data.kode_rs === val
   })
-  const stok = store.stoks.filter(data => {
-    return data.kode_rs === val
+  const stok = Object.keys(store.stoks).filter(data => {
+    return store.stoks[data].kode_rs === val
   })
 
   const toDistribute = store.distribusies.filter(data => {
     return data.kode_rs === val
   })
-  // console.log('to dis', toDistribute)
+  console.log('stok', stok)
   if (stok.length) {
-    store.setInput('stok_gudang', stok[0].sisa_stok)
-    store.setForm('no_penerimaan', stok[0].no_penerimaan)
+    store.setInput('stok_gudang', store.stoks[stok[0]].stok)
+    store.setForm('no_penerimaan', store.stoks[stok[0]].no_penerimaan)
     if (toDistribute.length) {
       let alokasi = 0
       if (toDistribute[0].jml > 0) {
