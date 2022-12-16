@@ -19,7 +19,7 @@
               </div>
               <div class="col-6 text-left">
                 <div class="row f-14 text-weight-bold">
-                  UOBK RUSD Dr. MUHAMMAD SALEH
+                  UOBK RSUD Dokter MOHAMAD SALEH
                 </div>
                 <div class="row f-12 text-weight-bold">
                   KOTA PROBOLINGGO
