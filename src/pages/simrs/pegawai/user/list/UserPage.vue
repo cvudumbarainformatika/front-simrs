@@ -148,14 +148,14 @@
           <template #cell-status="{row}">
             <div v-if="row.status===null">
               <q-chip
-                color="grey"
+                color="green"
                 text-color="white"
                 class="chip"
                 dense
                 square
               >
                 <div class="f-12 text-center">
-                  none
+                  bisa login
                 </div>
               </q-chip>
             </div>
@@ -248,7 +248,7 @@ const changeDevice = val => {
 
 const detailPegawai = ref(false)
 const seeDetail = (row) => {
-  console.log('row', row)
+  // console.log('row', row)
   detailPegawai.value = !detailPegawai.value
 }
 </script>
