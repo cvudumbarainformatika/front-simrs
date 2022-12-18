@@ -32,6 +32,9 @@
           <template #col-nama>
             <div>Nama</div>
           </template>
+          <template #col-detail>
+            <div>Detail</div>
+          </template>
           <template #col-ganti>
             <div class="text-center">
               More Actions
@@ -105,6 +108,43 @@
               </q-btn> -->
             </div>
           </template>
+          <template #cell-username="{row}">
+            <div class="fit row no-wrap justify-between items-center">
+              <div>{{ row.username }}</div>
+              <div>
+                <q-btn
+                  flat
+                  color="grey"
+                  icon="icon-mat-visibility"
+                  dense
+                  rounded
+                  size="xs"
+                  @click="seeDetail(row)"
+                >
+                  <q-menu>
+                    <q-chip
+                      color="primary"
+                      text-color="white"
+                      class="chip-able"
+                      dense
+                      square
+                      outline
+                    >
+                      <div class="f-12">
+                        {{ row.pegawai?row.pegawai.account_pass:'-' }}
+                      </div>
+                    </q-chip>
+                  </q-menu>
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Lihat password
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+          </template>
           <template #cell-status="{row}">
             <div v-if="row.status===null">
               <q-chip
@@ -162,6 +202,7 @@ import { useRekapAbesensiUserStore } from 'src/stores/simrs/pegawai/user/rekap/r
 import { date, Dialog } from 'quasar'
 import RekapPage from './rekap/RekapPage.vue'
 import JadwalPage from './rekap/JadwalPage.vue'
+import { ref } from 'vue'
 const store = useUserStore()
 const rekap = useRekapAbesensiUserStore()
 
@@ -205,6 +246,11 @@ const changeDevice = val => {
   console.log('change dev. req', val)
 }
 
+const detailPegawai = ref(false)
+const seeDetail = (row) => {
+  console.log('row', row)
+  detailPegawai.value = !detailPegawai.value
+}
 </script>
 <style lang="scss" scoped>
 .chip{
