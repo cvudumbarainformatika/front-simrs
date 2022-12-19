@@ -28,10 +28,16 @@
 
       <q-card-section class="q-pt-none">
         <div
-          v-if="!rekap.jadwals.length"
+          v-if="rekap.loading"
           class="flex flex-center"
         >
           <app-loading />
+        </div>
+        <div
+          v-if="!rekap.jadwals.length && !rekap.loading"
+          class="flex flex-center"
+        >
+          <app-no-data />
         </div>
         <div
           v-for="(jadwal,i) in rekap.jadwals"

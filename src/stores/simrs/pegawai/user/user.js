@@ -218,7 +218,7 @@ export const useUserStore = defineStore('store_user', {
       const data = { id: this.deleteId }
       return new Promise((resolve, reject) => {
         api
-          .post('v1//destroy', data)
+          .post('v1/pegawai/absensi/hapus-jadwal', data)
           .then((resp) => {
             this.loading = false
             notifSuccess(resp)

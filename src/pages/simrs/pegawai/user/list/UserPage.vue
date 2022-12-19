@@ -91,21 +91,21 @@
                   Lihat Rekap Absensi
                 </q-tooltip>
               </q-btn>
-              <!-- <q-btn
+              <q-btn
                 flat
                 color="red"
-                icon="icon-mat-summarize"
+                icon="icon-mat-delete"
                 dense
                 rounded
-                @click="bukaKalender(row)"
+                @click="hapusJadwal(row)"
               >
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
-                  Lihat Rekap Absensi
+                  Hapus Jadwal
                 </q-tooltip>
-              </q-btn> -->
+              </q-btn>
             </div>
           </template>
           <template #cell-username="{row}">
@@ -226,6 +226,26 @@ const detailRekap = (val) => {
 //   store.setCalender()
 //   console.log(val)
 // }
+const hapusJadwal = val => {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: `Apakah jadwal <strong>: ${val.nama}</strong> akan di hapus?`,
+    cancel: true,
+    html: true
+    // persistent: true
+  })
+    .onOk(() => {
+      store.deleteId = val.id
+      store.deleteData()
+      // store.setForm('id', val.id)
+      // store.sanitazeForm()
+      // store.updateStatus()
+      // store.setOpen()
+    }).onCancel(() => {
+      // store.setOpen()
+    })
+  console.log('hapus jadwal', val)
+}
 const changeDevice = val => {
   Dialog.create({
     title: 'Konfirmasi',
