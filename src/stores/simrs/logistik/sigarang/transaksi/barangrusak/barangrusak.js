@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { uniqueId } from 'src/modules/utils'
+import { notifSuccess, uniqueId } from 'src/modules/utils'
 
 export const useBarangRusakStore = defineStore('barang_rusak_store', {
   state: () => ({
@@ -98,7 +98,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
     },
     // set reff
     setReff() {
-      this.form.reff = 'reff-' + uniqueId()
+      this.form.reff = 'RSK-' + uniqueId()
     },
     // get barang rs
     getBarangRs() {
@@ -141,6 +141,21 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
             this.loading = false
             console.log('ruang', resp)
             this.ruangans = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    // simpan
+    saveForm() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/pemakaianruangan/rusak', this.form)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => {

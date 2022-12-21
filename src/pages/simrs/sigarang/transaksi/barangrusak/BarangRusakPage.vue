@@ -145,6 +145,9 @@
             <div class="anak text-center">
               Jumlah
             </div>
+            <div class="anak text-center">
+              #
+            </div>
           </div>
           <div
             v-for="(input, i) in store.displays"
@@ -169,6 +172,16 @@
             <div class="anak text-center">
               {{ input.jumlah }}
             </div>
+            <div class="anak text-center">
+              <q-btn
+                round
+                icon="icon-mat-delete"
+                size="xs"
+                color="negative"
+                flat
+                @click="remove(i)"
+              />
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -180,12 +193,14 @@
           label="Simpan"
           icon="icon-mat-save"
           flat
+          @click="simpan"
         />
       </q-card-actions>
     </q-card>
   </div>
 </template>
 <script setup>
+import { notifErrVue } from 'src/modules/utils'
 import { useBarangRusakStore } from 'src/stores/simrs/logistik/sigarang/transaksi/barangrusak/barangrusak'
 import { ref } from 'vue'
 
@@ -229,17 +244,37 @@ const refRuangan = ref(null)
 const refJumlah = ref(null)
 const tambah = () => {
   store.setInput('jumlah', store.details.jumlah)
-  store.form.details.push(store.details)
-  store.displays.push(store.input)
-  store.resetInput()
-  refBarang.value.$refs.refAuto.resetValidation()
-  refJumlah.value.$refs.refInput.resetValidation()
-  refBarang.value.$refs.refAuto.focus()
-  console.log('tambah', refJumlah.value.$refs)
+  if (Object.keys(store.input).length && store.details.jumlah > 0) {
+    store.form.details.push(store.details)
+    store.displays.push(store.input)
+    store.resetInput()
+    console.log('tambah', refJumlah.value.$refs.refAuto)
+    refBarang.value.$refs.refAuto.resetValidation()
+    refJumlah.value.$refs.refInput.resetValidation()
+    refBarang.value.$refs.refAuto.focus()
+  } else {
+    notifErrVue('Periksa kembali input yang belum terisi')
+  }
+}
+
+const remove = val => {
+  store.displays.splice(val, 1)
+  store.form.details.splice(val, 1)
+  console.log(val)
+}
+
+const simpan = () => {
+  store.saveForm().then(() => {
+    store.resetAll()
+    refBarang.value.$refs.refAuto.resetValidation()
+    refJumlah.value.$refs.refInput.resetValidation()
+    refRuangan.value.$refs.refAuto.resetValidation()
+    refRuangan.value.$refs.refAuto.focus()
+  })
 }
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/6);
+  width:calc(100vw/7);
 }
 </style>
