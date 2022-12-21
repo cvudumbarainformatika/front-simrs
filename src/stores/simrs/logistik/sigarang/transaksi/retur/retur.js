@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess, uniqueId } from 'src/modules/utils'
 
@@ -9,13 +10,14 @@ export const useReturStore = defineStore('retur_store', {
 
     // custom for this store
     gudangOptions: [
-      { nama: 'Gudang', value: 'gudang' },
-      { nama: 'Penyedia', value: 'penyedia' }
+      { nama: 'Gudang', value: 'GUDANG' },
+      { nama: 'Penyedia', value: 'PENYEDIA' }
     ],
     form: {
       reff: null,
-      nama: 'BARANG RUSAK',
-      kode_pengguna: null,
+      tujuan: null,
+      dari: null,
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       details: []
     },
     details: {
@@ -31,17 +33,23 @@ export const useReturStore = defineStore('retur_store', {
       uraian: null,
       satuan: null
     },
+    gudangTujuan: null,
     barangrs: [],
     mapingBarangs: [],
-    ruangans: []
+    ruangans: [],
+    mapingbarangdepos: [],
+    gudangUmum: {
+      kode: 'Gd-00000000',
+      nama: 'GUDANG SELURUH RUMAH SAKIT'
+    }
   }),
   actions: {
     resetFORM() {
       this.form = {}
       const columns = [
         'reff',
-        'kode_pengguna',
-        'jumlah'
+        'tujuan',
+        'dari'
       ]
 
       for (let i = 0; i < columns.length; i++) {
@@ -55,6 +63,7 @@ export const useReturStore = defineStore('retur_store', {
       this.displays = []
       this.input = {}
       this.setReff()
+      this.gudangTujuan = null
     },
     setForm(key, val) {
       this.form[key] = val
@@ -86,6 +95,7 @@ export const useReturStore = defineStore('retur_store', {
       this.getBarangRs()
       this.getMappingbBarang()
       this.getDataRuangan()
+      // this.getMapingDepo()
       this.setReff()
     },
     // set reff
@@ -140,11 +150,28 @@ export const useReturStore = defineStore('retur_store', {
           })
       })
     },
-    // simpan
-    saveForm() {
+    // get data ruangan
+    getMapingDepo() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/pemakaianruangan/rusa', this.form)
+        api.get('v1/mapingdepo/maping')
+          .then(resp => {
+            this.loading = false
+            console.log('maping depo', resp)
+            this.mapingbarangdepos = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    // simpan
+    saveForm() {
+      // console.log('form', this.form)
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/retur/simpan', this.form)
           .then(resp => {
             this.loading = false
             notifSuccess(resp)

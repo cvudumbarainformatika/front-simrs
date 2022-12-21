@@ -29,9 +29,8 @@
               </div>
               <div class="q-ml-sm col-xs-12 col-md-9 col-sm-9">
                 <app-autocomplete-new
-
                   label="pilih "
-                  :model="store.input.kode_gudang"
+                  :model="store.gudangTujuan"
                   autocomplete="nama"
                   option-label="nama"
                   option-value="value"
@@ -42,25 +41,6 @@
                 />
               </div>
             </div>
-            <!-- <div class="row no-wrap items-center q-mb-sm">
-              <div class="col-md-3 col-sm-3 col-xs-12">
-                Ruangan
-              </div>
-              <div class="q-ml-sm col-xs-12 col-md-9 col-sm-9">
-                <app-autocomplete-new
-                  ref="refRuangan"
-                  label="pilih ruangan"
-                  :model="store.form.kode_pengguna"
-                  autocomplete="uraian"
-                  option-label="uraian"
-                  option-value="kode"
-                  :loading="store.loading"
-                  :source="store.ruangans"
-                  @on-select="penggunaSelected"
-                  @clear="penggunaCleared"
-                />
-              </div>
-            </div> -->
             <div class="row no-wrap items-center q-mb-sm">
               <div class="col-md-3 col-sm-3 col-xs-12">
                 Kode Barang
@@ -99,12 +79,18 @@
                 Alasan
               </div>
               <div class="q-ml-sm col-xs-12 col-md-9 col-sm-9">
-                <app-input
-                  v-model="store.details.alasan"
+                <q-input
+                  v-model="store.form.alasan"
                   label="alasan"
                   type="textarea"
                   filled
                   borderless
+                  dense
+                  :rules="[
+                    val => !!val || '* harap di isi',
+                    val => val.length <= 255|| 'maksimal 255 karakter'
+                  ]"
+                  :hint="store.details.alasan?String(store.details.alasan.length):''"
                 />
               </div>
             </div>
@@ -265,12 +251,18 @@ const barangCleared = () => {
 }
 
 const gudangSelected = (val) => {
+  console.log('gudang', val)
   store.resetInput()
-  store.setInput('kode_gudang', val)
+  store.gudangTujuan = val
+  if (val === 'GUDANG') {
+    store.setForm('tujuan', store.gudangUmum.kode)
+  } else {
+    store.setForm('tujuan', '-')
+  }
 }
 const gudangCleared = () => {
   store.resetInput()
-  store.setInput('kode_gudang', null)
+  store.gudangTujuan = null
 }
 
 const refRuangan = ref(null)
