@@ -107,10 +107,10 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       // console.log('columns', this.columns)
     },
     setData(payload) {
-      this.users.forEach(user => {
-        // console.log('cari id', payload[user.id])
+      // console.log('cari id', payload.user.data)
+      payload.user.data.forEach(user => {
         if (payload[user.id]) {
-          // console.log('ada lengt', payload[user.id])
+          console.log('ada lengt', payload[user.id])
           payload[user.id].forEach(data => {
             user[data.day] = data
           })
@@ -144,7 +144,7 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
           })
         }
       })
-      this.items = this.users
+      this.items = payload.user.data
       // console.log('set data', this.users)
     },
 
@@ -198,11 +198,11 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
     },
     getInitialData() {
       this.getKatgory()
-      this.getUsers().then(() => {
-        this.getProta()
-        this.getLibur()
-        this.getDataTable()
-      })
+      this.getDataTable()
+      this.getProta()
+      this.getLibur()
+      // this.getUsers().then(() => {
+      // })
     },
     // this custom store
     refreshTable() {
@@ -213,19 +213,19 @@ export const useRekapAbsensiPegawaiStore = defineStore('rekap_absensi_pegawai', 
       // this.setParam('tahun ', tahun)
       // console.log('moth', month)
       this.resetUser()
-      this.getUsers().then(() => {
-        this.getProta()
-        this.getLibur()
-        this.getDataTable()
-      })
+      this.getProta()
+      this.getLibur()
+      this.getDataTable()
+      // this.getUsers().then(() => {
+      // })
     },
-    // setPage(payload) {
-    //   // console.log('setPage', payload)
-    //   this.params.bulan = payload
-    //   this.getProta()
-    //   this.getLibur()
-    //   this.getDataTable()
-    // },
+    setPage(payload) {
+      // console.log('setPage', payload)
+      this.params.page = payload
+      this.getDataTable()
+      this.getProta()
+      this.getLibur()
+    },
 
     setPerPage(payload) {
       this.params.per_page = payload
