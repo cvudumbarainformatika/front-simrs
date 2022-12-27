@@ -28,10 +28,11 @@
           <div class="col-9">
             <app-autocomplete-new
               label="pilih "
-              :model="store.form.kode_tempat"
+              :model="store.kode_tempat"
               autocomplete="nama"
               option-label="nama"
               option-value="kode"
+              valid
               :loading="store.loading"
               :source="store.gudangDepo"
               @on-select="gudangSelected"
@@ -42,20 +43,20 @@
         <!-- button stok opname -->
         <div class="fit row no-wrap justify-end items-center q-mb-sm">
           <q-btn
-            :label="!store.items.length ? 'Mulai Opname':'Sudah ada data'"
+            :label="!store.allItems.length ? 'Mulai Opname':'Sudah ada data'"
             no-caps
             color="primary"
-            :disable="!!store.items.length || store.loading"
+            :disable="!!store.allItems.length || store.loading"
             @click="store.simpanOpname"
           >
             <q-tooltip
               anchor="top middle"
               self="center middle"
             >
-              <div v-if="!store.items.length">
+              <div v-if="!store.allItems.length">
                 Mulai stok opname
               </div>
-              <div v-if="store.items.length">
+              <div v-if="store.allItems.length">
                 Sudah dilakukan stok opname di bulan ini
               </div>
             </q-tooltip>
@@ -138,11 +139,15 @@
             <template #cell-selisih="{row}">
               {{ row.penyesuaian?row.penyesuaian.selisih:'-' }}
             </template>
+            <template #cell-sisa_stok="{row}">
+              {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+            </template>
           </app-table>
         </div>
         <q-separator />
       </q-card-section>
     </q-card>
+    <formDialog v-model="store.isOpen" />
   </div>
 </template>
 <script setup>
@@ -153,6 +158,7 @@ import { date } from 'quasar'
 import { ref } from 'vue'
 import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/transaksi/opname/stokOpname'
 import { dateFullFormat } from 'src/modules/formatter'
+import formDialog from './FormDialog.vue'
 
 const tanggalStokOpname = ref(date.formatDate(Date.now(), 'DD MMMM YYYY'))
 const store = useStokOpnameStore()
@@ -160,10 +166,19 @@ store.getInitialData()
 
 const gudangSelected = (val) => {
   console.log('gudang', val)
-  store.form.kode_tempat = val
+  store.kode_tempat = val
+  if (val !== null) {
+    store.params.search = val
+    store.getDataByDepo()
+  } else {
+    store.params.search = ''
+    store.getDataTable()
+  }
 }
 const gudangCleared = () => {
-  store.form.kode_tempat = null
+  store.kode_tempat = null
+  store.params.search = ''
+  store.getDataTable()
 }
 // const searchEnter = () => {
 //   console.log(store.params.search)

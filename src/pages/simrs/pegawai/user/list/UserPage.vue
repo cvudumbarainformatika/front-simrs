@@ -146,7 +146,7 @@
             </div>
           </template>
           <template #cell-status="{row}">
-            <div v-if="row.status===null">
+            <div v-if="row.status===null || row.status===''">
               <q-chip
                 color="green"
                 text-color="white"
@@ -159,16 +159,16 @@
                 </div>
               </q-chip>
             </div>
-            <div v-if="row.status===''">
+            <div v-if="row.status==='8'">
               <q-chip
-                color="green"
+                color="negative"
                 text-color="white"
                 class="chip"
                 dense
                 square
               >
                 <div class="f-12 text-center">
-                  bisa login
+                  Scan Barcode
                 </div>
               </q-chip>
             </div>
@@ -257,6 +257,7 @@ const changeDevice = val => {
     .onOk(() => {
       store.resetFORM()
       store.setForm('id', val.id)
+      store.setForm('status', '2')
       store.sanitazeForm()
       store.updateStatus()
       // store.setOpen()
