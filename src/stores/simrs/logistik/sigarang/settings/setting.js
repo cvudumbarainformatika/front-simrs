@@ -151,11 +151,11 @@ export const useSettingsStore = defineStore('setting_store', {
             nama: 'Master Barang RS',
             name: 'sigarang.master.barangrs'
           },
-          {
-            link: 'sigarang/master/mapingbarang',
-            nama: 'Master Mapping RS ke 108',
-            name: 'sigarang.master.mapingbarang'
-          },
+          // {
+          //   link: 'sigarang/master/mapingbarang',
+          //   nama: 'Master Mapping RS ke 108',
+          //   name: 'sigarang.master.mapingbarang'
+          // },
           {
             link: 'sigarang/master/supplier',
             nama: 'Master Supplier',

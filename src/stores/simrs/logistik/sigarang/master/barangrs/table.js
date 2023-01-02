@@ -16,7 +16,7 @@ export const useMasterBarangRSTable = defineStore('master_barangrs_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'uuid', 'kode_satuan', 'created_at', 'updated_at']
+    columnHide: ['id', 'uuid', 'kode_satuan', 'kode_108', 'created_at', 'updated_at']
   }),
   getters: {
     getterColumns (state) {
@@ -47,8 +47,9 @@ export const useMasterBarangRSTable = defineStore('master_barangrs_table', {
       this.getDataTable()
     },
     setColumns (payload) {
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0]
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0]
+      this.columns = ['kode', 'nama', 'barang108', 'merk', 'satuan']
       // console.log('columns', this.columns)
     },
 

@@ -29,11 +29,20 @@
             <template #col-nama>
               <div>Nama Barang RS</div>
             </template>
+            <template #col-merk>
+              <div>Merk</div>
+            </template>
+            <template #col-barang108>
+              <div>Nama Barang 108</div>
+            </template>
             <template #col-satuan>
               <div>Satuan</div>
             </template>
             <template #cell-satuan="{row}">
               <div>{{ row.satuan?row.satuan.nama:'-' }}</div>
+            </template>
+            <template #cell-barang108="{row}">
+              <div>{{ row.barang108?row.barang108.uraian:'-' }}</div>
             </template>
           </app-table>
           <!--
