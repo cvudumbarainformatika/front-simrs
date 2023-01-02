@@ -16,7 +16,7 @@ export const useMasterBarang108Table = defineStore('master_barang108_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'uuid', 'akun', 'kelompok', 'jenis', 'objek', 'rincian_objek', 'sub_rincian_objek', 'created_at', 'updated_at']
+    columnHide: ['id', 'uuid', 'akun', 'kelompok', 'jenis', 'objek', 'rincian_objek', 'sub_rincian_objek', 'sub_sub_rincian_objek', 'created_at', 'updated_at']
   }),
   getters: {
     getterColumns (state) {

@@ -13,6 +13,7 @@ export const useMasterBarang108Form = defineStore('master_barang108_form', {
       objek: null,
       rincian_objek: null,
       sub_rincian_objek: null,
+      sub_sub_rincian_objek: null,
       kode: null,
       uraian: null
     },
@@ -23,7 +24,7 @@ export const useMasterBarang108Form = defineStore('master_barang108_form', {
     resetFORM () {
       this.form = {}
       const columns = [
-        'akun', 'kode', 'kelompok', 'jenis', 'objek', 'rincian_objek', 'sub_rincian_objek', 'uraian'
+        'akun', 'kode', 'kelompok', 'jenis', 'objek', 'rincian_objek', 'sub_rincian_objek', 'sub_sub_rincian_objek', 'uraian'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
@@ -31,7 +32,7 @@ export const useMasterBarang108Form = defineStore('master_barang108_form', {
     },
     setKode () {
       console.log('set kode')
-      this.form.kode = this.form.akun + '.' + this.form.kelompok + '.' + this.form.jenis + '.' + this.form.objek + '.' + this.form.rincian_objek + '.' + this.form.sub_rincian_objek
+      this.form.kode = this.form.akun + '.' + this.form.kelompok + '.' + this.form.jenis + '.' + this.form.objek + '.' + this.form.rincian_objek + '.' + this.form.sub_rincian_objek + '.' + this.form.sub_sub_rincian_objek
     },
     setToday () {
       const date = new Date()

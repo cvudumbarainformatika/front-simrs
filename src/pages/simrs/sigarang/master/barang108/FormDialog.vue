@@ -66,6 +66,15 @@
                 @update:model-value="store.setKode"
               />
             </div>
+            <div class="col-md-2 col-xs-12">
+              <app-input
+                v-model="store.form.sub_sub_rincian_objek"
+                label="Sub Rincian Objek*"
+                outlined
+                autofocus
+                @update:model-value="store.setKode"
+              />
+            </div>
           </div>
           <div class="row q-col-gutter-md q-mt-sm">
             <div class="col-md-4 col-xs-12">

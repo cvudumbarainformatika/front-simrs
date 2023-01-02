@@ -124,6 +124,7 @@
           :ada-tambah="false"
           @goto="store.setPage"
           @refresh="store.refreshTable"
+          @set-row="store.setPerPage"
           @find="store.setSearch"
           @set-order="store.setOder"
           @new-data="store.newData"

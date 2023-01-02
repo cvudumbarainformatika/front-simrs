@@ -33,7 +33,7 @@
               <div>Satuan</div>
             </template>
             <template #cell-satuan="{row}">
-              <div>{{ row.satuan.nama }}</div>
+              <div>{{ row.satuan?row.satuan.nama:'-' }}</div>
             </template>
           </app-table>
           <!--
