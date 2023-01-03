@@ -173,7 +173,7 @@
             <div class="disp text-center">
               {{ data.jumlah }}
             </div>
-            <div class="disp text-center">
+            <div class="anak text-center">
               <div class="fit row no-wrap justify-evenly items-center content-center">
                 <q-btn
                   size="sm"
@@ -376,6 +376,7 @@ const deleteData = index => {
 <style lang="scss" scoped>
 .anak{
   width:calc(100vw/9);
+  margin-right: .5em;
 }
 .disp{
   width:calc(100vw/9);

@@ -32,6 +32,12 @@
             <template #col-merk>
               <div>Merk</div>
             </template>
+            <template #col-pengali>
+              <div>Pengali</div>
+            </template>
+            <template #col-satuankecil>
+              <div>Satuan Kecil</div>
+            </template>
             <template #col-barang108>
               <div>Nama Barang 108</div>
             </template>

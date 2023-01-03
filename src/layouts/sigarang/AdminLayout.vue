@@ -114,7 +114,7 @@ function toggleLeftDrawer () {
 // }
 onMounted(() => {
   store.getUser()
-  // setting.getAllData()
+  setting.getAllData()
   // checkTempdata()
 })
 // function toggleRightDrawer() {

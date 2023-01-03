@@ -180,6 +180,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.detail = {}
     },
     filterBarangHasStok() {
+      this.barangrHasStoks = []
       console.log('type', Object.keys(this.stoks))
       if (this.barangrses.length) {
         const keys = Object.keys(this.stoks)
@@ -202,8 +203,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
               // console.log('temp', temp)
               return temp[0]
             })
+            console.log('apem', ape)
             this.barangrHasStoks = ape
-            // console.log('apem', ape)
           }
         }, 2000)
       }

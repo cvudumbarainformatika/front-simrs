@@ -96,6 +96,12 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.isOpen = false
     },
     updateHarga () {
+      console.log('stok', this.stok)
+      if (this.stok.max_stok) {
+        if (this.stok.sisaStok) {
+          this.stok.maxBeli = this.stok.max_stok - this.stok.sisaStok
+        }
+      }
       if (this.stok.maxBeli) {
         if (this.stok.maxBeli > 0) {
           if (parseInt(this.form.qty) > this.stok.maxBeli) {
@@ -139,6 +145,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.form.kode_perusahaan = result[0].kodeperusahaan
       this.namaPerusahaan = result[0].namaperusahaan
       this.form.kontrak = val
+      // this.form.nokontrak = val
       this.setToday()
       // console.log('kotrak', val)
       // console.log('result', result)
@@ -152,24 +159,25 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.barangrs = mappingBarang.barangrses.filter(data => {
         return data.kode === val
       })
-      const maping = this.mapingBarangs.filter(data => {
-        return data.kode_rs === val
-      })
-      this.barang108 = mappingBarang.barang108s.filter(data => {
-        return data.kode === maping[0].kode_108
-      })
-      this.satuan = mappingBarang.satuans.filter(data => {
-        return data.kode === maping[0].kode_satuan
-      })
-      this.form.kode_rs = maping[0].kode_rs
-      this.form.kode_108 = maping[0].kode_108
-      this.form.kode_satuan = maping[0].kode_satuan
+      // const maping = this.mapingBarangs.filter(data => {
+      //   return data.kode_rs === val
+      // })
+      // this.barang108 = mappingBarang.barang108s.filter(data => {
+      //   return data.kode === maping[0].kode_108
+      // })
+      // this.satuan = mappingBarang.satuans.filter(data => {
+      //   return data.kode === maping[0].kode_satuan
+      // })
+      this.form.kode_rs = this.barangrs[0].kode
+      this.form.kode_108 = this.barangrs[0].kode_108
+      this.form.kode_satuan = this.barangrs[0].kode_satuan
 
       const dataStok = this.stoks.filter(s => {
         return s.kode_rs === val
       })
       const minMax = this.minMaxDepos.filter(s => {
-        return s.kode_rs === val && s.kode_depo === 'Gd-00000000' // hardcode kode gudang besar
+        // return s.kode_rs === val && s.kode_depo === 'Gd-02010100' // hardcode kode gudang Habis pakai gedung 2
+        return s.kode_rs === val // hardcode kode gudang Habis pakai gedung 2
       })
       if (dataStok.length) {
         this.stok.sisaStok = dataStok[0].sisa_stok
@@ -188,6 +196,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       }
       console.log('dataStok', dataStok)
       console.log('minmax', minMax)
+      console.log('form', this.form)
       // console.log('maping', maping)
     },
     // api related actions
@@ -198,7 +207,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       return new Promise((resolve, reject) => {
         api.get('v1/kontrak-pengerjaan/kontrak-aktif', params)
           .then(resp => {
-            // console.log('kontrak', resp.data)
+            console.log('kontrak', resp.data)
             this.loadingKontrak = false
             if (resp.status === 200) {
               this.kontrakPekerjaans = resp.data
@@ -214,9 +223,10 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     getMapingBarang () {
       const params = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/mapingbarang/maping', params)
+        // api.get('v1/mapingbarang/maping', params)
+        api.get('v1/barangrs/barangrs', params)
           .then(resp => {
-            // console.log('maping barang', resp.data)
+            console.log('maping barang', resp.data)
             this.mapingBarangs = resp.data
             // console.log(resp.data)
             resolve(resp)

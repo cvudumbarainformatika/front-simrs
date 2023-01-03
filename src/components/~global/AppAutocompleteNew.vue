@@ -95,8 +95,16 @@
       </q-item>
     </template>
     <template #selected-item="scope">
-      <div class="ellipsis">
-        {{ scope.opt[optionLabel] }}
+      <div v-if="typeof(props.optionLabel)==='object'">
+        <div class="ellipsis">
+          {{ scope.opt[optionLabel[0]] }}
+          <!-- {{ props.optionLabel[0] }} -->
+        </div>
+      </div>
+      <div v-else>
+        <div class="ellipsis">
+          {{ scope.opt[optionLabel] }}
+        </div>
       </div>
     </template>
   </q-select>

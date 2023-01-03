@@ -230,6 +230,7 @@
                       :valid="jumlah"
                       label="Jumlah Pemesanan*"
                       outlined
+                      type="number"
                       @update:model-value="store.updateHarga"
                     />
                   </div>
@@ -258,17 +259,17 @@
                 </td> -->
                 <td>
                   <div class="bold">
-                    {{ store.barang108.length ? store.barang108[0].kode : '-' }}
+                    {{ store.barangrs.length ? store.barangrs[0].barang108.kode : '-' }}
                   </div>
                 </td>
                 <td>
                   <div class="bold">
-                    {{ store.barang108.length ? store.barang108[0].uraian : '-' }}
+                    {{ store.barangrs.length ? store.barangrs[0].barang108.uraian : '-' }}
                   </div>
                 </td>
                 <td>
                   <div class="bold">
-                    {{ store.satuan.length ? store.satuan[0].nama : '-' }}
+                    {{ store.barangrs.length ? store.barangrs[0].satuan.nama : '-' }}
                   </div>
                 </td>
                 <td>
@@ -278,12 +279,12 @@
                 </td>
                 <td>
                   <div class="bold">
-                    {{ store.stok.max_stok?store.stok.max_stok:0 }}
+                    {{ store.stok.max_stok?store.stok.max_stok:'-' }}
                   </div>
                 </td>
                 <td>
                   <div class="bold">
-                    {{ store.stok.maxBeli?store.stok.maxBeli:0 }}
+                    {{ store.stok.maxBeli?store.stok.maxBeli:'-' }}
                   </div>
                 </td>
 
@@ -358,6 +359,7 @@ const clearBarangRs = () => {
 }
 
 const clearkontrak = () => {
+  // store.setForm('nokontrak', null)
   store.setForm('kontrak', null)
   store.setForm('kode_perusahaan', null)
   store.namaPerusahaan = null

@@ -14,7 +14,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       nama: 'PENERIMAAN',
       no_penerimaan: null,
       nomor: null,
-      status_pembelian: 'pembelian',
+      status_pembelian: '',
       total: 0
     },
     pemesanans: [],
@@ -43,7 +43,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         nama: 'PENERIMAAN',
         no_penerimaan: null,
         pemesanan: null,
-        status_pembelian: 'pembelian',
+        status_pembelian: '',
         total: 0
       }
       this.detailPemesanans = []
@@ -256,6 +256,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             console.log(resp)
             // notifSuccess('data berhasil disimpan')
             this.getDataPenerimaan()
+            this.searchPemesanan()
             resolve(resp)
           })
           .catch(err => {
