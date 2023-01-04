@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifSuccess, uniqueId } from 'src/modules/utils'
+import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
+import { useSettingsStore } from '../../settings/setting'
 
 export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
   state: () => ({
@@ -103,7 +104,16 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tanggal', 'tanggal_distribusi', 'no_distribusi', 'no_permintaan', 'tanggal_verif', 'pengguna', 'pj', 'status', 'aksi']
+      this.columns = [
+        'tanggal',
+        'tanggal_distribusi',
+        'no_distribusi',
+        'no_permintaan',
+        'tanggal_verif',
+        'pengguna',
+        'pj',
+        'status',
+        'aksi']
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
@@ -142,7 +152,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.getDataTable()
       this.getDataDepo()
       this.setNoDistribusi()
-      this.getBarangRs()
+      // this.getBarangRs()
       this.getMappingBarang()
       this.getMinMaxDepo()
       this.getCurrentStok()
@@ -179,34 +189,65 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.displays = []
       this.detail = {}
     },
-    filterBarangHasStok() {
+    filterBarangHasStok(val) {
+      const setting = useSettingsStore()
       this.barangrHasStoks = []
-      console.log('type', Object.keys(this.stoks))
-      if (this.barangrses.length) {
+      // console.log('mapig', setting.mapingbarangdepo)
+      if (Object.keys(setting.mapingbarangdepo).length) {
+        // console.log('mapig if', setting.mapingbarangdepo[val])
+        this.barangrses = setting.mapingbarangdepo[val]
+        // console.log('barang RS', this.barangrses)
+        console.log('type', Object.keys(this.stoks))
+        // }
+        // if (this.barangrses.length) {
         const keys = Object.keys(this.stoks)
         const ape = keys.map(key => {
           const temp = this.barangrses.filter(data => {
-            return data.kode === this.stoks[key].kode_rs
+            return data.kode_rs === this.stoks[key].kode_rs
           })
-          // console.log('temp', temp)
-          return temp[0]
+          if (temp.length) {
+            const barang = {
+              nama: temp[0].barangrs.nama,
+              kode: temp[0].barangrs.kode,
+              kode_satuan: temp[0].barangrs.kode_satuan
+            }
+            return barang
+          } else return false
         })
-        this.barangrHasStoks = ape
+        if (ape[0] === false) {
+          this.barangrHasStoks = []
+        } else {
+          this.barangrHasStoks = ape
+        }
         // console.log('apem', ape)
       } else {
+        // console.log('maping else')
+        notifErrVue('Data barang masih dalam perjalanan')
         setTimeout(() => {
-          if (this.barangrses.length) {
+          // console.log('maping else time out')
+          if (setting.mapingbarangdepo.length) {
+            this.barangrses = setting.mapingbarangdepo[val]
             const ape = this.stoks.map(stok => {
               const temp = this.barangrses.filter(data => {
                 return data.kode_rs === stok.kode_rs
               })
-              // console.log('temp', temp)
-              return temp[0]
+              if (temp.length) {
+                const barang = {
+                  nama: temp[0].barangrs.nama,
+                  kode: temp[0].barangrs.kode,
+                  kode_satuan: temp[0].barangrs.kode_satuan
+                }
+                return barang
+              } else return false
             })
             console.log('apem', ape)
-            this.barangrHasStoks = ape
+            if (ape[0] === false) {
+              this.barangrHasStoks = []
+            } else {
+              this.barangrHasStoks = ape
+            }
           }
-        }, 2000)
+        }, 10000)
       }
     },
     // api related function

@@ -18,7 +18,20 @@ export const useHistoryTable = defineStore('history_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'uuid', 'kode_penanggungjawab', 'kode_penerima', 'nama', 'transaksi_gudang_id', 'kontrak', 'perusahaan', 'kode_perusahaan', 'reff', 'details', 'created_at', 'updated_at',
+    columnHide: ['id',
+      'uuid',
+      'kode_penanggungjawab',
+      'kode_penerima',
+      'nama',
+      'transaksi_gudang_id',
+      'kontrak',
+      'perusahaan',
+      'kode_perusahaan',
+      'reff',
+      'details',
+      'created_at',
+      'updated_at',
+      'kode_depo',
       'kode_pengguna'
     ]
   }),
@@ -72,6 +85,7 @@ export const useHistoryTable = defineStore('history_table', {
       const thumb = payload.map((x) => Object.keys(x))
       this.columns = thumb[0]
       changeArrayIndex(this.columns, 'perusahaan', 'total')
+      changeArrayIndex(this.columns, 'depo', 'kode_depo')
 
       // console.log('columns', this.columns)
     },

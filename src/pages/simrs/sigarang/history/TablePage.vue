@@ -56,6 +56,9 @@
             <template #cell-pj="{row}">
               {{ row.pj.jabatan }}
             </template>
+            <template #cell-depo="{row}">
+              {{ row.depo.nama }}
+            </template>
             <template #cell-status="{row}">
               <!-- {{row.status}} -->
               <q-chip
@@ -67,6 +70,12 @@
             </template>
             <template #col-total>
               Total
+            </template>
+            <template #col-depo>
+              Depo
+            </template>
+            <template #col-no_distribusi>
+              Nomor Distribusi
             </template>
             <template #col-perusahaan>
               Perusahaan
@@ -189,6 +198,30 @@ const label = (status, nama) => {
     switch (status) {
       case 1:
         return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Selesai'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Diterima Sebagian'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'DISTRIBUSI DEPO') {
+    switch (status) {
+      case 1:
+        return 'Di distribusikan ke depo'
         // eslint-disable-next-line no-unreachable
         break
       case 2:

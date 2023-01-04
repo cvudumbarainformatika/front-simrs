@@ -199,14 +199,38 @@ export const useSettingsStore = defineStore('setting_store', {
           {
             icon: 'icon-mat-account_balance_wallet',
             link: 'sigarang/history',
+            nama: 'Permintaan',
+            name: 'sigarang.history.permintaan'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            link: 'sigarang/history',
+            nama: 'Distribusi Depo',
+            name: 'sigarang.history.distribusidepo'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            link: 'sigarang/history',
+            nama: 'Pemakaian Ruangan',
+            name: 'sigarang.history.pemakaianruangan'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            link: 'sigarang/history',
+            nama: 'Penerimaan Ruangan',
+            name: 'sigarang.history.penerimaanruangan'
+          },
+          {
+            icon: 'icon-mat-account_balance_wallet',
+            link: 'sigarang/history',
             nama: 'Gudang',
             name: 'sigarang.history.gudang'
           },
           {
             icon: 'icon-mat-account_balance_wallet',
             link: 'sigarang/history',
-            nama: 'Permintaan',
-            name: 'sigarang.history.permintaan'
+            nama: 'Retur',
+            name: 'sigarang.history.retur'
           }
         ]
       },
@@ -238,11 +262,13 @@ export const useSettingsStore = defineStore('setting_store', {
     form: {
       nama: 'sigarang'
     },
-    loading: false
+    loading: false,
+    mapingbarangdepo: []
   }),
   actions: {
     getAllData () {
       // this.getDataSetting()
+      this.getMapingBarangDepo()
       const mapingBarang = useMasterMapingBarangForm()
       mapingBarang.getDataBarang108()
       mapingBarang.getDataBarangRs()
@@ -267,7 +293,16 @@ export const useSettingsStore = defineStore('setting_store', {
     },
 
     // api related function
-
+    getMapingBarangDepo() {
+      return new Promise(resolve => {
+        api.get('v1/mapingdepo/maping')
+          .then(resp => {
+            console.log('maping barang depo', resp)
+            this.mapingbarangdepo = resp.data
+            resolve(resp)
+          })
+      })
+    },
     getDataSetting () {
       return new Promise((resolve, reject) => {
         api.get('v1/setting/index')

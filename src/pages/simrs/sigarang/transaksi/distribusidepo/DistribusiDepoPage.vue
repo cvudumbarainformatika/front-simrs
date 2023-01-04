@@ -239,7 +239,7 @@ const store = useDistribusiDepoStore()
 store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)
-  store.filterBarangHasStok()
+  store.filterBarangHasStok(val)
   // const minmax = store.minMaxDepos.filter(data => {
   //   return data.kode_depo === val
   // })
