@@ -130,6 +130,12 @@
               <template #col-harga>
                 Harga
               </template>
+              <template #col-no_penerimaan>
+                Nomor Penerimaan
+              </template>
+              <template #col-satuan_kecil>
+                Satuan Kecil
+              </template>
               <template #cell-harga="{row}">
                 {{ formatRp(row.harga) }}
               </template>

@@ -221,19 +221,11 @@ const label = (status, nama) => {
   } else if (nama === 'DISTRIBUSI DEPO') {
     switch (status) {
       case 1:
-        return 'Di distribusikan ke depo'
+        return 'Menunggu diterima Depo'
         // eslint-disable-next-line no-unreachable
         break
       case 2:
-        return 'Selesai'
-        // eslint-disable-next-line no-unreachable
-        break
-      case 3:
-        return 'Diterima Sebagian'
-        // eslint-disable-next-line no-unreachable
-        break
-      case 4:
-        return 'Diterima Seluruhnya'
+        return 'Diterima Depo'
         // eslint-disable-next-line no-unreachable
         break
 

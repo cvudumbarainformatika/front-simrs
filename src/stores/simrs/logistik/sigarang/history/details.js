@@ -14,7 +14,20 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id', 'uuid', 'transaksi_gudang_id', 'status', 'pemesanan_id', 'penerimaan_id', 'kode_satuan', 'kode_perusahaan', 'reff', 'details', 'created_at', 'updated_at']
+    columnHide: ['id',
+      'uuid',
+      'transaksi_gudang_id',
+      'status',
+      'pemesanan_id',
+      'distribusi_depo_id',
+      'penerimaan_id',
+      'kode_satuan',
+      'kode_perusahaan',
+      'reff',
+      'details',
+      'created_at',
+      'updated_at'
+    ]
   }),
   getters: {
     getterColumns (state) {
@@ -34,6 +47,7 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       changeArrayIndex(this.columns, 'kode_rs', 'kode_108')
       changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
       changeArrayIndex(this.columns, 'satuan', 'harga')
+      changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
       // console.log('columns', this.columns)
     },
     setData (data) {

@@ -105,6 +105,8 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     assignForm(data) {
       console.log('Assign Form', data)
       const store = useTransaksiPermintaanForm()
+      const b = data.no_permintaan.split('/')
+      store.nomor = b[0] + '-' + b[2]
       store.setForm('reff', data.reff)
       store.setForm('kode_penanggungjawab', data.kode_penanggungjawab)
       store.setForm('kode_pengguna', data.kode_pengguna)
@@ -115,24 +117,28 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       })
       console.log('soucet', store.penggunas.length)
       console.log('peng', peng)
-      const pj = store.penanggungjawabs.filter((data) => {
-        return (
-          data.level_3 === peng[0].level_3 &&
-      data.level_2 === peng[0].level_2 &&
-      data.level_1 === peng[0].level_1
-        )
-      })
-      console.log('pj', pj)
-      const ruang = store.penggunaruangs.filter((apem) => {
-        return apem.kode_pengguna === data.kode_pengguna
-      })
-      console.log('ruang', ruang)
+      // const pj = store.penanggungjawabs.filter((data) => {
+      //   return (
+      //     data.level_3 === peng[0].level_3 &&
+      // data.level_2 === peng[0].level_2 &&
+      // data.level_1 === peng[0].level_1
+      //   )
+      // })
+      // console.log('pj', pj)
+      const detail = data.details[0]
+      // const ruang = store.penggunaruangs.filter((apem) => {
+      //   return apem.kode_pengguna === data.kode_pengguna
+      // })
+      console.log('ruang', detail)
 
-      store.setForm('kode_penanggungjawab', pj[0].kode)
-      store.setNama('penanggungjawab', pj[0].jabatan)
-      if (ruang.length) {
-        store.setForm('tujuan', ruang[0].kode_ruang)
-        store.setNama('ruang', ruang[0].ruang.uraian)
+      // store.setForm('kode_penanggungjawab', pj[0].kode)
+      store.setNama('penanggungjawab', data.pj.jabatan)
+      store.setNama('pengguna', data.pengguna.jabatan)
+      if (Object.keys(detail).length) {
+        console.log('Objeck key detail HAAAAADDIIIIRRRRR')
+        store.setForm('tujuan', detail.tujuan)
+        store.setForm('kode_ruang', detail.tujuan)
+        store.setNama('ruang', detail.ruang.uraian)
       } else {
         store.setForm('tujuan', null)
         store.setNama('ruang', 'ruang tidak ditemukan')
@@ -323,7 +329,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       this.loading = true
       return new Promise((resolve, reject) => {
         api
-          .get('v1/mapingdepo/maping')
+          .get('v1/mapingdepo/barang')
           .then((resp) => {
             this.loading = false
             console.log('mapingDepo', resp)

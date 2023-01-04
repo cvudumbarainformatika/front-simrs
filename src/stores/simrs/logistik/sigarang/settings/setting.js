@@ -199,7 +199,7 @@ export const useSettingsStore = defineStore('setting_store', {
           {
             icon: 'icon-mat-account_balance_wallet',
             link: 'sigarang/history',
-            nama: 'Permintaan',
+            nama: 'Permintaan Ruangan',
             name: 'sigarang.history.permintaan'
           },
           {

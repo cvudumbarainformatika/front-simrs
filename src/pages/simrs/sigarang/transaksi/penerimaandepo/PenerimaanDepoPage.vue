@@ -85,9 +85,9 @@
           <div class="anak text-center">
             Stok Gudang
           </div>
-          <div class="anak text-center">
+          <!-- <div class="anak text-center">
             Stok Minimum Depo
-          </div>
+          </div> -->
           <div class="anak text-center">
             Stok Maksimum Depo
           </div>
@@ -118,9 +118,9 @@
           <div class="disp text-center">
             {{ data.stok_gudang }}
           </div>
-          <div class="disp text-center">
+          <!-- <div class="disp text-center">
             {{ data.min_stok }}
-          </div>
+          </div> -->
           <div class="disp text-center">
             {{ data.max_stok }}
           </div>
@@ -157,7 +157,7 @@
   </div>
 </template>
 <script setup>
-import { notifNegativeCenterVue } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 import { usePenerimaanDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaandepo/penerimaadepo'
 import { ref } from 'vue'
 
@@ -167,7 +167,7 @@ store.getInitialData()
 const refDistribusi = ref(null)
 const disSelected = (val) => {
   if (!store.minMaxDepos.length || !store.stoks.length) {
-    notifNegativeCenterVue('data masih sedang dalam perjalanan, mohon tunggu dan ulangi pilih nomor distribusi beberapa saat lagi')
+    notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
     return
   }
   store.setForm('id', val)
@@ -176,12 +176,13 @@ const disSelected = (val) => {
   })
   store.display = disp[0]
   store.display.details.forEach(data => {
-    const mm = store.minMaxDepos.filter(minmax => {
-      return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
-    })
-    data.min_stok = mm[0].min_stok
-    data.max_stok = mm[0].max_stok
+    // data min - max depo tidak ada
+    // const mm = store.minMaxDepos.filter(minmax => {
+    //   return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
+    // })
+    // // data.min_stok = mm[0].min_stok
     // console.log('mm', mm)
+    // data.max_stok = mm[0].max_stok
     const stk = store.stoks.filter(stok => {
       return data.kode_rs === stok.kode_rs
     })
@@ -204,9 +205,9 @@ const saveForm = () => {
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/8);
+  width:calc(100vw/7);
 }
 .disp{
-  width:calc(100vw/8);
+  width:calc(100vw/7);
 }
 </style>

@@ -13,10 +13,11 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     },
     nomor: null,
     nama: {
-      penanggungjawab: 'pengguna belum dipilih',
-      ruang: 'pengguna belum dipilih',
+      penanggungjawab: 'ruangan pengguna belum dipilih',
+      ruang: 'ruangan pengguna belum dipilih',
       gudang: 'barang belum dipilih',
-      satuan: 'barang belum dipilih'
+      satuan: 'barang belum dipilih',
+      pengguna: 'ruangan pengguna belum dipilih'
     },
     tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     penggunas: [],
@@ -63,10 +64,13 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
       this.loading = true
       return new Promise((resolve) => {
         api.get('v1/penggunaruang/pengguna-ruang').then((resp) => {
-          // console.log('pengguna Ruang', resp.data)
           this.loading = false
           if (resp.status === 200) {
-            this.penggunaruangs = resp.data
+            this.penggunaruangs = resp.data.map(apem => {
+              apem.uraian = apem.ruang.uraian
+              return apem
+            })
+            console.log('pengguna Ruang', this.penggunaruangs)
             resolve(resp)
           }
         })
