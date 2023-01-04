@@ -86,7 +86,14 @@
         />
         <app-btn
           v-if="edit"
-          label="Submit"
+          class="q-mr-sm"
+          color="dark"
+          label="Batal"
+          @click="onCancel"
+        />
+        <app-btn
+          v-if="edit"
+          label="Verif"
           @click="onSubmit"
         />
       </div>
@@ -113,5 +120,8 @@ const onSubmit = () => {
 }
 const onEdit = () => {
   edit.value = true
+}
+const onCancel = () => {
+  edit.value = false
 }
 </script>

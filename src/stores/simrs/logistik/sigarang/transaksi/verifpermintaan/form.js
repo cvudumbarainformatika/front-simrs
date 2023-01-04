@@ -164,6 +164,9 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
           notifErrVue('periksa kembali Jumlah disetujui')
           lanjut = false
+        } else if (parseInt(data.jumlah_disetujui) <= 0) {
+          notifErrVue('periksa kembali Jumlah disetujui')
+          lanjut = false
         } else {
           lanjut = true
         }
