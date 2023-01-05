@@ -263,7 +263,8 @@ export const useSettingsStore = defineStore('setting_store', {
       nama: 'sigarang'
     },
     loading: false,
-    mapingbarangdepo: []
+    mapingbarangdepo: [],
+    stateOfmapingbarangdepo: false
   }),
   actions: {
     getAllData () {
@@ -294,9 +295,11 @@ export const useSettingsStore = defineStore('setting_store', {
 
     // api related function
     getMapingBarangDepo() {
+      this.stateOfmapingbarangdepo = true
       return new Promise(resolve => {
         api.get('v1/mapingdepo/maping')
           .then(resp => {
+            this.stateOfmapingbarangdepo = false
             console.log('maping barang depo', resp)
             this.mapingbarangdepo = resp.data
             resolve(resp)

@@ -30,7 +30,8 @@
               autocomplete="nama"
               option-label="nama"
               option-value="kode"
-              :loading="store.loading"
+              :disable="setting.stateOfmapingbarangdepo"
+              :loading="setting.stateOfmapingbarangdepo"
               :source="store.depos"
               @on-select="depoSelected"
               @clear="depoCleared"
@@ -232,20 +233,24 @@
 <script setup>
 import { Dialog } from 'quasar'
 import { notifErrVue } from 'src/modules/utils'
+import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
 
 const store = useDistribusiDepoStore()
+const setting = useSettingsStore()
 store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)
   store.filterBarangHasStok(val)
+  barangCleared()
   // const minmax = store.minMaxDepos.filter(data => {
   //   return data.kode_depo === val
   // })
   // console.log('min max', minmax)
 }
 const depoCleared = () => {
+  barangCleared()
   store.setForm('kode_depo', null)
 }
 const barangSelected = val => {
@@ -254,14 +259,18 @@ const barangSelected = val => {
   const barang = store.mappingBarangs.filter(sel => {
     return sel.kode_rs === val
   })
+
   if (!store.minMaxDepos.length) store.filterBarangHasStok()
 
-  const minmax = store.minMaxDepos.filter(data => {
-    return data.kode_depo === store.form.kode_depo
-  })
-  const minMaxBarang = minmax.filter(data => {
+  // ganti database, fungsi dibawah ini jadi tidak diperlukan
+  // const minmax = store.minMaxDepos.filter(data => {
+  //   return data.kode_depo === store.form.kode_depo
+  // })
+
+  const minMaxBarang = store.minMaxDepos.filter(data => {
     return data.kode_rs === val
   })
+
   const stok = Object.keys(store.stoks).filter(data => {
     return store.stoks[data].kode_rs === val
   })
@@ -269,6 +278,7 @@ const barangSelected = val => {
   const toDistribute = store.distribusies.filter(data => {
     return data.kode_rs === val
   })
+  console.log('to distributed', toDistribute)
   console.log('stok', stok)
   if (stok.length) {
     store.setInput('stok_gudang', store.stoks[stok[0]].stok)

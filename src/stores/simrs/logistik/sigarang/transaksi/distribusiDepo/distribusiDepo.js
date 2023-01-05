@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
+import { notifSuccess, uniqueId } from 'src/modules/utils'
 import { useSettingsStore } from '../../settings/setting'
 
 export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
@@ -42,7 +42,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     mappingBarangs: [],
     minMaxDepos: [],
     stoks: [],
-    distribusies: []
+    distribusies: [],
+    hasStok: false
   }),
   actions: {
     resetFORM() {
@@ -197,7 +198,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         // console.log('mapig if', setting.mapingbarangdepo[val])
         this.barangrses = setting.mapingbarangdepo[val]
         // console.log('barang RS', this.barangrses)
-        console.log('type', Object.keys(this.stoks))
+        // console.log('type', this.stoks)
         // }
         // if (this.barangrses.length) {
         const keys = Object.keys(this.stoks)
@@ -205,6 +206,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           const temp = this.barangrses.filter(data => {
             return data.kode_rs === this.stoks[key].kode_rs
           })
+          // console.log('barang', temp)
           if (temp.length) {
             const barang = {
               nama: temp[0].barangrs.nama,
@@ -214,15 +216,21 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             return barang
           } else return false
         })
-        if (ape[0] === false) {
+        const filtered = ape.filter(data => {
+          return data !== false
+        })
+        // console.log('ape', filtered)
+        if (filtered[0] === false) {
           this.barangrHasStoks = []
+          // this.hasStok = false
         } else {
-          this.barangrHasStoks = ape
+          // this.hasStok = true
+          this.barangrHasStoks = filtered
         }
         // console.log('apem', ape)
       } else {
-        // console.log('maping else')
-        notifErrVue('Data barang masih dalam perjalanan')
+        // this.hasStok = false
+        // notifErrVue('Data barang masih dalam perjalanan')
         setTimeout(() => {
           // console.log('maping else time out')
           if (setting.mapingbarangdepo.length) {
@@ -240,7 +248,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
                 return barang
               } else return false
             })
-            console.log('apem', ape)
+            // console.log('apem', ape)
             if (ape[0] === false) {
               this.barangrHasStoks = []
             } else {
@@ -311,10 +319,10 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     getCurrentStok() {
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/stok/all-current')
+        api.get('v1/stok/current-gudang')
           .then(resp => {
             this.loading = false
-            console.log('stok', resp.data)
+            // console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
               this.filterBarangHasStok()
@@ -389,9 +397,9 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             this.loading = false
             notifSuccess(resp)
             this.getDataTable()
-            this.resetAll()
             resolve(resp)
           }).catch(() => {
+            this.resetAll()
             this.loading = false
           })
       })

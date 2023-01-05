@@ -23,7 +23,8 @@
               autocomplete="no_distribusi"
               option-label="no_distribusi"
               option-value="id"
-              :loading="store.loading"
+              :loading="store.loadingMinMaxDepos && store.loadingStoks"
+              :disable="store.loadingMinMaxDepos && store.loadingStoks"
               :source="store.toDistribute"
               @on-select="disSelected"
               @clear="disCleared"
@@ -157,7 +158,7 @@
   </div>
 </template>
 <script setup>
-import { notifErrVue } from 'src/modules/utils'
+// import { notifErrVue } from 'src/modules/utils'
 import { usePenerimaanDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaandepo/penerimaadepo'
 import { ref } from 'vue'
 
@@ -166,10 +167,10 @@ store.getInitialData()
 
 const refDistribusi = ref(null)
 const disSelected = (val) => {
-  if (!store.minMaxDepos.length || !store.stoks.length) {
-    notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
-    return
-  }
+  // if (!store.minMaxDepos.length || !store.stoks.length) {
+  //   // notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
+  //   return
+  // }
   store.setForm('id', val)
   const disp = store.toDistribute.filter(data => {
     return data.id === val
@@ -181,12 +182,18 @@ const disSelected = (val) => {
     //   return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
     // })
     // // data.min_stok = mm[0].min_stok
-    // console.log('mm', mm)
     // data.max_stok = mm[0].max_stok
-    const stk = store.stoks.filter(stok => {
-      return data.kode_rs === stok.kode_rs
+    const kunci = Object.keys(store.stoks)
+    const stk = kunci.map(key => {
+      const temp = store.stoks[key]
+      if (data.kode_rs === store.stoks[key].kode_rs) return temp
+      else return false
     })
-    data.stok_gudang = stk[0].sisa_stok
+    const filtered = stk.filter(stk1 => {
+      return stk1 !== false
+    })
+    data.stok_gudang = filtered[0].stok
+    console.log('stok', filtered)
   })
   console.log('display', store.display)
 }

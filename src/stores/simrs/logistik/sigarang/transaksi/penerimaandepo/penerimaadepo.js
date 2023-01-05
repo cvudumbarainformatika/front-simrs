@@ -27,7 +27,9 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
     display: {},
     tanggalDisplay: null,
     minMaxDepos: [],
-    stoks: []
+    loadingMinMaxDepos: false,
+    stoks: [],
+    loadingStoks: false
   }),
   actions: {
     resetFORM() {
@@ -81,34 +83,34 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
 
     // get data minMaxDepo
     getMinMaxDepo() {
-      this.loading = true
+      this.loadingMinMaxDepos = true
       return new Promise(resolve => {
         api.get('v1/minmaxdepostok/all')
           .then(resp => {
-            this.loading = false
+            this.loadingMinMaxDepos = false
             // console.log('minmaxdepo', resp)
             this.minMaxDepos = resp.data
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingMinMaxDepos = false
           })
       })
     },
     // get data stok
     getCurrentStok() {
-      this.loading = true
+      this.loadingStoks = true
       return new Promise(resolve => {
-        api.get('v1/stok/all-current')
+        api.get('v1/stok/current-gudang')
           .then(resp => {
-            this.loading = false
-            console.log('stok', resp)
+            this.loadingStoks = false
+            console.log('curren stok', resp)
             this.stoks = resp.data
 
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingStoks = false
           })
       })
     },
