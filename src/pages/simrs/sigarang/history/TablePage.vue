@@ -185,6 +185,10 @@ const color = val => {
       return 'grey'
       // eslint-disable-next-line no-unreachable
       break
+    case 8:
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
 
     default:
       return 'red'
@@ -226,6 +230,42 @@ const label = (status, nama) => {
         break
       case 2:
         return 'Diterima Depo'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PERMINTAAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Selesai'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Diterima Sebagian'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 5:
+        return 'Menunggu verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 6:
+        return 'Telah di verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 7:
+        return 'Telah di distribusikan'
         // eslint-disable-next-line no-unreachable
         break
 
