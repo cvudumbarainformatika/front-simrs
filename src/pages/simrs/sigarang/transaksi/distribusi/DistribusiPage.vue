@@ -159,7 +159,7 @@ const onClick = val => {
     delete item.highlight
   })
   store.items[val.index].highlight = true
-  // console.log(val)
+  console.log(val)
 }
 const distribusikan = val => {
   const toNum = val.no_permintaan.split('/')
