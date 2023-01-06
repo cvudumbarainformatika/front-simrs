@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+// import { notifSuccess } from 'src/modules/utils'
 
 export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
   state: () => ({
@@ -114,6 +114,12 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
         }
       })
     },
+    sebelumSimpan() {
+      const setuju = false
+      console.log(this.form)
+
+      if (setuju === false) return false
+    },
     getInitialData() {
       this.getDataTable()
     },
@@ -130,7 +136,12 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
           .then((resp) => {
             this.loading = false
             console.log('permintaan verified', resp.data)
-            this.items = resp.data.data.data
+            const dataTable = resp.data.data.data.map(apem => {
+              const temp = apem
+              temp.disableSend = true
+              return temp
+            })
+            this.items = dataTable
             this.setColumns(resp.data)
             this.meta = resp.data.meta
             this.resetFORM()
@@ -143,21 +154,26 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       })
     },
     saveForm() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
-          .then(resp => {
-            this.loading = false
-            notifSuccess(resp)
-            this.getDataTable()
-            this.items.forEach(item => {
-              delete item.highlight
-            })
-            resolve(resp)
-          }).catch(() => {
-            this.loading = false
-          })
-      })
+      // if (this.sebelumSimpan()) {
+      console.log('isik budhal lho..')
+      console.log('form', this.form)
+      // this.loading = true
+      // return new Promise(resolve => {
+      //   api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
+      //     .then(resp => {
+      //       this.loading = false
+      //       notifSuccess(resp)
+      //       this.getDataTable()
+      //       this.items.forEach(item => {
+      //         delete item.highlight
+      //       })
+      //       resolve(resp)
+      //     }).catch(() => {
+      //       this.loading = false
+      //     })
+      // })
+      // }
+      // console.log('ora budhal wes..')
     }
   }
 })

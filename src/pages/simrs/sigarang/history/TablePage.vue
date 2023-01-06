@@ -268,6 +268,10 @@ const label = (status, nama) => {
         return 'Telah di distribusikan'
         // eslint-disable-next-line no-unreachable
         break
+      case 8:
+        return 'Telah diterima ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
 
       default:
         return 'Belum di definisikan'

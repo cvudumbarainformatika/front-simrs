@@ -80,6 +80,7 @@
               no-caps
               dense
               round
+              :disable="row.disableSend"
               @click="distribusikan(row)"
             />
           </template>
@@ -103,18 +104,27 @@
             >
               <!-- style="width: 100%;" -->
               <q-card-section>
-                <div class="fit row wrap justify-evenly items-center content-center">
-                  <div class="col-3 text-center">
+                <div class="fit row no-wrap justify-evenly items-center content-center">
+                  <div class="anak text-center">
                     Kode Barang
                   </div>
-                  <div class="col-3 text-center">
+                  <div class="anak text-center">
                     Nama Barang
                   </div>
-                  <div class="col-3 text-center">
+                  <div class="anak text-center">
                     Kode 108
                   </div>
-                  <div class="col-3 text-center">
+                  <div class="anak text-center">
                     Uraian 108
+                  </div>
+                  <div class="anak text-center">
+                    Jumlah
+                  </div>
+                  <div class="anak text-center">
+                    Jumlah Disetujui
+                  </div>
+                  <div class="anak text-center">
+                    Jumlah Distribusi
                   </div>
                 </div>
                 <q-separator />
@@ -122,18 +132,34 @@
                   v-for="(data, j) in item.details"
                   :key="j"
                 >
-                  <div class="fit row wrap justify-evenly items-center content-center">
-                    <div class="col-3 text-center">
+                  <div class="fit row no-wrap justify-evenly items-center content-center">
+                    <div class="anak text-center">
                       {{ data.barangrs.kode }}
                     </div>
-                    <div class="col-3 text-center">
+                    <div class="anak text-center">
                       {{ data.barangrs.nama }}
                     </div>
-                    <div class="col-3 text-center">
+                    <div class="anak text-center">
                       {{ data.barangrs.mapingbarang.barang108.kode }}
                     </div>
-                    <div class="col-3 text-center">
+                    <div class="anak text-center">
                       {{ data.barangrs.mapingbarang.barang108.uraian }}
+                    </div>
+                    <div class="anak text-center">
+                      {{ data.jumlah }}
+                    </div>
+                    <div class="anak text-center">
+                      {{ data.jumlah_disetujui }}
+                    </div>
+                    <div class="anak text-center">
+                      <q-input
+                        v-model="data.jumlah_distribusi"
+                        label="jumlah distribusi"
+                        type="number"
+                        dense
+                        @update:model-value="updateJumlahDistribusi"
+                        @focus="fokus(i,j)"
+                      />
                     </div>
                   </div>
                 </div>
@@ -149,6 +175,7 @@
 <script setup>
 import { Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
@@ -174,6 +201,31 @@ const distribusikan = val => {
     store.saveForm()
   })
   console.log('distribusikan', val)
+}
+let itemsIndex = null
+let detailIndex = null
+const updateJumlahDistribusi = val => {
+  const tempItems = store.items[itemsIndex].details.filter(item => {
+    return item.jumlah_distribusi <= 0
+  })
+  console.log('jumlah distribusi', val)
+  if (!tempItems.length) {
+    store.items[itemsIndex].disableSend = false
+    store.setForm('detail', store.items[itemsIndex].details)
+  }
+  if (store.items[itemsIndex].details[detailIndex].jumlah_disetujui < val) {
+    notifErrVue('jumlah Distribusi tidak boleh melebihi jumlah distujui')
+    store.items[itemsIndex].details[detailIndex].jumlah_distribusi = store.items[itemsIndex].details[detailIndex].jumlah_disetujui
+    console.log('details item', store.items[itemsIndex].details[detailIndex])
+  }
+  console.log('items', tempItems)
+}
+const fokus = (i, j) => {
+  console.log('fokus', i, j)
+  itemsIndex = i
+  detailIndex = j
+  const current = store.items[i].details[j]
+  console.log('current', current)
 }
 const color = val => {
   switch (val) {
@@ -227,3 +279,12 @@ const label = (status, nama) => {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.anak{
+  width:calc(100vw/7);
+}
+.disp{
+  width:calc(100vw/7);
+}
+</style>
