@@ -87,7 +87,10 @@
           </template>
 
           <template #cell-default-img="{row}">
-            <div class="row">
+            <div
+              v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap"
+              class="row"
+            >
               <q-avatar
                 size="30px"
                 :class="getKelamin(row)==='Laki-laki'?'bg-secondary':'bg-orange'"
@@ -97,29 +100,45 @@
             </div>
           </template>
           <template #cell-pasien="{row}">
-            <div class="text-weight-bold">
-              {{ getNama(row) }}
+            <div v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap">
+              <div class="text-weight-bold">
+                {{ getNama(row) }}
+              </div>
+              <div class="text-negative text-italic text-weight-bold">
+                No RM : {{ getNoRm(row) }}
+              </div>
+              <q-badge
+                outline
+                color="primary"
+                :label="getLamaBaru(row)"
+                class="q-mr-xs"
+              />
+              <q-badge
+                round
+                color="primary"
+                :label="getUsia(row)+ ' Thn'"
+              />
             </div>
-            <div class="text-negative text-italic text-weight-bold">
-              No RM : {{ getNoRm(row) }}
+            <div v-else>
+              -
             </div>
-            <q-badge
-              outline
-              color="primary"
-              :label="getLamaBaru(row)"
-              class="q-mr-xs"
-            />
-            <q-badge
-              round
-              color="primary"
-              :label="getUsia(row)+ ' Thn'"
-            />
           </template>
           <template #cell-status="{row}">
-            {{ getProgress(row) }}
+            <div v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap">
+              {{ getProgress(row) }}
+            </div>
+            <div
+              v-else
+              class="text-negative"
+            >
+              Data ini sudah dihapus oleh poli/ruangan
+            </div>
           </template>
           <template #cell-detail="{row}">
-            <div class="column">
+            <div
+              v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap"
+              class="column"
+            >
               <!-- <div class="flex items-center"> -->
               <div>No.Nota : <i class="text-primary">{{ row.rs2 }}</i></div>
               <div class="text-negative f-12 q-mb-xs">
@@ -132,64 +151,78 @@
               />
               <!-- </div> -->
             </div>
+            <div v-else>
+              -
+            </div>
           </template>
           <template #cell-dokter="{row}">
-            <div class="q-mb-sm">
+            <div v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap">
+              <div class="q-mb-sm">
+                <q-badge
+                  outline
+                  color="primary"
+                  :label="getSistemBayar(row)"
+                  class="q-mr-xs"
+                />
+              </div>
               <q-badge
-                outline
+                round
                 color="primary"
-                :label="getSistemBayar(row)"
-                class="q-mr-xs"
+                :label="row.dokter? row.dokter.rs2:'No Name'"
+                class="q-mb-sm"
               />
             </div>
-            <q-badge
-              round
-              color="primary"
-              :label="row.dokter? row.dokter.rs2:'No Name'"
-              class="q-mb-sm"
-            />
+            <div v-else>
+              -
+            </div>
           </template>
           <template #custom-btn="{row}">
-            <q-btn
-              round
-              flat
-              icon="icon-mat-print"
-              color="grey-8"
-              @click="printHasil(row)"
-            >
-              <q-tooltip>
-                Print Hasil Pemeriksaan
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              round
-              flat
-              icon="icon-mat-visibility"
-              color="grey-8"
-              :loading="loadingEye && eye===row"
-              @click="previewLaborat(row)"
-            >
-              <q-tooltip>
-                Lihat Detail Permintaan Pemeriksaan
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              round
-              flat
-              :icon="row.rs18 === '1'?'icon-mat-lock':'icon-mat-send'"
-              :color="row.rs18 === '1'?'primary':'negative'"
-              :loading="loadingKey && x===row"
-              @click="kunciPermintaan(row)"
-            >
-              <q-tooltip>
-                <div v-if="row.rs18 !== '1'">
-                  Kirim Permintaan ke LIS
-                </div>
-                <div v-else>
-                  Permintaan Terkunci
-                </div>
-              </q-tooltip>
-            </q-btn>
+            <!-- {{ row.pasien_kunjungan_poli }} {{ row.pasien_kunjungan_rawat_inap }} -->
+            <div v-if="row.pasien_kunjungan_poli || row.pasien_kunjungan_rawat_inap">
+              <q-btn
+                round
+                flat
+                icon="icon-mat-print"
+                color="grey-8"
+                @click="printHasil(row)"
+              >
+                <q-tooltip>
+                  Print Hasil Pemeriksaan
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                round
+                flat
+                icon="icon-mat-visibility"
+                color="grey-8"
+                :loading="loadingEye && eye===row"
+                @click="previewLaborat(row)"
+              >
+                <q-tooltip>
+                  Lihat Detail Permintaan Pemeriksaan
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                round
+                flat
+                :icon="row.rs18 === '1'?'icon-mat-lock':'icon-mat-send'"
+                :color="row.rs18 === '1'?'primary':'negative'"
+                :loading="loadingKey && x===row"
+                @click="kunciPermintaan(row)"
+              >
+                <q-tooltip>
+                  <div v-if="row.rs18 !== '1'">
+                    Kirim Permintaan ke LIS
+                  </div>
+                  <div v-else>
+                    Permintaan Terkunci
+                  </div>
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-else>
+              -
+            </div>
           </template>
         </app-table-new>
       </q-card-section>
