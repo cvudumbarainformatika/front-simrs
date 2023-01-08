@@ -362,11 +362,11 @@ function getSistemBayar(row) {
   const poli = row.poli
   const krw = row.kunjungan_rawat_inap
   if (poli) {
-    return row.sb_kunjungan_poli.rs2
+    return row.sb_kunjungan_poli ? row.sb_kunjungan_poli.rs2 : 'tdk ada'
   } else {
     if (krw) {
       if (row.kunjungan_rawat_inap) {
-        return row.sb_kunjungan_rawat_inap.rs2
+        return row.sb_kunjungan_rawat_inap ? row.sb_kunjungan_rawat_inap.rs2 : 'tdk ada'
       }
       return 'tdk ada'
     }
