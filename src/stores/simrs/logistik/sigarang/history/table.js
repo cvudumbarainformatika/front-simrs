@@ -46,7 +46,7 @@ export const useHistoryTable = defineStore('history_table', {
       const detail = useDetailHistoryTable()
       detail.setData(data)
       detail.setOpen()
-      // console.log('data', data)
+      console.log('data', data)
     },
     setParams (key, val) {
       this.params[key] = val

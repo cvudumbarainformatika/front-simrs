@@ -144,23 +144,27 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
         this.setForm('kode_pengguna', permintaan[0].kode_pengguna)
         this.setForm('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
         this.setForm('details', [])
+        this.setForm('no_distribusi', permintaan[0].no_distribusi)
+        this.setForm('status', 2)
         this.tanggal_distribusi = permintaan[0].tanggal_distribusi
         this.details = []
         permintaan[0].details.forEach((data, i) => {
           console.log('for each', data, i)
           const detils = {
-            jumlah: data.jumlah_disetujui,
+            jumlah: data.jumlah_distribusi,
             kode_rs: data.kode_rs,
             barangrs: data.barangrs,
             kode_satuan: data.kode_satuan,
-            kode_108: data.barangrs.mapingbarang.barang108.kode
+            kode_108: data.barangrs.barang108.kode
 
           }
           const detil = {
-            jumlah: data.jumlah_disetujui,
+            jumlah: data.jumlah_distribusi,
             kode_rs: data.kode_rs,
             kode_satuan: data.kode_satuan,
-            kode_108: data.barangrs.mapingbarang.barang108.kode
+            kode_108: data.barangrs.barang108.kode,
+            dari: data.dari,
+            tujuan: data.tujuan
 
           }
           this.details.push(detils)

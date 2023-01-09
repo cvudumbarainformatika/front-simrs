@@ -55,10 +55,10 @@
             Uraian 108
           </div>
           <div class="anak text-center">
-            Stok Gudang
+            Stok Depo
           </div>
           <div class="anak text-center">
-            Stok Alokasi Gudang
+            Stok Alokasi Depo
           </div>
           <div class="anak text-center">
             Stok Maksimum Ruangan
@@ -83,10 +83,10 @@
               {{ item.barangrs.nama }}
             </div>
             <div class="anak text-center">
-              {{ item.barangrs.mapingbarang.barang108.kode }}
+              {{ item.barangrs.barang108.kode }}
             </div>
             <div class="anak text-center">
-              {{ item.barangrs.mapingbarang.barang108.uraian }}
+              {{ item.barangrs.barang108.uraian }}
             </div>
             <div class="anak text-center">
               belum ada

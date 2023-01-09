@@ -20,69 +20,10 @@
         </q-btn>
       </q-bar>
       <q-card-section>
-        <div class="row q-col-gutter-sm">
-          <div class="col-6">
-            <div class="row">
-              <div class="col-4">
-                Nomor Pemesanan
-              </div>
-              <div class="col-6">
-                {{ table.header.nomor }}
-              </div>
-            </div>
-            <div
-              v-if="table.header.no_penerimaan"
-              class="row"
-            >
-              <div class="col-4">
-                Nomor Penerimaan
-              </div>
-              <div class="col-6">
-                {{ table.header.no_penerimaan }}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
-                Tanggal
-              </div>
-              <div class="col-6">
-                {{ dateFullFormat(table.header.tanggal) }}
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div
-              v-if="table.header.kontrak"
-              class="row"
-            >
-              <div class="col-4">
-                Nomor Kontrak
-              </div>
-              <div class="col-6">
-                {{ table.header.kontrak }}
-              </div>
-            </div>
-            <div
-              v-if="table.header.perusahaan"
-              class="row"
-            >
-              <div class="col-4">
-                Nama Perusahaan
-              </div>
-              <div class="col-6">
-                {{ table.header.perusahaan.nama }}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
-                Total
-              </div>
-              <div class="col-6">
-                {{ formatRp(table.header.total) }}
-              </div>
-            </div>
-          </div>
-        </div>
+        <HeaderDetails
+
+          :header="table.header"
+        />
       </q-card-section>
       <q-card-section>
         <app-card :is-header="false">
@@ -136,6 +77,30 @@
               <template #col-satuan_kecil>
                 Satuan Kecil
               </template>
+              <template #col-jumlah>
+                Jumlah
+              </template>
+              <template #col-tujuan>
+                Tujuan
+              </template>
+              <template #col-dari>
+                Dari
+              </template>
+              <template #col-alasan>
+                Alasan
+              </template>
+              <template #col-gudang>
+                Depo
+              </template>
+              <template #col-ruang>
+                Ruang
+              </template>
+              <template #col-jumlah_disetujui>
+                Jumlah Disetujui
+              </template>
+              <template #col-jumlah_distribusi>
+                Jumlah Distribusi
+              </template>
               <template #cell-harga="{row}">
                 {{ formatRp(row.harga) }}
               </template>
@@ -143,13 +108,22 @@
                 {{ formatRp(row.sub_total) }}
               </template>
               <template #cell-barang108="{row}">
-                {{ row.barang108.uraian }}
+                {{ row.barangrs.barang108.uraian }}
+              </template>
+              <template #cell-kode_108="{row}">
+                {{ row.barangrs.kode_108 }}
               </template>
               <template #cell-satuan="{row}">
                 {{ row.satuan.nama }}
               </template>
               <template #cell-barangrs="{row}">
                 {{ row.barangrs.nama }}
+              </template>
+              <template #cell-gudang="{row}">
+                {{ row.gudang.nama }}
+              </template>
+              <template #cell-ruang="{row}">
+                {{ row.ruang.uraian }}
               </template>
             </app-table-view>
             <!--
@@ -163,8 +137,9 @@
   </q-dialog>
 </template>
 <script setup>
-import { dateFullFormat, formatRp, titleCase } from 'src/modules/formatter'
+import { formatRp, titleCase } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
+import HeaderDetails from './header/HeaderDetails.vue'
 
 const table = useDetailHistoryTable()
 </script>

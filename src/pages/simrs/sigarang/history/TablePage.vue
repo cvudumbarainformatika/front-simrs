@@ -149,6 +149,7 @@
   </q-page>
 </template>
 <script setup>
+import { onMounted } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
@@ -316,5 +317,9 @@ const label = (status, nama) => {
     }
   }
 }
+
+onMounted(() => {
+  table.pilihTransaksi({ nama: 'Pemesanan' })
+})
 // table.getDataTable()
 </script>
