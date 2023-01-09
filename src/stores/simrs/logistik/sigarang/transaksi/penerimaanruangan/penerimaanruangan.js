@@ -128,7 +128,18 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       this.getDataTable()
     },
     // this custom store
-
+    newDistribusiSelected(val) {
+      const permintaan = this.permintaans.filter(data => { return data.id === val })
+      console.log('permintaa', permintaan)
+      if (permintaan.length) {
+        this.setForm('reff', 'RRAGD-' + uniqueId())
+        this.setForm('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
+        this.setForm('no_distribusi', permintaan[0].no_distribusi)
+        this.setForm('status', 2)
+        this.setForm('permintaan_id', permintaan[0].id)
+        // this.setForm('details', [])
+      }
+    },
     distribusiSelected(val) {
       // 'id',
       // 'reff',
@@ -136,7 +147,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       // 'tanggal',
       // 'details'
       const permintaan = this.permintaans.filter(data => { return data.id === val })
-
+      console.log('permintaan', permintaan)
       if (permintaan.length) {
         this.setForm('permintaan_id', permintaan[0].id)
         this.setForm('reff', 'RRAGD-' + uniqueId())
@@ -181,6 +192,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       return new Promise((resolve, reject) => {
         api
           .get('v1/transaksi/penerimaanruangan/index', params)
+          // .get('v1/transaksi/penerimaanruangan/to-accept', params)
           .then((resp) => {
             this.loading = false
             console.log('permintaan distributed', resp.data)
@@ -199,7 +211,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
     saveForm() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/penerimaanruangan/store', this.form)
+        api.post('v1/transaksi/penerimaanruangan/distribusi-diterima', this.form)
           .then(resp => {
             this.loading = false
             console.log('penerimaan ruangan', resp)

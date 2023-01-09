@@ -199,6 +199,7 @@ const color = val => {
 }
 
 const label = (status, nama) => {
+  console.log('nama', nama)
   if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:
@@ -231,6 +232,22 @@ const label = (status, nama) => {
         break
       case 2:
         return 'Diterima Depo'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PENERIMAAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Menunggu diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Diterima Ruangan'
         // eslint-disable-next-line no-unreachable
         break
 
