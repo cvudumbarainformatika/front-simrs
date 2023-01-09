@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-// import { notifSuccess } from 'src/modules/utils'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
   state: () => ({
@@ -154,25 +154,22 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       })
     },
     saveForm() {
-      // if (this.sebelumSimpan()) {
-      console.log('isik budhal lho..')
       console.log('form', this.form)
-      // this.loading = true
-      // return new Promise(resolve => {
-      //   api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
-      //     .then(resp => {
-      //       this.loading = false
-      //       notifSuccess(resp)
-      //       this.getDataTable()
-      //       this.items.forEach(item => {
-      //         delete item.highlight
-      //       })
-      //       resolve(resp)
-      //     }).catch(() => {
-      //       this.loading = false
-      //     })
-      // })
-      // }
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            this.getDataTable()
+            this.items.forEach(item => {
+              delete item.highlight
+            })
+            resolve(resp)
+          }).catch(() => {
+            this.loading = false
+          })
+      })
       // console.log('ora budhal wes..')
     }
   }
