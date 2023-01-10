@@ -207,7 +207,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       console.log('params to get', this.form)
       return new Promise(resolve => {
         // api.get('v1/transaksi/penerimaanruangan/koders', params)
-        api.get('v1/stok/current-by-ruangan', params)
+        api.get('v1/stok/get-current-by-ruangan', params)
           .then(resp => {
             this.loading = false
             console.log('data items', resp)
