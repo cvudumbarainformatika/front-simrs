@@ -40,24 +40,25 @@
         </div>
         <div class="fit row items-center justify-start content-start q-mb-sm">
           <div class="col-3">
-            <div v-if="(store.filteredPengguna.length > 1)">
-              Cari Pengguna Ruangan
+            <div v-if="(store.ruangans.length > 1)">
+              Cari Ruangan
             </div>
             <div v-else>
-              Pengguna Ruangan
+              Ruangan
             </div>
           </div>
           <div class="q-ml-md">
-            <div v-if="(store.filteredPengguna.length > 1)">
+            <div v-if="(store.ruangans.length > 0)">
               <app-autocomplete-new
                 ref="refUs"
                 :model="store.user"
-                label="pilih penanggungjawab"
-                autocomplete="jabatan"
-                option-label="jabatan"
-                option-value="kode"
-                :source="store.filteredPengguna"
-                :loading="store.loading"
+                label="pilih Ruangan"
+                autocomplete="uraian"
+                option-label="uraian"
+                option-value="kode_ruang"
+                :source="store.ruangans"
+                :loading="store.loadingMaping"
+                :disable="store.loadingMaping"
                 valid
                 @on-select="store.penggunaSelected"
                 @clear="penggunaCleared"
