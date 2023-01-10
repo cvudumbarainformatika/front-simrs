@@ -104,7 +104,7 @@
             Nama Perusahaan
           </div>
           <div class="col-6">
-            {{ props.header.perusahaan.nama }}
+            {{ props.header.perusahaan?props.header.perusahaan.nama:'-' }}
           </div>
         </div>
 
@@ -116,7 +116,7 @@
             Nama Pengguna
           </div>
           <div class="col-6">
-            {{ props.header.pengguna.jabatan }}
+            {{ props.header.pengguna?props.header.pengguna.jabatan:'-' }}
           </div>
         </div>
 
@@ -128,7 +128,19 @@
             Nama Penanggungjawab
           </div>
           <div class="col-6">
-            {{ props.header.pj.jabatan }}
+            {{ props.header.pj?props.header.pj.jabatan:'-' }}
+          </div>
+        </div>
+
+        <div
+          v-if="props.header.depo"
+          class="row q-mt-sm"
+        >
+          <div class="col-4">
+            Depo
+          </div>
+          <div class="col-6">
+            {{ props.header.depo?props.header.depo.nama:'-' }}
           </div>
         </div>
 

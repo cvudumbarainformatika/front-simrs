@@ -78,6 +78,26 @@ export const useDetailHistoryTable = defineStore('detail_history', {
           'jumlah'
         ]
       }
+      if (nama === 'DISTRIBUSI DEPO') {
+        this.columns = [
+          'kode_rs',
+          'barangrs',
+          'kode_108',
+          'barang108',
+          'satuan',
+          'jumlah'
+        ]
+      }
+      if (nama === 'PEMAKAIAN RUANGAN' || nama === 'BARANG RUSAK') {
+        this.columns = [
+          'kode_rs',
+          'barangrs',
+          'kode_108',
+          'barang108',
+          'satuan',
+          'jumlah'
+        ]
+      }
     },
     setData (data) {
       console.log('detail ', data)

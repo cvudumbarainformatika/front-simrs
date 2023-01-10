@@ -24,6 +24,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
       reff: null,
       nama: 'BARANG RUSAK',
       kode_pengguna: null,
+      status: 9,
       details: []
     },
     details: {

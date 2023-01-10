@@ -45,19 +45,22 @@
               {{ dateFullFormat(row.tanggal_faktur) }}
             </template>
             <template #cell-asal="{row}">
-              {{ row.asal.nama }}
+              {{ row.asal?row.asal.nama:'-' }}
             </template>
             <template #cell-tujuan="{row}">
-              {{ row.tujuan.nama }}
+              {{ row.tujuan?row.tujuan.nama:'-' }}
             </template>
             <template #cell-pengguna="{row}">
-              {{ row.pengguna.jabatan }}
+              {{ row.pengguna?row.pengguna.jabatan:'-' }}
             </template>
             <template #cell-pj="{row}">
-              {{ row.pj.jabatan }}
+              {{ row.pj?row.pj.jabatan:'-' }}
+            </template>
+            <template #cell-ruang="{row}">
+              {{ row.ruang?row.ruang.uraian:'-' }}
             </template>
             <template #cell-depo="{row}">
-              {{ row.depo.nama }}
+              {{ row.depo?row.depo.nama:'-' }}
             </template>
             <template #cell-status="{row}">
               <!-- {{row.status}} -->
@@ -70,6 +73,9 @@
             </template>
             <template #col-total>
               Total
+            </template>
+            <template #col-ruang>
+              Ruangan
             </template>
             <template #col-depo>
               Depo
@@ -187,7 +193,11 @@ const color = val => {
       // eslint-disable-next-line no-unreachable
       break
     case 8:
-      return 'grey'
+      return 'blue-grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 9:
+      return 'brown-6'
       // eslint-disable-next-line no-unreachable
       break
 
@@ -248,6 +258,26 @@ const label = (status, nama) => {
         break
       case 2:
         return 'Diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PEMAKAIAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Menunggu diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Sudah dipakai'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 9:
+        return 'Rusak'
         // eslint-disable-next-line no-unreachable
         break
 
@@ -336,7 +366,9 @@ const label = (status, nama) => {
 }
 
 onMounted(() => {
-  table.pilihTransaksi({ nama: 'Pemesanan' })
+  if (table.nama === '') {
+    table.pilihTransaksi({ nama: 'Pemesanan' })
+  }
 })
 // table.getDataTable()
 </script>
