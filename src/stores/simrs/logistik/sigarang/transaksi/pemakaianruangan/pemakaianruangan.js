@@ -7,7 +7,9 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   state: () => ({
     loading: false,
     items: [],
-    form: {},
+    form: {
+      status: 2
+    },
     mapingbarang: [],
     penggunas: [],
     penanggungjawabs: [],
@@ -23,10 +25,14 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   }),
   actions: {
     resetForm() {
-      this.form = {}
+      this.form = {
+        status: 2
+      }
     },
     resetAll() {
-      this.form = {}
+      this.form = {
+        status: 2
+      }
       this.displays = []
       this.details = []
       this.detail = {}

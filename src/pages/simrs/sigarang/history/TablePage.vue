@@ -266,6 +266,22 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
+  } else if (nama === 'BARANG RUSAK') {
+    switch (status) {
+      case 1:
+        return 'Rusak'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Dinyatakn dipakai ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
   } else if (nama === 'PEMAKAIAN RUANGAN') {
     switch (status) {
       case 1:
