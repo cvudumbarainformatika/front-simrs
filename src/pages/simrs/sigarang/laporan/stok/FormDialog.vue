@@ -68,7 +68,7 @@
 
 <script setup>
 import { notifCenterVue } from 'src/modules/utils'
-import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/opname/stokOpname'
+import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stokOpname'
 import { ref } from 'vue'
 const store = useStokOpnameStore()
 const formReff = ref(null)
