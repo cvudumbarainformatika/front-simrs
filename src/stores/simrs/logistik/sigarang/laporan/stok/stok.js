@@ -103,7 +103,7 @@ export const useStokStore = defineStore('stok_store', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tanggal', 'tempat', 'kode_rs', 'barang', 'kode_108', 'uraian', 'sisa_stok']
+      this.columns = ['tempat', 'kode_rs', 'barang', 'kode_108', 'uraian', 'sisa_stok']
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
@@ -163,7 +163,7 @@ export const useStokStore = defineStore('stok_store', {
       }
       return new Promise(resolve => {
         // api.get('v1/stok/all-current-has-stok', data)
-        api.get('v1/stok/all-current', data)
+        api.get('v1/stok/stok-sekarang', data)
           .then(resp => {
             this.loading = false
             console.log('data table', resp)

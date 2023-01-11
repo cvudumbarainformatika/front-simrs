@@ -104,7 +104,7 @@
               <div>Uraian 108</div>
             </template>
             <template #col-sisa_stok>
-              <div>Stok Aplikasi</div>
+              <div>Stok</div>
             </template>
             <template #col-stok_fisik>
               <div>Stok Fisik</div>
@@ -125,13 +125,13 @@
               {{ (row.barang.nama) }}
             </template>
             <template #cell-tempat="{row}">
-              {{ (row.depo.nama) }}
+              {{ (row.depo?row.depo.nama:row.ruang?row.ruang.uraian:'-') }}
             </template>
             <template #cell-kode_108="{row}">
-              {{ (row.barang.mapingbarang.kode_108) }}
+              {{ (row.barang.kode_108) }}
             </template>
             <template #cell-uraian="{row}">
-              {{ (row.barang.mapingbarang.barang108.uraian) }}
+              {{ (row.barang.barang108.uraian) }}
             </template>
             <template #cell-stok_fisik="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
