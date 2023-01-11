@@ -51,13 +51,13 @@
               {{ row.tujuan?row.tujuan.nama:'-' }}
             </template>
             <template #cell-pengguna="{row}">
-              {{ row.pengguna?row.pengguna.jabatan:'-' }}
+              {{ row.pengguna?row.pengguna.jabatan:row.ruangpengguna?row.ruangpengguna.pengguna.jabatan:'-' }}
             </template>
             <template #cell-pj="{row}">
-              {{ row.pj?row.pj.jabatan:'-' }}
+              {{ row.pj?row.pj.jabatan:row.ruangpengguna?row.ruangpengguna.pj.jabatan:'-' }}
             </template>
             <template #cell-ruang="{row}">
-              {{ row.ruang?row.ruang.uraian:'-' }}
+              {{ row.ruang?row.ruang.uraian:row.penggunaruang?row.penggunaruang.ruang.uraian:'-' }}
             </template>
             <template #cell-depo="{row}">
               {{ row.depo?row.depo.nama:'-' }}

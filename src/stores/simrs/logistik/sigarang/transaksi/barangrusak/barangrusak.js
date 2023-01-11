@@ -42,7 +42,10 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
     },
     barangrs: [],
     mapingBarangs: [],
-    ruangans: []
+    ruangans: [],
+    ruangHasStok: [],
+    barangHasStok: [],
+    loadingStok: false
   }),
   actions: {
     resetFORM() {
@@ -94,12 +97,31 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
     getInitialData() {
       this.getBarangRs()
       this.getMappingbBarang()
-      this.getDataRuangan()
+      this.getDataRuangan().then(() => {
+        this.getCurrentStokRuangan()
+      })
       this.setReff()
     },
     // set reff
     setReff() {
       this.form.reff = 'RSK-' + uniqueId()
+    },
+    // get Stok ruangan
+    // pending dulu. ini yang belum selsai adalah maping barang yang punya stok.
+    // sehingga yang muncul hanya barang yang punya stok saja
+    getCurrentStokRuangan() {
+      this.loadingStok = true
+      return new Promise(resolve => {
+        api.get('v1/stok/current-ruangan')
+          .then(resp => {
+            this.loadingStok = false
+            console.log('stok ruangan', resp.data)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingStok = false
+          })
+      })
     },
     // get barang rs
     getBarangRs() {

@@ -32,7 +32,9 @@ export const useHistoryTable = defineStore('history_table', {
       'created_at',
       'updated_at',
       'kode_depo',
-      'kode_pengguna'
+      'kode_pengguna',
+      'penggunaruang',
+      'ruangpengguna'
     ]
   }),
   getters: {
