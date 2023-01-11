@@ -1,8 +1,5 @@
 <template>
   <q-page class="q-pb-lg">
-    <!-- <div class="fixed top menu-bar">
-      <MenuTransaksi />
-    </div> -->
     <div
       v-if="path!=='/transaksi'"
       class="q-pt-sm"

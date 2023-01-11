@@ -156,7 +156,7 @@
 // pilih bulan
 import { date } from 'quasar'
 import { ref } from 'vue'
-import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/transaksi/opname/stokOpname'
+import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/opname/stokOpname'
 import { dateFullFormat } from 'src/modules/formatter'
 import formDialog from './FormDialog.vue'
 

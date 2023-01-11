@@ -197,11 +197,19 @@ const routes = [
       {
         path: '/sigarang/laporan',
         name: 'sigarang.laporan',
-        component: () => import('pages/simrs/sigarang/laporan/IndexPage.vue')
-        // children: [
+        component: () => import('pages/simrs/sigarang/laporan/LaporanPage.vue'),
+        children: [
+          {
+            path: '/sigarang/laporan/stok',
+            name: 'sigarang.laporan.stok',
+            component: () =>
+              import(
+                'pages/simrs/sigarang/laporan/stok/IndexPage.vue'
+              )
+          }
         //   { path: '/admin/pegawai', name: 'admin.pegawai', component: () => import('pages/simrs/sigarang/admin/pegawai/IndexPage.vue') },
         //   { path: '/admin/user', name: 'admin.user', component: () => import('pages/simrs/sigarang/admin/user/IndexPage.vue') }
-        // ]
+        ]
       },
       {
         path: '/sigarang/history',
@@ -385,14 +393,6 @@ const routes = [
             component: () =>
               import(
                 'pages/simrs/sigarang/transaksi/pemakaianruangan/IndexPage.vue'
-              )
-          },
-          {
-            path: '/sigarang/transaksi/stockopname',
-            name: 'sigarang.transaksi.stockopname',
-            component: () =>
-              import(
-                'pages/simrs/sigarang/transaksi/stockopname/IndexPage.vue'
               )
           }
         ]

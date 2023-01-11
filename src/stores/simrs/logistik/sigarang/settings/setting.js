@@ -97,11 +97,6 @@ export const useSettingsStore = defineStore('setting_store', {
             link: 'sigarang/transaksi/pengembalian',
             nama: 'Transaksi Pengembalian',
             name: 'sigarang.transaksi.pengembalian'
-          },
-          {
-            link: 'sigarang/transaksi/stockopname',
-            nama: 'Transaksi Stock Opname',
-            name: 'sigarang.transaksi.stockopname'
           }
         ]
       },
@@ -239,7 +234,12 @@ export const useSettingsStore = defineStore('setting_store', {
         link: 'sigarang/laporan',
         nama: 'Laporan',
         name: 'sigarang.laporan',
-        submenus: []
+        submenus: [
+          {
+            link: 'sigarang/laporan/stok',
+            nama: 'Laporan Stock',
+            name: 'sigarang.laporan.stok'
+          }]
       }
       // {
       //   icon: 'icon-mat-settings',

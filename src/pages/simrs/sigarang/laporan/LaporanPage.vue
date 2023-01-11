@@ -1,17 +1,7 @@
 <template>
-  <div
-    class="flex column flex-center bg-loading-bg__table"
-    style="height:300px"
-  >
-    <div>
-      <q-icon
-        name="icon-mat-warning"
-        color="orange"
-        size="60px"
-      />
-    </div>
-    <div class="text-negative text-weight-bold q-mt-sm">
-      Sedang dalam proses pengerjaan
-    </div>
-  </div>
+  <q-page class="q-pb-lg">
+    <q-page class=" q-px-sm">
+      <router-view />
+    </q-page>
+  </q-page>
 </template>
