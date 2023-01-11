@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./StockOpnamePage.vue')
+  import('./StokPanels.vue')
 )
 </script>

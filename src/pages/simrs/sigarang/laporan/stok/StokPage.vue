@@ -1,0 +1,3 @@
+<template>
+  Stok Sekarang
+</template>
