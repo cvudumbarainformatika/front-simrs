@@ -25,7 +25,7 @@
             <!-- gudang -->
             <div class="fit row no-wrap justify-between items-center q-mb-sm">
               <div class="col-4">
-                Gudang / Depo / Ruang
+                Depo / Ruang
               </div>
               <div class="col-8">
                 <app-autocomplete-new
