@@ -28,9 +28,9 @@ export const useStokStore = defineStore('stok_store', {
       order_by: 'created_at',
       sort: 'asc'
     },
-    kode_tempat: null,
+    kode_tempat: 'semua',
     gudangDepo: [
-      { nama: 'Semua', kode: null }
+      { nama: 'Semua', kode: 'semua' }
     ]
 
   }),
@@ -64,7 +64,8 @@ export const useStokStore = defineStore('stok_store', {
     // local table related function
     setSearch(val) {
       this.params.q = val
-      if (this.form.kode_tempat !== null) {
+      console.log('kodet tempat', this.kode_tempat)
+      if (this.kode_tempat !== null) {
         this.getDataByDepo()
       } else {
         this.getDataTable()
@@ -138,17 +139,23 @@ export const useStokStore = defineStore('stok_store', {
     },
     getDataGudangDepo() {
       this.gudangDepo = [
-        { nama: 'semua', kode: null }
+        { nama: 'semua', kode: 'semua' }
       ]
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/transaksi/opname/gudangdepo')
+        api.get('v1/stok/ruang-has-stok')
           .then(resp => {
             this.loading = false
             console.log('data gudang', resp)
-            resp.data.forEach(data => {
+            const keys = Object.keys(resp.data)
+            keys.forEach(key => {
+              // console.log('ruang', resp.data[key])
+              const data = {}
+              data.nama = resp.data[key].depo ? resp.data[key].depo.nama : resp.data[key].ruang ? resp.data[key].ruang.uraian : '-'
+              data.kode = resp.data[key].depo ? resp.data[key].depo.kode : resp.data[key].ruang ? resp.data[key].ruang.kode : '-'
               this.gudangDepo.push(data)
             })
+            // console.log('ruangs', this.gudangDepo)
             resolve(resp)
           })
           .catch(() => {
@@ -184,7 +191,7 @@ export const useStokStore = defineStore('stok_store', {
         params: this.params
       }
       return new Promise(resolve => {
-        api.get('v1/transaksi/opname/opname-by-depo', data)
+        api.get('v1/stok/stok-by-ruang', data)
           .then(resp => {
             this.loading = false
             console.log('data table', resp)

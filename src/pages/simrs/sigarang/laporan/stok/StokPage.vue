@@ -12,56 +12,47 @@
       <q-separator />
       <q-card-section>
         <!-- tanggal -->
-        <div class="fit row no-wrap justify-between items-center">
-          <div class="col-3">
-            Tanggal Stok
+        <div class="fit row no-wrap q-col-gutter-sm justify-between items-start">
+          <div class="col-6">
+            <div class="fit row no-wrap justify-between items-center">
+              <div class="col-4">
+                Tanggal Stok
+              </div>
+              <div class="col-8">
+                {{ tanggalStokOpname }}
+              </div>
+            </div>
+            <!-- gudang -->
+            <div class="fit row no-wrap justify-between items-center q-mb-sm">
+              <div class="col-4">
+                Gudang / Depo / Ruang
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  label="pilih "
+                  :model="store.kode_tempat"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="kode"
+                  valid
+                  :loading="store.loading"
+                  :source="store.gudangDepo"
+                  @on-select="gudangSelected"
+                  @clear="gudangCleared"
+                />
+              </div>
+            </div>
           </div>
-          <div class="col-9">
-            {{ tanggalStokOpname }}
+          <div class="col-6">
+            <!-- <div class="row">
+              stok per ruangan
+            </div>
+            <div class="row">
+              total stok barang
+            </div> -->
           </div>
         </div>
-        <!-- gudang -->
-        <div class="fit row no-wrap justify-between items-center q-mb-sm">
-          <div class="col-3">
-            Gudang
-          </div>
-          <div class="col-9">
-            <app-autocomplete-new
-              label="pilih "
-              :model="store.kode_tempat"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kode"
-              valid
-              :loading="store.loading"
-              :source="store.gudangDepo"
-              @on-select="gudangSelected"
-              @clear="gudangCleared"
-            />
-          </div>
-        </div>
-        <!-- button stok opname -->
-        <!-- <div class="fit row no-wrap justify-end items-center q-mb-sm">
-          <q-btn
-            :label="!store.allItems.length ? 'Mulai Opname':'Sudah ada data'"
-            no-caps
-            color="primary"
-            :disable="!!store.allItems.length || store.loading"
-            @click="store.simpanOpname"
-          >
-            <q-tooltip
-              anchor="top middle"
-              self="center middle"
-            >
-              <div v-if="!store.allItems.length">
-                Mulai stok opname
-              </div>
-              <div v-if="store.allItems.length">
-                Sudah dilakukan stok opname di bulan ini
-              </div>
-            </q-tooltip>
-          </q-btn>
-        </div> -->
+
         <q-separator />
         <div class="q-mt-sm">
           <!-- table -->
@@ -77,7 +68,8 @@
             :loading="store.loading"
             :to-search="store.params.q"
             :ada-tambah="false"
-            :ada-delete="false"
+            :default-btn="false"
+
             @goto="store.setPage"
             @set-row="store.setPerPage"
             @refresh="store.refreshTable"
@@ -142,12 +134,31 @@
             <template #cell-sisa_stok="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template>
+            <!-- Custom BTN -->
+            <template #custom-btn="{row}">
+              <q-btn
+                flat
+                class=""
+                size="sm"
+                round
+                color="grey"
+                icon="icon-mat-visibility"
+                @click="kartuStok(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Lihat kartu stok
+                </q-tooltip>
+              </q-btn>
+            </template>
           </app-table>
         </div>
         <q-separator />
       </q-card-section>
     </q-card>
-    <!-- <formDialog v-model="store.isOpen" /> -->
+    <KartuStok v-model="store.isOpen" />
   </div>
 </template>
 <script setup>
@@ -158,7 +169,7 @@ import { date } from 'quasar'
 import { ref } from 'vue'
 import { useStokStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stok'
 import { dateFullFormat } from 'src/modules/formatter'
-// import formDialog from './FormDialog.vue'
+import KartuStok from './KartuStok.vue'
 
 const tanggalStokOpname = ref(date.formatDate(Date.now(), 'DD MMMM YYYY'))
 const store = useStokStore()
@@ -167,18 +178,22 @@ store.getInitialData()
 const gudangSelected = (val) => {
   console.log('gudang', val)
   store.kode_tempat = val
-  if (val !== null) {
-    store.params.search = val
-    store.getDataByDepo()
-  } else {
+  if (val === null || val === 'semua') {
     store.params.search = ''
     store.getDataTable()
+  } else {
+    store.params.search = val
+    store.getDataByDepo()
   }
 }
 const gudangCleared = () => {
-  store.kode_tempat = null
+  store.kode_tempat = 'semua'
   store.params.search = ''
   store.getDataTable()
+}
+const kartuStok = val => {
+  store.setOpen()
+  console.log(val)
 }
 // const searchEnter = () => {
 //   console.log(store.params.search)
