@@ -17,7 +17,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       page: 1,
       per_page: 10,
       order_by: 'created_at',
-      sort: 'asc'
+      sort: 'desc'
     },
     // custom for this store
     flags: [
