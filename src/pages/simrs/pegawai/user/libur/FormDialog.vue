@@ -33,6 +33,26 @@
           <div class="col-sm-4 col-xs-12">
             Tanggal
           </div>
+          <div class="col-sm-2 col-xs-1">
+            <div class="row">
+              <q-radio
+                v-model="store.rangeDay"
+                val="sehari"
+                dense
+                label="sehari"
+                @update:model-value="store.setRangeDay"
+              />
+            </div>
+            <div class="row">
+              <q-radio
+                v-model="store.rangeDay"
+                val="lebih"
+                dense
+                label="Lebih dari Sehari"
+                @update:model-value="store.setRangeDay"
+              />
+            </div>
+          </div>
           <div class="col-sm-1 col-xs-1">
             <q-btn
               icon="icon-mat-event"
@@ -46,32 +66,81 @@
                 transition-hide="scale"
                 @show="updateProxy"
               >
-                <q-date
-                  ref="refDate"
-                  v-model="store.form.tanggal"
-                  mask="YYYY-MM-DD"
-                >
-                  <div class="row items-center justify-end q-gutter-sm">
-                    <q-btn
-                      v-close-popup
-                      label="Cancel"
-                      color="dark"
-                      flat
-                    />
-                    <q-btn
-                      v-close-popup
-                      label="OK"
-                      color="primary"
-                      flat
-                    />
+                <div v-if="store.rangeDay==='sehari'">
+                  <q-date
+                    ref="refDate"
+                    v-model="store.form.tanggal"
+                    mask="YYYY-MM-DD"
+                  >
+                    <div class="row items-center justify-end q-gutter-sm">
+                      <q-btn
+                        v-close-popup
+                        label="Cancel"
+                        color="dark"
+                        flat
+                      />
+                      <q-btn
+                        v-close-popup
+                        label="OK"
+                        color="primary"
+                        flat
+                      />
                     <!-- @click="save" -->
-                  </div>
-                </q-date>
+                    </div>
+                  </q-date>
+                </div>
+                <div v-if="store.rangeDay==='lebih'">
+                  <q-date
+                    ref="refDate"
+                    v-model="store.form.tanggals"
+                    multiple
+                    mask="YYYY-MM-DD"
+                  >
+                    <div class="row items-center justify-end q-gutter-sm">
+                      <q-btn
+                        v-close-popup
+                        label="Cancel"
+                        color="dark"
+                        flat
+                      />
+                      <q-btn
+                        v-close-popup
+                        label="OK"
+                        color="primary"
+                        flat
+                      />
+                    <!-- @click="save" -->
+                    </div>
+                  </q-date>
+                </div>
               </q-popup-proxy>
             </q-btn>
           </div>
-          <div class="col-sm-7 col-xs-11">
+          <div
+            v-if="store.rangeDay==='sehari'"
+            class="col-sm-5 col-xs-11"
+          >
             {{ dateFullFormat( store.form.tanggal) }}
+          </div>
+          <div
+            v-if="store.rangeDay==='lebih'"
+            class="col-sm-5 col-xs-11"
+          >
+            <!-- {{ store.form.tanggals }} -->
+            <div class="row">
+              <div
+                v-for="(tanggal,i) in store.form.tanggals"
+                :key="i"
+              >
+                <div v-if="i%2===0">
+                  {{ dateFullFormat( tanggal) }}
+                </div>
+
+                <div v-else>
+                  , {{ dateFullFormat( tanggal) }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row q-col-gutter-sm items-center q-mb-sm">
@@ -186,9 +255,7 @@ const onCancel = () => {
   store.setOpen()
 }
 const onSimpan = () => {
-  store.saveForm().then(() => {
-    store.setOpen()
-  })
+  store.toSaveForm()
 }
 </script>
 <style lang="scss" scoped>

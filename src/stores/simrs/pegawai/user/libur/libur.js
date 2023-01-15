@@ -27,6 +27,12 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       { nama: 'Cuti', value: 'CUTI' },
       { nama: 'Extra', value: 'EXTRA' }
     ],
+    days: [
+      { nama: 'Satu Hari', link: 'v1/libur/store', value: 'sehari' },
+      { nama: 'Lebih', link: 'v1/libur/range', value: 'lebih' }
+    ],
+    day: { nama: 'Satu Hari', link: 'v1/libur/store', value: 'sehari' },
+    rangeDay: 'sehari',
     image: '',
     expand: false
   }),
@@ -43,6 +49,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('tanggals', [])
     },
     setForm(key, payload) {
       this.form[key] = payload
@@ -138,6 +145,14 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     setExpand() {
       this.expand = !this.expand
     },
+    setRangeDay(val) {
+      const temp = this.days.filter(d => {
+        return d.value === val
+      })
+      this.day = temp[0]
+      console.log('hari', temp)
+      console.log(val)
+    },
     // api related function
     // get data tabel
     getDataTable() {
@@ -178,6 +193,19 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
             reject(err)
           })
       })
+    },
+    toSaveForm() {
+      if (this.rangeDay === 'sehari') {
+        this.saveForm().then(() => {
+          this.setOpen()
+        })
+      } else {
+        this.form.tanggals.forEach(tanggal => {
+          this.setForm('tanggal', tanggal)
+          this.saveForm()
+        })
+        this.setOpen()
+      }
     },
     saveForm() {
       this.loading = true
