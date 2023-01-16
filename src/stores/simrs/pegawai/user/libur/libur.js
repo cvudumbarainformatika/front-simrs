@@ -16,7 +16,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       q: '',
       page: 1,
       per_page: 10,
-      order_by: 'created_at',
+      order_by: 'tanggal',
       sort: 'desc'
     },
     // custom for this store
