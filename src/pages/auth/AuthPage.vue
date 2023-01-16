@@ -66,13 +66,13 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
-// import { useAuthStore } from 'src/stores/auth'
-import { useAuthStoreAccess } from 'src/stores/authAccess'
+import { useAuthStore } from 'src/stores/auth'
+// import { useAuthStoreAccess } from 'src/stores/authAccess'
 import { useAppStore } from 'src/stores/app'
 import { pathImg } from 'src/boot/axios'
 
-// const storeAuth = useAuthStore()
-const storeAuth = useAuthStoreAccess()
+const storeAuth = useAuthStore()
+// const storeAuth = useAuthStoreAccess()
 const app = useAppStore()
 const $q = useQuasar()
 
