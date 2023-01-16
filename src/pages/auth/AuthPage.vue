@@ -57,7 +57,7 @@
           Aplikasi ini tidak di perjualbelikan secara bebas tanpa seizin dari pembuatnya.
         </div>
         <div class="q-mt-lg text-right f-14">
-          ADMIN WEBSITE
+          ADMIN WEBSITEu
         </div>
       </div> -->
     </q-card>
@@ -66,11 +66,13 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useAuthStore } from 'src/stores/auth'
+// import { useAuthStore } from 'src/stores/auth'
+import { useAuthStoreAccess } from 'src/stores/authAccess'
 import { useAppStore } from 'src/stores/app'
 import { pathImg } from 'src/boot/axios'
 
-const storeAuth = useAuthStore()
+// const storeAuth = useAuthStore()
+const storeAuth = useAuthStoreAccess()
 const app = useAppStore()
 const $q = useQuasar()
 

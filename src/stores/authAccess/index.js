@@ -4,7 +4,7 @@ import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
 import { waitLoad } from 'src/modules/utils'
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStoreAccess = defineStore('auth_access', {
   state: () => ({
     state: () => ({
       token: localStorage.getItem('token') ? storage.getLocalToken() : null,
@@ -24,10 +24,10 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       waitLoad('show')
       try {
-        await api.post('/v1/login', payload).then(resp => {
-        // await api.post('/v2/login', payload).then(resp => {
+        await api.post('/login/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
+          console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
           if (hdd) {
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = ''
     },
     async getUser () {
-      await api.get('/v1/me').then(resp => {
+      await api.get('/login/me').then(resp => {
         console.log('me', resp)
         storage.setUser(resp.data.result)
         this.user = resp.data.result
@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', {
     async logout () {
       waitLoad('show')
       try {
-        await api.post('/v1/logout').then(resp => {
+        await api.post('/login/logout').then(resp => {
           this.REMOVE_LOKAL()
           routerInstance.replace('/login')
           waitLoad('done')
