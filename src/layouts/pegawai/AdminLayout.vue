@@ -12,7 +12,7 @@
       v-if="!mobile"
       v-model="leftDrawerOpen"
       :dark="dark"
-      :menus="pegawai.menus"
+      :menus="menus"
     />
     <q-drawer
       v-model="rightDrawerOpen"
@@ -28,7 +28,7 @@
     <adm-footer-menu
       v-if="mobile"
       :dark="dark"
-      :menus="pegawai.menus"
+      :menus="menus"
     />
     <q-page-container>
       <router-view />
@@ -62,14 +62,25 @@ import AdmHeader from './AdmHeader.vue'
 import AdmFooterMenu from './AdmFooterMenu.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
-import { usePegawaiApplicationStore } from 'src/stores/simrs/pegawai/pegawai'
+// import { usePegawaiApplicationStore } from 'src/stores/simrs/pegawai/pegawai'
 const store = useAuthStore()
 const setting = useSettingsStore()
-const pegawai = usePegawaiApplicationStore()
+// const pegawai = usePegawaiApplicationStore()
 const leftDrawerOpen = ref(false)
 const rightDrawerOpen = ref(false)
 const $q = useQuasar()
 const mobile = $q.screen.lt.sm
+
+const menus = computed(() => {
+  const apem = store.aplications.filter(app => {
+    return app.aplikasi === 'pegawai'
+  })
+  if (apem.length) {
+    return apem[0].menus
+  } else {
+    return []
+  }
+})
 const dark = computed(() => {
   return $q.dark.isActive
 })

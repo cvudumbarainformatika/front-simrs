@@ -70,6 +70,7 @@ import { useAuthStore } from 'src/stores/auth'
 // import { useAuthStoreAccess } from 'src/stores/authAccess'
 import { useAppStore } from 'src/stores/app'
 import { pathImg } from 'src/boot/axios'
+import { useRouter } from 'vue-router'
 
 const storeAuth = useAuthStore()
 // const storeAuth = useAuthStoreAccess()
@@ -95,13 +96,18 @@ const logo = computed(() => {
 // console.log(logo)
 // console.log(form)
 // console.log(storeAuth)
-
+const router = useRouter()
 function onSubmit () {
   const formData = new FormData()
   formData.append('email', form.value.email + '@app.com')
   formData.append('password', form.value.password)
   formData.append('device_name', form.value.device_name)
   storeAuth.login(formData)
+  setTimeout(() => {
+    if (storeAuth.loading === false) {
+      router.push(storeAuth.route.link)
+    }
+  }, 1000)
 }
 
 </script>

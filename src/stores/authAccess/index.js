@@ -27,7 +27,7 @@ export const useAuthStoreAccess = defineStore('auth_access', {
         await api.post('/login/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
-          console.log('login', resp)
+          // console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
           if (hdd) {

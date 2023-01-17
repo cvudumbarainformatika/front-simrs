@@ -3,14 +3,19 @@ import { api } from 'boot/axios'
 import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
 import { waitLoad } from 'src/modules/utils'
+// import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     state: () => ({
       token: localStorage.getItem('token') ? storage.getLocalToken() : null,
-      user: localStorage.getItem('user') ? storage.getUser() : null,
-      loading: false
-    })
+      user: localStorage.getItem('user') ? storage.getUser() : null
+    }),
+    loading: false,
+    aplications: [],
+    menus: [],
+    role: '',
+    route: {}
   }),
   getters: {
     isAuth (state) {
@@ -20,6 +25,82 @@ export const useAuthStore = defineStore('auth', {
     userGetter: () => storage.getUser() !== null || storage.getUser() !== undefined
   },
   actions: {
+    // maping menu
+    mapingMenu(val) {
+      // ini sebagai catatan
+      // console.log('prototype aplikasi', Object.getPrototypeOf(val.aplikasi).constructor.name === 'Object')
+      // console.log('prototype menu', Object.getPrototypeOf(val.menus).constructor.name === 'Object')
+      // console.log('prototype role', Object.getPrototypeOf(val.role).constructor.name === 'Array')
+      // console.log('prototype submenu', Object.getPrototypeOf(val.submenu).constructor.name === 'Array')
+      console.log('data menu', val)
+
+      const aplKey = Object.keys(val.aplikasi)
+      const menuKey = Object.keys(val.menus)
+      const apli = aplKey.map(key => {
+        const temp = {}
+        temp.aplikasi = val.aplikasi[key].aplikasi
+        temp.id = val.aplikasi[key].id
+        temp.nama = val.aplikasi[key].nama
+        const menu = menuKey.map(menu => {
+          if (val.aplikasi[key].id === val.menus[menu].aplikasi_id) {
+            return val.menus[menu]
+          } else { return false }
+        })
+
+        temp.menus = menu.filter(data => { return data !== false })
+        return temp
+      })
+      this.aplications = apli
+      this.role = val.role[0].nama
+      if (apli.length === 1) {
+        // const router = useRouter()
+        this.menus = apli[0].menus
+        // routerInstance.replace({ name: apli[0].aplikasi })
+        const apem = {}
+        switch (apli[0].aplikasi) {
+          case 'sigarang':
+            console.log('switch sigarang', apli[0].aplikasi)
+            if (this.menus.length) {
+              if (this.menus[0].submenus.length) {
+                apem.link = this.menus[0].submenus[0].link
+                apem.name = this.menus[0].submenus[0].name
+                this.route = this.menus[0].submenus[0]
+              }
+            }
+            console.log('path', apem)
+            // router.push(apem.link)
+            // router.replace({ name: apem.name })
+            // routerInstance.push(apem.link)
+            // routerInstance.replace({ name: 'sigarang.dashboard' })
+            break
+          case 'pegawai':
+            console.log('switch pegawai', apli[0].aplikasi)
+            if (this.menus.length) {
+              if (this.menus[0].submenus.length) {
+                apem.link = this.menus[0].submenus[0].link
+                this.route = this.menus[0].submenus[0]
+              }
+            }
+            console.log('path', apem)
+            // router.replace({ name: apem.name })
+            // router.push(apem.link)
+            // routerInstance.push(apem.link)
+            // routerInstance.replace({ name: 'pegawai.user.list' })
+            break
+
+          default:
+            console.log('switch default', apli[0].aplikasi)
+            this.route.link = '/admin/sso'
+            // router.replace({ name: 'admin.sso' })
+            break
+        }
+        console.log('panjangnya cuma satu', apli)
+      }
+      console.log('aplikasi', apli)
+      console.log('role', this.role)
+    },
+
+    //
     async login (payload) {
       this.loading = true
       waitLoad('show')
@@ -28,6 +109,8 @@ export const useAuthStore = defineStore('auth', {
         // await api.post('/v2/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
+          this.mapingMenu(resp.data)
+          // console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
           if (hdd) {
@@ -43,6 +126,7 @@ export const useAuthStore = defineStore('auth', {
         // notifErr(error.response)
       }
     },
+
     SET_TOKEN_USER (token, user) {
       storage.setHeaderToken(token)
       this.token = token
@@ -60,6 +144,7 @@ export const useAuthStore = defineStore('auth', {
     async getUser () {
       await api.get('/v1/me').then(resp => {
         console.log('me', resp)
+        this.mapingMenu(resp.data)
         storage.setUser(resp.data.result)
         this.user = resp.data.result
       })

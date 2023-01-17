@@ -78,7 +78,7 @@ const routes = [
     meta: { requireAuth: true },
     children: [
       // { path: '', redirect: '/pegawai/dashboard' },
-      { path: '', redirect: '/pegawai/user/list' },
+      { path: '', name: 'pegawai', redirect: '/pegawai/user/list' },
       {
         path: '/pegawai/dashboard',
         name: 'pegawai.dashboard',
@@ -169,7 +169,7 @@ const routes = [
     component: () => import('layouts/sigarang/AdminLayout.vue'),
     meta: { requireAuth: true },
     children: [
-      { path: '', redirect: '/sigarang/dashboard' },
+      { path: '', name: 'sigarang', redirect: '/sigarang/dashboard' },
       {
         path: '/sigarang/dashboard',
         name: 'sigarang.dashboard',

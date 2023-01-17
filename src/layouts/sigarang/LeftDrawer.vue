@@ -128,7 +128,7 @@
           </q-menu>
           <div class="item-content">
             <q-tooltip
-              v-if="!menu.submenus.length"
+              v-if="!menu.submenus.length && !Object.keys(menu.submenus).length"
               class="bg-primary"
               anchor="center right"
               self="center left"
@@ -237,7 +237,7 @@ const refItem = ref(null)
 const refMenu = ref(null)
 const prev = ref(0)
 const hover = (menu, i) => {
-  if (menu.submenus.length) {
+  if (menu.submenus.length || Object.keys(menu.submenus).length) {
     refMenu.value[i].show()
     if (!refItem.value[i].active) {
       refMenu.value[i].offset[0] = 16
@@ -256,6 +256,7 @@ const hover = (menu, i) => {
 
   // console.log('ref item', refItem.value)
   // console.log('ref menu', refMenu.value[i])
+  console.log('menu', menu.submenus.length)
 }
 const leave = (i) => {
   refMenu.value[i].hide()

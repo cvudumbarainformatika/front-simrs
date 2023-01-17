@@ -58,7 +58,7 @@ export const useHistoryTable = defineStore('history_table', {
       this.nama = val.nama
       this.title = val.nama
       this.params.nama = val.nama
-      // console.log('dipilih ', val)
+      console.log('dipilih ', val)
 
       this.getDataTransactions()
     },

@@ -12,7 +12,7 @@
       v-if="!mobile"
       v-model="leftDrawerOpen"
       :dark="dark"
-      :menus="setting.menus"
+      :menus="menus"
     />
     <q-drawer
       v-model="rightDrawerOpen"
@@ -28,7 +28,7 @@
     <adm-footer-menu
       v-if="mobile"
       :dark="dark"
-      :menus="setting.menus"
+      :menus="menus"
     />
     <q-page-container>
       <router-view />
@@ -70,6 +70,16 @@ const store = useAuthStore()
 const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
 
+const menus = computed(() => {
+  const apem = store.aplications.filter(app => {
+    return app.aplikasi === 'sigarang'
+  })
+  if (apem.length) {
+    return apem[0].menus
+  } else {
+    return []
+  }
+})
 const leftDrawerOpen = ref(false)
 const rightDrawerOpen = ref(false)
 const $q = useQuasar()
