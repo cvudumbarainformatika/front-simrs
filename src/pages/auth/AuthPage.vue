@@ -102,12 +102,17 @@ function onSubmit () {
   formData.append('email', form.value.email + '@app.com')
   formData.append('password', form.value.password)
   formData.append('device_name', form.value.device_name)
-  storeAuth.login(formData)
-  setTimeout(() => {
-    if (storeAuth.loading === false) {
-      router.push(storeAuth.route.link)
-    }
-  }, 1000)
+  storeAuth.login2(formData)
+    .then(() => {
+      console.log('loading false', storeAuth.aplications)
+      if (storeAuth.aplications.length === 1) {
+        if (storeAuth.aplications[0].aplikasi === 'pegawai') {
+          router.push('pegawai/user/list')
+        } else {
+          router.push(storeAuth.route.link)
+        }
+      }
+    })
 }
 
 </script>

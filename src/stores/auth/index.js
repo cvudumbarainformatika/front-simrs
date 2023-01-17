@@ -47,7 +47,30 @@ export const useAuthStore = defineStore('auth', {
           } else { return false }
         })
 
-        temp.menus = menu.filter(data => { return data !== false })
+        const menus = menu.filter(data => { return data !== false })
+          .map(men => {
+            if (Object.getPrototypeOf(men.submenus).constructor.name === 'Object') {
+              const a = Object.keys(men.submenus)
+              const b = []
+              a.forEach(mbem => {
+                b.push(men.submenus[mbem])
+              })
+              const c = {
+                aplikasi_id: men.aplikasi_id,
+                icon: men.icon,
+                link: men.link,
+                nama: men.nama,
+                name: men.name,
+                submenus: b
+              }
+              return c
+            } else {
+              return men
+            }
+          })
+        temp.menus = menus
+        console.log('menus', menus)
+
         return temp
       })
       this.aplications = apli
@@ -105,8 +128,8 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       waitLoad('show')
       try {
-        await api.post('/v1/login', payload).then(resp => {
         // await api.post('/v2/login', payload).then(resp => {
+        await api.post('/v1/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
           this.mapingMenu(resp.data)
@@ -126,7 +149,29 @@ export const useAuthStore = defineStore('auth', {
         // notifErr(error.response)
       }
     },
-
+    login2(payload) {
+      this.loading = true
+      waitLoad('show')
+      return new Promise(resolve => {
+        api.post('/v1/login', payload).then(resp => {
+          storage.setLocalToken(resp.data.token)
+          storage.setUser(resp.data.user)
+          this.mapingMenu(resp.data)
+          // console.log('login', resp)
+          const hdd = storage.getLocalToken()
+          const hddUser = storage.getUser()
+          if (hdd) {
+            this.SET_TOKEN_USER(hdd, hddUser)
+          }
+          resolve(resp)
+          this.loading = false
+          waitLoad('done')
+        })
+      }).catch(() => {
+        this.loading = false
+        waitLoad('done')
+      })
+    },
     SET_TOKEN_USER (token, user) {
       storage.setHeaderToken(token)
       this.token = token
