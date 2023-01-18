@@ -163,6 +163,29 @@
                     </div>
                   </div>
                 </div>
+                <div
+                  v-if="itemIndex!==null"
+                >
+                  <div
+                    v-if="!store.items[itemIndex].disableSend"
+                    class="q-mt-sm"
+                  >
+                    <q-separator />
+                    <div class="fit row no-wrap justify-end items-center content-center">
+                      <div class="q-mt-sm">
+                        <q-btn
+                          icon="icon-mat-send"
+                          color="primary"
+                          flat
+                          no-caps
+                          dense
+                          round
+                          @click="distribusikan(store.items[itemIndex])"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </q-card-section>
             </q-card>
           </div>
@@ -173,6 +196,7 @@
   </div>
 </template>
 <script setup>
+import { ref } from 'vue'
 import { Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
@@ -180,31 +204,48 @@ import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
 
+const itemIndex = ref(null)
 store.getInitialData()
 const onClick = val => {
   store.items.forEach(item => {
     delete item.highlight
   })
   store.items[val.index].highlight = true
+  itemIndex.value = val.index
   console.log(val)
 }
 const distribusikan = val => {
+  console.log('distribusikan', val)
   const toNum = val.no_permintaan.split('/')
 
   store.setForm('no_distribusi', 'RCVD/' + toNum[1] + '/' + toNum[2])
   store.setForm('id', val.id)
-  Dialog.create({
-    title: 'Konfirmasi',
-    message: 'Distribusikan barang terlampir?',
-    cancel: true
-  }).onOk(() => {
-    store.saveForm()
+  const enolDetail = val.details.filter(data => {
+    return data.jumlah_distribusi <= 0
   })
-  console.log('distribusikan', val)
+  if (enolDetail.length) {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Ada barang yang distribusinya bernilai 0, Tetap lanjutakan distribusi?',
+      cancel: true
+    }).onOk(() => {
+      store.saveForm()
+    })
+  } else {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Distribusikan barang terlampir?',
+      cancel: true
+    }).onOk(() => {
+      store.saveForm()
+    })
+  }
 }
 let itemsIndex = null
 let detailIndex = null
 const updateJumlahDistribusi = val => {
+  const intVal = parseInt(val)
+  store.items[itemsIndex].details[detailIndex].jumlah_distribusi = intVal
   const tempItems = store.items[itemsIndex].details.filter(item => {
     return item.jumlah_distribusi <= 0
   })
@@ -213,15 +254,19 @@ const updateJumlahDistribusi = val => {
     store.items[itemsIndex].disableSend = false
     store.setForm('detail', store.items[itemsIndex].details)
   }
-  if (store.items[itemsIndex].details[detailIndex].jumlah_disetujui < val) {
+  if (store.items[itemsIndex].details[detailIndex].jumlah_disetujui < intVal) {
     notifErrVue('jumlah Distribusi tidak boleh melebihi jumlah distujui')
     store.items[itemsIndex].details[detailIndex].jumlah_distribusi = store.items[itemsIndex].details[detailIndex].jumlah_disetujui
     console.log('details item', store.items[itemsIndex].details[detailIndex])
+  } else if (store.items[itemsIndex].details[detailIndex].jumlah_distribusi < 0) {
+    notifErrVue('jumlah Distribusi tidak boleh kurang dari 0')
+    store.items[itemsIndex].details[detailIndex].jumlah_distribusi = 0
   }
   console.log('items', tempItems)
 }
 const fokus = (i, j) => {
   console.log('fokus', i, j)
+  // itemIndex.value = i
   itemsIndex = i
   detailIndex = j
   const current = store.items[i].details[j]

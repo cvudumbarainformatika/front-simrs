@@ -114,11 +114,11 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       store.setForm('kode_pengguna', data.kode_pengguna)
       // store.setForm('no_permintaan', data.no_permintaan)
 
-      const peng = store.penggunas.filter((apem) => {
-        return apem.kode === data.kode_pengguna
-      })
-      console.log('soucet', store.penggunas.length)
-      console.log('peng', peng)
+      // const peng = store.penggunas.filter((apem) => {
+      //   return apem.kode === data.kode_pengguna
+      // })
+      // console.log('soucet', store.penggunas.length)
+      // console.log('peng', peng)
       // const pj = store.penanggungjawabs.filter((data) => {
       //   return (
       //     data.level_3 === peng[0].level_3 &&
@@ -131,13 +131,13 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       // const ruang = store.penggunaruangs.filter((apem) => {
       //   return apem.kode_pengguna === data.kode_pengguna
       // })
-      console.log('ruang', detail)
+      // console.log('ruang', detail)
 
       // store.setForm('kode_penanggungjawab', pj[0].kode)
       store.setNama('penanggungjawab', data.pj.jabatan)
       store.setNama('pengguna', data.pengguna.jabatan)
       if (Object.keys(detail).length) {
-        console.log('Objeck key detail HAAAAADDIIIIRRRRR')
+        // console.log('Objeck key detail HAAAAADDIIIIRRRRR')
         store.setForm('tujuan', detail.tujuan)
         store.setForm('kode_ruang', detail.tujuan)
         store.setNama('ruang', detail.ruang.uraian)
