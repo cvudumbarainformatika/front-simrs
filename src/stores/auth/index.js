@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
-import { waitLoad } from 'src/modules/utils'
+import { notifErrVue, waitLoad } from 'src/modules/utils'
 // import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', {
@@ -69,7 +69,7 @@ export const useAuthStore = defineStore('auth', {
             }
           })
         temp.menus = menus
-        console.log('menus', menus)
+        // console.log('menus', menus)
 
         return temp
       })
@@ -90,7 +90,7 @@ export const useAuthStore = defineStore('auth', {
                 this.route = this.menus[0].submenus[0]
               }
             }
-            console.log('path', apem)
+            // console.log('path', apem)
             // router.push(apem.link)
             // router.replace({ name: apem.name })
             // routerInstance.push(apem.link)
@@ -104,7 +104,7 @@ export const useAuthStore = defineStore('auth', {
                 this.route = this.menus[0].submenus[0]
               }
             }
-            console.log('path', apem)
+            // console.log('path', apem)
             // router.replace({ name: apem.name })
             // router.push(apem.link)
             // routerInstance.push(apem.link)
@@ -112,15 +112,15 @@ export const useAuthStore = defineStore('auth', {
             break
 
           default:
-            console.log('switch default', apli[0].aplikasi)
+            // console.log('switch default', apli[0].aplikasi)
             this.route.link = '/admin/sso'
             // router.replace({ name: 'admin.sso' })
             break
         }
-        console.log('panjangnya cuma satu', apli)
+        // console.log('panjangnya cuma satu', apli)
       }
-      console.log('aplikasi', apli)
-      console.log('role', this.role)
+      // console.log('aplikasi', apli)
+      // console.log('role', this.role)
     },
 
     //
@@ -152,24 +152,29 @@ export const useAuthStore = defineStore('auth', {
     login2(payload) {
       this.loading = true
       waitLoad('show')
-      return new Promise(resolve => {
-        api.post('/v1/login', payload).then(resp => {
-          storage.setLocalToken(resp.data.token)
-          storage.setUser(resp.data.user)
-          this.mapingMenu(resp.data)
-          // console.log('login', resp)
-          const hdd = storage.getLocalToken()
-          const hddUser = storage.getUser()
-          if (hdd) {
-            this.SET_TOKEN_USER(hdd, hddUser)
-          }
-          resolve(resp)
-          this.loading = false
-          waitLoad('done')
-        })
-      }).catch(() => {
-        this.loading = false
-        waitLoad('done')
+      return new Promise((resolve) => {
+        api.post('/v1/login', payload)
+          .then(resp => {
+            console.log('login', resp)
+            if (Object.keys(resp.data.aplikasi).length) {
+              this.mapingMenu(resp.data)
+              storage.setLocalToken(resp.data.token)
+              storage.setUser(resp.data.user)
+              const hdd = storage.getLocalToken()
+              const hddUser = storage.getUser()
+              if (hdd) {
+                this.SET_TOKEN_USER(hdd, hddUser)
+              }
+              resolve(resp)
+            } else {
+              notifErrVue('Anda tidak memiliki Akses')
+            }
+            this.loading = false
+            waitLoad('done')
+          }).catch(() => {
+            this.loading = false
+            waitLoad('done')
+          })
       })
     },
     SET_TOKEN_USER (token, user) {
