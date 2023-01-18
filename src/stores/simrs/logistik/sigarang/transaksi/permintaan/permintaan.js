@@ -20,6 +20,8 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       'created_at',
       'updated_at',
       'jumlah_disetujui',
+      'jumlah_distribusi',
+      'no_penerimaan',
       'permintaanruangan_id'
     ],
     form: {},
