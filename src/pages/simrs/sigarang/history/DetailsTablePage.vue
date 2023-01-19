@@ -114,7 +114,7 @@
                 {{ row.barangrs.kode_108 }}
               </template>
               <template #cell-satuan="{row}">
-                {{ row.satuan.nama }}
+                {{ row.satuan?row.satuan.nama:'-' }}
               </template>
               <template #cell-barangrs="{row}">
                 {{ row.barangrs.nama }}

@@ -24,9 +24,17 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     penggunaruangs: [],
     penanggungjawabs: [],
     minMaxPenggunas: {},
-    stok: {}
+    stok: {},
+    params: {
+      kode_rs: '',
+      kode_ruangan: ''
+    },
+    barang: {}
   }),
   actions: {
+    setParams(key, val) {
+      this.params[key] = val
+    },
     setNoPermintaan() {
       const m = 'SPMT-' + uniqueId()
       this.nomor = m
@@ -49,6 +57,27 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
     setSearch(val) {},
     pilihPenanggungjawab(val) {},
     // api related function
+    // get data stok by barang
+    getStokByBarang() {
+      this.loading = true
+      const param = {
+        params: this.params
+      }
+      return new Promise(resolve => {
+        api.get('v1/stok/get-ruangan-by-barang', param)
+          .then(resp => {
+            this.loading = false
+            console.log('stok by barang', resp)
+            this.barang = resp.data
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+
     getPenanggungJawabs() {
       return new Promise((resolve) => {
         api.get('v1/pengguna/penanggungjawab').then((resp) => {

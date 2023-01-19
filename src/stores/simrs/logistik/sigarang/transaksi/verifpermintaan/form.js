@@ -64,8 +64,8 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
       // this.getDataTable()
     },
     setColumns(payload) {
-      console.log('payload', payload)
-      this.columns = ['kode_rs', 'barangrs', 'satuan', 'jumlah', 'jumlah_disetujui', 'alasan']
+      // console.log('payload', payload)
+      this.columns = ['kode_rs', 'barangrs', 'satuan', 'stokDepo', 'alokasi', 'jumlah', 'jumlah_disetujui', 'alasan']
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0].sort()
       // changeArrayIndex(this.columns, 'kode_rs', 'alasan')

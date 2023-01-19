@@ -61,7 +61,7 @@
           <div>Jumlah Disetujui</div>
         </template>
         <template #cell-jumlah_disetujui="{row}">
-          <div v-if="edit">
+          <div v-if="edit && row.alokasi>0">
             <q-input
               ref="refInput"
               v-model="row.jumlah_disetujui"
@@ -72,6 +72,9 @@
               ]"
             />
           </div>
+          <div v-if="edit && row.alokasi===0">
+            Tidak ada Alokasi
+          </div>
           <div v-if="!edit">
             {{ row.jumlah_disetujui }}
           </div>
@@ -79,7 +82,14 @@
       </app-table-input>
       <div class="fit row no-wrap justify-end items-center q-mt-md">
         <app-btn
+          label="Tolak Permintaan"
+          color="red"
+          class="q-mr-sm"
+          @click="onDenied"
+        />
+        <app-btn
           v-if="!edit"
+
           label="Edit"
           color="dark"
           @click="onEdit"
@@ -112,7 +122,7 @@ defineProps({
 const refInput = ref(null)
 const edit = ref(false)
 const onSubmit = () => {
-  refInput.value.validate()
+  if (refInput.value) refInput.value.validate()
   store.saveForm()
   // emits('onSubmit', props.map.items)
   edit.value = false
@@ -124,4 +134,5 @@ const onEdit = () => {
 const onCancel = () => {
   edit.value = false
 }
+const onDenied = () => {}
 </script>

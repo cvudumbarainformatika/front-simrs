@@ -56,6 +56,8 @@
                   option-value="kode"
                   option-label="nama"
                   :source="mapingbarang.barangrses"
+                  :loading="table.loadingDepo"
+                  :disable="table.loadingDepo"
                   @on-select="barangSelected"
                   @clear="clearBarangRs"
                   @set-model="modelSet"
@@ -66,7 +68,10 @@
               <div class="col-md-3 col-xs-12">
                 Jumlah Minta
               </div>
-              <div class="col-md-9 col-xs-12">
+              <div
+                v-if="store.barang ? store.barang.alokasi<=0 ? false : true : false"
+                class="col-md-9 col-xs-12"
+              >
                 <app-input
                   v-model="store.form.jumlah"
                   outlined
@@ -97,9 +102,16 @@
                 <app-btn
                   label="Simpan "
                   color="secondary"
+                  :disable="store.barang?store.barang.alokasi>0?false:true:true"
                   :loading="table.loading"
                   @click="table.saveForm"
                 />
+                <div
+                  v-if="store.barang?store.barang.alokasi<=0:false"
+                  class="f-10"
+                >
+                  *Stok Depo tidak mencukupi
+                </div>
               </div>
             </div>
           </div>
@@ -152,27 +164,66 @@
                 {{ store.nama.gudang }}
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center">
+            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Stok User
               </div>
-              <div class="col-md-9 col-xs-12">
+              <div
+                v-if="store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                <q-btn
+                  flat
+                  dense
+                  :loading="store.loading"
+                />
+              </div>
+              <div
+                v-if="!store.loading"
+                class="col-md-9 col-xs-12"
+              >
                 {{ store.stok.sisa_stok?store.stok.sisa_stok:0 }}
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center">
+            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Stok Alokasi
               </div>
-              <div class="col-md-9 col-xs-12">
-                Belum ada
+              <div
+                v-if="store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                <q-btn
+                  flat
+                  dense
+                  :loading="store.loading"
+                />
+              </div>
+              <div
+                v-if="!store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                {{ Object.keys(store.barang).length?store.barang.alokasi:0 }}
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center">
+            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Maks Stok user
               </div>
-              <div class="col-md-9 col-xs-12">
+              <div
+                v-if="store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                <q-btn
+                  flat
+                  dense
+                  :loading="store.loading"
+                />
+              </div>
+              <div
+                v-if="!store.loading"
+                class="col-md-9 col-xs-12"
+              >
                 {{ store.minMaxPenggunas.max_stok?store.minMaxPenggunas.max_stok:0 }}
               </div>
             </div>
@@ -226,6 +277,7 @@ const pilihPengguna = (val) => {
   store.setNama('pengguna', peng.jabatan)
   if (ruang.length) {
     store.setForm('tujuan', ruang[0].kode_ruang)
+    store.setParams('kode_rauangan', ruang[0].kode_ruang)
     store.setNama('ruang', ruang[0].ruang.uraian)
   } else {
     store.setForm('tujuan', null)
@@ -239,10 +291,13 @@ const pilihPengguna = (val) => {
 }
 
 const barangSelected = val => {
+  // :source="mapingbarang.barangrses"
+
   if (!table.mapingDepos.length) return notifErrVue('data barang depo belum tersedia, mohon besabar menunggu sebentar. ')
   store.setForm('kode_rs', val)
+  store.setParams('kode_rs', val)
   // console.log('maping depo', table.mapingDepos)
-
+  store.getStokByBarang()
   store.getMinMaxPengguna()
 
   const apem = mapingbarang.barangrses.filter(data => { return data.kode === val })

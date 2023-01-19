@@ -308,10 +308,10 @@ const label = (status, nama) => {
         return 'Draft'
         // eslint-disable-next-line no-unreachable
         break
-      // case 2:
-      //   return 'Selesai'
-      //   // eslint-disable-next-line no-unreachable
-      //   break
+      case 20:
+        return 'Permintaan Ditolak'
+        // eslint-disable-next-line no-unreachable
+        break
       // case 3:
       //   return 'Diterima Sebagian'
       //   // eslint-disable-next-line no-unreachable
