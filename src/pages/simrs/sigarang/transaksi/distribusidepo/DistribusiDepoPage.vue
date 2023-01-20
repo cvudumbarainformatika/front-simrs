@@ -315,6 +315,7 @@ const barangSelected = val => {
   // console.log('stok', stok)
 }
 const barangCleared = () => {
+  store.resetDisplay()
   store.resetInput()
   store.setInput('kode_barang', null)
 }

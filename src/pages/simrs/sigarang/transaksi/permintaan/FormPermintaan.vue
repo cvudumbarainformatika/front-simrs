@@ -277,7 +277,7 @@ const pilihPengguna = (val) => {
   store.setNama('pengguna', peng.jabatan)
   if (ruang.length) {
     store.setForm('tujuan', ruang[0].kode_ruang)
-    store.setParams('kode_rauangan', ruang[0].kode_ruang)
+    store.setParams('kode_ruangan', ruang[0].kode_ruang)
     store.setNama('ruang', ruang[0].ruang.uraian)
   } else {
     store.setForm('tujuan', null)
@@ -292,12 +292,15 @@ const pilihPengguna = (val) => {
 
 const barangSelected = val => {
   // :source="mapingbarang.barangrses"
-
+  console.log('barang selected', val)
   if (!table.mapingDepos.length) return notifErrVue('data barang depo belum tersedia, mohon besabar menunggu sebentar. ')
   store.setForm('kode_rs', val)
+  // console.log('barang selected ga return', val)
   store.setParams('kode_rs', val)
   // console.log('maping depo', table.mapingDepos)
-  store.getStokByBarang()
+  if (val !== null) {
+    store.getStokByBarang()
+  }
   store.getMinMaxPengguna()
 
   const apem = mapingbarang.barangrses.filter(data => { return data.kode === val })

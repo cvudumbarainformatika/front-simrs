@@ -57,6 +57,10 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         this.setForm(columns[i], null)
       }
       this.form.details = []
+      this.setNoDistribusi()
+    },
+    resetDisplay() {
+      this.displays = []
     },
     setForm(key, payload) {
       this.form[key] = payload
@@ -193,20 +197,16 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     filterBarangHasStok(val) {
       const setting = useSettingsStore()
       this.barangrHasStoks = []
-      // console.log('mapig', setting.mapingbarangdepo)
+
       if (Object.keys(setting.mapingbarangdepo).length) {
-        // console.log('mapig if', setting.mapingbarangdepo[val])
         this.barangrses = setting.mapingbarangdepo[val]
-        // console.log('barang RS', this.barangrses)
-        // console.log('type', this.stoks)
-        // }
-        // if (this.barangrses.length) {
+
         const keys = Object.keys(this.stoks)
         const ape = keys.map(key => {
           const temp = this.barangrses.filter(data => {
             return data.kode_rs === this.stoks[key].kode_rs
           })
-          // console.log('barang', temp)
+
           if (temp.length) {
             const barang = {
               nama: temp[0].barangrs.nama,
@@ -219,20 +219,14 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         const filtered = ape.filter(data => {
           return data !== false
         })
-        // console.log('ape', filtered)
+
         if (filtered[0] === false) {
           this.barangrHasStoks = []
-          // this.hasStok = false
         } else {
-          // this.hasStok = true
           this.barangrHasStoks = filtered
         }
-        // console.log('apem', ape)
       } else {
-        // this.hasStok = false
-        // notifErrVue('Data barang masih dalam perjalanan')
         setTimeout(() => {
-          // console.log('maping else time out')
           if (setting.mapingbarangdepo.length) {
             this.barangrses = setting.mapingbarangdepo[val]
             const ape = this.stoks.map(stok => {
@@ -396,7 +390,12 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           .then(resp => {
             this.loading = false
             notifSuccess(resp)
+            this.resetFORM()
+            this.resetInput()
+            this.resetDisplay()
             this.getDataTable()
+            this.getToDistributed()
+            this.getCurrentStok()
             resolve(resp)
           }).catch(() => {
             this.resetAll()

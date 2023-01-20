@@ -11,67 +11,19 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <div class="row items-center q-mb-sm">
-          <div class="col-2 q-mr-sm">
-            Nomor Distribusi
-          </div>
-          <div class="col">
-            <app-autocomplete-new
-              ref="refDistribusi"
-              label="pilih nomor distribusi"
-              :model="store.form.id"
-              autocomplete="no_distribusi"
-              option-label="no_distribusi"
-              option-value="id"
-              :loading="store.loadingMinMaxDepos && store.loadingStoks"
-              :disable="store.loadingMinMaxDepos && store.loadingStoks"
-              :source="store.toDistribute"
-              @on-select="disSelected"
-              @clear="disCleared"
-            />
-          </div>
-        </div>
-        <div class="row items-center q-mb-sm">
-          <div class="col-2 q-mr-sm">
-            Depo Tujuan
-          </div>
-          <div class="col">
-            <div v-if="!Object.keys(store.display).length">
-              -
-            </div>
-            <div v-if="Object.keys(store.display).length">
-              <q-chip
-                color="primary"
-                text-color="white"
-                class="chip-able"
-                dense
-                square
-              >
-                <div class="f-12">
-                  {{ store.display.depo.nama }}
-                </div>
-              </q-chip>
-            </div>
-            <!-- {{ Object.keys(store.display).length ? store.display.depo.nama:'-' }} -->
-          </div>
-        </div>
-        <div class="row items-center q-mb-sm">
-          <div class="col-2 q-mr-sm">
-            tanggal
-          </div>
-          <div class="col">
-            {{ store.tanggalDisplay }}
-          </div>
+        <!-- :source="store.toDistribute" -->
+        <div
+          v-for="(distibusi,i) in store.toDistribute"
+          :key="i"
+        >
+          <div>{{ distibusi }}</div>
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section v-if="store.loading ">
-        <app-loading />
-      </q-card-section>
-      <q-card-section v-if="!Object.keys(store.display).length && !store.loading">
+      <q-card-section v-if="!Object.keys(store.display).length">
         <app-no-data />
       </q-card-section>
-      <q-card-section v-if="Object.keys(store.display).length && !store.loading">
+      <q-card-section v-if="Object.keys(store.display).length">
         <!-- header -->
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
           <div class="anak text-center">
@@ -153,8 +105,6 @@
           label="Terima"
           no-caps
           icon="icon-mat-save"
-          :loading="store.loading"
-          :disable="store.loading"
           @click="saveForm"
         />
       </q-card-actions>
@@ -171,42 +121,42 @@ const store = usePenerimaanDepoStore()
 store.getInitialData()
 
 const refDistribusi = ref(null)
-const disSelected = (val) => {
-  // if (!store.minMaxDepos.length || !store.stoks.length) {
-  //   // notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
-  //   return
-  // }
-  store.setForm('id', val)
-  const disp = store.toDistribute.filter(data => {
-    return data.id === val
-  })
-  store.display = disp[0]
-  store.display.details.forEach(data => {
-    // data min - max depo tidak ada
-    // const mm = store.minMaxDepos.filter(minmax => {
-    //   return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
-    // })
-    // // data.min_stok = mm[0].min_stok
-    // data.max_stok = mm[0].max_stok
-    const kunci = Object.keys(store.stoks)
-    const stk = kunci.map(key => {
-      const temp = store.stoks[key]
-      if (data.kode_rs === store.stoks[key].kode_rs) return temp
-      else return false
-    })
-    const filtered = stk.filter(stk1 => {
-      return stk1 !== false
-    })
-    data.stok_gudang = filtered[0].stok
-    console.log('stok', filtered)
-  })
-  console.log('display', store.display)
-}
-const disCleared = () => {
-  store.setForm('id', null)
-  store.display = {}
-  refDistribusi.value.$refs.refAuto.resetValidation()
-}
+// const disSelected = (val) => {
+//   // if (!store.minMaxDepos.length || !store.stoks.length) {
+//   //   // notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
+//   //   return
+//   // }
+//   store.setForm('id', val)
+//   const disp = store.toDistribute.filter(data => {
+//     return data.id === val
+//   })
+//   store.display = disp[0]
+//   store.display.details.forEach(data => {
+//     // data min - max depo tidak ada
+//     // const mm = store.minMaxDepos.filter(minmax => {
+//     //   return minmax.kode_rs === data.kode_rs && minmax.kode_depo === store.display.kode_depo
+//     // })
+//     // // data.min_stok = mm[0].min_stok
+//     // data.max_stok = mm[0].max_stok
+//     const kunci = Object.keys(store.stoks)
+//     const stk = kunci.map(key => {
+//       const temp = store.stoks[key]
+//       if (data.kode_rs === store.stoks[key].kode_rs) return temp
+//       else return false
+//     })
+//     const filtered = stk.filter(stk1 => {
+//       return stk1 !== false
+//     })
+//     data.stok_gudang = filtered[0].stok
+//     console.log('stok', filtered)
+//   })
+//   console.log('display', store.display)
+// }
+// const disCleared = () => {
+//   store.setForm('id', null)
+//   store.display = {}
+//   refDistribusi.value.$refs.refAuto.resetValidation()
+// }
 const saveForm = () => {
   store.saveForm().then(() => {
     store.setForm('id', null)

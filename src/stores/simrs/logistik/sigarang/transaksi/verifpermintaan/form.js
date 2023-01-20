@@ -161,7 +161,9 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     saveForm() {
       let lanjut = false
       this.permintaan.details.forEach(data => {
-        if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
+        if (parseInt(data.jumlah_disetujui) > parseInt(data.alokasi)) {
+          notifErrVue('Jumlah di setujui tidak boleh melebihi jumlah alokasi')
+        } else if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
           notifErrVue('periksa kembali Jumlah disetujui')
           lanjut = false
         } else if (parseInt(data.jumlah_disetujui) <= 0) {
@@ -202,6 +204,30 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
             })
         })
       }
+    },
+    tolakPermintaan() {
+      const data = {
+        id: this.permintaan.id,
+        status: 20
+      }
+      console.log('data', data)
+      // this.loading = true
+      // return new Promise(resolve => {
+      //   api.post('v1/transaksi/permintaanruangan/tolak-permintaan', data)
+      //     .then(resp => {
+      //       this.loading = false
+      //       console.log(resp)
+      //       this.form.no_permintaan = null
+      //       this.permintaan = {}
+      //       this.mapGudang = {}
+      //       this.getPermintaan()
+      //       notifSuccess(resp)
+      //       resolve(resp)
+      //     })
+      //     .catch(() => {
+      //       this.loading = false
+      //     })
+      // })
     }
   }
 })

@@ -18,6 +18,8 @@
         :to-search="store.params.q"
         :bisa-edit="false"
         :bisa-delete="false"
+        :click-able="true"
+        @on-click="onClick"
         @goto="store.setPage"
         @set-row="store.setPerPage"
         @refresh="store.refreshTable"
@@ -68,7 +70,8 @@
               dense
               type="number"
               :rules="[
-                (val)=>(val && val.length>0)||'periksa kembali input'
+                (val)=>(val && val.length>0)||'periksa kembali input',
+                (val)=> val <= row.alokasi || 'tidak boleh melebih alokasi'
               ]"
             />
           </div>
@@ -111,6 +114,7 @@
   </app-card>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { useVerifPermintaanRuangan } from 'src/stores/simrs/logistik/sigarang/transaksi/verifpermintaan/form'
 import { ref } from 'vue'
 
@@ -121,8 +125,13 @@ defineProps({
 // const emits = defineEmits(['onSubmit'])
 const refInput = ref(null)
 const edit = ref(false)
+const onClick = (val, i) => {
+  console.log('clicked', i)
+  console.log('clicked', val)
+}
 const onSubmit = () => {
   if (refInput.value) refInput.value.validate()
+  // perlu cek dulu tiap detail ada yang melebihi alokasi atau tidak
   store.saveForm()
   // emits('onSubmit', props.map.items)
   edit.value = false
@@ -134,5 +143,18 @@ const onEdit = () => {
 const onCancel = () => {
   edit.value = false
 }
-const onDenied = () => {}
+const onDenied = () => {
+  const permintaan = store.permintaan.details.map(detail => {
+    const temp = detail.barangrs ? detail.barangrs.nama : '-'
+    return temp
+  })
+  console.log('onDenied', permintaan)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Tolak Permintaan?',
+    cancel: true
+  }).onOk(() => {
+    store.tolakPermintaan()
+  })
+}
 </script>
