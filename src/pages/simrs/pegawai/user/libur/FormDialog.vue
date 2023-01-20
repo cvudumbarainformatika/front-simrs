@@ -25,6 +25,7 @@
               option-value="id"
               :source="store.users"
               :loading="store.loading"
+              :debounce="500"
               @input-value="store.searchUser"
             />
           </div>
