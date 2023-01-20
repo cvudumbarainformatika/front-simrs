@@ -211,23 +211,23 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         status: 20
       }
       console.log('data', data)
-      // this.loading = true
-      // return new Promise(resolve => {
-      //   api.post('v1/transaksi/permintaanruangan/tolak-permintaan', data)
-      //     .then(resp => {
-      //       this.loading = false
-      //       console.log(resp)
-      //       this.form.no_permintaan = null
-      //       this.permintaan = {}
-      //       this.mapGudang = {}
-      //       this.getPermintaan()
-      //       notifSuccess(resp)
-      //       resolve(resp)
-      //     })
-      //     .catch(() => {
-      //       this.loading = false
-      //     })
-      // })
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/permintaanruangan/tolak-permintaan', data)
+          .then(resp => {
+            this.loading = false
+            console.log(resp)
+            this.form.no_permintaan = null
+            this.permintaan = {}
+            this.mapGudang = {}
+            this.getPermintaan()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     }
   }
 })
