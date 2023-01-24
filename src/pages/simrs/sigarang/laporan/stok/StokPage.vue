@@ -180,9 +180,11 @@ const gudangSelected = (val) => {
   store.kode_tempat = val
   if (val === null || val === 'semua') {
     store.params.search = ''
+    store.params.page = 1
     store.getDataTable()
   } else {
     store.params.search = val
+    store.params.page = 1
     store.getDataByDepo()
   }
 }
