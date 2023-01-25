@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { titleCase } from 'src/modules/formatter'
-import { changeArrayIndex, notifCenterVue, notifSuccess } from 'src/modules/utils'
+import { changeArrayIndex, notifCenterVue, notifErrVue, notifSuccess } from 'src/modules/utils'
 import { useTransaksiPermintaanForm } from './form'
 
 export const useTransaksiPermintaanTable = defineStore('table_transaksi_permintaan', {
@@ -35,6 +35,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     ruangs: [],
     minMaxPenggunas: [],
     stoks: [],
+    barangHasStok: [],
     params: {
       q: '',
       page: 1,
@@ -190,9 +191,18 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
         api.get('v1/stok/all-current')
           .then(resp => {
             this.loading = false
-            // console.log('stok', resp)
+            console.log('stok', resp.data)
             this.stoks = resp.data
-
+            const keys = Object.keys(this.stoks)
+            keys.forEach(key => {
+              const barang = resp.data[key]
+              barang.nama = barang.barang.nama
+              barang.kode = barang.kode_rs
+              barang.barang108 = barang.barang.barang108
+              barang.satuan = barang.barang.satuan
+              this.barangHasStok.push(barang)
+            })
+            console.log('barang has stok', this.barangHasStok)
             resolve(resp)
           })
           .catch(() => {
@@ -370,6 +380,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     },
     saveForm() {
       const store = useTransaksiPermintaanForm()
+      if (store.form.jumlah >= store.barang.alokasi) return notifErrVue('Jumlah Minta tidak boleh melebihi jumlah alokasi')
       // remove null
       const formini = Object.keys(store.form)
       formini.forEach((data) => {
