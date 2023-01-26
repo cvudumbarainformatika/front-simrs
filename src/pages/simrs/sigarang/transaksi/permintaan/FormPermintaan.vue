@@ -169,7 +169,7 @@
                 {{ store.nama.gudang }}
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
+            <!-- <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Stok Depo
               </div>
@@ -187,10 +187,9 @@
                 v-if="!store.loading"
                 class="col-md-9 col-xs-12"
               >
-                <!-- {{ store.stok }} -->
                 {{ store.barang.stok?store.barang.stok:0 }}
               </div>
-            </div>
+            </div> -->
             <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Stok Alokasi

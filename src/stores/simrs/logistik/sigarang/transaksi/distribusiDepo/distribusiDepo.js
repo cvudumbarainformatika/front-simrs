@@ -43,7 +43,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     minMaxDepos: [],
     stoks: [],
     distribusies: [],
-    hasStok: false
+    hasStok: false,
+    loadingHasStok: false
   }),
   actions: {
     resetFORM() {
@@ -311,11 +312,11 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     },
     // get data stok
     getCurrentStok() {
-      this.loading = true
+      this.loadingHasStok = true
       return new Promise(resolve => {
         api.get('v1/stok/current-gudang')
           .then(resp => {
-            this.loading = false
+            this.loadingHasStok = false
             // console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
@@ -330,7 +331,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingHasStok = false
           })
       })
     },
@@ -382,6 +383,14 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           })
       })
     },
+    resetAllData() {
+      this.resetFORM()
+      this.resetInput()
+      this.resetDisplay()
+      this.getDataTable()
+      this.getToDistributed()
+      this.getCurrentStok()
+    },
     // save
     saveForm() {
       this.loading = true
@@ -390,12 +399,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           .then(resp => {
             this.loading = false
             notifSuccess(resp)
-            this.resetFORM()
-            this.resetInput()
-            this.resetDisplay()
-            this.getDataTable()
-            this.getToDistributed()
-            this.getCurrentStok()
+            this.resetAllData()
             resolve(resp)
           }).catch(() => {
             this.resetAll()

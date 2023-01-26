@@ -88,7 +88,7 @@
               autocomplete="nama"
               option-label="nama"
               option-value="kode"
-              :loading="store.loading"
+              :loading="store.loadingHasStok"
               :source="store.barangrHasStoks"
               :disable="edit"
               @on-select="barangSelected"
@@ -236,6 +236,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useDistribusiDepoStore()
 const setting = useSettingsStore()
@@ -286,8 +287,10 @@ const barangSelected = val => {
     if (toDistribute.length) {
       let alokasi = 0
       if (toDistribute[0].jml > 0) {
+        console.log('if to distribute', store.stoks[stok[0]].stok)
         alokasi = store.input.stok_gudang - toDistribute[0].jml
       } else {
+        console.log('else distribute', stok)
         alokasi = store.input.stok_gudang
       }
       //   if (store.input.stok_gudang > 0) {
@@ -383,6 +386,11 @@ const deleteData = index => {
   // console.log('display', store.displays[index])
   // console.log('form', store.form.details[index])
 }
+onBeforeRouteLeave((to, from) => {
+  // console.log('to', to)
+  // console.log('from', from)
+  store.resetAllData()
+})
 </script>
 <style lang="scss" scoped>
 .anak{

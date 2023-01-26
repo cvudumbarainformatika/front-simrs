@@ -60,8 +60,9 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       store.setForm('alasan', '')
       store.setNoPermintaan()
       store.setNewReff()
-      store.setNama('ruang', 'pengguna belum dipilih')
-      store.setNama('penanggungjawab', 'penngguna belum dpilih')
+      store.setNama('ruang', 'ruangan belum dipilih')
+      store.setNama('pengguna', 'ruangan belum dipilih')
+      store.setNama('penanggungjawab', 'ruangan belum dpilih')
       store.setNama('gudang', 'barang belum dipilih')
       store.setNama('satuan', 'barang belum dipilih')
       store.setForm('jumlah', '')
@@ -77,6 +78,11 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       store.setForm('alasan', '')
       store.setNama('gudang', 'barang belum dipilih')
       store.setNama('satuan', 'barang belum dipilih')
+    },
+    resetAllData() {
+      this.resetInput()
+      this.resetForm()
+      this.getDataTable()
     },
     setNama(key, val) {
       this.nama[key] = val
@@ -408,8 +414,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
           .then((resp) => {
             this.loading = false
             notifSuccess(resp)
-            this.getDataTable()
-            this.resetInput()
+            this.resetAllData()
             resolve(resp)
           })
           .catch((err) => {
