@@ -346,7 +346,7 @@ const barangSelected = val => {
   }
 
   const depo = table.mapingDepos.filter(data => { return data.kode_rs === val })
-  // console.log('depo', depo)
+  console.log('depo', depo)
   if (depo.length) {
     const nama = depo[0].gudang.nama
     let noPer = ''
