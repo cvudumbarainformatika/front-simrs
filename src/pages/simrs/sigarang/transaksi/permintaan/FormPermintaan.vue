@@ -46,7 +46,10 @@
               <div class="col-md-3 col-xs-12">
                 Nama Barang
               </div>
-              <div class="col-md-9 col-xs-12">
+              <div
+                v-if="store.form.kode_ruang"
+                class="col-md-9 col-xs-12"
+              >
                 <app-autocomplete-new
                   :model="store.form.kode_rs"
                   outlined
@@ -55,12 +58,13 @@
                   autocomplete="nama"
                   option-value="kode"
                   option-label="nama"
-                  :source="mapingbarang.barangrses"
+                  :source="table.barangHasStok"
                   :loading="table.loadingDepo"
                   :disable="table.loadingDepo"
                   @on-select="barangSelected"
                   @clear="clearBarangRs"
                   @set-model="modelSet"
+                  @buang="cariBarang"
                 />
               </div>
             </div>
@@ -72,12 +76,16 @@
                 v-if="store.barang ? store.barang.alokasi<=0 ? false : true : false"
                 class="col-md-9 col-xs-12"
               >
+                <!-- valid -->
                 <app-input
                   v-model="store.form.jumlah"
                   outlined
-                  valid
                   type="number"
                   label="Jumlah Minta"
+                  :rules="[
+                    val=> val <= store.barang.alokasi || 'tidak boleh melebihi alokasi',
+                    val=> val<= (store.minMaxPenggunas.max_stok - store.barang.stokRuangan) ||'Sudah Melebihi Maksimal stok ruangan'
+                  ]"
                 />
               </div>
             </div>
@@ -102,7 +110,7 @@
                 <app-btn
                   label="Simpan "
                   color="secondary"
-                  :disable="store.barang?store.barang.alokasi>0?false:true:true"
+                  :disable="store.barang?store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi?false:true:true"
                   :loading="table.loading"
                   @click="table.saveForm"
                 />
@@ -164,9 +172,9 @@
                 {{ store.nama.gudang }}
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
+            <!-- <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
-                Stok User
+                Stok Depo
               </div>
               <div
                 v-if="store.loading"
@@ -182,9 +190,9 @@
                 v-if="!store.loading"
                 class="col-md-9 col-xs-12"
               >
-                {{ store.stok.sisa_stok?store.stok.sisa_stok:0 }}
+                {{ store.barang.stok?store.barang.stok:0 }}
               </div>
-            </div>
+            </div> -->
             <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
                 Stok Alokasi
@@ -204,6 +212,27 @@
                 class="col-md-9 col-xs-12"
               >
                 {{ Object.keys(store.barang).length?store.barang.alokasi:0 }}
+              </div>
+            </div>
+            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
+              <div class="col-md-3 col-xs-12">
+                Stok User
+              </div>
+              <div
+                v-if="store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                <q-btn
+                  flat
+                  dense
+                  :loading="store.loading"
+                />
+              </div>
+              <div
+                v-if="!store.loading"
+                class="col-md-9 col-xs-12"
+              >
+                {{ store.barang.stokRuangan?store.barang.stokRuangan:0 }}
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
@@ -232,6 +261,7 @@
               <div class="col-md-3 col-xs-12">
                 <app-btn
                   label="Selesai"
+                  :disable="!table.mapGudang.length"
                   :loading="table.Finishloading"
                   @click="table.selesaiInput"
                 />
@@ -277,7 +307,7 @@ const pilihPengguna = (val) => {
   store.setNama('pengguna', peng.jabatan)
   if (ruang.length) {
     store.setForm('tujuan', ruang[0].kode_ruang)
-    store.setParams('kode_rauangan', ruang[0].kode_ruang)
+    store.setParams('kode_ruangan', ruang[0].kode_ruang)
     store.setNama('ruang', ruang[0].ruang.uraian)
   } else {
     store.setForm('tujuan', null)
@@ -292,16 +322,21 @@ const pilihPengguna = (val) => {
 
 const barangSelected = val => {
   // :source="mapingbarang.barangrses"
-
+  // console.log('barang selected', val)
+  const barang = table.barangHasStok.filter(barang => { return barang.kode === val })
+  // if (barang.length) store.stok = barang[0]
+  console.log('barang', barang)
   if (!table.mapingDepos.length) return notifErrVue('data barang depo belum tersedia, mohon besabar menunggu sebentar. ')
   store.setForm('kode_rs', val)
   store.setParams('kode_rs', val)
-  // console.log('maping depo', table.mapingDepos)
-  store.getStokByBarang()
+
+  if (val !== null) {
+    store.getStokByBarang()
+  }
   store.getMinMaxPengguna()
 
   const apem = mapingbarang.barangrses.filter(data => { return data.kode === val })
-  console.log('apem', apem)
+  // console.log('apem', apem)
 
   if (apem.length) store.setForm('kode_satuan', apem[0].kode_satuan)
 
@@ -330,10 +365,10 @@ const barangSelected = val => {
       temp = temp[1]
       noPer = temp
     }
-    console.log('noper', noPer)
+    // console.log('noper', noPer)
     //   return data
     // })
-    console.log('nama', nama)
+    // console.log('nama', nama)
     const ap = store.nomor.split('-')
     store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
 
@@ -344,24 +379,7 @@ const barangSelected = val => {
     store.setNama('gudang', 'gudang tidak ditemukan')
   }
 
-  // console.log('epem', apem)
-  // console.log('epem', mapingbarang.satuans[0])
-
-  // cari stok user
-  console.log(table.stoks)
-  // const stok = table.stoks.filter(data => {
-  //   return data.kode_rs === val && data.kode_ruang === store.form.dari
-  // })
-  // if (stok.length) store.stok = stok[0]
-  // cari alokasi
-  // const minMax = table.minMaxPenggunas.filter(data => {
-  //   return data.kode_pengguna === store.form.kode_pengguna && data.kode_rs === val
-  // })
-
-  // console.log('stok', stok)
-  // console.log('minMax', minMax)
-  console.log('val', val)
-  // console.log('table.minMaxPenggunas', table.minMaxPenggunas)
+  // console.log(table.stoks)
 }
 const clearBarangRs = () => {
   store.setForm('no_permintaan', null)
@@ -370,6 +388,10 @@ const clearBarangRs = () => {
   store.setNama('gudang', 'barang belum dipilih')
 }
 const modelSet = val => {
-  console.log(val)
+  console.log('model set', val)
+}
+const cariBarang = val => {
+  console.log('cari', val)
+  // carinya di table
 }
 </script>

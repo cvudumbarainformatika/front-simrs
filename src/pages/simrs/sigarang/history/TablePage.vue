@@ -312,14 +312,14 @@ const label = (status, nama) => {
         return 'Permintaan Ditolak'
         // eslint-disable-next-line no-unreachable
         break
-      // case 3:
-      //   return 'Diterima Sebagian'
-      //   // eslint-disable-next-line no-unreachable
-      //   break
-      // case 4:
-      //   return 'Diterima Seluruhnya'
-      //   // eslint-disable-next-line no-unreachable
-      //   break
+      case 19:
+        return 'Kadaluarsa'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 18:
+        return 'Invalid'
+        // eslint-disable-next-line no-unreachable
+        break
       case 5:
         return 'Menunggu verifikasi'
         // eslint-disable-next-line no-unreachable

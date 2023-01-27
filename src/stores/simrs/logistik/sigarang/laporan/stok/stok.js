@@ -64,11 +64,12 @@ export const useStokStore = defineStore('stok_store', {
     // local table related function
     setSearch(val) {
       this.params.q = val
+      this.params.page = 1
       console.log('kodet tempat', this.kode_tempat)
-      if (this.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
+      if (this.kode_tempat === null || this.kode_tempat === 'semua') {
         this.getDataTable()
+      } else {
+        this.getDataByDepo()
       }
     },
     setOder(payload) {
@@ -76,28 +77,28 @@ export const useStokStore = defineStore('stok_store', {
       this.params.sort === 'desc'
         ? (this.params.sort = 'asc')
         : (this.params.sort = 'desc')
-      if (this.form.kode_tempat !== null) {
+      if (this.kode_tempat !== null) {
         this.getDataByDepo()
       } else {
         this.getDataTable()
       }
     },
     setPage(payload) {
-      // console.log('setPage', payload)
+      console.log('setPage', this.kode_tempat)
       this.params.page = payload
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
+      if (this.kode_tempat === null || this.kode_tempat === 'semua') {
         this.getDataTable()
+      } else {
+        this.getDataByDepo()
       }
     },
     setPerPage(payload) {
       this.params.per_page = payload
       this.params.page = 1
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
+      if (this.kode_tempat === null || this.kode_tempat === 'semua') {
         this.getDataTable()
+      } else {
+        this.getDataByDepo()
       }
     },
     setColumns(payload) {
@@ -135,7 +136,11 @@ export const useStokStore = defineStore('stok_store', {
     // get initial data
     getInitialData() {
       this.getDataGudangDepo()
-      this.getDataTable()
+      if (this.kode_tempat === null || this.kode_tempat === 'semua') {
+        this.getDataTable()
+      } else {
+        this.getDataByDepo()
+      }
     },
     getDataGudangDepo() {
       this.gudangDepo = [
@@ -217,10 +222,10 @@ export const useStokStore = defineStore('stok_store', {
             this.loading = false
             console.log('resp', resp)
             notifSuccess(resp)
-            if (this.form.kode_tempat !== null) {
-              this.getDataByDepo()
-            } else {
+            if (this.kode_tempat === null || this.kode_tempat === 'semua') {
               this.getDataTable()
+            } else {
+              this.getDataByDepo()
             }
             this.resetForm()
             resolve(resp)

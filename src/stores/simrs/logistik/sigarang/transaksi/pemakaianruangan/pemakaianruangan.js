@@ -227,18 +227,20 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       })
     },
     getDataMaping() {
-      this.loadingMaping = true
-      return new Promise(resolve => {
-        api.get('v1/mapingbarang/mapingwith')
-          .then(resp => {
-            this.loadingMaping = false
-            // console.log('maping', resp)
-            this.mapingbarang = resp.data
-            resolve(resp)
-          }).catch(() => {
-            this.loadingMaping = false
-          })
-      })
+      if (!this.mapingbarang.length) {
+        this.loadingMaping = true
+        return new Promise(resolve => {
+          api.get('v1/mapingbarang/mapingwith')
+            .then(resp => {
+              this.loadingMaping = false
+              // console.log('maping', resp)
+              this.mapingbarang = resp.data
+              resolve(resp)
+            }).catch(() => {
+              this.loadingMaping = false
+            })
+        })
+      }
     },
     // dibawah ini adalah api related function yang tidak dipakai
     getDataPenanggungjawab() {

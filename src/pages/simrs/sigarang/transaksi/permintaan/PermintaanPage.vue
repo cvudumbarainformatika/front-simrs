@@ -28,6 +28,7 @@ import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/t
 import TabelTujuanPermintaan from './TabelTujuanPermintaan.vue'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
+import { onBeforeRouteLeave } from 'vue-router'
 // import { onMounted } from 'vue'
 const setting = useSettingsStore()
 const store = useTransaksiPermintaanForm()
@@ -61,5 +62,8 @@ table.getDataTable().then(data => {
     routerInstance.replace({ name: 'sigarang.transaksi.permintaan', params: { slug } })
     table.setParam('reff', slug)
   }
+})
+onBeforeRouteLeave((to, from) => {
+  table.resetAllData()
 })
 </script>

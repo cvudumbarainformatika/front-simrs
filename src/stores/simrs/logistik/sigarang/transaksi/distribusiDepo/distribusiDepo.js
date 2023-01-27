@@ -43,7 +43,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     minMaxDepos: [],
     stoks: [],
     distribusies: [],
-    hasStok: false
+    hasStok: false,
+    loadingHasStok: false
   }),
   actions: {
     resetFORM() {
@@ -57,6 +58,10 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         this.setForm(columns[i], null)
       }
       this.form.details = []
+      this.setNoDistribusi()
+    },
+    resetDisplay() {
+      this.displays = []
     },
     setForm(key, payload) {
       this.form[key] = payload
@@ -193,20 +198,16 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     filterBarangHasStok(val) {
       const setting = useSettingsStore()
       this.barangrHasStoks = []
-      // console.log('mapig', setting.mapingbarangdepo)
+
       if (Object.keys(setting.mapingbarangdepo).length) {
-        // console.log('mapig if', setting.mapingbarangdepo[val])
         this.barangrses = setting.mapingbarangdepo[val]
-        // console.log('barang RS', this.barangrses)
-        // console.log('type', this.stoks)
-        // }
-        // if (this.barangrses.length) {
+
         const keys = Object.keys(this.stoks)
         const ape = keys.map(key => {
           const temp = this.barangrses.filter(data => {
             return data.kode_rs === this.stoks[key].kode_rs
           })
-          // console.log('barang', temp)
+
           if (temp.length) {
             const barang = {
               nama: temp[0].barangrs.nama,
@@ -219,20 +220,14 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         const filtered = ape.filter(data => {
           return data !== false
         })
-        // console.log('ape', filtered)
+
         if (filtered[0] === false) {
           this.barangrHasStoks = []
-          // this.hasStok = false
         } else {
-          // this.hasStok = true
           this.barangrHasStoks = filtered
         }
-        // console.log('apem', ape)
       } else {
-        // this.hasStok = false
-        // notifErrVue('Data barang masih dalam perjalanan')
         setTimeout(() => {
-          // console.log('maping else time out')
           if (setting.mapingbarangdepo.length) {
             this.barangrses = setting.mapingbarangdepo[val]
             const ape = this.stoks.map(stok => {
@@ -317,11 +312,11 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     },
     // get data stok
     getCurrentStok() {
-      this.loading = true
+      this.loadingHasStok = true
       return new Promise(resolve => {
         api.get('v1/stok/current-gudang')
           .then(resp => {
-            this.loading = false
+            this.loadingHasStok = false
             // console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
@@ -336,7 +331,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingHasStok = false
           })
       })
     },
@@ -358,35 +353,47 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     },
     // get data mapping barang
     getMappingBarang() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.get('v1/mapingbarang/mapingwith')
-          .then(resp => {
-            this.loading = false
-            // console.log('maping barang', resp)
-            this.mappingBarangs = resp.data
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+      if (!this.mappingBarangs.length) {
+        this.loading = true
+        return new Promise(resolve => {
+          api.get('v1/mapingbarang/mapingwith')
+            .then(resp => {
+              this.loading = false
+              // console.log('maping barang', resp)
+              this.mappingBarangs = resp.data
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        })
+      }
     },
     // get data minMaxDepo
     getMinMaxDepo() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.get('v1/minmaxdepostok/all')
-          .then(resp => {
-            this.loading = false
-            // console.log('minmaxdepo', resp)
-            this.minMaxDepos = resp.data
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+      if (!this.minMaxDepos.length) {
+        this.loading = true
+        return new Promise(resolve => {
+          api.get('v1/minmaxdepostok/all')
+            .then(resp => {
+              this.loading = false
+              // console.log('minmaxdepo', resp)
+              this.minMaxDepos = resp.data
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        })
+      }
+    },
+    resetAllData() {
+      this.resetFORM()
+      this.resetInput()
+      this.resetDisplay()
+      this.getDataTable()
+      this.getToDistributed()
+      this.getCurrentStok()
     },
     // save
     saveForm() {
@@ -396,7 +403,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           .then(resp => {
             this.loading = false
             notifSuccess(resp)
-            this.getDataTable()
+            this.resetAllData()
             resolve(resp)
           }).catch(() => {
             this.resetAll()

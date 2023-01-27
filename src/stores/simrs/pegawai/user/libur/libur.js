@@ -140,6 +140,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     searchUser(val) {
       console.log('search user', val)
       this.setParam('q', val)
+      this.setParam('order_by', 'created_at')
       this.getUser()
     },
     setExpand() {

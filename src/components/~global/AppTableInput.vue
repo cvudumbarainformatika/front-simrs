@@ -320,6 +320,8 @@
           v-else
           :key="i"
           class="text-left"
+          :class="clickAble ? 'cursor-pointer':''"
+          @click="clickAble?clicked(item,i):''"
         >
           <td v-if="isChecked">
             <q-checkbox
@@ -481,10 +483,12 @@ const props = defineProps({
   adaSearch: { type: Boolean, default: false },
   adaPaginasi: { type: Boolean, default: false },
   adaPerPage: { type: Boolean, default: false },
-  inputCol: { type: Number, default: 0 }
+  inputCol: { type: Number, default: 0 },
+  clickAble: { type: Boolean, default: false }
 
 })
 const emits = defineEmits([
+  'onClick',
   'newData',
   'editData',
   'goto',
@@ -522,6 +526,9 @@ const search = computed({
     emits('find', newVal)
   }
 })
+const clicked = (val, i) => {
+  emits('onClick', { item: val, index: i })
+}
 const spanCol = computed(() => {
   const inp = props.inputCol
   const cols = filterColumn.value.length

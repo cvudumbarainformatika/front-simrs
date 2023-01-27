@@ -89,16 +89,16 @@
               {{ item.barangrs.barang108.uraian }}
             </div>
             <div class="anak text-center">
-              belum ada
+              {{ item.barangrs.stokDepo }}
             </div>
             <div class="anak text-center">
-              belum ada
+              {{ item.barangrs.alokasi }}
             </div>
             <div class="anak text-center">
-              belum ada
+              {{ item.barangrs.maxStok }}
             </div>
             <div class="anak text-center">
-              belum ada
+              {{ item.barangrs.stokRuangan }}
             </div>
             <div class="anak text-center">
               {{ item.jumlah }}
