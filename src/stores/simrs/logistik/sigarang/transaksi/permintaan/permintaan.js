@@ -175,20 +175,22 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
 
     // get data minMaxPengguna
     getMinMaxPengguna() {
-      this.loading = true
-      return new Promise(resolve => {
+      if (!this.minMaxPenggunas.length) {
+        this.loading = true
+        return new Promise(resolve => {
         // api.get('v1/minmaxpenggunastok/all')
-        api.post('v1/minmaxpenggunastok/spesifik', this.form)
-          .then(resp => {
-            this.loading = false
-            // console.log('minmaxpengguna', resp)
-            this.minMaxPenggunas = resp.data
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+          api.post('v1/minmaxpenggunastok/spesifik', this.form)
+            .then(resp => {
+              this.loading = false
+              // console.log('minmaxpengguna', resp)
+              this.minMaxPenggunas = resp.data
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        })
+      }
     },
     // get data stok
     getCurrentStok() {
@@ -199,6 +201,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
             this.loading = false
             console.log('stok', resp.data)
             this.stoks = resp.data
+            this.barangHasStok = []
             const keys = Object.keys(this.stoks)
             keys.forEach(key => {
               const barang = resp.data[key]
@@ -294,77 +297,83 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       })
     },
     getDepo() {
-      this.loading = true
-      return new Promise((resolve, reject) => {
-        api
-          .get('v1/gudang/depo')
-          .then((resp) => {
-            this.loading = false
-            if (resp.status === 200) {
-              const nama = resp.data.map(data => {
-                let temp = data.nama.split(' ')
+      if (!this.depos.length) {
+        this.loading = true
+        return new Promise((resolve, reject) => {
+          api
+            .get('v1/gudang/depo')
+            .then((resp) => {
+              this.loading = false
+              if (resp.status === 200) {
+                const nama = resp.data.map(data => {
+                  let temp = data.nama.split(' ')
 
-                if (temp.length > 2) {
-                  for (let i = 0; i < temp.length; i++) {
-                    temp[i] = temp[i].charAt(0)
+                  if (temp.length > 2) {
+                    for (let i = 0; i < temp.length; i++) {
+                      temp[i] = temp[i].charAt(0)
+                    }
+                    data.noPer = temp.join('')
+                    return data
+                  } else {
+                    temp = temp[1]
                   }
-                  data.noPer = temp.join('')
+                  data.noPer = temp
                   return data
-                } else {
-                  temp = temp[1]
-                }
-                data.noPer = temp
-                return data
-              })
-              this.depos = resp.data
-              console.log('nama', nama)
+                })
+                this.depos = resp.data
+                console.log('nama', nama)
               // console.log('depo', resp.data)
-            }
-            resolve(resp)
-          })
-          .catch((err) => {
-            this.loading = false
-            reject(err)
-          })
-      })
+              }
+              resolve(resp)
+            })
+            .catch((err) => {
+              this.loading = false
+              reject(err)
+            })
+        })
+      }
     },
     getRuang() {
-      this.loading = true
-      return new Promise((resolve, reject) => {
-        api
-          .get('v1/ruang/all-ruang')
-          .then((resp) => {
-            this.loading = false
-            // console.log('depo', resp)
-            if (resp.status === 200) {
-              this.ruangs = resp.data
-            }
-            resolve(resp)
-          })
-          .catch((err) => {
-            this.loading = false
-            reject(err)
-          })
-      })
+      if (!this.ruangs.length) {
+        this.loading = true
+        return new Promise((resolve, reject) => {
+          api
+            .get('v1/ruang/all-ruang')
+            .then((resp) => {
+              this.loading = false
+              // console.log('depo', resp)
+              if (resp.status === 200) {
+                this.ruangs = resp.data
+              }
+              resolve(resp)
+            })
+            .catch((err) => {
+              this.loading = false
+              reject(err)
+            })
+        })
+      }
     },
     getMapingDepo() {
-      this.loadingDepo = true
-      return new Promise((resolve, reject) => {
-        api
-          .get('v1/mapingdepo/barang')
-          .then((resp) => {
-            this.loadingDepo = false
-            // console.log('mapingDepo', resp)
-            if (resp.status === 200) {
-              this.mapingDepos = resp.data
-            }
-            resolve(resp)
-          })
-          .catch((err) => {
-            this.loadingDepo = false
-            reject(err)
-          })
-      })
+      if (!this.mapingDepos.length) {
+        this.loadingDepo = true
+        return new Promise((resolve, reject) => {
+          api
+            .get('v1/mapingdepo/barang')
+            .then((resp) => {
+              this.loadingDepo = false
+              // console.log('mapingDepo', resp)
+              if (resp.status === 200) {
+                this.mapingDepos = resp.data
+              }
+              resolve(resp)
+            })
+            .catch((err) => {
+              this.loadingDepo = false
+              reject(err)
+            })
+        })
+      }
     },
     selesaiInput() {
       this.Finishloading = true
@@ -387,6 +396,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     saveForm() {
       const store = useTransaksiPermintaanForm()
       if (store.form.jumlah >= store.barang.alokasi) return notifErrVue('Jumlah Minta tidak boleh melebihi jumlah alokasi')
+      if (store.form.jumlah >= (store.minMaxPenggunas.max_stok - store.barang.stokRuangan)) return notifErrVue('Jumlah Minta tidak boleh melebihi maksimal ruangan')
       // remove null
       const formini = Object.keys(store.form)
       formini.forEach((data) => {

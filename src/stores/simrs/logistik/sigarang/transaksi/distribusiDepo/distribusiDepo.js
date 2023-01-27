@@ -353,35 +353,39 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     },
     // get data mapping barang
     getMappingBarang() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.get('v1/mapingbarang/mapingwith')
-          .then(resp => {
-            this.loading = false
-            // console.log('maping barang', resp)
-            this.mappingBarangs = resp.data
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+      if (!this.mappingBarangs.length) {
+        this.loading = true
+        return new Promise(resolve => {
+          api.get('v1/mapingbarang/mapingwith')
+            .then(resp => {
+              this.loading = false
+              // console.log('maping barang', resp)
+              this.mappingBarangs = resp.data
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        })
+      }
     },
     // get data minMaxDepo
     getMinMaxDepo() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.get('v1/minmaxdepostok/all')
-          .then(resp => {
-            this.loading = false
-            // console.log('minmaxdepo', resp)
-            this.minMaxDepos = resp.data
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+      if (!this.minMaxDepos.length) {
+        this.loading = true
+        return new Promise(resolve => {
+          api.get('v1/minmaxdepostok/all')
+            .then(resp => {
+              this.loading = false
+              // console.log('minmaxdepo', resp)
+              this.minMaxDepos = resp.data
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        })
+      }
     },
     resetAllData() {
       this.resetFORM()

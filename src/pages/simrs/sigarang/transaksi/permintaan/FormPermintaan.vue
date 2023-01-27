@@ -82,7 +82,10 @@
                   outlined
                   type="number"
                   label="Jumlah Minta"
-                  :rules="[val=> val <= store.barang.alokasi || 'tidak boleh melebihi alokasi']"
+                  :rules="[
+                    val=> val <= store.barang.alokasi || 'tidak boleh melebihi alokasi',
+                    val=> val<= (store.minMaxPenggunas.max_stok - store.barang.stokRuangan) ||'Sudah Melebihi Maksimal stok ruangan'
+                  ]"
                 />
               </div>
             </div>

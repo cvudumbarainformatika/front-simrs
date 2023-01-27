@@ -202,22 +202,24 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     // api related actions
     // ambil data kontrak pekerjaan
     getKontrakPekerjaan () {
-      this.loadingKontrak = true
-      const params = { params: this.params }
-      return new Promise((resolve, reject) => {
-        api.get('v1/kontrak-pengerjaan/kontrak-aktif', params)
-          .then(resp => {
-            console.log('kontrak', resp.data)
-            this.loadingKontrak = false
-            if (resp.status === 200) {
-              this.kontrakPekerjaans = resp.data
-            }
-            resolve(resp)
-          }).catch(err => {
-            this.loadingKontrak = false
-            reject(err)
-          })
-      })
+      if (!this.kontrakPekerjaans.length) {
+        this.loadingKontrak = true
+        const params = { params: this.params }
+        return new Promise((resolve, reject) => {
+          api.get('v1/kontrak-pengerjaan/kontrak-aktif', params)
+            .then(resp => {
+              console.log('kontrak', resp.data)
+              this.loadingKontrak = false
+              if (resp.status === 200) {
+                this.kontrakPekerjaans = resp.data
+              }
+              resolve(resp)
+            }).catch(err => {
+              this.loadingKontrak = false
+              reject(err)
+            })
+        })
+      }
     },
     // ambil mapping barang
     getMapingBarang () {

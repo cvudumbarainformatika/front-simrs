@@ -80,9 +80,9 @@
               no-caps
               dense
               round
-              :disable="row.disableSend"
               @click="distribusikan(row)"
             />
+            <!-- :disable="row.disableSend" -->
           </template>
           <template #cell-status="{row}">
             <!-- {{row.status}} -->
@@ -164,7 +164,7 @@
                       {{ data.jumlah_disetujui }}
                     </div>
                     <div class="anak text-center">
-                      <div v-if="store.items[itemIndex].status < 7 && data.barangrs.alokasi>0">
+                      <!-- <div v-if="store.items[itemIndex].status < 7 && data.barangrs.alokasi>0">
                         <q-input
                           v-model="data.jumlah_distribusi"
                           label="jumlah distribusi"
@@ -173,13 +173,16 @@
                           @update:model-value="updateJumlahDistribusi"
                           @focus="fokus(i,j)"
                         />
-                      </div>
+                      </div> -->
                       <div v-if="store.items[itemIndex].status >= 7">
                         {{ data.jumlah_distribusi }}
                       </div>
-                      <div v-if="data.barangrs.alokasi<=0">
-                        Tidak Ada Alokasi
+                      <div v-if="store.items[itemIndex].status < 7">
+                        '-'
                       </div>
+                      <!-- <div v-if="data.barangrs.alokasi<=0">
+                        Tidak Ada Alokasi
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -219,7 +222,7 @@
 import { ref } from 'vue'
 import { Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
-import { notifErrVue } from 'src/modules/utils'
+// import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
@@ -261,50 +264,50 @@ const distribusikan = val => {
     })
   }
 }
-let itemsIndex = null
-let detailIndex = null
-const updateJumlahDistribusi = val => {
-  const intVal = parseInt(val)
+// let itemsIndex = null
+// let detailIndex = null
+// const updateJumlahDistribusi = val => {
+//   const intVal = parseInt(val)
 
-  if (store.items[itemsIndex].details[detailIndex].status > 15) return
+//   if (store.items[itemsIndex].details[detailIndex].status > 15) return
 
-  store.items[itemsIndex].details[detailIndex].jumlah_distribusi = intVal
-  const tempItems = store.items[itemsIndex].details.filter(item => {
-    return item.jumlah_distribusi <= 0
-  })
-  console.log('jumlah distribusi', val)
+//   store.items[itemsIndex].details[detailIndex].jumlah_distribusi = intVal
+//   const tempItems = store.items[itemsIndex].details.filter(item => {
+//     return item.jumlah_distribusi <= 0
+//   })
+//   console.log('jumlah distribusi', val)
 
-  if (!tempItems.length) {
-    const habis = store.items[itemsIndex].details.filter(det => { return det.barangrs.alokasi <= 0 })
-    if (!habis.length) {
-      store.items[itemsIndex].disableSend = false
-      store.setForm('detail', store.items[itemsIndex].details)
-    } else {
-      // console.log(habis)
-      habis.forEach(a => {
-        notifErrVue('tidak ada alokasi untuk ' + a.barangrs.nama)
-      })
-    }
-  }
+//   if (!tempItems.length) {
+//     const habis = store.items[itemsIndex].details.filter(det => { return det.barangrs.alokasi <= 0 })
+//     if (!habis.length) {
+//       store.items[itemsIndex].disableSend = false
+//       store.setForm('detail', store.items[itemsIndex].details)
+//     } else {
+//       // console.log(habis)
+//       habis.forEach(a => {
+//         notifErrVue('tidak ada alokasi untuk ' + a.barangrs.nama)
+//       })
+//     }
+//   }
 
-  if (store.items[itemsIndex].details[detailIndex].jumlah_disetujui < intVal) {
-    store.items[itemsIndex].details[detailIndex].jumlah_distribusi = store.items[itemsIndex].details[detailIndex].jumlah_disetujui
-    notifErrVue('jumlah Distribusi tidak boleh melebihi jumlah distujui')
-    console.log('details item', store.items[itemsIndex].details[detailIndex])
-  } else if (store.items[itemsIndex].details[detailIndex].jumlah_distribusi < 0) {
-    notifErrVue('jumlah Distribusi tidak boleh kurang dari 0')
-    store.items[itemsIndex].details[detailIndex].jumlah_distribusi = 0
-  }
-  console.log('items', tempItems)
-}
-const fokus = (i, j) => {
-  console.log('fokus', i, j)
-  // itemIndex.value = i
-  itemsIndex = i
-  detailIndex = j
-  const current = store.items[i].details[j]
-  console.log('current', current)
-}
+//   if (store.items[itemsIndex].details[detailIndex].jumlah_disetujui < intVal) {
+//     store.items[itemsIndex].details[detailIndex].jumlah_distribusi = store.items[itemsIndex].details[detailIndex].jumlah_disetujui
+//     notifErrVue('jumlah Distribusi tidak boleh melebihi jumlah distujui')
+//     console.log('details item', store.items[itemsIndex].details[detailIndex])
+//   } else if (store.items[itemsIndex].details[detailIndex].jumlah_distribusi < 0) {
+//     notifErrVue('jumlah Distribusi tidak boleh kurang dari 0')
+//     store.items[itemsIndex].details[detailIndex].jumlah_distribusi = 0
+//   }
+//   console.log('items', tempItems)
+// }
+// const fokus = (i, j) => {
+//   console.log('fokus', i, j)
+//   // itemIndex.value = i
+//   itemsIndex = i
+//   detailIndex = j
+//   const current = store.items[i].details[j]
+//   console.log('current', current)
+// }
 const color = val => {
   switch (val) {
     case 5:
