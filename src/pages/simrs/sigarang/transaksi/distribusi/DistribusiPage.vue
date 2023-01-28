@@ -243,26 +243,26 @@ const distribusikan = val => {
 
   store.setForm('no_distribusi', 'RCVD/' + toNum[1] + '/' + toNum[2])
   store.setForm('id', val.id)
-  const enolDetail = val.details.filter(data => {
-    return data.jumlah_distribusi <= 0
+  // const enolDetail = val.details.filter(data => {
+  //   return data.jumlah_distribusi <= 0
+  // })
+  // if (enolDetail.length) {
+  //   Dialog.create({
+  //     title: 'Konfirmasi',
+  //     message: 'Ada barang yang distribusinya bernilai 0, Tetap lanjutakan distribusi?',
+  //     cancel: true
+  //   }).onOk(() => {
+  //     store.saveForm()
+  //   })
+  // } else {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Distribusikan barang terlampir?',
+    cancel: true
+  }).onOk(() => {
+    store.saveForm()
   })
-  if (enolDetail.length) {
-    Dialog.create({
-      title: 'Konfirmasi',
-      message: 'Ada barang yang distribusinya bernilai 0, Tetap lanjutakan distribusi?',
-      cancel: true
-    }).onOk(() => {
-      store.saveForm()
-    })
-  } else {
-    Dialog.create({
-      title: 'Konfirmasi',
-      message: 'Distribusikan barang terlampir?',
-      cancel: true
-    }).onOk(() => {
-      store.saveForm()
-    })
-  }
+  // }
 }
 // let itemsIndex = null
 // let detailIndex = null
