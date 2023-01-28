@@ -59,8 +59,8 @@
                   option-value="kode"
                   option-label="nama"
                   :source="table.barangHasStok"
-                  :loading="table.loadingDepo"
-                  :disable="table.loadingDepo"
+                  :loading="table.loadingHasStok"
+                  :disable="table.loadingHasStok"
                   @on-select="barangSelected"
                   @clear="clearBarangRs"
                   @set-model="modelSet"
@@ -274,14 +274,14 @@
   </div>
 </template>
 <script setup>
-import { notifErrVue } from 'src/modules/utils'
-import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
+// import { notifErrVue } from 'src/modules/utils'
+// import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
-const mapingbarang = useMasterMapingBarangForm()
+// const mapingbarang = useMasterMapingBarangForm()
 
 const clearPengguna = () => {
   store.setForm('kode_ruang', null)
@@ -321,63 +321,76 @@ const pilihPengguna = (val) => {
 }
 
 const barangSelected = val => {
-  // :source="mapingbarang.barangrses"
-  // console.log('barang selected', val)
+  /** usable code */
   const barang = table.barangHasStok.filter(barang => { return barang.kode === val })
-  // if (barang.length) store.stok = barang[0]
+  store.setForm('kode_satuan', barang[0].satuan.kode)
+  store.setNama('satuan', barang[0].satuan.nama)
   console.log('barang', barang)
-  if (!table.mapingDepos.length) return notifErrVue('data barang depo belum tersedia, mohon besabar menunggu sebentar. ')
   store.setForm('kode_rs', val)
   store.setParams('kode_rs', val)
 
+  const nama = barang[0].maping.gudang.nama
+  let noPer = ''
+  // const nama = depo.map(data => {
+  let temp = nama.split(' ')
+
+  if (temp.length > 2) {
+    let a = ''
+    for (let i = 0; i < temp.length; i++) {
+      temp[i] = temp[i].charAt(0)
+      // noPer = noPer + temp[i]
+      console.log('temp', a = a + temp[i])
+    }
+    noPer = temp.join('')
+  } else {
+    temp = temp[1]
+    noPer = temp
+  }
+  const ap = store.nomor.split('-')
+  store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
+
+  store.setForm('dari', barang[0].maping.kode_gudang)
+  store.setNama('gudang', barang[0].maping.gudang.nama)
   if (val !== null) {
     store.getStokByBarang()
   }
   store.getMinMaxPengguna()
 
-  const apem = mapingbarang.barangrses.filter(data => { return data.kode === val })
-  // console.log('apem', apem)
+  /** end of usable code */
 
-  if (apem.length) store.setForm('kode_satuan', apem[0].kode_satuan)
+  // const depo = table.mapingDepos.filter(data => { return data.kode_rs === val })
+  // console.log('depo', depo)
+  // if (depo.length) {
+  //   const nama = depo[0].gudang.nama
+  //   let noPer = ''
+  //   // const nama = depo.map(data => {
+  //   let temp = nama.split(' ')
 
-  const satuan = apem.length ? mapingbarang.satuans.filter(data => { return data.kode === apem[0].kode_satuan }) : null
-  if (satuan !== null) {
-    store.setNama('satuan', satuan[0].nama)
-  }
+  //   if (temp.length > 2) {
+  //     let a = ''
+  //     for (let i = 0; i < temp.length; i++) {
+  //       temp[i] = temp[i].charAt(0)
+  //       // noPer = noPer + temp[i]
+  //       console.log('temp', a = a + temp[i])
+  //     }
+  //     noPer = temp.join('')
+  //   } else {
+  //     temp = temp[1]
+  //     noPer = temp
+  //   }
+  //   // console.log('noper', noPer)
+  //   //   return data
+  //   // })
+  //   // console.log('nama', nama)
+  //   const ap = store.nomor.split('-')
+  //   store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
 
-  const depo = table.mapingDepos.filter(data => { return data.kode_rs === val })
-  console.log('depo', depo)
-  if (depo.length) {
-    const nama = depo[0].gudang.nama
-    let noPer = ''
-    // const nama = depo.map(data => {
-    let temp = nama.split(' ')
-
-    if (temp.length > 2) {
-      let a = ''
-      for (let i = 0; i < temp.length; i++) {
-        temp[i] = temp[i].charAt(0)
-        // noPer = noPer + temp[i]
-        console.log('temp', a = a + temp[i])
-      }
-      noPer = temp.join('')
-    } else {
-      temp = temp[1]
-      noPer = temp
-    }
-    // console.log('noper', noPer)
-    //   return data
-    // })
-    // console.log('nama', nama)
-    const ap = store.nomor.split('-')
-    store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
-
-    store.setForm('dari', depo[0].kode_gudang)
-    store.setNama('gudang', depo[0].gudang.nama)
-  } else {
-    store.setForm('dari', null)
-    store.setNama('gudang', 'gudang tidak ditemukan')
-  }
+  //   store.setForm('dari', depo[0].kode_gudang)
+  //   store.setNama('gudang', depo[0].gudang.nama)
+  // } else {
+  //   store.setForm('dari', null)
+  //   store.setNama('gudang', 'gudang tidak ditemukan')
+  // }
 
   // console.log(table.stoks)
 }

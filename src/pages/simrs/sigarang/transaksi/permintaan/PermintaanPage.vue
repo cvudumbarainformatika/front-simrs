@@ -9,6 +9,9 @@
       <!-- <div class="col-12">
         <TabelPermintaan />
       </div> -->
+      <div v-if="table.loadingTable">
+        <app-loading />
+      </div>
       <div
         v-for="(apem,i) in table.mapGudang"
         :key="i"

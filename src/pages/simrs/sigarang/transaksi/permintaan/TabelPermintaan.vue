@@ -12,7 +12,7 @@
           :order-by="table.params.order_by"
 
           :sort="table.params.sort"
-          :loading="table.loading"
+          :loading="table.loadingTable"
           :to-search="table.params.q"
           :add-input="store.isOpen"
           @goto="table.setPage"

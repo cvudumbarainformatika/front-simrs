@@ -32,10 +32,12 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     depos: [],
     mapingDepos: [],
     loadingDepo: false,
+    loadingTable: false,
     ruangs: [],
     minMaxPenggunas: [],
     stoks: [],
     barangHasStok: [],
+    loadingHasStok: false,
     params: {
       q: '',
       page: 1,
@@ -80,8 +82,8 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       store.setNama('satuan', 'barang belum dipilih')
     },
     resetAllData() {
-      this.resetInput()
       this.resetForm()
+      this.resetInput()
       this.getDataTable()
     },
     setNama(key, val) {
@@ -194,12 +196,13 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     },
     // get data stok
     getCurrentStok() {
-      this.loading = true
+      this.loadingHasStok = true
+      this.barangHasStok = []
       return new Promise(resolve => {
         api.get('v1/stok/all-current')
           .then(resp => {
-            this.loading = false
-            console.log('stok', resp.data)
+            this.loadingHasStok = false
+            // console.log('stok', resp.data)
             this.stoks = resp.data
             this.barangHasStok = []
             const keys = Object.keys(this.stoks)
@@ -215,7 +218,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingHasStok = false
           })
       })
     },
@@ -223,44 +226,35 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     // api related function
     // ambil data permintaan belum selesai
     getDataTable() {
-      this.loading = true
+      this.loadingTable = true
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
           .get('v1/transaksi/permintaanruangan/draft', params)
           .then((resp) => {
-            this.loading = false
-            // console.log('data ', resp)
-            // console.log('data[0] ', resp.data.data[0])
+            this.loadingTable = false
+            console.log('data ', resp)
             if (resp.data.message === 'completed') {
-              // console.log(resp)
               notifCenterVue('data sudah disimpan dan dikunci, tidak diperkenannkan untuk diubah')
               resolve('completed')
               return
             }
             if (resp.status === 200) {
-              // console.log('Detail length', resp.data)
               if (resp.data.length) {
-                // console.log('with detail', resp.data)
                 const apem = resp.data
                 this.setForm(apem[apem.length - 1])
                 this.assignForm(apem[apem.length - 1])
                 apem.forEach((data, i) => {
-                  // console.log('data', data)
                   if (data) {
                     const mapKey = Object.keys(data.gudang)
-                    // console.log('mapkey', mapKey)
                     mapKey.forEach((lupis) => {
                       const apem = this.depos.filter(x => { return x.kode === lupis })
                       this.setColumns(data.gudang[lupis])
-                      // console.log('LUPIS', data.gudang[lupis])
-                      // console.log('map gudang', apem)
                       this.mapGudang[i] = {
                         header: data,
                         gudang: titleCase(apem[0].nama),
                         items: data.gudang[lupis]
                       }
-                    // console.log(resp.data[0].gudang[data])
                     })
                   }
                 })
@@ -291,7 +285,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
             }
           })
           .catch((err) => {
-            this.loading = false
+            this.loadingTable = false
             reject(err)
           })
       })
@@ -424,7 +418,8 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
           .then((resp) => {
             this.loading = false
             notifSuccess(resp)
-            this.resetAllData()
+            this.resetInput()
+            this.getDataTable()
             resolve(resp)
           })
           .catch((err) => {
