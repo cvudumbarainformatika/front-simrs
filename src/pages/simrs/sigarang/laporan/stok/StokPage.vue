@@ -98,6 +98,9 @@
             <template #col-sisa_stok>
               <div>Stok</div>
             </template>
+            <template #col-totalStok>
+              <div>Stok</div>
+            </template>
             <template #col-stok_fisik>
               <div>Stok Fisik</div>
             </template>

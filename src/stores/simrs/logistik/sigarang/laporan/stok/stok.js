@@ -25,7 +25,7 @@ export const useStokStore = defineStore('stok_store', {
       q: '',
       page: 1,
       per_page: 10,
-      order_by: 'created_at',
+      order_by: 'kode_rs',
       sort: 'asc'
     },
     kode_tempat: 'semua',
@@ -105,7 +105,7 @@ export const useStokStore = defineStore('stok_store', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tempat', 'kode_rs', 'barang', 'kode_108', 'uraian', 'sisa_stok']
+      this.columns = ['tempat', 'kode_rs', 'barang', 'kode_108', 'uraian', 'totalStok']
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
