@@ -9,6 +9,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     loading: false,
     form: {},
     permintaans: [],
+    loadingPermintaan: false,
     permintaan: {},
     depos: [],
     mapGudang: {},
@@ -65,7 +66,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     },
     setColumns(payload) {
       // console.log('payload', payload)
-      this.columns = ['kode_rs', 'barangrs', 'satuan', 'stokDepo', 'alokasi', 'jumlah', 'jumlah_disetujui', 'alasan']
+      this.columns = ['kode_rs', 'barangrs', 'satuan', 'ruang', 'stokDepo', 'alokasi', 'jumlah', 'jumlah_disetujui', 'alasan']
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0].sort()
       // changeArrayIndex(this.columns, 'kode_rs', 'alasan')
@@ -141,18 +142,19 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     // ambil permintaan yang sudah selesai
 
     getPermintaan() {
-      this.loading = true
+      this.permintaans = []
+      this.loadingPermintaan = true
       return new Promise((resolve, reject) => {
         api
           .get('v1/transaksi/permintaanruangan/get-permintaan')
           .then((resp) => {
-            this.loading = false
+            this.loadingPermintaan = false
             console.log('permintaan ruangan', resp)
             this.permintaans = resp.data
             resolve(resp)
           })
           .then((err) => {
-            this.loading = false
+            this.loadingPermintaan = false
             reject(err)
           })
       })
@@ -161,15 +163,20 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     saveForm() {
       let lanjut = false
       this.permintaan.details.forEach(data => {
-        if (parseInt(data.jumlah_disetujui) > parseInt(data.alokasi)) {
-          notifErrVue('Jumlah di setujui tidak boleh melebihi jumlah alokasi')
-        } else if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
+        if (parseInt(data.jumlah_disetujui) <= 0 || data.jumlah_disetujui === null) {
+          console.log('disetujui cek 0', data.jumlah_disetujui)
           notifErrVue('periksa kembali Jumlah disetujui')
           lanjut = false
-        } else if (parseInt(data.jumlah_disetujui) <= 0) {
+        } else if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
+          console.log('disetujui cek jumlah minta', data.jumlah_disetujui)
           notifErrVue('periksa kembali Jumlah disetujui')
+          lanjut = false
+        } else if (parseInt(data.jumlah_disetujui) > parseInt(data.alokasi)) {
+          console.log('disetujui cek alokasi', data.jumlah_disetujui)
+          notifErrVue('Jumlah di setujui tidak boleh melebihi jumlah alokasi')
           lanjut = false
         } else {
+          console.log('disetujui else', data.jumlah_disetujui)
           lanjut = true
         }
       })

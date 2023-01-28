@@ -44,11 +44,14 @@
         <template #col-gudang>
           <div>dari</div>
         </template>
+        <template #col-stokDepo>
+          <div>Stok Depo</div>
+        </template>
         <template #col-jumlah>
           <div>Jumlah</div>
         </template>
         <template #col-ruang>
-          <div>tujuan</div>
+          <div>Ruangan</div>
         </template>
         <template #col-kode_rs>
           <div>kode rs</div>
@@ -73,6 +76,7 @@
                 (val)=>(val && val.length>0)||'periksa kembali input',
                 (val)=> val <= row.alokasi || 'tidak boleh melebih alokasi'
               ]"
+              @keyup.enter="onSubmit"
             />
           </div>
           <div v-if="edit && row.alokasi===0">

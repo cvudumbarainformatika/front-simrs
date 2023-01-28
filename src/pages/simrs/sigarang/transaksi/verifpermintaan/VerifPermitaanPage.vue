@@ -13,20 +13,44 @@
                 Nomor Permintaan
               </div>
               <div class="col-8">
-                <app-autocomplete-new
-                  :model="store.form.no_permintaan"
-                  valid
-                  outlined
-                  label="cari nomor permintaan*"
-                  autocomplete="no_permintaan"
-                  option-value="no_permintaan"
-                  :loading="store.loading"
-                  option-label="no_permintaan"
-                  :source="store.permintaans"
-                  @on-select="store.permintaanSelected"
-                  @clear="clearPermintaan"
-                />
+                <div
+                  v-if="store.loadingPermintaan"
+                  class="row q-col-gutter-md"
+                >
+                  <div class="col-6">
+                    <q-skeleton type="rect" />
+                  </div>
+                  <div class="col-6">
+                    memperbarui data..
+                  </div>
+                </div>
+                <div
+                  v-if="store.loading"
+                  class="row q-col-gutter-md"
+                >
+                  <div class="col-6">
+                    <q-skeleton type="rect" />
+                  </div>
+                  <div class="col-6">
+                    sedang menyimpan..
+                  </div>
+                </div>
+                <div v-if="!store.loadingPermintaan && !store.loading">
+                  <app-autocomplete-new
+                    :model="store.form.no_permintaan"
+                    valid
+                    outlined
+                    label="cari nomor permintaan*"
+                    autocomplete="no_permintaan"
+                    option-value="no_permintaan"
+                    :loading="store.loadingPermintaan"
+                    option-label="no_permintaan"
+                    :source="store.permintaans"
+                    @on-select="store.permintaanSelected"
+                    @clear="clearPermintaan"
+                  />
                 <!-- @buang="store.setSearch" -->
+                </div>
               </div>
             </div>
           </div>
@@ -62,7 +86,7 @@
       />
     </div> -->
     <div
-      v-if="Object.keys(store.mapGudang).length"
+      v-if="Object.keys(store.mapGudang).length && !store.loading"
       class="col-12"
     >
       <tabelVerifGudang
