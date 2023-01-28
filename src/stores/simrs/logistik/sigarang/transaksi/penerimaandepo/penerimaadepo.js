@@ -35,7 +35,8 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
     resetFORM() {
       this.form = {}
       const columns = [
-        'id'
+        'id',
+        'tanggal'
       ]
 
       for (let i = 0; i < columns.length; i++) {
@@ -57,8 +58,9 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
       this.getCurrentStok()
     },
     setTanggal() {
-      const tanggal = Date.now()
-      this.tanggalDisplay = date.formatDate(tanggal, 'DD MMMM YYYY')
+      // const tanggal = Date.now()
+      // this.tanggalDisplay = date.formatDate(tanggal, 'DD MMMM YYYY')
+      this.tanggalDisplay = date.formatDate(this.form.tanggal, 'DD MMMM YYYY')
     },
     // api related function
     // get data distribusi yang belum di terima

@@ -27,7 +27,8 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     option_surat: 'faktur',
     statuses: [
       { id: 'hibah', nama: 'Hibah' },
-      { id: 'pembelian', nama: 'Pembelian' }
+      { id: 'pembelian', nama: 'Pembelian' },
+      { id: 'mutasi', nama: 'Mutasi' }
     ],
     params: {
       q: '',
@@ -35,7 +36,9 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
-    }
+    },
+    tanggalTampil: null,
+    loadingSimpan: false
   }),
   actions: {
     resetForm () {
@@ -71,6 +74,10 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       // const formatTp = day + '/' + month + '/' + year
       this.form.tanggal = formatDb
       this.tanggalTampil = dateFullFormat(formatDb)
+    },
+    setTanggal(val) {
+      // console.log(val)
+      this.tanggalTampil = dateFullFormat(this.form.tanggal)
     },
     setReff () {
       const slug = 'TRM-' + uniqueId()
@@ -247,12 +254,12 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       })
     },
     simpanTransaksi () {
-      this.loading = true
+      this.loadingSimpan = true
 
       return new Promise((resolve, reject) => {
         api.post('v1/transaksi/penerimaan/simpan-penerimaan', this.form)
           .then(resp => {
-            this.loading = false
+            this.loadingSimpan = false
             console.log(resp)
             // notifSuccess('data berhasil disimpan')
             this.getDataPenerimaan()
@@ -260,7 +267,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             resolve(resp)
           })
           .catch(err => {
-            this.loading = false
+            this.loadingSimpan = false
             reject(err)
           })
       })

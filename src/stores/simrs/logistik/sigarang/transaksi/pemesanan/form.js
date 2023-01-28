@@ -29,7 +29,8 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     loadingFinish: false,
     minMaxDepos: [],
     stoks: [],
-    stok: {}
+    stok: {},
+    tanggalTampil: null
   }),
   actions: {
     // local related actions
@@ -94,6 +95,10 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     setClose () {
       this.setToday()
       this.isOpen = false
+    },
+    setTanggal(val) {
+      // console.log(val)
+      this.tanggalTampil = dateFullFormat(this.form.tanggal)
     },
     updateHarga () {
       console.log('stok', this.stok)

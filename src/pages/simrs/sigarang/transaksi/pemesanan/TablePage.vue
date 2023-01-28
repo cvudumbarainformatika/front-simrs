@@ -135,7 +135,42 @@
                       Tanggal Pemesanan
                     </div>
                     <div class="col text-right">
-                      {{ store.tanggalTampil }}
+                      <div class="fit row no-wrap justify-end items-center">
+                        <div>
+                          {{ store.tanggalTampil }}
+                        </div>
+                        <div class="q-ml-sm">
+                          <q-btn
+                            icon="icon-mat-event"
+                            round
+                            dense
+                            color="primary"
+                          >
+                            <q-popup-proxy
+                              cover
+                              transition-show="scale"
+                              transition-hide="scale"
+                              @show="updateProxy"
+                            >
+                              <q-date
+                                ref="refDate"
+                                v-model="store.form.tanggal"
+                                mask="YYYY-MM-DD"
+                                @update:model-value="store.setTanggal"
+                              >
+                                <div class="row items-center justify-end">
+                                  <q-btn
+                                    v-close-popup
+                                    label="Close"
+                                    color="primary"
+                                    flat
+                                  />
+                                </div>
+                              </q-date>
+                            </q-popup-proxy>
+                          </q-btn>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="row q-mb-sm">
@@ -159,7 +194,7 @@
                       <app-btn
                         label="Tutup Pemesanan"
                         :loading="store.loadingFinish"
-                        :disable="store.isOpen"
+                        :disable="store.isOpen || store.loadingFinish || store.loadingTambah"
                         @click="onFisnish"
                       />
                     </div>
@@ -231,6 +266,7 @@
                       label="Jumlah Pemesanan*"
                       outlined
                       type="number"
+                      :disable="store.loadingTambah"
                       @update:model-value="store.updateHarga"
                     />
                   </div>
@@ -244,6 +280,7 @@
                       label="Harga Pembelian*"
                       currency
                       outlined
+                      :disable="store.loadingTambah"
                       @update:model-value="store.updateHarga"
                       @keyup.enter="onSubmit"
                     />
@@ -301,12 +338,13 @@
                     class="q-mx-sm"
                     label="Batal"
                     color="dark"
-                    :disable="store.loading"
+                    :disable="store.loadingTambah"
                     @click="onCancel"
                   />
                   <app-btn
                     label="Tambah"
                     :loading="store.loadingTambah"
+                    :disable="store.loadingTambah"
                     @click="onSubmit"
                   />
                 </td>
@@ -326,6 +364,7 @@
   </q-page>
 </template>
 <script setup>
+import { date } from 'quasar'
 import { routerInstance } from 'src/boot/router'
 import { dateFullFormat, formatRp, olahUang } from 'src/modules/formatter'
 import { notifNegativeCenterVue, uniqueId } from 'src/modules/utils'
@@ -347,6 +386,16 @@ const jumlah = ref(false)
 const harga = ref(false)
 const kode108 = ref(false)
 // const inputRow = ref(10)
+
+const proxyDate = ref(null)
+const refDate = ref(null)
+const updateProxy = () => {
+  console.log('date', store.form.tanggal)
+  // refDate.value.setToday()
+  proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
+  store.setForm('tanggal', proxyDate.value)
+  store.tanggalTampil = dateFullFormat(proxyDate.value)
+}
 
 const modelSet = val => {
   console.log('model barang RS', val)

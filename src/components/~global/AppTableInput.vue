@@ -419,7 +419,7 @@
             </div>
           </td>
         </tr>
-        <tr v-if="!items.length > 0 && !inputCol">
+        <tr v-if="items.length > 0 && inputCol">
           <td
             :colspan="
               rowImage === null

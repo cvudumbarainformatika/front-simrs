@@ -12,7 +12,42 @@
                 Tanggal
               </div>
               <div class="col-md-6 col-xs-12">
-                {{ store.tanggalTampil }}
+                <div class="fit row no-wrap justify-end items-center">
+                  <div>
+                    {{ store.tanggalTampil }}
+                  </div>
+                  <div class="q-ml-sm">
+                    <q-btn
+                      icon="icon-mat-event"
+                      round
+                      dense
+                      color="primary"
+                    >
+                      <q-popup-proxy
+                        cover
+                        transition-show="scale"
+                        transition-hide="scale"
+                        @show="updateProxy"
+                      >
+                        <q-date
+                          ref="refDate"
+                          v-model="store.form.tanggal"
+                          mask="YYYY-MM-DD"
+                          @update:model-value="store.setTanggal"
+                        >
+                          <div class="row items-center justify-end">
+                            <q-btn
+                              v-close-popup
+                              label="Close"
+                              color="primary"
+                              flat
+                            />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-btn>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm">
@@ -85,14 +120,14 @@
 
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
-                Status pembelian
+                Status penerimaan
               </div>
               <div class="col-md-6 col-xs-12">
                 <app-autocomplete-new
                   v-model="store.form.status_pembelian"
                   :valid="statusPembelian"
                   outlined
-                  label="Status Pembelian*"
+                  label="Status Penerimaan*"
                   autocomplete="nama"
                   option-value="id"
                   :loading="store.loading"
@@ -283,6 +318,8 @@
             <div class="col-md-1 col-xs-12">
               <app-btn
                 label="Selesai"
+                :loading="store.loadingSimpan"
+                :disable="store.loadingSimpan"
                 @click="onSimpan"
               />
             </div>
@@ -293,14 +330,25 @@
   </div>
 </template>
 <script setup>
-import { formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { ref } from 'vue'
 import { notifNegativeCenterVue } from 'src/modules/utils'
 import { useTransaksiPenerimaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaan/form'
+import { date } from 'quasar'
 
 const store = useTransaksiPenerimaanForm()
 store.setNomorPenerimaan()
 store.setToday()
+
+const proxyDate = ref(null)
+const refDate = ref(null)
+const updateProxy = () => {
+  console.log('date', store.form.tanggal)
+  // refDate.value.setToday()
+  proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
+  store.setForm('tanggal', proxyDate.value)
+  store.tanggalTampil = dateFullFormat(proxyDate.value)
+}
 
 const setModel = val => {
   store.setForm('tempo', val)
