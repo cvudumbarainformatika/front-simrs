@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess, uniqueId } from 'src/modules/utils'
-import { useSettingsStore } from '../../settings/setting'
+// import { useSettingsStore } from '../../settings/setting'
 
 export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
   state: () => ({
@@ -196,29 +196,37 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.detail = {}
     },
     filterBarangHasStok(val) {
-      const setting = useSettingsStore()
+      // const setting = useSettingsStore()
       this.barangrHasStoks = []
 
-      if (Object.keys(setting.mapingbarangdepo).length) {
-        this.barangrses = setting.mapingbarangdepo[val]
-
-        const keys = Object.keys(this.stoks)
-        const ape = keys.map(key => {
-          const temp = this.barangrses.filter(data => {
-            return data.kode_rs === this.stoks[key].kode_rs
-          })
-
-          if (temp.length) {
-            const barang = {
-              nama: temp[0].barangrs.nama,
-              kode: temp[0].barangrs.kode,
-              kode_satuan: temp[0].barangrs.kode_satuan
-            }
-            return barang
-          } else return false
+      if (this.stoks.length) {
+        this.barangrses = this.stoks.filter(stok => { return stok.maping.kode_gudang === val })
+        console.log('barangrses', this.barangrses)
+        const temp = this.barangrses.map(data => {
+          data.nama = data.barang.nama
+          data.kode = data.barang.kode
+          data.kode_satuan = data.barang.kode_satuan
+          return data
         })
-        const filtered = ape.filter(data => {
-          return data !== false
+
+        // const keys = Object.keys(this.stoks)
+        // console.log('stoks keys', keys)
+        // const ape = keys.map(key => {
+        //   const temp = this.barangrses.filter(data => {
+        //     return data.stok > 0
+        //   })
+
+        //   if (temp.length) {
+        //     const barang = {
+        //       nama: temp[0].barang.nama,
+        //       kode: temp[0].barang.kode,
+        //       kode_satuan: temp[0].barang.kode_satuan
+        //     }
+        //     return barang
+        //   } else return false
+        // })
+        const filtered = temp.filter(data => {
+          return data.stok > 0
         })
 
         if (filtered[0] === false) {
@@ -228,8 +236,9 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         }
       } else {
         setTimeout(() => {
-          if (setting.mapingbarangdepo.length) {
-            this.barangrses = setting.mapingbarangdepo[val]
+          if (this.stoks.length) {
+            this.barangrses = this.stoks.filter(stok => { return stok.maping.kode_gudang === val })
+            console.log('barangrses with timeout', this.barangrses)
             const ape = this.stoks.map(stok => {
               const temp = this.barangrses.filter(data => {
                 return data.kode_rs === stok.kode_rs
@@ -317,7 +326,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/stok/current-gudang')
           .then(resp => {
             this.loadingHasStok = false
-            // console.log('stok', resp.data)
+            console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
               this.filterBarangHasStok()

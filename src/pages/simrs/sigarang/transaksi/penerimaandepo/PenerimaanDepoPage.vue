@@ -60,7 +60,43 @@
             tanggal
           </div>
           <div class="col">
-            {{ store.tanggalDisplay }}
+            <!-- {{ store.tanggalDisplay }} -->
+            <div class="fit row no-wrap justify-start items-center">
+              <div>
+                {{ store.tanggalDisplay }}
+              </div>
+              <div class="q-ml-sm">
+                <q-btn
+                  icon="icon-mat-event"
+                  round
+                  dense
+                  color="primary"
+                >
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                    @show="updateProxy"
+                  >
+                    <q-date
+                      ref="refDate"
+                      v-model="store.form.tanggal"
+                      mask="YYYY-MM-DD HH:mm:ss"
+                      @update:model-value="store.setTanggal"
+                    >
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-btn>
+              </div>
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -164,11 +200,23 @@
 </template>
 <script setup>
 // import { notifErrVue } from 'src/modules/utils'
+import { date } from 'quasar'
+import { dateFullFormat } from 'src/modules/formatter'
 import { usePenerimaanDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaandepo/penerimaadepo'
 import { ref } from 'vue'
 
 const store = usePenerimaanDepoStore()
 store.getInitialData()
+
+const proxyDate = ref(null)
+const refDate = ref(null)
+const updateProxy = () => {
+  console.log('date', store.form.tanggal)
+  // refDate.value.setToday()
+  proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
+  store.setForm('tanggal', proxyDate.value)
+  store.tanggalDisplay = dateFullFormat(proxyDate.value)
+}
 
 const refDistribusi = ref(null)
 const disSelected = (val) => {
@@ -176,6 +224,7 @@ const disSelected = (val) => {
   //   // notifErrVue('data masih sedang dalam perjalanan, mohon tunggu beberapa saat lagi')
   //   return
   // }
+
   store.setForm('id', val)
   const disp = store.toDistribute.filter(data => {
     return data.id === val

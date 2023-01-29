@@ -21,7 +21,8 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
     },
     // custom for this store
     form: {
-      id: null
+      id: null,
+      tanggal: null
     },
     toDistribute: [],
     display: {},
@@ -52,6 +53,7 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
 
     // initial data
     getInitialData() {
+      this.form.tanggal = Date.now()
       this.setTanggal()
       this.getToDistributed()
       this.getMinMaxDepo()
@@ -60,6 +62,7 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
     setTanggal() {
       // const tanggal = Date.now()
       // this.tanggalDisplay = date.formatDate(tanggal, 'DD MMMM YYYY')
+      // this.form.tanggal = Date.now()
       this.tanggalDisplay = date.formatDate(this.form.tanggal, 'DD MMMM YYYY')
     },
     // api related function

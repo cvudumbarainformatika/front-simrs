@@ -30,12 +30,14 @@
               autocomplete="nama"
               option-label="nama"
               option-value="kode"
-              :disable="setting.stateOfmapingbarangdepo"
-              :loading="setting.stateOfmapingbarangdepo"
+              :disable="store.loadingHasStok"
+              :loading="store.loadingHasStok"
               :source="store.depos"
               @on-select="depoSelected"
               @clear="depoCleared"
             />
+            <!-- :disable="setting.stateOfmapingbarangdepo"
+              :loading="setting.stateOfmapingbarangdepo" -->
           </div>
         </div>
       </q-card-section>
@@ -233,13 +235,13 @@
 <script setup>
 import { Dialog } from 'quasar'
 import { notifErrVue } from 'src/modules/utils'
-import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
+// import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useDistribusiDepoStore()
-const setting = useSettingsStore()
+// const setting = useSettingsStore()
 store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)
