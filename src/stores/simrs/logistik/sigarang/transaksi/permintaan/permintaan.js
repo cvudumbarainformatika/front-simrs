@@ -389,6 +389,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     },
     saveForm() {
       const store = useTransaksiPermintaanForm()
+      if (store.form.jumlah <= 0 || store.form.jumlah === null) return notifErrVue('Jumlah Minta harus di isi')
       if (store.form.jumlah >= store.barang.alokasi) return notifErrVue('Jumlah Minta tidak boleh melebihi jumlah alokasi')
       if (store.form.jumlah >= (store.minMaxPenggunas.max_stok - store.barang.stokRuangan)) return notifErrVue('Jumlah Minta tidak boleh melebihi maksimal ruangan')
       // remove null

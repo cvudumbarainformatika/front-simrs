@@ -50,22 +50,35 @@
                 v-if="store.form.kode_ruang"
                 class="col-md-9 col-xs-12"
               >
-                <app-autocomplete-new
-                  :model="store.form.kode_rs"
-                  outlined
-                  valid
-                  label="Nama Barang RS"
-                  autocomplete="nama"
-                  option-value="kode"
-                  option-label="nama"
-                  :source="table.barangHasStok"
-                  :loading="table.loadingHasStok"
-                  :disable="table.loadingHasStok"
-                  @on-select="barangSelected"
-                  @clear="clearBarangRs"
-                  @set-model="modelSet"
-                  @buang="cariBarang"
-                />
+                <div
+                  v-if="table.loadingHasStok"
+                  class="row q-col-gutter-md"
+                >
+                  <div class="col-6">
+                    <q-skeleton type="rect" />
+                  </div>
+                  <div class="col-6">
+                    mengambil data barang yang memiliki stok..
+                  </div>
+                </div>
+                <div v-if="!table.loadingHasStok">
+                  <app-autocomplete-new
+                    :model="store.form.kode_rs"
+                    outlined
+                    valid
+                    label="Nama Barang RS"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :source="table.barangHasStok"
+                    :loading="table.loadingHasStok"
+                    :disable="table.loadingHasStok"
+                    @on-select="barangSelected"
+                    @clear="clearBarangRs"
+                    @set-model="modelSet"
+                    @buang="cariBarang"
+                  />
+                </div>
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
@@ -110,7 +123,7 @@
                 <app-btn
                   label="Simpan "
                   color="secondary"
-                  :disable="store.barang?store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi?false:true:true"
+                  :disable="store.barang ? store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi && store.form.jumlah && store.form.jumlah > 0?false:true:true"
                   :loading="table.loading"
                   @click="table.saveForm"
                 />
