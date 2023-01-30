@@ -132,7 +132,7 @@
               {{ (row.barang.barang108.uraian) }}
             </template>
             <template #cell-satuan="{row}">
-              {{ (row.barang.satuan.nama) }}
+              {{ row.barang.satuan?row.barang.satuan.nama:'-' }}
             </template>
             <template #cell-stok_fisik="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
