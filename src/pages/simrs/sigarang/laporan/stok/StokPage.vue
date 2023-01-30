@@ -101,6 +101,9 @@
             <template #col-totalStok>
               <div>Stok</div>
             </template>
+            <template #col-satuan>
+              <div>Satuan</div>
+            </template>
             <template #col-stok_fisik>
               <div>Stok Fisik</div>
             </template>
@@ -127,6 +130,9 @@
             </template>
             <template #cell-uraian="{row}">
               {{ (row.barang.barang108.uraian) }}
+            </template>
+            <template #cell-satuan="{row}">
+              {{ (row.barang.satuan.nama) }}
             </template>
             <template #cell-stok_fisik="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
