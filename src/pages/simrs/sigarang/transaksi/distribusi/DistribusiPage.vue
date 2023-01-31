@@ -72,26 +72,72 @@
           </template>
 
           <template #cell-aksi="{row}">
-            <q-btn
+            <div
               v-if="row.status===6"
-              icon="icon-mat-send"
-              color="green"
-              flat
-              no-caps
-              dense
-              round
-              @click="distribusikan(row)"
+              class="fit row no-wrap justify-start items-center"
             >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
-              >
-                Distribusikan
-              </q-tooltip>
-            </q-btn>
+              <div>
+                {{ store.tanggalDisplay }}
+              </div>
+              <div class="q-ml-sm">
+                <q-btn
+                  icon="icon-mat-event"
+                  round
+                  flat
+                  dense
+                  color="primary"
+                >
+                  <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                    @show="updateProxy"
+                  >
+                    <q-date
+                      ref="refDate"
+                      v-model="store.form.tanggal"
+                      mask="YYYY-MM-DD HH:mm:ss"
+                      @update:model-value="store.setTanggal"
+                    >
+                      <div class="row items-center justify-end">
+                        <q-btn
+                          v-close-popup
+                          label="Close"
+                          color="primary"
+                          flat
+                        />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Ganti Tanggal
+                  </q-tooltip>
+                </q-btn>
+                <q-btn
+                  icon="icon-mat-send"
+                  color="green"
+                  flat
+                  no-caps
+                  dense
+                  round
+                  @click="distribusikan(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Distribusikan
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+
             <q-btn
               v-if="row.status===5"
-              icon="icon-mat-send"
+              icon="icon-mat-move_to_inbox"
               color="blue"
               flat
               no-caps
@@ -198,10 +244,10 @@
                           @focus="fokus(i,j)"
                         />
                       </div> -->
-                      <div v-if="store.items[itemIndex].status >= 7">
+                      <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 7:false">
                         {{ data.jumlah_distribusi }}
                       </div>
-                      <div v-if="store.items[itemIndex].status < 7">
+                      <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
                         '-'
                       </div>
                       <!-- <div v-if="data.barangrs.alokasi<=0">
@@ -244,12 +290,22 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { Dialog } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
+
+const proxyDate = ref(null)
+const refDate = ref(null)
+const updateProxy = () => {
+  console.log('date', store.form.tanggal)
+  // refDate.value.setToday()
+  proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
+  store.setForm('tanggal', proxyDate.value)
+  store.tanggalDisplay = dateFullFormat(proxyDate.value)
+}
 
 const itemIndex = ref(null)
 store.getInitialData()
@@ -264,7 +320,13 @@ const onClick = val => {
 const barangSiap = val => {
   store.setForm('id', val.id)
   store.setForm('status', 6)
-  store.updateStatus()
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah barang sudah siap untuk?',
+    cancel: true
+  }).onOk(() => {
+    store.updateStatus()
+  })
 }
 const distribusikan = val => {
   console.log('distribusikan', val)

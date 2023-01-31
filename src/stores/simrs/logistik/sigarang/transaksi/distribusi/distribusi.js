@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
@@ -18,8 +19,9 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
-    }
+    },
     // custom for this store
+    tanggalDisplay: null
   }),
   actions: {
     resetFORM() {
@@ -83,6 +85,9 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
+    },
+    setTanggal() {
+      this.tanggalDisplay = date.formatDate(this.form.tanggal, 'DD MMMM YYYY')
     },
 
     refreshTable() {
