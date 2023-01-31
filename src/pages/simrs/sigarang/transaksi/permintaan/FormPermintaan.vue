@@ -342,7 +342,7 @@ const barangSelected = val => {
   store.setForm('kode_rs', val)
   store.setParams('kode_rs', val)
 
-  const nama = barang[0].maping.gudang.nama
+  const nama = barang[0].barang.mapingdepo.gudang.nama
   let noPer = ''
   // const nama = depo.map(data => {
   let temp = nama.split(' ')
@@ -362,8 +362,8 @@ const barangSelected = val => {
   const ap = store.nomor.split('-')
   store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
 
-  store.setForm('dari', barang[0].maping.kode_gudang)
-  store.setNama('gudang', barang[0].maping.gudang.nama)
+  store.setForm('dari', barang[0].barang.mapingdepo.kode_gudang)
+  store.setNama('gudang', barang[0].barang.mapingdepo.gudang.nama)
   if (val !== null) {
     store.getStokByBarang()
   }
