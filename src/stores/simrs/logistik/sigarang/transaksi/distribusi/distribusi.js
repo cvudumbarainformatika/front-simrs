@@ -171,6 +171,31 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
           })
       })
       // console.log('ora budhal wes..')
+    },
+    updateStatus() {
+      console.log('form', this.form)
+      // const data = {
+      //   id: this.permintaan.id,
+      //   status: 20
+      // }
+      // console.log('data', data)
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/permintaanruangan/tolak-permintaan', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log(resp)
+            this.getDataTable()
+            this.items.forEach(item => {
+              delete item.highlight
+            })()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     }
   }
 })

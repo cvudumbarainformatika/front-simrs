@@ -191,7 +191,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         })
         const data = {
           id: this.permintaan.id,
-          status: 6,
+          status: 5,
           details: detail,
           // tanggal_verif: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
           tanggal_verif: this.form.tanggal

@@ -324,16 +324,16 @@ const label = (status, nama) => {
         return 'Tidak Diambil Ruangan'
         // eslint-disable-next-line no-unreachable
         break
-      case 5:
+      case 4:
         return 'Menunggu verifikasi'
         // eslint-disable-next-line no-unreachable
         break
-      case 4:
-        return 'Barang sudah bisa diambil'
+      case 5:
+        return 'Telah di verifikasi'
         // eslint-disable-next-line no-unreachable
         break
       case 6:
-        return 'Telah di verifikasi'
+        return 'Barang sudah bisa diambil'
         // eslint-disable-next-line no-unreachable
         break
       case 7:

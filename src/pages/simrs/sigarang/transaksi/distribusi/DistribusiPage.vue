@@ -73,15 +73,39 @@
 
           <template #cell-aksi="{row}">
             <q-btn
-              v-if="row.status<7"
+              v-if="row.status===6"
               icon="icon-mat-send"
-              color="primary"
+              color="green"
               flat
               no-caps
               dense
               round
               @click="distribusikan(row)"
-            />
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Distribusikan
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              v-if="row.status===5"
+              icon="icon-mat-send"
+              color="blue"
+              flat
+              no-caps
+              dense
+              round
+              @click="barangSiap(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Barang Siap
+              </q-tooltip>
+            </q-btn>
             <!-- :disable="row.disableSend" -->
           </template>
           <template #cell-status="{row}">
@@ -237,6 +261,11 @@ const onClick = val => {
   itemIndex.value = val.index
   console.log(val)
 }
+const barangSiap = val => {
+  store.setForm('id', val.id)
+  store.setForm('status', 6)
+  store.updateStatus()
+}
 const distribusikan = val => {
   console.log('distribusikan', val)
   const toNum = val.no_permintaan.split('/')
@@ -310,8 +339,12 @@ const distribusikan = val => {
 // }
 const color = val => {
   switch (val) {
-    case 5:
+    case 4:
       return 'light-blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 5:
+      return 'blue'
       // eslint-disable-next-line no-unreachable
       break
     case 6:
@@ -336,12 +369,16 @@ const color = val => {
 
 const label = (status, nama) => {
   switch (status) {
-    case 5:
+    case 4:
       return 'Menunggu verifikasi'
       // eslint-disable-next-line no-unreachable
       break
-    case 6:
+    case 5:
       return 'Telah di verifikasi'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 6:
+      return 'Barang sudah bisa diambil'
       // eslint-disable-next-line no-unreachable
       break
     case 7:
@@ -350,6 +387,10 @@ const label = (status, nama) => {
       break
     case 8:
       return 'Telah di diterima ruangan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 17:
+      return 'Tidak Diambil Ruangan'
       // eslint-disable-next-line no-unreachable
       break
     case 18:
