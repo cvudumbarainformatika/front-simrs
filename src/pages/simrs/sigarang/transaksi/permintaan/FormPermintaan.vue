@@ -12,13 +12,21 @@
                 Tanggal Permintaan
               </div>
               <div class="col-md-9 col-xs-12">
-                <app-input
+                <!-- v-model="store.tanggal" -->
+                <app-input-date
+                  :model="store.tanggal"
+                  label="Tanggal Permintaan"
+                  outlined
+                  dense
+                  @set-model="setTanggal"
+                />
+                <!-- <app-input
                   v-model="store.tanggal"
                   readonly
                   label="Tanggal Permintaan"
                   outlined
                   dense
-                />
+                /> -->
               </div>
             </div>
 
@@ -289,6 +297,7 @@
 <script setup>
 // import { notifErrVue } from 'src/modules/utils'
 // import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
+import { date } from 'quasar'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 
@@ -296,6 +305,11 @@ const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
 // const mapingbarang = useMasterMapingBarangForm()
 
+const setTanggal = val => {
+  store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
+  store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
+  console.log(store.form)
+}
 const clearPengguna = () => {
   store.setForm('kode_ruang', null)
   store.setForm('kode_pengguna', null)
