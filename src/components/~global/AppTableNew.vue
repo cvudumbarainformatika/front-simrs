@@ -256,11 +256,11 @@
                 <div>
                   <q-icon
                     name="icon-mat-receipt_long"
-                    color="primary"
-                    size="60px"
+                    color="grey"
+                    size="30px"
                   />
                 </div>
-                <div class="text-primary q-mt-sm">
+                <div class="text-grey q-mt-sm">
                   Data Belum Ada
                 </div>
               </div>
@@ -360,7 +360,7 @@
               <div>
                 <q-spinner-cube
                   color="primary"
-                  size="40px"
+                  size="30px"
                 />
               </div>
               <div class="text-primary q-mt-sm">
