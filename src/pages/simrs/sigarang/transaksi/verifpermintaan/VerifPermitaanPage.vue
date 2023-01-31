@@ -60,7 +60,25 @@
                 Tanggal Permintaan
               </div>
               <div class="col-8">
-                : {{ Object.keys(store.permintaan).length ? store.permintaan.tanggal:'belum dipilih' }}
+                : {{ Object.keys(store.permintaan).length ? dateFull( store.permintaan.tanggal):'belum dipilih' }}
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm q-mb-sm items-center">
+              <div class="col-4">
+                Tanggal Verifikasi
+              </div>
+              <div class="col-8">
+                <div class="row items-center">
+                  :
+                  <app-input-date
+                    class="q-ml-sm"
+                    :model="store.tanggal"
+                    label="Tanggal verifikasi"
+                    outlined
+                    dense
+                    @set-model="setTanggal"
+                  />
+                </div>
               </div>
             </div>
             <div class="row q-col-gutter-sm q-mb-sm items-center">
@@ -96,6 +114,8 @@
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
+import { dateFull } from 'src/modules/formatter'
 import { useVerifPermintaanRuangan } from 'src/stores/simrs/logistik/sigarang/transaksi/verifpermintaan/form'
 import tabelVerifGudang from './TabelVerifGudang.vue'
 
@@ -103,6 +123,11 @@ const store = useVerifPermintaanRuangan()
 store.getDepo()
 store.getPermintaan()
 
+const setTanggal = val => {
+  store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
+  store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
+  console.log(store.form)
+}
 // const onSubmit = val => {
 // console.log('val', val)
 // console.log('mapGudang', store.mapGudang)

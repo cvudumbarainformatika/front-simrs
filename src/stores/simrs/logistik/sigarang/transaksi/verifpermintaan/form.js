@@ -7,7 +7,9 @@ import { findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan', {
   state: () => ({
     loading: false,
-    form: {},
+    form: {
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+    },
     permintaans: [],
     loadingPermintaan: false,
     permintaan: {},
@@ -23,6 +25,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
       'updated_at',
       'permintaanruangan_id'
     ],
+    tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     params: {
       q: '',
       page: 1,
@@ -190,7 +193,8 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           id: this.permintaan.id,
           status: 6,
           details: detail,
-          tanggal_verif: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+          // tanggal_verif: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+          tanggal_verif: this.form.tanggal
         }
         console.log('permintaan', data)
         return new Promise((resolve, reject) => {
@@ -199,6 +203,8 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
               this.loading = false
               console.log(resp)
               this.form.no_permintaan = null
+              this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+              this.tanggal = date.formatDate(Date.now(), 'DD MMMM YYYY ')
               this.permintaan = {}
               this.mapGudang = {}
               this.getPermintaan()
