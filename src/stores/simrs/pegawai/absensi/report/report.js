@@ -10,15 +10,28 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     loading: false,
     params: {
       periode: null,
-      filter_by: 1,
       q: '',
       page: 1,
       per_page: 20,
-      order_by: 'pegawai_id',
+      order_by: 'id',
       sort: 'desc'
     },
     columns: ['nama', 'ruangan', 'rekap'],
-    columnHide: ['id']
+    columnHide: ['id'],
+    jenis_pegawai: [
+      {
+        id: 987654321,
+        kode_jenis: 'all',
+        jenispegawai: 'Semua'
+      }
+    ],
+    ruangan: [
+      {
+        id: 987654321,
+        koderuangan: 'all',
+        namaruang: 'Semua'
+      }
+    ]
   }),
 
   getters: {
@@ -30,6 +43,24 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
   actions: {
     setPeriode(val) {
       this.params.periode = val
+      this.getDataTable()
+    },
+    filterByFlag(val) {
+      if (val !== 'all') {
+        this.params.flag = val
+      } else {
+        delete this.params.flag
+      }
+
+      this.getDataTable()
+    },
+    filterByRuang(val) {
+      if (val !== 'all') {
+        this.params.ruang = val
+      } else {
+        delete this.params.ruang
+      }
+
       this.getDataTable()
     },
     setSearch (val) {
@@ -84,6 +115,26 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       }
       this.loading = false
       // this.getTotalTable()
+    },
+    async autocomplete () {
+      const resp = await api.get('/v1/pegawai/absensi/autocomplete')
+      console.log('autocomplete', resp)
+      if (resp.status === 200) {
+        this.jenis_pegawai = resp.data.jenis_pegawai
+        this.jenis_pegawai.unshift({
+          id: 987654321,
+          kode_jenis: 'all',
+          jenispegawai: 'Semua'
+        })
+        this.ruangan = resp.data.ruangan
+        this.ruangan.unshift(
+          {
+            id: 987654321,
+            koderuangan: 'all',
+            namaruang: 'Semua'
+          }
+        )
+      }
     }
   }
 })

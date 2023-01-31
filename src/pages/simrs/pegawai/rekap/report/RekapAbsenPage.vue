@@ -35,11 +35,46 @@
           :default-btn="false"
           :ada-tambah="false"
         >
+          <template #header-left-after-search>
+            <div class="q-ml-sm">
+              <q-select
+                v-model="flag"
+                dense
+                outlined
+                option-value="kode_jenis"
+                option-label="jenispegawai"
+                behavior="menu"
+                map-options
+                emit-value
+                :options="store.jenis_pegawai"
+                label="Jenis Pegawai"
+                style="min-width:200px"
+                @update:model-value="changeFlag"
+              />
+            </div>
+            <div class="q-ml-sm">
+              <q-select
+                v-model="ruang"
+                dense
+                outlined
+                option-value="koderuangan"
+                option-label="namaruang"
+                behavior="menu"
+                map-options
+                emit-value
+                :options="store.ruangan"
+                label="Ruangan"
+                style="min-width:200px"
+                @update:model-value="changeRuang"
+              />
+            </div>
+          </template>
           <template #cell-default-img="{row}">
             <div class="row">
               <q-avatar
-                size="30px"
-                :class="row.kelamin==='Perempuan'?'bg-secondary cursor-pointer':'bg-orange cursor-pointer'"
+                size="40px"
+                class="cursor-pointer"
+                :class="row.kelamin ==='Perempuan'?'bg-secondary':'bg-orange'"
               >
                 <img :src="getImage(row.kelamin, row)">
                 <q-menu>
@@ -92,10 +127,11 @@
           </template>
           <template #cell-rekap="{row}">
             <div>
-              {{
-                row.transaksi_absen ? row.transaksi_absen[0]? dateFull(row.transaksi_absen[0].updated_at) :"-"
-                : "-"
-              }}
+              <!-- {{
+                row.transaksi_absen ? row.transaksi_absen[0]? dateFull(row.transaksi_absen[0].updated_at) :row.transaksi_absen.length
+                : row.transaksi_absen.length
+              }} -->
+              {{ row.transaksi_absen.length }}
             </div>
           </template>
         </app-table>
@@ -106,36 +142,47 @@
 </template>
 
 <script setup>
-import { dateFull } from 'src/modules/formatter'
+// import { dateFull } from 'src/modules/formatter'
 import { daysInMonth, bulans } from 'src/modules/datesme'
 import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/report.js'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 const date = new Date()
 const bulan = date.getMonth() + 1
 const year = date.getFullYear()
 
 const store = useReportAbsensiStore()
+const flag = ref('all')
+const ruang = ref('all')
 
 onMounted(() => {
   let mm = bulan.toString()
   if (mm.length === 1) {
     mm = `0${mm}`
   }
-  const periode = `${year}-${mm}`
+  const periode = `${year}-${'01'}`
   console.log(periode)
 
+  store.autocomplete()
   store.setPeriode(periode)
 })
 
 console.log('bulans', bulans(bulan))
 console.log('tahun', daysInMonth(bulan, year))
 
-function getImage(kelamin, foto) {
-  if (foto !== null || foto !== '' || foto !== 'undefined' || foto) {
-    return 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + foto.nip + '/' + foto.foto
+function getImage(kelamin, row) {
+  if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
+    return kelamin === 'Perempuan'
+      ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
+      : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
+  } else {
+    return 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + row.nip + '/' + row.foto
   }
-  return kelamin === 'Perempuan'
-    ? new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
-    : new URL('../../../../../assets/images/actress.svg', import.meta.url).href
+}
+
+const changeFlag = (val) => {
+  store.filterByFlag(val)
+}
+const changeRuang = (val) => {
+  store.filterByRuang(val)
 }
 </script>
