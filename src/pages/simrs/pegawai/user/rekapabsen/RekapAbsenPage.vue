@@ -10,10 +10,10 @@
             >
               <div class="col text-left">
                 <div class="f-14 text-weight-bold">
-                  Rekap Absensi Pegawai
+                  Laporan Absensi Pegawai
                 </div>
                 <div class="title-desc">
-                  Halaman Rekap Absensi per bulan
+                  Halaman Laporan Absensi per bulan
                 </div>
               </div>
             </div>
