@@ -16,7 +16,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       order_by: 'id',
       sort: 'desc'
     },
-    columns: ['nama', 'ruangan', 'rekap'],
+    columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'masuk', 'hari', 'percent'],
     columnHide: ['id'],
     jenis_pegawai: [
       {
@@ -31,7 +31,8 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         koderuangan: 'all',
         namaruang: 'Semua'
       }
-    ]
+    ],
+    jumlahProta: 0
   }),
 
   getters: {
@@ -134,6 +135,18 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
             namaruang: 'Semua'
           }
         )
+      }
+    },
+    async prota(periode) {
+      const params = {
+        params: {
+          periode
+        }
+      }
+      const resp = await api.get('/v1/pegawai/absensi/prota', params)
+      console.log('autocomplete', resp)
+      if (resp.status === 200) {
+        this.jumlahProta = resp.data.length
       }
     }
   }

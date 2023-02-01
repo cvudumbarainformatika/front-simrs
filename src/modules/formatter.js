@@ -23,6 +23,14 @@ const diffDate = (val) => {
   const diff = date.getDateDiff(date1, date2, unit)
   return diff
 }
+const calcDate = (val1, val2, type) => {
+  const date1 = val1
+  const date2 = val2
+  const unit = type
+
+  const diff = date.getDateDiff(date1, date2, unit)
+  return diff
+}
 
 const formatRp = (value) => {
   if (value !== null) {
@@ -73,7 +81,7 @@ export {
   dateHalfFormat,
   dateDbFormat,
   humanDate,
-  diffDate,
+  diffDate, calcDate,
   dateBOD,
   dateUnix,
   formatRp,
