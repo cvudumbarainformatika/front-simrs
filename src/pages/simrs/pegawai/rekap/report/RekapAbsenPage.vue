@@ -98,6 +98,22 @@
               />
             </div>
           </template>
+          <template #header-right-before>
+            <q-btn
+              unelevated
+              color="dark"
+              round
+              size="sm"
+              icon="icon-mat-print"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print data
+              </q-tooltip>
+            </q-btn>
+          </template>
           <template #col-masuk>
             Masuk (jam)
           </template>

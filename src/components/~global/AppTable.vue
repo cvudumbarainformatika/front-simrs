@@ -34,6 +34,10 @@
       </div>
       <div class="col-one">
         <!-- delete Ids -->
+        <slot
+          name="header-right-before"
+          class="q-ml-md"
+        />
         <q-btn
           v-if="selected.length>0"
           unelevated
