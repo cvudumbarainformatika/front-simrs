@@ -104,6 +104,9 @@
           <template #col-hari>
             Masuk (Hari)
           </template>
+          <template #col-kurang>
+            Rekap keterlambatan
+          </template>
           <template #cell-default-img="{row}">
             <div class="row">
               <q-avatar
@@ -256,6 +259,11 @@
                 />
               </div>
             </q-linear-progress>
+          </template>
+          <template #cell-kurang="{row}">
+            <div class="text-negative">
+              {{ getKurang(row) }}
+            </div>
           </template>
         </app-table>
       </q-card-section>
@@ -411,6 +419,41 @@ function getMasuk(row) {
     return hitung.toFixed(1)
   }
   return 0
+}
+
+function getKurang(row) {
+  const ada = row.transaksi_absen.length
+  if (ada > 0) {
+    const data = row.transaksi_absen
+    let hitung = 0
+    for (let i = 0; i < data.length; i++) {
+      const kategoryMasuk = data[i].kategory.masuk
+      // const kategoryPulang = data[i].kategory.pulang
+
+      // const tglPulangServer = dateDbFormat(data[i].updated_at)
+      // const jamPulangServer = formatJam(data[i].updated_at)
+      const jamMasukServer = formatJam(data[i].created_at)
+      const tglMasukServer = dateDbFormat(data[i].created_at)
+
+      const terlambat = new Date(tglMasukServer + ' ' + jamMasukServer) > new Date(tglMasukServer + ' ' + kategoryMasuk)
+
+      if (terlambat) {
+        hitung += calcDate(new Date(tglMasukServer + ' ' + jamMasukServer), new Date(tglMasukServer + ' ' + kategoryMasuk), 'minutes')
+      } else {
+        hitung += 0
+      }
+    }
+
+    return toHoursAndMinutes(hitung)
+  }
+  return 0
+}
+
+function toHoursAndMinutes(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+  return `${hours > 0 ? ` ${hours} jam` : ''}
+        ${minutes > 0 ? ` ${minutes} mnt` : ''}`
 }
 
 function getMasukHari(row) {
