@@ -32,6 +32,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         namaruang: 'Semua'
       }
     ],
+    ruanganPrint: null,
     jumlahProta: 0
   }),
 
@@ -58,6 +59,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     filterByRuang(val) {
       if (val !== 'all') {
         this.params.ruang = val
+        this.ruanganPrint = this.ruangan.filter(x => x.koderuangan === val)
       } else {
         delete this.params.ruang
       }

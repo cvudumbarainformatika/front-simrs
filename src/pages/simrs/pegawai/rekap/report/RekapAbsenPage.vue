@@ -45,6 +45,7 @@
           />
         </div>
         <app-table
+          id="printMe"
           title="Rekap Absens Pegawai"
           :columns="store.columns"
           :column-hide="store.columnHide"
@@ -64,6 +65,19 @@
           @find="store.setSearch"
           @refresh="store.refreshTable"
         >
+          <template #header-for-print>
+            <div class="column items-center q-my-md">
+              <div class="f-12 text-weight-bold">
+                DATA REKAP ABSENSI KARYAWAN
+              </div>
+              <div class="f-12">
+                UOBK RSUD MOHAMAD SALEH KOTA PROBOLINGGO
+              </div>
+              <div class="f-12">
+                Periode Bulan {{ bulanName }} {{ tahun }} {{ store.ruanganPrint.length > 0? store.ruanganPrint[0].namaruang:'-' }}
+              </div>
+            </div>
+          </template>
           <template #header-left-after-search>
             <div class="q-ml-sm">
               <q-select
@@ -100,6 +114,7 @@
           </template>
           <template #header-right-before>
             <q-btn
+              v-print="printObj"
               unelevated
               color="dark"
               round
@@ -113,6 +128,13 @@
                 Print data
               </q-tooltip>
             </q-btn>
+          </template>
+          <template
+            #col-status
+          >
+            <div class="print-hide">
+              Status
+            </div>
           </template>
           <template #col-masuk>
             Masuk (jam)
@@ -193,7 +215,7 @@
             </div>
           </template>
           <template #cell-nama="{row}">
-            <div class="">
+            <div class="text-xs">
               {{ row.nama }}
               <q-linear-progress
                 stripe
@@ -215,19 +237,24 @@
               </q-linear-progress>
             </div>
           </template>
-          <template #cell-status="{row}">
-            <q-badge
-              v-if="getStatus(row)"
-              outline
-              color="primary"
-              label="Valid"
-            />
-            <q-badge
-              v-else
-              outline
-              color="negative"
-              label="Belum Install Xenter"
-            />
+          <template
+            v-if="!printed"
+            #cell-status="{row}"
+          >
+            <div class="print-hide">
+              <q-badge
+                v-if="getStatus(row)"
+                outline
+                color="primary"
+                label="Valid"
+              />
+              <q-badge
+                v-else
+                outline
+                color="negative"
+                label="Belum Install Xenter"
+              />
+            </div>
           </template>
           <template #cell-IJIN="{row}">
             <div class="">
@@ -294,6 +321,7 @@ import { calcDate, dateDbFormat, formatJam } from 'src/modules/formatter'
 import { daysInMonth, bulans } from 'src/modules/datesme'
 import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/report.js'
 import { computed, onMounted, ref } from 'vue'
+
 const date = new Date()
 const bulan = date.getMonth() + 1
 const year = date.getFullYear()
@@ -305,6 +333,7 @@ const ruang = ref('all')
 const currentMonth = ref(date.getMonth() + 1)
 const tahun = ref(date.getFullYear())
 const perwali = ref(38)
+const printed = ref(false)
 
 const bulanName = computed(() => bulans(currentMonth.value))
 
@@ -525,4 +554,26 @@ function getMasukHari(row) {
 //   console.log(result)
 //   return result.trim()
 // }
+
+const printObj = {
+  id: 'printMe',
+  popTitle: 'good print',
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback(vue) {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback (vue) {
+    console.log('opened')
+  },
+  closeCallback (vue) {
+    printed.value = false
+    changePeriode()
+    console.log('closePrint')
+  }
+}
 </script>
+
+<style lang="scss" scoped>
+</style>

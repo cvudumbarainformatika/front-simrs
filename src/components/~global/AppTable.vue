@@ -1,7 +1,12 @@
 <template>
   <div class="app-table f-12">
     <!-- title option table -->
-    <div class="flex items-center justify-between q-mb-md">
+    <div class="print-only">
+      <slot
+        name="header-for-print"
+      />
+    </div>
+    <div class="flex items-center justify-between q-mb-md  print-hide">
       <!-- title -->
       <!-- <div class="title-table q-pr-sm f-14 text-bold">
         {{ title }}
@@ -180,7 +185,7 @@
       flat
       bordered
       separator="horizontal"
-      class=""
+      class="screenwide"
     >
       <thead>
         <tr>
@@ -393,6 +398,7 @@
     <!-- Pagination -->
     <AppPaginationTable
       v-if="items.length > 0"
+      class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
       @last="emits('goto', meta.last_page)"
@@ -549,8 +555,37 @@ function deleteOne (id) {
 <style lang="scss" scoped>
 .q-table td {
   padding: 10px 10px;
+  font-size: 12px;
 }
 .q-table th {
   padding:15px 10px;
+}
+
+@media print {
+  .app-table {
+    width: 100%; /* print width */
+    font-size:10px;
+
+    .q-table {
+        max-width: 100% !important;
+      }
+    .q-table td {
+      padding: 5px 5px;
+      font-size: 10px;
+       white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+    .q-table th {
+      padding:5px 5px;
+      white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+
+    .screenwide{
+      max-width: 100% !important;
+    }
+  }
 }
 </style>
