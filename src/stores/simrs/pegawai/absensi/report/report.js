@@ -29,10 +29,10 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       {
         id: 987654321,
         koderuangan: 'all',
-        namaruang: 'Semua'
+        namaruang: 'Semua Ruangan'
       }
     ],
-    ruanganPrint: null,
+    ruanganPrint: [],
     jumlahProta: 0
   }),
 
@@ -59,11 +59,11 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     filterByRuang(val) {
       if (val !== 'all') {
         this.params.ruang = val
-        this.ruanganPrint = this.ruangan.filter(x => x.koderuangan === val)
       } else {
         delete this.params.ruang
       }
 
+      this.ruanganPrint = this.ruangan.filter(x => x.koderuangan === val)
       this.getDataTable()
     },
     setSearch (val) {
@@ -134,9 +134,10 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
           {
             id: 987654321,
             koderuangan: 'all',
-            namaruang: 'Semua'
+            namaruang: 'Semua Ruangan'
           }
         )
+        this.ruanganPrint = this.ruangan
       }
     },
     async prota(periode) {

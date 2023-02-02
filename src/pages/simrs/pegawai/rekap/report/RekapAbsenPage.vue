@@ -91,7 +91,7 @@
                 emit-value
                 :options="store.jenis_pegawai"
                 label="Jenis Pegawai"
-                style="min-width:200px"
+                style="min-width:150px"
                 @update:model-value="changeFlag"
               />
             </div>
@@ -107,7 +107,7 @@
                 emit-value
                 :options="store.ruangan"
                 label="Ruangan"
-                style="min-width:200px"
+                style="min-width:150px"
                 @update:model-value="changeRuang"
               />
             </div>
@@ -557,7 +557,7 @@ function getMasukHari(row) {
 
 const printObj = {
   id: 'printMe',
-  popTitle: 'good print',
+  popTitle: 'print Absensi',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
   beforeOpenCallback(vue) {
