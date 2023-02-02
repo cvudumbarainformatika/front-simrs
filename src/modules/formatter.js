@@ -15,6 +15,7 @@ const dateUnix = (val) => {
 const humanDate = (val) => {
   return date.formatDate(val, 'DD MMMM YYYY')
 }
+
 const diffDate = (val) => {
   const date1 = new Date()
   const date2 = val
@@ -49,6 +50,12 @@ const dateHalfFormat = (val) => {
 const dateFull = (val) => {
   return date.formatDate(val, 'DD MMM YYYY HH:mm:ss')
 }
+const tglJamFormat = (val) => {
+  return date.formatDate(val, 'YYYY-MM-DD HH:mm:ss')
+}
+const formatJam = (val) => {
+  return date.formatDate(val, 'HH:mm:ss')
+}
 
 function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ')
@@ -81,7 +88,7 @@ export {
   dateHalfFormat,
   dateDbFormat,
   humanDate,
-  diffDate, calcDate,
+  diffDate, calcDate, tglJamFormat, formatJam,
   dateBOD,
   dateUnix,
   formatRp,

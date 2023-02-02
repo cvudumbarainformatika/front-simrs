@@ -21,6 +21,29 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
+        <div class="row items-center q-mb-md">
+          <q-btn
+            outline
+            round
+            color="primary"
+            dense
+            icon="icon-mat-chevron_left"
+            size="sm"
+            @click="prevMonth()"
+          />
+          <div class="q-mx-sm">
+            {{ bulanName }} {{ tahun }}
+          </div>
+          <q-btn
+            outline
+            round
+            color="primary"
+            dense
+            icon="icon-mat-chevron_right"
+            size="sm"
+            @click="nextMonth()"
+          />
+        </div>
         <app-table
           title="Rekap Absens Pegawai"
           :columns="store.columns"
@@ -35,7 +58,6 @@
           :default-btn="false"
           :ada-tambah="false"
           :to-search="store.params.q"
-          @set-order="store.setOder"
           @set-row="store.setPerPage"
           @goto="store.setPage"
           @search="store.enterSearch"
@@ -151,6 +173,29 @@
               </q-avatar>
             </div>
           </template>
+          <template #cell-nama="{row}">
+            <div class="">
+              {{ row.nama }}
+              <q-linear-progress
+                stripe
+                rounded
+                class="q-mt-xs"
+                size="xl"
+                :value="hitungPercent(row)"
+                :color="hitungPercent(row) > 0.99 ? 'primary'
+                  : hitungPercent(row) <= 0.8 ? hitungPercent(row) <= 0.5 ? 'negative' : 'orange'
+                    : 'secondary'"
+              >
+                <div class="absolute-full flex flex-center">
+                  <q-badge
+                    color="transparent"
+                    text-color="white"
+                    :label="`${(hitungPercent(row) * 100).toFixed(0) >= 100? 'complete': (hitungPercent(row) * 100).toFixed(0) + '%' }`"
+                  />
+                </div>
+              </q-linear-progress>
+            </div>
+          </template>
           <template #cell-status="{row}">
             <q-badge
               v-if="getStatus(row)"
@@ -200,7 +245,8 @@
               size="25px"
               :value="hitungPercent(row)"
               :color="hitungPercent(row) >= 1 ? 'primary'
-                : hitungPercent(row) < 0.9 ? 'orange' : 'secondary'"
+                : hitungPercent(row) < 0.9 ? hitungPercent(row) < 0.5 ? 'negative' : 'orange'
+                  : 'secondary'"
             >
               <div class="absolute-full flex flex-center">
                 <q-badge
@@ -215,11 +261,12 @@
       </q-card-section>
     </q-card>
     <div style="padding-bottom:180px;" />
+    {{ lhb }}
   </div>
 </template>
 
 <script setup>
-import { calcDate } from 'src/modules/formatter'
+import { calcDate, dateDbFormat, formatJam } from 'src/modules/formatter'
 import { daysInMonth, bulans } from 'src/modules/datesme'
 import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/report.js'
 import { computed, onMounted, ref } from 'vue'
@@ -231,27 +278,58 @@ const store = useReportAbsensiStore()
 const flag = ref('all')
 const ruang = ref('all')
 
-// const bulanName = computed(() => bulans(bulan))
+const currentMonth = ref(date.getMonth() + 1)
+const tahun = ref(date.getFullYear())
+const perwali = ref(38)
+
+const bulanName = computed(() => bulans(currentMonth.value))
 
 const lhb = computed(() => store.jumlahProta)
 
-onMounted(() => {
-  let mm = bulan.toString()
+const changePeriode = () => {
+  let mm = currentMonth.value.toString()
   if (mm.length === 1) {
     mm = `0${mm}`
   }
-  const periode = `${year}-${'01'}`
-  console.log(periode)
-
-  store.autocomplete()
+  const periode = `${tahun.value}-${mm}`
+  console.log('periode', periode)
   store.prota(periode)
   store.setPeriode(periode)
+}
+
+onMounted(() => {
+  store.autocomplete()
+  changePeriode()
 })
 
-console.log('prota', lhb)
+console.log('prota', lhb.value)
+console.log('currentMoth', currentMonth.value)
 console.log('bulans', bulans(bulan))
 console.log('tahun', daysInMonth(bulan, year))
 console.log('rumus', rumusTerkecil())
+
+function nextMonth() {
+  const month = currentMonth.value
+  if (month >= 12) {
+    currentMonth.value = 1
+    tahun.value = tahun.value + 1
+  } else {
+    currentMonth.value = month + 1
+  }
+  console.log('next', currentMonth.value)
+  changePeriode()
+}
+function prevMonth() {
+  const month = currentMonth.value
+  if (month <= 1) {
+    currentMonth.value = 12
+    tahun.value = tahun.value - 1
+  } else {
+    currentMonth.value = month - 1
+  }
+  console.log('next', currentMonth.value)
+  changePeriode()
+}
 
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
@@ -276,8 +354,8 @@ function hitungPercent(row) {
 }
 
 function rumusTerkecil(libur) {
-  const perwali = 38
-  const perbulan = (perwali * (daysInMonth(bulan, year) - libur)) / 7
+  const extra = libur + lhb.value
+  const perbulan = (perwali.value * (daysInMonth(currentMonth.value, tahun.value) - extra)) / 7
   return perbulan.toFixed(1)
 }
 
@@ -305,21 +383,39 @@ function getMasuk(row) {
   const ada = row.transaksi_absen.length
   if (ada > 0) {
     const data = row.transaksi_absen
-    // const hitung = calcDate(data[0].updated_at, data[0].created_at, 'minutes') / 60
+    // let hitung = 0
+    // for (let i = 0; i < data.length; i++) {
+    //   hitung += calcDate(data[i].updated_at, data[i].created_at, 'minutes') / 60
+    // }
+    // return hitung.toFixed(1)
+
+    // return waktuMasuk + '-' + waktuPulang
     let hitung = 0
     for (let i = 0; i < data.length; i++) {
-      hitung += calcDate(data[i].updated_at, data[i].created_at, 'minutes') / 60
+      const kategoryMasuk = data[i].kategory.masuk
+      const kategoryPulang = data[i].kategory.pulang
+
+      const tglPulangServer = dateDbFormat(data[i].updated_at)
+      const jamPulangServer = formatJam(data[i].updated_at)
+      const jamMasukServer = formatJam(data[i].created_at)
+      const tglMasukServer = dateDbFormat(data[i].created_at)
+
+      const waktuMasuk = new Date(tglMasukServer + ' ' + jamMasukServer) < new Date(tglMasukServer + ' ' + kategoryMasuk) ? tglMasukServer + ' ' + kategoryMasuk : tglMasukServer + ' ' + jamMasukServer
+      const waktuPulang = new Date(tglPulangServer + ' ' + jamPulangServer) > new Date(tglPulangServer + ' ' + kategoryPulang) ? tglPulangServer + ' ' + kategoryPulang : tglPulangServer + ' ' + jamPulangServer
+      if (data[i].pulang === null || data[i].pulang === '') {
+        hitung += 0
+      } else {
+        hitung += calcDate(waktuPulang, waktuMasuk, 'minutes') / 60
+      }
     }
-    // data.reduce((a, b) => a + b, 0)
     return hitung.toFixed(1)
   }
-  return ada
-  // return 0
+  return 0
 }
+
 function getMasukHari(row) {
   const ada = row.transaksi_absen.length
   return ada
-  // return 0
 }
 
 // function calcDate(masuk, pulang) {
