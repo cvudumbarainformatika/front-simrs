@@ -248,7 +248,7 @@
           <template #cell-masuk="{row}">
             <div style="max-width:50px">
               <div class="text-xs text-dark">
-                {{ getMasuk(row) }}
+                {{ toHoursAndMinutes(getMasuk(row) * 60) }}
               </div>
             </div>
           </template>
@@ -462,14 +462,15 @@ function getKurang(row) {
 
     return toHoursAndMinutes(hitung)
   }
-  return 0
+  const x = rumusTerkecil(getIjin(row)) * 60
+  return toHoursAndMinutes(x)
 }
 
 function toHoursAndMinutes(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60)
   const minutes = totalMinutes % 60
   return `${hours > 0 ? ` ${hours} jam` : ''}
-        ${minutes > 0 ? ` ${minutes} mnt` : ''}`
+        ${minutes > 0 ? ` ${minutes.toFixed(0)} mnt` : ''}`
 }
 
 function getMasukHari(row) {
