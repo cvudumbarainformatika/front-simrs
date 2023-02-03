@@ -132,9 +132,15 @@
           <template
             #col-status
           >
-            <div class="print-hide">
+            <div class="">
               Status
             </div>
+          </template>
+          <template #col-IJIN>
+            I
+          </template>
+          <template #col-SAKIT>
+            S
           </template>
           <template #col-masuk>
             Masuk (jam)
@@ -237,23 +243,26 @@
               </q-linear-progress>
             </div>
           </template>
-          <template
-            v-if="!printed"
-            #cell-status="{row}"
-          >
-            <div class="print-hide">
+          <template #cell-status="{row}">
+            <div class="">
               <q-badge
                 v-if="getStatus(row)"
                 outline
                 color="primary"
-                label="Valid"
-              />
+              >
+                <div class="f-10">
+                  Valid
+                </div>
+              </q-badge>
               <q-badge
                 v-else
                 outline
                 color="negative"
-                label="Belum Install Xenter"
-              />
+              >
+                <div class="f-10">
+                  Belum Install Xenter
+                </div>
+              </q-badge>
             </div>
           </template>
           <template #cell-IJIN="{row}">
