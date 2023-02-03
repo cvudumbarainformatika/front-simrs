@@ -235,8 +235,8 @@
               >
                 <div class="absolute-full flex flex-center">
                   <q-badge
-                    color="dark"
-                    text-color="white"
+                    color="transparent"
+                    text-color="black"
                     :label="`${(hitungPercent(row) * 100).toFixed(0) >= 100? 'complete': (hitungPercent(row) * 100).toFixed(0) + '%' }`"
                   />
                 </div>
