@@ -15,11 +15,11 @@
           no-caps
           label="Stoks Sekarang"
         />
-        <q-tab
+        <!-- <q-tab
           name="opname"
           no-caps
           label="Stok Opname"
-        />
+        /> -->
       </q-tabs>
 
       <q-separator />
