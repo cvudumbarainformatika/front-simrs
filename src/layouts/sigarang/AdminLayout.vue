@@ -6,6 +6,8 @@
     <AdmHeader
       :dark="dark"
       :mobile="mobile"
+      :role="role"
+      :foto="foto"
       @toggle-left="toggleLeftDrawer"
     />
     <LeftDrawer
@@ -69,7 +71,17 @@ import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/se
 const store = useAuthStore()
 const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
-
+const role = computed(() => {
+  return store.role ? store.role : ''
+})
+const foto = computed(() => {
+  return store.foto !== '' ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + store.foto : new URL('../../assets/images/user-avatar.svg', import.meta.url).href
+  // if (store.foto !== '') {
+  //   return 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + store.foto
+  // } else {
+  //   return new URL('../../assets/images/user-avatar.svg', import.meta.url).href
+  // }
+})
 const menus = computed(() => {
   const apem = store.aplications.filter(app => {
     return app.aplikasi === 'sigarang'

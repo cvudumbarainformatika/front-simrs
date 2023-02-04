@@ -9,11 +9,28 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     form: {
       nama: null,
       kode: null,
-      kode_satuan: null
+      pengali: 1,
+      kode_satuan: null,
+      kode_gudang: null,
+      kode_108: null,
+      kode_satuan_kecil: null,
+      ssh: 'non-ssh',
+      tipe: 'kering'
     },
-    input_kode: null,
+    input_kode: '',
     loading: false,
-    satuans: []
+    satuans: [],
+    sshOption: [
+      { nama: 'SSH', value: 'ssh' },
+      { nama: 'Non-SSH', value: 'non-ssh' }
+    ],
+    tipeOption: [
+      { nama: 'Basah', value: 'basah' },
+      { nama: 'Kering', value: 'kering' }
+    ],
+    depos: [],
+    barang108s: [],
+    loading108: false
   }),
   actions: {
     // local related actions
@@ -22,11 +39,17 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       const columns = [
         'nama',
         'kode',
-        'kode_satuan'
+        'kode_satuan',
+        'kode_gudang',
+        'kode_108',
+        'kode_satuan_kecil'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('ssh', 'non-ssh')
+      this.setForm('tipe', 'kering')
+      this.setForm('pengali', 1)
     },
     setToday () {
       const date = new Date()
@@ -74,18 +97,48 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
         api.get('v1/satuan/satuan')
           .then(resp => {
             if (resp.status === 200) {
-              this.satuans = resp.data.data
-              // console.log('satuan', resp.data)
+              console.log('satuan', resp.data)
+              this.satuans = resp.data
             }
           })
       })
+    },
+    // ambil data depo
+    getDataDepos () {
+      if (!this.depos.length) {
+        return new Promise(resolve => {
+          api.get('v1/gudang/depo')
+            .then(resp => {
+              if (resp.status === 200) {
+                console.log('Depos', resp.data)
+                this.depos = resp.data
+              }
+            })
+        })
+      }
+    },
+    // ambil data barang108
+    getData108s () {
+      // loading diambil dari tambah baru barang 108
+      if (!this.barang108s.length && !this.loading108) {
+        return new Promise(resolve => {
+          api.get('v1/barang108/barang108')
+            .then(resp => {
+              if (resp.status === 200) {
+                console.log('108', resp.data)
+                this.barang108s = resp.data
+              }
+              this.loading108 = false
+            }).catch(() => { this.loading108 = false })
+        })
+      }
     },
     // tambah
     saveForm () {
       this.loading = true
       return new Promise((resolve, reject) => {
         api
-          .post('v1/barangrs/store', this.form)
+          .post('v1/barangrs/store-by-kode', this.form)
           .then((resp) => {
             // console.log('save data   ', resp)
             notifSuccess(resp)

@@ -115,11 +115,15 @@
 
 <script setup>
 import { useMasterBarang108Form } from 'src/stores/simrs/logistik/sigarang/master/barang108/form'
+import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { ref } from 'vue'
 const store = useMasterBarang108Form()
+const formBarang = useMasterBarangRSForm()
 const formReff = ref(null)
 const onSubmit = () => {
   store.saveForm().then(() => {
+    formBarang.loading108 = true
+    formBarang.getData108s()
     // console.log('form', formReff)
     if (formReff.value != null) { formReff.value.resetValidation() }
   })

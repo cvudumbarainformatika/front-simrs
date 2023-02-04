@@ -31,13 +31,29 @@
           round
           icon="icon-eva-bell-outline"
         /> -->
-        <q-avatar
-          size="40px"
-          class="q-ml-sm cursor-pointer bg-grey"
-        >
-          <img src="~assets/images/actor.svg">
-          <adm-header-menu-profile />
-        </q-avatar>
+        <div class="row items-center">
+          <div v-if="role!=='root' && role!==''">
+            <q-badge>
+              Akses : {{ role }}
+            </q-badge>
+          </div>
+          <div>
+            <q-avatar
+              size="40px"
+              class="q-ml-sm cursor-pointer bg-grey"
+            >
+              <img
+                v-if="role!=='root'"
+                :src="foto"
+              >
+              <img
+                v-if="role==='root'"
+                src="~assets/images/actor.svg"
+              >
+              <adm-header-menu-profile />
+            </q-avatar>
+          </div>
+        </div>
       </div>
     </div>
   </q-header>
@@ -54,6 +70,14 @@ defineProps({
   mobile: {
     type: Boolean,
     default: false
+  },
+  role: {
+    type: String,
+    default: ''
+  },
+  foto: {
+    type: String,
+    default: ''
   }
 })
 </script>

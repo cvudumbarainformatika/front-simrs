@@ -142,7 +142,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       // console.log('kontrak', !this.kontrakPekerjaans.length)
       if (!val || !this.kontrakPekerjaans.length) return
       const result = this.kontrakPekerjaans.filter(data => {
-        return data.nokontrak === val
+        return data.nokontrakx === val
       })
       // console.log('kontrak val', val)
       // console.log('kontrak all', this.kontrakPekerjaans)

@@ -14,7 +14,8 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
     satuans: [],
     barang108s: [],
     barangrses: [],
-    loading: false
+    loading: false,
+    mapingLoading: false
   }),
   actions: {
     // local related actions
@@ -69,13 +70,15 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
       })
     },
     getDataBarangRs () {
+      this.mapingLoading = true
       return new Promise(resolve => {
         api.get('v1/barangrs/barangrs')
           .then(resp => {
+            this.mapingLoading = false
             this.barangrses = resp.data
             // console.log('barang rs', resp.data)
             resolve(resp)
-          })
+          }).catch(() => { this.mapingLoading = false })
       })
     },
     getDataSatuan () {

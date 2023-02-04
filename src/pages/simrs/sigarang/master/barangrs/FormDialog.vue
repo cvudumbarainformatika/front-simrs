@@ -35,6 +35,7 @@
           <div class="row q-col-gutter-md">
             <div class="col-md-6 col-xs-12">
               <app-input
+                ref="refNama"
                 v-model="store.form.nama"
                 label="Nama*"
                 outlined
@@ -43,6 +44,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-new
+                ref="refKodeSatuan"
                 v-model="store.form.kode_satuan"
                 outlined
                 label="Satuan"
@@ -50,6 +52,100 @@
                 option-value="kode"
                 option-label="nama"
                 :source="store.satuans"
+              />
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mt-sm">
+            <div class="col-md-6 col-xs-12">
+              <app-input
+                v-model="store.form.pengali"
+                label="pengali*"
+                outlined
+                type="number"
+                autofocus
+              />
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <app-autocomplete-new
+                v-model="store.form.kode_satuan_kecil"
+                outlined
+                label="Satuan Kecil"
+                autocomplete="nama"
+                option-value="kode"
+                option-label="nama"
+                valid
+                :source="store.satuans"
+              />
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mt-sm">
+            <div class="col-md-6 col-xs-12">
+              <app-autocomplete-new
+                v-model="store.form.ssh"
+                outlined
+                label="SSH / Non-SSH"
+                autocomplete="nama"
+                option-value="value"
+                option-label="nama"
+                :source="store.sshOption"
+              />
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <app-autocomplete-new
+                v-model="store.form.tipe"
+                outlined
+                label="Tipe"
+                autocomplete="nama"
+                option-value="value"
+                option-label="nama"
+                :source="store.tipeOption"
+              />
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mt-sm">
+            <div class="col-md-6 col-xs-12">
+              <!-- maping 108 -->
+              <app-autocomplete-new
+                ref="ref108"
+                v-model="store.form.kode_108"
+                outlined
+                label="Uraian 108"
+                autocomplete="uraian"
+                option-value="kode"
+                option-label="uraian"
+                :source="store.barang108s"
+              />
+              <!-- <div class="row items-center">
+                  style="width:80%"
+                <q-btn
+                  class="q-ml-sm"
+                  unelevated
+                  round
+                  color="primary"
+                  size="sm"
+                  icon="icon-mat-add"
+                  @click="form108.setOpen()"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Tambah data 108
+                  </q-tooltip>
+                </q-btn>
+              </div> -->
+            </div>
+            <div class="col-md-6 col-xs-12">
+              <!-- Maping Depo -->
+              <app-autocomplete-new
+                ref="refDepo"
+                v-model="store.form.kode_gudang"
+                outlined
+                label="Depo"
+                autocomplete="nama"
+                option-value="kode"
+                option-label="nama"
+                :source="store.depos"
               />
             </div>
           </div>
@@ -73,11 +169,27 @@
 </template>
 
 <script setup>
+// import { useMasterBarang108Form } from 'src/stores/simrs/logistik/sigarang/master/barang108/form'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { ref } from 'vue'
 const store = useMasterBarangRSForm()
+// const form108 = useMasterBarang108Form()
 const formReff = ref(null)
+const refNama = ref(null)
+const refKodeSatuan = ref(null)
+const ref108 = ref(null)
+const refDepo = ref(null)
 const onSubmit = () => {
+  // let nama=false
+  console.log(refNama.value.$refs.refInput)
+  refNama.value.$refs.refInput.validate()
+  refKodeSatuan.value.$refs.refAuto.validate()
+  ref108.value.$refs.refAuto.validate()
+  refDepo.value.$refs.refAuto.validate()
+  // .then(apem => {
+  //   console.log('depo', apem)
+  // })
+  // console.log('sebelum simpan')
   store.saveForm().then(() => {
     // console.log('form', formReff)
     if (formReff.value != null) { formReff.value.resetValidation() }

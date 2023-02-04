@@ -29,11 +29,14 @@
             <template #col-nama>
               <div>Nama Barang RS</div>
             </template>
-            <template #col-merk>
-              <div>Merk</div>
+            <template #col-ssh>
+              <div>SSH/Non-SSH</div>
             </template>
             <template #col-pengali>
               <div>Pengali</div>
+            </template>
+            <template #col-tipe>
+              <div>Tipe</div>
             </template>
             <template #col-satuankecil>
               <div>Satuan Kecil</div>
@@ -49,6 +52,15 @@
             </template>
             <template #cell-barang108="{row}">
               <div>{{ row.barang108?row.barang108.uraian:'-' }}</div>
+            </template>
+            <template #cell-satuanKecil="{row}">
+              <div>{{ row.satuanKecil?row.satuanKecil.nama:'-' }}</div>
+            </template>
+            <template #cell-ssh="{row}">
+              <div>{{ row.ssh.toUpperCase() }}</div>
+            </template>
+            <template #cell-tipe="{row}">
+              <div>{{ row.tipe.toUpperCase() }}</div>
             </template>
           </app-table>
           <!--
