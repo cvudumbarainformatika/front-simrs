@@ -56,6 +56,12 @@ const tglJamFormat = (val) => {
 const formatJam = (val) => {
   return date.formatDate(val, 'HH:mm:ss')
 }
+const jamTnpDetik = (val) => {
+  return date.formatDate(val, 'HH:mm')
+}
+const dateOnly = (val) => {
+  return date.formatDate(val, 'DD')
+}
 
 function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ')
@@ -88,7 +94,7 @@ export {
   dateHalfFormat,
   dateDbFormat,
   humanDate,
-  diffDate, calcDate, tglJamFormat, formatJam,
+  diffDate, calcDate, tglJamFormat, formatJam, dateOnly, jamTnpDetik,
   dateBOD,
   dateUnix,
   formatRp,

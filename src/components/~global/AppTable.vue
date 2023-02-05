@@ -433,7 +433,8 @@ const props = defineProps({
   adaDelete: { type: Boolean, default: true },
   adaTambah: { type: Boolean, default: true },
   adaCari: { type: Boolean, default: true },
-  clickAble: { type: Boolean, default: false }
+  clickAble: { type: Boolean, default: false },
+  textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 
@@ -550,34 +551,77 @@ function deleteOne (id) {
   })
 }
 
+const ts = computed(() => (props.textSize).toString() + 'px')
+const pts = computed(() => (props.textSize - 2).toString() + 'px')
 </script>
 
 <style lang="scss" scoped>
-.q-table td {
-  padding: 10px 10px;
-  font-size: 12px;
+
+$fs : v-bind(ts);
+$pfs: v-bind(pts);
+
+@mixin width-full($full: true) {
+  @if $full {
+    max-width: 100% !important;
+  }
 }
-.q-table th {
-  padding:15px 10px;
+@mixin wrap($full: true) {
+  @if $full {
+    padding:10px 10px;
+      white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+  } @else {
+    padding:8px 10px;
+  }
+}
+
+.app-table {
+  width: 100%; /* print width */
+  font-size:$fs;
+
+  // .q-table{
+  //   @include width-full($full: true);
+  // }
+  .q-table {
+    max-width: 100% !important;
+  }
+  // .q-table td {
+  //   padding: 10px 10px;
+  //   font-size: $fs;
+  // }
+  // .q-table th {
+  //   padding:15px 10px;
+  //   font-size: $fs;
+  // }
+  .q-table td {
+      font-size:$fs;
+      @include wrap($full: false);
+    }
+    .q-table th {
+      font-size:$fs;
+      @include wrap($full: false);
+    }
 }
 
 @media print {
   .app-table {
     width: 100%; /* print width */
-    font-size:10px;
+    font-size:$pfs;
 
     .q-table {
         max-width: 100% !important;
       }
     .q-table td {
       padding: 5px 5px;
-      font-size: 10px;
+      font-size: $pfs;
        white-space: normal !important;
         word-wrap: normal !important;
         hyphens: manual;
     }
     .q-table th {
       padding:5px 5px;
+      font-size:$pfs;
       white-space: normal !important;
         word-wrap: normal !important;
         hyphens: manual;

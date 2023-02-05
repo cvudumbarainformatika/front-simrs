@@ -4,10 +4,12 @@ import { api } from 'src/boot/axios'
 export const useReportAbsensiStore = defineStore('report_absensi', {
   state: () => ({
     items: [],
+    prints: [],
     meta: {},
     item: {},
     total: 0,
     loading: false,
+    loadingDialog: false,
     params: {
       periode: null,
       q: '',
@@ -16,6 +18,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       order_by: 'id',
       sort: 'desc'
     },
+    defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'masuk', 'hari', 'kurang'],
     columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'masuk', 'hari', 'kurang'],
     columnHide: ['id'],
     jenis_pegawai: [
@@ -33,7 +36,8 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       }
     ],
     ruanganPrint: [],
-    jumlahProta: 0
+    jumlahProta: 0,
+    rincian: false
   }),
 
   getters: {
@@ -92,12 +96,21 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       this.getDataTable()
     },
     setColumns (payload) {
-      if (payload) {
-        const thumb = payload.map(x => Object.keys(x))
-        this.columns = thumb[0]
+      // if (payload) {
+      //   const thumb = payload.map(x => Object.keys(x))
+      //   this.columns = thumb[0]
+      // }
+      console.log('column change :', payload)
+      if (payload === 'default') {
+        this.columns = []
+        this.columns = this.defaultColumn
+      } else {
+        this.columns = []
+        for (let index = 0; index < payload; index++) {
+          this.columns[index] = index < 9 ? '0' + (index + 1) : (index + 1).toString()
+        }
+        this.columns.unshift('nama')
       }
-
-      // console.log('columns', this.columns)
     },
 
     refreshTable() {
@@ -151,6 +164,17 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       if (resp.status === 200) {
         this.jumlahProta = resp.data.length
       }
+    },
+    async getDataPrint(periode) {
+      this.loadingDialog = true
+      const params = { params: this.params }
+      const resp = await api.get('/v1/pegawai/absensi/print', params)
+      console.log('prints', resp)
+      if (resp.status === 200) {
+        this.prints = resp.data
+        this.loadingDialog = false
+      }
+      this.loadingDialog = false
     }
   }
 })

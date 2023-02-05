@@ -43,6 +43,12 @@
             size="sm"
             @click="nextMonth()"
           />
+          <div class="q-ml-md">
+            <q-toggle
+              v-model="store.rincian"
+              label="Laporan Rinci"
+            />
+          </div>
         </div>
         <app-table
           id="printMe"
@@ -56,6 +62,7 @@
           :sort="store.params.sort"
           :loading="store.loading"
           row-image="foto"
+          :text-size="11"
           :default-btn="false"
           :ada-tambah="false"
           :to-search="store.params.q"
@@ -114,6 +121,23 @@
           </template>
           <template #header-right-before>
             <q-btn
+              class="q-mr-sm"
+              unelevated
+              color="negative"
+              round
+              size="sm"
+              icon="icon-mat-print"
+              @click="printMode()"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print model 1
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              ref="refPrint"
               v-print="printObj"
               unelevated
               color="dark"
@@ -125,7 +149,7 @@
                 class="primary"
                 :offset="[10, 10]"
               >
-                Print data
+                Print model 2
               </q-tooltip>
             </q-btn>
           </template>
@@ -154,7 +178,7 @@
           <template #cell-default-img="{row}">
             <div class="row">
               <q-avatar
-                size="40px"
+                size="30px"
                 class="cursor-pointer"
                 :class="row.kelamin ==='Perempuan'?'bg-secondary':'bg-orange'"
               >
@@ -223,10 +247,9 @@
           <template #cell-nama="{row}">
             <div class="text-xs">
               {{ row.nama }}
-              <q-linear-progress
-                stripe
-                rounded
+              <!-- <q-linear-progress
                 class="q-mt-xs"
+                rounded
                 size="xl"
                 :value="hitungPercent(row)"
                 :color="hitungPercent(row) > 0.99 ? 'primary'
@@ -236,24 +259,40 @@
                 <div class="absolute-full flex flex-center">
                   <q-badge
                     color="transparent"
-                    text-color="black"
-                    :label="`${(hitungPercent(row) * 100).toFixed(0) >= 100? 'complete': (hitungPercent(row) * 100).toFixed(0) + '%' }`"
-                  />
+                    :text-color="hitungPercent(row) > 0.99 ? 'white': 'dark'"
+                  >
+                    <div class="f-10">
+                      {{ (hitungPercent(row) * 100).toFixed(0) >= 100? 'complete': (hitungPercent(row) * 100).toFixed(0) + '%' }}
+                    </div>
+                  </q-badge>
                 </div>
-              </q-linear-progress>
+              </q-linear-progress> -->
             </div>
           </template>
           <template #cell-status="{row}">
             <div class="">
-              <q-badge
-                v-if="getStatus(row)"
-                outline
-                color="primary"
-              >
-                <div class="f-10">
-                  Valid
-                </div>
-              </q-badge>
+              <div v-if="getStatus(row)">
+                <q-linear-progress
+                  class="q-mt-xs"
+                  rounded
+                  size="20px"
+                  :value="hitungPercent(row)"
+                  :color="hitungPercent(row) > 0.99 ? 'primary'
+                    : hitungPercent(row) <= 0.8 ? hitungPercent(row) <= 0.5 ? 'negative' : 'orange'
+                      : 'secondary'"
+                >
+                  <div class="absolute-full flex flex-center">
+                    <q-badge
+                      color="transparent"
+                      :text-color="hitungPercent(row) > 0.99 ? 'white': 'dark'"
+                    >
+                      <div class="f-10">
+                        {{ (hitungPercent(row) * 100).toFixed(0) >= 100? 'complete': (hitungPercent(row) * 100).toFixed(0) + '%' }}
+                      </div>
+                    </q-badge>
+                  </div>
+                </q-linear-progress>
+              </div>
               <q-badge
                 v-else
                 outline
@@ -299,8 +338,8 @@
             <q-linear-progress
               size="25px"
               :value="hitungPercent(row)"
-              :color="hitungPercent(row) >= 1 ? 'primary'
-                : hitungPercent(row) < 0.9 ? hitungPercent(row) < 0.5 ? 'negative' : 'orange'
+              :color="hitungPercent(row) > 0.99 ? 'primary'
+                : hitungPercent(row) < 0.99 ? hitungPercent(row) < 0.5 ? 'negative' : 'orange'
                   : 'secondary'"
             >
               <div class="absolute-full flex flex-center">
@@ -317,27 +356,68 @@
               {{ getKurang(row) }}
             </div>
           </template>
+
+          <!-- rincian -->
+          <template
+            v-for="(num, i) in daysInMonth(currentMonth, tahun)"
+            :key="i"
+            #[getSlotRinci(num)]="{row}"
+          >
+            <div v-if="row.transaksi_absen.length > 0">
+              <div class="columns flex-center items-center">
+                <div>{{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}</div>
+                <q-separator />
+                <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative':''">
+                  {{ getTransaksiAbsen(num, row.transaksi_absen, 'pulang') }}
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
         </app-table>
       </q-card-section>
     </q-card>
     <div style="padding-bottom:180px;" />
-    {{ lhb }}
+
+    <!-- dialog print -->
+    <print-dialog
+      v-model="openDialog"
+      :loading="store.loadingDialog"
+      :current-month="currentMonth"
+      :tahun="tahun.toString()"
+      :month-name="bulanName"
+      :get-status="(val)=>getStatus(val)"
+      :hitung-percent="(val)=>hitungPercent(val)"
+      :get-ijin="(val,x)=>getIjin(val,x)"
+      :get-masuk="(val)=>toHoursAndMinutes(getMasuk(val) * 60)"
+      :get-masuk-hari="(val)=>getMasukHari(val)"
+      :get-kurang="(val)=>getKurang(val)"
+      :days-in-month="daysInMonth(currentMonth, tahun)"
+      :get-transaksi-absen="(x,y,z) => getTransaksiAbsen(x,y,z)"
+    />
   </div>
 </template>
 
 <script setup>
-import { calcDate, dateDbFormat, formatJam } from 'src/modules/formatter'
+import { calcDate, dateDbFormat, formatJam, jamTnpDetik } from 'src/modules/formatter'
 import { daysInMonth, bulans } from 'src/modules/datesme'
 import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/report.js'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+
+import PrintDialog from './PrintDialog.vue'
+// import IsiCellRinci from './IsiCellRinci.vue'
 
 const date = new Date()
 const bulan = date.getMonth() + 1
-const year = date.getFullYear()
+// const year = date.getFullYear()
 
 const store = useReportAbsensiStore()
 const flag = ref('all')
 const ruang = ref('all')
+const openDialog = ref(false)
+const refPrint = ref(null)
 
 const currentMonth = ref(date.getMonth() + 1)
 const tahun = ref(date.getFullYear())
@@ -362,12 +442,14 @@ const changePeriode = () => {
 onMounted(() => {
   store.autocomplete()
   changePeriode()
+
+  console.log('ref', refPrint.value)
 })
 
 console.log('prota', lhb.value)
 console.log('currentMoth', currentMonth.value)
 console.log('bulans', bulans(bulan))
-console.log('tahun', daysInMonth(bulan, year))
+console.log('tahun', daysInMonth(currentMonth.value, tahun.value))
 console.log('rumus', rumusTerkecil())
 
 function nextMonth() {
@@ -380,6 +462,8 @@ function nextMonth() {
   }
   console.log('next', currentMonth.value)
   changePeriode()
+  const obj = store.rincian
+  obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
 }
 function prevMonth() {
   const month = currentMonth.value
@@ -391,6 +475,26 @@ function prevMonth() {
   }
   console.log('next', currentMonth.value)
   changePeriode()
+  const obj = store.rincian
+  obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
+}
+
+function getSlotRinci(num) {
+  return num <= 9 ? 'cell-0' + num.toString() : 'cell-' + num.toString()
+}
+
+function getTransaksiAbsen(num, data, jns) {
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
+  const trans = data.filter(x => x.tanggal === cellDate)
+  if (trans.length > 0) {
+    if (jns === 'masuk') {
+      return jamTnpDetik(trans[0].created_at)
+    } else {
+      return jamTnpDetik(trans[0].updated_at) === jamTnpDetik(trans[0].created_at) ? 'TAP' : jamTnpDetik(trans[0].updated_at)
+    }
+  }
+  return ''
 }
 
 function getImage(kelamin, row) {
@@ -445,17 +549,10 @@ function getMasuk(row) {
   const ada = row.transaksi_absen.length
   if (ada > 0) {
     const data = row.transaksi_absen
-    // let hitung = 0
-    // for (let i = 0; i < data.length; i++) {
-    //   hitung += calcDate(data[i].updated_at, data[i].created_at, 'minutes') / 60
-    // }
-    // return hitung.toFixed(1)
-
-    // return waktuMasuk + '-' + waktuPulang
-    let hitung = 0
+    let hitung = 0.0
     for (let i = 0; i < data.length; i++) {
-      const kategoryMasuk = data[i].kategory.masuk
-      const kategoryPulang = data[i].kategory.pulang
+      const kategoryMasuk = data[i].kategory ? data[i].kategory.masuk : '00:00:00'
+      const kategoryPulang = data[i].kategory ? data[i].kategory.pulang : '00:00:00'
 
       const tglPulangServer = dateDbFormat(data[i].updated_at)
       const jamPulangServer = formatJam(data[i].updated_at)
@@ -481,7 +578,7 @@ function getKurang(row) {
     const data = row.transaksi_absen
     let hitung = 0
     for (let i = 0; i < data.length; i++) {
-      const kategoryMasuk = data[i].kategory.masuk
+      const kategoryMasuk = data[i].kategory ? data[i].kategory.masuk : '00:00:00'
       // const kategoryPulang = data[i].kategory.pulang
 
       // const tglPulangServer = dateDbFormat(data[i].updated_at)
@@ -582,6 +679,17 @@ const printObj = {
     console.log('closePrint')
   }
 }
+
+function printMode() {
+  // openDialog = !openDialog
+  // store.getDataPrint()
+  openDialog.value = !openDialog.value
+}
+
+watch(() => store.rincian, (obj) => {
+  obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
+  console.log('watch', store.columns)
+}, { deep: true })
 </script>
 
 <style lang="scss" scoped>
