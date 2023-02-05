@@ -120,7 +120,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     // ambil data barang108
     getData108s () {
       // loading diambil dari tambah baru barang 108
-      if (!this.barang108s.length && !this.loading108) {
+      if (!this.barang108s.length || this.loading108) {
         return new Promise(resolve => {
           api.get('v1/barang108/barang108')
             .then(resp => {
