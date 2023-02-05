@@ -17,7 +17,8 @@ export const useMasterBarang108Form = defineStore('master_barang108_form', {
       kode: null,
       uraian: null
     },
-    loading: false
+    loading: false,
+    edited: false
   }),
   actions: {
     // local related actions

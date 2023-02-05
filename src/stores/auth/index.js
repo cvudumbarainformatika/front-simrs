@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('auth', {
     aplications: [],
     menus: [],
     role: '',
+    foto: '',
     route: {}
   }),
   getters: {
@@ -75,6 +76,7 @@ export const useAuthStore = defineStore('auth', {
       })
       this.aplications = apli
       this.role = val.role[0].nama
+      this.foto = val.foto
       if (apli.length === 1) {
         // const router = useRouter()
         this.menus = apli[0].menus

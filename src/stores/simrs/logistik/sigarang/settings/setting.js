@@ -281,6 +281,8 @@ export const useSettingsStore = defineStore('setting_store', {
 
       const barangrs = useMasterBarangRSForm()
       barangrs.getDataSatuans()
+      barangrs.getData108s()
+      barangrs.getDataDepos()
 
       const mapingpengguna = useMasterPenggunaRuangForm()
       mapingpengguna.getDataPenggunas()

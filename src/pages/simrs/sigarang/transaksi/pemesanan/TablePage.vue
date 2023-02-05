@@ -11,7 +11,6 @@
             :meta="table.meta"
             :per-page="table.params.per_page"
             :order-by="table.params.order_by"
-            ada-input
             :input-col="10"
             :sort="table.params.sort"
             :loading="table.loading"
@@ -100,9 +99,9 @@
                         :valid="kontrak"
                         outlined
                         label="Nomor Kontrak"
-                        autocomplete="nokontrak"
-                        option-value="nokontrak"
-                        :option-label="['nokontrak','namaperusahaan']"
+                        autocomplete="nokontrakx"
+                        option-value="nokontrakx"
+                        :option-label="['nokontrakx','namaperusahaan']"
                         :source="store.kontrakPekerjaans"
                         :disable="table.items.length ? true : false"
                         :loading="store.loadingKontrak"
@@ -112,7 +111,26 @@
                     </div>
                   </div>
                   <div class="row q-col-gutter-md q-mb-sm">
-                    <div class="col-12">
+                    <div
+                      v-if="mappingBarang.mapingLoading"
+                      class="col-12"
+                    >
+                      <div
+                        class="row q-col-gutter-md items-center"
+                      >
+                        <div class="col-6">
+                          <!-- <q-skeleton type="rect" /> -->
+                          <q-skeleton type="QRange" />
+                        </div>
+                        <div class="col-6">
+                          Mengambil data Barang...
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      v-if="!mappingBarang.mapingLoading"
+                      class="col-12"
+                    >
                       <app-autocomplete-new
                         :model="store.form.kode_rs"
                         :valid="kodeRs"
@@ -122,6 +140,7 @@
                         option-value="kode"
                         option-label="nama"
                         :source="mappingBarang.barangrses"
+                        :loading="mappingBarang.mapingLoading"
                         @on-select="store.barangSelected"
                         @clear="clearBarangRs"
                         @set-model="modelSet"
@@ -194,7 +213,7 @@
                       <app-btn
                         label="Tutup Pemesanan"
                         :loading="store.loadingFinish"
-                        :disable="store.isOpen || store.loadingFinish || store.loadingTambah"
+                        :disable="store.isOpen || store.loadingFinish || store.loadingTambah || !table.items.length"
                         @click="onFisnish"
                       />
                     </div>

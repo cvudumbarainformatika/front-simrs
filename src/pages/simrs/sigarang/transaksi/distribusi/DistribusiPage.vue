@@ -322,7 +322,7 @@ const barangSiap = val => {
   store.setForm('status', 6)
   Dialog.create({
     title: 'Konfirmasi',
-    message: 'Apakah barang sudah siap untuk?',
+    message: 'Apakah barang sudah siap?',
     cancel: true
   }).onOk(() => {
     store.updateStatus()
