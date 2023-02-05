@@ -114,6 +114,7 @@
 </template>
 
 <script setup>
+import { notifErrVue } from 'src/modules/utils'
 import { useMasterBarang108Form } from 'src/stores/simrs/logistik/sigarang/master/barang108/form'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { ref } from 'vue'
@@ -121,12 +122,17 @@ const store = useMasterBarang108Form()
 const formBarang = useMasterBarangRSForm()
 const formReff = ref(null)
 const onSubmit = () => {
-  store.saveForm().then(() => {
-    formBarang.loading108 = true
-    formBarang.getData108s()
-    // console.log('form', formReff)
-    if (formReff.value != null) { formReff.value.resetValidation() }
-  })
+  const ada = formBarang.barang108s.filter(val => { return val.kode === store.form.kode })
+  if (ada.length && !store.edited) {
+    notifErrVue('Kode 108 sudah ada')
+  } else {
+    store.saveForm().then(() => {
+      formBarang.loading108 = true
+      formBarang.getData108s()
+      // console.log('form', formReff)
+      if (formReff.value != null) { formReff.value.resetValidation() }
+    })
+  }
 }
 const onReset = () => {
   formReff.value.resetValidation()

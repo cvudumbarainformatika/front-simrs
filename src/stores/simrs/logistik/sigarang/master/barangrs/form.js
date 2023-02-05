@@ -30,7 +30,8 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     ],
     depos: [],
     barang108s: [],
-    loading108: false
+    loading108: false,
+    edited: false
   }),
   actions: {
     // local related actions
@@ -141,6 +142,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
           .post('v1/barangrs/store-by-kode', this.form)
           .then((resp) => {
             // console.log('save data   ', resp)
+            this.resetFORM()
             notifSuccess(resp)
             const table = useMasterBarangRSTable()
             table.getDataTable()

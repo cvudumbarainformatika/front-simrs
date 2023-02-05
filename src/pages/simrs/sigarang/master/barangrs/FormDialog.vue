@@ -170,9 +170,12 @@
 
 <script setup>
 // import { useMasterBarang108Form } from 'src/stores/simrs/logistik/sigarang/master/barang108/form'
+import { Dialog } from 'quasar'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
+import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { ref } from 'vue'
 const store = useMasterBarangRSForm()
+const mapingbarang = useMasterMapingBarangForm()
 // const form108 = useMasterBarang108Form()
 const formReff = ref(null)
 const refNama = ref(null)
@@ -181,6 +184,28 @@ const ref108 = ref(null)
 const refDepo = ref(null)
 const onSubmit = () => {
   // let nama=false
+  const ada = mapingbarang.barangrses.filter(val => { return val.kode === store.form.kode })
+  if (ada.length && !store.edited) {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Kode barang sudah ada, jika dilanjutkan maka barang akan di update',
+      ok: {
+        flat: true,
+        'no-caps': true,
+        color: 'primary'
+      },
+      cancel: {
+        flat: true,
+        color: 'dark'
+      }
+    }).onOk(() => {
+      simpan()
+    })
+  } else {
+    simpan()
+  }
+}
+const simpan = () => {
   console.log(refNama.value.$refs.refInput)
   refNama.value.$refs.refInput.validate()
   refKodeSatuan.value.$refs.refAuto.validate()

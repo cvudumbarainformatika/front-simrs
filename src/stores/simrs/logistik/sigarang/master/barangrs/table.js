@@ -49,7 +49,7 @@ export const useMasterBarangRSTable = defineStore('master_barangrs_table', {
     setColumns (payload) {
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['kode', 'nama', 'barang108', 'satuan', 'pengali', 'satuankecil', 'ssh', 'tipe']
+      this.columns = ['kode', 'nama', 'barang108', 'depo', 'satuan', 'pengali', 'satuankecil', 'ssh', 'tipe']
       // console.log('columns', this.columns)
     },
 

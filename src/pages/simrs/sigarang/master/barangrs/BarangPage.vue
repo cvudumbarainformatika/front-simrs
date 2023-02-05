@@ -47,6 +47,9 @@
             <template #col-satuan>
               <div>Satuan</div>
             </template>
+            <template #col-depo>
+              <div>Depo</div>
+            </template>
             <template #cell-satuan="{row}">
               <div>{{ row.satuan?row.satuan.nama:'-' }}</div>
             </template>
@@ -61,6 +64,9 @@
             </template>
             <template #cell-tipe="{row}">
               <div>{{ row.tipe.toUpperCase() }}</div>
+            </template>
+            <template #cell-depo="{row}">
+              <div>{{ row.mapingdepo?row.mapingdepo.gudang.nama:'-' }}</div>
             </template>
           </app-table>
           <!--
