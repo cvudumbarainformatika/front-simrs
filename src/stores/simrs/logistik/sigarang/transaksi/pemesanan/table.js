@@ -91,11 +91,26 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
       this.columns.splice(toIn, 0, mau)
     },
     setColumns (payload) {
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0].sort()
-      // pindah harga ke dekat jumlah / qty
-      this.pindah('harga', 'qty')
-      this.pindah('satuan', 'kode_satuan')
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0].sort()
+      this.columns = [
+        'kode_rs',
+        'nama_barang',
+        'kode_108',
+        'uraian_108',
+        'kode_50',
+        'uraian_50',
+        'qty',
+        'harga',
+        'merk',
+        'satuan_besar',
+        'isi',
+        'satuan_kecil',
+        'sub_total'
+      ]
+      // // pindah harga ke dekat jumlah / qty
+      // this.pindah('harga', 'qty')
+      // this.pindah('satuan', 'kode_satuan')
       // console.log('columns', this.columns)
     },
 

@@ -269,6 +269,7 @@ export const useSettingsStore = defineStore('setting_store', {
   actions: {
     getAllData () {
       // this.getDataSetting()
+      // sigarang
       this.getMapingBarangDepo()
       const mapingBarang = useMasterMapingBarangForm()
       mapingBarang.getDataBarang108()
@@ -278,6 +279,7 @@ export const useSettingsStore = defineStore('setting_store', {
       const pemesanan = useTransaksiPemensananForm()
       pemesanan.getKontrakPekerjaan()
       pemesanan.getMapingBarang()
+      pemesanan.getRekening50()
 
       const barangrs = useMasterBarangRSForm()
       barangrs.getDataSatuans()

@@ -31,8 +31,26 @@
             <template #col-kode_108>
               <div>Kode 108</div>
             </template>
+            <template #col-uraian_108>
+              <div>Uraian 108</div>
+            </template>
+            <template #col-uraian_50>
+              <div>Uraian 50</div>
+            </template>
+            <template #col-kode_50>
+              <div>Kode 50</div>
+            </template>
+            <template #col-satuan_besar>
+              <div>Satuan Besar</div>
+            </template>
+            <template #col-satuan_kecil>
+              <div>Satuan Kecil</div>
+            </template>
             <template #col-kontrak>
               <div>Nomor Kontrak</div>
+            </template>
+            <template #col-merk>
+              <div>Merk</div>
             </template>
             <template #col-barang108>
               <div>Uraian 108</div>
@@ -46,8 +64,14 @@
             <template #col-barangrs>
               <div>Nama Barang RS</div>
             </template>
+            <template #col-nama_barang>
+              <div>Nama Barang</div>
+            </template>
             <template #cell-barangrs="{row}">
               <div>{{ row.barangrs?row.barangrs.nama:'-' }}</div>
+            </template>
+            <template #cell-satuan_kecil="{row}">
+              <div>{{ row.satuan_kecil?row.satuan_kecil:'-' }}</div>
             </template>
             <template #col-satuan>
               <div>Satuan</div>
@@ -261,12 +285,12 @@
                 </th>
                 <th>
                   <div class="bold">
-                    <strong>Stok Maks Gudang</strong>
+                    <strong>Uraian 50</strong>
                   </div>
                 </th>
                 <th>
                   <div class="bold">
-                    <strong>Jml Maks dibeli</strong>
+                    <strong>Merk</strong>
                   </div>
                 </th>
                 <th>
@@ -334,14 +358,34 @@
                   </div>
                 </td>
                 <td>
-                  <div class="bold">
+                  <app-autocomplete-new
+                    :model="store.form.kode_50"
+                    outlined
+                    label="Rekening 50"
+                    autocomplete="uraian"
+                    option-value="kode"
+                    option-label="uraian"
+                    :source="store.rekening50s"
+                    :disable="store.loadingTambah"
+                    @on-select="store.rekening50Selected"
+                    @clear="clearRekening50"
+                    @set-model="rekeningSet"
+                  />
+                  <!-- <div class="bold">
                     {{ store.stok.max_stok?store.stok.max_stok:'-' }}
-                  </div>
+                  </div> -->
                 </td>
                 <td>
-                  <div class="bold">
+                  <app-input
+                    v-model="store.form.merk"
+                    input-class="text-right"
+                    label="Merk*"
+                    outlined
+                    :disable="store.loadingTambah"
+                  />
+                  <!-- <div class="bold">
                     {{ store.stok.maxBeli?store.stok.maxBeli:'-' }}
-                  </div>
+                  </div> -->
                 </td>
 
                 <td>
@@ -418,6 +462,12 @@ const updateProxy = () => {
 
 const modelSet = val => {
   console.log('model barang RS', val)
+}
+const rekeningSet = val => {
+  console.log('rekening', val)
+}
+const clearRekening50 = () => {
+  store.setForm('kode_50', null)
 }
 const clearBarangRs = () => {
   store.setForm('kode_rs', null)
