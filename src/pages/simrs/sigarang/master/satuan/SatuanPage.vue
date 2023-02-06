@@ -22,11 +22,18 @@
             @new-data="store.newData"
             @edit-data="store.editData"
             @delete="table.deletesData"
-          />
-          <!--
+          >
+            <!--
             row-image="image"
             @delete-ids="table.deletesData"
             -->
+            <template #col-kecil>
+              <div>Satuan Kecil</div>
+            </template>
+            <template #col-nama>
+              <div>Satuan Besar</div>
+            </template>
+          </app-table>
         </template>
       </app-card>
     </div>

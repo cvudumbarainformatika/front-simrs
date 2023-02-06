@@ -8,7 +8,9 @@ export const useMasterSatuanForm = defineStore('master_satuan_form', {
     isOpen: false,
     form: {
       nama: null,
-      kode: null
+      kode: null,
+      kecil: null,
+      isi: 1
     },
     gedungs: [],
     loading: false
@@ -19,11 +21,13 @@ export const useMasterSatuanForm = defineStore('master_satuan_form', {
       this.form = {}
       const columns = [
         'nama',
-        'kode'
+        'kode',
+        'kecil'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('isi', 1)
     },
     setToday () {
       const date = new Date()
