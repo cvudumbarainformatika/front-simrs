@@ -233,6 +233,9 @@
                               </div>
                             </div>
                           </div>
+                          <div v-else-if="getIjinRinci(row) > 0">
+                            a
+                          </div>
                           <div v-else>
                             -
                           </div>
@@ -365,6 +368,20 @@ onMounted(() => {
 
 function getString(num) {
   return num <= 9 ? '0' + num : num.toString()
+}
+
+function getIjinRinci(row, fx) {
+  const user = row.user
+  if (user) {
+    const ada = user.libur.length
+    if (ada > 0) {
+      const libur = user.libur
+      return libur.length
+    }
+    return 0
+  }
+
+  return 0
 }
 </script>
 
