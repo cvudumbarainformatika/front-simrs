@@ -404,6 +404,13 @@ const init = val => {
   store.setForm('kode_108', val.kode_108)
   store.setForm('kode_satuan', val.kode_satuan)
   store.setForm('harga', val.harga)
+  store.setForm('nama_barang', val.nama_barang)
+  store.setForm('uraian_108', val.uraian_108)
+  store.setForm('uraian_50', val.uraian_50)
+  store.setForm('kode_50', val.kode_50)
+  store.setForm('satuan_besar', val.satuan_besar)
+  store.setForm('satuan_kecil', val.satuan_kecil)
+  store.setForm('isi', val.isi)
 
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)

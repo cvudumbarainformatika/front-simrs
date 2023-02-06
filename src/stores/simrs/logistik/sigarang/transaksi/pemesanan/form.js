@@ -18,6 +18,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     mapingBarangs: [],
     barangrs: [],
     barang108: [],
+    rekening50s: [],
     satuan: [],
     params: {
       q: '',
@@ -49,7 +50,12 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         'kontrak',
         'kode_rs',
         'kode_108',
+        'uraian_108',
+        'kode_50',
+        'uraian_50',
         'kode_satuan',
+        'satuan_besar',
+        'satuan_kecil',
         'kode_perusahaan',
         'kode_gudang',
         'kode_stok_minimun',
@@ -61,12 +67,19 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('merk', '')
+      this.setForm('isi', 1)
     },
     resetInput () {
       const columns = [
         'kode_rs',
         'kode_108',
+        'uraian_108',
+        'kode_50',
+        'uraian_50',
         'kode_satuan',
+        'satuan_besar',
+        'satuan_kecil',
         'qty',
         'harga',
         'sub_total'
@@ -74,6 +87,8 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('isi', 1)
+      this.setForm('merk', '')
     },
     setToday () {
       const date = new Date()
@@ -174,8 +189,18 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       //   return data.kode === maping[0].kode_satuan
       // })
       this.form.kode_rs = this.barangrs[0].kode
+      this.form.nama_barang = this.barangrs[0].nama
       this.form.kode_108 = this.barangrs[0].kode_108
+      this.form.uraian_108 = this.barangrs[0].uraian_108
+      this.form.kode_50 = this.barangrs[0].kode_50
+      this.form.uraian_50 = this.barangrs[0].uraian_50
       this.form.kode_satuan = this.barangrs[0].kode_satuan
+      // satuan_besar, isi, satuan_kecil
+      if (this.barangrs[0].satuan) {
+        this.form.satuan_besar = this.barangrs[0].satuan.nama
+        this.form.isi = this.barangrs[0].satuan.isi
+        this.form.satuan_kecil = this.barangrs[0].satuan.kecil
+      }
 
       const dataStok = this.stoks.filter(s => {
         return s.kode_rs === val
@@ -203,6 +228,14 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       console.log('minmax', minMax)
       console.log('form', this.form)
       // console.log('maping', maping)
+    },
+    // rekening 50
+    rekening50Selected(val) {
+      console.log('rekening 50', val)
+      const kode = this.rekening50s.filter(data => { return data.kode === val })
+      console.log('rekening 50 selected', kode)
+      this.setForm('kode_50', val)
+      this.setForm('uraian_50', kode[0].uraian)
     },
     // api related actions
     // ambil data kontrak pekerjaan
@@ -235,6 +268,20 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
           .then(resp => {
             console.log('maping barang', resp.data)
             this.mapingBarangs = resp.data
+            // console.log(resp.data)
+            resolve(resp)
+          })
+      })
+    },
+    // ambil rekening 50
+    getRekening50 () {
+      const params = { params: this.params }
+      return new Promise(resolve => {
+        // api.get('v1/mapingbarang/maping', params)
+        api.get('v1/rekening50/semua', params)
+          .then(resp => {
+            console.log('rekening 50', resp.data)
+            this.rekening50s = resp.data
             // console.log(resp.data)
             resolve(resp)
           })
