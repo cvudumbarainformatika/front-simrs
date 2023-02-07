@@ -365,9 +365,9 @@
           >
             <div v-if="row.transaksi_absen.length > 0 ">
               <div class="columns flex-center items-center">
-                <!-- <div v-if="getIjinRinci(num, row) > 0">
+                <div>
                   {{ getIjinRinci(num) }}
-                </div> -->
+                </div>
                 <div>{{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}</div>
                 <q-separator />
                 <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative':''">
@@ -549,26 +549,26 @@ function getIjin(row, fx) {
   return 0
 }
 
-// function getIjinRinci(num, row, fx) {
-//   // const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
-//   // const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
-//   // const user = row.user ? row.user : null
-//   console.log('cellDate', num)
-//   // console.log('libur', row.user)
-//   return 1
-//   // if (user) {
-//   //   const ada = user.libur.length
-//   //   if (ada > 0) {
-//   //     const libur = user.libur
-//   //     const trans = libur.filter(x => x.tanggal === cellDate)
+function getIjinRinci(num, row, fx) {
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
+  // const user = row.user ? row.user : null
+  console.log('cellDate', cellDate)
+  // console.log('libur', row.user)
+  return cellDate
+  // if (user) {
+  //   const ada = user.libur.length
+  //   if (ada > 0) {
+  //     const libur = user.libur
+  //     const trans = libur.filter(x => x.tanggal === cellDate)
 
-//   //     return trans.length
-//   //   }
-//   //   return 0
-//   // }
+  //     return trans.length
+  //   }
+  //   return 0
+  // }
 
-//   // return 0
-// }
+  // return 0
+}
 function getMasuk(row) {
   const ada = row.transaksi_absen.length
   if (ada > 0) {

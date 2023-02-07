@@ -119,7 +119,7 @@
           </div>
         </q-card>
       </div>
-      <div class="col-md-6 col-xs-12">
+      <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-teal text-white q-mb-md cursor-pointer model-two"
           @click="goTo('/admin/laborat')"
@@ -137,6 +137,29 @@
               <q-separator class="bg-white q-my-sm" />
               <div class="text-h5 text-weight-light">
                 Laboratorium system
+              </div>
+            </div>
+          </div>
+        </q-card>
+      </div>
+      <div class="col-md-3 col-xs-12">
+        <q-card
+          class="bg-accent text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('/antrian')"
+        >
+          <div class="q-pa-md">
+            <div class="column ">
+              <div class="flex items-center justify-between">
+                <div class="icon-b">
+                  <q-icon name="icon-eva-person-outline" />
+                </div>
+                <div class="text-h4 text-weight-light">
+                  ANTRIAN
+                </div>
+              </div>
+              <q-separator class="bg-white q-my-sm" />
+              <div class="text-h5 text-weight-light">
+                Antrian System
               </div>
             </div>
           </div>
