@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
+import { useAuthStore } from 'src/stores/auth'
 
 export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
   state: () => ({
@@ -15,6 +16,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     penanggungjawabs: [],
     filteredPengguna: [],
     pj: null,
+    pj2: null,
     user: null,
     displays: [],
     details: [],
@@ -60,6 +62,47 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       //       this.penggunaSelected(this.tempData.kode_pengguna)
       //     }
       //   })
+    },
+    setRuangan(val) {
+      console.log('set Ruangan atas')
+      this.setNomorPemakaian()
+      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      this.form.kode_ruang = val
+      const temp = this.penanggungjawabs.map(data => {
+        const apem = data.ruang.filter(rua => { return rua.kode_ruang === val })
+        if (apem.length) return apem[0]
+        else return false
+      }).filter(ada => { return ada !== false })
+      console.log('set Ruangan temp', temp[0])
+
+      this.form.kode_penanggungjawab = temp[0].kode_penanggungjawab
+      this.pj = temp[0].kode_penanggungjawab
+      this.pj2 = temp[0].penanggungjawab ? temp[0].penanggungjawab.jabatan : temp[0].pengguna.jabatan
+      this.form.kode_pengguna = temp[0].kode_pengguna
+      this.user = val
+
+      console.log('pengguna', temp[0].kode_pengguna)
+
+      const ruangan = this.penanggungjawabs.map(data => {
+        const apem = data.ruang.filter(rua => { return rua.kode_pengguna === this.form.kode_pengguna })
+        if (apem.length) return apem
+        else return false
+      }).filter(ada => { return ada !== false })
+
+      console.log('set ruangan', ruangan)
+
+      this.ruangans = ruangan[0].map(data => {
+        data.uraian = data.ruang.uraian
+        return data
+      })
+
+      console.log('set Ruangans', this.ruangans)
+      // this.ruangans = temp[0].map(ruru => {
+      //   ruru.uraian = ruru.ruang.uraian
+      //   return ruru
+      // })
+      console.log('set Ruangan', temp)
+      this.getItemsData()
     },
     penanggungjawabSelected(val) {
       this.setNomorPemakaian()
@@ -142,7 +185,11 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         return dat
       })
       this.penanggungjawabs = penanggungjawab
-      // console.log('data pj', penanggungjawab)
+
+      // const auth = useAuthStore()
+      // this.setRuangan(auth.kode_ruang)
+
+      console.log('data pj', penanggungjawab)
       // console.log('data keys', keys)
     },
 
@@ -235,6 +282,8 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
               this.loadingMaping = false
               // console.log('maping', resp)
               this.mapingbarang = resp.data
+              const auth = useAuthStore()
+              this.setRuangan(auth.kode_ruang)
               resolve(resp)
             }).catch(() => {
               this.loadingMaping = false
@@ -264,7 +313,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         api.get('v1/pengguna/pengguna-ruang')
           .then(resp => {
             this.loading = false
-            // console.log('pengguna', resp)
+            console.log('pengguna', resp)
             this.penggunas = resp.data
             resolve(resp)
           }).catch(() => {
