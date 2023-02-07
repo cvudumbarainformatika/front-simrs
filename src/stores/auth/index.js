@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', {
     foto: '',
     route: {},
     ruang: {},
+    kode_ruang: null,
     depo: {}
   }),
   getters: {
@@ -80,6 +81,7 @@ export const useAuthStore = defineStore('auth', {
       this.role = val.role[0].nama
       this.foto = val.foto
       this.ruang = val.ruang
+      this.kode_ruang = val.kode_ruang
       this.depo = val.depo
       if (apli.length === 1) {
         // const router = useRouter()
