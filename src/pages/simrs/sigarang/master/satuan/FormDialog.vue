@@ -2,8 +2,8 @@
   <q-dialog>
     <app-card
       class="my-card"
-      title="Form Beban"
-      desc="Input data Beban"
+      title="Form Satuan"
+      desc="Input data Satuan"
     >
       <template #content>
         <q-form
@@ -21,10 +21,33 @@
                 autofocus
               />
             </div>
-            <div class="col-md-10 col-xs-12">
+            <div class="col-md-4 col-xs-12">
               <app-input
                 v-model="store.form.nama"
                 label="Nama Satuan*"
+                outlined
+                autofocus
+              />
+            </div>
+            <div class="col-md-2 col-xs-12">
+              <app-input
+                v-model="store.form.isi"
+                label="Isi*"
+                type="number"
+                outlined
+                autofocus
+              />
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                isi dari satuan kecil ke satuan besar
+              </q-tooltip>
+            </div>
+            <div class="col-md-4 col-xs-12">
+              <app-input
+                v-model="store.form.kecil"
+                label="Nama Satuan Kecil*"
                 outlined
                 autofocus
               />

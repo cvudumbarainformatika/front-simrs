@@ -16,7 +16,7 @@ export const useMasterSatuanTable = defineStore('master_satuan_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id']
+    columnHide: ['id', 'created_at', 'updated_at']
   }),
   getters: {
     getterColumns (state) {

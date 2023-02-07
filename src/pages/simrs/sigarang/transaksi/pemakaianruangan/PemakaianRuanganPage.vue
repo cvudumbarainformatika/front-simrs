@@ -15,12 +15,40 @@
           <div class="col-3">
             Nomor Pemakaian
           </div>
-          <div class="q-ml-md">
+          <div v-if="store.loadingMaping">
+            <q-btn
+              :loading="true"
+              color="primary"
+              flat
+              dense
+            />
+          </div>
+          <div
+            v-if="!store.loadingMaping"
+            class="q-ml-md"
+          >
             {{ store.form.reff }}
           </div>
         </div>
         <div class="fit row items-center justify-start content-start q-mb-sm">
           <div class="col-3">
+            Penanggungajawab Ruangan
+          </div>
+          <div v-if="store.loadingMaping">
+            <q-btn
+              :loading="true"
+              color="primary"
+              flat
+              dense
+            />
+          </div>
+          <div
+            v-if="!store.loadingMaping"
+            class="q-ml-md"
+          >
+            {{ store.pj2 ? store.pj2 : '-' }}
+          </div>
+          <!-- <div class="col-3">
             Cari Penanggungajawab Ruangan
           </div>
           <div class="q-ml-md">
@@ -36,7 +64,7 @@
               @on-select="store.penanggungjawabSelected"
               @clear="cleared"
             />
-          </div>
+          </div> -->
         </div>
         <div class="fit row items-center justify-start content-start q-mb-sm">
           <div class="col-3">
@@ -46,6 +74,14 @@
             <div v-else>
               Ruangan
             </div>
+          </div>
+          <div v-if="store.loadingMaping">
+            <q-btn
+              :loading="true"
+              color="primary"
+              flat
+              dense
+            />
           </div>
           <div class="q-ml-md">
             <div v-if="(store.ruangans.length > 0)">
@@ -64,6 +100,7 @@
                 @clear="penggunaCleared"
               />
             </div>
+
             <div v-else>
               {{ store.filteredPengguna[0] ? store.filteredPengguna[0].jabatan : '' }}
             </div>
@@ -73,8 +110,16 @@
           <div class="col-3">
             Tanggal Pemakaian
           </div>
+          <div v-if="store.loadingMaping">
+            <q-btn
+              :loading="true"
+              color="primary"
+              flat
+              dense
+            />
+          </div>
           <div
-            v-if="store.form.tanggal"
+            v-if="store.form.tanggal && !store.loadingMaping"
             class="q-ml-md"
           >
             {{ dateFull(store.form.tanggal) }}
@@ -83,9 +128,16 @@
       </q-card-section>
       <q-separator />
       <q-card-section v-if="(!store.items.length && store.loading && store.pj!==null)">
-        <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
+        <div
+          class="flex column flex-center bg-loading-bg__table q-my-xs text-weight-bold"
+          style="height:300px"
+        >
           sedang menghitung data barang yang tersedia
+          <app-loading />
         </div>
+      </q-card-section>
+      <q-card-section v-if="!store.items.length && !store.loading">
+        <app-no-data />
       </q-card-section>
       <q-card-section v-if="store.items.length">
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs text-weight-bold">
@@ -206,19 +258,19 @@ import { dateFull } from 'src/modules/formatter'
 import { setTempData } from 'src/modules/storage'
 import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 import { ref } from 'vue'
-const refPj = ref(null)
+// const refPj = ref(null)
 const refUs = ref(null)
 const refInput = ref(null)
 const store = usePemakaianRuanganStore()
 store.getInitialData()
-const cleared = () => {
-  store.form = {}
-  store.pj = null
-  store.user = null
-  store.items = []
-  store.filteredPengguna = []
-  refPj.value.$refs.refAuto.resetValidation()
-}
+// const cleared = () => {
+//   store.form = {}
+//   store.pj = null
+//   store.user = null
+//   store.items = []
+//   store.filteredPengguna = []
+//   refPj.value.$refs.refAuto.resetValidation()
+// }
 const penggunaCleared = () => {
   delete store.form.kode_pengguna
   store.user = null

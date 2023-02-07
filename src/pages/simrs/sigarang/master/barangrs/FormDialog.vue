@@ -139,7 +139,7 @@
               <!-- Maping Depo -->
               <app-autocomplete-new
                 ref="refDepo"
-                v-model="store.form.kode_gudang"
+                v-model="store.form.kode_depo"
                 outlined
                 label="Depo"
                 autocomplete="nama"
