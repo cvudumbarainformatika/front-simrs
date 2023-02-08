@@ -13,6 +13,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       kode_satuan: null,
       kode_depo: null,
       kode_108: null,
+      kode_50: null,
       kode_satuan_kecil: null,
       ssh: 'non-ssh',
       tipe: 'kering'
@@ -42,6 +43,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
         'kode',
         'kode_satuan',
         'kode_depo',
+        'kode_50',
         'kode_108',
         'kode_satuan_kecil'
       ]
