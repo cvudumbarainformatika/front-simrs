@@ -24,7 +24,64 @@
           SubMenu Belum Ada
         </div>
         <div v-else>
-          {{ submenus }}
+          <!-- {{ submenus }} -->
+
+          <q-list
+            bordered
+            class="bg-white"
+            separator
+          >
+            <q-item
+              v-for="(sub, i) in submenus"
+              :key="i"
+              v-ripple
+              class="q-my-sm"
+              clickable
+              :active="link === i"
+              active-class="my-menu-link"
+              @click="link = i"
+            >
+              <q-item-section avatar>
+                <q-avatar
+                  color="secondary"
+                  text-color="white"
+                >
+                  {{ sub.nama.charAt(0) }}
+                </q-avatar>
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>{{ sub.nama }}</q-item-label>
+                <q-item-label
+                  class="f-10"
+                  lines="1"
+                >
+                  description
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <div>
+                  <q-btn
+                    flat
+                    size="sm"
+                    padding="xs"
+                    round
+                    icon="icon-mat-edit"
+                    color="grey"
+                    @click="emits('editSubmenu', (menuId))"
+                  />
+                  <q-btn
+                    flat
+                    size="sm"
+                    padding="xs"
+                    round
+                    icon="icon-mat-delete_sweep"
+                    color="negative"
+                  />
+                </div>
+              </q-item-section>
+            </q-item>
+          </q-list>
         </div>
       </div>
     </div>
@@ -32,7 +89,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   menu: {
@@ -45,7 +102,9 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['addSubmenu'])
+const link = ref(0)
+
+const emits = defineEmits(['addSubmenu', 'editSubmenu'])
 
 const submenus = computed(() => {
   let arr = []
@@ -84,5 +143,10 @@ const menuId = computed(() => {
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+
+.my-menu-link{
+  color: white;
+  background: $primary;
 }
 </style>
