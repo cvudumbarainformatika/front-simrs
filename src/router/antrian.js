@@ -5,7 +5,7 @@ const antrian =
     meta: { requireAuth: true },
     children: [
       // { path: '', redirect: '/pegawai/dashboard' },
-      { path: '', name: 'pegawai', redirect: '/antrian/dashboard' },
+      { path: '', name: 'antrian', redirect: '/antrian/dashboard' },
       {
         path: '/antrian/dashboard',
         name: 'antrian.dashboard',

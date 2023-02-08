@@ -27,7 +27,7 @@ export const useTableMenu = defineStore('table_menu', {
     async getData() {
       await api.get('/v1/menus').then(resp => {
         console.log('menus', resp)
-        this.items = resp.data
+        // this.items = resp.data
       })
     },
 

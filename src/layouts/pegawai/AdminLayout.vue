@@ -94,7 +94,7 @@ function toggleLeftDrawer () {
 }
 onMounted(() => {
   store.getUser()
-  // setting.getAllData()
+  setting.getAllData()
 })
 // function toggleRightDrawer() {
 //   rightDrawerOpen.value = !rightDrawerOpen.value
