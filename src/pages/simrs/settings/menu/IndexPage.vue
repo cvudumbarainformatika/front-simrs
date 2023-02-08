@@ -94,6 +94,7 @@
           :menu="link"
           :items="store.items"
           @add-submenu="(val) => store.addNewSub(val)"
+          @edit-submenu="val => cobaEditSubmenu(val)"
         />
       </div>
     </div>
@@ -187,6 +188,10 @@ function deleteData(id) {
   }).onDismiss(() => {
     console.log('Called on OK or Cancel')
   })
+}
+
+function cobaEditSubmenu(params) {
+  console.log(params)
 }
 
 </script>
