@@ -16,7 +16,10 @@ export const useAuthStore = defineStore('auth', {
     menus: [],
     role: '',
     foto: '',
-    route: {}
+    route: {},
+    ruang: {},
+    kode_ruang: null,
+    depo: {}
   }),
   getters: {
     isAuth (state) {
@@ -77,6 +80,9 @@ export const useAuthStore = defineStore('auth', {
       this.aplications = apli
       this.role = val.role[0].nama
       this.foto = val.foto
+      this.ruang = val.ruang
+      this.kode_ruang = val.kode_ruang
+      this.depo = val.depo
       if (apli.length === 1) {
         // const router = useRouter()
         this.menus = apli[0].menus

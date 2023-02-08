@@ -2,14 +2,17 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { uniqueId } from 'src/modules/utils'
+import { useAuthStore } from 'src/stores/auth'
 import { useTransaksiPermintaanTable } from './permintaan'
 
 export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan', {
   state: () => ({
     isOpen: true,
     loading: false,
+    auth: useAuthStore(),
     form: {
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      kode_ruang: useAuthStore().kode_ruang
     },
     nomor: null,
     nama: {
@@ -56,6 +59,31 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
 
     setSearch(val) {},
     pilihPenanggungjawab(val) {},
+    setPenggunaRuang(val) {
+      this.penggunaruangs = val.map(apem => {
+        apem.uraian = apem.ruang.uraian
+        return apem
+      })
+      // if (this.auth.role.id === 5) {}
+      this.form.kode_ruang = this.auth.kode_ruang
+      const ruang = this.penggunaruangs.filter(data => { return data.kode_ruang === this.auth.kode_ruang })
+      if (ruang.length) {
+        const peng = ruang[0].pengguna
+        const pj = ruang[0].penanggungjawab ? ruang[0].penanggungjawab : ruang[0].pengguna
+
+        this.setForm('kode_penanggungjawab', pj.kode)
+        this.setNama('penanggungjawab', pj.jabatan)
+        this.setForm('kode_pengguna', peng.kode)
+        this.setNama('pengguna', peng.jabatan)
+        this.setForm('tujuan', ruang[0].kode_ruang)
+        this.setParams('kode_ruangan', ruang[0].kode_ruang)
+        this.setNama('ruang', ruang[0].ruang.uraian)
+      } else {
+        this.setForm('tujuan', null)
+        this.setNama('ruang', 'ruang tidak ditemukan')
+      }
+      console.log('pengguna Ruang', this.penggunaruangs)
+    },
     // api related function
     // get data stok by barang
     getStokByBarang() {
@@ -95,11 +123,8 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
         api.get('v1/penggunaruang/pengguna-ruang').then((resp) => {
           this.loading = false
           if (resp.status === 200) {
-            this.penggunaruangs = resp.data.map(apem => {
-              apem.uraian = apem.ruang.uraian
-              return apem
-            })
-            console.log('pengguna Ruang', this.penggunaruangs)
+            this.setPenggunaRuang(resp.data)
+
             resolve(resp)
           }
         })
