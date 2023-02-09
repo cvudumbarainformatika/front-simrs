@@ -50,10 +50,10 @@
             {{ dateFull(row.tanggal_verif) }}
           </template>
           <template #col-pengguna>
-            <div>User</div>
+            <div>Ruangan</div>
           </template>
           <template #cell-pengguna="{row}">
-            {{ row.pengguna.jabatan }}
+            {{ row.ruang?row.ruang.uraian:'-' }}
           </template>
           <template #col-pj>
             <div>Nama Penerima</div>

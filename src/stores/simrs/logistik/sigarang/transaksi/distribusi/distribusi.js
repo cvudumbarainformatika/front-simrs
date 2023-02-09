@@ -81,7 +81,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tanggal', 'tanggal_distribusi', 'no_distribusi', 'no_permintaan', 'tanggal_verif', 'pengguna', 'pj', 'status', 'aksi']
+      this.columns = ['tanggal', 'tanggal_distribusi', 'no_distribusi', 'no_permintaan', 'tanggal_verif', 'pengguna', 'status', 'aksi']
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)
@@ -143,6 +143,10 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
             console.log('permintaan verified', resp.data)
             const dataTable = resp.data.data.data.map(apem => {
               const temp = apem
+              if (apem.details.length) {
+                apem.ruang = apem.details[0].ruang
+              }
+              console.log('details', apem)
               temp.disableSend = true
               return temp
             })
