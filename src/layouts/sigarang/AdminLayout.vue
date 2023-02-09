@@ -4,6 +4,7 @@
     :class="dark?'':'page-light'"
   >
     <AdmHeader
+      class="print-hide"
       :dark="dark"
       :mobile="mobile"
       :role="role"
@@ -13,11 +14,13 @@
     <LeftDrawer
       v-if="!mobile"
       v-model="leftDrawerOpen"
+      class="print-hide"
       :dark="dark"
       :menus="menus"
     />
     <q-drawer
       v-model="rightDrawerOpen"
+      class="print-hide"
       side="right"
       overlay
       behavior="desktop"

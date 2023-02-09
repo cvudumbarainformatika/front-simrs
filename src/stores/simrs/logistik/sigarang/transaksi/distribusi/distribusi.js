@@ -146,7 +146,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
               if (apem.details.length) {
                 apem.ruang = apem.details[0].ruang
               }
-              console.log('details', apem)
+              // console.log('details', apem)
               temp.disableSend = true
               return temp
             })
