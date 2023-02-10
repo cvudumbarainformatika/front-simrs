@@ -50,10 +50,10 @@
             {{ dateFull(row.tanggal_verif) }}
           </template>
           <template #col-pengguna>
-            <div>User</div>
+            <div>Ruangan</div>
           </template>
           <template #cell-pengguna="{row}">
-            {{ row.pengguna.jabatan }}
+            {{ row.ruang?row.ruang.uraian:'-' }}
           </template>
           <template #col-pj>
             <div>Nama Penerima</div>
@@ -172,34 +172,52 @@
             <q-card
               v-if="item.highlight"
             >
+              <div class="print">
+                <q-btn
+                  ref="refPrint"
+                  v-print="printObj"
+                  unelevated
+                  color="dark"
+                  round
+                  size="sm"
+                  icon="icon-mat-print"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print
+                  </q-tooltip>
+                </q-btn>
+              </div>
               <!-- style="width: 100%;" -->
-              <q-card-section>
-                <div class="fit row no-wrap justify-evenly items-center content-center">
-                  <div class="anak text-center">
+              <q-card-section id="printMe">
+                <div class="fit row no-wrap justify-evenly items-center content-center q-mt-lg">
+                  <div class="anak text-left">
                     Kode Barang
                   </div>
-                  <div class="anak text-center">
+                  <div class="anak text-left">
                     Nama Barang
                   </div>
-                  <div class="anak text-center">
+                  <!-- <div class="anak text-left">
                     Kode 108
+                  </div> -->
+                  <div class="anak text-left">
+                    Ruangan
                   </div>
-                  <div class="anak text-center">
-                    Uraian 108
-                  </div>
-                  <div class="anak text-center">
+                  <div class="anak text-right print-hide">
                     Stok Depo
                   </div>
-                  <div class="anak text-center">
+                  <div class="anak text-right">
                     Alokasi
                   </div>
-                  <div class="anak text-center">
+                  <div class="anak text-right">
                     Jumlah
                   </div>
-                  <div class="anak text-center">
+                  <div class="anak text-right">
                     Jumlah Disetujui
                   </div>
-                  <div class="anak text-center">
+                  <div class="anak text-right">
                     Jumlah Distribusi
                   </div>
                 </div>
@@ -209,31 +227,31 @@
                   :key="j"
                 >
                   <div class="fit row no-wrap justify-evenly items-center content-center">
-                    <div class="anak text-center">
+                    <div class="anak text-left">
                       {{ data.barangrs.kode }}
                     </div>
-                    <div class="anak text-center">
+                    <div class="anak text-left">
                       {{ data.barangrs.nama }}
                     </div>
-                    <div class="anak text-center">
+                    <!-- <div class="anak text-left">
                       {{ data.barangrs.mapingbarang.barang108.kode }}
+                    </div> -->
+                    <div class="anak text-left">
+                      {{ data.ruang.uraian }}
                     </div>
-                    <div class="anak text-center">
-                      {{ data.barangrs.mapingbarang.barang108.uraian }}
-                    </div>
-                    <div class="anak text-center">
+                    <div class="anak text-right print-hide">
                       {{ data.barangrs.stokDepo }}
                     </div>
-                    <div class="anak text-center">
+                    <div class="anak text-right">
                       {{ data.barangrs.alokasi }}
                     </div>
-                    <div class="anak text-center">
+                    <div class="anak text-right">
                       {{ data.jumlah }}
                     </div>
-                    <div class="anak text-center">
+                    <div class="anak text-right">
                       {{ data.jumlah_disetujui }}
                     </div>
-                    <div class="anak text-center">
+                    <div class="anak text-right">
                       <!-- <div v-if="store.items[itemIndex].status < 7 && data.barangrs.alokasi>0">
                         <q-input
                           v-model="data.jumlah_distribusi"
@@ -248,7 +266,7 @@
                         {{ data.jumlah_distribusi }}
                       </div>
                       <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
-                        '-'
+                        -
                       </div>
                       <!-- <div v-if="data.barangrs.alokasi<=0">
                         Tidak Ada Alokasi
@@ -354,6 +372,26 @@ const distribusikan = val => {
     store.saveForm()
   })
   // }
+}
+
+const printed = ref(false)
+const printObj = {
+  id: 'printMe',
+  popTitle: 'print Dsitribusi',
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback(vue) {
+    printed.value = true
+    console.log('wait...', vue)
+  },
+  openCallback (vue) {
+    console.log('opened', vue)
+  },
+  closeCallback (vue) {
+    printed.value = false
+    // changePeriode()
+    console.log('closePrint')
+  }
 }
 // let itemsIndex = null
 // let detailIndex = null
@@ -478,9 +516,15 @@ const label = (status, nama) => {
 
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/9);
+  width:calc(100vw/8);
 }
 .disp{
   width:calc(100vw/9);
+}
+.print{
+  position: absolute;
+    right: 30px;
+    top: 5px;
+    z-index: 10;
 }
 </style>

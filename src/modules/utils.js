@@ -11,11 +11,13 @@ const removeToken = () => {
 
 const notifErr = (resp) => {
   // const msg = resp ? resp.data.message : 'Ada Kesalahan, Harap ulangi!'
-  const status = resp ? resp.status : 500
+  const status = (resp === 'undefined' || resp === undefined) ? 500 : resp.status
+  const statusText = (resp === 'undefined' || resp === undefined) ? 500 : resp.statusText
+  const statusMsg = (resp === 'undefined' || resp === undefined) ? 500 : resp.data.message
 
   // unauthenticated
   console.log('utility', resp)
-  if (resp.status === 401 || resp.statusText === 'Unauthorized' || resp.data.message === 'Unauthenticated.') {
+  if (status === 401 || statusText === 'Unauthorized' || statusMsg === 'Unauthenticated.') {
     return removeToken()
   }
 
@@ -84,6 +86,17 @@ const notifErr = (resp) => {
     const msgs = resp.data.message
     Notify.create({
       message: msgs,
+      icon: 'icon-eva-message-circle-outline',
+      position: 'top-right',
+      color: 'negative',
+      actions: [
+        { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+      ]
+    })
+  } else if (status === 500) {
+    // const msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
+    Notify.create({
+      message: 'Ada Kesalahan Harap ulangi',
       icon: 'icon-eva-message-circle-outline',
       position: 'top-right',
       color: 'negative',

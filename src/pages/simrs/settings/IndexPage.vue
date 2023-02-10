@@ -13,8 +13,11 @@
                 icon="icon-mat-person"
               />
             </div>
-            <div class="text-h6">
-              PROGRAMMER
+            <div class="column">
+              <div class="text-h6">
+                SIMRS IT
+              </div>
+              <div>Halaman Ini Khusu SIMRS / IT</div>
             </div>
           </div>
         </div>
@@ -44,6 +47,14 @@
 </template>
 <script setup>
 import AppSettingCard from 'src/components/~global/AppSettingCard.vue'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+import { onMounted } from 'vue'
+
+const store = useSettingsAplikasi()
+
+onMounted(() => {
+  store.getData()
+})
 
 </script>
 

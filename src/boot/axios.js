@@ -30,6 +30,7 @@ const interceptResErrors = (err) => {
     // check for response code 123 and redirect to login
     // Will return err if something goes wrong
     console.log('1. catch', e)
+    // notifErr(e)
   }
   return Promise.reject(err)
 }

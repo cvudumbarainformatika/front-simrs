@@ -41,6 +41,11 @@
         <template #cell-ruang="{row}">
           <div>{{ row.ruang?row.ruang.uraian:'-' }}</div>
         </template>
+        <template #cell-kode_rs="{row}">
+          <div class="print-hide">
+            {{ row.kode_rs }}
+          </div>
+        </template>
         <template #col-gudang>
           <div>dari</div>
         </template>
@@ -54,7 +59,9 @@
           <div>Ruangan</div>
         </template>
         <template #col-kode_rs>
-          <div>kode rs</div>
+          <div class="print-hide">
+            kode rs
+          </div>
         </template>
         <template #col-barangrs>
           <div>Nama Barang</div>
