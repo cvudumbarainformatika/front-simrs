@@ -1,0 +1,3 @@
+<template>
+  tabel kontrak
+</template>

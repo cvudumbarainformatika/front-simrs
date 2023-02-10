@@ -166,11 +166,12 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     saveForm() {
       let lanjut = false
       this.permintaan.details.forEach(data => {
-        if (parseInt(data.jumlah_disetujui) <= 0 || data.jumlah_disetujui === null) {
-          console.log('disetujui cek 0', data.jumlah_disetujui)
-          notifErrVue('periksa kembali Jumlah disetujui')
-          lanjut = false
-        } else if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
+        // if (parseInt(data.jumlah_disetujui) <= 0 || data.jumlah_disetujui === null) {
+        //   console.log('disetujui cek 0', data.jumlah_disetujui)
+        //   notifErrVue('periksa kembali Jumlah disetujui')
+        //   lanjut = false
+        // } else
+        if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
           console.log('disetujui cek jumlah minta', data.jumlah_disetujui)
           notifErrVue('periksa kembali Jumlah disetujui')
           lanjut = false
