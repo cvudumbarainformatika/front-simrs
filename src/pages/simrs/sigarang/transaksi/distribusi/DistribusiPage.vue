@@ -192,92 +192,142 @@
               </div>
               <!-- style="width: 100%;" -->
               <q-card-section
-                id="printMe"
                 class="print-only"
               >
-                <div class="text-center text-weight-bold">
-                  TANDA TERIMA PENGAMBILAN BARANG
-                </div>
-                <div class="text-center text-weight-bold">
-                  BAHAN HABIS PAKAI
-                </div>
-                <div class="text-center text-weight-bold q-mb-lg">
-                  TAHUN {{ date.formatDate(item.tanggal, 'YYYY') }}
-                </div>
-                <div class="row text-left text-weight-bold">
-                  <div class="col-3">
-                    NAMA RUANGAN
+                <div id="printMe">
+                  <div class="text-center text-weight-bold">
+                    TANDA TERIMA PENGAMBILAN BARANG
                   </div>
-                  <div class="col-7">
-                    : {{ item.ruang.uraian }}
+                  <div class="text-center text-weight-bold">
+                    BAHAN HABIS PAKAI
                   </div>
-                </div>
-                <div class="row text-left text-weight-bold">
-                  <div class="col-3">
-                    TANGGAL
+                  <div class="text-center text-weight-bold q-mb-lg">
+                    TAHUN {{ date.formatDate(item.tanggal, 'YYYY') }}
                   </div>
-                  <div class="col-7">
-                    : {{ dateFullFormat(item.tanggal_distribusi) }}
+                  <div class="row text-left text-weight-bold">
+                    <div class="col-3">
+                      NAMA RUANGAN
+                    </div>
+                    <div class="col-7">
+                      : {{ item.ruang.uraian }}
+                    </div>
                   </div>
-                </div>
-                <div class="fit row no-wrap justify-evenly items-center content-center q-mt-lg">
-                  <div class="to-print text-weight-bold text-left">
-                    NO
+                  <div class="row text-left text-weight-bold">
+                    <div class="col-3">
+                      TANGGAL
+                    </div>
+                    <div class="col-7">
+                      : {{ dateFullFormat(item.tanggal_distribusi) }}
+                    </div>
                   </div>
-                  <div class="to-print text-weight-bold text-left">
-                    KODE BARANG
-                  </div>
-                  <div class="to-print text-weight-bold text-left">
-                    NAMA BARANG
-                  </div>
+                  <div class="fit row no-wrap justify-evenly items-center content-center q-col-gutter-sm q-mt-lg">
+                    <!-- <div class="to-print text-weight-bold text-left"> -->
+                    <div class="col-1 text-weight-bold text-left">
+                      NO
+                    </div>
+                    <!-- <div class="to-print text-weight-bold text-left"> -->
+                    <div class="col-2 text-weight-bold text-left">
+                      KODE BARANG
+                    </div>
+                    <!-- <div class="to-print text-weight-bold text-left"> -->
+                    <div class="col-4 text-weight-bold text-left">
+                      NAMA BARANG
+                    </div>
 
-                  <div class="to-print text-weight-bold text-left print-hide">
-                    SATUAN
-                  </div>
-                  <div class="to-print text-weight-bold text-right">
-                    JUMLAH MINTA
-                  </div>
-                  <div class="to-print text-weight-bold text-right">
-                    JUMLAH DIBERI
-                  </div>
-                  <div class="to-print text-weight-bold text-right">
-                    KETERANGAN
-                  </div>
-                </div>
-                <q-separator />
-                <div
-                  v-for="(data, j) in item.details"
-                  :key="j"
-                >
-                  <div class="fit row no-wrap justify-evenly items-center content-center">
-                    <div class="to-print text-left">
-                      {{ j+1 }}
+                    <!-- <div class="to-print text-weight-bold text-left"> -->
+                    <div class="col-1 text-weight-bold text-left">
+                      SATUAN
                     </div>
-                    <div class="to-print text-left print-hide">
-                      {{ data.kode_rs }}
+                    <!-- <div class="to-print text-weight-bold text-right"> -->
+                    <div class="col-1 text-weight-bold text-right">
+                      JUMLAH MINTA
                     </div>
-                    <div class="to-print text-left">
-                      {{ data.barangrs.nama }}
+                    <!-- <div class="to-print text-weight-bold text-right"> -->
+                    <div class="col-1 text-weight-bold text-right">
+                      JUMLAH DIBERI
                     </div>
-                    <div class="to-print text-left">
-                      {{ data.satuan?data.satuan.nama:'-' }}
-                    </div>
-                    <div class="to-print text-right">
-                      {{ data.jumlah }}
-                    </div>
-                    <div class="to-print text-right">
-                      <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 7:false">
-                        {{ data.jumlah_distribusi }}
-                      </div>
-                      <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
-                        -
-                      </div>
-                    </div>
-                    <div class="to-print text-right">
-                      <!-- {{ data.jumlah }} -->
+                    <!-- <div class="to-print text-weight-bold text-right"> -->
+                    <div class="col-2 text-weight-bold text-right">
+                      KETERANGAN
                     </div>
                   </div>
                   <q-separator />
+                  <div
+                    v-for="(data, j) in item.details"
+                    :key="j"
+                  >
+                    <div class="fit row no-wrap justify-evenly items-center content-center q-col-gutter-sm">
+                      <!-- <div class="to-print text-left"> -->
+                      <div class="col-1 text-left">
+                        {{ j+1 }}
+                      </div>
+                      <!-- <div class="to-print text-left"> -->
+                      <div class="col-2 text-left">
+                        {{ data.kode_rs }}
+                      </div>
+                      <!-- <div class="to-print text-left"> -->
+                      <div class="col-4 text-left">
+                        {{ data.barangrs.nama }}
+                      </div>
+                      <!-- <div class="to-print text-left"> -->
+                      <div class="col-1 text-left">
+                        {{ data.satuan?data.satuan.nama:'-' }}
+                      </div>
+                      <!-- <div class="to-print text-right"> -->
+                      <div class="col-1 text-right">
+                        {{ data.jumlah }}
+                      </div>
+                      <!-- <div class="to-print text-right"> -->
+                      <div class="col-1 text-right">
+                        <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 7:false">
+                          {{ data.jumlah_distribusi }}
+                        </div>
+                        <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
+                          -
+                        </div>
+                      </div>
+                      <!-- <div class="to-print text-right"> -->
+                      <div class="col-2 text-right">
+                      <!-- {{ data.jumlah }} -->
+                      </div>
+                    </div>
+                    <q-separator />
+                  </div>
+                  <div class="fit row no-wrap justify-evenly items-center content-center q-mt-md">
+                    <div class="to-print-tt text-center">
+                      <div class="q-mb-xl">
+                        Pejabat Pelaksanan Teknik Kegiatan
+                      </div>
+                      <div class="q-mt-lg text-weight-bold">
+                        YULIANA S.A.P
+                      </div>
+                      <div class="">
+                        NIP. 19740304 200801 2 005
+                      </div>
+                    </div>
+                    <div class="to-print-tt text-center">
+                      <div class="q-mb-xl">
+                        Petugas Barang
+                      </div>
+                      <div class="q-mt-lg text-weight-bold">
+                        SARWANI
+                      </div>
+                      <div class="">
+                        NIP. 19760311 200801 1 008
+                      </div>
+                    </div>
+                    <div class="to-print-tt text-center">
+                      <div class="q-mb-xl">
+                        Kepala Bagian / Ka.ru
+                      </div>
+                      <div class="q-mt-lg text-weight-bold">
+                        ...........................
+                      </div>
+                    <!-- <div class="">
+                      NIP. 19740304 200801 2 005
+                    </div> -->
+                    </div>
+                  </div>
                 </div>
               </q-card-section>
               <q-card-section>
@@ -609,6 +659,10 @@ const label = (status, nama) => {
 }
 .to-print{
   width:calc(100vw/7);
+  margin-left: 3px;
+}
+.to-print-tt{
+  width:calc(100vw/3);
 }
 .disp{
   width:calc(100vw/9);
