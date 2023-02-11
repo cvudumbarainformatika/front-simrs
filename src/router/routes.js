@@ -57,14 +57,14 @@ const routes = [
       { path: '', component: () => import('pages/auth/AuthPage.vue') }
     ]
   },
-  {
-    path: '/qrcode',
-    component: () => import('layouts/Auth/AuthLayout.vue'),
-    meta: { requireAuth: false },
-    children: [
-      { path: '', component: () => import('pages/simrs/pegawai/absensi/qrcode/IndexPage.vue') }
-    ]
-  },
+  // {
+  //   path: '/qrcode',
+  //   component: () => import('layouts/Auth/AuthLayout.vue'),
+  //   meta: { requireAuth: false },
+  //   children: [
+  //     { path: '', component: () => import('pages/simrs/pegawai/absensi/qrcode/IndexPage.vue') }
+  //   ]
+  // },
 
   // Always leave this as last one,
   // but you can also remove it
