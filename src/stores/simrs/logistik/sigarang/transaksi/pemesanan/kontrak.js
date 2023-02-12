@@ -34,6 +34,9 @@ export const useKontrakPemensananStore = defineStore('kontrak_pemesanan', {
       'userentry',
       'tglentry',
       'program',
+      'flag_hutang',
+      'kodeBagian',
+      'termin',
       'kegiatan'
     ]
   }),
