@@ -277,7 +277,7 @@ export const useSettingsStore = defineStore('setting_store', {
       mapingBarang.getDataSatuan()
 
       const pemesanan = useTransaksiPemensananForm()
-      pemesanan.getKontrakPekerjaan()
+      // pemesanan.getKontrakPekerjaan()
       pemesanan.getMapingBarang()
       pemesanan.getRekening50()
 

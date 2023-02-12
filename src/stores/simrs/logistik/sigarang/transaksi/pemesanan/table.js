@@ -56,7 +56,13 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
         'harga',
         'sub_total'
       ]
-      // console.log('val', val.details[0])
+      const terima = val.nomor.split('/')
+      const sp = terima[3].split('-')
+
+      store.terima.nomer_urut = terima[2]
+      store.terima.bidang = sp[1]
+      store.terima.bulan = sp[5]
+      console.log('val', terima)
 
       columns.forEach(data => {
         store.form[data] = val[data]
@@ -64,7 +70,7 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
       })
       // store.form.kode_rs = val.detals[0].kode_rs
       // store.form.kode_108 = val.detals[0].kode_108
-      store.kontrakSelected(store.form.kontrak)
+      store.kontrakSelected(val.details_kontrak)
       // console.log('form', store.form)
     },
     setOder (payload) {

@@ -1,27 +1,42 @@
 import { defineStore } from 'pinia'
-import { notifErrVue, notifSuccess, uniqueId } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { api } from 'boot/axios'
 // import { useTransaksiPemesananTable } from './table'
-import { dateFullFormat, olahUang } from 'src/modules/formatter'
+import { dateFullFormat } from 'src/modules/formatter'
 import { routerInstance } from 'src/boot/router'
-import { useMasterMapingBarangForm } from '../../master/mapingbarang/form'
+// import { useMasterMapingBarangForm } from '../../master/mapingbarang/form'
+import { date } from 'quasar'
 
 export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form', {
   state: () => ({
     isOpen: false,
+    kontrakOpen: false,
     nama: 'PEMESANAN',
     form: {
     },
+    terima: {
+      index: '000.3.2/02.0',
+      bidang: '',
+      nomer_urut: '',
+      jenis_surat_per_bidang: 'SP-',
+      nomer_skpd: '1.02.2.14.0.00.03.0301',
+      bulan: 'I',
+      inputBulan: date.formatDate(Date.now(), 'MM'),
+      tahun: date.formatDate(Date.now(), 'YYYY')
+    },
     display: {},
     loadingKontrak: false,
+    mapingLoading: false,
     kontrakPekerjaans: [],
     mapingBarangs: [],
     barangrs: [],
+    barangrses: [],
     barang108: [],
     rekening50s: [],
     satuan: [],
     params: {
       q: '',
+      per_page: 11,
       order_by: 'id',
       sort: 'desc'
     },
@@ -43,8 +58,18 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.barang108 = []
       this.satuan = []
       this.tanggalTampil = null
+      this.terima = {
+        index: '000.3.2/02.0',
+        nomer_urut: '01',
+        bidang: '',
+        jenis_surat_per_bidang: 'SP-',
+        nomer_skpd: '1.02.2.14.0.00.03.0301',
+        bulan: 'I',
+        inputBulan: date.formatDate(Date.now(), 'MM'),
+        tahun: date.formatDate(Date.now(), 'YYYY')
+      }
       const columns = [
-        'tanggal',
+
         'reff',
         'nomor',
         'kontrak',
@@ -69,6 +94,8 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       }
       this.setForm('merk', '')
       this.setForm('isi', 1)
+      this.setToday()
+      this.setNomorPemesanan()
     },
     resetInput () {
       const columns = [
@@ -90,18 +117,66 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.setForm('isi', 1)
       this.setForm('merk', '')
     },
+    setBulan(apem) {
+      const val = parseInt(apem)
+      // console.log('val bulan', typeof val === 'number', val, val === 2)
+      if (val === 1) {
+        this.terima.bulan = 'I'
+      } else if (val === 2) {
+        this.terima.bulan = 'II'
+      } else if (val === 3) {
+        this.terima.bulan = 'III'
+      } else if (val === 4) {
+        this.terima.bulan = 'IV'
+      } else if (val === 5) {
+        this.terima.bulan = 'V'
+      } else if (val === 6) {
+        this.terima.bulan = 'VI'
+      } else if (val === 7) {
+        this.terima.bulan = 'VII'
+      } else if (val === 8) {
+        this.terima.bulan = 'VIII'
+      } else if (val === 9) {
+        this.terima.bulan = 'IX'
+      } else if (val === 10) {
+        this.terima.bulan = 'X'
+      } else if (val === 11) {
+        this.terima.bulan = 'XI'
+      } else if (val === 12) {
+        this.terima.bulan = 'XII'
+      } else {
+        this.terima.bulan = apem === '' || val > 12 ? 'I' : apem
+      }
+    },
+    bidang() {
+      this.terima.jenis_surat_per_bidang = 'SP-' + this.terima.bidang
+      this.setNomorPemesanan()
+    },
+    bulan(val) {
+      this.setBulan(val)
+      this.setNomorPemesanan()
+    },
+    setNomorPemesanan() {
+      this.setBulan(this.terima.inputBulan)
+      // Index/nomer urut/jenis surat per bidang/nomer skpd/bulan/tahun
+      this.form.nomor = this.terima.index + '/' + this.terima.nomer_urut + '/' + this.terima.jenis_surat_per_bidang + '/' + this.terima.nomer_skpd + '/' + this.terima.bulan + '/' + this.terima.tahun
+    },
     setToday () {
-      const date = new Date()
-      const year = date.getFullYear()
-      const month = ('0' + (date.getMonth() + 1)).slice(-2)
-      const day = ('0' + date.getDate()).slice(-2)
-      const formatDb = year + '-' + month + '-' + day
+      // const date = new Date()
+      // const year = date.getFullYear()
+      // const month = ('0' + (date.getMonth() + 1)).slice(-2)
+      // const day = ('0' + date.getDate()).slice(-2)
+      // const formatDb = year + '-' + month + '-' + day
       // const formatTp = day + '/' + month + '/' + year
-      this.form.tanggal = formatDb
-      this.tanggalTampil = dateFullFormat(formatDb)
+      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD')
+      this.tanggalTampil = dateFullFormat(this.form.tanggal)
+      console.log('set tanggal', this.form.tanggal)
     },
     setForm (nama, val) {
       this.form[nama] = val
+    },
+    setKontrak() {
+      this.kontrakOpen = !this.kontrakOpen
     },
     setOpen () {
       this.setToday()
@@ -124,20 +199,20 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       }
       if (this.stok.maxBeli) {
         if (this.stok.maxBeli > 0) {
-          if (parseInt(this.form.qty) > this.stok.maxBeli) {
+          if (parseFloat(this.form.qty) > this.stok.maxBeli) {
             notifErrVue('Jumlah Pembelian tidak boleh melebihi jumlah maksimal pembelian')
             this.form.qty = this.stok.maxBeli
           }
         }
       }
-      this.form.sub_total = (this.form.harga ? olahUang(this.form.harga) : 0) * (this.form.qty ? this.form.qty : 0)
+      this.form.sub_total = (this.form.harga ? parseFloat(this.form.harga) : 0) * (this.form.qty ? this.form.qty : 0)
       this.setToday()
     },
     newData (val) {
       // this.resetFORM()
       this.edited = false
       this.isOpen = true
-      if (!this.form.nomor) { this.form.nomor = 'PSN-' + uniqueId() }
+      // if (!this.form.nomor) { this.form.nomor = 'PSN-' + uniqueId() }
       if (!this.form.reff) { this.form.reff = routerInstance.currentRoute.value.params.slug }
       // console.log('new data', val)
     },
@@ -155,28 +230,30 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     },
     kontrakSelected (val) {
       // console.log('kontrak', !this.kontrakPekerjaans.length)
-      if (!val || !this.kontrakPekerjaans.length) return
-      const result = this.kontrakPekerjaans.filter(data => {
-        return data.nokontrakx === val
-      })
-      // console.log('kontrak val', val)
+
+      console.log('kontrak val', val)
+      this.form.kode_perusahaan = val.kodeperusahaan
+      this.namaPerusahaan = val.namaperusahaan
+      this.form.kontrak = val.nokontrakx
+      this.kontrakOpen = true
+      // if (!val || !this.kontrakPekerjaans.length) return
+      // const result = this.kontrakPekerjaans.filter(data => {
+      //   return data.nokontrakx === val
+      // })
       // console.log('kontrak all', this.kontrakPekerjaans)
       // console.log('kontrak selected', result[0])
-      this.form.kode_perusahaan = result[0].kodeperusahaan
-      this.namaPerusahaan = result[0].namaperusahaan
-      this.form.kontrak = val
       // this.form.nokontrak = val
-      this.setToday()
+      // this.setToday()
       // console.log('kotrak', val)
       // console.log('result', result)
     },
     barangSelected (val) {
+      const barang = this.mapingBarangs
       this.newData()
-      const mappingBarang = useMasterMapingBarangForm()
       // console.log('barang rs', mappingBarang.barangrses)
       // console.log('barang 108', mappingBarang.barang108s)
       // console.log('satuan', mappingBarang.satuans)
-      this.barangrs = mappingBarang.barangrses.filter(data => {
+      this.barangrs = barang.filter(data => {
         return data.kode === val
       })
       // const maping = this.mapingBarangs.filter(data => {
@@ -261,16 +338,19 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     },
     // ambil mapping barang
     getMapingBarang () {
+      this.mapingLoading = true
       const params = { params: this.params }
       return new Promise(resolve => {
         // api.get('v1/mapingbarang/maping', params)
-        api.get('v1/barangrs/barangrs', params)
+        api.get('v1/barangrs/index-pemesanan', params)
           .then(resp => {
+            this.mapingLoading = false
             console.log('maping barang', resp.data)
-            this.mapingBarangs = resp.data
+            this.mapingBarangs = resp.data.data
             // console.log(resp.data)
             resolve(resp)
           })
+          .catch(() => { this.mapingLoading = false })
       })
     },
     // ambil rekening 50

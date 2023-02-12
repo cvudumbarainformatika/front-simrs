@@ -328,6 +328,11 @@
             </slot>
           </td>
           <td class="text-right">
+            <slot
+              name="left-acttion"
+              class="q-ml-md"
+              :row="item"
+            />
             <div v-if="defaultBtn">
               <q-btn
                 v-if="adaEdit"
