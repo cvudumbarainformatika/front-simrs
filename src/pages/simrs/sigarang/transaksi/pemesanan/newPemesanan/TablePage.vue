@@ -24,6 +24,7 @@
             :loading="table.loading"
             :to-search="table.params.q"
             :add-input="store.isOpen"
+            wrap-cells
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"

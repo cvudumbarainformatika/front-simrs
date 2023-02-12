@@ -14,6 +14,7 @@
             :sort="table.params.sort"
             :loading="table.loading"
             :to-search="table.params.q"
+            :wrap-cells="true"
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"

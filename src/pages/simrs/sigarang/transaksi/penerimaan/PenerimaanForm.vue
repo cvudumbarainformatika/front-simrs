@@ -6,6 +6,23 @@
     >
       <template #content>
         <div class="row q-col-gutter-md q-mb-sm">
+          <div class="col-md-12 col-xs-12">
+            <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bold">
+              <div class="col-md-2 col-xs-12">
+                Nomor Penerimaan
+              </div>
+              <div class="col-md-9 col-xs-12 text-white">
+                <app-input
+                  v-model="store.form.no_penerimaan"
+                  label="Nomor Penerimaan"
+                  label-color="teal"
+                  outlined
+                  bg-color="red-2"
+                  dense
+                />
+              </div>
+            </div>
+          </div>
           <div class="col-md-6 col-xs-12">
             <div class="row q-col-gutter-md q-mb-sm">
               <div class="col-md-4 col-xs-12">
@@ -68,15 +85,19 @@
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-md-4 col-xs-12">
-                Nomor Penerimaan
+                Status penerimaan
               </div>
               <div class="col-md-6 col-xs-12">
-                <app-input
-                  v-model="store.form.no_penerimaan"
-                  readonly
-                  label="Nomor Penerimaan"
+                <app-autocomplete-new
+                  v-model="store.form.status_pembelian"
+                  :valid="statusPembelian"
                   outlined
-                  dense
+                  label="Status Penerimaan*"
+                  autocomplete="nama"
+                  option-value="id"
+                  :loading="store.loading"
+                  option-label="nama"
+                  :source="store.statuses"
                 />
               </div>
             </div>
@@ -85,6 +106,15 @@
                 Nomor Pemesanan
               </div>
               <div class="col-md-6 col-xs-12">
+                <!-- <div v-if="store.form.status_pembelian==='mutasi'">
+                  <app-input
+                    v-model="store.form.nomor"
+                    label="Nomor Penerimaan"
+                    outlined
+                    dense
+                  />
+                </div>
+                <div v-if="store.form.status_pembelian!=='mutasi'"> -->
                 <app-autocomplete-new
                   :model="store.form.nomor"
                   :valid="pemesanan"
@@ -99,6 +129,7 @@
                   @on-select="store.pemesananSelected"
                   @clear="clearPemesanan"
                 />
+                <!-- </div> -->
               </div>
             </div>
 
@@ -114,25 +145,6 @@
                   :valid="pengirim"
                   label="Nama Pengirim*"
                   outlined
-                />
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div class="col-md-4 col-xs-12">
-                Status penerimaan
-              </div>
-              <div class="col-md-6 col-xs-12">
-                <app-autocomplete-new
-                  v-model="store.form.status_pembelian"
-                  :valid="statusPembelian"
-                  outlined
-                  label="Status Penerimaan*"
-                  autocomplete="nama"
-                  option-value="id"
-                  :loading="store.loading"
-                  option-label="nama"
-                  :source="store.statuses"
                 />
               </div>
             </div>
