@@ -598,7 +598,11 @@ const updateProxy = () => {
   console.log('date', store.form.tanggal)
   // refDate.value.setToday()
   proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
-  store.setForm('tanggal', proxyDate.value)
+  if (!store.form.tanggal) {
+    store.setForm('tanggal', proxyDate.value)
+    store.form.tanggal = proxyDate.value
+  }
+  console.log('date 2', store.form.tanggal)
   store.tanggalTampil = dateFullFormat(proxyDate.value)
 }
 
@@ -650,6 +654,7 @@ const onFisnish = () => {
     store.saveForm().then(() => {
       table.setParam('reff', slug)
       console.log('onFinish ', slug)
+      store.tglManual = false
       table.resetData()
       store.resetFORM()
       store.setForm('reff', slug)

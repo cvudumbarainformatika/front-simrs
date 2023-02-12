@@ -12,6 +12,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     isOpen: false,
     kontrakOpen: false,
     nama: 'PEMESANAN',
+    tglManual: false,
     form: {
     },
     terima: {
@@ -168,7 +169,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       // const day = ('0' + date.getDate()).slice(-2)
       // const formatDb = year + '-' + month + '-' + day
       // const formatTp = day + '/' + month + '/' + year
-      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD')
+      this.form.tanggal = this.tglManual ? this.form.tanggal : date.formatDate(Date.now(), 'YYYY-MM-DD')
       this.tanggalTampil = dateFullFormat(this.form.tanggal)
       console.log('set tanggal', this.form.tanggal)
     },
@@ -187,7 +188,8 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.isOpen = false
     },
     setTanggal(val) {
-      // console.log(val)
+      console.log('store set tanggal', val)
+      this.form.tanggal = val
       this.tanggalTampil = dateFullFormat(this.form.tanggal)
     },
     updateHarga () {
@@ -206,7 +208,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         }
       }
       this.form.sub_total = (this.form.harga ? parseFloat(this.form.harga) : 0) * (this.form.qty ? this.form.qty : 0)
-      this.setToday()
+      // this.setToday()
     },
     newData (val) {
       // this.resetFORM()

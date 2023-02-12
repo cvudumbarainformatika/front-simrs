@@ -172,7 +172,7 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
       const params = { id: payload }
       return new Promise((resolve, reject) => {
         api
-          .post('v1/transaksi/pemesanan/destroy', params)
+          .post('v1/transaksi/pemesanan/delete-details', params)
           .then((resp) => {
             // console.log(resp)
             notifSuccess(resp)
