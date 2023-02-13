@@ -181,11 +181,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useSettingsAplikasiStore } from 'src/stores/simrs/settings/index.js'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings/index.js'
 import { onMounted } from 'vue'
 
 const router = useRouter()
-const store = useSettingsAplikasiStore()
+const store = useSettingsAplikasi()
 
 onMounted(() => {
   console.log('mounted sso')

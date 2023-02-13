@@ -50,10 +50,10 @@
 </template>
 <script setup>
 import AppSettingCard from 'src/components/~global/AppSettingCard.vue'
-import { useSettingsAplikasiStore } from 'src/stores/simrs/settings'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { onMounted } from 'vue'
 
-const store = useSettingsAplikasiStore()
+const store = useSettingsAplikasi()
 
 onMounted(() => {
   store.getData()
