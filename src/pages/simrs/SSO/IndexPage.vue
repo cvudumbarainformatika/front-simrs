@@ -1,6 +1,16 @@
 <template>
   <q-page class="bg-grey-3 flex column flex-center desktop-padding bg-img ">
-    <div class="row q-col-gutter-md">
+    <div
+      v-if="store.loading"
+      class="column flex-center items-center"
+      style="min-height:500px"
+    >
+      <app-loading />
+    </div>
+    <div
+      v-else
+      class="row q-col-gutter-md"
+    >
       <div class="col-md-3 col-xs-12">
         <q-card
           v-ripple
@@ -171,8 +181,16 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useSettingsAplikasiStore } from 'src/stores/simrs/settings/index.js'
+import { onMounted } from 'vue'
 
 const router = useRouter()
+const store = useSettingsAplikasiStore()
+
+onMounted(() => {
+  console.log('mounted sso')
+  store.getData()
+})
 
 function goTo(url) {
   router.replace({ path: url })
