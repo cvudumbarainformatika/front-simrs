@@ -12,7 +12,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     loading: false,
     form: {
       nama: 'PENERIMAAN',
-      no_penerimaan: null,
+      no_penerimaan: '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY'),
       nomor: null,
       status_pembelian: '',
       total: 0
@@ -44,7 +44,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     resetForm () {
       this.form = {
         nama: 'PENERIMAAN',
-        no_penerimaan: null,
+        no_penerimaan: '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY'),
         pemesanan: null,
         status_pembelian: '',
         total: 0
@@ -61,9 +61,9 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       delete this.form[key]
     },
     setNomorPenerimaan () {
-      const tgl = date.formatDate(Date.now(), '/DD/MM/YYYY')
-      const randomness = Math.random().toString(36).substring(2, 7).toUpperCase()
-      this.form.no_penerimaan = randomness + tgl
+      // const tgl = date.formatDate(Date.now(), '/DD/MM/YYYY')
+      // const randomness = Math.random().toString(36).substring(2, 7).toUpperCase()
+      this.form.no_penerimaan = '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY')
     },
     setToday () {
       const date = new Date()

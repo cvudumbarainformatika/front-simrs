@@ -218,7 +218,7 @@
                   </div>
                   <div class="row q-mb-sm">
                     <div class="col col-5">
-                      Nomor Pemesanan
+                      Nomor Pemesananh
                     </div>
                     <div class="col text-right">
                       {{ store.form.nomor }}

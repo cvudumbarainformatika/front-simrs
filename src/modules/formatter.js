@@ -41,6 +41,16 @@ const formatRp = (value) => {
   }
 }
 
+const formatRpDouble = (value, dg) => {
+  if (value !== null) {
+    return 'Rp. ' + Number(value)
+      .toFixed(dg)
+      .replace('.', ',')
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+      // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
+  }
+}
+
 const dateFullFormat = (val) => {
   return date.formatDate(val, 'DD MMMM YYYY')
 }
@@ -98,6 +108,7 @@ export {
   dateBOD,
   dateUnix,
   formatRp,
+  formatRpDouble,
   olahUang,
   dateFullFormat,
   titleCase,

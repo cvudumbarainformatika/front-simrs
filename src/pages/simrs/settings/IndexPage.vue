@@ -21,10 +21,11 @@
                 PROGRAMMER
               </div>
             </div>
-          </div>
-          <div class="col text-right">
-            <div class="text-h6">
-              SETTINGS APLIKASI
+            <div class="column">
+              <div class="text-h6">
+                SIMRS IT
+              </div>
+              <div>Halaman Ini Khusu SIMRS / IT</div>
             </div>
             <div>SISTEM INFORMASI RUMAH SAKIT </div>
           </div>
@@ -52,7 +53,7 @@ import AppSettingCard from 'src/components/~global/AppSettingCard.vue'
 import { useSettingsAplikasiStore } from 'src/stores/simrs/settings'
 import { onMounted } from 'vue'
 
-const store = useSettingsAplikasiStore()
+const store = useSettingsAplikasiStore() 
 
 onMounted(() => {
   store.getData()

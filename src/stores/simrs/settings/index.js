@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+// import { notifSuccess } from 'src/modules/utils'
 
-export const useSettingsAplikasiStore = defineStore('settings_aplikasi', {
+export const useSettingsAplikasi = defineStore('settings_aplikasi', {
   state: () => ({
-    aplikasi: [],
+    items: [],
     loading: false
   }),
+  // getters: {
+  //   doubleCount: (state) => state.counter * 2
+  // },
   actions: {
     async getData() {
       this.loading = true

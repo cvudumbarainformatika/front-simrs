@@ -1,5 +1,23 @@
 <template>
   <div class="q-mb-xl">
+    <div class="print">
+      <q-btn
+        ref="refPrint"
+        unelevated
+        color="dark"
+        round
+        size="sm"
+        icon="icon-mat-print"
+        @click="print"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Print verifikasi
+        </q-tooltip>
+      </q-btn>
+    </div>
     <app-card
       title="Verifikasi Permintaan"
       desc="Form Verifikasi Permintaan Ruangan"
@@ -123,6 +141,9 @@ const store = useVerifPermintaanRuangan()
 store.getDepo()
 store.getPermintaan()
 
+const print = () => {
+  window.print()
+}
 const setTanggal = val => {
   store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
   store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
@@ -140,3 +161,11 @@ const clearPermintaan = () => {
   store.permintaan = {}
 }
 </script>
+<style scoped>
+.print{
+  position: absolute;
+    right: 30px;
+    top: 24px;
+    z-index: 10;
+}
+</style>

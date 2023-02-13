@@ -115,25 +115,6 @@
                 option-label="uraian"
                 :source="store.barang108s"
               />
-              <!-- <div class="row items-center">
-                  style="width:80%"
-                <q-btn
-                  class="q-ml-sm"
-                  unelevated
-                  round
-                  color="primary"
-                  size="sm"
-                  icon="icon-mat-add"
-                  @click="form108.setOpen()"
-                >
-                  <q-tooltip
-                    class="primary"
-                    :offset="[10, 10]"
-                  >
-                    Tambah data 108
-                  </q-tooltip>
-                </q-btn>
-              </div> -->
             </div>
             <div class="col-md-6 col-xs-12">
               <!-- Maping Depo -->
@@ -146,6 +127,21 @@
                 option-value="kode"
                 option-label="nama"
                 :source="store.depos"
+              />
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mt-sm">
+            <div class="col-md-12 col-xs-12">
+              <!-- Maping rekening 50 -->
+              <app-autocomplete-new
+                ref="ref50"
+                v-model="store.form.kode_50"
+                outlined
+                label="Uraian 50"
+                autocomplete="uraian"
+                option-value="kode"
+                option-label="uraian"
+                :source="pemesanan.rekening50s"
               />
             </div>
           </div>
@@ -173,9 +169,11 @@
 import { Dialog } from 'quasar'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
+import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
 import { ref } from 'vue'
 const store = useMasterBarangRSForm()
 const mapingbarang = useMasterMapingBarangForm()
+const pemesanan = useTransaksiPemensananForm()
 // const form108 = useMasterBarang108Form()
 const formReff = ref(null)
 const refNama = ref(null)
@@ -184,6 +182,21 @@ const ref108 = ref(null)
 const refDepo = ref(null)
 const onSubmit = () => {
   // let nama=false
+// isi uraian 108
+  const ur108 = store.barang108s.filter(data => {
+    return data.kode === store.form.kode_108
+  })
+  if (ur108.length) {
+    store.setForm('uraian_108', ur108[0].uraian)
+  }
+  // isi uraian 50
+  const ur50 = pemesanan.rekening50s.filter(data => {
+    return data.kode === store.form.kode_50
+  })
+  if (ur50.length) {
+    store.setForm('uraian_50', ur50[0].uraian)
+  }
+
   const ada = mapingbarang.barangrses.filter(val => { return val.kode === store.form.kode })
   if (ada.length && !store.edited) {
     Dialog.create({

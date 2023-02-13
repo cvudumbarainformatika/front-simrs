@@ -14,6 +14,7 @@
             :sort="table.params.sort"
             :loading="table.loading"
             :to-search="table.params.q"
+            :wrap-cells="true"
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"
@@ -38,11 +39,14 @@
             <template #col-tipe>
               <div>Tipe</div>
             </template>
+            <template #col-uraian_50>
+              <div>Uraian 50</div>
+            </template>
             <template #col-satuankecil>
               <div>Satuan Kecil</div>
             </template>
             <template #col-barang108>
-              <div>Nama Barang 108</div>
+              <div>Uraian 108</div>
             </template>
             <template #col-satuan>
               <div>Satuan</div>
@@ -66,7 +70,8 @@
               <div>{{ row.tipe.toUpperCase() }}</div>
             </template>
             <template #cell-depo="{row}">
-              <div>{{ row.mapingdepo?row.mapingdepo.gudang.nama:'-' }}</div>
+              <div>{{ row.depo?row.depo.nama:'-' }}</div>
+              <!-- <div>{{ row.mapingdepo?(row.mapingdepo.depo?row.mapingdepo.depo.nama:'-'):'-' }}</div> -->
             </template>
           </app-table>
           <!--
