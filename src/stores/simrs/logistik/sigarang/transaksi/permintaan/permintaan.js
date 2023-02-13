@@ -203,20 +203,23 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       return new Promise(resolve => {
         api.get('v1/stok/all-current')
           .then(resp => {
-            this.loadingHasStok = false
-            // console.log('stok', resp.data)
+            console.log('stok ada', Object.getPrototypeOf(resp.data).constructor.name)
             this.stoks = resp.data
-            this.barangHasStok = []
-            const keys = Object.keys(this.stoks)
-            keys.forEach(key => {
-              const barang = resp.data[key]
-              barang.nama = barang.barang.nama
+            const kuncis = Object.keys(this.stoks)
+
+            console.log('stok ada', this.stoks)
+
+            kuncis.forEach(key => {
+              const barang = this.stoks[key]
+              barang.nama = barang.barang ? barang.barang.nama : 'nama barang tidak ditemukan'
               barang.kode = barang.kode_rs
-              barang.barang108 = barang.barang.barang108
-              barang.satuan = barang.barang.satuan
+              barang.barang108 = barang.barang ? barang.barang.barang108 : 'kode 108 tidak ditemukan'
+              barang.satuan = barang.barang ? barang.barang.satuan : 'satuan tidak ada'
               this.barangHasStok.push(barang)
+              console.log('barang aja', key)
             })
-            console.log('barang has stok', this.barangHasStok)
+
+            this.loadingHasStok = false
             resolve(resp)
           })
           .catch(() => {
