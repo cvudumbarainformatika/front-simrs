@@ -143,6 +143,24 @@
             <template #col-no_permintaan>
               Nomor Permintaan
             </template>
+            <template #left-action="{row}">
+              <q-btn
+                v-if="row.nama==='PEMESANAN' && row.status===1"
+                color="primary"
+                round
+                icon="icon-mat-exit_to_app"
+                flat
+                size="sm"
+                @click="goTo(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Buka link
+                </q-tooltip>
+              </q-btn>
+            </template>
           </app-table-view>
           <!--
             row-image="image"
@@ -160,8 +178,14 @@ import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
+import { routerInstance } from 'src/boot/router'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
+const goTo = val => {
+  const Slug = val.reff
+  routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: Slug } })
+  console.log(val)
+}
 const color = val => {
   switch (val) {
     case 1:

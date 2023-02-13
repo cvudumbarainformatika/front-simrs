@@ -60,8 +60,8 @@
             <template #cell-barang108="{row}">
               <div>{{ row.barang108?row.barang108.uraian:'-' }}</div>
             </template>
-            <template #cell-satuanKecil="{row}">
-              <div>{{ row.satuanKecil?row.satuanKecil.nama:'-' }}</div>
+            <template #cell-satuankecil="{row}">
+              <div>{{ row.satuankecil?row.satuankecil.nama:'-' }}</div>
             </template>
             <template #cell-ssh="{row}">
               <div>{{ row.ssh.toUpperCase() }}</div>
