@@ -29,9 +29,9 @@
         @mouseenter="hover(menu,i)"
       >
         <!-- @mouseleave="leave(menu,i)" -->
+        <!-- :to="`/${menu.link}`" -->
         <q-item
           ref="refItem"
-          :to="`/${menu.link}`"
           replace
           class="sidebar flex flex-center item item-link"
           :active-class="dark? 'active-dark' : 'active'"
@@ -250,6 +250,7 @@ console.log('router', props.dark)
 .sidebar {
   width: calc(100% - 10px);
   height: 60px;
+  color: $grey-5;
 }
 .submenu {
   width: calc(100% - 10px);
@@ -270,10 +271,24 @@ a.active {
   background-color: $grey-4;
   border-left: 3px solid $primary;
 }
+.active {
+  margin-left: 10px;
+  border-radius: 10px 0px 0px 10px;
+  color: $primary;
+  background-color: $grey-4;
+  border-left: 3px solid $primary;
+}
 
 a.router-link-active-dark,
 a.router-link-exact-active-dark,
 a.active-dark {
+  margin-left: 10px;
+  border-radius: 10px 0px 0px 10px;
+  color: white;
+  background-color: $dark-light;
+  border-left: 3px solid white;
+}
+.active-dark {
   margin-left: 10px;
   border-radius: 10px 0px 0px 10px;
   color: white;
