@@ -7,7 +7,7 @@
         rounded
         flat
         size="25px"
-        @click="store.setKontrak()"
+        @click="backToKontrak()"
       />
       <app-card :is-header="false">
         <template #content>
@@ -254,6 +254,24 @@
                       </div>
                       <div class="col-6">
                         {{ store.barangrs.length ? store.barangrs[0].satuan.nama : '-' }}
+                      </div>
+                    </div>
+                    <div class="row q-mb-sm items-center">
+                      <div class="col-4 text-weight-bold">
+                        Keterangan / Merk
+                      </div>
+                      <div class="col-6">
+                        <app-input
+                          v-model="store.form.merk"
+                          input-class="text-right"
+                          valid
+                          label="Keterangan / Merk"
+                          outlined
+                          counter
+                          type="text"
+                          :rules="[ val => val.length <= 255 || 'maximal 255 karakter']"
+                          :disable="store.loadingTambah"
+                        />
                       </div>
                     </div>
                     <div class="row q-mb-sm">
@@ -576,7 +594,7 @@ import { useTransaksiPemesananTable } from 'src/stores/simrs/logistik/sigarang/t
 import { ref } from 'vue'
 const table = useTransaksiPemesananTable()
 const store = useTransaksiPemensananForm()
-store.setToday()
+// store.setToday()
 table.getDataTable()
 store.getCurrentStok()
 store.getMinMaxDepo()
@@ -589,9 +607,15 @@ const kode108 = ref(false)
 const refNoUrut = ref(null)
 const refBidang = ref(null)
 
-// const toKontrak = () => {
-//   store.setKontrak()
-// }
+const backToKontrak = () => {
+  store.kontrakOpen = false
+  const slug = 'TRP-' + uniqueId()
+  routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
+  table.items = []
+  table.meta = {}
+  store.resetFORM()
+  table.setParam('reff', slug)
+}
 
 const proxyDate = ref(null)
 const refDate = ref(null)

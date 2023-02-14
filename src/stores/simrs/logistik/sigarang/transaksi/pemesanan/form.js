@@ -179,6 +179,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     setKontrak() {
       this.kontrakOpen = !this.kontrakOpen
     },
+
     setOpen () {
       this.setToday()
       this.isOpen = true

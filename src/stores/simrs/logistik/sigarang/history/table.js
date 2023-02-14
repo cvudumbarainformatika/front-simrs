@@ -33,6 +33,7 @@ export const useHistoryTable = defineStore('history_table', {
       'updated_at',
       'kode_depo',
       'kode_pengguna',
+      'kode_ruang',
       'penggunaruang',
       'ruangpengguna'
     ]
@@ -88,6 +89,7 @@ export const useHistoryTable = defineStore('history_table', {
       this.columns = thumb[0]
       changeArrayIndex(this.columns, 'perusahaan', 'total')
       changeArrayIndex(this.columns, 'depo', 'kode_depo')
+      changeArrayIndex(this.columns, 'ruangan', 'no_permintaan')
 
       // console.log('columns', this.columns)
     },

@@ -59,6 +59,27 @@
             <template #cell-ruang="{row}">
               {{ row.ruang?row.ruang.uraian:row.penggunaruang?row.penggunaruang.ruang.uraian:'-' }}
             </template>
+            <template #cell-ruangan="{row}">
+              <!-- <q-chip
+                v-if="row.ruangan"
+                class="f-12"
+                color="primary"
+                text-color="white"
+                :label="row.ruangan.uraian"
+              /> -->
+              <q-badge
+                v-if="row.ruangan"
+                color="primary"
+                text-color="white"
+                :label="row.ruangan.uraian"
+              />
+              <div
+                v-if="!row.ruangan"
+                class="text-center"
+              >
+                -
+              </div>
+            </template>
             <template #cell-depo="{row}">
               {{ row.depo?row.depo.nama:'-' }}
             </template>
@@ -73,6 +94,9 @@
             </template>
             <template #col-total>
               Total
+            </template>
+            <template #col-ruangan>
+              Ruangan
             </template>
             <template #col-ruang>
               Ruangan
