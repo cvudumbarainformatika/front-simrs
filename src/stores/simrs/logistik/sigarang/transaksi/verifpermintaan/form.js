@@ -153,7 +153,10 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           .then((resp) => {
             this.loadingPermintaan = false
             console.log('permintaan ruangan', resp)
-            this.permintaans = resp.data
+            const permintaanWithDetail = resp.data.filter(minta => {
+              return minta.details.length > 0
+            })
+            this.permintaans = permintaanWithDetail
             resolve(resp)
           })
           .then((err) => {
