@@ -141,7 +141,10 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
           .then((resp) => {
             this.loading = false
             console.log('permintaan verified', resp.data)
-            const dataTable = resp.data.data.data.map(apem => {
+            const permintaanWithDetail = resp.data.data.data.filter(minta => {
+              return minta.details.length > 0
+            })
+            const dataTable = permintaanWithDetail.map(apem => {
               const temp = apem
               if (apem.details.length) {
                 apem.ruang = apem.details[0].ruang
