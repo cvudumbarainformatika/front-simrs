@@ -147,7 +147,7 @@
                       /> -->
                     </div>
                   </div>
-                  <div class="row q-col-gutter-md q-mb-sm">
+                  <div class="row q-col-gutter-md q-mb-sm items-center">
                     <!-- <div
                       v-if="store.mapingLoading"
                       class="col-12"
@@ -164,7 +164,7 @@
                       </div>
                     </div> -->
                     <div
-                      class="col-12"
+                      class="col-11"
                     >
                       <app-autocomplete-new
                         :model="store.form.kode_rs"
@@ -182,6 +182,24 @@
                         @set-model="modelSet"
                       />
                       <!-- @buang="buang" -->
+                    </div>
+                    <div class="col-1">
+                      <q-btn
+                        class="q-ml-sm"
+                        unelevated
+                        round
+                        color="primary"
+                        size="sm"
+                        icon="icon-mat-add"
+                        @click="masterBarangForm.newData()"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Tambah Data Master Baru
+                        </q-tooltip>
+                      </q-btn>
                     </div>
                   </div>
                   <div v-if="store.form.kode_rs">
@@ -580,11 +598,13 @@
       </app-card>
     </div>
     <!-- dialog -->
+    <pemesananForm v-model="masterBarangForm.isOpen" />
     <!-- <formDialog /> -->
     <!-- <q-btn label="coba" @click="onFisnish"></q-btn> -->
   </q-page>
 </template>
 <script setup>
+import pemesananForm from 'src/pages/simrs/sigarang/master/barangrs/FormDialog.vue'
 import { date } from 'quasar'
 import { routerInstance } from 'src/boot/router'
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
@@ -592,8 +612,12 @@ import { notifNegativeCenterVue, uniqueId } from 'src/modules/utils'
 import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
 import { useTransaksiPemesananTable } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/table'
 import { ref } from 'vue'
+import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 const table = useTransaksiPemesananTable()
 const store = useTransaksiPemensananForm()
+
+// store master barang
+const masterBarangForm = useMasterBarangRSForm()
 // store.setToday()
 table.getDataTable()
 store.getCurrentStok()
