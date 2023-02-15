@@ -129,7 +129,7 @@
               <div class="col-md-9 col-xs-12" />
               <div class="col-md-3 col-xs-12">
                 <app-btn
-                  label="Simpan "
+                  label="Simpan List Barang"
                   color="secondary"
                   :disable="store.barang ? store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi && store.form.jumlah && store.form.jumlah > 0?false:true:true"
                   :loading="table.loading"
@@ -281,7 +281,8 @@
               <div class="col-md-9 col-xs-12" />
               <div class="col-md-3 col-xs-12">
                 <app-btn
-                  label="Selesai"
+                  label="Kirim ke Depo"
+                  icon-right="icon-mat-send"
                   :disable="!table.mapGudang.length"
                   :loading="table.Finishloading"
                   @click="table.selesaiInput"
