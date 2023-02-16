@@ -306,11 +306,6 @@
             </slot>
           </td>
           <td class="text-right">
-            <slot
-              name="left-action"
-              class="q-ml-md"
-              :row="item"
-            />
             <q-btn
               v-if="bisaEdit"
               flat
@@ -362,6 +357,11 @@
                 Delete Data
               </q-tooltip>
             </q-btn>
+            <slot
+              name="left-action"
+              class="q-ml-md"
+              :row="item"
+            />
           </td>
         </tr>
       </tbody>

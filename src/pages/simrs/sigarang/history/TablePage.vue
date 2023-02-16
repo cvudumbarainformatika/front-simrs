@@ -184,6 +184,22 @@
                   Buka link
                 </q-tooltip>
               </q-btn>
+              <q-btn
+                v-if="row.status===1 "
+                color="negative"
+                round
+                icon="icon-mat-delete_sweep"
+                flat
+                size="sm"
+                @click="hapus(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Hapus Draft
+                </q-tooltip>
+              </q-btn>
             </template>
           </app-table-view>
           <!--
@@ -203,6 +219,7 @@ import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/histor
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
 import { routerInstance } from 'src/boot/router'
+import { notifCenterVue } from 'src/modules/utils'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const goTo = val => {
@@ -219,7 +236,12 @@ const goTo = val => {
   } else if (val.nama === 'DISTRIBUSI DEPO') {
     routerInstance.replace({ name: 'sigarang.transaksi.distribusidepo', params: { slug: Slug } })
   }
+  // console.log(val)
+}
+const hapus = val => {
   console.log(val)
+  notifCenterVue('tombol delete belum berfungsi')
+  // table.deleteTransaction(val)
 }
 const color = val => {
   switch (val) {

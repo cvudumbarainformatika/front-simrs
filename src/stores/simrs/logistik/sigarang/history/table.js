@@ -18,7 +18,8 @@ export const useHistoryTable = defineStore('history_table', {
       sort: 'desc'
     },
     columns: [],
-    columnHide: ['id',
+    columnHide: [
+      'id',
       'uuid',
       'kode_penanggungjawab',
       'kode_penerima',
@@ -35,7 +36,9 @@ export const useHistoryTable = defineStore('history_table', {
       'kode_pengguna',
       'kode_ruang',
       'penggunaruang',
-      'ruangpengguna'
+      'ruangpengguna',
+      'tanggal_serahterima',
+      'flag_siasik'
     ]
   }),
   getters: {
