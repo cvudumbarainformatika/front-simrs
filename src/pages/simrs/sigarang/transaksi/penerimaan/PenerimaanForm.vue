@@ -14,13 +14,14 @@
               <div class="col-md-9 col-xs-12 text-red">
                 <app-input
                   v-model="store.form.no_penerimaan"
+                  autofocus
                   label="Nomor Penerimaan"
-                  label-color="teal"
+                  label-color="red"
                   outlined
-                  hint="Pastikan Nomor Penerimaan sudah sesuai"
-                  bg-color="red-2"
+                  hint="SESUAIKAN NOMOR PENERIMAAN"
                   dense
                 />
+                <!-- bg-color="red-2" -->
               </div>
             </div>
           </div>

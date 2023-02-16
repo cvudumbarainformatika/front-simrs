@@ -199,8 +199,17 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       // const setting = useSettingsStore()
       this.barangrHasStoks = []
 
+      console.log('Stoks', this.stoks)
       if (this.stoks.length) {
-        this.barangrses = this.stoks.filter(stok => { return stok.maping.kode_gudang === val })
+        // this.barangrses = this.stoks.filter(stok => { return stok.maping.kode_gudang === val })
+        const apem = this.stoks.filter(stok => {
+          if (stok.barang) {
+            return stok.barang.kode_depo === val
+          } else {
+            return false
+          }
+        })
+        this.barangrses = apem.filter(anu => { return anu !== false })
         console.log('barangrses', this.barangrses)
         const temp = this.barangrses.map(data => {
           data.nama = data.barang.nama
@@ -208,6 +217,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
           data.kode_satuan = data.barang.kode_satuan
           return data
         })
+        console.log('barangrses after if', this.barangrses)
 
         // const keys = Object.keys(this.stoks)
         // console.log('stoks keys', keys)
@@ -237,7 +247,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       } else {
         setTimeout(() => {
           if (this.stoks.length) {
-            this.barangrses = this.stoks.filter(stok => { return stok.maping.kode_gudang === val })
+            this.barangrses = this.stoks.filter(stok => { return stok.barang.kode_depo === val })
             console.log('barangrses with timeout', this.barangrses)
             const ape = this.stoks.map(stok => {
               const temp = this.barangrses.filter(data => {
