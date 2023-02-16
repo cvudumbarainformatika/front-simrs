@@ -169,7 +169,7 @@
             </template>
             <template #left-action="{row}">
               <q-btn
-                v-if="row.nama==='PEMESANAN' && row.status===1"
+                v-if="row.status===1 && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
                 color="primary"
                 round
                 icon="icon-mat-exit_to_app"
@@ -207,7 +207,18 @@ const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const goTo = val => {
   const Slug = val.reff
-  routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: Slug } })
+
+  if (val.nama === 'PEMESANAN') {
+    routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: Slug } })
+  } else if (val.nama === 'PERMINTAAN RUANGAN') {
+    routerInstance.replace({ name: 'sigarang.transaksi.permintaan', params: { slug: Slug } })
+  } else if (val.nama === 'PENERIMAAN') {
+    routerInstance.replace({ name: 'sigarang.transaksi.penerimaan', params: { slug: Slug } })
+  } else if (val.nama === 'PEMAKAIAN RUANGAN') {
+    routerInstance.replace({ name: 'sigarang.transaksi.pemakaianruangan', params: { slug: Slug } })
+  } else if (val.nama === 'DISTRIBUSI DEPO') {
+    routerInstance.replace({ name: 'sigarang.transaksi.distribusidepo', params: { slug: Slug } })
+  }
   console.log(val)
 }
 const color = val => {

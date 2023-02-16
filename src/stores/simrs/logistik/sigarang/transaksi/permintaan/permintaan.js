@@ -201,7 +201,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       this.loadingHasStok = true
       this.barangHasStok = []
       return new Promise(resolve => {
-        api.get('v1/stok/all-current')
+        api.get('v1/stok/stok-depo')
           .then(resp => {
             // console.log('stok ada', Object.getPrototypeOf(resp.data).constructor.name)
             this.stoks = resp.data
@@ -257,7 +257,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
                       this.setColumns(data.gudang[lupis])
                       this.mapGudang[i] = {
                         header: data,
-                        gudang: apem.length ? titleCase(apem[0].nama) : 'Tidak ada nama Depo',
+                        gudang: apem.length ? titleCase(apem[0].nama) : 'Nama depo Tidak terlihat',
                         items: data.gudang[lupis]
                       }
                     })
@@ -383,8 +383,9 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
             this.Finishloading = false
             notifSuccess(resp)
             this.resetForm()
-            this.getDataTable()
-            resolve(resp)
+            this.getDataTable().then(() => {
+              resolve(resp)
+            })
           })
           .catch(err => {
             this.Finishloading = false
@@ -425,8 +426,9 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
             this.loading = false
             notifSuccess(resp)
             this.resetInput()
-            this.getDataTable()
-            resolve(resp)
+            this.getDataTable().then(() => {
+              resolve(resp)
+            })
           })
           .catch((err) => {
             this.loading = false

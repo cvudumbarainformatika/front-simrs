@@ -99,6 +99,7 @@
               >
                 <!-- valid -->
                 <app-input
+                  ref="inputJumlahMinta"
                   v-model="store.form.jumlah"
                   outlined
                   type="number"
@@ -133,7 +134,7 @@
                   color="secondary"
                   :disable="store.barang ? store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi && store.form.jumlah && store.form.jumlah > 0?false:true:true"
                   :loading="table.loading"
-                  @click="table.saveForm"
+                  @click="simpanList"
                 />
                 <div
                   v-if="store.barang?store.barang.alokasi<=0:false"
@@ -301,11 +302,18 @@
 import { date } from 'quasar'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
+import { ref } from 'vue'
 
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
 // const mapingbarang = useMasterMapingBarangForm()
-
+const inputJumlahMinta = ref(null)
+const simpanList = () => {
+  console.log('ref input', inputJumlahMinta.value.$refs)
+  table.saveForm().then(() => {
+    inputJumlahMinta.value.$refs.refInput.resetValidation()
+  })
+}
 const setTanggal = val => {
   store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
   store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
@@ -318,6 +326,7 @@ const clearPengguna = () => {
   store.setNama('penanggungjawab', 'ruangan pengguna belum dipilih')
   store.setNama('ruang', 'ruangan pengguna belum dipilih')
   store.setNama('pengguna', 'ruangan pengguna belum dipilih')
+  inputJumlahMinta.value.$refs.refInput.resetValidation()
 }
 const pilihPengguna = (val) => {
   store.setForm('kode_ruang', val)
@@ -427,6 +436,7 @@ const clearBarangRs = () => {
   store.setForm('kode_rs', null)
   store.setNama('satuan', 'barang belum dipilih')
   store.setNama('gudang', 'barang belum dipilih')
+  inputJumlahMinta.value.$refs.refInput.resetValidation()
 }
 const modelSet = val => {
   console.log('model set', val)
