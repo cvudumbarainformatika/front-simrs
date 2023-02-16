@@ -257,7 +257,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
                       this.setColumns(data.gudang[lupis])
                       this.mapGudang[i] = {
                         header: data,
-                        gudang: titleCase(apem[0].nama),
+                        gudang: apem.length ? titleCase(apem[0].nama) : 'Tidak ada nama Depo',
                         items: data.gudang[lupis]
                       }
                     })
