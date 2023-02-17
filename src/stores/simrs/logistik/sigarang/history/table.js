@@ -147,6 +147,7 @@ export const useHistoryTable = defineStore('history_table', {
         api.post('v1/history/destroy', params)
           .then(resp => {
             this.loading = false
+            console.log('hapus draft', resp)
             notifSuccess(resp)
             this.getDataTransactions()
             resolve(resp)

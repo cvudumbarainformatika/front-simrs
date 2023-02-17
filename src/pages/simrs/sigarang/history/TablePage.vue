@@ -219,7 +219,8 @@ import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/histor
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
 import { routerInstance } from 'src/boot/router'
-import { notifCenterVue } from 'src/modules/utils'
+// import { notifCenterVue } from 'src/modules/utils'
+import { Dialog } from 'quasar'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const goTo = val => {
@@ -240,8 +241,27 @@ const goTo = val => {
 }
 const hapus = val => {
   console.log(val)
-  notifCenterVue('tombol delete belum berfungsi')
-  // table.deleteTransaction(val)
+  // notifCenterVue('tombol delete belum berfungsi')
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakan anda akan menghapus Transaksi ini?',
+    ok: {
+      'no-caps': true,
+      label: 'Lanjutkan Hapus',
+      color: 'negative',
+      push: true,
+      icon: 'icon-mat-delete_sweep'
+    },
+    cancel: {
+      color: 'dark',
+      'no-caps': true,
+      push: true
+    }
+  })
+    .onOk(() => {
+      console.log('ok', val)
+      table.deleteTransaction(val)
+    })
 }
 const color = val => {
   switch (val) {
