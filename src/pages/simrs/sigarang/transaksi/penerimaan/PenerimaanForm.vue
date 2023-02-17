@@ -235,7 +235,7 @@
         </div>
         <div v-if="store.detailPemesanans.length">
           <div class="row q-col-gutter-md q-mb-sm text-weight-bold items-center">
-            <div class="col-md-1 col-xs-12">
+            <div class="col-md-3 col-xs-12">
               Nama Barang
             </div>
             <div class="col-md-1 col-xs-12">
@@ -256,16 +256,16 @@
             <div class="col-md-2 col-xs-12">
               Jumlah Seluruh Penerimaan
             </div>
-            <div class="col-md-2 col-xs-12">
+            <!-- <div class="col-md-2 col-xs-12">
               Sub Total
-            </div>
+            </div> -->
           </div>
           <div
             v-for="(item, i) in store.detailPemesanans"
             :key="i"
           >
             <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div class="col-md-1 col-xs-12">
+              <div class="col-md-3 col-xs-12">
                 {{ item.barangrs?item.barangrs.nama:'-' }}
               </div>
               <div class="col-md-1 col-xs-12">
@@ -318,10 +318,10 @@
               <div class="col-md-2 col-xs-12">
                 {{ parseFloat( item.qtysblm) + parseFloat(item.qtyskr) }}
               </div>
-              <div class="col-md-2 col-xs-12">
+              <!-- <div class="col-md-2 col-xs-12">
                 {{ formatRp((parseFloat( item.qtysblm) +
                   parseFloat(item.qtyskr)) * item.harga) }}
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="row q-col-gutter-md q-mb-sm">
