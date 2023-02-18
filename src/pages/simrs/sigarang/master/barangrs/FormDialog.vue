@@ -21,18 +21,18 @@
               />
             </div>
             <div class="col-md-6 col-xs-12">
+              <!-- :rules="[ val => val.length <= 5 || 'Maksimal 5 karakter']" -->
               <q-input
                 v-model="store.input_kode"
                 dense
                 label="Input Kode*"
-                :rules="[ val => val.length <= 5 || 'Maksimal 5 karakter']"
                 outlined
                 autofocus
                 @update:model-value="store.setKode"
               />
             </div>
           </div>
-          <div class="row q-col-gutter-md">
+          <div class="row q-col-gutter-md q-mt-sm">
             <div class="col-md-6 col-xs-12">
               <app-input
                 ref="refNama"

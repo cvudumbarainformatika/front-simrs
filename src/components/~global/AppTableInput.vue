@@ -191,6 +191,15 @@
         </slot>
         <tr>
           <th
+            v-if="indexNomor"
+            width="5%"
+            class="text-left"
+          >
+            <div>
+              No
+            </div>
+          </th>
+          <th
             v-if="isChecked"
             width="5%"
             class="text-left"
@@ -323,6 +332,9 @@
           :class="clickAble ? 'cursor-pointer':''"
           @click="clickAble?clicked(item,i):''"
         >
+          <td v-if="indexNomor">
+            {{ i+1 }}
+          </td>
           <td v-if="isChecked">
             <q-checkbox
               v-model="selected"
@@ -484,7 +496,8 @@ const props = defineProps({
   adaPaginasi: { type: Boolean, default: false },
   adaPerPage: { type: Boolean, default: false },
   inputCol: { type: Number, default: 0 },
-  clickAble: { type: Boolean, default: false }
+  clickAble: { type: Boolean, default: false },
+  indexNomor: { type: Boolean, default: false }
 
 })
 const emits = defineEmits([

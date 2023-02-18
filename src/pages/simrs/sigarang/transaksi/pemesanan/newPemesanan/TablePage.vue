@@ -25,6 +25,7 @@
             :to-search="table.params.q"
             :add-input="store.isOpen"
             wrap-cells
+            index-nomor
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"

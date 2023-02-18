@@ -65,7 +65,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     setKode () {
       const temp = this.input_kode.split('')
       const apem = temp.length
-      apem === 5 ? this.form.kode = 'RS-' + this.input_kode
+      apem >= 5 ? this.form.kode = 'RS-' + this.input_kode
         : apem === 4 ? this.form.kode = 'RS-0' + this.input_kode
           : apem === 3 ? this.form.kode = 'RS-00' + this.input_kode
             : apem === 2 ? this.form.kode = 'RS-000' + this.input_kode
