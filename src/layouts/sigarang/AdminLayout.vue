@@ -72,9 +72,9 @@ import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/se
 // import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 // import { routerInstance } from 'src/boot/router'
 
-const store = useAuthStore()
 const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
+const store = useAuthStore()
 const role = computed(() => {
   return store.role ? store.role : ''
 })

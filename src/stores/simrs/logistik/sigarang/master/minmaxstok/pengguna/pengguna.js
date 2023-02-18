@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
+import { Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess, waitLoad } from 'src/modules/utils'
+import { findWithAttr, notifSuccess, waitLoad } from 'src/modules/utils'
 import { useTransaksiPermintaanForm } from '../../../transaksi/permintaan/form'
 
 export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store', {
@@ -11,8 +12,9 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     item: {},
     params: {
       q: '',
-      pengguna: '',
+      ruang: '',
       barang: '',
+      flag_minta: 'all',
       page: 1,
       per_page: 10,
       order_by: 'created_at',
@@ -24,9 +26,14 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     // form
     loading: false,
     isOpen: false,
+    optionTampil: [
+      { nama: 'Semua', value: 'all' },
+      { nama: 'Ada permintaan Maks', value: '1' },
+      { nama: 'Tidak ada Pemrintaan maks', value: null }
+    ],
     form: {
       kode_rs: null,
-      kode_pengguna: null,
+      kode_ruang: null,
       min_stok: 0,
       max_stok: 0
     },
@@ -48,13 +55,15 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       this.form = {}
       const columns = [
         'kode_rs',
-        'kode_pengguna',
-        'min_stok',
-        'max_stok'
+        'kode_ruang'
+
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('flag_minta', 'all')
+      this.setForm('max_stok', 0)
+      this.setForm('minta', 0)
     },
     setForm (nama, val) {
       this.form[nama] = val
@@ -115,7 +124,7 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     setColumns (payload) {
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['kode_rs', 'barang', 'pengguna', 'min_stok', 'max_stok']
+      this.columns = ['kode_rs', 'barang', 'ruang', 'max_stok', 'minta', 'flag_minta']
       // console.log('columns', this.columns)
     },
 
@@ -135,7 +144,7 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       this.getDataTable()
     },
     setPenggunaSearch (val) {
-      this.params.pengguna = val
+      this.params.ruang = val
       this.getDataTable()
     },
     // api
@@ -233,6 +242,60 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
           })
       })
       // this.formRuangan.flag_minta = null
+    },
+    // setujui maks ruangan
+    setujuiMaxRuangan () {
+      // this.sanitazeForm()
+      // this.loading = true
+      return new Promise((resolve, reject) => {
+        api
+          .post('v1/minmaxpenggunastok/store', this.form)
+          .then((resp) => {
+            console.log('save data   ', resp.data)
+            notifSuccess(resp)
+            const ind = findWithAttr(this.items, 'id', resp.data.data.id)
+            delete this.items[ind].loading
+            console.log('save data index  ', ind, this.items[ind])
+            // this.loading = false
+            this.resetFORM()
+            resolve(resp)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      })
+    },
+    // terima semua
+    accceptAll() {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: 'Apakah Akan diterima semua sesuai dengan jumlah yang diminta ruangan?',
+        ok: {
+          'no-caps': true,
+          push: true,
+          color: 'primary'
+        },
+        cancel: {
+          'no-caps': true,
+          push: true,
+          color: 'dark'
+        }
+      })
+        .onOk(() => {
+          this.loading = true
+          return new Promise(resolve => {
+            api.get('v1/minmaxpenggunastok/terima-semua')
+              .then(resp => {
+                notifSuccess(resp)
+                this.getDataTable()
+                this.loading = false
+                resolve(resp)
+              })
+              .catch(() => {
+                this.loading = false
+              })
+          })
+        })
     }
   }
 })

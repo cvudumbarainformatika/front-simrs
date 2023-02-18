@@ -328,53 +328,56 @@
             </slot>
           </td>
           <td class="text-right">
-            <slot
-              name="left-acttion"
-              class="q-ml-md"
-              :row="item"
-            />
-            <div v-if="defaultBtn">
-              <q-btn
-                v-if="adaEdit"
-                flat
-                class=""
-                size="sm"
-                round
-                color="grey"
-                icon="icon-mat-edit"
-                @click="emits('editData',item)"
-              >
-                <q-tooltip
-                  anchor="top middle"
-                  self="center middle"
-                >
-                  Edit Data
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="selected.length < 2 && adaDelete"
-                flat
-                class=""
-                size="sm"
-                round
-                color="grey"
-                icon="icon-mat-delete_sweep"
-                @click="deleteOne(item.id)"
-              >
-                <q-tooltip
-                  anchor="top middle"
-                  self="center middle"
-                >
-                  Delete Data
-                </q-tooltip>
-              </q-btn>
-            </div>
-
-            <div v-else>
+            <div class="row justify-end items-center">
               <slot
-                name="custom-btn"
+                name="left-acttion"
+                class="q-ml-md"
                 :row="item"
+                :col="i"
               />
+              <div v-if="defaultBtn">
+                <q-btn
+                  v-if="adaEdit"
+                  flat
+                  class=""
+                  size="sm"
+                  round
+                  color="grey"
+                  icon="icon-mat-edit"
+                  @click="emits('editData',item)"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Edit Data
+                  </q-tooltip>
+                </q-btn>
+                <q-btn
+                  v-if="selected.length < 2 && adaDelete"
+                  flat
+                  class=""
+                  size="sm"
+                  round
+                  color="grey"
+                  icon="icon-mat-delete_sweep"
+                  @click="deleteOne(item.id)"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Delete Data
+                  </q-tooltip>
+                </q-btn>
+              </div>
+
+              <div v-else>
+                <slot
+                  name="custom-btn"
+                  :row="item"
+                />
+              </div>
             </div>
           </td>
         </tr>
@@ -400,6 +403,11 @@
         </tr>
       </tbody>
     </q-markup-table>
+    <div class="print-only">
+      <slot
+        name="footer-for-print"
+      />
+    </div>
     <!-- Pagination -->
     <AppPaginationTable
       v-if="items.length > 0"

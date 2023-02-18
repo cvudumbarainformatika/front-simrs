@@ -2,14 +2,14 @@
   <q-page class="q-pa-sm">
     <div>
       <app-card
-        title="Data Min Max Stok"
-        desc="Data Min Max Stok Pengguna"
+        title="Maks stok ruangan"
+        desc="Data Maksimal Stok Ruangan"
       >
         <template #content>
           <div class="fit row wrap justify-start">
             <div class="q-mr-sm">
               <q-input
-                v-model="store.params.pengguna"
+                v-model="store.params.ruang"
                 outlined
                 class="search-big"
                 borderless
@@ -46,6 +46,31 @@
                   />
                 </template>
               </q-input>
+            </div>
+            <div class="q-mr-sm">
+              <app-autocomplete-new
+                v-model="store.params.flag_minta"
+                label="Tampilkan"
+                option-value="value"
+                option-label="nama"
+                autocomplete="nama"
+                valid
+                outlined
+                :source="store.optionTampil"
+                :loading="store.loading"
+                @on-select="FlagSelected"
+                @clear="FlagCleared"
+              />
+            </div>
+            <div
+              v-if="store.params.flag_minta==='1' && store.items.length"
+              class="q-mr-sm"
+            >
+              <app-btn
+                label="Terima Semua"
+                push
+                @click="store.accceptAll"
+              />
             </div>
           </div>
           <app-table
@@ -86,6 +111,19 @@
             <template #cell-depo="{row}">
               <div>{{ row.depo?row.depo.nama:'-' }}</div>
             </template>
+            <template #col-minta>
+              <div>Permintaan max Ruangan</div>
+            </template>
+            <template #col-flag_minta>
+              <div>ada Permintaan max</div>
+            </template>
+            <template #cell-flag_minta="{row}">
+              <div>
+                <q-badge v-if="row.flag_minta==='1'">
+                  Ya
+                </q-badge>
+              </div>
+            </template>
 
             <template #col-pengguna>
               <div>Pengguna</div>
@@ -93,12 +131,39 @@
             <template #cell-pengguna="{row}">
               <div>{{ row.pengguna?row.pengguna.jabatan:'-' }}</div>
             </template>
+            <template #col-ruang>
+              <div>Ruangan</div>
+            </template>
+            <template #cell-ruang="{row}">
+              <div>{{ row.ruang?row.ruang.uraian:'-' }}</div>
+            </template>
 
             <template #col-min_stok>
               <div>Stok Minimun</div>
             </template>
             <template #col-max_stok>
               <div>Stok Maksimum</div>
+            </template>
+            <template #left-acttion="{row,col}">
+              <div class="row items-center">
+                <div v-if="row.loading">
+                  <!-- <div> -->
+                  <app-btn
+                    flat
+                    loading
+                  />
+                </div>
+                <div v-if="row.flag_minta==='1'">
+                  <app-input
+                    v-model="row.max_stok"
+                    label="max ruangan disetujui"
+                    outlined
+                    valid
+                    @focus="maxFokus(row,col)"
+                    @blur="maxBlur(row,col)"
+                  />
+                </div>
+              </div>
             </template>
           </app-table>
           <!--
@@ -117,4 +182,38 @@ import { useMinMaxPenggunaStockStore } from 'src/stores/simrs/logistik/sigarang/
 import formDialog from './FormDialog.vue'
 const store = useMinMaxPenggunaStockStore()
 store.getDataTable()
+const maxFokus = (val, i) => {
+  store.items[i].max_stok = val.minta
+  console.log('fokus', val, i)
+}
+const maxBlur = (val, i) => {
+  store.items[i].loading = true
+  store.items[i].flag_minta = null
+  store.items[i].minta = 0
+  store.setForm('kode_rs', store.items[i].kode_rs)
+  store.setForm('kode_ruang', store.items[i].kode_ruang)
+  store.setForm('max_stok', store.items[i].max_stok)
+  store.setForm('id', store.items[i].id)
+  store.setForm('minta', 0)
+  store.setForm('flag_minta', null)
+  store.setujuiMaxRuangan()
+  // store.form = {
+  //   kode_rs: store.items[i].kode_rs,
+  //   kode_ruang: store.items[i].kode_ruang,
+  //   minta: 0,
+  //   max_stok: store.items[i],
+  //   max_stok,
+  //   id: store.items[i].id,
+  //   flag_minta: null
+  // },
+  console.log('blur', store.form)
+}
+const FlagSelected = val => {
+  store.params.flag_minta = val
+  console.log('selected', val)
+  store.getDataTable()
+}
+const FlagCleared = val => {
+  console.log('clared', val)
+}
 </script>

@@ -10,13 +10,14 @@
       narrow-indicator
     >
       <q-tab
+        v-if="role!=='depo'"
         name="depo"
         label="Depo"
         no-caps
       />
       <q-tab
         name="pengguna"
-        label="Pengguna"
+        label="Ruangan"
         no-caps
       />
     </q-tabs>
@@ -38,12 +39,17 @@
   </q-card>
 </template>
 <script setup>
+import { useAuthStore } from 'src/stores/auth'
 import { useMinMaxStokForm } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/form'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import DepoTable from './depo/DepoTable.vue'
 import PenggunaTable from './pengguna/PenggunaTable.vue'
 
-const tab = ref('depo')
 const store = useMinMaxStokForm()
+const auth = useAuthStore()
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
+const tab = role.value !== '' ? ref('depo') : ref('pengguna')
 store.getRequredDataForm()
 </script>
