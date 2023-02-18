@@ -15,9 +15,9 @@
                 borderless
                 debounce="1000"
                 dense
-                placeholder="Cari Depo"
+                placeholder="Cari Ruangan"
                 @update:model-value="store.setPenggunaSearch"
-                @keydown.enter.prevent="store.setPenggunaSearch"
+                @keyup.enter.prevent="store.setPenggunaSearch"
               >
                 <template #prepend>
                   <q-icon
@@ -37,7 +37,7 @@
                 dense
                 placeholder="Cari barang"
                 @update:model-value="store.setBarangSearch"
-                @keydown.enter.prevent="store.setBarangSearch"
+                @keyup.enter.prevent="store.setBarangSearch"
               >
                 <template #prepend>
                   <q-icon
