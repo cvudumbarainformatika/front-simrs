@@ -23,6 +23,9 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       'jumlah_disetujui',
       'jumlah_distribusi',
       'no_penerimaan',
+      'satuan_besar',
+      'satuan_kecil',
+      'isi',
       'permintaanruangan_id'
     ],
     form: {},
@@ -227,11 +230,31 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
           })
       })
     },
-    deletesData(val) {},
     // api related function
+    deletesDetail(val) {
+      console.log('delete', val)
+      const data = {
+        id: val
+      }
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/permintaanruangan/hapus-detail', data)
+          .then(resp => {
+            this.loading = false
+            this.getDataTable().then(() => {
+              resolve(resp)
+            })
+            notifSuccess(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
     // ambil data permintaan belum selesai
     getDataTable() {
       this.loadingTable = true
+      this.mapGudang = []
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
@@ -397,7 +420,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
       const store = useTransaksiPermintaanForm()
       if (store.form.jumlah <= 0 || store.form.jumlah === null) return notifErrVue('Jumlah Minta harus di isi')
       if (store.form.jumlah > store.barang.alokasi) return notifErrVue('Jumlah Minta tidak boleh melebihi jumlah alokasi')
-      if (store.form.jumlah > (store.minMaxPenggunas.max_stok - store.barang.stokRuangan)) return notifErrVue('Jumlah Minta tidak boleh melebihi maksimal ruangan')
+      if (store.form.jumlah > (store.minMaxPenggunas.flag_minta === null ? (store.minMaxPenggunas.max_stok - store.barang.stokRuangan) : (store.minMaxPenggunas.minta - store.barang.stokRuangan))) return notifErrVue('Jumlah Minta tidak boleh melebihi maksimal ruangan')
       // remove null
       const formini = Object.keys(store.form)
       formini.forEach((data) => {

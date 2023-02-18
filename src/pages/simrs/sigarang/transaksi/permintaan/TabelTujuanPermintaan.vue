@@ -39,7 +39,6 @@
           :loading="table.loading"
           :to-search="table.params.q"
           :bisa-edit="false"
-          :bisa-delete="false"
           @goto="table.setPage"
           @set-row="table.setPerPage"
           @refresh="table.refreshTable"
@@ -47,8 +46,9 @@
           @set-order="table.setOder"
           @new-data="store.newData"
           @edit-data="store.editData"
-          @delete="table.deletesData"
+          @delete="table.deletesDetail"
         >
+          <!-- :bisa-delete="false" -->
           <template #cell-barangrs="{row}">
             <div>{{ row.barangrs?row.barangrs.nama:'-' }}</div>
           </template>

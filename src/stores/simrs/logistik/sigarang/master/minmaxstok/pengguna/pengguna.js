@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess, waitLoad } from 'src/modules/utils'
+import { useTransaksiPermintaanForm } from '../../../transaksi/permintaan/form'
 
 export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store', {
   state: () => ({
@@ -29,6 +30,14 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       min_stok: 0,
       max_stok: 0
     },
+    formRuangan: {
+      kode_ruang: null,
+      kode_rs: null,
+      minta: 0,
+      flag_minta: null,
+      max_stok: 0
+    },
+
     barangs: [],
     penggunas: [],
     gudangs: []
@@ -201,6 +210,29 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
             reject(err)
           })
       })
+    },
+    // permintaan maks ruangan
+    simpanPermintaanMaksRuangan() {
+      this.loading = true
+      console.log('form permintaan maks ruangan', this.formRuangan)
+      return new Promise((resolve, reject) => {
+        api
+          .post('v1/minmaxpenggunastok/store', this.formRuangan)
+          .then((resp) => {
+            // console.log('save data   ', resp)
+            const formPermintaan = useTransaksiPermintaanForm()
+            formPermintaan.getMinMaxPengguna()
+            notifSuccess(resp)
+            this.loading = false
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.isOpen = false
+            this.loading = false
+            reject(err)
+          })
+      })
+      // this.formRuangan.flag_minta = null
     }
   }
 })

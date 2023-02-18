@@ -106,7 +106,7 @@
                   label="Jumlah Minta"
                   :rules="[
                     val=> val <= store.barang.alokasi || 'tidak boleh melebihi alokasi',
-                    val=> val<= (store.minMaxPenggunas.max_stok - store.barang.stokRuangan) ||'Sudah Melebihi Maksimal stok ruangan'
+                    val=> val < (store.minMaxPenggunas.flag_minta === null ? (store.minMaxPenggunas.max_stok - store.barang.stokRuangan):(store.minMaxPenggunas.minta - store.barang.stokRuangan)) ||'Sudah Melebihi Maksimal stok ruangan'
                   ]"
                 />
               </div>
@@ -238,7 +238,7 @@
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
-                Stok User
+                Stok Ruangan
               </div>
               <div
                 v-if="store.loading"
@@ -259,7 +259,7 @@
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
               <div class="col-md-3 col-xs-12">
-                Maks Stok user
+                Maks Stok Ruangan
               </div>
               <div
                 v-if="store.loading"
@@ -273,9 +273,48 @@
               </div>
               <div
                 v-if="!store.loading"
-                class="col-md-9 col-xs-12"
+                class="col-md-1 col-xs-12"
               >
                 {{ store.minMaxPenggunas.max_stok?store.minMaxPenggunas.max_stok:0 }}
+              </div>
+              <div
+                v-if="!store.loading"
+                class="col-md-8 col-xs-12"
+              >
+                <div v-if="maksRuangan.formRuangan.flag_minta===null && !Object.keys(store.minMaxPenggunas).length && store.form.kode_rs">
+                  <app-btn
+                    label="Minta maks ruangan"
+                    color="orange"
+                    @click="ruanganMinta"
+                  />
+                </div>
+                <div
+                  v-if="maksRuangan.formRuangan.flag_minta==='1' && !Object.keys(store.minMaxPenggunas).length"
+                  class="row"
+                >
+                  <app-input
+                    v-model="maksRuangan.formRuangan.minta"
+                    label="Jumlah minta"
+                    type="number"
+                    :loading="maksRuangan.loading"
+                    @keyup.enter="maksRuangan.simpanPermintaanMaksRuangan"
+                  />
+                  <app-btn
+                    class="q-ml-sm"
+                    label="Simpan"
+                    icon="icon-mat-save"
+                    :loading="maksRuangan.loading"
+                    @click="maksRuangan.simpanPermintaanMaksRuangan"
+                  />
+                </div>
+                <div
+                  v-if="maksRuangan.formRuangan.flag_minta==='1' && Object.keys(store.minMaxPenggunas).length"
+                  class="row"
+                >
+                  <q-badge>
+                    Menunggu persetujuan depo sejumlah {{ store.minMaxPenggunas.minta }}
+                  </q-badge>
+                </div>
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
@@ -284,8 +323,8 @@
                 <app-btn
                   label="Kirim ke Depo"
                   icon-right="icon-mat-send"
-                  :disable="!table.mapGudang.length"
-                  :loading="table.Finishloading"
+                  :disable="!table.mapGudang.length || table.loading"
+                  :loading="table.Finishloading "
                   @click="table.selesaiInput"
                 />
               </div>
@@ -300,13 +339,22 @@
 // import { notifErrVue } from 'src/modules/utils'
 // import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { date } from 'quasar'
+import { useMinMaxPenggunaStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/pengguna/pengguna'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 import { ref } from 'vue'
 
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
+const maksRuangan = useMinMaxPenggunaStockStore()
 // const mapingbarang = useMasterMapingBarangForm()
+const ruanganMinta = () => {
+  console.log('form', store.form)
+  console.log('min-max', store.minMaxPenggunas)
+  maksRuangan.formRuangan.flag_minta = '1'
+  maksRuangan.formRuangan.kode_rs = store.form.kode_rs
+  maksRuangan.formRuangan.kode_ruang = store.form.tujuan
+}
 const inputJumlahMinta = ref(null)
 const simpanList = () => {
   console.log('ref input', inputJumlahMinta.value.$refs)

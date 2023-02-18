@@ -3,6 +3,7 @@ import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { uniqueId } from 'src/modules/utils'
 import { useAuthStore } from 'src/stores/auth'
+import { useMinMaxPenggunaStockStore } from '../../master/minmaxstok/pengguna/pengguna'
 import { useTransaksiPermintaanTable } from './permintaan'
 
 export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan', {
@@ -154,6 +155,8 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
             this.loading = false
             console.log('minmaxpengguna', resp)
             this.minMaxPenggunas = resp.data
+            const maksRuangan = useMinMaxPenggunaStockStore()
+            maksRuangan.formRuangan.flag_minta = Object.keys(resp.data).length ? resp.data.flag_minta : null
             resolve(resp)
           })
           .catch(() => {
