@@ -17,7 +17,7 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       flag_minta: 'all',
       page: 1,
       per_page: 10,
-      order_by: 'created_at',
+      order_by: 'id',
       sort: 'desc'
     },
     columns: [],
