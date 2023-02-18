@@ -9,6 +9,7 @@
       :mobile="mobile"
       :role="role"
       :foto="foto"
+      :ruangan="ruang"
       @toggle-left="toggleLeftDrawer"
     />
     <LeftDrawer
@@ -76,6 +77,17 @@ const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
 const role = computed(() => {
   return store.role ? store.role : ''
+})
+const ruang = computed(() => {
+  const ruangan = store.ruang ? 'Ruangan : ' + store.ruang.uraian : false
+  const depo = store.depo ? 'Depo : ' + store.depo.nama : false
+  if (ruangan) {
+    return ruangan
+  } else if (depo) {
+    return depo
+  } else {
+    return '-'
+  }
 })
 const foto = computed(() => {
   return store.foto !== '' ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + store.foto : new URL('../../assets/images/user-avatar.svg', import.meta.url).href

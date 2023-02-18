@@ -33,9 +33,16 @@
         /> -->
         <div class="row items-center">
           <div v-if="role!=='root' && role!==''">
-            <q-badge>
-              Akses : {{ role }}
-            </q-badge>
+            <div class="row">
+              <q-badge>
+                Akses : {{ role }}
+              </q-badge>
+            </div>
+            <div class="row q-mt-sm">
+              <q-badge>
+                {{ ruangan }}
+              </q-badge>
+            </div>
           </div>
           <div>
             <q-avatar
@@ -72,6 +79,10 @@ defineProps({
     default: false
   },
   role: {
+    type: String,
+    default: ''
+  },
+  ruangan: {
     type: String,
     default: ''
   },
