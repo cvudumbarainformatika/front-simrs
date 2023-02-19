@@ -17,6 +17,7 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
     },
     barangs: [],
     penggunas: [],
+    ruangs: [],
     gudangs: [],
     loading: false,
     depo: useMinMaxDepoStockStore(),
@@ -78,7 +79,8 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
     getRequredDataForm() {
       this.getDataBarang()
       this.getDataGudang()
-      this.getDataPengguna()
+      // this.getDataPengguna()
+      this.getDataRuang()
     },
     // api related actions
     // get autoComp data
@@ -126,6 +128,23 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             this.penggunas = resp.data
             this.depo.penggunas = resp.data
             this.pengguna.penggunas = resp.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getDataRuang() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/ruang/all-ruang')
+          .then(resp => {
+            this.loading = false
+            console.log('pengguna', resp)
+            this.ruangs = resp.data
+            this.depo.ruangs = resp.data
+            this.pengguna.ruangs = resp.data
             resolve(resp)
           })
           .catch(() => {

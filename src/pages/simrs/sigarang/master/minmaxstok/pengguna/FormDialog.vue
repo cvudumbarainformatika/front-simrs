@@ -15,15 +15,15 @@
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-new
                 ref="refKodeGudang"
-                label="pengguna"
-                :model="store.form.kode_pengguna"
+                label="ruangan"
+                :model="store.form.kode_ruang"
                 option-value="kode"
-                option-label="jabatan"
-                autocomplete="jabatan"
-                :source="store.penggunas"
+                option-label="uraian"
+                autocomplete="uraian"
+                :source="store.ruangs"
                 :loading="store.loading"
-                @on-select="penggunaSelected"
-                @clear="penggunaCleared"
+                @on-select="ruangSelected"
+                @clear="ruangCleared"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -43,12 +43,12 @@
           </div>
           <div class="row q-col-gutter-md q-mb-sm">
             <div class="col-md-6 col-xs-12">
-              <app-input
+              <!-- <app-input
                 v-model="store.form.min_stok"
                 valid
                 label="Min Stok"
                 type="number"
-              />
+              /> -->
             </div>
             <div class="col-md-6 col-xs-12">
               <app-input
@@ -94,11 +94,11 @@ const barangCleared = () => {
   refKodeRs.value.$refs.refAuto.resetValidation()
 }
 
-const penggunaSelected = (val) => {
-  store.form.kode_pengguna = val
+const ruangSelected = (val) => {
+  store.form.kode_ruang = val
 }
-const penggunaCleared = () => {
-  store.form.kode_pengguna = null
+const ruangCleared = () => {
+  store.form.kode_ruang = null
   refKodeGudang.value.$refs.refAuto.resetValidation()
 }
 

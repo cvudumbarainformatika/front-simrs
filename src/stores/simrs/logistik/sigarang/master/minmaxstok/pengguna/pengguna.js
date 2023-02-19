@@ -47,7 +47,8 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
 
     barangs: [],
     penggunas: [],
-    gudangs: []
+    gudangs: [],
+    ruangs: []
   }),
   actions: {
     // form
@@ -140,11 +141,11 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     // custom for this store
 
     setBarangSearch (val) {
-      this.params.barang = val
+      // this.params.barang = val
       this.getDataTable()
     },
     setPenggunaSearch (val) {
-      this.params.ruang = val
+      // this.params.ruang = val
       this.getDataTable()
     },
     // api

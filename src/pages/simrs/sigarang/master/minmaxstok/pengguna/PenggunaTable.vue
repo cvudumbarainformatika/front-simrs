@@ -17,7 +17,7 @@
                 dense
                 placeholder="Cari Ruangan"
                 @update:model-value="store.setPenggunaSearch"
-                @keyup.enter.prevent="store.setPenggunaSearch"
+                @keyup.enter="store.setPenggunaSearch"
               >
                 <template #prepend>
                   <q-icon
@@ -37,7 +37,7 @@
                 dense
                 placeholder="Cari barang"
                 @update:model-value="store.setBarangSearch"
-                @keyup.enter.prevent="store.setBarangSearch"
+                @keyup.enter="store.setBarangSearch"
               >
                 <template #prepend>
                   <q-icon

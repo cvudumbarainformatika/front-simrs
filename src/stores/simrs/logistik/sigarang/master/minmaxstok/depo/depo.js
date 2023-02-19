@@ -31,6 +31,7 @@ export const useMinMaxDepoStockStore = defineStore('min_max_depo_store', {
     },
     barangs: [],
     penggunas: [],
+    ruangs: [],
     gudangs: []
   }),
   actions: {
