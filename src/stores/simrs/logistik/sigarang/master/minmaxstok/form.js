@@ -81,6 +81,8 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
       this.getDataGudang()
       // this.getDataPengguna()
       this.getDataRuang()
+      this.pengguna.getDataBarang()
+      this.pengguna.getDataRuang()
     },
     // api related actions
     // get autoComp data
@@ -127,7 +129,7 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             console.log('pengguna', resp)
             this.penggunas = resp.data
             this.depo.penggunas = resp.data
-            this.pengguna.penggunas = resp.data
+            // this.pengguna.penggunas = resp.data
             resolve(resp)
           })
           .catch(() => {
@@ -144,7 +146,7 @@ export const useMinMaxStokForm = defineStore('min_maks_stok_form', {
             console.log('pengguna', resp)
             this.ruangs = resp.data
             this.depo.ruangs = resp.data
-            this.pengguna.ruangs = resp.data
+            // this.pengguna.ruangs = resp.data
             resolve(resp)
           })
           .catch(() => {

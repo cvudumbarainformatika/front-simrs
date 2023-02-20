@@ -8,27 +8,21 @@
         <template #content>
           <div class="fit row wrap justify-start">
             <div class="q-mr-sm">
-              <q-input
-                v-model="store.params.ruang"
+              <app-autocomplete-new
+                v-model="store.params.barang"
+                label="Cari Barang"
                 outlined
-                class="search-big"
-                borderless
-                debounce="1000"
-                dense
-                placeholder="Cari Ruangan"
-                @update:model-value="store.setPenggunaSearch"
-                @keyup.enter="store.setPenggunaSearch"
-              >
-                <template #prepend>
-                  <q-icon
-                    name="icon-mat-search"
-                    size="20px"
-                  />
-                </template>
-              </q-input>
-            </div>
-            <div class="q-mr-sm">
-              <q-input
+                debounce="500"
+                option-value="kode"
+                option-label="nama"
+                autocomplete="nama"
+                :source="store.barangs"
+                :loading="store.loadingBarang"
+                valid
+                @buang="store.barangSearch"
+                @on-select="store.setBarangSearch"
+              />
+              <!-- <q-input
                 v-model="store.params.barang"
                 outlined
                 class="search-big"
@@ -45,8 +39,43 @@
                     size="20px"
                   />
                 </template>
-              </q-input>
+              </q-input> -->
             </div>
+            <div class="q-mr-sm">
+              <app-autocomplete-new
+                v-model="store.params.ruang"
+                label="Cari Ruangan"
+                outlined
+                debounce="500"
+                option-value="kode"
+                option-label="uraian"
+                autocomplete="uraian"
+                :source="store.ruangs"
+                :loading="store.loadingRuang"
+                valid
+                @buang="store.ruangSearch"
+                @on-select="store.setPenggunaSearch"
+              />
+              <!-- <q-input
+                v-model="store.params.ruang"
+                outlined
+                class="search-big"
+                borderless
+                debounce="1000"
+                dense
+                placeholder="Cari Ruangan"
+                @update:model-value="store.setPenggunaSearch"
+                @keyup.enter="store.setPenggunaSearch"
+              >
+                <template #prepend>
+                  <q-icon
+                    name="icon-mat-search"
+                    size="20px"
+                  />
+                </template>
+              </q-input> -->
+            </div>
+
             <div class="q-mr-sm">
               <app-autocomplete-new
                 v-model="store.params.flag_minta"

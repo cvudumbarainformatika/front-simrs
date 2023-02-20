@@ -20,11 +20,27 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
       order_by: 'id',
       sort: 'desc'
     },
+    paramsBarang: {
+      q: '',
+      page: 1,
+      per_page: 15,
+      order_by: 'id',
+      sort: 'desc'
+    },
+    paramsRuang: {
+      q: '',
+      page: 1,
+      per_page: 15,
+      order_by: 'id',
+      sort: 'desc'
+    },
     columns: [],
     columnHide: [],
 
     // form
     loading: false,
+    loadingBarang: false,
+    loadingRuang: false,
     isOpen: false,
     optionTampil: [
       { nama: 'Semua', value: 'all' },
@@ -141,16 +157,57 @@ export const useMinMaxPenggunaStockStore = defineStore('min_max_pengguna_store',
     // custom for this store
 
     setBarangSearch (val) {
-      // this.params.barang = val
+      this.params.barang = val
       this.getDataTable()
     },
+    barangSearch (val) {
+      this.paramsBarang.q = val
+      this.getDataBarang()
+    },
     setPenggunaSearch (val) {
-      // this.params.ruang = val
+      this.params.ruang = val
+      console.log('ruang', val)
       this.getDataTable()
+    },
+    ruangSearch (val) {
+      // this.params.ruang = val
+      this.paramsRuang.q = val
+      this.getDataRuang()
     },
     // api
     // api related function
-
+    getDataBarang() {
+      const params = { params: this.paramsBarang }
+      this.loadingBarang = true
+      return new Promise(resolve => {
+        api.get('v1/barangrs/index', params)
+          .then(resp => {
+            this.loadingBarang = false
+            console.log('barangrs', resp)
+            this.barangs = resp.data.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBarang = false
+          })
+      })
+    },
+    getDataRuang() {
+      const params = { params: this.paramsRuang }
+      this.loadingRuang = true
+      return new Promise(resolve => {
+        api.get('v1/ruang/index', params)
+          .then(resp => {
+            this.loadingRuang = false
+            console.log('pengguna', resp)
+            this.ruangs = resp.data.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingRuang = false
+          })
+      })
+    },
     // table
 
     getDataTable () {
