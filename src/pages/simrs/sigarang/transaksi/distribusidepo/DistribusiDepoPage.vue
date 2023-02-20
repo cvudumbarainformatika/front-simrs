@@ -226,6 +226,8 @@
           label="Simpan"
           no-caps
           icon="icon-mat-save"
+          :loading="store.loading"
+          :disable="store.loading"
           @click="store.saveForm"
         />
       </q-card-actions>
