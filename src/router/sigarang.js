@@ -191,6 +191,14 @@ const sigarang =
             )
         },
         {
+          path: '/sigarang/transaksi/distribusilangsung',
+          name: 'sigarang.transaksi.distribusilangsung',
+          component: () =>
+            import(
+              'pages/simrs/sigarang/transaksi/distribusilangsung/IndexPage.vue'
+            )
+        },
+        {
           path: '/sigarang/transaksi/distribusidepo',
           name: 'sigarang.transaksi.distribusidepo',
           component: () =>
