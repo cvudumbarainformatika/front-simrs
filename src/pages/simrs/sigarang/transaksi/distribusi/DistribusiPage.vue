@@ -376,7 +376,7 @@
                       {{ data.barangrs.mapingbarang.barang108.kode }}
                     </div> -->
                     <div class="anak text-left">
-                      {{ data.ruang.uraian }}
+                      {{ data.ruang?data.ruang.uraian:'-' }}
                     </div>
                     <div class="anak text-right print-hide">
                       {{ data.barangrs.stokDepo }}

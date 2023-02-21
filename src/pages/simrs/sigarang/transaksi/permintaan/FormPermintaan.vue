@@ -1,5 +1,41 @@
 <template>
   <div class="q-pt-sm q-pb-lg-xl">
+    <q-card class="q-mb-sm">
+      <q-card-section>
+        <!-- {{ stokOpname }} {{ tutupPermintaan }} -->
+        <div class="row q-col-gutter-sm items-center">
+          <div class="text-weight-bold">
+            {{ tanggal.dayOfWeekStr }},
+          </div>
+          <div>{{ tanggal.day }} </div>
+          <div>{{ tanggal.monthStr }} </div>
+          <div>{{ tanggal.year }} </div>
+          <div :class="parseInt(tanggal.hour)>=13?'text-weight-bold text-negative':''">
+            {{ tanggal.hour }} :
+          </div>
+          <div :class="parseInt(tanggal.hour)>=13?'text-weight-bold text-negative':''">
+            {{ tanggal.minute }} :
+          </div>
+          <div :class="parseInt(tanggal.hour)>=13?'text-weight-bold text-negative':''">
+            {{ tanggal.second }}
+          </div>
+        </div>
+        <marquee>
+          <div
+            v-if="!stokOpname"
+            class="text-weight-bold q-mb-sm text-negative"
+          >
+            Pelayanan Permintaan barang di tutup jam 13:00. Permintaan diatas jam 13:00 tidak akan dilayani
+          </div>
+          <div
+            v-if="stokOpname"
+            class="text-weight-bold q-mb-sm text-negative"
+          >
+            Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
+          </div>
+        </marquee>
+      </q-card-section>
+    </q-card>
     <app-card
       title="Form Permintaan"
       desc="Form Permintaan Ruangan"
@@ -127,8 +163,35 @@
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div
+                v-if="!stokOpname && tutupPermintaan"
+                class="col-md-12 col-xs-12"
+              >
+                <marquee>
+                  <div
+                    class="text-weight-bold q-mb-sm text-negative"
+                  >
+                    Pelayanan Permintaan barang Sudah di tutup
+                  </div>
+                </marquee>
+              </div>
+              <div
+                v-if="stokOpname"
+                class="col-md-12 col-xs-12"
+              >
+                <marquee>
+                  <div
+                    class="text-weight-bold q-mb-sm text-negative"
+                  >
+                    Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
+                  </div>
+                </marquee>
+              </div>
               <div class="col-md-9 col-xs-12" />
-              <div class="col-md-3 col-xs-12">
+              <div
+                v-if="!tutupPermintaan && !stokOpname"
+                class="col-md-3 col-xs-12"
+              >
                 <app-btn
                   label="Simpan List Barang"
                   color="secondary"
@@ -318,8 +381,35 @@
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div
+                v-if="!stokOpname && tutupPermintaan"
+                class="col-md-12 col-xs-12"
+              >
+                <marquee>
+                  <div
+                    class="text-weight-bold q-mb-sm text-negative"
+                  >
+                    Pelayanan Permintaan barang Sudah di tutup
+                  </div>
+                </marquee>
+              </div>
+              <div
+                v-if="stokOpname"
+                class="col-md-12 col-xs-12"
+              >
+                <marquee>
+                  <div
+                    class="text-weight-bold q-mb-sm text-negative"
+                  >
+                    Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
+                  </div>
+                </marquee>
+              </div>
               <div class="col-md-9 col-xs-12" />
-              <div class="col-md-3 col-xs-12">
+              <div
+                v-if="!stokOpname && !tutupPermintaan"
+                class="col-md-3 col-xs-12"
+              >
                 <app-btn
                   label="Kirim ke Depo"
                   icon-right="icon-mat-send"
@@ -348,6 +438,66 @@ const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
 const maksRuangan = useMinMaxPenggunaStockStore()
 // const mapingbarang = useMasterMapingBarangForm()
+
+// timer
+const tanggal = ref({
+  day: date.formatDate(Date.now(), 'D'),
+  dayOfWeek: date.formatDate(Date.now(), 'd'),
+  dayOfWeekStr: '',
+  month: date.formatDate(Date.now(), 'M'),
+  monthStr: date.formatDate(Date.now(), 'MMMM'),
+  year: date.formatDate(Date.now(), 'YYYY'),
+  hour: date.formatDate(Date.now(), 'HH'),
+  minute: date.formatDate(Date.now(), 'mm'),
+  second: date.formatDate(Date.now(), 'ss')
+})
+const stokOpname = ref(false)
+const tutupPermintaan = ref(false)
+const time = () => {
+  // const sekarang = Date.now()
+  const anu = Date.now()
+  const sekarang = new Date(anu)
+  tanggal.value.day = date.formatDate(sekarang, 'D')
+  tanggal.value.dayOfWeek = date.formatDate(sekarang, 'd')
+  tanggal.value.month = date.formatDate(sekarang, 'M')
+  tanggal.value.monthStr = date.formatDate(sekarang, 'MMMM')
+  tanggal.value.year = date.formatDate(sekarang, 'YYYY')
+  tanggal.value.hour = date.formatDate(sekarang, 'HH')
+  tanggal.value.minute = date.formatDate(sekarang, 'mm')
+  tanggal.value.second = date.formatDate(sekarang, 'ss')
+  stokOpname.value = tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)
+  tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
+  switch (date.formatDate(sekarang, 'd')) {
+    case '0':
+      tanggal.value.dayOfWeekStr = 'Minggu'
+      break
+    case '1':
+      tanggal.value.dayOfWeekStr = 'Senin'
+      break
+    case '2':
+      tanggal.value.dayOfWeekStr = 'Selasa'
+      break
+    case '3':
+      tanggal.value.dayOfWeekStr = 'Rabu'
+      break
+    case '4':
+      tanggal.value.dayOfWeekStr = 'Kamis'
+      break
+    case '5':
+      tanggal.value.dayOfWeekStr = 'Jum\'at'
+      break
+    case '6':
+      tanggal.value.dayOfWeekStr = 'Sabtu'
+      break
+
+    default:
+      tanggal.value.dayOfWeekStr = ''
+      break
+  }
+}
+setInterval(() => { time() }, 1000)
+
+// end of timer
 const ruanganMinta = () => {
   console.log('form', store.form)
   console.log('min-max', store.minMaxPenggunas)

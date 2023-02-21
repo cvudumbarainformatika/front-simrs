@@ -1,14 +1,14 @@
 <template>
   <div class="full-width">
-    <div class="row q-mb-sm">
+    <!-- timer {{ tanggal.hour }} :{{ tanggal.minute }}: {{ tanggal.second }} -->
+    <!-- <div class="row q-mb-sm">
       <div class="col-12">
-        timer {{ tanggal.hour }} :{{ tanggal.minute }}: {{ tanggal.second }}
-        <!-- <app-no-selected-page
+        <app-no-selected-page
           text="Permintaan ditutup untuk sementara karena ada Stok Opname, dibuka kembali awal bulan depan"
           color="primary"
-        /> -->
+        />
       </div>
-    </div>
+    </div>-->
     <!-- <div class="row q-mb-sm">
       <div class="col-12">
         <app-no-selected-page
@@ -49,8 +49,6 @@ import TabelTujuanPermintaan from './TabelTujuanPermintaan.vue'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { onBeforeRouteLeave } from 'vue-router'
-import { ref } from 'vue'
-import { date } from 'quasar'
 // import { onMounted } from 'vue'
 const setting = useSettingsStore()
 const store = useTransaksiPermintaanForm()
@@ -65,23 +63,6 @@ table.getRuang()
 table.getMapingDepo()
 table.getCurrentStok()
 // table.getMinMaxPengguna()
-const tanggal = ref({
-  day: date.formatDate(Date.now(), 'D'),
-  dayOfWeek: date.formatDate(Date.now(), 'd'),
-  month: date.formatDate(Date.now(), 'M'),
-  hour: date.formatDate(Date.now(), 'H'),
-  minute: date.formatDate(Date.now(), 'mm'),
-  second: date.formatDate(Date.now(), 'ss')
-})
-const time = () => {
-  tanggal.value.day = date.formatDate(Date.now(), 'D')
-  tanggal.value.dayOfWeek = date.formatDate(Date.now(), 'd')
-  tanggal.value.month = date.formatDate(Date.now(), 'M')
-  tanggal.value.hour = date.formatDate(Date.now(), 'H')
-  tanggal.value.minute = date.formatDate(Date.now(), 'mm')
-  tanggal.value.second = date.formatDate(Date.now(), 'ss')
-}
-setInterval(() => { time() }, 1000)
 const slug = 'TPN-' + uniqueId()
 const oldSlug = routerInstance.currentRoute.value.params.slug
 table.setParam('reff', oldSlug)
