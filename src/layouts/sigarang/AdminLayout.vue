@@ -90,9 +90,9 @@ const ruang = computed(() => {
   }
 })
 const foto = computed(() => {
-  return store.foto !== '' ? 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + store.foto : new URL('../../assets/images/user-avatar.svg', import.meta.url).href
+  return store.foto !== '' ? 'http://192.168.100.100/simpeg/foto/' + store.foto : new URL('../../assets/images/user-avatar.svg', import.meta.url).href
   // if (store.foto !== '') {
-  //   return 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + store.foto
+  //   return 'http://192.168.100.100/simpeg/foto/' + store.foto
   // } else {
   //   return new URL('../../assets/images/user-avatar.svg', import.meta.url).href
   // }

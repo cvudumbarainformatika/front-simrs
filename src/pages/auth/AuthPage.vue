@@ -29,8 +29,8 @@
           <app-input
             v-model="form.email"
             dense
-            label="email"
-            icon="icon-mat-email"
+            label="Nik"
+            icon="icon-mat-person"
           />
           <app-input
             v-model="form.password"
