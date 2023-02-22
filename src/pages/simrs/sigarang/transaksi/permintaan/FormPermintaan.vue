@@ -23,15 +23,15 @@
         <marquee>
           <div
             v-if="!stokOpname"
-            class="text-weight-bold q-mb-sm text-negative"
+            class="q-mb-sm"
           >
-            Pelayanan Permintaan barang di tutup jam 13:00. Permintaan diatas jam 13:00 tidak akan dilayani
+            Pelayanan Permintaan barang <span class="text-weight-bold"> Depo Habis Pakai </span>dibuka jam 07:00 dan ditutup jam 13:00. Permintaan diluar jam pelayanan tidak akan dilayani
           </div>
           <div
             v-if="stokOpname"
-            class="text-weight-bold q-mb-sm text-negative"
+            class="q-mb-sm"
           >
-            Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
+            Sehubungan dengan Stok Opname <span class="text-weight-bold"> Depo Habis Pakai</span>, Pemintaan sementara ditutup
           </div>
         </marquee>
       </q-card-section>
@@ -162,51 +162,6 @@
                 />
               </div>
             </div>
-            <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div
-                v-if="!stokOpname && tutupPermintaan"
-                class="col-md-12 col-xs-12"
-              >
-                <marquee>
-                  <div
-                    class="text-weight-bold q-mb-sm text-negative"
-                  >
-                    Pelayanan Permintaan barang Sudah di tutup
-                  </div>
-                </marquee>
-              </div>
-              <div
-                v-if="stokOpname"
-                class="col-md-12 col-xs-12"
-              >
-                <marquee>
-                  <div
-                    class="text-weight-bold q-mb-sm text-negative"
-                  >
-                    Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
-                  </div>
-                </marquee>
-              </div>
-              <div class="col-md-9 col-xs-12" />
-              <div
-                v-if="!tutupPermintaan && !stokOpname"
-                class="col-md-3 col-xs-12"
-              >
-                <app-btn
-                  label="Simpan List Barang"
-                  color="secondary"
-                  :disable="store.barang ? store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi && store.form.jumlah && store.form.jumlah > 0?false:true:true"
-                  :loading="table.loading"
-                  @click="simpanList"
-                />
-                <div
-                  v-if="store.barang?store.barang.alokasi<=0:false"
-                  class="f-10"
-                >
-                  *Stok Depo tidak mencukupi
-                </div>
-              </div>
-            </div>
           </div>
           <div class="col-6">
             <div class="row q-col-gutter-md q-mb-sm items-center">
@@ -253,8 +208,17 @@
               <div class="col-md-3 col-xs-12">
                 Depo
               </div>
-              <div class="col-md-9 col-xs-12 text-weight-bolder">
+              <div
+                class="col-md-3 col-xs-12 text-weight-bolder"
+                :class="tutupPermintaan && store.nama.gudang!=='barang belum dipilih'?'text-negative':''"
+              >
                 {{ store.nama.gudang }}
+              </div>
+              <div
+                v-if="tutupPermintaan && store.nama.gudang!=='barang belum dipilih'"
+                class="col-md-3 col-xs-12 text-weight-bolder text-negative"
+              >
+                (Tutup)
               </div>
             </div>
             <!-- <div class="row q-col-gutter-md q-mb-sm items-center text-weight-bolder">
@@ -380,32 +344,78 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="row q-col-gutter-md q-mb-sm">
+          <div
+            v-if="!stokOpname && tutupPermintaan"
+            class="col-md-12 col-xs-12"
+          >
+            <marquee>
+              <p
+                class="q-mb-sm"
+              >
+                Pelayanan Permintaan barang <span class="text-weight-bold"> Depo Habis Pakai</span>
+                tutup. depo lain tetap melayani permintaan
+              </p>
+              <p>
+                Silahkan pilih nama barang. Tombol akan tampil jika barang yang anda pilih bukan barang
+                <span class="text-weight-bold"> Depo Habis Pakai</span>
+              </p>
+            </marquee>
+          </div>
+          <div
+            v-if="stokOpname"
+            class="col-md-12 col-xs-12"
+          >
+            <marquee>
+              <p
+                class="q-mb-sm"
+              >
+                Sehubungan dengan Stok Opname <span class="text-weight-bold"> Depo Habis Pakai</span>,
+                Pemintaan <span class="text-weight-bold"> Depo Habis Pakai</span> sementara ditutup
+              </p>
+              <p>
+                Silahkan pilih nama barang. Tombol akan tampil jika barang yang anda pilih bukan barang
+                <span class="text-weight-bold"> Depo Habis Pakai</span>
+              </p>
+            </marquee>
+          </div>
+        </div>
+        <div class="row q-col-gutter-md q-mb-sm">
+          <div class="col-6">
             <div class="row q-col-gutter-md q-mb-sm items-center">
-              <div
-                v-if="!stokOpname && tutupPermintaan"
-                class="col-md-12 col-xs-12"
-              >
-                <marquee>
-                  <div
-                    class="text-weight-bold q-mb-sm text-negative"
-                  >
-                    Pelayanan Permintaan barang Sudah di tutup
-                  </div>
-                </marquee>
-              </div>
-              <div
-                v-if="stokOpname"
-                class="col-md-12 col-xs-12"
-              >
-                <marquee>
-                  <div
-                    class="text-weight-bold q-mb-sm text-negative"
-                  >
-                    Sehubungan dengan Stok Opname, Pemintaan sementara ditutup
-                  </div>
-                </marquee>
-              </div>
               <div class="col-md-9 col-xs-12" />
+              <div
+                v-if=" !stokOpname && !tutupPermintaan "
+                class="col-md-3 col-xs-12"
+              >
+                <app-btn
+                  label="Simpan List Barang"
+                  color="secondary"
+                  :disable="store.barang ? store.barang.alokasi > 0 && store.form.jumlah <= store.barang.alokasi && store.form.jumlah && store.form.jumlah > 0?false:true:true"
+                  :loading="table.loading"
+                  @click="simpanList"
+                />
+                <div
+                  v-if="store.barang?store.barang.alokasi<=0:false"
+                  class="f-10"
+                >
+                  *Stok Depo tidak mencukupi
+                </div>
+                <div
+                  v-if="!store.form.jumlah"
+                  class="f-10"
+                >
+                  *Tidak ada jumlah
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div class="col-md-9 col-xs-12" />
+
               <div
                 v-if="!stokOpname && !tutupPermintaan"
                 class="col-md-3 col-xs-12"
@@ -453,6 +463,8 @@ const tanggal = ref({
 })
 const stokOpname = ref(false)
 const tutupPermintaan = ref(false)
+// const depoTutup = ref(false)
+const bhp = 'Gd-02010103'
 const time = () => {
   // const sekarang = Date.now()
   const anu = Date.now()
@@ -467,6 +479,14 @@ const time = () => {
   tanggal.value.second = date.formatDate(sekarang, 'ss')
   stokOpname.value = tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)
   tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
+  const barang = table.barangHasStok.filter(barang => { return barang.kode === store.form.kode_rs })
+  if (barang.length) {
+    if (barang[0].depo.kode === bhp) {
+      tutupPermintaan.value = true
+    } else {
+      tutupPermintaan.value = false
+    }
+  }
   switch (date.formatDate(sekarang, 'd')) {
     case '0':
       tanggal.value.dayOfWeekStr = 'Minggu'
@@ -554,10 +574,14 @@ const pilihPengguna = (val) => {
   // console.log('pj', pj)
   // console.log('ruang', ruang)
 }
-
 const barangSelected = val => {
   /** usable code */
   const barang = table.barangHasStok.filter(barang => { return barang.kode === val })
+  if (barang[0].depo.kode === bhp) {
+    tutupPermintaan.value = true
+  } else {
+    tutupPermintaan.value = false
+  }
   store.setForm('kode_satuan', barang[0].satuan.kode)
   store.setNama('satuan', barang[0].satuan.nama)
   console.log('barang', barang)
@@ -635,6 +659,7 @@ const clearBarangRs = () => {
   store.setNama('satuan', 'barang belum dipilih')
   store.setNama('gudang', 'barang belum dipilih')
   inputJumlahMinta.value.$refs.refInput.resetValidation()
+  tutupPermintaan.value = false
 }
 const modelSet = val => {
   console.log('model set', val)
