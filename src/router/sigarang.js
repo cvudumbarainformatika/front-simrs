@@ -191,7 +191,7 @@ const sigarang =
             )
         },
         {
-          path: '/sigarang/transaksi/distribusilangsung',
+          path: '/sigarang/transaksi/distribusilangsung/:slug',
           name: 'sigarang.transaksi.distribusilangsung',
           component: () =>
             import(

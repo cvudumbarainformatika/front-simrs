@@ -13,6 +13,71 @@
       <q-card-section>
         <div class="row items-center">
           <div class="col-3">
+            Nomor Distribusi
+          </div>
+          <div class="col-4">
+            <app-input
+              ref="refDist"
+              v-model="store.form.no_distribusi"
+              label="Nomor Distribusi"
+              outlined
+              :rules="[
+                val=> val!=='xxx/DSTL/xxx' || 'Harap diganti'
+              ]"
+            />
+          </div>
+        </div>
+        <div class="row items-center q-mt-sm">
+          <div class="col-3">
+            Tanggal Distribusi
+          </div>
+          <div class="col-4">
+            <div class="col-md-6 col-xs-12">
+              <app-input-date
+                ref="refTempo"
+                :model="store.form.tanggal"
+                icon="icon-mat-event"
+                outlined
+                label="Tempo"
+                @set-model="setModel"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row items-center q-mt-sm">
+          <div class="col-3">
+            Ruangan Tujuan
+          </div>
+          <div class="col-4">
+            <app-autocomplete-new
+              ref="refRuangan"
+              label="Ruangan"
+              :model="store.form.ruang_tujuan"
+              option-value="kode"
+              option-label="uraian"
+              autocomplete="uraian"
+              outlined
+              debounce="500"
+              :source="store.ruangs"
+              :loading="store.loadingRuang"
+              @buang="store.getRuangs"
+              @on-select="ruangSelected"
+              @clear="ruangCleared"
+            />
+          </div>
+        </div>
+        <div class="row items-center q-my-sm">
+          <div class="col-3">
+            Petugas Depo
+          </div>
+          <div class="col-9">
+            {{ auth.currentUser? auth.currentUser.nama:'tekan f5 karena nama anda belum terbaca' }}
+          </div>
+
+          <!-- {{ store.form }} -->
+        </div>
+        <div class="row items-center">
+          <div class="col-3">
             Pilih Tipe Barang
           </div>
           <div class="col-4">
@@ -30,45 +95,24 @@
             />
           </div>
         </div>
-        <div class="row items-center">
-          <div class="col-3">
-            Nomor Distribusi
-          </div>
-          <div class="col-4">
-            <app-input
-              v-model="store.form.no_distribusi"
-              label="Nomor Distribusi"
-              outlined
-            />
-          </div>
-        </div>
-        <div class="row items-center">
-          <div class="col-3">
-            Tanggal Distribusi
-          </div>
-        </div>
-        <div class="row items-center">
-          <div class="col-3">
-            Ruangan Tujuan
-          </div>
-        </div>
-        <div class="row items-center">
-          <div class="col-3">
-            Petugas Depo
-          </div>
-          <div class="col-9">
-            {{ auth.currentUser? auth.currentUser.nama:'-' }}
-          </div>
-          {{ store.form }}
-        </div>
       </q-card-section>
     </q-card>
+    <FormBasah
+      v-if="store.tipe==='basah'"
+    />
+    <FormKering
+      v-if="store.tipe==='kering'"
+      @simpan-list="simpanList"
+    />
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
+import FormBasah from './FormBasah.vue'
+import FormKering from './FormKering.vue'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const store = useTransaksiDistribusiLangsung()
 const auth = useAuthStore()
@@ -83,6 +127,43 @@ const ruang = computed(() => {
 })
 const tipeSelected = val => {
   console.log(val)
+}
+const setModel = val => {
+  const temp = new Date(val)
+  const jam = date.formatDate(Date.now(), 'HH')
+  const min = date.formatDate(Date.now(), 'mm')
+  const det = date.formatDate(Date.now(), 'ss')
+  temp.setHours(jam)
+  temp.setMinutes(min)
+  temp.setSeconds(det)
+  const indTime = date.formatDate(temp, 'YYYY-MM-DD HH:mm:ss')
+
+  store.setForm('tanggal', indTime)
+  console.log('tanggal', indTime)
+}
+const ruangSelected = val => {
+  store.setForm('ruang_tujuan', val)
+  console.log('runag', val)
+}
+const ruangCleared = val => {
+  store.setForm('ruang_tujuan', null)
+  console.log('runag', val)
+}
+const refDist = ref(null)
+const refRuangan = ref(null)
+// const valid=ref(false)
+const simpanList = val => {
+  refRuangan.value.$refs.refAuto.validate()
+  refDist.value.$refs.refInput.validate()
+  if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
+    store.formIsValid = true
+  }
+  // console.log('ref ruangan', refRuangan.value.$refs.refAuto.validate())
+  // if (store.form.no_distribusi === 'xxx/DSTL/xxx') {
+  //   console.log('simpan list', refDist.value.$refs.refInput.validate())
+  // } else {
+  //   refDist.value.$refs.refInput.resetValidation()
+  // }
 }
 // watch(() => auth.currentUser, (data) => {
 //   console.log('watch', data)
