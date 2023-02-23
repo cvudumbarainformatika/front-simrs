@@ -104,6 +104,11 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       // console.log('form', this.form)
     },
     pemesananSelected (val) {
+      const tempNo = val.split('/SP-')
+      console.log('tempNo', tempNo)
+      if (tempNo.length === 2) {
+        this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+      }
       this.params.nomor = val
       this.form.nomor = val
       this.getDataPenerimaan().then(data => {
@@ -152,6 +157,10 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
           //   if (apem.tanggal_surat) { this.setForm('tanggal_surat', apem.tanggal_surat) }
         } else {
           this.clearNomorPemesanan()
+          // const tempNo = val.split('SP')
+          if (tempNo.length === 2) {
+            this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+          }
         }
 
         console.log('form', this.form)
