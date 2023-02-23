@@ -478,10 +478,10 @@ const time = () => {
   tanggal.value.minute = date.formatDate(sekarang, 'mm')
   tanggal.value.second = date.formatDate(sekarang, 'ss')
   stokOpname.value = tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)
-  tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
+  // tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
   const barang = table.barangHasStok.filter(barang => { return barang.kode === store.form.kode_rs })
   if (barang.length) {
-    if (barang[0].depo.kode === bhp) {
+    if (barang[0].depo.kode === bhp && (parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7)) {
       tutupPermintaan.value = true
     } else {
       tutupPermintaan.value = false
