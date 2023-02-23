@@ -12,32 +12,70 @@
       <q-separator />
       <q-card-section>
         <!-- tanggal -->
-        <div class="fit row no-wrap justify-between items-center">
-          <div class="col-3">
-            Tanggal Stok Opname
+        <div class="row q-col-gutter-sm items-start">
+          <div class="col-6">
+            <div class="fit row no-wrap justify-between items-center q-my-sm">
+              <div class="col-3">
+                Tanggal Stok Opname
+              </div>
+              <div class="col-9">
+                <!-- <app-input-date
+                  v-model="tanggalStokOpname"
+                  label="Tanggal Stok opname"
+                  outlined
+                /> -->
+                {{ tanggalStokOpname }}
+              </div>
+            </div>
+            <!-- gudang -->
+            <div class="fit row no-wrap justify-between items-center q-mb-sm">
+              <div class="col-3">
+                Gudang
+              </div>
+              <div class="col-9">
+                <app-autocomplete-new
+                  label="pilih "
+                  :model="store.kode_tempat"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="kode"
+                  outlined
+                  valid
+                  :loading="store.loading"
+                  :source="store.gudangDepo"
+                  @on-select="gudangSelected"
+                  @clear="gudangCleared"
+                />
+              </div>
+            </div>
           </div>
-          <div class="col-9">
-            {{ tanggalStokOpname }}
-          </div>
-        </div>
-        <!-- gudang -->
-        <div class="fit row no-wrap justify-between items-center q-mb-sm">
-          <div class="col-3">
-            Gudang
-          </div>
-          <div class="col-9">
-            <app-autocomplete-new
-              label="pilih "
-              :model="store.kode_tempat"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kode"
-              valid
-              :loading="store.loading"
-              :source="store.gudangDepo"
-              @on-select="gudangSelected"
-              @clear="gudangCleared"
-            />
+          <div class="col-6">
+            <div class="fit row no-wrap justify-start items-center q-col-gutter-sm">
+              <div class="col-3">
+                Periode
+              </div>
+              <div class="col-3">
+                <app-autocomplete-new
+                  v-model="store.params.bulan"
+                  label="Pilih Bulan"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="value"
+                  outlined
+                  :source="store.months"
+                  @on-select="bulanSelected"
+                />
+              </div>
+              <div class="col-3">
+                <app-autocomplete
+                  v-model="store.params.tahun"
+                  label="Pilih Tahun"
+                  outlined
+                  :source="years"
+                  @selected="tahunSelected"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <!-- button stok opname -->
@@ -159,11 +197,43 @@ import { ref } from 'vue'
 import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stokOpname'
 import { dateFullFormat } from 'src/modules/formatter'
 import formDialog from './FormDialog.vue'
+import { daysInMonth } from 'src/modules/utils'
 
-const tanggalStokOpname = ref(date.formatDate(Date.now(), 'DD MMMM YYYY'))
 const store = useStokOpnameStore()
+const tanggalStokOpname = ref('')
+const dayInMonth = ref(0)
+const setDate = () => {
+  // const tempDate = Date.now()
+  const sekarang = new Date()
+  sekarang.setMonth(parseInt(store.params.bulan) - 1)
+  sekarang.setFullYear(parseInt(store.params.tahun))
+  dayInMonth.value = daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun))
+  sekarang.setDate(dayInMonth.value)
+  sekarang.setHours(23)
+  sekarang.setMinutes(59)
+  sekarang.setSeconds(59)
+  tanggalStokOpname.value = date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss')
+  console.log('params', store.params)
+  console.log('tanggal', date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss'))
+  console.log('bulan selected', parseInt(store.params.bulan))
+  console.log('bulan selected day', daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun)))
+  console.log('sekarang', sekarang)
+}
 store.getInitialData()
-
+setDate()
+const bulanSelected = (val) => {
+  store.setParams('bulan', val)
+  store.setParams('page', 1)
+  setDate()
+  store.getDataTable()
+}
+const tahunSelected = val => {
+  console.log('tahun', val)
+  store.setParams('page', 1)
+  store.setParams('tahun', val)
+  setDate()
+  store.getDataTable()
+}
 const gudangSelected = (val) => {
   console.log('gudang', val)
   store.kode_tempat = val
@@ -180,6 +250,18 @@ const gudangCleared = () => {
   store.params.search = ''
   store.getDataTable()
 }
+
+// pilih range bulan dan tahun
+// const months = ref()
+const curY = parseInt(store.params.tahun)
+const years = ref([])
+for (let index = 0; index < 11; index++) {
+  years.value[index] = curY - 5 + index
+}
+
+// const monthSelected = ref(null)
+// const yearSelected = ref(null)
+
 // const searchEnter = () => {
 //   console.log(store.params.search)
 // }

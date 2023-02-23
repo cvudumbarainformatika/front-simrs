@@ -27,13 +27,15 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       page: 1,
       per_page: 10,
       order_by: 'created_at',
-      sort: 'asc'
+      sort: 'asc',
+      bulan: date.formatDate(Date.now(), 'MM'),
+      tahun: date.formatDate(Date.now(), 'YYYY')
     },
     kode_tempat: null,
     gudangDepo: [
       { nama: 'Semua', kode: null }
     ],
-    bulans: [
+    months: [
       { nama: 'Januari', value: '01' },
       { nama: 'Februari', value: '02' },
       { nama: 'Maret', value: '03' },
@@ -44,10 +46,10 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       { nama: 'Agustus', value: '08' },
       { nama: 'September', value: '09' },
       { nama: 'Oktober', value: '10' },
-      { nama: 'Nopember', value: '11' },
+      { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
-    ],
-    bulan: date.formatDate(Date.now(), 'MM')
+
+    ]
 
   }),
   actions: {
@@ -64,6 +66,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     // table function -- start
     setForm(key, val) {
       this.form[key] = val
+    },
+    setParams(key, val) {
+      this.params[key] = val
     },
     setMeta(payload) {
       delete payload.data
