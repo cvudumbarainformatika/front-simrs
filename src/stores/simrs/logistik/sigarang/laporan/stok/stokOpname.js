@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
@@ -31,7 +32,22 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     kode_tempat: null,
     gudangDepo: [
       { nama: 'Semua', kode: null }
-    ]
+    ],
+    bulans: [
+      { nama: 'Januari', value: '01' },
+      { nama: 'Februari', value: '02' },
+      { nama: 'Maret', value: '03' },
+      { nama: 'April', value: '04' },
+      { nama: 'Mei', value: '05' },
+      { nama: 'Juni', value: '06' },
+      { nama: 'Juli', value: '07' },
+      { nama: 'Agustus', value: '08' },
+      { nama: 'September', value: '09' },
+      { nama: 'Oktober', value: '10' },
+      { nama: 'Nopember', value: '11' },
+      { nama: 'Desember', value: '12' }
+    ],
+    bulan: date.formatDate(Date.now(), 'MM')
 
   }),
   actions: {
