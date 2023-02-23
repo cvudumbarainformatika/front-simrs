@@ -2,6 +2,7 @@ import pegawai from './pegawai'
 import sigarang from './sigarang'
 import antrian from './antrian'
 import laborat from './laborat'
+import settings from './settings'
 
 const routes = [
   {
@@ -20,16 +21,16 @@ const routes = [
           )
       },
 
-      laborat,
-      {
-        path: '/admin/settings',
-        component: () => import('pages/simrs/settings/IndexPage.vue')
-      },
-      {
-        path: '/admin/settings/menu',
-        name: 'settings.menu',
-        component: () => import('pages/simrs/settings/menu/IndexPage.vue')
-      }
+      laborat
+      // {
+      //   path: '/admin/settings',
+      //   component: () => import('src/pages/simrs/settings/IndexPage.vue')
+      // },
+      // {
+      //   path: '/admin/settings/menu',
+      //   name: 'settings.menu',
+      //   component: () => import('pages/simrs/settings/menu/IndexPage.vue')
+      // }
     ]
   },
   {
@@ -45,7 +46,7 @@ const routes = [
       }
     ]
   },
-
+  settings,
   pegawai,
   sigarang,
   antrian,

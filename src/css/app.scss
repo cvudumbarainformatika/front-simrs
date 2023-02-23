@@ -40,6 +40,11 @@ h1,h2,h3,h4,h5 {
 .my-card {
   width: 700px;
 }
+.card-my {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
 .my-flex-1 {
   flex: 1;
