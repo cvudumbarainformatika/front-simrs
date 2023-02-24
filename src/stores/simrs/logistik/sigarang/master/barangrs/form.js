@@ -6,6 +6,7 @@ import { useMasterBarangRSTable } from './table'
 export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
   state: () => ({
     isOpen: false,
+    loadingCount: false,
     form: {
       nama: null,
       kode: null,
@@ -62,8 +63,10 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       const formatDb = year + '-' + month + '-' + day
       this.form.tanggal_lahir = formatDb
     },
-    setKode () {
-      const temp = this.input_kode.split('')
+    setKode (kode) {
+      console.log('kode', kode)
+      const anu = this.input_kode === '' ? this.input_kode.split('') : false
+      const temp = anu || kode.split('')
       const apem = temp.length
       apem >= 5 ? this.form.kode = 'RS-' + this.input_kode
         : apem === 4 ? this.form.kode = 'RS-0' + this.input_kode
@@ -83,6 +86,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       this.resetFORM()
       this.edited = false
       this.isOpen = !this.isOpen
+      this.getIndexNumber()
     },
     editData (val) {
       this.edited = true
@@ -104,6 +108,23 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
               this.satuans = resp.data
             }
           })
+      })
+    },
+    getIndexNumber() {
+      this.loadingCount = true
+      return new Promise(resolve => {
+        api.get('v1/barangrs/count-index')
+          .then(resp => {
+            this.loadingCount = false
+            console.log('count barang', resp.data)
+            this.input_kode = resp.data
+            setTimeout(() => {
+              this.setKode(String(resp.data))
+            }, 300)
+
+            resolve(resp)
+          })
+          .catch(() => { this.loadingCount = false })
       })
     },
     // ambil data depo

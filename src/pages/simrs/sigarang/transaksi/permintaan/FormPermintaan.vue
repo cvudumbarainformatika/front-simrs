@@ -469,6 +469,7 @@ const time = () => {
   // const sekarang = Date.now()
   const anu = Date.now()
   const sekarang = new Date(anu)
+  // sekarang.setDate(27)
   tanggal.value.day = date.formatDate(sekarang, 'D')
   tanggal.value.dayOfWeek = date.formatDate(sekarang, 'd')
   tanggal.value.month = date.formatDate(sekarang, 'M')
@@ -477,14 +478,21 @@ const time = () => {
   tanggal.value.hour = date.formatDate(sekarang, 'HH')
   tanggal.value.minute = date.formatDate(sekarang, 'mm')
   tanggal.value.second = date.formatDate(sekarang, 'ss')
-  stokOpname.value = tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)
+  // stokOpname.value = tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)
   // tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
   const barang = table.barangHasStok.filter(barang => { return barang.kode === store.form.kode_rs })
   if (barang.length) {
-    if (barang[0].depo.kode === bhp && (parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7)) {
-      tutupPermintaan.value = true
+    if (barang[0].depo.kode === bhp) {
+      if ((parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) < 7)) {
+        tutupPermintaan.value = true
+      }
+      if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)) {
+        stokOpname.value = true
+        tutupPermintaan.value = true
+      }
     } else {
       tutupPermintaan.value = false
+      stokOpname.value = false
     }
   }
   switch (date.formatDate(sekarang, 'd')) {

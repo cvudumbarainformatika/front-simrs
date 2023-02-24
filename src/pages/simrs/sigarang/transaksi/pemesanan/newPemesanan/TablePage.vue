@@ -167,6 +167,7 @@
                     <div
                       class="col-11"
                     >
+                      <!-- hint="tekan enter untuk cari" -->
                       <app-autocomplete-new
                         :model="store.form.kode_rs"
                         :valid="kodeRs"
@@ -175,12 +176,13 @@
                         autocomplete="nama"
                         option-value="kode"
                         option-label="nama"
-                        hint="tekan enter untuk cari"
+                        debounce="500"
                         :source="store.mapingBarangs"
                         :loading="store.mapingLoading"
                         @on-select="store.barangSelected"
                         @clear="clearBarangRs"
                         @set-model="modelSet"
+                        @buang="modelSet"
                       />
                       <!-- @buang="buang" -->
                     </div>

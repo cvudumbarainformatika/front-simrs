@@ -28,6 +28,7 @@
                 label="Input Kode*"
                 outlined
                 autofocus
+                :loading="store.loadingCount"
                 @update:model-value="store.setKode"
               />
             </div>

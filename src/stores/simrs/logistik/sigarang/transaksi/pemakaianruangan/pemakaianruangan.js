@@ -140,17 +140,23 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       this.getItemsData()
     },
     setItems(data) {
-      this.items = data.map(item => {
+      const anu = data.map(item => {
         // {kode_rs: 'RS-00901', jml: '12'}
-        const temp = this.mapingbarang.filter(maping => {
-          maping.nama = maping.barangrs.nama
-          return item.kode_rs === maping.kode_rs
-        })
-        // temp[0].jumlah = item.jml
-        temp[0].jumlah = item.sisa_stok
-
-        return temp[0]
+        // const temp = this.mapingbarang.filter(maping => {
+        //   maping.nama = maping.barangrs.nama
+        //   return item.kode_rs === maping.kode_rs
+        // })
+        // // temp[0].jumlah = item.jml
+        // item.nama = item.barang ? item.barang.nama : 'Tidak ada nama, periksa kembali data master'
+        if (item.barang) {
+          const temp = item.barang
+          item.jumlah = item.sisa_stok
+          return temp
+        } else {
+          return false
+        }
       })
+      this.items = anu.filter(dua => { return dua !== false })
       console.log('items', this.items)
     },
     mapingPenanggungjawab(data) {
