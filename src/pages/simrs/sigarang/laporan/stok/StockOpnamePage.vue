@@ -180,6 +180,26 @@
             <template #cell-sisa_stok="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template>
+            <template #left-acttion="{row}">
+              <div>
+                <q-btn
+                  flat
+                  class=""
+                  size="sm"
+                  round
+                  color="grey"
+                  icon="icon-mat-visibility"
+                  @click="kartuStok(row)"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Lihat kartu stok
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </template>
           </app-table>
         </div>
         <q-separator />
@@ -261,6 +281,10 @@ for (let index = 0; index < 11; index++) {
   years.value[index] = curY - 5 + index
 }
 
+// kartu stok
+const kartuStok = (val) => {
+  console.log(val)
+}
 // const monthSelected = ref(null)
 // const yearSelected = ref(null)
 

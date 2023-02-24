@@ -329,9 +329,9 @@
           </td>
           <td class="text-right">
             <div class="row justify-end items-center">
+              <!-- class="q-ml-md" -->
               <slot
                 name="left-acttion"
-                class="q-ml-md"
                 :row="item"
                 :col="i"
               />

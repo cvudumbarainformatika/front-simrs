@@ -488,7 +488,6 @@ const time = () => {
       }
       if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)) {
         stokOpname.value = true
-        // tutupPermintaan.value = true
       }
     } else {
       tutupPermintaan.value = false
@@ -585,11 +584,11 @@ const pilihPengguna = (val) => {
 const barangSelected = val => {
   /** usable code */
   const barang = table.barangHasStok.filter(barang => { return barang.kode === val })
-  if (barang[0].depo.kode === bhp) {
-    tutupPermintaan.value = true
-  } else {
-    tutupPermintaan.value = false
-  }
+  // if (barang[0].depo.kode === bhp) {
+  //   tutupPermintaan.value = true
+  // } else {
+  //   tutupPermintaan.value = false
+  // }
   store.setForm('kode_satuan', barang[0].satuan.kode)
   store.setNama('satuan', barang[0].satuan.nama)
   console.log('barang', barang)
