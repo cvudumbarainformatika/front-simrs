@@ -174,7 +174,7 @@
               label="pilih Kode barang"
               autocomplete="nama"
               option-label="nama"
-              option-value="kode_rs"
+              option-value="kode"
               :source="store.items"
               :loading="store.loading"
               @on-select="store.itemSelectod"

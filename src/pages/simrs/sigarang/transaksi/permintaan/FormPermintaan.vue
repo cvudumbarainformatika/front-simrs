@@ -488,7 +488,7 @@ const time = () => {
       }
       if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)) {
         stokOpname.value = true
-        tutupPermintaan.value = true
+        // tutupPermintaan.value = true
       }
     } else {
       tutupPermintaan.value = false

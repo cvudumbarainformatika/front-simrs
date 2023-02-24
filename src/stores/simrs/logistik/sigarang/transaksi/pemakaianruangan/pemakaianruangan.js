@@ -150,7 +150,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         // item.nama = item.barang ? item.barang.nama : 'Tidak ada nama, periksa kembali data master'
         if (item.barang) {
           const temp = item.barang
-          item.jumlah = item.sisa_stok
+          temp.jumlah = item.stok
           return temp
         } else {
           return false
@@ -200,16 +200,16 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     },
 
     itemSelectod(val) {
-      console.log(val)
+      console.log('val', val)
       const temp = this.items.filter(data => {
-        return data.kode_rs === val
+        return data.kode === val
       })
       console.log('temp', temp)
       this.detail.kode_rs = val
       this.detail.kode_108 = temp[0].kode_108
       this.detail.nama = temp[0].nama
       this.detail.kode_satuan = temp[0].kode_satuan
-      this.detail.uraian = temp[0].barang108.uraian
+      this.detail.uraian = temp[0].uraian_108
       this.detail.stokRuangan = parseInt(temp[0].jumlah)
       this.detail.jumlah = 0
       this.detail.sisaStok = temp[0].jumlah
