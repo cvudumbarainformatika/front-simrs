@@ -213,6 +213,7 @@ const setDate = () => {
   sekarang.setMinutes(59)
   sekarang.setSeconds(59)
   tanggalStokOpname.value = date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss')
+  store.setParams('lastDay', dayInMonth.value)
   console.log('params', store.params)
   console.log('tanggal', date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss'))
   console.log('bulan selected', parseInt(store.params.bulan))
@@ -237,6 +238,7 @@ const tahunSelected = val => {
 const gudangSelected = (val) => {
   console.log('gudang', val)
   store.kode_tempat = val
+  store.setParams('search', val)
   if (val !== null) {
     store.params.search = val
     store.getDataByDepo()

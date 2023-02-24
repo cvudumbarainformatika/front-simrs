@@ -1,6 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <q-card>
+      <!-- {{ role }} -->
       <q-tabs
         v-model="tab"
         dense
@@ -16,6 +17,7 @@
           label="Stoks Sekarang"
         />
         <q-tab
+          v-if="role?(role==='root' || role==='depo' || role==='gudang' || role==='gizi'):role"
           name="opname"
           no-caps
           label="Stok Opname"
@@ -40,8 +42,13 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
+import { computed, ref } from 'vue'
 import StokOpnamePage from './StockOpnamePage.vue'
 import StokPage from './StokPage.vue'
 const tab = ref('stok')
+const auth = useAuthStore()
+const role = computed(() => {
+  return auth.role ? auth.role : false
+})
 </script>

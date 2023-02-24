@@ -219,6 +219,33 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     simpanOpname() {
       this.loading = true
+      // const data = {
+      //   id: this.form.id,
+      //   jumlah: this.form.jumlah,
+      //   selisih: this.form.selisih
+      // }
+      const data = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/opname/store-opname', data)
+          .then(resp => {
+            this.loading = false
+            console.log('resp', resp)
+            notifSuccess(resp)
+            if (this.form.kode_tempat !== null) {
+              this.getDataByDepo()
+            } else {
+              this.getDataTable()
+            }
+            this.resetForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    simpanPenyesuaian() {
+      this.loading = true
       const data = {
         id: this.form.id,
         jumlah: this.form.jumlah,

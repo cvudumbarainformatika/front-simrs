@@ -80,7 +80,7 @@ const actJumlah = val => {
 
 const onSubmit = () => {
   if (store.form.selisih > 0 || store.form.selisih < 0) {
-    store.simpanOpname().then(() => {
+    store.simpanPenyesuaian().then(() => {
       store.setOpen()
     })
   } else {
