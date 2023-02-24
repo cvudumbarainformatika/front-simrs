@@ -1,64 +1,74 @@
 <template>
-  <q-page>
-    <div v-if="store.loading">
-      <app-loading />
-    </div>
-    <div v-else>
-      <div class="header bg-primary text-white q-pa-md padding-xxxl ">
-        <div class="row items-center">
-          <div class="col">
-            <div class="row items-center q-col-gutter-md">
-              <div>
-                <q-avatar
-                  size="80px"
-                  font-size="40px"
-                  color="indigo"
-                  text-color="white"
-                  icon="icon-mat-person"
-                />
-              </div>
-              <div class="text-h6">
-                PROGRAMMER
-              </div>
-            </div>
-            <div class="column">
-              <div class="text-h6">
-                SIMRS IT
-              </div>
-              <div>Halaman Ini Khusu SIMRS / IT</div>
-            </div>
-            <div>SISTEM INFORMASI RUMAH SAKIT </div>
-          </div>
+  <q-page
+    ref="main"
+    class=""
+  >
+    <div
+      class="padding-xxxl q-pt-md"
+    >
+      <q-card
+        class="card-my shadow-22"
+        :style="`height:${h}px`"
+      >
+        <div
+          style="height:70px"
+          class="q-px-lg q-py-md"
+        >
+          <app-input
+            dense
+            valid
+            label="search"
+          />
         </div>
-      </div>
-      <div class="content padding-xxxl q-pa-lg">
-        <div class="row  q-col-gutter-lg">
-          <div class="col">
-            <app-setting-card url="settings.menu" />
+        <q-scroll-area :style="`height:${hScroll}px`">
+          <div class="q-px-lg q-py-sm">
+            <div
+              v-for="n in 50"
+              :key="n"
+            >
+              Drawer {{ n }} / 50
+            </div>
           </div>
-          <div class="col">
-            <app-setting-card
-              title="Setting Pengguna"
-              subtitle="Pengaturan data Pengguna Aplikasi"
-              icon="icon-mat-person_2"
+        </q-scroll-area>
+        <div
+          ref="bot"
+          style="height:72px"
+          class="absolute-bottom bg-primary text-white q-px-lg q-py-md"
+        >
+          <div class="row">
+            <q-avatar
+              size="40px"
+              font-size="20px"
+              color="dark"
+              text-color="white"
+              icon="icon-mat-person"
+            />
+            <q-space />
+            <q-btn
+              flat
+              padding="sm"
+              icon="icon-mat-settings"
             />
           </div>
         </div>
-      </div>
+      </q-card>
     </div>
   </q-page>
 </template>
-<script setup>
-import AppSettingCard from 'src/components/~global/AppSettingCard.vue'
-import { useSettingsAplikasi } from 'src/stores/simrs/settings'
-import { onMounted } from 'vue'
 
-const store = useSettingsAplikasi()
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const main = ref(null)
+const h = ref()
+const hScroll = ref()
 
 onMounted(() => {
-  store.getData()
-})
+  h.value = main.value.$el.offsetHeight - 35
+  hScroll.value = h.value - (72 + 70)
 
+  console.log(h.value)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -66,5 +76,4 @@ onMounted(() => {
   padding-left: 20%;
   padding-right: 20%;
 }
-
 </style>
