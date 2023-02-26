@@ -47,6 +47,7 @@
                 :size="i + 1 === hovered? `${30}px`:`${25}px`"
                 @mouseover="hovered=i+ 1"
                 @mouseleave="hovered=0"
+                @click="copied(icon)"
               />
               <div
                 style="font-size: 9px;"
@@ -70,6 +71,8 @@
 </template>
 
 <script setup>
+import { copyToClipboard } from 'quasar'
+import { notifErr, notifSuccessVue } from 'src/modules/utils'
 import { ref, onMounted, computed } from 'vue'
 const iconLists = import.meta.globEager('./../../custom-icons/svg/**/*.svg')
 
@@ -92,9 +95,26 @@ onMounted(() => {
   console.log(folders.value)
 })
 
+const emits = defineEmits(['copyText'])
+
 function filteredList() {
   return folders.value.filter((fruit) =>
     fruit.toLowerCase().includes(search.value.toLowerCase())
   )
+}
+
+function copied(text) {
+  copyToClipboard(text)
+    .then(() => {
+      notifSuccessVue('icon terpilih')
+      emits('copyText', text)
+    })
+    .catch(() => {
+      const resp = {
+        status: 500
+      }
+
+      notifErr(resp)
+    })
 }
 </script>

@@ -27,6 +27,12 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
 
     addNew(val) {
       this.items.unshift(val)
+    },
+    changeAppIcon(idx, val) {
+      return new Promise((resolve, reject) => {
+        this.items[idx].icon = val
+        resolve(val)
+      })
     }
   }
 })

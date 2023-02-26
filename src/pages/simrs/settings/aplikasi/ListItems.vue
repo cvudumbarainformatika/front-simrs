@@ -61,10 +61,13 @@
         :key="i"
         expand-icon-toggle
       >
-        <template #header>
+        <template
+          #header
+        >
           <q-item-section
             avatar
-            @click="$emit('iconAppChange',item.icon)"
+            :class="editIndex=== i? 'text-blue':'text-dark'"
+            @click="$emit('iconAppChange',i)"
           >
             <q-skeleton
               v-if="item.icon===''|| item.icon===null"
@@ -80,7 +83,7 @@
 
           <q-item-section>
             <div
-              :class="item.julukan==='kosong'|| item.julukan===''?'text-negative':'text-dark'"
+              :class="item.julukan==='kosong'|| item.julukan===''?'text-negative': editIndex=== i? 'text-blue': 'text-dark'"
               style="width: 100px"
             >
               {{ item.julukan===''?'...': item.julukan }}
@@ -160,6 +163,8 @@
 <script setup>
 // import { dateFullFormat } from 'src/modules/formatter'
 
+import { computed } from 'vue'
+
 const props = defineProps({
   items: {
     type: Array,
@@ -168,9 +173,21 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  edited: {
+    type: String,
+    default: null
   }
 })
 
 defineEmits(['add', 'iconAppChange'])
+
+const editIndex = computed(() => {
+  if (props.edited !== null) {
+    const arr = props.edited.split('-')
+    return arr[1]
+  }
+  return null
+})
 
 </script>

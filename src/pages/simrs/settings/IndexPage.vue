@@ -24,8 +24,9 @@
           <list-items
             :items="store.items"
             :loading="store.loading"
+            :edited="edited"
             @add="newData()"
-            @icon-app-change="(val)=>iconAppChange(val)"
+            @icon-app-change="(val)=>iconAppClick(val)"
           />
         </q-scroll-area>
         <div
@@ -53,7 +54,10 @@
     </div>
 
     <!-- modal -->
-    <app-get-icon v-model="modalIcon" />
+    <app-get-icon
+      v-model="modalIcon"
+      @copy-text="(val)=>changeIconApp(val)"
+    />
   </q-page>
 </template>
 
@@ -80,6 +84,7 @@ const newValue = ref({
   url: ''
 })
 const modalIcon = ref(false)
+const edited = ref(null)
 
 onMounted(() => {
   h.value = main.value.$el.offsetHeight - 35
@@ -93,8 +98,20 @@ function newData() {
   store.addNew(newValue.value)
 }
 
-function iconAppChange() {
+const indexApp = ref(null)
+function iconAppClick(index) {
   modalIcon.value = true
+  indexApp.value = index
+  console.log('index app', index)
+}
+
+function changeIconApp(val) {
+  modalIcon.value = false
+  console.log(val)
+  store.changeAppIcon(indexApp.value, val).then(() => {
+    edited.value = 'edited-' + indexApp.value
+    console.log(edited.value)
+  })
 }
 </script>
 
