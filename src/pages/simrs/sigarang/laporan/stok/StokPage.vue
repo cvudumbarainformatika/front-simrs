@@ -120,19 +120,19 @@
               {{ dateFullFormat(row.tanggal) }}
             </template>
             <template #cell-barang="{row}">
-              {{ (row.barang.nama) }}
+              {{ row.barang?row.barang.nama:'master barang tidak ditemukan' }}
             </template>
             <template #cell-tempat="{row}">
               {{ (row.depo?row.depo.nama:row.ruang?row.ruang.uraian:'-') }}
             </template>
             <template #cell-kode_108="{row}">
-              {{ (row.barang.kode_108) }}
+              {{ row.barang?(row.barang.kode_108):'master barang tidak ditemukan' }}
             </template>
             <template #cell-uraian="{row}">
-              {{ (row.barang.barang108.uraian) }}
+              {{ row.barang?(row.barang.uraian_108):'master barang tidak ditemukan' }}
             </template>
             <template #cell-satuan="{row}">
-              {{ row.barang.satuan?row.barang.satuan.nama:'-' }}
+              {{ row.barang?(row.barang.satuan?row.barang.satuan.nama:'belum ada satuan'):'master barang tidak ditemukan' }}
             </template>
             <template #cell-stok_fisik="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}

@@ -124,7 +124,17 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
-      this.columns = ['tanggal', 'tempat', 'kode_rs', 'barang', 'kode_108', 'uraian', 'sisa_stok', 'stok_fisik', 'selisih']
+      this.columns = [
+        'tanggal',
+        'tempat',
+        'kode_rs',
+        'barang',
+        'kode_108',
+        'uraian',
+        'sisa_stok',
+        'stok_fisik',
+        'selisih'
+      ]
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)

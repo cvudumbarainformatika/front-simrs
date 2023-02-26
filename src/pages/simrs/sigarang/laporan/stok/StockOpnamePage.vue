@@ -16,7 +16,7 @@
           <div class="col-6">
             <div class="fit row no-wrap justify-between items-center q-my-sm">
               <div class="col-3">
-                Tanggal Stok Opname
+                Tanggal Stok Opname otomatis
               </div>
               <div class="col-9">
                 <!-- <app-input-date
@@ -115,7 +115,7 @@
             :loading="store.loading"
             :to-search="store.params.q"
             :ada-tambah="false"
-            :ada-delete="false"
+            :default-btn="false"
             @goto="store.setPage"
             @set-row="store.setPerPage"
             @refresh="store.refreshTable"
@@ -160,16 +160,16 @@
               {{ dateFullFormat(row.tanggal) }}
             </template>
             <template #cell-barang="{row}">
-              {{ (row.barang.nama) }}
+              {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
             </template>
             <template #cell-tempat="{row}">
               {{ (row.depo.nama) }}
             </template>
             <template #cell-kode_108="{row}">
-              {{ (row.barang.mapingbarang.kode_108) }}
+              {{ row.barang?(row.barang.kode_108):'Master barang tidak ditemukan' }}
             </template>
             <template #cell-uraian="{row}">
-              {{ (row.barang.mapingbarang.barang108.uraian) }}
+              {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
             </template>
             <template #cell-stok_fisik="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
