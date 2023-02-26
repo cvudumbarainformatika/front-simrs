@@ -21,14 +21,12 @@
           />
         </div>
         <q-scroll-area :style="`height:${hScroll}px`">
-          <div class="q-px-lg q-py-sm">
-            <div
-              v-for="n in 50"
-              :key="n"
-            >
-              Drawer {{ n }} / 50
-            </div>
-          </div>
+          <list-items
+            :items="store.items"
+            :loading="store.loading"
+            @add="newData()"
+            @icon-app-change="(val)=>iconAppChange(val)"
+          />
         </q-scroll-area>
         <div
           ref="bot"
@@ -53,22 +51,51 @@
         </div>
       </q-card>
     </div>
+
+    <!-- modal -->
+    <app-get-icon v-model="modalIcon" />
   </q-page>
 </template>
 
 <script setup>
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { ref, onMounted } from 'vue'
+
+import ListItems from './aplikasi/ListItems.vue'
 
 const main = ref(null)
 const h = ref()
 const hScroll = ref()
 
+const store = useSettingsAplikasi()
+
+const newValue = ref({
+  aplikasi: '',
+  color: '',
+  icon: '',
+  id: 0,
+  julukan: 'kosong',
+  menus: [],
+  nama: '',
+  url: ''
+})
+const modalIcon = ref(false)
+
 onMounted(() => {
   h.value = main.value.$el.offsetHeight - 35
   hScroll.value = h.value - (72 + 70)
 
-  console.log(h.value)
+  console.log(newValue.value)
+  store.getData()
 })
+
+function newData() {
+  store.addNew(newValue.value)
+}
+
+function iconAppChange() {
+  modalIcon.value = true
+}
 </script>
 
 <style lang="scss" scoped>

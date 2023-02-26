@@ -15,9 +15,18 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       this.loading = true
       await api.get('/v1/settings/appmenu/aplikasi').then(resp => {
         console.log('settings aplikasi :', resp)
+        if (resp.status === 200) {
+          this.items = resp.data
+          this.loading = false
+        }
         this.loading = false
-        // this.items = resp.data
+      }).catch(e => {
+        this.loading = false
       })
+    },
+
+    addNew(val) {
+      this.items.unshift(val)
     }
   }
 })
