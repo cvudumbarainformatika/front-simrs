@@ -109,7 +109,7 @@ function changeIconApp(val) {
   modalIcon.value = false
   console.log(val)
   store.changeAppIcon(indexApp.value, val).then(() => {
-    edited.value = 'edited-' + indexApp.value
+    edited.value = 'edited-' + val
     console.log(edited.value)
   })
 }

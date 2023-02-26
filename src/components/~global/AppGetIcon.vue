@@ -54,13 +54,11 @@
                 class="ellipsis q-mt-sm"
               >
                 <span
-                  v-for="letter in icon.toLowerCase()"
-                  :key="letter"
                   :class="{
                     'bg-grey-3':
-                      search.toLowerCase().includes(letter)
+                      search.toLowerCase().includes(icon)
                   }"
-                >{{ letter }}</span>
+                >{{ icon }}</span>
               </div>
             </div>
           </div>
