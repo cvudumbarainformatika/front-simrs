@@ -261,10 +261,13 @@ const depoCleared = () => {
 const barangSelected = val => {
   store.resetInput()
   store.setInput('kode_barang', val)
-  const barang = store.mappingBarangs.filter(sel => {
+  // const barang = store.mappingBarangs.filter(sel => {
+  //   return sel.kode_rs === val
+  // })
+  const barang = store.barangrHasStoks.filter(sel => {
     return sel.kode_rs === val
   })
-
+  console.log('barang', barang)
   if (!store.minMaxDepos.length) store.filterBarangHasStok()
 
   // ganti database, fungsi dibawah ini jadi tidak diperlukan
@@ -305,11 +308,11 @@ const barangSelected = val => {
     }
   }
   if (barang.length) {
-    store.setInput('kode_108', barang[0].kode_108)
-    store.setInput('uraian', barang[0].barang108.uraian)
-    store.setInput('nama', barang[0].barangrs.nama)
-    store.setDetail('kode_108', barang[0].kode_108)
-    store.setDetail('kode_satuan', barang[0].kode_satuan)
+    store.setInput('kode_108', barang[0].barang.kode_108)
+    store.setInput('uraian', barang[0].barang.uraian_108)
+    store.setInput('nama', barang[0].barang.nama)
+    store.setDetail('kode_108', barang[0].barang.kode_108)
+    store.setDetail('kode_satuan', barang[0].barang.kode_satuan)
   }
   if (minMaxBarang.length) {
     store.setInput('stok_min_depo', minMaxBarang[0].min_stok)
