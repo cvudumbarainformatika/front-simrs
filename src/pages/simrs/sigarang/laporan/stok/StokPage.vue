@@ -203,8 +203,22 @@ const gudangCleared = () => {
   store.getDataTable()
 }
 const kartuStok = val => {
+  const skr = Date.now()
+  store.setParamsDetails('from', date.formatDate(skr, 'YYYY-MM-') + '01')
+  store.setParamsDetails('to', date.formatDate(skr, 'YYYY-MM-DD'))
+
   store.setOpen()
-  console.log(val)
+  store.setParamsDetails('kode_rs', val.kode_rs)
+  store.setParamsDetails('kode_ruang', val.kode_ruang)
+  // const anu = Object.keys(val)
+  // if (anu.length) {
+  //   anu.forEach(y => {
+  //     if (val[y] !== null || val[y] !== '') {
+  //     }
+  //   })
+  // }
+  // console.log('anu', anu)
+  store.getDataByBarang()
 }
 // const searchEnter = () => {
 //   console.log(store.params.search)
