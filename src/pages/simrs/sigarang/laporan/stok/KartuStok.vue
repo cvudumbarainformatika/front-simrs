@@ -50,6 +50,12 @@
             </q-popup-proxy>
           </div>
         </div>
+        <div>
+          <app-no-selected-page
+            text="Sedang dalam Proses Pengerjaan"
+            color="orange"
+          />
+        </div>
         <app-loading v-if="store.loadingKartuStok" />
       </template>
     </app-card>

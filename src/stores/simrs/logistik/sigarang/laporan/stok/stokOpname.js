@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useStokOpnameStore = defineStore('stok_opnam_store', {
   state: () => ({
     loading: false,
+    kartuStokOpen: false,
     isOpen: false,
     allItems: [],
     items: [],
@@ -129,10 +130,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         'tempat',
         'kode_rs',
         'barang',
-        'kode_108',
+        'no_penerimaan',
         'uraian',
         'sisa_stok',
-        'stok_fisik',
+        'totalStok',
+        'stok_transaksi',
         'selisih'
       ]
       // this.columns.sort()
@@ -201,6 +203,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.allItems = resp.data.data
             this.items = resp.data.data
             this.meta = resp.data.meta
+            this.items.forEach(item => {
+              item.loading = false
+            })
             resolve(resp)
           })
           .catch(() => {
@@ -220,12 +225,40 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             console.log('data table', resp)
             this.items = resp.data.data
             this.meta = resp.data.meta
+            this.items.forEach(item => {
+              item.loading = false
+            })
             resolve(resp)
           })
           .catch(() => {
             this.loading = false
           })
       })
+    },
+    updateStokFisik(val, i) {
+      console.log('update stok fisik', val, 'Index', i)
+      if (parseFloat(val.stok_fisik) !== val.sisa_stok) {
+        const form = {
+          id: val.id,
+          stok_fisik: parseFloat(val.stok_fisik),
+          selisih: parseFloat(val.sisa_stok) - parseFloat(val.stok_fisik)
+        }
+        this.items[i].loading = true
+        return new Promise(resolve => {
+          api.post('v1/transaksi/opname/update-stok-fisik', form)
+            .then(resp => {
+              this.items[i].loading = false
+              console.log(resp.data)
+              notifSuccess(resp)
+              resolve(resp)
+            })
+            .catch(() => {
+              this.items[i].loading = false
+            })
+        })
+      } else {
+        notifErrVue('stok fisik sama dengan stok aplikasi, tidak ada perubahan')
+      }
     },
     simpanOpname() {
       this.loading = true

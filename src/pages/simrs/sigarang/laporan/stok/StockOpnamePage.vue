@@ -132,8 +132,11 @@
             <template #col-kode_rs>
               <div>Kode Barang</div>
             </template>
-            <template #col-kode_108>
-              <div>Kode 108</div>
+            <template #col-totalStok>
+              <div>Total Stok</div>
+            </template>
+            <template #col-no_penerimaan>
+              <div>No Penerimaan</div>
             </template>
             <template #col-barang>
               <div>Nama Barang</div>
@@ -144,8 +147,8 @@
             <template #col-sisa_stok>
               <div>Stok Aplikasi</div>
             </template>
-            <template #col-stok_fisik>
-              <div>Stok Fisik</div>
+            <template #col-stok_transaksi>
+              <div>Stok Transaksi</div>
             </template>
             <template #col-selisih>
               <div>Selisih</div>
@@ -160,44 +163,132 @@
               {{ dateFullFormat(row.tanggal) }}
             </template>
             <template #cell-barang="{row}">
-              {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
+              <div style="width:7vw;">
+                <div class="ellipsis">
+                  {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #cell-tempat="{row}">
-              {{ (row.depo.nama) }}
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.depo?row.depo.nama:(row.ruang?row.ruang.uraian:'-') }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.depo?row.depo.nama:(row.ruang?row.ruang.uraian:'-') }}
+                </q-tooltip>
+              </div>
             </template>
-            <template #cell-kode_108="{row}">
-              {{ row.barang?(row.barang.kode_108):'Master barang tidak ditemukan' }}
+            <template #cell-totalStok="{row}">
+              {{ row.totalStok?row.totalStok:0 }}
+              <q-tooltip
+                anchor="top middle"
+                self="center middle"
+              >
+                Total stok di ruangan yang sama
+              </q-tooltip>
             </template>
             <template #cell-uraian="{row}">
-              {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
+              <div style="width:7vw;">
+                <div class="ellipsis">
+                  {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
+                </q-tooltip>
+              </div>
             </template>
-            <template #cell-stok_fisik="{row}">
-              {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+            <template #cell-no_penerimaan="{row}">
+              <div style="width:8vw;">
+                <div class="ellipsis">
+                  {{ row.no_penerimaan }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.no_penerimaan }}
+                </q-tooltip>
+              </div>
+            </template>
+            <template #cell-stok_transaksi="{row}">
+              {{ row.stok_transaksi?row.stok_transaksi.jumlah:'proses' }}
             </template>
             <template #cell-selisih="{row}">
-              {{ row.penyesuaian?row.penyesuaian.selisih:'-' }}
+              <div>
+                {{ row.sisa_stok - parseFloat(row.stok_fisik) }}
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Stok aplikasi dikurangi stok fisik
+                </q-tooltip>
+              </div>
             </template>
             <template #cell-sisa_stok="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template>
-            <template #left-acttion="{row}">
-              <div>
-                <q-btn
-                  flat
-                  class=""
-                  size="sm"
-                  round
-                  color="grey"
-                  icon="icon-mat-visibility"
-                  @click="kartuStok(row)"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
+            <template #left-acttion="{row,col}">
+              <div class="row no-wrap fit">
+                <div style="width:5vw">
+                  <app-input
+                    v-model="row.stok_fisik"
+                    label="stok Fisik"
+                    outlined
+                    valid
+                    type="number"
+                    :loading="row.loading"
+                    @blur="store.updateStokFisik(row,col)"
+                  />
+                </div>
+                <!-- <div>
+                  <q-btn
+                    flat
+                    class=""
+                    size="sm"
+                    round
+                    color="grey"
+                    icon="icon-mat-pencil"
+                    @click="row.enableInput=true"
                   >
-                    Lihat kartu stok
-                  </q-tooltip>
-                </q-btn>
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Tampilkan Input
+                    </q-tooltip>
+                  </q-btn>
+                </div> -->
+                <div>
+                  <q-btn
+                    flat
+                    class=""
+                    size="sm"
+                    round
+                    color="grey"
+                    icon="icon-mat-visibility"
+                    @click="kartuStok(row)"
+                  >
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Lihat kartu stok
+                    </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </template>
           </app-table>
@@ -206,6 +297,7 @@
       </q-card-section>
     </q-card>
     <formDialog v-model="store.isOpen" />
+    <kartuStokOpname v-model="store.kartuStokOpen" />
   </div>
 </template>
 <script setup>
@@ -217,6 +309,7 @@ import { ref } from 'vue'
 import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stokOpname'
 import { dateFullFormat } from 'src/modules/formatter'
 import formDialog from './FormDialog.vue'
+import kartuStokOpname from './KartuStokOpname.vue'
 import { daysInMonth } from 'src/modules/utils'
 
 const store = useStokOpnameStore()
@@ -284,6 +377,7 @@ for (let index = 0; index < 11; index++) {
 // kartu stok
 const kartuStok = (val) => {
   console.log(val)
+  store.kartuStokOpen = true
 }
 // const monthSelected = ref(null)
 // const yearSelected = ref(null)
