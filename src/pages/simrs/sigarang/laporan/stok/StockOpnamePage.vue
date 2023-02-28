@@ -125,6 +125,12 @@
             @edit-data="store.editData"
             @delete="store.deletesData"
           >
+            <!-- header -->
+            <template #header-left-after-search>
+              <div class="row fit no-wrap q-ml-md">
+                anu
+              </div>
+            </template>
             <!-- kolom -->
             <template #col-tanggal>
               <div>Tanggal</div>

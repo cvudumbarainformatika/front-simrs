@@ -126,12 +126,12 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
       this.columns = [
-        'tanggal',
-        'tempat',
+        // 'tanggal',
+        // 'tempat',
         'kode_rs',
         'barang',
         'no_penerimaan',
-        'uraian',
+        // 'uraian',
         'sisa_stok',
         'totalStok',
         'stok_transaksi',
