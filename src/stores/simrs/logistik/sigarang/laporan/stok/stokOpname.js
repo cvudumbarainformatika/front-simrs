@@ -169,6 +169,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       this.getDataGudangDepo()
       this.getDataTable()
     },
+    prosesData(val) {
+      console.log('proses data', val)
+    },
     getDataGudangDepo() {
       this.gudangDepo = [
         { nama: 'semua', kode: null }
@@ -202,6 +205,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.setColumns()
             this.allItems = resp.data.data
             this.items = resp.data.data
+            this.prosesData(this.items)
             this.meta = resp.data.meta
             this.items.forEach(item => {
               item.loading = false
@@ -224,6 +228,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('data table', resp)
             this.items = resp.data.data
+            this.prosesData(this.items)
             this.meta = resp.data.meta
             this.items.forEach(item => {
               item.loading = false

@@ -336,7 +336,7 @@
                     <div class="col text-right">
                       <div class="fit row no-wrap justify-end items-center">
                         <div>
-                          {{ store.tanggalTampil }}
+                          {{ dateFullFormat(store.form.tanggal) }}
                         </div>
                         <div class="q-ml-sm">
                           <q-btn
