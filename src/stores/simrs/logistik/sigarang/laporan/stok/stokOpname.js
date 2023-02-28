@@ -171,6 +171,51 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     prosesData(val) {
       console.log('proses data', val)
+      const barang = val.map(br => {
+        const x = br
+        const penerimaan = !br.barang.detail_penerimaan.length ? []
+          : br.barang.detail_penerimaan.filter(trm => {
+            return trm.penerimaan !== null
+          })
+        x.penerimaan = !penerimaan.length ? 0 : penerimaan.filter(trm => {
+          return trm.qty
+        }).reduce((a, b) => a + b)
+        // console.log('barang x ', x)
+        const permintaanRuangan = !br.barang.detail_permintaanruangan.length ? []
+          : br.barang.detail_permintaanruangan.filter(trm => {
+            return trm.permintaanruangan !== null
+          })
+        x.permintaanRuangan = !permintaanRuangan.length ? 0 : permintaanRuangan.filter(mt => {
+          return mt.jumlah_distribusi
+        }).reduce((a, b) => a + b)
+        const gudang = !br.barang.detail_transaksi_gudang.length ? []
+          : br.barang.detail_transaksi_gudang.filter(trm => {
+            return trm.transaction !== null
+          })
+        x.gudang = !gudang.length ? 0 : gudang.filter(gd => {
+          return gd.qty
+        }).reduce((a, b) => a + b)
+        const distribusiDepo = !br.barang.detail_distribusi_depo.length ? []
+          : br.barang.detail_distribusi_depo.filter(trm => {
+            return trm.distribusi !== null
+          })
+        x.distribusiDepo = !distribusiDepo.length ? 0 : distribusiDepo.filter(dp => {
+          return dp.jumlah
+        }).reduce((a, b) => a + b)
+        const distribusiLangsung = !br.barang.detail_distribusi_langsung.length ? []
+          : br.barang.detail_distribusi_langsung.filter(trm => {
+            return trm.distribusi !== null
+          })
+        x.distribusiLangsung = !distribusiLangsung.length ? 0 : distribusiLangsung.filter(dp => {
+          return dp.jumlah
+        }).reduce((a, b) => a + b)
+        x.awal = !br.barang.monthly.length ? []
+          : br.barang.monthly.filter(mo => { return mo.sisa_stok }) // .reduce((a, b) => a + b)
+
+        return x
+      })
+      console.log('barang', barang)
+      this.items = val
     },
     getDataGudangDepo() {
       this.gudangDepo = [
@@ -204,8 +249,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
-            this.items = resp.data.data
-            this.prosesData(this.items)
+            // this.items = resp.data.data
+            this.prosesData(resp.data.data)
             this.meta = resp.data.meta
             this.items.forEach(item => {
               item.loading = false
@@ -227,8 +272,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           .then(resp => {
             this.loading = false
             console.log('data table', resp)
-            this.items = resp.data.data
-            this.prosesData(this.items)
+            // this.items = resp.data.data
+            this.prosesData(resp.data.data)
             this.meta = resp.data.meta
             this.items.forEach(item => {
               item.loading = false
