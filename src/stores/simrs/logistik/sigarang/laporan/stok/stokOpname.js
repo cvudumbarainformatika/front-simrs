@@ -126,12 +126,13 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
       this.columns = [
-        // 'tanggal',
-        // 'tempat',
-        'kode',
-        'barang',
-        // 'no_penerimaan',
+        'tanggal',
+        'tempat',
+        'kode_rs',
+        // 'kode',
+        'no_penerimaan',
         // 'uraian',
+        'barang',
         'sisa_stok',
         'totalStok',
         'stok_transaksi',
@@ -245,16 +246,16 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       const data = {
         params: this.params
       }
-      // api.get('v1/transaksi/opname/monthly-stok', data)
-      await api.get('v1/transaksi/opname/stok-opname', data)
+      api.get('v1/transaksi/opname/monthly-stok', data)
+      // await api.get('v1/transaksi/opname/stok-opname', data)
         .then(resp => {
           if (resp.status === 200) {
             this.loading = false
             console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
-            this.meta = resp.data
-            // this.meta = 'apem'
+            // this.meta = resp.data
+            this.meta = resp.data.meta
             this.prosesData(resp.data.data)
             // this.meta = 'resp.data'
           }

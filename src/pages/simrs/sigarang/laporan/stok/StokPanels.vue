@@ -44,7 +44,8 @@
 <script setup>
 import { useAuthStore } from 'src/stores/auth'
 import { computed, ref } from 'vue'
-import StokOpnamePage from './StockOpnamePage.vue'
+// import StokOpnamePage from './StockOpnamePage.vue'
+import StokOpnamePage from './StockOpnamePageOld.vue'
 import StokPage from './StokPage.vue'
 const tab = ref('stok')
 const auth = useAuthStore()

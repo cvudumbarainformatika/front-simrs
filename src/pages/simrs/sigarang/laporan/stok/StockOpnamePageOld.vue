@@ -352,13 +352,13 @@ const gudangSelected = (val) => {
   console.log('gudang', val)
   store.kode_tempat = val
   store.setParams('search', val)
-  if (val !== null) {
-    store.params.search = val
-    store.getDataByDepo()
-  } else {
-    store.params.search = ''
-    store.getDataTable()
-  }
+  // if (val !== null) {
+  //   store.params.search = val
+  //   store.getDataByDepo()
+  // } else {
+  //   store.params.search = ''
+  store.getDataTable()
+  // }
 }
 const gudangCleared = () => {
   store.kode_tempat = null

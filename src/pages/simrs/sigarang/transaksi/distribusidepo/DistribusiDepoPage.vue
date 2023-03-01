@@ -80,7 +80,20 @@
         <!-- input -->
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
           <div class="anak text-center">
-            {{ store.input.kode_barang?store.input.kode_barang:'-' }}
+            <!-- {{ store.input.kode_barang?store.input.kode_barang:'-' }} -->
+            <!-- ref="refBarang" -->
+            <app-autocomplete-new
+              label="pilih kode barang"
+              :model="store.input.kode_barang"
+              autocomplete="kode"
+              option-label="kode"
+              option-value="kode"
+              :loading="store.loadingHasStok"
+              :source="store.barangrHasStoks"
+              :disable="edit"
+              @on-select="barangSelected"
+              @clear="barangCleared"
+            />
           </div>
           <div class="anak text-center">
             <app-autocomplete-new

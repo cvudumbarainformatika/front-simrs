@@ -169,7 +169,8 @@
             </template>
             <template #left-action="{row}">
               <q-btn
-                v-if="row.status===1 && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
+                v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')
+                  && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
                 color="primary"
                 round
                 icon="icon-mat-exit_to_app"
@@ -185,7 +186,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="row.status===1 "
+                v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')"
                 color="negative"
                 round
                 icon="icon-mat-delete_sweep"
@@ -213,7 +214,7 @@
   </q-page>
 </template>
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
@@ -221,8 +222,15 @@ import DetailsTablePage from './DetailsTablePage.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
+import { useAuthStore } from 'src/stores/auth'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
+
+const auth = useAuthStore()
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
+
 const goTo = val => {
   const Slug = val.reff
 
@@ -270,7 +278,8 @@ const color = val => {
       // eslint-disable-next-line no-unreachable
       break
     case 2:
-      return 'green'
+      // return 'grey'
+      return 'red-4'
       // eslint-disable-next-line no-unreachable
       break
     case 3:
@@ -278,7 +287,7 @@ const color = val => {
       // eslint-disable-next-line no-unreachable
       break
     case 4:
-      return 'grey'
+      return 'green'
       // eslint-disable-next-line no-unreachable
       break
     case 5:
@@ -318,7 +327,7 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
       case 2:
-        return 'Selesai'
+        return 'Menunggu diterima Gudang'
         // eslint-disable-next-line no-unreachable
         break
       case 3:

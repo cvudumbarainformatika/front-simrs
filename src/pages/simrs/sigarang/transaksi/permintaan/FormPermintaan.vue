@@ -193,7 +193,22 @@
                 Kode Barang
               </div>
               <div class="col-md-9 col-xs-12">
-                {{ store.form.kode_rs }}
+                <app-autocomplete-new
+                  :model="store.form.kode_rs"
+                  outlined
+                  valid
+                  label="Kode Barang RS"
+                  autocomplete="kode"
+                  option-value="kode"
+                  option-label="kode"
+                  :source="table.barangHasStok"
+                  :loading="table.loadingHasStok"
+                  :disable="table.loadingHasStok"
+                  @on-select="barangSelected"
+                  @clear="clearBarangRs"
+                  @set-model="modelSet"
+                  @buang="cariBarang"
+                />
               </div>
             </div>
             <div class="row q-col-gutter-md q-mb-sm items-center">
