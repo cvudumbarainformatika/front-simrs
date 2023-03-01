@@ -104,6 +104,7 @@
         <div class="q-mt-sm">
           <!-- table -->
           <app-table
+            :key="store.kode_tempat"
             title="Data Distribusi"
             :columns="store.columns"
             :column-hide="store.columnHide"
@@ -125,11 +126,17 @@
             @edit-data="store.editData"
             @delete="store.deletesData"
           >
+            <!-- header -->
+            <template #header-left-after-search>
+              <div class="q-ml-md">
+                store.meta
+              </div>
+            </template>
             <!-- kolom -->
             <template #col-tanggal>
               <div>Tanggal</div>
             </template>
-            <template #col-kode_rs>
+            <template #col-kode>
               <div>Kode Barang</div>
             </template>
             <template #col-totalStok>
@@ -165,13 +172,13 @@
             <template #cell-barang="{row}">
               <div style="width:7vw;">
                 <div class="ellipsis">
-                  {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
+                  {{ row.nama }}
                 </div>
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
-                  {{ row.barang?(row.barang.nama):'Master barang tidak ditemukan' }}
+                  {{ row.nama }}
                 </q-tooltip>
               </div>
             </template>
@@ -189,37 +196,39 @@
               </div>
             </template>
             <template #cell-totalStok="{row}">
-              {{ row.totalStok?row.totalStok:0 }}
-              <q-tooltip
+              {{ stokGudang(row.monthly) }}
+              <!-- <q-tooltip
                 anchor="top middle"
                 self="center middle"
               >
                 Total stok di ruangan yang sama
-              </q-tooltip>
+              </q-tooltip> -->
             </template>
-            <template #cell-uraian="{row}">
+
+            <template #cell-sisa_stok="{row}">
               <div style="width:7vw;">
-                <div class="ellipsis">
-                  {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
+                <div>
+                  {{ sisaStok(row.monthly) }}
                 </div>
-                <q-tooltip
+                <!-- <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
                   {{ row.barang?(row.barang.uraian_108):'Master barang tidak ditemukan' }}
-                </q-tooltip>
+                </q-tooltip> -->
               </div>
             </template>
+
             <template #cell-no_penerimaan="{row}">
               <div style="width:8vw;">
                 <div class="ellipsis">
-                  {{ row.no_penerimaan }}
+                  {{ row.monthly }}
                 </div>
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
-                  {{ row.no_penerimaan }}
+                  {{ row.monthly }}
                 </q-tooltip>
               </div>
             </template>
@@ -237,9 +246,9 @@
                 </q-tooltip>
               </div>
             </template>
-            <template #cell-sisa_stok="{row}">
+            <!-- <template #cell-sisa_stok="{row}">
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
-            </template>
+            </template> -->
             <template #left-acttion="{row,col}">
               <div class="row no-wrap fit">
                 <div style="width:5vw">
@@ -333,6 +342,30 @@ const setDate = () => {
   console.log('bulan selected day', daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun)))
   console.log('sekarang', sekarang)
 }
+function sisaStok(val) {
+  if (val.length > 0) {
+    const depo = val.filter(m => m.kode_ruang === store.kode_tempat)
+    let totalDepo = 0
+    if (depo.length > 0) {
+      totalDepo = depo.map(x => x.sisa_stok).reduce((a, b) => a + b, 0)
+    }
+    return totalDepo
+  }
+  return 0
+}
+function stokGudang (val) {
+  const gudang = 'Gd-02010100'
+  if (val.length > 0) {
+    const depo = val.filter(m => m.kode_ruang === gudang)
+    let totalDepo = 0
+    if (depo.length > 0) {
+      totalDepo = depo.map(x => x.sisa_stok).reduce((a, b) => a + b, 0)
+    }
+    return totalDepo
+  }
+  return 0
+}
+
 store.getInitialData()
 setDate()
 const bulanSelected = (val) => {
@@ -352,13 +385,13 @@ const gudangSelected = (val) => {
   console.log('gudang', val)
   store.kode_tempat = val
   store.setParams('search', val)
-  if (val !== null) {
-    store.params.search = val
-    store.getDataByDepo()
-  } else {
-    store.params.search = ''
-    store.getDataTable()
-  }
+  store.params.search = val
+  // if (val !== null) {
+  // store.getDataByDepo()
+  // } else {
+  //   store.params.search = ''
+  store.getDataTable()
+  // }
 }
 const gudangCleared = () => {
   store.kode_tempat = null

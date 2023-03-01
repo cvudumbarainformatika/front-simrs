@@ -439,14 +439,19 @@
 // import { notifErrVue } from 'src/modules/utils'
 // import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { date } from 'quasar'
+import { useAuthStore } from 'src/stores/auth'
 import { useMinMaxPenggunaStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/pengguna/pengguna'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
 const maksRuangan = useMinMaxPenggunaStockStore()
+const auth = useAuthStore()
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
 // const mapingbarang = useMasterMapingBarangForm()
 
 // timer
@@ -484,10 +489,18 @@ const time = () => {
   if (barang.length) {
     if (barang[0].depo.kode === bhp) {
       if ((parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) < 7)) {
-        tutupPermintaan.value = true
+        if (role.value !== 'root') {
+          tutupPermintaan.value = true
+        } else {
+          tutupPermintaan.value = false
+        }
       }
       if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)) {
-        stokOpname.value = true
+        if (role.value !== 'root') {
+          stokOpname.value = true
+        } else {
+          stokOpname.value = false
+        }
       }
     } else {
       tutupPermintaan.value = false
