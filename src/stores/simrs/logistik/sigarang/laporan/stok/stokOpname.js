@@ -10,7 +10,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     isOpen: false,
     allItems: [],
     items: [],
-    meta: {},
+    meta: null,
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
     // customized data
@@ -23,7 +23,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       selisih: 0
     },
     params: {
-      search: '',
+      search: 'Gd-02010101',
       q: '',
       page: 1,
       per_page: 10,
@@ -32,9 +32,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY')
     },
-    kode_tempat: null,
+    kode_tempat: 'Gd-02010101',
     gudangDepo: [
-      { nama: 'Semua', kode: null }
+      { nama: 'Depo PNM', kode: 'Gd-02010101' }
     ],
     months: [
       { nama: 'Januari', value: '01' },
@@ -86,40 +86,40 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     // local table related function
     setSearch(val) {
       this.params.q = val
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setOder(payload) {
       this.params.order_by = payload
       this.params.sort === 'desc'
         ? (this.params.sort = 'asc')
         : (this.params.sort = 'desc')
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setPage(payload) {
       // console.log('setPage', payload)
       this.params.page = payload
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setPerPage(payload) {
       this.params.per_page = payload
       this.params.page = 1
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setColumns(payload) {
       // if (!payload) return
@@ -128,9 +128,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       this.columns = [
         // 'tanggal',
         // 'tempat',
-        'kode_rs',
+        'kode',
         'barang',
-        'no_penerimaan',
+        // 'no_penerimaan',
         // 'uraian',
         'sisa_stok',
         'totalStok',
@@ -170,6 +170,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       this.getDataTable()
     },
     prosesData(val) {
+      this.items = val
       console.log('proses data', val)
       const barang = val.map(br => {
         const x = br
@@ -219,7 +220,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     getDataGudangDepo() {
       this.gudangDepo = [
-        { nama: 'semua', kode: null }
+        { nama: 'Depo PNM', kode: 'Gd-02010101' }
       ]
       this.loading = true
       return new Promise(resolve => {
@@ -228,7 +229,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('data gudang', resp)
             resp.data.forEach(data => {
-              this.gudangDepo.push(data)
+              if (data.kode !== 'Gd-02010101') {
+                this.gudangDepo.push(data)
+              }
             })
             resolve(resp)
           })
@@ -237,31 +240,54 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           })
       })
     },
-    getDataTable() {
+    async getDataTable() {
       this.loading = true
       const data = {
         params: this.params
       }
-      return new Promise(resolve => {
-        api.get('v1/transaksi/opname/monthly-stok', data)
-          .then(resp => {
+      // api.get('v1/transaksi/opname/monthly-stok', data)
+      await api.get('v1/transaksi/opname/stok-opname', data)
+        .then(resp => {
+          if (resp.status === 200) {
             this.loading = false
             console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
-            // this.items = resp.data.data
+            this.meta = resp.data
+            // this.meta = 'apem'
             this.prosesData(resp.data.data)
-            this.meta = resp.data.meta
-            this.items.forEach(item => {
-              item.loading = false
-            })
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+            // this.meta = 'resp.data'
+          }
+        }).catch(() => {
+          this.loading = false
+        })
     },
+    // getDataTable() {
+    //   this.loading = true
+    //   const data = {
+    //     params: this.params
+    //   }
+    //   return new Promise(resolve => {
+    //     // api.get('v1/transaksi/opname/monthly-stok', data)
+    //     api.get('v1/transaksi/opname/stok-opname', data)
+    //       .then(resp => {
+    //         this.loading = false
+    //         console.log('data table', resp)
+    //         this.setColumns()
+    //         this.allItems = resp.data.data
+    //         // this.items = resp.data.data
+    //         this.prosesData(resp.data.data)
+    //         this.meta = resp.data
+    //         this.items.forEach(item => {
+    //           item.loading = false
+    //         })
+    //         resolve(resp)
+    //       })
+    //       .catch(() => {
+    //         this.loading = false
+    //       })
+    //   })
+    // },
     getDataByDepo() {
       this.loading = true
       const data = {
@@ -274,7 +300,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             console.log('data table', resp)
             // this.items = resp.data.data
             this.prosesData(resp.data.data)
-            this.meta = resp.data.meta
+            this.meta = resp.data
             this.items.forEach(item => {
               item.loading = false
             })
@@ -324,11 +350,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('resp', resp)
             notifSuccess(resp)
-            if (this.form.kode_tempat !== null) {
-              this.getDataByDepo()
-            } else {
-              this.getDataTable()
-            }
+            // if (this.form.kode_tempat !== null) {
+            //   this.getDataByDepo()
+            // } else {
+            this.getDataTable()
+            // }
             this.resetForm()
             resolve(resp)
           })
@@ -350,11 +376,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('resp', resp)
             notifSuccess(resp)
-            if (this.form.kode_tempat !== null) {
-              this.getDataByDepo()
-            } else {
-              this.getDataTable()
-            }
+            // if (this.form.kode_tempat !== null) {
+            //   this.getDataByDepo()
+            // } else {
+            this.getDataTable()
+            // }
             this.resetForm()
             resolve(resp)
           })
