@@ -222,13 +222,13 @@
             <template #cell-no_penerimaan="{row}">
               <div style="width:8vw;">
                 <div class="ellipsis">
-                  {{ row.monthly }}
+                  {{ noPenerimaanDepo(row.monthly) }}
                 </div>
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
-                  {{ row.monthly }}
+                  {{ noPenerimaanDepo(row.monthly) }}
                 </q-tooltip>
               </div>
             </template>
@@ -341,6 +341,10 @@ const setDate = () => {
   console.log('bulan selected', parseInt(store.params.bulan))
   console.log('bulan selected day', daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun)))
   console.log('sekarang', sekarang)
+}
+function noPenerimaanDepo(val) {
+  const depo = val.filter(x => x.kode_ruang === store.kode_tempat)
+  return depo.map(m => m.no_penerimaan).toString()
 }
 function sisaStok(val) {
   if (val.length > 0) {

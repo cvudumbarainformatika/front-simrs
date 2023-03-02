@@ -126,12 +126,12 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
       this.columns = [
-        'tanggal',
-        'tempat',
-        'kode_rs',
-        // 'kode',
-        'no_penerimaan',
+        // 'tanggal',
+        // 'tempat',
+        // 'kode_rs',
         // 'uraian',
+        'kode',
+        'no_penerimaan',
         'barang',
         'sisa_stok',
         'totalStok',
@@ -175,44 +175,45 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       console.log('proses data', val)
       const barang = val.map(br => {
         const x = br
-        const penerimaan = !br.barang.detail_penerimaan.length ? []
-          : br.barang.detail_penerimaan.filter(trm => {
-            return trm.penerimaan !== null
-          })
-        x.penerimaan = !penerimaan.length ? 0 : penerimaan.filter(trm => {
-          return trm.qty
-        }).reduce((a, b) => a + b)
-        // console.log('barang x ', x)
-        const permintaanRuangan = !br.barang.detail_permintaanruangan.length ? []
-          : br.barang.detail_permintaanruangan.filter(trm => {
-            return trm.permintaanruangan !== null
-          })
-        x.permintaanRuangan = !permintaanRuangan.length ? 0 : permintaanRuangan.filter(mt => {
-          return mt.jumlah_distribusi
-        }).reduce((a, b) => a + b)
-        const gudang = !br.barang.detail_transaksi_gudang.length ? []
-          : br.barang.detail_transaksi_gudang.filter(trm => {
-            return trm.transaction !== null
-          })
-        x.gudang = !gudang.length ? 0 : gudang.filter(gd => {
-          return gd.qty
-        }).reduce((a, b) => a + b)
-        const distribusiDepo = !br.barang.detail_distribusi_depo.length ? []
-          : br.barang.detail_distribusi_depo.filter(trm => {
-            return trm.distribusi !== null
-          })
-        x.distribusiDepo = !distribusiDepo.length ? 0 : distribusiDepo.filter(dp => {
-          return dp.jumlah
-        }).reduce((a, b) => a + b)
-        const distribusiLangsung = !br.barang.detail_distribusi_langsung.length ? []
-          : br.barang.detail_distribusi_langsung.filter(trm => {
-            return trm.distribusi !== null
-          })
-        x.distribusiLangsung = !distribusiLangsung.length ? 0 : distribusiLangsung.filter(dp => {
-          return dp.jumlah
-        }).reduce((a, b) => a + b)
-        x.awal = !br.barang.monthly.length ? []
-          : br.barang.monthly.filter(mo => { return mo.sisa_stok }) // .reduce((a, b) => a + b)
+
+        // penerimaan
+        x.penerimaan = !br.detail_penerimaan.length ? []
+          : br.detail_penerimaan.filter(trm => trm.qty).reduce((a, b) => a + b)
+        // x.penerimaan = !penerimaan.length ? 0 : penerimaan.filter(trm => {
+        //   return trm.qty
+        // }).reduce((a, b) => a + b)
+
+        // permintaan ruangan
+        x.permintaanRuangan = !br.detail_permintaanruangan.length ? []
+          : br.detail_permintaanruangan.filter(trm => trm.jumlah_distribusi).reduce((a, b) => a + b)
+        // x.permintaanRuangan = !permintaanRuangan.length ? 0 : permintaanRuangan.filter(mt => {
+        //   return mt.jumlah_distribusi
+        // }).reduce((a, b) => a + b)
+
+        // pemesanan masuk gudang
+        x.gudang = !br.detail_transaksi_gudang.length ? []
+          : br.detail_transaksi_gudang.filter(trm => trm.qty).reduce((a, b) => a + b)
+        // x.gudang = !gudang.length ? 0 : gudang.filter(gd => {
+        //   return gd.qty
+        // }).reduce((a, b) => a + b)
+
+        // distribusi depo
+        x.distribusiDepo = !br.detail_distribusi_depo.length ? []
+          : br.detail_distribusi_depo.filter(trm => trm.jumlah).reduce((a, b) => a + b)
+        // x.distribusiDepo = !distribusiDepo.length ? 0 : distribusiDepo.filter(dp => {
+        //   return dp.jumlah
+        // }).reduce((a, b) => a + b)
+
+        // distribusi langsung
+        x.distribusiLangsung = !br.barang.detail_distribusi_langsung.length ? []
+          : br.barang.detail_distribusi_langsung.filter(trm => trm.jumlah).reduce((a, b) => a + b)
+        // x.distribusiLangsung = !distribusiLangsung.length ? 0 : distribusiLangsung.filter(dp => {
+        //   return dp.jumlah
+        // }).reduce((a, b) => a + b)
+
+        // stok awal
+        x.awal = !br.stok_awal.length ? []
+          : br.stok_awal.filter(mo => { return mo.sisa_stok }) // .reduce((a, b) => a + b)
 
         return x
       })
@@ -246,16 +247,16 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       const data = {
         params: this.params
       }
-      api.get('v1/transaksi/opname/monthly-stok', data)
-      // await api.get('v1/transaksi/opname/stok-opname', data)
+      // api.get('v1/transaksi/opname/monthly-stok', data)
+      await api.get('v1/transaksi/opname/stok-opname', data)
         .then(resp => {
           if (resp.status === 200) {
             this.loading = false
             console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
-            // this.meta = resp.data
-            this.meta = resp.data.meta
+            this.meta = resp.data
+            // this.meta = resp.data.meta
             this.prosesData(resp.data.data)
             // this.meta = 'resp.data'
           }
