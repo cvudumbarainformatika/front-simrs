@@ -41,14 +41,70 @@
             <template #col-kode_108>
               <div>Kode 108</div>
             </template>
+            <template #cell-kode_108="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.kode_108?row.kode_108:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.kode_108?row.kode_108:'-' }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #col-uraian_108>
               <div>Uraian 108</div>
+            </template>
+            <template #cell-uraian_108="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.uraian_108?row.uraian_108:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.uraian_108?row.uraian_108:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-uraian_50>
               <div>Uraian 50</div>
             </template>
+            <template #cell-uraian_50="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.uraian_50?row.uraian_50:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.uraian_50?row.uraian_50:'-' }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #col-kode_50>
               <div>Kode 50</div>
+            </template>
+            <template #cell-kode_50="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.kode_50?row.kode_50:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.kode_50?row.kode_50:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-satuan_besar>
               <div>Satuan Besar</div>
@@ -66,7 +122,18 @@
               <div>Uraian 108</div>
             </template>
             <template #cell-barang108="{row}">
-              <div>{{ row.barang108?row.barang108.uraian:'-' }}</div>
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.barang108?row.barang108.uraian:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.barang108?row.barang108.uraian:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-kode_rs>
               <div>Kode RS</div>
