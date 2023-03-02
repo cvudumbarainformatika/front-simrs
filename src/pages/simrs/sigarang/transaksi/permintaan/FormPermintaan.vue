@@ -107,12 +107,13 @@
                 </div>
                 <div v-if="!table.loadingHasStok">
                   <app-autocomplete-new
+                    :key="store.form.kode_rs"
                     :model="store.form.kode_rs"
                     outlined
                     valid
                     label="Nama Barang RS"
                     autocomplete="nama"
-                    option-value="kode"
+                    option-value="kode_rs"
                     option-label="nama"
                     :source="table.barangHasStok"
                     :loading="table.loadingHasStok"
@@ -194,13 +195,14 @@
               </div>
               <div class="col-md-9 col-xs-12">
                 <app-autocomplete-new
+                  :key="store.form.kode_rs"
                   :model="store.form.kode_rs"
                   outlined
                   valid
                   label="Kode Barang RS"
-                  autocomplete="kode"
-                  option-value="kode"
-                  option-label="kode"
+                  autocomplete="kode_rs"
+                  option-value="kode_rs"
+                  option-label="kode_rs"
                   :source="table.barangHasStok"
                   :loading="table.loadingHasStok"
                   :disable="table.loadingHasStok"
@@ -623,7 +625,7 @@ const barangSelected = val => {
   store.setForm('kode_rs', val)
   store.setParams('kode_rs', val)
 
-  const nama = barang[0].depo.nama
+  const nama = barang[0].barang.depo.nama
   let noPer = ''
   // const nama = depo.map(data => {
   let temp = nama.split(' ')
@@ -643,8 +645,8 @@ const barangSelected = val => {
   const ap = store.nomor.split('-')
   store.setForm('no_permintaan', ap[0] + '/' + noPer + '/' + ap[1])
 
-  store.setForm('dari', barang[0].depo.kode)
-  store.setNama('gudang', barang[0].depo.nama)
+  store.setForm('dari', barang[0].barang.depo.kode)
+  store.setNama('gudang', barang[0].barang.depo.nama)
   if (val !== null) {
     store.getStokByBarang()
   }
@@ -693,7 +695,9 @@ const clearBarangRs = () => {
   store.setForm('kode_rs', null)
   store.setNama('satuan', 'barang belum dipilih')
   store.setNama('gudang', 'barang belum dipilih')
-  inputJumlahMinta.value.$refs.refInput.resetValidation()
+  if (store.barang && store.barang.alokasi > 0) {
+    inputJumlahMinta.value.$refs.refInput.resetValidation()
+  }
   tutupPermintaan.value = false
 }
 const modelSet = val => {
