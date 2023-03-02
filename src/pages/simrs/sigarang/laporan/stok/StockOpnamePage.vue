@@ -233,11 +233,11 @@
               </div>
             </template>
             <template #cell-stok_transaksi="{row}">
-              {{ row.stok_transaksi?row.stok_transaksi.jumlah:'proses' }}
+              {{ row.stok_transaksi }}
             </template>
             <template #cell-selisih="{row}">
               <div>
-                {{ row.sisa_stok - parseFloat(row.stok_fisik) }}
+                {{ row.totalStok - parseFloat(row.stok_fisik) }}
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
@@ -250,7 +250,7 @@
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template> -->
             <template #left-acttion="{row,col}">
-              <div class="row no-wrap fit">
+              <div class="row no-wrap fit items-center">
                 <div style="width:5vw">
                   <app-input
                     v-model="row.stok_fisik"
@@ -261,6 +261,12 @@
                     :loading="row.loading"
                     @blur="store.updateStokFisik(row,col)"
                   />
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Input stok fisik
+                  </q-tooltip>
                 </div>
                 <!-- <div>
                   <q-btn

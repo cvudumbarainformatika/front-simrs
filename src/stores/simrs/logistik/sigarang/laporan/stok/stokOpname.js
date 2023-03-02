@@ -134,7 +134,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         'no_penerimaan',
         'barang',
         'sisa_stok',
-        'totalStok',
+        // 'totalStok',
         'stok_transaksi',
         'selisih'
       ]
@@ -171,54 +171,46 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       this.getDataTable()
     },
     prosesData(val) {
-      this.items = val
+      // this.items = val
       console.log('proses data', val)
       const barang = val.map(br => {
         const x = br
 
         // penerimaan
-        x.penerimaan = !br.detail_penerimaan.length ? []
-          : br.detail_penerimaan.filter(trm => trm.qty).reduce((a, b) => a + b)
-        // x.penerimaan = !penerimaan.length ? 0 : penerimaan.filter(trm => {
-        //   return trm.qty
-        // }).reduce((a, b) => a + b)
-
-        // permintaan ruangan
-        x.permintaanRuangan = !br.detail_permintaanruangan.length ? []
-          : br.detail_permintaanruangan.filter(trm => trm.jumlah_distribusi).reduce((a, b) => a + b)
-        // x.permintaanRuangan = !permintaanRuangan.length ? 0 : permintaanRuangan.filter(mt => {
-        //   return mt.jumlah_distribusi
-        // }).reduce((a, b) => a + b)
+        x.penerimaan = !br.detail_penerimaan.length ? 0
+          : br.detail_penerimaan.map(trm => trm.qty).reduce((a, b) => a + b)
 
         // pemesanan masuk gudang
-        x.gudang = !br.detail_transaksi_gudang.length ? []
-          : br.detail_transaksi_gudang.filter(trm => trm.qty).reduce((a, b) => a + b)
-        // x.gudang = !gudang.length ? 0 : gudang.filter(gd => {
-        //   return gd.qty
-        // }).reduce((a, b) => a + b)
+        x.gudang = !br.detail_transaksi_gudang.length ? 0
+          : br.detail_transaksi_gudang.map(trm => trm.qty).reduce((a, b) => a + b)
 
         // distribusi depo
-        x.distribusiDepo = !br.detail_distribusi_depo.length ? []
-          : br.detail_distribusi_depo.filter(trm => trm.jumlah).reduce((a, b) => a + b)
-        // x.distribusiDepo = !distribusiDepo.length ? 0 : distribusiDepo.filter(dp => {
-        //   return dp.jumlah
-        // }).reduce((a, b) => a + b)
+        x.distribusiDepo = !br.detail_distribusi_depo.length ? 0
+          : br.detail_distribusi_depo.map(trm => trm.jumlah).reduce((a, b) => a + b)
+
+        // permintaan ruangan
+        x.permintaanRuangan = !br.detail_permintaanruangan.length ? 0
+          : br.detail_permintaanruangan.map(trm => trm.jumlah_distribusi).reduce((a, b) => a + b)
 
         // distribusi langsung
-        x.distribusiLangsung = !br.barang.detail_distribusi_langsung.length ? []
-          : br.barang.detail_distribusi_langsung.filter(trm => trm.jumlah).reduce((a, b) => a + b)
-        // x.distribusiLangsung = !distribusiLangsung.length ? 0 : distribusiLangsung.filter(dp => {
-        //   return dp.jumlah
-        // }).reduce((a, b) => a + b)
+        x.distribusiLangsung = !br.detail_distribusi_langsung.length ? 0
+          : br.detail_distribusi_langsung.map(trm => trm.jumlah).reduce((a, b) => a + b)
+
+        // pemakaian ruangan
+        x.pemakaianRuangan = !br.detail_pemakaianruangan.length ? 0
+          : br.detail_pemakaianruangan.map(trm => trm.jumlah).reduce((a, b) => a + b)
 
         // stok awal
-        x.awal = !br.stok_awal.length ? []
-          : br.stok_awal.filter(mo => { return mo.sisa_stok }) // .reduce((a, b) => a + b)
+        x.stokAwal = !br.stok_awal.length ? 0
+          : br.stok_awal.map(mo => { return mo.sisa_stok }).reduce((a, b) => a + b)
+
+        // hitung stok transaksi
+        x.stok_transaksi = x.stokAwal + x.gudang - x.permintaanRuangan - x.distribusiLangsung
 
         return x
       })
       console.log('barang', barang)
-      this.items = val
+      this.items = barang
     },
     getDataGudangDepo() {
       this.gudangDepo = [
