@@ -196,6 +196,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       this.setToday()
     },
     setDetails (data) {
+      console.log('data sebelum pesanan', data)
       const pesanan = data.pemesanan[0].details
       const skr = data.trmSkr.length ? data.trmSkr[0].details : null
       const sblm = data.detailLama.length ? data.detailLama : null

@@ -201,6 +201,22 @@
                   Hapus Draft
                 </q-tooltip>
               </q-btn>
+              <q-btn
+                v-if="row.status===5 && (role==='gudang' || role==='root'|| role==='gizi')"
+                color="negative"
+                round
+                icon="icon-mat-undo"
+                flat
+                size="sm"
+                @click="backToVerif(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Kembali ke menunggu verivikasi
+                </q-tooltip>
+              </q-btn>
             </template>
           </app-table-view>
           <!--
@@ -230,7 +246,9 @@ const auth = useAuthStore()
 const role = computed(() => {
   return auth.role ? auth.role : ''
 })
-
+function backToVerif(val) {
+  console.log('back to', val)
+}
 const goTo = val => {
   const Slug = val.reff
 

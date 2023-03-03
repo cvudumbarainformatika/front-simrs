@@ -120,7 +120,7 @@
 
         <!-- penrimaan -->
         <!-- {{ data.detail_penerimaan }} -->
-        <div
+        <!-- <div
           v-if="data.detail_penerimaan"
         >
           <div
@@ -180,7 +180,7 @@
           <div class="col-1">
             tidak ada Penerimaan bulan ini
           </div>
-        </div>
+        </div> -->
 
         <!-- distribusi depo -->
 
