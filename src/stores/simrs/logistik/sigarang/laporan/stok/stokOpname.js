@@ -209,7 +209,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           : br.fisik.map(fs => fs.stok_fisik).reduce((a, b) => a + b)
 
         // hitung stok transaksi
-        x.stok_transaksi = x.stokAwal + x.gudang - x.permintaanRuangan - x.distribusiLangsung
+        x.stok_transaksi = x.stokAwal + x.distribusiDepo - x.permintaanRuangan - x.distribusiLangsung
 
         // total stok
         x.totalStok = !br.monthly.length ? 0

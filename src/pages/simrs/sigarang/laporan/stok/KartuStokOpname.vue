@@ -227,7 +227,7 @@
           class="row fit no-wrap items-center q-mb-sm q-col-gutter-sm"
         >
           <div class="col-2">
-            '-'
+            -
           </div>
           <div class="col-2">
             Distribusi depo
