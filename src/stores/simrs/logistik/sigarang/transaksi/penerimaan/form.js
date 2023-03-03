@@ -10,6 +10,7 @@ import { findWithAttr, uniqueId } from 'src/modules/utils'
 export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan', {
   state: () => ({
     loading: false,
+    loadingJumlah: false,
     form: {
       nama: 'PENERIMAAN',
       no_penerimaan: '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY'),
@@ -131,7 +132,9 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             this.setForm('surat_jalan', apem.surat_jalan)
             this.setForm('surat', apem.surat_jalan)
           }
-          if (apem.no_penerimaan) { this.setForm('no_penerimaan', apem.no_penerimaan) }
+          if (apem.no_penerimaan) {
+            this.setForm('no_penerimaan', apem.no_penerimaan)
+          }
           if (apem.pengirim) { this.setForm('pengirim', apem.pengirim) }
           if (apem.reff) { this.setForm('reff', apem.reff) }
           if (apem.tanggal) { this.setForm('tanggal', apem.tanggal) }
@@ -159,7 +162,14 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
           this.clearNomorPemesanan()
           // const tempNo = val.split('SP')
           if (tempNo.length === 2) {
-            this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+            this.jumlahPenerimaan(val).then(resp => {
+              console.log('jumlahnya', resp)
+              if (resp.jumlah > 0) {
+                this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1] + '-' + resp.jumlah)
+              } else {
+                this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+              }
+            })
           }
         }
 
@@ -237,12 +247,31 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             this.loading = false
             console.log('cari pemesanans', resp)
             console.log('pemesanan ini', this.pemesanan)
-            this.pemesanans = resp.data
+            this.pemesanans = resp.data.filter(pm => pm.status < 4)
+
             resolve(resp)
           }).catch(err => {
             this.loading = false
             reject(err)
           })
+      })
+    },
+    // jumlah penerimaan
+    jumlahPenerimaan(val) {
+      const data = {
+        params: {
+          nomor: val
+        }
+      }
+      this.loadingJumlah = true
+      return new Promise(resolve => {
+        api.get('v1/transaksi/penerimaan/jumlah-penerimaan', data)
+          .then(resp => {
+            console.log('jumlah', resp)
+            this.loadingJumlah = false
+            resolve(resp.data)
+          })
+          .catch(() => { this.loadingJumlah = false })
       })
     },
     // ambil Transaksis Penerimaan saat ini

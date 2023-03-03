@@ -50,8 +50,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
 
-    ]
-
+    ],
+    dataKartuStok: {}
   }),
   actions: {
     resetForm() {
@@ -202,10 +202,18 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
 
         // stok awal
         x.stokAwal = !br.stok_awal.length ? 0
-          : br.stok_awal.map(mo => { return mo.sisa_stok }).reduce((a, b) => a + b)
+          : br.stok_awal.map(mo => mo.sisa_stok).reduce((a, b) => a + b)
+
+        // stok fisik
+        x.stok_fisik = !br.fisik.length ? 0
+          : br.fisik.map(fs => fs.stok_fisik).reduce((a, b) => a + b)
 
         // hitung stok transaksi
         x.stok_transaksi = x.stokAwal + x.gudang - x.permintaanRuangan - x.distribusiLangsung
+
+        // total stok
+        x.totalStok = !br.monthly.length ? 0
+          : br.monthly.filter(mo => mo.kode_ruang === this.kode_tempat).map(y => y.sisa_stok).reduce((a, b) => a + b, 0)
 
         return x
       })
@@ -310,8 +318,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       if (parseFloat(val.stok_fisik) !== val.sisa_stok) {
         const form = {
           id: val.id,
+          kode_rs: val.kode,
           stok_fisik: parseFloat(val.stok_fisik),
-          selisih: parseFloat(val.sisa_stok) - parseFloat(val.stok_fisik)
+          selisih: parseFloat(val.sisa_stok) - parseFloat(val.stok_fisik),
+          param: this.params,
+          tanggal: this.params.tahun + '-' + this.params.bulan + '-' + this.params.lastDay + ' 23:59:59'
         }
         this.items[i].loading = true
         return new Promise(resolve => {

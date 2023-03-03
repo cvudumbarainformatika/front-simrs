@@ -420,6 +420,7 @@ for (let index = 0; index < 11; index++) {
 // kartu stok
 const kartuStok = (val) => {
   console.log(val)
+  store.dataKartuStok = val
   store.kartuStokOpen = true
 }
 // const monthSelected = ref(null)

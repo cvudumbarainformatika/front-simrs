@@ -38,7 +38,9 @@ export const useHistoryTable = defineStore('history_table', {
       'penggunaruang',
       'ruangpengguna',
       'tanggal_serahterima',
-      'flag_siasik'
+      'flag_siasik',
+      'updated_by',
+      'created_by'
     ]
   }),
   getters: {

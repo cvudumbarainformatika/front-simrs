@@ -20,6 +20,7 @@
                   outlined
                   hint="SESUAIKAN NOMOR PENERIMAAN"
                   dense
+                  :loading="store.loadingJumlah"
                 />
                 <!-- bg-color="red-2" -->
               </div>
@@ -332,8 +333,8 @@
             <div class="col-md-1 col-xs-12">
               <app-btn
                 label="Selesai"
-                :loading="store.loadingSimpan"
-                :disable="store.loadingSimpan"
+                :loading="store.loadingSimpan || store.loadingJumlah"
+                :disable="store.loadingSimpan || store.loadingJumlah"
                 @click="onSimpan"
               />
             </div>
