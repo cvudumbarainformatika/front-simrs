@@ -169,6 +169,21 @@
             </template>
             <template #left-action="{row,index}">
               <q-btn
+                unelevated
+                color="dark"
+                round
+                size="sm"
+                icon="icon-mat-print"
+                @click="toPrint(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+              <q-btn
                 v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')
                   && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
                 color="primary"
@@ -204,6 +219,7 @@
               <q-btn
                 v-if="row.loading"
                 round
+                flat
                 size="sm"
                 :loading="row.loading"
               />
@@ -232,15 +248,136 @@
         </template>
       </app-card>
     </div>
+    <q-dialog v-model="openPrint">
+      <q-card>
+        <div class="print">
+          <q-btn
+            ref="refPrint"
+            v-print="printObj"
+            unelevated
+            color="dark"
+            round
+            size="sm"
+            icon="icon-mat-print"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Print
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            color="primary"
+            round
+            size="sm"
+            icon="icon-my-print_setting"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Pilih PTK dan gudang
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div
+          id="printMe"
+          style="width:210mm; height:310mm; margin:20mm; "
+        >
+          <!-- heder -->
+          <q-card-section>
+            <div class="row q-mb-sm">
+              <div class="col-6">
+                UOBK RSUD DOKTER MOHAMAD SALEH
+              </div>
+              <div class="col-6">
+                PROBOLINGGO, {{ dateFullFormat(item.tanggal) }}
+              </div>
+            </div>
+            <div class="row q-mb-sm">
+              <div class="col-6">
+                KOTA PROBOLINGGO
+              </div>
+              <div class="col-6">
+                KEPADA: {{ item.perusahaan?item.perusahaan.nama:'perusahaan tidak ditemukan' }}
+              </div>
+            </div>
+            <div class="row justify-center q-mb-sm">
+              SURAT PESANAN
+            </div>
+            <div class="row justify-center q-mb-sm">
+              NO. {{ item.nomor }}
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div v-if="!item.details">
+              <app-no-data />
+            </div>
+            <div v-if="item.details">
+              <!-- header detail -->
+              <div class="row justify-between q-col-gutter-sm">
+                <div class="col-2">
+                  Nama Barang
+                </div>
+                <div class="col-2">
+                  Jumlah
+                </div>
+                <div class="col-3">
+                  Keterangan
+                </div>
+              </div>
+              <q-separator />
+              <div
+                v-for="(det, i) in item.details"
+                :key="i"
+              >
+                <div
+                  class="row justify-between q-col-gutter-sm"
+                >
+                  <div class="col-2">
+                    {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
+                  </div>
+                  <div class="col-2">
+                    {{ det.qty }} {{ det.satuan?det.satuan.nama:'-' }}
+                  </div>
+                  <div class="col-3">
+                    {{ det.merk?det.merk:'-' }}
+                  </div>
+                </div>
+                <q-separator />
+              </div>
+            </div>
+          </q-card-section>
+          <!-- tanda tangan -->
+          <q-card-section>
+            <div class="row justify-between q-col-gutter-sm">
+              <div class="col-6 text-center">
+                penerima
+              </div>
+              <div class="col-6 text-center">
+                ptk
+              </div>
+            </div>
+            <div class="row justify-center q-col-gutter-sm">
+              <div>mengetahui</div>
+            </div>
+          </q-card-section>
+        </div>
+      </q-card>
+    </q-dialog>
     <DetailsTablePage v-model="detail.isOpen" />
+    <!-- id="printMe" -->
   </q-page>
 </template>
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
+// import PrintPage from './PrintPage.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
@@ -252,6 +389,7 @@ const auth = useAuthStore()
 const role = computed(() => {
   return auth.role ? auth.role : ''
 })
+// kembalikan status ke verif (akses gudang)
 function backToVerif(val, index) {
   console.log('back to', val, index)
   table.setForm('id', val.id)
@@ -263,6 +401,37 @@ function backToVerif(val, index) {
   }).onOk(() => {
     table.getItBackToVerif(index)
   })
+}
+// print
+const openPrint = ref(false)
+// let title = ''
+const printed = ref(false)
+const item = ref({})
+function toPrint(val) {
+  console.log('print', val)
+  item.value = val
+  // title = 'Print ' + val.nama
+  openPrint.value = true
+}
+const printObj = {
+  id: 'printMe',
+  // popTitle: title,
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback(vue) {
+    printed.value = true
+    console.log('wait...', vue)
+  },
+  openCallback (vue) {
+    console.log('opened', vue)
+  },
+  closeCallback (vue) {
+    openPrint.value = false
+    printed.value = false
+    // changePeriode()
+    item.value = {}
+    console.log('closePrint')
+  }
 }
 const goTo = val => {
   const Slug = val.reff
@@ -542,5 +711,23 @@ onMounted(() => {
     }
   }
 })
+watch(() => role.value, val => {
+  if (table.nama === '') {
+    if (val === 'PTK' || val === 'root' || val === 'gizi') {
+      table.pilihTransaksi({ nama: 'Pemesanan' })
+    }
+    if (val === 'gudang' || val === 'depo' || val === 'ruangan') {
+      table.pilihTransaksi({ nama: 'Permintaan Ruangan' })
+    }
+  }
+})
 // table.getDataTable()
 </script>
+<style scoped>
+.print{
+  position: absolute;
+    right: 30px;
+    top: 5px;
+    z-index: 10;
+}
+</style>

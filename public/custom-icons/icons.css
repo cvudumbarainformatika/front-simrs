@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?d6f7d90dbf6f19bb383c6d7e7ca6a645") format("woff"),
-url("./icons.woff2?d6f7d90dbf6f19bb383c6d7e7ca6a645") format("woff2");
+    src: url("./icons.woff?ca84d7c64ae58a9aae3928f3e71fda2e") format("woff"),
+url("./icons.woff2?ca84d7c64ae58a9aae3928f3e71fda2e") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -483,6 +483,9 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-point_of_sale:before {
     content: "\f19c";
 }
-.icon-my-word:before {
+.icon-my-print_setting:before {
     content: "\f19d";
+}
+.icon-my-word:before {
+    content: "\f19e";
 }
