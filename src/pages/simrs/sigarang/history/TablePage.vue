@@ -167,7 +167,7 @@
             <template #col-no_permintaan>
               Nomor Permintaan
             </template>
-            <template #left-action="{row}">
+            <template #left-action="{row,index}">
               <q-btn
                 v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')
                   && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
@@ -202,13 +202,19 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="row.status===5 && (role==='gudang' || role==='root'|| role==='gizi')"
+                v-if="row.loading"
+                round
+                size="sm"
+                :loading="row.loading"
+              />
+              <q-btn
+                v-if="row.status===5 && (role==='gudang' || role==='root'|| role==='gizi') && !row.loading"
                 color="negative"
                 round
                 icon="icon-mat-undo"
                 flat
                 size="sm"
-                @click="backToVerif(row)"
+                @click="backToVerif(row,index)"
               >
                 <q-tooltip
                   anchor="top middle"
@@ -246,8 +252,17 @@ const auth = useAuthStore()
 const role = computed(() => {
   return auth.role ? auth.role : ''
 })
-function backToVerif(val) {
-  console.log('back to', val)
+function backToVerif(val, index) {
+  console.log('back to', val, index)
+  table.setForm('id', val.id)
+  table.setForm('status', 4)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Kembalikan status permintaan ke Menungggu verivikasi?',
+    cancel: true
+  }).onOk(() => {
+    table.getItBackToVerif(index)
+  })
 }
 const goTo = val => {
   const Slug = val.reff
@@ -519,7 +534,12 @@ const label = (status, nama) => {
 
 onMounted(() => {
   if (table.nama === '') {
-    table.pilihTransaksi({ nama: 'Pemesanan' })
+    if (role.value === 'PTK' || role.value === 'root' || role.value === 'gizi') {
+      table.pilihTransaksi({ nama: 'Pemesanan' })
+    }
+    if (role.value === 'gudang' || role.value === 'depo' || role.value === 'ruangan') {
+      table.pilihTransaksi({ nama: 'Permintaan Ruangan' })
+    }
   }
 })
 // table.getDataTable()
