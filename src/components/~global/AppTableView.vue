@@ -361,6 +361,7 @@
               name="left-action"
               class="q-ml-md"
               :row="item"
+              :index="i"
             />
           </td>
         </tr>

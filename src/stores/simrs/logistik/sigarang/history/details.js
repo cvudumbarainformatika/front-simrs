@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { changeArrayIndex } from 'src/modules/utils'
+import { changeArrayIndex, notifErrVue } from 'src/modules/utils'
 
 export const useDetailHistoryTable = defineStore('detail_history', {
   state: () => ({
@@ -45,13 +45,18 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       console.log('NAMA', nama)
       if (nama === 'PEMESANAN' || nama === 'PENERIMAAN') {
         const thumb = payload.map((x) => Object.keys(x))
+        console.log('thumb', thumb)
         this.columns = thumb[0]
-        this.columns.sort()
-        changeArrayIndex(this.columns, 'kode_108', 'barang108')
-        changeArrayIndex(this.columns, 'kode_rs', 'kode_108')
-        changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
-        changeArrayIndex(this.columns, 'satuan', 'harga')
-        changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
+        if (thumb.length) {
+          this.columns.sort()
+          changeArrayIndex(this.columns, 'kode_108', 'barang108')
+          changeArrayIndex(this.columns, 'kode_rs', 'kode_108')
+          changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
+          changeArrayIndex(this.columns, 'satuan', 'harga')
+          changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
+        } else {
+          notifErrVue('tidak ada data details')
+        }
       }
       if (nama === 'PERMINTAAN RUANGAN') {
         this.columns = [

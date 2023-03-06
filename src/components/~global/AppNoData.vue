@@ -11,7 +11,7 @@
       />
     </div>
     <div class="text-primary q-mt-sm">
-      Belum Ada Data
+      Tidak Ada Data
     </div>
   </div>
 </template>

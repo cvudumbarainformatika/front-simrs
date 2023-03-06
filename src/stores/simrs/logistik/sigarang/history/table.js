@@ -6,6 +6,7 @@ import { useDetailHistoryTable } from './details'
 export const useHistoryTable = defineStore('history_table', {
   state: () => ({
     loading: false,
+    loadingItem: false,
     nama: '',
     items: [],
     meta: {},
@@ -17,6 +18,7 @@ export const useHistoryTable = defineStore('history_table', {
       order_by: 'created_at',
       sort: 'desc'
     },
+    form: {},
     columns: [],
     columnHide: [
       'id',
@@ -58,6 +60,12 @@ export const useHistoryTable = defineStore('history_table', {
     },
     setParams (key, val) {
       this.params[key] = val
+    },
+    setForm(key, val) {
+      this.form[key] = val
+    },
+    resetForm() {
+      this.form = {}
     },
     pilihTransaksi (val) {
       this.selected = true
@@ -143,6 +151,19 @@ export const useHistoryTable = defineStore('history_table', {
       })
     },
 
+    getItBackToVerif(val) {
+      this.items[val].loading = true
+      return new Promise(() => {
+        api.post('v1/transaksi/permintaanruangan/tolak-permintaan', this.form)
+          .then(() => {
+            this.items[val].loading = false
+            this.getDataTransactions()
+          })
+          .catch(() => {
+            this.items[val].loading = false
+          })
+      })
+    },
     deleteTransaction (params) {
       this.loading = true
       return new Promise((resolve, reject) => {
