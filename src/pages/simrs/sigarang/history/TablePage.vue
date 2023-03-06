@@ -169,6 +169,7 @@
             </template>
             <template #left-action="{row,index}">
               <q-btn
+                v-if="role==='root'"
                 unelevated
                 color="dark"
                 round
