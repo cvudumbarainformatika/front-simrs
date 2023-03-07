@@ -67,8 +67,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.columns = [
         'kode',
         'nama',
-        'satuan',
-        'sisa_stok'
+        'sisa_stok',
+        'satuan'
       ]
     },
     // end of table
