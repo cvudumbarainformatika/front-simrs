@@ -62,6 +62,10 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.params.page = payload
       this.getDataTable()
     },
+    refreshTable() {
+      this.params.page = 1
+      this.getDataTable()
+    },
 
     setColumns(payload) {
       this.columns = [
@@ -99,6 +103,10 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.setPegawai()
       // this.getStokDepo()
       this.getRuangs()
+      this.getNewTable()
+    },
+    getNewTable() {
+      this.resetForm()
       // setting table slug
       const slug = 'DSTL-' + uniqueId()
       const oldSlug = routerInstance.currentRoute.value.params.slug
@@ -198,6 +206,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             this.items[i].loading = false
             this.formIsValid = false
             this.detailIsValid = false
+            this.setForm('id', resp.data.distribusi.id)
             notifSuccess(resp)
             resolve(resp)
           })
@@ -205,6 +214,34 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             this.items[i].loading = false
             this.items[i].toDistribute = 0
           })
+      })
+    },
+    selesai() {
+      this.loading = true
+      this.setPegawai()
+      return new Promise(resolve => {
+        api.post('v1/transaksi/distribusilangsung/selesai', this.form)
+          .then(resp => {
+            this.loading = false
+            routerInstance.currentRoute.value.params.slug = 'DSTL-' + uniqueId()
+            this.getNewTable()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    habiskanBahanBasah() {
+      this.setPegawai()
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/distribusilangsung/basah', this.form)
+          .then(resp => {
+            this.loading = false
+            routerInstance.currentRoute.value.params.slug = 'DSTL-' + uniqueId()
+            this.getNewTable()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
       })
     }
   }

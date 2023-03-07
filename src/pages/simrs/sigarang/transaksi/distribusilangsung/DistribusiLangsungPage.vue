@@ -101,7 +101,21 @@
           </div>
         </div>
         <div class="row justify-end">
-          <app-btn label="Distribusikan" />
+          <app-btn
+            v-if="store.params.tipe==='basah'"
+            class="q-mr-md"
+            color="deep-purple"
+            label="Distribusikan Semua bahan basah"
+            :loading="store.loading"
+            :disable="store.loading"
+            @click="distribusikanBasah"
+          />
+          <app-btn
+            label="Distribusikan"
+            :loading="store.loading"
+            :disable="store.loading"
+            @click="selesai"
+          />
         </div>
       </q-card-section>
     </q-card>
@@ -115,7 +129,7 @@
   </div>
 </template>
 <script setup>
-import { date } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import FormBasah from './FormBasah.vue'
 // import FormKering from './FormKering.vue'
@@ -173,6 +187,42 @@ const simpanList = val => {
   } else {
     notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
   }
+}
+function distribusikanBasah() {
+  refRuangan.value.$refs.refAuto.validate()
+  refDist.value.$refs.refInput.validate()
+  if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
+    store.formIsValid = true
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah semua barang basah akan langsung di distribusikan sampai habis?',
+      ok: {
+        push: true,
+        'no-caps': true,
+        label: 'Habiskan',
+        color: 'warning'
+      },
+      cancel: {
+        push: true,
+        color: 'dark',
+        'no-caps': true
+      }
+    })
+      .onOk(() => {
+        store.habiskanBahanBasah().then(() => {
+          refRuangan.value.$refs.refAuto.resetValidation()
+          refDist.value.$refs.refInput.resetValidation()
+        })
+      })
+  } else {
+    notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
+  }
+}
+function selesai() {
+  store.selesai().then(() => {
+    refRuangan.value.$refs.refAuto.resetValidation()
+    refDist.value.$refs.refInput.resetValidation()
+  })
 }
 // watch(() => auth.currentUser, (data) => {
 //   console.log('watch', data)
