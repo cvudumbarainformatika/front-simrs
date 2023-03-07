@@ -87,7 +87,7 @@
           </div>
           <div class="col-4">
             <app-autocomplete-new
-              v-model="store.tipe"
+              v-model="store.params.tipe"
               label="pilih tipe barang"
               autocomplete="nama"
               option-label="nama"
@@ -130,6 +130,8 @@ const ruang = computed(() => {
 })
 const tipeSelected = val => {
   console.log(val)
+  store.setParam('tipe', val)
+  store.getDataTable()
 }
 const setModel = val => {
   const temp = new Date(val)

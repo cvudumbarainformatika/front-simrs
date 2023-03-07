@@ -8,8 +8,13 @@ import { routerInstance } from 'src/boot/router'
 export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_langsung', {
   state: () => ({
     loading: false,
+    // tabel
     items: [],
     meta: {},
+    columns: [],
+    columnHide: ['id', 'created_at', 'updated_at'],
+    deleteId: null,
+    // end of table state
     loadingStokDepo: false,
     loadingRuang: false,
     formIsValid: false,
@@ -31,9 +36,9 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       { nama: 'KERING', value: 'kering' },
       { nama: 'BASAH', value: 'basah' }
     ],
-    tipe: 'kering',
     barang: {},
     params: {
+      tipe: 'kering',
       q: '',
       page: 1,
       per_page: 10,
@@ -42,6 +47,31 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     }
   }),
   actions: {
+    // table
+    setSearch(val) {
+      this.params.q = val
+      this.getDataTable()
+    },
+    setPerPage(payload) {
+      this.params.per_page = payload
+      this.params.page = 1
+      this.getDataTable()
+    },
+    setPage(payload) {
+      // console.log('setPage', payload)
+      this.params.page = payload
+      this.getDataTable()
+    },
+
+    setColumns(payload) {
+      this.columns = [
+        'kode',
+        'nama',
+        'satuan',
+        'sisa_stok'
+      ]
+    },
+    // end of table
     setForm(index, val) {
       this.form[index] = val
     },
@@ -66,7 +96,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     // get initial data
     getInitialData() {
       this.setPegawai()
-      this.getStokDepo()
+      // this.getStokDepo()
       this.getRuangs()
       // setting table slug
       const slug = 'DSTL-' + uniqueId()
@@ -75,12 +105,13 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.getDataTable().then(data => {
         console.log('table', data)
         if (data === 'ada') {
+          this.loading = false
           this.setForm('reff', oldSlug)
           routerInstance.replace({ name: 'sigarang.transaksi.distribusilangsung', params: { slug: oldSlug } })
         } else {
+          this.loading = false
           this.setForm('reff', slug)
           routerInstance.replace({ name: 'sigarang.transaksi.distribusilangsung', params: { slug } })
-          this.loading = false
         }
       })
     },
@@ -91,14 +122,17 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         // api.get('v1/transaksi/distribusilangsung/index', params)
         api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
           .then(resp => {
-            const data = resp.data.data
-            console.log('items', data)
-            if (data.length) {
-              this.loading = false
+            const data = resp.data.data.data
+            console.log('items', resp.data)
+            this.items = data
+            this.meta = resp.data.meta
+            if (data.transaksi) {
               resolve('ada')
             } else {
               resolve('get new')
             }
+            this.loading = false
+            this.setColumns()
           })
       })
     },
