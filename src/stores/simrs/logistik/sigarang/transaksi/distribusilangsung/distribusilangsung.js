@@ -8,13 +8,15 @@ import { routerInstance } from 'src/boot/router'
 export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_langsung', {
   state: () => ({
     loading: false,
+    items: [],
+    meta: {},
     loadingStokDepo: false,
     loadingRuang: false,
     formIsValid: false,
     detailIsValid: false,
     form: {
       reff: 'DSTL-' + uniqueId(),
-      no_distribusi: 'xxx/DSTL/xxx',
+      no_distribusi: 'no/DSTL/bulan/tahun',
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       pegawai_id: null,
       ruang_tujuan: null,
@@ -48,7 +50,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     },
     resetForm() {
       this.form.reff = 'DSTL-' + uniqueId()
-      this.form.no_distribusi = 'xxx/DSTL/XXX'
+      this.form.no_distribusi = 'no/DSTL/bulan/tahun'
       this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.pegawai_id = null
       this.form.ruang_tujuan = null
@@ -78,6 +80,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         } else {
           this.setForm('reff', slug)
           routerInstance.replace({ name: 'sigarang.transaksi.distribusilangsung', params: { slug } })
+          this.loading = false
         }
       })
     },
@@ -85,11 +88,13 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.loading = true
       const params = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/transaksi/distribusilangsung/index', params)
+        // api.get('v1/transaksi/distribusilangsung/index', params)
+        api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
           .then(resp => {
-            this.loading = false
             const data = resp.data.data
+            console.log('items', data)
             if (data.length) {
+              this.loading = false
               resolve('ada')
             } else {
               resolve('get new')
