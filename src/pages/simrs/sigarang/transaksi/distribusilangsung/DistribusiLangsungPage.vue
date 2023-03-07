@@ -27,7 +27,7 @@
               label="Nomor Distribusi"
               outlined
               :rules="[
-                val=> val!=='no/DSTL/bulan/tahun' || 'Harap diganti'
+                val=> val!=='no/DSTL/' + date.formatDate(Date.now(), 'MM') + '/' + date.formatDate(Date.now(), 'YYYY') || 'Harap diganti'
               ]"
             />
           </div>
@@ -100,9 +100,14 @@
             />
           </div>
         </div>
+        <div class="row justify-end">
+          <app-btn label="Distribusikan" />
+        </div>
       </q-card-section>
     </q-card>
-    <FormBasah />
+    <FormBasah
+      @simpan-list="simpanList"
+    />
     <!-- <FormKering
       v-if="store.tipe==='kering'"
       @simpan-list="simpanList"
@@ -116,6 +121,7 @@ import FormBasah from './FormBasah.vue'
 // import FormKering from './FormKering.vue'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 import { computed, ref } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useTransaksiDistribusiLangsung()
 const auth = useAuthStore()
@@ -157,19 +163,17 @@ const ruangCleared = val => {
 const refDist = ref(null)
 const refRuangan = ref(null)
 // const valid=ref(false)
-// const simpanList = val => {
-//   refRuangan.value.$refs.refAuto.validate()
-//   refDist.value.$refs.refInput.validate()
-//   if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
-//     store.formIsValid = true
-//   }
-//   // console.log('ref ruangan', refRuangan.value.$refs.refAuto.validate())
-//   // if (store.form.no_distribusi === 'xxx/DSTL/xxx') {
-//   //   console.log('simpan list', refDist.value.$refs.refInput.validate())
-//   // } else {
-//   //   refDist.value.$refs.refInput.resetValidation()
-//   // }
-// }
+const simpanList = val => {
+  console.log('simpan list', val)
+  refRuangan.value.$refs.refAuto.validate()
+  refDist.value.$refs.refInput.validate()
+  if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
+    store.formIsValid = true
+    store.saveList(val)
+  } else {
+    notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
+  }
+}
 // watch(() => auth.currentUser, (data) => {
 //   console.log('watch', data)
 //   store.setForm('pegawai_id', data.pegawai_id)

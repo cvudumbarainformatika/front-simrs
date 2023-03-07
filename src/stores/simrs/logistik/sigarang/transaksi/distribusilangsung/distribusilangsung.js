@@ -21,7 +21,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     detailIsValid: false,
     form: {
       reff: 'DSTL-' + uniqueId(),
-      no_distribusi: 'no/DSTL/bulan/tahun',
+      no_distribusi: 'no/DSTL/' + date.formatDate(Date.now(), 'MM') + '/' + date.formatDate(Date.now(), 'YYYY'),
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       pegawai_id: null,
       ruang_tujuan: null,
@@ -68,7 +68,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         'kode',
         'nama',
         'sisa_stok',
-        'satuan'
+        'satuan',
+        'toDistribute'
       ]
     },
     // end of table
@@ -80,7 +81,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     },
     resetForm() {
       this.form.reff = 'DSTL-' + uniqueId()
-      this.form.no_distribusi = 'no/DSTL/bulan/tahun'
+      this.form.no_distribusi = 'no/DSTL/' + date.formatDate(Date.now(), 'MM') + '/' + date.formatDate(Date.now(), 'YYYY')
       this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.pegawai_id = null
       this.form.ruang_tujuan = null
@@ -122,17 +123,28 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         // api.get('v1/transaksi/distribusilangsung/index', params)
         api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
           .then(resp => {
+            console.log('items', resp.data.data.data)
             const data = resp.data.data.data
-            console.log('items', resp.data)
+
             this.items = data
             this.meta = resp.data.meta
-            if (data.transaksi) {
+            if (resp.data.transaksi) {
+              // this.setForm('no_distribusi', resp.data.transaksi.no_distribusi)
+              // this.setForm('reff', resp.data.transaksi.reff)
+              // this.setForm('ruang_tujuan', resp.data.transaksi.ruang_tujuan)
+              this.form = resp.data.transaksi
               resolve('ada')
             } else {
               resolve('get new')
             }
             this.loading = false
             this.setColumns()
+            this.items.forEach(anu => {
+              anu.loading = false
+              if (!anu.detail_distribusi_langsung.length) { anu.toDistribute = 0 } else {
+                anu.toDistribute = anu.detail_distribusi_langsung.map(m => m.jumlah).reduce((a, b) => a + b, 0)
+              }
+            })
           })
       })
     },
@@ -177,19 +189,22 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
           .catch(() => { this.loadingRuang = false })
       })
     },
-    saveList() {
-      this.loading = true
+    saveList(i) {
+      this.items[i].loading = true
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusilangsung/store', this.form)
           .then(resp => {
             console.log('save', resp)
-            this.loading = false
+            this.items[i].loading = false
             this.formIsValid = false
             this.detailIsValid = false
             notifSuccess(resp)
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          .catch(() => {
+            this.items[i].loading = false
+            this.items[i].toDistribute = 0
+          })
       })
     }
   }

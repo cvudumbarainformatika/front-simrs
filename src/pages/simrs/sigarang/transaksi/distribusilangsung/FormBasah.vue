@@ -25,7 +25,6 @@
           :ada-tambah="false"
           :ada-edit="false"
           :ada-delete="false"
-          :click-able="true"
           @goto="store.setPage"
           @set-row="store.setPerPage"
           @refresh="store.refreshTable"
@@ -41,6 +40,21 @@
           <template #col-nama>
             <div>Nama Barang</div>
           </template>
+          <template #col-toDistribute>
+            <div>Akan di Distribusikan</div>
+          </template>
+          <template #left-acttion="{row,col}">
+            <app-input
+              v-model="row.toDistribute"
+              label="input distribusi"
+              valid
+              dense
+              outlined
+              :loading="row.loading"
+              @blur="inputBlur(row,col)"
+            />
+            <!-- @focus="inputFokus(row,col)" -->
+          </template>
         </app-table>
       </q-card-section>
     </q-card>
@@ -50,4 +64,16 @@
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 
 const store = useTransaksiDistribusiLangsung()
+const emits = defineEmits(['simpanList'])
+// function inputFokus(row, col) {
+//   console.log('fokus', row, col)
+//   console.log('form', store.form)
+// }
+function inputBlur(row, col) {
+  store.setForm('kode_rs', row.kode)
+  store.setForm('kode_satuan', row.kode_satuan)
+  store.setForm('jumlah', row.toDistribute)
+  console.log('blur', row, col)
+  emits('simpanList', col)
+}
 </script>
