@@ -15,7 +15,28 @@
           {{ auth.currentUser?auth.currentUser.nama:'-' }}
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section v-if="!store.loading">
+        <div class="row items-center q-col-gutter-sm q-mb-sm">
+          <div class="col-4">
+            PPK
+          </div>
+          <div class="col-8">
+            <app-autocomplete-new
+              v-model="store.form.ppk"
+              label="cari Ppk"
+              debounce="700"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="id"
+              outlined
+              valid
+              :loading="store.loadingPpk"
+              :source="store.optionPPK"
+              @buang="store.getDataPpk"
+              @on-select="store.ppkSelected"
+            />
+          </div>
+        </div>
         <div class="row items-center q-col-gutter-sm q-mb-sm">
           <div class="col-4">
             PTK
@@ -76,6 +97,18 @@
               :source="store.optionMengetahui"
               @buang="store.getDataMengetahui"
               @on-select="store.mengetahuiSelected"
+            />
+          </div>
+        </div>
+        <div class="row items-center q-col-gutter-sm  q-mb-sm">
+          <div class="col-4">
+            Lainnya
+          </div>
+          <div class="col-8">
+            <app-input
+              v-model="store.form.text"
+              label="Lainnya"
+              outlined
             />
           </div>
         </div>

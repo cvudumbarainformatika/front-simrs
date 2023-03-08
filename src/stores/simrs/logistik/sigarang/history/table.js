@@ -43,7 +43,10 @@ export const useHistoryTable = defineStore('history_table', {
       'flag_siasik',
       'updated_by',
       'created_by'
-    ]
+    ],
+    kanan: '',
+    kiri: '',
+    tengah: ''
   }),
   getters: {
     getterColumns (state) {
