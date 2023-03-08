@@ -250,7 +250,7 @@
       </app-card>
     </div>
     <q-dialog v-model="openPrint">
-      <q-card>
+      <q-card style="width:210mm; height:310mm; max-width:90vw;">
         <div class="print">
           <q-btn
             ref="refPrint"
@@ -273,12 +273,13 @@
             round
             size="sm"
             icon="icon-my-print_setting"
+            @click="tandatangan.setOpen"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Pilih PTK dan gudang
+              Pilih tanda tangan
             </q-tooltip>
           </q-btn>
         </div>
@@ -319,11 +320,14 @@
             <div v-if="item.details">
               <!-- header detail -->
               <div class="row justify-between q-col-gutter-sm">
-                <div class="col-2">
+                <div class="col-7">
                   Nama Barang
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                   Jumlah
+                </div>
+                <div class="col-1">
+                  Satuan
                 </div>
                 <div class="col-3">
                   Keterangan
@@ -337,11 +341,14 @@
                 <div
                   class="row justify-between q-col-gutter-sm"
                 >
-                  <div class="col-2">
+                  <div class="col-7">
                     {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
                   </div>
-                  <div class="col-2">
-                    {{ det.qty }} {{ det.satuan?det.satuan.nama:'-' }}
+                  <div class="col-1">
+                    {{ det.qty===null?0:det.qty }}
+                  </div>
+                  <div class="col-1">
+                    {{ det.satuan?det.satuan.nama:'-' }}
                   </div>
                   <div class="col-3">
                     {{ det.merk?det.merk:'-' }}
@@ -353,21 +360,41 @@
           </q-card-section>
           <!-- tanda tangan -->
           <q-card-section>
-            <div class="row justify-between q-col-gutter-sm">
+            <div class="row justify-between q-col-gutter-sm q-mb-xl">
               <div class="col-6 text-center">
-                penerima
+                Penerima
               </div>
               <div class="col-6 text-center">
-                ptk
+                PTK
               </div>
             </div>
+            <div class="row justify-between q-col-gutter-sm">
+              <div class="col-6 text-center">
+                (...................)
+              </div>
+              <div class="col-6 text-center">
+                <div class="row justify-center">
+                  {{ tandatangan.data.ptk?tandatangan.data.ptk.nama:'..............' }}
+                </div>
+                <div class="row justify-center">
+                  {{ tandatangan.data.ptk?tandatangan.data.ptk.nip:'..............' }}
+                </div>
+              </div>
+            </div>
+            <div class="row justify-center q-col-gutter-sm q-mb-xl">
+              <div>Mengetahui</div>
+            </div>
             <div class="row justify-center q-col-gutter-sm">
-              <div>mengetahui</div>
+              <div> {{ tandatangan.data.mengetahui?tandatangan.data.mengetahui.nama:'..............' }}</div>
+            </div>
+            <div class="row justify-center q-col-gutter-sm">
+              <div> {{ tandatangan.data.mengetahui?tandatangan.data.mengetahui.nip:'..............' }}</div>
             </div>
           </q-card-section>
         </div>
       </q-card>
     </q-dialog>
+    <TandaTanganPage v-model="tandatangan.isOpen" />
     <DetailsTablePage v-model="detail.isOpen" />
     <!-- id="printMe" -->
   </q-page>
@@ -378,13 +405,17 @@ import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
+import TandaTanganPage from 'src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'
 // import PrintPage from './PrintPage.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
+import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
+const tandatangan = useTandaTanganStore()
+tandatangan.getInitialData()
 
 const auth = useAuthStore()
 const role = computed(() => {
