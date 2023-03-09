@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { changeArrayIndex, notifSuccess } from 'src/modules/utils'
 import { useDetailHistoryTable } from './details'
@@ -14,9 +15,13 @@ export const useHistoryTable = defineStore('history_table', {
     params: {
       q: '',
       page: 1,
-      per_page: 5,
+      per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
+    },
+    tanggal: {
+      from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      to: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     form: {},
     columns: [],
@@ -27,8 +32,8 @@ export const useHistoryTable = defineStore('history_table', {
       'kode_penerima',
       'nama',
       'transaksi_gudang_id',
-      'kontrak',
-      'perusahaan',
+      // 'kontrak',
+      // 'perusahaan',
       'kode_perusahaan',
       'reff',
       'details',
@@ -82,6 +87,17 @@ export const useHistoryTable = defineStore('history_table', {
     setSearch (val) {
       this.params.q = val
       this.getDataTransactions()
+    },
+    searchTanggal (val) {
+      console.log('tanggal ', val)
+      if (val) {
+        this.params.from = val.from
+        this.params.to = val.to
+        this.getDataTransactions()
+      } else {
+        delete this.params.from
+        delete this.params.to
+      }
     },
     setOder (payload) {
       this.params.order_by = payload

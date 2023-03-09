@@ -27,7 +27,7 @@
               {{ formatRp(row.total) }}
             </template>
             <template #cell-nomor="{row}">
-              <div style="width:7vw;">
+              <div style="width:10vw;">
                 <div class="ellipsis">
                   {{ row.nomor }}
                 </div>
@@ -39,8 +39,21 @@
                 </q-tooltip>
               </div>
             </template>
+            <template #cell-kontrak="{row}">
+              <div style="width:10vw;">
+                <div class="ellipsis">
+                  {{ row.kontrak }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.kontrak }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #cell-no_penerimaan="{row}">
-              <div style="width:7vw;">
+              <div style="width:10vw;">
                 <div class="ellipsis">
                   {{ row.no_penerimaan }}
                 </div>
@@ -92,7 +105,17 @@
               </div>
             </template>
             <template #cell-perusahaan="{row}">
-              {{ row.perusahaan.nama }}
+              <div style="width:10vw;">
+                <div class="ellipsis">
+                  {{ row.perusahaan.nama }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.perusahaan.nama }}
+                </q-tooltip>
+              </div>
             </template>
             <template #cell-tanggal="{row}">
               {{ dateFullFormat(row.tanggal) }}
@@ -268,6 +291,23 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="row.status===2 && (role==='PTK' || role==='root'|| role==='gizi')
+                  && (row.nama === 'PEMESANAN')"
+                color="primary"
+                round
+                icon="icon-mat-edit"
+                flat
+                size="sm"
+                @click="editRow(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Edit
+                </q-tooltip>
+              </q-btn>
+              <q-btn
                 v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')"
                 color="negative"
                 round
@@ -281,6 +321,22 @@
                   self="center middle"
                 >
                   Hapus Draft
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="row.status===2 && (role==='PTK' || role==='root'|| role==='gizi')"
+                color="negative"
+                round
+                icon="icon-mat-delete_sweep"
+                flat
+                size="sm"
+                @click="hapus(row)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Hapus
                 </q-tooltip>
               </q-btn>
               <q-btn
@@ -306,6 +362,72 @@
                   Kembali ke menunggu verivikasi
                 </q-tooltip>
               </q-btn>
+            </template>
+            <template #header-left-after-search>
+              {{ table.params.tanggal }}
+              <div>
+                Periode :
+                <q-badge>
+                  {{ table.params.from ? dateFullFormat(table.params.from) : '-' }}
+                </q-badge>
+                sampai
+                <q-badge>
+                  {{ table.params.to ? dateFullFormat(table.params.to) : '-' }}
+                </q-badge>
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date
+                    v-model="table.tanggal"
+                    range
+                    mask="YYYY-MM-DD"
+                    @update:model-value="table.searchTanggal"
+                  >
+                    <div class="row items-center justify-end q-gutter-sm">
+                      <q-btn
+                        v-close-popup
+                        label="Cancel"
+                        color="primary"
+                        flat
+                      />
+                      <q-btn
+                        v-close-popup
+                        label="OK"
+                        color="primary"
+                        flat
+                      />
+                      <!-- @click="table.searchTanggal" -->
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  pilih range tanggal
+                </q-tooltip>
+              </div>
+              <!-- <q-input
+                v-if="(role==='PTK' || role==='root'|| role==='gizi')"
+                v-model="table.params.tanggal"
+                class="search-big"
+                borderless
+                debounce="800"
+                clearable
+                dense
+                placeholder="tanggal ... "
+                clear-icon="icon-mat-close"
+                @update:model-value="table.searchTanggal"
+              >
+                <template #prepend>
+                  <q-icon
+                    name="icon-mat-search"
+                    size="20px"
+                  />
+                </template>
+              </q-input> -->
             </template>
           </app-table-view>
           <!--
@@ -772,6 +894,10 @@ const hapus = val => {
       console.log('ok', val)
       table.deleteTransaction(val)
     })
+}
+// edit
+function editRow(row) {
+  console.log(row)
 }
 const color = val => {
   switch (val) {
