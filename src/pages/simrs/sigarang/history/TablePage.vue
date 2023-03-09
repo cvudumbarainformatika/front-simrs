@@ -234,7 +234,8 @@
             </template>
             <template #left-action="{row,index}">
               <q-btn
-                v-if="role==='root'"
+                v-if="(role==='root' || role==='PTK' || role==='gizi')
+                  && (row.nama === 'PEMESANAN' || row.nama === 'PENERIMAAN')"
                 unelevated
                 color="dark"
                 round

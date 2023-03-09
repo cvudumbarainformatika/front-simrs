@@ -504,10 +504,17 @@ const time = () => {
   // tutupPermintaan.value = parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) <= 7
   const barang = table.barangHasStok.filter(barang => { return barang.kode === store.form.kode_rs })
   if (barang.length) {
+    const excepDate = new Date('2023-03-09')
+    const sameday = date.isSameDate(sekarang, excepDate, 'days')
+    // console.log('same date', sameday)
     if (barang[0].depo.kode === bhp) {
       if ((parseInt(tanggal.value.hour) >= 13 || parseInt(tanggal.value.hour) < 7)) {
         if (role.value !== 'root') {
-          tutupPermintaan.value = true
+          if (sameday) {
+            tutupPermintaan.value = false
+          } else {
+            tutupPermintaan.value = true
+          }
         } else {
           tutupPermintaan.value = false
         }
