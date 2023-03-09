@@ -391,6 +391,7 @@
                         label="Cancel"
                         color="primary"
                         flat
+                        @click="table.searchTanggal"
                       />
                       <q-btn
                         v-close-popup
@@ -398,7 +399,6 @@
                         color="primary"
                         flat
                       />
-                      <!-- @click="table.searchTanggal" -->
                     </div>
                   </q-date>
                 </q-popup-proxy>
