@@ -385,6 +385,7 @@
             </div>
             <!-- pemesanan start -->
             <div v-if="item.nama=== 'PEMESANAN'">
+              <!-- Top words -->
               <div class="row justify-center q-mt-md f-16 text-weight-bold">
                 SURAT PESANAN
               </div>
@@ -412,6 +413,7 @@
               <div v-if="!item.details">
                 <app-no-data />
               </div>
+              <!-- details -->
               <div v-if="item.details">
                 <!-- header detail -->
                 <div class="row justify-between q-col-gutter-sm">
@@ -428,7 +430,7 @@
                     Keterangan
                   </div>
                 </div>
-                <q-separator />
+                <!-- body details -->
                 <div
                   v-for="(det, i) in item.details"
                   :key="i"
@@ -493,6 +495,17 @@
               </div>
             </div>
             <!-- pemesanan end -->
+            <!-- penerimaan start -->
+            <div v-if="item.nama=== 'PENERIMAAN'">
+              <!-- Top words -->
+              <div class="row justify-center q-mt-md f-16 text-weight-bold">
+                BERITA ACARA SERAH TERIMA (BAST)
+              </div>
+              <div class="row justify-center q-mb-sm">
+                NO. {{ item.no_penerimaan }}
+              </div>
+            </div>
+            <!-- penerimaan end -->
           </q-card-section>
           <!-- tanda tangan -->
           <q-card-section>
