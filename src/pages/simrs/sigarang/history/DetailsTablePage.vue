@@ -50,17 +50,23 @@
               <template #col-sub_total>
                 Sub Total
               </template>
+              <template #col-merk>
+                Keterangan
+              </template>
               <template #col-kode_108>
                 Kode 108
               </template>
               <template #col-kode_rs>
                 Kode Rs
               </template>
-              <template #col-barangrs>
-                Barang RS
+              <template #col-nama_barang>
+                Nama Barang
               </template>
-              <template #col-barang108>
-                Barang 108
+              <template #col-uraian_108>
+                Uraian 108
+              </template>
+              <template #col-uraian_50>
+                Uraian 50
               </template>
               <template #col-qty>
                 Jumlah

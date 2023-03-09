@@ -26,6 +26,71 @@
             <template #cell-total="{row}">
               {{ formatRp(row.total) }}
             </template>
+            <template #cell-nomor="{row}">
+              <div style="width:7vw;">
+                <div class="ellipsis">
+                  {{ row.nomor }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.nomor }}
+                </q-tooltip>
+              </div>
+            </template>
+            <template #cell-no_penerimaan="{row}">
+              <div style="width:7vw;">
+                <div class="ellipsis">
+                  {{ row.no_penerimaan }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.no_penerimaan }}
+                </q-tooltip>
+              </div>
+            </template>
+            <template #cell-faktur="{row}">
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.faktur }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.faktur }}
+                </q-tooltip>
+              </div>
+            </template>
+            <template #cell-surat_jalan="{row}">
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.surat_jalan }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.surat_jalan }}
+                </q-tooltip>
+              </div>
+            </template>
+            <template #cell-pengirim="{row}">
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.pengirim }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.pengirim }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #cell-perusahaan="{row}">
               {{ row.perusahaan.nama }}
             </template>
@@ -285,7 +350,7 @@
         </div>
         <div
           id="printMe"
-          style="width:210mm; height:310mm; margin:20mm; "
+          style="width:210mm; height:310mm; margin:10mm; "
         >
           <!-- heder -->
           <q-card-section>
@@ -318,115 +383,116 @@
                 </div>
               </div>
             </div>
-
-            <div class="row justify-center q-mt-md f-16 text-weight-bold">
-              SURAT PESANAN
-            </div>
-            <div class="row justify-center q-mb-sm">
-              NO. {{ item.nomor }}
-            </div>
-            <div class="row justify-start">
-              Kepada : Yth. Pemilik {{ item.perusahaan?item.perusahaan.nama:'-' }}
-            </div>
-            <div class="row justify-start">
-              <div class="col-1" />
-              <div class="col-1">
-                di
+            <!-- pemesanan start -->
+            <div v-if="item.nama=== 'PEMESANAN'">
+              <div class="row justify-center q-mt-md f-16 text-weight-bold">
+                SURAT PESANAN
               </div>
-            </div>
-            <div class="row justify-start">
-              <div class="col-1" />
-              <div class="col-4">
-                {{ item.perusahaan?item.perusahaan.alamat:'-' }}
+              <div class="row justify-center q-mb-sm">
+                NO. {{ item.nomor }}
               </div>
-            </div>
-            <div class="row justify-start q-mt-md q-mb-md">
-              Mohon dikirim pesanan dengan spesifikasi,
-            </div>
-            <!-- </q-card-section>
-          <q-card-section> -->
-            <div v-if="!item.details">
-              <app-no-data />
-            </div>
-            <div v-if="item.details">
-              <!-- header detail -->
-              <div class="row justify-between q-col-gutter-sm">
-                <div class="col-7 text-weight-bold border-tb border-left">
-                  Nama Barang
-                </div>
-                <div class="col-1 text-weight-bold border-tb border-left">
-                  Jumlah
-                </div>
-                <div class="col-1 text-weight-bold border-tb border-left">
-                  Satuan
-                </div>
-                <div class="col-3 text-weight-bold border-box">
-                  Keterangan
+              <div class="row justify-start">
+                Kepada : Yth. Pemilik {{ item.perusahaan?item.perusahaan.nama:'-' }}
+              </div>
+              <div class="row justify-start">
+                <div class="col-1" />
+                <div class="col-1">
+                  di
                 </div>
               </div>
-              <q-separator />
-              <div
-                v-for="(det, i) in item.details"
-                :key="i"
-              >
-                <div
-                  class="row justify-between q-col-gutter-sm"
-                >
-                  <div class="col-7 border-bottom border-left">
-                    {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
+              <div class="row justify-start">
+                <div class="col-1" />
+                <div class="col-4">
+                  {{ item.perusahaan?item.perusahaan.alamat:'-' }}
+                </div>
+              </div>
+              <div class="row justify-start q-mt-md q-mb-md">
+                Mohon dikirim pesanan dengan spesifikasi,
+              </div>
+              <div v-if="!item.details">
+                <app-no-data />
+              </div>
+              <div v-if="item.details">
+                <!-- header detail -->
+                <div class="row justify-between q-col-gutter-sm">
+                  <div class="col-7 text-weight-bold border-tb border-left">
+                    Nama Barang
                   </div>
-                  <div class="col-1 border-bottom border-left">
-                    {{ det.qty===null?0:det.qty }}
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Jumlah
                   </div>
-                  <div class="col-1 border-bottom border-left">
-                    {{ det.satuan?det.satuan.nama:'-' }}
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Satuan
                   </div>
-                  <div class="col-3 border-bottom border-left border-right">
-                    {{ det.merk?det.merk:'-' }}
+                  <div class="col-3 text-weight-bold border-box">
+                    Keterangan
                   </div>
                 </div>
                 <q-separator />
+                <div
+                  v-for="(det, i) in item.details"
+                  :key="i"
+                >
+                  <div
+                    class="row justify-between q-col-gutter-sm"
+                  >
+                    <div class="col-7 border-bottom border-left">
+                      {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
+                    </div>
+                    <div class="col-1 border-bottom border-left">
+                      {{ det.qty===null?0:det.qty }}
+                    </div>
+                    <div class="col-1 border-bottom border-left">
+                      {{ det.satuan?det.satuan.nama:'-' }}
+                    </div>
+                    <div class="col-3 border-bottom border-left border-right">
+                      {{ det.merk?det.merk:'-' }}
+                    </div>
+                  </div>
+                  <q-separator />
+                </div>
+              </div>
+              <!-- Bottom words -->
+              <div class="row justify-start q-mt-md q-mb-sm">
+                Pesanan tersebut di atas dapat tersedia pada,
+              </div>
+              <div class="row justify-start q-mb-sm q-ml-lg">
+                <div class="col-1">
+                  Hari
+                </div>
+                <div class="col-1">
+                  :
+                </div>
+              </div>
+              <div class="row justify-start q-mb-sm q-ml-lg">
+                <div class="col-1">
+                  Tanggal
+                </div>
+                <div class="col-1">
+                  :
+                </div>
+              </div>
+              <div class="row justify-start q-mb-sm q-ml-lg">
+                <div class="col-1">
+                  Waktu
+                </div>
+                <div class="col-1">
+                  :
+                </div>
+              </div>
+              <div class="row justify-start q-mb-sm q-ml-lg">
+                <div class="col-1">
+                  Tempat
+                </div>
+                <div class="col-1">
+                  :
+                </div>
+              </div>
+              <div class="row justify-start q-mt-md q-mb-sm">
+                Atas perhatiannya disampaikan terima kasih.
               </div>
             </div>
-            <!-- Bottom words -->
-            <div class="row justify-start q-mt-md q-mb-sm">
-              Pesanan tersebut di atas dapat tersedia pada,
-            </div>
-            <div class="row justify-start q-mb-sm q-ml-lg">
-              <div class="col-1">
-                Hari
-              </div>
-              <div class="col-1">
-                :
-              </div>
-            </div>
-            <div class="row justify-start q-mb-sm q-ml-lg">
-              <div class="col-1">
-                Tanggal
-              </div>
-              <div class="col-1">
-                :
-              </div>
-            </div>
-            <div class="row justify-start q-mb-sm q-ml-lg">
-              <div class="col-1">
-                Waktu
-              </div>
-              <div class="col-1">
-                :
-              </div>
-            </div>
-            <div class="row justify-start q-mb-sm q-ml-lg">
-              <div class="col-1">
-                Tempat
-              </div>
-              <div class="col-1">
-                :
-              </div>
-            </div>
-            <div class="row justify-start q-mt-md q-mb-sm">
-              Atas perhatiannya disampaikan terima kasih.
-            </div>
+            <!-- pemesanan end -->
           </q-card-section>
           <!-- tanda tangan -->
           <q-card-section>

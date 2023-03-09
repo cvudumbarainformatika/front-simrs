@@ -27,6 +27,17 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       'kode_perusahaan',
       'reff',
       'details',
+      'flag_siasik',
+      'barangrs',
+      'barang108',
+      'kode_108',
+      'kode_50',
+      'qty_kecil',
+      'satuan_besar',
+      'satuan_kecil',
+      'isi',
+      'harga',
+      'sub_total',
       'created_at',
       'updated_at'
     ]
@@ -49,11 +60,12 @@ export const useDetailHistoryTable = defineStore('detail_history', {
         this.columns = thumb[0]
         if (thumb.length) {
           this.columns.sort()
-          changeArrayIndex(this.columns, 'kode_108', 'barang108')
-          changeArrayIndex(this.columns, 'kode_rs', 'kode_108')
-          changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
-          changeArrayIndex(this.columns, 'satuan', 'harga')
-          changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
+          // changeArrayIndex(this.columns, 'kode_rs', 'harga')
+          changeArrayIndex(this.columns, 'nama_barang', 'merk')
+          changeArrayIndex(this.columns, 'uraian_108', 'merk')
+          changeArrayIndex(this.columns, 'uraian_50', 'merk')
+          // changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
+          // changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
         } else {
           notifErrVue('tidak ada data details')
         }
