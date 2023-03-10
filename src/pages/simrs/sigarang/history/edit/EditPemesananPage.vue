@@ -20,12 +20,20 @@
                 {{ store.form.kontrak }}
               </div>
             </div>
-            <div class="row">
+            <div class="row items-center">
               <div class="col-4">
                 Nomor Pemesanan
               </div>
               <div class="col-8">
-                {{ store.form.nomor }}
+                <app-input
+                  v-if="store.item.status<=2"
+                  v-model="store.form.nomor"
+                  label="Nomor Permintaan"
+                  outlined
+                />
+                <div v-if="store.item.status>2">
+                  {{ store.form.nomor }}
+                </div>
               </div>
             </div>
           </div>
@@ -35,7 +43,12 @@
                 Tanggal
               </div>
               <div class="col-8">
-                {{ store.form.tanggal }}
+                <app-input-date
+                  :model="store.form.tanggal"
+                  label="Tanggal"
+                  outlined
+                  @set-model="setModel"
+                />
               </div>
             </div>
             <div class="row">
@@ -47,6 +60,13 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="row justify-end">
+          <app-btn
+            label="simpan perubahan"
+            :loading="store.loading"
+            @click="store.simpanHeader"
+          />
         </div>
       </q-card-section>
       <q-card-section>
@@ -86,7 +106,14 @@
           >
             <div class="row">
               <div class="col-1">
-                {{ i+1 }}. {{ detail.barangrs?detail.barangrs.kode:'-' }}
+                <div class="row">
+                  <div class="text-weight-bold col-3">
+                    {{ i+1 }}.
+                  </div>
+                  <div class="col-9">
+                    {{ detail.barangrs?detail.barangrs.kode:'-' }}
+                  </div>
+                </div>
               </div>
               <div class="col-4">
                 {{ detail.barangrs?detail.barangrs.nama:'-' }}
@@ -101,36 +128,38 @@
                 {{ detail.merk }}
               </div>
               <div class="col-1">
-                <q-btn
-                  color="primary"
-                  round
-                  icon="icon-mat-edit"
-                  flat
-                  size="sm"
-                  @click="editRow(detail,i)"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
+                <div v-if="store.item.status!==4">
+                  <q-btn
+                    color="primary"
+                    round
+                    icon="icon-mat-edit"
+                    flat
+                    size="sm"
+                    @click="editRow(detail,i)"
                   >
-                    Edit
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  color="negative"
-                  round
-                  icon="icon-mat-delete_sweep"
-                  flat
-                  size="sm"
-                  @click="hapus(detail,i)"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Edit
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    color="negative"
+                    round
+                    icon="icon-mat-delete_sweep"
+                    flat
+                    size="sm"
+                    @click="hapus(detail,i)"
                   >
-                    Hapus
-                  </q-tooltip>
-                </q-btn>
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Hapus
+                    </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </div>
           </div>
@@ -143,6 +172,9 @@
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
 
 const store = useEditPemesananStore()
+function setModel(val) {
+  store.setForm('tanggal', val)
+}
 function editRow(val, i) {}
 function hapus(val, i) {}
 </script>

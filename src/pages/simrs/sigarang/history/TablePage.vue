@@ -135,6 +135,9 @@
             <template #cell-asal="{row}">
               {{ row.asal?row.asal.nama:'-' }}
             </template>
+            <template #cell-dibuat="{row}">
+              {{ row.dibuat?row.dibuat.nama:'-' }}
+            </template>
             <template #cell-tujuan="{row}">
               {{ row.tujuan?row.tujuan.nama:'-' }}
             </template>
@@ -182,6 +185,9 @@
             </template>
             <template #col-total>
               Total
+            </template>
+            <template #col-dibuat>
+              PTK
             </template>
             <template #col-ruangan>
               Ruangan
@@ -290,14 +296,16 @@
                   Buka link
                 </q-tooltip>
               </q-btn>
+              <!-- || role==='PTK' || role==='gizi' -->
               <q-btn
-                v-if="(row.status===2 || row.status===3) && (role==='PTK' || role==='root'|| role==='gizi')
-                  && (row.nama === 'PEMESANAN')"
+                v-if="(role==='root')
+                  && (row.nama === 'PEMESANAN' && (row.status>=2 && row.status<=4))"
                 color="primary"
                 round
                 icon="icon-mat-edit"
                 flat
                 size="sm"
+                :loading="loadingEdit(index)"
                 @click="editRow(row,index)"
               >
                 <q-tooltip
@@ -653,6 +661,7 @@
                 <app-input
                   v-model="tandatangan.kiri"
                   outlined
+                  valid
                   label="Text kiri"
                 />
               </div>
@@ -660,6 +669,7 @@
                 <app-input
                   v-model="tandatangan.kanan"
                   outlined
+                  valid
                   label="Text kanan"
                 />
               </div>
@@ -734,6 +744,7 @@
                 <app-input
                   v-model="tandatangan.tengah"
                   outlined
+                  valid
                   label="Text Tengah"
                 />
               </div>
@@ -884,6 +895,12 @@ function editRow(val, i) {
   // console.log(val)
   editPemesanan.assignForm(val, i)
   editPemesanan.setOpen()
+}
+const ladingPemesanan = computed(() => {
+  return editPemesanan.loading
+})
+function loadingEdit(index) {
+  return index === editPemesanan.index && ladingPemesanan.value === true
 }
 const color = val => {
   switch (val) {
