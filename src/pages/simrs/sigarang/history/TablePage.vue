@@ -296,9 +296,9 @@
                   Buka link
                 </q-tooltip>
               </q-btn>
-              <!--  -->
+              <!-- || role==='PTK' || role==='gizi' -->
               <q-btn
-                v-if="(role==='root' || role==='PTK' || role==='gizi')
+                v-if="(role==='root')
                   && (row.nama === 'PEMESANAN' && (row.status>=2 && row.status<=4))"
                 color="primary"
                 round
@@ -315,9 +315,9 @@
                   Edit
                 </q-tooltip>
               </q-btn>
-              <!-- ||role==='PTK' || role==='gizi' -->
+              <!--  -->
               <q-btn
-                v-if="row.status===1 && (role==='root')"
+                v-if="row.status===1 && (role==='root'||role==='PTK' || role==='gizi')"
                 color="negative"
                 round
                 icon="icon-mat-delete_sweep"
@@ -332,8 +332,9 @@
                   Hapus Draft
                 </q-tooltip>
               </q-btn>
+              <!-- ||role==='PTK' || role==='gizi' -->
               <q-btn
-                v-if="row.status===2 && (role==='PTK' || role==='root'|| role==='gizi')"
+                v-if="row.status===2 && ( role==='root')"
                 color="negative"
                 round
                 icon="icon-mat-delete_sweep"

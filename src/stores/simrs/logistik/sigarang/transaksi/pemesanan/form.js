@@ -427,8 +427,16 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
             this.loadingFinish = false
           })
           .catch((err) => {
+            console.log('aku error', err.response)
+            const keys = Object.keys(err.response.data)
+            keys.forEach(k => {
+              if (k === 'nomor') {
+                notifErrVue('Nomor pemesanan sudah ada Sebelumnya')
+              }
+            })
+            console.log('aku error key', keys)
             this.loadingTambah = false
-            this.isOpen = false
+            // this.isOpen = false
             this.loadingFinish = false
             this.loading = false
             reject(err)

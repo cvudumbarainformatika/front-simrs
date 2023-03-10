@@ -804,6 +804,7 @@ const validation = () => {
 }
 const onSubmit = () => {
   validation()
+  console.log('on Submit', kontrak.value, kodeRs.value, kode108.value, jumlah.value, harga.value)
   if (kontrak.value && kodeRs.value && kode108.value && jumlah.value && harga.value) {
     const apem = Object.keys(store.form)
     apem.forEach(data => {
