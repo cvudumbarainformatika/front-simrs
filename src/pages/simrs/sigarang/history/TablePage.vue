@@ -296,9 +296,9 @@
                   Buka link
                 </q-tooltip>
               </q-btn>
-              <!-- || role==='PTK' || role==='gizi' -->
+              <!--  -->
               <q-btn
-                v-if="(role==='root')
+                v-if="(role==='root' || role==='PTK' || role==='gizi')
                   && (row.nama === 'PEMESANAN' && (row.status>=2 && row.status<=4))"
                 color="primary"
                 round
