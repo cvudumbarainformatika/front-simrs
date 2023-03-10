@@ -44,6 +44,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     loading: false,
     loadingTambah: false,
     loadingFinish: false,
+    needToEdit: false,
     minMaxDepos: [],
     stoks: [],
     stok: {},

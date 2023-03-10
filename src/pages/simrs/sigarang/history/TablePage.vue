@@ -107,13 +107,13 @@
             <template #cell-perusahaan="{row}">
               <div style="width:10vw;">
                 <div class="ellipsis">
-                  {{ row.perusahaan.nama }}
+                  {{ row.perusahaan?row.perusahaan.nama:'-' }}
                 </div>
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
-                  {{ row.perusahaan.nama }}
+                  {{ row.perusahaan?row.perusahaan.nama:'-' }}
                 </q-tooltip>
               </div>
             </template>
@@ -291,14 +291,14 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="row.status===2 && (role==='PTK' || role==='root'|| role==='gizi')
+                v-if="(row.status===2 || row.status===3) && (role==='PTK' || role==='root'|| role==='gizi')
                   && (row.nama === 'PEMESANAN')"
                 color="primary"
                 round
                 icon="icon-mat-edit"
                 flat
                 size="sm"
-                @click="editRow(row)"
+                @click="editRow(row,index)"
               >
                 <q-tooltip
                   anchor="top middle"
@@ -364,8 +364,7 @@
               </q-btn>
             </template>
             <template #header-left-after-search>
-              {{ table.params.tanggal }}
-              <div>
+              <!-- <div>
                 Periode :
                 <q-badge>
                   {{ table.params.from ? dateFullFormat(table.params.from) : '-' }}
@@ -408,26 +407,7 @@
                 >
                   pilih range tanggal
                 </q-tooltip>
-              </div>
-              <!-- <q-input
-                v-if="(role==='PTK' || role==='root'|| role==='gizi')"
-                v-model="table.params.tanggal"
-                class="search-big"
-                borderless
-                debounce="800"
-                clearable
-                dense
-                placeholder="tanggal ... "
-                clear-icon="icon-mat-close"
-                @update:model-value="table.searchTanggal"
-              >
-                <template #prepend>
-                  <q-icon
-                    name="icon-mat-search"
-                    size="20px"
-                  />
-                </template>
-              </q-input> -->
+              </div> -->
             </template>
           </app-table-view>
           <!--
@@ -786,6 +766,7 @@
     </q-dialog>
     <TandaTanganPage v-model="tandatangan.isOpen" />
     <DetailsTablePage v-model="detail.isOpen" />
+    <editPemesananPage v-model="editPemesanan.isOpen" />
     <!-- id="printMe" -->
   </q-page>
 </template>
@@ -793,8 +774,10 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
+import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
+import editPemesananPage from './edit/EditPemesananPage.vue'
 import TandaTanganPage from 'src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'
 // import PrintPage from './PrintPage.vue'
 import { routerInstance } from 'src/boot/router'
@@ -896,8 +879,11 @@ const hapus = val => {
     })
 }
 // edit
-function editRow(row) {
-  console.log(row)
+const editPemesanan = useEditPemesananStore()
+function editRow(val, i) {
+  // console.log(val)
+  editPemesanan.assignForm(val, i)
+  editPemesanan.setOpen()
 }
 const color = val => {
   switch (val) {

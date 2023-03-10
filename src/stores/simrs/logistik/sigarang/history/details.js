@@ -61,9 +61,9 @@ export const useDetailHistoryTable = defineStore('detail_history', {
         if (thumb.length) {
           this.columns.sort()
           // changeArrayIndex(this.columns, 'kode_rs', 'harga')
-          changeArrayIndex(this.columns, 'barangrs', 'merk')
           changeArrayIndex(this.columns, 'uraian_108', 'merk')
           changeArrayIndex(this.columns, 'uraian_50', 'merk')
+          changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
           // changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
           // changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
         } else {

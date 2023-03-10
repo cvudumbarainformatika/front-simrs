@@ -490,10 +490,18 @@
                   <div class="row q-mb-sm">
                     <div class="col-12 text-right">
                       <app-btn
+                        v-if="!store.needToEdit"
                         label="Tutup Pemesanan"
                         :loading="store.loadingFinish"
                         :disable="store.isOpen || store.loadingFinish || store.loadingTambah || !table.items.length"
                         @click="onFisnish"
+                      />
+                      <app-btn
+                        v-if="store.needToEdit"
+                        label="Selesai Edit"
+                        :loading="store.loadingFinish"
+                        :disable="store.isOpen || store.loadingFinish || store.loadingTambah || !table.items.length"
+                        @click="onFisnishEdit"
                       />
                     </div>
                   </div>
@@ -821,6 +829,17 @@ const onSubmit = () => {
   } else {
     notifNegativeCenterVue('cek data input, ada yang kurang')
   }
+}
+function onFisnishEdit() {
+  store.needToEdit = false
+  const slug = 'TRP-' + uniqueId()
+
+  table.resetData()
+  store.resetFORM()
+  store.setForm('reff', slug)
+  routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
+  table.getDataTable(slug)
+  store.kontrakOpen = false
 }
 const onCancel = () => {
   clearBarangRs()
