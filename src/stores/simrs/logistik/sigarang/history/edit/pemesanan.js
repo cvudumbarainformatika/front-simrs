@@ -13,6 +13,8 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
   /* catatan:
   * barang yang sudah diterima ada penerimaan tidak bisa di edit
   * no pemesanan, kontrak yang sudah ada penerimaan tidak bisa di edit
+  * jika ada penambahan data, maka jika status pemesanan sebelumnya adalah 4, berubah jadi 3
+  * sebliknya, jika ada pengurangan maka cek secara keseluruhan, jika semua barang sudah diterima maka status berubah jadi 4
   */
   actions: {
     setForm(key, val) {
