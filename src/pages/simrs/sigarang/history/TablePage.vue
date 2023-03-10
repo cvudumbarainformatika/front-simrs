@@ -315,8 +315,9 @@
                   Edit
                 </q-tooltip>
               </q-btn>
+              <!-- ||role==='PTK' || role==='gizi' -->
               <q-btn
-                v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')"
+                v-if="row.status===1 && (role==='root')"
                 color="negative"
                 round
                 icon="icon-mat-delete_sweep"
