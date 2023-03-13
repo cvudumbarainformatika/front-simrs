@@ -312,7 +312,7 @@
                         Uraian 108
                       </div>
                       <div class="col-6">
-                        {{ store.barangrs.length ? store.barangrs[0].barang108.uraian : '-' }}
+                        {{ store.barangrs.length ? store.barangrs[0].uraian_108 : '-' }}
                       </div>
                     </div>
 
