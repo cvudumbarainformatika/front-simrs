@@ -294,7 +294,10 @@
                     <q-separator />
                   </div>
                   <div class="fit row no-wrap justify-evenly items-center content-center q-mt-md">
-                    <div class="to-print-tt text-center">
+                    <div
+                      v-if="ruang==='Depo Habis Pakai'"
+                      class="to-print-tt text-center"
+                    >
                       <div class="q-mb-xl">
                         Pejabat Pelaksanan Teknik Kegiatan
                       </div>
@@ -303,6 +306,20 @@
                       </div>
                       <div class="">
                         NIP. 19740304 200801 2 005
+                      </div>
+                    </div>
+                    <div
+                      v-if="ruang==='Depo PNM' || ruang==='Depo Gizi'"
+                      class="to-print-tt text-center"
+                    >
+                      <div class="q-mb-xl">
+                        Pejabat Pelaksanan Teknik Kegiatan
+                      </div>
+                      <div class="q-mt-lg text-weight-bold">
+                        SUYANI, S.Sos.
+                      </div>
+                      <div class="">
+                        NIP. 19661125 199603 2 003
                       </div>
                     </div>
                     <div class="to-print-tt text-center">
@@ -446,13 +463,20 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
+import { useAuthStore } from 'src/stores/auth'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
+const auth = useAuthStore()
+const ruang = computed(() => {
+  const depo = auth.depo ? auth.depo.nama : false
+
+  return depo
+})
 
 const proxyDate = ref(null)
 const refDate = ref(null)
