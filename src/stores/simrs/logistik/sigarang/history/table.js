@@ -36,6 +36,7 @@ export const useHistoryTable = defineStore('history_table', {
       // 'perusahaan',
       'kode_perusahaan',
       'reff',
+      'dari',
       'details',
       'created_at',
       'updated_at',
@@ -45,8 +46,12 @@ export const useHistoryTable = defineStore('history_table', {
       'penggunaruang',
       'ruangpengguna',
       'tanggal_serahterima',
+      'tanggal_verif',
+      'tanggal_distribusi',
+      // 'no_distribusi',
       'flag_siasik',
       'updated_by',
+      'pj',
       'created_by'
     ],
     kanan: '',
@@ -88,11 +93,20 @@ export const useHistoryTable = defineStore('history_table', {
       this.params.q = val
       this.getDataTransactions()
     },
+    setKontrak (val) {
+      this.params.kontrak = val
+      this.getDataTransactions()
+    },
     searchTanggal (val) {
+      console.log('tipe tanggal ', Object.getPrototypeOf(val).constructor.name)
       console.log('tanggal ', val)
-      if (val) {
+      if (Object.getPrototypeOf(val).constructor.name === 'Object') {
         this.params.from = val.from
         this.params.to = val.to
+        this.getDataTransactions()
+      } else if (Object.getPrototypeOf(val).constructor.name === 'String') {
+        this.params.from = val
+        this.params.to = val
         this.getDataTransactions()
       } else {
         delete this.params.from

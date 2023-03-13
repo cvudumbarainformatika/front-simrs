@@ -32,8 +32,82 @@
           </div>
         </div>
         <q-separator class="q-mb-sm" />
-        <!-- header -->
+        <!-- penerimaan gudang -->
+        <div class="row fit no-wrap justify-center f-16 text-weight-bold items-center q-mb-sm q-col-gutter-sm">
+          Transaksi Penerimaan gudang
+        </div>
         <div class="row fit no-wrap text-weight-bold items-center q-mb-sm q-col-gutter-sm">
+          <div class="col-2">
+            Tanggal
+          </div>
+          <div class="col-2">
+            Nomor Pemesanan
+          </div>
+          <div class="col-2">
+            No Peneriman
+          </div>
+          <div class="col-1">
+            Masuk
+          </div>
+          <div class="col-1">
+            Keluar
+          </div>
+          <div class="col-4">
+            keterangan
+          </div>
+        </div>
+        <!-- penrimaan -->
+        <!-- {{ data.detail_penerimaan }} -->
+        <div
+          v-if="data.detail_penerimaan"
+        >
+          <div
+            v-for="(terima,i) in data.detail_penerimaan"
+            :key="i"
+            class="row fit no-wrap items-center q-mb-sm q-col-gutter-sm"
+          >
+            <div class="col-2">
+              {{ dateFullFormat(terima.tanggal) }}
+            </div>
+            <div class="col-2">
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ terima.nomor }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ terima.nomor }}
+                </q-tooltip>
+              </div>
+            </div>
+            <div class="col-2">
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ terima.no_penerimaan }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ terima.no_penerimaan }}
+                </q-tooltip>
+              </div>
+            </div>
+            <div class="col-1">
+              {{ terima.qty }}
+            </div>
+            <div class="col-1">
+              0
+            </div>
+            <div class="col-4">
+              Diterima Gudang
+            </div>
+          </div>
+        </div>
+        <!-- header -->
+        <div class="row fit no-wrap text-weight-bold items-center q-mb-sm q-col-gutter-sm q-mt-sm">
           <div class="col-2">
             Tanggal
           </div>
@@ -49,7 +123,7 @@
           <div class="col-1">
             Keluar
           </div>
-          <div class="col-2">
+          <div class="col-4">
             keterangan
           </div>
         </div>
@@ -75,7 +149,7 @@
           <div class="col-1">
             0
           </div>
-          <div class="col-2">
+          <div class="col-4">
             tidak ada data stok opname bulan lalu
           </div>
         </div>
@@ -118,47 +192,7 @@
           </div>
         </div>
 
-        <!-- penrimaan -->
-        <!-- {{ data.detail_penerimaan }} -->
         <!-- <div
-          v-if="data.detail_penerimaan"
-        >
-          <div
-            v-for="(terima,i) in data.detail_penerimaan"
-            :key="i"
-            class="row fit no-wrap items-center q-mb-sm q-col-gutter-sm"
-          >
-            <div class="col-2">
-              {{ dateFullFormat(terima.tanggal) }}
-            </div>
-            <div class="col-2">
-              Penerimaan
-            </div>
-            <div class="col-2">
-              <div style="width:5vw;">
-                <div class="ellipsis">
-                  {{ terima.no_penerimaan }}
-                </div>
-                <q-tooltip
-                  anchor="top middle"
-                  self="center middle"
-                >
-                  {{ terima.no_penerimaan }}
-                </q-tooltip>
-              </div>
-            </div>
-            <div class="col-1">
-              {{ terima.qty }}
-            </div>
-            <div class="col-1">
-              0
-            </div>
-            <div class="col-2">
-              Diterima Gudang
-            </div>
-          </div>
-        </div>
-        <div
           v-if="!data.detail_penerimaan"
           class="row fit no-wrap items-center q-mb-sm q-col-gutter-sm"
         >
@@ -280,8 +314,13 @@
             <div class="col-1">
               {{ minta.jumlah_distribusi }}
             </div>
-            <div class="col-1">
-              {{ minta.alasan }}
+            <div class="col-4">
+              <div class="text-weight-bold">
+                ({{ minta.uraian }})
+              </div>
+              <div v-if="minta.alasan">
+                {{ minta.alasan }}
+              </div>
             </div>
           </div>
         </div>

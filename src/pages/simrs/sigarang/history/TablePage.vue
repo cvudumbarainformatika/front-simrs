@@ -14,6 +14,7 @@
             :sort="table.params.sort"
             :loading="table.loading"
             :to-search="table.params.q"
+            :ada-cari="false"
             ada-detail
             @goto="table.setPage"
             @set-row="table.setPerPage"
@@ -142,7 +143,17 @@
               {{ row.tujuan?row.tujuan.nama:'-' }}
             </template>
             <template #cell-pengguna="{row}">
-              {{ row.pengguna?row.pengguna.jabatan:row.ruangpengguna?row.ruangpengguna.pengguna.jabatan:'-' }}
+              <div style="width:10vw;">
+                <div class="ellipsis">
+                  {{ row.pengguna?row.pengguna.jabatan:row.ruangpengguna?row.ruangpengguna.pengguna.jabatan:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.pengguna?row.pengguna.jabatan:row.ruangpengguna?row.ruangpengguna.pengguna.jabatan:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #cell-pj="{row}">
               {{ row.pj?row.pj.jabatan:row.ruangpengguna?row.ruangpengguna.pj.jabatan:'-' }}
@@ -374,7 +385,53 @@
               </q-btn>
             </template>
             <template #header-left-after-search>
-              <!-- <div>
+              <div>
+                <q-input
+                  v-if="table.params.nama === 'Pemesanan'
+                    || table.params.nama === 'Penerimaan'
+                    || table.params.nama === 'Gudang'
+                    || table.params.nama === 'Penerimaan Ruangan'
+                    ||table.params.nama === 'Permintaan Ruangan'"
+                  v-model="table.params.q"
+                  class="search-big"
+                  borderless
+                  debounce="500"
+                  clearable
+                  dense
+                  :placeholder="reqQ(table.params.nama)"
+                  clear-icon="icon-mat-close"
+                  @update:model-value="table.setSearch"
+                >
+                  <template #prepend>
+                    <q-icon
+                      name="icon-mat-search"
+                      size="20px"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div>
+                <q-input
+                  v-if="table.params.nama === 'Pemesanan' || table.params.nama === 'Penerimaan'"
+                  v-model="table.params.kontrak"
+                  class="search-big"
+                  borderless
+                  debounce="500"
+                  clearable
+                  dense
+                  placeholder="Nomor Kontrak"
+                  clear-icon="icon-mat-close"
+                  @update:model-value="table.setKontrak"
+                >
+                  <template #prepend>
+                    <q-icon
+                      name="icon-mat-search"
+                      size="20px"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div>
                 Periode :
                 <q-badge>
                   {{ table.params.from ? dateFullFormat(table.params.from) : '-' }}
@@ -417,7 +474,7 @@
                 >
                   pilih range tanggal
                 </q-tooltip>
-              </div> -->
+              </div>
             </template>
           </app-table-view>
           <!--
@@ -819,6 +876,17 @@ function backToVerif(val, index) {
   }).onOk(() => {
     table.getItBackToVerif(index)
   })
+}
+function reqQ(val) {
+  let x = ''
+  if (val === 'Pemesanan' || val === 'Penerimaan' || val === 'Gudang') {
+    x = 'Nomor Pemesanan'
+  } else if (val === 'Permintaan Ruangan') {
+    x = 'Nomor Permintaan'
+  } else if (val === 'Penerimaan Ruangan') {
+    x = 'Nomor Distribusi'
+  }
+  return x
 }
 // print
 const openPrint = ref(false)
