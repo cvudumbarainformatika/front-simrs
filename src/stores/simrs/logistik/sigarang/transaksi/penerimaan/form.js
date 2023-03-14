@@ -173,7 +173,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
           } else {
             this.clearNomorPemesanan()
             if (tempNo.length === 2) {
-              this.jumlahPenerimaan(dat).then(resp => {
+              this.jumlahPenerimaan(val).then(resp => {
                 console.log('jumlahnya', resp)
                 if (resp.jumlah > 0) {
                   this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1] + '-' + resp.jumlah)
@@ -268,7 +268,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     jumlahPenerimaan(val) {
       const data = {
         params: {
-          reff: val
+          nomor: val
         }
       }
       this.loadingJumlah = true
