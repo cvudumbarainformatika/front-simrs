@@ -33,10 +33,16 @@
         </div>
         <q-separator class="q-mb-sm" />
         <!-- penerimaan gudang -->
-        <div class="row fit no-wrap justify-center f-16 text-weight-bold items-center q-mb-sm q-col-gutter-sm">
+        <div
+          v-if="role==='gudang' || role==='root'"
+          class="row fit no-wrap justify-center f-16 text-weight-bold items-center q-mb-sm q-col-gutter-sm"
+        >
           Transaksi Penerimaan gudang
         </div>
-        <div class="row fit no-wrap text-weight-bold items-center q-mb-sm q-col-gutter-sm">
+        <div
+          v-if="role==='gudang' || role==='root'"
+          class="row fit no-wrap text-weight-bold items-center q-mb-sm q-col-gutter-sm"
+        >
           <div class="col-2">
             Tanggal
           </div>
@@ -59,7 +65,7 @@
         <!-- penrimaan -->
         <!-- {{ data.detail_penerimaan }} -->
         <div
-          v-if="data.detail_penerimaan"
+          v-if="data.detail_penerimaan &&(role==='gudang' || role==='root')"
         >
           <div
             v-for="(terima,i) in data.detail_penerimaan"
@@ -103,9 +109,13 @@
             </div>
             <div class="col-4">
               Diterima Gudang
+              <div v-if="terima.merk">
+                <p> {{ terima.merk }}</p>
+              </div>
             </div>
           </div>
         </div>
+        <q-separator />
         <!-- header -->
         <div class="row fit no-wrap text-weight-bold items-center q-mb-sm q-col-gutter-sm q-mt-sm">
           <div class="col-2">
@@ -364,13 +374,20 @@
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { useAuthStore } from 'src/stores/auth'
 import { useStokOpnameStore } from 'src/stores/simrs/logistik/sigarang/laporan/stok/stokOpname'
 import { computed } from 'vue'
 
 const store = useStokOpnameStore()
+const auth = useAuthStore()
+
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
 const data = computed(() => {
   return store.dataKartuStok
 })
+
 function depo() {
   const a = store.gudangDepo.filter(anu => anu.kode === store.kode_tempat)
   return a[0].nama
