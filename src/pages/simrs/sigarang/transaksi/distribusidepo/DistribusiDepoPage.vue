@@ -249,7 +249,7 @@
 </template>
 <script setup>
 import { Dialog } from 'quasar'
-import { notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
@@ -262,12 +262,11 @@ const depoSelected = val => {
   store.setForm('kode_depo', val)
   store.filterBarangHasStok(val)
   barangCleared()
-  // const minmax = store.minMaxDepos.filter(data => {
-  //   return data.kode_depo === val
-  // })
-  // console.log('min max', minmax)
 }
 const depoCleared = () => {
+  store.resetDisplay()
+  store.resetFORM()
+  store.resetDetail()
   barangCleared()
   store.setForm('kode_depo', null)
 }
@@ -338,7 +337,7 @@ const barangSelected = val => {
   // console.log('stok', stok)
 }
 const barangCleared = () => {
-  store.resetDisplay()
+  // store.resetDisplay()
   store.resetInput()
   store.setInput('kode_barang', null)
 }
@@ -354,8 +353,23 @@ const addInput = () => {
       store.setDetail('jumlah', store.input.jumlah)
       store.setInput('jumlah', store.input.jumlah)
       if (!edit.value) {
-        store.form.details.push(store.detail)
-        store.displays.push(store.input)
+        console.log('store detail', store.detail)
+        console.log('form detail', store.form.details)
+        console.log('display', store.displays)
+        const indexForm = findWithAttr(store.form.details, 'kode_rs', store.input.kode_barang)
+        const indexDis = findWithAttr(store.displays, 'kode_barang', store.input.kode_barang)
+        console.log('index form', indexForm)
+        console.log('index dis', indexDis)
+        if (indexForm < 0) {
+          store.form.details.push(store.detail)
+        } else {
+          store.form.details[indexForm] = store.detail
+        }
+        if (indexDis < 0) {
+          store.displays.push(store.input)
+        } else {
+          store.displays[indexDis] = store.input
+        }
       } else {
         store.form.details[index.value].jumlah = store.input.jumlah
         store.displays[index.value].jumlah = store.input.jumlah
@@ -377,9 +391,6 @@ const addInput = () => {
 
 // edit
 const editData = apem => {
-  // console.log('index', apem, index)
-  // console.log('display', store.displays[index.value])
-  // console.log('form', store.form.details[index.value])
   edit.value = true
   index.value = apem
   store.input = store.displays[index.value]
@@ -401,10 +412,7 @@ const deleteData = index => {
     // apem
     store.displays.splice(index, 1)
     store.form.details.splice(index, 1)
-    // console.log('form', store.form)
   })
-  // console.log('display', store.displays[index])
-  // console.log('form', store.form.details[index])
 }
 onBeforeRouteLeave((to, from) => {
   // console.log('to', to)
