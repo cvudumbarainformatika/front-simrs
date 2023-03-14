@@ -79,7 +79,7 @@
           </div>
         </div>
         <!-- button stok opname -->
-        <div class="fit row no-wrap justify-end items-center q-mb-sm">
+        <!-- <div class="fit row no-wrap justify-end items-center q-mb-sm">
           <q-btn
             :label="!store.allItems.length ? 'Mulai Opname':'Sudah ada data'"
             no-caps
@@ -99,7 +99,7 @@
               </div>
             </q-tooltip>
           </q-btn>
-        </div>
+        </div> -->
         <q-separator />
         <div class="q-mt-sm">
           <!-- table -->
@@ -129,7 +129,7 @@
             <!-- header -->
             <template #header-left-after-search>
               <div class="q-ml-md">
-                store.meta
+                <!-- store.meta -->
               </div>
             </template>
             <!-- kolom -->

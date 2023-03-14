@@ -23,7 +23,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       selisih: 0
     },
     params: {
-      search: 'Gd-02010101',
+      // search: 'Gd-02010101',
+      search: '',
       q: '',
       page: 1,
       per_page: 10,
@@ -32,9 +33,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY')
     },
-    kode_tempat: 'Gd-02010101',
+    kode_tempat: '',
     gudangDepo: [
-      { nama: 'Depo PNM', kode: 'Gd-02010101' }
+      // { nama: 'Depo PNM', kode: 'Gd-02010101' }
     ],
     months: [
       { nama: 'Januari', value: '01' },
@@ -222,7 +223,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     getDataGudangDepo() {
       this.gudangDepo = [
-        { nama: 'Depo PNM', kode: 'Gd-02010101' }
+        // { nama: 'Depo PNM', kode: 'Gd-02010101' }
       ]
       this.loading = true
       return new Promise(resolve => {
@@ -231,9 +232,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('data gudang', resp)
             resp.data.forEach(data => {
-              if (data.kode !== 'Gd-02010101') {
-                this.gudangDepo.push(data)
-              }
+              // if (data.kode !== 'Gd-02010101') {
+              // }
+              this.gudangDepo.push(data)
             })
             resolve(resp)
           })
