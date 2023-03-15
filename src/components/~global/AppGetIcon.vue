@@ -70,7 +70,7 @@
 
 <script setup>
 import { copyToClipboard } from 'quasar'
-import { notifErr, notifSuccessVue } from 'src/modules/utils'
+import { notifErr } from 'src/modules/utils'
 import { ref, onMounted, computed } from 'vue'
 const iconLists = import.meta.globEager('./../../custom-icons/svg/**/*.svg')
 
@@ -104,7 +104,6 @@ function filteredList() {
 function copied(text) {
   copyToClipboard(text)
     .then(() => {
-      notifSuccessVue('icon terpilih')
       emits('copyText', text)
     })
     .catch(() => {

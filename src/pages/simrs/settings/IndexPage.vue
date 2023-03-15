@@ -26,7 +26,10 @@
             :loading="store.loading"
             :edited="edited"
             @add="newData()"
+            @save-new="(val)=> saveNew(val)"
             @icon-app-change="(val)=>iconAppClick(val)"
+            @delete-new="(val)=>store.deleteNew(val)"
+            @add-menu="(val)=>store.addMenu(val)"
           />
         </q-scroll-area>
         <div
@@ -47,16 +50,60 @@
               flat
               padding="sm"
               icon="icon-mat-settings"
-            />
+            >
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-close-popup
+                    clickable
+                    @click="modalSearch = true"
+                  >
+                    <q-item-section>Hak Akses User</q-item-section>
+                  </q-item>
+                  <q-item
+                    v-close-popup
+                    clickable
+                  >
+                    <q-item-section>New incognito tab</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    v-close-popup
+                    clickable
+                  >
+                    <q-item-section>Settings</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    v-close-popup
+                    clickable
+                  >
+                    <q-item-section>Help &amp; Feedback</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
           </div>
         </div>
       </q-card>
+    </div>
+
+    <div
+      v-if="store.pegawai !== null"
+      class="absolute-left q-pa-md"
+      style="width:20%"
+    >
+      <card-pegawai :item="store.pegawai" />
     </div>
 
     <!-- modal -->
     <app-get-icon
       v-model="modalIcon"
       @copy-text="(val)=>changeIconApp(val)"
+    />
+    <DialogSearchUser
+      v-model="modalSearch"
+      @updated="(val)=>setPegawai(val)"
     />
   </q-page>
 </template>
@@ -66,6 +113,8 @@ import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { ref, onMounted } from 'vue'
 
 import ListItems from './aplikasi/ListItems.vue'
+import DialogSearchUser from './aplikasi/DialogSearchUser.vue'
+import CardPegawai from './aplikasi/CardPegawai.vue'
 
 const main = ref(null)
 const h = ref()
@@ -84,7 +133,9 @@ const newValue = ref({
   url: ''
 })
 const modalIcon = ref(false)
+const modalSearch = ref(false)
 const edited = ref(null)
+const indexApp = ref(null)
 
 onMounted(() => {
   h.value = main.value.$el.offsetHeight - 35
@@ -97,8 +148,13 @@ onMounted(() => {
 function newData() {
   store.addNew(newValue.value)
 }
+function saveNew(val) {
+  store.saveNew(val).then(() => {
+    edited.value = null
+    indexApp.value = null
+  })
+}
 
-const indexApp = ref(null)
 function iconAppClick(index) {
   modalIcon.value = true
   indexApp.value = index
@@ -112,6 +168,12 @@ function changeIconApp(val) {
     edited.value = 'edited-' + val
     console.log(edited.value)
   })
+}
+
+function setPegawai(val) {
+  console.log('set', val)
+  store.setPegawai(val)
+  modalSearch.value = false
 }
 </script>
 

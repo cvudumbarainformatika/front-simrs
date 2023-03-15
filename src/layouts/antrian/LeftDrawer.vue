@@ -97,7 +97,7 @@
       </div>
     </div>
     <!-- Skleleton -->
-    <div
+    <!-- <div
       v-if="!menus.length"
       class="flex column flex-center full-height"
       style="height:calc(100%-60px) "
@@ -130,7 +130,7 @@
           height="25px"
         />
       </div>
-    </div>
+    </div> -->
     <!-- </q-scroll-area> -->
 
     <div class="just-shadow absolute-full overflow-hidden no-pointer-events" />

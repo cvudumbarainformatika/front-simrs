@@ -71,16 +71,16 @@ const rightDrawerOpen = ref(false)
 const $q = useQuasar()
 const mobile = $q.screen.lt.sm
 
-const menus = computed(() => {
-  const apem = store.aplications.filter(app => {
-    return app.aplikasi === 'pegawai'
-  })
-  if (apem.length) {
-    return apem[0].menus
-  } else {
-    return []
-  }
-})
+// const menus = computed(() => {
+//   const apem = store.aplications.filter(app => {
+//     return app.aplikasi === 'antrian'
+//   })
+//   if (apem.length) {
+//     return apem[0].menus
+//   } else {
+//     return []
+//   }
+// })
 const dark = computed(() => {
   return $q.dark.isActive
 })
