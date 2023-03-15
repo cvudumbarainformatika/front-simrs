@@ -69,17 +69,19 @@ const notifErr = (resp) => {
           })
         })
       } else {
-        Notify.create({
-          message: resp.data[msgkeys],
-          icon: 'icon-eva-message-circle-outline',
-          position: 'top-right',
-          color: 'negative',
-          actions: [
-            { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
-          ]
+        if (msgkeys !== 'nomor') {
+          Notify.create({
+            message: resp.data[msgkeys],
+            icon: 'icon-eva-message-circle-outline',
+            position: 'top-right',
+            color: 'negative',
+            actions: [
+              { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+            ]
           // for (const key in msgs) {
           // }
-        })
+          })
+        }
       }
     })
   } else if (status === 409) {

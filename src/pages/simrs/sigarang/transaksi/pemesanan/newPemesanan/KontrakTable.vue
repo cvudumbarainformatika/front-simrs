@@ -25,6 +25,19 @@
             <template #col-nokontrakx>
               <div>No Kontrak</div>
             </template>
+            <template #cell-nokontrakx="{row}">
+              <div style="width:10vw;">
+                <div class="ellipsis">
+                  {{ row.nokontrakx }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.nokontrakx }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #col-namaperusahaan>
               <div>Nama Perusahaan</div>
             </template>

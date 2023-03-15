@@ -150,10 +150,10 @@
             {{ data.barangrs?data.barangrs.nama:'-' }}
           </div>
           <div class="disp text-center">
-            {{ data.kode_108 }}
+            {{ data.barangrs?data.barangrs.kode_108:'-' }}
           </div>
           <div class="disp text-center">
-            {{ data.barang108?data.barang108.uraian:'-' }}
+            {{ data.barangrs?data.barangrs.uraian_108:'-' }}
           </div>
           <div class="disp text-center">
             {{ data.stok_gudang }}

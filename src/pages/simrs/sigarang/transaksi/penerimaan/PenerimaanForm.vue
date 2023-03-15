@@ -20,6 +20,7 @@
                   outlined
                   hint="SESUAIKAN NOMOR PENERIMAAN"
                   dense
+                  :loading="store.loadingJumlah"
                 />
                 <!-- bg-color="red-2" -->
               </div>
@@ -118,14 +119,14 @@
                 </div>
                 <div v-if="store.form.status_pembelian!=='mutasi'"> -->
                 <app-autocomplete-new
-                  :model="store.form.nomor"
+                  :model="store.form.reff"
                   :valid="pemesanan"
                   outlined
                   label="cari nomor pemesanan*"
                   autocomplete="nomor"
-                  option-value="nomor"
-                  :loading="store.loading"
                   option-label="nomor"
+                  option-value="reff"
+                  :loading="store.loading"
                   :source="store.pemesanans"
                   @buang="store.setSearch"
                   @on-select="store.pemesananSelected"
@@ -332,8 +333,8 @@
             <div class="col-md-1 col-xs-12">
               <app-btn
                 label="Selesai"
-                :loading="store.loadingSimpan"
-                :disable="store.loadingSimpan"
+                :loading="store.loadingSimpan || store.loadingJumlah"
+                :disable="store.loadingSimpan || store.loadingJumlah"
                 @click="onSimpan"
               />
             </div>
@@ -377,7 +378,7 @@ const setFaktur = val => {
 }
 
 const clearPemesanan = () => {
-  store.setForm('nomor', null)
+  store.setForm('reff', null)
   store.deleteForm('namaPerusahaan')
   store.deleteForm('kontrak')
   store.clearNomorPemesanan()
@@ -428,7 +429,7 @@ const init = val => {
 
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
-  console.log('ref', refNomorSurat.value.$refs.refInput)
+  // console.log('ref', refNomorSurat.value.$refs.refInput)
   console.log('init', val)
 }
 
@@ -498,17 +499,17 @@ const validasi = (val) => {
   }
   refPengirim.value.$refs.refInput.validate()
   // diterima.value = !!form.qty
-  // console.log(
+  console.log(
   // refPengirim.value.$refs,
   // refPengirim.value.$refs.refInput,
   // 'diterima', diterima.value,
-  // 'pemesanan', pemesanan.value,
-  // 'pengirim', pengirim.value,
-  // 'status pembelian', statusPembelian.value,
-  // 'pilih surat', pilihSurat.value,
+    'pemesanan', pemesanan.value,
+    'pengirim', pengirim.value,
+    'status pembelian', statusPembelian.value,
+    'pilih surat', pilihSurat.value
   // 'surat', surat.value,
   // 'tanggal surat', tglSurat.value
-  // )
+  )
   if (!pemesanan.value || !pengirim.value || !statusPembelian.value || !pilihSurat.value) {
     // if (!diterima.value) {
     //   notifNegativeCenterVue('Anda belum memasukkan jumlah barang diterima')

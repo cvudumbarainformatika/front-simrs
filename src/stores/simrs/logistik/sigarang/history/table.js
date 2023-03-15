@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { changeArrayIndex, notifSuccess } from 'src/modules/utils'
 import { useDetailHistoryTable } from './details'
@@ -6,6 +7,7 @@ import { useDetailHistoryTable } from './details'
 export const useHistoryTable = defineStore('history_table', {
   state: () => ({
     loading: false,
+    loadingItem: false,
     nama: '',
     items: [],
     meta: {},
@@ -13,10 +15,15 @@ export const useHistoryTable = defineStore('history_table', {
     params: {
       q: '',
       page: 1,
-      per_page: 5,
+      per_page: 10,
       order_by: 'created_at',
       sort: 'desc'
     },
+    tanggal: {
+      from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      to: date.formatDate(Date.now(), 'YYYY-MM-DD')
+    },
+    form: {},
     columns: [],
     columnHide: [
       'id',
@@ -25,10 +32,11 @@ export const useHistoryTable = defineStore('history_table', {
       'kode_penerima',
       'nama',
       'transaksi_gudang_id',
-      'kontrak',
-      'perusahaan',
+      // 'kontrak',
+      // 'perusahaan',
       'kode_perusahaan',
       'reff',
+      'dari',
       'details',
       'created_at',
       'updated_at',
@@ -38,8 +46,17 @@ export const useHistoryTable = defineStore('history_table', {
       'penggunaruang',
       'ruangpengguna',
       'tanggal_serahterima',
-      'flag_siasik'
-    ]
+      'tanggal_verif',
+      'tanggal_distribusi',
+      // 'no_distribusi',
+      'flag_siasik',
+      'updated_by',
+      'pj',
+      'created_by'
+    ],
+    kanan: '',
+    kiri: '',
+    tengah: ''
   }),
   getters: {
     getterColumns (state) {
@@ -57,6 +74,12 @@ export const useHistoryTable = defineStore('history_table', {
     setParams (key, val) {
       this.params[key] = val
     },
+    setForm(key, val) {
+      this.form[key] = val
+    },
+    resetForm() {
+      this.form = {}
+    },
     pilihTransaksi (val) {
       this.selected = true
       this.nama = val.nama
@@ -69,6 +92,26 @@ export const useHistoryTable = defineStore('history_table', {
     setSearch (val) {
       this.params.q = val
       this.getDataTransactions()
+    },
+    setKontrak (val) {
+      this.params.kontrak = val
+      this.getDataTransactions()
+    },
+    searchTanggal (val) {
+      console.log('tipe tanggal ', Object.getPrototypeOf(val).constructor.name)
+      console.log('tanggal ', val)
+      if (Object.getPrototypeOf(val).constructor.name === 'Object') {
+        this.params.from = val.from
+        this.params.to = val.to
+        this.getDataTransactions()
+      } else if (Object.getPrototypeOf(val).constructor.name === 'String') {
+        this.params.from = val
+        this.params.to = val
+        this.getDataTransactions()
+      } else {
+        delete this.params.from
+        delete this.params.to
+      }
     },
     setOder (payload) {
       this.params.order_by = payload
@@ -141,6 +184,19 @@ export const useHistoryTable = defineStore('history_table', {
       })
     },
 
+    getItBackToVerif(val) {
+      this.items[val].loading = true
+      return new Promise(() => {
+        api.post('v1/transaksi/permintaanruangan/tolak-permintaan', this.form)
+          .then(() => {
+            this.items[val].loading = false
+            this.getDataTransactions()
+          })
+          .catch(() => {
+            this.items[val].loading = false
+          })
+      })
+    },
     deleteTransaction (params) {
       this.loading = true
       return new Promise((resolve, reject) => {

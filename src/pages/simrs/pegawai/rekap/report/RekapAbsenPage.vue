@@ -506,6 +506,10 @@ function getImage(kelamin, row) {
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
   } else {
+<<<<<<< HEAD
+=======
+    // return 'https://rsudmsaleh.probolinggokota.go.id/simpeg/foto/' + row.nip + '/' + row.foto
+>>>>>>> a46eaa8b3d333cb9304313a9bdf49c78b701a713
     return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
   }
 }

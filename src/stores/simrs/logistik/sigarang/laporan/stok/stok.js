@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 export const useStokStore = defineStore('stok_store', {
   state: () => ({
     loading: false,
+    loadingKartuStok: false,
     isOpen: false,
     allItems: [],
     items: [],
@@ -28,6 +29,10 @@ export const useStokStore = defineStore('stok_store', {
       order_by: 'kode_rs',
       sort: 'asc'
     },
+    paramsDetail: {
+      from: null,
+      to: null
+    },
     kode_tempat: 'semua',
     gudangDepo: [
       { nama: 'Semua', kode: 'semua' }
@@ -41,6 +46,9 @@ export const useStokStore = defineStore('stok_store', {
         jumlah: null,
         selisih: 0
       }
+    },
+    setParamsDetails(key, val) {
+      this.paramsDetail[key] = val
     },
     setOpen() {
       this.isOpen = !this.isOpen
@@ -62,6 +70,9 @@ export const useStokStore = defineStore('stok_store', {
       this.deleteData()
     },
     // local table related function
+    setTanggalKartuStok(val) {
+      this.getDataByBarang()
+    },
     setSearch(val) {
       this.params.q = val
       this.params.page = 1
@@ -207,6 +218,20 @@ export const useStokStore = defineStore('stok_store', {
           .catch(() => {
             this.loading = false
           })
+      })
+    },
+    getDataByBarang() {
+      console.log('get data by barang', this.paramsDetail)
+      const data = { params: this.paramsDetail }
+      this.loadingKartuStok = true
+      return new Promise(resolve => {
+        api.get('v1/stok/get-data-kartu-stok', data)
+          .then(resp => {
+            this.loadingKartuStok = false
+            console.log(resp.data)
+            resolve(resp)
+          })
+          .catch(() => { this.loadingKartuStok = false })
       })
     },
     simpanOpname() {

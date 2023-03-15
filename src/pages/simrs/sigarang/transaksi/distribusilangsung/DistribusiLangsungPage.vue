@@ -1,4 +1,9 @@
 <template>
+  <!--  distribusi langsung sekalian saja, tabelnya jadi satu.
+        antara transaksi dan form nya.
+        jadikan satu tabel saja.
+        biar simple juga melihatnya
+         -->
   <div>
     <q-card>
       <q-card-section>
@@ -22,7 +27,7 @@
               label="Nomor Distribusi"
               outlined
               :rules="[
-                val=> val!=='xxx/DSTL/xxx' || 'Harap diganti'
+                val=> val!=='no/DSTL/' + date.formatDate(Date.now(), 'MM') + '/' + date.formatDate(Date.now(), 'YYYY') || 'Harap diganti'
               ]"
             />
           </div>
@@ -82,7 +87,7 @@
           </div>
           <div class="col-4">
             <app-autocomplete-new
-              v-model="store.tipe"
+              v-model="store.params.tipe"
               label="pilih tipe barang"
               autocomplete="nama"
               option-label="nama"
@@ -95,24 +100,42 @@
             />
           </div>
         </div>
+        <div class="row justify-end">
+          <app-btn
+            v-if="store.params.tipe==='basah'"
+            class="q-mr-md"
+            color="deep-purple"
+            label="Distribusikan Semua bahan basah"
+            :loading="store.loading"
+            :disable="store.loading"
+            @click="distribusikanBasah"
+          />
+          <app-btn
+            label="Distribusikan"
+            :loading="store.loading"
+            :disable="store.loading"
+            @click="selesai"
+          />
+        </div>
       </q-card-section>
     </q-card>
     <FormBasah
-      v-if="store.tipe==='basah'"
-    />
-    <FormKering
-      v-if="store.tipe==='kering'"
       @simpan-list="simpanList"
     />
+    <!-- <FormKering
+      v-if="store.tipe==='kering'"
+      @simpan-list="simpanList"
+    /> -->
   </div>
 </template>
 <script setup>
-import { date } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import FormBasah from './FormBasah.vue'
-import FormKering from './FormKering.vue'
+// import FormKering from './FormKering.vue'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 import { computed, ref } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useTransaksiDistribusiLangsung()
 const auth = useAuthStore()
@@ -127,6 +150,8 @@ const ruang = computed(() => {
 })
 const tipeSelected = val => {
   console.log(val)
+  store.setParam('tipe', val)
+  store.getDataTable()
 }
 const setModel = val => {
   const temp = new Date(val)
@@ -153,17 +178,51 @@ const refDist = ref(null)
 const refRuangan = ref(null)
 // const valid=ref(false)
 const simpanList = val => {
+  console.log('simpan list', val)
   refRuangan.value.$refs.refAuto.validate()
   refDist.value.$refs.refInput.validate()
   if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
     store.formIsValid = true
+    store.saveList(val)
+  } else {
+    notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
   }
-  // console.log('ref ruangan', refRuangan.value.$refs.refAuto.validate())
-  // if (store.form.no_distribusi === 'xxx/DSTL/xxx') {
-  //   console.log('simpan list', refDist.value.$refs.refInput.validate())
-  // } else {
-  //   refDist.value.$refs.refInput.resetValidation()
-  // }
+}
+function distribusikanBasah() {
+  refRuangan.value.$refs.refAuto.validate()
+  refDist.value.$refs.refInput.validate()
+  if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
+    store.formIsValid = true
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah semua barang basah akan langsung di distribusikan sampai habis?',
+      ok: {
+        push: true,
+        'no-caps': true,
+        label: 'Habiskan',
+        color: 'warning'
+      },
+      cancel: {
+        push: true,
+        color: 'dark',
+        'no-caps': true
+      }
+    })
+      .onOk(() => {
+        store.habiskanBahanBasah().then(() => {
+          refRuangan.value.$refs.refAuto.resetValidation()
+          refDist.value.$refs.refInput.resetValidation()
+        })
+      })
+  } else {
+    notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
+  }
+}
+function selesai() {
+  store.selesai().then(() => {
+    refRuangan.value.$refs.refAuto.resetValidation()
+    refDist.value.$refs.refInput.resetValidation()
+  })
 }
 // watch(() => auth.currentUser, (data) => {
 //   console.log('watch', data)

@@ -80,7 +80,20 @@
         <!-- input -->
         <div class="fit row no-wrap justify-evenly items-center content-center q-my-xs">
           <div class="anak text-center">
-            {{ store.input.kode_barang?store.input.kode_barang:'-' }}
+            <!-- {{ store.input.kode_barang?store.input.kode_barang:'-' }} -->
+            <!-- ref="refBarang" -->
+            <app-autocomplete-new
+              label="pilih kode barang"
+              :model="store.input.kode_barang"
+              autocomplete="kode"
+              option-label="kode"
+              option-value="kode"
+              :loading="store.loadingHasStok"
+              :source="store.barangrHasStoks"
+              :disable="edit"
+              @on-select="barangSelected"
+              @clear="barangCleared"
+            />
           </div>
           <div class="anak text-center">
             <app-autocomplete-new
@@ -236,7 +249,7 @@
 </template>
 <script setup>
 import { Dialog } from 'quasar'
-import { notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
@@ -249,22 +262,24 @@ const depoSelected = val => {
   store.setForm('kode_depo', val)
   store.filterBarangHasStok(val)
   barangCleared()
-  // const minmax = store.minMaxDepos.filter(data => {
-  //   return data.kode_depo === val
-  // })
-  // console.log('min max', minmax)
 }
 const depoCleared = () => {
+  store.resetDisplay()
+  store.resetFORM()
+  store.resetDetail()
   barangCleared()
   store.setForm('kode_depo', null)
 }
 const barangSelected = val => {
   store.resetInput()
   store.setInput('kode_barang', val)
-  const barang = store.mappingBarangs.filter(sel => {
+  // const barang = store.mappingBarangs.filter(sel => {
+  //   return sel.kode_rs === val
+  // })
+  const barang = store.barangrHasStoks.filter(sel => {
     return sel.kode_rs === val
   })
-
+  console.log('barang', barang)
   if (!store.minMaxDepos.length) store.filterBarangHasStok()
 
   // ganti database, fungsi dibawah ini jadi tidak diperlukan
@@ -305,11 +320,11 @@ const barangSelected = val => {
     }
   }
   if (barang.length) {
-    store.setInput('kode_108', barang[0].kode_108)
-    store.setInput('uraian', barang[0].barang108.uraian)
-    store.setInput('nama', barang[0].barangrs.nama)
-    store.setDetail('kode_108', barang[0].kode_108)
-    store.setDetail('kode_satuan', barang[0].kode_satuan)
+    store.setInput('kode_108', barang[0].barang.kode_108)
+    store.setInput('uraian', barang[0].barang.uraian_108)
+    store.setInput('nama', barang[0].barang.nama)
+    store.setDetail('kode_108', barang[0].barang.kode_108)
+    store.setDetail('kode_satuan', barang[0].barang.kode_satuan)
   }
   if (minMaxBarang.length) {
     store.setInput('stok_min_depo', minMaxBarang[0].min_stok)
@@ -322,7 +337,7 @@ const barangSelected = val => {
   // console.log('stok', stok)
 }
 const barangCleared = () => {
-  store.resetDisplay()
+  // store.resetDisplay()
   store.resetInput()
   store.setInput('kode_barang', null)
 }
@@ -338,8 +353,23 @@ const addInput = () => {
       store.setDetail('jumlah', store.input.jumlah)
       store.setInput('jumlah', store.input.jumlah)
       if (!edit.value) {
-        store.form.details.push(store.detail)
-        store.displays.push(store.input)
+        console.log('store detail', store.detail)
+        console.log('form detail', store.form.details)
+        console.log('display', store.displays)
+        const indexForm = findWithAttr(store.form.details, 'kode_rs', store.input.kode_barang)
+        const indexDis = findWithAttr(store.displays, 'kode_barang', store.input.kode_barang)
+        console.log('index form', indexForm)
+        console.log('index dis', indexDis)
+        if (indexForm < 0) {
+          store.form.details.push(store.detail)
+        } else {
+          store.form.details[indexForm] = store.detail
+        }
+        if (indexDis < 0) {
+          store.displays.push(store.input)
+        } else {
+          store.displays[indexDis] = store.input
+        }
       } else {
         store.form.details[index.value].jumlah = store.input.jumlah
         store.displays[index.value].jumlah = store.input.jumlah
@@ -361,9 +391,6 @@ const addInput = () => {
 
 // edit
 const editData = apem => {
-  // console.log('index', apem, index)
-  // console.log('display', store.displays[index.value])
-  // console.log('form', store.form.details[index.value])
   edit.value = true
   index.value = apem
   store.input = store.displays[index.value]
@@ -385,10 +412,7 @@ const deleteData = index => {
     // apem
     store.displays.splice(index, 1)
     store.form.details.splice(index, 1)
-    // console.log('form', store.form)
   })
-  // console.log('display', store.displays[index])
-  // console.log('form', store.form.details[index])
 }
 onBeforeRouteLeave((to, from) => {
   // console.log('to', to)

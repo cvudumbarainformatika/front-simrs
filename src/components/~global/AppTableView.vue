@@ -27,6 +27,10 @@
             </template>
           </q-input>
         </div>
+        <slot
+          name="header-left-after-search"
+          class="q-ml-md"
+        />
       </div>
       <div class="col-one">
         <!-- delete Ids -->
@@ -361,6 +365,7 @@
               name="left-action"
               class="q-ml-md"
               :row="item"
+              :index="i"
             />
           </td>
         </tr>

@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useStokOpnameStore = defineStore('stok_opnam_store', {
   state: () => ({
     loading: false,
+    kartuStokOpen: false,
     isOpen: false,
     allItems: [],
     items: [],
-    meta: {},
+    meta: null,
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
     // customized data
@@ -22,6 +23,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       selisih: 0
     },
     params: {
+      // search: 'Gd-02010101',
       search: '',
       q: '',
       page: 1,
@@ -31,9 +33,9 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       bulan: date.formatDate(Date.now(), 'MM'),
       tahun: date.formatDate(Date.now(), 'YYYY')
     },
-    kode_tempat: null,
+    kode_tempat: '',
     gudangDepo: [
-      { nama: 'Semua', kode: null }
+      // { nama: 'Depo PNM', kode: 'Gd-02010101' }
     ],
     months: [
       { nama: 'Januari', value: '01' },
@@ -49,8 +51,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       { nama: 'November', value: '11' },
       { nama: 'Desember', value: '12' }
 
-    ]
-
+    ],
+    dataKartuStok: {}
   }),
   actions: {
     resetForm() {
@@ -85,54 +87,56 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     // local table related function
     setSearch(val) {
       this.params.q = val
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setOder(payload) {
       this.params.order_by = payload
       this.params.sort === 'desc'
         ? (this.params.sort = 'asc')
         : (this.params.sort = 'desc')
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setPage(payload) {
       // console.log('setPage', payload)
       this.params.page = payload
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setPerPage(payload) {
       this.params.per_page = payload
       this.params.page = 1
-      if (this.form.kode_tempat !== null) {
-        this.getDataByDepo()
-      } else {
-        this.getDataTable()
-      }
+      // if (this.form.kode_tempat !== null) {
+      //   this.getDataByDepo()
+      // } else {
+      // }
+      this.getDataTable()
     },
     setColumns(payload) {
       // if (!payload) return
       // const thumb = payload.map((x) => Object.keys(x))
       // this.columns = thumb[0]
       this.columns = [
-        'tanggal',
-        'tempat',
-        'kode_rs',
+        // 'tanggal',
+        // 'tempat',
+        // 'kode_rs',
+        // 'uraian',
+        'kode',
+        'no_penerimaan',
         'barang',
-        'kode_108',
-        'uraian',
         'sisa_stok',
-        'stok_fisik',
+        // 'totalStok',
+        'stok_transaksi',
         'selisih'
       ]
       // this.columns.sort()
@@ -167,9 +171,59 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       this.getDataGudangDepo()
       this.getDataTable()
     },
+    prosesData(val) {
+      // this.items = val
+      console.log('proses data', val)
+      const barang = val.map(br => {
+        const x = br
+
+        // penerimaan
+        x.penerimaan = !br.detail_penerimaan.length ? 0
+          : br.detail_penerimaan.map(trm => trm.qty).reduce((a, b) => a + b)
+
+        // pemesanan masuk gudang
+        x.gudang = !br.detail_transaksi_gudang.length ? 0
+          : br.detail_transaksi_gudang.map(trm => trm.qty).reduce((a, b) => a + b)
+
+        // distribusi depo
+        x.distribusiDepo = !br.detail_distribusi_depo.length ? 0
+          : br.detail_distribusi_depo.map(trm => trm.jumlah).reduce((a, b) => a + b)
+
+        // permintaan ruangan
+        x.permintaanRuangan = !br.detail_permintaanruangan.length ? 0
+          : br.detail_permintaanruangan.map(trm => trm.jumlah_distribusi).reduce((a, b) => a + b)
+
+        // distribusi langsung
+        x.distribusiLangsung = !br.detail_distribusi_langsung.length ? 0
+          : br.detail_distribusi_langsung.map(trm => trm.jumlah).reduce((a, b) => a + b)
+
+        // pemakaian ruangan
+        x.pemakaianRuangan = !br.detail_pemakaianruangan.length ? 0
+          : br.detail_pemakaianruangan.map(trm => trm.jumlah).reduce((a, b) => a + b)
+
+        // stok awal
+        x.stokAwal = !br.stok_awal.length ? 0
+          : br.stok_awal.map(mo => mo.sisa_stok).reduce((a, b) => a + b)
+
+        // stok fisik
+        x.stok_fisik = !br.fisik.length ? 0
+          : br.fisik.map(fs => fs.stok_fisik).reduce((a, b) => a + b)
+
+        // hitung stok transaksi
+        x.stok_transaksi = x.stokAwal + x.distribusiDepo - x.permintaanRuangan - x.distribusiLangsung
+
+        // total stok
+        x.totalStok = !br.monthly.length ? 0
+          : br.monthly.filter(mo => mo.kode_ruang === this.kode_tempat).map(y => y.sisa_stok).reduce((a, b) => a + b, 0)
+
+        return x
+      })
+      console.log('barang', barang)
+      this.items = barang
+    },
     getDataGudangDepo() {
       this.gudangDepo = [
-        { nama: 'semua', kode: null }
+        // { nama: 'Depo PNM', kode: 'Gd-02010101' }
       ]
       this.loading = true
       return new Promise(resolve => {
@@ -178,6 +232,8 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('data gudang', resp)
             resp.data.forEach(data => {
+              // if (data.kode !== 'Gd-02010101') {
+              // }
               this.gudangDepo.push(data)
             })
             resolve(resp)
@@ -187,27 +243,54 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           })
       })
     },
-    getDataTable() {
+    async getDataTable() {
       this.loading = true
       const data = {
         params: this.params
       }
-      return new Promise(resolve => {
-        api.get('v1/transaksi/opname/monthly-stok', data)
-          .then(resp => {
+      // api.get('v1/transaksi/opname/monthly-stok', data)
+      await api.get('v1/transaksi/opname/stok-opname', data)
+        .then(resp => {
+          if (resp.status === 200) {
             this.loading = false
             console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
-            this.items = resp.data.data
-            this.meta = resp.data.meta
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loading = false
-          })
-      })
+            this.meta = resp.data
+            // this.meta = resp.data.meta
+            this.prosesData(resp.data.data)
+            // this.meta = 'resp.data'
+          }
+        }).catch(() => {
+          this.loading = false
+        })
     },
+    // getDataTable() {
+    //   this.loading = true
+    //   const data = {
+    //     params: this.params
+    //   }
+    //   return new Promise(resolve => {
+    //     // api.get('v1/transaksi/opname/monthly-stok', data)
+    //     api.get('v1/transaksi/opname/stok-opname', data)
+    //       .then(resp => {
+    //         this.loading = false
+    //         console.log('data table', resp)
+    //         this.setColumns()
+    //         this.allItems = resp.data.data
+    //         // this.items = resp.data.data
+    //         this.prosesData(resp.data.data)
+    //         this.meta = resp.data
+    //         this.items.forEach(item => {
+    //           item.loading = false
+    //         })
+    //         resolve(resp)
+    //       })
+    //       .catch(() => {
+    //         this.loading = false
+    //       })
+    //   })
+    // },
     getDataByDepo() {
       this.loading = true
       const data = {
@@ -218,14 +301,46 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           .then(resp => {
             this.loading = false
             console.log('data table', resp)
-            this.items = resp.data.data
-            this.meta = resp.data.meta
+            // this.items = resp.data.data
+            this.prosesData(resp.data.data)
+            this.meta = resp.data
+            this.items.forEach(item => {
+              item.loading = false
+            })
             resolve(resp)
           })
           .catch(() => {
             this.loading = false
           })
       })
+    },
+    updateStokFisik(val, i) {
+      console.log('update stok fisik', val, 'Index', i)
+      if (parseFloat(val.stok_fisik) !== val.sisa_stok) {
+        const form = {
+          id: val.id,
+          kode_rs: val.kode,
+          stok_fisik: parseFloat(val.stok_fisik),
+          selisih: parseFloat(val.sisa_stok) - parseFloat(val.stok_fisik),
+          param: this.params,
+          tanggal: this.params.tahun + '-' + this.params.bulan + '-' + this.params.lastDay + ' 23:59:59'
+        }
+        this.items[i].loading = true
+        return new Promise(resolve => {
+          api.post('v1/transaksi/opname/update-stok-fisik', form)
+            .then(resp => {
+              this.items[i].loading = false
+              console.log(resp.data)
+              notifSuccess(resp)
+              resolve(resp)
+            })
+            .catch(() => {
+              this.items[i].loading = false
+            })
+        })
+      } else {
+        notifErrVue('stok fisik sama dengan stok aplikasi, tidak ada perubahan')
+      }
     },
     simpanOpname() {
       this.loading = true
@@ -241,11 +356,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('resp', resp)
             notifSuccess(resp)
-            if (this.form.kode_tempat !== null) {
-              this.getDataByDepo()
-            } else {
-              this.getDataTable()
-            }
+            // if (this.form.kode_tempat !== null) {
+            //   this.getDataByDepo()
+            // } else {
+            this.getDataTable()
+            // }
             this.resetForm()
             resolve(resp)
           })
@@ -267,11 +382,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
             this.loading = false
             console.log('resp', resp)
             notifSuccess(resp)
-            if (this.form.kode_tempat !== null) {
-              this.getDataByDepo()
-            } else {
-              this.getDataTable()
-            }
+            // if (this.form.kode_tempat !== null) {
+            //   this.getDataByDepo()
+            // } else {
+            this.getDataTable()
+            // }
             this.resetForm()
             resolve(resp)
           })

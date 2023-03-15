@@ -1,12 +1,14 @@
 <template>
+  <!-- persistent -->
   <q-dialog
-    persistent
-    maximized
     transition-show="slide-up"
     transition-hide="slide-down"
   >
-    <q-card>
-      <q-bar>
+    <q-card
+      style="width:80vw; max-width:90vw;"
+      class="emak"
+    >
+      <q-bar class="anak">
         <q-space />
         <q-btn
           v-close-popup
@@ -50,6 +52,9 @@
               <template #col-sub_total>
                 Sub Total
               </template>
+              <template #col-merk>
+                Keterangan
+              </template>
               <template #col-kode_108>
                 Kode 108
               </template>
@@ -57,10 +62,13 @@
                 Kode Rs
               </template>
               <template #col-barangrs>
-                Barang RS
+                Nama Barang
               </template>
-              <template #col-barang108>
-                Barang 108
+              <template #col-uraian_108>
+                Uraian 108
+              </template>
+              <template #col-uraian_50>
+                Uraian 50
               </template>
               <template #col-qty>
                 Jumlah
@@ -143,3 +151,8 @@ import HeaderDetails from './header/HeaderDetails.vue'
 
 const table = useDetailHistoryTable()
 </script>
+<style scoped>
+.emak{
+  position: absolute;
+}
+</style>

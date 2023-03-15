@@ -41,14 +41,70 @@
             <template #col-kode_108>
               <div>Kode 108</div>
             </template>
+            <template #cell-kode_108="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.kode_108?row.kode_108:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.kode_108?row.kode_108:'-' }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #col-uraian_108>
               <div>Uraian 108</div>
+            </template>
+            <template #cell-uraian_108="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.uraian_108?row.uraian_108:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.uraian_108?row.uraian_108:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-uraian_50>
               <div>Uraian 50</div>
             </template>
+            <template #cell-uraian_50="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.uraian_50?row.uraian_50:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.uraian_50?row.uraian_50:'-' }}
+                </q-tooltip>
+              </div>
+            </template>
             <template #col-kode_50>
               <div>Kode 50</div>
+            </template>
+            <template #cell-kode_50="{row}">
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.kode_50?row.kode_50:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.kode_50?row.kode_50:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-satuan_besar>
               <div>Satuan Besar</div>
@@ -66,7 +122,18 @@
               <div>Uraian 108</div>
             </template>
             <template #cell-barang108="{row}">
-              <div>{{ row.barang108?row.barang108.uraian:'-' }}</div>
+              <!-- <div>{{ row.barang108?row.barang108.uraian:'-' }}</div> -->
+              <div style="width:5vw;">
+                <div class="ellipsis">
+                  {{ row.barang108?row.barang108.uraian:'-' }}
+                </div>
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  {{ row.barang108?row.barang108.uraian:'-' }}
+                </q-tooltip>
+              </div>
             </template>
             <template #col-kode_rs>
               <div>Kode RS</div>
@@ -245,7 +312,7 @@
                         Uraian 108
                       </div>
                       <div class="col-6">
-                        {{ store.barangrs.length ? store.barangrs[0].barang108.uraian : '-' }}
+                        {{ store.barangrs.length ? store.barangrs[0].uraian_108 : '-' }}
                       </div>
                     </div>
 
@@ -336,7 +403,7 @@
                     <div class="col text-right">
                       <div class="fit row no-wrap justify-end items-center">
                         <div>
-                          {{ store.tanggalTampil }}
+                          {{ dateFullFormat(store.form.tanggal) }}
                         </div>
                         <div class="q-ml-sm">
                           <q-btn
@@ -423,10 +490,18 @@
                   <div class="row q-mb-sm">
                     <div class="col-12 text-right">
                       <app-btn
+                        v-if="!store.needToEdit"
                         label="Tutup Pemesanan"
                         :loading="store.loadingFinish"
                         :disable="store.isOpen || store.loadingFinish || store.loadingTambah || !table.items.length"
                         @click="onFisnish"
+                      />
+                      <app-btn
+                        v-if="store.needToEdit"
+                        label="Selesai Edit"
+                        :loading="store.loadingFinish"
+                        :disable="store.isOpen || store.loadingFinish || store.loadingTambah || !table.items.length"
+                        @click="onFisnishEdit"
                       />
                     </div>
                   </div>
@@ -729,6 +804,7 @@ const validation = () => {
 }
 const onSubmit = () => {
   validation()
+  console.log('on Submit', kontrak.value, kodeRs.value, kode108.value, jumlah.value, harga.value)
   if (kontrak.value && kodeRs.value && kode108.value && jumlah.value && harga.value) {
     const apem = Object.keys(store.form)
     apem.forEach(data => {
@@ -754,6 +830,17 @@ const onSubmit = () => {
   } else {
     notifNegativeCenterVue('cek data input, ada yang kurang')
   }
+}
+function onFisnishEdit() {
+  store.needToEdit = false
+  const slug = 'TRP-' + uniqueId()
+
+  table.resetData()
+  store.resetFORM()
+  store.setForm('reff', slug)
+  routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
+  table.getDataTable(slug)
+  store.kontrakOpen = false
 }
 const onCancel = () => {
   clearBarangRs()

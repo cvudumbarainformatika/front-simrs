@@ -1,6 +1,6 @@
 
 
-$text-sizes:10, 12, 14, 16, 18, 20, 21, 24;
+$text-sizes:10, 12, 14, 16, 18, 20, 21, 24,26,28;
 
 @each $text-size in $text-sizes {
   .f-#{$text-size} {
