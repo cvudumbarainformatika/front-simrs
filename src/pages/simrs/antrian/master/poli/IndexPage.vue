@@ -33,46 +33,103 @@
             :order-by="store.params.order_by"
             :sort="store.params.sort"
             :loading="store.loading"
-            row-image="foto"
-            :text-size="11"
-            :default-btn="false"
-            :ada-tambah="false"
+            :text-size="12"
+            :default-btn="true"
             :to-search="store.params.q"
+            :ada-tambah="true"
             @set-row="store.setPerPage"
             @goto="store.setPage"
             @search="store.enterSearch"
             @find="store.setSearch"
             @refresh="store.refreshTable"
+            @new-data="form.addNew()"
+            @edit-data="(val)=>form.editData(val)"
+            @delete="(id)=>store.deletesData(id)"
           >
             <template #header-left-after-search>
               <div class="q-ml-sm">
-                <q-select
-                  v-model="flag"
-                  dense
-                  outlined
-                  option-value="kode_jenis"
-                  option-label="jenispegawai"
-                  behavior="menu"
-                  map-options
-                  emit-value
-                  :options="store.jenis_pegawai"
-                  label="Jenis Pegawai"
-                  style="min-width:150px"
-                  @update:model-value="changeFlag"
-                />
+                ini
+              </div>
+            </template>
+            <template #col-max="{right}">
+              <div :class="`${right}`">
+                Max Antrian {{ set }}
+              </div>
+            </template>
+            <template #col-max_ol="{right}">
+              <div :class="`${right}`">
+                Max Antrian OL
+              </div>
+            </template>
+            <template #cell-max="{row}">
+              <div class="text-right">
+                {{ row.max }}
+              </div>
+            </template>
+            <template #cell-max_ol="{row}">
+              <div class="text-right">
+                {{ row.max_ol }}
               </div>
             </template>
           </app-table>
         </q-card-section>
       </q-card>
     </div>
+
+    <!-- dialog form -->
+    <app-dialog-form
+      ref="formRef"
+      v-model="form.dialog"
+      :title="form.titleDialog"
+      :loading="form.loading"
+      @save-form="saveForm(ref)"
+    >
+      <app-input
+        v-model="form.form.nama"
+        label="Nama Poli"
+        outlined
+        class="q-my-sm"
+      />
+      <app-input
+        v-model="form.form.max"
+        label="Max Antrian"
+        type="number"
+        style="width: 40%;"
+        outlined
+        class="q-my-sm"
+      />
+      <app-input
+        v-model="form.form.max_ol"
+        label="Max Antrian OL"
+        type="number"
+        style="width: 40%;"
+        outlined
+        class="q-my-sm"
+      />
+    </app-dialog-form>
   </q-page>
 </template>
 
 <script setup>
 import { useMasterPoliStore } from 'src/stores/antrian/master/poli'
+import { useFormMasterPoliStore } from 'src/stores/antrian/master/poliform'
+import { onMounted, ref } from 'vue'
 
 const store = useMasterPoliStore()
+const form = useFormMasterPoliStore()
 
-console.log(store)
+const formRef = ref()
+// console.log(form)
+
+onMounted(() => {
+  store.getDataTable()
+})
+
+function saveForm(ref) {
+  console.log(ref)
+  form.saveForm().then(() => {
+    store.getDataTable()
+    formRef.value.resetForm()
+  })
+}
 </script>

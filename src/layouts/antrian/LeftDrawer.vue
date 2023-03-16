@@ -49,6 +49,7 @@
             auto-close
           >
             <q-list
+              v-if="menu.submenus.length>0"
               bordered
               separator
               style="width:250px;"
@@ -77,13 +78,15 @@
               </q-item>
             </q-list>
           </q-menu>
-          <div class="item-content">
+          <div
+            class="item-content"
+          >
             <q-tooltip
-              v-if="!menu.submenus.length"
+              v-if="menu.submenus.length===0"
               class="bg-primary"
               anchor="top right"
               self="top left"
-              :offset="[5, 5]"
+              :offset="[0, 0]"
             >
               <strong class="">{{ menu.nama }}</strong>
               (
@@ -98,8 +101,8 @@
       </div>
     </div>
     <!-- Skleleton -->
-    <!-- <div
-      v-if="!menus.length"
+    <div
+      v-if="menus.length===0"
       class="flex column flex-center full-height"
       style="height:calc(100%-60px) "
     >
@@ -131,7 +134,7 @@
           height="25px"
         />
       </div>
-    </div> -->
+    </div>
     <!-- </q-scroll-area> -->
 
     <div class="just-shadow absolute-full overflow-hidden no-pointer-events" />
@@ -142,7 +145,7 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { routerInstance } from 'src/boot/router'
+// import { routerInstance } from 'src/boot/router'
 const path = computed(() => useRoute().name)
 
 const props = defineProps({
@@ -196,18 +199,18 @@ const leave = (i) => {
 const menuClick = val => {
   // const gaPunya = val.submenus
   // console.log('name', !!val.submenus)
-  if (val.name === 'sigarang.transaksi') {
-    const nama = val.submenus[0].name
-    routerInstance.replace({ name: nama, params: { slug: '-' } })
-  } else if (val.submenus.length) {
-    // console.log('masuk', val.submenus)
-    const nama = val.submenus[0].name
-    routerInstance.replace({ name: nama })
-  } else {
-    console.log('ga masuk', val.submenus)
-    const nama = val.name
-    routerInstance.replace({ name: nama })
-  }
+  // if (val.name === 'sigarang.transaksi') {
+  //   const nama = val.submenus[0].name
+  //   routerInstance.replace({ name: nama, params: { slug: '-' } })
+  // } else if (val.submenus.length) {
+  //   // console.log('masuk', val.submenus)
+  //   const nama = val.submenus[0].name
+  //   routerInstance.replace({ name: nama })
+  // } else {
+  //   console.log('ga masuk', val.submenus)
+  //   const nama = val.name
+  //   routerInstance.replace({ name: nama })
+  // }
 }
 
 // function activated (val) {

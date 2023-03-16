@@ -1,5 +1,8 @@
 <template>
-  <q-dialog persistent>
+  <q-dialog
+    ref="dialogR"
+    persistent
+  >
     <q-card style="width:400px;">
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6">
@@ -15,13 +18,17 @@
         />
       </q-card-section>
 
-      <q-separator class="q-my-md" />
+      <q-separator class="q-mt-md" />
       <q-form
+        ref="formRef"
         @submit="saveForm"
       >
         <q-card-section>
-          <slot />
+          <div class="q-px-md">
+            <slot />
+          </div>
         </q-card-section>
+        <q-separator />
         <q-card-actions align="right">
           <q-btn
             v-close-popup
@@ -30,7 +37,7 @@
             color="primary"
           />
           <q-btn
-            label="ok"
+            label="Simpan"
             type="submit"
             flat
             color="primary"
@@ -44,6 +51,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const formRef = ref(null)
+const dialogR = ref(null)
 
 defineProps({
   title: {
@@ -57,6 +68,12 @@ defineProps({
 })
 
 const emits = defineEmits(['saveForm'])
+
+function resetForm() {
+  console.log('child', formRef.value)
+  formRef.value.resetValidation()
+}
+defineExpose({ resetForm })
 
 function saveForm() {
   emits('saveForm')

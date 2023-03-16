@@ -224,15 +224,17 @@
           <th
             v-for="(head, index) in filterColumn"
             :key="index"
-            class="text-left cursor-pointer"
+            class="cursor-pointer"
             @click="emits('setOrder', head)"
           >
-            <div class="flex items-center">
+            <div class="row items-center text-weight-bold">
               <slot
                 :name="'col-' + head"
                 :row="head"
+                :left="'col-grow text-left'"
+                :right="'col-grow text-right'"
               >
-                <div class="bold">
+                <div class="col-grow text-left">
                   {{ head }}
                 </div>
               </slot>

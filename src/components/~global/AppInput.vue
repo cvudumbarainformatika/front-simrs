@@ -97,6 +97,7 @@ const props = defineProps({
 
 const refInput = ref(null)
 defineExpose({ refInput })
+
 const typeInput = ref(props.type)
 
 onMounted(() => {

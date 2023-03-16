@@ -19,8 +19,17 @@ export const useMasterPoliStore = defineStore('master_poli', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: [],
-    columnHide: ['id']
+    columns: ['nama', 'max', 'max_ol'],
+    columnHide: ['id'],
+
+    form: {
+      id: null,
+      kode_simrs: null,
+      kode_bpjs: null,
+      nama: null,
+      max: 30,
+      max_ol: 20
+    }
   }),
 
   getters: {
@@ -62,12 +71,12 @@ export const useMasterPoliStore = defineStore('master_poli', {
     async getDataTable () {
       this.loading = true
       const params = { params: this.params }
-      const resp = await api.get('/v1/laborats', params)
+      const resp = await api.get('/v1/masterpoli/data', params)
       console.log('items', resp)
       if (resp.status === 200) {
         this.items = resp.data.data
-        this.meta = resp.data.meta
-        this.setColumns(resp.data.data)
+        this.meta = resp.data
+        // this.setColumns(resp.data.data)
         this.loading = false
       }
       this.loading = false
@@ -75,7 +84,7 @@ export const useMasterPoliStore = defineStore('master_poli', {
     async deletesData (payload) {
       const params = { id: payload }
       try {
-        await api.post('/v1/laborat/destroy', params).then(resp => {
+        await api.post('/v1/masterpoli/destroy', params).then(resp => {
           notifSuccess(resp)
           this.getDataTable()
         })
