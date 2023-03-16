@@ -41,11 +41,11 @@
         >
           <q-menu
             ref="refMenu"
-            anchor="top right"
-            self="top left"
             transition-show="slide-down"
             transition-hide="slide-right"
-            :offset="[0,0]"
+            anchor="top right"
+            self="top left"
+            :offset="[0, 0]"
             auto-close
           >
             <!-- <q-card style="width:250px;">
@@ -91,8 +91,14 @@
               <q-item
                 v-for="(submenu,n) in menu.submenus"
                 :key="n"
+                ref="refSubItem"
                 v-ripple
                 clickable
+                :to="`/${submenu.link}`"
+                replace
+                :active-class="dark? 'active-dark' : 'active'"
+                :active="path===submenu.name"
+                exact
               >
                 <q-item-section>{{ submenu.nama }}</q-item-section>
               </q-item>
@@ -102,8 +108,8 @@
             <q-tooltip
               v-if="!menu.submenus.length"
               class="bg-primary"
-              anchor="center right"
-              self="center left"
+              anchor="top right"
+              self="top left"
               :offset="[5, 5]"
             >
               <strong class="">{{ menu.nama }}</strong>
