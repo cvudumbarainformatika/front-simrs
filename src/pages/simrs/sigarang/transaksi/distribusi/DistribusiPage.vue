@@ -279,10 +279,11 @@
                       </div>
                       <!-- <div class="to-print text-right"> -->
                       <div class="col-1 text-right">
-                        <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 7:false">
-                          {{ data.jumlah_distribusi }}
+                        <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 5:false">
+                          <!-- {{ data.jumlah_distribusi }} -->
+                          {{ data.jumlah_disetujui }}
                         </div>
-                        <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
+                        <div v-if="itemIndex?store.items[itemIndex].status < 5:false">
                           -
                         </div>
                       </div>
