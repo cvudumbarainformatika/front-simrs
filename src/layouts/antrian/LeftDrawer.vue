@@ -69,7 +69,7 @@
                 clickable
                 :to="`/${submenu.link}`"
                 replace
-                :active-class="dark? 'active-dark' : 'active'"
+                :active-class="dark? 'active-sub-dark' : 'active-sub'"
                 :active="path===submenu.name"
                 exact
               >
@@ -247,6 +247,25 @@ a.active {
   color: $primary;
   background-color: $grey-4;
   border-left: 3px solid $primary;
+}
+
+a.router-link-active,
+a.router-link-exact-active,
+a.active-sub {
+  // margin-left: 10px;
+  // border-radius: 10px 0px 0px 10px;
+  color: #fff;
+  background-color: $primary;
+  // border-left: 3px solid $primary;
+}
+a.router-link-active-dark,
+a.router-link-exact-active-dark,
+a.active-sub-dark {
+  // margin-left: 10px;
+  // border-radius: 10px 0px 0px 10px;
+  color: $primary;
+  background-color: #fff;
+  // border-left: 3px solid $primary;
 }
 
 a.router-link-active-dark,
