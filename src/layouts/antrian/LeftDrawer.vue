@@ -48,33 +48,6 @@
             :offset="[0, 0]"
             auto-close
           >
-            <!-- <q-card style="width:250px;">
-              <q-card-section>
-                <div class="text-weight-bold f-12">
-                  {{ menu.nama }}
-                </div>
-                <q-separator class="q-my-sm" />
-
-                <div
-                  v-for="(submenu,n) in menu.submenus"
-                  :key="n"
-                >
-                  <div v-if="submenu.link">
-                    <q-item
-                      ref="refSubItem"
-                      :to="`/${submenu.link}`"
-                      replace
-                      class="submenu flex flex-center item item-link"
-                      :active-class="dark? 'active-dark' : 'active'"
-                      :active="path===submenu.name"
-                      exact
-                    >
-                      <q-item-section>{{ submenu.nama }}</q-item-section>
-                    </q-item>
-                  </div>
-                </div>
-              </q-card-section>
-            </q-card> -->
             <q-list
               bordered
               separator
