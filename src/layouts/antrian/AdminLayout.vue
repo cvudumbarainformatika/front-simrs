@@ -81,6 +81,19 @@ const mobile = $q.screen.lt.sm
 //     return []
 //   }
 // })
+
+const menus = ref([
+  { icon: 'icon-mat-dataset', link: 'antrian/dashboard', nama: 'Dashboard', name: 'antrian.dashboard', submenus: [] },
+  {
+    icon: 'icon-mat-dataset',
+    link: 'antrian/master',
+    nama: 'Master',
+    name: 'antrian.master',
+    submenus: [
+      { nama: 'Master Poli', name: 'antrian.master.poli', icon: null, link: 'antrian/master/poli' }
+    ]
+  }
+])
 const dark = computed(() => {
   return $q.dark.isActive
 })
