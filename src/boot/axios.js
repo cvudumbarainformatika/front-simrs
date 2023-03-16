@@ -5,7 +5,11 @@ import { notifErr } from 'src/modules/utils'
 // import { setCssVar } from 'quasar'
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
+<<<<<<< HEAD
 // const SERV = 'http://api.laborat.test'
+=======
+const SERV = 'http://api.laborat.test'
+>>>>>>> 331bf905e0c656e6eb77099c54cb3f5d8787e27a
 // const SERV = 'http://192.168.150.103:3507'
 // const SERV = 'https://xenter.my.id'
 // const SERV = 'http://192.168.150.103:3501'
