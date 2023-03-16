@@ -419,10 +419,11 @@
                           @focus="fokus(i,j)"
                         />
                       </div> -->
-                      <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 7:false">
-                        {{ data.jumlah_distribusi }}
+                      <div v-if="store.items[itemIndex]?store.items[itemIndex].status >= 5:false">
+                        <!-- {{ data.jumlah_distribusi }} -->
+                        {{ data.jumlah_disetujui }}
                       </div>
-                      <div v-if="itemIndex?store.items[itemIndex].status < 7:false">
+                      <div v-if="itemIndex?store.items[itemIndex].status < 5:false">
                         -
                       </div>
                       <!-- <div v-if="data.barangrs.alokasi<=0">
