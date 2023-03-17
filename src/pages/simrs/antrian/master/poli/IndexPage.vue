@@ -48,7 +48,7 @@
           >
             <template #header-left-after-search>
               <div class="q-ml-sm">
-                ini
+                <app-btn label="Sync Simrs & Bpjs" />
               </div>
             </template>
             <template #col-max="{right}">
