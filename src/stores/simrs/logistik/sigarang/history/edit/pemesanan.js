@@ -8,6 +8,7 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     isOpen: false,
     index: null,
     loading: false,
+    loadingDetailPenerimaan: false,
     item: {},
     form: {
       nama: 'PEMESANAN'
@@ -36,8 +37,41 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       this.setForm('nomor', val.nomor)
       this.setForm('tanggal', val.tanggal)
       this.setForm('kode_perusahaan', val.kode_perusahaan)
+      this.getItemsDetail()
     },
     // api related function
+    // cari barang yang sudah diterima
+    getItemsDetail() {
+      // ambil kode barang di detail
+      if (this.item.details.length) {
+        const kodeBarang = this.item.details.map(a => a.kode_rs)
+        this.setForm('kodeBarang', kodeBarang)
+        // console.log('get detail ', kodeBarang)
+        // console.log('get detail form', this.form)
+        // ambil barang yang sudah ada penerimaan
+        const params = { params: this.form }
+        this.loadingDetailPenerimaan = true
+        return new Promise(resolve => {
+          api.get('v1/transaksi/penerimaan/cari-detail-penerimaan', params)
+            .then(resp => {
+              this.loadingDetailPenerimaan = false
+              if (resp.status === 200 && resp.data.length) {
+                this.item.details.forEach(b => {
+                  const bar = resp.data.filter(a => a.kode_rs === b.kode_rs).map(m => m.qty).reduce((x, y) => x + y, 0)
+                  b.diterima = bar
+                })
+                console.log('resp', resp.data)
+                console.log('item', this.item)
+              }
+              resolve(resp)
+            })
+            .catch(() => {
+              this.loadingDetailPenerimaan = false
+            })
+        })
+      }
+    },
+    // edit header saja
     simpanHeader() {
       console.log('form', this.form)
       this.loading = true
