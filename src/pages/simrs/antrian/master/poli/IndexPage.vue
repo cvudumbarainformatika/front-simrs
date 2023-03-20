@@ -37,6 +37,7 @@
             :default-btn="true"
             :to-search="store.params.q"
             :ada-tambah="true"
+            row-image="image"
             @set-row="store.setPerPage"
             @goto="store.setPage"
             @search="store.enterSearch"
@@ -48,12 +49,16 @@
           >
             <template #header-left-after-search>
               <div class="q-ml-sm">
-                <app-btn label="Sync Simrs & Bpjs" />
+                <app-btn
+                  label="Sync Simrs & Bpjs"
+                  :loading="store.loading"
+                  @click="store.synch()"
+                />
               </div>
             </template>
             <template #col-max="{right}">
               <div :class="`${right}`">
-                Max Antrian {{ set }}
+                Max Antrian
               </div>
             </template>
             <template #col-max_ol="{right}">
@@ -70,6 +75,82 @@
               <div class="text-right">
                 {{ row.max_ol }}
               </div>
+            </template>
+            <template #cell-default-img="{row}">
+              <q-avatar
+                color="primary"
+                text-color="white"
+                size="lg"
+                class="cursor-pointer"
+                :class="row.nama.substring(0,1)=== 'P'? 'bg-negative':'bg-primary'"
+              >
+                {{ row.nama.substring(0,1) }}
+                <q-menu>
+                  <div class="row no-wrap q-pa-md">
+                    <div class="column items-center">
+                      <div class="text-h6 q-mb-md">
+                        Detail Poli
+                      </div>
+                      <q-avatar
+                        color="primary"
+                        text-color="white"
+                        size="lg"
+                        class="cursor-pointer"
+                        :class="row.nama.substring(0,1)=== 'P'? 'bg-negative':'bg-primary'"
+                      >
+                        {{ row.nama.substring(0,1) }}
+                      </q-avatar>
+                      <div class=" q-mt-md">
+                        {{ row.nama }}
+                      </div>
+                    </div>
+                    <q-separator
+                      vertical
+                      inset
+                      class="q-mx-lg"
+                    />
+                    <div class="column">
+                      <div class="f-14 text-weight-bold q-mb-md">
+                        Detail Poli BPJS
+                      </div>
+                      <q-separator class="q-mb-sm" />
+                      <div>
+                        Kode : <span class="text-weight-bold">{{ row.poli_bpjs? row.poli_bpjs.kode:'-' }}</span>
+                      </div>
+                      <div>
+                        Nama : <span class="text-weight-bold">{{ row.poli_bpjs? row.poli_bpjs.nama:'-' }}</span>
+                      </div>
+                      <q-separator class="q-my-md" />
+                      <div class="f-14 text-weight-bold q-mb-md">
+                        Pencarian yang ditemukan Bpjs
+                      </div>
+                      <q-list
+                        v-if="row.referensi_poli_bpjs.length>0"
+                        dense
+                        bordered
+                        padding
+                        class="rounded-borders"
+                        separator
+                      >
+                        <q-item
+                          v-for="(item,i) in row.referensi_poli_bpjs"
+                          :key="i"
+                        >
+                          <q-item-section>
+                            {{ item.nama }}
+                          </q-item-section>
+                          <q-item-section side>
+                            {{ item.kode }}
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                      <div v-else>
+                        Data tidak ditemukan
+                      </div>
+                    </div>
+                  </div>
+                </q-menu>
+              </q-avatar>
             </template>
           </app-table>
         </q-card-section>
