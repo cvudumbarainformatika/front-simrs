@@ -90,9 +90,12 @@
               Jumlah
             </div>
             <div class="col-1">
+              Diterima
+            </div>
+            <div class="col-1">
               Satuan
             </div>
-            <div class="col-4">
+            <div class="col-3">
               Keterangan
             </div>
             <div class="col-1">
@@ -122,12 +125,59 @@
                 {{ detail.qty }}
               </div>
               <div class="col-1">
-                {{ detail.satuan?detail.satuan.nama:'-' }}
-              </div>
-              <div class="col-4">
-                {{ detail.merk }}
+                <q-btn
+                  v-if="store.loadingDetailPenerimaan"
+                  size="sm"
+                  loading
+                  dense
+                  style="min-width:25px"
+                  color="primary"
+                  flat
+                >
+                  <template #loading>
+                    <q-spinner-hourglass
+                      class="on-left"
+                      size="18px"
+                    />
+                  </template>
+                </q-btn>
+                <div
+                  v-if="!store.loadingDetailPenerimaan"
+                >
+                  {{ detail.diterima }}
+                </div>
               </div>
               <div class="col-1">
+                {{ detail.satuan?detail.satuan.nama:'-' }}
+              </div>
+              <div class="col-3">
+                {{ detail.merk }}
+              </div>
+              <div
+                v-if="store.loadingDetailPenerimaan"
+                class="col-1"
+              >
+                <q-btn
+                  v-if="store.loadingDetailPenerimaan"
+                  size="sm"
+                  loading
+                  dense
+                  style="min-width:25px"
+                  color="primary"
+                  flat
+                >
+                  <template #loading>
+                    <q-spinner-hourglass
+                      class="on-left"
+                      size="18px"
+                    />
+                  </template>
+                </q-btn>
+              </div>
+              <div
+                v-if="!store.loadingDetailPenerimaan"
+                class="col-1"
+              >
                 <div v-if="store.item.status!==4">
                   <q-btn
                     color="primary"
