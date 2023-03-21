@@ -56,19 +56,32 @@
                 />
               </div>
             </template>
+            <template #col-nama="{left}">
+              <div :class="`${left}`">
+                Kode / Nama
+              </div>
+            </template>
             <template #col-max="{right}">
               <div :class="`${right}`">
-                Max Antrian
+                Kuota NonJkn
               </div>
             </template>
             <template #col-max_ol="{right}">
               <div :class="`${right}`">
-                Max Antrian OL
+                Kuota JKN
+              </div>
+            </template>
+            <template #cell-nama="{row}">
+              <div class="text-left">
+                {{ row.kode_simrs }}
+              </div>
+              <div class="text-left text-weight-bold">
+                {{ row.nama }}
               </div>
             </template>
             <template #cell-max="{row}">
               <div class="text-right">
-                {{ row.max }}
+                {{ row.max_of }}
               </div>
             </template>
             <template #cell-max_ol="{row}">
@@ -166,13 +179,19 @@
       @save-form="saveForm(ref)"
     >
       <app-input
-        v-model="form.form.nama"
-        label="Nama Poli"
+        v-model="form.form.kode_simrs"
+        label="Kode Unit"
         outlined
         class="q-my-sm"
       />
       <app-input
-        v-model="form.form.max"
+        v-model="form.form.nama"
+        label="Nama Unit"
+        outlined
+        class="q-my-sm"
+      />
+      <app-input
+        v-model="form.form.max_of"
         label="Max Antrian"
         type="number"
         style="width: 40%;"

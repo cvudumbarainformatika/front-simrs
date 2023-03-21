@@ -12,8 +12,11 @@ export const useFormMasterPoliStore = defineStore('master_poli_form', {
       kode_simrs: null,
       kode_bpjs: null,
       nama: null,
-      max: 30,
-      max_ol: 20
+      max_of: 30,
+      max_ol: 60,
+      unit_group: '',
+      jam_buka: '07:00:00',
+      tersedia: 'ada'
     },
     loading: false,
     dialog: false,
@@ -32,7 +35,7 @@ export const useFormMasterPoliStore = defineStore('master_poli_form', {
         'kode_simrs',
         'kode_bpjs',
         'nama',
-        'max',
+        'max_of',
         'max_ol'
       ]
       for (let i = 0; i < columns.length; i++) {
