@@ -276,10 +276,38 @@
                 {{ formatRp(item.harga) }}
               </div>
               <div class="col-md-1 col-xs-12">
-                {{ item.qty }}
+                <div
+                  v-if="(parseFloat( item.qtysblm) + parseFloat(item.qtyskr)===parseFloat(item.qty))"
+                >
+                  <q-chip
+                    color="green"
+                    text-color="white"
+                    class="chip-able"
+                    dense
+                    square
+                    outline
+                  >
+                    <div>
+                      {{ item.qty }}
+                    </div>
+                  </q-chip>
+                </div>
+                <div v-if="!(parseFloat( item.qtysblm) + parseFloat(item.qtyskr)===parseFloat(item.qty))">
+                  <q-chip
+                    color="grey"
+                    text-color="white"
+                    class="chip-able"
+                    dense
+                    square
+                    outline
+                  >
+                    <div>
+                      {{ item.qty }}
+                    </div>
+                  </q-chip>
+                </div>
               </div>
               <div class="col-md-2 col-xs-12">
-                <!-- @update:model-value="store.updateHarga" -->
                 <div class="bold cursor-pointer">
                   {{ item.qtyskr }}
                   <q-popup-edit
@@ -308,9 +336,6 @@
                     jumlah penerimaan sudah sesuai
                     jumlah pemesanan
                   </q-tooltip>
-                  <!-- @keyup.enter="scope.set" -->
-                  <!-- <app-input input-class="text-left" v-model="kuantiti" @update:model-value="inputKuantiti(item)"
-                    :valid="diterima" label="Jumlah diterima*" outlined @blur="validasi" @keyup.enter="validasi" /> -->
                 </div>
               </div>
               <div class="col-md-2 col-xs-12">
