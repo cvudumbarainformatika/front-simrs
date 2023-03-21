@@ -108,6 +108,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       // console.log('form', this.form)
     },
     pemesananSelected (dat) {
+      this.detailPemesanans = []
       const psn = this.pemesanans.filter(x => x.reff === dat)
       this.form.reff = dat
       this.params.reff = dat
@@ -130,7 +131,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
           this.setForm('kontrak', data.pemesanan[0].kontrak)
           // this.setForm('nomor', data.pemesanan[0].nomor)
           this.setForm('kode_perusahaan', data.pemesanan[0].kode_perusahaan)
-          this.setForm('namaPerusahaan', data.pemesanan[0].perusahaan.nama)
+          this.setForm('namaPerusahaan', data.pemesanan[0].perusahaan ? data.pemesanan[0].perusahaan.nama : '-')
           // this.setForm('harga', data.pemesanan[0].details.harga)
 
           if (data.trmSkr.length && !data.trmSkr[0].status) {
