@@ -40,6 +40,7 @@ export const useMasterPoliStore = defineStore('master_poli', {
 
   actions: {
     setSearch (val) {
+      this.params.page = 1
       this.params.q = val
       this.getDataTable()
     },
@@ -62,6 +63,11 @@ export const useMasterPoliStore = defineStore('master_poli', {
       const thumb = payload.map(x => Object.keys(x))
       this.columns = thumb[0]
       // console.log('columns', this.columns)
+    },
+
+    enterSearch() {
+      this.params.page = 1
+      this.getDataTable()
     },
 
     refreshTable() {
