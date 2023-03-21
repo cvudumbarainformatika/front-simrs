@@ -13,7 +13,10 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     form: {
       nama: 'PEMESANAN'
     },
-    tableHis: useHistoryTable()
+    tableHis: useHistoryTable(),
+    newDetail: false,
+    isEditDetail: false,
+    formOpen: false
   }),
   /* catatan:
   * barang yang sudah diterima ada penerimaan tidak bisa di edit
@@ -27,6 +30,15 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     },
     setOpen() {
       this.isOpen = !this.isOpen
+    },
+    openForm() {
+      this.formOpen = !this.formOpen
+    },
+    setNewDetail() {
+      this.newDetail = !this.newDetail
+    },
+    setEditDetail() {
+      this.isEditDetail = !this.isEditDetail
     },
     assignForm(val, i) {
       console.log(val)
@@ -96,7 +108,13 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
             reject(err)
           })
       })
-    }
+    },
+    // tambah barang
+    addNewDetail() {},
+    // hapus barang
+    deleteDetail() {},
+    // edit barang
+    editDetail() {}
   }
 
 })

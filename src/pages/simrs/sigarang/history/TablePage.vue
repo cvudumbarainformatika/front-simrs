@@ -28,7 +28,11 @@
               {{ formatRp(row.total) }}
             </template>
             <template #cell-nomor="{row}">
-              <div style="width:10vw;">
+              <div
+                style="width:10vw;"
+                class="cursor-pointer"
+                @click="table.setDetails(row)"
+              >
                 <div class="ellipsis">
                   {{ row.nomor }}
                 </div>
@@ -837,6 +841,7 @@
     <TandaTanganPage v-model="tandatangan.isOpen" />
     <DetailsTablePage v-model="detail.isOpen" />
     <editPemesananPage v-model="editPemesanan.isOpen" />
+    <FormPemesananBarang v-model="editPemesanan.formOpen" />
     <!-- id="printMe" -->
   </q-page>
 </template>
@@ -849,6 +854,7 @@ import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/tabl
 import DetailsTablePage from './DetailsTablePage.vue'
 import editPemesananPage from './edit/EditPemesananPage.vue'
 import TandaTanganPage from 'src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'
+import FormPemesananBarang from './edit/FormPemesananBarang.vue'
 // import PrintPage from './PrintPage.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
@@ -972,6 +978,8 @@ const ladingPemesanan = computed(() => {
 function loadingEdit(index) {
   return index === editPemesanan.index && ladingPemesanan.value === true
 }
+
+// -----------keterangan status-----------
 const color = val => {
   switch (val) {
     case 1:
@@ -1199,6 +1207,8 @@ const label = (status, nama) => {
     }
   }
 }
+
+// -----------keterangan status end-----------
 
 onMounted(() => {
   if (table.nama === '') {

@@ -61,16 +61,37 @@
             </div>
           </div>
         </div>
+        <div class="row q-mb-md q-mt-sm">
+          <div class="col-6" />
+          <div class="col-6">
+            <div class="row">
+              <div class="col-6 text-left">
+                Status
+              </div>
+              <div class="col-6 text-right">
+                <q-chip
+                  class="f-12"
+                  :color="color(store.item.status)"
+                  text-color="white"
+                  :label="label(store.item.status,store.item.nama)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row justify-end">
           <app-btn
-            label="simpan perubahan"
+            label="simpan perubahan header transaksi"
             :loading="store.loading"
             @click="store.simpanHeader"
           />
         </div>
       </q-card-section>
       <q-card-section>
-        <app-btn label="Tambah Barang" />
+        <app-btn
+          label="Tambah Barang"
+          @click="tambahRow"
+        />
         <div
           v-if="!store.item.details.length"
           style="height:300px"
@@ -79,26 +100,29 @@
         </div>
         <div v-if="store.item.details.length">
           <!-- header -->
-          <div class="row text-weight-bold">
-            <div class="col-1">
+          <div class="row text-weight-bold q-col-gutter-sm q-mb-sm q-mt-sm">
+            <div class="col-1 border-tb border-left">
               Kode Barang
             </div>
-            <div class="col-4">
+            <div class="col-3 border-tb border-left">
               Nama barang
             </div>
-            <div class="col-1">
+            <div class="col-1 border-tb border-left">
+              Harga
+            </div>
+            <div class="col-1 border-tb border-left">
               Jumlah
             </div>
-            <div class="col-1">
+            <div class="col-1 border-tb border-left">
               Diterima
             </div>
-            <div class="col-1">
+            <div class="col-1 border-tb border-left">
               Satuan
             </div>
-            <div class="col-3">
+            <div class="col-3 border-tb border-left">
               Keterangan
             </div>
-            <div class="col-1">
+            <div class="col-1 border-tb border-left border-right">
               Aksi
             </div>
           </div>
@@ -107,8 +131,8 @@
             v-for="(detail,i) in store.item.details"
             :key="i"
           >
-            <div class="row">
-              <div class="col-1">
+            <div class="row q-col-gutter-sm q-mb-sm">
+              <div class="col-1 border-bottom border-left">
                 <div class="row">
                   <div class="text-weight-bold col-3">
                     {{ i+1 }}.
@@ -118,13 +142,18 @@
                   </div>
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-3 border-bottom border-left">
                 {{ detail.barangrs?detail.barangrs.nama:'-' }}
               </div>
-              <div class="col-1">
+              <div class="col-1 border-bottom border-left">
+                <div class="text-right">
+                  {{ formatRpDouble(detail.harga) }}
+                </div>
+              </div>
+              <div class="col-1 border-bottom border-left">
                 {{ detail.qty }}
               </div>
-              <div class="col-1">
+              <div class="col-1 border-bottom border-left">
                 <q-btn
                   v-if="store.loadingDetailPenerimaan"
                   size="sm"
@@ -147,15 +176,15 @@
                   {{ detail.diterima }}
                 </div>
               </div>
-              <div class="col-1">
+              <div class="col-1 border-bottom border-left">
                 {{ detail.satuan?detail.satuan.nama:'-' }}
               </div>
-              <div class="col-3">
+              <div class="col-3 border-bottom border-left">
                 {{ detail.merk }}
               </div>
               <div
                 v-if="store.loadingDetailPenerimaan"
-                class="col-1"
+                class="col-1 border-bottom border-left border-right"
               >
                 <q-btn
                   v-if="store.loadingDetailPenerimaan"
@@ -176,7 +205,7 @@
               </div>
               <div
                 v-if="!store.loadingDetailPenerimaan"
-                class="col-1"
+                class="col-1 border-bottom border-left border-right"
               >
                 <div v-if="store.item.status!==4">
                   <q-btn
@@ -219,12 +248,266 @@
   </q-dialog>
 </template>
 <script setup>
+import { formatRpDouble } from 'src/modules/formatter'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
 
 const store = useEditPemesananStore()
 function setModel(val) {
   store.setForm('tanggal', val)
 }
+function tambahRow() {
+  store.newDetail = true
+  store.openForm()
+}
 function editRow(val, i) {}
 function hapus(val, i) {}
+
+// -----------keterangan status-----------
+const color = val => {
+  switch (val) {
+    case 1:
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 2:
+      // return 'grey'
+      return 'red-4'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 3:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 4:
+      return 'green'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 5:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 6:
+      return 'green'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 7:
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 8:
+      return 'blue-grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 9:
+      return 'brown-6'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+
+const label = (status, nama) => {
+  console.log('nama', nama)
+  if (nama === 'PEMESANAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Menunggu diterima Gudang'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Diterima Sebagian'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'DISTRIBUSI DEPO') {
+    switch (status) {
+      case 1:
+        return 'Menunggu diterima Depo'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Diterima Depo'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PENERIMAAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Menunggu diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'BARANG RUSAK') {
+    switch (status) {
+      case 1:
+        return 'Rusak'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Dinyatakn dipakai ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PEMAKAIAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Menunggu diterima Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Sudah dipakai'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 9:
+        return 'Rusak'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PERMINTAAN RUANGAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 20:
+        return 'Permintaan Ditolak'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 19:
+        return 'Kadaluarsa'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 18:
+        return 'Invalid'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 17:
+        return 'Tidak Diambil Ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Menunggu verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 5:
+        return 'Telah di verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 6:
+        return 'Barang sudah bisa diambil'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 7:
+        return 'Telah di distribusikan'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 8:
+        return 'Telah diterima ruangan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else { // if (nama === 'PEMESANAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Selesai'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Diterima Sebagian'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 5:
+        return 'Menunggu verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 6:
+        return 'Telah di verifikasi'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 7:
+        return 'Telah di distribusikan'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  }
+}
+
+// -----------keterangan status end-----------
 </script>
+<style scoped>
+.border-tb{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.border-top{
+  border-top: 1px solid black;
+}
+.border-left{
+  border-left: 1px solid black;
+}
+.border-right{
+  border-right: 1px solid black;
+}
+.border-bottom{
+  border-bottom: 1px solid black;
+}
+</style>
