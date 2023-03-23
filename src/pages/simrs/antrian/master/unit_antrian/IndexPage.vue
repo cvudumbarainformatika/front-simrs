@@ -56,65 +56,38 @@
                 />
               </div>
             </template>
-            <template #col-nama="{left}">
+            <template #col-loket="{left}">
               <div :class="`${left}`">
-                Kode / Nama
+                Loket
               </div>
             </template>
-            <template #col-max="{right}">
-              <div :class="`${right}`">
-                Kuota NonJkn
-              </div>
-            </template>
-            <template #col-max_ol="{right}">
-              <div :class="`${right}`">
-                Kuota JKN
-              </div>
-            </template>
-            <template #cell-nama="{row}">
-              <div class="text-left">
-                {{ row.kode_simrs }}
-              </div>
-              <div class="text-left text-weight-bold">
-                {{ row.nama }}
-              </div>
-            </template>
-            <template #cell-max="{row}">
-              <div class="text-right">
-                {{ row.max_of }}
-              </div>
-            </template>
-            <template #cell-max_ol="{row}">
-              <div class="text-right">
-                {{ row.max_ol }}
-              </div>
-            </template>
+
             <template #cell-default-img="{row}">
               <q-avatar
-                color="primary"
+                :color="row.unit_group ==='Pendaftaran'? 'primary':'negative'"
                 text-color="white"
-                size="lg"
+                size="md"
                 class="cursor-pointer"
-                :class="row.nama.substring(0,1)=== 'P'? 'bg-negative':'bg-primary'"
+                :class="row.unit_group ==='Pendaftaran'? 'bg-primary':'bg-negtive'"
               >
-                {{ row.nama.substring(0,1) }}
-                <q-menu>
+                {{ row.loket.substring(0,1) }}
+                <!-- <q-menu>
                   <div class="row no-wrap q-pa-md">
                     <div class="column items-center">
                       <div class="text-h6 q-mb-md">
                         Detail Poli
                       </div>
                       <q-avatar
-                        color="primary"
+                        :color="row.unit_group ==='Pendaftaran'? 'primary':'negtive'"
                         text-color="white"
                         size="lg"
                         class="cursor-pointer"
-                        :class="row.nama.substring(0,1)=== 'P'? 'bg-negative':'bg-primary'"
+                        :class="row.unit_group ==='Pendaftaran'? 'bg-primary':'bg-negtive'"
                       >
-                        {{ row.nama.substring(0,1) }}
+                        {{ row.loket.substring(0,1) }}
                       </q-avatar>
                       <div class=" q-mt-md">
-                        {{ row.nama }}
+                        {{ row.loket }}
                       </div>
                     </div>
                     <q-separator
@@ -162,7 +135,7 @@
                       </div>
                     </div>
                   </div>
-                </q-menu>
+                </q-menu> -->
               </q-avatar>
             </template>
           </app-table>
@@ -178,7 +151,7 @@
       :loading="form.loading"
       @save-form="saveForm(ref)"
     >
-      <app-input
+      <!-- <app-input
         v-model="form.form.kode_simrs"
         label="Kode Unit"
         outlined
@@ -205,17 +178,17 @@
         style="width: 40%;"
         outlined
         class="q-my-sm"
-      />
+      /> -->
     </app-dialog-form>
   </q-page>
 </template>
 
 <script setup>
-import { useMasterPoliStore } from 'src/stores/antrian/master/poli'
+import { useMasterUnitStore } from 'src/stores/antrian/master/masterunit'
 import { useFormMasterPoliStore } from 'src/stores/antrian/master/poliform'
 import { onMounted, ref } from 'vue'
 
-const store = useMasterPoliStore()
+const store = useMasterUnitStore()
 const form = useFormMasterPoliStore()
 
 const formRef = ref()

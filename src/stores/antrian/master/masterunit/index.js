@@ -4,7 +4,7 @@ import { api } from 'boot/axios'
 import { notifErr, notifSuccess } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 
-export const useMasterPoliStore = defineStore('master_poli', {
+export const useMasterUnitStore = defineStore('master_unit', {
   state: () => ({
     title: 'Master Unit',
     subtitle: 'Data Master Unit Antrean',
@@ -19,7 +19,7 @@ export const useMasterPoliStore = defineStore('master_poli', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: ['nama', 'max', 'max_ol', 'kode_bpjs'],
+    columns: ['loket'],
     columnHide: ['id'],
 
     form: {
@@ -78,8 +78,9 @@ export const useMasterPoliStore = defineStore('master_poli', {
       this.loading = true
       const params = { params: this.params }
       try {
-        await api.get('/v1/masterpoli/data', params)
-          .then((resp) => {
+        await api.get('/v1/masterunit/data', params)
+          .then(resp => {
+            console.log('unit', resp)
             if (resp.status === 200) {
               this.items = resp.data.data
               this.meta = resp.data
