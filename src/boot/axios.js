@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { getLocalToken } from 'src/modules/storage'
-import { notifErr } from 'src/modules/utils'
+import { notifErr, removeToken } from 'src/modules/utils'
 // import { setCssVar } from 'quasar'
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
@@ -26,7 +26,10 @@ const interceptResErrors = (err) => {
     // check for response code 123 and redirect to login
     // err = Object.assign(new Error(), { message: err.response.data })
     // console.log('1. interceptResErrors', err.response)
-    notifErr(err.response)
+    if (!err.response) {
+      removeToken()
+    }
+    notifErr(err)
   } catch (e) {
     // check for response code 123 and redirect to login
     // Will return err if something goes wrong
