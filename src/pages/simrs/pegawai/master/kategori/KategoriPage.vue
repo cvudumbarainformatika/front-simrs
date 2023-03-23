@@ -5,6 +5,14 @@
       desc="Halaman Input Kategori Jadwal Absensi"
     >
       <template #content>
+        <div class="row fit justify-end q-mb-md">
+          <div class="q-mr-sm">
+            ramadhan
+          </div>
+          <div class="q-mr-sm">
+            lebaran
+          </div>
+        </div>
         <app-table
           title="Data Prota"
           :columns="store.columns"

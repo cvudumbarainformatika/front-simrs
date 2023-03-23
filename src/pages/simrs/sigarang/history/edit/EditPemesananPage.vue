@@ -87,7 +87,13 @@
           />
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section
+        v-if="store.loadingHapus"
+        style="height:300px;"
+      >
+        <app-loading />
+      </q-card-section>
+      <q-card-section v-if="!store.loadingHapus">
         <app-btn
           label="Tambah Barang"
           @click="tambahRow"
@@ -207,7 +213,7 @@
                 v-if="!store.loadingDetailPenerimaan"
                 class="col-1 border-bottom border-left border-right"
               >
-                <div v-if="store.item.status!==4">
+                <div v-if="detail.diterima===null || detail.diterima===0 || !detail.diterima">
                   <q-btn
                     color="primary"
                     round
@@ -248,8 +254,10 @@
   </q-dialog>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
+// import { onMounted } from 'vue'
 
 const store = useEditPemesananStore()
 function setModel(val) {
@@ -257,10 +265,51 @@ function setModel(val) {
 }
 function tambahRow() {
   store.newDetail = true
+  store.isEditDetail = false
   store.openForm()
+  console.log('form', store.form)
 }
-function editRow(val, i) {}
-function hapus(val, i) {}
+function editRow(val, i) {
+  console.log('edit', i, val)
+  val.barangrs.satuan = val.satuan
+  store.barangs.push(val.barangrs)
+  store.barangSelected(val.kode_rs)
+  store.setForm('jumlah', val.qty)
+  store.setForm('harga', val.harga)
+  store.newDetail = false
+  store.isEditDetail = true
+  store.openForm()
+  console.log('form', store.form)
+}
+function hapus(val, i) {
+  console.log('hapus', val)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakan anda akan menghapus <strong>' + val.nama_barang + '</strong> ?',
+    html: true,
+    ok: {
+      push: true,
+      label: 'Hapus',
+      color: 'negative',
+      'no-caps': true
+    },
+    cancel: {
+      push: true,
+      color: 'dark',
+      'no-caps': true
+    }
+  })
+    .onOk(() => {
+      const kirim = {
+        id: val.id,
+        reff: store.form.reff
+      }
+      store.deleteDetail(kirim).then(resp => {
+        store.tableHis.items[store.index] = resp.data
+        store.item = resp.data
+      })
+    })
+}
 
 // -----------keterangan status-----------
 const color = val => {
@@ -490,6 +539,9 @@ const label = (status, nama) => {
     }
   }
 }
+// onMounted(() => {
+//   store.getInitData()
+// })
 
 // -----------keterangan status end-----------
 </script>

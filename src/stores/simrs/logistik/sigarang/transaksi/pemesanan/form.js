@@ -396,7 +396,6 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
             this.loading = false
             console.log('stok', resp)
             this.stoks = resp.data
-
             resolve(resp)
           })
           .catch(() => {
