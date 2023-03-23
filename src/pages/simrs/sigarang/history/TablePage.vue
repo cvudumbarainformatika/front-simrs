@@ -1219,6 +1219,7 @@ onMounted(() => {
       table.pilihTransaksi({ nama: 'Permintaan Ruangan' })
     }
   }
+  editPemesanan.getInitData()
 })
 watch(() => role.value, val => {
   if (table.nama === '') {

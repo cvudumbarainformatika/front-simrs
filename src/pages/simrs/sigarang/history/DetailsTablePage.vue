@@ -133,6 +133,19 @@
               <template #cell-ruang="{row}">
                 {{ row.ruang.uraian }}
               </template>
+              <template #cell-uraian_50="{row}">
+                <div style="width:7vw;">
+                  <div class="ellipsis">
+                    {{ row.uraian_50 }}
+                  </div>
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    {{ row.uraian_50 }}
+                  </q-tooltip>
+                </div>
+              </template>
             </app-table-view>
             <!--
                     row-image="image"
