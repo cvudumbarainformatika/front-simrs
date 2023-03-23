@@ -6,8 +6,8 @@ import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const useMasterPoliStore = defineStore('master_poli', {
   state: () => ({
-    title: 'Master Poli',
-    subtitle: 'Data Master Poliklinik',
+    title: 'Master Unit',
+    subtitle: 'Data Master Unit Antrean',
     items: [],
     meta: {},
     item: {},
@@ -19,7 +19,7 @@ export const useMasterPoliStore = defineStore('master_poli', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: ['nama', 'max', 'max_ol'],
+    columns: ['nama', 'max', 'max_ol', 'kode_bpjs'],
     columnHide: ['id'],
 
     form: {

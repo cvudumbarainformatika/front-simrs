@@ -90,8 +90,8 @@ const menus = ref([
     nama: 'Master',
     name: 'antrian.master',
     submenus: [
-      { nama: 'Master Poli', name: 'antrian.master.poli', icon: null, link: 'antrian/master/poli' },
-      { nama: 'Master Coba', name: 'antrian.master.coba', icon: null, link: 'antrian/master/coba' }
+      { nama: 'Master Unit', name: 'antrian.master.poli', icon: null, link: 'antrian/master/poli' },
+      { nama: 'Unit Antrean', name: 'antrian.master.unit_antrian', icon: null, link: 'antrian/master/unit_antrian' }
     ]
   }
 ])

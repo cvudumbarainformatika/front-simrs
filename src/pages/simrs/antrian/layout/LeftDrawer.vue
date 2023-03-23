@@ -113,7 +113,7 @@ const menus = ref([
     label: 'Master',
     icon: 'icon-mat-dvr',
     submenu: [
-      { route: 'antrian.master.poli', path: '/admin/antrian/master/poli', label: 'Master Poli', icon: 'icon-mat-dvr' }
+      { route: 'antrian.master.poli', path: '/admin/antrian/master/poli', label: 'Master Unit', icon: 'icon-mat-dvr' }
     ]
   }
   // { route: 'lab.permintaan-luar', path: '/admin/laborat/permintaan-luar', label: 'Permintaan Luar', icon: 'icon-mat-transfer_within_a_station' }

@@ -12,8 +12,8 @@ export const useFormMasterPoliStore = defineStore('master_poli_form', {
       kode_simrs: null,
       kode_bpjs: null,
       nama: null,
-      max_of: 30,
-      max_ol: 60,
+      max_of: 60,
+      max_ol: 40, // kuotajkn
       unit_group: '',
       jam_buka: '07:00:00',
       tersedia: 'ada'
@@ -41,8 +41,8 @@ export const useFormMasterPoliStore = defineStore('master_poli_form', {
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      this.setForm('max', 30)
-      this.setForm('max_ol', 20)
+      this.setForm('max_of', 60)
+      this.setForm('max_ol', 40) // kuotajkn
     },
     setForm (name, val) {
       this.form[name] = val
