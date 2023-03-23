@@ -10,7 +10,6 @@ const removeToken = () => {
 }
 
 const notifErr = (resp) => {
-  console.log('utility', resp)
   // const msg = resp ? resp.data.message : 'Ada Kesalahan, Harap ulangi!'
   const status = (resp === 'undefined' || resp === undefined) ? 500 : resp.status
   const statusText = (resp === 'undefined' || resp === undefined) ? 500 : resp.statusText
@@ -18,6 +17,7 @@ const notifErr = (resp) => {
 
   // unauthenticated
 
+  console.log('utility', resp)
   if (status === 401 || statusText === 'Unauthorized' || statusMsg === 'Unauthenticated.') {
     return removeToken()
   }
