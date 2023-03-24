@@ -28,14 +28,23 @@
               {{ formatRp(row.total) }}
             </template>
             <template #cell-nomor="{row}">
-              <div
+              <!-- <div
                 style="width:10vw;"
                 class="cursor-pointer"
                 @click="table.setDetails(row)"
+              > -->
+              <div
+                class="box cursor-pointer"
+                @click="table.setDetails(row)"
               >
-                <div class="ellipsis">
-                  {{ row.nomor }}
+                <div class="">
+                  <p>
+                    {{ row.nomor }}
+                  </p>
                 </div>
+                <!-- <div class="ellipsis">
+                  {{ row.nomor }}
+                </div> -->
                 <q-tooltip
                   anchor="top middle"
                   self="center middle"
@@ -1234,6 +1243,14 @@ watch(() => role.value, val => {
 // table.getDataTable()
 </script>
 <style scoped>
+.q-table td box {
+  white-space: normal !important;
+    inline-size: 100px;
+    overflow-wrap: break-word;
+}
+.q-table--no-wrap th, .q-table--no-wrap td {
+  white-space: normal !important;
+}
 .print{
   position: absolute;
     right: 30px;

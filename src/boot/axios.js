@@ -5,8 +5,8 @@ import { notifErr } from 'src/modules/utils'
 // import { setCssVar } from 'quasar'
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
-// const SERV = 'http://api.laborat.test'
-const SERV = 'http://api.laborat.test:8080'
+const SERV = 'http://api.laborat.test'
+// const SERV = 'http://api.laborat.test:8080'
 // const SERV = 'http://192.168.150.103:3507'
 // const SERV = 'https://xenter.my.id'
 // const SERV = 'http://192.168.150.103:3501'
@@ -30,7 +30,8 @@ const interceptResErrors = (err) => {
     // if (!err.response) {
     //   removeToken()
     // }
-    notifErr(err)
+    notifErr(err.response)
+    // notifErr(err)
   } catch (e) {
     // check for response code 123 and redirect to login
     // Will return err if something goes wrong
