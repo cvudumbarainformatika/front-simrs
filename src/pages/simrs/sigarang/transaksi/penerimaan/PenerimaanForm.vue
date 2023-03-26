@@ -235,7 +235,7 @@
           </div>
         </div>
         <div v-if="store.detailPemesanans.length">
-          <div class="row q-col-gutter-md q-mb-sm text-weight-bold items-center">
+          <div class="row q-col-gutter-md q-mb-sm text-weight-bold items-center bdb">
             <div class="col-md-3 col-xs-12">
               Nama Barang
             </div>
@@ -265,7 +265,7 @@
             v-for="(item, i) in store.detailPemesanans"
             :key="i"
           >
-            <div class="row q-col-gutter-md q-mb-sm items-center">
+            <div class="row q-col-gutter-md items-center bdb anu">
               <div class="col-md-3 col-xs-12">
                 {{ item.barangrs?item.barangrs.nama:'-' }}
               </div>
@@ -614,3 +614,25 @@ const simpanDetail = () => {
 // }
 // cari
 </script>
+<style lang="scss" scoped>
+.border-box{
+  border: 1px solid black;
+}
+.bdt{
+  border-top: 1px solid black;
+}
+.bdl{
+  border-left: 1px solid black;
+}
+.bdr{
+  border-right: 1px solid black;
+}
+.bdb{
+  border-bottom: 1px solid black;
+}
+.anu:hover{
+  background-color: #87e9df;
+  margin-top: 0px;
+}
+
+</style>

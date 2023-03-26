@@ -261,7 +261,7 @@
                         color="primary"
                         size="sm"
                         icon="icon-mat-add"
-                        @click="masterBarangForm.newData()"
+                        @click="addNewBarang"
                       >
                         <q-tooltip
                           class="primary"
@@ -683,7 +683,7 @@
 </template>
 <script setup>
 import pemesananForm from 'src/pages/simrs/sigarang/master/barangrs/FormDialog.vue'
-import { date } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { routerInstance } from 'src/boot/router'
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifNegativeCenterVue, uniqueId } from 'src/modules/utils'
@@ -700,6 +700,28 @@ const masterBarangForm = useMasterBarangRSForm()
 table.getDataTable()
 store.getCurrentStok()
 store.getMinMaxDepo()
+
+function addNewBarang() {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Akan menambahkan <strong> Data Master Barang </strong>, untuk barang baru?',
+    html: true,
+    ok: {
+      push: true,
+      label: 'Buat Data Barang Baru di Master Barang',
+      'no-caps': true
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      color: 'dark',
+      'no-caps': true
+    }
+  })
+    .onOk(() => {
+      masterBarangForm.newData()
+    })
+}
 
 const kontrak = ref(false)
 const kodeRs = ref(false)

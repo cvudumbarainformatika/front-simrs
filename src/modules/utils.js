@@ -11,6 +11,7 @@ const removeToken = () => {
 
 const notifErr = (resp) => {
   // const msg = resp ? resp.data.message : 'Ada Kesalahan, Harap ulangi!'
+  // console.log('before utility', resp.response)
   const status = (resp === 'undefined' || resp === undefined) ? 500 : resp.status
   const statusText = (resp === 'undefined' || resp === undefined) ? 500 : resp.statusText
   const statusMsg = (resp === 'undefined' || resp === undefined) ? 500 : resp.data ? resp.data.message : 'ER'

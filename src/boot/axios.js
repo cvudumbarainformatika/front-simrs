@@ -30,7 +30,8 @@ const interceptResErrors = (err) => {
     // if (!err.response) {
     //   removeToken()
     // }
-    notifErr(err)
+    notifErr(err.response)
+    // notifErr(err)
   } catch (e) {
     // check for response code 123 and redirect to login
     // Will return err if something goes wrong

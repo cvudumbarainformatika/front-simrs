@@ -310,63 +310,65 @@
             </slot>
           </td>
           <td class="text-right">
-            <q-btn
-              v-if="bisaEdit"
-              flat
-              class=""
-              size="sm"
-              round
-              color="grey"
-              icon="icon-mat-edit"
-              @click="emits('editData', item)"
-            >
-              <q-tooltip
-                anchor="top middle"
-                self="center middle"
+            <div class="row fit no-wrap">
+              <q-btn
+                v-if="bisaEdit"
+                flat
+                class=""
+                size="sm"
+                round
+                color="grey"
+                icon="icon-mat-edit"
+                @click="emits('editData', item)"
               >
-                Edit Data
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              v-if="adaDetail"
-              flat
-              class=""
-              size="sm"
-              round
-              color="grey"
-              icon="icon-mat-visibility"
-              @click="emits('detail', item)"
-            >
-              <q-tooltip
-                anchor="top middle"
-                self="center middle"
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Edit Data
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="adaDetail"
+                flat
+                class=""
+                size="sm"
+                round
+                color="grey"
+                icon="icon-mat-visibility"
+                @click="emits('detail', item)"
               >
-                Lihat Details
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              v-if="selected.length < 2 && bisaDelete"
-              flat
-              class=""
-              size="sm"
-              round
-              color="grey"
-              icon="icon-mat-delete_sweep"
-              @click="deleteOne(item.id)"
-            >
-              <q-tooltip
-                anchor="top middle"
-                self="center middle"
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Lihat Details
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="selected.length < 2 && bisaDelete"
+                flat
+                class=""
+                size="sm"
+                round
+                color="grey"
+                icon="icon-mat-delete_sweep"
+                @click="deleteOne(item.id)"
               >
-                Delete Data
-              </q-tooltip>
-            </q-btn>
-            <slot
-              name="left-action"
-              class="q-ml-md"
-              :row="item"
-              :index="i"
-            />
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Delete Data
+                </q-tooltip>
+              </q-btn>
+              <slot
+                name="left-action"
+                class="q-ml-md"
+                :row="item"
+                :index="i"
+              />
+            </div>
           </td>
         </tr>
       </tbody>
@@ -570,5 +572,8 @@ function deleteData () {
 .q-table th,
 .q-table td {
   padding: 5px !important;
+}
+.q-table--no-wrap th, .q-table--no-wrap td {
+  white-space: normal !important;
 }
 </style>
