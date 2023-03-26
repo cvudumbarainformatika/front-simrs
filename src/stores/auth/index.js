@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
-import { notifErrVue, waitLoad } from 'src/modules/utils'
+import { notifErrVue, removeToken, waitLoad } from 'src/modules/utils'
 // import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', {
@@ -201,12 +201,16 @@ export const useAuthStore = defineStore('auth', {
       this.token = ''
     },
     async getUser () {
-      await api.get('/v1/me').then(resp => {
-        console.log('me', resp)
-        this.mapingMenu(resp.data)
-        storage.setUser(resp.data.result)
-        this.user = resp.data.result
-      })
+      try {
+        await api.get('/v1/me').then(resp => {
+          console.log('me', resp)
+          this.mapingMenu(resp.data)
+          storage.setUser(resp.data.result)
+          this.user = resp.data.result
+        })
+      } catch (error) {
+        removeToken()
+      }
     },
 
     async logout () {

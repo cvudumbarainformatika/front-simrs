@@ -6,7 +6,7 @@ import { notifErr } from 'src/modules/utils'
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
 // const SERV = 'http://api.laborat.test'
-const SERV = 'http://api.laborat.test:8080'
+const SERV = 'http://api.laborat.test'
 // const SERV = 'http://192.168.150.103:3507'
 // const SERV = 'https://xenter.my.id'
 // const SERV = 'http://192.168.150.103:3501'
@@ -26,7 +26,7 @@ const interceptResErrors = (err) => {
   try {
     // check for response code 123 and redirect to login
     // err = Object.assign(new Error(), { message: err.response.data })
-    console.log('1. interceptResErrors', err.response)
+    // console.log('1. interceptResErrors', err.response)
     // if (!err.response) {
     //   removeToken()
     // }

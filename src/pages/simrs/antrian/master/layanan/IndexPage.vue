@@ -56,18 +56,15 @@
                 />
               </div>
             </template> -->
-            <template #col-loket="{left}">
-              <div :class="`${left}`">
-                Loket
-              </div>
-            </template>
-            <template #col-kode_layanan="{left}">
+            <template #col-nama="{left}">
               <div :class="`${left}`">
                 Layanan
               </div>
             </template>
-            <template #cell-kode_layanan="{row}">
-              {{ row.kode_layanan }} <span>{{ row.loket_no !== '1'? row.loket_no:'' }}</span>
+            <template #col-kode="{left}">
+              <div :class="`${left}`">
+                Kode
+              </div>
             </template>
 
             <template #cell-default-img="{row}">
@@ -159,18 +156,18 @@
       :loading="form.loading"
       @save-form="saveForm(ref)"
     >
-      <form-dialog-input />
+      <!-- <form-dialog-input /> -->
     </app-dialog-form>
   </q-page>
 </template>
 
 <script setup>
-import { useMasterUnitStore } from 'src/stores/antrian/master/masterunit'
+import { useMasterLayananStore } from 'src/stores/antrian/master/layanan'
 import { useMasterUnitFormStore } from 'src/stores/antrian/master/masterunit/form'
 import { onMounted, ref } from 'vue'
-import FormDialogInput from './FormDialogInput.vue'
+// import FormDialogInput from './FormDialogInput.vue'
 
-const store = useMasterUnitStore()
+const store = useMasterLayananStore()
 const form = useMasterUnitFormStore()
 
 const formRef = ref()
