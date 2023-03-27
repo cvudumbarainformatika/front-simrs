@@ -58,7 +58,7 @@
             </template> -->
             <template #col-nama="{left}">
               <div :class="`${left}`">
-                Layanan
+                Nama Layanan
               </div>
             </template>
             <template #col-kode="{left}">
@@ -156,26 +156,25 @@
       :loading="form.loading"
       @save-form="saveForm(ref)"
     >
-      <!-- <form-dialog-input /> -->
+      <form-dialog-input />
     </app-dialog-form>
   </q-page>
 </template>
 
 <script setup>
 import { useMasterLayananStore } from 'src/stores/antrian/master/layanan'
-import { useMasterUnitFormStore } from 'src/stores/antrian/master/masterunit/form'
+import { useMasterLayananFormStore } from 'src/stores/antrian/master/layanan/form'
 import { onMounted, ref } from 'vue'
-// import FormDialogInput from './FormDialogInput.vue'
+import FormDialogInput from './FormDialogInput.vue'
 
 const store = useMasterLayananStore()
-const form = useMasterUnitFormStore()
+const form = useMasterLayananFormStore()
 
 const formRef = ref()
 // console.log(form)
 
 onMounted(() => {
   store.getDataTable()
-  form.getLayanans()
 })
 
 function saveForm(ref) {
