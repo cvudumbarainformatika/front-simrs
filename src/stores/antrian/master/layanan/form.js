@@ -11,7 +11,7 @@ export const useMasterLayananFormStore = defineStore('layanan_form', {
       // id: null,
       id_layanan: null,
       nama: null,
-      kode: 60
+      kode: null
     },
     loading: false,
     dialog: false,
@@ -59,7 +59,7 @@ export const useMasterLayananFormStore = defineStore('layanan_form', {
       this.loading = true
       // this.setForm('details', arr)
       try {
-        const resp = await api.post('/v1/masterunit/store', this.form)
+        const resp = await api.post('/v1/layanan/store', this.form)
         console.log('save data', resp)
         notifSuccess(resp)
 

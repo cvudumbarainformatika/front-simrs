@@ -4,10 +4,10 @@ import { api } from 'boot/axios'
 import { notifErr, notifSuccess } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 
-export const useMasterUnitStore = defineStore('master_unit', {
+export const useMasterDisplayStore = defineStore('master_display', {
   state: () => ({
-    title: 'Master Unit',
-    subtitle: 'Data Master Unit Antrean',
+    title: 'Master Display',
+    subtitle: 'Data Master Display Antrean',
     items: [],
     meta: {},
     item: {},
@@ -19,7 +19,7 @@ export const useMasterUnitStore = defineStore('master_unit', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: ['loket', 'kode_layanan', 'kuotajkn', 'kuotanonjkn', 'jam_buka', 'tersedia', 'display_id'],
+    columns: ['kode', 'nama', 'keterangan'],
     columnHide: ['id'],
 
     form: {
@@ -78,9 +78,9 @@ export const useMasterUnitStore = defineStore('master_unit', {
       this.loading = true
       const params = { params: this.params }
       try {
-        await api.get('/v1/masterunit/data', params)
+        await api.get('/v1/display/data', params)
           .then(resp => {
-            console.log('unit', resp)
+            console.log('display', resp)
             if (resp.status === 200) {
               this.items = resp.data.data
               this.meta = resp.data
@@ -97,7 +97,7 @@ export const useMasterUnitStore = defineStore('master_unit', {
     async deletesData (payload) {
       const params = { id: payload }
       try {
-        await api.post('/v1/masterunit/destroy', params).then(resp => {
+        await api.post('/v1/display/destroy', params).then(resp => {
           notifSuccess(resp)
           this.getDataTable()
         })
@@ -106,23 +106,5 @@ export const useMasterUnitStore = defineStore('master_unit', {
         notifErr(error.response)
       }
     }
-
-    // async synch() {
-    //   this.loading = true
-    //   try {
-    //     await api.get('/v1/masterpoli/synch')
-    //       .then((resp) => {
-    //         if (resp.status === 200) {
-    //           console.log('synch', resp)
-    //           this.loading = false
-    //           this.getDataTable()
-    //         } else {
-    //           this.loading = false
-    //         }
-    //       })
-    //   } catch (error) {
-    //     this.loading = false
-    //   }
-    // }
   }
 })

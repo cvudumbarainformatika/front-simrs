@@ -24,7 +24,6 @@
         <q-card-section>
           <app-table
             id="printMe"
-            title="Rekap Absens Pegawai"
             :columns="store.columns"
             :column-hide="store.columnHide"
             :items="store.items"
@@ -75,7 +74,7 @@
                 class="cursor-pointer"
                 :class="row.id_layanan <=4 ? 'bg-primary':'bg-negtive'"
               >
-                {{ row.id_layanan.substring(0,1) }}
+                {{ row.id_layanan? row.id_layanan.substring(0,1): 'P' }}
                 <!-- <q-menu>
                   <div class="row no-wrap q-pa-md">
                     <div class="column items-center">

@@ -22,6 +22,7 @@
       label="Kuota JKN Mobile"
       type="number"
       outlined
+      valid
       class="q-my-sm"
       style="width:100px"
     />
@@ -29,6 +30,7 @@
       v-model="store.form.kuotanonjkn"
       label="Kuota Non JKN"
       type="number"
+      valid
       outlined
       class="q-my-sm"
       style="width:100px"
@@ -42,6 +44,17 @@
       style="width:100px"
     />
   </div>
+  <app-autocomplete-new
+    v-model="store.form.display_id"
+    label="Pilih Display"
+    outlined
+    class="q-mb-sm"
+    valid
+    autocomplete="nama"
+    option-value="kode"
+    :option-label="['kode','nama']"
+    :source="store.displays"
+  />
 </template>
 
 <script setup>

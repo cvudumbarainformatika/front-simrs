@@ -70,11 +70,17 @@
               {{ row.kode_layanan }} <span>{{ row.loket_no !== '1'? row.loket_no:'' }}</span>
             </template>
 
+            <template #col-display_id="{left}">
+              <div :class="`${left}`">
+                Group Display
+              </div>
+            </template>
+
             <template #cell-default-img="{row}">
               <q-avatar
                 :color="row.layanan_id <=3 ? 'primary':'negative'"
                 text-color="white"
-                size="md"
+                size="sm"
                 class="cursor-pointer"
                 :class="row.layanan_id <=3 ? 'bg-primary':'bg-negtive'"
               >
@@ -179,6 +185,7 @@ const formRef = ref()
 onMounted(() => {
   store.getDataTable()
   form.getLayanans()
+  form.getDisplays()
 })
 
 function saveForm(ref) {

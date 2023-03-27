@@ -4,21 +4,14 @@ import { api } from 'boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 
-export const useMasterUnitFormStore = defineStore('masterunit_form', {
+export const useMasterDisplayFormStore = defineStore('display_form', {
   state: () => ({
 
     form: {
       // id: null,
-      loket: null,
-      layanan_id: null,
-      display_id: null,
-      kuotajkn: 60,
-      kuotanonjkn: 40,
-      loket_no: 1,
-      tersedia: 'ada'
+      nama: null,
+      keterangan: null
     },
-    layanans: [],
-    displays: [],
     loading: false,
     dialog: false,
     edited: false,
@@ -32,21 +25,12 @@ export const useMasterUnitFormStore = defineStore('masterunit_form', {
     resetFORM() {
       this.form = {}
       const columns = [
-        // 'id',
-        'loket',
-        'layanan_id',
-        'display_id',
-        'kuotajkn',
-        'kuotanonjkn',
-        'loket_no',
-        'tersedia'
+        'nama',
+        'keterangan'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      this.setForm('loket_no', 1)
-      this.setForm('kuotajkn', 60)
-      this.setForm('kuotanonjkn', 40) // kuotajkn
     },
     setForm(name, val) {
       this.form[name] = val
@@ -72,7 +56,7 @@ export const useMasterUnitFormStore = defineStore('masterunit_form', {
       this.loading = true
       // this.setForm('details', arr)
       try {
-        const resp = await api.post('/v1/masterunit/store', this.form)
+        const resp = await api.post('/v1/display/store', this.form)
         console.log('save data', resp)
         notifSuccess(resp)
 
@@ -84,20 +68,13 @@ export const useMasterUnitFormStore = defineStore('masterunit_form', {
       } catch (error) {
         this.loading = false
       }
-    },
-    async getLayanans() {
-      const resp = await api.get('/v1/masterunit/layanans')
-      console.log('layanan', resp)
-      if (resp.status === 200) {
-        this.layanans = resp.data
-      }
-    },
-    async getDisplays() {
-      const resp = await api.get('/v1/masterunit/displays')
-      console.log('displays', resp)
-      if (resp.status === 200) {
-        this.displays = resp.data
-      }
     }
+    // async getDisplays() {
+    //   const resp = await api.get('/v1/masterunit/displays')
+    //   console.log('display', resp)
+    //   if (resp.status === 200) {
+    //     this.displays = resp.data
+    //   }
+    // }
   }
 })
