@@ -29,17 +29,17 @@ table.setParam('reff', oldSlug)
 setting.transaksiLoading = true
 table.getDataTable().then(data => {
   setting.transaksiLoading = false
-  console.log('Pemesanan resolved', data)
-  console.log('Pemesanan resolved kontrak', store.kontrakOpen)
+  // console.log('Pemesanan resolved', data)
+  // console.log('Pemesanan resolved kontrak', store.kontrakOpen)
   if (data === 'ada') {
-    console.log('oldSlug')
+    // console.log('oldSlug')
     routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: oldSlug } })
     table.setParam('reff', oldSlug)
     // store.kontrakOpen = true
-    console.log('Pemesanan resolved kontrak if', store.kontrakOpen)
+    // console.log('Pemesanan resolved kontrak if', store.kontrakOpen)
   } else {
-    console.log('slug')
-    console.log('Pemesanan resolved kontrak else', store.kontrakOpen)
+    // console.log('slug')
+    // console.log('Pemesanan resolved kontrak else', store.kontrakOpen)
     routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug } })
     store.resetFORM()
     table.setParam('reff', slug)

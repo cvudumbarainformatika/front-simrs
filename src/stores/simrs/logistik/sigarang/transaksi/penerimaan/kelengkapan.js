@@ -36,10 +36,10 @@ export const useKelengkapanSuratPenerimaan = defineStore('kelengkapan_surat_pene
         if (data.nomor === val) { a = data }
         return a
       })
-      console.log(this.items)
+      // console.log(this.items)
     },
     penerimaanSelected(val) {
-      console.log(val)
+      // console.log(val)
     },
     // api related function
     getDataPenerimaan() {
@@ -49,7 +49,7 @@ export const useKelengkapanSuratPenerimaan = defineStore('kelengkapan_surat_pene
         api.get('v1/transaksi/penerimaan/surat-belum-lengkap', params)
           .then(resp => {
             this.loading = false
-            console.log('penerimaan', resp)
+            // console.log('penerimaan', resp)
             if (resp.status === 200) {
               this.penerimaans = resp.data
             }
@@ -68,7 +68,7 @@ export const useKelengkapanSuratPenerimaan = defineStore('kelengkapan_surat_pene
         api.get('v1/transaksi/pemesanan/ada-penerimaan', params)
           .then(resp => {
             this.loading = false
-            console.log('pemesanan', resp.data)
+            // console.log('pemesanan', resp.data)
             if (resp.status === 200) {
               this.pemesanans = resp.data
             }

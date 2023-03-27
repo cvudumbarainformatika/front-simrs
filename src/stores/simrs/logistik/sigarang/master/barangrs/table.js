@@ -74,7 +74,7 @@ export const useMasterBarangRSTable = defineStore('master_barangrs_table', {
               this.items = resp.data.data
               this.meta = resp.data.meta
               this.setColumns(resp.data.data)
-              console.log(resp.data.data)
+              // console.log(resp.data.data)
               resolve(resp.data.data)
             }
           })

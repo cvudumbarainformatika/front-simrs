@@ -209,7 +209,7 @@ store.getInitialData()
 
 const refBarang = ref(null)
 const barangSelected = (val) => {
-  console.log('val', val)
+  // console.log('val', val)
   store.setDetail('kode_rs', val)
   store.setInput('kode_rs', val)
   const maping = store.mapingBarangs.filter(mp => {
@@ -223,7 +223,7 @@ const barangSelected = (val) => {
     store.setInput('nama', maping[0].barangrs.nama)
     store.setInput('uraian', maping[0].barang108.uraian)
     store.setInput('satuan', maping[0].satuan.nama)
-    console.log('maping', maping[0])
+    // console.log('maping', maping[0])
   }
 }
 const barangCleared = () => {
@@ -248,7 +248,7 @@ const tambah = () => {
     store.form.details.push(store.details)
     store.displays.push(store.input)
     store.resetInput()
-    console.log('tambah', refJumlah.value.$refs.refAuto)
+    // console.log('tambah', refJumlah.value.$refs.refAuto)
     refBarang.value.$refs.refAuto.resetValidation()
     refJumlah.value.$refs.refInput.resetValidation()
     refBarang.value.$refs.refAuto.focus()
@@ -260,7 +260,7 @@ const tambah = () => {
 const remove = val => {
   store.displays.splice(val, 1)
   store.form.details.splice(val, 1)
-  console.log(val)
+  // console.log(val)
 }
 
 const simpan = () => {

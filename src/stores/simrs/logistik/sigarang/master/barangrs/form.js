@@ -64,7 +64,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       this.form.tanggal_lahir = formatDb
     },
     setKode (kode) {
-      console.log('kode', kode)
+      // console.log('kode', kode)
       const anu = this.input_kode === '' ? this.input_kode.split('') : false
       const temp = anu || kode.split('')
       const apem = temp.length
@@ -74,7 +74,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
             : apem === 2 ? this.form.kode = 'RS-000' + this.input_kode
               : apem === 1 ? this.form.kode = 'RS-0000' + this.input_kode : this.form.kode = 'RS-00000'
 
-      console.log('apem', apem)
+      // console.log('apem', apem)
     },
     setForm (nama, val) {
       this.form[nama] = val
@@ -104,7 +104,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
         api.get('v1/satuan/satuan')
           .then(resp => {
             if (resp.status === 200) {
-              console.log('satuan', resp.data)
+              // console.log('satuan', resp.data)
               this.satuans = resp.data
             }
           })
@@ -116,7 +116,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
         api.get('v1/barangrs/count-index')
           .then(resp => {
             this.loadingCount = false
-            console.log('count barang', resp.data)
+            // console.log('count barang', resp.data)
             this.input_kode = resp.data
             setTimeout(() => {
               this.setKode(String(resp.data))
@@ -134,7 +134,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
           api.get('v1/gudang/depo')
             .then(resp => {
               if (resp.status === 200) {
-                console.log('Depos', resp.data)
+                // console.log('Depos', resp.data)
                 this.depos = resp.data
               }
             })
@@ -149,7 +149,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
           api.get('v1/barang108/barang108')
             .then(resp => {
               if (resp.status === 200) {
-                console.log('108', resp.data)
+                // console.log('108', resp.data)
                 this.barang108s = resp.data
               }
               this.loading108 = false

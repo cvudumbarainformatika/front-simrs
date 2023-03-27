@@ -107,8 +107,8 @@ const barangSelected = val => {
     store.setForm('kode_rs', store.barang.kode_rs)
     store.setForm('kode_satuan', store.barang.kode_satuan)
   }
-  console.log('barang', store.barang)
-  console.log('form', store.form)
+  // console.log('barang', store.barang)
+  // console.log('form', store.form)
 }
 const barangCleared = () => {
   store.setForm('kode_rs', null)
@@ -116,7 +116,7 @@ const barangCleared = () => {
 const refBarang = ref(null)
 const refJumlah = ref(null)
 const simpanList = () => {
-  console.log('stok', store.barang.totalStok)
+  // console.log('stok', store.barang.totalStok)
   refBarang.value.$refs.refAuto.validate()
   refJumlah.value.$refs.refInput.validate()
   if (refBarang.value.$refs.refAuto.validate() && refJumlah.value.$refs.refInput.validate()) {

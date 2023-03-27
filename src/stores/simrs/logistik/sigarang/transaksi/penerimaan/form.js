@@ -114,19 +114,19 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       this.params.reff = dat
       // console.log('psn', psn)
       if (psn.length) {
-        console.log('psn ada', psn[0])
+        // console.log('psn ada', psn[0])
         const val = psn[0].nomor
         this.setForm('nomor', psn[0].nomor)
-        console.log('form anu', this.form)
+        // console.log('form anu', this.form)
         const tempNo = val.split('/SP-')
-        console.log('tempNo', tempNo)
+        // console.log('tempNo', tempNo)
         if (tempNo.length === 2) {
           this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
         }
         this.params.nomor = val
         // this.form.nomor = val
         this.getDataPenerimaan().then(data => {
-          console.log('data', data)
+          // console.log('data', data)
           this.pemesanan = data.pemesanan[0]
           this.setForm('kontrak', data.pemesanan[0].kontrak)
           // this.setForm('nomor', data.pemesanan[0].nomor)
@@ -175,7 +175,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             this.clearNomorPemesanan()
             if (tempNo.length === 2) {
               this.jumlahPenerimaan(val).then(resp => {
-                console.log('jumlahnya', resp)
+                // console.log('jumlahnya', resp)
                 if (resp.jumlah > 0) {
                   this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1] + '-' + resp.jumlah)
                 } else {
@@ -185,7 +185,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             }
           }
 
-          console.log('form', this.form)
+          // console.log('form', this.form)
           this.setDetails(data)
         })
       }
@@ -204,7 +204,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       this.setToday()
     },
     setDetails (data) {
-      console.log('data sebelum pesanan', data)
+      // console.log('data sebelum pesanan', data)
       const pesanan = data.pemesanan[0].details
       const skr = data.trmSkr.length ? data.trmSkr[0].details : null
       const sblm = data.detailLama.length ? data.detailLama : null
@@ -219,20 +219,20 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             data.qtyskr = skr[item].qty
             data.total = skr[item].sub_total
           }
-          console.log('item', item)
+          // console.log('item', item)
         }
         if (sblm !== null) {
           const temp = findWithAttr(sblm, 'kode_rs', data.kode_rs)
           if (temp >= 0) {
             data.qtysblm = parseFloat(sblm[temp].jml)
           }
-          console.log('temp', temp)
+          // console.log('temp', temp)
         }
       })
       this.detailPemesanans = pesanan
-      console.log('pesanan', pesanan)
-      console.log('skr', skr)
-      console.log('sblm', sblm)
+      // console.log('pesanan', pesanan)
+      // console.log('skr', skr)
+      // console.log('sblm', sblm)
     },
     setDataLama (data) {
       if (data.length === 1) {
@@ -254,8 +254,8 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         api.get('v1/transaksi/penerimaan/cari-pemesanan', params)
           .then(resp => {
             this.loading = false
-            console.log('cari pemesanans', resp)
-            console.log('pemesanan ini', this.pemesanan)
+            // console.log('cari pemesanans', resp)
+            // console.log('pemesanan ini', this.pemesanan)
             this.pemesanans = resp.data.filter(pm => pm.status < 4)
 
             resolve(resp)
@@ -276,7 +276,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       return new Promise(resolve => {
         api.get('v1/transaksi/penerimaan/jumlah-penerimaan', data)
           .then(resp => {
-            console.log('jumlah', resp)
+            // console.log('jumlah', resp)
             this.loadingJumlah = false
             resolve(resp.data)
           })
@@ -291,7 +291,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         api.get('v1/transaksi/penerimaan/penerimaan', params)
           .then(resp => {
             this.loading = false
-            console.log('penerimaan ', resp.data)
+            // console.log('penerimaan ', resp.data)
             resolve(resp.data)
           })
           .catch(err => {
@@ -307,7 +307,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         api.post('v1/transaksi/penerimaan/simpan-penerimaan', this.form)
           .then(resp => {
             this.loadingSimpan = false
-            console.log(resp)
+            // console.log(resp)
             // notifSuccess('data berhasil disimpan')
             this.getDataPenerimaan()
             this.searchPemesanan()

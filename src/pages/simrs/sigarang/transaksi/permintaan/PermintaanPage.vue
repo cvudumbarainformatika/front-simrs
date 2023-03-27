@@ -69,15 +69,15 @@ table.setParam('reff', oldSlug)
 setting.transaksiLoading = true
 table.getDataTable().then(data => {
   setting.transaksiLoading = false
-  console.log('Pemesanan resolved', data)
+  // console.log('Pemesanan resolved', data)
   if (data === 'ada') {
     store.setForm('reff', oldSlug)
-    console.log('oldSlug')
+    // console.log('oldSlug')
     routerInstance.replace({ name: 'sigarang.transaksi.permintaan', params: { slug: oldSlug } })
     table.setParam('reff', oldSlug)
   } else {
     store.setForm('reff', slug)
-    console.log('slug')
+    // console.log('slug')
     routerInstance.replace({ name: 'sigarang.transaksi.permintaan', params: { slug } })
     table.setParam('reff', slug)
   }

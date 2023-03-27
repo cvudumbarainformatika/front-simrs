@@ -881,7 +881,7 @@ const role = computed(() => {
 })
 // kembalikan status ke verif (akses gudang)
 function backToVerif(val, index) {
-  console.log('back to', val, index)
+  // console.log('back to', val, index)
   table.setForm('id', val.id)
   table.setForm('status', 4)
   Dialog.create({
@@ -909,7 +909,7 @@ const openPrint = ref(false)
 const printed = ref(false)
 const item = ref({})
 function toPrint(val) {
-  console.log('print', val)
+  // console.log('print', val)
   item.value = val
   // title = 'Print ' + val.nama
   openPrint.value = true
@@ -951,7 +951,7 @@ const goTo = val => {
   // console.log(val)
 }
 const hapus = val => {
-  console.log(val)
+  // console.log(val)
   // notifCenterVue('tombol delete belum berfungsi')
   Dialog.create({
     title: 'Konfirmasi',
@@ -970,7 +970,7 @@ const hapus = val => {
     }
   })
     .onOk(() => {
-      console.log('ok', val)
+      // console.log('ok', val)
       table.deleteTransaction(val)
     })
 }
@@ -1037,7 +1037,7 @@ const color = val => {
 }
 
 const label = (status, nama) => {
-  console.log('nama', nama)
+  // console.log('nama', nama)
   if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:

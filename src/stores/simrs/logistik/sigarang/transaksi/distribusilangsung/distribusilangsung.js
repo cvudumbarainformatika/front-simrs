@@ -112,7 +112,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       const oldSlug = routerInstance.currentRoute.value.params.slug
       this.setParam('reff', oldSlug)
       this.getDataTable().then(data => {
-        console.log('table', data)
+        // console.log('table', data)
         if (data === 'ada') {
           this.loading = false
           this.setForm('reff', oldSlug)
@@ -131,7 +131,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         // api.get('v1/transaksi/distribusilangsung/index', params)
         api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
           .then(resp => {
-            console.log('items', resp.data.data.data)
+            // console.log('items', resp.data.data.data)
             const data = resp.data.data.data
 
             this.items = data
@@ -161,7 +161,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       return new Promise(resolve => {
         api.get('v1/transaksi/distribusilangsung/get-stok-depo')
           .then(resp => {
-            console.log('stok depo', resp.data)
+            // console.log('stok depo', resp.data)
             const temp = resp.data.map(apem => {
               apem.tipe = apem.barang ? apem.barang.tipe : 'kering'
               apem.nama = apem.barang ? apem.barang.nama : ''
@@ -171,8 +171,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             })
             this.barangBasahes = temp.filter(apem => { return apem.tipe === 'basah' })
             this.barangKerings = temp.filter(apem => { return apem.tipe === 'kering' })
-            console.log('stok basah', this.barangBasahes)
-            console.log('stok kering', this.barangKerings)
+            // console.log('stok basah', this.barangBasahes)
+            // console.log('stok kering', this.barangKerings)
             this.loadingStokDepo = false
             resolve(resp)
           })
@@ -190,7 +190,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         api.get('v1/transaksi/distribusilangsung/get-ruang', params)
           .then(resp => {
             this.loadingRuang = false
-            console.log('runag', resp)
+            // console.log('runag', resp)
             this.ruangs = resp.data
             resolve(resp)
           })
@@ -202,7 +202,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusilangsung/store', this.form)
           .then(resp => {
-            console.log('save', resp)
+            // console.log('save', resp)
             this.items[i].loading = false
             this.formIsValid = false
             this.detailIsValid = false

@@ -107,7 +107,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', val)
+      // console.log('edit', val)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -121,7 +121,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
     },
     sebelumSimpan() {
       const setuju = false
-      console.log(this.form)
+      // console.log(this.form)
 
       if (setuju === false) return false
     },
@@ -140,7 +140,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
           .get('v1/transaksi/permintaanruangan/get-permintaan-verified', params)
           .then((resp) => {
             this.loading = false
-            console.log('permintaan verified', resp.data)
+            // console.log('permintaan verified', resp.data)
             const permintaanWithDetail = resp.data.data.data.filter(minta => {
               return minta.details.length > 0
             })
@@ -166,7 +166,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       })
     },
     saveForm() {
-      console.log('form', this.form)
+      // console.log('form', this.form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/transaksi/permintaanruangan/update-distribusi', this.form)
@@ -185,7 +185,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       // console.log('ora budhal wes..')
     },
     updateStatus() {
-      console.log('form', this.form)
+      // console.log('form', this.form)
       // const data = {
       //   id: this.permintaan.id,
       //   status: 20
@@ -196,7 +196,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
         api.post('v1/transaksi/permintaanruangan/tolak-permintaan', this.form)
           .then(resp => {
             this.loading = false
-            console.log(resp)
+            // console.log(resp)
             this.getDataTable()
             this.items.forEach(item => {
               delete item.highlight

@@ -23,7 +23,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const path = computed(() => route.path)
 let slug = routerInstance.currentRoute.value.params.slug
-console.log('slug', slug)
+// console.log('slug', slug)
 // if(slug)
 let name = routerInstance.currentRoute.value.name
 if (name === 'sigarang.transaksi') {

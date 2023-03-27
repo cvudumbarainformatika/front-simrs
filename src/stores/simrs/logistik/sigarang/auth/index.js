@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
       waitLoad('show')
       return new Promise((resolve, reject) => {
         api.post('v1/auth/login', data).then(resp => {
-          console.log(resp.data)
+          // console.log(resp.data)
           storage.setLocalToken(resp.data.access_token)
           storage.setUser(resp.data.user)
           const hdd = storage.getLocalToken()
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore('auth', {
       waitLoad('show')
       try {
         await api.post('v1/auth/login', payload).then(resp => {
-          console.log(resp.data)
+          // console.log(resp.data)
           storage.setLocalToken(resp.data.access_token)
           storage.setUser(resp.data.user)
           const hdd = storage.getLocalToken()

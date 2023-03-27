@@ -76,7 +76,7 @@ export const useStokStore = defineStore('stok_store', {
     setSearch(val) {
       this.params.q = val
       this.params.page = 1
-      console.log('kodet tempat', this.kode_tempat)
+      // console.log('kodet tempat', this.kode_tempat)
       if (this.kode_tempat === null || this.kode_tempat === 'semua') {
         this.getDataTable()
       } else {
@@ -95,7 +95,7 @@ export const useStokStore = defineStore('stok_store', {
       }
     },
     setPage(payload) {
-      console.log('setPage', this.kode_tempat)
+      // console.log('setPage', this.kode_tempat)
       this.params.page = payload
       if (this.kode_tempat === null || this.kode_tempat === 'semua') {
         this.getDataTable()
@@ -139,7 +139,7 @@ export const useStokStore = defineStore('stok_store', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', this.form)
+      // console.log('edit', this.form)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -162,7 +162,7 @@ export const useStokStore = defineStore('stok_store', {
         api.get('v1/stok/ruang-has-stok')
           .then(resp => {
             this.loading = false
-            console.log('data gudang', resp)
+            // console.log('data gudang', resp)
             const keys = Object.keys(resp.data)
             keys.forEach(key => {
               // console.log('ruang', resp.data[key])
@@ -189,7 +189,7 @@ export const useStokStore = defineStore('stok_store', {
         api.get('v1/stok/stok-sekarang', data)
           .then(resp => {
             this.loading = false
-            console.log('data table', resp)
+            // console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
             this.items = resp.data.data
@@ -210,7 +210,7 @@ export const useStokStore = defineStore('stok_store', {
         api.get('v1/stok/stok-by-ruang', data)
           .then(resp => {
             this.loading = false
-            console.log('data table', resp)
+            // console.log('data table', resp)
             this.items = resp.data.data
             this.meta = resp.data.meta
             resolve(resp)
@@ -221,14 +221,14 @@ export const useStokStore = defineStore('stok_store', {
       })
     },
     getDataByBarang() {
-      console.log('get data by barang', this.paramsDetail)
+      // console.log('get data by barang', this.paramsDetail)
       const data = { params: this.paramsDetail }
       this.loadingKartuStok = true
       return new Promise(resolve => {
         api.get('v1/stok/get-data-kartu-stok', data)
           .then(resp => {
             this.loadingKartuStok = false
-            console.log(resp.data)
+            // console.log(resp.data)
             resolve(resp)
           })
           .catch(() => { this.loadingKartuStok = false })
@@ -245,7 +245,7 @@ export const useStokStore = defineStore('stok_store', {
         api.post('v1/transaksi/opname/simpan-penyesuaian', data)
           .then(resp => {
             this.loading = false
-            console.log('resp', resp)
+            // console.log('resp', resp)
             notifSuccess(resp)
             if (this.kode_tempat === null || this.kode_tempat === 'semua') {
               this.getDataTable()

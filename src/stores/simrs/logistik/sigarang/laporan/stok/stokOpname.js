@@ -161,7 +161,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', this.form)
+      // console.log('edit', this.form)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -173,7 +173,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     prosesData(val) {
       // this.items = val
-      console.log('proses data', val)
+      // console.log('proses data', val)
       const barang = val.map(br => {
         const x = br
 
@@ -218,7 +218,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
 
         return x
       })
-      console.log('barang', barang)
+      // console.log('barang', barang)
       this.items = barang
     },
     getDataGudangDepo() {
@@ -230,7 +230,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         api.get('v1/transaksi/opname/gudangdepo')
           .then(resp => {
             this.loading = false
-            console.log('data gudang', resp)
+            // console.log('data gudang', resp)
             resp.data.forEach(data => {
               // if (data.kode !== 'Gd-02010101') {
               // }
@@ -253,7 +253,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         .then(resp => {
           if (resp.status === 200) {
             this.loading = false
-            console.log('data table', resp)
+            // console.log('data table', resp)
             this.setColumns()
             this.allItems = resp.data.data
             this.meta = resp.data
@@ -300,7 +300,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         api.get('v1/transaksi/opname/opname-by-depo', data)
           .then(resp => {
             this.loading = false
-            console.log('data table', resp)
+            // console.log('data table', resp)
             // this.items = resp.data.data
             this.prosesData(resp.data.data)
             this.meta = resp.data
@@ -315,7 +315,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
       })
     },
     updateStokFisik(val, i) {
-      console.log('update stok fisik', val, 'Index', i)
+      // console.log('update stok fisik', val, 'Index', i)
       if (parseFloat(val.stok_fisik) !== val.sisa_stok) {
         const form = {
           id: val.id,
@@ -330,7 +330,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
           api.post('v1/transaksi/opname/update-stok-fisik', form)
             .then(resp => {
               this.items[i].loading = false
-              console.log(resp.data)
+              // console.log(resp.data)
               notifSuccess(resp)
               resolve(resp)
             })
@@ -354,7 +354,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         api.get('v1/transaksi/opname/store-opname', data)
           .then(resp => {
             this.loading = false
-            console.log('resp', resp)
+            // console.log('resp', resp)
             notifSuccess(resp)
             // if (this.form.kode_tempat !== null) {
             //   this.getDataByDepo()
@@ -380,7 +380,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         api.post('v1/transaksi/opname/simpan-penyesuaian', data)
           .then(resp => {
             this.loading = false
-            console.log('resp', resp)
+            // console.log('resp', resp)
             notifSuccess(resp)
             // if (this.form.kode_tempat !== null) {
             //   this.getDataByDepo()

@@ -53,10 +53,10 @@ export const useDetailHistoryTable = defineStore('detail_history', {
     },
 
     setColumns (payload, nama) {
-      console.log('NAMA', nama)
+      // console.log('NAMA', nama)
       if (nama === 'PEMESANAN' || nama === 'PENERIMAAN') {
         const thumb = payload.map((x) => Object.keys(x))
-        console.log('thumb', thumb)
+        // console.log('thumb', thumb)
         this.columns = thumb[0]
         if (thumb.length) {
           this.columns.sort()
@@ -117,11 +117,11 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       }
     },
     setData (data) {
-      console.log('detail ', data)
+      // console.log('detail ', data)
       this.header = data
       this.setColumns(data.details, data.nama)
       this.items = data.details
-      console.log('details', data)
+      // console.log('details', data)
     }
   }
 })

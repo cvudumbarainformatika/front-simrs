@@ -279,7 +279,7 @@ const barangSelected = val => {
   const barang = store.barangrHasStoks.filter(sel => {
     return sel.kode_rs === val
   })
-  console.log('barang', barang)
+  // console.log('barang', barang)
   if (!store.minMaxDepos.length) store.filterBarangHasStok()
 
   // ganti database, fungsi dibawah ini jadi tidak diperlukan
@@ -298,18 +298,18 @@ const barangSelected = val => {
   const toDistribute = store.distribusies.filter(data => {
     return data.kode_rs === val
   })
-  console.log('to distributed', toDistribute)
-  console.log('stok', stok)
+  // console.log('to distributed', toDistribute)
+  // console.log('stok', stok)
   if (stok.length) {
     store.setInput('stok_gudang', store.stoks[stok[0]].stok)
     store.setForm('no_penerimaan', store.stoks[stok[0]].no_penerimaan)
     if (toDistribute.length) {
       let alokasi = 0
       if (toDistribute[0].jml > 0) {
-        console.log('if to distribute', store.stoks[stok[0]].stok)
+        // console.log('if to distribute', store.stoks[stok[0]].stok)
         alokasi = store.input.stok_gudang - toDistribute[0].jml
       } else {
-        console.log('else distribute', stok)
+        // console.log('else distribute', stok)
         alokasi = store.input.stok_gudang
       }
       //   if (store.input.stok_gudang > 0) {
@@ -353,13 +353,13 @@ const addInput = () => {
       store.setDetail('jumlah', store.input.jumlah)
       store.setInput('jumlah', store.input.jumlah)
       if (!edit.value) {
-        console.log('store detail', store.detail)
-        console.log('form detail', store.form.details)
-        console.log('display', store.displays)
+        // console.log('store detail', store.detail)
+        // console.log('form detail', store.form.details)
+        // console.log('display', store.displays)
         const indexForm = findWithAttr(store.form.details, 'kode_rs', store.input.kode_barang)
         const indexDis = findWithAttr(store.displays, 'kode_barang', store.input.kode_barang)
-        console.log('index form', indexForm)
-        console.log('index dis', indexDis)
+        // console.log('index form', indexForm)
+        // console.log('index dis', indexDis)
         if (indexForm < 0) {
           store.form.details.push(store.detail)
         } else {

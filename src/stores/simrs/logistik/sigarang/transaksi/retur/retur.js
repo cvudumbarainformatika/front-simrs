@@ -109,7 +109,7 @@ export const useReturStore = defineStore('retur_store', {
         api.get('v1/barangrs/barangrs')
           .then(resp => {
             this.loading = false
-            console.log('barangrs', resp)
+            // console.log('barangrs', resp)
             this.barangrs = resp.data
             resolve(resp)
           })
@@ -125,7 +125,7 @@ export const useReturStore = defineStore('retur_store', {
         api.get('v1/mapingbarang/mapingwith')
           .then(resp => {
             this.loading = false
-            console.log('maping barang', resp)
+            // console.log('maping barang', resp)
             this.mapingBarangs = resp.data
             resolve(resp)
           })
@@ -141,7 +141,7 @@ export const useReturStore = defineStore('retur_store', {
         api.get('v1/ruang/all-ruang')
           .then(resp => {
             this.loading = false
-            console.log('ruang', resp)
+            // console.log('ruang', resp)
             this.ruangans = resp.data
             resolve(resp)
           })
@@ -157,7 +157,7 @@ export const useReturStore = defineStore('retur_store', {
         api.get('v1/mapingdepo/maping')
           .then(resp => {
             this.loading = false
-            console.log('maping depo', resp)
+            // console.log('maping depo', resp)
             this.mapingbarangdepos = resp.data
             resolve(resp)
           })

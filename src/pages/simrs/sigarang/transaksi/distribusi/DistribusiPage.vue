@@ -483,7 +483,7 @@ const ruang = computed(() => {
 const proxyDate = ref(null)
 const refDate = ref(null)
 const updateProxy = () => {
-  console.log('date', store.form.tanggal)
+  // console.log('date', store.form.tanggal)
   // refDate.value.setToday()
   proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
   store.setForm('tanggal', proxyDate.value)
@@ -498,7 +498,7 @@ const onClick = val => {
   })
   store.items[val.index].highlight = true
   itemIndex.value = val.index
-  console.log(val)
+  // console.log(val)
 }
 const barangSiap = val => {
   store.setForm('id', val.id)
@@ -512,7 +512,7 @@ const barangSiap = val => {
   })
 }
 const distribusikan = val => {
-  console.log('distribusikan', val)
+  // console.log('distribusikan', val)
   const toNum = val.no_permintaan.split('/')
 
   store.setForm('no_distribusi', 'RCVD/' + toNum[1] + '/' + toNum[2])

@@ -109,7 +109,7 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
         api.get('v1/stok/current-gudang')
           .then(resp => {
             this.loadingStoks = false
-            console.log('curren stok', resp)
+            // console.log('curren stok', resp)
             this.stoks = resp.data
 
             resolve(resp)
@@ -120,7 +120,7 @@ export const usePenerimaanDepoStore = defineStore('penerimaan_depo_store', {
       })
     },
     saveForm() {
-      console.log('form', this.form)
+      // console.log('form', this.form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusidepo/terima-depo', this.form)

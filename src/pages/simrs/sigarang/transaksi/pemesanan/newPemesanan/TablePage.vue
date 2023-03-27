@@ -744,19 +744,19 @@ const backToKontrak = () => {
 const proxyDate = ref(null)
 const refDate = ref(null)
 const updateProxy = () => {
-  console.log('date', store.form.tanggal)
+  // console.log('date', store.form.tanggal)
   // refDate.value.setToday()
   proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
   if (!store.form.tanggal) {
     store.setForm('tanggal', proxyDate.value)
     store.form.tanggal = proxyDate.value
   }
-  console.log('date 2', store.form.tanggal)
+  // console.log('date 2', store.form.tanggal)
   store.tanggalTampil = dateFullFormat(proxyDate.value)
 }
 
 const modelSet = val => {
-  console.log('model barang RS', val)
+  // console.log('model barang RS', val)
   store.params.q = val
   store.getMapingBarang()
 }
@@ -767,7 +767,7 @@ const modelSet = val => {
 //   store.getMapingBarang()
 // }
 const rekeningSet = val => {
-  console.log('rekening', val)
+  // console.log('rekening', val)
 }
 const clearRekening50 = () => {
   store.setForm('kode_50', null)
@@ -793,7 +793,7 @@ const onFisnish = () => {
     const jumlah = table.items.map(data => {
       return data.sub_total
     }).reduce((x, y) => { return x + y })
-    console.log('jumlag', jumlah)
+    // console.log('jumlag', jumlah)
 
     store.setForm('status', 2)
     store.setForm('total', jumlah)
@@ -802,7 +802,7 @@ const onFisnish = () => {
     store.loadingFinish = true
     store.saveForm().then(() => {
       table.setParam('reff', slug)
-      console.log('onFinish ', slug)
+      // console.log('onFinish ', slug)
       store.tglManual = false
       table.resetData()
       store.resetFORM()
@@ -826,7 +826,7 @@ const validation = () => {
 }
 const onSubmit = () => {
   validation()
-  console.log('on Submit', kontrak.value, kodeRs.value, kode108.value, jumlah.value, harga.value)
+  // console.log('on Submit', kontrak.value, kodeRs.value, kode108.value, jumlah.value, harga.value)
   if (kontrak.value && kodeRs.value && kode108.value && jumlah.value && harga.value) {
     const apem = Object.keys(store.form)
     apem.forEach(data => {

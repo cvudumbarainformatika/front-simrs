@@ -74,7 +74,7 @@ export const useTransaksiPenerimaanTable = defineStore('transaksi_penerimaan_tab
               this.items = resp.data.data
               this.meta = resp.data.meta
               this.setColumns(resp.data.data)
-              console.log(resp.data.data)
+              // console.log(resp.data.data)
               resolve(resp.data.data)
             }
           })

@@ -342,11 +342,11 @@ const setDate = () => {
   sekarang.setSeconds(59)
   tanggalStokOpname.value = date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss')
   store.setParams('lastDay', dayInMonth.value)
-  console.log('params', store.params)
-  console.log('tanggal', date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss'))
-  console.log('bulan selected', parseInt(store.params.bulan))
-  console.log('bulan selected day', daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun)))
-  console.log('sekarang', sekarang)
+  // console.log('params', store.params)
+  // console.log('tanggal', date.formatDate(sekarang, 'DD MMMM YYYY HH:mm:ss'))
+  // console.log('bulan selected', parseInt(store.params.bulan))
+  // console.log('bulan selected day', daysInMonth(parseInt(store.params.bulan), parseInt(store.params.tahun)))
+  // console.log('sekarang', sekarang)
 }
 function noPenerimaanDepo(val) {
   const depo = val.filter(x => x.kode_ruang === store.kode_tempat)
@@ -385,14 +385,14 @@ const bulanSelected = (val) => {
   store.getDataTable()
 }
 const tahunSelected = val => {
-  console.log('tahun', val)
+  // console.log('tahun', val)
   store.setParams('page', 1)
   store.setParams('tahun', val)
   setDate()
   store.getDataTable()
 }
 const gudangSelected = (val) => {
-  console.log('gudang', val)
+  // console.log('gudang', val)
   store.kode_tempat = val
   store.setParams('search', val)
   store.params.search = val
@@ -419,7 +419,7 @@ for (let index = 0; index < 11; index++) {
 
 // kartu stok
 const kartuStok = (val) => {
-  console.log(val)
+  // console.log(val)
   store.dataKartuStok = val
   store.kartuStokOpen = true
 }

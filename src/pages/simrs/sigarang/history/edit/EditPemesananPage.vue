@@ -267,10 +267,10 @@ function tambahRow() {
   store.newDetail = true
   store.isEditDetail = false
   store.openForm()
-  console.log('form', store.form)
+  // console.log('form', store.form)
 }
 function editRow(val, i) {
-  console.log('edit', i, val)
+  // console.log('edit', i, val)
   val.barangrs.satuan = val.satuan
   store.barangs.push(val.barangrs)
   store.barangSelected(val.kode_rs)
@@ -279,10 +279,10 @@ function editRow(val, i) {
   store.newDetail = false
   store.isEditDetail = true
   store.openForm()
-  console.log('form', store.form)
+  // console.log('form', store.form)
 }
 function hapus(val, i) {
-  console.log('hapus', val)
+  // console.log('hapus', val)
   Dialog.create({
     title: 'Konfirmasi',
     message: 'Apakan anda akan menghapus <strong>' + val.nama_barang + '</strong> ?',
@@ -360,7 +360,7 @@ const color = val => {
 }
 
 const label = (status, nama) => {
-  console.log('nama', nama)
+  // console.log('nama', nama)
   if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:

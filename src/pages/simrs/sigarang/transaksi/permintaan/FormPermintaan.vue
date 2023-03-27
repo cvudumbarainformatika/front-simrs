@@ -563,15 +563,15 @@ setInterval(() => { time() }, 1000)
 
 // end of timer
 const ruanganMinta = () => {
-  console.log('form', store.form)
-  console.log('min-max', store.minMaxPenggunas)
+  // console.log('form', store.form)
+  // console.log('min-max', store.minMaxPenggunas)
   maksRuangan.formRuangan.flag_minta = '1'
   maksRuangan.formRuangan.kode_rs = store.form.kode_rs
   maksRuangan.formRuangan.kode_ruang = store.form.tujuan
 }
 const inputJumlahMinta = ref(null)
 const simpanList = () => {
-  console.log('ref input', inputJumlahMinta.value.$refs)
+  // console.log('ref input', inputJumlahMinta.value.$refs)
   table.saveForm().then(() => {
     inputJumlahMinta.value.$refs.refInput.resetValidation()
   })
@@ -579,7 +579,7 @@ const simpanList = () => {
 const setTanggal = val => {
   store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
   store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
-  console.log(store.form)
+  // console.log(store.form)
 }
 const clearPengguna = () => {
   store.setForm('kode_ruang', null)
@@ -628,7 +628,7 @@ const barangSelected = val => {
   // }
   store.setForm('kode_satuan', barang[0].satuan.kode)
   store.setNama('satuan', barang[0].satuan.nama)
-  console.log('barang', barang)
+  // console.log('barang', barang)
   store.setForm('kode_rs', val)
   store.setParams('kode_rs', val)
 
@@ -638,11 +638,11 @@ const barangSelected = val => {
   let temp = nama.split(' ')
 
   if (temp.length > 2) {
-    let a = ''
+    // let a = ''
     for (let i = 0; i < temp.length; i++) {
       temp[i] = temp[i].charAt(0)
       // noPer = noPer + temp[i]
-      console.log('temp', a = a + temp[i])
+      // console.log('temp', a = a + temp[i])
     }
     noPer = temp.join('')
   } else {
@@ -708,10 +708,10 @@ const clearBarangRs = () => {
   tutupPermintaan.value = false
 }
 const modelSet = val => {
-  console.log('model set', val)
+  // console.log('model set', val)
 }
 const cariBarang = val => {
-  console.log('cari', val)
+  // console.log('cari', val)
   // carinya di table
 }
 </script>

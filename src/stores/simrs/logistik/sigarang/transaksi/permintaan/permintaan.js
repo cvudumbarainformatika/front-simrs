@@ -232,7 +232,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     },
     // api related function
     deletesDetail(val) {
-      console.log('delete', val)
+      // console.log('delete', val)
       const data = {
         id: val
       }
@@ -261,7 +261,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
           .get('v1/transaksi/permintaanruangan/draft', params)
           .then((resp) => {
             this.loadingTable = false
-            console.log('data ', resp)
+            // console.log('data ', resp)
             if (resp.data.message === 'completed') {
               notifCenterVue('data sudah disimpan dan dikunci, tidak diperkenannkan untuk diubah')
               resolve('completed')

@@ -58,6 +58,6 @@ import { useKelengkapanSuratPenerimaan } from 'src/stores/simrs/logistik/sigaran
 const kelengkapan = useKelengkapanSuratPenerimaan()
 const penerimaanSelected = val => {
   kelengkapan.form = val
-  console.log(val)
+  // console.log(val)
 }
 </script>

@@ -115,7 +115,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
         api.get('v1/stok/current-ruangan')
           .then(resp => {
             this.loadingStok = false
-            console.log('stok ruangan', resp.data)
+            // console.log('stok ruangan', resp.data)
             resolve(resp)
           })
           .catch(() => {
@@ -130,7 +130,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
         api.get('v1/barangrs/barangrs')
           .then(resp => {
             this.loading = false
-            console.log('barangrs', resp)
+            // console.log('barangrs', resp)
             this.barangrs = resp.data
             resolve(resp)
           })
@@ -146,7 +146,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
         api.get('v1/mapingbarang/mapingwith')
           .then(resp => {
             this.loading = false
-            console.log('maping barang', resp)
+            // console.log('maping barang', resp)
             this.mapingBarangs = resp.data
             resolve(resp)
           })
@@ -162,7 +162,7 @@ export const useBarangRusakStore = defineStore('barang_rusak_store', {
         api.get('v1/ruang/all-ruang')
           .then(resp => {
             this.loading = false
-            console.log('ruang', resp)
+            // console.log('ruang', resp)
             this.ruangans = resp.data
             resolve(resp)
           })

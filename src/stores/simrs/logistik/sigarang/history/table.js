@@ -69,7 +69,7 @@ export const useHistoryTable = defineStore('history_table', {
       const detail = useDetailHistoryTable()
       detail.setData(data)
       detail.setOpen()
-      console.log('data', data)
+      // console.log('data', data)
     },
     setParams (key, val) {
       this.params[key] = val
@@ -85,7 +85,7 @@ export const useHistoryTable = defineStore('history_table', {
       this.nama = val.nama
       this.title = val.nama
       this.params.nama = val.nama
-      console.log('dipilih ', val)
+      // console.log('dipilih ', val)
 
       this.getDataTransactions()
     },
@@ -98,8 +98,8 @@ export const useHistoryTable = defineStore('history_table', {
       this.getDataTransactions()
     },
     searchTanggal (val) {
-      console.log('tipe tanggal ', Object.getPrototypeOf(val).constructor.name)
-      console.log('tanggal ', val)
+      // console.log('tipe tanggal ', Object.getPrototypeOf(val).constructor.name)
+      // console.log('tanggal ', val)
       if (Object.getPrototypeOf(val).constructor.name === 'Object') {
         this.params.from = val.from
         this.params.to = val.to
@@ -165,7 +165,7 @@ export const useHistoryTable = defineStore('history_table', {
           .then(resp => {
             this.loading = false
             if (resp.status === 200) {
-              console.log('resp history', resp.data)
+              // console.log('resp history', resp.data)
               if (resp.data.data.length) {
                 this.setColumns(resp.data.data)
                 this.items = resp.data.data
@@ -203,7 +203,7 @@ export const useHistoryTable = defineStore('history_table', {
         api.post('v1/history/destroy', params)
           .then(resp => {
             this.loading = false
-            console.log('hapus draft', resp)
+            // console.log('hapus draft', resp)
             notifSuccess(resp)
             this.getDataTransactions()
             resolve(resp)

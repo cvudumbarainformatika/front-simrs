@@ -75,7 +75,7 @@ const formReff = ref(null)
 
 const actJumlah = val => {
   store.form.selisih = val - store.form.sisa_stok
-  console.log('jumlah', val)
+  // console.log('jumlah', val)
 }
 
 const onSubmit = () => {

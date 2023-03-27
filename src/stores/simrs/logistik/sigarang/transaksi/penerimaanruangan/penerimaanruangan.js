@@ -112,7 +112,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', val)
+      // console.log('edit', val)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -130,7 +130,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
     // this custom store
     newDistribusiSelected(val) {
       const permintaan = this.permintaans.filter(data => { return data.id === val })
-      console.log('permintaa', permintaan)
+      // console.log('permintaa', permintaan)
       if (permintaan.length) {
         this.setForm('reff', 'RRAGD-' + uniqueId())
         this.setForm('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
@@ -147,7 +147,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
       // 'tanggal',
       // 'details'
       const permintaan = this.permintaans.filter(data => { return data.id === val })
-      console.log('permintaan', permintaan)
+      // console.log('permintaan', permintaan)
       if (permintaan.length) {
         this.setForm('permintaan_id', permintaan[0].id)
         this.setForm('reff', 'RRAGD-' + uniqueId())
@@ -160,7 +160,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
         this.tanggal_distribusi = permintaan[0].tanggal_distribusi
         this.details = []
         permintaan[0].details.forEach((data, i) => {
-          console.log('for each', data, i)
+          // console.log('for each', data, i)
           const detils = {
             jumlah: data.jumlah_distribusi,
             kode_rs: data.kode_rs,
@@ -182,7 +182,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
           this.form.details.push(detil)
         })
       }
-      console.log('distribusi selected', this.form)
+      // console.log('distribusi selected', this.form)
     },
     // api related function
     // get data tabel
@@ -195,7 +195,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
           // .get('v1/transaksi/penerimaanruangan/to-accept', params)
           .then((resp) => {
             this.loading = false
-            console.log('permintaan distributed', resp.data)
+            // console.log('permintaan distributed', resp.data)
             this.permintaans = resp.data
             this.setColumns(resp.data)
             // this.meta = resp.data.meta
@@ -214,7 +214,7 @@ export const usePenerimaanRuanganStore = defineStore('penerimaan_ruangan_store',
         api.post('v1/transaksi/penerimaanruangan/distribusi-diterima', this.form)
           .then(resp => {
             this.loading = false
-            console.log('penerimaan ruangan', resp)
+            // console.log('penerimaan ruangan', resp)
             notifSuccess(resp)
             this.getDataTable()
             resolve(resp)

@@ -83,7 +83,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
         this.setForm('tujuan', null)
         this.setNama('ruang', 'ruang tidak ditemukan')
       }
-      console.log('pengguna Ruang', this.penggunaruangs)
+      // console.log('pengguna Ruang', this.penggunaruangs)
     },
     // api related function
     // get data stok by barang
@@ -96,7 +96,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
         api.get('v1/stok/get-ruangan-by-barang', param)
           .then(resp => {
             this.loading = false
-            console.log('stok by barang', resp)
+            // console.log('stok by barang', resp)
             this.barang = resp.data
 
             resolve(resp)
@@ -153,7 +153,7 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
         api.post('v1/minmaxpenggunastok/spesifik', this.form)
           .then(resp => {
             this.loading = false
-            console.log('minmaxpengguna', resp)
+            // console.log('minmaxpengguna', resp)
             this.minMaxPenggunas = resp.data
             const maksRuangan = useMinMaxPenggunaStockStore()
             maksRuangan.formRuangan.flag_minta = Object.keys(resp.data).length ? resp.data.flag_minta : null

@@ -185,7 +185,7 @@ const store = useStokStore()
 store.getInitialData()
 
 const gudangSelected = (val) => {
-  console.log('gudang', val)
+  // console.log('gudang', val)
   store.kode_tempat = val
   if (val === null || val === 'semua') {
     store.params.search = ''

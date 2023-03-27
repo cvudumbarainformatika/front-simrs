@@ -86,12 +86,12 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
     permintaanSelected(val) {
       this.mapGudang = []
       this.permintaan = {}
-      console.log('permintaan selected ', val)
+      // console.log('permintaan selected ', val)
       this.setForm('no_permintaan', val)
       const i = findWithAttr(this.permintaans, 'no_permintaan', val)
       if (i >= 0) {
         this.permintaan = this.permintaans[i]
-        console.log('details', this.permintaan)
+        // console.log('details', this.permintaan)
         this.setColumns(this.permintaan.details)
         // cari nama depo
         const apem = this.depos.filter((x) => {
@@ -116,7 +116,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         // }
         //   // console.log(this.permintaan.gudang[data])
         // })
-        console.log('map gudang all', this.mapGudang)
+        // console.log('map gudang all', this.mapGudang)
       } else {
         notifErrVue('Permintaan tidak ditemukan')
       }
@@ -130,7 +130,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           .get('v1/gudang/depo')
           .then((resp) => {
             this.loading = false
-            console.log('depo', resp)
+            // console.log('depo', resp)
             if (resp.status === 200) {
               this.depos = resp.data
             }
@@ -152,7 +152,7 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           .get('v1/transaksi/permintaanruangan/get-permintaan')
           .then((resp) => {
             this.loadingPermintaan = false
-            console.log('permintaan ruangan', resp)
+            // console.log('permintaan ruangan', resp)
             const permintaanWithDetail = resp.data.filter(minta => {
               return minta.details.length > 0
             })
@@ -175,15 +175,15 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         //   lanjut = false
         // } else
         if (parseInt(data.jumlah_disetujui) > parseInt(data.jumlah)) {
-          console.log('disetujui cek jumlah minta', data.jumlah_disetujui)
+          // console.log('disetujui cek jumlah minta', data.jumlah_disetujui)
           notifErrVue('periksa kembali Jumlah disetujui')
           lanjut = false
         } else if (parseInt(data.jumlah_disetujui) > parseInt(data.alokasi)) {
-          console.log('disetujui cek alokasi', data.jumlah_disetujui)
+          // console.log('disetujui cek alokasi', data.jumlah_disetujui)
           notifErrVue('Jumlah di setujui tidak boleh melebihi jumlah alokasi')
           lanjut = false
         } else {
-          console.log('disetujui else', data.jumlah_disetujui)
+          // console.log('disetujui else', data.jumlah_disetujui)
           lanjut = true
         }
       })
@@ -200,12 +200,12 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           // tanggal_verif: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
           tanggal_verif: this.form.tanggal
         }
-        console.log('permintaan', data)
+        // console.log('permintaan', data)
         return new Promise((resolve, reject) => {
           api.post('v1/transaksi/permintaanruangan/update-permintaan', data)
             .then(resp => {
               this.loading = false
-              console.log(resp)
+              // console.log(resp)
               this.form.no_permintaan = null
               this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
               this.tanggal = date.formatDate(Date.now(), 'DD MMMM YYYY ')
@@ -227,13 +227,13 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
         id: this.permintaan.id,
         status: 20
       }
-      console.log('data', data)
+      // console.log('data', data)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/transaksi/permintaanruangan/tolak-permintaan', data)
           .then(resp => {
             this.loading = false
-            console.log(resp)
+            // console.log(resp)
             this.form.no_permintaan = null
             this.permintaan = {}
             this.mapGudang = {}

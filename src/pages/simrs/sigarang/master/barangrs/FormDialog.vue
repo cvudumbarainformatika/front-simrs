@@ -220,7 +220,7 @@ const onSubmit = () => {
   }
 }
 const simpan = () => {
-  console.log(refNama.value.$refs.refInput)
+  // console.log(refNama.value.$refs.refInput)
   refNama.value.$refs.refInput.validate()
   refKodeSatuan.value.$refs.refAuto.validate()
   ref108.value.$refs.refAuto.validate()

@@ -336,7 +336,7 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         api.get('v1/stok/current-gudang')
           .then(resp => {
             this.loadingHasStok = false
-            console.log('stok', resp.data)
+            // console.log('stok', resp.data)
             this.stoks = resp.data
             if (this.barangrses.length) {
               this.filterBarangHasStok()

@@ -62,7 +62,7 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
       store.terima.nomer_urut = terima[2]
       store.terima.bidang = sp[1]
       store.terima.bulan = sp[5]
-      console.log('val', terima)
+      // console.log('val', terima)
 
       columns.forEach(data => {
         store.form[data] = val[data]
@@ -136,25 +136,25 @@ export const useTransaksiPemesananTable = defineStore('transaksi_pemesanan_table
           .get('v1/transaksi/pemesanan/draft', params)
           .then((resp) => {
             this.loading = false
-            console.log('data ', resp)
+            // console.log('data ', resp)
             // console.log('data[0] ', resp.data.data[0])
             if (resp.data.message === 'completed') {
-              console.log(resp)
+              // console.log(resp)
               notifCenterVue('data sudah disimpan dan dikunci, tidak diperkenannkan untuk diubah')
               resolve('completed')
               return
             }
             if (resp.status === 200) {
-              console.log('Detail length', resp.data.length)
+              // console.log('Detail length', resp.data.length)
               if (resp.data.length) {
-                console.log('with detail', resp.data)
+                // console.log('with detail', resp.data)
                 this.items = resp.data[0].details
                 this.setColumns(resp.data[0].details)
                 this.setForm(resp.data[0])
-                console.log('ada')
+                // console.log('ada')
                 resolve('ada')
               } else {
-                console.log('ambil baru')
+                // console.log('ambil baru')
                 resolve('get new')
               }
               // this.meta = resp.data.meta

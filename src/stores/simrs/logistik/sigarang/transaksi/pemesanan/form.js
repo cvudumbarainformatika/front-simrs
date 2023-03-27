@@ -172,7 +172,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       // const formatTp = day + '/' + month + '/' + year
       this.form.tanggal = this.tglManual ? this.form.tanggal : date.formatDate(Date.now(), 'YYYY-MM-DD')
       this.tanggalTampil = dateFullFormat(this.form.tanggal)
-      console.log('set tanggal', this.form.tanggal)
+      // console.log('set tanggal', this.form.tanggal)
     },
     setForm (nama, val) {
       this.form[nama] = val
@@ -190,12 +190,12 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.isOpen = false
     },
     setTanggal(val) {
-      console.log('store set tanggal', val)
+      // console.log('store set tanggal', val)
       this.form.tanggal = val
       this.tanggalTampil = dateFullFormat(this.form.tanggal)
     },
     updateHarga () {
-      console.log('stok', this.stok)
+      // console.log('stok', this.stok)
       if (this.stok.max_stok) {
         if (this.stok.sisaStok) {
           this.stok.maxBeli = this.stok.max_stok - this.stok.sisaStok
@@ -235,7 +235,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
     kontrakSelected (val) {
       // console.log('kontrak', !this.kontrakPekerjaans.length)
 
-      console.log('kontrak val', val)
+      // console.log('kontrak val', val)
       this.form.kode_perusahaan = val.kodeperusahaan
       this.namaPerusahaan = val.namaperusahaan
       this.form.kontrak = val.nokontrakx
@@ -305,16 +305,16 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       } else {
         this.stok.maxBeli = null
       }
-      console.log('dataStok', dataStok)
-      console.log('minmax', minMax)
-      console.log('form', this.form)
+      // console.log('dataStok', dataStok)
+      // console.log('minmax', minMax)
+      // console.log('form', this.form)
       // console.log('maping', maping)
     },
     // rekening 50
     rekening50Selected(val) {
-      console.log('rekening 50', val)
+      // console.log('rekening 50', val)
       const kode = this.rekening50s.filter(data => { return data.kode === val })
-      console.log('rekening 50 selected', kode)
+      // console.log('rekening 50 selected', kode)
       this.setForm('kode_50', val)
       this.setForm('uraian_50', kode[0].uraian)
     },
@@ -327,7 +327,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         return new Promise((resolve, reject) => {
           api.get('v1/kontrak-pengerjaan/kontrak-aktif', params)
             .then(resp => {
-              console.log('kontrak', resp.data)
+              // console.log('kontrak', resp.data)
               this.loadingKontrak = false
               if (resp.status === 200) {
                 this.kontrakPekerjaans = resp.data
@@ -349,7 +349,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         api.get('v1/barangrs/index-pemesanan', params)
           .then(resp => {
             this.mapingLoading = false
-            console.log('maping barang', resp.data)
+            // console.log('maping barang', resp.data)
             this.mapingBarangs = resp.data.data
             // console.log(resp.data)
             resolve(resp)
@@ -364,7 +364,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         // api.get('v1/mapingbarang/maping', params)
         api.get('v1/rekening50/semua', params)
           .then(resp => {
-            console.log('rekening 50', resp.data)
+            // console.log('rekening 50', resp.data)
             this.rekening50s = resp.data
             // console.log(resp.data)
             resolve(resp)
@@ -394,7 +394,7 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
         api.get('v1/stok/current-by-gudang')
           .then(resp => {
             this.loading = false
-            console.log('stok', resp)
+            // console.log('stok', resp)
             this.stoks = resp.data
             resolve(resp)
           })
@@ -426,14 +426,14 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
             this.loadingFinish = false
           })
           .catch((err) => {
-            console.log('aku error', err.response)
+            // console.log('aku error', err.response)
             const keys = Object.keys(err.response.data)
             keys.forEach(k => {
               if (k === 'nomor') {
                 notifErrVue('Nomor pemesanan sudah ada Sebelumnya')
               }
             })
-            console.log('aku error key', keys)
+            // console.log('aku error key', keys)
             this.loadingTambah = false
             // this.isOpen = false
             this.loadingFinish = false

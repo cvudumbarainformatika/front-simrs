@@ -64,7 +64,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       //   })
     },
     setRuangan(val) {
-      console.log('set Ruangan atas')
+      // console.log('set Ruangan atas')
       this.setNomorPemakaian()
       this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.kode_ruang = val
@@ -73,7 +73,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         if (apem.length) return apem[0]
         else return false
       }).filter(ada => { return ada !== false })
-      console.log('set Ruangan temp', temp[0])
+      // console.log('set Ruangan temp', temp[0])
 
       this.form.kode_penanggungjawab = temp[0].kode_penanggungjawab
       this.pj = temp[0].kode_penanggungjawab
@@ -81,7 +81,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       this.form.kode_pengguna = temp[0].kode_pengguna
       this.user = val
 
-      console.log('pengguna', temp[0].kode_pengguna)
+      // console.log('pengguna', temp[0].kode_pengguna)
 
       const ruangan = this.penanggungjawabs.map(data => {
         const apem = data.ruang.filter(rua => { return rua.kode_pengguna === this.form.kode_pengguna })
@@ -89,19 +89,19 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         else return false
       }).filter(ada => { return ada !== false })
 
-      console.log('set ruangan', ruangan)
+      // console.log('set ruangan', ruangan)
 
       this.ruangans = ruangan[0].map(data => {
         data.uraian = data.ruang.uraian
         return data
       })
 
-      console.log('set Ruangans', this.ruangans)
+      // console.log('set Ruangans', this.ruangans)
       // this.ruangans = temp[0].map(ruru => {
       //   ruru.uraian = ruru.ruang.uraian
       //   return ruru
       // })
-      console.log('set Ruangan', temp)
+      // console.log('set Ruangan', temp)
       this.getItemsData()
     },
     penanggungjawabSelected(val) {
@@ -116,7 +116,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         ruru.uraian = ruru.ruang.uraian
         return ruru
       })
-      console.log('ruang', this.ruangans)
+      // console.log('ruang', this.ruangans)
       // const trimmed = val.slice(0, 8)
       // const pengguna = this.penggunas.filter(data => {
       //   const temp = data.kode.slice(0, 8)
@@ -127,13 +127,13 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       //   this.getItemsData()
       // }
       // this.filteredPengguna = pengguna
-      console.log('form', this.form)
+      // console.log('form', this.form)
     },
     penggunaSelected(val) {
       const ruang = this.ruangans.filter(sisi => {
         return sisi.kode_ruang === val
       })
-      console.log('ruang', ruang)
+      // console.log('ruang', ruang)
       this.form.kode_ruang = val
       this.form.kode_pengguna = ruang[0].kode_pengguna
       this.user = val
@@ -157,7 +157,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         }
       })
       this.items = anu.filter(dua => { return dua !== false })
-      console.log('items', this.items)
+      // console.log('items', this.items)
     },
     mapingPenanggungjawab(data) {
       // disini maping penanggungjawab ruangan
@@ -195,16 +195,16 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       // const auth = useAuthStore()
       // this.setRuangan(auth.kode_ruang)
 
-      console.log('data pj', penanggungjawab)
+      // console.log('data pj', penanggungjawab)
       // console.log('data keys', keys)
     },
 
     itemSelectod(val) {
-      console.log('val', val)
+      // console.log('val', val)
       const temp = this.items.filter(data => {
         return data.kode === val
       })
-      console.log('temp', temp)
+      // console.log('temp', temp)
       this.detail.kode_rs = val
       this.detail.kode_108 = temp[0].kode_108
       this.detail.nama = temp[0].nama
@@ -221,7 +221,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         this.detail.jumlah = this.detail.stokRuangan
         this.detail.sisaStok = this.detail.stokRuangan - parseInt(this.detail.jumlah)
       }
-      console.log('input', val)
+      // console.log('input', val)
     },
     // --- unused function ----
     // --- end of unused function ----
@@ -243,7 +243,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     },
     saveInput() {
       this.form.details = this.details
-      console.log('input saved', this.form)
+      // console.log('input saved', this.form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/transaksi/pemakaianruangan/store', this.form)
@@ -263,13 +263,13 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
           kode_ruang: this.form.kode_ruang
         }
       }
-      console.log('params to get', this.form)
+      // console.log('params to get', this.form)
       return new Promise(resolve => {
         // api.get('v1/transaksi/penerimaanruangan/koders', params)
         api.get('v1/stok/get-current-by-ruangan', params)
           .then(resp => {
             this.loading = false
-            console.log('data items', resp)
+            // console.log('data items', resp)
             this.setItems(resp.data)
 
             resolve(resp)
@@ -319,7 +319,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         api.get('v1/pengguna/pengguna-ruang')
           .then(resp => {
             this.loading = false
-            console.log('pengguna', resp)
+            // console.log('pengguna', resp)
             this.penggunas = resp.data
             resolve(resp)
           }).catch(() => {

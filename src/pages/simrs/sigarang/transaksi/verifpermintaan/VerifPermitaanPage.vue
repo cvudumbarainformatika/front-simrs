@@ -147,7 +147,7 @@ const print = () => {
 const setTanggal = val => {
   store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
   store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
-  console.log(store.form)
+  // console.log(store.form)
 }
 // const onSubmit = val => {
 // console.log('val', val)

@@ -114,7 +114,7 @@ import { useKelengkapanSuratPenerimaan } from 'src/stores/simrs/logistik/sigaran
 
 const kelengkapan = useKelengkapanSuratPenerimaan()
 const onSimpan = () => {
-  console.log('simpan')
+  // console.log('simpan')
   kelengkapan.simpanSurat().then(() => {
     kelengkapan.emptyForm()
   })
@@ -125,7 +125,7 @@ const onCacel = () => {
 const setModel = val => {
   kelengkapan.setForm('tempo', val)
   kelengkapan.setForm('tempo', val)
-  console.log('tempo', val)
+  // console.log('tempo', val)
 }
 const setSurat = val => {
   kelengkapan.setForm('tanggal_surat', val)

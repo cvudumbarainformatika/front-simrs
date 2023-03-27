@@ -149,7 +149,7 @@ const ruang = computed(() => {
   }
 })
 const tipeSelected = val => {
-  console.log(val)
+  // console.log(val)
   store.setParam('tipe', val)
   store.getDataTable()
 }
@@ -164,21 +164,21 @@ const setModel = val => {
   const indTime = date.formatDate(temp, 'YYYY-MM-DD HH:mm:ss')
 
   store.setForm('tanggal', indTime)
-  console.log('tanggal', indTime)
+  // console.log('tanggal', indTime)
 }
 const ruangSelected = val => {
   store.setForm('ruang_tujuan', val)
-  console.log('runag', val)
+  // console.log('runag', val)
 }
 const ruangCleared = val => {
   store.setForm('ruang_tujuan', null)
-  console.log('runag', val)
+  // console.log('runag', val)
 }
 const refDist = ref(null)
 const refRuangan = ref(null)
 // const valid=ref(false)
 const simpanList = val => {
-  console.log('simpan list', val)
+  // console.log('simpan list', val)
   refRuangan.value.$refs.refAuto.validate()
   refDist.value.$refs.refInput.validate()
   if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
@@ -225,7 +225,7 @@ function selesai() {
   })
 }
 // watch(() => auth.currentUser, (data) => {
-//   console.log('watch', data)
+// console.log('watch', data)
 //   store.setForm('pegawai_id', data.pegawai_id)
 // })
 </script>

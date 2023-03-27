@@ -56,7 +56,7 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       this.isEditDetail = !this.isEditDetail
     },
     assignForm(val, i) {
-      console.log(val)
+      // console.log(val)
       this.index = i
       this.item = val
       this.setForm('reff', val.reff)
@@ -116,11 +116,11 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       } else {
         this.stok.maxBeli = null
       }
-      console.log('form', this.form)
+      // console.log('form', this.form)
       // console.log('maping', maping)
     },
     updateHarga () {
-      console.log('stok', this.stok)
+      // console.log('stok', this.stok)
       if (this.stok.max_stok) {
         if (this.stok.sisaStok) {
           this.stok.maxBeli = this.stok.max_stok - this.stok.sisaStok
@@ -167,7 +167,7 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
         api.get('v1/stok/current-by-gudang')
           .then(resp => {
             this.loading = false
-            console.log('stok', resp)
+            // console.log('stok', resp)
             this.stoks = resp.data
             resolve(resp)
           })
@@ -196,8 +196,8 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
                   const bar = resp.data.filter(a => a.kode_rs === b.kode_rs).map(m => m.qty).reduce((x, y) => x + y, 0)
                   b.diterima = bar
                 })
-                console.log('resp', resp.data)
-                console.log('item', this.item)
+                // console.log('resp', resp.data)
+                // console.log('item', this.item)
               }
               resolve(resp)
             })
@@ -214,7 +214,7 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       return new Promise(resolve => {
         api.get('v1/barangrs/index-pemesanan', params)
           .then(resp => {
-            console.log('maping barang', resp.data)
+            // console.log('maping barang', resp.data)
             this.barangLoading = false
             this.barangs = resp.data.data
             // console.log(resp.data)
@@ -225,18 +225,18 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     },
     // edit header saja
     simpanHeader() {
-      console.log('form', this.form)
+      // console.log('form', this.form)
       this.loading = true
       return new Promise((resolve, reject) => {
         api.post('v1/transaksi/pemesanan/store', this.form)
           .then(resp => {
             this.loading = false
-            console.log('edit pemesanan ', resp)
+            // console.log('edit pemesanan ', resp)
             if (resp.status === 200) {
               const key = Object.keys(resp.data.data)
               key.forEach(k => {
                 if (resp.data.data[k] !== this.tableHis.items[this.index][k]) {
-                  console.log('ga sama', this.tableHis.items[this.index][k], resp.data.data[k])
+                  // console.log('ga sama', this.tableHis.items[this.index][k], resp.data.data[k])
                   this.tableHis.items[this.index][k] = resp.data.data[k]
                 }
               })
@@ -251,13 +251,13 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     },
     // tambah barang
     storeDetail() {
-      console.log('store form', this.form)
+      // console.log('store form', this.form)
       this.loadingTambah = true
       return new Promise((resolve, reject) => {
         api.post('v1/transaksi/pemesanan/store-details', this.form)
           .then(resp => {
             this.loadingTambah = false
-            console.log('store detail', resp)
+            // console.log('store detail', resp)
             resolve(resp)
           })
           .catch(err => {

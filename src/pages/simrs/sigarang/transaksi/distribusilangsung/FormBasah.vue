@@ -73,7 +73,7 @@ function inputBlur(row, col) {
   store.setForm('kode_rs', row.kode)
   store.setForm('kode_satuan', row.kode_satuan)
   store.setForm('jumlah', row.toDistribute)
-  console.log('blur', row, col)
+  // console.log('blur', row, col)
   emits('simpanList', col)
 }
 </script>

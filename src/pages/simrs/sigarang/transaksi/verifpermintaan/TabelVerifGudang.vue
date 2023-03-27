@@ -137,8 +137,8 @@ defineProps({
 const refInput = ref(null)
 const edit = ref(false)
 const onClick = (val, i) => {
-  console.log('clicked', i)
-  console.log('clicked', val)
+  // console.log('clicked', i)
+  // console.log('clicked', val)
 }
 const onSubmit = () => {
   if (refInput.value) refInput.value.validate()
@@ -146,7 +146,7 @@ const onSubmit = () => {
   store.saveForm()
   // emits('onSubmit', props.map.items)
   edit.value = false
-  console.log('val', refInput.value)
+  // console.log('val', refInput.value)
 }
 const onEdit = () => {
   edit.value = true
@@ -155,11 +155,11 @@ const onCancel = () => {
   edit.value = false
 }
 const onDenied = () => {
-  const permintaan = store.permintaan.details.map(detail => {
-    const temp = detail.barangrs ? detail.barangrs.nama : '-'
-    return temp
-  })
-  console.log('onDenied', permintaan)
+  // const permintaan = store.permintaan.details.map(detail => {
+  //   const temp = detail.barangrs ? detail.barangrs.nama : '-'
+  //   return temp
+  // })
+  // console.log('onDenied', permintaan)
   Dialog.create({
     title: 'Konfirmasi',
     message: 'Tolak Permintaan?',

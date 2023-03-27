@@ -383,7 +383,7 @@ store.setToday()
 const proxyDate = ref(null)
 const refDate = ref(null)
 const updateProxy = () => {
-  console.log('date', store.form.tanggal)
+  // console.log('date', store.form.tanggal)
   // refDate.value.setToday()
   proxyDate.value = store.form.tanggal ? store.form.tanggal : date.formatDate(Date.now(), 'YYYY/MM/DD')
   store.setForm('tanggal', proxyDate.value)
@@ -392,7 +392,7 @@ const updateProxy = () => {
 
 const setModel = val => {
   store.setForm('tempo', val)
-  console.log('tempo', val)
+  // console.log('tempo', val)
 }
 
 const setSurat = val => {
@@ -433,7 +433,7 @@ const save = val => {
   //   store.setForm('stasuspemesanan', 4)
   // }
   // console.log('sebelum', parseFloat(val), pesanan.value, terimaSebelum.value)
-  console.log('save', store.form)
+  // console.log('save', store.form)
   if (!valid) { simpanDetail() }
 }
 
@@ -455,7 +455,7 @@ const init = val => {
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
   // console.log('ref', refNomorSurat.value.$refs.refInput)
-  console.log('init', val)
+  // console.log('init', val)
 }
 
 // validasi
@@ -476,17 +476,17 @@ const refNomorFaktur = ref(null)
 const refTanggalFaktur = ref(null)
 // const diterima = ref(false)
 const validate = val => {
-  const apem = validasi()
-  console.log('validasi', apem)
+  // const apem = validasi()
+  // console.log('validasi', apem)
   if ((parseFloat(val) + terimaSebelum.value) > pesanan.value || validasi()) {
-    console.log('pesanan', pesanan.value)
-    console.log('dibanding', parseFloat(val) + terimaSebelum.value)
-    console.log('if', (val + terimaSebelum.value) > pesanan.value)
+    // console.log('pesanan', pesanan.value)
+    // console.log('dibanding', parseFloat(val) + terimaSebelum.value)
+    // console.log('if', (val + terimaSebelum.value) > pesanan.value)
     error.value = true
     errMessage.value = (parseFloat(val) + terimaSebelum.value) > pesanan.value ? 'Jumlah input melebihi jumlah pemesanan' : 'periksa kembali input anda yang lain'
     return false
   }
-  console.log('if', false)
+  // console.log('if', false)
   error.value = false
   errMessage.value = ''
   return true
@@ -500,7 +500,7 @@ const validasi = (val) => {
   pilihSurat.value = !!(form.surat_jalan || form.faktur)
   surat.value = !!form.surat
   tglSurat.value = !!form.tanggal_surat
-  console.log('pilih surat', pilihSurat.value)
+  // console.log('pilih surat', pilihSurat.value)
   if (refNomorFaktur.value.$refs.refInput.modelValue) {
     refTanggalFaktur.value.$refs.refInputDate.validate()
     refTempo.value.$refs.refInputDate.validate()
@@ -524,17 +524,17 @@ const validasi = (val) => {
   }
   refPengirim.value.$refs.refInput.validate()
   // diterima.value = !!form.qty
-  console.log(
+  // console.log(
   // refPengirim.value.$refs,
   // refPengirim.value.$refs.refInput,
   // 'diterima', diterima.value,
-    'pemesanan', pemesanan.value,
-    'pengirim', pengirim.value,
-    'status pembelian', statusPembelian.value,
-    'pilih surat', pilihSurat.value
+  // 'pemesanan', pemesanan.value,
+  // 'pengirim', pengirim.value,
+  // 'status pembelian', statusPembelian.value,
+  // 'pilih surat', pilihSurat.value
   // 'surat', surat.value,
   // 'tanggal surat', tglSurat.value
-  )
+  // )
   if (!pemesanan.value || !pengirim.value || !statusPembelian.value || !pilihSurat.value) {
     // if (!diterima.value) {
     //   notifNegativeCenterVue('Anda belum memasukkan jumlah barang diterima')
@@ -565,21 +565,21 @@ const onSimpan = () => {
     if (data.qtyskr > 0) { temp = data }
     return temp
   }).reduce((s, y) => { return s + y })
-  console.log('ada', ada)
+  // console.log('ada', ada)
   const total = store.detailPemesanans.map(data => {
-    console.log(data)
+    // console.log(data)
     return parseFloat(data.qtyskr) * parseFloat(data.harga)
   }).reduce((x, y) => x + y)
-  console.log('total', total)
+  // console.log('total', total)
   if (ada === 0) return notifNegativeCenterVue('tidak ada data penerimaan tersimpan, periksa kembali data penerimaan anda')
   const temp = store.detailPemesanans.map(data => {
     let status = null
     if (parseFloat(data.qty) === (parseFloat(data.qtysblm) + parseFloat(data.qtyskr))) { status = 4 } else { status = 3 }
-    console.log(data)
+    // console.log(data)
     return status
   }).reduce((x, y) => x + y) / store.detailPemesanans.length
   const statuspemesanan = Math.floor(temp)
-  console.log('satatuspemesanan', statuspemesanan)
+  // console.log('satatuspemesanan', statuspemesanan)
   store.setForm('statuspemesanan', statuspemesanan)
   store.setForm('status', 2)
   if (total > 0) {
@@ -592,7 +592,7 @@ const onSimpan = () => {
   store.deleteForm('sub_total')
   store.deleteForm('qty')
   store.deleteForm('kode_rs')
-  console.log('simpan', store.form)
+  // console.log('simpan', store.form)
   const valid = validasi()
   if (!valid) {
     simpanDetail()
@@ -601,7 +601,7 @@ const onSimpan = () => {
 }
 
 const simpanDetail = () => {
-  console.log('simpan deatail', store.form)
+  // console.log('simpan deatail', store.form)
   store.simpanTransaksi().then(() => {
     if (store.form.status && store.form.status === 2) {
       store.resetForm()

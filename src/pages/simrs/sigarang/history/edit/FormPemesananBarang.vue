@@ -163,7 +163,7 @@ const modelSet = val => {
 }
 
 function onSubmit() {
-  console.log('form submit', store.form)
+  // console.log('form submit', store.form)
   store.storeDetail().then(resp => {
     closeForm()
     updateData(resp)
