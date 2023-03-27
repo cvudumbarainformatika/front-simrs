@@ -339,6 +339,24 @@
                   Edit
                 </q-tooltip>
               </q-btn>
+              <q-btn
+                v-if="(role==='root' || role==='gudang' || role==='gizi')
+                  && (row.nama === 'PENERIMAAN' && row.status>=2 )"
+                color="primary"
+                round
+                icon="icon-mat-edit"
+                flat
+                size="sm"
+                :loading="loadingEdit(index)"
+                @click="editRowTerima(row,index)"
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  Edit
+                </q-tooltip>
+              </q-btn>
               <!--  -->
               <q-btn
                 v-if="row.status===1 && (role==='root'||role==='PTK' || role==='gizi')"
@@ -851,6 +869,7 @@
     <DetailsTablePage v-model="detail.isOpen" />
     <editPemesananPage v-model="editPemesanan.isOpen" />
     <FormPemesananBarang v-model="editPemesanan.formOpen" />
+    <editPenerimaanPage v-model="editPenerimaan.isOpen" />
     <!-- id="printMe" -->
   </q-page>
 </template>
@@ -859,9 +878,11 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
+import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import DetailsTablePage from './DetailsTablePage.vue'
 import editPemesananPage from './edit/EditPemesananPage.vue'
+import editPenerimaanPage from './edit/EditPenerimaanPage.vue'
 import TandaTanganPage from 'src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'
 import FormPemesananBarang from './edit/FormPemesananBarang.vue'
 // import PrintPage from './PrintPage.vue'
@@ -974,7 +995,7 @@ const hapus = val => {
       table.deleteTransaction(val)
     })
 }
-// edit
+// ------------ edit pemesanan -------
 const editPemesanan = useEditPemesananStore()
 function editRow(val, i) {
   // console.log(val)
@@ -987,6 +1008,16 @@ const ladingPemesanan = computed(() => {
 function loadingEdit(index) {
   return index === editPemesanan.index && ladingPemesanan.value === true
 }
+// ------------------------------------
+
+// --------edit penerimaan -----------
+const editPenerimaan = useEditPenerimaanStore()
+function editRowTerima(val, i) {
+  // console.log(val)
+  // editPenerimaan.assignForm(val, i)
+  editPenerimaan.setOpen()
+}
+// ------------------------------------
 
 // -----------keterangan status-----------
 const color = val => {
