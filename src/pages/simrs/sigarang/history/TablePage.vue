@@ -132,19 +132,35 @@
               </div>
             </template>
             <template #cell-tanggal="{row}">
-              {{ dateFullFormat(row.tanggal) }}
+              <div
+                class="row"
+                style="width:max-content;"
+              >
+                {{ dateFullFormat(row.tanggal) }}
+              </div>
             </template>
             <template #cell-tanggal_verif="{row}">
-              {{ dateFull(row.tanggal_verif) }}
+              <div class="row">
+                {{ dateFull(row.tanggal_verif) }}
+              </div>
             </template>
             <template #cell-tanggal_distribusi="{row}">
-              {{ dateFull(row.tanggal_distribusi) }}
+              <div class="row">
+                {{ dateFull(row.tanggal_distribusi) }}
+              </div>
             </template>
             <template #cell-tanggal_surat="{row}">
-              {{ dateFullFormat(row.tanggal_surat) }}
+              <div
+                class="row"
+                style="width:max-content;"
+              >
+                {{ dateFullFormat(row.tanggal_surat) }}
+              </div>
             </template>
             <template #cell-tanggal_faktur="{row}">
-              {{ dateFullFormat(row.tanggal_faktur) }}
+              <div class="row">
+                {{ dateFullFormat(row.tanggal_faktur) }}
+              </div>
             </template>
             <template #cell-asal="{row}">
               {{ row.asal?row.asal.nama:'-' }}
@@ -1014,7 +1030,7 @@ function loadingEdit(index) {
 const editPenerimaan = useEditPenerimaanStore()
 function editRowTerima(val, i) {
   // console.log(val)
-  // editPenerimaan.assignForm(val, i)
+  editPenerimaan.assignForm(val, i)
   editPenerimaan.setOpen()
 }
 // ------------------------------------

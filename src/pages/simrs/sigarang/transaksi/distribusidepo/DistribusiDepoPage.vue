@@ -142,8 +142,9 @@
             <!-- hint="tekan enter untuk input" -->
           </div>
           <div class="anak text-center">
+            <!-- {{ parseFloat(store.input.jumlah) }} -->
             <q-btn
-              :disable="parseInt(store.input.jumlah)<=0"
+              :disable="parseFloat(store.input.jumlah)<=0"
               class="q-mr-lg"
               flat
               color="primary"
@@ -349,7 +350,7 @@ const refBarang = ref(null)
 const addInput = () => {
   // console.log('ref barang', refBarang.value.$refs.refAuto)
   if (store.input.stok_alokasi_depo > 0) {
-    if (parseInt(store.input.jumlah) <= parseInt(store.input.stok_alokasi_depo) && parseInt(store.input.jumlah) > 0) {
+    if (parseFloat(store.input.jumlah) <= parseFloat(store.input.stok_alokasi_depo) && parseFloat(store.input.jumlah) > 0) {
       store.setDetail('jumlah', store.input.jumlah)
       store.setInput('jumlah', store.input.jumlah)
       if (!edit.value) {
@@ -379,7 +380,7 @@ const addInput = () => {
       refBarang.value.$refs.refAuto.resetValidation()
       refBarang.value.$refs.refAuto.focus()
       // console.log('add input', store.form)
-    } else if (parseInt(store.input.jumlah) <= 0) {
+    } else if (parseFloat(store.input.jumlah) < 0) {
       notifErrVue('jumlah distribusi tidak valid')
     } else {
       notifErrVue('jumlah distribusi tidak boleh melebihi alokasi')

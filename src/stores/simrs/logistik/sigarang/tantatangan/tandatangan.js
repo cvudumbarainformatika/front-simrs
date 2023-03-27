@@ -62,7 +62,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           data.acr = this.data[val]
         }
         this.onKanan = data
-        console.log('kanan', data)
+        // console.log('kanan', data)
       } else {
         this.onKanan = {}
       }
@@ -80,7 +80,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           data.acr = this.data[val]
         }
         this.onKiri = data
-        console.log('kiri', data)
+        // console.log('kiri', data)
       } else {
         this.onKiri = {}
       }
@@ -98,7 +98,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           data.acr = this.data[val]
         }
         this.onTengah = data
-        console.log('kiri', data)
+        // console.log('kiri', data)
       } else {
         this.onTengah = {}
       }
@@ -131,7 +131,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           .then(resp => {
             this.loading = false
             this.data = resp.data
-            console.log('data length', Object.getPrototypeOf(this.data.ptk).constructor.name)
+            // console.log('data length', Object.getPrototypeOf(this.data.ptk).constructor.name)
             // if (Object.getPrototypeOf(this.data).constructor.name === 'Object') {
             if (this.data) {
               // ptk
@@ -175,13 +175,13 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
                 this.setForm('text', this.data.text)
               }
             }
-            console.log('form', this.form)
+            // console.log('form', this.form)
             resolve(resp)
           })
       })
     },
     getDataPtk(val) {
-      console.log('cari ptk', val)
+      // console.log('cari ptk', val)
       this.loadingPtk = true
       const params = {
         params: {
@@ -192,7 +192,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         api.get('v1/tandatangan/get-ptk', params)
           .then(resp => {
             this.loadingPtk = false
-            console.log('ptk', resp)
+            // console.log('ptk', resp)
             this.optionPTK = resp.data
             resolve(resp)
           })
@@ -202,7 +202,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
       })
     },
     getDataPpk(val) {
-      console.log('cari ptk', val)
+      // console.log('cari ptk', val)
       this.loadingPpk = true
       const params = {
         params: {
@@ -213,7 +213,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         api.get('v1/tandatangan/get-ppk', params)
           .then(resp => {
             this.loadingPpk = false
-            console.log('ppk', resp)
+            // console.log('ppk', resp)
             this.optionPPK = resp.data
             resolve(resp)
           })
@@ -223,7 +223,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
       })
     },
     getDataGudang(val) {
-      console.log('cari gudang', val)
+      // console.log('cari gudang', val)
       this.loadingGudang = true
       const params = {
         params: {
@@ -234,7 +234,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         api.get('v1/tandatangan/get-gudang', params)
           .then(resp => {
             this.loadingGudang = false
-            console.log('gudang', resp)
+            // console.log('gudang', resp)
             this.optionGudang = resp.data
             resolve(resp)
           })
@@ -244,7 +244,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
       })
     },
     getDataMengetahui(val) {
-      console.log('cari mengetahui', val)
+      // console.log('cari mengetahui', val)
       this.loadingMengetahui = true
       const params = {
         params: {
@@ -255,7 +255,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         api.get('v1/tandatangan/get-mengetahui', params)
           .then(resp => {
             this.loadingMengetahui = false
-            console.log('mengetahui', resp)
+            // console.log('mengetahui', resp)
             this.optionMengetahui = resp.data
             resolve(resp)
           })
@@ -270,7 +270,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         api.post('v1/tandatangan/store', this.form)
           .then(resp => {
             this.loading = false
-            console.log('sved ', resp.data)
+            // console.log('sved ', resp.data)
             notifSuccess(resp)
             this.getDataIndex()
             this.setOpen()
