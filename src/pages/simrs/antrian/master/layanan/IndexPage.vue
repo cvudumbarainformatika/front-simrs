@@ -69,13 +69,13 @@
 
             <template #cell-default-img="{row}">
               <q-avatar
-                :color="row.layanan_id <=3 ? 'primary':'negative'"
+                :color="row.id_layanan <=4 ? 'primary':'negative'"
                 text-color="white"
                 size="md"
                 class="cursor-pointer"
-                :class="row.layanan_id <=3 ? 'bg-primary':'bg-negtive'"
+                :class="row.id_layanan <=4 ? 'bg-primary':'bg-negtive'"
               >
-                {{ row.loket.substring(0,1) }}
+                {{ row.id_layanan.substring(0,1) }}
                 <!-- <q-menu>
                   <div class="row no-wrap q-pa-md">
                     <div class="column items-center">

@@ -20,6 +20,11 @@ const antrian =
         path: '/antrian/master/unit_antrian',
         name: 'antrian.master.unit_antrian',
         component: () => import('pages/simrs/antrian/master/unit_antrian/IndexPage.vue')
+      },
+      {
+        path: '/antrian/master/layanan',
+        name: 'antrian.master.layanan',
+        component: () => import('pages/simrs/antrian/master/layanan/IndexPage.vue')
       }
 
     ]

@@ -91,7 +91,8 @@ const menus = ref([
     name: 'antrian.master',
     submenus: [
       { nama: 'Master Unit', name: 'antrian.master.poli', icon: null, link: 'antrian/master/poli' },
-      { nama: 'Unit Antrean', name: 'antrian.master.unit_antrian', icon: null, link: 'antrian/master/unit_antrian' }
+      { nama: 'Unit Antrean', name: 'antrian.master.unit_antrian', icon: null, link: 'antrian/master/unit_antrian' },
+      { nama: 'Layanan', name: 'antrian.master.layanan', icon: null, link: 'antrian/master/layanan' }
     ]
   }
 ])
