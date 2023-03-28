@@ -243,7 +243,7 @@
                         autocomplete="nama"
                         option-value="kode"
                         option-label="nama"
-                        debounce="500"
+                        input-debounce="700"
                         :source="store.mapingBarangs"
                         :loading="store.mapingLoading"
                         @on-select="store.barangSelected"
@@ -253,7 +253,7 @@
                       />
                       <!-- @buang="buang" -->
                     </div>
-                    <div class="col-1">
+                    <!-- <div class="col-1">
                       <q-btn
                         class="q-ml-sm"
                         unelevated
@@ -270,7 +270,7 @@
                           Tambah Data Master Baru
                         </q-tooltip>
                       </q-btn>
-                    </div>
+                    </div> -->
                   </div>
                   <div v-if="store.form.kode_rs">
                     <div class="row q-mb-sm q-col-gutter-sm">
@@ -683,7 +683,7 @@
 </template>
 <script setup>
 import pemesananForm from 'src/pages/simrs/sigarang/master/barangrs/FormDialog.vue'
-import { date, Dialog } from 'quasar'
+import { date } from 'quasar'
 import { routerInstance } from 'src/boot/router'
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifNegativeCenterVue, uniqueId } from 'src/modules/utils'
@@ -701,27 +701,27 @@ table.getDataTable()
 store.getCurrentStok()
 store.getMinMaxDepo()
 
-function addNewBarang() {
-  Dialog.create({
-    title: 'Konfirmasi',
-    message: 'Apakah Anda Akan menambahkan <strong> Data Master Barang </strong>, untuk barang baru?',
-    html: true,
-    ok: {
-      push: true,
-      label: 'Buat Data Barang Baru di Master Barang',
-      'no-caps': true
-    },
-    cancel: {
-      push: true,
-      label: 'Batal',
-      color: 'dark',
-      'no-caps': true
-    }
-  })
-    .onOk(() => {
-      masterBarangForm.newData()
-    })
-}
+// function addNewBarang() {
+//   Dialog.create({
+//     title: 'Konfirmasi',
+//     message: 'Apakah Anda Akan menambahkan <strong> Data Master Barang </strong>, untuk barang baru?',
+//     html: true,
+//     ok: {
+//       push: true,
+//       label: 'Buat Data Barang Baru di Master Barang',
+//       'no-caps': true
+//     },
+//     cancel: {
+//       push: true,
+//       label: 'Batal',
+//       color: 'dark',
+//       'no-caps': true
+//     }
+//   })
+//     .onOk(() => {
+//       masterBarangForm.newData()
+//     })
+// }
 
 const kontrak = ref(false)
 const kodeRs = ref(false)

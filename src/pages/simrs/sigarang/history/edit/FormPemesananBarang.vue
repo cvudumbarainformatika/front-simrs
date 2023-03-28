@@ -29,7 +29,7 @@
                   autocomplete="nama"
                   option-value="kode"
                   option-label="nama"
-                  debounce="500"
+                  input-debounce="1000"
                   :disable="store.isEditDetail"
                   :source="store.barangs"
                   :loading="store.barangLoading"
