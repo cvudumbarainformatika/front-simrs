@@ -15,6 +15,7 @@
     :disable="disable"
     :model-value="modelProp"
     :loading="loading"
+    :input-debounce="debounce"
     lazy-rules
     :rules="[anotherValid]"
     behavior="menu"
@@ -124,7 +125,8 @@ const props = defineProps({
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
-  model: { type: [String, Number], default: '' }
+  model: { type: [String, Number], default: '' },
+  debounce: { type: [String, Number], default: 1000 }
 
 })
 const optionx = ref([])

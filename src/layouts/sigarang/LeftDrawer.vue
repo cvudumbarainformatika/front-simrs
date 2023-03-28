@@ -256,7 +256,7 @@ const hover = (menu, i) => {
 
   // console.log('ref item', refItem.value)
   // console.log('ref menu', refMenu.value[i])
-  console.log('menu', menu.submenus.length)
+  // console.log('menu', menu.submenus.length)
 }
 const leave = (i) => {
   refMenu.value[i].hide()
