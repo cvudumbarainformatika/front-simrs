@@ -252,8 +252,9 @@
                       />
                       <!-- @buang="buang" -->
                     </div>
-                    <!-- <div class="col-1">
+                    <div class="col-1">
                       <q-btn
+                        v-if="role==='root'||role==='gizi'"
                         class="q-ml-sm"
                         unelevated
                         round
@@ -269,7 +270,7 @@
                           Tambah Data Master Baru
                         </q-tooltip>
                       </q-btn>
-                    </div> -->
+                    </div>
                   </div>
                   <div v-if="store.form.kode_rs">
                     <div class="row q-mb-sm q-col-gutter-sm">
@@ -682,17 +683,20 @@
 </template>
 <script setup>
 import pemesananForm from 'src/pages/simrs/sigarang/master/barangrs/FormDialog.vue'
-import { date } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { routerInstance } from 'src/boot/router'
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifNegativeCenterVue, uniqueId } from 'src/modules/utils'
 import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
 import { useTransaksiPemesananTable } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/table'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
+import { useAuthStore } from 'src/stores/auth'
+
 const table = useTransaksiPemesananTable()
 const store = useTransaksiPemensananForm()
 
+const auth = useAuthStore()
 // store master barang
 const masterBarangForm = useMasterBarangRSForm()
 // store.setToday()
@@ -700,27 +704,31 @@ table.getDataTable()
 store.getCurrentStok()
 store.getMinMaxDepo()
 
-// function addNewBarang() {
-//   Dialog.create({
-//     title: 'Konfirmasi',
-//     message: 'Apakah Anda Akan menambahkan <strong> Data Master Barang </strong>, untuk barang baru?',
-//     html: true,
-//     ok: {
-//       push: true,
-//       label: 'Buat Data Barang Baru di Master Barang',
-//       'no-caps': true
-//     },
-//     cancel: {
-//       push: true,
-//       label: 'Batal',
-//       color: 'dark',
-//       'no-caps': true
-//     }
-//   })
-//     .onOk(() => {
-//       masterBarangForm.newData()
-//     })
-// }
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
+
+function addNewBarang() {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Akan menambahkan <strong> Data Master Barang </strong>, untuk barang baru?',
+    html: true,
+    ok: {
+      push: true,
+      label: 'Buat Data Barang Baru di Master Barang',
+      'no-caps': true
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      color: 'dark',
+      'no-caps': true
+    }
+  })
+    .onOk(() => {
+      masterBarangForm.newData()
+    })
+}
 
 const kontrak = ref(false)
 const kodeRs = ref(false)
