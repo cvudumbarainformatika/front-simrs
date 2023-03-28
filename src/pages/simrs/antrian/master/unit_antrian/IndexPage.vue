@@ -82,7 +82,7 @@
                 text-color="white"
                 size="sm"
                 class="cursor-pointer"
-                :class="row.layanan_id <=3 ? 'bg-primary':'bg-negtive'"
+                :class="row.layanan_id <=3 ? 'bg-primary':'bg-negative'"
               >
                 {{ row.loket.substring(0,1) }}
                 <!-- <q-menu>

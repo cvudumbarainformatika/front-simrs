@@ -50,6 +50,17 @@ const routes = [
   pegawai,
   sigarang,
   antrian,
+
+  {
+    path: '/display_antrian',
+    component: () => import('layouts/antrian/display/DisplayLayout.vue'),
+    meta: { requireAuth: false },
+    children: [
+      { path: '', component: () => import('pages/simrs/antrian/display/IndexPage.vue') }
+    ]
+
+  },
+
   {
     path: '/login',
     component: () => import('layouts/Auth/AuthLayout.vue'),
