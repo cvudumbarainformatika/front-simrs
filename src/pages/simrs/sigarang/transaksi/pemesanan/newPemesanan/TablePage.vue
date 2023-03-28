@@ -243,7 +243,6 @@
                         autocomplete="nama"
                         option-value="kode"
                         option-label="nama"
-                        input-debounce="700"
                         :source="store.mapingBarangs"
                         :loading="store.mapingLoading"
                         @on-select="store.barangSelected"

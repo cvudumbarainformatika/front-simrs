@@ -7,6 +7,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
   state: () => ({
     loading: false,
     loadingNoPenerimaan: false,
+    loadingDetailPemesanan: false,
     isOpen: false,
     form: {
       nama: 'PENERIMAAN'
@@ -27,6 +28,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.item = val
       console.log('assign', index, i, val)
       this.item = val
+      this.setForm('id', val.id)
       this.setForm('reff', val.reff)
       this.setForm('kontrak', val.kontrak)
       this.setForm('nomor', val.nomor)
@@ -38,7 +40,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.setForm('tanggal_surat', val.tanggal_surat)
       this.setForm('faktur', val.faktur)
       this.setForm('tempo', val.tempo)
-      // this.getItemsDetail()
+      this.cariPesanan()
     },
 
     // api related function
@@ -52,14 +54,46 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
         await api.get('v1/transaksi/penerimaan/jumlah-penerimaan', params)
           .then(resp => {
             this.loadingNoPenerimaan = false
-            this.form.jumlahNomorPenerimaan = resp.data.jumlah
+            const jumlahNomorPenerimaan = resp.data.jumlah
             console.log('jumlah nomor penerimaan', resp)
-            const temp = val.split('sp')
+            const temp = val.split('SP-')
+            if (jumlahNomorPenerimaan > 0) {
+              this.form.no_penerimaan = temp[0] + 'BAST-' + temp[1] + '-' + jumlahNomorPenerimaan
+            } else {
+              this.form.no_penerimaan = temp[0] + 'BAST-' + temp[1]
+            }
             console.log('val', temp)
           })
       } catch (a) {
         this.loadingNoPenerimaan = false
       }
+    },
+    cariPesanan() {
+      this.loadingDetailPemesanan = true
+      const temp = this.form
+      // temp.detail = this.item.details
+      console.log('temp', temp)
+      const params = { params: temp }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/penerimaan/cari-detail-pesanan', params)
+          .then(resp => {
+            this.loadingDetailPemesanan = false
+            console.log('pesanan', resp.data)
+            const detailPesanan = resp.data
+            console.log('detail', detailPesanan)
+            resolve(resp.data)
+            this.item.details.map(det => {
+              det.dipesan = detailPesanan.filter(a => a.kode_rs === det.kode_rs).map(y => y.qty).reduce((m, n) => m + n, 0)
+
+              return det
+            })
+            console.log('item', this.item)
+          })
+          .catch(() => { this.loadingDetailPemesanan = false })
+      })
+    },
+    simpanHeader() {
+      console.log('simpan header', this.form)
     }
   }
 })

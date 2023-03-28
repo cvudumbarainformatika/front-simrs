@@ -15,6 +15,8 @@
             :loading="table.loading"
             :to-search="table.params.q"
             :wrap-cells="true"
+            :ada-tambah="role==='gudang'||role==='root'"
+            :default-btn="role==='gudang'||role==='root'"
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"
@@ -86,10 +88,16 @@
   </q-page>
 </template>
 <script setup>
+import { useAuthStore } from 'src/stores/auth'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { useMasterBarangRSTable } from 'src/stores/simrs/logistik/sigarang/master/barangrs/table'
+import { computed } from 'vue'
 import formDialog from './FormDialog.vue'
 const table = useMasterBarangRSTable()
 const store = useMasterBarangRSForm()
 table.getDataTable()
+const auth = useAuthStore()
+const role = computed(() => {
+  return auth.role ? auth.role : ''
+})
 </script>
