@@ -256,6 +256,7 @@
 <script setup>
 import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
+import { findWithAttr } from 'src/modules/utils'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
 // import { onMounted } from 'vue'
 
@@ -304,9 +305,21 @@ function hapus(val, i) {
         id: val.id,
         reff: store.form.reff
       }
+      const index = findWithAttr(store.item.details, 'id', val.id)
+      const det = store.item.details
+      delete det[index]
+      store.item.details = det.filter(a => a.kode_rs)
+      const habisUdah = store.item.details.filter(y => y.diterima <= 0)
+      if (!habisUdah.length) {
+        kirim.status = 4
+      } else {
+        delete kirim.status
+      }
+
       store.deleteDetail(kirim).then(resp => {
         store.tableHis.items[store.index] = resp.data
-        store.item = resp.data
+        store.item.status = resp.data.status
+        console.log('items', store.item)
       })
     })
 }

@@ -148,6 +148,7 @@
   </q-dialog>
 </template>
 <script setup>
+import { findWithAttr } from 'src/modules/utils'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
 
 const store = useEditPemesananStore()
@@ -179,6 +180,25 @@ function updateData(data) {
   // console.log('index', store.tableHis.items[store.index])
   // console.log('data', data.data.data)
   store.tableHis.items[store.index] = data.data.data
-  store.item = data.data.data
+  store.item.status = data.data.data.status
+  const det = data.data.data.details.map(a => a.kode_rs)
+  const detData = data.data.data.details
+  if (det.length) {
+    det.forEach(m => {
+      const respIn = findWithAttr(detData, 'kode_rs', m)
+      const itemIn = findWithAttr(store.item.details, 'kode_rs', m)
+      if (respIn >= 0 && itemIn < 0) {
+        detData[respIn].diterima = 0
+        store.item.details.push(detData[respIn])
+      } else if (respIn >= 0 && itemIn >= 0) {
+        if (store.item.details[itemIn].kode_rs === detData[respIn].kode_rs) {
+          detData[respIn].diterima = store.item.details[itemIn].diterima
+          store.item.details[itemIn] = detData[respIn]
+        }
+      }
+    })
+  }
+  console.log(det)
+  // store.item = data.data.data
 }
 </script>
