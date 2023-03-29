@@ -110,7 +110,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     pemesananSelected (dat) {
       this.detailPemesanans = []
       const psn = this.pemesanans.filter(x => x.reff === dat)
-      this.form.reff = dat
+      // this.form.reff = dat
       this.params.reff = dat
       // console.log('psn', psn)
       if (psn.length) {

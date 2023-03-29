@@ -12,12 +12,42 @@
       <q-card-section>
         <div class="row fit q-col-gutter-sm">
           <div class="col-6">
-            <div class="row">
+            <div class="row items-center q-mb-sm">
               <div class="col-4">
-                Nomor Kontrak
+                <div v-if="!store.editKontrak">
+                  Nomor Kontrak
+                </div>
+                <div v-if="store.editKontrak">
+                  <app-btn
+                    label="Batal Ganti nomor kontrak"
+                    color="dark"
+                    @click="store.editKontrak=false"
+                  />
+                </div>
               </div>
               <div class="col-8">
-                {{ store.form.kontrak }}
+                <div
+                  v-if="!store.editKontrak"
+                  class="cursor-pointer"
+                  @click="store.editKontrak=true"
+                >
+                  {{ store.form.kontrak }}
+                </div>
+                <div v-if="store.editKontrak">
+                  <app-autocomplete-new
+                    :model="store.form.kontrak"
+                    outlined
+                    label="Kontrak pilih"
+                    autocomplete="namaperusahaan"
+                    option-value="nokontrakx"
+                    :option-label="['nokontrakx','namaperusahaan']"
+                    :source="kontrakStore.items"
+                    :loading="kontrakStore.loading"
+                    @on-select="store.kontrakSelected"
+                    @clear="clearKontrak"
+                    @buang="modelSet"
+                  />
+                </div>
               </div>
             </div>
             <div class="row items-center">
@@ -258,9 +288,23 @@ import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { findWithAttr } from 'src/modules/utils'
 import { useEditPemesananStore } from 'src/stores/simrs/logistik/sigarang/history/edit/pemesanan'
+import { useKontrakPemensananStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/kontrak'
 // import { onMounted } from 'vue'
 
+const kontrakStore = useKontrakPemensananStore()
 const store = useEditPemesananStore()
+// kontrak
+const clearKontrak = () => {
+  store.setForm('kontrak', null)
+}
+const modelSet = val => {
+  // store.params.q = val
+  // store.getMapingBarang()
+  setTimeout(() => {
+    kontrakStore.setSearch(val)
+  }, 700)
+}
+//
 function setModel(val) {
   store.setForm('tanggal', val)
 }

@@ -34,14 +34,14 @@
                 Nomor Pemesanan
               </div>
               <div class="col-9">
-                <app-input
+                <!-- <app-input
                   v-model="store.form.nomor"
                   label="Nomor Pemesanan"
                   outlined
                   debounce="1000"
                   @update:model-value="gantiNomorPesanan"
-                />
-                <!-- {{ store.form.nomor }} -->
+                /> -->
+                {{ store.form.nomor }}
               </div>
             </div>
             <div class="row q-mb-sm items-center">
@@ -49,8 +49,8 @@
                 Nomor Penerimaan
               </div>
               <div class="col-9">
-                <div v-if="!store.loadingNoPenerimaan">
-                  <!-- {{ store.form.no_penerimaan }} -->
+                {{ store.form.no_penerimaan }}
+                <!-- <div v-if="!store.loadingNoPenerimaan">
                   <app-input
                     v-model="store.form.no_penerimaan "
                     label="Nomor Penerimaan"
@@ -62,7 +62,7 @@
                     flat
                     loading
                   />
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="row q-mb-sm items-center">
@@ -153,6 +153,8 @@
         <div class="row justify-end q-mr-md">
           <app-btn
             label="Simpan Perubahan Header Transaksi"
+            :loading="store.loading"
+            :disable="store.loading"
             @click="store.simpanHeader"
           />
         </div>
@@ -298,6 +300,7 @@
 </template>
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
+import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
 
 /**
@@ -311,12 +314,12 @@ import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/histo
   * hapus detail penerimaan (termasuk data di gudang jika masih belum di distribusikan)
  */
 const store = useEditPenerimaanStore()
-function gantiNomorPesanan(val) {
-  // store.params.nomor = val
-  console.log('nomor pemesanan', val)
-  store.getJumlahNomorPenerimaan(val)
-  console.log('form', store.form)
-}
+// function gantiNomorPesanan(val) {
+//   // store.params.nomor = val
+//   console.log('nomor pemesanan', val)
+//   store.getJumlahNomorPenerimaan(val)
+//   console.log('form', store.form)
+// }
 function setModel(val) {
   store.setForm('tanggal', val)
 }
@@ -325,6 +328,12 @@ function setTglSuratjalan(val) {
 }
 function setTempo(val) {
   store.setForm('tempo', val)
+}
+function editRow(val, i) {
+  notifCenterVue('masih dibuat... sabaaaarr...')
+}
+function hapus(val, i) {
+  notifCenterVue('masih dibuat... sabaaaarr...')
 }
 </script>
 <style lang="scss" scoped>

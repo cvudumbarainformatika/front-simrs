@@ -6,6 +6,7 @@ import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/tabl
 export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
   state: () => ({
     loading: false,
+    index: 0,
     loadingNoPenerimaan: false,
     loadingDetailPemesanan: false,
     isOpen: false,
@@ -24,9 +25,10 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.form[key] = val
     },
     assignForm(val, i) {
-      const index = findWithAttr(this.table.items, 'id', val.id)
+      // const index = findWithAttr(this.table.items, 'id', val.id)
       this.item = val
-      console.log('assign', index, i, val)
+      this.index = i
+      // console.log('assign', index, i, val)
       this.item = val
       this.setForm('id', val.id)
       this.setForm('reff', val.reff)
@@ -55,14 +57,14 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
           .then(resp => {
             this.loadingNoPenerimaan = false
             const jumlahNomorPenerimaan = resp.data.jumlah
-            console.log('jumlah nomor penerimaan', resp)
+            // console.log('jumlah nomor penerimaan', resp)
             const temp = val.split('SP-')
             if (jumlahNomorPenerimaan > 0) {
               this.form.no_penerimaan = temp[0] + 'BAST-' + temp[1] + '-' + jumlahNomorPenerimaan
             } else {
               this.form.no_penerimaan = temp[0] + 'BAST-' + temp[1]
             }
-            console.log('val', temp)
+            // console.log('val', temp)
           })
       } catch (a) {
         this.loadingNoPenerimaan = false
@@ -72,28 +74,41 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.loadingDetailPemesanan = true
       const temp = this.form
       // temp.detail = this.item.details
-      console.log('temp', temp)
+      // console.log('temp', temp)
       const params = { params: temp }
       return new Promise(resolve => {
         api.get('v1/transaksi/penerimaan/cari-detail-pesanan', params)
           .then(resp => {
             this.loadingDetailPemesanan = false
-            console.log('pesanan', resp.data)
+            // console.log('pesanan', resp.data)
             const detailPesanan = resp.data
-            console.log('detail', detailPesanan)
             resolve(resp.data)
             this.item.details.map(det => {
               det.dipesan = detailPesanan.filter(a => a.kode_rs === det.kode_rs).map(y => y.qty).reduce((m, n) => m + n, 0)
 
               return det
             })
-            console.log('item', this.item)
           })
           .catch(() => { this.loadingDetailPemesanan = false })
       })
     },
     simpanHeader() {
-      console.log('simpan header', this.form)
+      this.form.detail = this.item.details.map(x => x.kode_rs)
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/penerimaan/edit-header-penerimaan', this.form)
+          .then(resp => {
+            this.loading = false
+            const data = resp.data.data
+            const index = findWithAttr(this.table.items, 'id', data.id)
+            if (index >= 0) {
+              this.table.items[index] = data
+            }
+            // console.log(data)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

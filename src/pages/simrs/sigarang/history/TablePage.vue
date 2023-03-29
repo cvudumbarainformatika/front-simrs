@@ -45,12 +45,12 @@
                 <!-- <div class="ellipsis">
                   {{ row.nomor }}
                 </div> -->
-                <q-tooltip
+                <!-- <q-tooltip
                   anchor="top middle"
                   self="center middle"
                 >
                   {{ row.nomor }}
-                </q-tooltip>
+                </q-tooltip> -->
               </div>
             </template>
             <template #cell-kontrak="{row}">
@@ -907,6 +907,7 @@ import { routerInstance } from 'src/boot/router'
 import { Dialog } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
+import { useKontrakPemensananStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/kontrak'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const tandatangan = useTandaTanganStore()
@@ -1013,16 +1014,21 @@ const hapus = val => {
 }
 // ------------ edit pemesanan -------
 const editPemesanan = useEditPemesananStore()
+const kontrakStore = useKontrakPemensananStore()
 function editRow(val, i) {
   // console.log(val)
+  kontrakStore.setSearch(val.kontrak)
   editPemesanan.assignForm(val, i)
   editPemesanan.setOpen()
 }
 const ladingPemesanan = computed(() => {
   return editPemesanan.loading
 })
+const ladingPenerimaan = computed(() => {
+  return editPenerimaan.loading
+})
 function loadingEdit(index) {
-  return index === editPemesanan.index && ladingPemesanan.value === true
+  return (editPemesanan.index === index || editPenerimaan.index === index) && (ladingPemesanan.value === true || ladingPenerimaan.value === true)
 }
 // ------------------------------------
 

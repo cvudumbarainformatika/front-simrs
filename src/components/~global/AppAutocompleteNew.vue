@@ -113,7 +113,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear'])
+const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear', 'new-val'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { type: String, default: 'Label' },
@@ -222,7 +222,7 @@ const inputValue = (value) => {
 }
 function createValue (val, done) {
   const result = new Promise((resolve) => emits('on-enter', val, resolve))
-  emits('set-model', val)
+  emits('new-val', val)
   result.then((resp) => {
     fetchData()
     done(resp, 'toggle')

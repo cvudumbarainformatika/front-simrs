@@ -30,7 +30,8 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     barangrs: [],
     stoks: [],
     stok: {},
-    minMaxDepos: []
+    minMaxDepos: [],
+    editKontrak: false
 
   }),
   /* catatan:
@@ -118,6 +119,10 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       }
       // console.log('form', this.form)
       // console.log('maping', maping)
+    },
+    kontrakSelected(val) {
+      this.form.kontrak = val
+      this.editKontrak = false
     },
     updateHarga () {
       // console.log('stok', this.stok)

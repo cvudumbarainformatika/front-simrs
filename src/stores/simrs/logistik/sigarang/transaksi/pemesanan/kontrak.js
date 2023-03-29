@@ -76,7 +76,7 @@ export const useKontrakPemensananStore = defineStore('kontrak_pemesanan', {
     setColumns (payload) {
       const thumb = payload.map((x) => Object.keys(x))
       this.columns = thumb[0]
-      changeArrayIndex(this.columns, 'nokontrakx', 'namaperusahaan')
+      if (this.columns.length) changeArrayIndex(this.columns, 'nokontrakx', 'namaperusahaan')
       // console.log('columns', this.columns)
     },
 
@@ -92,6 +92,7 @@ export const useKontrakPemensananStore = defineStore('kontrak_pemesanan', {
     getDataTable () {
       if (!this.items.length || this.getNew) {
         waitLoad('show')
+        this.loading = true
         // const params = { params: this.params }
         return new Promise((resolve, reject) => {
           api
@@ -99,6 +100,7 @@ export const useKontrakPemensananStore = defineStore('kontrak_pemesanan', {
             .post('v1/siasik/paged-kontrak-aktif', this.params)
             .then((resp) => {
               waitLoad('done')
+              this.loading = false
               // console.log(resp)
               if (resp.status === 200) {
                 this.items = resp.data.data
@@ -110,6 +112,7 @@ export const useKontrakPemensananStore = defineStore('kontrak_pemesanan', {
             })
             .catch((err) => {
               this.getNew = false
+              this.loading = false
               waitLoad('done')
               reject(err)
             })
