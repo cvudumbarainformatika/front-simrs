@@ -2,10 +2,8 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { routerInstance } from 'src/boot/router'
-// import { routerInstance } from 'src/boot/router'
 import { dateFullFormat } from 'src/modules/formatter'
-import { findWithAttr, uniqueId } from 'src/modules/utils'
-// import { notifSuccess } from 'src/modules/utils'
+import { findWithAttr, notifSuccess, uniqueId } from 'src/modules/utils'
 
 export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan', {
   state: () => ({
@@ -66,7 +64,6 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
     },
     setNomorPenerimaan () {
       // const tgl = date.formatDate(Date.now(), '/DD/MM/YYYY')
-      // const randomness = Math.random().toString(36).substring(2, 7).toUpperCase()
       this.form.no_penerimaan = '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY')
     },
     setToday () {
@@ -75,7 +72,6 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       const month = ('0' + (date.getMonth() + 1)).slice(-2)
       const day = ('0' + date.getDate()).slice(-2)
       const formatDb = year + '-' + month + '-' + day
-      // const formatTp = day + '/' + month + '/' + year
       this.form.tanggal = formatDb
       this.tanggalTampil = dateFullFormat(formatDb)
     },
@@ -89,14 +85,11 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
       routerInstance.replace({ name: 'sigarang.transaksi.penerimaan', params: { slug } })
     },
     setSearch (val) {
-      // console.log(val)
       this.params.q = val
       this.searchPemesanan()
     },
     inputSurat (val) {
       this.setForm(this.option_surat, val)
-      // console.log('option_surat', this.option_surat)
-      // console.log('form', this.form)
     },
     suratSelected (val) {
       this.setForm(val, this.form.surat)
@@ -105,34 +98,26 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
           delete this.form[data.id]
         }
       })
-      // console.log('form', this.form)
     },
     pemesananSelected (dat) {
       this.detailPemesanans = []
-      const psn = this.pemesanans.filter(x => x.reff === dat)
-      // this.form.reff = dat
-      this.params.reff = dat
-      // console.log('psn', psn)
+      const psn = this.pemesanans.filter(x => x.id === dat)
+      this.form.id = dat
+      this.params.reff = psn[0].reff
       if (psn.length) {
-        // console.log('psn ada', psn[0])
         const val = psn[0].nomor
         this.setForm('nomor', psn[0].nomor)
-        // console.log('form anu', this.form)
         const tempNo = val.split('/SP-')
-        // console.log('tempNo', tempNo)
         if (tempNo.length === 2) {
           this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
         }
         this.params.nomor = val
         // this.form.nomor = val
         this.getDataPenerimaan().then(data => {
-          // console.log('data', data)
           this.pemesanan = data.pemesanan[0]
           this.setForm('kontrak', data.pemesanan[0].kontrak)
-          // this.setForm('nomor', data.pemesanan[0].nomor)
           this.setForm('kode_perusahaan', data.pemesanan[0].kode_perusahaan)
           this.setForm('namaPerusahaan', data.pemesanan[0].perusahaan ? data.pemesanan[0].perusahaan.nama : '-')
-          // this.setForm('harga', data.pemesanan[0].details.harga)
 
           if (data.trmSkr.length && !data.trmSkr[0].status) {
             const apem = data.trmSkr[0]
@@ -254,8 +239,6 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         api.get('v1/transaksi/penerimaan/cari-pemesanan', params)
           .then(resp => {
             this.loading = false
-            // console.log('cari pemesanans', resp)
-            // console.log('pemesanan ini', this.pemesanan)
             this.pemesanans = resp.data.filter(pm => pm.status < 4)
 
             resolve(resp)
@@ -309,6 +292,7 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             this.loadingSimpan = false
             // console.log(resp)
             // notifSuccess('data berhasil disimpan')
+            notifSuccess(resp)
             this.getDataPenerimaan()
             this.searchPemesanan()
             resolve(resp)

@@ -109,23 +109,14 @@
                 Nomor Pemesanan
               </div>
               <div class="col-md-6 col-xs-12">
-                <!-- <div v-if="store.form.status_pembelian==='mutasi'">
-                  <app-input
-                    v-model="store.form.nomor"
-                    label="Nomor Penerimaan"
-                    outlined
-                    dense
-                  />
-                </div>
-                <div v-if="store.form.status_pembelian!=='mutasi'"> -->
                 <app-autocomplete-new
-                  :model="store.form.reff"
+                  :model="store.form.id"
                   :valid="pemesanan"
                   outlined
                   label="cari nomor pemesanan*"
                   autocomplete="nomor"
                   option-label="nomor"
-                  option-value="reff"
+                  option-value="id"
                   :loading="store.loading"
                   :source="store.pemesanans"
                   @buang="store.setSearch"

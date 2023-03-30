@@ -199,42 +199,12 @@
                     </div>
                     <div class="col-8">
                       {{ store.form.kontrak }}
-                      <!-- <app-autocomplete-new
-                        :model="store.form.kontrak"
-                        :valid="kontrak"
-                        outlined
-                        label="Nomor Kontrak"
-                        autocomplete="nokontrakx"
-                        option-value="nokontrakx"
-                        :option-label="['nokontrakx','namaperusahaan']"
-                        :source="store.kontrakPekerjaans"
-                        :disable="table.items.length ? true : false"
-                        :loading="store.loadingKontrak"
-                        @on-select="store.kontrakSelected"
-                        @clear="clearkontrak"
-                      /> -->
                     </div>
                   </div>
                   <div class="row q-col-gutter-md q-mb-sm items-center">
-                    <!-- <div
-                      v-if="store.mapingLoading"
-                      class="col-12"
-                    >
-                      <div
-                        class="row q-col-gutter-md items-center"
-                      >
-                        <div class="col-6">
-                          <q-skeleton type="QRange" />
-                        </div>
-                        <div class="col-6">
-                          Mengambil data Barang...
-                        </div>
-                      </div>
-                    </div> -->
                     <div
                       class="col-11"
                     >
-                      <!-- hint="tekan enter untuk cari" -->
                       <app-autocomplete-new
                         :model="store.form.kode_rs"
                         :valid="kodeRs"
