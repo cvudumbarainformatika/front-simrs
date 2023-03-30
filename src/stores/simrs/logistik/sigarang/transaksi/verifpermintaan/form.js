@@ -91,17 +91,19 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
       const i = findWithAttr(this.permintaans, 'no_permintaan', val)
       if (i >= 0) {
         this.permintaan = this.permintaans[i]
-        // console.log('details', this.permintaan)
         this.setColumns(this.permintaan.details)
         // cari nama depo
         const apem = this.depos.filter((x) => {
           return x.kode === this.permintaan.details[0].dari
         })
         // map ke gudang
-        this.mapGudang = {
-          gudang: titleCase(apem[0].nama),
-          items: this.permintaan.details
-        }
+        // this.mapGudang = {
+        //   gudang: titleCase(apem[0].nama),
+        //   items: this.permintaan.details
+        // }
+
+        this.mapGudang.gudang = apem.length ? titleCase(apem[0].nama) : '-'
+        this.mapGudang.items = this.permintaan.details
 
         // const mapKey = Object.keys(this.permintaan.gudang)
         // mapKey.forEach((data, i) => {
