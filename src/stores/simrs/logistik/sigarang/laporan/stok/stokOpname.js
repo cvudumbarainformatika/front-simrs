@@ -173,8 +173,11 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     },
     prosesData(val) {
       // this.items = val
-      // console.log('proses data', val)
-      const barang = val.map(br => {
+      if (this.kode_tempat === '' && val.length) {
+        this.kode_tempat = val[0].kode_depo
+      }
+      console.log('proses data', val[0])
+      this.items = val.map(br => {
         const x = br
 
         // penerimaan
@@ -219,7 +222,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         return x
       })
       // console.log('barang', barang)
-      this.items = barang
+      // this.items = barang
     },
     getDataGudangDepo() {
       this.gudangDepo = [
