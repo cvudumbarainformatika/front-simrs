@@ -150,13 +150,27 @@
             </div>
           </div>
         </div>
-        <div class="row justify-end q-mr-md">
-          <app-btn
-            label="Simpan Perubahan Header Transaksi"
-            :loading="store.loading"
-            :disable="store.loading"
-            @click="store.simpanHeader"
-          />
+        <div class="row q-mr-md items-center">
+          <div class="col-2">
+            Status Pemesanan
+          </div>
+          <div class="col-2">
+            <q-chip
+              class="f-12"
+              :color="color(store.item.statuspesanan)"
+              text-color="white"
+              :label="label(store.item.statuspesanan,'PEMESANAN')"
+            />
+            <!-- {{ store.item.statuspesanan }} -->
+          </div>
+          <div class="col-8 text-right">
+            <app-btn
+              label="Simpan Perubahan Header Transaksi"
+              :loading="store.loading"
+              :disable="store.loading"
+              @click="store.simpanHeader"
+            />
+          </div>
         </div>
       </q-card-section>
       <q-separator />
@@ -224,7 +238,19 @@
                 {{ detail.dipesan?detail.dipesan:'-' }}
               </div>
               <div class="col-1 bb bl">
-                {{ detail.qty }}
+                <div v-if="detail.edit">
+                  <app-input
+                    v-model="detail.qty"
+                    label="diterima"
+                    outlined
+                    :loading="store.loadingUpdateDetail"
+                    @focus="beforeUpdateJumlah(detail,i)"
+                    @blur="updateJumlah(detail,i)"
+                  />
+                </div>
+                <div v-if="!detail.edit">
+                  {{ detail.qty }}
+                </div>
               </div>
               <div class="col-1 bb bl">
                 {{ detail.satuan?detail.satuan.nama:'-' }}
@@ -258,7 +284,8 @@
                 class="col-1 bb bl br"
               >
                 <!-- <div v-if="detail.diterima===null || detail.diterima===0 || !detail.diterima"> -->
-                <div>
+
+                <div v-if="!detail.edit">
                   <q-btn
                     color="primary"
                     round
@@ -299,6 +326,7 @@
   </q-dialog>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
@@ -329,12 +357,128 @@ function setTglSuratjalan(val) {
 function setTempo(val) {
   store.setForm('tempo', val)
 }
+
 function editRow(val, i) {
-  notifCenterVue('masih dibuat... sabaaaarr...')
+  console.log('edit ', i, val)
+  store.item.details[i].edit = true
+}
+function beforeUpdateJumlah(val, i) {
+  val.qtyprev = val.qty
+  // store.item.details[i].qtyprev = val.qty
+}
+
+function updateJumlah(val, i) {
+  console.log('update ', i, val)
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Lakukan Edit Jumlah Diterima?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Lanjut edit jumlah diterima',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('ok')
+  }).onCancel(() => {
+    if (val.qty !== val.qtyprev) {
+      val.qty = val.qtyprev
+    }
+  })
+  store.item.details[i].edit = false
 }
 function hapus(val, i) {
   notifCenterVue('masih dibuat... sabaaaarr...')
 }
+// -----------keterangan status-----------
+const color = val => {
+  switch (val) {
+    case 1:
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 2:
+      // return 'grey'
+      return 'red-4'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 3:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 4:
+      return 'green'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 5:
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 6:
+      return 'green'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 7:
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 8:
+      return 'blue-grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 9:
+      return 'brown-6'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+
+const label = (status, nama) => {
+  // console.log('nama', nama)
+  if (nama === 'PEMESANAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Menunggu diterima Gudang'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Diterima Sebagian'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 4:
+        return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum ada data'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else {
+    return 'Belum di definisikan'
+  }
+}
+// onMounted(() => {
+//   store.getInitData()
+// })
+
+// -----------keterangan status end-----------
 </script>
 <style lang="scss" scoped>
 .btb{

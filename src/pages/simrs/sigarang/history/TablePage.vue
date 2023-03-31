@@ -1035,7 +1035,7 @@ function loadingEdit(index) {
 // --------edit penerimaan -----------
 const editPenerimaan = useEditPenerimaanStore()
 function editRowTerima(val, i) {
-  // console.log(val)
+  console.log('edit penerimaan', val)
   editPenerimaan.assignForm(val, i)
   editPenerimaan.setOpen()
 }

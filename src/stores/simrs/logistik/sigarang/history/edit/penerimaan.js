@@ -9,6 +9,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
     index: 0,
     loadingNoPenerimaan: false,
     loadingDetailPemesanan: false,
+    loadingUpdateDetail: false,
     isOpen: false,
     form: {
       nama: 'PENERIMAAN'
@@ -80,14 +81,19 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
         api.get('v1/transaksi/penerimaan/cari-detail-pesanan', params)
           .then(resp => {
             this.loadingDetailPemesanan = false
-            // console.log('pesanan', resp.data)
+            console.log('pesanan', resp.data)
             const detailPesanan = resp.data
+            if (detailPesanan.length) {
+              this.item.statuspesanan = detailPesanan[0].statuspesanan
+            } else {
+              this.item.statuspesanan = 0
+            }
             resolve(resp.data)
             this.item.details.map(det => {
               det.dipesan = detailPesanan.filter(a => a.kode_rs === det.kode_rs).map(y => y.qty).reduce((m, n) => m + n, 0)
-
               return det
             })
+            console.log('item', this.item)
           })
           .catch(() => { this.loadingDetailPemesanan = false })
       })
@@ -109,6 +115,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
           })
           .catch(() => { this.loading = false })
       })
-    }
+    },
+    simpanPerubahanDetail() {}
   }
 })
