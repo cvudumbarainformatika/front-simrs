@@ -201,9 +201,12 @@
               Diterima
             </div>
             <div class="col-1 btb bl">
+              Distribusi
+            </div>
+            <div class="col-1 btb bl">
               Satuan
             </div>
-            <div class="col-3 btb bl">
+            <div class="col-2 btb bl">
               Keterangan
             </div>
             <div class="col-1 btb bl br">
@@ -235,27 +238,37 @@
                 </div>
               </div>
               <div class="col-1 bb bl">
-                {{ detail.dipesan?detail.dipesan:'-' }}
+                <div :class="detail.qty!==detail.dipesan?'text-weight-bold text-grey':''">
+                  {{ detail.dipesan?detail.dipesan:'-' }}
+                </div>
               </div>
               <div class="col-1 bb bl">
                 <div v-if="detail.edit">
                   <app-input
+                    ref="jmlTrm"
                     v-model="detail.qty"
                     label="diterima"
                     outlined
                     :loading="store.loadingUpdateDetail"
                     @focus="beforeUpdateJumlah(detail,i)"
                     @blur="updateJumlah(detail,i)"
+                    @keyup.enter="updateJumlah(detail,i)"
                   />
                 </div>
-                <div v-if="!detail.edit">
+                <div
+                  v-if="!detail.edit"
+                  :class="detail.qty!==detail.dipesan?'text-weight-bold text-negative':''"
+                >
                   {{ detail.qty }}
                 </div>
               </div>
               <div class="col-1 bb bl">
+                {{ detail.distribusi?detail.distribusi:'-' }}
+              </div>
+              <div class="col-1 bb bl">
                 {{ detail.satuan?detail.satuan.nama:'-' }}
               </div>
-              <div class="col-3 bb bl">
+              <div class="col-2 bb bl">
                 {{ detail.merk }}
               </div>
               <div
@@ -330,6 +343,7 @@ import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
+import { ref } from 'vue'
 
 /**
   edit pemesanan meliputi:
@@ -365,9 +379,17 @@ function editRow(val, i) {
 function beforeUpdateJumlah(val, i) {
   val.qtyprev = val.qty
   // store.item.details[i].qtyprev = val.qty
+  // console.log('ref1', jmlTrm.value)
 }
+const jmlTrm = ref(null)
 
+// function pencetEnter() {
+//   console.log('ref1', jmlTrm.value)
+//   console.log('ref2', jmlTrm)
+//   console.log('ref', jmlTrm.value.$refs)
+// }
 function updateJumlah(val, i) {
+  // console.log('ref1', jmlTrm.value)
   console.log('update ', i, val)
   Dialog.create({
     title: 'Konfirmasi.',
@@ -385,7 +407,25 @@ function updateJumlah(val, i) {
       color: 'dark'
     }
   }).onOk(() => {
-    console.log('ok')
+    console.log('store item', store.item)
+    console.log('ok', val, i)
+    const form = {
+      id: val.id,
+      qty: val.qty,
+      penerimaan_id: val.penerimaan_id,
+      kode_rs: val.kode_rs,
+      nomor: store.item.nomor
+    }
+    if (parseFloat(val.dipesan) > parseFloat(val.qty)) {
+      form.statuspesanan = 3
+    } else {
+      delete form.statuspesanan
+    }
+    store.simpanPerubahanDetail(form).then(resp => {
+      store.item.statuspesanan = resp.pesanan.status
+      val.qty = resp.terima.qty
+      store.item.details[i].edit = false
+    })
   }).onCancel(() => {
     if (val.qty !== val.qtyprev) {
       val.qty = val.qtyprev

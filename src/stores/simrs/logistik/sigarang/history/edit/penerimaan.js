@@ -82,7 +82,8 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
           .then(resp => {
             this.loadingDetailPemesanan = false
             console.log('pesanan', resp.data)
-            const detailPesanan = resp.data
+            const detailPesanan = resp.data.pesanan
+            const detaildistribusi = resp.data.distribusi
             if (detailPesanan.length) {
               this.item.statuspesanan = detailPesanan[0].statuspesanan
             } else {
@@ -91,9 +92,10 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
             resolve(resp.data)
             this.item.details.map(det => {
               det.dipesan = detailPesanan.filter(a => a.kode_rs === det.kode_rs).map(y => y.qty).reduce((m, n) => m + n, 0)
+              det.distribusi = detaildistribusi.filter(a => a.kode_rs === det.kode_rs).map(y => y.jumlah).reduce((m, n) => m + n, 0)
               return det
             })
-            console.log('item', this.item)
+            // console.log('item', this.item)
           })
           .catch(() => { this.loadingDetailPemesanan = false })
       })
@@ -116,6 +118,17 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
           .catch(() => { this.loading = false })
       })
     },
-    simpanPerubahanDetail() {}
+    simpanPerubahanDetail(form) {
+      this.loadingDetailPemesanan = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/penerimaan/edit-detail-penerimaan', form)
+          .then(resp => {
+            this.loadingDetailPemesanan = false
+            console.log('perubahan detail', resp.data)
+            resolve(resp.data)
+          })
+          .catch(() => { this.loadingDetailPemesanan = false })
+      })
+    }
   }
 })
