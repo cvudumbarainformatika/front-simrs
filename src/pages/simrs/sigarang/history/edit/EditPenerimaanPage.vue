@@ -315,6 +315,7 @@
                     </q-tooltip>
                   </q-btn>
                   <q-btn
+                    v-if="!detail.distribusi"
                     color="negative"
                     round
                     icon="icon-mat-delete_sweep"
@@ -341,7 +342,7 @@
 <script setup>
 import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
-import { notifCenterVue } from 'src/modules/utils'
+// import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
 import { ref } from 'vue'
 
@@ -434,7 +435,38 @@ function updateJumlah(val, i) {
   store.item.details[i].edit = false
 }
 function hapus(val, i) {
-  notifCenterVue('masih dibuat... sabaaaarr...')
+  console.log('item detail length', store.item.details.length)
+  console.log('hapus', val)
+  const form = {
+    id: val.id,
+    kode_rs: val.kode_rs,
+    penerimaan: val.penerimaan_id,
+    jmlDet: store.item.details.length
+  }
+  if (store.item.details.length <= 1) {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Data akan terhapus seluruhnya, Apakah akan dilanjutkan?',
+      ok: {
+        push: true,
+        'no-caps': true,
+        color: 'negative',
+        label: 'Lanjutkan Hapus'
+      },
+      cancel: {
+        push: true,
+        color: 'dark'
+      }
+    })
+      .onOk(() => {
+        store.hapusDetail(form).then(() => {
+          store.table.refreshTable()
+          store.setOpen()
+        })
+      })
+  } else {
+    store.hapusDetail(form).then(() => { store.item.details.splice(i, 1) })
+  }
 }
 // -----------keterangan status-----------
 const color = val => {

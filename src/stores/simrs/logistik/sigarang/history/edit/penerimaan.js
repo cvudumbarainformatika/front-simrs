@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifSuccess } from 'src/modules/utils'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 
 export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
@@ -128,6 +128,18 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
             resolve(resp.data)
           })
           .catch(() => { this.loadingDetailPemesanan = false })
+      })
+    },
+    hapusDetail(data) {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/penerimaan/hapus-detail-penerimaan', data)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
       })
     }
   }
