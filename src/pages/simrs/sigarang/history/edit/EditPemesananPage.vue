@@ -98,13 +98,36 @@
               <div class="col-6 text-left">
                 Status
               </div>
-              <div class="col-6 text-right">
+              <div class="col-6 text-right cursor-pointer">
                 <q-chip
                   class="f-12"
                   :color="color(store.item.status)"
                   text-color="white"
                   :label="label(store.item.status,store.item.nama)"
                 />
+                <q-menu
+                  transition-show="jump-down"
+                  transition-hide="jump-up"
+                  anchor="center middle"
+                  self="center middle"
+                  :offset="[-50, 0]"
+                >
+                  <q-list>
+                    <q-item
+                      v-for="(item,i) in store.statuses"
+                      :key="i"
+                      v-close-popup
+                      style="min-width:250px"
+                      clickable
+                      :style="'background-color:'+color(item.nilai)+';'"
+                      @click="store.gantiStatus(item)"
+                    >
+                      <q-item-section>
+                        {{ item.nama }}
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
               </div>
             </div>
           </div>
@@ -410,14 +433,14 @@ const color = val => {
       break
 
     default:
-      return 'red'
+      return 'negative'
       // eslint-disable-next-line no-unreachable
       break
   }
 }
 
 const label = (status, nama) => {
-  console.log('nama', nama)
+  // console.log('nama', nama)
   if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
 import { useHistoryTable } from '../table'
 
 export const useEditPemesananStore = defineStore('edit_pemesanan', {
@@ -31,7 +31,14 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     stoks: [],
     stok: {},
     minMaxDepos: [],
-    editKontrak: false
+    editKontrak: false,
+    useStatus: [
+      { nama: 'Draft', nilai: 1 },
+      { nama: 'Menunggu diterima Gudang', nilai: 2 },
+      { nama: 'Diterima Sebagian', nilai: 3 },
+      { nama: 'Diterima Seluruhnya', nilai: 4 }
+    ],
+    statuses: []
 
   }),
   /* catatan:
@@ -187,8 +194,10 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       if (this.item.details.length) {
         const kodeBarang = this.item.details.map(a => a.kode_rs)
         this.setForm('kodeBarang', kodeBarang)
+
         // console.log('get detail ', kodeBarang)
         // console.log('get detail form', this.form)
+
         // ambil barang yang sudah ada penerimaan
         const params = { params: this.form }
         this.loadingDetailPenerimaan = true
@@ -196,14 +205,22 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
           api.get('v1/transaksi/penerimaan/cari-detail-penerimaan', params)
             .then(resp => {
               this.loadingDetailPenerimaan = false
+              console.log('resp', resp.data.length)
               if (resp.status === 200 && resp.data.length) {
                 this.item.details.forEach(b => {
                   const bar = resp.data.filter(a => a.kode_rs === b.kode_rs).map(m => m.qty).reduce((x, y) => x + y, 0)
                   b.diterima = bar
                 })
-                // console.log('resp', resp.data)
+
                 // console.log('item', this.item)
               }
+              const adaPenerimaan = this.item.details.filter(anu => anu.diterima > 0)
+              if (adaPenerimaan.length) {
+                this.statuses = this.useStatus.filter(anu => (anu.nilai === 3 || anu.nilai === 4))
+              } else {
+                this.statuses = this.useStatus
+              }
+              console.log('statuses', this.statuses)
               resolve(resp)
             })
             .catch(() => {
@@ -252,6 +269,32 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
             this.loading = false
             reject(err)
           })
+      })
+    },
+    // ganti status
+    gantiStatus(val) {
+      console.log('ganti status', val)
+      console.log('ganti status item', this.item)
+      const form = {
+        id: this.item.id,
+        status: val.nilai
+      }
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/pemesanan/ganti-status', form)
+          .then(resp => {
+            this.loading = false
+            console.log('resp', resp.data)
+            notifSuccess(resp)
+            resolve(resp.data)
+            this.item.status = resp.data.data.status
+            const index = findWithAttr(this.tableHis.items, 'id', this.item.id)
+            if (index >= 0) {
+              console.log(this.tableHis.items[index])
+              this.tableHis.items[index].status = resp.data.data.status
+            }
+          })
+          .catch(() => { this.loading = false })
       })
     },
     // tambah barang
