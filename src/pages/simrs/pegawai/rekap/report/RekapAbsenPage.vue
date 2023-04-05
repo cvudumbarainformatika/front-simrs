@@ -365,9 +365,6 @@
           >
             <div v-if="row.transaksi_absen.length > 0 ">
               <div class="columns flex-center items-center">
-                <div>
-                  {{ getIjinRinci(num) }}
-                </div>
                 <div>{{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}</div>
                 <q-separator />
                 <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative':''">
@@ -375,8 +372,13 @@
                 </div>
               </div>
             </div>
+            <div v-else-if="getIjinRinci(num, row) !==0">
+              <div class="text-primary">
+                {{ getIjinRinci(num, row) }}
+              </div>
+            </div>
             <div v-else>
-              -
+              {{ getAlphaRinci(num, row) }}
             </div>
           </template>
         </app-table>
@@ -549,25 +551,32 @@ function getIjin(row, fx) {
   return 0
 }
 
-function getIjinRinci(num, row, fx) {
+function getAlphaRinci(num, row) {
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
-  // const user = row.user ? row.user : null
-  console.log('cellDate', cellDate)
-  // console.log('libur', row.user)
-  return cellDate
-  // if (user) {
-  //   const ada = user.libur.length
-  //   if (ada > 0) {
-  //     const libur = user.libur
-  //     const trans = libur.filter(x => x.tanggal === cellDate)
+  // console.log('cellDate', cellDate)
+  const alpha = row.alpha
+  if (alpha.length > 0) {
+    return alpha.filter(x => x.tanggal === cellDate).length > 0 ? 'A' : '-'
+  }
+  return '-'
+}
 
-  //     return trans.length
-  //   }
-  //   return 0
-  // }
+function getIjinRinci(num, row) {
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
+  // console.log('cellDate', cellDate)
+  const user = row.user
+  if (user) {
+    const ada = user.libur.length
+    if (ada > 0) {
+      const libur = user.libur
+      return libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
+    }
+    return 0
+  }
 
-  // return 0
+  return 0
 }
 function getMasuk(row) {
   const ada = row.transaksi_absen.length
