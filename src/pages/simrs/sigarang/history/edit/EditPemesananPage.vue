@@ -119,7 +119,7 @@
                       v-close-popup
                       style="min-width:250px"
                       clickable
-                      :style="'background-color:'+color(item.nilai)+';'"
+                      :style="'background-color:'+color(item.nilai)+'; color:white;'"
                       @click="store.gantiStatus(item)"
                     >
                       <q-item-section>
@@ -400,7 +400,7 @@ const color = val => {
       break
     case 2:
       // return 'grey'
-      return 'red-4'
+      return 'red'
       // eslint-disable-next-line no-unreachable
       break
     case 3:
