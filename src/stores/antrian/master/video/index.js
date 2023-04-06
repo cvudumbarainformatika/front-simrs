@@ -19,7 +19,7 @@ export const useVideoStore = defineStore('video', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: ['nama', 'type'],
+    columns: ['nama', 'type', 'url'],
     columnHide: ['id']
 
   }),
