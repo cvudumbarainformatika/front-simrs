@@ -143,16 +143,34 @@
           </div>
           <div class="anak text-center">
             <!-- {{ parseFloat(store.input.jumlah) }} -->
-            <q-btn
-              :disable="parseFloat(store.input.jumlah)<=0"
-              class="q-mr-lg"
-              flat
-              color="primary"
-              no-caps
-              icon="icon-mat-save"
-              :loading="store.loading"
-              @click="addInput"
-            />
+            <div class="fit row no-wrap justify-end">
+              <div class="col">
+                <q-btn
+                  :disable="parseFloat(store.input.jumlah)<=0"
+                  flat
+                  color="primary"
+                  no-caps
+                  icon="icon-mat-save"
+                  :loading="store.loading"
+                  @click="addInput"
+                />
+              </div>
+              <div class="col">
+                <!-- {{ !(parseFloat(store.input.stok_gudang)===parseFloat(store.input.stok_alokasi_depo)) }}
+                {{ (parseFloat(store.input.stok_gudang)) }}
+                {{ (parseFloat(store.input.stok_alokasi_depo)) }} -->
+                <q-btn
+                  :disable="!(parseFloat(store.input.stok_gudang)===parseFloat(store.input.stok_alokasi_depo))"
+                  class="q-mr-sm"
+                  flat
+                  color="negative"
+                  no-caps
+                  icon="icon-mat-delete"
+                  :loading="store.loading"
+                  @click="hapusData"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <q-separator />
@@ -274,19 +292,11 @@ const depoCleared = () => {
 const barangSelected = val => {
   store.resetInput()
   store.setInput('kode_barang', val)
-  // const barang = store.mappingBarangs.filter(sel => {
-  //   return sel.kode_rs === val
-  // })
   const barang = store.barangrHasStoks.filter(sel => {
     return sel.kode_rs === val
   })
-  // console.log('barang', barang)
+  console.log('barang', barang)
   if (!store.minMaxDepos.length) store.filterBarangHasStok()
-
-  // ganti database, fungsi dibawah ini jadi tidak diperlukan
-  // const minmax = store.minMaxDepos.filter(data => {
-  //   return data.kode_depo === store.form.kode_depo
-  // })
 
   const minMaxBarang = store.minMaxDepos.filter(data => {
     return data.kode_rs === val
@@ -299,22 +309,17 @@ const barangSelected = val => {
   const toDistribute = store.distribusies.filter(data => {
     return data.kode_rs === val
   })
-  // console.log('to distributed', toDistribute)
-  // console.log('stok', stok)
+
   if (stok.length) {
     store.setInput('stok_gudang', store.stoks[stok[0]].stok)
     store.setForm('no_penerimaan', store.stoks[stok[0]].no_penerimaan)
     if (toDistribute.length) {
       let alokasi = 0
       if (toDistribute[0].jml > 0) {
-        // console.log('if to distribute', store.stoks[stok[0]].stok)
         alokasi = store.input.stok_gudang - toDistribute[0].jml
       } else {
-        // console.log('else distribute', stok)
         alokasi = store.input.stok_gudang
       }
-      //   if (store.input.stok_gudang > 0) {
-      // }
       store.setInput('stok_alokasi_depo', alokasi)
     } else {
       store.setInput('stok_alokasi_depo', store.input.stok_gudang)
@@ -326,6 +331,7 @@ const barangSelected = val => {
     store.setInput('nama', barang[0].barang.nama)
     store.setDetail('kode_108', barang[0].barang.kode_108)
     store.setDetail('kode_satuan', barang[0].barang.kode_satuan)
+    store.setDetail('recentStokId', barang[0].id)
   }
   if (minMaxBarang.length) {
     store.setInput('stok_min_depo', minMaxBarang[0].min_stok)
@@ -341,6 +347,47 @@ const barangCleared = () => {
   // store.resetDisplay()
   store.resetInput()
   store.setInput('kode_barang', null)
+}
+function hapusData() {
+  console.log('form', store.form)
+  console.log('input', store.input)
+  console.log('detail', store.detail)
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Apakah anda akan menghapus ' + store.input.nama + ' dari stok gudang?',
+    ok: {
+      'no-caps': true,
+      label: 'Hapus',
+      color: 'negative',
+      push: true
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      color: 'dark'
+    }
+  })
+    .onOk(() => {
+      const toHapus = {
+        id: store.detail.recentStokId
+      }
+      // console.log('kirimkan', toHapus)
+      store.hapusDataStokGudang(toHapus).then(() => {
+        // store.resetDetail()
+        // store.resetDisplay()
+        // // store.resetFORM()
+        // store.resetInput()
+        const index = findWithAttr(store.barangrHasStoks, 'id', store.detail.recentStokId)
+        const stokInd = findWithAttr(store.stoks, 'id', store.detail.recentStokId)
+        if (index >= 0) {
+          store.barangrHasStoks.splice(index, 1)
+        }
+        if (stokInd >= 0) {
+          store.stoks.splice(stokInd, 1)
+        }
+        store.resetAllData()
+      })
+    })
 }
 const edit = ref(false)
 const index = ref(null)
