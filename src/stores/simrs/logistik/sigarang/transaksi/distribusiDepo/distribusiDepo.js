@@ -429,6 +429,19 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
             this.loading = false
           })
       })
+    },
+    hapusDataStokGudang(form) {
+      this.loading = true
+      console.log('form hapus', form)
+      return new Promise(resolve => {
+        api.post('v1/transaksi/distribusidepo/hapus-data-gudang', form)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })
