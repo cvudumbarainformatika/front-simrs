@@ -55,7 +55,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         if (val !== 'text') {
           data = this.data[val]
           const anu = this.optionTT.filter(tt => tt.value === val)
-          data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejaban Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
+          data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejabat Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
           data.ada = true
         } else {
           data.ada = false
