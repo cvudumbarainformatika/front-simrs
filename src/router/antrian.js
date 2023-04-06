@@ -30,6 +30,11 @@ const antrian =
         path: '/antrian/master/display',
         name: 'antrian.master.display',
         component: () => import('pages/simrs/antrian/master/display/IndexPage.vue')
+      },
+      {
+        path: '/antrian/master/video',
+        name: 'antrian.master.video',
+        component: () => import('pages/simrs/antrian/master/video/IndexPage.vue')
       }
 
     ]
