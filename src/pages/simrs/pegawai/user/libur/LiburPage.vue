@@ -25,6 +25,15 @@
           @edit-data="store.editData"
           @delete="store.deletesData"
         >
+          <template #header-left-after-search>
+            <div class="q-ml-sm">
+              <app-btn
+                label="DISPEN"
+                color="negative"
+                @click="dispen.setIsOpen()"
+              />
+            </div>
+          </template>
           <template #col-nama>
             <div>Nama</div>
           </template>
@@ -120,16 +129,20 @@
     </app-card>
     <FormDialog v-model="store.isOpen" />
     <ImageDialog v-model="store.expand" />
+    <FormDispen v-model="dispen.isOpen" />
   </div>
 </template>
 <script setup>
 import FormDialog from './FormDialog.vue'
+import FormDispen from './FormDispen.vue'
 import ImageDialog from './ImageDialog.vue'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
+import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
 import { pathImg } from 'src/boot/axios'
 import { dateFullFormat } from 'src/modules/formatter'
 
 const store = useLiburAbsenStore()
+const dispen = useDispenStore()
 store.getInitialData()
 const imgClick = val => {
   store.image = val

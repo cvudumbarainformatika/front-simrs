@@ -29,9 +29,9 @@
         @mouseenter="hover(menu,i)"
       >
         <!-- @mouseleave="leave(menu,i)" -->
-        <!-- :to="`/${menu.link}`" -->
         <q-item
           ref="refItem"
+          :to="`/${menu.link}`"
           replace
           class="sidebar flex flex-center item item-link"
           :active-class="dark? 'active-dark' : 'active'"
@@ -41,48 +41,52 @@
         >
           <q-menu
             ref="refMenu"
-            anchor="top right"
-            self="top left"
             transition-show="slide-down"
             transition-hide="slide-right"
-            :offset="[0,0]"
+            anchor="top right"
+            self="top left"
+            :offset="[0, 0]"
+            auto-close
           >
-            <q-card style="width:150px;">
-              <q-card-section>
-                <div class="text-weight-bold f-12">
+            <q-list
+              v-if="menu.submenus.length>0"
+              bordered
+              separator
+              style="width:250px;"
+            >
+              <q-item-label>
+                <div
+                  class="text-weight-bold q-pa-md"
+                >
                   {{ menu.nama }}
                 </div>
-                <q-separator class="q-my-sm" />
-
-                <div
-                  v-for="(submenu,n) in menu.submenus"
-                  :key="n"
-                >
-                  <div v-if="submenu.link">
-                    <q-item
-                      ref="refSubItem"
-                      :to="`/${submenu.link}`"
-                      replace
-                      class="submenu flex flex-center item item-link"
-                      :active-class="dark? 'active-dark' : 'active'"
-                      :active="path===submenu.name"
-                      exact
-                    >
-                      <!-- {{ aktif(menu.name) }} : {{ path }} -->
-                      <q-item-section>{{ submenu.nama }}</q-item-section>
-                    </q-item>
-                  </div>
-                </div>
-              </q-card-section>
-            </q-card>
+              </q-item-label>
+              <q-separator />
+              <q-item
+                v-for="(submenu,n) in menu.submenus"
+                :key="n"
+                ref="refSubItem"
+                v-ripple
+                clickable
+                :to="`/${submenu.link}`"
+                replace
+                :active-class="dark? 'active-sub-dark' : 'active-sub'"
+                :active="path===submenu.name"
+                exact
+              >
+                <q-item-section>{{ submenu.nama }}</q-item-section>
+              </q-item>
+            </q-list>
           </q-menu>
-          <div class="item-content">
+          <div
+            class="item-content"
+          >
             <q-tooltip
-              v-if="!menu.submenus.length"
+              v-if="menu.submenus.length===0"
               class="bg-primary"
-              anchor="center right"
-              self="center left"
-              :offset="[5, 5]"
+              anchor="top right"
+              self="top left"
+              :offset="[0, 0]"
             >
               <strong class="">{{ menu.nama }}</strong>
               (
@@ -98,7 +102,7 @@
     </div>
     <!-- Skleleton -->
     <div
-      v-if="!menus.length"
+      v-if="menus.length===0"
       class="flex column flex-center full-height"
       style="height:calc(100%-60px) "
     >
@@ -130,27 +134,6 @@
           height="25px"
         />
       </div>
-      <!-- <div class="sidebar flex flex-center item item-link">
-        <q-skeleton
-          animation="pulse"
-          width="25px"
-          height="25px"
-        />
-      </div>
-      <div class="sidebar flex flex-center item item-link">
-        <q-skeleton
-          animation="pulse"
-          width="25px"
-          height="25px"
-        />
-      </div>
-      <div class="sidebar flex flex-center item item-link">
-        <q-skeleton
-          animation="pulse"
-          width="25px"
-          height="25px"
-        />
-      </div> -->
     </div>
     <!-- </q-scroll-area> -->
 
