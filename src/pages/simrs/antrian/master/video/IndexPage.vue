@@ -50,6 +50,7 @@
               <div style="width:200px;">
                 <q-video
                   :key="row.url"
+                  fetchpriority="low"
                   :ratio="16/9"
                   :src="previewImage(row.url)"
                 />

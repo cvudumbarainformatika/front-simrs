@@ -12,6 +12,7 @@
       v-else
       :key="store.form.url"
       :ratio="16/9"
+      fetchpriority="low"
       :src="previewImage"
     />
     <q-file
