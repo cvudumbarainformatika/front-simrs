@@ -183,6 +183,22 @@ const sigarang =
             )
         },
         {
+          path: '/sigarang/transaksi/bast',
+          name: 'sigarang.transaksi.bast',
+          component: () =>
+            import(
+              'pages/simrs/sigarang/transaksi/bast/IndexPage.vue'
+            )
+        },
+        {
+          path: '/sigarang/transaksi/pembayaran',
+          name: 'sigarang.transaksi.pembayaran',
+          component: () =>
+            import(
+              'pages/simrs/sigarang/transaksi/pembayaran/IndexPage.vue'
+            )
+        },
+        {
           path: '/sigarang/transaksi/distribusi',
           name: 'sigarang.transaksi.distribusi',
           component: () =>
