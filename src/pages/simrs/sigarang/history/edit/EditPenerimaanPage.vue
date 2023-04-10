@@ -86,7 +86,7 @@
               </div>
               <div class="col-9">
                 <!-- {{ store.form.tanggal }} -->
-                <app-input-date
+                <app-input-date-human
                   :model="store.form.tanggal"
                   label="Tanggal"
                   outlined
@@ -113,7 +113,7 @@
               </div>
               <div class="col-9">
                 <!-- {{ store.form.tanggal_surat }} -->
-                <app-input-date
+                <app-input-date-human
                   :model="store.form.tanggal_surat"
                   label="Tanggal"
                   outlined
@@ -136,11 +136,25 @@
             </div>
             <div class="row q-mb-sm items-center">
               <div class="col-3">
+                Tanggal Faktur
+              </div>
+              <div class="col-9">
+                <!-- {{ store.form.tempo }} -->
+                <app-input-date-human
+                  :model="store.form.tanggal_faktur"
+                  label="Tanggal Faktur"
+                  outlined
+                  @set-model="setTglFaktur"
+                />
+              </div>
+            </div>
+            <div class="row q-mb-sm items-center">
+              <div class="col-3">
                 Tempo
               </div>
               <div class="col-9">
                 <!-- {{ store.form.tempo }} -->
-                <app-input-date
+                <app-input-date-human
                   :model="store.form.tempo"
                   label="Tanggal"
                   outlined
@@ -371,6 +385,9 @@ function setTglSuratjalan(val) {
 }
 function setTempo(val) {
   store.setForm('tempo', val)
+}
+function setTglFaktur(val) {
+  store.setForm('tanggal_faktur', val)
 }
 
 function editRow(val, i) {

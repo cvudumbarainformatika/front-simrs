@@ -158,7 +158,10 @@
               </div>
             </template>
             <template #cell-tanggal_faktur="{row}">
-              <div class="row">
+              <div
+                class="row"
+                style="width:max-content;"
+              >
                 {{ dateFullFormat(row.tanggal_faktur) }}
               </div>
             </template>

@@ -97,6 +97,16 @@ export const useSettingsStore = defineStore('setting_store', {
             link: 'sigarang/transaksi/pengembalian',
             nama: 'Transaksi Pengembalian',
             name: 'sigarang.transaksi.pengembalian'
+          },
+          {
+            link: 'sigarang/transaksi/bast',
+            nama: 'Transaksi BAST',
+            name: 'sigarang.transaksi.bast'
+          },
+          {
+            link: 'sigarang/transaksi/pembayaran',
+            nama: 'Transaksi Pembayaran',
+            name: 'sigarang.transaksi.pembayaran'
           }
         ]
       },
