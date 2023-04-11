@@ -36,6 +36,7 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
     },
     pemesananSelected(val) {
       this.penerimaans = []
+      this.tampilPenerimaans = []
       console.log('pemesanan selected', val)
       const temp = val.split('SP-')
       console.log('pemesanan temp', temp)
