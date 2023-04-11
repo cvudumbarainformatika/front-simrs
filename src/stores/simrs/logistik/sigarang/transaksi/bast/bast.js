@@ -7,6 +7,7 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
     perusahaans: [],
     pemesanans: [],
     penerimaans: [],
+    tampilPenerimaans: [],
     pemesanan: {},
     penerimaan: {},
     form: {},
@@ -25,6 +26,7 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
       this.form = {}
       this.pemesanan = {}
       this.penerimaans = []
+      this.tampilPenerimaans = []
       this.penerimaan = {}
       this.setForm('kode_perusahaan', val)
       console.log('perusahaan selected', val)
@@ -92,6 +94,15 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
             if (resp.data.penerimaan.length) {
               this.penerimaans = resp.data.penerimaan.map(data => {
                 data.checked = false
+                // const balik = data.details.map(anu => {
+                data.details.map(anu => {
+                  if (anu.harga_kontrak === 0) anu.harga_kontrak = anu.harga
+                  if (anu.harga_jadi === 0) anu.harga_jadi = anu.harga
+                  // console.log('harga kontrak', anu.harga_kontrak)
+                  return anu
+                })
+                data.nilai_tagihan = data.details.map(x => x.harga_jadi).reduce((a, b) => a + b, 0)
+                // return balik
                 return data
               })
 
@@ -102,6 +113,25 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
           .catch(() => {
             this.loading = false
           })
+      })
+    },
+    // simpan
+    simpanBast() {
+      console.log('simpan', this.form)
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/bast/simpan-bast', this.form)
+          .then(resp => {
+            this.loading = false
+            this.form = {}
+            this.pemesanan = {}
+            this.penerimaans = []
+            this.tampilPenerimaans = []
+            this.penerimaan = {}
+            this.getPerusahaan()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
       })
     }
   }
