@@ -308,6 +308,7 @@
 // rencana : simpan sementara di local storage
 // import { routerInstance } from 'src/boot/router'
 import { dateFull } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useAuthStore } from 'src/stores/auth'
 // import { setTempData } from 'src/modules/storage'
 import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
@@ -382,7 +383,13 @@ function addIndex(item, i) {
   // ind = i
 }
 function updateJumlah(val) {
-  itemme.sisaStok = parseFloat(itemme.stok) - parseFloat(val)
+  if ((parseFloat(itemme.stok) - parseFloat(val)) >= 0) {
+    itemme.sisaStok = parseFloat(itemme.stok) - parseFloat(val)
+  } else {
+    itemme.sisaStok = 0
+    itemme.jumlah = itemme.stok
+    notifErrVue('Jumlah maksimal yang bisa di input adalah ' + itemme.stok)
+  }
 }
 </script>
 <style lang="scss" scoped>
