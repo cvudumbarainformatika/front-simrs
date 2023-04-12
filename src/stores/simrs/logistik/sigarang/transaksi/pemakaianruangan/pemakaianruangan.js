@@ -248,6 +248,8 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
               this.loading = false
               notifSuccess(resp)
               this.resetAll()
+              const auth = useAuthStore()
+              this.setRuangan(auth.kode_ruang)
               // this.getData()
               this.getItemsData()
               resolve(resp)
