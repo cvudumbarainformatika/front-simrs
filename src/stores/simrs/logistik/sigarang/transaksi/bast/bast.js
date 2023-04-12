@@ -4,6 +4,7 @@ import { api } from 'src/boot/axios'
 export const useTransaksiBastStore = defineStore('transaksi_bast', {
   state: () => ({
     loading: false,
+    loadingNomor: false,
     perusahaans: [],
     pemesanans: [],
     penerimaans: [],
@@ -39,13 +40,17 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
       this.tampilPenerimaans = []
       console.log('pemesanan selected', val)
       const temp = val.split('SP-')
-      console.log('pemesanan temp', temp)
-      if (temp.length > 1) {
-        this.setForm('no_bast', temp[0] + 'BAST-' + temp[1])
-      } else {
-        this.setForm('no_bast', val + ' (BAST)')
-      }
       this.setParam('nomor', val)
+      console.log('pemesanan temp', temp)
+      this.getNoBast().then(data => {
+        const anu = data > 0 ? '-' + data : ''
+        if (temp.length > 1) {
+          this.setForm('no_bast', temp[0] + 'BAST-' + temp[1] + anu)
+        } else {
+          this.setForm('no_bast', val + ' (BAST)' + anu)
+        }
+      })
+
       this.getDataPemesanan()
     },
     /// //////////////////
@@ -53,6 +58,20 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
       this.getPerusahaan()
     },
     // api related function
+    // ambil data perusahaan
+    getNoBast() {
+      const param = { params: this.params }
+      this.loadingNomor = true
+      return new Promise(resolve => {
+        api.get('v1/transaksi/bast/no-bast', param)
+          .then(resp => {
+            console.log('resp no bast', resp.data)
+            this.loadingNomor = false
+            resolve(resp.data)
+          })
+          .catch(() => { this.loadingNomor = false })
+      })
+    },
     // ambil data perusahaan
     getPerusahaan() {
       this.loading = true

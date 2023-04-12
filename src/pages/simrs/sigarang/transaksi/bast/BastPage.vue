@@ -53,6 +53,7 @@
                   v-model="store.form.no_bast"
                   label="nomor BAST"
                   outlined
+                  :loading="store.loadingNomor"
                 />
               </div>
             </div>

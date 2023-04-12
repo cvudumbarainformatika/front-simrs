@@ -280,7 +280,7 @@ export const useSettingsStore = defineStore('setting_store', {
     getAllData () {
       // this.getDataSetting()
       // sigarang
-      this.getMapingBarangDepo()
+      // this.getMapingBarangDepo()
       const mapingBarang = useMasterMapingBarangForm()
       mapingBarang.getDataBarang108()
       mapingBarang.getDataBarangRs()

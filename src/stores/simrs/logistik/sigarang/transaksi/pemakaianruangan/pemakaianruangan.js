@@ -52,7 +52,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
     },
     getInitialData() {
       this.getData()
-      this.getDataMaping()
+      // this.getDataMaping()
       // this.getDataPengguna()
       // this.getDataPenanggungjawab()
       //   .then(() => {
@@ -64,7 +64,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       //   })
     },
     setRuangan(val) {
-      // console.log('set Ruangan atas')
+      console.log('set Ruangan atas', val)
       this.setNomorPemakaian()
       this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.kode_ruang = val
@@ -73,7 +73,6 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         if (apem.length) return apem[0]
         else return false
       }).filter(ada => { return ada !== false })
-      // console.log('set Ruangan temp', temp[0])
 
       this.form.kode_penanggungjawab = temp[0].kode_penanggungjawab
       this.pj = temp[0].kode_penanggungjawab
@@ -81,27 +80,17 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       this.form.kode_pengguna = temp[0].kode_pengguna
       this.user = val
 
-      // console.log('pengguna', temp[0].kode_pengguna)
-
       const ruangan = this.penanggungjawabs.map(data => {
         const apem = data.ruang.filter(rua => { return rua.kode_pengguna === this.form.kode_pengguna })
         if (apem.length) return apem
         else return false
       }).filter(ada => { return ada !== false })
 
-      // console.log('set ruangan', ruangan)
-
       this.ruangans = ruangan[0].map(data => {
         data.uraian = data.ruang.uraian
         return data
       })
 
-      // console.log('set Ruangans', this.ruangans)
-      // this.ruangans = temp[0].map(ruru => {
-      //   ruru.uraian = ruru.ruang.uraian
-      //   return ruru
-      // })
-      // console.log('set Ruangan', temp)
       this.getItemsData()
     },
     penanggungjawabSelected(val) {
@@ -134,12 +123,14 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         return sisi.kode_ruang === val
       })
       // console.log('ruang', ruang)
+      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.form.kode_ruang = val
       this.form.kode_pengguna = ruang[0].kode_pengguna
       this.user = val
       this.getItemsData()
     },
     setItems(data) {
+      console.log('data items', data)
       const anu = data.map(item => {
         // {kode_rs: 'RS-00901', jml: '12'}
         // const temp = this.mapingbarang.filter(maping => {
@@ -150,14 +141,18 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         // item.nama = item.barang ? item.barang.nama : 'Tidak ada nama, periksa kembali data master'
         if (item.barang) {
           const temp = item.barang
-          temp.jumlah = item.stok
+          temp.jumlah = 0
+          temp.sisaStok = item.stok
+          temp.stok = item.stok
+          temp.no_penerimaan = item.no_penerimaan
+          temp.kode_rs = item.kode_rs
           return temp
         } else {
           return false
         }
       })
       this.items = anu.filter(dua => { return dua !== false })
-      // console.log('items', this.items)
+      console.log('items aja', this.items)
     },
     mapingPenanggungjawab(data) {
       // disini maping penanggungjawab ruangan
@@ -242,18 +237,27 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       })
     },
     saveInput() {
-      this.form.details = this.details
-      // console.log('input saved', this.form)
-      this.loading = true
-      return new Promise(resolve => {
-        api.post('v1/transaksi/pemakaianruangan/store', this.form)
-          .then(resp => {
-            this.loading = false
-            notifSuccess(resp)
-            this.resetAll()
-            resolve(resp)
-          }).catch(() => { this.loading = false })
-      })
+      const det = this.items.filter(x => x.jumlah > 0)
+      if (det.length) {
+        this.form.details = this.items.filter(x => x.jumlah > 0)
+        // console.log('input saved', this.form)
+        this.loading = true
+        return new Promise(resolve => {
+          api.post('v1/transaksi/pemakaianruangan/store', this.form)
+            .then(resp => {
+              this.loading = false
+              notifSuccess(resp)
+              this.resetAll()
+              const auth = useAuthStore()
+              this.setRuangan(auth.kode_ruang)
+              // this.getData()
+              this.getItemsData()
+              resolve(resp)
+            }).catch(() => { this.loading = false })
+        })
+      } else {
+        notifErrVue('Belum ada Jumlah pemakaian yang di isi')
+      }
     },
     getItemsData() {
       this.loading = true
@@ -269,7 +273,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         api.get('v1/stok/get-current-by-ruangan', params)
           .then(resp => {
             this.loading = false
-            // console.log('data items', resp)
+            console.log('data items', resp)
             this.setItems(resp.data)
 
             resolve(resp)
@@ -279,6 +283,8 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
           })
       })
     },
+    //
+    // dibawah ini adalah api related function yang tidak dipakai
     getDataMaping() {
       if (!this.mapingbarang.length) {
         this.loadingMaping = true
@@ -297,7 +303,6 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
         })
       }
     },
-    // dibawah ini adalah api related function yang tidak dipakai
     getDataPenanggungjawab() {
       this.loading = true
       return new Promise(resolve => {
