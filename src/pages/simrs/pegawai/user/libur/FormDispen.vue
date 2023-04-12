@@ -36,9 +36,19 @@
               <ListPegawai :key="store.pegawais" />
             </div>
           </div>
+          <!-- list select -->
           <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <div class="q-ml-md">
-              <app-input label="alasan" />
+              <div class="q-mb-md">
+                <app-input label="alasan" />
+              </div>
+              <ListSelectPegawai />
+              <div class="q-mt-md">
+                <app-btn
+                  v-if="store.list.length > 0"
+                  label="Simpan"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -49,6 +59,7 @@
 
 <script setup>
 import ListPegawai from './dispen/ListPegawai.vue'
+import ListSelectPegawai from './dispen/ListSelectPegawai.vue'
 import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
 import { onMounted } from 'vue'
 

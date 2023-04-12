@@ -23,6 +23,24 @@
           {{ row.ruangan? row.ruangan.namaruang:'-' }}
         </div>
       </q-item-section>
+      <q-item-section side>
+        <!-- {{ coba(row) }} -->
+        <q-btn
+          v-if="coba(row)===false"
+          round
+          flat
+          icon="icon-mat-send"
+          color="primary"
+          size="sm"
+          @click="store.toList(row)"
+        >
+          <q-tooltip>
+            <div>
+              Masukkan Ke List
+            </div>
+          </q-tooltip>
+        </q-btn>
+      </q-item-section>
     </q-item>
   </q-list>
 </template>
@@ -41,5 +59,20 @@ const image = (row) => {
   } else {
     return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
   }
+}
+
+function coba(obj) {
+  const id = obj.id
+  const arr = store.list
+  if (arr.length) {
+    const matching = arr.filter(x => x.id === id).length
+
+    if (matching === 1) {
+      return true
+    }
+
+    return false
+  }
+  return false
 }
 </script>

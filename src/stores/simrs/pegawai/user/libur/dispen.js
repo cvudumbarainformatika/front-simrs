@@ -16,7 +16,8 @@ export const useDispenStore = defineStore('dispen', {
       user_id: null,
       tanggal: null,
       flag: 'DISPEN'
-    }
+    },
+    list: []
 
   }),
   // getters: {
@@ -44,6 +45,14 @@ export const useDispenStore = defineStore('dispen', {
       } catch (error) {
         console.log('dispen', error)
         this.loading = false
+      }
+    },
+    toList(val) {
+      this.list.push(val)
+    },
+    hapusList(index) {
+      if (index > -1) { // only splice array when item is found
+        this.list.splice(index, 1) // 2nd parameter means remove one item only
       }
     }
   }
