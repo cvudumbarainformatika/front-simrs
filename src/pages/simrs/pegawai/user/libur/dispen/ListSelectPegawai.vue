@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <div v-if="store.list.length ===0">
+  <div class="q-pa-xs">
+    <div
+      v-if="store.list.length === 0"
+      class="full-height"
+    >
       <div
-        class="column flex-center items-center "
-        style="min-height:400px"
+        :style="`height: ${height};`"
+        class="column flex-center items-center"
       >
-        Belum Ada LIST
+        Belum Ada Data Terpilih
       </div>
     </div>
     <q-list
@@ -19,6 +22,7 @@
           :key="i"
           v-ripple
           clickable
+          class="bg-white shadow-2"
         >
           <q-item-section>{{ row.nama }}</q-item-section>
           <q-item-section side>
@@ -47,6 +51,13 @@
 import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
 
 const store = useDispenStore()
+
+defineProps({
+  height: {
+    type: String,
+    default: '480px'
+  }
+})
 </script>
 
 <style lang="scss" scoped>

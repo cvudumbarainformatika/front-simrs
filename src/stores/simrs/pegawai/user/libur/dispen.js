@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useDispenStore = defineStore('dispen', {
   state: () => ({
@@ -14,7 +15,7 @@ export const useDispenStore = defineStore('dispen', {
     form: {
       alasan: null,
       user_id: null,
-      tanggal: null,
+      tanggal: new Date(),
       flag: 'DISPEN'
     },
     list: []
@@ -24,6 +25,20 @@ export const useDispenStore = defineStore('dispen', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    setToday () {
+      const tgl = new Date()
+      const year = tgl.getFullYear()
+      const month = ('0' + (tgl.getMonth() + 1)).slice(-2)
+      const day = ('0' + (tgl.getDate())).slice(-2)
+      const formatDb = year + '-' + month + '-' + day
+      // const formatUniq = date.formatDate(tgl, 'YYMMDD')
+      this.form.tanggal = formatDb
+      // this.form.sampel_diambil = formatDb
+      // this.uniqueId(formatUniq)
+    },
+    setForm(key, payload) {
+      this.form[key] = payload
+    },
     setIsOpen () {
       this.isOpen = !this.isOpen
     },
@@ -48,12 +63,42 @@ export const useDispenStore = defineStore('dispen', {
       }
     },
     toList(val) {
+      console.log('toList', val)
       this.list.push(val)
     },
     hapusList(index) {
       if (index > -1) { // only splice array when item is found
         this.list.splice(index, 1) // 2nd parameter means remove one item only
       }
+    },
+    async saveData() {
+      this.loading = true
+
+      const ids = this.list.map(x => x.id)
+      // console.log(ids)
+      const formdata = new FormData()
+      formdata.append('alasan', this.form.alasan)
+      formdata.append('tanggal', this.form.tanggal)
+      formdata.append('flag', this.form.flag)
+      formdata.append('user_ids', ids)
+
+      try {
+        await api.post('/v1/dispen/store', formdata).then((resp) => {
+          console.log('post dispen', resp)
+          notifSuccess(resp)
+          this.loading = false
+          return new Promise((resolve, reject) => {
+            resolve()
+          })
+        })
+      } catch (error) {
+        console.log('error')
+        this.loading = false
+      }
+    },
+
+    resetList() {
+      this.list = []
     }
   }
 })
