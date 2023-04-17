@@ -177,6 +177,28 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           })
       })
     },
+    getDataTablePage() {
+      this.loading = true
+      this.params.page = 1
+      const params = { params: this.params }
+      return new Promise((resolve, reject) => {
+        api
+          .get('v1/libur/index', params)
+          .then((resp) => {
+            this.loading = false
+            console.log('data table', resp.data)
+            this.items = resp.data.data
+            this.setColumns(resp.data.data)
+            this.meta = resp.data
+            this.resetFORM()
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
+    },
     getUser() {
       this.loading = true
       const params = { params: this.params }

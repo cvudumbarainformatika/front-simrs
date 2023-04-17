@@ -17,19 +17,37 @@
         <div class="row q-col-qutter-md">
           <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
             <!-- searc -->
-            <div>
-              <q-input
-                v-model="store.params.q"
-                debounce="500"
-                filled
-                placeholder="Pencarian pegawai"
-                dense
-                @update:model-value="store.searchPegawai()"
-              >
-                <template #append>
-                  <q-icon name="icon-mat-search" />
-                </template>
-              </q-input>
+            <div class="row q-col-gutter-md">
+              <div class="col-6">
+                <q-input
+                  v-model="store.params.q"
+                  debounce="500"
+                  filled
+                  placeholder="Pencarian pegawai"
+                  dense
+                  @update:model-value="store.searchPegawai()"
+                >
+                  <template #append>
+                    <q-icon name="icon-mat-search" />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-6">
+                <q-select
+                  v-model="ruang"
+                  dense
+                  outlined
+                  option-value="koderuangan"
+                  option-label="namaruang"
+                  behavior="menu"
+                  map-options
+                  emit-value
+                  :options="store.ruangan"
+                  label="Ruangan"
+                  style="min-width:150px"
+                  @update:model-value="changeRuang"
+                />
+              </div>
             </div>
             <!-- list -->
             <div class="q-my-md">
@@ -89,15 +107,23 @@
 import ListPegawai from './dispen/ListPegawai.vue'
 import ListSelectPegawai from './dispen/ListSelectPegawai.vue'
 import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 import { useQuasar } from 'quasar'
+import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
 
 const $q = useQuasar()
 const store = useDispenStore()
+const table = useLiburAbsenStore()
+
+const ruang = ref('all')
+const changeRuang = (val) => {
+  store.filterByRuang(val)
+}
 onMounted(() => {
   store.setToday()
   store.getPegawai()
+  store.autocomplete()
 })
 
 const onSubmit = () => {
@@ -105,7 +131,11 @@ const onSubmit = () => {
   if (!store.list.length) {
     return notifErrVue('Maaf, Belum Ada Pegawai yang dipilih!')
   }
-  store.saveData()
+  store.saveData().then(() => {
+    table.getDataTablePage()
+    store.setIsOpen()
+    store.resetList()
+  })
 }
 const onReset = () => {
   console.log('onReset')
