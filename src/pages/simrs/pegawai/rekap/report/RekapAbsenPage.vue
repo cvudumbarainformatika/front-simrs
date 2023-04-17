@@ -363,21 +363,25 @@
             :key="i"
             #[getSlotRinci(num)]="{row}"
           >
-            <div v-if="row.transaksi_absen.length > 0 ">
-              <div class="columns flex-center items-center">
+            <div v-if="row.transaksi_absen.length > 0 && !getIjinRinci(num, row)">
+              <div
+                class="columns flex-center items-center f-10"
+              >
                 <div>{{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}</div>
-                <q-separator />
                 <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative':''">
                   {{ getTransaksiAbsen(num, row.transaksi_absen, 'pulang') }}
                 </div>
               </div>
             </div>
-            <div v-else-if="getIjinRinci(num, row) !==0">
-              <div class="text-primary">
+            <div v-else-if="getIjinRinci(num, row)">
+              <div class="text-orange">
                 {{ getIjinRinci(num, row) }}
               </div>
             </div>
-            <div v-else>
+            <div
+              v-else
+              class="text-negative"
+            >
               {{ getAlphaRinci(num, row) }}
             </div>
           </template>
@@ -645,54 +649,6 @@ function getMasukHari(row) {
   const ada = row.transaksi_absen.length
   return ada
 }
-
-// function calcDate(masuk, pulang) {
-//   const date1 = new Date(masuk)
-//   const date2 = new Date(pulang)
-
-//   // Get the Timestamp
-//   const date1timestamp = date1.getTime()
-//   const date2timestamp = date2.getTime()
-
-//   let calc
-
-//   // Check which timestamp is greater
-//   if (date1timestamp > date2timestamp) {
-//     calc = new Date(date1timestamp - date2timestamp)
-//   } else {
-//     calc = new Date(date1timestamp - date2timestamp)
-//   }
-
-//   // Retrieve the date, month and year
-//   const calcFormatTmp = calc.getDate() + '-' + (calc.getMonth() + 1) + '-' + calc.getFullYear()
-//   // Convert to an array and store
-//   const calcFormat = calcFormatTmp.split('-')
-
-//   // Subtract each member of our array from the default date
-//   const dayspassed = Number(Math.abs(calcFormat[0]) - 1)
-//   const monthspassed = Number(Math.abs(calcFormat[1]) - 1)
-//   const yearspassed = Number(Math.abs(calcFormat[2]) - 1970)
-
-//   // Set up custom text
-//   const yrsTxt = ['year', 'years']
-//   const mnthsTxt = ['month', 'months']
-//   const daysTxt = ['day', 'days']
-
-//   // Convert to days and sum together
-//   const totaldays = (yearspassed * 365) + (monthspassed * 30.417) + dayspassed
-
-//   // display result with custom text
-//   const result = ((yearspassed === 1) ? yearspassed + ' ' + yrsTxt[0] + ' ' : (yearspassed > 1)
-//     ? yearspassed + ' ' + yrsTxt[1] + ' ' : '') +
-//         ((monthspassed === 1) ? monthspassed + ' ' + mnthsTxt[0] : (monthspassed > 1)
-//           ? monthspassed + ' ' + mnthsTxt[1] + ' ' : '') +
-//         ((dayspassed === 1) ? dayspassed + ' ' + daysTxt[0] : (dayspassed > 1)
-//           ? dayspassed + ' ' + daysTxt[1] : '')
-
-//   console.log(totaldays)
-//   console.log(result)
-//   return result.trim()
-// }
 
 const printObj = {
   id: 'printMe',

@@ -9,7 +9,9 @@ export const useDispenStore = defineStore('dispen', {
     params: {
       q: null,
       per_page: 20,
-      page: 1
+      page: 1,
+      flag: null,
+      ruang: null
     },
     pegawais: [],
     form: {
@@ -18,13 +20,41 @@ export const useDispenStore = defineStore('dispen', {
       tanggal: new Date(),
       flag: 'DISPEN'
     },
-    list: []
+    list: [],
+    ruangan: [
+      {
+        id: 987654321,
+        koderuangan: 'all',
+        namaruang: 'Semua Ruangan'
+      }
+    ]
 
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    async autocomplete () {
+      const resp = await api.get('/v1/pegawai/absensi/autocomplete')
+      console.log('autocomplete', resp)
+      if (resp.status === 200) {
+        // this.jenis_pegawai = resp.data.jenis_pegawai
+        // this.jenis_pegawai.unshift({
+        //   id: 987654321,
+        //   kode_jenis: 'all',
+        //   jenispegawai: 'Semua'
+        // })
+        this.ruangan = resp.data.ruangan
+        this.ruangan.unshift(
+          {
+            id: 987654321,
+            koderuangan: 'all',
+            namaruang: 'Semua Ruangan'
+          }
+        )
+        // this.ruanganPrint = this.ruangan
+      }
+    },
     setToday () {
       const tgl = new Date()
       const year = tgl.getFullYear()
@@ -44,6 +74,25 @@ export const useDispenStore = defineStore('dispen', {
     },
     searchPegawai() {
       this.params.page = 1
+      this.getPegawai()
+    },
+    filterByFlag(val) {
+      if (val !== 'all') {
+        this.params.flag = val
+      } else {
+        delete this.params.flag
+      }
+
+      this.getPegawai()
+    },
+    filterByRuang(val) {
+      if (val !== 'all') {
+        this.params.ruang = val
+      } else {
+        delete this.params.ruang
+      }
+
+      // this.ruanganPrint = this.ruangan.filter(x => x.koderuangan === val)
       this.getPegawai()
     },
     async getPegawai() {
@@ -74,7 +123,7 @@ export const useDispenStore = defineStore('dispen', {
     async saveData() {
       this.loading = true
 
-      const ids = this.list.map(x => x.id)
+      const ids = this.list.map(x => x.user ? x.user.id : null)
       // console.log(ids)
       const formdata = new FormData()
       formdata.append('alasan', this.form.alasan)
@@ -99,6 +148,8 @@ export const useDispenStore = defineStore('dispen', {
 
     resetList() {
       this.list = []
+      this.form.alasan = null
+      this.setToday()
     }
   }
 })
