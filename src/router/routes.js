@@ -3,6 +3,7 @@ import sigarang from './sigarang'
 import antrian from './antrian'
 import laborat from './laborat'
 import settings from './settings'
+import masters from './masters'
 
 const routes = [
   {
@@ -50,6 +51,7 @@ const routes = [
   pegawai,
   sigarang,
   antrian,
+  masters,
 
   {
     path: '/display_antrian',

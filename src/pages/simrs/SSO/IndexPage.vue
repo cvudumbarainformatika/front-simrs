@@ -178,14 +178,14 @@
       </div>
       <div class="col-md-3 col-xs-12">
         <q-card
-          class="bg-green-10 text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/sigarang/dashboard')"
+          class="bg-deep-purple text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('/master/dashboard')"
         >
           <div class="q-pa-md">
             <div class="column ">
               <div class="flex items-center justify-between">
                 <div class="icon-b">
-                  <q-icon name="icon-mat-group_work" />
+                  <q-icon name="icon-mat-groups" />
                 </div>
                 <div class="text-h4 text-weight-light">
                   MS
