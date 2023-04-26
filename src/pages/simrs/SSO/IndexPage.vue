@@ -129,6 +129,7 @@
           </div>
         </q-card>
       </div>
+
       <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-teal text-white q-mb-md cursor-pointer model-two"
@@ -170,6 +171,29 @@
               <q-separator class="bg-white q-my-sm" />
               <div class="text-h5 text-weight-light">
                 Antrian System
+              </div>
+            </div>
+          </div>
+        </q-card>
+      </div>
+      <div class="col-md-3 col-xs-12">
+        <q-card
+          class="bg-green-10 text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('/sigarang/dashboard')"
+        >
+          <div class="q-pa-md">
+            <div class="column ">
+              <div class="flex items-center justify-between">
+                <div class="icon-b">
+                  <q-icon name="icon-mat-group_work" />
+                </div>
+                <div class="text-h4 text-weight-light">
+                  MS
+                </div>
+              </div>
+              <q-separator class="bg-white q-my-sm" />
+              <div class="text-h5 text-weight-light">
+                Masters
               </div>
             </div>
           </div>
