@@ -74,61 +74,35 @@
             transition-hide="slide-right"
             :offset="[0,0]"
           >
-            <q-card style="width:150px;">
-              <q-card-section>
-                <q-item-label>
-                  <div
-                    class="text-weight-bold q-pa-md"
-                  >
-                    {{ menu.nama }}
-                  </div>
-                </q-item-label>
-                <q-separator class="q-my-sm" />
-
+            <q-list
+              v-if="menu.submenus.length>0"
+              bordered
+              separator
+              style="width:250px;"
+            >
+              <q-item-label>
                 <div
-                  v-for="(submenu,n) in menu.submenus"
-                  :key="n"
+                  class="text-weight-bold q-pa-md"
                 >
-                  <div v-if="menu.nama!=='History'">
-                    <div v-if="submenu.link">
-                      <q-item
-                        ref="refSubItem"
-                        :to="`/${submenu.link}`"
-                        replace
-                        class="submenu flex flex-center item item-link"
-                        :active-class="dark? 'active-dark' : 'active'"
-                        :active="path===submenu.name"
-                        exact
-                      >
-                        <!-- {{ aktif(menu.name) }} : {{ path }} -->
-                        <q-item-section>{{ submenu.nama }}</q-item-section>
-                      </q-item>
-                    </div>
-                  </div>
-                  <!-- menu history -->
-                  <div v-if="menu.nama==='History'">
-                    <div v-if="submenu.name ">
-                      <q-item
-                        ref="refSubItemHis"
-                        v-close-popup
-                        v-ripple
-                        :to="`/${menu.link}`"
-                        class="menu"
-                        :active="history.nama===submenu.nama"
-                        :active-class="dark ? 'page-dark text-white active-dark' : ' bg-grey-4 text-primary active'"
-                        clickable
-                        exact
-                        @click="history.pilihTransaksi(submenu)"
-                      >
-                        <q-item-section>
-                          {{ submenu.nama }}
-                        </q-item-section>
-                      </q-item>
-                    </div>
-                  </div>
+                  {{ menu.nama }}
                 </div>
-              </q-card-section>
-            </q-card>
+              </q-item-label>
+              <q-separator />
+              <q-item
+                v-for="(submenu,n) in menu.submenus"
+                :key="n"
+                ref="refSubItem"
+                v-ripple
+                clickable
+                :to="`/${submenu.link}`"
+                replace
+                :active-class="dark? 'active-sub-dark' : 'active-sub'"
+                :active="path===submenu.name"
+                exact
+              >
+                <q-item-section>{{ submenu.nama }}</q-item-section>
+              </q-item>
+            </q-list>
           </q-menu>
           <div class="item-content">
             <q-tooltip
@@ -213,7 +187,6 @@
 </template>
 
 <script setup>
-import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 const path = computed(() => useRoute().name)
@@ -230,8 +203,6 @@ const props = defineProps({
     default: () => []
   }
 })
-
-const history = useHistoryTable()
 
 const aktif = (apem) => {
   const temp = apem.split('.')

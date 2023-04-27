@@ -121,7 +121,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
-      console.log('edit', val)
+      // console.log('edit', val)
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
     },
@@ -138,7 +138,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     },
     // custom for this store
     searchUser(val) {
-      console.log('search user', val)
+      // console.log('search user', val)
       this.setParam('q', val)
       this.setParam('order_by', 'created_at')
       this.getUser()
@@ -151,8 +151,8 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
         return d.value === val
       })
       this.day = temp[0]
-      console.log('hari', temp)
-      console.log(val)
+      // console.log('hari', temp)
+      // console.log(val)
     },
     // api related function
     // get data tabel
@@ -164,7 +164,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
-            console.log('data table', resp.data)
+            // console.log('data table', resp.data)
             this.items = resp.data.data
             this.setColumns(resp.data.data)
             this.meta = resp.data
@@ -186,7 +186,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
-            console.log('data table', resp.data)
+            // console.log('data table', resp.data)
             this.items = resp.data.data
             this.setColumns(resp.data.data)
             this.meta = resp.data
@@ -207,7 +207,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/user/user', params)
           .then((resp) => {
             this.loading = false
-            console.log('store user', resp.data)
+            // console.log('store user', resp.data)
             this.users = resp.data.data
             resolve(resp)
           })
@@ -238,7 +238,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       data.append('flag', this.form.flag)
       if (this.form.alasan) data.append('alasan', this.form.alasan)
       if (this.form.image) data.append('gambar', this.form.image)
-      console.log('image', this.form)
+      // console.log('image', this.form)
       return new Promise((resolve, reject) => {
         api
           .post('v1/libur/store', data, {
@@ -247,7 +247,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
             }
           })
           .then((resp) => {
-            console.log('save libur', resp)
+            // console.log('save libur', resp)
             notifSuccess(resp)
             this.loading = false
             this.getDataTable()
@@ -257,6 +257,21 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
             this.loading = false
             reject(err)
           })
+      })
+    },
+    deleteData() {
+      this.loading = true
+      console.log('id', this.deleteId)
+      const send = { id: this.deleteId }
+      return new Promise(resolve => {
+        api.post('v1/libur/delete', send)
+          .then(resp => {
+            console.log('delete ', resp)
+            this.getDataTable()
+            this.loading = false
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
       })
     }
   }

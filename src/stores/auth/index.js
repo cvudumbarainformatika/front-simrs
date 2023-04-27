@@ -41,6 +41,7 @@ export const useAuthStore = defineStore('auth', {
 
       const aplKey = Object.keys(val.aplikasi)
       const menuKey = Object.keys(val.menus)
+      console.log('submenu', menuKey)
       const apli = aplKey.map(key => {
         const temp = {}
         temp.aplikasi = val.aplikasi[key].aplikasi
@@ -85,9 +86,7 @@ export const useAuthStore = defineStore('auth', {
       this.kode_ruang = val.kode_ruang
       this.depo = val.depo
       if (apli.length === 1) {
-        // const router = useRouter()
         this.menus = apli[0].menus
-        // routerInstance.replace({ name: apli[0].aplikasi })
         const apem = {}
         switch (apli[0].aplikasi) {
           case 'sigarang':
@@ -99,11 +98,6 @@ export const useAuthStore = defineStore('auth', {
                 this.route = this.menus[0].submenus[0]
               }
             }
-            // console.log('path', apem)
-            // router.push(apem.link)
-            // router.replace({ name: apem.name })
-            // routerInstance.push(apem.link)
-            // routerInstance.replace({ name: 'sigarang.dashboard' })
             break
           case 'pegawai':
             console.log('switch pegawai', apli[0].aplikasi)
@@ -113,11 +107,15 @@ export const useAuthStore = defineStore('auth', {
                 this.route = this.menus[0].submenus[0]
               }
             }
-            // console.log('path', apem)
-            // router.replace({ name: apem.name })
-            // router.push(apem.link)
-            // routerInstance.push(apem.link)
-            // routerInstance.replace({ name: 'pegawai.user.list' })
+            break
+          case 'master':
+            console.log('switch master', apli[0].aplikasi)
+            if (this.menus.length) {
+              if (this.menus[0].submenus.length) {
+                apem.link = this.menus[0].submenus[0].link
+                this.route = this.menus[0].submenus[0]
+              }
+            }
             break
 
           default:
@@ -141,7 +139,6 @@ export const useAuthStore = defineStore('auth', {
         await api.post('/v1/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
-          this.mapingMenu(resp.data)
           // console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
@@ -150,6 +147,7 @@ export const useAuthStore = defineStore('auth', {
           }
           this.loading = false
           waitLoad('done')
+          this.mapingMenu(resp.data)
         })
       } catch (error) {
         waitLoad('done')
@@ -166,7 +164,6 @@ export const useAuthStore = defineStore('auth', {
           .then(resp => {
             console.log('login', resp)
             if (Object.keys(resp.data.aplikasi).length) {
-              this.mapingMenu(resp.data)
               storage.setLocalToken(resp.data.token)
               storage.setUser(resp.data.user)
               const hdd = storage.getLocalToken()
@@ -175,6 +172,7 @@ export const useAuthStore = defineStore('auth', {
                 this.SET_TOKEN_USER(hdd, hddUser)
               }
               resolve(resp)
+              this.mapingMenu(resp.data)
             } else {
               notifErrVue('Anda tidak memiliki Akses')
             }
@@ -204,9 +202,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         await api.get('/v1/me').then(resp => {
           console.log('me', resp)
-          this.mapingMenu(resp.data)
           storage.setUser(resp.data.result)
           this.user = resp.data.result
+          this.mapingMenu(resp.data)
         })
       } catch (error) {
         removeToken()

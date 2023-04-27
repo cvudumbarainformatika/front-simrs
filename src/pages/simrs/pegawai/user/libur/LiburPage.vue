@@ -15,7 +15,6 @@
           :sort="store.params.sort"
           :loading="store.loading"
           :to-search="store.params.q"
-          :default-btn="false"
           @goto="store.setPage"
           @set-row="store.setPerPage"
           @refresh="store.refreshTable"

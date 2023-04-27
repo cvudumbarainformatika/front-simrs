@@ -1,6 +1,7 @@
 <template>
   <q-select
     ref="refAuto"
+    use-input
     dense
     :options="optionx"
     :label="label"
@@ -8,7 +9,6 @@
     :outlined="outlined"
     hide-bottom-space
     no-error-icon
-    use-input
     hide-dropdown-icon
     :option-label="typeof optionLabel === 'object' ? optionLabel[0]: optionLabel"
     :option-value="optionValue"
@@ -113,7 +113,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear', 'new-val'])
+const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear', 'new-val', 'cari'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { type: String, default: 'Label' },
@@ -126,7 +126,7 @@ const props = defineProps({
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
   model: { type: [String, Number], default: '' },
-  debounce: { type: [String, Number], default: 1000 }
+  debounce: { type: [String, Number], default: '700' }
 
 })
 const optionx = ref([])
@@ -223,6 +223,7 @@ const inputValue = (value) => {
 function createValue (val, done) {
   const result = new Promise((resolve) => emits('on-enter', val, resolve))
   emits('new-val', val)
+
   result.then((resp) => {
     fetchData()
     done(resp, 'toggle')
