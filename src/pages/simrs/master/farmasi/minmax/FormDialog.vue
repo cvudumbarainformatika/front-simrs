@@ -46,7 +46,7 @@
               <app-input
                 v-model="store.form.min"
                 label="Minimal"
-                number
+                type="number"
                 outlined
               />
             </div>
@@ -55,7 +55,7 @@
                 v-model="store.form.max"
                 label="maksimal"
                 outlined
-                number
+                type="number"
               />
             </div>
           </div>
