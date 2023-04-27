@@ -76,9 +76,13 @@
           >
             <q-card style="width:150px;">
               <q-card-section>
-                <div class="text-weight-bold f-12">
-                  {{ menu.nama }}
-                </div>
+                <q-item-label>
+                  <div
+                    class="text-weight-bold q-pa-md"
+                  >
+                    {{ menu.nama }}
+                  </div>
+                </q-item-label>
                 <q-separator class="q-my-sm" />
 
                 <div

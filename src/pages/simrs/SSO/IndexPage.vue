@@ -185,7 +185,7 @@
             <div class="column ">
               <div class="flex items-center justify-between">
                 <div class="icon-b">
-                  <q-icon name="icon-mat-groups" />
+                  <q-icon name="icon-mat-group_work" />
                 </div>
                 <div class="text-h4 text-weight-light">
                   MS
