@@ -272,7 +272,7 @@
           <template #cell-status="{row}">
             <div class="">
               <div v-if="getStatus(row)">
-                <q-linear-progress
+                <!-- <q-linear-progress
                   class="q-mt-xs"
                   rounded
                   size="20px"
@@ -291,7 +291,16 @@
                       </div>
                     </q-badge>
                   </div>
-                </q-linear-progress>
+                </q-linear-progress> -->
+                <q-badge
+                  v-if="getStatus(row)"
+                  outline
+                  color="primary"
+                >
+                  <div class="f-10">
+                    Installed
+                  </div>
+                </q-badge>
               </div>
               <q-badge
                 v-else
@@ -299,7 +308,7 @@
                 color="negative"
               >
                 <div class="f-10">
-                  Belum Install Xenter
+                  Blm Install
                 </div>
               </q-badge>
             </div>
@@ -317,6 +326,11 @@
           <template #cell-DL="{row}">
             <div class="">
               {{ getIjin(row, 'DL')===0? '-': getIjin(row, 'DL') }}
+            </div>
+          </template>
+          <template #cell-DSPEN="{row}">
+            <div class="">
+              {{ getIjin(row, 'DISPEN')===0? '-': getIjin(row, 'DISPEN') }}
             </div>
           </template>
 
@@ -353,7 +367,7 @@
           </template>
           <template #cell-kurang="{row}">
             <div class="text-negative">
-              {{ getKurang(row) }}
+              {{ getKurang(row) }} - {{ getRekapTerlambat(row) }}
             </div>
           </template>
 
@@ -363,7 +377,7 @@
             :key="i"
             #[getSlotRinci(num)]="{row}"
           >
-            <div v-if="row.transaksi_absen.length > 0 && !getIjinRinci(num, row)">
+            <!-- <div v-if="row.transaksi_absen.length > 0 && !getIjinRinci(num, row) && !getAlphaRinci(num, row)">
               <div
                 class="columns flex-center items-center f-10"
               >
@@ -373,7 +387,7 @@
                 </div>
               </div>
             </div>
-            <div v-else-if="getIjinRinci(num, row)">
+            <div v-else-if="row.transaksi_absen.length > 0 && getIjinRinci(num, row)">
               <div class="text-orange">
                 {{ getIjinRinci(num, row) }}
               </div>
@@ -383,6 +397,22 @@
               class="text-negative"
             >
               {{ getAlphaRinci(num, row) }}
+            </div> -->
+            <div v-if="getTransaksiAbsens(num, row) === 'MSK'">
+              <div class="f-10">
+                {{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}
+              </div>
+              <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative f-10':'f-10'">
+                {{ getTransaksiAbsen(num, row.transaksi_absen, 'pulang') }}
+              </div>
+            </div>
+            <div
+              v-else
+              :class="getTransaksiAbsens(num, row) === 'A'? 'text-negative':
+                getTransaksiAbsens(num, row) === '-'? 'text-dark':'text-green'
+              "
+            >
+              {{ getTransaksiAbsens(num, row) }}
             </div>
           </template>
         </app-table>
@@ -444,8 +474,8 @@ const changePeriode = () => {
   }
   const periode = `${tahun.value}-${mm}`
   console.log('periode', periode)
-  store.prota(periode)
   store.setPeriode(periode)
+  store.prota(periode)
 }
 
 onMounted(() => {
@@ -505,6 +535,28 @@ function getTransaksiAbsen(num, data, jns) {
   }
   return ''
 }
+function getTransaksiAbsens(num, data) {
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
+  const trans = data.transaksi_absen.filter(x => x.tanggal === cellDate)
+  const libur = store.protas.filter(x => x.tgl_libur === cellDate)
+  const ijin = getIjinRinci(num, data)
+  const alpha = getAlphaRinci(num, data)
+  // console.log('trans', trans)
+  console.log('libur', libur)
+  if (trans.length) {
+    return 'MSK'
+  } else {
+    if (ijin) {
+      return ijin
+    } else if (libur.length) {
+      return '-'
+    } else if (alpha) {
+      return 'A'
+    }
+    return ''
+  }
+}
 
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
@@ -554,16 +606,26 @@ function getIjin(row, fx) {
 
   return 0
 }
+// function getAlpha(row) {
+//   // const user = row.user
+//   // let libur = 0
+//   const alpha = row.alpha ? row.alpha.length : 0
+//   // if (user) {
+//   //   libur = user.libur.length
+//   //   return libur
+//   // }
+//   return alpha
+// }
 
 function getAlphaRinci(num, row) {
+  // console.log('alpha', num)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   const cellDate = num <= 9 ? tahun.value + '-' + bulanX + '-0' + num.toString() : tahun.value + '-' + bulanX + '-' + num.toString()
-  // console.log('cellDate', cellDate)
   const alpha = row.alpha
   if (alpha.length > 0) {
-    return alpha.filter(x => x.tanggal === cellDate).length > 0 ? 'A' : '-'
+    return alpha.filter(x => x.tanggal === cellDate).length > 0 ? 'A' : 0
   }
-  return '-'
+  return 0
 }
 
 function getIjinRinci(num, row) {
@@ -611,15 +673,11 @@ function getMasuk(row) {
 
 function getKurang(row) {
   const ada = row.transaksi_absen.length
-  if (ada > 0) {
+  if (ada) {
     const data = row.transaksi_absen
     let hitung = 0
     for (let i = 0; i < data.length; i++) {
       const kategoryMasuk = data[i].kategory ? data[i].kategory.masuk : '00:00:00'
-      // const kategoryPulang = data[i].kategory.pulang
-
-      // const tglPulangServer = dateDbFormat(data[i].updated_at)
-      // const jamPulangServer = formatJam(data[i].updated_at)
       const jamMasukServer = formatJam(data[i].created_at)
       const tglMasukServer = dateDbFormat(data[i].created_at)
 
@@ -636,6 +694,38 @@ function getKurang(row) {
   }
   const x = rumusTerkecil(getIjin(row)) * 60
   return toHoursAndMinutes(x)
+}
+
+function getRekapTerlambat(row) {
+  // console.log('row', row)
+  const days = daysInMonth(currentMonth.value, tahun.value)
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const ijin = []
+  const absen = []
+  for (let i = 1; i <= days; i++) {
+    const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + i.toString() : tahun.value + '-' + bulanX + '-' + i.toString()
+
+    // INI UNTUK IJIN
+    const user = row.user
+    if (user) {
+      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+      if (user.libur.length) {
+        // const libur = user.libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
+        const libur = user.libur.filter(x => x.tanggal === cellDate)
+        ijin.push(libur.length ? libur.length : trans[0] ? 'ada' : 0)
+      } else {
+        ijin.push(trans[0] ? 'ada' : 0)
+      }
+    }
+
+    // ini untuk yang absen
+    const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)[0]
+    absen.push(trans || 0)
+    // const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+    // absen.push(trans.length || 0)
+  }
+
+  return ijin
 }
 
 function toHoursAndMinutes(totalMinutes) {

@@ -18,8 +18,8 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       order_by: 'id',
       sort: 'desc'
     },
-    defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'masuk', 'hari', 'kurang'],
-    columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'masuk', 'hari', 'kurang'],
+    defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'masuk', 'hari', 'kurang'],
+    columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'masuk', 'hari', 'kurang'],
     columnHide: ['id'],
     jenis_pegawai: [
       {
@@ -37,6 +37,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     ],
     ruanganPrint: [],
     jumlahProta: 0,
+    protas: [],
     rincian: false
   }),
 
@@ -160,9 +161,10 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         }
       }
       const resp = await api.get('/v1/pegawai/absensi/prota', params)
-      console.log('autocomplete', resp)
+      console.log('prota', resp)
       if (resp.status === 200) {
         this.jumlahProta = resp.data.length
+        this.protas = resp.data
       }
     },
     async getDataPrint(periode) {
