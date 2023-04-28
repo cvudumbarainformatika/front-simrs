@@ -32,6 +32,30 @@
                 @click="dispen.setIsOpen()"
               />
             </div>
+            <div class="q-ml-sm">
+              <app-input-date-human
+                ref="tgl"
+                :model="store.tanggal"
+                label="Tanggal"
+                outlined
+                @set-model="setTanggal"
+              />
+            </div>
+            <div class="q-ml-sm">
+              <app-autocomplete-new
+                :model="store.params.bulan"
+                label="Pilih Bulan"
+                outlined
+                autocomplete="nama"
+                option-value="value"
+                option-label="nama"
+                valid
+                :source="store.bulans"
+                :loading="store.loading"
+                @on-select="bulanSelected"
+                @clear="clearBulan"
+              />
+            </div>
           </template>
           <template #col-nama>
             <div>Nama</div>
@@ -139,12 +163,37 @@ import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
 import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
 import { pathImg } from 'src/boot/axios'
 import { dateFullFormat } from 'src/modules/formatter'
+import { date } from 'quasar'
+import { onMounted, ref } from 'vue'
 
 const store = useLiburAbsenStore()
 const dispen = useDispenStore()
-store.getInitialData()
 const imgClick = val => {
   store.image = val
   store.setExpand()
 }
+
+const tgl = ref(null)
+function setTanggal(val) {
+  store.tanggal = val
+  store.params.tanggal = date.formatDate(val, 'YYYY-MM-DD')
+  delete store.params.bulan
+  store.getInitialData()
+}
+function bulanSelected(val) {
+  console.log('bulan', val)
+  store.params.bulan = val
+  delete store.params.tanggal
+  store.getInitialData()
+}
+function clearBulan() {
+  store.params.tanggal = date.formatDate(store.tanggal, 'YYYY-MM-DD')
+  delete store.params.bulan
+  store.getInitialData()
+}
+onMounted(() => {
+  store.tanggal = date.formatDate(Date.now(), 'DD MMMM YYYY')
+  store.params.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD')
+  store.getInitialData()
+})
 </script>

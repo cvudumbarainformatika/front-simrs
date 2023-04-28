@@ -21,7 +21,10 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     filterRuang: '',
     columns: [],
     columnHide: ['id', 'uuid', 'akun', 'kelompok', 'jenis', 'objek', 'rincian_objek', 'sub_rincian_objek', 'sub_sub_rincian_objek', 'created_at', 'updated_at'],
-    form: {},
+    form: {
+      min: 0,
+      max: 0
+    },
     edited: false
 
   }),
@@ -37,11 +40,13 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     resetFORM () {
       this.form = {}
       const columns = [
-        'kodeobat', 'koderuang', 'min', 'max'
+        'kd_obat', 'kd_ruang'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
+      this.setForm('min', 0)
+      this.setForm('max', 0)
     },
     newData () {
       this.resetFORM()
@@ -91,10 +96,12 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
 
     obatSelected(val) {
       console.log('obat', val)
+      this.form.kd_obat = val
       this.form.kodeobat = val
     },
     ruangSelected(val) {
       console.log('ruang', val)
+      this.form.kd_ruang = val
       this.form.koderuang = val
     },
     // api relatec function
@@ -148,6 +155,19 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
             this.loading = false
             this.ruangs = resp.data
             console.log('ruang', resp.data)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    // simpan
+    simpanData() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/maping/minmaxobat', this.form)
+          .then(resp => {
+            this.loading = false
+            this.getDataTable()
             resolve(resp)
           })
           .catch(() => { this.loading = false })
