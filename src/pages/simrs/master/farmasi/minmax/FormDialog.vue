@@ -84,7 +84,9 @@ import { useMasterFarmasiMinMaxObatStore } from 'src/stores/simrs/master/farmasi
 const store = useMasterFarmasiMinMaxObatStore()
 function onSubmit() {
   console.log('on Submit', store.form)
-  store.setOpen()
+  store.simpanData().then(() => {
+    store.setOpen()
+  })
 }
 function onReset() {
   store.setOpen()
@@ -103,7 +105,7 @@ function obatSet(val) {
 }
 function obatInput(val) {
   store.filterObat = val
-  if (val.length % 4 === 0) {
+  if (val.length % 2 === 0) {
     store.getDataObat()
   }
 }
@@ -116,7 +118,7 @@ function ruangSet(val) {
 }
 function ruangInput(val) {
   store.filterRuang = val
-  if (val.length % 4 === 0) {
+  if (val.length % 2 === 0) {
     store.getDataRuang()
   }
 }

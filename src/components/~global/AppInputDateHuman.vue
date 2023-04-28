@@ -37,6 +37,7 @@
         <!-- <q-menu v-model="showing"> -->
         <q-date
           v-if="typeDate"
+          ref="refDate"
           v-model="modelProp"
           mask="DD MMMM YYYY"
           today-btn
@@ -125,6 +126,7 @@ const modelProp = computed({
 
 const refInputDate = ref(null)
 const refPopup = ref(null)
+const refDate = ref(null)
 // const showing = ref(false)
 // const modelProxy = ref()
 

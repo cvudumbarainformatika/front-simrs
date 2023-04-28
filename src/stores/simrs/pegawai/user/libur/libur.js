@@ -11,6 +11,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
     form: {},
+    tanggal: '',
     deleteId: null,
     params: {
       q: '',
@@ -32,6 +33,20 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
       { nama: 'Lebih', link: 'v1/libur/range', value: 'lebih' }
     ],
     day: { nama: 'Satu Hari', link: 'v1/libur/store', value: 'sehari' },
+    bulans: [
+      { nama: 'Januari', value: '01' },
+      { nama: 'Februari', value: '02' },
+      { nama: 'Maret', value: '02' },
+      { nama: 'April', value: '04' },
+      { nama: 'Mei', value: '05' },
+      { nama: 'Juni', value: '06' },
+      { nama: 'Juli', value: '07' },
+      { nama: 'Agustus', value: '08' },
+      { nama: 'September', value: '09' },
+      { nama: 'Oktober', value: '10' },
+      { nama: 'November', value: '11' },
+      { nama: 'Desember', value: '12' }
+    ],
     rangeDay: 'sehari',
     image: '',
     expand: false
