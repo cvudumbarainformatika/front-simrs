@@ -333,6 +333,16 @@
               {{ getIjin(row, 'DISPEN')===0? '-': getIjin(row, 'DISPEN') }}
             </div>
           </template>
+          <template #cell-CUTI="{row}">
+            <div class="">
+              {{ getIjin(row, 'CUTI')===0? '-': getIjin(row, 'CUTI') }}
+            </div>
+          </template>
+          <template #cell-A="{row}">
+            <div class="">
+              {{ getAlpha(row)===0? '-': getAlpha(row) }}
+            </div>
+          </template>
 
           <template #cell-masuk="{row}">
             <div style="max-width:50px">
@@ -367,7 +377,8 @@
           </template>
           <template #cell-kurang="{row}">
             <div class="text-negative">
-              {{ getKurang(row) }} - {{ getRekapTerlambat(row) }}
+              <!-- {{ getKurang(row) }} -  -->
+              {{ getRekapTerlambat(row) }}
             </div>
           </template>
 
@@ -409,7 +420,7 @@
             <div
               v-else
               :class="getTransaksiAbsens(num, row) === 'A'? 'text-negative':
-                getTransaksiAbsens(num, row) === '-'? 'text-dark':'text-green'
+                getTransaksiAbsens(num, row) === 'CB'? 'text-primary':'text-green'
               "
             >
               {{ getTransaksiAbsens(num, row) }}
@@ -544,20 +555,54 @@ function getTransaksiAbsens(num, data) {
   const alpha = getAlphaRinci(num, data)
   // console.log('trans', trans)
   console.log('libur', libur)
-  if (trans.length) {
+  if (trans.length && !ijin) {
     return 'MSK'
   } else {
     if (ijin) {
       return ijin
     } else if (libur.length) {
-      return '-'
+      return 'CB'
     } else if (alpha) {
       return 'A'
     }
-    return ''
+    return 'L'
   }
 }
 
+function getAlpha(row) {
+  console.log('alpha', row)
+  const days = daysInMonth(currentMonth.value, tahun.value)
+  const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+  const ijin = []
+  const absen = []
+  for (let i = 1; i <= days; i++) {
+    const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + i.toString() : tahun.value + '-' + bulanX + '-' + i.toString()
+
+    // INI UNTUK IJIN
+    const user = row.user
+    if (user) {
+      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+      if (user.libur.length) {
+        // const libur = user.libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
+        const libur = user.libur.filter(x => x.tanggal === cellDate)
+        ijin.push(libur.length ? 0 : trans[0] ? hitungTelat(trans[0]) : 0)
+      } else {
+        ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
+      }
+    } else {
+      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+      ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
+    }
+
+    // ini untuk yang absen
+    const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)[0]
+    absen.push(trans || 0)
+    // const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+    // absen.push(trans.length || 0)
+  }
+
+  return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
+}
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
     return kelamin === 'Perempuan'
@@ -606,16 +651,6 @@ function getIjin(row, fx) {
 
   return 0
 }
-// function getAlpha(row) {
-//   // const user = row.user
-//   // let libur = 0
-//   const alpha = row.alpha ? row.alpha.length : 0
-//   // if (user) {
-//   //   libur = user.libur.length
-//   //   return libur
-//   // }
-//   return alpha
-// }
 
 function getAlphaRinci(num, row) {
   // console.log('alpha', num)
@@ -656,6 +691,7 @@ function getMasuk(row) {
       const tglPulangServer = dateDbFormat(data[i].updated_at)
       const jamPulangServer = formatJam(data[i].updated_at)
       const jamMasukServer = formatJam(data[i].created_at)
+      // const jamMasukServer = formatJam(data[i].masuk)
       const tglMasukServer = dateDbFormat(data[i].created_at)
 
       const waktuMasuk = new Date(tglMasukServer + ' ' + jamMasukServer) < new Date(tglMasukServer + ' ' + kategoryMasuk) ? tglMasukServer + ' ' + kategoryMasuk : tglMasukServer + ' ' + jamMasukServer
@@ -712,10 +748,13 @@ function getRekapTerlambat(row) {
       if (user.libur.length) {
         // const libur = user.libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
         const libur = user.libur.filter(x => x.tanggal === cellDate)
-        ijin.push(libur.length ? libur.length : trans[0] ? 'ada' : 0)
+        ijin.push(libur.length ? 0 : trans[0] ? hitungTelat(trans[0]) : 0)
       } else {
-        ijin.push(trans[0] ? 'ada' : 0)
+        ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
       }
+    } else {
+      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
+      ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
     }
 
     // ini untuk yang absen
@@ -725,7 +764,22 @@ function getRekapTerlambat(row) {
     // absen.push(trans.length || 0)
   }
 
-  return ijin
+  return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
+  // return ijin
+}
+
+function hitungTelat(x) {
+  const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
+  const jamMasukServer = formatJam(x.created_at)
+  const tglMasukServer = dateDbFormat(x.created_at)
+
+  const terlambat = new Date(tglMasukServer + ' ' + jamMasukServer) > new Date(tglMasukServer + ' ' + kategoryMasuk)
+  let hitung = 0
+
+  if (terlambat) {
+    hitung = calcDate(new Date(tglMasukServer + ' ' + jamMasukServer), new Date(tglMasukServer + ' ' + kategoryMasuk), 'minutes')
+  }
+  return hitung
 }
 
 function toHoursAndMinutes(totalMinutes) {
