@@ -378,7 +378,8 @@
           <template #cell-kurang="{row}">
             <div class="text-negative">
               <!-- {{ getKurang(row) }} -  -->
-              {{ getRekapTerlambat(row) }}
+              <!-- {{ getRekapTerlambat(row) }} -->
+              {{ getRekapTerlambatMinute(getRekapTerlambat(row)) }} => {{ getRekapTerlambatPercent(getRekapTerlambat(row)) }}%
             </div>
           </template>
 
@@ -573,35 +574,38 @@ function getAlpha(row) {
   console.log('alpha', row)
   const days = daysInMonth(currentMonth.value, tahun.value)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
-  const ijin = []
+  // const ijin = []
   const absen = []
-  for (let i = 1; i <= days; i++) {
-    const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + i.toString() : tahun.value + '-' + bulanX + '-' + i.toString()
 
-    // INI UNTUK IJIN
-    const user = row.user
-    if (user) {
-      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
-      if (user.libur.length) {
-        // const libur = user.libur.filter(x => x.tanggal === cellDate).map(y => y.flag)[0]
-        const libur = user.libur.filter(x => x.tanggal === cellDate)
-        ijin.push(libur.length ? 0 : trans[0] ? hitungTelat(trans[0]) : 0)
-      } else {
-        ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
-      }
+  // for (let x = 1; x <= days; x++) {
+  //   absen.push(x)
+  // }
+
+  for (let i = 0; i < days; i++) {
+    const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + (i + 1).toString() : tahun.value + '-' + bulanX + '-' + (i + 1).toString()
+    absen.push(i)
+    const trans = row.transaksi_absen.filter(x => x.tanggal === cellDate)
+    const libur = store.protas.filter(x => x.tgl_libur === cellDate)
+    const ijin = getIjinRinci(i + 1, row)
+    const alpha = getAlphaRinci(i + 1, row)
+
+    if (trans.length && !ijin) {
+      absen[i] = 'M'
     } else {
-      const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
-      ijin.push(trans[0] ? hitungTelat(trans[0]) : 0)
+      if (ijin) {
+        absen[i] = 'I'
+      } else if (libur.length) {
+        absen[i] = 'C'
+      } else if (alpha) {
+        absen[i] = 'A'
+      } else {
+        absen[i] = 'L'
+      }
     }
-
-    // ini untuk yang absen
-    const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)[0]
-    absen.push(trans || 0)
-    // const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
-    // absen.push(trans.length || 0)
   }
 
-  return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
+  // return absen
+  return absen.filter(x => x === 'A').length
 }
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
@@ -764,8 +768,24 @@ function getRekapTerlambat(row) {
     // absen.push(trans.length || 0)
   }
 
-  return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
+  // return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
   // return ijin
+  return ijin.reduce((x, y) => parseInt(x + y))
+}
+
+function getRekapTerlambatPercent(e) {
+  if (e > 0 && e <= 60) {
+    return 5
+  } else if (e > 60 && e <= 120) {
+    return 10
+  } else if (e >= 121) {
+    return 20
+  } else {
+    return 0
+  }
+}
+function getRekapTerlambatMinute(x) {
+  return toHoursAndMinutes(x)
 }
 
 function hitungTelat(x) {

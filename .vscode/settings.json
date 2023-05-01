@@ -22,5 +22,6 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.autoSave": "onWindowChange",
   "beautify.config": "",
-  "workbench.colorTheme": "GitHub Dark"
+  "workbench.colorTheme": "GitHub Dark",
+  "vue.codeActions.enabled": false
 }
