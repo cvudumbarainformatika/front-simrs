@@ -579,7 +579,7 @@ function getTransaksiAbsens(num, data) {
 }
 
 function getAlpha(row) {
-  console.log('alpha', row)
+  // console.log('alpha', row)
   const days = daysInMonth(currentMonth.value, tahun.value)
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   // const ijin = []
