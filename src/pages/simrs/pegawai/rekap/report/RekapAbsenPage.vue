@@ -274,8 +274,8 @@
           </template>
           <template #cell-status="{row}">
             <div class="">
-              <div v-if="getStatus(row)">
-                <!-- <q-linear-progress
+              <!-- <div v-if="getStatus(row)"> -->
+              <!-- <q-linear-progress
                   class="q-mt-xs"
                   rounded
                   size="20px"
@@ -295,7 +295,7 @@
                     </q-badge>
                   </div>
                 </q-linear-progress> -->
-                <q-badge
+              <!-- <q-badge
                   v-if="getStatus(row)"
                   outline
                   color="primary"
@@ -303,9 +303,9 @@
                   <div class="f-10">
                     Installed
                   </div>
-                </q-badge>
-              </div>
-              <q-badge
+                </q-badge> -->
+              <!-- </div> -->
+              <!-- <q-badge
                 v-else
                 outline
                 color="negative"
@@ -313,7 +313,8 @@
                 <div class="f-10">
                   Blm Install
                 </div>
-              </q-badge>
+              </q-badge> -->
+              {{ row.jenis_pegawai? row.jenis_pegawai.jenispegawai:'-' }}
             </div>
           </template>
           <template #cell-IJIN="{row}">
