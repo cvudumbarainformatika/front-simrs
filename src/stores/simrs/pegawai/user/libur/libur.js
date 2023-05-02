@@ -179,7 +179,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
-            // console.log('data table', resp.data)
+            console.log('tidak masuk', resp.data)
             this.items = resp.data.data
             this.setColumns(resp.data.data)
             this.meta = resp.data
