@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { findWithAttr } from 'src/modules/utils'
 
 export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minmax_obat', {
   state: () => ({
@@ -56,10 +57,26 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     editData (val) {
       this.edited = true
       const keys = Object.keys(val)
+      console.log('val', val)
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
+      this.setForm('kodeobat', val.kd_obat)
+      this.setForm('koderuang', val.kd_ruang)
+      const obatnya = findWithAttr(this.obats, 'kodeobat', val.kd_obat)
+      if (obatnya < 0) {
+        const obt = { kodeobat: val.obat.rs1, namaobat: val.obat.namaobat }
+        this.obats.push(obt)
+      }
+      const ruangnya = findWithAttr(this.ruangs, 'kode', val.kd_ruang)
+      if (ruangnya < 0) {
+        const rua = { kode: val.ruanganx.kode, uraian: val.ruanganx.namaruangan }
+        this.ruangs.push(rua)
+      }
       this.formOpen = !this.formOpen
+      console.log('obat', obatnya)
+      console.log('ruang', ruangnya)
+      console.log(this.form)
     },
     setSearch (val) {
       this.params.q = val
@@ -83,8 +100,9 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       this.getDataTable()
     },
     setColumns (payload) {
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0]
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0]
+      this.columns = ['Obat', 'Ruangan', 'Min', 'Max']
       // console.log('columns', this.columns)
     },
 
@@ -112,16 +130,22 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/barang108/index', params)
+          .get('v1/simrs/maping/carilistminmaxbyobat', params)
           .then((resp) => {
             this.loading = false
-            // console.log(resp)
+            // if (resp.status === 200) {
+            //   this.items = resp.data.data
+            //   this.meta = resp.data.meta
+            //   this.setColumns(resp.data.data)
+            //   console.log(resp.data.data)
+            //   resolve(resp.data.data)
+            // }
             if (resp.status === 200) {
               this.items = resp.data.data
-              this.meta = resp.data.meta
-              this.setColumns(resp.data.data)
-              console.log(resp.data.data)
-              resolve(resp.data.data)
+              this.meta = resp.data
+              this.setColumns(resp.data)
+              console.log(resp.data)
+              resolve(resp.data)
             }
           })
           .catch((err) => {

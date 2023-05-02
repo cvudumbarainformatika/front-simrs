@@ -14,6 +14,7 @@
             :sort="store.params.sort"
             :loading="store.loading"
             :to-search="store.params.q"
+            :ada-cari="false"
             @goto="store.setPage"
             @set-row="store.setPerPage"
             @refresh="store.refreshTable"
@@ -23,11 +24,41 @@
             @edit-data="store.editData"
             @delete="store.deletesData"
           >
-            <template #col-kode>
-              <div>Kode</div>
+            <template #header-left-after-search>
+              <div class="row fit q-col-gutter-sm">
+                <div class="col">
+                  <app-input
+                    v-model="store.params.o"
+                    outlined
+                    valid
+                    label="Cari Obat"
+                    debounce="700"
+                    @update:model-value="store.setSearch"
+                  />
+                </div>
+                <div class="col">
+                  <app-input
+                    v-model="store.params.r"
+                    outlined
+                    valid
+                    label="Cari Ruanngan"
+                    debounce="700"
+                    @update:model-value="store.setSearch"
+                  />
+                </div>
+              </div>
             </template>
-            <template #col-uraian>
-              <div>Uraian</div>
+            <template #cell-Obat="{row}">
+              <div>{{ row.obat.namaobat }}</div>
+            </template>
+            <template #cell-Ruangan="{row}">
+              <div>{{ row.ruanganx.namaruangan }}</div>
+            </template>
+            <template #cell-Min="{row}">
+              <div>{{ row.min }}</div>
+            </template>
+            <template #cell-Max="{row}">
+              <div>{{ row.max }}</div>
             </template>
           </app-table>
           <!--
