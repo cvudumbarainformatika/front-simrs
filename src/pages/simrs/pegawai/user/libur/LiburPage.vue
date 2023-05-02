@@ -80,11 +80,25 @@
           </template>
           <template #cell-image="{row}">
             <div v-if="row.image">
-              <q-img
-                :src="pathImg + row.image"
-                class="cursor-pointer"
-                @click="imgClick(pathImg + row.image)"
-              />
+              <div v-if="row.fileType==='pdf'">
+                <!-- <app-pdf
+                  :src="pathImg + row.image"
+                  class="cursor-pointer"
+                  @click="imgClick(pathImg + row.image,row.fileType)"
+                /> -->
+                <q-img
+                  src="~assets/images/PDF_file_icon.png"
+                  class="cursor-pointer"
+                  @click="openPdf(pathImg + row.image)"
+                />
+              </div>
+              <div v-else>
+                <q-img
+                  :src="pathImg + row.image"
+                  class="cursor-pointer"
+                  @click="imgClick(pathImg + row.image)"
+                />
+              </div>
             </div>
             <div v-if="!row.image">
               <q-img
@@ -163,11 +177,16 @@ import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
 import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
 import { pathImg } from 'src/boot/axios'
 import { dateFullFormat } from 'src/modules/formatter'
-import { date } from 'quasar'
+import { date, openURL } from 'quasar'
 import { onMounted, ref } from 'vue'
 
 const store = useLiburAbsenStore()
 const dispen = useDispenStore()
+
+function openPdf(val) {
+  openURL(val)
+}
+
 const imgClick = val => {
   store.image = val
   store.setExpand()
