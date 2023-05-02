@@ -173,7 +173,10 @@
             Masuk (Hari)
           </template>
           <template #col-kurang>
-            Rekap keterlambatan
+            Terlambat
+          </template>
+          <template #col-per-t>
+            % POT
           </template>
           <template #cell-default-img="{row}">
             <div class="row">
@@ -378,8 +381,13 @@
           <template #cell-kurang="{row}">
             <div class="text-negative">
               <!-- {{ getKurang(row) }} -  -->
-              <!-- {{ getRekapTerlambat(row) }} -->
-              {{ getRekapTerlambatMinute(getRekapTerlambat(row)) }} => {{ getRekapTerlambatPercent(getRekapTerlambat(row)) }}%
+              {{ getRekapTerlambatMinute(getRekapTerlambat(row)) }}
+            </div>
+          </template>
+          <template #cell-per-t="{row}">
+            <div class="text-negative">
+              <!-- {{ getKurang(row) }} -  -->
+              {{ getRekapTerlambatPercent(getRekapTerlambat(row)) }}%
             </div>
           </template>
 
