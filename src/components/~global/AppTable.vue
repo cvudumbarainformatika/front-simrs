@@ -455,7 +455,7 @@ const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds'
 
 // const per_page = ref(5)
 const refCellTable = ref(null)
-const options = ref([5, 10, 20, 50])
+const options = ref([5, 10, 20, 50, 100, 1000])
 const checkAll = ref(false)
 const selected = ref([])
 const selectPerPage = computed({

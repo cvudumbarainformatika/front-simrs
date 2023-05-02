@@ -180,6 +180,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           .get('v1/libur/index', params)
           .then((resp) => {
             this.loading = false
+            console.log('tidak masuk', resp.data)
             this.items = resp.data.data
             this.items.forEach(data => {
               if (data.image.length) {
