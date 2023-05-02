@@ -49,6 +49,7 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
     ],
     rangeDay: 'sehari',
     image: '',
+    ext: '',
     expand: false
   }),
   actions: {
@@ -181,9 +182,20 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
             this.loading = false
             console.log('tidak masuk', resp.data)
             this.items = resp.data.data
+            this.items.forEach(data => {
+              if (data.image.length) {
+                const temp = data.image.split('.')
+                console.log('data', data)
+                console.log('image ', temp)
+                console.log('image ', temp[1])
+                data.fileType = temp[temp.length - 1]
+                data.disp = true
+              }
+            })
             this.setColumns(resp.data.data)
             this.meta = resp.data
             this.resetFORM()
+            console.log('data table', this.items)
             resolve(resp)
           })
           .catch((err) => {

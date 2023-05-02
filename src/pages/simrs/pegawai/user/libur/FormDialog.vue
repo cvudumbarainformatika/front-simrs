@@ -191,7 +191,7 @@
               filled
               dense
               label="Gambar Thumbnail"
-              accept="image/*"
+              accept=".pdf,image/*"
               class="q-mb-md"
               @update:model-value="simpanGambar"
             />
