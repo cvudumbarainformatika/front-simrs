@@ -6,6 +6,8 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
     loading: false,
     kontraks: [],
     kontrak: {},
+    penerimaans: [],
+    noBayar: 0,
     form: {},
     params: {
       q: ''
@@ -22,7 +24,9 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
     kontrakSelected(val) {
       console.log('kontrak', val)
       this.setParam('kontrak', val)
+      this.getPenerimaan()
       this.getKontrak()
+      this.getNoBayar()
     },
     // api related function
     // ambil data kontrak
@@ -53,6 +57,37 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
           })
           .catch(() => { this.loading = false })
       })
+    },
+    getPenerimaan() {
+      this.loading = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/pembayaran/ambil-penerimaan', param)
+          .then(resp => {
+            this.loading = false
+            console.log('get penerimaan', resp.data)
+            this.penerimaans = resp.data
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    getNoBayar() {
+      this.loading = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/pembayaran/ambil-no-bayar', param)
+          .then(resp => {
+            this.loading = false
+            console.log('get no bayar', resp.data)
+            this.noBayar = resp.data
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    simpanPembayaran() {
+      console.log('form', this.form)
     }
   }
 })

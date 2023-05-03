@@ -74,7 +74,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-const emits = defineEmits(['showDate', 'setModel'])
+
+const emits = defineEmits(['showDate', 'setModel', 'setDisplay'])
 const props = defineProps({
   icon: {
     type: String,
@@ -117,7 +118,18 @@ const props = defineProps({
 
 const modelProp = computed({
   get () { return props.model },
-  set (val) { emits('setModel', val) }
+  set (val) {
+    const temp = val.split(' ')
+    let newTgl = ''
+    if (temp[1] === 'Mei') {
+      newTgl = temp[0] + ' May ' + temp[2]
+    } else {
+      newTgl = val
+    }
+    console.log('app input date', newTgl)
+    emits('setModel', newTgl)
+    emits('setDisplay', val)
+  }
 })
 // const modelProp = toRef(props, 'model')// react to ref
 // watch(modelProp, (value) => {

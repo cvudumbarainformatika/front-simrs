@@ -48,6 +48,7 @@
                   outlined
                   :loading="store.loading"
                   @set-model="setTanggal"
+                  @set-display="setTanggalDisp"
                 />
               </div>
             </div>
@@ -70,33 +71,123 @@
               <div class="col-4">
                 Tanggal Kontrak
               </div>
-              <div class="col-8">
-                display
+              <div class="col-8 text-weight-bold">
+                {{ dateFullFormat( store.kontrak.tglmulaikontrak) }}
               </div>
             </div>
             <div class="row fit q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Nama Penyedia
               </div>
-              <div class="col-8">
-                display
+              <div class="col-8 text-weight-bold">
+                {{ store.kontrak.penenyedia?store.kontrak.penenyedia.nama:store.kontrak.namaperusahaan }}
               </div>
             </div>
           </div>
         </div>
+      </q-card-section>
+      <q-card-actions align="right">
+        <div>
+          <app-btn
+            label="Simpan"
+            :disable="store.loading"
+            :loading="store.loading"
+            @click="simpan"
+          />
+        </div>
+      </q-card-actions>
+    </q-card>
+    <q-card
+      v-if="store.penerimaans.length && !store.loading"
+      class="q-mt-md"
+    >
+      <q-card-section>
+        <div
+          class="row fit q-col-gutter-sm text-weight-bold q-mb-sm"
+        >
+          <div class="col-1">
+            No
+          </div>
+          <div class="col-2">
+            No Faktur
+          </div>
+          <div class="col-5">
+            Kode Belanja
+          </div>
+          <div class="col-2">
+            Nilai Tagihan
+          </div>
+          <div class="col-2">
+            Nilai Belanja
+          </div>
+        </div>
+        <div
+          v-for="(trm,i) in store.penerimaans"
+          :key="i"
+          class="row fit q-col-gutter-sm items-center q-mb-xs"
+        >
+          <div class="col-1">
+            {{ i+1 }}
+          </div>
+          <div class="col-2">
+            {{ trm.faktur?trm.faktur:'tidak ada faktur' }}
+          </div>
+          <div class="col-5">
+            <div
+              v-for="(det,j) in trm.details"
+              :key="j"
+            >
+              {{ det.uraian_50?det.uraian_50:'tidak ada kode Belanja' }}
+            </div>
+          </div>
+          <div class="col-2">
+            {{ trm.nilai_tagihan?formatRpDouble(trm.nilai_tagihan,2):formatRpDouble(0,2) }}
+          </div>
+          <div class="col-2">
+            <app-input
+              v-model="trm.nilai_belanja"
+              label="Nilai Belanja"
+              outlined
+            />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+    <q-card
+      v-if="!store.penerimaans.length && !store.loading"
+      class="q-mt-md"
+    >
+      <q-card-section><app-no-data /></q-card-section>
+    </q-card>
+    <q-card
+      v-if="store.loading"
+      class="q-mt-md"
+      style="height:300px"
+    >
+      <q-card-section
+        class="row fit items-center justify-center"
+      >
+        <app-loading />
       </q-card-section>
     </q-card>
   </div>
 </template>
 <script setup>
 import { date } from 'quasar'
+import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { usePembayaranStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pembayaran/pembayaran'
 
 const store = usePembayaranStore()
 store.getKontraks()
 function setTanggal(val) {
-  store.setForm('tangl', val)
   store.setForm('tanggal_pembayaran', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setTanggalDisp(val) {
+  store.setForm('tangl', val)
   console.log(store.form)
+}
+
+function simpan() {
+  console.log('simpan', store.form)
 }
 </script>

@@ -15,6 +15,7 @@
             :loading="store.loading"
             :to-search="store.params.q"
             :ada-cari="false"
+            :ada-delete="false"
             @goto="store.setPage"
             @set-row="store.setPerPage"
             @refresh="store.refreshTable"
