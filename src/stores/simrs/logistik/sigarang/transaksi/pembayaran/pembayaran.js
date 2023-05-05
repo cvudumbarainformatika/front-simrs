@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
 
 export const usePembayaranStore = defineStore('pembayaran_store', {
   state: () => ({
@@ -24,9 +25,39 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
     kontrakSelected(val) {
       console.log('kontrak', val)
       this.setParam('kontrak', val)
-      this.getPenerimaan()
+      this.getPenerimaan().then(pnrm => {
+        this.getNoBayar().then(byr => {
+          if (pnrm.length) {
+            const nomor = pnrm[0].nomor
+            const tempNom = nomor.split('SP-')
+            let nom = ''
+            let nom2 = ''
+            const noByr = byr < 9 ? '0' + (byr + 1) : byr + 1
+            if (tempNom.length > 1) {
+              nom = tempNom[0].split('/')
+              nom2 = tempNom[1].split('/')
+              const dua = nom2[0] === '' ? nom2[1] + '/' + nom2[2] + '/' + nom2[3] : tempNom[1]
+              if (nom.length > 3) {
+                this.setForm('no_kwitansi', noByr + '/KWTS/SP-' + nom[2] + '/' + dua)
+                this.setForm('no_pembayaran', noByr + '/BYR/SP-' + nom[2] + '/' + dua)
+              } else {
+                this.setForm('no_kwitansi', noByr + '/KWTS/' + tempNom[1])
+                this.setForm('no_pembayaran', noByr + '/BYR/' + tempNom[1])
+              }
+            } else {
+              this.setForm('no_kwitansi', noByr + '/KWTS/' + nomor)
+              this.setForm('no_pembayaran', noByr + '/BYR/' + nomor)
+            }
+            console.log('nom length', tempNom.length)
+            console.log('nom', nom2)
+          } else {
+            notifErrVue('tidak ada Transaksi Penerimaan')
+          }
+          console.log('penerimaan', pnrm)
+          console.log('anu', byr)
+        })
+      })
       this.getKontrak()
-      this.getNoBayar()
     },
     // api related function
     // ambil data kontrak
@@ -65,7 +96,7 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
         api.get('v1/transaksi/pembayaran/ambil-penerimaan', param)
           .then(resp => {
             this.loading = false
-            console.log('get penerimaan', resp.data)
+            // console.log('get penerimaan', resp.data)
             this.penerimaans = resp.data
             resolve(resp.data)
           })
@@ -79,7 +110,7 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
         api.get('v1/transaksi/pembayaran/ambil-no-bayar', param)
           .then(resp => {
             this.loading = false
-            console.log('get no bayar', resp.data)
+            // console.log('get no bayar', resp.data)
             this.noBayar = resp.data
             resolve(resp.data)
           })
@@ -87,7 +118,7 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
       })
     },
     simpanPembayaran() {
-      console.log('form', this.form)
+      console.log('simpan pembayaran', this.form)
     }
   }
 })

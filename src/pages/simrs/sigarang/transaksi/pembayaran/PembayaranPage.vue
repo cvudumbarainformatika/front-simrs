@@ -43,6 +43,7 @@
               </div>
               <div class="col-8">
                 <app-input-date-human
+                  ref="tglByr"
                   :model="store.form.tangl"
                   label="tanggal bayar"
                   outlined
@@ -62,6 +63,21 @@
                   label="isi Nomor pembayaran"
                   outlined
                   :loading="store.loading"
+                />
+              </div>
+            </div>
+            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                anu
+              </div>
+              <div class="col-8">
+                <app-input
+                  v-model="store.form.anu"
+                  label="isi Nomor pembayaran"
+                  outlined
+                  type="number"
+                  :loading="store.loading"
+                  @update:model-value="fungsAnu"
                 />
               </div>
             </div>
@@ -147,6 +163,7 @@
             <app-input
               v-model="trm.nilai_belanja"
               label="Nilai Belanja"
+              type="number"
               outlined
             />
           </div>
@@ -175,7 +192,9 @@
 <script setup>
 import { date } from 'quasar'
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { usePembayaranStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pembayaran/pembayaran'
+import { ref } from 'vue'
 
 const store = usePembayaranStore()
 store.getKontraks()
@@ -187,7 +206,21 @@ function setTanggalDisp(val) {
   console.log(store.form)
 }
 
+const tglByr = ref(null)
 function simpan() {
+  const dbyr = store.penerimaans.filter(trm => trm.nilai_belanja > 0)
+  store.setForm('penerimaans', dbyr)
+  if (tglByr.value.$refs.refInputDate.validate()) {
+    console.log('bisa dibayar')
+  } else {
+    notifErrVue('Tanggal Pembayaran belum di isi')
+  }
+  console.log(tglByr.value.$refs.refInputDate.validate())
   console.log('simpan', store.form)
+}
+
+function fungsAnu(val) {
+  const anu = parseFloat(val)
+  console.log('anu ', anu < 9 ? ('0' + (anu + 1) + '/') : (anu + 1 + '/'))
 }
 </script>
