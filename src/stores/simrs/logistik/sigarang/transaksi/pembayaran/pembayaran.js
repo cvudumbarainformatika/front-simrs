@@ -22,6 +22,13 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
     setParam(key, val) {
       this.params[key] = val
     },
+    resetAll() {
+      this.kontraks = []
+      this.kontrak = {}
+      this.penerimaans = []
+      this.form = {}
+      this.getKontraks()
+    },
     kontrakSelected(val) {
       console.log('kontrak', val)
       this.setParam('kontrak', val)
@@ -97,7 +104,11 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
           .then(resp => {
             this.loading = false
             // console.log('get penerimaan', resp.data)
-            this.penerimaans = resp.data
+            const trm = resp.data.map(terima => {
+              terima.nilai_pembayaran = terima.nilai_tagihan
+              return terima
+            })
+            this.penerimaans = trm
             resolve(resp.data)
           })
           .catch(() => { this.loading = false })
@@ -118,7 +129,18 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
       })
     },
     simpanPembayaran() {
+      this.loading = true
       console.log('simpan pembayaran', this.form)
+      return new Promise(resolve => {
+        api.post('v1/transaksi/pembayaran/simpan-bayar', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan resp ', resp.data)
+            this.resetAll()
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

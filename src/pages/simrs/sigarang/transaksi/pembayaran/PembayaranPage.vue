@@ -30,6 +30,7 @@
               </div>
               <div class="col-8">
                 <app-input
+                  ref="refKwitansi"
                   v-model="store.form.no_kwitansi"
                   label="isi Nomor Kwitansi"
                   outlined
@@ -59,25 +60,11 @@
               </div>
               <div class="col-8">
                 <app-input
+                  ref="refNoBayar"
                   v-model="store.form.no_pembayaran"
                   label="isi Nomor pembayaran"
                   outlined
                   :loading="store.loading"
-                />
-              </div>
-            </div>
-            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                anu
-              </div>
-              <div class="col-8">
-                <app-input
-                  v-model="store.form.anu"
-                  label="isi Nomor pembayaran"
-                  outlined
-                  type="number"
-                  :loading="store.loading"
-                  @update:model-value="fungsAnu"
                 />
               </div>
             </div>
@@ -156,16 +143,28 @@
               {{ det.uraian_50?det.uraian_50:'tidak ada kode Belanja' }}
             </div>
           </div>
-          <div class="col-2">
+          <div class="col-2 text-right">
             {{ trm.nilai_tagihan?formatRpDouble(trm.nilai_tagihan,2):formatRpDouble(0,2) }}
           </div>
-          <div class="col-2">
+          <div class="col-2 text-right">
             <app-input
-              v-model="trm.nilai_belanja"
+              ref="refBayar"
+              v-model="trm.nilai_pembayaran"
               label="Nilai Belanja"
               type="number"
+              :rules="[val => val > 0 || 'Input tidak valid' ]"
               outlined
             />
+          </div>
+        </div>
+        <div
+          class="row fit q-col-gutter-sm f-16 text-weight-bold q-mb-sm"
+        >
+          <div class="col-9">
+            Total Belanja
+          </div>
+          <div class="col-3 text-right">
+            {{ formatRpDouble((store.penerimaans.map(a=>a.nilai_pembayaran).reduce((x,y)=>x+y,0)),2) }}
           </div>
         </div>
       </q-card-section>
@@ -206,21 +205,38 @@ function setTanggalDisp(val) {
   console.log(store.form)
 }
 
+const refKwitansi = ref(null)
+const refNoBayar = ref(null)
 const tglByr = ref(null)
+const refBayar = ref(null)
 function simpan() {
-  const dbyr = store.penerimaans.filter(trm => trm.nilai_belanja > 0)
-  store.setForm('penerimaans', dbyr)
+  console.log('kwitansi', refKwitansi.value.$refs.refInput)
+  const dbyr = store.penerimaans.filter(trm => trm.nilai_pembayaran > 0)
   if (tglByr.value.$refs.refInputDate.validate()) {
-    console.log('bisa dibayar')
+    const ada = []
+    refBayar.value.forEach(belanja => {
+      if (belanja.$refs.refInput.validate() === false) {
+        ada.push(belanja.$refs.refInput.validate())
+      }
+    })
+    const anu = ada.filter(a => a === false)
+    // console.log('satu belanja', anu)
+    if (anu.length) {
+      notifErrVue('Semua BAST harus dibayar')
+    } else {
+      store.setForm('penerimaans', dbyr)
+      store.simpanPembayaran().then(() => {
+        tglByr.value.$refs.refInputDate.resetValidation()
+        refKwitansi.value.$refs.refInput.resetValidation()
+        refNoBayar.value.$refs.refInput.resetValidation()
+      })
+    }
+    // console.log('bisa dibayar')
   } else {
     notifErrVue('Tanggal Pembayaran belum di isi')
   }
-  console.log(tglByr.value.$refs.refInputDate.validate())
-  console.log('simpan', store.form)
+  // console.log(tglByr.value.$refs.refInputDate.validate())
+  // console.log('simpan', store.form)
 }
 
-function fungsAnu(val) {
-  const anu = parseFloat(val)
-  console.log('anu ', anu < 9 ? ('0' + (anu + 1) + '/') : (anu + 1 + '/'))
-}
 </script>
