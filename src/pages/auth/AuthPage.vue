@@ -112,7 +112,7 @@ function onSubmit () {
           router.push(storeAuth.route.link)
         }
       }
-      window.location.reload(true)
+      window.location.reload()
     })
 }
 

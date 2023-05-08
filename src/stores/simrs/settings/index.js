@@ -7,7 +7,8 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
   state: () => ({
     items: [],
     pegawai: null,
-    loading: false
+    loading: false,
+    currentApp: ''
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -19,6 +20,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         console.log('settings aplikasi :', resp)
         if (resp.status === 200) {
           this.items = resp.data
+          console.log('setting ', this.items)
           this.loading = false
         }
         this.loading = false
