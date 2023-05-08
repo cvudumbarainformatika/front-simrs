@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div v-if="store.form.id">
+      <app-input
+        v-model="store.form.id"
+        label="id"
+      />
+    </div>
     <q-img
       v-if="store.form.url === null && store.tempImg===null"
       :key="previewImage"
