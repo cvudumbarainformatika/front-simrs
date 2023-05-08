@@ -128,6 +128,27 @@
             </div>
           </div>
         </q-card>
+        <q-card
+          class="bg-indigo text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('/laporan/dashboard')"
+        >
+          <div class="q-pa-md">
+            <div class="column ">
+              <div class="flex items-center justify-between">
+                <div class="icon-b">
+                  <q-icon name="icon-mat-summarize" />
+                </div>
+                <div class="text-h4 text-weight-light">
+                  E-REP
+                </div>
+              </div>
+              <q-separator class="bg-white q-my-sm" />
+              <div class="text-h5 text-weight-light">
+                e-Report
+              </div>
+            </div>
+          </div>
+        </q-card>
       </div>
 
       <div class="col-md-3 col-xs-12">
@@ -217,6 +238,7 @@ onMounted(() => {
 })
 
 function goTo(url) {
+  console.log('go to', url)
   router.replace({ path: url })
 }
 </script>

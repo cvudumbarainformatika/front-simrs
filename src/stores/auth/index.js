@@ -46,6 +46,12 @@ export const useAuthStore = defineStore('auth', {
         const temp = {}
         temp.aplikasi = val.aplikasi[key].aplikasi
         temp.id = val.aplikasi[key].id
+        temp.color = val.aplikasi[key].color
+        temp.url = val.aplikasi[key].url
+        temp.keterangan = val.aplikasi[key].keterangan
+        temp.julukan = val.aplikasi[key].julukan
+        temp.singkatan = val.aplikasi[key].singkatan
+        temp.icon = val.aplikasi[key].icon
         temp.nama = val.aplikasi[key].nama
         const menu = menuKey.map(menu => {
           if (val.aplikasi[key].id === val.menus[menu].aplikasi_id) {
@@ -126,7 +132,7 @@ export const useAuthStore = defineStore('auth', {
         }
         // console.log('panjangnya cuma satu', apli)
       }
-      // console.log('aplikasi', apli)
+      console.log('aplikasi', apli)
       // console.log('role', this.role)
     },
 

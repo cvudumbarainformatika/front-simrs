@@ -188,7 +188,7 @@
       class="screenwide"
     >
       <thead>
-        <tr>
+        <tr v-if="enableHead">
           <th
             v-if="isChecked"
             width="5%"
@@ -257,6 +257,9 @@
               #
             </div>
           </th>
+        </tr>
+        <tr>
+          <slot name="top-row" />
         </tr>
       </thead>
       <tbody v-if="!loading">
@@ -449,6 +452,7 @@ const props = defineProps({
   adaTambah: { type: Boolean, default: true },
   adaCari: { type: Boolean, default: true },
   clickAble: { type: Boolean, default: false },
+  enableHead: { type: Boolean, default: true },
   textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
