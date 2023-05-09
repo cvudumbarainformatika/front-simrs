@@ -225,9 +225,9 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings/index.js'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const store = useSettingsAplikasi()
