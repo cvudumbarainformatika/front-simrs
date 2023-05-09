@@ -89,7 +89,11 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
     setTanggal() {
       this.tanggalDisplay = date.formatDate(this.form.tanggal, 'DD MMMM YYYY')
     },
-
+    searchRuangan(val) {
+      // console.log('val', val)
+      // console.log('param', this.params)
+      this.getDataTable()
+    },
     refreshTable() {
       this.params.page = 1
       this.getDataTable()
