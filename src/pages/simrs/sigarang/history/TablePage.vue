@@ -4,6 +4,7 @@
       <app-card :is-header="false">
         <template #content>
           <app-table-view
+            :key="table.items"
             :title="`Data ${table.nama}`"
             :columns="table.columns"
             :column-hide="table.columnHide"
