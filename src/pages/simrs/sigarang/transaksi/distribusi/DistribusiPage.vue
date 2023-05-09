@@ -39,7 +39,8 @@
                 outlined
                 valid
                 icon="icon-mat-search"
-                debounde="1000"
+                debounce="1000"
+                :loading="store.loading"
                 @update:model-value="store.searchRuangan"
               />
             </div>
