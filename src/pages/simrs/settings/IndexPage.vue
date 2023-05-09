@@ -28,6 +28,7 @@
             @add="newData()"
             @save-new="(val)=> saveNew(val)"
             @icon-app-change="(val)=>iconAppClick(val)"
+            @icon-menu-change="(val)=>iconMenuClick(val)"
             @delete-new="(val)=>store.deleteNew(val)"
             @add-menu="(val)=>store.addMenu(val)"
           />
@@ -101,6 +102,10 @@
       v-model="modalIcon"
       @copy-text="(val)=>changeIconApp(val)"
     />
+    <app-get-icon
+      v-model="modalMenuIcon"
+      @copy-text="(val)=>changeIconMenu(val)"
+    />
     <DialogSearchUser
       v-model="modalSearch"
       @updated="(val)=>setPegawai(val)"
@@ -133,6 +138,7 @@ const newValue = ref({
   url: ''
 })
 const modalIcon = ref(false)
+const modalMenuIcon = ref(false)
 const modalSearch = ref(false)
 const edited = ref(null)
 const indexApp = ref(null)
@@ -165,6 +171,23 @@ function changeIconApp(val) {
   modalIcon.value = false
   console.log(val)
   store.changeAppIcon(indexApp.value, val).then(() => {
+    edited.value = 'edited-' + val
+    console.log(edited.value)
+  })
+}
+const indexMenu = ref(null)
+function iconMenuClick(index) {
+  console.log('icon menu', index)
+  modalMenuIcon.value = true
+  indexApp.value = index.app
+  indexMenu.value = index.menu
+  console.log('index app', index)
+}
+function changeIconMenu(val) {
+  console.log('change icon', val)
+  modalMenuIcon.value = false
+  console.log(val)
+  store.changeMenuIcon(indexApp.value, indexMenu.value, val).then(() => {
     edited.value = 'edited-' + val
     console.log(edited.value)
   })

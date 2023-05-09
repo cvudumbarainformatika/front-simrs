@@ -55,10 +55,18 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         resolve(val)
       })
     },
+    changeMenuIcon(idx, men, val) {
+      return new Promise((resolve, reject) => {
+        this.items[idx].menus[men].icon = val
+        resolve(val)
+      })
+    },
 
     addMenu(idx) {
       const menus = this.items[idx]
       const menu = {
+        aplikasi_id: menus.id,
+        menuId: 0,
         icon: null,
         link: 'kosong',
         nama: 'kosong',

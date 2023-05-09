@@ -1,7 +1,36 @@
 <template>
   <q-page padding>
-    <q-card>
+    <q-card :key="store.items">
       <q-card-section>
+        <div class="row garis-bawah">
+          <div class="col-2">
+            <q-img
+              src="~assets/images/logo-kota-grey.png"
+              spinner-color="white"
+              style="height: 3.56cm; max-width: 2.86cm"
+            />
+          </div>
+          <div class="col-10">
+            <div class="row justify-center f-18">
+              PEMERINTAH KOTA PROBOLINGGO
+            </div>
+            <div class="row justify-center f-14 text-weight-bold">
+              DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+            </div>
+            <div class="row justify-center f-28 text-weight-bold">
+              UOBK RSUD DOKTER MOHAMAD SALEH
+            </div>
+            <div class="row justify-center f-14">
+              Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+            </div>
+            <div class="row justify-center f-14">
+              E-mail : rsudprob@probolinggokota.go.id
+            </div>
+            <div class="row justify-center f-14 text-weight-bold">
+              PROBOLINGGO  67219
+            </div>
+          </div>
+        </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
           REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}
         </div>
@@ -31,6 +60,44 @@
           @edit-data="store.editData"
           @delete="store.deletesData"
         >
+          <!-- header print -->
+          <template #header-for-print>
+            <div class="row garis-bawah">
+              <div class="col-2">
+                <q-img
+                  src="~assets/images/logo-kota-grey.png"
+                  spinner-color="white"
+                  style="height: 3.56cm; max-width: 2.86cm"
+                />
+              </div>
+              <div class="col-10">
+                <div class="row justify-center f-18">
+                  PEMERINTAH KOTA PROBOLINGGO
+                </div>
+                <div class="row justify-center f-14 text-weight-bold">
+                  DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+                </div>
+                <div class="row justify-center f-28 text-weight-bold">
+                  UOBK RSUD DOKTER MOHAMAD SALEH
+                </div>
+                <div class="row justify-center f-14">
+                  Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+                </div>
+                <div class="row justify-center f-14">
+                  E-mail : rsudprob@probolinggokota.go.id
+                </div>
+                <div class="row justify-center f-14 text-weight-bold">
+                  PROBOLINGGO  67219
+                </div>
+              </div>
+            </div>
+            <div class="row justify-center f-18 text-weight-bold q-my-sm">
+              REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}
+            </div>
+            <!-- <div class="row ">
+              <div>  REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}</div>
+            </div> -->
+          </template>
           <!-- tombol print -->
           <template #header-right-before>
             <q-btn
@@ -213,3 +280,9 @@ const printObj = {
 
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.garis-bawah{
+  border-bottom: 6px solid black;
+  border-bottom-style: double;
+}
+</style>

@@ -98,9 +98,7 @@
         :key="i"
         expand-icon-toggle
       >
-        <template
-          #header
-        >
+        <template #header>
           <q-item-section
             avatar
             :class="edited=== 'edited-'+item.icon? 'text-blue':'text-dark'"
@@ -231,7 +229,7 @@
             </q-item-section>
 
             <q-item-section>
-              <div>{{ menu.nama }}</div>
+              <div>{{ menu.nama }} anu cak</div>
             </q-item-section>
             <q-item-section>
               <div> urlName : {{ menu.name }} </div>
@@ -255,6 +253,7 @@
               <q-item-section
                 avatar
                 :class="edited=== 'edited-'+menu.icon? 'text-blue':'text-dark'"
+                @click="$emit('iconMenuChange',({app:i,menu:n}),)"
               >
                 <q-skeleton
                   v-if="menu.icon===''|| menu.icon===null"
@@ -322,12 +321,62 @@
                   </q-popup-edit>
                 </div>
               </q-item-section>
+              <q-item-section side>
+                <div class="row items-center">
+                  <q-btn
+                    v-if="menu.menuId===0 && menu.nama!=='kosong'"
+                    flat
+                    icon="icon-mat-save"
+                    dense
+                    size="sm"
+                    color="primary"
+                    @click="$emit('saveNewMenu', i)"
+                  />
+                  <div v-else>
+                    #
+                  </div>
+                  <q-btn
+                    flat
+                    icon="icon-mat-add"
+                    dense
+                    size="sm"
+                    color="secondary"
+                    @click="$emit('addsubmenu', i)"
+                  />
+                  <q-btn
+                    v-if="menu.menuId===0"
+                    flat
+                    icon="icon-mat-delete"
+                    dense
+                    size="sm"
+                    color="negative"
+                    @click="$emit('deleteNewMenu', i)"
+                  />
+                  <div v-else>
+                    #
+                  </div>
+                </div>
+              </q-item-section>
             </template>
             <q-list
               separator
               class="q-pl-lg"
             >
               <q-separator />
+              <q-item class="text-weight-bold">
+                <q-item-section>
+                  <q-item-label>Nama</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Nama url</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>link url</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>icon</q-item-label>
+                </q-item-section>
+              </q-item>
               <q-item
                 v-for="(sub, x) in menu.submenus"
                 :key="x"
@@ -335,7 +384,17 @@
                 clickable
               >
                 <q-item-section>
+                  <!-- {{ sub }} -->
                   <q-item-label>{{ sub.nama }}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ sub.name }}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ sub.link }}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ sub.icon }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -363,6 +422,18 @@ const props = defineProps({
   }
 })
 
-defineEmits(['add', 'iconAppChange', 'deleteNew', 'saveNew', 'addMenu'])
-
+defineEmits([
+  'add',
+  'iconAppChange',
+  'deleteNew',
+  'saveNew',
+  'addMenu',
+  'iconMenuChange',
+  'deleteNewMenu',
+  'saveNewMenu',
+  'addsubmenu'
+])
+// function toConsole() {
+//   console.log('aku di klik')
+// }
 </script>

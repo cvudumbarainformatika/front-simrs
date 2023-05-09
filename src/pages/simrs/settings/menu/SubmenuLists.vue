@@ -111,6 +111,7 @@ const submenus = computed(() => {
   // const id = props.items[props.menu].id
   if (props.menu.length === 0) return arr
   if (props.items.length > 0) arr = props.items[props.menu].submenu
+  console.log('submenus', arr)
   return arr
 })
 const title = computed(() => {
