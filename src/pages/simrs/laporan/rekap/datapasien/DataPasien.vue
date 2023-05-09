@@ -3,11 +3,12 @@
     <q-card>
       <q-card-section>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          REKAP DATA PASIEN DI RR
+          REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}
         </div>
       </q-card-section>
       <q-card-section>
-        <app-table
+        <CustomTable
+          id="printMe"
           :columns="store.columns"
           :meta="store.meta"
           :column-hide="store.columnHide"
@@ -19,8 +20,8 @@
           :to-search="store.params.q"
           :ada-cari="false"
           :default-btn="false"
-          :enable-head="false"
           :ada-tambah="false"
+          :enable-head="false"
           @goto="store.setPage"
           @set-row="store.setPerPage"
           @refresh="store.refreshTable"
@@ -30,6 +31,26 @@
           @edit-data="store.editData"
           @delete="store.deletesData"
         >
+          <!-- tombol print -->
+          <template #header-right-before>
+            <q-btn
+              ref="refPrint"
+              v-print="printObj"
+              unelevated
+              color="dark"
+              round
+              size="sm"
+              icon="icon-mat-print"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </template>
+          <!-- set periode -->
           <template #header-left-after-search>
             <div class="row q-col-gutter-sm">
               <div>
@@ -52,19 +73,9 @@
                   @set-display="setToDisp"
                 />
               </div>
-              <!-- pake from to app date human -->
-              <!-- <app-autocomplete-new
-                :model="store.params.bulan"
-                label="pilih bulan"
-                autocomplete="nama"
-                option-label="nama"
-                option-value="mo"
-                outlined
-                :source="store.bulans"
-                @on-select="store.bulanSelected"
-              /> -->
             </div>
           </template>
+          <!-- pengganti header karena header di disable -->
           <template #top-row>
             <th>
               <div class="row items-center text-weight-bold">
@@ -123,7 +134,27 @@
           <template #cell-lama="{row}">
             {{ timeDiff(row.rs11,row.rs12) }}
           </template>
-        </app-table>
+          <template #cell-regional="{row}">
+            <div
+              v-if="row.rs4==='Regional'"
+              class="text-center"
+            >
+              <q-avatar size="12px">
+                <img src="~assets/images/check.png">
+              </q-avatar>
+            </div>
+          </template>
+          <template #cell-general="{row}">
+            <div
+              v-if="row.rs4!=='Regional'"
+              class="text-center"
+            >
+              <q-avatar size="12px">
+                <img src="~assets/images/check.png">
+              </q-avatar>
+            </div>
+          </template>
+        </CustomTable>
         <!--
             row-image="image"
             @delete-ids="table.deletesData"
@@ -136,6 +167,10 @@
 import { date } from 'quasar'
 import { dateFullFormat, timeDiff } from 'src/modules/formatter'
 import { useSimrsLaporanRekapDataPasienStore } from 'src/stores/simrs/laporan/rekap/datapasien/datapasien.js'
+import { ref } from 'vue'
+
+import CustomTable from '../CustomTable.vue'
+
 const store = useSimrsLaporanRekapDataPasienStore()
 
 function setFrom(val) {
@@ -155,6 +190,25 @@ function setToDisp(val) {
   store.tanggal.to = val
   console.log('params ', store.params)
   console.log('tanggal', store.tanggal)
+}
+
+const printed = ref(false)
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Laporan Rekap',
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback(vue) {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback (vue) {
+    console.log('opened')
+  },
+  closeCallback (vue) {
+    printed.value = false
+    console.log('closePrint')
+  }
 }
 
 store.getInitialData()

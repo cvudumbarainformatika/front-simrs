@@ -40,6 +40,7 @@
       <router-view />
     </q-page-container>
     <q-page-sticky
+      class="print-hide"
       position="bottom-right"
       :offset="[18, 18]"
     >
