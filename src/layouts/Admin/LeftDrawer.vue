@@ -56,11 +56,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
+import { ref, watch } from 'vue'
 
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
+const auth = useAuthStore()
+watch(
+  () => auth.aplications,
+  (now, prev) => {
+    console.log('now', now)
+    console.log('prev', prev)
+    if (now.length === 1) {
+      const url = now[0].url
+      router.replace({ path: url })
+      console.log('inside if now')
+    }
+  }
+)
 function goTo(url) {
   router.replace({ path: url })
 }
