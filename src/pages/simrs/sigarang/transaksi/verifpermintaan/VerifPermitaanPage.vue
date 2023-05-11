@@ -1,5 +1,8 @@
 <template>
-  <div class="q-mb-xl">
+  <div
+    :key="store.form"
+    class="q-mb-xl"
+  >
     <div class="print">
       <q-btn
         ref="refPrint"

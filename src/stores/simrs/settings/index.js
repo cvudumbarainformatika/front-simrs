@@ -14,20 +14,6 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getData() {
-      this.loading = true
-      await api.get('/v1/settings/appmenu/aplikasi').then(resp => {
-        console.log('settings aplikasi :', resp)
-        if (resp.status === 200) {
-          this.items = resp.data
-          console.log('setting ', this.items)
-          this.loading = false
-        }
-        this.loading = false
-      }).catch(e => {
-        this.loading = false
-      })
-    },
 
     addNew(val) {
       this.items.unshift(val)
@@ -129,7 +115,23 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     setPegawai(val) {
       this.pegawai = val
     },
+
     // api related function
+    async getData() {
+      this.loading = true
+      await api.get('/v1/settings/appmenu/aplikasi').then(resp => {
+        console.log('settings aplikasi :', resp)
+        if (resp.status === 200) {
+          this.items = resp.data
+          console.log('setting ', this.items)
+          this.loading = false
+        }
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
+      })
+    },
+
     async saveNew(idx) {
       const params = this.items[idx]
       delete params.id
@@ -228,6 +230,22 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
             this.getData()
             resolve(resp.data)
           }).catch(() => { this.loading = false })
+      })
+    },
+    simpanAksesMenu(val) {
+      const form = {
+        user_id: this.pegawai.user.id,
+        app: val
+      }
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/settings/appakses/store-akses', form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan akses', resp.data)
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
       })
     }
   }

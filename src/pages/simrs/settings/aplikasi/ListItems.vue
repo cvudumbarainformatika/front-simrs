@@ -605,7 +605,7 @@
                   <div
                     class="text-left"
                   >
-                    <span>{{ sub.name===''?'...': sub.name }}</span>
+                    <span class="wrap">{{ sub.name===''?'...': sub.name }}</span>
                     <q-popup-edit
                       v-slot="scope"
                       v-model="sub.name"

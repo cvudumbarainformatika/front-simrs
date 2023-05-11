@@ -1,5 +1,8 @@
 <template>
-  <div class="q-pt-sm q-pb-lg-xl">
+  <div
+    :key="tanggal"
+    class="q-pt-sm q-pb-lg-xl"
+  >
     <q-card class="q-mb-sm">
       <q-card-section>
         <!-- {{ stokOpname }} {{ tutupPermintaan }} -->

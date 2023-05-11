@@ -90,7 +90,7 @@ const folders = computed(() => {
   return thumb
 })
 onMounted(() => {
-  console.log(folders.value)
+  // console.log(folders.value)
 })
 
 const emits = defineEmits(['copyText'])

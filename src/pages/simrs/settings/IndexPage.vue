@@ -102,7 +102,15 @@
       class="absolute-left q-pa-md"
       style="width:20%"
     >
-      <card-pegawai :item="store.pegawai" />
+      <card-pegawai
+        :item="store.pegawai"
+        :menus="menus"
+        @simpan="onSimpanUserMenu"
+        @all-check="allCheck"
+        @app-check="appCheck"
+        @menu-check="menuCheck"
+        @submenu-check="submenuCheck"
+      />
     </div>
 
     <!-- modal -->
@@ -123,7 +131,7 @@
 
 <script setup>
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 import ListItems from './aplikasi/ListItems.vue'
 import DialogSearchUser from './aplikasi/DialogSearchUser.vue'
@@ -136,6 +144,7 @@ const hScroll = ref()
 
 const store = useSettingsAplikasi()
 
+const menus = computed(() => store.pegawai.menus)
 const newValue = ref({
   aplikasi: '',
   color: '',
@@ -253,9 +262,148 @@ function changeIconMenu(val) {
 }
 
 function setPegawai(val) {
+  console.log('items', store.items)
   console.log('set', val)
+  const menus = store.items.map(item => {
+    const it = item
+    it.checked = false
+    it.menus.map(menu => {
+      const men = menu
+      // console.log('men length', men)
+      men.checked = false
+      men.submenus.map(sub => {
+        const su = sub
+        // console.log('su length', su)
+        su.checked = false
+        return su
+      })
+      return men
+    })
+    return it
+  })
+  const userMenu = val.user.menus
+  if (userMenu.length) {
+    console.log('user menu', userMenu)
+  } else {
+    val.menus = menus
+  }
+  console.log('menu', val)
   store.setPegawai(val)
   modalSearch.value = false
+}
+
+function onSimpanUserMenu(val) {
+  const app = val.filter(app => app.checked)
+  const menu = app.map(app => {
+    const men = app.menus.filter(men => men.checked)
+    men.forEach(a => {
+      const sub = a.submenus.filter(anu => anu.checked)
+      a.submenus = sub
+    })
+    app.menus = men
+    return app
+  })
+  // console.log('app', app)
+  // console.log('menu', menu)
+
+  store.simpanAksesMenu(menu)
+}
+
+function allCheck(val) {
+  const all = store.pegawai.menus
+  if (val === true) {
+    all.forEach(app => {
+      app.checked = true
+      if (app.menus.length) {
+        app.menus.forEach(men => {
+          men.checked = true
+          if (men.submenus.length) {
+            men.submenus.forEach(sub => {
+              sub.checked = true
+            })
+          }
+        })
+      }
+    })
+  } else {
+    all.forEach(app => {
+      app.checked = false
+      if (app.menus.length) {
+        app.menus.forEach(men => {
+          men.checked = false
+          if (men.submenus.length) {
+            men.submenus.forEach(sub => {
+              sub.checked = false
+            })
+          }
+        })
+      }
+    })
+  }
+  // console.log('all menus', val, all)
+}
+function appCheck(val) {
+  const app = store.pegawai.menus[val.i]
+  const menus = app.menus
+  console.log('app ', val, 'menus', menus)
+  if (app.checked) {
+    menus.forEach(men => {
+      men.checked = true
+      if (men.submenus.length) {
+        men.submenus.forEach(sub => {
+          sub.checked = true
+        })
+      }
+    })
+  } else {
+    menus.forEach(men => {
+      men.checked = false
+      if (men.submenus.length) {
+        men.submenus.forEach(sub => {
+          sub.checked = false
+        })
+      }
+    })
+  }
+}
+function menuCheck(val) {
+  const app = store.pegawai.menus[val.i]
+  const sub = val.menu.submenus
+  // console.log('menu ', val, 'app', app, 'sub', sub)
+  if (val.menu.checked) {
+    if (!app.checked) {
+      app.checked = true
+    }
+    if (sub.length) {
+      sub.forEach(s => { s.checked = true })
+    }
+  } else {
+    const menu = app.menus.filter(a => a.checked === true)
+    if (!menu.length) {
+      app.checked = false
+    }
+    if (sub.length) {
+      sub.forEach(s => { s.checked = false })
+    }
+  }
+}
+function submenuCheck(val) {
+  const app = store.pegawai.menus[val.i]
+  const menu = app.menus[val.n]
+  if (val.sub.checked === true) {
+    app.checked = true
+    menu.checked = true
+  } else {
+    const subs = menu.submenus.filter(a => a.checked === true)
+    if (!subs.length) {
+      menu.checked = false
+    }
+    const mens = app.menus.filter(n => n.checked === true)
+    if (!mens.length) {
+      app.checked = false
+    }
+  }
+  // console.log('submenu ', val)
 }
 </script>
 
