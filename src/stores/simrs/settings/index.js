@@ -232,10 +232,12 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           }).catch(() => { this.loading = false })
       })
     },
-    simpanAksesMenu(val) {
+    simpanAksesMenu(act, type, array) {
       const form = {
         user_id: this.pegawai.user.id,
-        app: val
+        action: act,
+        tipe: type,
+        data: array
       }
       this.loading = true
       return new Promise(resolve => {

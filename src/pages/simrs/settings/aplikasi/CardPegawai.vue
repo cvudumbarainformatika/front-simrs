@@ -54,6 +54,7 @@
             <q-checkbox
               v-model="check"
               dense
+              :disable="loading"
               @update:model-value="$emit('allCheck',check)"
             />
 
@@ -73,6 +74,7 @@
                 <q-checkbox
                   v-model="app.checked"
                   dense
+                  :disable="loading"
                   @update:model-value="$emit('appCheck',{'app':app,'i':i})"
                 />
               </q-item-section>
@@ -100,6 +102,7 @@
                   <q-checkbox
                     v-model="menu.checked"
                     dense
+                    :disable="loading"
                     @update:model-value="$emit('menuCheck',{'menu':menu,'i':i,'n':n})"
                   />
                 </q-item-section>
@@ -125,6 +128,7 @@
                     <q-checkbox
                       v-model="menu.checked"
                       dense
+                      :disable="loading"
                       @update:model-value="$emit('menuCheck',{'menu':menu,'i':i,'n':n})"
                     />
                   </q-item-section>
@@ -151,6 +155,7 @@
                       <q-checkbox
                         v-model="sub.checked"
                         dense
+                        :disable="loading"
                         @update:model-value="$emit('submenuCheck',{'sub':sub,'i':i,'n':n,'x':x})"
                       />
                     </q-item-section>
@@ -172,7 +177,7 @@
     </q-card-section>
   </q-card>
   <q-card>
-    <q-card-actions
+    <!-- <q-card-actions
       v-if="menus.length"
       align="right"
     >
@@ -182,7 +187,7 @@
         :disable="store.loading"
         @click="$emit('simpan',menus)"
       />
-    </q-card-actions>
+    </q-card-actions> -->
   </q-card>
 </template>
 
@@ -197,6 +202,10 @@ defineProps({
   menus: {
     type: Array,
     default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 

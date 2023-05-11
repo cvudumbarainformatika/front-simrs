@@ -105,6 +105,7 @@
       <card-pegawai
         :item="store.pegawai"
         :menus="menus"
+        :loading="store.loading"
         @simpan="onSimpanUserMenu"
         @all-check="allCheck"
         @app-check="appCheck"
@@ -311,7 +312,9 @@ function onSimpanUserMenu(val) {
 
 function allCheck(val) {
   const all = store.pegawai.menus
+  let data = []
   if (val === true) {
+    data = []
     all.forEach(app => {
       app.checked = true
       if (app.menus.length) {
@@ -320,12 +323,14 @@ function allCheck(val) {
           if (men.submenus.length) {
             men.submenus.forEach(sub => {
               sub.checked = true
+              data.push({ app: app.id, menu: men.id, submenu: sub.id })
             })
           }
         })
       }
     })
   } else {
+    data = []
     all.forEach(app => {
       app.checked = false
       if (app.menus.length) {
@@ -334,62 +339,83 @@ function allCheck(val) {
           if (men.submenus.length) {
             men.submenus.forEach(sub => {
               sub.checked = false
+              data.push({ app: app.id, menu: men.id, submenu: sub.id })
             })
           }
         })
       }
     })
   }
+  store.simpanAksesMenu('all', val, data)
   // console.log('all menus', val, all)
 }
 function appCheck(val) {
   const app = store.pegawai.menus[val.i]
   const menus = app.menus
+  let data = []
   console.log('app ', val, 'menus', menus)
   if (app.checked) {
+    data = []
     menus.forEach(men => {
       men.checked = true
       if (men.submenus.length) {
         men.submenus.forEach(sub => {
           sub.checked = true
+          data.push({ app: app.id, menu: men.id, submenu: sub.id })
         })
       }
     })
   } else {
+    data = []
     menus.forEach(men => {
       men.checked = false
       if (men.submenus.length) {
         men.submenus.forEach(sub => {
           sub.checked = false
+          data.push({ app: app.id, menu: men.id, submenu: sub.id })
         })
       }
     })
   }
+  store.simpanAksesMenu('app', app.checked, data)
 }
 function menuCheck(val) {
   const app = store.pegawai.menus[val.i]
   const sub = val.menu.submenus
+  let data = []
   // console.log('menu ', val, 'app', app, 'sub', sub)
   if (val.menu.checked) {
+    data = []
     if (!app.checked) {
       app.checked = true
     }
     if (sub.length) {
-      sub.forEach(s => { s.checked = true })
+      sub.forEach(s => {
+        s.checked = true
+        data.push({ app: app.id, menu: val.menu.id, submenu: s.id })
+      })
     }
   } else {
+    data = []
     const menu = app.menus.filter(a => a.checked === true)
     if (!menu.length) {
       app.checked = false
     }
     if (sub.length) {
-      sub.forEach(s => { s.checked = false })
+      sub.forEach(s => {
+        s.checked = false
+        data.push({ app: app.id, menu: val.menu.id, submenu: s.id })
+      })
     }
   }
+  store.simpanAksesMenu('menu', val.menu.checked, data)
 }
 function submenuCheck(val) {
   const app = store.pegawai.menus[val.i]
   const menu = app.menus[val.n]
+  console.log('app ', app)
+  console.log('menu ', menu)
+  console.log('submenu ', val.sub.id)
   if (val.sub.checked === true) {
     app.checked = true
     menu.checked = true
@@ -403,7 +429,13 @@ function submenuCheck(val) {
       app.checked = false
     }
   }
-  // console.log('submenu ', val)
+  const data = []
+  data.push({
+    app: app.id,
+    menu: menu.id,
+    submenu: val.sub.id
+  })
+  store.simpanAksesMenu('submenu', val.sub.checked, data)
 }
 </script>
 
