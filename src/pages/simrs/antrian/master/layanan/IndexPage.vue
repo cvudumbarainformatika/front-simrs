@@ -46,7 +46,7 @@
             @edit-data="(val)=>form.editData(val)"
             @delete="(id)=>store.deletesData(id)"
           >
-            <!-- <template #header-left-after-search>
+            <template #header-left-after-search>
               <div class="q-ml-sm">
                 <app-btn
                   label="Sync Simrs & Bpjs"
@@ -54,7 +54,7 @@
                   @click="store.synch()"
                 />
               </div>
-            </template> -->
+            </template>
             <template #col-nama="{left}">
               <div :class="`${left}`">
                 Nama Layanan

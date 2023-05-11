@@ -19,7 +19,7 @@ export const useMasterLayananStore = defineStore('master_layanan', {
       order_by: 'rs3',
       sort: 'desc'
     },
-    columns: ['id_layanan', 'nama', 'kode'],
+    columns: ['id_layanan', 'nama', 'kode', 'kode_bpjs'],
     columnHide: ['id'],
 
     form: {
@@ -105,24 +105,24 @@ export const useMasterLayananStore = defineStore('master_layanan', {
         console.log('err laborat', error.response)
         notifErr(error.response)
       }
-    }
+    },
 
-    // async synch() {
-    //   this.loading = true
-    //   try {
-    //     await api.get('/v1/masterpoli/synch')
-    //       .then((resp) => {
-    //         if (resp.status === 200) {
-    //           console.log('synch', resp)
-    //           this.loading = false
-    //           this.getDataTable()
-    //         } else {
-    //           this.loading = false
-    //         }
-    //       })
-    //   } catch (error) {
-    //     this.loading = false
-    //   }
-    // }
+    async synch() {
+      this.loading = true
+      try {
+        await api.get('/v1/layanan/synch')
+          .then((resp) => {
+            if (resp.status === 200) {
+              console.log('synch', resp)
+              this.loading = false
+              this.getDataTable()
+            } else {
+              this.loading = false
+            }
+          })
+      } catch (error) {
+        this.loading = false
+      }
+    }
   }
 })
