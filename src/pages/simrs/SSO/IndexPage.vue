@@ -15,7 +15,7 @@
         <q-card
           v-ripple
           class="bg-primary text-white full-height cursor-pointer q-hoverable"
-          @click="goTo('/pegawai')"
+          @click="goTo('pegawai','/pegawai')"
         >
           <div
             class="feature-item c-p column flex-center "
@@ -109,7 +109,7 @@
       <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-green-10 text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/sigarang/dashboard')"
+          @click="goTo('sigarang','/sigarang/dashboard')"
         >
           <div class="q-pa-md">
             <div class="column ">
@@ -130,7 +130,7 @@
         </q-card>
         <q-card
           class="bg-indigo text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/laporan/dashboard')"
+          @click="goTo('laporan','/laporan/dashboard')"
         >
           <div class="q-pa-md">
             <div class="column ">
@@ -154,7 +154,7 @@
       <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-teal text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/admin/laborat')"
+          @click="goTo('laborat','/admin/laborat')"
         >
           <div class="q-pa-md">
             <div class="column ">
@@ -177,7 +177,7 @@
       <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-accent text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/antrian')"
+          @click="goTo('antrian','/antrian')"
         >
           <div class="q-pa-md">
             <div class="column ">
@@ -200,7 +200,7 @@
       <div class="col-md-3 col-xs-12">
         <q-card
           class="bg-deep-purple text-white q-mb-md cursor-pointer model-two"
-          @click="goTo('/master/dashboard')"
+          @click="goTo('master','/master/dashboard')"
         >
           <div class="q-pa-md">
             <div class="column ">
@@ -225,21 +225,35 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings/index.js'
+import { useAuthStore } from 'src/stores/auth/index.js'
 import { onMounted } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const store = useSettingsAplikasi()
+const auth = useAuthStore()
 
 onMounted(() => {
   console.log('mounted sso')
   store.getData()
 })
 
-function goTo(url) {
-  console.log('go to', url)
-  router.replace({ path: url })
+function goTo(app, url) {
+  // console.log('go to', url, app, auth.aplications)
+  if (auth.aplications.length) {
+    const appAkses = auth.aplications.filter(a => a.aplikasi === app)
+    // console.log('akses', appAkses, auth.role)
+    if (appAkses.length || auth.role === 'root') {
+      // console.log('masuk')
+      router.replace({ path: url })
+    } else {
+      notifErrVue('Anda tidak memiliki akses ke aplikasi ini')
+    }
+  } else {
+    notifErrVue('Data Aplikasi belum tersedia, tunggu berapa saat lagi')
+  }
 }
 </script>
 

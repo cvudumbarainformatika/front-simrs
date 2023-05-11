@@ -4,7 +4,10 @@
     :width="70"
   >
     <!-- logo -->
-    <div class="absolute-top">
+    <div
+      class="absolute-top cursor-pointer"
+      @click="goTo('/admin/sso')"
+    >
       <div
         class=" flex flex-center"
         style="height: 60px;"
@@ -215,9 +218,14 @@
 <script setup>
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
-const path = computed(() => useRoute().name)
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter()
+function goTo(url) {
+  router.replace({ path: url })
+}
+
+const path = computed(() => useRoute().name)
 // import { routerInstance } from 'src/boot/router'
 
 const props = defineProps({

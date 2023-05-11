@@ -31,6 +31,20 @@
           @delete="store.deletesData"
           @on-click="onClick"
         >
+          <template #header-left-after-search>
+            <div class="q-ml-sm">
+              <app-input
+                v-model="store.params.r"
+                label="cari ruangan"
+                outlined
+                valid
+                icon="icon-mat-search"
+                debounce="1000"
+                :loading="store.loading"
+                @update:model-value="store.searchRuangan"
+              />
+            </div>
+          </template>
           <template #col-tanggal>
             <div>Tanggal Permintaan</div>
           </template>

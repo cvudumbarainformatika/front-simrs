@@ -27,9 +27,18 @@
             :edited="edited"
             @add="newData()"
             @save-new="(val)=> saveNew(val)"
+            @save-new-menu="(val)=> saveNewMenu(val)"
+            @save-edit-menu="(val)=> saveEditMenu(val)"
+            @save-new-sub-menu="(val)=> saveNewSubMenu(val)"
+            @save-edit-sub-menu="(val)=> saveEditSubMenu(val)"
+            @edit-app="(val)=> editApp(val)"
             @icon-app-change="(val)=>iconAppClick(val)"
+            @icon-menu-change="(val)=>iconMenuClick(val)"
             @delete-new="(val)=>store.deleteNew(val)"
+            @delete-new-menu="(val)=>store.deleteNewMenu(val)"
+            @delete-new-sub-menu="(val)=>store.deleteNewSubMenu(val)"
             @add-menu="(val)=>store.addMenu(val)"
+            @add-sub-menu="(val)=>store.addSubMenu(val)"
           />
         </q-scroll-area>
         <div
@@ -101,6 +110,10 @@
       v-model="modalIcon"
       @copy-text="(val)=>changeIconApp(val)"
     />
+    <app-get-icon
+      v-model="modalMenuIcon"
+      @copy-text="(val)=>changeIconMenu(val)"
+    />
     <DialogSearchUser
       v-model="modalSearch"
       @updated="(val)=>setPegawai(val)"
@@ -115,6 +128,7 @@ import { ref, onMounted } from 'vue'
 import ListItems from './aplikasi/ListItems.vue'
 import DialogSearchUser from './aplikasi/DialogSearchUser.vue'
 import CardPegawai from './aplikasi/CardPegawai.vue'
+import { notifErrVue } from 'src/modules/utils'
 
 const main = ref(null)
 const h = ref()
@@ -126,13 +140,15 @@ const newValue = ref({
   aplikasi: '',
   color: '',
   icon: '',
-  id: 0,
+  itemId: 0,
   julukan: 'kosong',
   menus: [],
   nama: '',
-  url: ''
+  url: '',
+  singkatan: ''
 })
 const modalIcon = ref(false)
+const modalMenuIcon = ref(false)
 const modalSearch = ref(false)
 const edited = ref(null)
 const indexApp = ref(null)
@@ -146,13 +162,62 @@ onMounted(() => {
 })
 
 function newData() {
-  store.addNew(newValue.value)
+  console.log(store.items)
+  const ada = store.items.filter(anu => anu.itemId === 0)
+  if (ada.length) {
+    notifErrVue('isi dulu yang ada')
+  } else {
+    store.addNew(newValue.value)
+  }
 }
+
 function saveNew(val) {
   store.saveNew(val).then(() => {
     edited.value = null
     indexApp.value = null
   })
+}
+function editApp(val) {
+  console.log(val)
+  store.editApp(val).then(() => {
+    edited.value = null
+    indexApp.value = null
+    delete val.item.save
+  })
+}
+
+function saveNewMenu(val) {
+  console.log('new Menu', val)
+  store.saveNewMenu(val)
+    .then(() => {
+      edited.value = null
+      indexApp.value = null
+    })
+}
+function saveEditMenu(val) {
+  console.log('edit Menu', val)
+  store.saveEditMenu(val)
+    .then(() => {
+      edited.value = null
+      indexApp.value = null
+    })
+}
+
+function saveNewSubMenu(val) {
+  console.log('new Menu', val)
+  store.saveNewSubMenu(val)
+    .then(() => {
+      edited.value = null
+      indexApp.value = null
+    })
+}
+function saveEditSubMenu(val) {
+  console.log('edit Menu', val)
+  store.saveEditSubMenu(val)
+    .then(() => {
+      edited.value = null
+      indexApp.value = null
+    })
 }
 
 function iconAppClick(index) {
@@ -165,6 +230,23 @@ function changeIconApp(val) {
   modalIcon.value = false
   console.log(val)
   store.changeAppIcon(indexApp.value, val).then(() => {
+    edited.value = 'edited-' + val
+    console.log(edited.value)
+  })
+}
+const indexMenu = ref(null)
+function iconMenuClick(index) {
+  console.log('icon menu', index)
+  modalMenuIcon.value = true
+  indexApp.value = index.app
+  indexMenu.value = index.menu
+  console.log('index app', index)
+}
+function changeIconMenu(val) {
+  console.log('change icon', val)
+  modalMenuIcon.value = false
+  console.log(val)
+  store.changeMenuIcon(indexApp.value, indexMenu.value, val).then(() => {
     edited.value = 'edited-' + val
     console.log(edited.value)
   })

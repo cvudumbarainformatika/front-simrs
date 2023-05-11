@@ -4,6 +4,7 @@
       <app-card :is-header="false">
         <template #content>
           <app-table-view
+            :key="table.items"
             :title="`Data ${table.nama}`"
             :columns="table.columns"
             :column-hide="table.columnHide"
@@ -723,6 +724,58 @@
               </div>
               <div class="row justify-center q-mb-sm">
                 NO. {{ item.no_penerimaan }}
+              </div>
+            </div>
+            <div class="row justify-start">
+              Sudah Diterima dari {{ item.perusahaan?item.perusahaan.nama:'-' }}
+            </div>
+
+            <div class="row justify-start q-mt-md q-mb-md">
+              Barang dengan spesifikasi,
+            </div>
+            <!-- no details -->
+            <div v-if="!item.details">
+              <app-no-data />
+            </div>
+            <!-- details -->
+            <div v-if="item.details">
+              <!-- header detail -->
+              <div class="row justify-between q-col-gutter-sm">
+                <div class="col-7 text-weight-bold border-tb border-left">
+                  Nama Barang
+                </div>
+                <div class="col-1 text-weight-bold border-tb border-left">
+                  Jumlah
+                </div>
+                <div class="col-1 text-weight-bold border-tb border-left">
+                  Satuan
+                </div>
+                <div class="col-3 text-weight-bold border-box">
+                  Keterangan
+                </div>
+              </div>
+              <!-- body details -->
+              <div
+                v-for="(det, i) in item.details"
+                :key="i"
+              >
+                <div
+                  class="row justify-between q-col-gutter-sm"
+                >
+                  <div class="col-7 border-bottom border-left">
+                    {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
+                  </div>
+                  <div class="col-1 border-bottom border-left">
+                    {{ det.qty===null?0:det.qty }}
+                  </div>
+                  <div class="col-1 border-bottom border-left">
+                    {{ det.satuan?det.satuan.nama:'-' }}
+                  </div>
+                  <div class="col-3 border-bottom border-left border-right">
+                    {{ det.merk?det.merk:'-' }}
+                  </div>
+                </div>
+                <q-separator />
               </div>
             </div>
             <!-- penerimaan end -->
