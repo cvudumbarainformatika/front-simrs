@@ -282,7 +282,7 @@ function setPegawai(val) {
     })
     return it
   })
-  const userMenu = val.user.menus
+  const userMenu = val.user.akses
   if (userMenu.length) {
     // const anu = []
     const menu = menus

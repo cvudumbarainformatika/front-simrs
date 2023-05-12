@@ -11,7 +11,7 @@
     "custom-icons:watch": "watch \"npm run custom-icons\" src/custom-icons/svg"
   },
   "dependencies": {
-    "@quasar/cli": "^2.0.1",
+    "@quasar/cli": "^2.1.1",
     "@quasar/extras": "^1.0.0",
     "@tato30/vue-pdf": "^1.3.4",
     "@tiptap/extension-code-block-lowlight": "^2.0.0-beta.73",
