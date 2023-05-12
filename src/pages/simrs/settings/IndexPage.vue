@@ -137,7 +137,7 @@ import { ref, onMounted, computed } from 'vue'
 import ListItems from './aplikasi/ListItems.vue'
 import DialogSearchUser from './aplikasi/DialogSearchUser.vue'
 import CardPegawai from './aplikasi/CardPegawai.vue'
-import { notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 const main = ref(null)
 const h = ref()
@@ -284,7 +284,18 @@ function setPegawai(val) {
   })
   const userMenu = val.user.menus
   if (userMenu.length) {
-    console.log('user menu', userMenu)
+    // const anu = []
+    const menu = menus
+    userMenu.forEach(dat => {
+      const appInd = findWithAttr(menu, 'id', dat.aplikasi_id)
+      const menuInd = findWithAttr(menu[appInd].menus, 'id', dat.menu_id)
+      const subInd = findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id)
+      menu[appInd].checked = true
+      menu[appInd].menus[menuInd].checked = true
+      menu[appInd].menus[menuInd].submenus[subInd].checked = true
+    })
+    console.log('user menu', userMenu, menu)
+    val.menus = menu
   } else {
     val.menus = menus
   }
@@ -323,7 +334,7 @@ function allCheck(val) {
           if (men.submenus.length) {
             men.submenus.forEach(sub => {
               sub.checked = true
-              data.push({ app: app.id, menu: men.id, submenu: sub.id })
+              data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
             })
           }
         })
@@ -339,7 +350,7 @@ function allCheck(val) {
           if (men.submenus.length) {
             men.submenus.forEach(sub => {
               sub.checked = false
-              data.push({ app: app.id, menu: men.id, submenu: sub.id })
+              data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
             })
           }
         })
@@ -361,18 +372,20 @@ function appCheck(val) {
       if (men.submenus.length) {
         men.submenus.forEach(sub => {
           sub.checked = true
-          data.push({ app: app.id, menu: men.id, submenu: sub.id })
+          data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
       }
     })
   } else {
     data = []
-    menus.forEach(men => {
+    const temp = menus.filter(m => m.checked)
+    temp.forEach(men => {
       men.checked = false
       if (men.submenus.length) {
-        men.submenus.forEach(sub => {
+        const anu = men.submenus.filter(a => a.checked)
+        anu.forEach(sub => {
           sub.checked = false
-          data.push({ app: app.id, menu: men.id, submenu: sub.id })
+          data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
       }
     })
@@ -392,7 +405,7 @@ function menuCheck(val) {
     if (sub.length) {
       sub.forEach(s => {
         s.checked = true
-        data.push({ app: app.id, menu: val.menu.id, submenu: s.id })
+        data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
     }
   } else {
@@ -402,9 +415,10 @@ function menuCheck(val) {
       app.checked = false
     }
     if (sub.length) {
-      sub.forEach(s => {
+      const tmp = sub.filter(anu => anu.checked)
+      tmp.forEach(s => {
         s.checked = false
-        data.push({ app: app.id, menu: val.menu.id, submenu: s.id })
+        data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
     }
   }
@@ -430,11 +444,8 @@ function submenuCheck(val) {
     }
   }
   const data = []
-  data.push({
-    app: app.id,
-    menu: menu.id,
-    submenu: val.sub.id
-  })
+  data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: menu.id, submenu_id: val.sub.id })
+
   store.simpanAksesMenu('submenu', val.sub.checked, data)
 }
 </script>
