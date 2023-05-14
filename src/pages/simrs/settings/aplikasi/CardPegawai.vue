@@ -20,6 +20,65 @@
           <div class="ellipsis">
             <strong>Ruangan : </strong> {{ item.ruangan? item.ruangan.namaruang: '-' }}
           </div>
+          <div class="ellipsis row items-center">
+            <strong>Akses Ruang: </strong>
+            <q-btn
+              :label="item.ruang? item.ruang.uraian: 'tidak ada akses ruang'"
+              no-caps
+              flat
+              size="12px"
+              :loading="store.loadingRuang"
+            >
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item>
+                    <app-input
+                      v-model="store.par.q"
+                      label="cari ruang"
+                      debounce="800"
+                      outlined
+                      valid
+                      :loading="store.loadingRuang"
+                      @update:model-value="store.getRuang"
+                    />
+                  </q-item>
+                  <q-item
+                    v-for="(ruang,i) in store.ruangs"
+                    :key="i"
+                    v-close-popup
+                    clickable
+                    @click="store.setRuang(ruang)"
+                  >
+                    <q-item-section>{{ ruang.uraian }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
+          <div class="ellipsis">
+            <strong>Akses Role : </strong>
+            <q-btn
+              :label="item.role? item.role.nama: 'tidak ada akses role'"
+              no-caps
+              flat
+              size="12px"
+              :loading="store.loadingRole"
+            >
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-for="(role,i) in store.roles"
+                    :key="i"
+                    v-close-popup
+                    clickable
+                    @click="store.setRole(role)"
+                  >
+                    <q-item-section>{{ role.nama }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
         </div>
       </div>
     </q-card-section>
@@ -193,6 +252,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+const store = useSettingsAplikasi()
 
 defineProps({
   item: {

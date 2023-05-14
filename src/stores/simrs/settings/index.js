@@ -8,7 +8,14 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     items: [],
     pegawai: null,
     loading: false,
-    currentApp: ''
+    loadingRole: false,
+    loadingRuang: false,
+    currentApp: '',
+    roles: [],
+    ruangs: [],
+    par: {
+      q: ''
+    }
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -115,7 +122,6 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     setPegawai(val) {
       this.pegawai = val
     },
-
     // api related function
     async getData() {
       this.loading = true
@@ -130,6 +136,61 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       }).catch(e => {
         this.loading = false
       })
+    },
+
+    async getRole() {
+      await api.get('v1/settings/appakses/role')
+        .then(resp => {
+          console.log('role', resp.data)
+          this.roles = resp.data
+        })
+    },
+    setRole(val) {
+      const form = {
+        id: this.pegawai.id,
+        role_id: val.id
+      }
+      console.log('val', val, 'form', form)
+      this.simpanRole(form)
+    },
+    async simpanRole(val) {
+      this.loadingRole = true
+      await api.post('v1/settings/appakses/store-role', val)
+        .then(resp => {
+          console.log('simpan role', resp.data)
+          this.loadingRole = false
+          this.pegawai.role = resp.data
+        })
+        .catch(() => { this.loadingRole = false })
+    },
+    async getRuang() {
+      this.loadingRuang = true
+      const param = { params: this.par }
+      await api.get('v1/ruang/cari-ruang', param)
+        .then(resp => {
+          this.loadingRuang = false
+          console.log('ruang', resp.data)
+          this.ruangs = resp.data
+        })
+        .catch(() => { this.loadingRuang = false })
+    },
+    setRuang(val) {
+      const form = {
+        id: this.pegawai.id,
+        kode_ruang: val.kode
+      }
+      console.log('val', val, 'form', form)
+      this.simpanRuang(form)
+    },
+    async simpanRuang(val) {
+      this.loadingRuang = true
+      await api.post('v1/settings/appakses/store-ruang', val)
+        .then(resp => {
+          console.log('simpan role', resp.data)
+          this.loadingRuang = false
+          this.pegawai.ruang = resp.data
+        })
+        .catch(() => { this.loadingRuang = false })
     },
 
     async saveNew(idx) {

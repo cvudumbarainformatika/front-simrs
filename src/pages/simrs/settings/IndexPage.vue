@@ -4,7 +4,7 @@
     class=""
   >
     <div
-      class="padding-xxxl q-pt-md"
+      :class="store.pegawai !== null?'padding-right q-pt-md':'padding-xxxl q-pt-md'"
     >
       <q-card
         class="card-my shadow-22"
@@ -97,10 +97,15 @@
       </q-card>
     </div>
 
-    <div
+    <!-- <div
       v-if="store.pegawai !== null"
       class="absolute-left q-pa-md"
       style="width:20%"
+    > -->
+    <div
+      v-if="store.pegawai !== null"
+      class="absolute-left q-pa-md"
+      style="width:39%"
     >
       <card-pegawai
         :item="store.pegawai"
@@ -131,19 +136,18 @@
 </template>
 
 <script setup>
-import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { ref, onMounted, computed } from 'vue'
-
 import ListItems from './aplikasi/ListItems.vue'
 import DialogSearchUser from './aplikasi/DialogSearchUser.vue'
 import CardPegawai from './aplikasi/CardPegawai.vue'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+const store = useSettingsAplikasi()
+
 const main = ref(null)
 const h = ref()
 const hScroll = ref()
-
-const store = useSettingsAplikasi()
 
 const menus = computed(() => store.pegawai.menus)
 const newValue = ref({
@@ -169,6 +173,8 @@ onMounted(() => {
 
   console.log(newValue.value)
   store.getData()
+  store.getRuang()
+  store.getRole()
 })
 
 function newData() {
@@ -265,39 +271,41 @@ function changeIconMenu(val) {
 function setPegawai(val) {
   console.log('items', store.items)
   console.log('set', val)
-  const menus = store.items.map(item => {
-    const it = item
-    it.checked = false
-    it.menus.map(menu => {
-      const men = menu
-      // console.log('men length', men)
-      men.checked = false
-      men.submenus.map(sub => {
-        const su = sub
-        // console.log('su length', su)
-        su.checked = false
-        return su
+  if (val !== null) {
+    const menus = store.items.map(item => {
+      const it = item
+      it.checked = false
+      it.menus.map(menu => {
+        const men = menu
+        // console.log('men length', men)
+        men.checked = false
+        men.submenus.map(sub => {
+          const su = sub
+          // console.log('su length', su)
+          su.checked = false
+          return su
+        })
+        return men
       })
-      return men
+      return it
     })
-    return it
-  })
-  const userMenu = val.user.akses
-  if (userMenu.length) {
+    const userMenu = val.user.akses
+    if (userMenu.length) {
     // const anu = []
-    const menu = menus
-    userMenu.forEach(dat => {
-      const appInd = findWithAttr(menu, 'id', dat.aplikasi_id)
-      const menuInd = findWithAttr(menu[appInd].menus, 'id', dat.menu_id)
-      const subInd = findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id)
-      menu[appInd].checked = true
-      menu[appInd].menus[menuInd].checked = true
-      menu[appInd].menus[menuInd].submenus[subInd].checked = true
-    })
-    console.log('user menu', userMenu, menu)
-    val.menus = menu
-  } else {
-    val.menus = menus
+      const menu = menus
+      userMenu.forEach(dat => {
+        const appInd = findWithAttr(menu, 'id', dat.aplikasi_id)
+        const menuInd = findWithAttr(menu[appInd].menus, 'id', dat.menu_id)
+        const subInd = findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id)
+        menu[appInd].checked = true
+        menu[appInd].menus[menuInd].checked = true
+        menu[appInd].menus[menuInd].submenus[subInd].checked = true
+      })
+      console.log('user menu', userMenu, menu)
+      val.menus = menu
+    } else {
+      val.menus = menus
+    }
   }
   console.log('menu', val)
   store.setPegawai(val)
@@ -454,5 +462,9 @@ function submenuCheck(val) {
 .padding-xxxl {
   padding-left: 20%;
   padding-right: 20%;
+}
+.padding-right {
+  padding-left: 39%;
+  padding-right: 1%;
 }
 </style>
