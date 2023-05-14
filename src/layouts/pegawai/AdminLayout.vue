@@ -63,6 +63,9 @@ import AdmFooterMenu from './AdmFooterMenu.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
 // import { usePegawaiApplicationStore } from 'src/stores/simrs/pegawai/pegawai'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+import { getCurrentApp } from 'src/modules/storage'
+const appSetting = useSettingsAplikasi()
 const store = useAuthStore()
 const setting = useSettingsStore()
 // const pegawai = usePegawaiApplicationStore()
@@ -73,8 +76,15 @@ const mobile = $q.screen.lt.sm
 
 const menus = computed(() => {
   const apem = store.aplications.filter(app => {
-    return app.aplikasi === 'pegawai'
+    // return app.aplikasi === 'pegawai'
+    const appNow = appSetting.currentApp !== '' ? appSetting.currentApp : getCurrentApp()
+    return app.aplikasi === appNow
   })
+  console.log(
+    'menu pegawai layout', appSetting.currentApp,
+    'Menu', apem,
+    'all app', store.aplications
+  )
   if (apem.length) {
     return apem[0].menus
   } else {

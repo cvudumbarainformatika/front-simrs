@@ -6,6 +6,7 @@ const removeToken = () => {
   storage.deleteLocalToken()
   storage.deleteHeaderToken()
   storage.deleteUser()
+  storage.deleteCurrentApp()
   routerInstance.replace('/login')
 }
 

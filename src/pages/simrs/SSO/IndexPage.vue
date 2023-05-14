@@ -69,20 +69,23 @@
         </q-card>
       </div>
       <div class="col-md-3 col-xs-12">
-        <q-card class="bg-dark text-white q-mb-md cursor-pointer model-two">
+        <q-card
+          class="bg-dark text-white q-mb-md cursor-pointer model-two"
+          @click="goTo('pendaftaran','/pendaftaran')"
+        >
           <div class="q-pa-md">
             <div class="column ">
               <div class="flex items-center justify-between">
                 <div class="icon-b">
-                  <q-icon name="icon-mat-medication_liquid" />
+                  <q-icon name="icon-mat-description" />
                 </div>
                 <div class="text-h4 text-weight-light">
-                  E-CLY
+                  DFTR
                 </div>
               </div>
               <q-separator class="bg-white q-my-sm" />
               <div class="text-h5 text-weight-light">
-                e-Clinic
+                Pendaftaran
               </div>
             </div>
           </div>
@@ -230,6 +233,7 @@ import { useAuthStore } from 'src/stores/auth/index.js'
 import { onMounted } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 import { useRouter } from 'vue-router'
+import { setCurrentApp } from 'src/modules/storage'
 
 const router = useRouter()
 const store = useSettingsAplikasi()
@@ -247,6 +251,8 @@ function goTo(app, url) {
     // console.log('akses', appAkses, auth.role)
     if (appAkses.length || auth.role === 'root') {
       // console.log('masuk')
+      store.currentApp = app
+      setCurrentApp(app)
       router.replace({ path: url })
     } else {
       notifErrVue('Anda tidak memiliki akses ke aplikasi ini')

@@ -5,6 +5,7 @@ import laborat from './laborat'
 import laporan from './laporan'
 import settings from './settings'
 import masters from './masters'
+import pendaftaran from './pendaftaran'
 
 const routes = [
   {
@@ -54,6 +55,7 @@ const routes = [
   antrian,
   masters,
   laporan,
+  pendaftaran,
 
   {
     path: '/display_antrian',

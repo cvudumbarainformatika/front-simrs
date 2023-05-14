@@ -123,6 +123,15 @@ export const useAuthStore = defineStore('auth', {
               }
             }
             break
+          case 'pendaftaran':
+            console.log('switch pendaftaran', apli[0].aplikasi)
+            if (this.menus.length) {
+              if (this.menus[0].submenus.length) {
+                apem.link = this.menus[0].submenus[0].link
+                this.route = this.menus[0].submenus[0]
+              }
+            }
+            break
 
           default:
             // console.log('switch default', apli[0].aplikasi)
@@ -305,6 +314,7 @@ export const useAuthStore = defineStore('auth', {
       storage.deleteLocalToken()
       storage.deleteHeaderToken()
       storage.deleteUser()
+      storage.deleteCurrentApp()
       this.user = null
       this.token = ''
     },

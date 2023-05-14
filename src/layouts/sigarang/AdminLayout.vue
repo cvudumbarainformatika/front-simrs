@@ -72,6 +72,8 @@ import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/se
 // import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 // import { routerInstance } from 'src/boot/router'
 
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+const appSetting = useSettingsAplikasi()
 const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
 const store = useAuthStore()
@@ -99,7 +101,9 @@ const foto = computed(() => {
 })
 const menus = computed(() => {
   const apem = store.aplications.filter(app => {
-    return app.aplikasi === 'sigarang'
+    console.log('current app', appSetting.currentApp)
+    // return app.aplikasi === 'sigarang'
+    return app.aplikasi === appSetting.currentApp
   })
   if (apem.length) {
     return apem[0].menus

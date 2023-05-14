@@ -56,6 +56,7 @@
 </template>
 
 <script setup>
+import { setCurrentApp } from 'src/modules/storage'
 import { useAuthStore } from 'src/stores/auth'
 import { ref, watch } from 'vue'
 
@@ -71,6 +72,7 @@ watch(
     console.log('prev', prev)
     if (now.length === 1) {
       const url = now[0].url
+      setCurrentApp(now[0].aplikasi)
       router.replace({ path: url })
       console.log('inside if now')
     }
