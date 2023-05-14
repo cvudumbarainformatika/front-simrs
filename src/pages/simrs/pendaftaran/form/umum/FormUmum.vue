@@ -341,7 +341,7 @@
                   :model="store.form.foto"
                   label="foto"
                   outlined
-                  @update:model="setImage"
+                  @on-file="setImage"
                 />
               </div>
             </div>

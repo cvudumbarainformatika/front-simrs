@@ -14,6 +14,7 @@
       label="Gambar"
       accept="image/*"
       class="q-mb-md"
+      @update:model-value="kirim"
     />
   </div>
 </template>
@@ -22,15 +23,20 @@ import { computed, ref } from 'vue'
 
 const props = defineProps({
   model: {
-    type: String,
+    type: [String, Object],
+    // type: String,
+    // eslint-disable-next-line vue/require-valid-default-prop
     default: null
   }
 })
 
-const emits = defineEmits(['update:model'])
-
+const emits = defineEmits(['update:model', 'onFile'])
+function kirim(val) {
+  emits('onFile', val)
+}
 const tempImg = computed({
   get() {
+    // console.log('model', props.model)
     return props.model
   },
   set(newVal) {
