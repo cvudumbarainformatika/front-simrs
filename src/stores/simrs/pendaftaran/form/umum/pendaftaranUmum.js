@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { axios } from 'boot/axios'
 
 export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umum', {
   state: () => ({
@@ -58,11 +59,96 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       { nama: 'Bugis', value: 'Bugis' },
       { nama: 'Dayak', value: 'Dayak' },
       { nama: 'Lain-lain', value: 'Lain-lain' }
-    ]
+    ],
+    loadingSelect: false,
+    api_wilayah: 'https://globalbudged.github.io/api-wilayah-indonesia/static/api',
+    propinsies: [],
+    kabupatens: [],
+    kecamatans: [],
+    kelurahans: []
   }),
   actions: {
     setForm(key, val) {
       this.form[key] = val
-    }
+    },
+
+    // api propinsi kebawah
+    async getProvinces (id) {
+      await axios.get(`${this.api_wilayah}/provinces.json`)
+        .then((resp) => {
+          // console.log(resp)
+          this.propinsies = resp.data
+          return resp.data.name
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+    async getKota (val) {
+      this.loadingSelect = true
+      if (this.propinsies.length > 0) {
+        // console.log('jika data array provinsi ada')
+        let temp = []
+        temp = this.propinsies.filter(v => v.name.toLowerCase() === val.toLowerCase())
+        if (temp.length > 0) {
+          const tempId = temp[0].id
+          await axios.get(`${this.api_wilayah}/regencies/${tempId}.json`)
+            .then((resp) => {
+              // console.log('resp', resp)
+              this.kabupatens = resp.data
+              // console.log('kotas', this.kotas)
+              this.loadingSelect = false
+            }).catch(err => {
+              console.log(err)
+              this.loadingSelect = false
+            })
+        }
+      }
+      this.loadingSelect = false
+    },
+    async getKec (val) {
+      this.loadingSelect = true
+      if (this.kabupatens.length > 0) {
+        // console.log('jika data array provinsi ada')
+        let temp = []
+        temp = this.kabupatens.filter(v => v.name.toLowerCase() === val.toLowerCase())
+        if (temp.length > 0) {
+          const tempId = temp[0].id
+          await axios.get(`${this.api_wilayah}/districts/${tempId}.json`)
+            .then((resp) => {
+              // console.log('resp', resp)
+              this.kecamatans = resp.data
+              // console.log('kec', this.kecamatans)
+              this.loadingSelect = false
+            }).catch(err => {
+              console.log(err)
+              this.loadingSelect = false
+            })
+        }
+      }
+      this.loadingSelect = false
+    },
+    async getKels (val) {
+      this.loadingSelect = true
+      if (this.kecamatans.length > 0) {
+        let temp = []
+        temp = this.kecamatans.filter(v => v.name.toLowerCase() === val.toLowerCase())
+        if (temp.length > 0) {
+          const tempId = temp[0].id
+          await axios.get(`${this.api_wilayah}/villages/${tempId}.json`)
+            .then((resp) => {
+              // console.log('resp', resp)
+              this.kelurahans = resp.data
+              this.loadingSelect = false
+              // console.log('kec', this.kels)
+            }).catch(err => {
+              console.log(err)
+              this.loadingSelect = false
+            })
+        }
+      }
+      this.loadingSelect = false
+    },
+    // api related functions
+    anu() {}
   }
 })
