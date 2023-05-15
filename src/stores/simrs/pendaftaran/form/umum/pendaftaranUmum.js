@@ -1,25 +1,35 @@
 import { defineStore } from 'pinia'
-import { axios } from 'boot/axios'
+import { api } from 'boot/axios'
+import { findWithAttr } from 'src/modules/utils'
 
 export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umum', {
   state: () => ({
     loading: false,
     params: {},
+    paramWilayah: {
+      kd_negara: '',
+      kd_propinsi: '',
+      kd_kotakabupaten: '',
+      kd_kecamatan: ''
+    },
+    wilayah: {
+      kecamatan: {},
+      kelurahan: {}
+    },
+    tanggal: {
+      tahun: null,
+      bulan: null,
+      hari: null
+    },
     form: {
       sapaan: 'Bpk.',
-      barulama: 'baru'
+      barulama: 'baru',
+      kelamin: '-'
     },
-    sapaans: [
-      { nama: 'Bpk', value: 'Bpk.' },
-      { nama: 'Ibu', value: 'Ibu.' },
-      { nama: 'Sdr', value: 'Sdr.' },
-      { nama: 'Sdri', value: 'Sdri.' },
-      { nama: 'Tn', value: 'Tn.' },
-      { nama: 'Ny', value: 'Ny.' },
-      { nama: 'An', value: 'An.' },
-      { nama: 'By', value: 'By.' },
-      { nama: 'Nn', value: 'Nn.' }
-    ],
+    display: {
+      sapaan: 'Bpk.'
+    },
+    sapaans: [],
     jenisPasiens: [
       { nama: 'Baru', value: 'baru' },
       { nama: 'Lama', value: 'lama' }
@@ -29,39 +39,10 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       { nama: 'Perempuan', value: 'Perempuan' },
       { nama: 'Laki-laki', value: 'Laki-laki' }
     ],
-    agamas: [
-      { nama: '-', value: '-' },
-      { nama: 'Islam', value: 'Islam' },
-      { nama: 'Kristen', value: 'Kristen' },
-      { nama: 'Katolik', value: 'Katolik' },
-      { nama: 'Hindu', value: 'Hindu' },
-      { nama: 'Budha', value: 'Budha' }
-    ],
-    pendidikans: [
-      { nama: '-', value: '-' },
-      { nama: 'Tidak Tahu', value: 'Tidak Tahu' },
-      { nama: 'SD', value: 'SD' },
-      { nama: 'SLTP', value: 'SLTP' },
-      { nama: 'SLTA', value: 'SLTA' },
-      { nama: 'Diploma 1', value: 'Diploma 1' },
-      { nama: 'Diploma 2', value: 'Diploma 2' },
-      { nama: 'Diploma 3', value: 'Diploma 3' },
-      { nama: 'Strata 1', value: 'Strata 1' },
-      { nama: 'Strata 2', value: 'Strata 2' },
-      { nama: 'Strata 3', value: 'Strata 3' }
-    ],
-    sukus: [
-      { nama: '-', value: '-' },
-      { nama: 'Jawa', value: 'Jawa' },
-      { nama: 'Madura', value: 'Madura' },
-      { nama: 'Tionghoa', value: 'Tionghoa' },
-      { nama: 'Batak', value: 'Batak' },
-      { nama: 'Bugis', value: 'Bugis' },
-      { nama: 'Dayak', value: 'Dayak' },
-      { nama: 'Lain-lain', value: 'Lain-lain' }
-    ],
+    agamas: [],
+    pendidikans: [],
     loadingSelect: false,
-    api_wilayah: 'https://globalbudged.github.io/api-wilayah-indonesia/static/api',
+    negaras: [],
     propinsies: [],
     kabupatens: [],
     kecamatans: [],
@@ -71,84 +52,276 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
     setForm(key, val) {
       this.form[key] = val
     },
+    negaraSelected(val) {
+      // const index = findWithAttr(this.negaras, 'kd_negara', val)
+      // const propinsi = this.negaras[index]
+      this.wilayah.kd_negara = val
+      this.paramWilayah.kd_negara = val
+      this.setForm('negara', val)
+      // this.setForm('propinsi', propinsi.wilayah)
 
-    // api propinsi kebawah
-    async getProvinces (id) {
-      await axios.get(`${this.api_wilayah}/provinces.json`)
-        .then((resp) => {
-          // console.log(resp)
-          this.propinsies = resp.data
-          return resp.data.name
-        }).catch(err => {
-          console.log(err)
-        })
+      console.log('negara selected', this.form)
+
+      this.getProvinces()
     },
-    async getKota (val) {
-      this.loadingSelect = true
-      if (this.propinsies.length > 0) {
-        // console.log('jika data array provinsi ada')
-        let temp = []
-        temp = this.propinsies.filter(v => v.name.toLowerCase() === val.toLowerCase())
-        if (temp.length > 0) {
-          const tempId = temp[0].id
-          await axios.get(`${this.api_wilayah}/regencies/${tempId}.json`)
-            .then((resp) => {
-              // console.log('resp', resp)
-              this.kabupatens = resp.data
-              // console.log('kotas', this.kotas)
-              this.loadingSelect = false
-            }).catch(err => {
-              console.log(err)
-              this.loadingSelect = false
-            })
-        }
-      }
-      this.loadingSelect = false
+    clearNegara() {
+      delete this.form.negara
+      delete this.form.propinsi
+      delete this.form.kodepropinsi
+      delete this.form.kabupatenkota
+      delete this.form.kodekabupatenkota
+      delete this.form.kecamatan
+      delete this.form.kodekecamatan
+      delete this.form.kelurahan
+      delete this.form.kodekelurahan
+
+      this.wilayah.kd_negara = null
+      this.wilayah.propinsi = null
+      this.wilayah.kotakabupaten = null
+      this.wilayah.kecamatan.kotakabupaten = null
+      this.wilayah.kelurahan.kotakabupaten = null
+
+      this.paramWilayah.kd_negara = null
+      this.paramWilayah.kd_propinsi = null
+      this.paramWilayah.kd_kotakabupaten = null
+      this.paramWilayah.kd_kecamatan = null
+      this.paramWilayah.kd_kelurahan = null
+
+      this.propinsies = []
+      this.kabupatens = []
+      this.kecamatans = []
+      this.kelurahans = []
     },
-    async getKec (val) {
-      this.loadingSelect = true
-      if (this.kabupatens.length > 0) {
-        // console.log('jika data array provinsi ada')
-        let temp = []
-        temp = this.kabupatens.filter(v => v.name.toLowerCase() === val.toLowerCase())
-        if (temp.length > 0) {
-          const tempId = temp[0].id
-          await axios.get(`${this.api_wilayah}/districts/${tempId}.json`)
-            .then((resp) => {
-              // console.log('resp', resp)
-              this.kecamatans = resp.data
-              // console.log('kec', this.kecamatans)
-              this.loadingSelect = false
-            }).catch(err => {
-              console.log(err)
-              this.loadingSelect = false
-            })
-        }
-      }
-      this.loadingSelect = false
+    propinsiSelected(val) {
+      const index = findWithAttr(this.propinsies, 'propinsi', val)
+      const propinsi = this.propinsies[index]
+      this.wilayah.propinsi = val
+      this.paramWilayah.kd_propinsi = val
+      this.setForm('kodepropinsi', val)
+      this.setForm('propinsi', propinsi.wilayah)
+
+      console.log('form ', this.form)
+
+      this.getKota()
     },
-    async getKels (val) {
-      this.loadingSelect = true
-      if (this.kecamatans.length > 0) {
-        let temp = []
-        temp = this.kecamatans.filter(v => v.name.toLowerCase() === val.toLowerCase())
-        if (temp.length > 0) {
-          const tempId = temp[0].id
-          await axios.get(`${this.api_wilayah}/villages/${tempId}.json`)
-            .then((resp) => {
-              // console.log('resp', resp)
-              this.kelurahans = resp.data
-              this.loadingSelect = false
-              // console.log('kec', this.kels)
-            }).catch(err => {
-              console.log(err)
-              this.loadingSelect = false
-            })
-        }
-      }
-      this.loadingSelect = false
+    clearPropinsi() {
+      delete this.form.propinsi
+      delete this.form.kodepropinsi
+      delete this.form.kabupatenkota
+      delete this.form.kodekabupatenkota
+      delete this.form.kecamatan
+      delete this.form.kodekecamatan
+      delete this.form.kelurahan
+      delete this.form.kodekelurahan
+
+      this.wilayah.propinsi = null
+      this.wilayah.kotakabupaten = null
+      this.wilayah.kecamatan.kotakabupaten = null
+      this.wilayah.kelurahan.kotakabupaten = null
+
+      this.paramWilayah.kd_propinsi = null
+      this.paramWilayah.kd_kotakabupaten = null
+      this.paramWilayah.kd_kecamatan = null
+      this.paramWilayah.kd_kelurahan = null
+
+      this.kabupatens = []
+      this.kecamatans = []
+      this.kelurahans = []
+    },
+    kabupatenSelected(val) {
+      const index = findWithAttr(this.kabupatens, 'kotakabupaten', val)
+      const kabupaten = this.kabupatens[index]
+      this.wilayah.kotakabupaten = val
+      this.paramWilayah.kd_kotakabupaten = val
+      this.setForm('kodekabupatenkota', val)
+      this.setForm('kabupatenkota', kabupaten.wilayah)
+
+      console.log('kabupaten ', val)
+      this.getKec()
+    },
+    clearKabupaten() {
+      delete this.form.kabupatenkota
+      delete this.form.kodekabupatenkota
+      delete this.form.kecamatan
+      delete this.form.kodekecamatan
+      delete this.form.kelurahan
+      delete this.form.kodekelurahan
+
+      this.wilayah.kotakabupaten = null
+      this.wilayah.kecamatan.kotakabupaten = null
+      this.wilayah.kelurahan.kotakabupaten = null
+
+      this.paramWilayah.kd_kotakabupaten = null
+      this.paramWilayah.kd_kecamatan = null
+      this.paramWilayah.kd_kelurahan = null
+
+      this.kecamatans = []
+      this.kelurahans = []
+    },
+    kecamatanSelected(val) {
+      const index = findWithAttr(this.kecamatans, 'kotakabupaten', val)
+      const kabupaten = this.kecamatans[index]
+      this.wilayah.kecamatan.kotakabupaten = val
+      this.paramWilayah.kd_kecamatan = val
+      this.setForm('kodekecamatan', val)
+      this.setForm('kecamatan', kabupaten.wilayah)
+      console.log('kecamatan ', val)
+      this.getKels()
+    },
+    clearKecamatan() {
+      delete this.form.kecamatan
+      delete this.form.kodekecamatan
+      delete this.form.kelurahan
+      delete this.form.kodekelurahan
+
+      this.wilayah.kecamatan.kotakabupaten = null
+      this.wilayah.kelurahan.kotakabupaten = null
+
+      this.paramWilayah.kd_kecamatan = null
+      this.paramWilayah.kd_kelurahan = null
+
+      this.kelurahans = []
+    },
+    kelurahanSelected(val) {
+      const index = findWithAttr(this.kelurahans, 'kotakabupaten', val)
+      const kabupaten = this.kelurahans[index]
+      this.wilayah.kelurahan.kotakabupaten = val
+      this.paramWilayah.kd_kelurahan = val
+      this.setForm('kodekelurahan', val)
+      this.setForm('kelurahan', kabupaten.wilayah)
+
+      console.log('kelurahan ', this.form)
+    },
+    clearKelurahan() {
+      delete this.form.kelurahan
+      delete this.form.kodekelurahan
+
+      this.wilayah.kelurahan.kotakabupaten = null
+
+      this.paramWilayah.kd_kelurahan = null
+    },
+
+    // initial data
+    getInitialData() {
+      this.getNegara()
+      this.getAgama()
+      this.getSapaan()
+      this.getKelamin()
+      this.getPendidikan()
     },
     // api related functions
-    anu() {}
+    async getSuku() {
+      this.loading = true
+      await api.get('v1/simrs/master/pendidikan')
+        .then(resp => {
+          this.loading = false
+          console.log('pendidikan ', resp.data)
+          this.pendidikans = resp.data
+        })
+        .catch(() => { this.loading = false })
+    },
+    async getPendidikan() {
+      this.loading = true
+      await api.get('v1/simrs/master/pendidikan')
+        .then(resp => {
+          this.loading = false
+          console.log('sapaan ', resp.data)
+          this.pendidikans = resp.data
+        })
+        .catch(() => { this.loading = false })
+    },
+    async getKelamin() {
+      this.loading = true
+      await api.get('v1/simrs/master/kelamin')
+        .then(resp => {
+          this.loading = false
+          console.log('sapaan ', resp.data)
+          this.kelamins = resp.data
+        })
+        .catch(() => { this.loading = false })
+    },
+    async getSapaan() {
+      this.loading = true
+      await api.get('v1/simrs/master/sapaan')
+        .then(resp => {
+          this.loading = false
+          console.log('sapaan ', resp.data)
+          this.sapaans = resp.data
+        })
+        .catch(() => { this.loading = false })
+    },
+    async getAgama() {
+      this.loading = true
+      await api.get('v1/simrs/master/agama')
+        .then(resp => {
+          this.loading = false
+          console.log('agama ', resp.data)
+          this.agamas = resp.data
+        })
+        .catch(() => { this.loading = false })
+    },
+    // api propinsi kebawah
+    async getNegara () {
+      this.loadingSelect = true
+      const param = { params: this.paramWilayah }
+      await api.get('v1/simrs/master/getnegara', param)
+        .then((resp) => {
+          this.loadingSelect = false
+          // console.log('negara', resp.data[0])
+          this.negaras = resp.data[0]
+        }).catch(() => {
+          this.loadingSelect = false
+        })
+    },
+    async getProvinces () {
+      this.loadingSelect = true
+      const param = { params: this.paramWilayah }
+      await api.get('v1/simrs/master/getpropinsi', param)
+        .then((resp) => {
+          this.loadingSelect = false
+          // console.log('Propinsi', resp.data[0])
+          this.propinsies = resp.data[0]
+        }).catch(() => {
+          this.loadingSelect = false
+        })
+    },
+    async getKota () {
+      this.loadingSelect = true
+      const param = { params: this.paramWilayah }
+      await api.get('v1/simrs/master/getkotakabupaten', param)
+        .then((resp) => {
+          // console.log('kota', resp.data)
+          this.kabupatens = resp.data[0]
+          this.loadingSelect = false
+        }).catch(() => {
+          this.loadingSelect = false
+        })
+    },
+    async getKec () {
+      this.loadingSelect = true
+      const param = { params: this.paramWilayah }
+      await api.get('v1/simrs/master/getkecamatan', param)
+        .then((resp) => {
+          // console.log('kecamatan', resp.data[0])
+          this.kecamatans = resp.data[0]
+          // console.log('kec', this.kecamatans)
+          this.loadingSelect = false
+        }).catch(() => {
+          this.loadingSelect = false
+        })
+    },
+    async getKels () {
+      this.loadingSelect = true
+      const param = { params: this.paramWilayah }
+      await api.get('v1/simrs/master/getkelurahan', param)
+        .then((resp) => {
+          // console.log('keluarahan', resp.data[0])
+          this.kelurahans = resp.data[0]
+          this.loadingSelect = false
+          // console.log('kec', this.kels)
+        }).catch(() => {
+          this.loadingSelect = false
+        })
+    }
   }
 })

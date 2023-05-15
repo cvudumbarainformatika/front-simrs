@@ -26,7 +26,7 @@
               <div class="col-8">
                 <app-autocomplete-new
                   :model="store.form.barulama"
-                  label="Pasien Baru / Pasien lama"
+                  label="Propinsi"
                   autocomplite="value"
                   option-value="value"
                   option-label="nama"
@@ -54,11 +54,12 @@
                     <app-autocomplete
                       v-model="store.form.sapaan"
                       label=" "
-                      autocomplite="value"
-                      option-value="value"
-                      option-label="nama"
+                      autocomplite="sapaan"
+                      option-value="sapaan"
+                      option-label="sapaan"
                       outlined
                       :source="store.sapaans"
+                      :loading="store.loading"
                     />
                   </div>
                   <div class="col-9">
@@ -84,6 +85,7 @@
                   option-label="nama"
                   outlined
                   :source="store.kelamins"
+                  :loading="store.loading"
                 />
               </div>
             </div>
@@ -95,11 +97,12 @@
                 <app-autocomplete
                   v-model="store.form.pendidikan"
                   label="Pendidikan"
-                  autocomplite="value"
-                  option-value="value"
-                  option-label="nama"
+                  autocomplite="pendidikan"
+                  option-value="pendidikan"
+                  option-label="pendidikan"
                   outlined
                   :source="store.pendidikans"
+                  :loading="store.loading"
                 />
               </div>
             </div>
@@ -108,14 +111,16 @@
                 Agama
               </div>
               <div class="col-8">
-                <app-autocomplete
-                  v-model="store.form.agama"
+                <app-autocomplete-new
+                  v-model="store.display.kode"
                   label="Agama"
-                  autocomplite="value"
-                  option-value="value"
-                  option-label="nama"
+                  autocomplite="kode"
+                  option-value="kode"
+                  option-label="keterangan"
                   outlined
                   :source="store.agamas"
+                  :loading="store.loading"
+                  @on-select="setAgama"
                 />
               </div>
             </div>
@@ -132,27 +137,16 @@
                 />
               </div>
             </div>
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Propinsi
-              </div>
-              <div class="col-8">
-                anu
-              </div>
-            </div>
+
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Suku
               </div>
               <div class="col-8">
-                <app-autocomplete
+                <app-input
                   v-model="store.form.suku"
                   label="Suku"
-                  autocomplite="value"
-                  option-value="value"
-                  option-label="nama"
                   outlined
-                  :source="store.sukus"
                 />
               </div>
             </div>
@@ -225,13 +219,42 @@
                 Tgl Lahir <span class="text-red">*</span>
               </div>
               <div class="col-8">
-                <app-input-date-human
+                <!-- <app-input-date-human
                   :model="store.tglLahir"
                   label="Tanggal lahir"
                   outlined
                   @set-model="setModelTglLahir"
                   @set-display="setDispTglLahir"
-                />
+                /> -->
+                <div class="row q-col-gutter-sm no-wrap">
+                  <div>
+                    <app-input
+                      v-model="store.tanggal.hari"
+                      label="Hari"
+                      outlined
+                      type="number"
+                      @update:model-value="setHariLahir"
+                    />
+                  </div>
+                  <div>
+                    <app-input
+                      v-model="store.tanggal.bulan"
+                      label="Bulan"
+                      outlined
+                      type="number"
+                      @update:model-value="setBulanLahir"
+                    />
+                  </div>
+                  <div>
+                    <app-input
+                      v-model="store.tanggal.tahun"
+                      label="Tahun"
+                      outlined
+                      type="number"
+                      @update:model-value="setTahunLahir"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -241,34 +264,37 @@
               <div class="col-8">
                 <div class="row items-center q-col-gutter-sm">
                   <div class="col-2">
-                    <app-input
+                    {{ store.form.umurthn }}
+                    <!-- <app-input
                       v-model="store.form.umurthn"
                       label=""
                       outlined
                       type="number"
-                    />
+                    /> -->
                   </div>
                   <div class="col-2">
                     thn
                   </div>
                   <div class="col-2">
-                    <app-input
+                    {{ store.form.umurbln }}
+                    <!-- <app-input
                       v-model="store.form.umurbln"
                       label=""
                       outlined
                       type="number"
-                    />
+                    /> -->
                   </div>
                   <div class="col-2">
                     bln
                   </div>
                   <div class="col-2">
-                    <app-input
+                    {{ store.form.umurhari }}
+                    <!-- <app-input
                       v-model="store.form.umurhari"
                       label=""
                       outlined
                       type="number"
-                    />
+                    /> -->
                   </div>
                   <div class="col-2">
                     hari
@@ -306,13 +332,40 @@
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
-                Kelurahan
+                Negara
               </div>
               <div class="col-8">
-                <app-input
-                  v-model="store.form.kelurahan"
-                  label="Kelurahan"
+                <app-autocomplete-new
+                  :model="store.wilayah.kd_negara"
+                  label="Cari Negara"
+                  autocomplite="wilayah"
+                  option-value="kd_negara"
+                  option-label="wilayah"
                   outlined
+                  :source="store.negaras"
+                  :loading="store.loadingSelect"
+                  @on-select="store.negaraSelected"
+                  @clear="store.clearNegara"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Propinsi
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  :model="store.wilayah.propinsi"
+                  label="Cari propinsi"
+                  autocomplite="wilayah"
+                  option-value="propinsi"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.propinsies"
+                  :disable="!store.propinsies.length"
+                  :loading="store.loadingSelect"
+                  @on-select="store.propinsiSelected"
+                  @clear="store.clearPropinsi"
                 />
               </div>
             </div>
@@ -321,7 +374,19 @@
                 Kabupaten
               </div>
               <div class="col-8">
-                anu
+                <app-autocomplete-new
+                  :model="store.wilayah.kotakabupaten"
+                  label="Cari kabupaten / kota"
+                  autocomplite="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.kabupatens"
+                  :loading="store.loadingSelect"
+                  :disable="!store.kabupatens.length"
+                  @on-select="store.kabupatenSelected"
+                  @clear="store.clearKabupaten"
+                />
               </div>
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -329,10 +394,42 @@
                 Kecamatan
               </div>
               <div class="col-8">
-                anu
+                <app-autocomplete-new
+                  :model="store.wilayah.kecamatan.kotakabupaten"
+                  label="Cari kecamatan"
+                  autocomplite="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.kecamatans"
+                  :loading="store.loadingSelect"
+                  :disable="!store.kecamatans.length"
+                  @on-select="store.kecamatanSelected"
+                  @clear="store.clearKecamatan"
+                />
               </div>
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Kelurahan
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  :model="store.wilayah.kelurahan.kotakabupaten"
+                  label="Cari kelurahan"
+                  autocomplite="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.kelurahans"
+                  :loading="store.loadingSelect"
+                  :disable="!store.kelurahans.length"
+                  @on-select="store.kelurahanSelected"
+                  @clear="store.clearKelurahan"
+                />
+              </div>
+            </div>
+            <!-- <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Foto
               </div>
@@ -344,19 +441,7 @@
                   @on-file="setImage"
                 />
               </div>
-            </div>
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                No. Antrian
-              </div>
-              <div class="col-8">
-                <app-input
-                  v-model="store.form.noantrian"
-                  label="Kelurahan"
-                  outlined
-                />
-              </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </q-card-section>
@@ -364,7 +449,8 @@
   </q-page>
 </template>
 <script setup>
-import { date } from 'quasar'
+// import { date } from 'quasar'
+import { findWithAttr } from 'src/modules/utils'
 import { usePendaftaranPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/pendaftaranUmum'
 
 const store = usePendaftaranPasienUmumStore()
@@ -373,17 +459,42 @@ function setJenisPasien(val) {
   store.setForm('barulama', val)
   console.log('baru lama', val)
 }
-function setModelTglLahir(val) {
-  console.log('model tgl', val)
-  store.setForm('tgllahir', date.formatDate(val, 'YYYY-MM-DD'))
+function setHariLahir() {
+  console.log('hari', store.tanggal)
 }
-function setDispTglLahir(val) {
-  console.log('disp tgl', val)
-  store.tglLahir = val
-  // store.setForm('sapaan', val)
+function setBulanLahir() {
+  console.log('hari', store.tanggal)
 }
-function setImage(val) {
-  console.log('image', val)
-  store.setForm('foto', val)
+function setTahunLahir() {
+  console.log('hari', store.tanggal)
 }
+// function setModelTglLahir(val) {
+//   console.log('model tgl', val)
+//   store.setForm('tgllahir', date.formatDate(val, 'YYYY-MM-DD'))
+// }
+// function setDispTglLahir(val) {
+//   console.log('disp tgl', val)
+//   store.tglLahir = val
+//   // store.setForm('sapaan', val)
+// }
+// function setImage(val) {
+//   console.log('image', val)
+//   store.setForm('foto', val)
+// }
+function setAgama(val) {
+  const index = findWithAttr(store.agamas, 'kode', val)
+  const temp = store.agamas[index]
+  store.setForm('agama', temp.keterangan)
+  store.setForm('kodemapagama', temp.kodemapping)
+  console.log('agama selected ', store.form)
+}
+// function setSapaan(val) {
+// console.log('sapaan selected ', val)
+// const index = findWithAttr(store.agamas, 'kode', val)
+// const temp = store.agamas[index]
+// store.setForm('agama', temp.keterangan)
+// store.setForm('kodemapagama', temp.kodemapping)
+// console.log('sapaan selected ', store.form)
+// }
+store.getInitialData()
 </script>
