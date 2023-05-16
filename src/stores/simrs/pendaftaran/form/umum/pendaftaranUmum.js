@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { findWithAttr } from 'src/modules/utils'
+import { date } from 'quasar'
 
 export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umum', {
   state: () => ({
     loading: false,
+    cariPasienDialog: false,
     params: {},
     paramWilayah: {
       kd_negara: '',
@@ -22,9 +24,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       hari: null
     },
     form: {
-      sapaan: 'Bpk.',
-      barulama: 'baru',
-      kelamin: '-'
+      barulama: 'baru'
     },
     display: {
       sapaan: 'Bpk.'
@@ -34,11 +34,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       { nama: 'Baru', value: 'baru' },
       { nama: 'Lama', value: 'lama' }
     ],
-    kelamins: [
-      { nama: '-', value: '-' },
-      { nama: 'Perempuan', value: 'Perempuan' },
-      { nama: 'Laki-laki', value: 'Laki-laki' }
-    ],
+    kelamins: [],
     agamas: [],
     pendidikans: [],
     loadingSelect: false,
@@ -62,7 +58,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
 
       console.log('negara selected', this.form)
 
-      this.getProvinces()
+      // this.getProvinces()
     },
     clearNegara() {
       delete this.form.negara
@@ -102,7 +98,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
 
       console.log('form ', this.form)
 
-      this.getKota()
+      // this.getKota()
     },
     clearPropinsi() {
       delete this.form.propinsi
@@ -137,7 +133,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.setForm('kabupatenkota', kabupaten.wilayah)
 
       console.log('kabupaten ', val)
-      this.getKec()
+      // this.getKec()
     },
     clearKabupaten() {
       delete this.form.kabupatenkota
@@ -166,7 +162,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.setForm('kodekecamatan', val)
       this.setForm('kecamatan', kabupaten.wilayah)
       console.log('kecamatan ', val)
-      this.getKels()
+      // this.getKels()
     },
     clearKecamatan() {
       delete this.form.kecamatan
@@ -203,6 +199,17 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
 
     // initial data
     getInitialData() {
+      const hariIni = Date.now()
+      this.form.tgllahir = date.formatDate(hariIni, 'YYYY-MM-DD')
+      this.tanggal.hari = date.formatDate(hariIni, 'DD')
+      this.tanggal.bulan = date.formatDate(hariIni, 'MM')
+      this.tanggal.tahun = date.formatDate(hariIni, 'YYYY')
+      const tanggal = this.tanggal.tahun + '-' + this.tanggal.bulan + '-' + this.tanggal.hari
+      this.form.umurthn = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'years')
+      this.form.umurbln = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'months')
+      this.form.umurhari = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'days')
+      console.log('form', this.form)
+
       this.getNegara()
       this.getAgama()
       this.getSapaan()
@@ -238,7 +245,13 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
           console.log('sapaan ', resp.data)
           this.kelamins = resp.data
         })
-        .catch(() => { this.loading = false })
+        .catch(() => {
+          this.kelamins = [
+            { nama: 'Perempuan', value: 'Perempuan' },
+            { nama: 'Laki-laki', value: 'Laki-laki' }
+          ]
+          this.loading = false
+        })
     },
     async getSapaan() {
       this.loading = true
@@ -281,6 +294,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
           this.loadingSelect = false
           // console.log('Propinsi', resp.data[0])
           this.propinsies = resp.data[0]
+          return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
           this.loadingSelect = false
         })
@@ -293,6 +307,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
           // console.log('kota', resp.data)
           this.kabupatens = resp.data[0]
           this.loadingSelect = false
+          return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
           this.loadingSelect = false
         })
@@ -303,9 +318,10 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       await api.get('v1/simrs/master/getkecamatan', param)
         .then((resp) => {
           // console.log('kecamatan', resp.data[0])
-          this.kecamatans = resp.data[0]
-          // console.log('kec', this.kecamatans)
           this.loadingSelect = false
+          this.kecamatans = resp.data[0]
+          return new Promise(resolve => { resolve(resp) })
+          // console.log('kec', this.kecamatans)
         }).catch(() => {
           this.loadingSelect = false
         })
@@ -316,8 +332,9 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       await api.get('v1/simrs/master/getkelurahan', param)
         .then((resp) => {
           // console.log('keluarahan', resp.data[0])
-          this.kelurahans = resp.data[0]
           this.loadingSelect = false
+          this.kelurahans = resp.data[0]
+          return new Promise(resolve => { resolve(resp) })
           // console.log('kec', this.kels)
         }).catch(() => {
           this.loadingSelect = false
