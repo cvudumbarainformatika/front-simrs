@@ -68,10 +68,13 @@ import AdmHeader from './AdmHeader.vue'
 import AdmFooterMenu from './AdmFooterMenu.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
+import { getCurrentApp } from 'src/modules/storage'
 // import { deleteTempData, getTempData } from 'src/modules/storage'
 // import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 // import { routerInstance } from 'src/boot/router'
 
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+const appSetting = useSettingsAplikasi()
 const setting = useSettingsStore()
 // const pemakaianruangan = usePemakaianRuanganStore()
 const store = useAuthStore()
@@ -99,7 +102,9 @@ const foto = computed(() => {
 })
 const menus = computed(() => {
   const apem = store.aplications.filter(app => {
-    return app.aplikasi === 'master'
+    // return app.aplikasi === 'pegawai'
+    const appNow = appSetting.currentApp !== '' ? appSetting.currentApp : getCurrentApp()
+    return app.aplikasi === appNow
   })
   if (apem.length) {
     return apem[0].menus

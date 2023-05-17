@@ -23,7 +23,7 @@
               <div class="col-4">
                 Pasien Baru / Lama
               </div>
-              <div class="col-8">
+              <div :class="store.form.barulama==='baru'?'col-8':'col-7'">
                 <app-autocomplete-new
                   ref="refJenisPasien"
                   :model="store.form.barulama"
@@ -36,6 +36,33 @@
                   :source="store.jenisPasiens"
                   @on-select="setJenisPasien"
                 />
+              </div>
+              <div
+                v-if="store.form.barulama==='lama'"
+                class="col-1"
+              >
+                <q-btn
+                  dense
+                  flat
+                  round
+                  icon="icon-mat-search"
+                  color="grey"
+                  @click="store.cariPasienDialog=true"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="center middle"
+                  >
+                    Cari pasien lain
+                  </q-tooltip>
+                  <template #loading>
+                    <q-spinner-hourglass
+                      class="on-left"
+                      size="18px"
+                    />
+                    <span class="f-12"> Loading </span>
+                  </template>
+                </q-btn>
               </div>
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -283,20 +310,6 @@
                 />
               </div>
             </div>
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Bahasa
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refBahasa"
-                  v-model="store.form.bahasa"
-                  label="Bahasa"
-                  outlined
-                  :disable="store.form.barulama!=='baru'"
-                />
-              </div>
-            </div>
           </div>
           <!-- kanan -->
           <div class="col-6">
@@ -431,7 +444,7 @@
                   outlined
                   :source="store.kabupatens"
                   :loading="store.loadingSelect"
-                  :disable="!store.propinsies.length || store.form.barulama!=='baru'"
+                  :disable="!store.kabupatens.length || store.form.barulama!=='baru'"
                   @on-select="kabupatenSelected"
                   @clear="store.clearKabupaten"
                 />
@@ -452,7 +465,7 @@
                   outlined
                   :source="store.kecamatans"
                   :loading="store.loadingSelect"
-                  :disable="!store.propinsies.length || store.form.barulama!=='baru'"
+                  :disable="!store.kecamatans.length || store.form.barulama!=='baru'"
                   @on-select="kecamatanSelected"
                   @clear="store.clearKecamatan"
                 />
@@ -473,9 +486,23 @@
                   outlined
                   :source="store.kelurahans"
                   :loading="store.loadingSelect"
-                  :disable="!store.propinsies.length || store.form.barulama!=='baru'"
+                  :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
                   @on-select="kelurahanSelected"
                   @clear="store.clearKelurahan"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Bahasa
+              </div>
+              <div class="col-8">
+                <app-input
+                  ref="refBahasa"
+                  v-model="store.form.bahasa"
+                  label="Bahasa"
+                  outlined
+                  :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
@@ -492,6 +519,182 @@
                 />
               </div>
             </div> -->
+          </div>
+        </div>
+        <div class="row fit q-col-gutter-sm q-mb-md">
+          <div class="col-12 text-right">
+            <q-checkbox
+              v-model="store.alamataDomisiliSama"
+              label="Alamat dan Alamat Domisili sama "
+              dense
+            />
+          </div>
+        </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <div class="text-weight-bold q-mb-md">
+          <div class="row fit q-col-gutter-sm q-mb-md">
+            <div class="f-14  col-6">
+              Alamat Domisili
+            </div>
+          </div>
+        </div>
+        <div class="row fit q-col-gutter-sm q-mb-md">
+          <div class="col-6">
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Alamat
+              </div>
+              <div class="col-8">
+                <app-input
+                  ref="refAlamatDomisili"
+                  v-model="store.form.alamatdomisili"
+                  outlined
+                  label="Alamat"
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                RT / RW
+              </div>
+              <div class="col-8">
+                <div class="row items-center q-col-gutter-sm">
+                  <div class="col-4">
+                    <app-input
+                      ref="refRTDomisili"
+                      v-model="store.form.rtdomisili"
+                      label="RT"
+                      outlined
+                      type="number"
+                      :disable="store.form.barulama!=='baru'"
+                    />
+                  </div>
+                  <div class="col-1 text-center">
+                    /
+                  </div>
+                  <div class="col-4">
+                    <app-input
+                      ref="refRWDomisili"
+                      v-model="store.form.rwdomisili"
+                      label="RW"
+                      outlined
+                      type="number"
+                      :disable="store.form.barulama!=='baru'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Negara
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  ref="refNegaraDomisili"
+                  :model="store.wilayahDomisili.kd_negara"
+                  label="Cari Negara"
+                  autocomplete="wilayah"
+                  option-value="kd_negara"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.domisiliNegaras"
+                  :loading="store.loadingSelectDomisili"
+                  :disable="store.form.barulama!=='baru'"
+                  @on-select="negaraDomisiliSelected"
+                  @clear="store.clearNegaraDomisili"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Propinsi
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  ref="refPropinsiDomisili"
+                  :model="store.wilayahDomisili.propinsi"
+                  label="Cari propinsi"
+                  autocomplete="wilayah"
+                  option-value="propinsi"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.domisiliPropinsies"
+                  :disable="!store.domisiliPropinsies.length || store.form.barulama!=='baru'"
+                  :loading="store.loadingSelectDomisili"
+                  @on-select="propinsiDomisiliSelected"
+                  @clear="store.clearPropinsiDomisili"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Kabupaten
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  ref="refKabupatenDomisili"
+                  :model="store.wilayahDomisili.kotakabupaten"
+                  label="Cari kabupaten / kota"
+                  autocomplete="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.domisiliKabupatens"
+                  :loading="store.loadingSelectDomisili"
+                  :disable="!store.domisiliKabupatens.length || store.form.barulama!=='baru'"
+                  @on-select="kabupatenDomisiliSelected"
+                  @clear="store.clearKabupatenDomisili"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Kecamatan
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  ref="refKecamatanDomisili"
+                  :model="store.wilayahDomisili.kecamatan.kotakabupaten"
+                  label="Cari kecamatan"
+                  autocomplete="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.domisiliKecamatans"
+                  :loading="store.loadingSelectDomisili"
+                  :disable="!store.domisiliKecamatans.length || store.form.barulama!=='baru'"
+                  @on-select="kecamatanDomisiliSelected"
+                  @clear="store.clearKecamatanDomisili"
+                />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Kelurahan
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  ref="refKelurahanDomisili"
+                  :model="store.wilayahDomisili.kelurahan.kotakabupaten"
+                  label="Cari kelurahan"
+                  autocomplete="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.domisiliKelurahans"
+                  :loading="store.loadingSelectDomisili"
+                  :disable="!store.domisiliKelurahans.length || store.form.barulama!=='baru'"
+                  @on-select="kelurahanDomisiliSelected"
+                  @clear="store.clearKelurahanDomisili"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -513,11 +716,14 @@
 <script setup>
 // import { date } from 'quasar'
 import { date } from 'quasar'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { usePendaftaranPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/pendaftaranUmum'
-import { onBeforeUpdate, ref } from 'vue'
+import { computed, onBeforeUpdate, ref } from 'vue'
 import dialogCariPasien from './DialogCariPasein.vue'
+import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/umum/dialogCariPasien'
 
+const dialog = useDialogCariPasienPendaftaranUmum()
+dialog.getInitialData()
 const store = usePendaftaranPasienUmumStore()
 
 const refJenisPasien = ref(null)
@@ -536,12 +742,55 @@ function setJenisPasien(val) {
   if (val === 'baru') {
     refJenisPasien.value.$refs.refAuto.blur()
     refNoRM.value.$refs.refInput.focus()
+    store.form = { barulama: 'baru' }
+    store.lahirHariIni()
     console.log('pasien baru')
+    setTimeout(() => {
+      resetValidation()
+    }, 1000)
   }
   if (val === 'lama') {
     refJenisPasien.value.$refs.refAuto.blur()
     store.cariPasienDialog = true
+    resetValidation()
+    // lahirValid.value = false
+    // console.log('lahir valid', lahirValid.value)
+    //
   }
+}
+function resetValidation() {
+  // reset validation
+  refJenisPasien.value.$refs.refAuto.resetValidation()
+  refNoRM.value.$refs.refInput.resetValidation()
+  refNama.value.$refs.refInput.resetValidation()
+  refSapaan.value.$refs.refAuto.resetValidation()
+  refKelamin.value.$refs.refAuto.resetValidation()
+  refTempatLahir.value.$refs.refInput.resetValidation()
+  refHariLahir.value.$refs.refInput.resetValidation()
+  refBulanLahir.value.$refs.refInput.resetValidation()
+  refTahunLahir.value.$refs.refInput.resetValidation()
+  refPendidikan.value.$refs.refAuto.resetValidation()
+  refAgama.value.$refs.refAuto.resetValidation()
+  refSuku.value.$refs.refInput.resetValidation()
+  refNoTlp.value.$refs.refInput.resetValidation()
+  refBahasa.value.$refs.refInput.resetValidation()
+  refKtp.value.$refs.refInput.resetValidation()
+  refNoKaBpjs.value.$refs.refInput.resetValidation()
+  refAlamat.value.$refs.refInput.resetValidation()
+  refRT.value.$refs.refInput.resetValidation()
+  refRW.value.$refs.refInput.resetValidation()
+  refNegara.value.$refs.refAuto.resetValidation()
+  refPropinsi.value.$refs.refAuto.resetValidation()
+  refKabupaten.value.$refs.refAuto.resetValidation()
+  refKecamatan.value.$refs.refAuto.resetValidation()
+  refKelurahan.value.$refs.refAuto.resetValidation()
+  refRTDomisili.value.$refs.refInput.resetValidation()
+  refRWDomisili.value.$refs.refInput.resetValidation()
+  refNegaraDomisili.value.$refs.refAuto.resetValidation()
+  refPropinsiDomisili.value.$refs.refAuto.resetValidation()
+  refKabupatenDomisili.value.$refs.refAuto.resetValidation()
+  refKecamatanDomisili.value.$refs.refAuto.resetValidation()
+  refKelurahanDomisili.value.$refs.refAuto.resetValidation()
 }
 // -- dialog cari pasien, untuk pasien lama--start--
 function cariPasienHide(val) {
@@ -604,12 +853,12 @@ function setAgama(val) {
   refSuku.value.$refs.refInput.focus()
 }
 // ---tanggal lahir start--
-const hariIni = Date.now()
 const refTahunLahir = ref(null)
 const refBulanLahir = ref(null)
 const refHariLahir = ref(null)
 const refRT = ref(null)
 const refRW = ref(null)
+const hariIni = Date.now()
 function setTanggalLahir() {
   const tanggal = store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari
   const tahunini = parseInt(date.formatDate(hariIni, 'YYYY'))
@@ -702,45 +951,113 @@ function kecamatanSelected(val) {
 }
 function kelurahanSelected(val) {
   store.kelurahanSelected(val)
+  refKelurahan.value.$refs.refAuto.blur()
+  refBahasa.value.$refs.refInput.focus()
 }
 // ---get negara to kelurahah end----
+// ---get negara to kelurahah domisili start----
+const refNegaraDomisili = ref(null)
+const refPropinsiDomisili = ref(null)
+const refKabupatenDomisili = ref(null)
+const refKecamatanDomisili = ref(null)
+const refKelurahanDomisili = ref(null)
+const refRTDomisili = ref(null)
+const refRWDomisili = ref(null)
+function negaraDomisiliSelected(val) {
+  store.negaraDomisiliSelected(val)
+  store.getProvincesDomisili().then(() => {
+    refNegaraDomisili.value.$refs.refAuto.blur()
+    refPropinsiDomisili.value.$refs.refAuto.focus()
+    refPropinsiDomisili.value.$refs.refAuto.showPopup()
+  })
+}
+function propinsiDomisiliSelected(val) {
+  store.propinsiDomisiliSelected(val)
+  store.getKotaDomisili().then(() => {
+    refPropinsiDomisili.value.$refs.refAuto.blur()
+    refKabupatenDomisili.value.$refs.refAuto.focus()
+    refKabupatenDomisili.value.$refs.refAuto.showPopup()
+  })
+}
+function kabupatenDomisiliSelected(val) {
+  store.kabupatenDomisiliSelected(val)
+  store.getKecDomisili().then(() => {
+    refKabupatenDomisili.value.$refs.refAuto.blur()
+    refKecamatanDomisili.value.$refs.refAuto.focus()
+    refKecamatanDomisili.value.$refs.refAuto.showPopup()
+  })
+}
+function kecamatanDomisiliSelected(val) {
+  store.kecamatanDomisiliSelected(val)
+  store.getKelsDomisili().then(() => {
+    refKecamatanDomisili.value.$refs.refAuto.blur()
+    refKelurahanDomisili.value.$refs.refAuto.focus()
+    refKelurahanDomisili.value.$refs.refAuto.showPopup()
+  })
+}
+function kelurahanDomisiliSelected(val) {
+  store.kelurahanDomisiliSelected(val)
+  refKelurahanDomisili.value.$refs.refAuto.blur()
+  // refBahasa.value.$refs.refInput.focus()
+}
+// ---get negara to kelurahah domisili end----
 const refNoTlp = ref(null)
 const refBahasa = ref(null)
 const refKtp = ref(null)
 const refNoKaBpjs = ref(null)
-const lahirValid = ref(true)
-function validateTglLahir() {
+// const lahirValid = ref(true)
+// function validateTglLahir() {
+//   const hariIni = new Date(date.formatDate(Date.now(), 'YYYY-MM-DD'))
+//   const tanggal = new Date(date.formatDate(store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari, 'YYYY-MM-DD'))
+//   console.log('validate tanggal', date.isSameDate(hariIni, tanggal, 'days'))
+//   lahirValid.value = date.isSameDate(hariIni, tanggal, 'days')
+// }
+const lahirValid = computed(() => {
   const hariIni = new Date(date.formatDate(Date.now(), 'YYYY-MM-DD'))
   const tanggal = new Date(date.formatDate(store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari, 'YYYY-MM-DD'))
   console.log('validate tanggal', date.isSameDate(hariIni, tanggal, 'days'))
-  lahirValid.value = date.isSameDate(hariIni, tanggal, 'days')
-}
+  return date.isSameDate(hariIni, tanggal, 'days')
+})
 function simpanData() {
-  validateTglLahir()
-  refJenisPasien.value.$refs.refAuto.validate()
-  refNoRM.value.$refs.refInput.validate()
-  refNama.value.$refs.refInput.validate()
-  refSapaan.value.$refs.refAuto.validate()
-  refKelamin.value.$refs.refAuto.validate()
-  refTempatLahir.value.$refs.refInput.validate()
-  refHariLahir.value.$refs.refInput.validate()
-  refBulanLahir.value.$refs.refInput.validate()
-  refTahunLahir.value.$refs.refInput.validate()
-  refPendidikan.value.$refs.refAuto.validate()
-  refAgama.value.$refs.refAuto.validate()
-  refSuku.value.$refs.refInput.validate()
-  refNoTlp.value.$refs.refInput.validate()
-  refBahasa.value.$refs.refInput.validate()
-  refKtp.value.$refs.refInput.validate()
-  refNoKaBpjs.value.$refs.refInput.validate()
-  refAlamat.value.$refs.refInput.validate()
-  refRT.value.$refs.refInput.validate()
-  refRW.value.$refs.refInput.validate()
-  refNegara.value.$refs.refAuto.validate()
-  refPropinsi.value.$refs.refAuto.validate()
-  refKabupaten.value.$refs.refAuto.validate()
-  refKecamatan.value.$refs.refAuto.validate()
-  refKelurahan.value.$refs.refAuto.validate()
+  // validateTglLahir()
+
+  console.log('lahir valid', lahirValid.value)
+  if (refJenisPasien.value.$refs.refAuto.validate() &&
+  refNoRM.value.$refs.refInput.validate() &&
+  refNama.value.$refs.refInput.validate() &&
+  refSapaan.value.$refs.refAuto.validate() &&
+  refKelamin.value.$refs.refAuto.validate() &&
+  refTempatLahir.value.$refs.refInput.validate() &&
+  refHariLahir.value.$refs.refInput.validate() &&
+  refBulanLahir.value.$refs.refInput.validate() &&
+  refTahunLahir.value.$refs.refInput.validate() &&
+  refPendidikan.value.$refs.refAuto.validate() &&
+  refAgama.value.$refs.refAuto.validate() &&
+  refSuku.value.$refs.refInput.validate() &&
+  refNoTlp.value.$refs.refInput.validate() &&
+  refBahasa.value.$refs.refInput.validate() &&
+  refKtp.value.$refs.refInput.validate() &&
+  refNoKaBpjs.value.$refs.refInput.validate() &&
+  refAlamat.value.$refs.refInput.validate() &&
+  refRT.value.$refs.refInput.validate() &&
+  refRW.value.$refs.refInput.validate() &&
+  refNegara.value.$refs.refAuto.validate() &&
+  refPropinsi.value.$refs.refAuto.validate() &&
+  refKabupaten.value.$refs.refAuto.validate() &&
+  refKecamatan.value.$refs.refAuto.validate() &&
+  refKelurahan.value.$refs.refAuto.validate() &&
+  refRTDomisili.value.$refs.refInput.validate() &&
+  refRWDomisili.value.$refs.refInput.validate() &&
+  refNegaraDomisili.value.$refs.refAuto.validate() &&
+  refPropinsiDomisili.value.$refs.refAuto.validate() &&
+  refKabupatenDomisili.value.$refs.refAuto.validate() &&
+  refKecamatanDomisili.value.$refs.refAuto.validate() &&
+  refKelurahanDomisili.value.$refs.refAuto.validate()
+  ) {
+    console.log('lanjut')
+  } else {
+    notifErrVue('periksa kembali input anda')
+  }
 }
 store.getInitialData()
 onBeforeUpdate(() => {
