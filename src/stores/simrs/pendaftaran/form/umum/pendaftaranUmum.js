@@ -47,6 +47,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
     ],
     kelamins: [],
     agamas: [],
+    statuspernikahans: [],
     pendidikans: [],
     loadingSelectDomisili: false,
     negaras: [],
@@ -70,6 +71,9 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.wilayah.kd_negara = val
       this.paramWilayah.kd_negara = val
       this.setForm('negara', val)
+      if (this.alamataDomisiliSama) {
+        this.setForm('negaradomisili', val)
+      }
       // this.setForm('propinsi', propinsi.wilayah)
 
       console.log('negara selected', this.form)
@@ -86,6 +90,17 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      if (this.alamataDomisiliSama) {
+        delete this.form.negaradomisili
+        delete this.form.propinsidomisili
+        delete this.form.kodepropinsidomisili
+        delete this.form.kabupatenkotadomisili
+        delete this.form.kodekabupatenkotadomisili
+        delete this.form.kecamatandomisili
+        delete this.form.kodekecamatandomisili
+        delete this.form.kelurahandomisili
+        delete this.form.kodekelurahandomisili
+      }
 
       this.wilayah.kd_negara = null
       this.wilayah.propinsi = null
@@ -111,6 +126,10 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.paramWilayah.kd_propinsi = val
       this.setForm('kodepropinsi', val)
       this.setForm('propinsi', propinsi.wilayah)
+      if (this.alamataDomisiliSama) {
+        this.setForm('kodepropinsidomisili', val)
+        this.setForm('propinsidomisili', propinsi.wilayah)
+      }
 
       console.log('form ', this.form)
 
@@ -125,6 +144,16 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      if (this.alamataDomisiliSama) {
+        delete this.form.propinsidomisili
+        delete this.form.kodepropinsidomisili
+        delete this.form.kabupatenkotadomisili
+        delete this.form.kodekabupatenkotadomisili
+        delete this.form.kecamatandomisili
+        delete this.form.kodekecamatandomisili
+        delete this.form.kelurahandomisili
+        delete this.form.kodekelurahandomisili
+      }
 
       this.wilayah.propinsi = null
       this.wilayah.kotakabupaten = null
@@ -147,6 +176,10 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.paramWilayah.kd_kotakabupaten = val
       this.setForm('kodekabupatenkota', val)
       this.setForm('kabupatenkota', kabupaten.wilayah)
+      if (this.alamataDomisiliSama) {
+        this.setForm('kodekabupatenkotadomisili', val)
+        this.setForm('kabupatenkotadomisili', kabupaten.wilayah)
+      }
 
       console.log('kabupaten ', val)
       // this.getKec()
@@ -158,6 +191,14 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      if (this.alamataDomisiliSama) {
+        delete this.form.kabupatenkotadomisili
+        delete this.form.kodekabupatenkotadomisili
+        delete this.form.kecamatandomisili
+        delete this.form.kodekecamatandomisili
+        delete this.form.kelurahandomisili
+        delete this.form.kodekelurahandomisili
+      }
 
       this.wilayah.kotakabupaten = null
       this.wilayah.kecamatan.kotakabupaten = null
@@ -177,6 +218,10 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.paramWilayah.kd_kecamatan = val
       this.setForm('kodekecamatan', val)
       this.setForm('kecamatan', kabupaten.wilayah)
+      if (this.alamataDomisiliSama) {
+        this.setForm('kodekecamatandomisili', val)
+        this.setForm('kecamatandomisili', kabupaten.wilayah)
+      }
       console.log('kecamatan ', val)
       // this.getKels()
     },
@@ -185,6 +230,12 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      if (this.alamataDomisiliSama) {
+        delete this.form.kecamatandomisili
+        delete this.form.kodekecamatandomisili
+        delete this.form.kelurahandomisili
+        delete this.form.kodekelurahandomisili
+      }
 
       this.wilayah.kecamatan.kotakabupaten = null
       this.wilayah.kelurahan.kotakabupaten = null
@@ -201,12 +252,20 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.paramWilayah.kd_kelurahan = val
       this.setForm('kodekelurahan', val)
       this.setForm('kelurahan', kabupaten.wilayah)
+      if (this.alamataDomisiliSama) {
+        this.setForm('kodekelurahandomisili', val)
+        this.setForm('kelurahandomisili', kabupaten.wilayah)
+      }
 
       console.log('kelurahan ', this.form)
     },
     clearKelurahan() {
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      if (this.alamataDomisiliSama) {
+        delete this.form.kelurahandomisili
+        delete this.form.kodekelurahandomisili
+      }
 
       this.wilayah.kelurahan.kotakabupaten = null
 
@@ -362,6 +421,7 @@ export const usePendaftaranPasienUmumStore = defineStore('pendaftaran_pasien_umu
       this.paramWilayahDomisili.kd_kelurahan = null
     },
 
+    samakanAlamatDanDomisili() {},
     setTanggalLahir() {
       const hariIni = Date.now()
       const tanggal = this.tanggal.tahun + '-' + this.tanggal.bulan + '-' + this.tanggal.hari

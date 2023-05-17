@@ -310,6 +310,39 @@
                 />
               </div>
             </div>
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Status Pernikahan
+              </div>
+              <div class="col-8">
+                <app-autocomplete
+                  ref="refStatusPernikahan"
+                  v-model="store.form.statuspernikahan"
+                  label="Status Pernikahan"
+                  autocomplete="statuspernikahan"
+                  option-value="statuspernikahan"
+                  option-label="statuspernikahan"
+                  outlined
+                  :source="store.statuspernikahans"
+                  :loading="store.loading"
+                  :disable=" store.form.barulama!=='baru'"
+                />
+                <!-- <app-autocomplete-new
+                  ref="refStatusPernikahan"
+                  :model="store.wilayah.kelurahan.kotakabupaten"
+                  label="Status Pernikahan"
+                  autocomplete="wilayah"
+                  option-value="kotakabupaten"
+                  option-label="wilayah"
+                  outlined
+                  :source="store.kelurahans"
+                  :loading="store.loadingSelect"
+                  :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
+                  @on-select="kelurahanSelected"
+                  @clear="store.clearKelurahan"
+                /> -->
+              </div>
+            </div>
           </div>
           <!-- kanan -->
           <div class="col-6">
@@ -494,6 +527,22 @@
             </div>
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
+                Kode Pos
+              </div>
+              <div class="col-8">
+                <app-input
+                  ref="refKodePos"
+                  v-model="store.form.kodepos"
+                  label="Kode Pos"
+                  type="number"
+                  outlined
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
+
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
                 Bahasa
               </div>
               <div class="col-8">
@@ -527,12 +576,13 @@
               v-model="store.alamataDomisiliSama"
               label="Alamat dan Alamat Domisili sama "
               dense
+              @update:model-value="store.samakanAlamatDanDomisili"
             />
           </div>
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <q-card-section v-if="!store.alamataDomisiliSama">
         <div class="text-weight-bold q-mb-md">
           <div class="row fit q-col-gutter-sm q-mb-md">
             <div class="f-14  col-6">
@@ -736,6 +786,7 @@ const refPendidikan = ref(null)
 const refAgama = ref(null)
 const refAlamat = ref(null)
 const refSuku = ref(null)
+const refKodePos = ref(null)
 // jenis pasien lama / baru
 function setJenisPasien(val) {
   store.setForm('barulama', val)
@@ -774,6 +825,7 @@ function resetValidation() {
   refSuku.value.$refs.refInput.resetValidation()
   refNoTlp.value.$refs.refInput.resetValidation()
   refBahasa.value.$refs.refInput.resetValidation()
+  refKodePos.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
@@ -952,7 +1004,7 @@ function kecamatanSelected(val) {
 function kelurahanSelected(val) {
   store.kelurahanSelected(val)
   refKelurahan.value.$refs.refAuto.blur()
-  refBahasa.value.$refs.refInput.focus()
+  refKodePos.value.$refs.refInput.focus()
 }
 // ---get negara to kelurahah end----
 // ---get negara to kelurahah domisili start----
@@ -1036,6 +1088,7 @@ function simpanData() {
   refSuku.value.$refs.refInput.validate() &&
   refNoTlp.value.$refs.refInput.validate() &&
   refBahasa.value.$refs.refInput.validate() &&
+  refKodePos.value.$refs.refInput.validate() &&
   refKtp.value.$refs.refInput.validate() &&
   refNoKaBpjs.value.$refs.refInput.validate() &&
   refAlamat.value.$refs.refInput.validate() &&
