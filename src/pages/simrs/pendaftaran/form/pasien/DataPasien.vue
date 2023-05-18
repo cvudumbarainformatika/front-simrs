@@ -404,6 +404,7 @@
                 >
                   <div class="col-12">
                     <app-input
+                      ref="refInputPekerjaan"
                       v-model="store.form.pekerjaan"
                       valid
                       label="tulis Pekerjaan"
@@ -1169,6 +1170,7 @@ const refKtp = ref(null)
 const refNoKaBpjs = ref(null)
 const refStatusPernikahan = ref(null)
 const refPekerjaan = ref(null)
+const refInputPekerjaan = ref(null)
 
 function setTlpRumah(val) {
   // console.log('form', store.form)
@@ -1192,8 +1194,14 @@ function setTlpHP(val) {
   // console.log('form', store.form)
 }
 function setPekerjaan(val) {
-  console.log(val)
-  if (val !== 'Lain-lain') {
+  // console.log(val)
+  if (val === 'Lain-lain') {
+    setTimeout(() => {
+      if (store.form.pekerjaan) delete store.form.pekerjaan
+      refPekerjaan.value.$refs.refAuto.blur()
+      refInputPekerjaan.value.$refs.refInput.focus()
+    }, 500)
+  } else {
     store.setForm('pekerjaan', val)
   }
 }
@@ -1216,7 +1224,9 @@ function validasi() {
   const TahunLahir = refTahunLahir.value.$refs.refInput.validate()
   const Pendidikan = refPendidikan.value.$refs.refAuto.validate()
   const StatusPernikahan = refStatusPernikahan.value.$refs.refAuto.validate()
+
   const Pekerjaan = refPekerjaan.value.$refs.refAuto.validate()
+  const InputPekerjaan = store.display.pekerjaan === 'Lain-lain' ? refInputPekerjaan.value.$refs.refInput.validate() : true
 
   const Agama = refAgama.value.$refs.refAuto.validate()
   const TulisAgama = store.display.agama === 'Lain-lain' ? refTulisAgama.value.$refs.refInput.validate() : true
@@ -1327,6 +1337,7 @@ function validasi() {
   Pendidikan &&
   StatusPernikahan &&
   Pekerjaan &&
+  InputPekerjaan &&
   Agama &&
   TulisAgama &&
   Suku &&
