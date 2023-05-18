@@ -106,11 +106,11 @@
 </template>
 <script setup>
 
-import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/umum/dialogCariPasien'
-import { usePendaftaranPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/pendaftaranUmum'
+import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
+import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 
 const dialog = useDialogCariPasienPendaftaranUmum()
-const store = usePendaftaranPasienUmumStore()
+const store = usePendaftaranPasienStore()
 defineEmits(['hide'])
 
 function pilihPasienIni(val) {
