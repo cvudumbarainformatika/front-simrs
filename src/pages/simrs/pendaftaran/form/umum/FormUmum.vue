@@ -30,7 +30,7 @@ const pasien = usePendaftaranPasienStore()
 const simpan = ref(false)
 const refDataPasien = ref(null)
 function bisaSimpan(val) {
-  console.log('bisa simpan data', val)
+  console.log('bisa simpan data', val, pasien.form)
   simpan.value = false
 }
 function tidakSimpan(val) {

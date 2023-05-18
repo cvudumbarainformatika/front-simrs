@@ -30,7 +30,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       kelurahan: {}
     },
     tanggal: {
-      tahun: '1970',
+      tahun: '1900',
       bulan: '01',
       hari: '01'
     },
@@ -489,6 +489,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     // initial data
     getInitialData() {
       // this.lahirHariIni()
+      this.setTanggalLahir()
       this.getNegara()
       this.getNegaraDomisili()
       this.getAgama()

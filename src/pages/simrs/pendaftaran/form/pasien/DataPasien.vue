@@ -324,18 +324,17 @@
                 />
               </div>
             </div>
-            <!-- telepon -->
+            <!-- bahasa -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
-                No. Telepon
+                Bahasa
               </div>
               <div class="col-8">
                 <app-input
-                  ref="refNoTlp"
-                  v-model="store.form.noteleponhp"
-                  label="No telepon HP"
+                  ref="refBahasa"
+                  v-model="store.form.bahasa"
+                  label="Bahasa"
                   outlined
-                  type="number"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
@@ -354,6 +353,7 @@
                   option-value="statuspernikahan"
                   option-label="statuspernikahan"
                   outlined
+                  :rules="[val => (!!val) || 'Harap diisi',]"
                   :source="store.statuspernikahans"
                   :loading="store.loading"
                   :disable=" store.form.barulama!=='baru'"
@@ -372,6 +372,45 @@
                   @on-select="kelurahanSelected"
                   @clear="store.clearKelurahan"
                 /> -->
+              </div>
+            </div>
+            <!-- pekerjaan -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Pekerjaan
+              </div>
+              <div class="col-8">
+                <div class="row q-mb-xs">
+                  <div class="col-12">
+                    <app-autocomplete
+                      ref="refPekerjaan"
+                      v-model="store.display.pekerjaan"
+                      label="Pilih Pekerjaan"
+                      autocomplete="pekerjaan"
+                      option-value="pekerjaan"
+                      option-label="pekerjaan"
+                      outlined
+                      :rules="[val => (!!val) || 'Harap diisi',]"
+                      :source="store.pekerjaans"
+                      :loading="store.loading"
+                      :disable=" store.form.barulama!=='baru'"
+                      @selected="setPekerjaan"
+                    />
+                  </div>
+                </div>
+                <div
+                  v-if="store.display.pekerjaan==='Lain-lain'"
+                  class="row"
+                >
+                  <div class="col-12">
+                    <app-input
+                      v-model="store.form.pekerjaan"
+                      valid
+                      label="tulis Pekerjaan"
+                      outlined
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -581,18 +620,40 @@
                 />
               </div>
             </div>
-            <!-- bahasa -->
+            <!-- telepon Rumah -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
-                Bahasa
+                No. Telepon Rumah
               </div>
               <div class="col-8">
                 <app-input
-                  ref="refBahasa"
-                  v-model="store.form.bahasa"
-                  label="Bahasa"
+                  ref="refNoTlpRumah"
+                  v-model="store.form.teleponrumah"
+                  label="No telepon rumah"
                   outlined
+                  valid
+                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
+                  type="number"
                   :disable="store.form.barulama!=='baru'"
+                  @update:model-value="setTlpRumah"
+                />
+              </div>
+            </div>
+            <!-- telepon -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                No. Ponsel
+              </div>
+              <div class="col-8">
+                <app-input
+                  ref="refNoTlp"
+                  v-model="store.form.teleponhp"
+                  label="No Ponsel"
+                  outlined
+                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
+                  type="number"
+                  :disable="store.form.barulama!=='baru'"
+                  @update:model-value="setTlpHP"
                 />
               </div>
             </div>
@@ -940,7 +1001,6 @@ const refTulisAgama = ref(null)
 function setAgama(val) {
   const index = findWithAttr(store.agamas, 'kode', val)
   const temp = store.agamas[index]
-  // console.log('agama index ', index)
   // console.log('agama temp ', temp)
   store.setForm('kodemapagama', temp.kodemapping)
   store.display.agama = temp.keterangan
@@ -1107,15 +1167,38 @@ const refNoTlp = ref(null)
 const refBahasa = ref(null)
 const refKtp = ref(null)
 const refNoKaBpjs = ref(null)
-// const lahirValid = ref(true)
-// function validateTglLahir() {
-//   const hariIni = new Date(date.formatDate(Date.now(), 'YYYY-MM-DD'))
-//   const tanggal = new Date(date.formatDate(store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari, 'YYYY-MM-DD'))
-//   console.log('validate tanggal', date.isSameDate(hariIni, tanggal, 'days'))
-//   lahirValid.value = date.isSameDate(hariIni, tanggal, 'days')
-// }
+const refStatusPernikahan = ref(null)
+const refPekerjaan = ref(null)
+
+function setTlpRumah(val) {
+  // console.log('form', store.form)
+  if (val.charAt(0) === '0') {
+    // console.log('val', val.charAt(0), val.slice(1, val.length))
+    store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
+  } else {
+    // console.log('val', val.charAt(0), val.slice(0, 1))
+    store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val)
+  }
+}
+function setTlpHP(val) {
+  // console.log('val', val)
+  if (val.charAt(0) === '0') {
+    // console.log('val', val.charAt(0), val.slice(1, val.length))
+    store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
+  } else {
+    // console.log('val', val.charAt(0), val.slice(0, 1))
+    store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val)
+  }
+  // console.log('form', store.form)
+}
+function setPekerjaan(val) {
+  console.log(val)
+  if (val !== 'Lain-lain') {
+    store.setForm('pekerjaan', val)
+  }
+}
 const lahirValid = computed(() => {
-  const hariIni = new Date(date.formatDate('1970-01-01', 'YYYY-MM-DD'))
+  const hariIni = new Date(date.formatDate('1900-01-01', 'YYYY-MM-DD'))
   const tanggal = new Date(date.formatDate(store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari, 'YYYY-MM-DD'))
   // console.log('validate tanggal', date.isSameDate(hariIni, tanggal, 'days'), hariIni, tanggal)
   return date.isSameDate(hariIni, tanggal, 'days')
@@ -1132,8 +1215,14 @@ function validasi() {
   const BulanLahir = refBulanLahir.value.$refs.refInput.validate()
   const TahunLahir = refTahunLahir.value.$refs.refInput.validate()
   const Pendidikan = refPendidikan.value.$refs.refAuto.validate()
+  const StatusPernikahan = refStatusPernikahan.value.$refs.refAuto.validate()
+  const Pekerjaan = refPekerjaan.value.$refs.refAuto.validate()
+
   const Agama = refAgama.value.$refs.refAuto.validate()
+  const TulisAgama = store.display.agama === 'Lain-lain' ? refTulisAgama.value.$refs.refInput.validate() : true
+
   const Suku = refSuku.value.$refs.refInput.validate()
+
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
   const Bahasa = refBahasa.value.$refs.refInput.validate()
   const KodePos = refKodePos.value.$refs.refInput.validate()
@@ -1155,7 +1244,7 @@ function validasi() {
   const KabupatenDomisili = store.alamataDomisiliSama ? true : refKabupatenDomisili.value.$refs.refAuto.validate()
   const KecamatanDomisili = store.alamataDomisiliSama ? true : refKecamatanDomisili.value.$refs.refAuto.validate()
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
-  // console.log(
+  console.log(
   //   'JenisPasien',
   //   JenisPasien,
   //   'NoRM',
@@ -1198,6 +1287,10 @@ function validasi() {
   //   RW,
   //   'Negara',
   //   Negara,
+    'StatusPernikahan',
+    StatusPernikahan,
+    'Pekerjaan',
+    Pekerjaan
   //   'Propinsi',
   //   Propinsi,
   //   'Kabupaten',
@@ -1220,7 +1313,7 @@ function validasi() {
   //   KecamatanDomisili,
   //   'KelurahanDomisili',
   //   KelurahanDomisili
-  // )
+  )
   if (
     JenisPasien &&
   NoRM &&
@@ -1232,7 +1325,10 @@ function validasi() {
   BulanLahir &&
   TahunLahir &&
   Pendidikan &&
+  StatusPernikahan &&
+  Pekerjaan &&
   Agama &&
+  TulisAgama &&
   Suku &&
   NoTlp &&
   Bahasa &&
