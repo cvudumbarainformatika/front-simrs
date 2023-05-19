@@ -15,17 +15,18 @@
       <q-separator />
       <q-card-section>
         <div class="f-14 text-weight-bold q-mb-md">
-          Pasien
+          Form Identitas Pasien I.1
         </div>
-        <div class="row fit q-col-gutter-sm q-mb-md">
+        <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
-          <div class="col-6">
+          <div class="col-4">
             <!-- lama / baru -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Pasien Baru / Lama
               </div>
-              <div :class="store.form.barulama==='baru'?'col-8':'col-7'">
+              <div :class="store.form.barulama==='baru'?'col-8':'col-7'">-->
+              <div :class="store.form.barulama==='baru'?'col-12':'col-11'">
                 <app-autocomplete-new
                   ref="refJenisPasien"
                   :model="store.form.barulama"
@@ -34,7 +35,7 @@
                   option-value="value"
                   option-label="nama"
                   autofocus
-                  outlined
+                  :filled="false"
                   :loading="store.loading"
                   :disable="store.loading"
                   :source="store.jenisPasiens"
@@ -71,17 +72,18 @@
             </div>
             <!-- no rm -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Nomor RM
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refNoRM"
                   v-model="store.form.norm"
                   label="Nomor RM"
                   type="number"
                   autofocus
-                  outlined
+                  :filled="false"
                   :disable="store.form.barulama!=='baru'"
                   :loading="store.loading"
                   :rules="[
@@ -94,22 +96,88 @@
                 />
               </div>
             </div>
+            <!-- ktp -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. KTP
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refKtp"
+                  v-model="store.form.nik"
+                  label="Nomor KTP"
+                  :filled="false"
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
+            <!-- kitas -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. Paspor / KITAS
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refKitas"
+                  v-model="store.form.kitas"
+                  label="Nomor Paspor / KITAS"
+                  valid
+                  :filled="false"
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
+            <!-- Nama ibu kandung -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. Paspor / KITAS
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refIbu"
+                  v-model="store.form.namaibukandung"
+                  label="Nama Ibu Kandung"
+                  :filled="false"
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
+            <!-- KA BPJS -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. KA BPJS
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refNoKaBpjs"
+                  v-model="store.form.nokabpjs"
+                  label="Nomor KA BPJS"
+                  :filled="false"
+                  :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+            </div>
             <!-- nama -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Nama <span class="text-red">*</span>
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row  q-col-gutter-sm items-center">
                   <div class="col-3">
                     <app-autocomplete
                       ref="refSapaan"
                       v-model="store.form.sapaan"
-                      label=" "
+                      label="Sapaan"
                       autocomplete="sapaan"
                       option-value="sapaan"
                       option-label="sapaan"
-                      outlined
+                      :filled="false"
                       :source="store.sapaans"
                       :loading="store.loading"
                       :disable="store.form.barulama!=='baru'"
@@ -123,64 +191,43 @@
                       ref="refNama"
                       v-model="store.form.nama"
                       label="Nama"
-                      outlined
+                      :filled="false"
                       :disable="store.form.barulama!=='baru'"
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <!-- kelamin -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Kelamin
-              </div>
-              <div class="col-8">
-                <app-autocomplete
-                  ref="refKelamin"
-                  v-model="store.form.kelamin"
-                  label="Jenis kelamin"
-                  autocomplete="kelamin"
-                  option-value="kelamin"
-                  option-label="kelamin"
-                  outlined
-                  :source="store.kelamins"
-                  :loading="store.loading"
-                  :disable="store.form.barulama!=='baru'"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="kelaminSelected"
-                  @keyup.enter="kelaminSelected"
-                />
-              </div>
-            </div>
             <!-- tempat lahir -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Tempat Lahir
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refTempatLahir"
                   v-model="store.form.templahir"
                   label="Tempat Lahir"
-                  outlined
+                  :filled="false"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
             <!-- tgl lahir -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Tgl Lahir <span class="text-red">*</span>
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row q-col-gutter-sm no-wrap">
                   <div>
                     <app-input
                       ref="refHariLahir"
                       v-model="store.tanggal.hari"
                       label="Hari"
-                      outlined
+                      :filled="false"
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
@@ -194,7 +241,7 @@
                       ref="refBulanLahir"
                       v-model="store.tanggal.bulan"
                       label="Bulan"
-                      outlined
+                      :filled="false"
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
@@ -207,7 +254,7 @@
                       ref="refTahunLahir"
                       v-model="store.tanggal.tahun"
                       label="Tahun"
-                      outlined
+                      :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
                       error-message="Periksa kembali tanggal lahir"
@@ -220,10 +267,11 @@
             </div>
             <!-- umur -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Umur
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row items-center q-col-gutter-sm">
                   <div class="col-2">
                     {{ store.form.umurthn }}
@@ -246,12 +294,40 @@
                 </div>
               </div>
             </div>
+          </div>
+          <!-- tengah -->
+          <div class="col-4">
+            <!-- kelamin -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                Kelamin
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refKelamin"
+                  v-model="store.form.kelamin"
+                  label="Jenis kelamin"
+                  autocomplete="kelamin"
+                  option-value="kelamin"
+                  option-label="kelamin"
+                  :filled="false"
+                  :source="store.kelamins"
+                  :loading="store.loading"
+                  :disable="store.form.barulama!=='baru'"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="kelaminSelected"
+                  @keyup.enter="kelaminSelected"
+                />
+              </div>
+            </div>
             <!-- pendidikan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Pendidikan
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete
                   ref="refPendidikan"
                   v-model="store.form.pendidikan"
@@ -259,7 +335,7 @@
                   autocomplete="pendidikan"
                   option-value="pendidikan"
                   option-label="pendidikan"
-                  outlined
+                  :filled="false"
                   :source="store.pendidikans"
                   :loading="store.loading"
                   :disable="store.form.barulama!=='baru'"
@@ -271,10 +347,11 @@
             </div>
             <!-- agama -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Agama
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row q-mb-xs">
                   <div class="col-12">
                     <app-autocomplete-new
@@ -284,7 +361,7 @@
                       autocomplete="kode"
                       option-value="kode"
                       option-label="keterangan"
-                      outlined
+                      :filled="false"
                       :source="store.agamas"
                       :loading="store.loading"
                       :disable="store.form.barulama!=='baru'"
@@ -303,7 +380,7 @@
                       ref="refTulisAgama"
                       v-model="store.form.agama"
                       label="Tulis Agama"
-                      outlined
+                      :filled="false"
                     />
                   </div>
                 </div>
@@ -311,40 +388,43 @@
             </div>
             <!-- suku -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Suku
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refSuku"
                   v-model="store.form.suku"
                   label="Suku"
-                  outlined
+                  :filled="false"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
             <!-- bahasa -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Bahasa
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refBahasa"
                   v-model="store.form.bahasa"
                   label="Bahasa"
-                  outlined
+                  :filled="false"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
             <!-- status prnikahan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Status Pernikahan
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete
                   ref="refStatusPernikahan"
                   v-model="store.form.statuspernikahan"
@@ -352,7 +432,7 @@
                   autocomplete="statuspernikahan"
                   option-value="statuspernikahan"
                   option-label="statuspernikahan"
-                  outlined
+                  :filled="false"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   :source="store.statuspernikahans"
                   :loading="store.loading"
@@ -365,7 +445,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.kelurahans"
                   :loading="store.loadingSelect"
                   :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
@@ -376,10 +456,11 @@
             </div>
             <!-- pekerjaan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Pekerjaan
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row q-mb-xs">
                   <div class="col-12">
                     <app-autocomplete
@@ -389,7 +470,7 @@
                       autocomplete="pekerjaan"
                       option-value="pekerjaan"
                       option-label="pekerjaan"
-                      outlined
+                      :filled="false"
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       :source="store.pekerjaans"
                       :loading="store.loading"
@@ -406,57 +487,67 @@
                     <app-input
                       ref="refInputPekerjaan"
                       v-model="store.form.pekerjaan"
-                      valid
                       label="tulis Pekerjaan"
-                      outlined
+                      :filled="false"
                     />
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- telepon Rumah -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. Telepon Rumah
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refNoTlpRumah"
+                  v-model="store.form.teleponrumah"
+                  label="No telepon rumah"
+                  :filled="false"
+                  valid
+                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
+                  type="number"
+                  :disable="store.form.barulama!=='baru'"
+                  @update:model-value="setTlpRumah"
+                />
+              </div>
+            </div>
+            <!-- telepon -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <!-- <div class="col-4">
+                No. Ponsel
+              </div>
+              <div class="col-8"> -->
+              <div class="col-12">
+                <app-input
+                  ref="refNoTlp"
+                  v-model="store.form.teleponhp"
+                  label="No Ponsel"
+                  :filled="false"
+                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
+                  type="number"
+                  :disable="store.form.barulama!=='baru'"
+                  @update:model-value="setTlpHP"
+                />
+              </div>
+            </div>
           </div>
           <!-- kanan -->
-          <div class="col-6">
-            <!-- ktp -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                No. KTP
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refKtp"
-                  v-model="store.form.nik"
-                  label="Nomor KTP"
-                  outlined
-                  :disable="store.form.barulama!=='baru'"
-                />
-              </div>
-            </div>
-            <!-- KA BPJS -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                No. KA BPJS
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refNoKaBpjs"
-                  v-model="store.form.nokabpjs"
-                  label="Nomor KA BPJS"
-                  outlined
-                  :disable="store.form.barulama!=='baru'"
-                />
-              </div>
-            </div>
+          <div class="col-4">
             <!-- alamat -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Alamat
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refAlamat"
                   v-model="store.form.alamat"
-                  outlined
+                  :filled="false"
                   label="Alamat"
                   :disable="store.form.barulama!=='baru'"
                 />
@@ -464,17 +555,18 @@
             </div>
             <!-- RT / RW -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 RT / RW
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <div class="row items-center q-col-gutter-sm">
                   <div class="col-4">
                     <app-input
                       ref="refRT"
                       v-model="store.form.rt"
                       label="RT"
-                      outlined
+                      :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
                     />
@@ -487,7 +579,7 @@
                       ref="refRW"
                       v-model="store.form.rw"
                       label="RW"
-                      outlined
+                      :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
                     />
@@ -497,10 +589,11 @@
             </div>
             <!-- Negara -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Negara
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete-new
                   ref="refNegara"
                   :model="store.wilayah.kd_negara"
@@ -508,7 +601,7 @@
                   autocomplete="wilayah"
                   option-value="kd_negara"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.negaras"
                   :loading="store.loadingSelect"
                   :disable="store.form.barulama!=='baru'"
@@ -519,10 +612,11 @@
             </div>
             <!-- Propinsi -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Propinsi
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete-new
                   ref="refPropinsi"
                   :model="store.wilayah.propinsi"
@@ -530,7 +624,7 @@
                   autocomplete="wilayah"
                   option-value="propinsi"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.propinsies"
                   :disable="!store.propinsies.length || store.form.barulama!=='baru'"
                   :loading="store.loadingSelect"
@@ -541,10 +635,11 @@
             </div>
             <!-- kabupaten -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Kabupaten
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete-new
                   ref="refKabupaten"
                   :model="store.wilayah.kotakabupaten"
@@ -552,7 +647,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.kabupatens"
                   :loading="store.loadingSelect"
                   :disable="!store.kabupatens.length || store.form.barulama!=='baru'"
@@ -563,10 +658,11 @@
             </div>
             <!-- kecamatan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Kecamatan
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete-new
                   ref="refKecamatan"
                   :model="store.wilayah.kecamatan.kotakabupaten"
@@ -574,7 +670,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.kecamatans"
                   :loading="store.loadingSelect"
                   :disable="!store.kecamatans.length || store.form.barulama!=='baru'"
@@ -585,10 +681,11 @@
             </div>
             <!-- kelurahan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Kelurahan
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-autocomplete-new
                   ref="refKelurahan"
                   :model="store.wilayah.kelurahan.kotakabupaten"
@@ -596,7 +693,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.kelurahans"
                   :loading="store.loadingSelect"
                   :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
@@ -607,70 +704,21 @@
             </div>
             <!-- kode pos -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
+              <!-- <div class="col-4">
                 Kode Pos
               </div>
-              <div class="col-8">
+              <div class="col-8"> -->
+              <div class="col-12">
                 <app-input
                   ref="refKodePos"
                   v-model="store.form.kodepos"
                   label="Kode Pos"
                   type="number"
-                  outlined
+                  :filled="false"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
-            <!-- telepon Rumah -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                No. Telepon Rumah
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refNoTlpRumah"
-                  v-model="store.form.teleponrumah"
-                  label="No telepon rumah"
-                  outlined
-                  valid
-                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
-                  type="number"
-                  :disable="store.form.barulama!=='baru'"
-                  @update:model-value="setTlpRumah"
-                />
-              </div>
-            </div>
-            <!-- telepon -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                No. Ponsel
-              </div>
-              <div class="col-8">
-                <app-input
-                  ref="refNoTlp"
-                  v-model="store.form.teleponhp"
-                  label="No Ponsel"
-                  outlined
-                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
-                  type="number"
-                  :disable="store.form.barulama!=='baru'"
-                  @update:model-value="setTlpHP"
-                />
-              </div>
-            </div>
-            <!-- <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Foto
-              </div>
-              <div class="col-8">
-                <app-input-image
-                  :model="store.form.foto"
-                  label="foto"
-                  outlined
-                  @on-file="setImage"
-                />
-              </div>
-            </div> -->
           </div>
         </div>
         <!-- check box alamat domisili sama -->
@@ -697,6 +745,7 @@
         </div>
         <div class="row fit q-col-gutter-sm q-mb-md">
           <div class="col-6">
+            <!-- alamat domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Alamat
@@ -705,12 +754,13 @@
                 <app-input
                   ref="refAlamatDomisili"
                   v-model="store.form.alamatdomisili"
-                  outlined
+                  :filled="false"
                   label="Alamat"
                   :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
+            <!-- RT / RW domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 RT / RW
@@ -722,7 +772,7 @@
                       ref="refRTDomisili"
                       v-model="store.form.rtdomisili"
                       label="RT"
-                      outlined
+                      :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
                     />
@@ -735,7 +785,7 @@
                       ref="refRWDomisili"
                       v-model="store.form.rwdomisili"
                       label="RW"
-                      outlined
+                      :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
                     />
@@ -743,6 +793,7 @@
                 </div>
               </div>
             </div>
+            <!-- negara domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Negara
@@ -755,7 +806,7 @@
                   autocomplete="wilayah"
                   option-value="kd_negara"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.domisiliNegaras"
                   :loading="store.loadingSelectDomisili"
                   :disable="store.form.barulama!=='baru'"
@@ -764,8 +815,7 @@
                 />
               </div>
             </div>
-          </div>
-          <div class="col-6">
+            <!-- propinsi domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Propinsi
@@ -778,7 +828,7 @@
                   autocomplete="wilayah"
                   option-value="propinsi"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.domisiliPropinsies"
                   :disable="!store.domisiliPropinsies.length || store.form.barulama!=='baru'"
                   :loading="store.loadingSelectDomisili"
@@ -787,6 +837,9 @@
                 />
               </div>
             </div>
+          </div>
+          <div class="col-6">
+            <!-- kabupaten domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Kabupaten
@@ -799,7 +852,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.domisiliKabupatens"
                   :loading="store.loadingSelectDomisili"
                   :disable="!store.domisiliKabupatens.length || store.form.barulama!=='baru'"
@@ -808,6 +861,7 @@
                 />
               </div>
             </div>
+            <!-- kecamatan domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Kecamatan
@@ -820,7 +874,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.domisiliKecamatans"
                   :loading="store.loadingSelectDomisili"
                   :disable="!store.domisiliKecamatans.length || store.form.barulama!=='baru'"
@@ -829,6 +883,7 @@
                 />
               </div>
             </div>
+            <!-- kelurahan domisili -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Kelurahan
@@ -841,12 +896,28 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  outlined
+                  :filled="false"
                   :source="store.domisiliKelurahans"
                   :loading="store.loadingSelectDomisili"
                   :disable="!store.domisiliKelurahans.length || store.form.barulama!=='baru'"
                   @on-select="kelurahanDomisiliSelected"
                   @clear="store.clearKelurahanDomisili"
+                />
+              </div>
+            </div>
+            <!-- kode pos domisili-->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Kode Pos
+              </div>
+              <div class="col-8">
+                <app-input
+                  ref="refKodePosDom"
+                  v-model="store.form.kodeposdomisili"
+                  label="Kode Pos"
+                  type="number"
+                  :filled="false"
+                  :disable="store.form.barulama!=='baru'"
                 />
               </div>
             </div>
@@ -892,7 +963,9 @@ const refPendidikan = ref(null)
 const refAgama = ref(null)
 const refAlamat = ref(null)
 const refSuku = ref(null)
+const refIbu = ref(null)
 const refKodePos = ref(null)
+const refKodePosDom = ref(null)
 // jenis pasien lama / baru
 function setJenisPasien(val) {
   store.setForm('barulama', val)
@@ -923,6 +996,7 @@ function resetValidation() {
   refSapaan.value.$refs.refAuto.resetValidation()
   refKelamin.value.$refs.refAuto.resetValidation()
   refTempatLahir.value.$refs.refInput.resetValidation()
+  refIbu.value.$refs.refInput.resetValidation()
   refHariLahir.value.$refs.refInput.resetValidation()
   refBulanLahir.value.$refs.refInput.resetValidation()
   refTahunLahir.value.$refs.refInput.resetValidation()
@@ -942,6 +1016,7 @@ function resetValidation() {
   refKabupaten.value.$refs.refAuto.resetValidation()
   refKecamatan.value.$refs.refAuto.resetValidation()
   refKelurahan.value.$refs.refAuto.resetValidation()
+  if (refTulisAgama.value.$refs.refInput) { refTulisAgama.value.$refs.refInput.resetValidation() }
   refRTDomisili.value.$refs.refInput.resetValidation()
   refRWDomisili.value.$refs.refInput.resetValidation()
   refNegaraDomisili.value.$refs.refAuto.resetValidation()
@@ -949,6 +1024,7 @@ function resetValidation() {
   refKabupatenDomisili.value.$refs.refAuto.resetValidation()
   refKecamatanDomisili.value.$refs.refAuto.resetValidation()
   refKelurahanDomisili.value.$refs.refAuto.resetValidation()
+  refKodePosDom.value.$refs.refInput.resetValidation()
 }
 // -- dialog cari pasien, untuk pasien lama--start--
 function cariPasienHide(val) {
@@ -1006,8 +1082,11 @@ function setAgama(val) {
   store.setForm('kodemapagama', temp.kodemapping)
   store.display.agama = temp.keterangan
   if (temp.keterangan === 'Lain-lain') {
-    refAgama.value.$refs.refAuto.blur()
-    refTulisAgama.value.$refs.refInput.focus()
+    if (store.form.agama) delete store.form.agama
+    setTimeout(() => {
+      refAgama.value.$refs.refAuto.blur()
+      refTulisAgama.value.$refs.refInput.focus()
+    }, 500)
   } else {
     store.setForm('agama', temp.keterangan)
     refAgama.value.$refs.refAuto.blur()
@@ -1067,7 +1146,7 @@ function setBulanLahir(val) {
 function setTahunLahir(val) {
   if (val.length === 4) {
     refTahunLahir.value.$refs.refInput.blur()
-    refPendidikan.value.$refs.refAuto.focus()
+    refKelamin.value.$refs.refAuto.focus()
     // refRT.value.$refs.refInput.focus()
   }
   setTanggalLahir()
@@ -1118,6 +1197,7 @@ function kelurahanSelected(val) {
   refKodePos.value.$refs.refInput.focus()
 }
 // ---get negara to kelurahah end----
+
 // ---get negara to kelurahah domisili start----
 const refNegaraDomisili = ref(null)
 const refPropinsiDomisili = ref(null)
@@ -1196,12 +1276,14 @@ function setTlpHP(val) {
 function setPekerjaan(val) {
   // console.log(val)
   if (val === 'Lain-lain') {
+    if (store.form.pekerjaan) delete store.form.pekerjaan
     setTimeout(() => {
-      if (store.form.pekerjaan) delete store.form.pekerjaan
       refPekerjaan.value.$refs.refAuto.blur()
       refInputPekerjaan.value.$refs.refInput.focus()
     }, 500)
   } else {
+    refPekerjaan.value.$refs.refAuto.blur()
+    refKtp.value.$refs.refInput.focus()
     store.setForm('pekerjaan', val)
   }
 }
@@ -1219,6 +1301,7 @@ function validasi() {
   const Sapaan = refSapaan.value.$refs.refAuto.validate()
   const Kelamin = refKelamin.value.$refs.refAuto.validate()
   const TempatLahir = refTempatLahir.value.$refs.refInput.validate()
+  const Ibu = refIbu.value.$refs.refInput.validate()
   const HariLahir = refHariLahir.value.$refs.refInput.validate()
   const BulanLahir = refBulanLahir.value.$refs.refInput.validate()
   const TahunLahir = refTahunLahir.value.$refs.refInput.validate()
@@ -1254,122 +1337,30 @@ function validasi() {
   const KabupatenDomisili = store.alamataDomisiliSama ? true : refKabupatenDomisili.value.$refs.refAuto.validate()
   const KecamatanDomisili = store.alamataDomisiliSama ? true : refKecamatanDomisili.value.$refs.refAuto.validate()
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
-  console.log(
-  //   'JenisPasien',
-  //   JenisPasien,
-  //   'NoRM',
-  //   NoRM,
-  //   'Nama',
-  //   Nama,
-  //   'Sapaan',
-  //   Sapaan,
-  //   'Kelamin',
-  //   Kelamin,
-  //   'TempatLahir',
-  //   TempatLahir,
-  //   'HariLahir',
-  //   HariLahir,
-  //   'BulanLahir',
-  //   BulanLahir,
-  //   'TahunLahir',
-  //   TahunLahir,
-  //   'Pendidikan',
-  //   Pendidikan,
-  //   'Agama',
-  //   Agama,
-  //   'Suku',
-  //   Suku,
-  //   'NoTlp',
-  //   NoTlp,
-  //   'Bahasa',
-  //   Bahasa,
-  //   'KodePos',
-  //   KodePos,
-  //   'Ktp',
-  //   Ktp,
-  //   'NoKaBpjs',
-  //   NoKaBpjs,
-  //   'Alamat',
-  //   Alamat,
-  //   'RT',
-  //   RT,
-  //   'RW',
-  //   RW,
-  //   'Negara',
-  //   Negara,
-    'StatusPernikahan',
-    StatusPernikahan,
-    'Pekerjaan',
-    Pekerjaan
-  //   'Propinsi',
-  //   Propinsi,
-  //   'Kabupaten',
-  //   Kabupaten,
-  //   'Kecamatan',
-  //   Kecamatan,
-  //   'Kelurahan',
-  //   Kelurahan,
-  //   'RTDomisili',
-  //   RTDomisili,
-  //   'RWDomisili',
-  //   RWDomisili,
-  //   'NegaraDomisili',
-  //   NegaraDomisili,
-  //   'PropinsiDomisili',
-  //   PropinsiDomisili,
-  //   'KabupatenDomisili',
-  //   KabupatenDomisili,
-  //   'KecamatanDomisili',
-  //   KecamatanDomisili,
-  //   'KelurahanDomisili',
-  //   KelurahanDomisili
-  )
+  const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
+
+  console.log('StatusPernikahan', StatusPernikahan)
+
   if (
-    JenisPasien &&
-  NoRM &&
-  Nama &&
-  Sapaan &&
-  Kelamin &&
-  TempatLahir &&
-  HariLahir &&
-  BulanLahir &&
-  TahunLahir &&
-  Pendidikan &&
-  StatusPernikahan &&
-  Pekerjaan &&
-  InputPekerjaan &&
-  Agama &&
-  TulisAgama &&
-  Suku &&
-  NoTlp &&
-  Bahasa &&
-  KodePos &&
-  Ktp &&
-  NoKaBpjs &&
-  Alamat &&
-  RT &&
-  RW &&
-  Negara &&
-  Propinsi &&
-  Kabupaten &&
-  Kecamatan &&
-  Kelurahan &&
-  RTDomisili &&
-  RWDomisili &&
-  NegaraDomisili &&
-  PropinsiDomisili &&
-  KabupatenDomisili &&
-  KecamatanDomisili &&
-  KelurahanDomisili) { valid = true } else { valid = false }
+    JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
+  TempatLahir && HariLahir && BulanLahir && TahunLahir && Ibu &&
+  Pendidikan && StatusPernikahan && Pekerjaan && InputPekerjaan &&
+  Agama && TulisAgama && Suku && NoTlp && Bahasa && KodePos &&
+  Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
+  Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
+  NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
+  KecamatanDomisili && KodePosDom && KelurahanDomisili) {
+    valid = true
+  } else { valid = false }
 }
 watch(() => props.simpan, (baru) => {
-  console.log('watch', baru)
+  // console.log('watch', baru)
   validasi()
   if (baru) {
-    console.log('Baru', baru)
+    // console.log('Baru', baru)
     if (valid) {
       emits('bisa-simpan')
-      console.log('lanjut')
+      // console.log('lanjut')
     } else {
       emits('tidak-simpan')
       notifErrVue('periksa kembali input anda')
@@ -1379,6 +1370,6 @@ watch(() => props.simpan, (baru) => {
 
 store.getInitialData()
 onBeforeUpdate(() => {
-  console.log('jenis pasien', refJenisPasien.value)
+  // console.log('jenis pasien', refJenisPasien.value)
 })
 </script>

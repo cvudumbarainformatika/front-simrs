@@ -45,7 +45,6 @@ export const useDialogCariPasienPendaftaranUmum = defineStore('dialog_cari_pasie
       const param = { params: this.params }
       await api.get('v1/simrs/master/pasienGetNoRM', param)
         .then(resp => {
-          console.log('pasien', resp)
           this.items = resp.data.data
           this.meta = resp.data
           this.loading = false

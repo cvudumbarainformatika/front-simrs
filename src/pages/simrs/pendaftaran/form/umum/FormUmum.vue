@@ -6,6 +6,7 @@
       @bisa-simpan="bisaSimpan"
       @tidak-simpan="tidakSimpan"
     />
+    <FormRegistrasi />
     <q-card
       class="full-width"
     >
@@ -24,6 +25,7 @@
 </template>
 <script setup>
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
+import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 const pasien = usePendaftaranPasienStore()
