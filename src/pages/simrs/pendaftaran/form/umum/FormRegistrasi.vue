@@ -20,10 +20,11 @@
                 : {{ store.form.noreg }}
               </div>
             </div>
-            <!-- no Registrasi -->
+            <!-- asal rujukan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-12">
                 <app-autocomplete
+                  ref="refAsalRujukan"
                   v-model="store.form.asalrujukan"
                   label="Asal Rujukan"
                   autocomplete="asalrujukan"
@@ -32,7 +33,7 @@
                   :filled="false"
                   :source="store.asalrujukans"
                   :loading="store.loading"
-                  :disable="pasien.form.barulama!=='baru'"
+
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -41,6 +42,7 @@
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-6">
                 <app-autocomplete
+                  ref="refFlagKartu"
                   v-model="store.form.asalrujukan"
                   label="Flag Kartu"
                   autocomplete="asalrujukan"
@@ -49,7 +51,7 @@
                   :filled="false"
                   :source="store.asalrujukans"
                   :loading="store.loading"
-                  :disable="pasien.form.barulama!=='baru'"
+
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -58,7 +60,6 @@
                   v-model="store.form.karcis"
                   label="Karcis"
                   :filled="false"
-                  :disable="pasien.form.barulama!=='baru'"
                 />
               </div>
             </div>
@@ -66,6 +67,7 @@
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-12">
                 <app-autocomplete
+                  ref="refDPJP"
                   v-model="store.form.dpjp"
                   label="DPJP"
                   autocomplete="asalrujukan"
@@ -74,7 +76,7 @@
                   :filled="false"
                   :source="store.dpjps"
                   :loading="store.loading"
-                  :disable="pasien.form.barulama!=='baru'"
+
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -86,6 +88,7 @@
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
                 <app-autocomplete
+                  ref="refPoliTujuan"
                   v-model="store.form.kodepoli"
                   label="Poli Tujuan"
                   autocomplete="polirs"
@@ -94,7 +97,7 @@
                   :filled="false"
                   :source="store.polis"
                   :loading="store.loading"
-                  :disable="pasien.form.barulama!=='baru'"
+
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -103,6 +106,7 @@
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
                 <app-autocomplete
+                  ref="refSistemBayar"
                   v-model="store.display.groupsistembayar"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
@@ -111,7 +115,7 @@
                   :filled="false"
                   :source="store.sistembayars"
                   :loading="store.loading"
-                  :disable="pasien.form.barulama!=='baru'"
+
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="setSistembayar"
                 />
@@ -125,12 +129,53 @@
 </template>
 <script setup>
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
-import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
-const pasien = usePendaftaranPasienStore()
+// import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
+import { ref } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
+// const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienUmumStore()
 store.getInitialData()
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
   console.log('form', store.form)
 }
+// emits
+const emits = defineEmits(['bisaSimpan'])
+// refs
+const refAsalRujukan = ref(null)
+const refFlagKartu = ref(null)
+const refDPJP = ref(null)
+const refPoliTujuan = ref(null)
+const refSistemBayar = ref(null)
+// reset validasi
+function resetValidation() {
+  refAsalRujukan.value.$refs.refAuto.resetValidation()
+  refFlagKartu.value.$refs.refAuto.resetValidation()
+  refDPJP.value.$refs.refAuto.resetValidation()
+  refPoliTujuan.value.$refs.refAuto.resetValidation()
+  refSistemBayar.value.$refs.refAuto.resetValidation()
+}
+// validasi
+let valid = false
+function validasi() {
+  const asalRujukan = refAsalRujukan.value.$refs.refAuto.validate()
+  const flagKartu = refFlagKartu.value.$refs.refAuto.validate()
+  const dpjp = refDPJP.value.$refs.refAuto.validate()
+  // const dpjp = true
+  const poliTujuan = refPoliTujuan.value.$refs.refAuto.validate()
+  const sistemBayar = refSistemBayar.value.$refs.refAuto.validate()
+  if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) { valid = true } else { valid = false }
+}
+// set
+function set() {
+  validasi()
+  if (valid) {
+    emits('bisaSimpan', store.form)
+  } else {
+    notifErrVue('periksa kembali input registrasi anda')
+  }
+}
+
+// expose function
+defineExpose({ resetValidation, set })
 </script>

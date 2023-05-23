@@ -16,6 +16,12 @@ const pendaftaran = {
             import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
         },
         {
+          path: '/pendaftaran/form/bpjs',
+          name: 'pendaftaran.form.bpjs',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/bpjs/IndexPage.vue')
+        },
+        {
           path: '/pendaftaran/form/igd',
           name: 'pendaftaran.form.igd',
           component: () =>

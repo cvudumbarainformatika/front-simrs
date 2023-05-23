@@ -317,8 +317,8 @@
                   :disable="store.form.barulama!=='baru'"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="kelaminSelected"
-                  @keyup.enter="kelaminSelected"
                 />
+                <!-- @keyup.enter="kelaminSelected" -->
               </div>
             </div>
             <!-- pendidikan -->
@@ -341,8 +341,8 @@
                   :disable="store.form.barulama!=='baru'"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="pendidikanSelected"
-                  @keyup.enter="pendidikanSelected"
                 />
+                <!-- @keyup.enter="pendidikanSelected" -->
               </div>
             </div>
             <!-- agama -->
@@ -437,6 +437,7 @@
                   :source="store.statuspernikahans"
                   :loading="store.loading"
                   :disable=" store.form.barulama!=='baru'"
+                  @selected="statusPernikahanSelected"
                 />
                 <!-- <app-autocomplete-new
                   ref="refStatusPernikahan"
@@ -569,6 +570,7 @@
                       :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
+                      @update:model-value="setRT"
                     />
                   </div>
                   <div class="col-1 text-center">
@@ -582,6 +584,7 @@
                       :filled="false"
                       type="number"
                       :disable="store.form.barulama!=='baru'"
+                      @update:model-value="setRW"
                     />
                   </div>
                 </div>
@@ -936,7 +939,7 @@
 import { date } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
-import { computed, onBeforeUpdate, ref, watch } from 'vue'
+import { computed, onBeforeUpdate, ref } from 'vue'
 import dialogCariPasien from './DialogCariPasien.vue'
 import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
 
@@ -945,14 +948,14 @@ const emits = defineEmits([
   'bisa-simpan',
   'tidak-simpan'
 ])
-const props = defineProps({
-  simpan: { type: Boolean, default: false }
-})
+// const props = defineProps({
+//   simpan: { type: Boolean, default: false }
+// })
 
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
-
+// refs
 const refJenisPasien = ref(null)
 const refNoRM = ref(null)
 const refSapaan = ref(null)
@@ -966,28 +969,31 @@ const refSuku = ref(null)
 const refIbu = ref(null)
 const refKodePos = ref(null)
 const refKodePosDom = ref(null)
-// jenis pasien lama / baru
-function setJenisPasien(val) {
-  store.setForm('barulama', val)
-  if (val === 'baru') {
-    refJenisPasien.value.$refs.refAuto.blur()
-    refNoRM.value.$refs.refInput.focus()
-    store.form = { barulama: 'baru' }
-    store.lahirHariIni()
-    console.log('pasien baru')
-    setTimeout(() => {
-      resetValidation()
-    }, 1000)
-  }
-  if (val === 'lama') {
-    refJenisPasien.value.$refs.refAuto.blur()
-    store.cariPasienDialog = true
-    resetValidation()
-    // lahirValid.value = false
-    // console.log('lahir valid', lahirValid.value)
-    //
-  }
-}
+const refTahunLahir = ref(null)
+const refBulanLahir = ref(null)
+const refHariLahir = ref(null)
+const refRT = ref(null)
+const refRW = ref(null)
+const refNegaraDomisili = ref(null)
+const refPropinsiDomisili = ref(null)
+const refKabupatenDomisili = ref(null)
+const refKecamatanDomisili = ref(null)
+const refKelurahanDomisili = ref(null)
+const refRTDomisili = ref(null)
+const refRWDomisili = ref(null)
+const refNoTlp = ref(null)
+const refBahasa = ref(null)
+const refKtp = ref(null)
+const refNoKaBpjs = ref(null)
+const refStatusPernikahan = ref(null)
+const refPekerjaan = ref(null)
+const refInputPekerjaan = ref(null)
+const refNegara = ref(null)
+const refPropinsi = ref(null)
+const refKabupaten = ref(null)
+const refKecamatan = ref(null)
+const refKelurahan = ref(null)
+// reset validasi
 function resetValidation() {
   // reset validation
   refJenisPasien.value.$refs.refAuto.resetValidation()
@@ -1016,26 +1022,67 @@ function resetValidation() {
   refKabupaten.value.$refs.refAuto.resetValidation()
   refKecamatan.value.$refs.refAuto.resetValidation()
   refKelurahan.value.$refs.refAuto.resetValidation()
-  if (refTulisAgama.value.$refs.refInput) { refTulisAgama.value.$refs.refInput.resetValidation() }
-  refRTDomisili.value.$refs.refInput.resetValidation()
-  refRWDomisili.value.$refs.refInput.resetValidation()
-  refNegaraDomisili.value.$refs.refAuto.resetValidation()
-  refPropinsiDomisili.value.$refs.refAuto.resetValidation()
-  refKabupatenDomisili.value.$refs.refAuto.resetValidation()
-  refKecamatanDomisili.value.$refs.refAuto.resetValidation()
-  refKelurahanDomisili.value.$refs.refAuto.resetValidation()
-  refKodePosDom.value.$refs.refInput.resetValidation()
+  refPekerjaan.value.$refs.refAuto.resetValidation()
+  refStatusPernikahan.value.$refs.refAuto.resetValidation()
+  if (refTulisAgama.value !== null) { refTulisAgama.value.$refs.refInput.resetValidation() }
+  if (refInputPekerjaan.value !== null) { refInputPekerjaan.value.$refs.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refRTDomisili.value.$refs.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refRWDomisili.value.$refs.refInput.resetValidation() }
+  if (!store.alamataDomisiliSama) { refNegaraDomisili.value.$refs.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refPropinsiDomisili.value.$refs.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKabupatenDomisili.value.$refs.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKecamatanDomisili.value.$refs.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKelurahanDomisili.value.$refs.refAuto.resetValidation() }
+  if (!store.alamataDomisiliSama) { refKodePosDom.value.$refs.refInput.resetValidation() }
+}
+// hari ini
+const hariIni = Date.now()
+// jenis pasien lama / baru
+function setJenisPasien(val) {
+  store.setForm('barulama', val)
+  if (val === 'baru') {
+    refJenisPasien.value.$refs.refAuto.blur()
+    refNoRM.value.$refs.refInput.focus()
+    store.form = { barulama: 'baru' }
+    store.lahirHariIni()
+    console.log('pasien baru')
+    setTimeout(() => {
+      resetValidation()
+    }, 1000)
+  }
+  if (val === 'lama') {
+    refJenisPasien.value.$refs.refAuto.blur()
+    store.cariPasienDialog = true
+    resetValidation()
+    // lahirValid.value = false
+    // console.log('lahir valid', lahirValid.value)
+    //
+  }
 }
 // -- dialog cari pasien, untuk pasien lama--start--
 function cariPasienHide(val) {
   console.log('cari pasien sembunyi', store.cariPasienDialog)
+}
+// set RT / RW
+function setRT(val) {
+  if (val.length === 3) {
+    refRT.value.$refs.refInput.blur()
+    refRW.value.$refs.refInput.focus()
+  }
+}
+function setRW(val) {
+  if (val.length === 3) {
+    refRW.value.$refs.refInput.blur()
+    refNegara.value.$refs.refAuto.focus()
+  }
 }
 // -- dialog cari pasien, untuk pasien lama--end--
 // input no rm
 function inputNoRmSelesai(val) {
   console.log('input selesai', val)
   refNoRM.value.$refs.refInput.blur()
-  refSapaan.value.$refs.refAuto.focus()
+  refKtp.value.$refs.refInput.focus()
+  // refSapaan.value.$refs.refAuto.focus()
 }
 function updateValNoRM(val) {
   console.log('ref sapaan', refSapaan.value.$refs.refAuto)
@@ -1046,7 +1093,8 @@ function updateValNoRM(val) {
     store.setForm('norm', temp)
     console.log('no rm', store.form.norm)
     refNoRM.value.$refs.refInput.blur()
-    refSapaan.value.$refs.refAuto.focus()
+    refKtp.value.$refs.refInput.focus()
+    // refSapaan.value.$refs.refAuto.focus()
   }
 }
 // input sapaan dan nama
@@ -1064,7 +1112,8 @@ function sapaanEnter() {
 // refkelamin
 function kelaminSelected() {
   refKelamin.value.$refs.refAuto.blur()
-  refTempatLahir.value.$refs.refInput.focus()
+  refPendidikan.value.$refs.refAuto.focus()
+  // refTempatLahir.value.$refs.refInput.focus()
 }
 
 // ref pendidikan
@@ -1094,13 +1143,14 @@ function setAgama(val) {
   }
   console.log('agama selected ', store.form)
 }
+
+// status pernikahan
+function statusPernikahanSelected(val) {
+  refStatusPernikahan.value.$refs.refAuto.blur()
+  refPekerjaan.value.$refs.refAuto.focus()
+}
 // ---tanggal lahir start--
-const refTahunLahir = ref(null)
-const refBulanLahir = ref(null)
-const refHariLahir = ref(null)
-const refRT = ref(null)
-const refRW = ref(null)
-const hariIni = Date.now()
+
 function setTanggalLahir() {
   const tanggal = store.tanggal.tahun + '-' + store.tanggal.bulan + '-' + store.tanggal.hari
   const tahunini = parseInt(date.formatDate(hariIni, 'YYYY'))
@@ -1154,11 +1204,7 @@ function setTahunLahir(val) {
 // ----tanggal lahir end-----
 
 // ---get negara to kelurahah start----
-const refNegara = ref(null)
-const refPropinsi = ref(null)
-const refKabupaten = ref(null)
-const refKecamatan = ref(null)
-const refKelurahan = ref(null)
+
 function negaraSelected(val) {
   store.negaraSelected(val)
   store.getProvinces().then(() => {
@@ -1199,13 +1245,7 @@ function kelurahanSelected(val) {
 // ---get negara to kelurahah end----
 
 // ---get negara to kelurahah domisili start----
-const refNegaraDomisili = ref(null)
-const refPropinsiDomisili = ref(null)
-const refKabupatenDomisili = ref(null)
-const refKecamatanDomisili = ref(null)
-const refKelurahanDomisili = ref(null)
-const refRTDomisili = ref(null)
-const refRWDomisili = ref(null)
+
 function negaraDomisiliSelected(val) {
   store.negaraDomisiliSelected(val)
   store.getProvincesDomisili().then(() => {
@@ -1244,13 +1284,6 @@ function kelurahanDomisiliSelected(val) {
   // refBahasa.value.$refs.refInput.focus()
 }
 // ---get negara to kelurahah domisili end----
-const refNoTlp = ref(null)
-const refBahasa = ref(null)
-const refKtp = ref(null)
-const refNoKaBpjs = ref(null)
-const refStatusPernikahan = ref(null)
-const refPekerjaan = ref(null)
-const refInputPekerjaan = ref(null)
 
 function setTlpRumah(val) {
   // console.log('form', store.form)
@@ -1353,20 +1386,19 @@ function validasi() {
     valid = true
   } else { valid = false }
 }
-watch(() => props.simpan, (baru) => {
-  // console.log('watch', baru)
+function set() {
   validasi()
-  if (baru) {
-    // console.log('Baru', baru)
-    if (valid) {
-      emits('bisa-simpan')
-      // console.log('lanjut')
-    } else {
-      emits('tidak-simpan')
-      notifErrVue('periksa kembali input anda')
-    }
+  // console.log('Baru', baru)
+  if (valid) {
+    emits('bisa-simpan', store.form)
+    // console.log('lanjut')
+  } else {
+    // emits('tidak-simpan')
+    notifErrVue('periksa kembali input data pasien anda')
   }
-})
+}
+
+defineExpose({ set, resetValidation })
 
 store.getInitialData()
 onBeforeUpdate(() => {

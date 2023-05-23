@@ -123,6 +123,8 @@ const modelProp = computed({
     let newTgl = ''
     if (temp[1] === 'Mei') {
       newTgl = temp[0] + ' May ' + temp[2]
+    } else if (temp[1] === 'Oktober') {
+      newTgl = temp[0] + ' October ' + temp[2]
     } else {
       newTgl = val
     }
