@@ -87,10 +87,11 @@
               <div class="col-9">
                 <!-- {{ store.form.tanggal }} -->
                 <app-input-date-human
-                  :model="store.form.tanggal"
+                  :model="store.display.tanggal"
                   label="Tanggal"
                   outlined
                   @set-model="setModel"
+                  @set-display="setDisplay"
                 />
               </div>
             </div>
@@ -114,10 +115,11 @@
               <div class="col-9">
                 <!-- {{ store.form.tanggal_surat }} -->
                 <app-input-date-human
-                  :model="store.form.tanggal_surat"
+                  :model="store.display.tanggal_surat"
                   label="Tanggal"
                   outlined
                   @set-model="setTglSuratjalan"
+                  @set-display="setDispTglSuratjalan"
                 />
               </div>
             </div>
@@ -141,10 +143,11 @@
               <div class="col-9">
                 <!-- {{ store.form.tempo }} -->
                 <app-input-date-human
-                  :model="store.form.tanggal_faktur"
+                  :model="store.display.tanggal_faktur"
                   label="Tanggal Faktur"
                   outlined
                   @set-model="setTglFaktur"
+                  @set-display="setDispTglFaktur"
                 />
               </div>
             </div>
@@ -155,10 +158,11 @@
               <div class="col-9">
                 <!-- {{ store.form.tempo }} -->
                 <app-input-date-human
-                  :model="store.form.tempo"
+                  :model="store.display.tempo"
                   label="Tanggal"
                   outlined
                   @set-model="setTempo"
+                  @set-display="setDispTempo"
                 />
               </div>
             </div>
@@ -354,7 +358,7 @@
   </q-dialog>
 </template>
 <script setup>
-import { Dialog } from 'quasar'
+import { date, Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 // import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
@@ -378,16 +382,29 @@ const store = useEditPenerimaanStore()
 //   console.log('form', store.form)
 // }
 function setModel(val) {
-  store.setForm('tanggal', val)
+  store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setDisplay(val) {
+  store.display.tanggal = val
+  console.log('form ', store.form)
 }
 function setTglSuratjalan(val) {
-  store.setForm('tanggal_surat', val)
+  store.setForm('tanggal_surat', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setDispTglSuratjalan(val) {
+  store.display.tanggal_surat = val
 }
 function setTempo(val) {
-  store.setForm('tempo', val)
+  store.setForm('tempo', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setDispTempo(val) {
+  store.display.tempo = val
 }
 function setTglFaktur(val) {
-  store.setForm('tanggal_faktur', val)
+  store.setForm('tanggal_faktur', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setDispTglFaktur(val) {
+  store.display.tanggal_faktur = val
 }
 
 function editRow(val, i) {

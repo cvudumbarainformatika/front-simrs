@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { findWithAttr, notifSuccess } from 'src/modules/utils'
 import { useHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/table'
@@ -14,6 +15,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
     form: {
       nama: 'PENERIMAAN'
     },
+    display: {},
     item: {},
     table: useHistoryTable()
 
@@ -37,13 +39,17 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.setForm('nomor', val.nomor)
       this.setForm('no_penerimaan', val.no_penerimaan)
       this.setForm('tanggal', val.tanggal)
+      this.display.tanggal = date.formatDate(val.tanggal, 'DD MMMM YYYY')
+      this.setForm('tanggal_surat', val.tanggal_surat)
+      this.display.tanggal_surat = date.formatDate(val.tanggal_surat, 'DD MMMM YYYY')
+      this.setForm('tanggal_faktur', val.tanggal_faktur)
+      this.display.tanggal_faktur = date.formatDate(val.tanggal_faktur, 'DD MMMM YYYY')
+      this.setForm('tempo', val.tempo)
+      this.display.tempo = date.formatDate(val.tempo, 'DD MMMM YYYY')
       this.setForm('kode_perusahaan', val.kode_perusahaan)
       this.setForm('pengirim', val.pengirim)
       this.setForm('surat_jalan', val.surat_jalan)
-      this.setForm('tanggal_surat', val.tanggal_surat)
-      this.setForm('tanggal_faktur', val.tanggal_faktur)
       this.setForm('faktur', val.faktur)
-      this.setForm('tempo', val.tempo)
       this.cariPesanan()
     },
 

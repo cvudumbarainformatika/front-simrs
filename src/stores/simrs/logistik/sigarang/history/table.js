@@ -23,6 +23,10 @@ export const useHistoryTable = defineStore('history_table', {
       from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       to: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
+    dispPrint: {
+      tanggal: null,
+      tanggalDisp: null
+    },
     form: {},
     columns: [],
     columnHide: [

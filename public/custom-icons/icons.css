@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?6a23df2645b2abcbf6309af334f889d7") format("woff"),
-url("./icons.woff2?6a23df2645b2abcbf6309af334f889d7") format("woff2");
+    src: url("./icons.woff?a90c17061828421ff32923d53c7d3da4") format("woff"),
+url("./icons.woff2?a90c17061828421ff32923d53c7d3da4") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -285,234 +285,237 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-mat-last_page:before {
     content: "\f15a";
 }
-.icon-mat-layers:before {
+.icon-mat-launch:before {
     content: "\f15b";
 }
-.icon-mat-lens:before {
+.icon-mat-layers:before {
     content: "\f15c";
 }
-.icon-mat-link:before {
+.icon-mat-lens:before {
     content: "\f15d";
 }
-.icon-mat-local_pharmacy:before {
+.icon-mat-link:before {
     content: "\f15e";
 }
-.icon-mat-lock_open:before {
+.icon-mat-local_pharmacy:before {
     content: "\f15f";
 }
-.icon-mat-lock:before {
+.icon-mat-lock_open:before {
     content: "\f160";
 }
-.icon-mat-logout:before {
+.icon-mat-lock:before {
     content: "\f161";
 }
-.icon-mat-manage_accounts:before {
+.icon-mat-logout:before {
     content: "\f162";
 }
-.icon-mat-medical_information:before {
+.icon-mat-manage_accounts:before {
     content: "\f163";
 }
-.icon-mat-medication_liquid:before {
+.icon-mat-medical_information:before {
     content: "\f164";
 }
-.icon-mat-menu_book:before {
+.icon-mat-medication_liquid:before {
     content: "\f165";
 }
-.icon-mat-menu:before {
+.icon-mat-menu_book:before {
     content: "\f166";
 }
-.icon-mat-mic_external_on:before {
+.icon-mat-menu:before {
     content: "\f167";
 }
-.icon-mat-mic_external:before {
+.icon-mat-mic_external_on:before {
     content: "\f168";
 }
-.icon-mat-move_to_inbox:before {
+.icon-mat-mic_external:before {
     content: "\f169";
 }
-.icon-mat-palette:before {
+.icon-mat-move_to_inbox:before {
     content: "\f16a";
 }
-.icon-mat-people_alt:before {
+.icon-mat-palette:before {
     content: "\f16b";
 }
-.icon-mat-person_2:before {
+.icon-mat-people_alt:before {
     content: "\f16c";
 }
-.icon-mat-person_3:before {
+.icon-mat-person_2:before {
     content: "\f16d";
 }
-.icon-mat-person:before {
+.icon-mat-person_3:before {
     content: "\f16e";
 }
-.icon-mat-personal_injury:before {
+.icon-mat-person:before {
     content: "\f16f";
 }
-.icon-mat-play_arrow:before {
+.icon-mat-personal_injury:before {
     content: "\f170";
 }
-.icon-mat-poll:before {
+.icon-mat-play_arrow:before {
     content: "\f171";
 }
-.icon-mat-print:before {
+.icon-mat-poll:before {
     content: "\f172";
 }
-.icon-mat-priority_high:before {
+.icon-mat-print:before {
     content: "\f173";
 }
-.icon-mat-receipt_long:before {
+.icon-mat-priority_high:before {
     content: "\f174";
 }
-.icon-mat-receipt:before {
+.icon-mat-receipt_long:before {
     content: "\f175";
 }
-.icon-mat-redo:before {
+.icon-mat-receipt:before {
     content: "\f176";
 }
-.icon-mat-refresh:before {
+.icon-mat-redo:before {
     content: "\f177";
 }
-.icon-mat-remove:before {
+.icon-mat-refresh:before {
     content: "\f178";
 }
-.icon-mat-save:before {
+.icon-mat-remove:before {
     content: "\f179";
 }
-.icon-mat-search:before {
+.icon-mat-save:before {
     content: "\f17a";
 }
-.icon-mat-segment:before {
+.icon-mat-search:before {
     content: "\f17b";
 }
-.icon-mat-send:before {
+.icon-mat-segment:before {
     content: "\f17c";
 }
-.icon-mat-settings:before {
+.icon-mat-send:before {
     content: "\f17d";
 }
-.icon-mat-skip_next:before {
+.icon-mat-settings:before {
     content: "\f17e";
 }
-.icon-mat-skip_previous:before {
+.icon-mat-skip_next:before {
     content: "\f17f";
 }
-.icon-mat-sms_black:before {
+.icon-mat-skip_previous:before {
     content: "\f180";
 }
-.icon-mat-sms_failed:before {
+.icon-mat-sms_black:before {
     content: "\f181";
 }
-.icon-mat-sort:before {
+.icon-mat-sms_failed:before {
     content: "\f182";
 }
-.icon-mat-sound_detection_loud:before {
+.icon-mat-sort:before {
     content: "\f183";
 }
-.icon-mat-strikethrough_s:before {
+.icon-mat-sound_detection_loud:before {
     content: "\f184";
 }
-.icon-mat-style:before {
+.icon-mat-strikethrough_s:before {
     content: "\f185";
 }
-.icon-mat-summarize:before {
+.icon-mat-style:before {
     content: "\f186";
 }
-.icon-mat-supervisor_account:before {
+.icon-mat-summarize:before {
     content: "\f187";
 }
-.icon-mat-swap_horiz:before {
+.icon-mat-supervisor_account:before {
     content: "\f188";
 }
-.icon-mat-sync_alt:before {
+.icon-mat-swap_horiz:before {
     content: "\f189";
 }
-.icon-mat-text_format:before {
+.icon-mat-sync_alt:before {
     content: "\f18a";
 }
-.icon-mat-textsms:before {
+.icon-mat-text_format:before {
     content: "\f18b";
 }
-.icon-mat-thumb_up_off_alt:before {
+.icon-mat-textsms:before {
     content: "\f18c";
 }
-.icon-mat-today:before {
+.icon-mat-thumb_up_off_alt:before {
     content: "\f18d";
 }
-.icon-mat-transfer_within_a_station:before {
+.icon-mat-today:before {
     content: "\f18e";
 }
-.icon-mat-tune:before {
+.icon-mat-transfer_within_a_station:before {
     content: "\f18f";
 }
-.icon-mat-tungsten:before {
+.icon-mat-tune:before {
     content: "\f190";
 }
-.icon-mat-undo:before {
+.icon-mat-tungsten:before {
     content: "\f191";
 }
-.icon-mat-vertical_align_bottom:before {
+.icon-mat-undo:before {
     content: "\f192";
 }
-.icon-mat-vertical_align_top:before {
+.icon-mat-vertical_align_bottom:before {
     content: "\f193";
 }
-.icon-mat-visibility_off:before {
+.icon-mat-vertical_align_top:before {
     content: "\f194";
 }
-.icon-mat-visibility:before {
+.icon-mat-visibility_off:before {
     content: "\f195";
 }
-.icon-mat-volume_up:before {
+.icon-mat-visibility:before {
     content: "\f196";
 }
-.icon-mat-vpn_key:before {
+.icon-mat-volume_up:before {
     content: "\f197";
 }
-.icon-mat-warning:before {
+.icon-mat-vpn_key:before {
     content: "\f198";
 }
-.icon-my-facebook:before {
+.icon-mat-warning:before {
     content: "\f199";
 }
-.icon-my-google:before {
+.icon-my-facebook:before {
     content: "\f19a";
 }
-.icon-my-how_to_reg:before {
+.icon-my-google:before {
     content: "\f19b";
 }
-.icon-my-key:before {
+.icon-my-how_to_reg:before {
     content: "\f19c";
 }
-.icon-my-local_hospital:before {
+.icon-my-key:before {
     content: "\f19d";
 }
-.icon-my-local_pharmacy:before {
+.icon-my-local_hospital:before {
     content: "\f19e";
 }
-.icon-my-medical_information:before {
+.icon-my-local_pharmacy:before {
     content: "\f19f";
 }
-.icon-my-medical_services:before {
+.icon-my-medical_information:before {
     content: "\f1a0";
 }
-.icon-my-medication_liquid:before {
+.icon-my-medical_services:before {
     content: "\f1a1";
 }
-.icon-my-medication:before {
+.icon-my-medication_liquid:before {
     content: "\f1a2";
 }
-.icon-my-monitor_heart:before {
+.icon-my-medication:before {
     content: "\f1a3";
 }
-.icon-my-personal_injury:before {
+.icon-my-monitor_heart:before {
     content: "\f1a4";
 }
-.icon-my-point_of_sale:before {
+.icon-my-personal_injury:before {
     content: "\f1a5";
 }
-.icon-my-print_setting:before {
+.icon-my-point_of_sale:before {
     content: "\f1a6";
 }
-.icon-my-word:before {
+.icon-my-print_setting:before {
     content: "\f1a7";
+}
+.icon-my-word:before {
+    content: "\f1a8";
 }

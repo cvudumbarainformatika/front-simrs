@@ -679,36 +679,70 @@
               <div class="row justify-start q-mt-md q-mb-sm">
                 Pesanan tersebut di atas dapat tersedia pada,
               </div>
-              <div class="row justify-start q-mb-sm q-ml-lg">
+              <div class="row justify-start q-mb-sm q-ml-lg items-center">
                 <div class="col-1">
                   Hari
                 </div>
-                <div class="col-1">
-                  :
+                <div class="col-11">
+                  <app-input
+                    v-model="table.dispPrint.hari"
+                    label="hari"
+                    class="print-hide"
+                    outlined
+                  />
+                  <div class="print-only">
+                    : {{ table.dispPrint.hari }}
+                  </div>
                 </div>
               </div>
               <div class="row justify-start q-mb-sm q-ml-lg">
                 <div class="col-1">
                   Tanggal
                 </div>
-                <div class="col-1">
-                  :
+                <div class="col-11">
+                  <app-input-date-human
+                    v-model="table.dispPrint.tanggal"
+                    label="tanggal"
+                    class="print-hide"
+                    outlined
+                    @set-model="setTanggal"
+                    @set-display="setTanggalDisp"
+                  />
+                  <div class="print-only">
+                    : {{ table.dispPrint.tanggalDisp }}
+                  </div>
                 </div>
               </div>
               <div class="row justify-start q-mb-sm q-ml-lg">
                 <div class="col-1">
                   Waktu
                 </div>
-                <div class="col-1">
-                  :
+                <div class="col-11">
+                  <app-input
+                    v-model="table.dispPrint.waktu"
+                    label="waktu"
+                    class="print-hide"
+                    outlined
+                  />
+                  <div class="print-only">
+                    : {{ table.dispPrint.waktu }}
+                  </div>
                 </div>
               </div>
               <div class="row justify-start q-mb-sm q-ml-lg">
                 <div class="col-1">
                   Tempat
                 </div>
-                <div class="col-1">
-                  :
+                <div class="col-11">
+                  <app-input
+                    v-model="table.dispPrint.tempat"
+                    label="tempat"
+                    class="print-hide"
+                    outlined
+                  />
+                  <div class="print-only">
+                    : {{ table.dispPrint.waktu }}
+                  </div>
                 </div>
               </div>
               <div class="row justify-start q-mt-md q-mb-sm">
@@ -973,6 +1007,16 @@ const auth = useAuthStore()
 const role = computed(() => {
   return auth.role ? auth.role : ''
 })
+// set tanggal print
+function setTanggal(val) {
+  table.dispPrint.tanggal = val
+  console.log('tanggal ', val)
+}
+function setTanggalDisp(val) {
+  table.dispPrint.tanggalDisp = val
+  console.log('tanggal disp', val)
+}
+/// ////////
 // kembalikan status ke verif (akses gudang)
 function backToVerif(val, index) {
   // console.log('back to', val, index)
