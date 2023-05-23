@@ -115,7 +115,8 @@ const menus = ref([
     submenu: [
       { route: 'antrian.master.poli', path: '/admin/antrian/master/poli', label: 'Master Unit', icon: 'icon-mat-dvr' }
     ]
-  }
+  },
+  { route: 'antrian.call', path: '/admin/antrian/call', label: 'Panggil', icon: 'icon-mat-dvr', submenu: [] }
   // { route: 'lab.permintaan-luar', path: '/admin/laborat/permintaan-luar', label: 'Permintaan Luar', icon: 'icon-mat-transfer_within_a_station' }
 ])
 const $q = useQuasar()
@@ -131,7 +132,8 @@ onMounted(() => {
 })
 
 const route = useRoute()
-console.log('mini', miniState.value)
+// console.log('mini', miniState.value)
+console.log('lefMenu', menus.value)
 </script>
 
 <style lang="scss" scoped>

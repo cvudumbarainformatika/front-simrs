@@ -11,6 +11,8 @@ const antrian =
         name: 'antrian.dashboard',
         component: () => import('pages/simrs/antrian/IndexPage.vue')
       },
+
+      // ini untuk master
       {
         path: '/antrian/master/poli',
         name: 'antrian.master.poli',
@@ -35,6 +37,14 @@ const antrian =
         path: '/antrian/master/video',
         name: 'antrian.master.video',
         component: () => import('pages/simrs/antrian/master/video/IndexPage.vue')
+      },
+
+      // ini untuk transaksi
+
+      {
+        path: '/antrian/call',
+        name: 'antrian.call',
+        component: () => import('pages/simrs/antrian/call/IndexPage.vue')
       }
 
     ]

@@ -96,7 +96,8 @@ const menus = ref([
       { nama: 'Display', name: 'antrian.master.display', icon: null, link: 'antrian/master/display' },
       { nama: 'Video', name: 'antrian.master.video', icon: null, link: 'antrian/master/video' }
     ]
-  }
+  },
+  { icon: 'icon-mat-dvr', link: 'antrian/call', nama: 'Panggil', name: 'antrian.call', submenus: [] }
 ])
 const dark = computed(() => {
   return $q.dark.isActive
