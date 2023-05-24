@@ -227,7 +227,7 @@
             </div>
             <!-- Assesment pelayanan -->
             <div
-              v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===2"
+              v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===2) || store.display.jeniskunjungan==='Rujukan Internal'"
               class="row q-col-gutter-sm items-center q-mb-xs"
             >
               <div class="col-12">
@@ -270,6 +270,40 @@
           </div>
           <!-- kanan -->
           <div class="col-6">
+            <!-- PPK Rujukan -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete-new
+                  ref="refSistemBayar"
+                  :model="store.display.kode"
+                  label="PPK Rujukan"
+                  autocomplete="nama"
+                  option-value="kode"
+                  option-label="nama"
+                  :filled="false"
+                  :source="store.ppkRujukans"
+                  :loading="store.loadingPpkRujukan"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @on-select="setPpkRujukan"
+                  @buang="prosesChange"
+                  @clear="clearPpkRujukan"
+                />
+              </div>
+            </div>
+            <!-- Tanggal Rujukan-->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-input-date-human
+                  ref="refTglRujukanr"
+                  :model="store.display.tanggal.rujukan"
+                  label="Tanggal Rujukan"
+                  :filled="false"
+                  :loading="store.loading"
+                  @db-model="setTglRujukan"
+                  @set-display="setDispTglRujukan"
+                />
+              </div>
+            </div>
             <!-- sistem bayar -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
@@ -287,6 +321,61 @@
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="setSistembayar"
                 />
+              </div>
+            </div>
+            <!-- Tanggal SEP -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-input-date-human
+                  ref="refTglSEP"
+                  :model="store.display.tanggal.sep"
+                  label="Tanggal SEP"
+                  :filled="false"
+                  :loading="store.loading"
+                  @db-model="setTglSEP"
+                  @set-display="setDispTglSEP"
+                />
+              </div>
+            </div>
+            <!-- Catatan -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                Catatan
+                <!-- free text
+                  <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.groupsistembayar"
+                  label="Sistem bayar"
+                  autocomplete="groupsistembayar"
+                  option-value="groupsistembayar"
+                  option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar"
+                /> -->
+              </div>
+            </div>
+            <!-- No SEP -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                No SEP
+                <!-- <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.groupsistembayar"
+                  label="Sistem bayar"
+                  autocomplete="groupsistembayar"
+                  option-value="groupsistembayar"
+                  option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar"
+                /> -->
               </div>
             </div>
             <!-- DPJP -->
@@ -307,6 +396,26 @@
                 />
               </div>
             </div>
+            <!-- Kecelakaan -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                Kecelakaan
+                <!-- <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.groupsistembayar"
+                  label="Sistem bayar"
+                  autocomplete="groupsistembayar"
+                  option-value="groupsistembayar"
+                  option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar"
+                /> -->
+              </div>
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -323,6 +432,37 @@ import { notifErrVue } from 'src/modules/utils'
 const store = useRegistrasiPasienBPJSStore()
 
 store.getInitialData()
+// ---- PPK Rujukan start---
+// debounce function
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const prosesChange = myDebounce((val) => {
+  console.log('proses val', val)
+  if (val !== '') findPpkRujukan(val)
+}
+)
+function setPpkRujukan(val) {
+  store.display.kode = val
+  store.setForm('ppkRujukan', val)
+  // console.log('set PPK rujukan', val)
+}
+function findPpkRujukan(val) {
+  // console.log('find PPK rujukan', val)
+  // store.paramPpkRujukan = val
+  store.getPpkRujukan(val)
+}
+function clearPpkRujukan() {
+  store.display.kode = null
+  delete store.form.ppkRujukan
+  // console.log('val PPK rujukan', val)
+}
+// ---- PPK Rujukan end---
+// sistem bayar
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
   console.log('form', store.form)
@@ -377,6 +517,24 @@ function setAssesmentPelayanan(val) {
 // penunjang
 function setPenunjang(val) {
   store.setForm('kdPenunjang', val)
+}
+// tanggal rujukan
+function setTglRujukan(val) {
+  store.setForm('tanggalrujukan', val)
+  // console.log('from tanggal rujukan', val)
+}
+function setDispTglRujukan(val) {
+  store.display.tanggal.rujukan = val
+  // console.log('disp tanggal rujukan', val)
+}
+// tanggal SEP
+function setTglSEP(val) {
+  store.setForm('tanggalsep', val)
+  // console.log('from tanggal sep', val)
+}
+function setDispTglSEP(val) {
+  store.display.tanggal.sep = val
+  // console.log('disp tanggal rujukan', val)
 }
 // emits
 const emits = defineEmits(['bisaSimpan'])

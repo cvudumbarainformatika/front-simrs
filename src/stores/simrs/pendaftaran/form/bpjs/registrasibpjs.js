@@ -9,10 +9,12 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       diagnosa: {},
       prosedur: {},
       assesment: {},
-      penunjang: {}
+      penunjang: {},
+      tanggal: {}
     },
     paramKarcis: {},
     paramDiagnosa: { q: '' },
+    paramPpkRujukan: { faskesasal: '' },
     kataraks: [
       { nama: 'Tidak', value: 0 },
       { nama: 'Ya', value: 1 }
@@ -30,7 +32,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     prosedurs: [],
     assesmens: [],
     penunjangs: [],
-    diagnosaAwals: []
+    diagnosaAwals: [],
+    ppkRujukans: [],
+    loadingPpkRujukan: false
   }),
   actions: {
     setForm(key, val) {
@@ -47,8 +51,22 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       this.getProsedur()
       this.getAssesmen()
       this.getPenunjang()
+      // this.getPpkRujukan('anu')
     },
     // api related function
+    async getPpkRujukan(val) {
+      this.loadingPpkRujukan = true
+      const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+        .then(resp => {
+          this.loadingPpkRujukan = false
+          this.ppkRujukans = resp.data.result.faskes
+          console.log('PPK rujukan', resp)
+        })
+        .catch(() => {
+          this.loadingPpkRujukan = false
+        })
+    },
     async getPenunjang() {
       this.loading = true
       await api.get('v1/simrs/bpjs/master/penunjangbpjs')
