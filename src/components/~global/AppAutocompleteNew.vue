@@ -126,7 +126,7 @@ const props = defineProps({
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
   model: { type: [String, Number], default: '' },
-  debounce: { type: [String, Number], default: '700' }
+  debounce: { type: [String, Number], default: '800' }
 
 })
 const optionx = ref([])

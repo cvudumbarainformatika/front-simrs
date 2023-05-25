@@ -73,9 +73,10 @@
 </template>
 
 <script setup>
+import { date } from 'quasar'
 import { ref, onMounted, computed } from 'vue'
 
-const emits = defineEmits(['showDate', 'setModel', 'setDisplay'])
+const emits = defineEmits(['showDate', 'setModel', 'setDisplay', 'dbModel'])
 const props = defineProps({
   icon: {
     type: String,
@@ -125,12 +126,17 @@ const modelProp = computed({
       newTgl = temp[0] + ' May ' + temp[2]
     } else if (temp[1] === 'Oktober') {
       newTgl = temp[0] + ' October ' + temp[2]
+    } else if (temp[1] === 'Agustus') {
+      newTgl = temp[0] + ' August ' + temp[2]
+    } else if (temp[1] === 'Desember') {
+      newTgl = temp[0] + ' December ' + temp[2]
     } else {
       newTgl = val
     }
     console.log('app input date', newTgl)
     emits('setModel', newTgl)
     emits('setDisplay', val)
+    emits('dbModel', date.formatDate(newTgl, 'YYYY-MM-DD'))
   }
 })
 // const modelProp = toRef(props, 'model')// react to ref

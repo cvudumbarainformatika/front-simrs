@@ -1,5 +1,6 @@
 <template>
   <app-card
+    :key="map.items"
     :is-header="false"
     class="q-mb-md"
   >
@@ -81,7 +82,7 @@
               type="number"
               :rules="[
                 (val)=>(val && val.length>0)||'periksa kembali input',
-                (val)=> val <= row.alokasi || 'tidak boleh melebih alokasi'
+                (val)=> val <= row.alokasi+row.jumlah || 'tidak boleh melebih alokasi'
               ]"
               @keyup.enter="onSubmit"
             />
