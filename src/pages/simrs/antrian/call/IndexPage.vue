@@ -61,7 +61,7 @@
             </template>
             <template #custom-btn="{row}">
               <div class="row">
-                <q-btn
+                <!-- <q-btn
                   round
                   size="sm"
                   icon="icon-mat-mic_external_on"
@@ -79,6 +79,17 @@
                   icon="icon-mat-volume_up"
                   color="teal"
                   @click="panggil(row,'nomor')"
+                >
+                  <q-tooltip>
+                    Panggil NOMOR Antrian
+                  </q-tooltip>
+                </q-btn> -->
+                <q-btn
+                  round
+                  size="sm"
+                  icon="icon-mat-volume_up"
+                  color="teal"
+                  @click="calling(row)"
                 >
                   <q-tooltip>
                     Panggil NOMOR Antrian
@@ -137,15 +148,6 @@ onMounted(() => {
   store.getDataTable()
 })
 
-// function saveForm(ref) {
-//   console.log(ref)
-//   // console.log(form.form)
-//   // form.saveForm().then(() => {
-//   //   store.getDataTable()
-//   //   formRef.value.resetForm()
-//   // })
-// }
-
 const speech = useSpeechStore()
 
 onMounted(() => {
@@ -165,23 +167,29 @@ onMounted(() => {
   }
 })
 
-function setSpeech(txt) {
-  console.log(speech.voiceList[11])
-  const voice = speech.utterance
-  voice.text = txt
-  voice.voice = speech.voiceList[11]
+// function setSpeech(txt) {
+//   console.log(speech.voiceList[11])
+//   const voice = speech.utterance
+//   voice.text = txt
+//   voice.voice = speech.voiceList[11]
 
-  voice.volume = 1
-  voice.pitch = 1
-  voice.rate = 0.7
+//   voice.volume = 1
+//   voice.pitch = 1
+//   voice.rate = 0.7
 
-  return voice
-}
+//   return voice
+// }
 
-function panggil(row, jns) {
-  const txt1 = 'Saudara... ' + (row.namapasien).toLowerCase() + ' ...Harap menuju... ke... ' + row.namapoli
-  const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
-  const txt = jns === 'nama' ? txt1 : txt2
-  speech.synth.speak(setSpeech(txt))
+// function panggil(row, jns) {
+//   const txt1 = 'Saudara... ' + (row.namapasien).toLowerCase() + ' ...Harap menuju... ke... ' + row.namapoli
+//   const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
+//   const txt = jns === 'nama' ? txt1 : txt2
+//   speech.synth.speak(setSpeech(txt))
+// }
+import { usePanggilStore } from 'src/stores/antrian/call/panggil'
+const call = usePanggilStore()
+
+function calling(row) {
+  call.callLayanan(row)
 }
 </script>
