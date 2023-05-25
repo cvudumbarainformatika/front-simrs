@@ -61,7 +61,14 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     domisiliPropinsies: [],
     domisiliKabupatens: [],
     domisiliKecamatans: [],
-    domisiliKelurahans: []
+    domisiliKelurahans: [],
+    // cek bpjs
+    alert: false,
+    alertMsg: {},
+    loadingNik: false,
+    loadingNoka: false,
+    loadingFinger: false
+    // --
   }),
   actions: {
     setForm(key, val) {
@@ -665,6 +672,45 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         }).catch(() => {
           this.loadingSelectDomisili = false
         })
+    },
+    // cek bpjs
+    async cekPesertaByNik (val) {
+      this.loadingNik = true
+      await api.post('v1/simrs/pendaftaran/cekpsertabpjsbynik', val)
+        .then((resp) => {
+          this.loadingNik = false
+          console.log('Nik', resp.data)
+          this.alertMsg = resp.data.result
+          this.alert = true
+          return new Promise(resolve => { resolve(resp.data) })
+        }).catch(() => {
+          this.loadingNik = false
+        })
+    },
+    async cekPesertaByNoka (val) {
+      this.loadingNoka = true
+      await api.post('v1/simrs/pendaftaran/cekpsertabpjsbynoka', val)
+        .then((resp) => {
+          this.loadingNoka = false
+          this.alert = true
+          this.alertMsg = resp.data.result
+          return new Promise(resolve => { resolve(resp.data) })
+        }).catch(() => {
+          this.loadingNoka = false
+        })
+    },
+    async cekPesertaFinger (val) {
+      this.loadingFinger = true
+      await api.get('v1/simrs/anu', val)
+        .then((resp) => {
+          this.loadingFinger = false
+          this.alert = true
+          this.alertMsg = resp.data.result
+          return new Promise(resolve => { resolve(resp.data) })
+        }).catch(() => {
+          this.loadingFinger = false
+        })
     }
+    // -------
   }
 })

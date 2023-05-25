@@ -180,6 +180,8 @@
               <div class="col-3">
                 <app-btn
                   label="List surat kontrol"
+                  :loading="store.loadingSuratKontrol"
+                  @click="cekSuratKontrol"
                 />
               </div>
             </div>
@@ -340,42 +342,23 @@
             <!-- Catatan -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
-                Catatan
-                <!-- free text
-                  <app-autocomplete
-                  ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
-                  label="Sistem bayar"
-                  autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
-                  option-label="groupsistembayar"
+                <app-input
+                  v-model="store.form.catatan"
+                  label="Catatan"
                   :filled="false"
-                  :source="store.sistembayars"
-                  :loading="store.loading"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setSistembayar"
-                /> -->
+                  valid
+                />
               </div>
             </div>
             <!-- No SEP -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
-                No SEP
-                <!-- <app-autocomplete
-                  ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
-                  label="Sistem bayar"
-                  autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
-                  option-label="groupsistembayar"
+                <app-input
+                  v-model="store.form.sep"
+                  label="No SEP"
                   :filled="false"
-                  :source="store.sistembayars"
-                  :loading="store.loading"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setSistembayar"
-                /> -->
+                  valid
+                />
               </div>
             </div>
             <!-- DPJP -->
@@ -399,21 +382,107 @@
             <!-- Kecelakaan -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
               <div class="col-12">
-                Kecelakaan
-                <!-- <app-autocomplete
-                  ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
-                  label="Sistem bayar"
-                  autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
-                  option-label="groupsistembayar"
+                <app-autocomplete
+                  ref="refKecelakaan"
+                  v-model="store.display.kecelakaan"
+                  label="Kecelakaan"
+                  autocomplete="nama"
+                  option-value="value"
+                  option-label="nama"
                   :filled="false"
-                  :source="store.sistembayars"
+                  :source="store.kecelakaans"
+                  :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
                   :loading="store.loading"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setSistembayar"
-                /> -->
+                  @selected="setKecelakaan"
+                />
+              </div>
+            </div>
+            <!-- jika kecelakaan -->
+            <div
+              v-if="store.display.kecelakaan>0"
+            >
+              <!-- tanggal dan option sulpesi -->
+              <div class="row q-col-gutter-md items-center q-mb-xs">
+                <div class="col-6">
+                  <app-input-date-human
+                    ref="refTglKecelakaan"
+                    :model="store.display.tanggal.kecelakaan"
+                    label="Tanggal Kejadian"
+                    :filled="false"
+                    :loading="store.loading"
+                    @db-model="setTglKecelakaan"
+                    @set-display="setDispTglKecelakaan"
+                  />
+                </div>
+                <div class="col-6">
+                  <app-autocomplete
+                    ref="refKecelakaan"
+                    v-model="store.display.suplesi"
+                    label="Suplesi"
+                    autocomplete="nama"
+                    option-value="value"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.optionSuplesi"
+                    :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
+                    :loading="store.loading"
+                  />
+                </div>
+              </div>
+              <!-- Nomor Suplesi -->
+              <div
+                v-if="store.display.suplesi===1"
+                class="row q-col-gutter-md items-center q-mb-xs"
+              >
+                <div class="col-10">
+                  <app-input
+                    ref="refSuplesi"
+                    v-model="store.form.nosuplesi"
+                    label="Nomor Suplesi"
+                    :filled="false"
+                  />
+                </div>
+                <div class="col-2">
+                  <q-btn
+                    no-caps
+                    color="primary"
+                    dense
+                    :loading="store.loadingSuplesi"
+                    @click="cekSuplesi"
+                  >
+                    <!-- style="max-width:80px" -->
+                    <div
+                      class="f-12"
+                    >
+                      Cek No Suplesi
+                    </div>
+                  </q-btn>
+                </div>
+              </div>
+              <!-- Tempat kejadian -->
+              <div class="row q-col-gutter-md items-center q-mb-xs">
+                <div class="col-4">
+                  <!--
+                    bentuk data : propinsikecelakaan, kodepropinsikecelakaan
+                    <app-autocomplete
+                  ref="refPropinsiKecelakaan"
+                  v-model="store.form.propinsi"
+                  label="Kecelakaan"
+                  autocomplete="nama"
+                  option-value="value"
+                  option-label="nama"
+                  :filled="false"
+                  :source="store.kecelakaans"
+                  :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
+                  :loading="store.loading"
+                  @select -->
+                </div>
+                <div class="col-4">
+                  Kabupaten
+                </div>
+                <div class="col-4">
+                  Kecamatan
+                </div>
               </div>
             </div>
           </div>
@@ -432,6 +501,49 @@ import { notifErrVue } from 'src/modules/utils'
 const store = useRegistrasiPasienBPJSStore()
 
 store.getInitialData()
+// refs
+const refAsalRujukan = ref(null)
+const refFlagKartu = ref(null)
+const refDPJP = ref(null)
+const refPoliTujuan = ref(null)
+const refSistemBayar = ref(null)
+const refNoRujukan = ref(null)
+const refNamaDiagnosa = ref(null)
+const refKodeDiagnosa = ref(null)
+const refJenisKunjungan = ref(null)
+const refNoSuratKontrol = ref(null)
+const refTujuanKunjungan = ref(null)
+const refSuplesi = ref(null)
+// cek surat kontrol
+function cekSuratKontrol() {
+  emits('getListSuratKontrol')
+  // if (refNoSuratKontrol.value.$refs.refInput.validate()) {
+  //   console.log('surat kontrol')
+  // } else {
+  //   notifErrVue('Nomor Suplesi Kosong')
+  // }
+}
+// --- kecelakaan start ---
+// autocomplete kecelakaan
+function setKecelakaan(val) {
+  console.log('kecelakaan ', val)
+}
+// tanggal kecelakaan
+function setTglKecelakaan(val) {
+  store.display.tanggal.kecelakaan = val
+}
+function setDispTglKecelakaan(val) {
+  store.setForm('tglKecelakaan', val)
+}
+// cek no suplesi
+function cekSuplesi() {
+  if (refSuplesi.value.$refs.refInput.validate()) {
+    console.log('cek suplesi')
+  } else {
+    notifErrVue('Nomor Suplesi Kosong')
+  }
+}
+// --- kecelakaan end ---
 // ---- PPK Rujukan start---
 // debounce function
 function myDebounce(func, timeout = 800) {
@@ -520,7 +632,7 @@ function setPenunjang(val) {
 }
 // tanggal rujukan
 function setTglRujukan(val) {
-  store.setForm('tanggalrujukan', val)
+  store.setForm('tglrujukan', val)
   // console.log('from tanggal rujukan', val)
 }
 function setDispTglRujukan(val) {
@@ -529,7 +641,7 @@ function setDispTglRujukan(val) {
 }
 // tanggal SEP
 function setTglSEP(val) {
-  store.setForm('tanggalsep', val)
+  store.setForm('tglsep', val)
   // console.log('from tanggal sep', val)
 }
 function setDispTglSEP(val) {
@@ -537,19 +649,8 @@ function setDispTglSEP(val) {
   // console.log('disp tanggal rujukan', val)
 }
 // emits
-const emits = defineEmits(['bisaSimpan'])
-// refs
-const refAsalRujukan = ref(null)
-const refFlagKartu = ref(null)
-const refDPJP = ref(null)
-const refPoliTujuan = ref(null)
-const refSistemBayar = ref(null)
-const refNoRujukan = ref(null)
-const refNamaDiagnosa = ref(null)
-const refKodeDiagnosa = ref(null)
-const refJenisKunjungan = ref(null)
-const refNoSuratKontrol = ref(null)
-const refTujuanKunjungan = ref(null)
+const emits = defineEmits(['bisaSimpan', 'getListSuratKontrol'])
+
 // reset validasi
 function resetValidation() {
   // autocomplete

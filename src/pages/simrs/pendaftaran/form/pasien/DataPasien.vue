@@ -102,13 +102,25 @@
                 No. KTP
               </div>
               <div class="col-8"> -->
-              <div class="col-12">
+              <div :class="bpjs?'col-10':'col-12'">
                 <app-input
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+              <div
+                v-if="bpjs"
+                class="col-2"
+              >
+                <q-btn
+                  color="primary"
+                  dense
+                  label="BPJS"
+                  :loading="store.loadingNik"
+                  @click="cekBpjsbyNik"
                 />
               </div>
             </div>
@@ -151,13 +163,38 @@
                 No. KA BPJS
               </div>
               <div class="col-8"> -->
-              <div class="col-12">
+              <div :class="bpjs?'col-8':'col-12'">
                 <app-input
                   ref="refNoKaBpjs"
-                  v-model="store.form.nokabpjs"
+                  v-model="store.form.noka"
                   label="Nomor KA BPJS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'"
+                />
+              </div>
+              <div
+                v-if="bpjs"
+                class="col-2"
+              >
+                <q-btn
+                  color="primary"
+                  dense
+                  label="BPJS"
+                  :loading="store.loadingNoka"
+                  @click="cekBpjsByNoka"
+                />
+              </div>
+              <div
+                v-if="bpjs"
+                class="col-2"
+              >
+                <q-btn
+                  no-caps
+                  color="primary"
+                  dense
+                  label="finger"
+                  :loading="store.loadingFinger"
+                  @click="cekFinger"
                 />
               </div>
             </div>
@@ -932,6 +969,133 @@
       v-model="store.cariPasienDialog"
       @hide="cariPasienHide"
     />
+    <app-dialog
+      v-model="store.alert"
+      label="Data Peserta BPJS"
+      @on-ok="dialogOk"
+      @keyup="store.alert=false"
+    >
+      <template #default>
+        <div
+          v-if="store.alertMsg==='Tidak ditemukan'"
+        >
+          <app-no-selected-page
+            color="primary"
+            :text="store.alertMsg"
+          />
+        </div>
+        <div
+          v-if="store.alertMsg.peserta"
+          class="q-pa-md"
+        >
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Nama
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.nama }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Hak Kelas
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.hakKelas.keterangan }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              No. Kartu
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.noKartu }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Telepon
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.mr.noTelepon?store.alertMsg.peserta.mr.noTelepon:'-' }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Jenis Kelamin
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.sex }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Asal Faskes
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.provUmum.nmProvider }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Status Peserta
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.statusPeserta.keterangan }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Jenis Peserta
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.jenisPeserta.keterangan }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              NIK
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.nik }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Dinsos
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.informasi.dinsos?store.alertMsg.peserta.informasi.dinsos:'-' }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              No SKTM
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.informasi.noSKTM?store.alertMsg.peserta.informasi.noSKTM:'-' }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              Prolanis PRB
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.informasi.proranisPRB?store.alertMsg.peserta.informasi.proranisPRB:'-' }}
+            </div>
+          </div>
+          <div class="row items-center q-my-sm">
+            <div class="col-4">
+              e SEP
+            </div>
+            <div class="col-8">
+              {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
+            </div>
+          </div>
+        </div>
+        <!-- {{ store.alertMsg }} -->
+      </template>
+    </app-dialog>
   </div>
 </template>
 <script setup>
@@ -946,15 +1110,51 @@ import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran
 const refPasien = ref(null)
 const emits = defineEmits([
   'bisa-simpan',
-  'tidak-simpan'
+  'tidak-simpan',
+  'suratKontrol'
 ])
-// const props = defineProps({
-//   simpan: { type: Boolean, default: false }
-// })
+const props = defineProps({
+  bpjs: { type: Boolean, default: false },
+  tampil: { type: Boolean, default: false },
+  nik: { type: [String, Number], default: '' },
+  noka: { type: [String, Number], default: '' },
+  tglsep: { type: [String, Number], default: '' }
+})
 
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
+
+// cek BPJS
+function cekBpjsbyNik() {
+  if (refKtp.value.$refs.refInput.validate()) {
+    const form = { nik: store.form.nik, tglsep: props.tglsep }
+    store.cekPesertaByNik(form)
+  } else {
+    notifErrVue('Nomor KTP Kosong')
+  }
+}
+function cekBpjsByNoka() {
+  if (refNoKaBpjs.value.$refs.refInput.validate()) {
+    const form = { noka: store.form.noka, tglsep: props.tglsep }
+    store.cekPesertaByNoka(form)
+  } else {
+    notifErrVue('Nomor BPJS Kosong')
+  }
+}
+function cekFinger() {
+  if (refNoKaBpjs.value.$refs.refInput.validate()) {
+    const form = { noka: store.form.noka, tglsep: props.tglsep }
+    store.cekPesertaFinger(form)
+  } else {
+    notifErrVue('Nomor BPJS Kosong')
+  }
+}
+function dialogOk() {
+  store.alert = false
+}
+// -----
+
 // refs
 const refJenisPasien = ref(null)
 const refNoRM = ref(null)
@@ -993,6 +1193,15 @@ const refPropinsi = ref(null)
 const refKabupaten = ref(null)
 const refKecamatan = ref(null)
 const refKelurahan = ref(null)
+// validasi noka dan norm
+function validateNokaAndNorm() {
+  if (refNoRM.value.$refs.refInput.validate() &&
+   refNoKaBpjs.value.$refs.refInput.validate()) {
+    emits('suratKontrol')
+  }
+  if (refNoRM.value.$refs.refInput.validate() === false) { notifErrVue('No RM Kosong') }
+  if (refNoKaBpjs.value.$refs.refInput.validate() === false) { notifErrVue('No BPJS Kosong') }
+}
 // reset validasi
 function resetValidation() {
   // reset validation
@@ -1398,7 +1607,7 @@ function set() {
   }
 }
 
-defineExpose({ set, resetValidation })
+defineExpose({ set, resetValidation, validateNokaAndNorm })
 
 store.getInitialData()
 onBeforeUpdate(() => {

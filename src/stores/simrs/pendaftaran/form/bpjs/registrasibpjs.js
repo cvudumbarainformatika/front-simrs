@@ -1,16 +1,28 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
     loading: false,
-    form: {},
+    form: {
+      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      jenis_pelayanan: 2
+    },
     display: {
       diagnosa: {},
       prosedur: {},
       assesment: {},
       penunjang: {},
-      tanggal: {}
+      tanggal: {
+        sep: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+        rujukan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+        kecelakaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      },
+      kecelakaan: 0,
+      suplesi: 0
     },
     paramKarcis: {},
     paramDiagnosa: { q: '' },
@@ -34,7 +46,22 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     penunjangs: [],
     diagnosaAwals: [],
     ppkRujukans: [],
-    loadingPpkRujukan: false
+    loadingPpkRujukan: false,
+    loadingSuplesi: false,
+    loadingSuratKontrol: false,
+    kecelakaans: [
+      { value: 0, nama: 'Bukan Kecelakaan Lalu Lintas [BKLL]' },
+      { value: 1, nama: 'KLL dan Bukan Kecelakaan Kerja [BKK]' },
+      { value: 2, nama: 'KLL dan KK' },
+      { value: 3, nama: 'KK' }
+    ],
+    optionSuplesi: [
+      { value: 1, nama: 'Ya' },
+      { value: 0, nama: 'Tidak' }
+    ],
+    propinsies: [],
+    kabupatens: [],
+    kecamatans: []
   }),
   actions: {
     setForm(key, val) {
