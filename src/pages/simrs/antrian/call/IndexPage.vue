@@ -45,15 +45,22 @@
             @edit-data="(val)=>form.editData(val)"
             @delete="(id)=>store.deletesData(id)"
           >
-            <!-- <template #header-left-after-search>
-              <div class="q-ml-sm">
-                <app-btn
-                  label="Sync Simrs & Bpjs"
-                  :loading="store.loading"
-                  @click="store.synch()"
+            <template #header-left-after-search>
+              <div
+                class="q-ml-sm"
+                style="min-width:200px;"
+              >
+                <q-select
+                  v-model="store.unit"
+                  dense
+                  filled
+                  :options="store.units"
+                  label="Pilih Loket / Poli"
+                  emit-value
+                  map-options
                 />
               </div>
-            </template> -->
+            </template>
             <template #col-status="{left}">
               <div :class="`${left}`">
                 Status
@@ -89,7 +96,7 @@
                   size="sm"
                   icon="icon-mat-volume_up"
                   color="teal"
-                  @click="calling(row)"
+                  @click="calling(row, store.unit)"
                 >
                   <q-tooltip>
                     Panggil NOMOR Antrian
@@ -137,6 +144,8 @@ import { useCallStore } from 'src/stores/antrian/call/index'
 import { onMounted } from 'vue'
 // import FormDialogInput from './FormDialogInput.vue'
 import { useSpeechStore } from 'src/stores/antrian/speech.js'
+import { usePanggilStore } from 'src/stores/antrian/call/panggil'
+const call = usePanggilStore()
 
 const store = useCallStore()
 // const form = useMasterDisplayFormStore()
@@ -145,6 +154,7 @@ const store = useCallStore()
 // console.log(form)
 
 onMounted(() => {
+  store.getUnits()
   store.getDataTable()
 })
 
@@ -186,10 +196,8 @@ onMounted(() => {
 //   const txt = jns === 'nama' ? txt1 : txt2
 //   speech.synth.speak(setSpeech(txt))
 // }
-import { usePanggilStore } from 'src/stores/antrian/call/panggil'
-const call = usePanggilStore()
 
-function calling(row) {
-  call.callLayanan(row)
+function calling(row, unit) {
+  call.callLayanan(row, unit)
 }
 </script>

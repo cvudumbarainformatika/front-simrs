@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 // import { routerInstance } from 'src/boot/router'
-// import { notifErr, notifSuccess } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 
 export const usePanggilStore = defineStore('panggil_antrian', {
@@ -17,8 +17,12 @@ export const usePanggilStore = defineStore('panggil_antrian', {
   },
 
   actions: {
-    async callLayanan(val) {
+    async callLayanan(val, unit) {
+      if (unit === null) {
+        return notifErrVue('Maaf Unit Tidak Boleh Kosong')
+      }
       this.item = val
+      this.item.unit_id = unit
       try {
         const resp = await api.post('v1/call/calling-layanan', this.item)
         console.log('calling_layanan', resp)

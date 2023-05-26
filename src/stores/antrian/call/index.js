@@ -20,7 +20,10 @@ export const useCallStore = defineStore('call_antrian', {
       sort: 'desc'
     },
     columns: ['namapasien', 'namapoli', 'nomorantrean', 'angkaantrean', 'status'],
-    columnHide: ['id']
+    columnHide: ['id'],
+
+    units: [],
+    unit: null
 
   }),
 
@@ -96,6 +99,20 @@ export const useCallStore = defineStore('call_antrian', {
       } catch (error) {
         console.log('err laborat', error.response)
         notifErr(error.response)
+      }
+    },
+
+    async getUnits () {
+      try {
+        await api.get('/v1/call/units')
+          .then(resp => {
+            console.log('units', resp)
+            if (resp.status === 200) {
+              this.units = resp.data
+            }
+          })
+      } catch (error) {
+        console.log('error', error)
       }
     }
   }
