@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum', {
@@ -7,10 +8,15 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     form: {},
     display: {},
     paramKarcis: {},
+    paramDpjp: {
+      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      jenis_pelayanan: 2
+    },
     asalrujukans: [],
     sistembayars: [],
     polis: [],
-    kasrcispolis: [],
+    kasrcispoli: null,
+    jenisKarcises: [],
     dpjps: []
   }),
   actions: {
@@ -23,18 +29,51 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
       this.getAsalRujukan()
       this.getSistemBayar()
       this.getPoli()
-      this.getKarcispoli()
+      this.getJenisKarcis()
     },
 
     // api related function
-    async getKarcispoli() {
+    async getDokterDpjp() {
+      this.loading = true
+      await api.post('v1/simrs/pendaftaran/dpjpbpjs', this.paramDpjp)
+        .then(resp => {
+          this.loading = false
+          if (resp.data.result.list.length) {
+            const data = resp.data.result.list
+            data.forEach(anu => {
+              anu.dpjp = anu.kode
+            })
+            this.dpjps = data
+            console.log('result ', data)
+          }
+          console.log('dokter DPJp ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getKarcisPoli() {
       this.loading = true
       const param = { params: this.paramKarcis }
       await api.get('v1/simrs/pendaftaran/getkarcispoli', param)
         .then(resp => {
           this.loading = false
-          this.kasrcispolis = resp.data
-          console.log('karcis poli', resp.data)
+          this.kasrcispoli = resp.data
+          console.log('jenis karcis ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getJenisKarcis() {
+      this.loading = true
+      await api.get('v1/simrs/master/jeniskartukarcis')
+        .then(resp => {
+          this.loading = false
+          this.jenisKarcises = resp.data
+          console.log('jenis karcis ', resp.data)
         })
         .catch(() => {
           this.loading = false
