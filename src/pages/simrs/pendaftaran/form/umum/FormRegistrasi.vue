@@ -38,28 +38,89 @@
                 />
               </div>
             </div>
+            <!-- poli tujuan -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refPoliTujuan"
+                  v-model="store.form.kodepoli"
+                  label="Poli Tujuan"
+                  autocomplete="polirs"
+                  option-value="kodepoli"
+                  option-label="polirs"
+                  :filled="false"
+                  :source="store.polis"
+                  :loading="store.loading"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setPoliTujuan"
+                />
+              </div>
+            </div>
             <!-- kartu / karcis -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-6">
                 <app-autocomplete
                   ref="refFlagKartu"
-                  v-model="store.form.asalrujukan"
+                  v-model="store.form.jeniskarcis"
                   label="Flag Kartu"
-                  autocomplete="asalrujukan"
-                  option-value="asalrujukan"
-                  option-label="asalrujukan"
+                  autocomplete="jeniskarcis"
+                  option-value="jeniskarcis"
+                  option-label="jeniskarcis"
                   :filled="false"
-                  :source="store.asalrujukans"
+                  :disable="!store.paramKarcis.kd_poli"
+                  :source="store.jenisKarcises"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setFlagKarcis"
                 />
               </div>
               <div class="col-6">
                 <app-input
-                  v-model="store.form.karcis"
+                  v-model="store.display.hargakarcis"
                   label="Karcis"
                   :filled="false"
+                  disable
+                />
+              </div>
+            </div>
+          </div>
+          <!-- kanan -->
+          <div class="col-6">
+            <!-- sistem bayar -->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.groupsistembayar"
+                  label="Sistem bayar"
+                  autocomplete="groupsistembayar"
+                  option-value="groupsistembayar"
+                  option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar"
+                />
+              </div>
+            </div>
+            <!-- sistem bayar 2-->
+            <div class="row q-col-gutter-md items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.groupsistembayar"
+                  label="Sistem bayar"
+                  autocomplete="groupsistembayar"
+                  option-value="groupsistembayar"
+                  option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar"
                 />
               </div>
             </div>
@@ -78,46 +139,6 @@
                   :loading="store.loading"
 
                   :rules="[val => (!!val) || 'Harap diisi',]"
-                />
-              </div>
-            </div>
-          </div>
-          <!-- kanan -->
-          <div class="col-6">
-            <!-- poli tujuan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refPoliTujuan"
-                  v-model="store.form.kodepoli"
-                  label="Poli Tujuan"
-                  autocomplete="polirs"
-                  option-value="kodepoli"
-                  option-label="polirs"
-                  :filled="false"
-                  :source="store.polis"
-                  :loading="store.loading"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                />
-              </div>
-            </div>
-            <!-- sistem bayar -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
-                  label="Sistem bayar"
-                  autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
-                  option-label="groupsistembayar"
-                  :filled="false"
-                  :source="store.sistembayars"
-                  :loading="store.loading"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setSistembayar"
                 />
               </div>
             </div>
@@ -175,7 +196,29 @@ function set() {
     notifErrVue('periksa kembali input registrasi anda')
   }
 }
-
+// set kode Poli
+function setPoliTujuan(val) {
+  store.paramKarcis.kd_poli = val
+  console.log(val)
+  if (store.paramKarcis.flag) {
+    if (store.paramKarcis.flag !== '') {
+      store.getKarcisPoli().then(() => {
+        store.display.hargakarcis = store.kasrcispoli.tarif
+      })
+    }
+  }
+}
+// set flag karcis
+function setFlagKarcis(val) {
+  // const index = findWithAttr(store.jenisKarcises, 'jeniskarcis', val)
+  // const flag = store.jenisKarcises[index]
+  // store.display.hargakarcis = flag.harga
+  store.paramKarcis.flag = val
+  console.log(store.paramKarcis)
+  store.getKarcisPoli().then(() => {
+    store.display.hargakarcis = store.kasrcispoli.tarif
+  })
+}
 // expose function
 defineExpose({ resetValidation, set })
 </script>

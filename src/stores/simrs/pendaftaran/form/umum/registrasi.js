@@ -10,7 +10,8 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     asalrujukans: [],
     sistembayars: [],
     polis: [],
-    kasrcispolis: [],
+    kasrcispoli: null,
+    jenisKarcises: [],
     dpjps: []
   }),
   actions: {
@@ -23,18 +24,31 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
       this.getAsalRujukan()
       this.getSistemBayar()
       this.getPoli()
-      this.getKarcispoli()
+      this.getJenisKarcis()
     },
 
     // api related function
-    async getKarcispoli() {
+    async getKarcisPoli() {
       this.loading = true
       const param = { params: this.paramKarcis }
       await api.get('v1/simrs/pendaftaran/getkarcispoli', param)
         .then(resp => {
           this.loading = false
-          this.kasrcispolis = resp.data
-          console.log('karcis poli', resp.data)
+          this.kasrcispoli = resp.data
+          console.log('jenis karcis ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getJenisKarcis() {
+      this.loading = true
+      await api.get('v1/simrs/master/jeniskartukarcis')
+        .then(resp => {
+          this.loading = false
+          this.jenisKarcises = resp.data
+          console.log('jenis karcis ', resp.data)
         })
         .catch(() => {
           this.loading = false
