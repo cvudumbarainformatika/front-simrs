@@ -131,9 +131,10 @@
                   ref="refDPJP"
                   v-model="store.form.dpjp"
                   label="DPJP"
-                  autocomplete="asalrujukan"
-                  option-value="asalrujukan"
-                  option-label="asalrujukan"
+                  autocomplete="nama"
+                  option-value="dpjp"
+                  option-label="nama"
+                  :disable="!store.dpjps.length"
                   :filled="false"
                   :source="store.dpjps"
                   :loading="store.loading"
@@ -152,7 +153,7 @@
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
-import { notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienUmumStore()
 store.getInitialData()
@@ -199,6 +200,12 @@ function set() {
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
+  const index = findWithAttr(store.polis, 'kodepoli', val)
+  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+  // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
+  store.form.dpjp = ''
+  refDPJP.value.$refs.refAuto.resetValidation()
+  store.getDokterDpjp()
   console.log(val)
   if (store.paramKarcis.flag) {
     if (store.paramKarcis.flag !== '') {

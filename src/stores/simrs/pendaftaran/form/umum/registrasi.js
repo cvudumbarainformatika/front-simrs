@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum', {
@@ -7,6 +8,10 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     form: {},
     display: {},
     paramKarcis: {},
+    paramDpjp: {
+      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      jenis_pelayanan: 2
+    },
     asalrujukans: [],
     sistembayars: [],
     polis: [],
@@ -28,6 +33,26 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     },
 
     // api related function
+    async getDokterDpjp() {
+      this.loading = true
+      await api.post('v1/simrs/pendaftaran/dpjpbpjs', this.paramDpjp)
+        .then(resp => {
+          this.loading = false
+          if (resp.data.result.list.length) {
+            const data = resp.data.result.list
+            data.forEach(anu => {
+              anu.dpjp = anu.kode
+            })
+            this.dpjps = data
+            console.log('result ', data)
+          }
+          console.log('dokter DPJp ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
     async getKarcisPoli() {
       this.loading = true
       const param = { params: this.paramKarcis }
