@@ -324,7 +324,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi')
+                v-if="row.status===1 && (role==='PTK' || role==='root'|| role==='gizi' || role==='ruangan')
                   && (row.nama === 'PEMESANAN' || row.nama === 'PERMINTAAN RUANGAN'||row.nama === 'PENERIMAAN'||row.nama === 'PEMAKAIAN RUANGAN'||row.nama === 'DISTRIBUSI DEPO')"
                 color="primary"
                 round
@@ -379,7 +379,7 @@
               </q-btn>
               <!--  -->
               <q-btn
-                v-if="row.status===1 && (role==='root'||role==='PTK' || role==='gizi')"
+                v-if="row.status===1 && (role==='root'||role==='PTK' || role==='gizi'|| role==='ruangan')"
                 color="negative"
                 round
                 icon="icon-mat-delete_sweep"

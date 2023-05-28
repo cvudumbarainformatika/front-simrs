@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-mb-lg q-pb-lg">
+  <q-page class="q-mb-lg q-pb-lg q-pa-sm">
     <div class="row q-col-gutter-sm">
       <!-- <div class="col-2">
         <div class="q-mb-sm">
@@ -13,7 +13,7 @@
       <div class="col-12">
         <div class="q-mb-sm">
           <q-skeleton
-            animation="pulse"
+            animation="fade"
             width="95vw"
             height="500px"
           />

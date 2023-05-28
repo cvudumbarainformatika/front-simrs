@@ -234,7 +234,7 @@
               Satuan
             </div>
             <div class="col-md-1 col-xs-12">
-              Harga Pemesanan
+              Harga
             </div>
             <div class="col-md-1 col-xs-12">
               Jumlah Pemesanan
@@ -263,8 +263,28 @@
               <div class="col-md-1 col-xs-12">
                 {{ item.satuan?item.satuan.nama:'-' }}
               </div>
-              <div class="col-md-1 col-xs-12">
+              <div class="col-md-1 col-xs-12 cursor-pointer">
                 {{ formatRp(item.harga) }}
+                <q-popup-edit
+                  v-slot="scope"
+                  v-model="item.harga"
+                  :validate="validasiharga"
+                  @show="initHarga(item)"
+                  @before-hide="hideHarga"
+                  @save="saveHarga"
+                >
+                  <q-input
+                    ref="refHarga"
+                    v-model="scope.value"
+                    :error="errorHarga"
+                    :error-message="errMessageHarga"
+                    dense
+                    autofocus
+                    type="number"
+                    counter
+                    @keyup.enter="scope.set"
+                  />
+                </q-popup-edit>
               </div>
               <div class="col-md-1 col-xs-12">
                 <div
@@ -307,12 +327,15 @@
                     v-model="item.qtyskr"
                     :validate="validate"
                     @show="init(item)"
+                    @before-hide="hideQty"
                     @save="save"
                   >
                     <q-input
+                      ref="refqty"
                       v-model="scope.value"
                       :error="error"
                       :error-message="errMessage"
+                      type="number"
                       dense
                       autofocus
                       counter
@@ -341,7 +364,7 @@
               </div> -->
             </div>
           </div>
-          <div class="row q-col-gutter-md q-mb-sm">
+          <div class="row q-col-gutter-md q-mb-sm q-mt-md">
             <div class="col-md-10 col-xs-12" />
             <!-- <div class="col-md-1 col-xs-12">
               <app-btn label="Batal" color="dark" @click="onBatal" />
@@ -373,6 +396,8 @@ store.setToday()
 
 const proxyDate = ref(null)
 const refDate = ref(null)
+const refqty = ref(null)
+const refHarga = ref(null)
 const updateProxy = () => {
   // console.log('date', store.form.tanggal)
   // refDate.value.setToday()
@@ -406,11 +431,26 @@ const clearPemesanan = () => {
 //   // return val.set
 // }
 
+const errorHarga = ref(false)
+const errMessageHarga = ref('')
 const error = ref(false)
 const errMessage = ref('')
 const terimaSebelum = ref(null)
 const pesanan = ref(null)
-
+// simpan harga
+function saveHarga(val) {
+  if (!store.form.qty) {
+    return notifNegativeCenterVue('Isi Jumlah penerimaan terlebih dahulu')
+  }
+  store.setForm('harga', val)
+  store.setForm('total', val * store.form.qty)
+  store.setForm('sub_total', val * store.form.qty)
+  store.setForm('statuspemesanan', 3)
+  console.log('masih lanjut coy', store.form)
+  const valid = validasi()
+  if (!valid) { simpanDetail() }
+}
+// simpan jumlah
 const save = val => {
   // if ((parseFloat(val) + terimaSebelum.value) > pesanan.value) return notifNegativeCenterVue('Jumlah input melebihi jumlah pemesanan')
   store.setForm('qty', val)
@@ -428,13 +468,27 @@ const save = val => {
   if (!valid) { simpanDetail() }
 }
 
+const initHarga = val => {
+  // console.log('ref', refHarga.value[0])
+  // console.log('form', store.form)
+  refHarga.value[0].focus()
+  refHarga.value[0].select()
+  if (store.form.harga) {
+    val.harga = store.form.harga
+  }
+  store.setForm('harga', store.form.harga ? store.form.harga !== val.harga ? store.form.harga : store.form.harga : val.harga)
+}
+function hideHarga() {
+  // console.log('ref', refHarga.value[0])
+  refHarga.value[0].blur()
+}
 const init = val => {
   terimaSebelum.value = val.qtysblm
   pesanan.value = val.qty
   store.setForm('kode_rs', val.kode_rs)
   store.setForm('kode_108', val.kode_108)
   store.setForm('kode_satuan', val.kode_satuan)
-  store.setForm('harga', val.harga)
+  store.setForm('harga', store.form.harga ? store.form.harga !== val.harga ? store.form.harga : store.form.harga : val.harga)
   store.setForm('nama_barang', val.nama_barang)
   store.setForm('uraian_108', val.uraian_108)
   store.setForm('uraian_50', val.uraian_50)
@@ -443,10 +497,15 @@ const init = val => {
   store.setForm('satuan_kecil', val.satuan_kecil)
   store.setForm('isi', val.isi)
 
+  // console.log('refqty', refqty.value[0])
+  refqty.value[0].focus()
+  refqty.value[0].select()
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
-  // console.log('ref', refNomorSurat.value.$refs.refInput)
   // console.log('init', val)
+}
+function hideQty() {
+  refqty.value[0].blur()
 }
 
 // validasi
@@ -466,7 +525,20 @@ const refNomorSurat = ref(null)
 const refNomorFaktur = ref(null)
 const refTanggalFaktur = ref(null)
 // const diterima = ref(false)
+const validasiharga = val => {
+  console.log('jumlah', !store.form.qty)
+  if (!store.form.qty) {
+    errorHarga.value = true
+    errMessageHarga.value = ('Isi Jumlah penerimaan terlebih dahulu')
+    return false
+  }
+  // console.log('if', false)
+  errorHarga.value = false
+  errMessageHarga.value = ''
+  return true
+}
 const validate = val => {
+  console.log('validasi', pesanan.value)
   // const apem = validasi()
   // console.log('validasi', apem)
   if ((parseFloat(val) + terimaSebelum.value) > pesanan.value || validasi()) {

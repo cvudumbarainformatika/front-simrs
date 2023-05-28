@@ -36,10 +36,14 @@ export const useDetailHistoryTable = defineStore('detail_history', {
       'satuan_besar',
       'satuan_kecil',
       'isi',
-      'harga',
+      // 'harga',
       'sub_total',
       'created_at',
-      'updated_at'
+      'updated_at',
+      'diskon',
+      'harga_jadi',
+      'harga_kontrak',
+      'ppn'
     ]
   }),
   getters: {
@@ -64,7 +68,7 @@ export const useDetailHistoryTable = defineStore('detail_history', {
           changeArrayIndex(this.columns, 'uraian_108', 'merk')
           changeArrayIndex(this.columns, 'uraian_50', 'merk')
           changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
-          // changeArrayIndex(this.columns, 'barangrs', 'kode_rs')
+          changeArrayIndex(this.columns, 'harga', 'qty')
           // changeArrayIndex(this.columns, 'no_penerimaan', 'distribusi_depo_id')
         } else {
           notifErrVue('tidak ada data details')

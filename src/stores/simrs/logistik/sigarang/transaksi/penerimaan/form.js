@@ -110,6 +110,8 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
         const tempNo = val.split('/SP-')
         if (tempNo.length === 2) {
           this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+        } else {
+          this.setForm('no_penerimaan', 'BAST/' + tempNo)
         }
         this.params.nomor = val
         // this.form.nomor = val
@@ -138,24 +140,6 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
             if (apem.tanggal) { this.setForm('tanggal', apem.tanggal) }
             if (apem.tempo) { this.setForm('tempo', apem.tempo) }
             if (apem.tanggal_surat) { this.setForm('tanggal_surat', apem.tanggal_surat) }
-            // } else if (data.trmSblm.length && data.trmSblm[0].status) {
-            //   const apem = data.trmSblm[0]
-            //   if (apem.faktur) {
-            //     this.option_surat = 'faktur'
-            //     this.setForm('faktur', apem.faktur)
-            //     this.setForm('surat', apem.faktur)
-            //   }
-            //   if (apem.surat_jalan) {
-            //     this.option_surat = 'surat_jalan'
-            //     this.setForm('surat_jalan', apem.surat_jalan)
-            //     this.setForm('surat', apem.surat_jalan)
-            //   }
-            //   if (apem.no_penerimaan) { this.setForm('no_penerimaan', apem.no_penerimaan) }
-            //   if (apem.pengirim) { this.setForm('pengirim', apem.pengirim) }
-
-          //   if (apem.tanggal) { this.setForm('tanggal', apem.tanggal) }
-          //   if (apem.tempo) { this.setForm('tempo', apem.tempo) }
-          //   if (apem.tanggal_surat) { this.setForm('tanggal_surat', apem.tanggal_surat) }
           } else {
             this.clearNomorPemesanan()
             if (tempNo.length === 2) {
@@ -165,6 +149,15 @@ export const useTransaksiPenerimaanForm = defineStore('form_transaksi_penerimaan
                   this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1] + '-' + resp.jumlah)
                 } else {
                   this.setForm('no_penerimaan', tempNo[0] + '/BAST-' + tempNo[1])
+                }
+              })
+            } else {
+              this.jumlahPenerimaan(val).then(resp => {
+                // console.log('jumlahnya', resp)
+                if (resp.jumlah > 0) {
+                  this.setForm('no_penerimaan', 'BAST/' + tempNo + '-' + resp.jumlah)
+                } else {
+                  this.setForm('no_penerimaan', 'BAST/' + tempNo)
                 }
               })
             }
