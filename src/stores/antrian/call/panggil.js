@@ -17,12 +17,13 @@ export const usePanggilStore = defineStore('panggil_antrian', {
   },
 
   actions: {
-    async callLayanan(val, unit) {
+    async callLayanan(val, unit, set) {
       if (unit === null) {
         return notifErrVue('Maaf Unit Tidak Boleh Kosong')
       }
       this.item = val
       this.item.unit_id = unit
+      this.item.set = set
       try {
         const resp = await api.post('v1/call/calling-layanan', this.item)
         console.log('calling_layanan', resp)

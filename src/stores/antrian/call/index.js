@@ -14,6 +14,7 @@ export const useCallStore = defineStore('call_antrian', {
     loading: false,
     params: {
       q: '',
+      unit: '',
       page: 1,
       per_page: 50,
       order_by: 'rs3',
@@ -22,8 +23,17 @@ export const useCallStore = defineStore('call_antrian', {
     columns: ['namapasien', 'namapoli', 'nomorantrean', 'angkaantrean', 'status'],
     columnHide: ['id'],
 
+    searchUnit: '',
     units: [],
-    unit: null
+    unit: null,
+    settings: [
+      { value: 1, label: 'Panggil Nomor' },
+      { value: 2, label: 'Panggil Nama' },
+      { value: 3, label: 'Panggil Nomor & Nama' }
+    ],
+    set: 1,
+
+    tab: 'awal' // awal || table
 
   }),
 
@@ -114,6 +124,16 @@ export const useCallStore = defineStore('call_antrian', {
       } catch (error) {
         console.log('error', error)
       }
+    },
+
+    filterUnit(val) {
+      this.searchUnit = val
+    },
+    setUnit(val) {
+      this.unit = val
+      this.params.unit = val
+      this.tab = 'table'
+      this.getDataTable()
     }
   }
 })

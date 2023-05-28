@@ -22,95 +22,103 @@
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <app-table
-            id="printMe"
-            :columns="store.columns"
-            :column-hide="store.columnHide"
-            :items="store.items"
-            :meta="store.meta"
-            :per-page="store.params.per_page"
-            :order-by="store.params.order_by"
-            :sort="store.params.sort"
-            :loading="store.loading"
-            :text-size="12"
-            :default-btn="false"
-            :to-search="store.params.q"
-            :ada-tambah="true"
-            @set-row="store.setPerPage"
-            @goto="store.setPage"
-            @search="store.enterSearch"
-            @find="store.setSearch"
-            @refresh="store.refreshTable"
-            @new-data="form.addNew()"
-            @edit-data="(val)=>form.editData(val)"
-            @delete="(id)=>store.deletesData(id)"
+          <q-tab-panels
+            v-model="store.tab"
+            animated
+            class="shadow-2 rounded-borders"
           >
-            <template #header-left-after-search>
-              <div
-                class="q-ml-sm"
-                style="min-width:200px;"
+            <q-tab-panel name="awal">
+              <PageAwal
+                :units="store.units"
+                :search="store.searchUnit"
+                @find-unit="store.filterUnit"
+                @unit-selected="(val)=> store.setUnit(val)"
+              />
+            </q-tab-panel>
+
+            <q-tab-panel name="table">
+              <app-table
+                v-if="store.unit !== null"
+                id="printMe"
+                :columns="store.columns"
+                :column-hide="store.columnHide"
+                :items="store.items"
+                :meta="store.meta"
+                :per-page="store.params.per_page"
+                :order-by="store.params.order_by"
+                :sort="store.params.sort"
+                :loading="store.loading"
+                :text-size="12"
+                :default-btn="false"
+                :to-search="store.params.q"
+                :ada-tambah="true"
+                @set-row="store.setPerPage"
+                @goto="store.setPage"
+                @search="store.enterSearch"
+                @find="store.setSearch"
+                @refresh="store.refreshTable"
+                @new-data="form.addNew()"
+                @edit-data="(val)=>form.editData(val)"
+                @delete="(id)=>store.deletesData(id)"
               >
-                <q-select
-                  v-model="store.unit"
-                  dense
-                  filled
-                  :options="store.units"
-                  label="Pilih Loket / Poli"
-                  emit-value
-                  map-options
-                />
-              </div>
-            </template>
-            <template #col-status="{left}">
-              <div :class="`${left}`">
-                Status
-              </div>
-            </template>
-            <template #custom-btn="{row}">
-              <div class="row">
-                <!-- <q-btn
-                  round
-                  size="sm"
-                  icon="icon-mat-mic_external_on"
-                  color="dark"
-                  class="q-mr-sm"
-                  @click="panggil(row, 'nama')"
-                >
-                  <q-tooltip>
-                    Panggil Nama Antrian
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  round
-                  size="sm"
-                  icon="icon-mat-volume_up"
-                  color="teal"
-                  @click="panggil(row,'nomor')"
-                >
-                  <q-tooltip>
-                    Panggil NOMOR Antrian
-                  </q-tooltip>
-                </q-btn> -->
-                <q-btn
-                  round
-                  size="sm"
-                  icon="icon-mat-volume_up"
-                  color="teal"
-                  @click="calling(row, store.unit)"
-                >
-                  <q-tooltip>
-                    Panggil NOMOR Antrian
-                  </q-tooltip>
-                </q-btn>
-              </div>
-            </template>
-            <!-- <template #col-kode="{left}">
+                <template #header-left-after-search>
+                  <div
+                    class="q-ml-sm"
+                    style="min-width:200px;"
+                  >
+                    <q-select
+                      v-model="store.unit"
+                      dense
+                      filled
+                      :options="store.units"
+                      label="Pilih Loket / Poli"
+                      emit-value
+                      map-options
+                      @update:model-value="store.setUnit"
+                    />
+                  </div>
+                  <div
+                    class="q-ml-sm"
+                    style="min-width:200px;"
+                  >
+                    <q-select
+                      v-model="store.set"
+                      dense
+                      filled
+                      :options="store.settings"
+                      label="settings Panggilan"
+                      emit-value
+                      map-options
+                    />
+                  </div>
+                </template>
+                <template #col-status="{left}">
+                  <div :class="`${left}`">
+                    Status
+                  </div>
+                </template>
+                <template #custom-btn="{row}">
+                  <div class="row">
+                    <q-btn
+                      round
+                      size="sm"
+                      icon="icon-mat-volume_up"
+                      color="teal"
+                      @click="calling(row, store.unit, store.set)"
+                    >
+                      <q-tooltip>
+                        Panggil NOMOR Antrian
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                </template>
+                <!-- <template #col-kode="{left}">
               <div :class="`${left}`">
                 Kode
               </div>
             </template> -->
 
-            <!-- <template #cell-default-img="{row}">
+                <!-- <template #cell-default-img="{row}">
               <q-avatar
                 color="secondary"
                 text-color="white"
@@ -120,31 +128,26 @@
                 {{ row.kode }}
               </q-avatar>
             </template> -->
-          </app-table>
+              </app-table>
+            </q-tab-panel>
+          </q-tab-panels>
         </q-card-section>
       </q-card>
     </div>
 
     <!-- dialog form -->
-    <!-- <app-dialog-form
-      ref="formRef"
-      v-model="form.dialog"
-      :title="form.titleDialog"
-      :loading="form.loading"
-      @save-form="saveForm(ref)"
-    >
-      <form-dialog-input />
-    </app-dialog-form> -->
   </q-page>
 </template>
 
 <script setup>
 import { useCallStore } from 'src/stores/antrian/call/index'
-// import { useMasterDisplayFormStore } from 'src/stores/antrian/master/display/form'
 import { onMounted } from 'vue'
 // import FormDialogInput from './FormDialogInput.vue'
 import { useSpeechStore } from 'src/stores/antrian/speech.js'
 import { usePanggilStore } from 'src/stores/antrian/call/panggil'
+
+import PageAwal from './PageAwal.vue'
+
 const call = usePanggilStore()
 
 const store = useCallStore()
@@ -155,7 +158,6 @@ const store = useCallStore()
 
 onMounted(() => {
   store.getUnits()
-  store.getDataTable()
 })
 
 const speech = useSpeechStore()
@@ -197,7 +199,7 @@ onMounted(() => {
 //   speech.synth.speak(setSpeech(txt))
 // }
 
-function calling(row, unit) {
-  call.callLayanan(row, unit)
+function calling(row, unit, set) {
+  call.callLayanan(row, unit, set)
 }
 </script>
