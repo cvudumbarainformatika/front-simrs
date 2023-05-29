@@ -37,7 +37,7 @@
             <div>{{ row.norm?row.norm:'-' }}</div>
           </template>
           <template #cell-NIK="{row}">
-            <div>{{ row.noktp?row.noktp:'-' }}</div>
+            <div>{{ row.noktp?row.noktp:row.nik?row.nik:'-' }}</div>
           </template>
           <template #cell-Alamat="{row}">
             <div class="row">

@@ -192,28 +192,32 @@ function validasi() {
 function set() {
   validasi()
   if (valid) {
-    emits('bisaSimpan', store.form)
+    emits('bisaSimpan', { form: store.form, save: true })
+    return { form: store.form, save: true }
   } else {
+    emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
+    return { form: store.form, save: false }
   }
 }
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
   const index = findWithAttr(store.polis, 'kodepoli', val)
-  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   refDPJP.value.$refs.refAuto.resetValidation()
-  store.getDokterDpjp()
-  console.log(val)
   if (store.paramKarcis.flag) {
     if (store.paramKarcis.flag !== '') {
       store.getKarcisPoli().then(() => {
         store.display.hargakarcis = store.kasrcispoli.tarif
+        store.form.karcis = store.kasrcispoli.tarif
       })
     }
   }
+  console.log(val)
+  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+  store.getDokterDpjp()
 }
 // set flag karcis
 function setFlagKarcis(val) {
@@ -224,6 +228,7 @@ function setFlagKarcis(val) {
   console.log(store.paramKarcis)
   store.getKarcisPoli().then(() => {
     store.display.hargakarcis = store.kasrcispoli.tarif
+    store.form.karcis = store.kasrcispoli.tarif
   })
 }
 // expose function

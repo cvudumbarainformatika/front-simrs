@@ -27,6 +27,10 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     paramKarcis: {},
     paramDiagnosa: { q: '' },
     paramPpkRujukan: { faskesasal: '' },
+    paramDpjp: {
+      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      jenis_pelayanan: 2
+    },
     kataraks: [
       { nama: 'Tidak', value: 0 },
       { nama: 'Ya', value: 1 }
@@ -34,7 +38,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     asalrujukans: [],
     sistembayars: [],
     polis: [],
-    kasrcispolis: [],
+    kasrcispoli: null,
     jenisKarcises: [],
     dpjps: [],
     jenisKunjungans: [],
@@ -48,6 +52,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     diagnosaAwals: [],
     ppkRujukans: [],
     loadingPpkRujukan: false,
+    loadingListRujukan: false,
     loadingSuplesi: false,
     loadingSuratKontrol: false,
     kecelakaans: [
@@ -82,6 +87,98 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       // this.getPpkRujukan('anu')
     },
     // api related function
+    async getListRujukanPCare(val) {
+      this.loadingListRujukan = true
+      // const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/listrujukanpcare', val)
+        .then(resp => {
+          this.loadingListRujukan = false
+          // this.ppkRujukans = resp.data.result.faskes
+          console.log('List rujukan p care', resp)
+        })
+        .catch(() => {
+          this.loadingListRujukan = false
+        })
+    },
+    async getListRujukanRs(val) {
+      this.loadingListRujukan = true
+      // const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/listrujukanrs', val)
+        .then(resp => {
+          this.loadingListRujukan = false
+          // this.ppkRujukans = resp.data.result.faskes
+          console.log('list rujukan rs', resp)
+        })
+        .catch(() => {
+          this.loadingListRujukan = false
+        })
+    },
+    async cekRujukanPeserta(val) {
+      this.loading = true
+      const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+        .then(resp => {
+          this.loading = false
+          this.ppkRujukans = resp.data.result.faskes
+          console.log('PPK rujukan', resp)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getListSuratKontrol(val) {
+      this.loading = true
+      const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+        .then(resp => {
+          this.loading = false
+          this.ppkRujukans = resp.data.result.faskes
+          console.log('PPK rujukan', resp)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getDokterDpjp() {
+      this.loading = true
+      await api.post('v1/simrs/pendaftaran/dpjpbpjs', this.paramDpjp)
+        .then(resp => {
+          this.loading = false
+          if (resp.data.result.list.length) {
+            const data = resp.data.result.list
+            data.forEach(anu => {
+              anu.dpjp = anu.kode
+            })
+            this.dpjps = data
+            console.log('result ', data)
+          }
+          console.log('dokter DPJp ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getKarcisPoli() {
+      this.loading = true
+      const param = { params: this.paramKarcis }
+      await api.get('v1/simrs/pendaftaran/getkarcispoli', param)
+        .then(resp => {
+          this.loading = false
+          this.kasrcispoli = resp.data
+          const temp = Object.keys(resp.data)
+          if (temp.length) {
+            temp.forEach(key => {
+              this.setForm(key, resp.data[key])
+            })
+          }
+          console.log('jenis karcis ', resp.data)
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
     async getPpkRujukan(val) {
       this.loadingPpkRujukan = true
       const param = { faskesasal: val }

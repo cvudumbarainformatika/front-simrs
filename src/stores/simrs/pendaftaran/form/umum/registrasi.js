@@ -5,7 +5,9 @@ import { api } from 'src/boot/axios'
 export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum', {
   state: () => ({
     loading: false,
-    form: {},
+    form: {
+      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+    },
     display: {},
     paramKarcis: {},
     paramDpjp: {
@@ -60,6 +62,12 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .then(resp => {
           this.loading = false
           this.kasrcispoli = resp.data
+          const temp = Object.keys(resp.data)
+          if (temp.length) {
+            temp.forEach(key => {
+              this.setForm(key, resp.data[key])
+            })
+          }
           console.log('jenis karcis ', resp.data)
           return new Promise(resolve => { resolve(resp.data) })
         })
@@ -114,6 +122,18 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .catch(() => {
           this.loading = false
         })
+    },
+    simpanRegistrasi() {
+      return new Promise(resolve => {
+        this.loading = true
+        api.post('v1/simrs/pendaftaran/rajalumumsimpan', this.form)
+          .then(resp => {
+            console.log('simpan pendaftaran', resp)
+            this.loading = false
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

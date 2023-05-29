@@ -8,6 +8,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     loading: false,
     cariPasienDialog: false,
     alamataDomisiliSama: true,
+    edit: false,
     params: {},
     paramWilayah: {
       kd_negara: '',
@@ -416,6 +417,10 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
 
     samakanAlamatDanDomisili(val) {
       if (val) {
+        if (this.form.alamat) this.setForm('alamatdomisili', this.form.alamat)
+        if (this.form.rt) this.setForm('rtdomisili', this.form.rt)
+        if (this.form.rw) this.setForm('rwdomisili', this.form.rw)
+        if (this.form.kodepos) this.setForm('kodeposdomisili', this.form.kodepos)
         if (this.form.negara) this.setForm('negaradomisili', this.form.negara)
         if (this.form.propinsi) this.setForm('propinsidomisili', this.form.propinsi)
         if (this.form.kodepropinsi) this.setForm('kodepropinsidomisili', this.form.kodepropinsi)
@@ -425,7 +430,16 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         if (this.form.kodekecamatan) this.setForm('kodekecamatandomisili', this.form.kodekecamatan)
         if (this.form.kelurahan) this.setForm('kelurahandomisili', this.form.kelurahan)
         if (this.form.kodekelurahan) this.setForm('kodekelurahandomisili', this.form.kodekelurahan)
+
+        this.domisiliPropinsies = this.propinsies
+        this.domisiliKabupatens = this.kabupatens
+        this.domisiliKecamatans = this.kecamatans
+        this.domisiliKelurahans = this.kelurahans
       } else {
+        if (this.form.alamatdomisili) delete this.form.alamatdomisili
+        if (this.form.rtdomisili) delete this.form.rtdomisili
+        if (this.form.rwdomisili) delete this.form.rwdomisili
+        if (this.form.kodeposdomisili) delete this.form.kodeposdomisili
         if (this.form.negaradomisili) delete this.form.negaradomisili
         if (this.form.propinsidomisili) delete this.form.propinsidomisili
         if (this.form.kodepropinsidomisili) delete this.form.kodepropinsidomisili
@@ -441,6 +455,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         if (this.domisiliKecamatans.length) this.domisiliKecamatans = []
         if (this.domisiliKelurahans.length) this.domisiliKelurahans = []
       }
+      console.log('form ', this.form)
     },
     setTanggalLahir() {
       const hariIni = Date.now()
