@@ -29,9 +29,11 @@
         </div>
       </q-card-actions>
     </q-card>
+    <DialogListRujukan v-model="registrasi.tampilRujukan" />
   </q-page>
 </template>
 <script setup>
+import DialogListRujukan from './DialogListRujukan.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
@@ -63,6 +65,7 @@ function simpanData() {
 //   dataPasien = val
 //   // console.log('bisa cek Surat kontrol', val)
 // }
+
 // cek surat Kontrol
 function getListSuratKontrol() {
   if (refDataPasien.value.validateNokaAndNorm()) {
@@ -73,10 +76,19 @@ function getListSuratKontrol() {
 function getListRujukan() {
   console.log('validasi ', refDataPasien.value.validateNokaAndNorm())
   const data = refDataPasien.value.validateNokaAndNorm()
-  if (Object.keys(data).length) {
-    console.log('cek list rujukan', data)
-    registrasi.getListRujukanPCare(data)
-    registrasi.getListRujukanRs(data)
+
+  registrasi.listRujukanPcare = []
+  registrasi.listRujukanRs = []
+  registrasi.listRujukanSepMrs = []
+
+  if (data) {
+    if (Object.keys(data).length) {
+      console.log('cek list rujukan', data)
+      registrasi.getListRujukanPCare(data)
+      registrasi.getListRujukanRs(data)
+      registrasi.getListSepMrs(data)
+      registrasi.tampilRujukan = true
+    }
   }
 }
 </script>

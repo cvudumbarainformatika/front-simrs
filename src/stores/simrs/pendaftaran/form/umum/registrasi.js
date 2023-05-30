@@ -15,6 +15,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
       jenis_pelayanan: 2
     },
     asalrujukans: [],
+    sistembayars1: [],
     sistembayars: [],
     polis: [],
     kasrcispoli: null,
@@ -102,6 +103,19 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     async getSistemBayar() {
       this.loading = true
       await api.get('v1/simrs/master/sistembayar')
+        .then(resp => {
+          this.loading = false
+          this.sistembayars1 = resp.data
+          console.log('sistem bayar', resp.data)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getSistemBayar2(val) {
+      const param = { params: { sistembayar1: val } }
+      this.loading = true
+      await api.get('v1/simrs/master/sistembayar2', param)
         .then(resp => {
           this.loading = false
           this.sistembayars = resp.data

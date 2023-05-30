@@ -36,7 +36,10 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       hari: '01'
     },
     form: {
-      barulama: 'baru'
+      barulama: 'baru',
+      // nanti di hapus
+      noka: '0000113317244',
+      norm: '091209'
     },
     display: {
       sapaan: 'Bpk.',

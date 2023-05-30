@@ -233,7 +233,7 @@ import { useAuthStore } from 'src/stores/auth/index.js'
 import { onMounted } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 import { useRouter } from 'vue-router'
-import { setCurrentApp } from 'src/modules/storage'
+import { getCurrentApp, setCurrentApp } from 'src/modules/storage'
 
 const router = useRouter()
 const store = useSettingsAplikasi()
@@ -250,10 +250,14 @@ function goTo(app, url) {
     const appAkses = auth.aplications.filter(a => a.aplikasi === app)
     // console.log('akses', appAkses, auth.role)
     if (appAkses.length || auth.role === 'root') {
-      // console.log('masuk')
-      store.currentApp = app
-      setCurrentApp(app)
-      router.replace({ path: url })
+      console.log('masuk', getCurrentApp(), app)
+      if (!getCurrentApp() || getCurrentApp() === app) {
+        setCurrentApp(app)
+        store.currentApp = app
+        router.replace({ path: url })
+      } else {
+        notifErrVue('Anda Sudah masuk aplikasi ' + getCurrentApp())
+      }
     } else {
       notifErrVue('Anda tidak memiliki akses ke aplikasi ini')
     }

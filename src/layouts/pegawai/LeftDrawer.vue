@@ -43,7 +43,7 @@
           @click="menuClick(menu)"
         >
           <q-item-section>
-            {{ menu.nama }}
+            <!-- {{ menu.nama }} -->
             <q-menu
               ref="refMenu"
               transition-show="slide-down"
@@ -151,10 +151,12 @@
 import { computed, ref } from 'vue'
 import { routerInstance } from 'src/boot/router'
 import { useRoute, useRouter } from 'vue-router'
+import { deleteCurrentApp } from 'src/modules/storage'
 
 const router = useRouter()
 function goTo(url) {
   router.replace({ path: url })
+  deleteCurrentApp()
 }
 
 const path = computed(() => useRoute().name)

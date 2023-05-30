@@ -97,12 +97,12 @@
                   :loading="store.loading"
                   :rules="[
                     val => (!!val) || 'Harap diisi',
-                    val => val?val.length < 7:!val || 'Harus 6 Karakter',
                     val => val?val.length > 5:!val || 'Harus 6 Karakter',
                   ]"
                   @keyup.enter="inputNoRmSelesai"
                   @update:model-value="updateValNoRM"
                 />
+                <!-- val => val?val.length < 7:!val || 'Harus 6 Karakter', -->
               </div>
             </div>
             <!-- ktp -->
@@ -116,8 +116,9 @@
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
+                  type="number"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                 />
               </div>
               <div
@@ -278,7 +279,7 @@
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       @update:model-value="setHariLahir"
                       @focus="fokusHariLahir"
                     />
@@ -292,7 +293,7 @@
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       @update:model-value="setBulanLahir"
                     />
                   </div>
@@ -303,7 +304,7 @@
                       label="Tahun"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
                       @update:model-value="setTahunLahir"
@@ -1310,23 +1311,23 @@ function setRW(val) {
 // -- dialog cari pasien, untuk pasien lama--end--
 // input no rm
 function inputNoRmSelesai(val) {
-  console.log('input selesai', val)
+  // console.log('input selesai', val)
   refNoRM.value.$refs.refInput.blur()
   refKtp.value.$refs.refInput.focus()
   // refSapaan.value.$refs.refAuto.focus()
 }
 function updateValNoRM(val) {
-  console.log('ref sapaan', refSapaan.value.$refs.refAuto)
+  store.setForm('norm', val)
+  // console.log('ref sapaan', refSapaan.value.$refs.refAuto)
 
-  console.log('input no rm', val.length)
-  if (val.length === 6) {
-    const temp = val.slice(0, 6)
-    store.setForm('norm', temp)
-    console.log('no rm', store.form.norm)
-    refNoRM.value.$refs.refInput.blur()
-    refKtp.value.$refs.refInput.focus()
-    // refSapaan.value.$refs.refAuto.focus()
-  }
+  // console.log('input no rm', val.length)
+  // if (val.length === 6) {
+  // const temp = val.slice(0, 6)
+  // console.log('no rm', store.form.norm)
+  // refNoRM.value.$refs.refInput.blur()?
+  // refKtp.value.$refs.refInput.focus()
+  // refSapaan.value.$refs.refAuto.focus()
+  // }
 }
 // input sapaan dan nama
 function sapaanSelected(val) {

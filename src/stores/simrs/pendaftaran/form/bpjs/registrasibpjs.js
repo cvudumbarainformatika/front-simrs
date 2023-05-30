@@ -5,11 +5,12 @@ import { api } from 'src/boot/axios'
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
     loading: false,
+    tampilRujukan: false,
     form: {
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      jenis_pelayanan: 2
+      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
     },
     display: {
       diagnosa: {},
@@ -37,6 +38,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     ],
     asalrujukans: [],
     sistembayars: [],
+    sistembayars1: [],
     polis: [],
     kasrcispoli: null,
     jenisKarcises: [],
@@ -51,8 +53,13 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     penunjangs: [],
     diagnosaAwals: [],
     ppkRujukans: [],
+    listRujukanPcare: [],
+    listRujukanRs: [],
+    listRujukanSepMrs: [],
     loadingPpkRujukan: false,
     loadingListRujukan: false,
+    loadingListRujukanRS: false,
+    loadingListRujukanMrs: false,
     loadingSuplesi: false,
     loadingSuratKontrol: false,
     kecelakaans: [
@@ -93,7 +100,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       await api.post('v1/simrs/pendaftaran/listrujukanpcare', val)
         .then(resp => {
           this.loadingListRujukan = false
-          // this.ppkRujukans = resp.data.result.faskes
+          this.listRujukanPcare = resp.data.result.rujukan ? resp.data.result.rujukan : []
           console.log('List rujukan p care', resp)
         })
         .catch(() => {
@@ -101,16 +108,29 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getListRujukanRs(val) {
-      this.loadingListRujukan = true
+      this.loadingListRujukanRS = true
       // const param = { faskesasal: val }
       await api.post('v1/simrs/pendaftaran/listrujukanrs', val)
         .then(resp => {
-          this.loadingListRujukan = false
-          // this.ppkRujukans = resp.data.result.faskes
+          this.loadingListRujukanRS = false
+          this.listRujukanRs = resp.data.result.rujukan ? resp.data.result.rujukan : []
           console.log('list rujukan rs', resp)
         })
         .catch(() => {
-          this.loadingListRujukan = false
+          this.loadingListRujukanRS = false
+        })
+    },
+    async getListSepMrs(val) {
+      this.loadingListRujukanMrs = true
+      // const param = { faskesasal: val }
+      await api.post('v1/simrs/pendaftaran/listsepmrs', val)
+        .then(resp => {
+          this.loadingListRujukanMrs = false
+          this.listRujukanSepMrs = resp.data
+          console.log('list sep mrs', resp)
+        })
+        .catch(() => {
+          this.loadingListRujukanMrs = false
         })
     },
     async cekRujukanPeserta(val) {
@@ -280,6 +300,19 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     async getSistemBayar() {
       this.loading = true
       await api.get('v1/simrs/master/sistembayar')
+        .then(resp => {
+          this.loading = false
+          this.sistembayars1 = resp.data
+          console.log('sistem bayar', resp.data)
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    async getSistemBayar2(val) {
+      const param = { params: { sistembayar1: val } }
+      this.loading = true
+      await api.get('v1/simrs/master/sistembayar2', param)
         .then(resp => {
           this.loading = false
           this.sistembayars = resp.data

@@ -251,7 +251,22 @@
                 {{ detail.barangrs?detail.barangrs.nama:'-' }}
               </div>
               <div class="col-1 bb bl">
-                <div class="text-right">
+                <div v-if="detail.edit">
+                  <app-input
+                    ref="refHarga"
+                    v-model="detail.harga"
+                    label="harga"
+                    outlined
+                    :loading="store.loadingUpdateDetail"
+                    @focus="beforeUpdateHarga(detail,i)"
+                    @blur="updateHarga(detail,i)"
+                    @keyup.enter="updateHarga(detail,i)"
+                  />
+                </div>
+                <div
+                  v-if="!detail.edit"
+                  class="text-right"
+                >
                   {{ formatRpDouble(detail.harga) }}
                 </div>
               </div>
@@ -411,18 +426,64 @@ function editRow(val, i) {
   console.log('edit ', i, val)
   store.item.details[i].edit = true
 }
+const jmlTrm = ref(null)
+const refHarga = ref(null)
+function beforeUpdateHarga(val, i) {
+  val.hargaprev = val.harga
+}
+
+function updateHarga(val, i) {
+  // console.log('ref1', jmlTrm.value)
+  console.log('update ', i, val)
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Lakukan Edit Harga Diterima?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Lanjut edit harga diterima',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('store item', store.item)
+    console.log('ok', val, i)
+    const form = {
+      id: val.id,
+      qty: val.qty,
+      harga: val.harga,
+      penerimaan_id: val.penerimaan_id,
+      kode_rs: val.kode_rs,
+      nomor: store.item.nomor
+    }
+    if (parseFloat(val.dipesan) > parseFloat(val.qty)) {
+      form.statuspesanan = 3
+    } else {
+      delete form.statuspesanan
+    }
+    store.simpanPerubahanDetail(form).then(resp => {
+      store.item.statuspesanan = resp.pesanan.status
+      val.harga = resp.terima.harga
+      store.item.details[i].edit = false
+    })
+    delete val.hargaprev
+  }).onCancel(() => {
+    if (val.harga !== val.hargaprev) {
+      val.harga = val.hargaprev
+      delete val.hargaprev
+    }
+  })
+  store.item.details[i].edit = false
+}
 function beforeUpdateJumlah(val, i) {
   val.qtyprev = val.qty
-  // store.item.details[i].qtyprev = val.qty
-  // console.log('ref1', jmlTrm.value)
 }
-const jmlTrm = ref(null)
 
-// function pencetEnter() {
-//   console.log('ref1', jmlTrm.value)
-//   console.log('ref2', jmlTrm)
-//   console.log('ref', jmlTrm.value.$refs)
-// }
 function updateJumlah(val, i) {
   // console.log('ref1', jmlTrm.value)
   console.log('update ', i, val)

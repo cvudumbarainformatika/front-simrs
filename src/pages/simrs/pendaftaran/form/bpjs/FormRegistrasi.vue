@@ -66,7 +66,10 @@
               </div> -->
             </div>
             <!-- poli tujuan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
+            <div
+              :key="store.form.kodepoli"
+              class="row q-col-gutter-md items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-autocomplete
                   ref="refPoliTujuan"
@@ -102,7 +105,10 @@
               </div>
             </div>
             <!-- kartu / karcis -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              :key="store.form.jeniskarcis"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <q-tooltip
                 v-if="!store.paramKarcis.kd_poli"
                 class="primary"
@@ -143,7 +149,10 @@
               </div>
             </div>
             <!-- Diagnosa awal -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              :key="store.display.diagnosa.nama"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <div class="col-4">
                 <app-autocomplete-new
                   ref="refKodeDiagnosa"
@@ -303,7 +312,10 @@
           <!-- kanan -->
           <div class="col-6">
             <!-- PPK Rujukan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
+            <div
+              :key="store.display.kode"
+              class="row q-col-gutter-md items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-autocomplete-new
                   ref="refSistemBayar"
@@ -338,14 +350,36 @@
             </div>
             <!-- sistem bayar -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
+              <div :class="store.display.kode?'col-6':'col-12'">
                 <app-autocomplete
                   ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
+                  v-model="store.display.kode"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
+                  option-value="kode"
                   option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars1"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar1"
+                />
+              </div>
+              <!-- </div> -->
+              <!-- sistem bayar -->
+              <!-- <div class="row q-col-gutter-md items-center q-mb-xs"> -->
+              <div
+                v-if="store.display.kode"
+                class="col-6"
+              >
+                <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.rs2"
+                  label="Sistem bayar"
+                  autocomplete="rs2"
+                  option-value="rs2"
+                  option-label="rs2"
                   :filled="false"
                   :source="store.sistembayars"
                   :loading="store.loading"
@@ -648,6 +682,13 @@ function clearPpkRujukan() {
 }
 // ---- PPK Rujukan end---
 // sistem bayar
+function setSistembayar1(val) {
+  // store.setForm('sistembayar', val)
+  if (store.form.sistembayar) { delete store.form.sistembayar }
+  if (store.display.rs2) { delete store.display.rs2 }
+  store.getSistemBayar2(val)
+  console.log('form', store.form)
+}
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
   console.log('form', store.form)
