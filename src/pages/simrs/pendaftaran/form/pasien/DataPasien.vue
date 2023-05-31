@@ -983,7 +983,7 @@
     />
     <app-dialog
       v-model="store.alert"
-      label="Data Peserta BPJS"
+      :label="store.alertMsg.kode!==''?'Status Finger Pasien':'Data Peserta BPJS'"
       @on-ok="dialogOk"
       @keyup="store.alert=false"
     >
@@ -1104,6 +1104,13 @@
               {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
             </div>
           </div>
+        </div>
+        <div v-if="store.alertMsg.kode!==''">
+          <app-no-selected-page
+            color="primary"
+            :icon="store.alertMsg.kode==='1'?'icon-mat-done':'icon-mat-report'"
+            :text="store.alertMsg.status"
+          />
         </div>
         <!-- {{ store.alertMsg }} -->
       </template>

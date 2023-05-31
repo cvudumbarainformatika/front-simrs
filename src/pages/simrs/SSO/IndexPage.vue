@@ -251,7 +251,7 @@ function goTo(app, url) {
     // console.log('akses', appAkses, auth.role)
     if (appAkses.length || auth.role === 'root') {
       console.log('masuk', getCurrentApp(), app)
-      if (!getCurrentApp() || getCurrentApp() === app) {
+      if (!getCurrentApp() || getCurrentApp() === null || getCurrentApp() === app) {
         setCurrentApp(app)
         store.currentApp = app
         router.replace({ path: url })

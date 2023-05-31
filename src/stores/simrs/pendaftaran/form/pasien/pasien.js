@@ -505,6 +505,18 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.getPekerjaan()
     },
     // api related functions
+    async cekFingerBpjs(val) {
+      this.loadingListRujukan = true
+      await api.post('v1/simrs/pendaftaran/cekfingerprint', val)
+        .then(resp => {
+          this.loadingListRujukan = false
+          this.listRujukanPcare = resp.data.result.rujukan ? resp.data.result.rujukan : []
+          console.log('List rujukan p care', resp)
+        })
+        .catch(() => {
+          this.loadingListRujukan = false
+        })
+    },
     async getPekerjaan() {
       this.loading = true
       await api.get('v1/simrs/master/pekerjaan')
@@ -719,7 +731,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     async cekPesertaFinger (val) {
       this.loadingFinger = true
-      await api.get('v1/simrs/anu', val)
+      await api.post('v1/simrs/pendaftaran/cekfingerprint', val)
         .then((resp) => {
           this.loadingFinger = false
           this.alert = true
