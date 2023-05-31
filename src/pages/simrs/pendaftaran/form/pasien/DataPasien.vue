@@ -1215,9 +1215,11 @@ function validateNokaAndNorm() {
    refNoKaBpjs.value.$refs.refInput.validate()) {
     emits('surat', { nik: store.form.nik, noka: store.form.noka, norm: store.form.norm })
     return { nik: store.form.nik, noka: store.form.noka, norm: store.form.norm }
+  } else {
+    if (refNoRM.value.$refs.refInput.validate() === false) { notifErrVue('No RM Kosong') }
+    if (refNoKaBpjs.value.$refs.refInput.validate() === false) { notifErrVue('No BPJS Kosong') }
+    return false
   }
-  if (refNoRM.value.$refs.refInput.validate() === false) { notifErrVue('No RM Kosong') }
-  if (refNoKaBpjs.value.$refs.refInput.validate() === false) { notifErrVue('No BPJS Kosong') }
 }
 // reset validasi
 function resetValidation() {

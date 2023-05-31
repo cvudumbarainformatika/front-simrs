@@ -54,6 +54,7 @@
                 <app-btn
                   label="List Rujukan"
                   :loading="store.loadingListRujukan"
+                  :disable="store.loadingListRujukan"
                   @click="listSuratRujukan"
                 />
               </div>
@@ -220,6 +221,7 @@
                 <app-btn
                   label="List surat kontrol"
                   :loading="store.loadingSuratKontrol"
+                  :disable="store.loadingSuratKontrol"
                   @click="cekSuratKontrol"
                 />
               </div>

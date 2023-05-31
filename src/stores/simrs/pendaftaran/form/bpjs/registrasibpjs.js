@@ -53,6 +53,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     penunjangs: [],
     diagnosaAwals: [],
     ppkRujukans: [],
+    listSuratKontrols: [],
     listRujukanPcare: [],
     listRujukanRs: [],
     listRujukanSepMrs: [],
@@ -94,9 +95,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       // this.getPpkRujukan('anu')
     },
     // api related function
+
     async getListRujukanPCare(val) {
       this.loadingListRujukan = true
-      // const param = { faskesasal: val }
       await api.post('v1/simrs/pendaftaran/listrujukanpcare', val)
         .then(resp => {
           this.loadingListRujukan = false
@@ -148,12 +149,12 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListSuratKontrol(val) {
       this.loading = true
-      const param = { faskesasal: val }
-      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+      const param = { params: val }
+      await api.get('v1/simrs/rekomdpjp/rekomdpjp', param)
         .then(resp => {
           this.loading = false
-          this.ppkRujukans = resp.data.result.faskes
-          console.log('PPK rujukan', resp)
+          this.listSuratKontrols = resp.data
+          console.log('Surat kontrols', resp)
         })
         .catch(() => {
           this.loading = false

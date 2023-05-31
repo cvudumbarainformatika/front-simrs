@@ -68,8 +68,10 @@ function simpanData() {
 
 // cek surat Kontrol
 function getListSuratKontrol() {
-  if (refDataPasien.value.validateNokaAndNorm()) {
-    console.log('cek Surat kontrol', refDataPasien.value)
+  const data = refDataPasien.value.validateNokaAndNorm()
+  if (data) {
+    console.log('cek Surat kontrol', data)
+    registrasi.getListSuratKontrol(data)
   }
 }
 // cek list rujukan
