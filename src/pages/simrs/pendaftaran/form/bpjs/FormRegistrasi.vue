@@ -320,7 +320,7 @@
             >
               <div class="col-12">
                 <app-autocomplete-new
-                  ref="refSistemBayar"
+                  ref="refPpkRujukan"
                   :model="store.display.kode"
                   label="PPK Rujukan"
                   autocomplete="nama"
@@ -352,10 +352,10 @@
             </div>
             <!-- sistem bayar -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div :class="store.display.kode?'col-6':'col-12'">
+              <div :class="store.display.bayar.kode?'col-6':'col-12'">
                 <app-autocomplete
                   ref="refSistemBayar"
-                  v-model="store.display.kode"
+                  v-model="store.display.bayar.kode"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
                   option-value="kode"
@@ -372,7 +372,7 @@
               <!-- sistem bayar -->
               <!-- <div class="row q-col-gutter-md items-center q-mb-xs"> -->
               <div
-                v-if="store.display.kode"
+                v-if="store.display.bayar.kode"
                 class="col-6"
               >
                 <app-autocomplete

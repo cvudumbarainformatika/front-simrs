@@ -17,6 +17,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       prosedur: {},
       assesment: {},
       penunjang: {},
+      bayar: {},
       tanggal: {
         sep: date.formatDate(Date.now(), 'DD MMMM YYYY'),
         rujukan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -110,7 +111,6 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListRujukanRs(val) {
       this.loadingListRujukanRS = true
-      // const param = { faskesasal: val }
       await api.post('v1/simrs/pendaftaran/listrujukanrs', val)
         .then(resp => {
           this.loadingListRujukanRS = false
@@ -123,7 +123,6 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListSepMrs(val) {
       this.loadingListRujukanMrs = true
-      // const param = { faskesasal: val }
       await api.post('v1/simrs/pendaftaran/listsepmrs', val)
         .then(resp => {
           this.loadingListRujukanMrs = false
