@@ -65,6 +65,15 @@ const formatRpDouble = (value, dg) => {
       // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
   }
 }
+const formatDouble = (value, dg) => {
+  if (value !== null) {
+    return Number(value)
+      .toFixed(dg)
+      .replace('.', ',')
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+      // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
+  }
+}
 
 const dateFullFormat = (val) => {
   return date.formatDate(val, 'DD MMMM YYYY')
@@ -128,5 +137,6 @@ export {
   dateFullFormat,
   titleCase,
   dateLIS,
-  timeDiff
+  timeDiff,
+  formatDouble
 }

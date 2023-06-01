@@ -38,6 +38,7 @@ import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
+import { date } from 'quasar'
 
 const registrasi = useRegistrasiPasienBPJSStore()
 const loading = ref(false)
@@ -69,9 +70,12 @@ function simpanData() {
 // cek surat Kontrol
 function getListSuratKontrol() {
   const data = refDataPasien.value.validateNokaAndNorm()
+  data.bulan = date.formatDate(registrasi.form.tglsep, 'MM')
+  data.tahun = date.formatDate(registrasi.form.tglsep, 'YYYY')
   if (data) {
     console.log('cek Surat kontrol', data)
     registrasi.getListSuratKontrol(data)
+    registrasi.getListRencanaKontrol(data)
   }
 }
 // cek list rujukan

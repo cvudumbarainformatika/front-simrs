@@ -58,6 +58,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     listRujukanPcare: [],
     listRujukanRs: [],
     listRujukanSepMrs: [],
+    listSuplesi: [],
     loadingPpkRujukan: false,
     loadingListRujukan: false,
     loadingListRujukanRS: false,
@@ -97,6 +98,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     // api related function
 
+    async getListSuplesi(val) {
+      this.loadingSuplesi = true
+      await api.post('v1/simrs/pendaftaran/ceksuplesibpjs', val)
+        .then(resp => {
+          this.loadingSuplesi = false
+          this.listSuplesi = resp.data.result.jaminan ? resp.data.result.jaminan : []
+          console.log('List Suplesi', resp)
+        })
+        .catch(() => {
+          this.loadingSuplesi = false
+        })
+    },
     async getListRujukanPCare(val) {
       this.loadingListRujukan = true
       await api.post('v1/simrs/pendaftaran/listrujukanpcare', val)
@@ -131,6 +144,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
         .catch(() => {
           this.loadingListRujukanMrs = false
+        })
+    },
+    async getListRencanaKontrol(val) {
+      this.listSuratKontrols = true
+      await api.post('v1/simrs/pendaftaran/rencanakontrolbpjs', val)
+        .then(resp => {
+          this.listSuratKontrols = false
+          this.listRencanaKontrols = resp.data.result.list ? resp.data.result.list : []
+          console.log('List rencana kontrol', resp)
+        })
+        .catch(() => {
+          this.listSuratKontrols = false
         })
     },
     async cekRujukanPeserta(val) {
