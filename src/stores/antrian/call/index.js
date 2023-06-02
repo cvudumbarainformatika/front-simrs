@@ -79,8 +79,9 @@ export const useCallStore = defineStore('call_antrian', {
       this.params.page = 1
       this.getDataTable()
     },
-    async getDataTable () {
-      this.loading = true
+    async getDataTable(noLoading) {
+      const noLoad = !!noLoading
+      !noLoad ? this.loading = true : this.loading = false
       const params = { params: this.params }
       try {
         await api.get('/v1/call/data', params)
@@ -134,6 +135,14 @@ export const useCallStore = defineStore('call_antrian', {
       this.params.unit = val
       this.tab = 'table'
       this.getDataTable()
+    },
+
+    ubahStatus(val) {
+      const arr = this.items
+      const ada = arr.filter(x => x.nomorantrean === val)
+      if (ada.length) {
+        ada[0].statuspanggil = 1
+      }
     }
   }
 })

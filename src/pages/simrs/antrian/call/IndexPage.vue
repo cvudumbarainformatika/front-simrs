@@ -97,6 +97,22 @@
                     Status
                   </div>
                 </template>
+                <template #cell-status="{row}">
+                  <div v-if="row.statuspanggil === 1">
+                    <q-badge
+                      outline
+                      color="primary"
+                      label="Sudah dipanggil"
+                    />
+                  </div>
+                  <div v-else>
+                    <q-badge
+                      outline
+                      color="negative"
+                      label="Belum dipanggil"
+                    />
+                  </div>
+                </template>
                 <template #custom-btn="{row}">
                   <div class="row">
                     <q-btn
@@ -104,6 +120,7 @@
                       size="sm"
                       icon="icon-mat-volume_up"
                       color="teal"
+                      :loading="call.loading"
                       @click="calling(row, store.unit, store.set)"
                     >
                       <q-tooltip>
