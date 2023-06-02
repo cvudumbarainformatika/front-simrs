@@ -208,7 +208,7 @@
             width="5%"
             class="text-left"
           >
-            <div class="">
+            <div class="text-weight-bold">
               No
             </div>
           </th>
@@ -388,6 +388,9 @@
               </div>
             </div>
           </td>
+        </tr>
+        <tr>
+          <slot name="bottom-row" />
         </tr>
       </tbody>
       <tbody v-else>

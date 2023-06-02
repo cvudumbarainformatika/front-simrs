@@ -190,6 +190,7 @@
 </template>
 
 <script setup>
+import { deleteCurrentApp } from 'src/modules/storage'
 import { computed, ref } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -197,6 +198,7 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 function goTo(url) {
   router.replace({ path: url })
+  deleteCurrentApp()
 }
 const path = computed(() => useRoute().name)
 

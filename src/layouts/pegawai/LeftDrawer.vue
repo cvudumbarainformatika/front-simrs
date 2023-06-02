@@ -42,64 +42,67 @@
           :active="aktif(path)===menu.name"
           @click="menuClick(menu)"
         >
-          <q-menu
-            ref="refMenu"
-            transition-show="slide-down"
-            transition-hide="slide-right"
-            anchor="top right"
-            self="top left"
-            :offset="[0, 0]"
-            auto-close
-          >
-            <q-list
-              v-if="menu.submenus.length>0"
-              bordered
-              separator
-              style="width:250px;"
-            >
-              <q-item-label>
-                <div
-                  class="text-weight-bold q-pa-md"
-                >
-                  {{ menu.nama }}
-                </div>
-              </q-item-label>
-              <q-separator />
-              <q-item
-                v-for="(submenu,n) in menu.submenus"
-                :key="n"
-                ref="refSubItem"
-                v-ripple
-                clickable
-                :to="`/${submenu.link}`"
-                replace
-                :active-class="dark? 'active-sub-dark' : 'active-sub'"
-                :active="path===submenu.name"
-                exact
-              >
-                <q-item-section>{{ submenu.nama }}</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-          <div
-            class="item-content"
-          >
-            <q-tooltip
-              v-if="menu.submenus.length===0"
-              class="bg-primary"
+          <q-item-section>
+            <!-- {{ menu.nama }} -->
+            <q-menu
+              ref="refMenu"
+              transition-show="slide-down"
+              transition-hide="slide-right"
               anchor="top right"
               self="top left"
               :offset="[0, 0]"
+              auto-close
             >
-              <strong class="">{{ menu.nama }}</strong>
-              (
-              <q-icon name="icon-mat-keyboard_arrow_right" />)
-            </q-tooltip>
-            <q-icon
-              :name="menu.icon"
-              size="25px"
-            />
-          </div>
+              <q-list
+                v-if="menu.submenus.length>0"
+                bordered
+                separator
+                style="width:250px;"
+              >
+                <q-item-label>
+                  <div
+                    class="text-weight-bold q-pa-md"
+                  >
+                    {{ menu.nama }}
+                  </div>
+                </q-item-label>
+                <q-separator />
+                <q-item
+                  v-for="(submenu,n) in menu.submenus"
+                  :key="n"
+                  ref="refSubItem"
+                  v-ripple
+                  clickable
+                  :to="`/${submenu.link}`"
+                  replace
+                  :active-class="dark? 'active-sub-dark' : 'active-sub'"
+                  :active="path===submenu.name"
+                  exact
+                >
+                  <q-item-section>{{ submenu.nama }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <div
+              class="item-content"
+            >
+              <q-tooltip
+                v-if="menu.submenus.length===0"
+                class="bg-primary"
+                anchor="top right"
+                self="top left"
+                :offset="[0, 0]"
+              >
+                <strong class="">{{ menu.nama }}</strong>
+                (
+                <q-icon name="icon-mat-keyboard_arrow_right" />)
+              </q-tooltip>
+              <q-icon
+                :name="menu.icon"
+                size="25px"
+              />
+            </div>
+          </q-item-section>
         </q-item>
       </div>
     </div>
@@ -148,10 +151,12 @@
 import { computed, ref } from 'vue'
 import { routerInstance } from 'src/boot/router'
 import { useRoute, useRouter } from 'vue-router'
+import { deleteCurrentApp } from 'src/modules/storage'
 
 const router = useRouter()
 function goTo(url) {
   router.replace({ path: url })
+  deleteCurrentApp()
 }
 
 const path = computed(() => useRoute().name)

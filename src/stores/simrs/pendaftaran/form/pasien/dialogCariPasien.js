@@ -34,6 +34,7 @@ export const useDialogCariPasienPendaftaranUmum = defineStore('dialog_cari_pasie
     },
     setSearch(val) {
       this.params.q = val
+      this.params.page = 1
       this.getDataPasien()
     },
     getInitialData() {

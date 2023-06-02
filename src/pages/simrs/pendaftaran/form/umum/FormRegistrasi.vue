@@ -28,12 +28,11 @@
                   v-model="store.form.asalrujukan"
                   label="Asal Rujukan"
                   autocomplete="asalrujukan"
-                  option-value="asalrujukan"
+                  option-value="kode"
                   option-label="asalrujukan"
                   :filled="false"
                   :source="store.asalrujukans"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -88,33 +87,35 @@
           <div class="col-6">
             <!-- sistem bayar -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
+              <div :class="store.display.kode?'col-6':'col-12'">
                 <app-autocomplete
                   ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
+                  v-model="store.display.kode"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
+                  option-value="kode"
                   option-label="groupsistembayar"
                   :filled="false"
-                  :source="store.sistembayars"
+                  :source="store.sistembayars1"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setSistembayar"
+                  @selected="setSistembayar1"
                 />
               </div>
-            </div>
-            <!-- sistem bayar 2-->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
+              <!-- </div> -->
+              <!-- sistem bayar 2-->
+              <!-- <div class="row q-col-gutter-md items-center q-mb-xs"> -->
+              <div
+                v-if="store.display.kode"
+                class="col-6"
+              >
                 <app-autocomplete
                   ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
+                  v-model="store.display.rs2"
                   label="Sistem bayar"
-                  autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
-                  option-label="groupsistembayar"
+                  autocomplete="rs2"
+                  option-value="rs2"
+                  option-label="rs2"
                   :filled="false"
                   :source="store.sistembayars"
                   :loading="store.loading"
@@ -157,6 +158,13 @@ import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienUmumStore()
 store.getInitialData()
+function setSistembayar1(val) {
+  // store.setForm('sistembayar1', val)
+  if (store.form.sistembayar) { delete store.form.sistembayar }
+  if (store.display.rs2) { delete store.display.rs2 }
+  store.getSistemBayar2(val)
+  console.log('form', store.form)
+}
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
   console.log('form', store.form)
@@ -192,28 +200,32 @@ function validasi() {
 function set() {
   validasi()
   if (valid) {
-    emits('bisaSimpan', store.form)
+    emits('bisaSimpan', { form: store.form, save: true })
+    return { form: store.form, save: true }
   } else {
+    emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
+    return { form: store.form, save: false }
   }
 }
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
   const index = findWithAttr(store.polis, 'kodepoli', val)
-  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   refDPJP.value.$refs.refAuto.resetValidation()
-  store.getDokterDpjp()
-  console.log(val)
   if (store.paramKarcis.flag) {
     if (store.paramKarcis.flag !== '') {
       store.getKarcisPoli().then(() => {
         store.display.hargakarcis = store.kasrcispoli.tarif
+        store.form.karcis = store.kasrcispoli.tarif
       })
     }
   }
+  console.log(val)
+  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+  store.getDokterDpjp()
 }
 // set flag karcis
 function setFlagKarcis(val) {
@@ -224,6 +236,7 @@ function setFlagKarcis(val) {
   console.log(store.paramKarcis)
   store.getKarcisPoli().then(() => {
     store.display.hargakarcis = store.kasrcispoli.tarif
+    store.form.karcis = store.kasrcispoli.tarif
   })
 }
 // expose function

@@ -14,8 +14,17 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <div class="f-14 text-weight-bold q-mb-md">
-          Form Identitas Pasien I.1
+        <div class="row items-center q-mr-sm">
+          <div class="col-10 f-14 text-weight-bold q-mb-md">
+            Form Identitas Pasien I.1
+          </div>
+          <div class="col-2">
+            <q-checkbox
+              v-model="store.edit"
+              label="Edit Form "
+              dense
+            />
+          </div>
         </div>
         <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
@@ -84,16 +93,16 @@
                   type="number"
                   autofocus
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   :loading="store.loading"
                   :rules="[
                     val => (!!val) || 'Harap diisi',
-                    val => val?val.length < 7:!val || 'Harus 6 Karakter',
                     val => val?val.length > 5:!val || 'Harus 6 Karakter',
                   ]"
                   @keyup.enter="inputNoRmSelesai"
                   @update:model-value="updateValNoRM"
                 />
+                <!-- val => val?val.length < 7:!val || 'Harus 6 Karakter', -->
               </div>
             </div>
             <!-- ktp -->
@@ -107,8 +116,9 @@
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
+                  type="number"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                 />
               </div>
               <div
@@ -137,7 +147,7 @@
                   label="Nomor Paspor / KITAS"
                   valid
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -153,7 +163,7 @@
                   v-model="store.form.namaibukandung"
                   label="Nama Ibu Kandung"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -169,7 +179,8 @@
                   v-model="store.form.noka"
                   label="Nomor KA BPJS"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  @update:model-value="setNokaBPJS"
                 />
               </div>
               <div
@@ -217,7 +228,7 @@
                       :filled="false"
                       :source="store.sapaans"
                       :loading="store.loading"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       @selected="sapaanSelected"
                       @keyup.enter="sapaanEnter"
@@ -229,7 +240,7 @@
                       v-model="store.form.nama"
                       label="Nama"
                       :filled="false"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
                 </div>
@@ -247,7 +258,7 @@
                   v-model="store.form.templahir"
                   label="Tempat Lahir"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -268,7 +279,7 @@
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       @update:model-value="setHariLahir"
                       @focus="fokusHariLahir"
                     />
@@ -282,7 +293,7 @@
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       @update:model-value="setBulanLahir"
                     />
                   </div>
@@ -293,7 +304,7 @@
                       label="Tahun"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
                       @update:model-value="setTahunLahir"
@@ -351,7 +362,7 @@
                   :filled="false"
                   :source="store.kelamins"
                   :loading="store.loading"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="kelaminSelected"
                 />
@@ -375,7 +386,7 @@
                   :filled="false"
                   :source="store.pendidikans"
                   :loading="store.loading"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="pendidikanSelected"
                 />
@@ -401,7 +412,7 @@
                       :filled="false"
                       :source="store.agamas"
                       :loading="store.loading"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       @on-select="setAgama"
                       @keyup.enter="setAgama"
@@ -435,7 +446,7 @@
                   v-model="store.form.suku"
                   label="Suku"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru' && !store.edit"
                 />
               </div>
             </div>
@@ -451,7 +462,7 @@
                   v-model="store.form.bahasa"
                   label="Bahasa"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -473,7 +484,7 @@
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   :source="store.statuspernikahans"
                   :loading="store.loading"
-                  :disable=" store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru' && !store.edit"
                   @selected="statusPernikahanSelected"
                 />
                 <!-- <app-autocomplete-new
@@ -512,7 +523,7 @@
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       :source="store.pekerjaans"
                       :loading="store.loading"
-                      :disable=" store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru' && !store.edit"
                       @selected="setPekerjaan"
                     />
                   </div>
@@ -548,7 +559,7 @@
                   valid
                   :prefix="'+'+(store.form.negara?store.form.negara:'62')"
                   type="number"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   @update:model-value="setTlpRumah"
                 />
               </div>
@@ -567,7 +578,7 @@
                   :filled="false"
                   :prefix="'+'+(store.form.negara?store.form.negara:'62')"
                   type="number"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   @update:model-value="setTlpHP"
                 />
               </div>
@@ -587,7 +598,8 @@
                   v-model="store.form.alamat"
                   :filled="false"
                   label="Alamat"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  @update:model-value="setAlamat"
                 />
               </div>
             </div>
@@ -606,7 +618,7 @@
                       label="RT"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                       @update:model-value="setRT"
                     />
                   </div>
@@ -620,7 +632,7 @@
                       label="RW"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                       @update:model-value="setRW"
                     />
                   </div>
@@ -644,7 +656,7 @@
                   :filled="false"
                   :source="store.negaras"
                   :loading="store.loadingSelect"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   @on-select="negaraSelected"
                   @clear="store.clearNegara"
                 />
@@ -666,7 +678,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.propinsies"
-                  :disable="!store.propinsies.length || store.form.barulama!=='baru'"
+                  :disable="!store.propinsies.length || (store.form.barulama!=='baru' && !store.edit)"
                   :loading="store.loadingSelect"
                   @on-select="propinsiSelected"
                   @clear="store.clearPropinsi"
@@ -690,7 +702,7 @@
                   :filled="false"
                   :source="store.kabupatens"
                   :loading="store.loadingSelect"
-                  :disable="!store.kabupatens.length || store.form.barulama!=='baru'"
+                  :disable="!store.kabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kabupatenSelected"
                   @clear="store.clearKabupaten"
                 />
@@ -713,7 +725,7 @@
                   :filled="false"
                   :source="store.kecamatans"
                   :loading="store.loadingSelect"
-                  :disable="!store.kecamatans.length || store.form.barulama!=='baru'"
+                  :disable="!store.kecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kecamatanSelected"
                   @clear="store.clearKecamatan"
                 />
@@ -736,7 +748,7 @@
                   :filled="false"
                   :source="store.kelurahans"
                   :loading="store.loadingSelect"
-                  :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
+                  :disable="!store.kelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kelurahanSelected"
                   @clear="store.clearKelurahan"
                 />
@@ -755,7 +767,7 @@
                   label="Kode Pos"
                   type="number"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -796,7 +808,7 @@
                   v-model="store.form.alamatdomisili"
                   :filled="false"
                   label="Alamat"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -814,7 +826,7 @@
                       label="RT"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
                   <div class="col-1 text-center">
@@ -827,7 +839,7 @@
                       label="RW"
                       :filled="false"
                       type="number"
-                      :disable="store.form.barulama!=='baru'"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
                 </div>
@@ -849,7 +861,7 @@
                   :filled="false"
                   :source="store.domisiliNegaras"
                   :loading="store.loadingSelectDomisili"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                   @on-select="negaraDomisiliSelected"
                   @clear="store.clearNegaraDomisili"
                 />
@@ -870,7 +882,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.domisiliPropinsies"
-                  :disable="!store.domisiliPropinsies.length || store.form.barulama!=='baru'"
+                  :disable="!store.domisiliPropinsies.length || (store.form.barulama!=='baru' && !store.edit)"
                   :loading="store.loadingSelectDomisili"
                   @on-select="propinsiDomisiliSelected"
                   @clear="store.clearPropinsiDomisili"
@@ -895,7 +907,7 @@
                   :filled="false"
                   :source="store.domisiliKabupatens"
                   :loading="store.loadingSelectDomisili"
-                  :disable="!store.domisiliKabupatens.length || store.form.barulama!=='baru'"
+                  :disable="!store.domisiliKabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kabupatenDomisiliSelected"
                   @clear="store.clearKabupatenDomisili"
                 />
@@ -917,7 +929,7 @@
                   :filled="false"
                   :source="store.domisiliKecamatans"
                   :loading="store.loadingSelectDomisili"
-                  :disable="!store.domisiliKecamatans.length || store.form.barulama!=='baru'"
+                  :disable="!store.domisiliKecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kecamatanDomisiliSelected"
                   @clear="store.clearKecamatanDomisili"
                 />
@@ -939,7 +951,7 @@
                   :filled="false"
                   :source="store.domisiliKelurahans"
                   :loading="store.loadingSelectDomisili"
-                  :disable="!store.domisiliKelurahans.length || store.form.barulama!=='baru'"
+                  :disable="!store.domisiliKelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kelurahanDomisiliSelected"
                   @clear="store.clearKelurahanDomisili"
                 />
@@ -957,7 +969,7 @@
                   label="Kode Pos"
                   type="number"
                   :filled="false"
-                  :disable="store.form.barulama!=='baru'"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
             </div>
@@ -971,7 +983,7 @@
     />
     <app-dialog
       v-model="store.alert"
-      label="Data Peserta BPJS"
+      :label="store.alertMsg.kode!==''?'Status Finger Pasien':'Data Peserta BPJS'"
       @on-ok="dialogOk"
       @keyup="store.alert=false"
     >
@@ -1093,6 +1105,13 @@
             </div>
           </div>
         </div>
+        <div v-if="store.alertMsg.kode!==''">
+          <app-no-selected-page
+            color="primary"
+            :icon="store.alertMsg.kode==='1'?'icon-mat-done':'icon-mat-report'"
+            :text="store.alertMsg.status"
+          />
+        </div>
         <!-- {{ store.alertMsg }} -->
       </template>
     </app-dialog>
@@ -1111,7 +1130,7 @@ const refPasien = ref(null)
 const emits = defineEmits([
   'bisa-simpan',
   'tidak-simpan',
-  'suratKontrol'
+  'surat'
 ])
 const props = defineProps({
   bpjs: { type: Boolean, default: false },
@@ -1125,6 +1144,10 @@ const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
 
+// set noka bpjs
+function setNokaBPJS(val) {
+  store.setForm('nokabpjs', val)
+}
 // cek BPJS
 function cekBpjsbyNik() {
   if (refKtp.value.$refs.refInput.validate()) {
@@ -1197,10 +1220,13 @@ const refKelurahan = ref(null)
 function validateNokaAndNorm() {
   if (refNoRM.value.$refs.refInput.validate() &&
    refNoKaBpjs.value.$refs.refInput.validate()) {
-    emits('suratKontrol')
+    emits('surat', { nik: store.form.nik, noka: store.form.noka, norm: store.form.norm })
+    return { nik: store.form.nik, noka: store.form.noka, norm: store.form.norm }
+  } else {
+    if (refNoRM.value.$refs.refInput.validate() === false) { notifErrVue('No RM Kosong') }
+    if (refNoKaBpjs.value.$refs.refInput.validate() === false) { notifErrVue('No BPJS Kosong') }
+    return false
   }
-  if (refNoRM.value.$refs.refInput.validate() === false) { notifErrVue('No RM Kosong') }
-  if (refNoKaBpjs.value.$refs.refInput.validate() === false) { notifErrVue('No BPJS Kosong') }
 }
 // reset validasi
 function resetValidation() {
@@ -1272,14 +1298,20 @@ function setJenisPasien(val) {
 function cariPasienHide(val) {
   console.log('cari pasien sembunyi', store.cariPasienDialog)
 }
+// alamat
+function setAlamat(val) {
+  if (store.alamataDomisiliSama) { store.setForm('alamatdomisili', val) }
+}
 // set RT / RW
 function setRT(val) {
+  if (store.alamataDomisiliSama) { store.setForm('rtdomisili', val) }
   if (val.length === 3) {
     refRT.value.$refs.refInput.blur()
     refRW.value.$refs.refInput.focus()
   }
 }
 function setRW(val) {
+  if (store.alamataDomisiliSama) { store.setForm('rwdomisili', val) }
   if (val.length === 3) {
     refRW.value.$refs.refInput.blur()
     refNegara.value.$refs.refAuto.focus()
@@ -1288,23 +1320,23 @@ function setRW(val) {
 // -- dialog cari pasien, untuk pasien lama--end--
 // input no rm
 function inputNoRmSelesai(val) {
-  console.log('input selesai', val)
+  // console.log('input selesai', val)
   refNoRM.value.$refs.refInput.blur()
   refKtp.value.$refs.refInput.focus()
   // refSapaan.value.$refs.refAuto.focus()
 }
 function updateValNoRM(val) {
-  console.log('ref sapaan', refSapaan.value.$refs.refAuto)
+  store.setForm('norm', val)
+  // console.log('ref sapaan', refSapaan.value.$refs.refAuto)
 
-  console.log('input no rm', val.length)
-  if (val.length === 6) {
-    const temp = val.slice(0, 6)
-    store.setForm('norm', temp)
-    console.log('no rm', store.form.norm)
-    refNoRM.value.$refs.refInput.blur()
-    refKtp.value.$refs.refInput.focus()
-    // refSapaan.value.$refs.refAuto.focus()
-  }
+  // console.log('input no rm', val.length)
+  // if (val.length === 6) {
+  // const temp = val.slice(0, 6)
+  // console.log('no rm', store.form.norm)
+  // refNoRM.value.$refs.refInput.blur()?
+  // refKtp.value.$refs.refInput.focus()
+  // refSapaan.value.$refs.refAuto.focus()
+  // }
 }
 // input sapaan dan nama
 function sapaanSelected(val) {
@@ -1599,11 +1631,14 @@ function set() {
   validasi()
   // console.log('Baru', baru)
   if (valid) {
-    emits('bisa-simpan', store.form)
+    emits('bisa-simpan', { form: store.form, save: true })
+    return { form: store.form, save: true }
     // console.log('lanjut')
   } else {
+    emits('bisa-simpan', { form: store.form, save: false })
     // emits('tidak-simpan')
     notifErrVue('periksa kembali input data pasien anda')
+    return { form: store.form, save: false }
   }
 }
 

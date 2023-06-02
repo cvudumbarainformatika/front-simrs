@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { setCurrentApp } from 'src/modules/storage'
+import { deleteCurrentApp, setCurrentApp } from 'src/modules/storage'
 import { useAuthStore } from 'src/stores/auth'
 import { ref, watch } from 'vue'
 
@@ -80,6 +80,7 @@ watch(
 )
 function goTo(url) {
   router.replace({ path: url })
+  deleteCurrentApp()
 }
 
 const props = defineProps({

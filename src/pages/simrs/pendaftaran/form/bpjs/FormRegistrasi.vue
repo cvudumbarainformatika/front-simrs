@@ -40,19 +40,37 @@
             </div>
             <!-- No rujukan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
+              <div class="col-9">
                 <app-input
                   ref="refNoRujukan"
                   v-model="store.form.norujukan"
                   label="nomor Rujukan"
                   :filled="false"
-                  :loading="store.loading"
+                  :loading="store.loadingListRujukan"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
+              <div class="col-3">
+                <app-btn
+                  label="List Rujukan"
+                  :loading="store.loadingListRujukan"
+                  :disable="store.loadingListRujukan"
+                  @click="listSuratRujukan"
+                />
+              </div>
+              <!-- <div class="col-3">
+                <app-btn
+                  label="Cek Rujukan"
+                  :loading="store.loadingListRujukan"
+                  @click="cekSuratRujukan"
+                />
+              </div> -->
             </div>
             <!-- poli tujuan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
+            <div
+              :key="store.form.kodepoli"
+              class="row q-col-gutter-md items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-autocomplete
                   ref="refPoliTujuan"
@@ -64,8 +82,8 @@
                   :filled="false"
                   :source="store.polis"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setPoliTujuan"
                 />
               </div>
             </div>
@@ -88,32 +106,54 @@
               </div>
             </div>
             <!-- kartu / karcis -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              :key="store.form.jeniskarcis"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
+              <q-tooltip
+                v-if="!store.paramKarcis.kd_poli"
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Pilih poli tujuan Terlebih dahulu
+              </q-tooltip>
               <div class="col-6">
                 <app-autocomplete
                   ref="refFlagKartu"
-                  v-model="store.form.asalrujukan"
+                  v-model="store.form.jeniskarcis"
                   label="Flag Kartu"
-                  autocomplete="asalrujukan"
-                  option-value="asalrujukan"
-                  option-label="asalrujukan"
+                  autocomplete="jeniskarcis"
+                  option-value="jeniskarcis"
+                  option-label="jeniskarcis"
                   :filled="false"
-                  :source="store.asalrujukans"
+                  :disable="!store.paramKarcis.kd_poli"
+                  :source="store.jenisKarcises"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setFlagKarcis"
                 />
               </div>
               <div class="col-6">
                 <app-input
-                  v-model="store.form.karcis"
+                  v-model="store.display.hargakarcis"
                   label="Karcis"
                   :filled="false"
+                  disable
                 />
+                <q-tooltip
+                  v-if="store.paramKarcis.kd_poli"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Terisi otomatis
+                </q-tooltip>
               </div>
             </div>
             <!-- Diagnosa awal -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              :key="store.display.diagnosa.nama"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <div class="col-4">
                 <app-autocomplete-new
                   ref="refKodeDiagnosa"
@@ -181,6 +221,7 @@
                 <app-btn
                   label="List surat kontrol"
                   :loading="store.loadingSuratKontrol"
+                  :disable="store.loadingSuratKontrol"
                   @click="cekSuratKontrol"
                 />
               </div>
@@ -273,10 +314,13 @@
           <!-- kanan -->
           <div class="col-6">
             <!-- PPK Rujukan -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
+            <div
+              :key="store.display.kode"
+              class="row q-col-gutter-md items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-autocomplete-new
-                  ref="refSistemBayar"
+                  ref="refPpkRujukan"
                   :model="store.display.kode"
                   label="PPK Rujukan"
                   autocomplete="nama"
@@ -308,14 +352,36 @@
             </div>
             <!-- sistem bayar -->
             <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
+              <div :class="store.display.bayar.kode?'col-6':'col-12'">
                 <app-autocomplete
                   ref="refSistemBayar"
-                  v-model="store.display.groupsistembayar"
+                  v-model="store.display.bayar.kode"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
-                  option-value="groupsistembayar"
+                  option-value="kode"
                   option-label="groupsistembayar"
+                  :filled="false"
+                  :source="store.sistembayars1"
+                  :loading="store.loading"
+
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setSistembayar1"
+                />
+              </div>
+              <!-- </div> -->
+              <!-- sistem bayar -->
+              <!-- <div class="row q-col-gutter-md items-center q-mb-xs"> -->
+              <div
+                v-if="store.display.bayar.kode"
+                class="col-6"
+              >
+                <app-autocomplete
+                  ref="refSistemBayar"
+                  v-model="store.display.rs2"
+                  label="Sistem bayar"
+                  autocomplete="rs2"
+                  option-value="rs2"
+                  option-label="rs2"
                   :filled="false"
                   :source="store.sistembayars"
                   :loading="store.loading"
@@ -368,9 +434,9 @@
                   ref="refDPJP"
                   v-model="store.form.dpjp"
                   label="DPJP"
-                  autocomplete="asalrujukan"
-                  option-value="asalrujukan"
-                  option-label="asalrujukan"
+                  autocomplete="nama"
+                  option-value="dpjp"
+                  option-label="nama"
                   :filled="false"
                   :source="store.dpjps"
                   :loading="store.loading"
@@ -495,10 +561,18 @@
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
-import { notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienBPJSStore()
+
+// emits
+const emits = defineEmits([
+  'bisaSimpan',
+  'getListSuratKontrol',
+  'getListRujukan',
+  'cekSuratRujukan'
+])
 
 store.getInitialData()
 // refs
@@ -514,14 +588,49 @@ const refJenisKunjungan = ref(null)
 const refNoSuratKontrol = ref(null)
 const refTujuanKunjungan = ref(null)
 const refSuplesi = ref(null)
+
+// list Surat kontrol
+function listSuratRujukan() {
+  emits('getListRujukan')
+}
+// cek Surat kontrol
+// function cekSuratRujukan() {
+//   emits('cekSuratRujukan')
+// }
 // cek surat kontrol
 function cekSuratKontrol() {
   emits('getListSuratKontrol')
-  // if (refNoSuratKontrol.value.$refs.refInput.validate()) {
-  //   console.log('surat kontrol')
-  // } else {
-  //   notifErrVue('Nomor Suplesi Kosong')
-  // }
+}
+// set kode Poli
+function setPoliTujuan(val) {
+  store.paramKarcis.kd_poli = val
+  const index = findWithAttr(store.polis, 'kodepoli', val)
+  // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
+  store.form.dpjp = ''
+  refDPJP.value.$refs.refAuto.resetValidation()
+  if (store.paramKarcis.flag) {
+    if (store.paramKarcis.flag !== '') {
+      store.getKarcisPoli().then(() => {
+        store.display.hargakarcis = store.kasrcispoli.tarif
+        store.form.karcis = store.kasrcispoli.tarif
+      })
+    }
+  }
+  console.log(val)
+  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+  store.getDokterDpjp()
+}
+// set flag karcis
+function setFlagKarcis(val) {
+  // const index = findWithAttr(store.jenisKarcises, 'jeniskarcis', val)
+  // const flag = store.jenisKarcises[index]
+  // store.display.hargakarcis = flag.harga
+  store.paramKarcis.flag = val
+  console.log(store.paramKarcis)
+  store.getKarcisPoli().then(() => {
+    store.display.hargakarcis = store.kasrcispoli.tarif
+    store.form.karcis = store.kasrcispoli.tarif
+  })
 }
 // --- kecelakaan start ---
 // autocomplete kecelakaan
@@ -575,6 +684,13 @@ function clearPpkRujukan() {
 }
 // ---- PPK Rujukan end---
 // sistem bayar
+function setSistembayar1(val) {
+  // store.setForm('sistembayar', val)
+  if (store.form.sistembayar) { delete store.form.sistembayar }
+  if (store.display.rs2) { delete store.display.rs2 }
+  store.getSistemBayar2(val)
+  console.log('form', store.form)
+}
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
   console.log('form', store.form)
@@ -648,9 +764,6 @@ function setDispTglSEP(val) {
   store.display.tanggal.sep = val
   // console.log('disp tanggal rujukan', val)
 }
-// emits
-const emits = defineEmits(['bisaSimpan', 'getListSuratKontrol'])
-
 // reset validasi
 function resetValidation() {
   // autocomplete
@@ -680,9 +793,9 @@ function validasi() {
   const KodeDiagnosa = refKodeDiagnosa.value.$refs.refAuto.validate()
   const NamaDiagnosa = refNamaDiagnosa.value.$refs.refAuto.validate()
   const JenisKunjungan = refJenisKunjungan.value.$refs.refAuto.validate()
-  const NoSuratKontrol = refNoSuratKontrol.value.$refs.refAuto.validate()
   const TujuanKunjungan = refTujuanKunjungan.value === null ? true : refTujuanKunjungan.value.$refs.refAuto.validate()
   // ref input
+  const NoSuratKontrol = refNoSuratKontrol.value.$refs.refInput.validate()
   const noRujukan = refNoRujukan.value.$refs.refInput.validate()
   if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar &&
   noRujukan && NamaDiagnosa && KodeDiagnosa && JenisKunjungan &&
@@ -692,8 +805,9 @@ function validasi() {
 function set() {
   validasi()
   if (valid) {
-    emits('bisaSimpan', store.form)
+    emits('bisaSimpan', { form: store.form, save: true })
   } else {
+    emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
   }
 }

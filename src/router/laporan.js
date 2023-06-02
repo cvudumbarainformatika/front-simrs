@@ -13,6 +13,11 @@ const laporan = {
       path: '/laporan/rekap/datapasien',
       name: 'laporan.rekap.datapasien',
       component: () => import('pages/simrs/laporan/rekap/datapasien/IndexPage.vue')
+    },
+    {
+      path: '/laporan/keuangan/billrajal',
+      name: 'laporan.keuangan.billrajal',
+      component: () => import('pages/simrs/laporan/keuangan/bill/IndexPage.vue')
     }
   ]
 }
