@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="store.items">
     <q-card>
       <q-card-section>
         <div class="f-14 text-weight-bold">
@@ -34,6 +34,7 @@
               </div>
               <div class="col-9">
                 <app-autocomplete-new
+                  :key="store.kode_tempat"
                   label="pilih "
                   :model="store.kode_tempat"
                   autocomplete="nama"

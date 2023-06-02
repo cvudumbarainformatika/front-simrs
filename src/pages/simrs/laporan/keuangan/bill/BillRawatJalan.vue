@@ -54,7 +54,7 @@
           :ada-cari="false"
           :default-btn="false"
           :ada-tambah="false"
-          :enable-head="true"
+          :enable-head="false"
           row-no
           @goto="store.setPage"
           @set-row="store.setPerPage"
@@ -159,41 +159,61 @@
             </div>
           </template>
           <!-- pengganti header karena header di disable -->
-          <!-- <template #top-row>
+          <template #top-row>
             <th>
               <div class="row items-center text-weight-bold">
-                TANGGAL
+                No
               </div>
             </th>
             <th>
               <div class="row items-center text-weight-bold">
-                PASIEN
+                Tanggal
               </div>
             </th>
             <th>
               <div class="row justify-center items-center text-weight-bold q-mb-sm">
-                POLI
+                Pasien
               </div>
             </th>
             <th>
               <div class="row justify-center items-center text-weight-bold q-mb-sm">
-                PASIEN RR
+                Poli
               </div>
-              <div class="row items-center text-weight-bold">
+            </th>
+            <th colspan="2">
+              <div class="row justify-center text-weight-bold">
+                Apotik
+              </div>
+              <div class="row justify-start text-weight-bold">
                 <div class="col-6">
-                  MASUK (JAM)
+                  Racikan
                 </div>
                 <div class="col-6">
-                  KELUAR (JAM)
+                  Non Racikan
                 </div>
               </div>
             </th>
             <th>
-              <div class="row items-center text-weight-bold">
-                LAMA
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Laborat
               </div>
             </th>
-          </template> -->
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Radiologi
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Sistem Bayar
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Sub Total
+              </div>
+            </th>
+          </template>
           <!-- Row paling bawah -->
           <template #bottom-row>
             <td colspan="9">
@@ -217,10 +237,10 @@
             Poli
           </template>
           <template #col-apotikrajal>
-            Apotek Rawat Jalan
+            Apotek Racikan
           </template>
           <template #col-apotikpoli>
-            Apotek Poli
+            Apotek Non racikan
           </template>
           <template #col-laborat>
             Laborat
@@ -240,6 +260,9 @@
           <template #cell-pasien="{row}">
             <div v-if="row.masterpasien">
               <div class="row no-wrap">
+                {{ row.rs1 }}
+              </div>
+              <div class="row no-wrap">
                 {{ row.masterpasien[0].rs1 }}
               </div>
               <div class="kecilin">
@@ -256,146 +279,183 @@
             </div>
           </template>
           <template #cell-apotikrajal="{row}">
-            <div
-              v-if="row.apotekracikanrajal.length"
-            >
-              <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Nama
-                </div>
-                <div class="col-4 text-right">
-                  Jumlah
-                </div>
-              </div>
+            <div v-if="row.rajalracik">
               <div
-                v-for="(item,i) in row.apotekracikanrajal"
-                :key="i"
-                class="anu row items-center q-mb-xs q-col-gutter-sm"
+                v-for="(nota,a) in row.rajalracik"
+                :key="a"
               >
-                <div class="col-8 wrap_it">
-                  {{ item.racikanrinci.rs2 }}
+                <div class="row items-center q-col-gutter-sm text-weight-bold mb-xs q-mt-sm">
+                  <div class="col-12">
+                    {{ nota.nota }}
+                  </div>
                 </div>
-                <div class="col-4 text-right">
-                  {{ formatDouble(item.subtotal) }}
-                </div>
-              </div>
-              <div class="anu row items-center q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Total
-                </div>
-                <div class="col-4  text-right">
-                  {{ formatDouble(row.apotekracikanrajal.map(apt=>apt.subtotal).reduce((a,b)=>a+b,0)) }}
-                </div>
-              </div>
-            </div>
-            <div v-if="!row.apotekracikanrajal.length">
-              -
-            </div>
-          </template>
-          <template #cell-apotikpoli="{row}">
-            <div v-if="row.apotekrajalpolilalu.length">
-              <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Nama
-                </div>
-                <div class="col-4">
-                  Jumlah
-                </div>
-              </div>
-              <div
-                v-for="(item,i) in row.apotekrajalpolilalu"
-                :key="i"
-                class="anu row items-center q-mb-xs q-col-gutter-sm"
-              >
-                <div class="col-8 wrap_it">
-                  {{ item.mobat.rs2 }}
-                </div>
-                <div class="col-4 text-right">
-                  {{ formatDouble(item.subtotal) }}
-                </div>
-              </div>
-              <div class="anu row items-center q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Total
-                </div>
-                <div class="col-4  text-right">
-                  {{ formatDouble(row.apotekrajalpolilalu.map(apt=>apt.subtotal).reduce((a,b)=>a+b,0)) }}
-                </div>
-              </div>
-            </div>
-            <div v-if="!row.apotekrajalpolilalu.length">
-              -
-            </div>
-          </template>
-          <template #cell-laborat="{row}">
-            <div v-if="row.laborat.length">
-              <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Nama
-                </div>
-                <div class="col-4">
-                  Jumlah
-                </div>
-              </div>
-              <div
-                v-for="(item,i) in row.laborat"
-                :key="i"
-                class="anu row items-center q-mb-xs q-col-gutter-sm"
-              >
-                <div class="col-8 wrap_it">
-                  {{ item.pemeriksaanlab.rs2 }}
-                </div>
-                <div class="col-4 text-right">
-                  {{ formatDouble(item.subtotal) }}
-                </div>
-              </div>
-              <div class="anu row items-center q-col-gutter-sm text-weight-bold">
-                <div class="col-8">
-                  Total
-                </div>
-                <div class="col-4  text-right">
-                  {{ formatDouble(row.laborat.map(apt=>apt.subtotal).reduce((a,b)=>a+b,0)) }}
-                </div>
-              </div>
-            </div>
-            <div v-if="!row.laborat.length">
-              -
-            </div>
-          </template>
-          <template #cell-radiologi="{row}">
-            <div v-if="row.radiologi">
-              <div v-if="row.radiologi.length">
+
                 <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                  <div class="col-8">
+                  <div class="col-7">
                     Nama
                   </div>
                   <div class="col-4">
-                    subtotal
+                    Jumlah
                   </div>
                 </div>
                 <div
-                  v-for="(item,i) in row.radiologi"
+                  v-for="(item,i) in nota.rinci"
                   :key="i"
                   class="anu row items-center q-mb-xs q-col-gutter-sm"
                 >
                   <div class="col-8 wrap_it">
-                    {{ item.radiologi?item.radiologi.rs2:'-' }}
+                    {{ item.racikanrinci.rs2 }}
                   </div>
                   <div class="col-4 text-right">
                     {{ formatDouble(item.subtotal) }}
                   </div>
                 </div>
-                <div class="anu row items-center q-col-gutter-sm text-weight-bold">
+                <div class="row items-center q-col-gutter-sm text-weight-bold">
                   <div class="col-8">
-                    Total
+                    subtotal
                   </div>
-                  <div class="col-4  text-right">
-                    {{ formatDouble(row.radiologi.map(apt=>apt.subtotal).reduce((a,b)=>a+b,0)) }}
+                  <div class="col-4">
+                    {{ formatDouble(nota.subtotal) }}
                   </div>
                 </div>
               </div>
-              <div v-if="!row.radiologi.length">
-                -
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-apotikpoli="{row}">
+            <div v-if="row.rajalpoli">
+              <div
+                v-for="(nota,a) in row.rajalpoli"
+                :key="a"
+              >
+                <div class="row items-center q-col-gutter-sm mb-xs q-mt-sm text-weight-bold">
+                  <div class="col-12">
+                    {{ nota.nota }}
+                  </div>
+                </div>
+
+                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
+                  <div class="col-7">
+                    Nama
+                  </div>
+                  <div class="col-4 ">
+                    Jumlah
+                  </div>
+                </div>
+                <div
+                  v-for="(item,i) in nota.rinci"
+                  :key="i"
+                  class="anu row items-center q-mb-xs q-col-gutter-sm"
+                >
+                  <div class="col-8 wrap_it">
+                    {{ item.mobat.rs2 }}
+                  </div>
+                  <div class="col-4 text-right">
+                    {{ formatDouble(item.subtotal) }}
+                  </div>
+                </div>
+                <div class="row items-center q-col-gutter-sm text-weight-bold">
+                  <div class="col-8">
+                    subtotal
+                  </div>
+                  <div class="col-4">
+                    {{ formatDouble(nota.subtotal) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-laborat="{row}">
+            <div v-if="row.lab">
+              <div
+                v-for="(nota,a) in row.lab"
+                :key="a"
+              >
+                <div class="row items-center q-col-gutter-sm text-weight-bold mb-xs q-mt-sm">
+                  <div class="col-12">
+                    {{ nota.nota }}
+                  </div>
+                </div>
+
+                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
+                  <div class="col-7">
+                    Nama
+                  </div>
+                  <div class="col-4">
+                    Jumlah
+                  </div>
+                </div>
+                <div
+                  v-for="(item,i) in nota.rinci"
+                  :key="i"
+                  class="anu row items-center q-mb-xs q-col-gutter-sm"
+                >
+                  <div class="col-8 wrap_it">
+                    {{ item.pemeriksaanlab.rs21!==''?item.pemeriksaanlab.rs21:item.pemeriksaanlab.rs2 }}
+                  </div>
+                  <div class="col-4 text-right">
+                    {{ formatDouble(item.subtotal) }}
+                  </div>
+                </div>
+                <div class="row items-center q-col-gutter-sm text-weight-bold">
+                  <div class="col-8">
+                    subtotal
+                  </div>
+                  <div class="col-4">
+                    {{ formatDouble(nota.subtotal) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-radiologi="{row}">
+            <div v-if="row.radiolog">
+              <div
+                v-for="(nota,a) in row.radiolog"
+                :key="a"
+              >
+                <div class="row items-center q-col-gutter-sm text-weight-bold q-mb-xs q-mt-sm">
+                  <div class="col-12">
+                    {{ nota.nota }}
+                  </div>
+                </div>
+
+                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
+                  <div class="col-7">
+                    Nama
+                  </div>
+                  <div class="col-4">
+                    Jumlah
+                  </div>
+                </div>
+                <div
+                  v-for="(item,i) in nota.rinci"
+                  :key="i"
+                  class="anu row items-center q-mb-xs q-col-gutter-sm"
+                >
+                  <div class="col-8 wrap_it">
+                    {{ item.relmasterpemeriksaan?item.relmasterpemeriksaan.rs2:'-' }}
+                  </div>
+                  <div class="col-4 text-right">
+                    {{ formatDouble(item.subtotal) }}
+                  </div>
+                </div>
+                <div class="row items-center q-col-gutter-sm text-weight-bold">
+                  <div class="col-8">
+                    subtotal
+                  </div>
+                  <div class="col-4">
+                    {{ formatDouble(nota.subtotal) }}
+                  </div>
+                </div>
               </div>
             </div>
             <div v-else>

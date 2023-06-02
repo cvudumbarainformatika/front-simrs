@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="store.items">
     <q-card>
       <q-card-section>
         <div class="f-14 text-weight-bold">
