@@ -6,8 +6,8 @@ import { notifErrVue } from 'src/modules/utils'
 
 export const usePanggilStore = defineStore('panggil_antrian', {
   state: () => ({
-    item: null
-
+    item: null,
+    loading: false
   }),
 
   getters: {
@@ -18,6 +18,7 @@ export const usePanggilStore = defineStore('panggil_antrian', {
 
   actions: {
     async callLayanan(val, unit, set) {
+      this.loading = true
       if (unit === null) {
         return notifErrVue('Maaf Unit Tidak Boleh Kosong')
       }
@@ -27,8 +28,18 @@ export const usePanggilStore = defineStore('panggil_antrian', {
       try {
         const resp = await api.post('v1/call/calling-layanan', this.item)
         console.log('calling_layanan', resp)
+        if (resp.status === 200) {
+          const code = resp.data.code
+          if (code === 202) {
+            notifErrVue(resp.data.message)
+          }
+        }
+        setTimeout(() => {
+          this.loading = false
+        }, 1000)
       } catch (error) {
         console.log(error)
+        this.loading = false
       }
     }
   }
