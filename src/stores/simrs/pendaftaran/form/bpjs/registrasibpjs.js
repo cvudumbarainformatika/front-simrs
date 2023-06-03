@@ -6,6 +6,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
   state: () => ({
     loading: false,
     tampilRujukan: false,
+    tampilKontrol: false,
     form: {
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -65,6 +66,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     loadingListRujukanMrs: false,
     loadingSuplesi: false,
     loadingSuratKontrol: false,
+    loadingRencanaKontrol: false,
     kecelakaans: [
       { value: 0, nama: 'Bukan Kecelakaan Lalu Lintas [BKLL]' },
       { value: 1, nama: 'KLL dan Bukan Kecelakaan Kerja [BKK]' },
@@ -147,15 +149,15 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getListRencanaKontrol(val) {
-      this.listSuratKontrols = true
+      this.listRencanaKontrols = true
       await api.post('v1/simrs/pendaftaran/rencanakontrolbpjs', val)
         .then(resp => {
-          this.listSuratKontrols = false
+          this.listRencanaKontrols = false
           this.listRencanaKontrols = resp.data.result.list ? resp.data.result.list : []
           console.log('List rencana kontrol', resp)
         })
         .catch(() => {
-          this.listSuratKontrols = false
+          this.listRencanaKontrols = false
         })
     },
     async cekRujukanPeserta(val) {
@@ -172,16 +174,16 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getListSuratKontrol(val) {
-      this.loading = true
+      this.loadingSuratKontrol = true
       const param = { params: val }
       await api.get('v1/simrs/rekomdpjp/rekomdpjp', param)
         .then(resp => {
-          this.loading = false
+          this.loadingSuratKontrol = false
           this.listSuratKontrols = resp.data
           console.log('Surat kontrols', resp)
         })
         .catch(() => {
-          this.loading = false
+          this.loadingSuratKontrol = false
         })
     },
     async getDokterDpjp() {

@@ -443,6 +443,13 @@
 
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
+                <q-tooltip
+                  v-if="!store.form.kodepoli"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Poli belum dipilih
+                </q-tooltip>
               </div>
             </div>
             <!-- Kecelakaan -->

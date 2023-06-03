@@ -30,9 +30,11 @@
       </q-card-actions>
     </q-card>
     <DialogListRujukan v-model="registrasi.tampilRujukan" />
+    <DialogListKontrol v-model="registrasi.tampilKontrol" />
   </q-page>
 </template>
 <script setup>
+import DialogListKontrol from './DialogListKontrol.vue'
 import DialogListRujukan from './DialogListRujukan.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
@@ -72,10 +74,13 @@ function getListSuratKontrol() {
   const data = refDataPasien.value.validateNokaAndNorm()
   data.bulan = date.formatDate(registrasi.form.tglsep, 'MM')
   data.tahun = date.formatDate(registrasi.form.tglsep, 'YYYY')
+  registrasi.listSuratKontrols = []
+  registrasi.listRencanaKontrols = []
   if (data) {
     console.log('cek Surat kontrol', data)
     registrasi.getListSuratKontrol(data)
     registrasi.getListRencanaKontrol(data)
+    registrasi.tampilKontrol = true
   }
 }
 // cek list rujukan
