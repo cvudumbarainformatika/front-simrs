@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays } from 'src/modules/utils'
+import { filterDuplicateArrays, filterDuplicateArraysInArrays } from 'src/modules/utils'
 
 export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_keuangan_bill_rajal', {
   state: () => ({
@@ -11,8 +11,8 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
     tanggal: {
       from: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       to: date.formatDate(Date.now(), 'DD MMMM YYYY')
-      // from: date.formatDate('03-01-2014', 'DD MMMM YYYY'),
-      // to: date.formatDate('03-05-2014', 'DD MMMM YYYY')
+      // from: date.formatDate('01-01-2023', 'DD MMMM YYYY'),
+      // to: date.formatDate('01-05-2023', 'DD MMMM YYYY')
     },
     params: {
       q: '',
@@ -21,8 +21,8 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
       order_by: 'created_at',
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      // tgldari: date.formatDate('03-01-2014', 'YYYY-MM-DD'),
-      // tglsampai: date.formatDate('03-05-2014', 'YYYY-MM-DD'),
+      // tgldari: date.formatDate('01-01-2023', 'YYYY-MM-DD'),
+      // tglsampai: date.formatDate('01-05-2023', 'YYYY-MM-DD'),
       sort: 'desc'
     },
     form: {},
@@ -71,21 +71,23 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
     },
     mapDataItems() {
       this.items.forEach(item => {
-        const racik = item.apotekracikanrajal ? (item.apotekracikanrajal.length ? item.apotekracikanrajal.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        // const racik = item.apotekracikanrajal ? (item.apotekracikanrajal.length ? item.apotekracikanrajal.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        let racik = 0
         const poli = item.apotekrajalpolilalu ? (item.apotekrajalpolilalu.length ? item.apotekrajalpolilalu.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         // const laborat = item.laborat ? (item.laborat.length ? item.laborat.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         let laborat = 0
-        const radiologi = item.radiologi ? (item.radiologi.length ? item.radiologi.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        // const radiologi = item.radiologi ? (item.radiologi.length ? item.radiologi.map(anu => anu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        let radiologi = 0
 
         const racikKey = item.apotekracikanrajal ? (item.apotekracikanrajal.length ? item.apotekracikanrajal.map(anu => anu.rs2) : []) : []
         const poliKey = item.apotekrajalpolilalu ? (item.apotekrajalpolilalu.length ? item.apotekrajalpolilalu.map(anu => anu.rs2) : []) : []
         const laboratKey = item.laborat ? (item.laborat.length ? item.laborat.map(anu => anu.rs2) : []) : []
-        const radiologiKey = item.radiologi ? (item.radiologi.length ? item.radiologi.map(anu => anu.rs2) : []) : []
+        const radiologiKey = item.radiologi ? (item.radiologi.length ? item.radiologi.map(anu => anu.reltransrinci.map(a => a.rs2)) : []) : []
 
         const racikKeyFilt = racikKey.length ? filterDuplicateArrays(racikKey) : []
         const poliKeyFilt = poliKey.length ? filterDuplicateArrays(poliKey) : []
         const laboratKeyFilt = laboratKey.length ? filterDuplicateArrays(laboratKey) : []
-        const radiologiKeyFilt = radiologiKey.length ? filterDuplicateArrays(radiologiKey) : []
+        const radiologiKeyFilt = radiologiKey.length ? filterDuplicateArraysInArrays(radiologiKey) : []
 
         // item.racikKey = racikKeyFilt.length ? filterDuplicateArrays(racikKey) : []
         // item.poliKey = poliKeyFilt.length ? filterDuplicateArrays(poliKey) : []
@@ -119,7 +121,12 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
               })
             }
             if (paket.length) {
-              temp.rinci.push(paket[0])
+              const keyP = paket.map(x => x.pemeriksaanlab.rs21)
+              const keyPaket = filterDuplicateArrays(keyP)
+              keyPaket.forEach(key => {
+                const anu = paket.filter(l => l.pemeriksaanlab.rs21 === key)
+                temp.rinci.push(anu[0])
+              })
             }
             // console.log('paket', paket, 'non paket', nonPaket)
             temp.subtotal = temp.rinci.map(a => a.subtotal).reduce((a, b) => a + b, 0)
@@ -127,13 +134,20 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
             item.lab.push(temp)
           })
         }
+        if (radiologiKey.length) {
+          console.log('rad key', radiologiKey)
+        }
         if (radiologiKeyFilt.length) {
+          console.log('rad key filt', radiologiKeyFilt)
           item.radiolog = []
           radiologiKeyFilt.forEach(key => {
             const temp = {}
             temp.nota = key
-            temp.rinci = item.radiologi.filter(it => it.rs2 === key)
+            item.radiologi.forEach(rad => {
+              temp.rinci = rad.reltransrinci.filter(it => it.rs2 === key)
+            })
             temp.subtotal = temp.rinci.map(a => a.subtotal).reduce((a, b) => a + b, 0)
+            radiologi = temp.subtotal
             item.radiolog.push(temp)
           })
         }
@@ -145,7 +159,7 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
             temp.rinci = item.apotekracikanrajal.filter(it => it.rs2 === key)
             temp.biaya_r = filterDuplicateArrays(temp.rinci.map(a => a.relasihederracikan.rs8)).length ? filterDuplicateArrays(temp.rinci.map(a => a.relasihederracikan.rs8)) : [0]
             temp.subtotal = temp.rinci.map(a => a.subtotal).reduce((a, b) => a + b, 0) + temp.biaya_r[0]
-            item.subtotal += temp.biaya_r[0]
+            racik += temp.subtotal
             item.rajalracik.push(temp)
           })
         }

@@ -156,6 +156,23 @@
                   @click="ambilData"
                 />
               </div>
+              <div v-if="store.items.length">
+                <download-excel
+                  class="btn"
+                  :fetch="fetchData"
+                  :fields="jsonFields"
+                  :before-generate="startDownload"
+                  :before-finish="finishDownload"
+                  name="tagihan.xls"
+                >
+                  <app-btn
+                    label="Download Excel"
+                    icon="icon-mat-download"
+                    push
+                    :loading="loading"
+                  />
+                </download-excel>
+              </div>
             </div>
           </template>
           <!-- pengganti header karena header di disable -->
@@ -480,14 +497,57 @@
   </q-page>
 </template>
 <script setup>
-// import { date } from 'quasar'
+import { date } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useSimrsLaporanKeuanganBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/billrajal'
+import CustomTable from '../../rekap/CustomTable.vue'
 import { ref } from 'vue'
 
-import CustomTable from '../../rekap/CustomTable.vue'
-
 const store = useSimrsLaporanKeuanganBillRajalStore()
+
+// data for print --start--
+const loading = ref(false)
+function startDownload() {
+  loading.value = true
+}
+function finishDownload() {
+  loading.value = false
+}
+const jsonFields = {
+  No: 'no',
+  Tanggal: 'tanggal',
+  Pasien: 'pasien',
+  Poli: 'poli',
+  'Apotek Racikan': 'racikan',
+  'Apotek Non Racikan': 'nonracikan',
+  Laborat: 'laborat',
+  Radiologi: 'radiologi',
+  'Sistem Bayar': 'bayar',
+  'Sub Total': 'subtotal'
+}
+function fetchData() {
+  loading.value = true
+  const data = []
+  store.items.forEach((item, i) => {
+    const temp = {}
+    temp.no = i + 1
+    temp.subtotal = item.subtotal
+    temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+    temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
+    temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+    temp.racikan = item.rajalracik ? 'Nota : ' + item.rajalracik.map(a => a.nota) + ', Subtotal ' + item.rajalracik.map(a => a.subtotal) + ', rinci : ' + item.rajalracik.map(a => a.rinci.map(anu => { return ' ' + anu.racikanrinci.rs2 + ' [' + anu.subtotal + ']' })) : '-'
+    temp.nonracikan = item.rajalpoli ? 'Nota : ' + item.rajalpoli.map(a => a.nota) + ', Subtotal ' + item.rajalpoli.map(a => a.subtotal) + ', rinci : ' + item.rajalpoli.map(a => a.rinci.map(anu => { return ' ' + anu.mobat.rs2 + ' [' + anu.subtotal + ']' })) : '-'
+    temp.laborat = item.lab ? 'Nota : ' + item.lab.map(a => a.nota) + ', Subtotal ' + item.lab.map(a => a.subtotal) + ', rinci : ' + item.lab.map(a => a.rinci.map(anu => { return ' ' + (anu.pemeriksaanlab.rs21 !== '' ? anu.pemeriksaanlab.rs21 : anu.pemeriksaanlab.rs2) + ' [' + anu.subtotal + ']' })) : '-'
+    temp.radiologi = item.radiolog ? 'Nota : ' + item.radiolog.map(a => a.nota) + ', Subtotal ' + item.radiolog.map(a => a.subtotal) + ', rinci : ' + item.radiolog.map(a => a.rinci.map(anu => { return ' ' + (anu.relmasterpemeriksaan ? anu.relmasterpemeriksaan.rs2 : '-') + ' [' + anu.subtotal + ']' })) : '-'
+    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+    data.push(temp)
+
+    // console.log('in', i, 'item', item)
+  })
+  loading.value = false
+  return data
+}
+// data for print --end--
 
 function ambilData() {
   store.getDataTable()

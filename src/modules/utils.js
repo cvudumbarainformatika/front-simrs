@@ -200,6 +200,26 @@ const filterDuplicateArrays = (array) => {
   return data
 }
 
+const filterDuplicateArraysInArrays = (array) => {
+  const anu = []
+  array.forEach(a => {
+    const data = a.filter((value, index, self) => {
+      return self.indexOf(value) === index
+    })
+    // console.log('a ', a)
+    if (data.length) {
+      data.forEach(b => {
+        anu.push(b)
+      })
+    }
+  })
+  // console.log('arrays ', array, 'anu ', anu)
+  const apem = anu.filter((value, index, self) => {
+    return self.indexOf(value) === index
+  })
+  return apem
+}
+
 const findWithAttr = (array, attr, value) => {
   for (let i = 0; i < array.length; i += 1) {
     if (array[i][attr] === value) {
@@ -251,5 +271,6 @@ export {
   findWithAttr,
   changeArrayIndex,
   notifNegativeCenterVue,
-  removeToken
+  removeToken,
+  filterDuplicateArraysInArrays
 }
