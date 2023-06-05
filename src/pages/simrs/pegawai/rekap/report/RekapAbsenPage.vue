@@ -348,9 +348,10 @@
               {{ row.nama }}
               <div
                 v-if="store.settingsTable.tampilNip"
-                class="text-gray"
+                :class="`text-gray`"
+                :style="`fonst-size: ${store.settingsTable.fontSize - 2}px !mportant`"
               >
-                {{ row.flag==='P01'? row.nip:row.nik }}
+                {{ row.flag ==='P01'? row.nip:row.nik }}
               </div>
               <!-- <q-linear-progress
                 class="q-mt-xs"
