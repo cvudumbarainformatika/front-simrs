@@ -56,6 +56,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     diagnosaAwals: [],
     ppkRujukans: [],
     listSuratKontrols: [],
+    listRencanaKontrols: [],
     listRujukanPcare: [],
     listRujukanRs: [],
     listRujukanSepMrs: [],
@@ -149,15 +150,15 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getListRencanaKontrol(val) {
-      this.listRencanaKontrols = true
+      this.loadingRencanaKontrol = true
       await api.post('v1/simrs/pendaftaran/rencanakontrolbpjs', val)
         .then(resp => {
-          this.listRencanaKontrols = false
+          this.loadingRencanaKontrol = false
           this.listRencanaKontrols = resp.data.result.list ? resp.data.result.list : []
           console.log('List rencana kontrol', resp)
         })
         .catch(() => {
-          this.listRencanaKontrols = false
+          this.loadingRencanaKontrol = false
         })
     },
     async cekRujukanPeserta(val) {

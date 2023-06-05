@@ -59,14 +59,14 @@
                 {{ row.kecamatan!==''?row.kecamatan+' ,':'-,' }}
               </div>
               <div class="col-6">
-                {{ row.kabupaten!==''?row.kabupaten+' ,':'-,' }}
+                {{ row.kabupatenkota!==''?row.kabupatenkota+' ,':'-,' }}
               </div>
             </div>
           </template>
           <template #cell-Nama="{row}">
             <div class="row">
               <div class="col-2">
-                {{ row.sapan }}
+                {{ row.sapan?row.sapan:'' }}
               </div>
               <div class="col-10 ellipsis">
                 {{ row.nama }}

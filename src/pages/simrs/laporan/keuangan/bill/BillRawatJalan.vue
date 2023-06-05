@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-card :key="store.items">
+    <q-card :key="store.params.tgldari">
       <q-card-section>
         <div class="row garis-bawah">
           <div class="col-2">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
-          DATA TAGIHAN PASIEN
+          REKAP TAGIHAN PASIEN RAWAT JALAN
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-14">
           periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
@@ -41,7 +41,7 @@
       <q-card-section>
         <CustomTable
           id="printMe"
-          :key="store.items"
+          :key="store.params.tgldari"
           :columns="store.columns"
           :meta="store.meta"
           :column-hide="store.columnHide"
@@ -97,7 +97,7 @@
               </div>
             </div>
             <div class="row justify-center f-18 text-weight-bold q-my-sm">
-              DATA TAGIHAN PASIEN
+              REKAP TAGIHAN PASIEN RAWAT JALAN
             </div>
             <div class="row justify-center f-14 text-weight-bold q-my-sm">
               periode {{ store.tanggal.from }} - {{ store.tanggal.to }}

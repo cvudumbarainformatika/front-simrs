@@ -9,86 +9,74 @@
           Daftar Surat kontrol
         </div>
         <div v-if="!store.listSuratKontrols.length">
-          <app-loading v-if="store.loadingListRujukan" />
+          <app-loading v-if="store.loadingSuratKontrol" />
           <app-no-data v-else />
         </div>
         <div v-if="store.listSuratKontrols.length">
           <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
             <div class="col-1">
-              <div class="row">
-                <div class="col-5">
+              <div class="row q-col-gutter-sm">
+                <div class="col-3">
                   No
                 </div>
-                <div class="col-7">
-                  ICD
+                <div class="col-9">
+                  No Surat Kontrol
                 </div>
               </div>
             </div>
             <div class="col-2">
-              Diagnosa
+              No. Reg
             </div>
             <div class="col-2">
-              No. Kunjungan
-            </div>
-            <div class="col-1">
-              Pelayanan
+              Tgl Kunjungan
             </div>
             <div class="col-2">
-              Poli Rujukan
+              Poli Asal
             </div>
-            <div class="col-1">
-              Kode faskes
+            <div class="col-2">
+              Tgl Kontrol
             </div>
-            <div class="col-1">
-              Nama faskes
-            </div>
-            <div class="col-1">
-              tanggal Kunjungan
+            <div class="col-2">
+              Masa Aktif
             </div>
             <div class="col-1">
               aksi
             </div>
           </div>
           <div
-            v-for="(list,i) in store.listRujukanPcare"
+            v-for="(list,i) in store.listSuratKontrols"
             :key="i"
             class="row no-wrap justify-center items-center q-col-gutter-sm q-mb-xs"
           >
             <div class="col-1">
-              <div class="row">
-                <div class="col-5">
+              <div class="row q-col-gutter-sm">
+                <div class="col-3">
                   {{ i+1 }}
                 </div>
-                <div class="col-7">
-                  {{ list.diagnosa?list.diagnosa.kode:'-' }}
+                <div class="col-9">
+                  {{ list.noDpjp?list.noDpjp:'-' }}
                 </div>
               </div>
             </div>
             <div class="col-2">
-              {{ list.diagnosa?list.diagnosa.nama:'-' }}
+              {{ list.noreg }}
             </div>
             <div class="col-2">
-              {{ list.noKunjungan }}
-            </div>
-            <div class="col-1">
-              {{ list.pelayanan?list.pelayanan.nama:'-' }}
+              {{ list.relkunjunganpoli?dateFullFormat(list.relkunjunganpoli.rs3):(list.relkunjunganranap?dateFullFormat(list.relkunjunganranap.rs3):'-') }}
             </div>
             <div class="col-2">
-              {{ list.poliRujukan?list.poliRujukan.nama:'-' }}
+              {{ list.relkunjunganpoli?(list.relkunjunganpoli.relmpoli?list.relkunjunganpoli.relmpoli.rs2:'-'):(list.relkunjunganranap.ruangan?list.relkunjunganranap.ruangan.rs2:'-') }}
             </div>
-            <div class="col-1">
-              {{ list.provPerujuk?list.provPerujuk.kode:'-' }}
+            <div class="col-2">
+              {{ list.tglKontrol?dateFullFormat(list.tglKontrol):'-' }}
             </div>
-            <div class="col-1">
-              {{ list.provPerujuk?list.provPerujuk.nama:'-' }}
-            </div>
-            <div class="col-1">
-              {{ list.tglKunjungan }}
+            <div class="col-2">
+              {{ list.tglMasaAktif?dateFullFormat(list.tglMasaAktif):'-' }}
             </div>
             <div class="col-1">
               <app-btn
                 label="pilih"
-                @click="pilihRujukanPCare(list)"
+                @click="pilihSuratKontrol(list)"
               />
             </div>
           </div>
@@ -102,214 +90,108 @@
         <div class="title-desc q-mb-md">
           Daftar Rencana kontrol
         </div>
-        <div v-if="!store.listRujukanRs.length">
-          <app-loading v-if="store.loadingListRujukanRS" />
+        <div v-if="!store.listRencanaKontrols.length">
+          <app-loading v-if="store.loadingRencanaKontrol" />
           <app-no-data v-else />
         </div>
-        <div v-if="store.listRujukanRs.length">
-          <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
-            <div class="col-1">
-              <div class="row">
-                <div class="col-5">
-                  No
-                </div>
-                <div class="col-7">
-                  ICD
-                </div>
-              </div>
-            </div>
-            <div class="col-2">
-              Diagnosa
-            </div>
-            <div class="col-2">
-              No. Kunjungan
-            </div>
-            <div class="col-1">
-              Pelayanan
-            </div>
-            <div class="col-2">
-              Poli Rujukan
-            </div>
-            <div class="col-1">
-              Kode faskes
-            </div>
-            <div class="col-1">
-              Nama faskes
-            </div>
-            <div class="col-1">
-              tanggal Kunjungan
-            </div>
-            <div class="col-1">
-              aksi
-            </div>
-          </div>
-          <div
-            v-for="(list,i) in store.listRujukanRs"
-            :key="i"
-            class="row no-wrap justify-center items-center q-col-gutter-sm q-mb-xs"
-          >
-            <div class="col-1">
-              <div class="row">
-                <div class="col-5">
-                  {{ i+1 }}
-                </div>
-                <div class="col-7">
-                  {{ list.diagnosa?list.diagnosa.kode:'-' }}
-                </div>
-              </div>
-            </div>
-            <div class="col-2">
-              {{ list.diagnosa?list.diagnosa.nama:'-' }}
-            </div>
-            <div class="col-2">
-              {{ list.noKunjungan }}
-            </div>
-            <div class="col-1">
-              {{ list.pelayanan?list.pelayanan.nama:'-' }}
-            </div>
-            <div class="col-2">
-              {{ list.poliRujukan?list.poliRujukan.nama:'-' }}
-            </div>
-            <div class="col-1">
-              {{ list.provPerujuk?list.provPerujuk.kode:'-' }}
-            </div>
-            <div class="col-1">
-              {{ list.provPerujuk?list.provPerujuk.nama:'-' }}
-            </div>
-            <div class="col-1">
-              {{ list.tglKunjungan }}
-            </div>
-            <div class="col-1">
-              <app-btn
-                label="pilih"
-                @click="pilihRujukanPCare(list)"
-              />
-            </div>
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="f-14 text-weight-bold q-mt-md">
-          NO SEP Waktu MRS
-        </div>
-        <div class="title-desc q-mb-md">
-          Daftar No SEP Waktu MRS
-        </div>
-        <div v-if="!store.listRujukanSepMrs.length">
-          <app-loading v-if="store.loadingListRujukanMrs" />
-          <app-no-data v-else />
-        </div>
-        <div v-if="store.listRujukanSepMrs.length">
+        <div v-if="store.listRencanaKontrols.length">
           <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
             <div class="col-1">
               No
             </div>
-            <div class="col-3">
-              No SEP
-            </div>
             <div class="col-2">
-              Noka
-            </div>
-            <div class="col-2">
-              Noreg
+              No Surat Kontrol
             </div>
             <div class="col-1">
-              Norm
+              Dokter
             </div>
             <div class="col-2">
-              Tanggal SEP
+              Tgl Rencana Kontrol
             </div>
+            <div class="col-1">
+              Tgl Terbit
+            </div>
+            <div class="col-2">
+              Poli Tujuan
+            </div>
+            <div class="col-2">
+              Jenis Kontrol
+            </div>
+            <!-- <div class="col-1">
+              Ket
+            </div> -->
             <div class="col-1">
               aksi
             </div>
           </div>
           <div
-            v-for="(list,i) in store.listRujukanSepMrs"
+            v-for="(list,i) in store.listRencanaKontrols"
             :key="i"
             class="row no-wrap justify-center items-center q-col-gutter-sm q-mb-xs"
           >
             <div class="col-1">
               {{ i+1 }}
             </div>
-            <div class="col-3">
-              {{ list.rs8 }}
-            </div>
             <div class="col-2">
-              {{ list.rs13 }}
-            </div>
-            <div class="col-2">
-              {{ list.rs1 }}
+              {{ list.noSuratKontrol?list.noSuratKontrol:'-' }}
             </div>
             <div class="col-1">
-              {{ list.rs2 }}
+              {{ list.namaDokter }}
             </div>
             <div class="col-2">
-              {{ list.rs6 }}
+              {{ list.tglRencanaKontrol?dateFullFormat(list.tglRencanaKontrol):'-' }}
             </div>
+            <div class="col-1">
+              {{ list.tglTerbitKontrol?dateFullFormat(list.tglTerbitKontrol):'-' }}
+            </div>
+            <div class="col-2">
+              {{ list.namaPoliTujuan?list.namaPoliTujuan:'-' }}
+            </div>
+            <div class="col-2">
+              {{ list.namaJnsKontrol?list.namaJnsKontrol:'-' }}
+            </div>
+            <!-- <div class="col-1">
+              {{ list.tglKunjungan }}
+            </div> -->
             <div class="col-1">
               <app-btn
                 label="pilih"
-                @click="pilihRujukanMrs(list)"
+                @click="pilihRencanaKontrol(list)"
               />
             </div>
           </div>
         </div>
       </q-card-section>
       <q-separator />
+
+      <q-separator />
     </q-card>
   </q-dialog>
 </template>
 <script setup>
-import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { dateFullFormat } from 'src/modules/formatter'
+import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 
 const store = useRegistrasiPasienBPJSStore()
-// pilih rujukan p care
-function pilihRujukanPCare(val) {
-  console.log('karcis', store.jenisKarcises)
-  console.log('rujukan p care', val, store.polis)
+// surat kontrol
+function pilihSuratKontrol(val) {
+  const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : '') : ''
+  const findruangan = val.relkunjunganranap ? (val.relkunjunganranap.ruangan ? val.relkunjunganranap.ruangan.rs1 : '') : ''
 
-  const index = findWithAttr(store.polis, 'kodemapingbpjs', val.poliRujukan.kode)
-  if (index >= 0) {
-    console.log('index', index, store.polis[index])
-    store.paramKarcis.kd_poli = store.polis[index].kodepoli
-    store.form.dpjp = ''
-    if (store.jenisKarcises.length) {
-      store.form.jeniskarcis = store.jenisKarcises[0].jeniskarcis
-      store.paramKarcis.flag = store.jenisKarcises[0].jeniskarcis
-    }
-    if (store.paramKarcis.flag) {
-      if (store.paramKarcis.flag !== '') {
-        store.getKarcisPoli().then(() => {
-          store.display.hargakarcis = store.kasrcispoli.tarif
-          store.form.karcis = store.kasrcispoli.tarif
-        })
-      }
-    }
-    store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
-    store.setForm('kodepoli', store.polis[index].kodepoli)
-    store.getDokterDpjp()
-  } else {
-    notifErrVue('Poli tidak ditemukan')
-  }
-  store.diagnosaAwals.push(val.diagnosa)
-  store.ppkRujukans.push(val.provPerujuk)
-  store.display.diagnosa.kode = val.diagnosa.kode
-  store.setForm('kodediagnosa', val.diagnosa.kode)
-  store.display.diagnosa.nama = val.diagnosa.nama
-  store.setForm('namadiagnosa', val.diagnosa.nama)
-  store.setForm('norujukan', val.noKunjungan)
-  // ppk rujukan
-  store.display.kode = val.provPerujuk.kode
-  store.setForm('ppkRujukan', val.provPerujuk.kode)
+  const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
+  const indRuangan = findruangan !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
 
-  store.tampilRujukan = false
+  const poli = indPoli >= 0 ? store.polis[indPoli] : false
+  const ruangan = indRuangan >= 0 ? store.polis[indRuangan] : false
+
+  console.log(' surat kontrol ', val)
+  console.log(' find ', findpoli, findruangan)
+  console.log(' index ', indPoli, indRuangan)
+  console.log(' poli ', poli, ruangan)
 }
-// pilih rujukan p care
-function pilihRujukanMrs(val) {
-  console.log('rujukan Mrs', val)
-  store.setForm('norujukan', val.rs8)
-  store.tampilRujukan = false
+// rencana kontrol
+function pilihRencanaKontrol(val) {
+  console.log(' rencana kontrol ', val)
 }
 </script>

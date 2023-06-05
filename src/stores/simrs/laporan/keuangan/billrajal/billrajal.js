@@ -67,7 +67,7 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
     },
     // init data
     getInitialData() {
-      this.getDataTable()
+      // this.getDataTable()
     },
     mapDataItems() {
       this.items.forEach(item => {
