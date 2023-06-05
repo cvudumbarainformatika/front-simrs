@@ -234,7 +234,7 @@
                 :left="'col-grow text-left'"
                 :right="'col-grow text-right'"
               >
-                <div class="col-grow text-left">
+                <div class="text-left">
                   {{ head }}
                 </div>
               </slot>
@@ -254,6 +254,12 @@
           </th>
           <th
             v-if="defaultBtn"
+            class="text-right"
+          >
+            #
+          </th>
+          <th
+            v-if="customBtn"
             class="text-right"
           >
             #
@@ -329,11 +335,16 @@
             <slot
               :name="'cell-' + col"
               :row="item"
+              :left="'col-grow text-left'"
+              :right="'col-grow text-right'"
             >
               {{ item[col] }}
             </slot>
           </td>
-          <td class="text-right">
+          <td
+            v-if="defaultBtn || customBtn"
+            class="text-right"
+          >
             <div class="row justify-end items-center">
               <!-- class="q-ml-md" -->
               <slot
@@ -378,7 +389,7 @@
                 </q-btn>
               </div>
 
-              <div>
+              <div v-if="customBtn">
                 <slot
                   name="custom-btn"
                   :row="item"
@@ -448,6 +459,7 @@ const props = defineProps({
   toSearch: { type: String, default: '' },
   isChecked: { type: Boolean, default: false },
   defaultBtn: { type: Boolean, default: true },
+  customBtn: { type: Boolean, default: false },
   adaEdit: { type: Boolean, default: true },
   adaDelete: { type: Boolean, default: true },
   adaTambah: { type: Boolean, default: true },
@@ -635,16 +647,18 @@ $pfs: v-bind(pts);
     .q-table td {
       padding: 5px 5px;
       font-size: $pfs;
-       white-space: normal !important;
-        word-wrap: normal !important;
-        hyphens: manual;
+      //  white-space: normal !important;
+      //   word-wrap: normal !important;
+      //   hyphens: manual;
+      @include wrap($full: false);
     }
     .q-table th {
       padding:5px 5px;
       font-size:$pfs;
-      white-space: normal !important;
-        word-wrap: normal !important;
-        hyphens: manual;
+      // white-space: normal !important;
+      //   word-wrap: normal !important;
+      //   hyphens: manual;
+      @include wrap($full: false);
     }
 
     .screenwide{

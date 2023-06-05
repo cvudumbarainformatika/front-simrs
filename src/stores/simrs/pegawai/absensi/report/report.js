@@ -18,9 +18,13 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       order_by: 'id',
       sort: 'desc'
     },
-    defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A', 'masuk', 'hari', 'kurang', 'per-t'],
-    columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A', 'masuk', 'hari', 'kurang', 'per-t'],
-    columnHide: ['id'],
+    defaultColumn: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A',
+      'masuk',
+      'hari', 'kurang', 'per-t'],
+    columns: ['nama', 'status', 'IJIN', 'SAKIT', 'DL', 'DSPEN', 'CUTI', 'A',
+      'masuk',
+      'hari', 'kurang', 'per-t'],
+    columnHide: ['id', 'masuk'],
     jenis_pegawai: [
       {
         id: 987654321,
@@ -38,7 +42,13 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     ruanganPrint: [],
     jumlahProta: 0,
     protas: [],
-    rincian: false
+    rincian: false,
+
+    settingsTable: {
+      imageTampil: true,
+      fontSize: 11,
+      tampilNip: true
+    }
   }),
 
   getters: {
@@ -177,6 +187,10 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         this.loadingDialog = false
       }
       this.loadingDialog = false
+    },
+
+    setSettings(key, value) {
+      this.settingsTable[key] = value
     }
   }
 })

@@ -50,7 +50,7 @@
             />
           </div>
         </div>
-        <app-table
+        <app-table-good
           id="printMe"
           title="Rekap Absens Pegawai"
           :columns="store.columns"
@@ -61,8 +61,8 @@
           :order-by="store.params.order_by"
           :sort="store.params.sort"
           :loading="store.loading"
-          row-image="foto"
-          :text-size="11"
+          :row-image="store.settingsTable.imageTampil?'foto':null"
+          :text-size="store.settingsTable.fontSize"
           :default-btn="false"
           :ada-tambah="false"
           :to-search="store.params.q"
@@ -123,18 +123,82 @@
             <q-btn
               class="q-mr-sm"
               unelevated
-              color="negative"
+              color="teal"
               round
               size="sm"
-              icon="icon-mat-print"
-              @click="printMode()"
+              icon="icon-mat-settings"
             >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
+              <q-menu
+                transition-show="flip-right"
+                transition-hide="flip-left"
               >
-                Print model 1
-              </q-tooltip>
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-close-popup
+                    clickable
+                    dense
+                  >
+                    <q-item-section>
+                      <q-checkbox
+                        v-model="store.settingsTable.imageTampil"
+                        size="xs"
+                        label="Foto Tampil"
+                      />
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    v-close-popup
+                    clickable
+                    dense
+                  >
+                    <q-item-section>
+                      <q-checkbox
+                        v-model="store.settingsTable.tampilNip"
+                        size="xs"
+                        label="Nik / Nip Tampil"
+                      />
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item
+                    dense
+                    clickable
+                  >
+                    <q-item-section>Ukuran Text</q-item-section>
+                    <q-item-section side>
+                      <q-icon name="icon-mat-keyboard_arrow_right" />
+                    </q-item-section>
+                    <q-menu
+                      anchor="top end"
+                      self="top start"
+                    >
+                      <q-list style="min-width: 80px">
+                        <q-item
+                          v-for="n in 7"
+                          :key="n"
+                          v-close-popup
+                          dense
+                          clickable
+                        >
+                          <q-item-section>
+                            <q-radio
+                              v-model="store.settingsTable.fontSize"
+                              :val="n+7"
+                              color="teal"
+                              size="xs"
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>{{ n+7 }} px</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-item>
+                  <q-separator />
+                </q-list>
+              </q-menu>
             </q-btn>
             <q-btn
               ref="refPrint"
@@ -160,23 +224,55 @@
               Status
             </div>
           </template>
-          <template #col-IJIN>
-            I
+          <template #col-IJIN="{right}">
+            <div :class="right">
+              I
+            </div>
           </template>
-          <template #col-SAKIT>
-            S
+          <template #col-SAKIT="{right}">
+            <div :class="right">
+              S
+            </div>
           </template>
-          <template #col-masuk>
-            Masuk (jam)
+          <template #col-DL="{right}">
+            <div :class="right">
+              DL
+            </div>
           </template>
-          <template #col-hari>
-            Masuk (Hari)
+          <template #col-DSPEN="{right}">
+            <div :class="right">
+              DISPEN
+            </div>
           </template>
-          <template #col-kurang>
-            Terlambat
+          <template #col-CUTI="{right}">
+            <div :class="right">
+              CUTI
+            </div>
           </template>
-          <template #col-per-t>
-            % POT
+          <template #col-A="{right}">
+            <div :class="right">
+              A
+            </div>
+          </template>
+          <template #col-masuk="{right}">
+            <div :class="right">
+              Masuk(Jam)
+            </div>
+          </template>
+          <template #col-hari="{right}">
+            <div :class="right">
+              Masuk
+            </div>
+          </template>
+          <template #col-kurang="{right}">
+            <div :class="right">
+              Terlambat
+            </div>
+          </template>
+          <template #col-per-t="{right}">
+            <div :class="right">
+              % POT
+            </div>
           </template>
           <template #cell-default-img="{row}">
             <div class="row">
@@ -248,8 +344,14 @@
             </div>
           </template>
           <template #cell-nama="{row}">
-            <div class="text-xs">
+            <div>
               {{ row.nama }}
+              <div
+                v-if="store.settingsTable.tampilNip"
+                class="text-gray"
+              >
+                {{ row.flag==='P01'? row.nip:row.nik }}
+              </div>
               <!-- <q-linear-progress
                 class="q-mt-xs"
                 rounded
@@ -317,33 +419,33 @@
               {{ row.jenis_pegawai? row.jenis_pegawai.jenispegawai:'-' }}
             </div>
           </template>
-          <template #cell-IJIN="{row}">
-            <div class="">
+          <template #cell-IJIN="{row, right}">
+            <div :class="`${right}`">
               {{ getIjin(row, 'IJIN')===0? '-': getIjin(row, 'IJIN') }}
             </div>
           </template>
-          <template #cell-SAKIT="{row}">
-            <div class="">
+          <template #cell-SAKIT="{row,right}">
+            <div :class="`${right}`">
               {{ getIjin(row, 'SAKIT')===0? '-': getIjin(row, 'SAKIT') }}
             </div>
           </template>
-          <template #cell-DL="{row}">
-            <div class="">
+          <template #cell-DL="{row, right}">
+            <div :class="`${right}`">
               {{ getIjin(row, 'DL')===0? '-': getIjin(row, 'DL') }}
             </div>
           </template>
-          <template #cell-DSPEN="{row}">
-            <div class="">
+          <template #cell-DSPEN="{row,right}">
+            <div :class="`${right}`">
               {{ getIjin(row, 'DISPEN')===0? '-': getIjin(row, 'DISPEN') }}
             </div>
           </template>
-          <template #cell-CUTI="{row}">
-            <div class="">
+          <template #cell-CUTI="{row,right}">
+            <div :class="`${right}`">
               {{ getIjin(row, 'CUTI')===0? '-': getIjin(row, 'CUTI') }}
             </div>
           </template>
-          <template #cell-A="{row}">
-            <div class="">
+          <template #cell-A="{row,right}">
+            <div :class="`${right}`">
               {{ getAlpha(row)===0? '-': getAlpha(row) }}
             </div>
           </template>
@@ -355,12 +457,12 @@
               </div>
             </div>
           </template>
-          <template #cell-hari="{row}">
-            <div style="max-width:50px">
-              <div class="text-xs text-dark">
-                {{ getMasukHari(row) }} hari
-              </div>
+          <template #cell-hari="{row, right}">
+            <!-- <div style="max-width:50px"> -->
+            <div :class="`${right}`">
+              {{ getMasukHari(row) }} hari
             </div>
+            <!-- </div> -->
           </template>
           <template #cell-percent="{row}">
             <q-linear-progress
@@ -379,14 +481,14 @@
               </div>
             </q-linear-progress>
           </template>
-          <template #cell-kurang="{row}">
-            <div class="text-negative">
+          <template #cell-kurang="{row, right}">
+            <div :class="`text-negative ${right}`">
               <!-- {{ getKurang(row) }} -  -->
               {{ getRekapTerlambatMinute(getRekapTerlambat(row)) }}
             </div>
           </template>
-          <template #cell-per-t="{row}">
-            <div class="text-negative">
+          <template #cell-per-t="{row, right}">
+            <div :class="getRekapTerlambatPercent(getRekapTerlambat(row))?`text-negative ${right}`:`${right}`">
               <!-- {{ getKurang(row) }} -  -->
               {{ getRekapTerlambatPercent(getRekapTerlambat(row)) }}%
             </div>
@@ -436,7 +538,7 @@
               {{ getTransaksiAbsens(num, row) }}
             </div>
           </template>
-        </app-table>
+        </app-table-good>
       </q-card-section>
     </q-card>
     <div style="padding-bottom:180px;" />
@@ -458,6 +560,8 @@
       :get-transaksi-absen="(x,y,z) => getTransaksiAbsen(x,y,z)"
     />
   </div>
+  <!-- loading print -->
+  <app-loading v-if="printed" />
 </template>
 
 <script setup>
@@ -564,7 +668,7 @@ function getTransaksiAbsens(num, data) {
   const ijin = getIjinRinci(num, data)
   const alpha = getAlphaRinci(num, data)
   // console.log('trans', trans)
-  console.log('libur', libur)
+  // console.log('libur', libur)
   if (trans.length && !ijin) {
     return 'MSK'
   } else {
@@ -842,11 +946,9 @@ const printObj = {
   }
 }
 
-function printMode() {
-  // openDialog = !openDialog
-  // store.getDataPrint()
-  openDialog.value = !openDialog.value
-}
+// function printMode() {
+//   openDialog.value = !openDialog.value
+// }
 
 watch(() => store.rincian, (obj) => {
   obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
