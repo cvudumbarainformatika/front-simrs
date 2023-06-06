@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+// import { daysInMonth } from 'src/modules/utils'
 
 export const useReportAbsensiStore = defineStore('report_absensi', {
   state: () => ({
@@ -14,7 +15,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       periode: null,
       q: '',
       page: 1,
-      per_page: 20,
+      per_page: 100,
       order_by: 'id',
       sort: 'desc'
     },
@@ -48,6 +49,11 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       imageTampil: true,
       fontSize: 11,
       tampilNip: true
+    },
+
+    sorting: {
+      head: null,
+      sortBy: 'desc'
     }
   }),
 
@@ -128,20 +134,35 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       this.params.page = 1
       this.getDataTable()
     },
-    async getDataTable () {
+    // async getDataTable () {
+    //   this.total = 0
+    //   this.loading = true
+    //   const params = { params: this.params }
+    //   const resp = await api.get('/v1/pegawai/absensi/report', params)
+    //   console.log('items', resp)
+    //   if (resp.status === 200) {
+    //     this.items = resp.data.data
+    //     this.meta = resp.data
+    //     this.loading = false
+    //   }
+    //   this.loading = false
+    // },
+    getDataTable() {
       this.total = 0
       this.loading = true
       const params = { params: this.params }
-      const resp = await api.get('/v1/pegawai/absensi/report', params)
-      console.log('items', resp)
-      if (resp.status === 200) {
-        this.items = resp.data.data
-        this.meta = resp.data
-        // this.setColumns(resp.data.data)
-        this.loading = false
-      }
-      this.loading = false
-      // this.getTotalTable()
+      return new Promise((resolve, reject) => {
+        api.get('/v1/pegawai/absensi/report', params)
+          .then((resp) => {
+            if (resp.status === 200) {
+              console.log('items', resp)
+              this.items = resp.data.data
+              this.meta = resp.data
+              this.loading = false
+              resolve(resp)
+            }
+          })
+      })
     },
     async autocomplete () {
       const resp = await api.get('/v1/pegawai/absensi/autocomplete')
@@ -191,6 +212,39 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
 
     setSettings(key, value) {
       this.settingsTable[key] = value
+    },
+
+    setSorting(val) {
+      console.log(val)
+      this.sorting.head = val
+      this.sorting.sortBy === 'desc'
+        ? this.sorting.sortBy = 'asc'
+        : this.sorting.sortBy = 'desc'
+      setTimeout(() => {
+        this.sorting.head = null
+      }, 3000)
+
+      if (val === 'A') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.TAKMASOK - b.TAKMASOK) : this.items = this.items.sort((a, b) => b.TAKMASOK - a.TAKMASOK)
+      } else if (val === 'kurang') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.TERLAMBAT - b.TERLAMBAT) : this.items = this.items.sort((a, b) => b.TERLAMBAT - a.TERLAMBAT)
+      }
+
+      // console.log('sorting', this.items)
+    },
+
+    pushAlpha(id, jml) {
+      const el = this.items.filter(x => x.id === id)[0]
+      el.TAKMASOK = jml
+    },
+
+    pushData(id, data) {
+      const el = this.items.filter(x => x.id === id)[0]
+      el.TERLAMBAT = data.TERLAMBAT
+      el.TAKMASOK = data.TAKMASOK
     }
+
   }
 })

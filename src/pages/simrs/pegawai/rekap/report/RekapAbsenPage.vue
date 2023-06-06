@@ -66,6 +66,7 @@
           :default-btn="false"
           :ada-tambah="false"
           :to-search="store.params.q"
+          @set-order="sortingDynamis"
           @set-row="store.setPerPage"
           @goto="store.setPage"
           @search="store.enterSearch"
@@ -251,7 +252,10 @@
           </template>
           <template #col-A="{right}">
             <div :class="right">
-              A
+              A <q-icon
+                v-if="store.sorting.head === 'A'"
+                :name="store.sorting.sortBy === 'desc'?'icon-mat-vertical_align_bottom':'icon-mat-vertical_align_top'"
+              />
             </div>
           </template>
           <template #col-masuk="{right}">
@@ -599,23 +603,42 @@ const changePeriode = () => {
     mm = `0${mm}`
   }
   const periode = `${tahun.value}-${mm}`
-  console.log('periode', periode)
+  // console.log('periode', periode)
   store.setPeriode(periode)
+
   store.prota(periode)
+}
+
+const sortingDynamis = (val) => {
+  // store.getDataTable().then(() =>
+  // getAlphaInput()
+  for (let i = 0; i < store.items.length; i++) {
+    const row = store.items[i]
+    const TAKMASOK = getAlpha(row)
+    const TERLAMBAT = getRekapTerlambat(row)
+    const data = {
+      TAKMASOK, TERLAMBAT
+    }
+    store.pushData(row.id, data)
+  }
+  store.setSorting(val)
+  // )
 }
 
 onMounted(() => {
   store.autocomplete()
   changePeriode()
 
-  console.log('ref', refPrint.value)
+  // store.getAlpa()
+
+  // console.log('onMounted', parseInt(cb))
 })
 
-console.log('prota', lhb.value)
-console.log('currentMoth', currentMonth.value)
+// console.log('prota', lhb.value)
+// console.log('currentMoth', currentMonth.value)
 console.log('bulans', bulans(bulan))
-console.log('tahun', daysInMonth(currentMonth.value, tahun.value))
-console.log('rumus', rumusTerkecil())
+// console.log('tahun', daysInMonth(currentMonth.value, tahun.value))
+// console.log('rumus', rumusTerkecil())
 
 function nextMonth() {
   const month = currentMonth.value
@@ -625,7 +648,7 @@ function nextMonth() {
   } else {
     currentMonth.value = month + 1
   }
-  console.log('next', currentMonth.value)
+  // console.log('next', currentMonth.value)
   changePeriode()
   const obj = store.rincian
   obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
@@ -638,7 +661,7 @@ function prevMonth() {
   } else {
     currentMonth.value = month - 1
   }
-  console.log('next', currentMonth.value)
+  // console.log('next', currentMonth.value)
   changePeriode()
   const obj = store.rincian
   obj ? store.setColumns(daysInMonth(currentMonth.value, tahun.value)) : store.setColumns('default')
@@ -690,11 +713,6 @@ function getAlpha(row) {
   const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
   // const ijin = []
   const absen = []
-
-  // for (let x = 1; x <= days; x++) {
-  //   absen.push(x)
-  // }
-
   for (let i = 0; i < days; i++) {
     const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + (i + 1).toString() : tahun.value + '-' + bulanX + '-' + (i + 1).toString()
     absen.push(i)
@@ -719,8 +737,49 @@ function getAlpha(row) {
   }
 
   // return absen
-  return absen.filter(x => x === 'A').length
+  const absensi = absen.filter(x => x === 'A').length
+  // store.pushAlpha(row.id, absensi)
+  // console.log('getAlpha', row.id)
+  return absensi
 }
+
+// function getAlphaInput() {
+//   const items = store.items
+//   if (items.length) {
+//     for (let x = 0; x < items.length; x++) {
+//       const row = items[x]
+//       const days = daysInMonth(currentMonth.value, tahun.value)
+//       const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
+//       // const ijin = []
+//       const absen = []
+//       for (let i = 0; i < days; i++) {
+//         const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + (i + 1).toString() : tahun.value + '-' + bulanX + '-' + (i + 1).toString()
+//         absen.push(i)
+//         const trans = row.transaksi_absen.filter(x => x.tanggal === cellDate)
+//         const libur = store.protas.filter(x => x.tgl_libur === cellDate)
+//         const ijin = getIjinRinci(i + 1, row)
+//         const alpha = getAlphaRinci(i + 1, row)
+
+//         if (trans.length && !ijin) {
+//           absen[i] = 'M'
+//         } else {
+//           if (ijin) {
+//             absen[i] = 'I'
+//           } else if (libur.length) {
+//             absen[i] = 'C'
+//           } else if (alpha) {
+//             absen[i] = 'A'
+//           } else {
+//             absen[i] = 'L'
+//           }
+//         }
+//       } // end for
+
+//       const absensi = absen.filter(x => x === 'A').length
+//       store.pushAlpha(row.id, absensi)
+//     }
+//   }
+// }
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
     return kelamin === 'Perempuan'
@@ -878,12 +937,7 @@ function getRekapTerlambat(row) {
     // ini untuk yang absen
     const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)[0]
     absen.push(trans || 0)
-    // const trans = row.transaksi_absen.filter(w => w.tanggal === cellDate)
-    // absen.push(trans.length || 0)
   }
-
-  // return toHoursAndMinutes(ijin.reduce((x, y) => parseInt(x + y)))
-  // return ijin
   return ijin.reduce((x, y) => parseInt(x + y))
 }
 
