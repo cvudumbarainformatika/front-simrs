@@ -616,8 +616,13 @@ const sortingDynamis = (val) => {
     const row = store.items[i]
     const TAKMASOK = getAlpha(row)
     const TERLAMBAT = getRekapTerlambat(row)
+    const IJIN = getIjin(row, 'IJIN')
+    const CUTI = getIjin(row, 'CUTI')
+    const SAKIT = getIjin(row, 'SAKIT')
+    const DL = getIjin(row, 'DL')
+    const DISPEN = getIjin(row, 'DISPEN')
     const data = {
-      TAKMASOK, TERLAMBAT
+      TAKMASOK, TERLAMBAT, IJIN, CUTI, SAKIT, DL, DISPEN
     }
     store.pushData(row.id, data)
   }
@@ -743,43 +748,6 @@ function getAlpha(row) {
   return absensi
 }
 
-// function getAlphaInput() {
-//   const items = store.items
-//   if (items.length) {
-//     for (let x = 0; x < items.length; x++) {
-//       const row = items[x]
-//       const days = daysInMonth(currentMonth.value, tahun.value)
-//       const bulanX = currentMonth.value <= 9 ? '0' + currentMonth.value : (currentMonth.value).toString()
-//       // const ijin = []
-//       const absen = []
-//       for (let i = 0; i < days; i++) {
-//         const cellDate = i <= 9 ? tahun.value + '-' + bulanX + '-0' + (i + 1).toString() : tahun.value + '-' + bulanX + '-' + (i + 1).toString()
-//         absen.push(i)
-//         const trans = row.transaksi_absen.filter(x => x.tanggal === cellDate)
-//         const libur = store.protas.filter(x => x.tgl_libur === cellDate)
-//         const ijin = getIjinRinci(i + 1, row)
-//         const alpha = getAlphaRinci(i + 1, row)
-
-//         if (trans.length && !ijin) {
-//           absen[i] = 'M'
-//         } else {
-//           if (ijin) {
-//             absen[i] = 'I'
-//           } else if (libur.length) {
-//             absen[i] = 'C'
-//           } else if (alpha) {
-//             absen[i] = 'A'
-//           } else {
-//             absen[i] = 'L'
-//           }
-//         }
-//       } // end for
-
-//       const absensi = absen.filter(x => x === 'A').length
-//       store.pushAlpha(row.id, absensi)
-//     }
-//   }
-// }
 function getImage(kelamin, row) {
   if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
     return kelamin === 'Perempuan'

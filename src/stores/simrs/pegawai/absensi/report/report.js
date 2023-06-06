@@ -244,6 +244,11 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       const el = this.items.filter(x => x.id === id)[0]
       el.TERLAMBAT = data.TERLAMBAT
       el.TAKMASOK = data.TAKMASOK
+      el.CUTI = data.CUTI
+      el.SAKIT = data.SAKIT
+      el.IJIN = data.IJIN
+      el.DL = data.DL
+      el.DISPEN = data.DISPEN
     }
 
   }
