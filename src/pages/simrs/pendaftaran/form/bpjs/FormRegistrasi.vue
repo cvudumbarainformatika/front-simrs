@@ -54,7 +54,7 @@
                 <app-btn
                   label="List Rujukan"
                   :loading="store.loadingListRujukan"
-                  :disable="store.loadingListRujukan"
+                  :disable="store.loadingListRujukan || store.loading"
                   @click="listSuratRujukan"
                 />
               </div>
@@ -221,7 +221,7 @@
                 <app-btn
                   label="List surat kontrol"
                   :loading="store.loadingSuratKontrol"
-                  :disable="store.loadingSuratKontrol"
+                  :disable="store.loadingSuratKontrol || store.loading"
                   @click="cekSuratKontrol"
                 />
               </div>
@@ -432,6 +432,7 @@
               <div class="col-12">
                 <app-autocomplete
                   ref="refDPJP"
+                  :key="store.form.dpjp"
                   v-model="store.form.dpjp"
                   label="DPJP"
                   autocomplete="nama"
@@ -440,7 +441,6 @@
                   :filled="false"
                   :source="store.dpjps"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
                 <q-tooltip
@@ -521,7 +521,8 @@
                     color="primary"
                     dense
                     :loading="store.loadingSuplesi"
-                    @click="cekSuplesi"
+                    :disable="store.loadingSuplesi || store.loading"
+                    @click="emits('cekSuplesi')"
                   >
                     <!-- style="max-width:80px" -->
                     <div
@@ -537,24 +538,53 @@
                 <div class="col-4">
                   <!--
                     bentuk data : propinsikecelakaan, kodepropinsikecelakaan
-                    <app-autocomplete
-                  ref="refPropinsiKecelakaan"
-                  v-model="store.form.propinsi"
-                  label="Kecelakaan"
-                  autocomplete="nama"
-                  option-value="value"
-                  option-label="nama"
-                  :filled="false"
-                  :source="store.kecelakaans"
-                  :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
-                  :loading="store.loading"
-                  @select -->
+                  -->
+                  <app-autocomplete
+                    ref="refPropinsiKecelakaan"
+                    v-model="store.display.tempatKecelakaan.kode"
+                    label="Propinsi Kecelakaan"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.propinsies"
+                    :disable="!store.propinsies.length"
+                    :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
+                    :loading="store.loadingKecelakaan"
+                    @selected="setPropisiKecelakaan"
+                  />
                 </div>
                 <div class="col-4">
-                  Kabupaten
+                  <app-autocomplete
+                    ref="refKabupatenKecelakaan"
+                    v-model="store.display.kabupatenKecelakaan.kode"
+                    label="Kabupaten Kecelakaan"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.kabupatens"
+                    :disable="!store.kabupatens.length"
+                    :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
+                    :loading="store.loadingKecelakaan"
+                    @selected="setKabupatenKecelakaan"
+                  />
                 </div>
                 <div class="col-4">
-                  Kecamatan
+                  <app-autocomplete
+                    ref="refKabupatenKecelakaan"
+                    v-model="store.display.kecamatanKecelakaan.kode"
+                    label="kecamatan Kecelakaan"
+                    autocomplete="nama"
+                    option-value="kode"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.kecamatans"
+                    :disable="!store.kecamatans.length"
+                    :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
+                    :loading="store.loadingKecelakaan"
+                    @selected="setKecamatanKecelakaan"
+                  />
                 </div>
               </div>
             </div>
@@ -578,7 +608,8 @@ const emits = defineEmits([
   'bisaSimpan',
   'getListSuratKontrol',
   'getListRujukan',
-  'cekSuratRujukan'
+  'cekSuratRujukan',
+  'cekSuplesi'
 ])
 
 store.getInitialData()
@@ -643,22 +674,59 @@ function setFlagKarcis(val) {
 // autocomplete kecelakaan
 function setKecelakaan(val) {
   console.log('kecelakaan ', val)
+  store.getPropinsiKecelakaan()
+}
+function setPropisiKecelakaan(val) {
+  // propinsikecelakaan, kodepropinsikecelakaan
+  store.paramKecelakaan.kodepropinsi = val
+  const index = findWithAttr(store.propinsies, 'kode', val)
+  if (index >= 0) {
+    store.form.propinsikecelakaan = store.propinsies[index].nama
+    store.form.kodepropinsikecelakaan = val
+    store.getKabupatenKecelakaan()
+  } else {
+    notifErrVue('Propinsi tidak ditemukan')
+  }
+}
+function setKabupatenKecelakaan(val) {
+  // propinsikecelakaan, kodepropinsikecelakaan
+  store.paramKecelakaan.kodekabupaten = val
+  const index = findWithAttr(store.kabupatens, 'kode', val)
+  if (index >= 0) {
+    store.form.kabupatenkecelakaan = store.kabupatens[index].nama
+    store.form.kodekabupatenkecelakaan = val
+    store.getKecamatanKecelakaan()
+  } else {
+    notifErrVue('kabupaten tidak ditemukan')
+  }
+}
+function setKecamatanKecelakaan(val) {
+  // propinsikecelakaan, kodepropinsikecelakaan
+  store.paramKecelakaan.kodekecamatan = val
+  const index = findWithAttr(store.kecamatans, 'kode', val)
+  if (index >= 0) {
+    store.form.kecamatankecelakaan = store.kecamatans[index].nama
+    store.form.kodekecamatankecelakaan = val
+    console.log('form', store.form)
+  } else {
+    notifErrVue('Kecamatan tidak ditemukan')
+  }
 }
 // tanggal kecelakaan
 function setTglKecelakaan(val) {
-  store.display.tanggal.kecelakaan = val
-}
-function setDispTglKecelakaan(val) {
   store.setForm('tglKecelakaan', val)
 }
-// cek no suplesi
-function cekSuplesi() {
-  if (refSuplesi.value.$refs.refInput.validate()) {
-    console.log('cek suplesi')
-  } else {
-    notifErrVue('Nomor Suplesi Kosong')
-  }
+function setDispTglKecelakaan(val) {
+  store.display.tanggal.kecelakaan = val
 }
+// cek no suplesi
+// function cekSuplesi() {
+//   if (refSuplesi.value.$refs.refInput.validate()) {
+//     console.log('cek suplesi')
+//   } else {
+//     notifErrVue('Nomor Suplesi Kosong')
+//   }
+// }
 // --- kecelakaan end ---
 // ---- PPK Rujukan start---
 // debounce function
@@ -820,5 +888,5 @@ function set() {
 }
 
 // expose function
-defineExpose({ resetValidation, set })
+defineExpose({ resetValidation, set, setPoliTujuan })
 </script>

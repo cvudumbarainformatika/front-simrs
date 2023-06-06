@@ -174,24 +174,55 @@ import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 
 const store = useRegistrasiPasienBPJSStore()
+const emits = defineEmits(['kodePoli'])
 // surat kontrol
 function pilihSuratKontrol(val) {
-  const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : '') : ''
-  const findruangan = val.relkunjunganranap ? (val.relkunjunganranap.ruangan ? val.relkunjunganranap.ruangan.rs1 : '') : ''
-
+  const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : val.relkunjunganpoli.rs8) : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
-  const indRuangan = findruangan !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
-
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  const ruangan = indRuangan >= 0 ? store.polis[indRuangan] : false
 
-  console.log(' surat kontrol ', val)
-  console.log(' find ', findpoli, findruangan)
-  console.log(' index ', indPoli, indRuangan)
-  console.log(' poli ', poli, ruangan)
+  // const findruangan = val.relkunjunganranap ? (val.relkunjunganranap.ruangan ? val.relkunjunganranap.ruangan.rs1 : val.relkunjunganranap.rs5) : ''
+  // const indRuangan = findruangan !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
+  // const ruangan = indRuangan >= 0 ? store.polis[indRuangan] : false
+
+  let datapoli = {}
+  if (indPoli < 0) {
+    if (!poli) {
+      if (val.relkunjunganpoli.relmpoli) {
+        datapoli = {
+          kodepoli: val.relkunjunganpoli.relmpoli.rs1,
+          polirs: val.relkunjunganpoli.relmpoli.rs2,
+          jenispoli: val.relkunjunganpoli.relmpoli.rs3,
+          jenisruangan: val.relkunjunganpoli.relmpoli.rs4,
+          statukeaktifan: val.relkunjunganpoli.relmpoli.rs5,
+          kodemapingbpjs: val.relkunjunganpoli.relmpoli.rs6,
+          polimapingbpjs: val.relkunjunganpoli.relmpoli.rs7
+        }
+        store.polis.push(datapoli)
+      }
+    }
+  }
+
+  if (poli || Object.keys(datapoli).length) emits('kodePoli', findpoli)
+  store.form.nosuratkontrol = val.noDpjp
+  store.tampilKontrol = false
+  // console.log(' surat kontrol ', val, store.polis)
+  // console.log(' find ', findpoli, findruangan)
+  // console.log(' index ', indPoli, indRuangan)
+  // console.log(' poli ', poli, ruangan)
 }
 // rencana kontrol
 function pilihRencanaKontrol(val) {
-  console.log(' rencana kontrol ', val)
+  store.form.nosuratkontrol = val.noSuratKontrol
+  const findpoli = val.poliTujuan ? val.poliTujuan : ''
+  const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
+  const poli = indPoli >= 0 ? store.polis[indPoli] : false
+  store.dpjpSuratKontrol = val.kodeDokter
+  store.form.tglsep = val.tglSEP
+  store.form.tglrujukan = val.tglTerbitKontrol
+
+  if (poli) emits('kodePoli', store.polis[indPoli].kodepoli)
+  store.tampilKontrol = false
+  console.log(' rencana kontrol ', val, poli, store.form)
 }
 </script>

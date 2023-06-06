@@ -106,15 +106,56 @@
 </template>
 <script setup>
 
+import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 
 const dialog = useDialogCariPasienPendaftaranUmum()
 const store = usePendaftaranPasienStore()
+const regis = useRegistrasiPasienBPJSStore()
 defineEmits(['hide'])
 
 function pilihPasienIni(val) {
+  if (val.nokabpjs !== '')val.noka = val.nokabpjs
   store.form = val
+  if (store.alamataDomisiliSama) {
+    if ((!store.form.alamatdomisili ? true : store.form.alamatdomisili === '') && store.form.alamat) store.setForm('alamatdomisili', store.form.alamat)
+    if ((!store.form.rtdomisili ? true : store.form.rtdomisili === '') && store.form.rt) store.setForm('rtdomisili', store.form.rt)
+    if ((!store.form.rwdomisili ? true : store.form.rwdomisili === '') && store.form.rw) store.setForm('rwdomisili', store.form.rw)
+    if ((!store.form.kodeposdomisili ? true : store.form.kodeposdomisili === '') && store.form.kodepos) store.setForm('kodeposdomisili', store.form.kodepos)
+    if ((!store.form.negaradomisili ? true : store.form.negaradomisili === '') && store.form.negara) store.setForm('negaradomisili', store.form.negara)
+    if ((!store.form.propinsidomisili ? true : store.form.propinsidomisili === '') && store.form.propinsi) store.setForm('propinsidomisili', store.form.propinsi)
+    if ((!store.form.kodepropinsidomisili ? true : store.form.kodepropinsidomisili === '') && store.form.kodepropinsi) store.setForm('kodepropinsidomisili', store.form.kodepropinsi)
+    if ((!store.form.kabupatenkotadomisili ? true : store.form.kabupatenkotadomisili === '') && store.form.kabupatenkota) store.setForm('kabupatenkotadomisili', store.form.kabupatenkota)
+    if ((!store.form.kodekabupatenkotadomisili ? true : store.form.kodekabupatenkotadomisili === '') && store.form.kodekabupatenkota) store.setForm('kodekabupatenkotadomisili', store.form.kodekabupatenkota)
+    if ((!store.form.kecamatandomisili ? true : store.form.kecamatandomisili === '') && store.form.kecamatan) store.setForm('kecamatandomisili', store.form.kecamatan)
+    if ((!store.form.kodekecamatandomisili ? true : store.form.kodekecamatandomisili === '') && store.form.kodekecamatan) store.setForm('kodekecamatandomisili', store.form.kodekecamatan)
+    if ((!store.form.kelurahandomisili ? true : store.form.kelurahandomisili === '') && store.form.kelurahan) store.setForm('kelurahandomisili', store.form.kelurahan)
+    if ((!store.form.kodekelurahandomisili ? true : store.form.kodekelurahandomisili === '') && store.form.kodekelurahan) store.setForm('kodekelurahandomisili', store.form.kodekelurahan)
+  }
+  if (val.nik !== '') {
+    const form = { nik: val.nik, tglsep: regis.form.tglsep }
+    store.cekPesertaByNik(form).then(resp => {
+      const rujukan = {
+        kode: resp.provUmum.kdProvider,
+        nama: resp.provUmum.nmProvider
+      }
+      regis.ppkRujukans.push(rujukan)
+      regis.display.kode = rujukan.kode
+      regis.setForm('ppkRujukan', rujukan.kode)
+    })
+  } else if (val.noka !== '') {
+    const form = { noka: val.noka, tglsep: regis.form.tglsep }
+    store.cekPesertaByNoka(form).then(resp => {
+      const rujukan = {
+        kode: resp.provUmum.kdProvider,
+        nama: resp.provUmum.nmProvider
+      }
+      regis.ppkRujukans.push(rujukan)
+      regis.display.kode = rujukan.kode
+      regis.setForm('ppkRujukan', rujukan.kode)
+    })
+  }
   const tglLahir = val.tgllahir.split('-')
   store.setForm('barulama', 'lama')
   if (tglLahir.length) {

@@ -712,7 +712,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           console.log('Nik', resp.data)
           this.alertMsg = resp.data.result
           this.alert = true
-          return new Promise(resolve => { resolve(resp.data) })
+          return new Promise(resolve => { resolve(resp.data.result) })
         }).catch(() => {
           this.loadingNik = false
         })
@@ -724,7 +724,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           this.loadingNoka = false
           this.alert = true
           this.alertMsg = resp.data.result
-          return new Promise(resolve => { resolve(resp.data) })
+          return new Promise(resolve => { resolve(resp.data.result) })
         }).catch(() => {
           this.loadingNoka = false
         })

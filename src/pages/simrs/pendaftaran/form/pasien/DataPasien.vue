@@ -1228,6 +1228,13 @@ function validateNokaAndNorm() {
     return false
   }
 }
+function validateNoka() {
+  if (refNoKaBpjs.value.$refs.refInput.validate()) {
+    return { noka: store.form.noka }
+  } else {
+    notifErrVue('No BPJS Kosong')
+  }
+}
 // reset validasi
 function resetValidation() {
   // reset validation
@@ -1642,7 +1649,7 @@ function set() {
   }
 }
 
-defineExpose({ set, resetValidation, validateNokaAndNorm })
+defineExpose({ set, resetValidation, validateNokaAndNorm, validateNoka })
 
 store.getInitialData()
 onBeforeUpdate(() => {

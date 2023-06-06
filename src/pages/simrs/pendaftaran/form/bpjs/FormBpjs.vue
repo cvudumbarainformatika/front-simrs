@@ -14,6 +14,7 @@
       @bisa-simpan="simpanRegistrasi"
       @get-list-surat-kontrol="getListSuratKontrol"
       @get-list-rujukan="getListRujukan"
+      @cek-suplesi="cekSuplesi"
     />
     <q-card
       class="full-width"
@@ -30,10 +31,17 @@
       </q-card-actions>
     </q-card>
     <DialogListRujukan v-model="registrasi.tampilRujukan" />
-    <DialogListKontrol v-model="registrasi.tampilKontrol" />
+    <DialogListKontrol
+      v-model="registrasi.tampilKontrol"
+      @kode-poli="setKodepoli"
+    />
+    <DialogListSuplesi
+      v-model="registrasi.tampilSuplesi"
+    />
   </q-page>
 </template>
 <script setup>
+import DialogListSuplesi from './DialogListSuplesi.vue'
 import DialogListKontrol from './DialogListKontrol.vue'
 import DialogListRujukan from './DialogListRujukan.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
@@ -82,6 +90,21 @@ function getListSuratKontrol() {
     registrasi.getListRencanaKontrol(data)
     registrasi.tampilKontrol = true
   }
+}
+// cek supplesi
+function cekSuplesi() {
+  const data = refDataPasien.value.validateNoka()
+  if (data) {
+    data.tglsep = registrasi.form.tglKecelakaan
+    console.log('noka', data)
+    registrasi.getListSuplesi(data)
+  }
+}
+// setkodePoli
+function setKodepoli(val) {
+  console.log('poli ditemukan', val, refRegistrasi.value)
+  registrasi.form.kodepoli = val
+  refRegistrasi.value.setPoliTujuan(val)
 }
 // cek list rujukan
 function getListRujukan() {

@@ -7,6 +7,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     loading: false,
     tampilRujukan: false,
     tampilKontrol: false,
+    tampilSuplesi: false,
     form: {
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -24,6 +25,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         rujukan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
         kecelakaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
       },
+      tempatKecelakaan: {},
+      kabupatenKecelakaan: {},
+      kecamatanKecelakaan: {},
       kecelakaan: 0,
       suplesi: 0
     },
@@ -57,6 +61,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     ppkRujukans: [],
     listSuratKontrols: [],
     listRencanaKontrols: [],
+    dpjpSuratKontrol: '',
     listRujukanPcare: [],
     listRujukanRs: [],
     listRujukanSepMrs: [],
@@ -78,6 +83,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       { value: 1, nama: 'Ya' },
       { value: 0, nama: 'Tidak' }
     ],
+    loadingKecelakaan: false,
+    paramKecelakaan: {
+      kodepropinsi: '',
+      kodekabupaten: ''
+    },
     propinsies: [],
     kabupatens: [],
     kecamatans: []
@@ -100,9 +110,47 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       // this.getPpkRujukan('anu')
     },
     // api related function
-
+    // tempat kecelakaan -- start --
+    async getPropinsiKecelakaan() {
+      this.loadingKecelakaan = true
+      await api.post('v1/simrs/pendaftaran/provinsibpjs', this.paramKecelakaan)
+        .then(resp => {
+          this.loadingKecelakaan = false
+          this.propinsies = resp.data.result.list ? resp.data.result.list : []
+          console.log('propinsi', resp)
+        })
+        .catch(() => {
+          this.loadingKecelakaan = false
+        })
+    },
+    async getKabupatenKecelakaan() {
+      this.loadingKecelakaan = true
+      await api.post('v1/simrs/pendaftaran/kabupatenbpjs', this.paramKecelakaan)
+        .then(resp => {
+          this.loadingKecelakaan = false
+          this.kabupatens = resp.data.result.list ? resp.data.result.list : []
+          console.log('kabupaten', resp)
+        })
+        .catch(() => {
+          this.loadingKecelakaan = false
+        })
+    },
+    async getKecamatanKecelakaan() {
+      this.loadingKecelakaan = true
+      await api.post('v1/simrs/pendaftaran/kecamatanbpjs', this.paramKecelakaan)
+        .then(resp => {
+          this.loadingKecelakaan = false
+          this.kecamatans = resp.data.result.list ? resp.data.result.list : []
+          console.log('kecamatan', resp)
+        })
+        .catch(() => {
+          this.loadingKecelakaan = false
+        })
+    },
+    // tempat kecelakaan -- end --
     async getListSuplesi(val) {
       this.loadingSuplesi = true
+      this.tampilSuplesi = true
       await api.post('v1/simrs/pendaftaran/ceksuplesibpjs', val)
         .then(resp => {
           this.loadingSuplesi = false
@@ -201,6 +249,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             console.log('result ', data)
           }
           console.log('dokter DPJp ', resp.data)
+          if (this.dpjpSuratKontrol !== '') this.form.dpjp = this.dpjpSuratKontrol
           return new Promise(resolve => { resolve(resp.data) })
         })
         .catch(() => {

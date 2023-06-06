@@ -240,5 +240,5 @@ function setFlagKarcis(val) {
   })
 }
 // expose function
-defineExpose({ resetValidation, set })
+defineExpose({ resetValidation, set, setPoliTujuan })
 </script>
