@@ -96,6 +96,9 @@ const jamTnpDetik = (val) => {
 const dateOnly = (val) => {
   return date.formatDate(val, 'DD')
 }
+const dayName = (val) => {
+  return date.formatDate(val, 'dddd')
+}
 
 function titleCase(str) {
   const splitStr = str.toLowerCase().split(' ')
@@ -138,5 +141,6 @@ export {
   titleCase,
   dateLIS,
   timeDiff,
-  formatDouble
+  formatDouble,
+  dayName
 }

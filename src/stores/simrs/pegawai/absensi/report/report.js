@@ -230,6 +230,27 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       } else if (val === 'kurang') {
         this.sorting.sortBy === 'asc'
           ? this.items = this.items.sort((a, b) => a.TERLAMBAT - b.TERLAMBAT) : this.items = this.items.sort((a, b) => b.TERLAMBAT - a.TERLAMBAT)
+      } else if (val === 'CUTI') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      } else if (val === 'IJIN') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.IJIN - b.IJIN) : this.items = this.items.sort((a, b) => b.IJIN - a.IJIN)
+      } else if (val === 'CUTI') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      } else if (val === 'SAKIT') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.SAKIT - b.SAKIT) : this.items = this.items.sort((a, b) => b.SAKIT - a.SAKIT)
+      } else if (val === 'DL') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.DL - b.DL) : this.items = this.items.sort((a, b) => b.DL - a.DL)
+      } else if (val === 'CUTI') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.CUTI - b.CUTI) : this.items = this.items.sort((a, b) => b.CUTI - a.CUTI)
+      } else if (val === 'DSPEN') {
+        this.sorting.sortBy === 'asc'
+          ? this.items = this.items.sort((a, b) => a.DISPEN - b.DISPEN) : this.items = this.items.sort((a, b) => b.DISPEN - a.DISPEN)
       }
 
       // console.log('sorting', this.items)

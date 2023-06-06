@@ -526,13 +526,27 @@
             >
               {{ getAlphaRinci(num, row) }}
             </div> -->
-            <div v-if="getTransaksiAbsens(num, row) === 'MSK'">
-              <div class="f-10">
+            <div
+              v-if="getTransaksiAbsens(num, row) === 'MSK'"
+              class="cursor-pointer"
+              @click="lihatDetailAbsensi(num,row)"
+            >
+              <div class="f-10 ">
                 {{ getTransaksiAbsen(num, row.transaksi_absen, 'masuk') }}
               </div>
               <div :class="getTransaksiAbsen(num, row.transaksi_absen, 'pulang') === 'TAP'? 'text-negative f-10':'f-10'">
                 {{ getTransaksiAbsen(num, row.transaksi_absen, 'pulang') }}
               </div>
+              <q-popup-proxy
+                :offset="[10, 10]"
+                cover
+                :breakpoint="600"
+              >
+                <detai-rinci
+                  :item="detailAbsensi"
+                  :pegawai="detailOrang"
+                />
+              </q-popup-proxy>
             </div>
             <div
               v-else
@@ -576,6 +590,7 @@ import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/r
 import { computed, onMounted, ref, watch } from 'vue'
 
 import PrintDialog from './PrintDialog.vue'
+import DetaiRinci from './DetailRinci.vue'
 // import IsiCellRinci from './IsiCellRinci.vue'
 
 const date = new Date()
@@ -948,6 +963,20 @@ function toHoursAndMinutes(totalMinutes) {
 function getMasukHari(row) {
   const ada = row.transaksi_absen.length
   return ada
+}
+
+const detailAbsensi = ref(null)
+const detailOrang = ref(null)
+function lihatDetailAbsensi(num, row) {
+  const trans = row.transaksi_absen
+  const bulan = currentMonth.value.toString().length <= 1 ? `0${currentMonth.value}` : currentMonth.value.toString()
+  const tanggal = num.toString().length <= 1 ? `0${num}` : num.toString()
+  const tanggalklik = `${tahun.value}-${bulan}-${tanggal}`
+  const obj = trans.filter(x => x.tanggal === tanggalklik)
+
+  detailAbsensi.value = obj.length ? obj[0] : null
+  detailOrang.value = row
+  console.log('num/row', detailOrang.value)
 }
 
 const printObj = {
