@@ -54,21 +54,36 @@ const registrasi = useRegistrasiPasienBPJSStore()
 const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
-function bisaSimpan(val) {
-  console.log('bisa simpan', val)
-  const keys = Object.keys(val)
-  if (keys.length) {
-    keys.forEach(key => {
-      registrasi.setForm(key, val[key])
-    })
-  }
-}
-function simpanRegistrasi(val) {
-  console.log('simpan regestrasi', val)
-}
+// function bisaSimpan(val) {
+//   console.log('bisa simpan', val)
+//   const keys = Object.keys(val.form)
+//   if (keys.length) {
+//     keys.forEach(key => {
+//       registrasi.setForm(key, val.form[key])
+//     })
+//   }
+// }
+// function simpanRegistrasi(val) {
+//   console.log('simpan regestrasi', val)
+// }
 function simpanData() {
-  refDataPasien.value.set()
-  refRegistrasi.value.set()
+  // refDataPasien.value.set()
+  // refRegistrasi.value.set()
+  const dataPasien = refDataPasien.value.set()
+  const dataRegis = refRegistrasi.value.set()
+  console.log('pasien', dataPasien,
+    'regis', dataRegis
+  )
+  if (dataPasien.save && dataRegis.save) {
+    const keys = Object.keys(dataPasien.form)
+    if (keys.length) {
+      keys.forEach(key => {
+        registrasi.setForm(key, dataPasien.form[key])
+      })
+    }
+    console.log('form registrasi ', registrasi.form)
+    registrasi.simpanRegistrasi()
+  }
 }
 // data nik, norm, noka pasien
 // let dataPasien = null

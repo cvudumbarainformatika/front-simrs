@@ -92,6 +92,7 @@
               <div class="col-12">
                 <app-autocomplete
                   ref="refKatarak"
+                  :key="store.form.katarak"
                   v-model="store.form.katarak"
                   label="Katarak"
                   autocomplete="nama"
@@ -100,7 +101,6 @@
                   :filled="false"
                   :source="store.kataraks"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>
@@ -881,9 +881,11 @@ function set() {
   validasi()
   if (valid) {
     emits('bisaSimpan', { form: store.form, save: true })
+    return { form: store.form, save: true }
   } else {
     emits('bisaSimpan', { form: store.form, save: false })
     notifErrVue('periksa kembali input registrasi anda')
+    return { form: store.form, save: false }
   }
 }
 
