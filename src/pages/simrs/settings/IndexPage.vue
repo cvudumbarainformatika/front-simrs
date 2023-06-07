@@ -382,6 +382,8 @@ function appCheck(val) {
           sub.checked = true
           data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
+      } else {
+        data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: null })
       }
     })
   } else {
@@ -395,6 +397,8 @@ function appCheck(val) {
           sub.checked = false
           data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
+      } else {
+        data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: null })
       }
     })
   }
@@ -415,6 +419,9 @@ function menuCheck(val) {
         s.checked = true
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
+    } else {
+      data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: null })
+      // store.simpanAksesMenuOnly('menu', val.menu.checked, data)
     }
   } else {
     data = []
@@ -428,6 +435,9 @@ function menuCheck(val) {
         s.checked = false
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
+    } else {
+      data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: null })
+      // store.simpanAksesMenuOnly('menu', val.menu.checked, data)
     }
   }
   store.simpanAksesMenu('menu', val.menu.checked, data)

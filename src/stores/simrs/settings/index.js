@@ -311,5 +311,23 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           .catch(() => { this.loading = false })
       })
     }
+    // simpanAksesMenuOnly(act, type, array) {
+    //   const form = {
+    //     user_id: this.pegawai.user.id,
+    //     action: act,
+    //     tipe: type,
+    //     data: array
+    //   }
+    //   this.loading = true
+    //   return new Promise(resolve => {
+    //     api.post('v1/settings/appakses/store-akses-menu-only', form)
+    //       .then(resp => {
+    //         this.loading = false
+    //         console.log('simpan akses', resp.data)
+    //         resolve(resp.data)
+    //       })
+    //       .catch(() => { this.loading = false })
+    //   })
+    // }
   }
 })

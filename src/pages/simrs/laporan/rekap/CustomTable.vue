@@ -184,7 +184,7 @@
       dense
       flat
       bordered
-      separator="horizontal"
+      separator="cell"
       class="screenwide"
     >
       <thead>

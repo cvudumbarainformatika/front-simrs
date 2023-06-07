@@ -12,7 +12,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+      katarak: '0'
     },
     display: {
       diagnosa: {},
@@ -39,8 +40,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       jenis_pelayanan: 2
     },
     kataraks: [
-      { nama: 'Tidak', value: 0 },
-      { nama: 'Ya', value: 1 }
+      { nama: 'Tidak', value: '0' },
+      { nama: 'Ya', value: '1' }
     ],
     asalrujukans: [],
     sistembayars: [],
@@ -107,6 +108,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       this.getProsedur()
       this.getAssesmen()
       this.getPenunjang()
+      // this.getDiagnosaAwal()
       // this.getPpkRujukan('anu')
     },
     // api related function
@@ -410,6 +412,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .catch(() => {
           this.loading = false
         })
+    },
+    simpanRegistrasi() {
+      return new Promise(resolve => {
+        this.loading = true
+        api.post('v1/simrs/pendaftaran/rajalumumsimpan', this.form)
+          .then(resp => {
+            console.log('simpan pendaftaran', resp)
+            this.loading = false
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

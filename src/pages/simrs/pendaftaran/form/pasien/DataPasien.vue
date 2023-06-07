@@ -1105,7 +1105,7 @@
             </div>
           </div>
         </div>
-        <div v-if="store.alertMsg.kode!==''">
+        <div v-if="store.alertMsg.kode&&(store.alertMsg.kode!=='' && store.alertMsg.status!=='')">
           <app-no-selected-page
             color="primary"
             :icon="store.alertMsg.kode==='1'?'icon-mat-done':'icon-mat-report'"
