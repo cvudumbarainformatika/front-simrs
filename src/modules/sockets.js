@@ -40,8 +40,8 @@ window.Echo = new Echo({
 const channel = window.Echo.channel('public.playground.1')
 const qrcodeChannel = window.Echo.channel('qrcode')
 
-// const antreanChannel = window.Echo.channel('public.antrean')
-// const anjunganChannel = window.Echo.channel('public.anjungan')
+const antreanChannel = window.Echo.channel('public.antrean')
+const anjunganChannel = window.Echo.channel('public.anjungan')
 
 // const socket = () => {
 //   let msg = null
