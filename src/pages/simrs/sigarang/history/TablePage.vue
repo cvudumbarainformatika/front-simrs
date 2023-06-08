@@ -741,7 +741,7 @@
                     outlined
                   />
                   <div class="print-only">
-                    : {{ table.dispPrint.waktu }}
+                    : {{ table.dispPrint.tempat }}
                   </div>
                 </div>
               </div>
