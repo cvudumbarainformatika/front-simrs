@@ -38,7 +38,7 @@ $grad:#187DC1;
 
   .inner-top-page {
       width: 100%;
-      height:80vh;
+      height:85vh;
       margin:0;
       padding: 0;
     }
@@ -54,7 +54,7 @@ $grad:#187DC1;
 .bot {
   position: absolute;
   width: 100%;
-  height: 10vh;
+  height: 5vh;
   bottom: 0;
   background-color: #fff  ;
 }

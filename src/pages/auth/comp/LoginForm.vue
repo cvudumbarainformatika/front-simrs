@@ -53,34 +53,52 @@
               </div>
             </div>
             <div class="q-my-lg full-width">
-              <q-input
-                v-model="text"
-                color="white"
-                label="Username"
-                dark
+              <q-form
+                ref="myForm"
+                class="q-pa-md"
+                @submit="onSubmit"
               >
-                <template #prepend>
-                  <q-icon name="icon-mat-person" />
-                </template>
-              </q-input>
-              <q-input
-                v-model="text"
-                color="white"
-                label="Password"
-                dark
-              >
-                <template #prepend>
-                  <q-icon name="icon-mat-key" />
-                </template>
-              </q-input>
+                <q-input
+                  v-model="form.email"
+                  color="white"
+                  label="Username"
+                  dark
+                  :rules="[val => !!val || 'Harap diisi terlebih dahulu']"
+                >
+                  <template #prepend>
+                    <q-icon name="icon-mat-person" />
+                  </template>
+                </q-input>
+                <q-input
+                  v-model="form.password"
+                  color="white"
+                  label="Password"
+                  dark
+                  :rules="[val => !!val || 'Harap diisi terlebih dahulu']"
+                >
+                  <template #prepend>
+                    <q-icon name="icon-mat-key" />
+                  </template>
+                </q-input>
+                <div class="row q-mt-lg">
+                  <q-btn
+                    push
+                    color="white"
+                    text-color="primary"
+                    label="Login"
+                    type="submit"
+                    :disable="storeAuth.loading"
+                  >
+                    <template #loading>
+                      <q-spinner-hourglass class="on-right" />
+                      Loading...
+                    </template>
+                  </q-btn>
+                </div>
+              </q-form>
             </div>
-            <div>
-              <q-btn
-                push
-                color="white"
-                text-color="primary"
-                label="Login"
-              />
+            <div class="app-v text-grey-4">
+              app versi v2.0
             </div>
           </div>
         </div>
@@ -92,17 +110,51 @@
 <script setup>
 
 import { computed, ref } from 'vue'
+import { useQuasar } from 'quasar'
 
-const text = ref('')
-
+const $q = useQuasar()
 import madSaleh from 'src/assets/images/mad_saleh_minum.png'
+import { useAuthStore } from 'src/stores/auth'
+import { useRouter } from 'vue-router'
 const img = computed(() => {
   return new URL(madSaleh, import.meta.url).href
 })
 
+const myForm = ref(null)
+const form = ref({
+  email: '',
+  password: '',
+  device_name: $q.platform.is.name + '-' + $q.platform.is.platform
+})
+
+const storeAuth = useAuthStore()
+const router = useRouter()
+function onSubmit () {
+  const formData = new FormData()
+  formData.append('email', form.value.email + '@app.com')
+  formData.append('password', form.value.password)
+  formData.append('device_name', form.value.device_name)
+  storeAuth.login(formData)
+    .then(() => {
+      console.log('loading false', storeAuth.aplications)
+      if (storeAuth.aplications.length === 1) {
+        if (storeAuth.aplications[0].aplikasi === 'pegawai') {
+          router.push('pegawai/user/list')
+        } else {
+          router.push(storeAuth.route.link)
+        }
+      }
+      window.location.reload()
+    })
+}
 </script>
 
 <style lang="scss" scoped>
+.app-v {
+  position: absolute;
+  bottom:20px;
+  right: 20px;
+}
 .box {
   position: relative;
 
