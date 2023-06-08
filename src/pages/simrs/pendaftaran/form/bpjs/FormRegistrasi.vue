@@ -28,12 +28,11 @@
                   v-model="store.form.asalrujukan"
                   label="Asal Rujukan"
                   autocomplete="asalrujukan"
-                  option-value="asalrujukan"
+                  option-value="kode"
                   option-label="asalrujukan"
                   :filled="false"
                   :source="store.asalrujukans"
                   :loading="store.loading"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
                 />
               </div>

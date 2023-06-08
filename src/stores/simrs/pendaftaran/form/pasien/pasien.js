@@ -722,6 +722,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       await api.post('v1/simrs/pendaftaran/cekpsertabpjsbynoka', val)
         .then((resp) => {
           this.loadingNoka = false
+          console.log('Noka', resp.data)
           this.alert = true
           this.alertMsg = resp.data.result
           return new Promise(resolve => { resolve(resp.data.result) })
@@ -734,6 +735,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       await api.post('v1/simrs/pendaftaran/cekfingerprint', val)
         .then((resp) => {
           this.loadingFinger = false
+          console.log('finger', resp.data)
           this.alert = true
           this.alertMsg = resp.data.result
           return new Promise(resolve => { resolve(resp.data) })

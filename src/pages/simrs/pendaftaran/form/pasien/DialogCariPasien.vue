@@ -1,6 +1,6 @@
 <template>
   <q-dialog
-    @hide="$emit('hide')"
+    @hide="emits('hide')"
   >
     <q-card style="min-width:75vw;">
       <q-card-section>
@@ -113,10 +113,13 @@ import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pas
 const dialog = useDialogCariPasienPendaftaranUmum()
 const store = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
-defineEmits(['hide'])
+const emits = defineEmits(['hide', 'gantiPasien'])
+const props = defineProps({
+  bpjs: { type: Boolean, default: false }
+})
 
 function pilihPasienIni(val) {
-  if (val.nokabpjs !== '')val.noka = val.nokabpjs
+  val.noka = val.nokabpjs
   store.form = val
   if (store.alamataDomisiliSama) {
     if ((!store.form.alamatdomisili ? true : store.form.alamatdomisili === '') && store.form.alamat) store.setForm('alamatdomisili', store.form.alamat)
@@ -133,28 +136,35 @@ function pilihPasienIni(val) {
     if ((!store.form.kelurahandomisili ? true : store.form.kelurahandomisili === '') && store.form.kelurahan) store.setForm('kelurahandomisili', store.form.kelurahan)
     if ((!store.form.kodekelurahandomisili ? true : store.form.kodekelurahandomisili === '') && store.form.kodekelurahan) store.setForm('kodekelurahandomisili', store.form.kodekelurahan)
   }
-  if (val.nik !== '') {
-    const form = { nik: val.nik, tglsep: regis.form.tglsep }
-    store.cekPesertaByNik(form).then(resp => {
-      const rujukan = {
-        kode: resp.provUmum.kdProvider,
-        nama: resp.provUmum.nmProvider
-      }
-      regis.ppkRujukans.push(rujukan)
-      regis.display.kode = rujukan.kode
-      regis.setForm('ppkRujukan', rujukan.kode)
-    })
-  } else if (val.noka !== '') {
-    const form = { noka: val.noka, tglsep: regis.form.tglsep }
-    store.cekPesertaByNoka(form).then(resp => {
-      const rujukan = {
-        kode: resp.provUmum.kdProvider,
-        nama: resp.provUmum.nmProvider
-      }
-      regis.ppkRujukans.push(rujukan)
-      regis.display.kode = rujukan.kode
-      regis.setForm('ppkRujukan', rujukan.kode)
-    })
+  if (props.bpjs) {
+    if (val.nik !== '') {
+      const form = { nik: val.nik, tglsep: regis.form.tglsep }
+      store.cekPesertaByNik(form).then(resp => {
+        if (Object.keys(resp.provUmum).length) {
+          const rujukan = {
+            kode: resp.provUmum.kdProvider,
+            nama: resp.provUmum.nmProvider
+          }
+          regis.ppkRujukans.push(rujukan)
+          regis.display.kode = rujukan.kode
+          regis.setForm('ppkRujukan', rujukan.kode)
+        }
+      })
+    } else if (val.noka !== '') {
+      console.log('noka', val.noka === undefined)
+      const form = { noka: val.noka, tglsep: regis.form.tglsep }
+      store.cekPesertaByNoka(form).then(resp => {
+        if (Object.keys(resp.provUmum).length) {
+          const rujukan = {
+            kode: resp.provUmum.kdProvider,
+            nama: resp.provUmum.nmProvider
+          }
+          regis.ppkRujukans.push(rujukan)
+          regis.display.kode = rujukan.kode
+          regis.setForm('ppkRujukan', rujukan.kode)
+        }
+      })
+    }
   }
   const tglLahir = val.tgllahir.split('-')
   store.setForm('barulama', 'lama')
@@ -165,6 +175,7 @@ function pilihPasienIni(val) {
     store.setTanggalLahir()
   }
   store.cariPasienDialog = false
+  emits('gantiPasien')
   console.log('pasien terpilih', val)
 }
 </script>

@@ -6,12 +6,13 @@
       :nik="registrasi.form.nik"
       :noka="registrasi.form.noka"
       :tglsep="registrasi.form.tglsep"
-      @bisa-simpan="bisaSimpan"
+      @ganti-pasien="clearFormRegistrasi"
     />
+    <!-- @bisa-simpan="bisaSimpan" -->
     <!-- @surat="bisaCekSurat" -->
+    <!-- @bisa-simpan="simpanRegistrasi" -->
     <FormRegistrasi
       ref="refRegistrasi"
-      @bisa-simpan="simpanRegistrasi"
       @get-list-surat-kontrol="getListSuratKontrol"
       @get-list-rujukan="getListRujukan"
       @cek-suplesi="cekSuplesi"
@@ -48,24 +49,15 @@ import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
-import { date } from 'quasar'
+import { date, Dialog } from 'quasar'
 
 const registrasi = useRegistrasiPasienBPJSStore()
 const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
-// function bisaSimpan(val) {
-//   console.log('bisa simpan', val)
-//   const keys = Object.keys(val.form)
-//   if (keys.length) {
-//     keys.forEach(key => {
-//       registrasi.setForm(key, val.form[key])
-//     })
-//   }
-// }
-// function simpanRegistrasi(val) {
-//   console.log('simpan regestrasi', val)
-// }
+function clearFormRegistrasi() {
+  registrasi.clearForm()
+}
 function simpanData() {
   // refDataPasien.value.set()
   // refRegistrasi.value.set()
@@ -82,7 +74,10 @@ function simpanData() {
       })
     }
     console.log('form registrasi ', registrasi.form)
-    registrasi.simpanRegistrasi()
+    registrasi.simpanRegistrasi().then(resp => {
+      console.log('resp bpjs', resp)
+      dialogCetak()
+    })
   }
 }
 // data nik, norm, noka pasien
@@ -139,5 +134,28 @@ function getListRujukan() {
       registrasi.tampilRujukan = true
     }
   }
+}
+
+function dialogCetak() {
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Cetak SEP?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Cetak',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('Cetak')
+  }).onCancel(() => {
+    console.log('tidak Cetak')
+  })
 }
 </script>

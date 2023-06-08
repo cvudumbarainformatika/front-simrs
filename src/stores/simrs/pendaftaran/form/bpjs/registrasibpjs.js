@@ -39,6 +39,10 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       jenis_pelayanan: 2
     },
+    paramKecelakaan: {
+      kodepropinsi: '',
+      kodekabupaten: ''
+    },
     kataraks: [
       { nama: 'Tidak', value: '0' },
       { nama: 'Ya', value: '1' }
@@ -85,10 +89,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       { value: 0, nama: 'Tidak' }
     ],
     loadingKecelakaan: false,
-    paramKecelakaan: {
-      kodepropinsi: '',
-      kodekabupaten: ''
-    },
+
     propinsies: [],
     kabupatens: [],
     kecamatans: []
@@ -97,7 +98,43 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     setForm(key, val) {
       this.form[key] = val
     },
-
+    clearForm() {
+      this.form = {
+        tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+        katarak: '0'
+      }
+      this.display = {
+        diagnosa: {},
+        prosedur: {},
+        assesment: {},
+        penunjang: {},
+        bayar: {},
+        tanggal: {
+          sep: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+          rujukan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+          kecelakaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
+        },
+        tempatKecelakaan: {},
+        kabupatenKecelakaan: {},
+        kecamatanKecelakaan: {},
+        kecelakaan: 0,
+        suplesi: 0
+      }
+      this.paramKarcis = {}
+      this.paramDiagnosa = { q: '' }
+      this.paramPpkRujukan = { faskesasal: '' }
+      this.paramDpjp = {
+        tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        jenis_pelayanan: 2
+      }
+      this.paramKecelakaan = {
+        kodepropinsi: '',
+        kodekabupaten: ''
+      }
+    },
     // initial data
     getInitialData() {
       this.getAsalRujukan()
@@ -171,7 +208,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.listRujukanPcare = resp.data.result.rujukan ? resp.data.result.rujukan : []
           console.log('List rujukan p care', resp)
         })
-        .catch(() => {
+        .catch(err => {
+          console.log('List rujukan p care Error', err)
           this.loadingListRujukan = false
         })
     },
@@ -183,7 +221,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.listRujukanRs = resp.data.result.rujukan ? resp.data.result.rujukan : []
           console.log('list rujukan rs', resp)
         })
-        .catch(() => {
+        .catch(err => {
+          console.log('List rujukan rs', err)
           this.loadingListRujukanRS = false
         })
     },
@@ -420,7 +459,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           .then(resp => {
             console.log('simpan pendaftaran', resp)
             this.loading = false
-            resolve(resp)
+            resolve(resp.data)
           })
           .catch(() => { this.loading = false })
       })

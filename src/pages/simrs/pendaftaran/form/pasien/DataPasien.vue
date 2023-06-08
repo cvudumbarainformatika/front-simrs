@@ -979,11 +979,13 @@
     </q-card>
     <dialogCariPasien
       v-model="store.cariPasienDialog"
+      :bpjs="bpjs"
       @hide="cariPasienHide"
+      @ganti-pasien="emits('gantiPasien')"
     />
     <app-dialog
       v-model="store.alert"
-      :label="store.alertMsg.kode!==''?'Status Finger Pasien':'Data Peserta BPJS'"
+      :label="store.alertMsg.kode==='0'?'Status Finger Pasien':'Data Peserta BPJS'"
       @on-ok="dialogOk"
       @keyup="store.alert=false"
     >
@@ -1130,7 +1132,8 @@ const refPasien = ref(null)
 const emits = defineEmits([
   'bisa-simpan',
   'tidak-simpan',
-  'surat'
+  'surat',
+  'gantiPasien'
 ])
 const props = defineProps({
   bpjs: { type: Boolean, default: false },
