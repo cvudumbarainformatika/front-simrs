@@ -99,6 +99,45 @@ const notifErr = (resp) => {
         { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
       ]
     })
+  } else if (status === 417) {
+    const keys = Object.keys(resp.data)
+    // const msgs = resp.data.message
+    console.log('keys', keys)
+    keys.forEach(msgkeys => {
+      if (msgkeys === 'error') {
+        const key = Object.keys(resp.data[msgkeys])
+        console.log('key', key)
+        key.forEach(msgkey => {
+          resp.data[msgkeys][msgkey].forEach(data => {
+            Notify.create({
+              message: data,
+              icon: 'icon-eva-message-circle-outline',
+              position: 'top-right',
+              color: 'negative',
+              actions: [
+                { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+              ]
+              // for (const key in msgs) {
+              // }
+            })
+          })
+        })
+      } else {
+        if (msgkeys !== 'nomor') {
+          Notify.create({
+            message: resp.data[msgkeys],
+            icon: 'icon-eva-message-circle-outline',
+            position: 'top-right',
+            color: 'negative',
+            actions: [
+              { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+            ]
+          // for (const key in msgs) {
+          // }
+          })
+        }
+      }
+    })
   } else if (status === 500) {
     // const msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
     Notify.create({

@@ -19,6 +19,21 @@
             {{ store.form.no_distribusi?store.form.no_distribusi:'-' }}
           </div>
         </div>
+        <div class="row items-center q-mb-xs">
+          <div class="col-2 q-mr-sm">
+            Tanggal
+          </div>
+          <div class="col">
+            <app-input-date-human
+              :model="store.display.tanggal"
+              label="dari tanggal"
+              :loading="store.loading"
+              @db-model="setTanggal"
+              @set-display="setTanggalDisp"
+            />
+            <!-- {{ store.form.no_distribusi?store.form.no_distribusi:'-' }} -->
+          </div>
+        </div>
         <div class="row items-center">
           <div class="col-2 q-mr-sm">
             Depo Tujuan
@@ -276,6 +291,14 @@ import { onBeforeRouteLeave } from 'vue-router'
 
 const store = useDistribusiDepoStore()
 // const setting = useSettingsStore()
+
+// tanggal
+function setTanggal(val) {
+  store.setForm('tanggal', val)
+}
+function setTanggalDisp(val) {
+  store.display.tanggal = val
+}
 store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)

@@ -26,7 +26,17 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     setForm(key, val) {
       this.form[key] = val
     },
-
+    clearForm() {
+      this.form = {
+        tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      }
+      this.display = {}
+      this.paramKarcis = {}
+      this.paramDpjp = {
+        tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        jenis_pelayanan: 2
+      }
+    },
     // initial data
     getInitialData() {
       this.getAsalRujukan()
@@ -144,7 +154,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           .then(resp => {
             console.log('simpan pendaftaran', resp)
             this.loading = false
-            resolve(resp)
+            resolve(resp.data)
           })
           .catch(() => { this.loading = false })
       })

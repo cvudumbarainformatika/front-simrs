@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess, uniqueId } from 'src/modules/utils'
 // import { useSettingsStore } from '../../settings/setting'
@@ -23,7 +24,11 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
     form: {
       no_distribusi: null,
       kode_depo: null,
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       details: []
+    },
+    display: {
+      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     input: {
       kode_barang: null,
@@ -59,6 +64,8 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       }
       this.form.details = []
       this.setNoDistribusi()
+      this.form.tanggal = date.formatDate(Date.now(), 'YYYY-MM-DD')
+      this.display.tanggal = date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     resetDisplay() {
       this.displays = []

@@ -21,7 +21,18 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
       sort: 'desc'
     },
     // custom for this store
-    tanggalDisplay: null
+    tanggalDisplay: null,
+    statuses: [
+      { nama: 'Tampilkan semua', value: 99, color: 'cyan' },
+      { nama: 'Menunggu verifikasi', value: 4, color: 'cyan' },
+      { nama: 'Telah di verifikasi', value: 5, color: 'blue' },
+      { nama: 'Barang sudah bisa diambil', value: 6, color: 'green' },
+      { nama: 'Telah di distribusikan', value: 7, color: 'orange' },
+      { nama: 'Ditolak', value: 20, color: 'red' }
+    ],
+    paramStatus: {
+      nama: 'Belum di filter', value: 99, color: 'cyan'
+    }
   }),
   actions: {
     resetFORM() {
@@ -97,6 +108,18 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
     refreshTable() {
       this.params.page = 1
       this.getDataTable()
+    },
+    setParamStatus(val) {
+      console.log('status ', val)
+      if (val.value === 99) {
+        this.paramStatus = val
+        delete this.params.status
+        this.getDataTable()
+      } else {
+        this.paramStatus = val
+        this.setParam('status', val.value)
+        this.getDataTable()
+      }
     },
     // data form related
 

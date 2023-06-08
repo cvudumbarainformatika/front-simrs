@@ -32,17 +32,57 @@
           @on-click="onClick"
         >
           <template #header-left-after-search>
-            <div class="q-ml-sm">
-              <app-input
-                v-model="store.params.r"
-                label="cari ruangan"
-                outlined
-                valid
-                icon="icon-mat-search"
-                debounce="1000"
-                :loading="store.loading"
-                @update:model-value="store.searchRuangan"
-              />
+            <div class="row q-col-guttes-sm q-ml-sm">
+              <div class="q-col">
+                <app-input
+                  v-model="store.params.r"
+                  label="cari ruangan"
+                  outlined
+                  valid
+                  icon="icon-mat-search"
+                  debounce="1000"
+                  :loading="store.loading"
+                  @update:model-value="store.searchRuangan"
+                />
+              </div>
+              <div class="col cursor-pointer">
+                <!-- <div class="row q-items-center"> -->
+                <!-- <div class="col-6 text-left">
+                    Status
+                  </div>
+                  <div class="col-6 text-right cursor-pointer"> -->
+                <q-chip
+                  class="f-12"
+                  :color="color(store.paramStatus.value)"
+                  :text-color="store.paramStatus.value===99?'dark':'white'"
+                  :label="label(store.paramStatus.value,store.paramStatus.nama)"
+                />
+                <q-menu
+                  transition-show="jump-down"
+                  transition-hide="jump-up"
+                  anchor="center middle"
+                  self="center middle"
+                  :offset="[-50, 0]"
+                >
+                  <q-list>
+                    <q-item
+                      v-for="(item,i) in store.statuses"
+                      :key="i"
+                      v-close-popup
+                      style="min-width:250px"
+                      clickable
+                      :style="'background-color:'+color(item.value)+'; color:white;'"
+                      @click="store.setParamStatus(item)"
+                    >
+                      <q-item-section>
+                        {{ item.nama }}
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+                <!-- </div> -->
+                <!-- </div> -->
+              </div>
             </div>
           </template>
           <template #col-tanggal>
@@ -618,8 +658,12 @@ const printObj = {
 // }
 const color = val => {
   switch (val) {
+    case 99:
+      return 'white'
+      // eslint-disable-next-line no-unreachable
+      break
     case 4:
-      return 'light-blue'
+      return 'cyan'
       // eslint-disable-next-line no-unreachable
       break
     case 5:
@@ -648,6 +692,10 @@ const color = val => {
 
 const label = (status, nama) => {
   switch (status) {
+    case 0:
+      return 'Tampilkan semua'
+      // eslint-disable-next-line no-unreachable
+      break
     case 4:
       return 'Menunggu verifikasi'
       // eslint-disable-next-line no-unreachable
@@ -682,6 +730,10 @@ const label = (status, nama) => {
       break
     case 20:
       return 'Ditolak'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 99:
+      return 'Status belum di filter'
       // eslint-disable-next-line no-unreachable
       break
 

@@ -18,7 +18,7 @@
             outlined
             class="search-big"
             borderless
-            debounce="500"
+            :debounce="debounce"
             clearable
             dense
             placeholder="Search..."
@@ -435,6 +435,7 @@ const $q = useQuasar()
 const props = defineProps({
   addData: { type: Boolean, default: true },
   title: { type: String, default: '' },
+  debounce: { type: String, default: '700' },
   loading: { type: Boolean, default: false },
   columns: { type: Array, default: () => [] },
   columnHide: { type: Array, default: () => [] },
