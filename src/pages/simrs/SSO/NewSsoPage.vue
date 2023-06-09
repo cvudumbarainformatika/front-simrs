@@ -1,33 +1,37 @@
 <template>
-  <div>
-    <HeaderSso
-      :user="user"
-      @sign-out="signOut"
-    />
+  <div class="column flex-center full-height">
     <div class="box">
-      <div class="column flex-center">
-        <div class="container q-pa-lg">
-          <div
-            class="square"
-            style="--i:0;"
-          />
-          <div
-            class="square"
-            style="--i:1;"
-          />
-          <div
-            class="square"
-            style="--i:2;"
-          />
-          <div
-            class="square"
-            style="--i:3;"
-          />
-          <div
-            class="square"
-            style="--i:4;"
-          />
-          asdas
+      <div
+        class="square"
+        style="--i:0;"
+      />
+      <div
+        class="square"
+        style="--i:1;"
+      />
+      <div
+        class="square"
+        style="--i:2;"
+      />
+      <div
+        class="square"
+        style="--i:3;"
+      />
+      <div
+        class="square"
+        style="--i:4;"
+      />
+      <div class="container full-height">
+        <div class="column full-height ">
+          <div class="col-grow">
+            <KumpulanAplikasi />
+          </div>
+          <div class="col-auto bg-primary corner">
+            <HeaderSso
+              :user="user"
+              @sign-out="signOut"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -35,6 +39,7 @@
 </template>
 <script setup>
 import HeaderSso from './comp/HeaderSso.vue'
+import KumpulanAplikasi from './comp/KumpulanAplikasi.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { computed, onMounted } from 'vue'
 
@@ -60,8 +65,8 @@ const signOut = () => {
   .square {
     position: absolute;
     // filter: blur(1px);
-    // backdrop-filter: blur(15px);
-    backdrop-filter: sepia(.5);
+    backdrop-filter: blur(15px);
+    // backdrop-filter: sepia(.5);
     box-shadow: 0 25px 45px rgba(0,0,0,0.1);
     border: 1px solid rgba(255,255,255,0.5);
     border-radius: 10px;
@@ -120,10 +125,11 @@ const signOut = () => {
   }
   .container {
     position: relative;
-    width: 90%;
-    min-height: 80vh;
+    width: 90vw;
+    min-height: 90vh;
     border-radius: 10px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
+    // backdrop-filter: sepia(.5);
     box-shadow: 0 25px 45px rgba(0,0,0,0.1);
     border: 3px solid rgba(255,255,255,0.5);
     border-right: 3px solid rgba(255,255,255,0.2);
@@ -134,6 +140,11 @@ const signOut = () => {
     background: linear-gradient(120deg, $primary 0%, $primary 100%);
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
+  }
+
+  .corner {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
 }

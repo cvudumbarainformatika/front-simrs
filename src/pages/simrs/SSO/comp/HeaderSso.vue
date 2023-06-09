@@ -1,6 +1,6 @@
 <template>
-  <div class="row justify-between">
-    <div class="q-pa-lg">
+  <div class="row justify-between q-pa-md">
+    <div class="">
       <div class="row items-center">
         <div>
           <q-avatar size="40px">
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="q-pa-lg">
+    <div class="">
       <div class="row items-center text-white">
         <div class="q-mr-md text-subtitle">
           {{ user.nama }}

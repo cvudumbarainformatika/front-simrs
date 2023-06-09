@@ -8,14 +8,13 @@
       <q-page class="fullscreen">
         <div class="top-page">
           <BoxAnimation class="absolute" />
-          <div class="inner-top-page">
+          <BgAnimation class="z--" />
+          <div class="inner-top-page column flex-center">
             <!-- INI TEMPAT CONTENYA -->
             <router-view />
           </div>
-
-          <bgAnimation />
         </div>
-        <div class="bot column flex-center" />
+        <!-- <div class="bot column flex-center" /> -->
       </q-page>
     </q-page-container>
   </q-layout>
@@ -48,9 +47,10 @@ $grad:#187DC1;
 
   .inner-top-page {
       width: 100%;
-      height:85vh;
+      height:100vh;
       margin:0;
       padding: 0;
+      z-index: 1;
     }
 
 }
@@ -61,5 +61,9 @@ $grad:#187DC1;
   height: 5vh;
   bottom: 0;
   background-color: #fff  ;
+}
+
+.z-- {
+  z-index: 0;
 }
 </style>

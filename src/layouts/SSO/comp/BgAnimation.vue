@@ -47,12 +47,17 @@
 
 <style lang="scss" scoped>
 .waves {
-  position: relative;
+  // position: relative;
+  // width: 100%;
+  // height: 10vh;
+  // margin-bottom: -30vh;
+  // min-height: 100px;
+  // max-height:100px;
+  position: absolute;
+  bottom: 0;
   width: 100%;
-  height: 15vh;
-  margin-bottom: -20px;
-  min-height: 100px;
-  max-height:100px;
+  height: 10vh;
+  // opacity: .6;
 
 }
 
@@ -60,15 +65,15 @@
     animation: moveForever 25s cubic-bezier(.55, .5, .45, .5) infinite;
   }
   .parallax > use:nth-child(1) {
-    animation-delay: -2s;
+    animation-delay: -1s;
     animation-duration: 7s;
   }
   .parallax > use:nth-child(2) {
-    animation-delay: -3s;
+    animation-delay: -2s;
     animation-duration: 10s;
   }
   .parallax > use:nth-child(3) {
-    animation-delay: -4s;
+    animation-delay: -3s;
     animation-duration: 13s;
   }
   .parallax > use:nth-child(4) {
