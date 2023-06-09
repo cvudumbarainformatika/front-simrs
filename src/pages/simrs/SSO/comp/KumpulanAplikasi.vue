@@ -3,9 +3,9 @@
     <!-- <q-scroll-area style="400px"> -->
     <div class="container row justify-center flex-wrap q-col-gutter-xl">
       <div
-        v-for="n in 15"
+        v-for="n in 6"
         :key="n"
-        class="col-md-3 "
+        class="col-md-2 "
       >
         <div class="card bg-white full-width q-pa-md cursor-pointer">
           <div class="imgBx">
