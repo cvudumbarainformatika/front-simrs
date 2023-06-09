@@ -266,7 +266,7 @@ export const useAuthStore = defineStore('auth', {
           }
           this.loading = false
           waitLoad('done')
-          this.mapingMenu2(resp.data)
+          // this.mapingMenu2(resp.data)
         })
       } catch (error) {
         waitLoad('done')
