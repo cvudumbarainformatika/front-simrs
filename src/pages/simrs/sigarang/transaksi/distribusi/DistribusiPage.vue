@@ -71,7 +71,7 @@
                       v-close-popup
                       style="min-width:250px"
                       clickable
-                      :style="'background-color:'+color(item.value)+'; color:white;'"
+                      :style="(item.value===99? 'color:black; ': 'color:white; ')+ 'background-color:'+color(item.value)+';'"
                       @click="store.setParamStatus(item)"
                     >
                       <q-item-section>
@@ -448,7 +448,16 @@
                       {{ data.barangrs.mapingbarang.barang108.kode }}
                     </div> -->
                     <div class="anak text-left">
-                      {{ data.ruang?data.ruang.uraian:'-' }}
+                      <div v-if="data.ruang">
+                        data.ruang.uraian
+                      </div>
+                      <div
+                        v-else
+                        class="text-yellow bg-red"
+                      >
+                        Tidak ada ruangan tujuan
+                      </div>
+                      <!-- {{ data.ruang?data.ruang.uraian:'-' }} -->
                     </div>
                     <div class="anak text-right print-hide">
                       {{ data.barangrs.stokDepo }}
@@ -552,7 +561,8 @@ const onClick = val => {
   })
   store.items[val.index].highlight = true
   itemIndex.value = val.index
-  // console.log(val)
+  console.log('item index', val)
+  // store.items.splice(val.index, 0, { no_permintaan: 'SPMT/DHP/legnrsvvwwxx6' })
 }
 const barangSiap = val => {
   store.setForm('id', val.id)

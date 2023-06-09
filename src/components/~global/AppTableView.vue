@@ -1,7 +1,12 @@
 <template>
   <div class="app-table f-12">
+    <div class="print-only">
+      <slot
+        name="header-for-print"
+      />
+    </div>
     <!-- title option table -->
-    <div class="flex items-center justify-between q-mb-md">
+    <div class="flex items-center justify-between q-mb-md print-hide">
       <!-- title -->
       <div class="col-one flex items-center">
         <div class="title-table q-pr-sm f-14 text-bold">

@@ -114,9 +114,6 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
       this.getDataTable()
     },
     setColumns(payload) {
-      // if (!payload) return
-      // const thumb = payload.map((x) => Object.keys(x))
-      // this.columns = thumb[0]
       this.columns = [
         'tanggal',
         'tanggal_distribusi',
@@ -127,6 +124,9 @@ export const useDistribusiDepoStore = defineStore('distribusi_depo_store', {
         'pj',
         'status',
         'aksi']
+      // if (!payload) return
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0]
       // this.columns.sort()
       // this.columns.reverse()
       // console.log('columns', this.columns)

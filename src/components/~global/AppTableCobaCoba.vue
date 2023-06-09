@@ -288,105 +288,116 @@
             </td>
           </transition>
         </tr>
-        <tr
+        <template
           v-for="(item, i) in items"
           v-else
           :key="i"
-          class="text-left"
-          :class="clickAble ? item.highlight===true? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
-          @click="clickAble?clicked(item,i):''"
         >
-          <td v-if="isChecked">
-            <q-checkbox
-              v-model="selected"
-              size="xs"
-              keep-color
-              :val="item.id"
-              color="teal"
-            />
-          </td>
-          <td
-            v-if="rowNo"
+          <tr
             class="text-left"
+            :class="clickAble ? item.highlight===true? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
+            @click="clickAble?clicked(item,i):''"
           >
-            {{ i+1 }}
-          </td>
-          <td
-            v-if="rowImage !== null"
-            class="text-left"
-          >
-            <slot
-              :name="'cell-default-img'"
-              :row="item"
-            />
-          </td>
-          <td
-            v-for="( col, idx ) in filterColumn"
-            :key="idx"
-            width="10%"
-            class="text-left"
-          >
-            <slot
-              :name="'cell-' + col"
-              :row="item"
-            >
-              {{ item[col] }}
-            </slot>
-          </td>
-          <td class="text-right">
-            <div class="row justify-end items-center">
-              <!-- class="q-ml-md" -->
-              <slot
-                name="left-acttion"
-                :row="item"
-                :col="i"
+            <td v-if="isChecked">
+              <q-checkbox
+                v-model="selected"
+                size="xs"
+                keep-color
+                :val="item.id"
+                color="teal"
               />
-              <div v-if="defaultBtn">
-                <q-btn
-                  v-if="adaEdit"
-                  flat
-                  class=""
-                  size="sm"
-                  round
-                  color="grey"
-                  icon="icon-mat-edit"
-                  @click="emits('editData',item)"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
-                  >
-                    Edit Data
-                  </q-tooltip>
-                </q-btn>
-                <q-btn
-                  v-if="selected.length < 2 && adaDelete"
-                  flat
-                  class=""
-                  size="sm"
-                  round
-                  color="grey"
-                  icon="icon-mat-delete_sweep"
-                  @click="deleteOne(item.id)"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    self="center middle"
-                  >
-                    Delete Data
-                  </q-tooltip>
-                </q-btn>
-              </div>
-
-              <div>
+            </td>
+            <td
+              v-if="rowNo"
+              class="text-left"
+            >
+              {{ i+1 }}
+            </td>
+            <td
+              v-if="rowImage !== null"
+              class="text-left"
+            >
+              <slot
+                :name="'cell-default-img'"
+                :row="item"
+              />
+            </td>
+            <td
+              v-for="( col, idx ) in filterColumn"
+              :key="idx"
+              width="10%"
+              class="text-left"
+            >
+              <slot
+                :name="'cell-' + col"
+                :row="item"
+              >
+                {{ item[col] }}
+              </slot>
+            </td>
+            <td class="text-right">
+              <div class="row justify-end items-center">
+                <!-- class="q-ml-md" -->
                 <slot
-                  name="custom-btn"
+                  name="left-acttion"
                   :row="item"
+                  :col="i"
                 />
+                <div v-if="defaultBtn">
+                  <q-btn
+                    v-if="adaEdit"
+                    flat
+                    class=""
+                    size="sm"
+                    round
+                    color="grey"
+                    icon="icon-mat-edit"
+                    @click="emits('editData',item)"
+                  >
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Edit Data
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    v-if="selected.length < 2 && adaDelete"
+                    flat
+                    class=""
+                    size="sm"
+                    round
+                    color="grey"
+                    icon="icon-mat-delete_sweep"
+                    @click="deleteOne(item.id)"
+                  >
+                    <q-tooltip
+                      anchor="top middle"
+                      self="center middle"
+                    >
+                      Delete Data
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+
+                <div>
+                  <slot
+                    name="custom-btn"
+                    :row="item"
+                  />
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
+            </td>
+          </tr>
+          <tr v-if="item.expand">
+            <td :colspan="filterColumn.length + 2">
+              <slot
+                name="expand"
+                :row="item"
+              />
+            </td>
+          </tr>
+        </template>
       </tbody>
       <tbody v-else>
         <tr>
@@ -636,7 +647,7 @@ $pfs: v-bind(pts);
     .q-table td {
       padding: 5px 5px;
       font-size: $pfs;
-       white-space: normal !important;
+        white-space: normal !important;
         word-wrap: normal !important;
         hyphens: manual;
     }

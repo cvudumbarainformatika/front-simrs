@@ -69,7 +69,7 @@
             </template>
             <template #cell-no_penerimaan="{row}">
               <div style="width:10vw;">
-                <div class="ellipsis">
+                <div class="ellipsis box">
                   {{ row.no_penerimaan }}
                 </div>
                 <q-tooltip
@@ -308,7 +308,7 @@
             <template #left-action="{row,index}">
               <q-btn
                 v-if="(role==='root' || role==='PTK' || role==='gizi' || role==='gudang')
-                  && (row.nama === 'PEMESANAN' || row.nama === 'PENERIMAAN' || row.nama==='DISTRIBUSI DEPO')"
+                  && (row.nama === 'PEMESANAN' || row.nama === 'PENERIMAAN' || row.nama==='DISTRIBUSI DEPO' || row.nama==='PERMINTAAN RUANGAN')"
                 unelevated
                 color="dark"
                 round
@@ -808,6 +808,95 @@
                     </div>
                     <div class="col-3 border-bottom border-left border-right">
                       {{ det.merk?det.merk:'-' }}
+                    </div>
+                  </div>
+                  <q-separator />
+                </div>
+              </div>
+            </div>
+            <div v-if="item.nama === 'PERMINTAAN RUANGAN'">
+              <!-- Top words -->
+              <!-- {{ item }} -->
+              <div class="row justify-center q-my-md f-16 text-weight-bold">
+                DATA PERMINTAAN RUANGAN
+              </div>
+              <div class="row justify-center q-mb-sm">
+                <div class="col-2">
+                  Tanggal
+                </div>
+                <div class="col-10">
+                  {{ dateFullFormat(item.tanggal) }}
+                </div>
+              </div>
+              <div class="row justify-center q-mb-sm">
+                <div class="col-2">
+                  No. Permintaan
+                </div>
+                <div class="col-10">
+                  {{ item.no_permintaan }}
+                </div>
+              </div>
+              <div class="row justify-center q-mb-sm">
+                <div class="col-2">
+                  Ruangan
+                </div>
+                <div class="col-10">
+                  {{ item.ruangan.uraian }}
+                </div>
+              </div>
+
+              <!-- no details -->
+              <div v-if="!item.details">
+                <app-no-data />
+              </div>
+              <!-- details -->
+              <div v-if="item.details">
+                <!-- header detail -->
+                <div class="row justify-between q-col-gutter-sm">
+                  <div class="col-5 text-weight-bold border-tb border-left">
+                    Nama Barang
+                  </div>
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Stok ruangan
+                  </div>
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Jumlah minta
+                  </div>
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Jumlah diberi
+                  </div>
+                  <div class="col-1 text-weight-bold border-tb border-left">
+                    Satuan
+                  </div>
+                  <div class="col-3 text-weight-bold border-box">
+                    Keterangan
+                  </div>
+                </div>
+                <!-- body details -->
+                <div
+                  v-for="(det, i) in item.details"
+                  :key="i"
+                >
+                  <div
+                    class="row justify-between q-col-gutter-sm"
+                  >
+                    <div class="col-5 border-bottom border-left">
+                      {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
+                    </div>
+                    <div class="col-1 border-bottom border-left">
+                      {{ det.sisastok?det.sisastok.filter(val=>val.kode_ruang===det.tujuan).map(anu=>anu.sisa_stok).reduce((a,b)=>a+b,0):0 }}
+                    </div>
+                    <div class="col-1 border-bottom border-left">
+                      {{ det.jumlah===null?0:det.jumlah }}
+                    </div>
+                    <div class="col-1 border-bottom border-left" />
+                    <div
+                      class="col-1 border-bottom border-left"
+                    >
+                      {{ det.satuan?det.satuan.nama:'-' }}
+                    </div>
+                    <div class="col-3 border-bottom border-left border-right">
+                      {{ det.alasan?det.alasan:'-' }}
                     </div>
                   </div>
                   <q-separator />

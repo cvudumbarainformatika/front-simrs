@@ -285,11 +285,12 @@
 import { Dialog } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // import { useSettingsStore } from 'src/stores/simrs/logistik/sigarang/settings/setting'
-import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 import { ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 
+import { useDistribusiDepoStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepo'
 const store = useDistribusiDepoStore()
+store.getInitialData()
 // const setting = useSettingsStore()
 
 // tanggal
@@ -299,7 +300,6 @@ function setTanggal(val) {
 function setTanggalDisp(val) {
   store.display.tanggal = val
 }
-store.getInitialData()
 const depoSelected = val => {
   store.setForm('kode_depo', val)
   store.filterBarangHasStok(val)
