@@ -18,10 +18,6 @@ const routes = [
         path: '/admin/sso',
         name: 'admin.sso',
         meta: { transition: 'fade', mode: '' },
-        // component: () =>
-        //   import(
-        //     /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/NewSsoPage.vue'
-        //   )
         component: () =>
           import('pages/simrs/SSO/NewSsoPage.vue')
       }
