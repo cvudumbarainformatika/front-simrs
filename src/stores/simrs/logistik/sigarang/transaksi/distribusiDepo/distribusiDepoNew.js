@@ -168,6 +168,23 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
             this.loading = false
           })
       })
+    },
+    saveDetailPenerimaan(val) {
+      this.loading = true
+      val.tanggal_distribusi = this.form.tanggal
+      return new Promise(resolve => {
+        api.post('v1/transaksi/distribusidepo/save-detail', val)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            console.log('simpan detail', resp)
+            // this.resetAllData()
+            resolve(resp)
+          }).catch(() => {
+            this.resetAll()
+            this.loading = false
+          })
+      })
     }
   }
 })

@@ -152,10 +152,12 @@
                 <div class="col-2">
                   <app-btn
                     v-if="row.canSave && row.hasStok"
-                    label="Distribusikan"
                     flat
                     icon-right="icon-mat-send"
-                    @click="kirimPemesanan(row)"
+                    tooltip="Distribusikan"
+                    label=""
+                    :tip="true"
+                    @click="kirimPenerimaan(row)"
                   />
                   <div v-if="!row.canSave">
                     Tidak ada Depo Tujuan
@@ -195,6 +197,26 @@
                 <div class="col-1">
                   {{ formatDouble(det.sub_total) }}
                 </div>
+                <div class="col-2">
+                  <div v-if="!row.hasStok">
+                    <div v-if="det.hasStok && det.canSave">
+                      <app-btn
+                        flat
+                        icon-right="icon-mat-send"
+                        tooltip="Distribusikan detail"
+                        label=""
+                        :tip="true"
+                        @click="kirimDetailPenerimaan(row,det)"
+                      />
+                    </div>
+                    <div v-if="!det.hasStok">
+                      tidak ada stok Gudang
+                    </div>
+                    <div v-if="!det.canSave">
+                      Depo tidak ditemukan
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div v-else>
@@ -226,9 +248,13 @@ function onClick(val) {
   val.item.highlight = !val.item.highlight
 }
 // kirim pesanan
-function kirimPemesanan(val) {
+function kirimPenerimaan(val) {
   console.log('kirim ', val)
   store.saveForm(val)
+}
+// kirim detail pemesanan
+function kirimDetailPenerimaan(item, detail) {
+  console.log('kirim detail', item, detail)
 }
 </script>
 <style scoped>
