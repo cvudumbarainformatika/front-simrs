@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess, uniqueId } from 'src/modules/utils'
+import { filterDuplicateArrays, notifSuccess, notifSuccessVue, uniqueId } from 'src/modules/utils'
 
 export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store', {
   state: () => ({
@@ -11,7 +11,7 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
     form: {
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
     },
     display: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
@@ -89,6 +89,7 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
       this.items.forEach(item => {
         if (item.details.length) {
           item.details.forEach(det => {
+            det.no_penerimaan = item.no_penerimaan
             if (det.barangrs) {
               det.kode_depo = det.barangrs.kode_depo
               if (det.barangrs.depo) {
@@ -98,6 +99,8 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
                 det.canSave = false
               }
             }
+            det.jumlah = det.qty
+            det.satuan = det.satuan_besar
             det.stok_gudang = item.stokgudang.filter(st => st.kode_rs === det.kode_rs).map(x => x.sisa_stok).reduce((a, b) => a + b, 0)
             if (det.stok_gudang < det.qty) {
               det.hasStok = false
@@ -107,9 +110,12 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
             // det.kode_depo = det.barangrs ? det.barangrs.kode_depo : '-'
             // det.depo = det.barangrs ? (det.barangrs.depo ? det.barangrs.depo.nama : '-') : '-'
           })
+          const depo = filterDuplicateArrays(item.details.map(x => x.kode_depo))
+          // console.log('depo', depo)
+          if (depo.length === 1) item.kode_depo = depo[0]
           const canSave = item.details.filter(x => x.canSave === false)
           const hasStok = item.details.filter(x => x.hasStok === false)
-          item.canSave = !canSave.length
+          item.canSave = !!(!canSave.length && depo.length === 1)
           item.hasStok = !hasStok.length
         }
         const temp = item.no_penerimaan.split('BAST')
@@ -153,35 +159,56 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
       })
     },
     saveForm(val) {
-      this.loading = true
+      // this.loading = true
       val.tanggal_distribusi = this.form.tanggal
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusidepo/new-store', val)
           .then(resp => {
-            this.loading = false
+            // this.loading = false
             notifSuccess(resp)
             console.log('simpan ', resp)
             // this.resetAllData()
+            notifSuccessVue('Mengambil data Penerimaan')
+            this.getDataPenerimaan()
             resolve(resp)
           }).catch(() => {
             this.resetAll()
-            this.loading = false
+            // this.loading = false
           })
       })
     },
     saveDetailPenerimaan(val) {
-      this.loading = true
+      // this.loading = true
       val.tanggal_distribusi = this.form.tanggal
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusidepo/save-detail', val)
           .then(resp => {
-            this.loading = false
+            // this.loading = false
             notifSuccess(resp)
             console.log('simpan detail', resp)
             // this.resetAllData()
+            notifSuccessVue('Mengambil data Penerimaan')
+            this.getDataPenerimaan()
             resolve(resp)
           }).catch(() => {
-            this.resetAll()
+            // this.resetAll()
+            // this.loading = false
+          })
+      })
+    },
+    gantiStatusPenerimaan(val) {
+      // this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/transaksi/distribusidepo/status-penerimaan', val)
+          .then(resp => {
+            this.loading = false
+            console.log('status penerimaan', resp)
+            notifSuccess(resp)
+            notifSuccessVue('Mengambil data Penerimaan')
+            this.getDataPenerimaan()
+            resolve(resp)
+          })
+          .catch(() => {
             this.loading = false
           })
       })

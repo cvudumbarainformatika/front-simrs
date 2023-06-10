@@ -47,7 +47,6 @@
           :sort="store.params.sort"
           :loading="store.loading"
           :to-search="store.params.q"
-          row-no
           :ada-tambah="false"
           :ada-edit="false"
           :ada-delete="false"
@@ -104,20 +103,12 @@
           </template>
           <template #cell-no_penerimaan="{row}">
             <div class="box">
-              <div class="">
-                <p>
-                  {{ row.no_penerimaan }}
-                </p>
-              </div>
+              {{ row.no_penerimaan }}
             </div>
           </template>
           <template #cell-kontrak="{row}">
             <div class="box">
-              <div class="">
-                <p>
-                  {{ row.kontrak }}
-                </p>
-              </div>
+              {{ row.kontrak }}
             </div>
           </template>
           <template #expand="{row}">
@@ -157,13 +148,24 @@
                     tooltip="Distribusikan"
                     label=""
                     :tip="true"
+                    :loading="row.loading"
+                    :disable="row.loading"
                     @click="kirimPenerimaan(row)"
                   />
                   <div v-if="!row.canSave">
                     Tidak ada Depo Tujuan
                   </div>
                   <div v-if="!row.hasStok">
-                    Tidak ada Stok Gudang
+                    <app-btn
+                      flat
+                      icon-right="icon-mat-published_with_changes"
+                      tooltip="Jadikan sudah di distribusikan semua"
+                      label=""
+                      :tip="true"
+                      :loading="row.loading"
+                      :disable="row.loading"
+                      @click="sudahDiDistribusikan(row)"
+                    />
                   </div>
                 </div>
               </div>
@@ -189,7 +191,7 @@
                   {{ det.stok_gudang }}
                 </div>
                 <div class="col-1">
-                  {{ det.qty }}
+                  {{ det.jumlah }}
                 </div>
                 <div class="col-1">
                   {{ formatDouble(det.harga) }}
@@ -206,6 +208,8 @@
                         tooltip="Distribusikan detail"
                         label=""
                         :tip="true"
+                        :loading="det.loading"
+                        :disable="det.loading"
                         @click="kirimDetailPenerimaan(row,det)"
                       />
                     </div>
@@ -229,14 +233,17 @@
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
+import { uniqueId } from 'src/modules/utils'
 import { useDistribusiDepoNewStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusiDepo/distribusiDepoNew'
 const store = useDistribusiDepoNewStore()
 store.getInitialData()
 
 // tanggal
 function setTanggal(val) {
-  store.setForm('tanggal', val)
+  const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
+  store.setForm('tanggal', val + jamIni)
 }
 function setTanggalDisp(val) {
   store.display.tanggal = val
@@ -249,12 +256,60 @@ function onClick(val) {
 }
 // kirim pesanan
 function kirimPenerimaan(val) {
-  console.log('kirim ', val)
-  store.saveForm(val)
+  const oldreff = val.reff.split('-')
+  const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
+  const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
+  const tanggal = store.form.tanggal.split('')
+  store.setForm('tanggal', tanggal[0] + ' ' + jamIni)
+  const data = {
+    details: val.details,
+    reff: newreff,
+    trmreff: val.reff,
+    trmid: val.id,
+    tanggal: store.form.tanggal,
+    kode_depo: val.kode_depo,
+    no_distribusi: val.no_distribusi,
+    status: 2
+  }
+  // console.log('kirim ', val, data)
+  val.loading = true
+  store.saveForm(data)
 }
 // kirim detail pemesanan
-function kirimDetailPenerimaan(item, detail) {
-  console.log('kirim detail', item, detail)
+function kirimDetailPenerimaan(val, detail) {
+  const oldreff = val.reff.split('-')
+  const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
+  const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
+  const tanggal = store.form.tanggal.split('')
+  store.setForm('tanggal', tanggal[0] + ' ' + jamIni)
+  const data = {
+    kode_rs: detail.kode_rs,
+    no_penerimaan: detail.no_penerimaan,
+    jumlah: detail.jumlah,
+    harga: detail.harga,
+    kode_satuan: detail.kode_satuan,
+    satuan: detail.satuan_besar,
+
+    reff: newreff,
+    trmreff: val.reff,
+    trmid: val.id,
+    tanggal: store.form.tanggal,
+    kode_depo: val.kode_depo,
+    no_distribusi: val.no_distribusi,
+    status: 2
+  }
+  // console.log('kirim ', val, data)
+  val.loading = true
+  detail.loading = true
+  store.saveDetailPenerimaan(data)
+  // console.log('kirim detail', val, detail)
+}
+// ganti status penerimaan
+function sudahDiDistribusikan(val) {
+  // console.log('sudah di distribusikan semua', val)
+  val.loading = true
+  const data = { id: val.id }
+  store.gantiStatusPenerimaan(data)
 }
 </script>
 <style scoped>
