@@ -19,7 +19,7 @@ const routes = [
         name: 'admin.sso',
         meta: { transition: 'fade', mode: '' },
         component: () =>
-          import('pages/simrs/SSO/NewSsoPage.vue')
+          import('pages/simrs/SSO/IndexNewSso.vue')
       }
     ]
   },
