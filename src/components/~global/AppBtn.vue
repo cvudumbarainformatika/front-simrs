@@ -23,12 +23,27 @@
       />
       <span class="f-12"> Loading </span>
     </template>
+    <q-tooltip
+      v-if="tip"
+      class="primary"
+      :offset="[10, 10]"
+    >
+      {{ tooltip }}
+    </q-tooltip>
   </q-btn>
 </template>
 
 <script setup>
 
 const props = defineProps({
+  tip: {
+    type: Boolean,
+    default: false
+  },
+  tooltip: {
+    type: String,
+    default: ''
+  },
   type: {
     type: String,
     default: 'submit'
