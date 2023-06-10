@@ -10,8 +10,8 @@ import pendaftaran from './pendaftaran'
 const routes = [
   {
     path: '/',
-    // component: () => import('layouts/Admin/AdminLayout.vue'),
-    component: () => import('layouts/SSO/SsoLayout.vue'),
+    component: () => import('layouts/Admin/AdminLayout.vue'),
+    // component: () => import('layouts/SSO/SsoLayout.vue'),
     meta: { requireAuth: true },
     children: [
       { path: '', redirect: '/admin/sso' },
@@ -19,9 +19,13 @@ const routes = [
         path: '/admin/sso',
         name: 'admin.sso',
         meta: { transition: 'fade', mode: '' },
+        // component: () =>
+        //   import(
+        //     /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/NewSsoPage.vue'
+        //   )
         component: () =>
           import(
-            /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/NewSsoPage.vue'
+            /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/IndexPage.vue'
           )
       },
 
