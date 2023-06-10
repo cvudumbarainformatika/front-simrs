@@ -54,10 +54,11 @@
   // min-height: 100px;
   // max-height:100px;
   position: absolute;
-  bottom: 0;
+  top: 0;
   width: 100%;
   height: 10vh;
-  // opacity: .6;
+  transform: scaleY(-1);
+  opacity: .6;
 
 }
 

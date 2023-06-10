@@ -3,7 +3,10 @@ import { api } from 'boot/axios'
 import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
 import { notifErrVue, removeToken, waitLoad } from 'src/modules/utils'
+import { useAplikasiStore } from '../app/aplikasi'
 // import { useRouter } from 'vue-router'
+
+const apps = useAplikasiStore()
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -141,7 +144,7 @@ export const useAuthStore = defineStore('auth', {
         }
         // console.log('panjangnya cuma satu', apli)
       }
-      console.log('aplikasi', apli)
+      // console.log('aplikasi', apli)
       // console.log('role', this.role)
     },
     mapingMenu2(val) {
@@ -150,7 +153,7 @@ export const useAuthStore = defineStore('auth', {
       // console.log('prototype menu', Object.getPrototypeOf(val.menus).constructor.name === 'Object')
       // console.log('prototype role', Object.getPrototypeOf(val.role).constructor.name === 'Array')
       // console.log('prototype submenu', Object.getPrototypeOf(val.submenu).constructor.name === 'Array')
-      console.log('data menu', val)
+      // console.log('data menu', val)
 
       const aplKey = Object.keys(val.aplikasi2)
       const menuKey = Object.keys(val.menus2)
@@ -209,7 +212,7 @@ export const useAuthStore = defineStore('auth', {
         const apem = {}
         switch (apli[0].aplikasi) {
           case 'sigarang':
-            console.log('switch sigarang', apli[0].aplikasi)
+            // console.log('switch sigarang', apli[0].aplikasi)
             if (this.menus.length) {
               if (this.menus[0].submenus.length) {
                 apem.link = this.menus[0].submenus[0].link
@@ -219,7 +222,7 @@ export const useAuthStore = defineStore('auth', {
             }
             break
           case 'pegawai':
-            console.log('switch pegawai', apli[0].aplikasi)
+            // console.log('switch pegawai', apli[0].aplikasi)
             if (this.menus.length) {
               if (this.menus[0].submenus.length) {
                 apem.link = this.menus[0].submenus[0].link
@@ -245,7 +248,7 @@ export const useAuthStore = defineStore('auth', {
         }
         // console.log('panjangnya cuma satu', apli)
       }
-      console.log('aplikasi', apli)
+      // console.log('aplikasi', apli)
       // console.log('role', this.role)
     },
 
@@ -315,6 +318,9 @@ export const useAuthStore = defineStore('auth', {
       storage.deleteHeaderToken()
       storage.deleteUser()
       storage.deleteCurrentApp()
+      storage.delAkses()
+      storage.delApps()
+      storage.delX()
       this.user = null
       this.token = ''
     },
@@ -325,6 +331,22 @@ export const useAuthStore = defineStore('auth', {
           storage.setUser(resp.data.result)
           this.user = resp.data.result
           this.mapingMenu2(resp.data)
+        })
+      } catch (error) {
+        removeToken()
+      }
+    },
+    async getUserNew() {
+      try {
+        await api.get('/v1/authuser').then(resp => {
+          // console.log('authuser', resp)
+          if (resp.status === 200) {
+            storage.setUser(resp.data.user)
+            // storage.setApps(resp.data.apps)
+            apps.setItems(resp.data.apps)
+            apps.setAksesApps(resp.data.akses)
+            // storage.setAkses(resp.data.akses)
+          }
         })
       } catch (error) {
         removeToken()

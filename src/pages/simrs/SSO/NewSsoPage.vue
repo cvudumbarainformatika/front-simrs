@@ -24,7 +24,10 @@
       <div class="container full-height">
         <div class="column full-height ">
           <div class="col-grow">
-            <KumpulanAplikasi />
+            <KumpulanAplikasi
+              :items="apps.items"
+              @go-to="(item)=>goTo(item)"
+            />
           </div>
           <div class="col-auto bg-primary corner">
             <HeaderSso
@@ -41,17 +44,28 @@
 import HeaderSso from './comp/HeaderSso.vue'
 import KumpulanAplikasi from './comp/KumpulanAplikasi.vue'
 import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const store = useAuthStore()
+const apps = useAplikasiStore()
+const router = useRouter()
 
 onMounted(() => {
-  store.getUser()
+  store.getUserNew()
+  apps.getItems()
+  // console.log('ssomounted', apps.items)
 })
 
 const user = computed(() => {
   return store.currentUser
 })
+
+const goTo = (item) => {
+  apps.setCurrentApp(item)
+  router.push(item.url)
+}
 
 const signOut = () => {
   store.logout()
