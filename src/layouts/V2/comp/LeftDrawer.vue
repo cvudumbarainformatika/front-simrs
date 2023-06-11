@@ -9,6 +9,103 @@
     @mouseover="miniState = false"
     @mouseout="miniState = true"
   >
+    <!-- drawer content -->
+    <q-scroll-area
+      class="fit"
+      style="height:calc(100%-60px); "
+      :thumb-style="thumbStyle"
+      :bar-style="barStyle"
+    >
+      <q-list
+        class="bg-white text-dark"
+      >
+        <!-- INI JIKA TIDAK PUNYA SUBMENU -->
+        <template
+          v-for="(menu, i) in filtermenus"
+          :key="i"
+        >
+          <q-item
+            v-if="menu.submenus.length === 0"
+            v-ripple
+            clickable
+            :active-class="route.path.indexOf(aturLink(menu.link)) > -1?'bg-primary text-white':''"
+            :to="`${aturLink(menu.link)}`"
+          >
+            <!-- :active="link === 'inbox'" -->
+            <q-item-section avatar>
+              <!-- <q-icon :name="menu.icon" /> -->
+              <q-avatar
+                size="32px"
+                :icon="menu.icon"
+                color="white"
+                text-color="dark"
+                font-size="20px"
+              />
+            </q-item-section>
+
+            <q-item-section>
+              {{ menu.nama }}
+            </q-item-section>
+          </q-item>
+          <q-expansion-item
+            v-else
+            no-padding
+            style="padding-left: -72px;"
+            :header-class="route.matched[1].path === aturLink(menu.link)?'bg-primary text-white':''"
+            :value="route.matched[1].path === aturLink(menu.link)"
+            :expand-icon-class="route.matched[1].path === aturLink(menu.link)?'text-white':''"
+            :default-opened="route.matched[1].path === aturLink(menu.link)"
+          >
+            <template #header>
+              <q-item-section avatar>
+                <q-avatar
+                  size="32px"
+                  :icon="menu.icon"
+                  color="white"
+                  text-color="dark"
+                  font-size="20px"
+                />
+              </q-item-section>
+
+              <q-item-section>
+                {{ menu.nama }}
+              </q-item-section>
+            </template>
+
+            <q-list
+              class="bg-grey-3 text-dark"
+            >
+              <template
+                v-for="(sub, x) in menu.submenus"
+                :key="x"
+              >
+                <q-item
+                  v-if="foundAkses(sub)"
+                  v-ripple
+                  clickable
+                  :active-class="route.path.indexOf(aturLink(sub.link)) > -1?'bg-dark text-white':''"
+                  :to="`${aturLink(sub.link)}`"
+                  class="q-pl-xl"
+                >
+                  <!-- :active="link === 'inbox'" -->
+                  <q-item-section avatar>
+                    <q-icon
+                      :name="route.path.indexOf(aturLink(sub.link)) > -1?'icon-mat-check_circle':'icon-mat-lens'"
+                      size="xs"
+                    />
+                  </q-item-section>
+
+                  <q-item-section>
+                    {{ sub.nama }}
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-list>
+          </q-expansion-item>
+        </template>
+      </q-list>
+    </q-scroll-area>
+
     <div
       class="absolute-bottom bg-grey-4"
     >
@@ -25,98 +122,6 @@
         /> <span v-if="!miniState">Logout</span>
       </div>
     </div>
-    <!-- drawer content -->
-    <q-scroll-area
-      style="height:calc(100%-60px)"
-    />
-    <q-list
-      class="bg-white text-dark full-height"
-    >
-      <!-- INI JIKA TIDAK PUNYA SUBMENU -->
-      <template
-        v-for="(menu, i) in filtermenus"
-        :key="i"
-      >
-        <q-item
-          v-if="menu.submenus.length === 0"
-          v-ripple
-          clickable
-          :active-class="route.path.indexOf(aturLink(menu.link)) > -1?'bg-primary text-white':''"
-          :to="`${aturLink(menu.link)}`"
-        >
-          <!-- :active="link === 'inbox'" -->
-          <q-item-section avatar>
-            <!-- <q-icon :name="menu.icon" /> -->
-            <q-avatar
-              size="32px"
-              :icon="menu.icon"
-              color="white"
-              text-color="dark"
-              font-size="20px"
-            />
-          </q-item-section>
-
-          <q-item-section>
-            {{ menu.nama }}
-          </q-item-section>
-        </q-item>
-        <q-expansion-item
-          v-else
-          no-padding
-          style="padding-left: -72px;"
-          :header-class="route.matched[1].path === aturLink(menu.link)?'bg-primary text-white':''"
-          :value="route.matched[1].path === aturLink(menu.link)"
-          :expand-icon-class="route.matched[1].path === aturLink(menu.link)?'text-white':''"
-          :default-opened="route.matched[1].path === aturLink(menu.link)"
-        >
-          <template #header>
-            <q-item-section avatar>
-              <q-avatar
-                size="32px"
-                :icon="menu.icon"
-                color="white"
-                text-color="dark"
-                font-size="20px"
-              />
-            </q-item-section>
-
-            <q-item-section>
-              {{ menu.nama }}
-            </q-item-section>
-          </template>
-
-          <q-list
-            class="bg-grey-3 text-dark full-height"
-          >
-            <template
-              v-for="(sub, x) in menu.submenus"
-              :key="x"
-            >
-              <q-item
-                v-if="foundAkses(sub)"
-                v-ripple
-                clickable
-                :active-class="route.path.indexOf(aturLink(sub.link)) > -1?'bg-dark text-white':''"
-                :to="`${aturLink(sub.link)}`"
-                class="q-pl-xl"
-              >
-                <!-- :active="link === 'inbox'" -->
-                <q-item-section avatar>
-                  <q-icon
-                    :name="route.path.indexOf(aturLink(sub.link)) > -1?'icon-mat-check_circle':'icon-mat-lens'"
-                    size="xs"
-                  />
-                </q-item-section>
-
-                <q-item-section>
-                  {{ sub.nama }}
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-list>
-        </q-expansion-item>
-      </template>
-    </q-list>
   </q-drawer>
 </template>
 
@@ -132,6 +137,21 @@ const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 const apps = useAplikasiStore()
+
+const thumbStyle = ref({
+  right: '0px',
+  borderRadius: '5px',
+  backgroundColor: '#027be3',
+  width: '2px',
+  opacity: 0.75
+})
+const barStyle = ref({
+  right: '0px',
+  borderRadius: '9px',
+  backgroundColor: '#027be3',
+  width: '5px',
+  opacity: 0.2
+})
 
 const filtermenus = computed(() => {
   const menus = apps.currentApp ? apps.currentApp.menus : []

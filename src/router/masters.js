@@ -1,6 +1,7 @@
 const masters = {
   path: '/master',
-  component: () => import('layouts/master/AdminLayout.vue'),
+  // component: () => import('layouts/master/AdminLayout.vue'),
+  component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
     { path: '', name: 'master', redirect: '/master/dashboard' },

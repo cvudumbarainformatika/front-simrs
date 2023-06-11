@@ -1,6 +1,7 @@
 const laporan = {
   path: '/laporan',
-  component: () => import('layouts/laporan/AdminLayout.vue'),
+  // component: () => import('layouts/laporan/AdminLayout.vue'),
+  component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
     { path: '', name: 'laporan', redirect: '/laporan/dashboard' },
