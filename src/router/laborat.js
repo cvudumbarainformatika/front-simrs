@@ -59,6 +59,11 @@ const laborat =
             import('pages/simrs/laborat/permintaanluar/IndexPage.vue')
         }
       ]
+    },
+
+    {
+      path: '/admin/laborat/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }

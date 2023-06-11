@@ -18,6 +18,11 @@ const laporan = {
       path: '/laporan/keuangan/billrajal',
       name: 'laporan.keuangan.billrajal',
       component: () => import('pages/simrs/laporan/keuangan/bill/IndexPage.vue')
+    },
+
+    {
+      path: '/laporan/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }

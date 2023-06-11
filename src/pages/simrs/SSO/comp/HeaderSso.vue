@@ -20,7 +20,7 @@
     <div class="">
       <div class="row items-center text-white">
         <div class="q-mr-md text-subtitle">
-          {{ user.nama }}
+          {{ user? user.nama:'-' }}
         </div>
         <q-avatar
           size="40px"

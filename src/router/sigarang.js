@@ -1,7 +1,8 @@
 const sigarang =
 {
   path: '/sigarang',
-  component: () => import('layouts/sigarang/AdminLayout.vue'),
+  // component: () => import('layouts/sigarang/AdminLayout.vue'),
+  component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
     { path: '', name: 'sigarang', redirect: '/sigarang/dashboard' },
@@ -264,6 +265,11 @@ const sigarang =
       //   { path: '/history/pegawai', name: 'history.pegawai', component: () => import('pages/simrs/sigarang/history/pegawai/IndexPage.vue') },
       //   { path: '/history/user', name: 'history.user', component: () => import('pages/simrs/sigarang/history/user/IndexPage.vue') }
       // ]
+    },
+
+    {
+      path: '/sigarang/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }

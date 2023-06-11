@@ -1,11 +1,12 @@
 const pegawai =
   {
     path: '/pegawai',
-    component: () => import('layouts/pegawai/AdminLayout.vue'),
+    // component: () => import('layouts/pegawai/AdminLayout.vue'),
+    component: () => import('layouts/V2/IndexLayout.vue'),
     meta: { requireAuth: true },
     children: [
       // { path: '', redirect: '/pegawai/dashboard' },
-      { path: '', name: 'pegawai', redirect: '/pegawai/user/list' },
+      { path: '', name: 'pegawai', redirect: '/pegawai/dashboard' },
       {
         path: '/pegawai/dashboard',
         name: 'pegawai.dashboard',
@@ -106,6 +107,11 @@ const pegawai =
               import('pages/simrs/pegawai/absensi/extra/IndexPage.vue')
           }
         ]
+      },
+
+      {
+        path: '/pegawai/notfound',
+        component: () => import('pages/MidlewareNotFound.vue')
       }
     ]
   }

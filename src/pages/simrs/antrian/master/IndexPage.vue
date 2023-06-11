@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-lg">
+  <q-page>
     <Suspense>
       <!-- main content -->
       <AsyncComp />
@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./dashboard/DashboardPage.vue')
+  import('./MasterPage.vue')
 )
 </script>

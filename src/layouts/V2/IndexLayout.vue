@@ -6,7 +6,7 @@
     <HeaderComp
       :dark="dark"
       :mobile="mobile"
-      @go-to-sso="()=>{router.push('/admin/sso')}"
+      @go-to-sso="()=>{router.push({path:'/admin/sso'})}"
     />
     <LeftDrawer
       v-if="!mobile"
@@ -86,13 +86,13 @@ import LeftDrawer from './comp/LeftDrawer.vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useTransitionStore } from 'src/stores/app/transition'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const transition = useTransitionStore()
 const store = useAuthStore()
-const apps = useAplikasiStore()
+// const apps = useAplikasiStore()
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)
 const $q = useQuasar()
@@ -115,8 +115,7 @@ function setDark(val) {
 //   rightDrawerOpen.value = !rightDrawerOpen.value
 // }
 onMounted(() => {
-  console.log('layout', store.currentUser)
-  console.log('layout', apps.currentApp)
+  console.log('layout user', store.currentUser)
 })
 // const afterEnter = () => {
 //   window.scrollTo(0, 0)

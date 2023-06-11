@@ -26,11 +26,11 @@
         class="container"
       >
         <div
-          v-if="items.length"
+          v-if="filterApps.length"
           class="row justify-center flex-wrap q-col-gutter-xl"
         >
           <div
-            v-for="(item, i) in items"
+            v-for="(item, i) in filterApps"
             :key="i"
             class="col-auto"
           >
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const h = ref()
 const main = ref()
@@ -90,19 +90,42 @@ const barStyle = ref({
   width: '9px',
   opacity: 0.2
 })
-onMounted(() => {
-  console.log(main.value.offsetHeight)
-  h.value = main.value.offsetHeight - (80 + 10)
-})
 
-defineProps({
+const props = defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  akses: {
+    type: [Array, String],
+    default: () => []
   }
 })
-
 const emits = defineEmits(['goTo'])
+
+const filterApps = computed(() => {
+  const allApp = props.items
+  const akses = props.akses
+  if (akses === 'all') {
+    return allApp
+  }
+  const filt = akses.reduce(function(r, e) {
+    r[e.aplikasi_id] = (r[e.aplikasi_id] || 0) + e.aplikasi_id
+    return r
+  }, {})
+
+  const group = Object.keys(filt)
+  const grouped = group.map(x => parseInt(x))
+  const r = allApp.filter((a) => grouped.some(x => x === a.id))
+  return r
+})
+
+onMounted(() => {
+  console.log(main.value.offsetHeight)
+  h.value = main.value.offsetHeight - (80 + 10)
+  console.log('kumpulan apps', filterApps.value)
+  console.log('kumpulan akses', props.akses)
+})
 
 function goTo(item) {
   emits('goTo', item)

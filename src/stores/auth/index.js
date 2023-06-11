@@ -264,7 +264,7 @@ export const useAuthStore = defineStore('auth', {
           // console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
-          if (hdd) {
+          if (hdd && hddUser) {
             this.SET_TOKEN_USER(hdd, hddUser)
           }
           this.loading = false
@@ -311,7 +311,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = token
       this.user = user
       this.loading = false
-      routerInstance.push('/')
+      routerInstance.push({ path: '/' })
     },
     REMOVE_LOKAL () {
       storage.deleteLocalToken()
@@ -327,7 +327,7 @@ export const useAuthStore = defineStore('auth', {
     async getUser () {
       try {
         await api.get('/v1/me').then(resp => {
-          console.log('me', resp)
+          // console.log('me', resp)
           storage.setUser(resp.data.result)
           this.user = resp.data.result
           this.mapingMenu2(resp.data)
@@ -339,7 +339,7 @@ export const useAuthStore = defineStore('auth', {
     async getUserNew() {
       try {
         await api.get('/v1/authuser').then(resp => {
-          // console.log('authuser', resp)
+          console.log('authuser', resp)
           if (resp.status === 200) {
             storage.setUser(resp.data.user)
             // storage.setApps(resp.data.apps)

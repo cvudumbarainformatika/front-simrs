@@ -25,7 +25,9 @@
         <div class="column full-height ">
           <div class="col-grow">
             <KumpulanAplikasi
+              :key="apps.aksesApps"
               :items="apps.items"
+              :akses="apps.aksesApps"
               @go-to="(item)=>goTo(item)"
             />
           </div>
@@ -55,7 +57,9 @@ const router = useRouter()
 onMounted(() => {
   store.getUserNew()
   apps.getItems()
-  // console.log('ssomounted', apps.items)
+  // console.log('sso currentApp', apps.currentApp)
+  // console.log('sso akses', apps.aksesMenus)
+  // console.log('sso apps', apps.items)
 })
 
 const user = computed(() => {
@@ -64,7 +68,7 @@ const user = computed(() => {
 
 const goTo = (item) => {
   apps.setCurrentApp(item)
-  router.push(item.url)
+  router.push({ path: item.url })
 }
 
 const signOut = () => {

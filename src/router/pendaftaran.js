@@ -41,6 +41,11 @@ const pendaftaran = {
             import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
         }
       ]
+    },
+
+    {
+      path: '/pendaftaran/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }

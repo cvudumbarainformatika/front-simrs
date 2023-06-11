@@ -264,7 +264,7 @@ const changeDevice = val => {
     }).onCancel(() => {
       // store.setOpen()
     })
-  console.log('change dev. req', val)
+  // console.log('change dev. req', val)
 }
 
 const detailPegawai = ref(false)

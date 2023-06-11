@@ -32,23 +32,90 @@
     <q-list
       class="bg-white text-dark full-height"
     >
-      <q-item
-        v-for="(menu, i) in menus"
+      <!-- INI JIKA TIDAK PUNYA SUBMENU -->
+      <template
+        v-for="(menu, i) in filtermenus"
         :key="i"
-        v-ripple
-        clickable
-        :active-class="route.path.indexOf(menu.path) > -1?'bg-primary text-white':''"
-        :to="{ name: menu.route }"
       >
-        <!-- :active="link === 'inbox'" -->
-        <q-item-section avatar>
-          <q-icon :name="menu.icon" />
-        </q-item-section>
+        <q-item
+          v-if="menu.submenus.length === 0"
+          v-ripple
+          clickable
+          :active-class="route.path.indexOf(aturLink(menu.link)) > -1?'bg-primary text-white':''"
+          :to="`${aturLink(menu.link)}`"
+        >
+          <!-- :active="link === 'inbox'" -->
+          <q-item-section avatar>
+            <!-- <q-icon :name="menu.icon" /> -->
+            <q-avatar
+              size="32px"
+              :icon="menu.icon"
+              color="white"
+              text-color="dark"
+              font-size="20px"
+            />
+          </q-item-section>
 
-        <q-item-section>
-          {{ menu.label }}
-        </q-item-section>
-      </q-item>
+          <q-item-section>
+            {{ menu.nama }}
+          </q-item-section>
+        </q-item>
+        <q-expansion-item
+          v-else
+          no-padding
+          style="padding-left: -72px;"
+          :header-class="route.matched[1].path === aturLink(menu.link)?'bg-primary text-white':''"
+          :value="route.matched[1].path === aturLink(menu.link)"
+          :expand-icon-class="route.matched[1].path === aturLink(menu.link)?'text-white':''"
+          :default-opened="route.matched[1].path === aturLink(menu.link)"
+        >
+          <template #header>
+            <q-item-section avatar>
+              <q-avatar
+                size="32px"
+                :icon="menu.icon"
+                color="white"
+                text-color="dark"
+                font-size="20px"
+              />
+            </q-item-section>
+
+            <q-item-section>
+              {{ menu.nama }}
+            </q-item-section>
+          </template>
+
+          <q-list
+            class="bg-grey-3 text-dark full-height"
+          >
+            <template
+              v-for="(sub, x) in menu.submenus"
+              :key="x"
+            >
+              <q-item
+                v-if="foundAkses(sub)"
+                v-ripple
+                clickable
+                :active-class="route.path.indexOf(aturLink(sub.link)) > -1?'bg-dark text-white':''"
+                :to="`${aturLink(sub.link)}`"
+                class="q-pl-xl"
+              >
+                <!-- :active="link === 'inbox'" -->
+                <q-item-section avatar>
+                  <q-icon
+                    :name="route.path.indexOf(aturLink(sub.link)) > -1?'icon-mat-check_circle':'icon-mat-lens'"
+                    size="xs"
+                  />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ sub.nama }}
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-list>
+        </q-expansion-item>
+      </template>
     </q-list>
   </q-drawer>
 </template>
@@ -58,17 +125,35 @@ import { useQuasar } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAuthStore } from 'src/stores/auth'
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const miniState = ref(true)
-// const menus = ref([
-//   { route: 'lab.dashboard', path: '/admin/laborat/dashboard', label: 'Dashboard', icon: 'icon-mat-dashboard' },
-//   { route: 'lab.laborat', path: '/admin/laborat/table', label: 'Laboratorium', icon: 'icon-mat-dvr' },
-//   { route: 'lab.permintaan-luar', path: '/admin/laborat/permintaan-luar', label: 'Permintaan Luar', icon: 'icon-mat-transfer_within_a_station' }
-// ])
+const route = useRoute()
+const router = useRouter()
+const auth = useAuthStore()
+const apps = useAplikasiStore()
 
-const menus = computed(() => {
-  return apps.currentApp.menus
+const filtermenus = computed(() => {
+  const menus = apps.currentApp ? apps.currentApp.menus : []
+  const akses = apps.aksesApps
+  if (akses === 'all') {
+    return menus
+  }
+  const curr = akses.filter(x => x.aplikasi_id === apps.currentApp.id)
+
+  const filt = curr.reduce(function(r, e) {
+    r[e.menu_id] = (r[e.menu_id] || 0) + e.menu_id
+    return r
+  }, {})
+  const group = Object.keys(filt)
+  const grouped = group.map(x => parseInt(x)) // kumpulan menu_id
+  const r = menus.filter((a) => grouped.some(x => x === a.id))
+  return r
+})
+
+const middleWare = computed(() => {
+  const aksesmenus = filtermenus.value.map(x => x.link)
+  return aksesmenus.includes(route.path) || aksesmenus.includes(route.path.substring(1))
 })
 const $q = useQuasar()
 // const mobile = $q.screen.lt.md
@@ -82,15 +167,39 @@ console.log(dark)
 //   $q.dark.set(val)
 // }
 
-const route = useRoute()
-const auth = useAuthStore()
-const apps = useAplikasiStore()
 onMounted(() => {
-  auth.getUser()
-  console.log('left drawer', route)
-  console.log('left drawer apps', apps.currentApp)
+  // auth.getUserNew()
+  // console.log('left drawer route', route.matched[0].path)
+  // console.log('left drawer filtermenus', filtermenus.value)
+  // console.log('middleware', middleWare.value)
+  if (!middleWare.value) {
+    const newroute = route.matched[0].path + '/notfound'
+    router.replace({ path: newroute })
+  }
 })
-// console.log('leftDrawer', route.path.indexOf('/admin/berita') > -1)
+
+function aturLink(val) {
+  const firstTxt = val.charAt(0)
+  if (firstTxt !== '/') {
+    return `/${val}`
+  }
+  return val
+}
+
+function foundAkses(val) {
+  const akses = apps.aksesApps
+  if (akses === 'all') {
+    return true
+  }
+  const curr = akses.filter(x => x.aplikasi_id === apps.currentApp.id && x.menu_id === val.menu_id)
+  const filt = curr.reduce(function(r, e) {
+    r[e.submenu_id] = (r[e.submenu_id] || 0) + e.submenu_id
+    return r
+  }, {})
+  const group = Object.keys(filt)
+  const grouped = group.map(x => parseInt(x)) // kumpulan menu_id
+  return grouped.includes(val.id)
+}
 </script>
 
 <style lang="scss" scoped>

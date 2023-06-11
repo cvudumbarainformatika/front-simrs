@@ -115,7 +115,7 @@ import { useQuasar } from 'quasar'
 const $q = useQuasar()
 import madSaleh from 'src/assets/images/mad_saleh_minum.png'
 import { useAuthStore } from 'src/stores/auth'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 const img = computed(() => {
   return new URL(madSaleh, import.meta.url).href
 })
@@ -128,24 +128,24 @@ const form = ref({
 })
 
 const storeAuth = useAuthStore()
-const router = useRouter()
+// const router = useRouter()
 function onSubmit () {
   const formData = new FormData()
   formData.append('email', form.value.email + '@app.com')
   formData.append('password', form.value.password)
   formData.append('device_name', form.value.device_name)
   storeAuth.login(formData)
-    .then(() => {
-      console.log('loading false', storeAuth.aplications)
-      if (storeAuth.aplications.length === 1) {
-        if (storeAuth.aplications[0].aplikasi === 'pegawai') {
-          router.push('pegawai/user/list')
-        } else {
-          router.push(storeAuth.route.link)
-        }
-      }
-      window.location.reload()
-    })
+  // .then(() => {
+  //   // console.log('loading false', storeAuth.aplications)
+  //   if (storeAuth.aplications.length === 1) {
+  //     if (storeAuth.aplications[0].aplikasi === 'pegawai') {
+  //       router.push('pegawai/user/list')
+  //     } else {
+  //       router.push(storeAuth.route.link)
+  //     }
+  //   }
+  //   // window.location.reload()
+  // })
 }
 </script>
 

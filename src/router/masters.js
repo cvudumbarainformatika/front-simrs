@@ -27,6 +27,11 @@ const masters = {
             import('pages/simrs/master/farmasi/obat/IndexPage.vue')
         }
       ]
+    },
+
+    {
+      path: '/master/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }
