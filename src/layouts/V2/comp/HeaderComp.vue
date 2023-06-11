@@ -2,9 +2,12 @@
   <q-header
     :bordered="!mobile"
     reveal
-    :class="dark?'bg-dark':'bg-white text-dark'"
-    height-hint="98"
+    class="glass"
+    height-hint="90"
   >
+    <!-- header class old
+    :class="dark?'bg-dark':'bg-white text-dark'"
+  -->
     <div
       class="q-px-sm q-py-sm flex items-center justify-between"
       style="height:60px"
@@ -71,5 +74,10 @@ defineProps({
 <style lang="scss" scoped>
 .flip__icon {
   transform: scaleX(-1);
+}
+
+.glass {
+  background: rgba(255,255,255,.1);
+  backdrop-filter: blur(20px);
 }
 </style>

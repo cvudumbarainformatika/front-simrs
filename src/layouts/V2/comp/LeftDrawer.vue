@@ -17,7 +17,7 @@
       :bar-style="barStyle"
     >
       <q-list
-        class="bg-white text-dark"
+        :class="dark?'bg-dark':'bg-white text-dark'"
       >
         <!-- INI JIKA TIDAK PUNYA SUBMENU -->
         <template
@@ -73,7 +73,8 @@
             </template>
 
             <q-list
-              class="bg-grey-3 text-dark"
+              separator
+              :class="dark?'bg-dark':'bg-grey-3 text-dark'"
             >
               <template
                 v-for="(sub, x) in menu.submenus"
