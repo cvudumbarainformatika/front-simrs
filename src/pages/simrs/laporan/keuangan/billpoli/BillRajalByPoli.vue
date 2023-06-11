@@ -54,8 +54,9 @@
           :ada-cari="false"
           :default-btn="false"
           :ada-tambah="false"
-          :enable-head="true"
+          :enable-head="false"
           row-no
+          top-row
           @goto="store.setPage"
           @set-row="store.setPerPage"
           @refresh="store.refreshTable"
@@ -172,9 +173,65 @@
               </div>
             </div>
           </template>
-
+          <template #top-row>
+            <th>
+              <div class="row items-center text-weight-bold">
+                No
+              </div>
+            </th>
+            <th>
+              <div class="row items-center text-weight-bold">
+                Poli
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Dokter
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Jumlah Kunjungan
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center text-weight-bold q-mb-sm">
+                Jumlah Tagihan
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Jumlah Pendapatan
+              </div>
+            </th>
+            <th colspan="3">
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Rincian
+              </div>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                <div class="col-4">
+                  Laborat
+                </div>
+                <div class="col-4">
+                  Radiologi
+                </div>
+                <div class="col-4">
+                  Obat
+                </div>
+              </div>
+            </th>
+          </template>
           <template #col-dokter>
             Dokter
+          </template>
+          <template #col-lab>
+            Laborat
+          </template>
+          <template #col-rad>
+            Radiologi
+          </template>
+          <template #col-obat>
+            Obat
           </template>
           <template #col-poli>
             Poli
@@ -184,6 +241,39 @@
           </template>
           <template #col-tagihan>
             Jumlah Tagihan
+          </template>
+          <template #cell-rad="{row}">
+            <div
+              v-if="row.dokter==='semua'"
+              class="text-weight-bold"
+            >
+              {{ formatDouble(row.rad) }}
+            </div>
+            <div v-if="row.dokter!=='semua'">
+              {{ formatDouble(row.rad) }}
+            </div>
+          </template>
+          <template #cell-obat="{row}">
+            <div
+              v-if="row.dokter==='semua'"
+              class="text-weight-bold"
+            >
+              {{ formatDouble(row.obat) }}
+            </div>
+            <div v-if="row.dokter!=='semua'">
+              {{ formatDouble(row.obat) }}
+            </div>
+          </template>
+          <template #cell-lab="{row}">
+            <div
+              v-if="row.dokter==='semua'"
+              class="text-weight-bold"
+            >
+              {{ formatDouble(row.lab) }}
+            </div>
+            <div v-if="row.dokter!=='semua'">
+              {{ formatDouble(row.lab) }}
+            </div>
           </template>
           <template #cell-poli="{row}">
             <div
@@ -275,7 +365,10 @@ const jsonFields = {
   Dokter: 'dokter',
   'Jumlah Kunjungan': 'kunjungan',
   'Jumlah Tagihan': 'tagihan',
-  'Jumlah Pendapatan': 'pendapatan'
+  'Jumlah Pendapatan': 'pendapatan',
+  Laborat: 'lab',
+  Radiologi: 'rad',
+  Obat: 'obat'
 }
 // function fetchData() {
 //   loading.value = true

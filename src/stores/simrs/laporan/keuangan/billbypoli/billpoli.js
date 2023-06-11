@@ -26,7 +26,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
       sort: 'desc'
     },
     form: {},
-    columns: ['poli', 'dokter', 'kunjungan', 'tagihan', 'pendapatan'],
+    columns: ['poli', 'dokter', 'kunjungan', 'tagihan', 'pendapatan', 'lab', 'rad', 'obat'],
     columnHide: ['id']
   }),
   actions: {
@@ -142,7 +142,10 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
             dokter: 'semua',
             kunjungan: pol.kunjungan.length,
             tagihan: pol.rekamMedikUmum + pol.aptRacik + pol.aptPoli + pol.lab + pol.psiko + pol.rad + pol.tinPol + pol.visite,
-            pendapatan: pol.penBpjs + pol.pendUmum
+            pendapatan: pol.penBpjs + pol.pendUmum,
+            lab: pol.lab,
+            rad: pol.rad,
+            obat: pol.aptRacik + pol.aptPoli
 
           }
           this.items.push(pol.poli)
@@ -235,7 +238,10 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
                 dokter: dok.kunjungan[0].dokter.rs2,
                 kunjungan: dok.kunjungan.length,
                 tagihan: dok.rekamMedikUmum + dok.aptRacik + dok.aptPoli + dok.lab + dok.psiko + dok.rad + dok.tinPol + dok.visite,
-                pendapatan: dok.penBpjs + dok.pendUmum
+                pendapatan: dok.penBpjs + dok.pendUmum,
+                lab: dok.lab,
+                rad: dok.rad,
+                obat: dok.aptRacik + dok.aptPoli
 
               }
               this.items.push(dok.poli)
