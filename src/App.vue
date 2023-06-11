@@ -8,6 +8,7 @@ import { useQuasar } from 'quasar'
 
 import customIcons from 'src/custom-icons/custom-icons'
 import { anjunganChannel, channel } from 'src/modules/sockets'
+// import { onBeforeUnmount, onUpdated, ref } from 'vue'
 import { useCallStore } from './stores/antrian/call'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from './stores/simrs/penunjang/laborat/transaksi_laborat'
@@ -68,4 +69,22 @@ anjunganChannel.subscribed(() => {
     callstore.ubahStatus(data)
   }
 })
+// timer
+// const angka = ref(0)
+// const hitung = () => {
+//   angka.value = angka.value + 1
+//   console.log('hitung', angka.value)
+//   // if (angka.value === store.time) {
+//   //   store.setTab('awal')
+//   //   goTo('/')
+//   // }
+// }
+// const updateTimeInterval = setInterval(hitung, 1000)
+// onBeforeUnmount(() => {
+//   clearInterval(updateTimeInterval)
+// })
+// onUpdated(() => {
+//   angka.value = 0
+//   console.log('updated', angka.value)
+// })
 </script>

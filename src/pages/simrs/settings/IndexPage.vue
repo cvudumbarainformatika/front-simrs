@@ -299,7 +299,7 @@ function setPegawai(val) {
         const subInd = findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id)
         menu[appInd].checked = true
         menu[appInd].menus[menuInd].checked = true
-        menu[appInd].menus[menuInd].submenus[subInd].checked = true
+        if (subInd >= 0) menu[appInd].menus[menuInd].submenus[subInd].checked = true
       })
       console.log('user menu', userMenu, menu)
       val.menus = menu
