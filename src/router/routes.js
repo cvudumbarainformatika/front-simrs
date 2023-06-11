@@ -8,25 +8,9 @@ import masters from './masters'
 import pendaftaran from './pendaftaran'
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('layouts/SSO/SsoLayout.vue'),
-    meta: { requireAuth: true },
-    children: [
-      { path: '', redirect: '/admin/sso' },
-      {
-        path: '/admin/sso',
-        name: 'admin.sso',
-        meta: { transition: 'fade', mode: '' },
-        component: () =>
-          import('pages/simrs/SSO/IndexNewSso.vue')
-      }
-    ]
-  },
-  // IKI SSO LAWAS
   // {
   //   path: '/',
-  //   component: () => import('layouts/Admin/AdminLayout.vue'),
+  //   component: () => import('layouts/SSO/SsoLayout.vue'),
   //   meta: { requireAuth: true },
   //   children: [
   //     { path: '', redirect: '/admin/sso' },
@@ -35,14 +19,30 @@ const routes = [
   //       name: 'admin.sso',
   //       meta: { transition: 'fade', mode: '' },
   //       component: () =>
-  //         import(
-  //           /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/IndexPage.vue'
-  //         )
-  //     },
-
-  //     laborat
+  //         import('pages/simrs/SSO/IndexNewSso.vue')
+  //     }
   //   ]
   // },
+  // IKI SSO LAWAS
+  {
+    path: '/',
+    component: () => import('layouts/Admin/AdminLayout.vue'),
+    meta: { requireAuth: true },
+    children: [
+      { path: '', redirect: '/admin/sso' },
+      {
+        path: '/admin/sso',
+        name: 'admin.sso',
+        meta: { transition: 'fade', mode: '' },
+        component: () =>
+          import(
+            /* webpackChunkName: "admin.sso" */ 'pages/simrs/SSO/IndexPage.vue'
+          )
+      },
+
+      laborat
+    ]
+  },
   {
     path: '/print',
     component: () => import('layouts/Admin/v2/PrintLayout.vue'),
@@ -80,8 +80,8 @@ const routes = [
     component: () => import('layouts/Auth/AuthLayout.vue'),
     meta: { requireAuth: false },
     children: [
-      // { path: '', component: () => import('pages/auth/AuthPage.vue') }
-      { path: '', component: () => import('pages/auth/LoginPage.vue') }
+      { path: '', component: () => import('pages/auth/AuthPage.vue') }
+      // { path: '', component: () => import('pages/auth/LoginPage.vue') }
     ]
   },
 
