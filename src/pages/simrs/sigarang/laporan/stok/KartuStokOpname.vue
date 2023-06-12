@@ -382,7 +382,7 @@ const store = useStokOpnameStore()
 const auth = useAuthStore()
 
 const role = computed(() => {
-  return auth.role ? auth.role : ''
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 const data = computed(() => {
   return store.dataKartuStok

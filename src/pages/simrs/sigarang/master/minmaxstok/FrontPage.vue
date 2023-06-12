@@ -48,7 +48,7 @@ import PenggunaTable from './pengguna/PenggunaTable.vue'
 const store = useMinMaxStokForm()
 const auth = useAuthStore()
 const role = computed(() => {
-  return auth.role ? auth.role : ''
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 const tab = role.value !== '' ? ref('depo') : ref('pengguna')
 store.getRequredDataForm()

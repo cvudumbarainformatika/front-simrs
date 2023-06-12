@@ -1097,7 +1097,7 @@ tandatangan.getInitialData()
 const auth = useAuthStore()
 console.log('auth', auth.currentUser.pegawai.role.nama)
 const role = computed(() => {
-  return auth.currentUser.pegawai.role.nama ? auth.currentUser.pegawai.role.nama : ''
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 // set tanggal print
 function setTanggal(val) {
