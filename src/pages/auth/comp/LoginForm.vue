@@ -129,11 +129,11 @@ import { computed, ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
-import madSaleh from 'src/assets/images/mad_saleh_minum.png'
+// import madSaleh from 'src/assets/images/mad_saleh_minum.png'
 import { useAuthStore } from 'src/stores/auth'
 // import { useRouter } from 'vue-router'
 const img = computed(() => {
-  return new URL(madSaleh, import.meta.url).href
+  return new URL('../../../assets/images/mad_saleh_minum.png', import.meta.url).href
 })
 
 const isPasw = ref(true)
