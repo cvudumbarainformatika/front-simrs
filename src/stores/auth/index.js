@@ -255,7 +255,7 @@ export const useAuthStore = defineStore('auth', {
     //
     async login (payload) {
       this.loading = true
-      waitLoad('show')
+      // waitLoad('show')
       try {
         // await api.post('/v2/login', payload).then(resp => {
         await api.post('/v1/login', payload).then(resp => {
@@ -267,12 +267,15 @@ export const useAuthStore = defineStore('auth', {
           if (hdd && hddUser) {
             this.SET_TOKEN_USER(hdd, hddUser)
           }
-          this.loading = false
-          waitLoad('done')
+          setTimeout(() => {
+            this.loading = false
+          }, 1000)
+
+          // waitLoad('done')
           // this.mapingMenu2(resp.data)
         })
       } catch (error) {
-        waitLoad('done')
+        // waitLoad('done')
         this.loading = false
         // console.log('err login', error.response)
         // notifErr(error.response)

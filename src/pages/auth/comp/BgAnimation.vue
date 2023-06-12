@@ -49,9 +49,9 @@
 .waves {
   position: relative;
   width: 100%;
-  height: 15vh;
+  height: 100%;
   margin-bottom: -20px;
-  min-height: 100px;
+  // min-height: 100px;
   max-height:100px;
 
 }
