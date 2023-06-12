@@ -1,9 +1,9 @@
 const pendaftaran = {
   path: '/pendaftaran',
-  component: () => import('layouts/pegawai/AdminLayout.vue'),
+  component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', name: 'pendaftaran', redirect: '/pendaftaran/form/umum' },
+    { path: '/pendaftaran', name: 'pendaftaran', redirect: '/pendaftaran/form/umum' },
     {
       path: '/pendaftaran/form',
       name: 'pendaftaran.form',
