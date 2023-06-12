@@ -41,7 +41,7 @@
       <q-card-section>
         <app-table-extend
           id="printMe"
-          :key="store.params.tgldari"
+          :key="store.items"
           :columns="store.columns"
           :meta="store.meta"
           :column-hide="store.columnHide"
@@ -323,7 +323,7 @@
               v-if="row.dokter==='semua'"
               class="text-weight-bold"
             >
-              {{ row.dokter }}
+              <!-- {{ row.dokter }} -->
             </div>
             <div v-if="row.dokter!=='semua'">
               {{ row.dokter }}

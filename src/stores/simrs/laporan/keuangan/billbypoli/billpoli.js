@@ -253,7 +253,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
               dok.pendUmum = tempDokPendUmum.length ? tempDokPendUmum.map(x => x.total).reduce((a, b) => a + b, 0) : 0
 
               dok.poli = {
-                poli: dok.kunjungan[0].relmpoli.rs2,
+                poli: '',
                 dokter: dok.kunjungan[0].dokter.rs2,
                 kunjungan: dok.kunjungan.length,
                 tagihan: dok.rekamMedikUmum + dok.aptRacik + dok.aptPoli + dok.lab + dok.psiko + dok.rad + dok.tinPol + dok.visite,
@@ -282,6 +282,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
 
     // api related function
     getDataTable() {
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {

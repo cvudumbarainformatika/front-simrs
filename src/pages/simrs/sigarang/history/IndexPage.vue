@@ -12,7 +12,7 @@
   </q-page>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, watch } from 'vue'
 import SkeletonPage from './SkeletonPage.vue'
 import { useRoute } from 'vue-router'
 import { findWithAttr } from 'src/modules/utils'
@@ -73,12 +73,19 @@ const submenus = [
   }
 ]
 const table = useHistoryTable()
-function getSub() {
-  const index = findWithAttr(submenus, 'name', useRoute().name)
-  const sub = submenus[index]
-  table.pilihTransaksi(sub)
-  // console.log('History aja', sub)
+const route = useRoute()
+function getSub(val) {
+  const index = findWithAttr(submenus, 'name', val)
+  if (index >= 0) {
+    const sub = submenus[index]
+    table.pilihTransaksi(sub)
+  }// console.log('History aja', sub)
 }
 // console.log('path', useRoute().name)
-getSub()
+getSub(useRoute().name)
+watch(() => route.name, val => {
+  console.log('watch ', val)
+  getSub(val)
+  // console.log('watch 2', useRoute().name)
+})
 </script>

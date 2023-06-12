@@ -73,9 +73,9 @@ const sigarang =
           component: () => import('pages/simrs/sigarang/history/distribusidepo/IndexPage.vue')
         },
         {
-          path: '/sigarang/history/permintaan',
-          name: 'sigarang.history.permintaan',
-          component: () => import('pages/simrs/sigarang/history/permintaan/IndexPage.vue')
+          path: '/sigarang/history/pemakaianruangan',
+          name: 'sigarang.history.pemakaianruangan',
+          component: () => import('pages/simrs/sigarang/history/pemakaianruangan/IndexPage.vue')
         },
         {
           path: '/sigarang/history/penerimaanruangan',
