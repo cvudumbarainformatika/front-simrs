@@ -65,6 +65,10 @@
                   dark
                   :rules="[val => !!val || 'Harap diisi terlebih dahulu']"
                 >
+                  <template #label>
+                    <!-- <span class="text-weight-bold text-deep-orange">You</span> -->
+                    <span class="q-px-sm bg-deep-orange text-white text-italic rounded-borders">Username</span>
+                  </template>
                   <template #prepend>
                     <q-icon name="icon-mat-person" />
                   </template>
@@ -75,9 +79,21 @@
                   label="Password"
                   dark
                   :rules="[val => !!val || 'Harap diisi terlebih dahulu']"
+                  :type="isPasw ? 'password' : 'text'"
                 >
+                  <template #label>
+                    <!-- <span class="text-weight-bold text-deep-orange">You</span> -->
+                    <span class="q-px-sm bg-deep-orange text-white text-italic rounded-borders">Password</span>
+                  </template>
                   <template #prepend>
                     <q-icon name="icon-mat-key" />
+                  </template>
+                  <template #append>
+                    <q-icon
+                      :name="isPasw ? 'icon-mat-visibility_off' : 'icon-mat-visibility'"
+                      class="cursor-pointer"
+                      @click="isPasw = !isPasw"
+                    />
                   </template>
                 </q-input>
                 <div class="row q-mt-lg">
@@ -120,6 +136,7 @@ const img = computed(() => {
   return new URL(madSaleh, import.meta.url).href
 })
 
+const isPasw = ref(true)
 const myForm = ref(null)
 const form = ref({
   email: '',

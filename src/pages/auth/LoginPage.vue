@@ -1,12 +1,17 @@
 <template>
   <q-page class="fullscreen">
+    <app-loader
+      v-if="store.loading"
+      class="dimmed"
+    />
     <div class="top-page">
       <BoxAnimation class="absolute" />
+      <BgAnimation class="z--" />
       <div class="inner-top-page column flex-center">
         <LoginForm class="login-form" />
       </div>
 
-      <bgAnimation />
+      <!-- <bgAnimation /> -->
     </div>
     <div class="bot column flex-center">
       <div class="text-subtitle">
@@ -17,9 +22,12 @@
 </template>
 <script setup>
 // import { computed } from 'vue'
-import bgAnimation from './comp/BgAnimation.vue'
+import { useAuthStore } from 'src/stores/auth'
+import BgAnimation from './comp/BgAnimation.vue'
 import BoxAnimation from './comp/BoxAnimation.vue'
 import LoginForm from './comp/LoginForm.vue'
+
+const store = useAuthStore()
 
 </script>
 
@@ -38,7 +46,7 @@ $grad:#187DC1;
 
   .inner-top-page {
       width: 100%;
-      height:85vh;
+      height:100vh;
       margin:0;
       padding: 0;
     }
@@ -56,6 +64,13 @@ $grad:#187DC1;
   width: 100%;
   height: 5vh;
   bottom: 0;
-  background-color: #fff  ;
+  background-color: transparent ;
+}
+.z-- {
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: 10vh;
 }
 </style>

@@ -84,7 +84,7 @@
                   v-if="foundAkses(sub)"
                   v-ripple
                   clickable
-                  :active-class="route.path.indexOf(aturLink(sub.link)) > -1?'bg-dark text-white':''"
+                  :active-class="route.path.indexOf(aturLink(sub.link)) > -1?'bg-dark text-white':null"
                   :to="`${aturLink(sub.link)}`"
                   class="q-pl-xl"
                 >
@@ -103,6 +103,7 @@
               </template>
             </q-list>
           </q-expansion-item>
+          <!-- {{ route.matched }} -->
         </template>
       </q-list>
     </q-scroll-area>
@@ -190,7 +191,7 @@ console.log(dark)
 
 onMounted(() => {
   // auth.getUserNew()
-  // console.log('left drawer route', route.matched[0].path)
+  // console.log('left drawer route', route.matched[2].path)
   // console.log('left drawer filtermenus', filtermenus.value)
   // console.log('middleware', middleWare.value)
   if (!middleWare.value) {
