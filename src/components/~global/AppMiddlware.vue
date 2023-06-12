@@ -38,9 +38,9 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import madsaleh from 'src/assets/images/mad_saleh_minum.png'
+// import madsaleh from 'src/assets/images/mad_saleh_minum.png'
 const gambar = computed(() => {
-  return new URL(madsaleh, import.meta.url).href
+  return new URL('../../assets/images/mad_saleh_minum.png', import.meta.url).href
 })
 
 const info = ref([
