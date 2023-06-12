@@ -55,7 +55,6 @@
           :default-btn="false"
           :ada-tambah="false"
           :enable-head="false"
-          row-no
           top-row
           @goto="store.setPage"
           @set-row="store.setPerPage"
@@ -174,11 +173,11 @@
             </div>
           </template>
           <template #top-row>
-            <th>
+            <!-- <th>
               <div class="row items-center text-weight-bold">
                 No
               </div>
-            </th>
+            </th> -->
             <th>
               <div class="row items-center text-weight-bold">
                 Poli
@@ -360,7 +359,6 @@ store.getInitialData()
 //   loading.value = false
 // }
 const jsonFields = {
-  No: 'no',
   Poli: 'poli',
   Dokter: 'dokter',
   'Jumlah Kunjungan': 'kunjungan',

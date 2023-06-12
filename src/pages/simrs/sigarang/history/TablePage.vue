@@ -307,7 +307,7 @@
             </template>
             <template #left-action="{row,index}">
               <q-btn
-                v-if="(role==='root' || role==='PTK' || role==='gizi' || role==='gudang')
+                v-if="(role==='root' || role==='PTK' || role==='gizi' || role==='gudang' || role==='ruangan')
                   && (row.nama === 'PEMESANAN' || row.nama === 'PENERIMAAN' || row.nama==='DISTRIBUSI DEPO' || row.nama==='PERMINTAAN RUANGAN')"
                 unelevated
                 color="dark"
@@ -1095,8 +1095,9 @@ const tandatangan = useTandaTanganStore()
 tandatangan.getInitialData()
 
 const auth = useAuthStore()
+console.log('auth', auth.currentUser.pegawai.role.nama)
 const role = computed(() => {
-  return auth.role ? auth.role : ''
+  return auth.currentUser.pegawai.role.nama ? auth.currentUser.pegawai.role.nama : ''
 })
 // set tanggal print
 function setTanggal(val) {

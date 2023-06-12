@@ -364,14 +364,16 @@ const auth = useAuthStore()
 // let timer = true
 // if (timer) {
 // }
+console.log('auth', auth.currentUser)
 const loading = ref(false)
 const timer = setInterval(() => {
   caller()
 }, 1000)
 function caller() {
   loading.value = true
-  if (auth.kode_ruang && store.penanggungjawabs.length) {
-    store.setRuangan(auth.kode_ruang)
+  if (auth.currentUser.pegawai.kode_ruang && store.penanggungjawabs.length) {
+    console.log('caller', auth.currentUser.pegawai.kode_ruang, store.penanggungjawabs)
+    store.setRuangan(auth.currentUser.pegawai.kode_ruang)
     loading.value = false
     clearInterval(timer)
   }
@@ -391,6 +393,7 @@ function updateJumlah(val) {
     notifErrVue('Jumlah maksimal yang bisa di input adalah ' + itemme.stok)
   }
 }
+caller()
 </script>
 <style lang="scss" scoped>
 .anak{
