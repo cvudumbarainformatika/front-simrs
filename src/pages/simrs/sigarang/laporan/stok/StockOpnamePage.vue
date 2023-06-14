@@ -28,11 +28,11 @@
               </div>
             </div>
             <!-- gudang -->
-            <div class="fit row no-wrap justify-between items-center q-mb-sm">
+            <div class="fit row no-wrap q-col-gutter-sm justify-between items-center q-mb-sm">
               <div class="col-3">
                 Gudang
               </div>
-              <div class="col-9">
+              <div class="col-7">
                 <app-autocomplete-new
                   :key="store.kode_tempat"
                   label="pilih "
@@ -46,6 +46,12 @@
                   :source="store.gudangDepo"
                   @on-select="gudangSelected"
                   @clear="gudangCleared"
+                />
+              </div>
+              <div class="col-2">
+                <app-btn
+                  label="ambil data"
+                  @click="store.getDataTable()"
                 />
               </div>
             </div>

@@ -75,6 +75,16 @@
               <div>{{ row.depo?row.depo.nama:'-' }}</div>
               <!-- <div>{{ row.mapingdepo?(row.mapingdepo.depo?row.mapingdepo.depo.nama:'-'):'-' }}</div> -->
             </template>
+            <template #cell-uraian_50="{row}">
+              <div class="box">
+                {{ row.uraian_50 }}
+              </div>
+            </template>
+            <template #cell-nama="{row}">
+              <div class="box">
+                {{ row.nama }}
+              </div>
+            </template>
           </app-table>
           <!--
             row-image="image"
@@ -101,3 +111,13 @@ const role = computed(() => {
   return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 </script>
+<style lang="scss" scoped>
+.q-table td div.box {
+  white-space: normal !important;
+    inline-size: 100px;
+    overflow-wrap: break-word;
+}
+.q-table--no-wrap th, .q-table--no-wrap td {
+  white-space: normal !important;
+}
+</style>

@@ -11,10 +11,11 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at'],
     form: {
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     display: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      jam: date.formatDate(Date.now(), ' HH:mm:ss')
     },
     params: {
       q: '',
@@ -160,7 +161,7 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
     },
     saveForm(val) {
       // this.loading = true
-      val.tanggal_distribusi = this.form.tanggal
+      // val.tanggal_distribusi = this.form.tanggal
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusidepo/new-store', val)
           .then(resp => {
@@ -179,7 +180,7 @@ export const useDistribusiDepoNewStore = defineStore('new_distribusi_depo_store'
     },
     saveDetailPenerimaan(val) {
       // this.loading = true
-      val.tanggal_distribusi = this.form.tanggal
+      // val.tanggal_distribusi = this.form.tanggal
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusidepo/save-detail', val)
           .then(resp => {

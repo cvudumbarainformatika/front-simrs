@@ -212,14 +212,24 @@
             <div class="col-1 btb bl">
               Harga
             </div>
-            <div class="col-1 btb bl">
-              Dipesan
-            </div>
-            <div class="col-1 btb bl">
-              Diterima
-            </div>
-            <div class="col-1 btb bl">
-              Distribusi
+            <div class="col-3 bt bl bb no-padding">
+              <div
+                class="row "
+                style="height:26px;"
+              >
+                <div class="col-3">
+                  Pesan
+                </div>
+                <div class="col-3  bl">
+                  Terima
+                </div>
+                <div class="col-4  bl">
+                  Subtotal
+                </div>
+                <div class="col-2  bl">
+                  Dist
+                </div>
+              </div>
             </div>
             <div class="col-1 btb bl">
               Satuan
@@ -260,6 +270,7 @@
                     :loading="store.loadingUpdateDetail"
                     @focus="beforeUpdateHarga(detail,i)"
                     @blur="updateHarga(detail,i)"
+                    @update:model-value="updateModelHarga"
                     @keyup.enter="updateHarga(detail,i)"
                   />
                 </div>
@@ -270,33 +281,44 @@
                   {{ formatRpDouble(detail.harga) }}
                 </div>
               </div>
-              <div class="col-1 bb bl">
-                <div :class="detail.qty!==detail.dipesan?'text-weight-bold text-grey':''">
-                  {{ detail.dipesan?detail.dipesan:'-' }}
-                </div>
-              </div>
-              <div class="col-1 bb bl">
-                <div v-if="detail.edit">
-                  <app-input
-                    ref="jmlTrm"
-                    v-model="detail.qty"
-                    label="diterima"
-                    outlined
-                    :loading="store.loadingUpdateDetail"
-                    @focus="beforeUpdateJumlah(detail,i)"
-                    @blur="updateJumlah(detail,i)"
-                    @keyup.enter="updateJumlah(detail,i)"
-                  />
-                </div>
+              <div class="col-3 bl bb no-padding">
                 <div
-                  v-if="!detail.edit"
-                  :class="detail.qty!==detail.dipesan?'text-weight-bold text-negative':''"
+                  class="row items-center"
+                  style="height:26px;"
                 >
-                  {{ detail.qty }}
+                  <div class="col-3">
+                    <div :class="detail.qty!==detail.dipesan?'text-weight-bold text-grey':''">
+                      {{ detail.dipesan?detail.dipesan:'-' }}
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div v-if="detail.edit">
+                      <app-input
+                        ref="jmlTrm"
+                        v-model="detail.qty"
+                        label="diterima"
+                        outlined
+                        :loading="store.loadingUpdateDetail"
+                        @focus="beforeUpdateJumlah(detail,i)"
+                        @blur="updateJumlah(detail,i)"
+                        @update:model-value="updateModelJumlah"
+                        @keyup.enter="updateJumlah(detail,i)"
+                      />
+                    </div>
+                    <div
+                      v-if="!detail.edit"
+                      :class="detail.qty!==detail.dipesan?'text-weight-bold text-negative':''"
+                    >
+                      {{ detail.qty }}
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    {{ detail.sub_total?formatDouble(detail.sub_total):'-' }}
+                  </div>
+                  <div class="col-2">
+                    {{ detail.distribusi?detail.distribusi:'-' }}
+                  </div>
                 </div>
-              </div>
-              <div class="col-1 bb bl">
-                {{ detail.distribusi?detail.distribusi:'-' }}
               </div>
               <div class="col-1 bb bl">
                 {{ detail.satuan?detail.satuan.nama:'-' }}
@@ -367,6 +389,14 @@
               </div>
             </div>
           </div>
+          <div class="row items-center">
+            <div class="col-7">
+              Total
+            </div>
+            <div class="col-5 text-weight-bold">
+              {{ formatRpDouble( store.item.total) }}
+            </div>
+          </div>
         </div>
       </q-card-section>
     </q-card>
@@ -374,7 +404,7 @@
 </template>
 <script setup>
 import { date, Dialog } from 'quasar'
-import { formatRpDouble } from 'src/modules/formatter'
+import { formatRpDouble, formatDouble } from 'src/modules/formatter'
 // import { notifCenterVue } from 'src/modules/utils'
 import { useEditPenerimaanStore } from 'src/stores/simrs/logistik/sigarang/history/edit/penerimaan'
 import { ref } from 'vue'
@@ -428,12 +458,21 @@ function editRow(val, i) {
 }
 const jmlTrm = ref(null)
 const refHarga = ref(null)
+let indexDetil = -1
 function beforeUpdateHarga(val, i) {
+  indexDetil = i
   val.hargaprev = val.harga
 }
-
+function updateModelHarga(val) {
+  console.log(val)
+  if (indexDetil >= 0) {
+    const det = store.item.details[indexDetil]
+    det.sub_total = parseFloat(det.qty) * parseFloat(val)
+  }
+}
 function updateHarga(val, i) {
   // console.log('ref1', jmlTrm.value)
+  // console.log('item ', store.item.details.map(x => x.sub_total).reduce((a, b) => a + b, 0))
   console.log('update ', i, val)
   Dialog.create({
     title: 'Konfirmasi.',
@@ -459,7 +498,8 @@ function updateHarga(val, i) {
       harga: val.harga,
       penerimaan_id: val.penerimaan_id,
       kode_rs: val.kode_rs,
-      nomor: store.item.nomor
+      nomor: store.item.nomor,
+      totalHarga: store.item.details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
     }
     if (parseFloat(val.dipesan) > parseFloat(val.qty)) {
       form.statuspesanan = 3
@@ -470,22 +510,32 @@ function updateHarga(val, i) {
       store.item.statuspesanan = resp.pesanan.status
       val.harga = resp.terima.harga
       store.item.details[i].edit = false
+      store.item.total = form.totalHarga
     })
     delete val.hargaprev
+    indexDetil = -1
   }).onCancel(() => {
     if (val.harga !== val.hargaprev) {
       val.harga = val.hargaprev
       delete val.hargaprev
     }
+    indexDetil = -1
   })
   store.item.details[i].edit = false
 }
 function beforeUpdateJumlah(val, i) {
+  indexDetil = i
   val.qtyprev = val.qty
 }
-
+function updateModelJumlah(val) {
+  if (indexDetil >= 0) {
+    const det = store.item.details[indexDetil]
+    det.sub_total = parseFloat(val) * parseFloat(det.harga)
+  }
+}
 function updateJumlah(val, i) {
   // console.log('ref1', jmlTrm.value)
+  // console.log('item ', store.item)
   console.log('update ', i, val)
   Dialog.create({
     title: 'Konfirmasi.',
@@ -510,7 +560,8 @@ function updateJumlah(val, i) {
       qty: val.qty,
       penerimaan_id: val.penerimaan_id,
       kode_rs: val.kode_rs,
-      nomor: store.item.nomor
+      nomor: store.item.nomor,
+      totalHarga: store.item.details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
     }
     if (parseFloat(val.dipesan) > parseFloat(val.qty)) {
       form.statuspesanan = 3
@@ -521,11 +572,14 @@ function updateJumlah(val, i) {
       store.item.statuspesanan = resp.pesanan.status
       val.qty = resp.terima.qty
       store.item.details[i].edit = false
+      store.item.total = form.totalHarga
     })
+    indexDetil = -1
   }).onCancel(() => {
     if (val.qty !== val.qtyprev) {
       val.qty = val.qtyprev
     }
+    indexDetil = -1
   })
   store.item.details[i].edit = false
 }
@@ -663,5 +717,10 @@ const label = (status, nama) => {
 }
 .bb{
   border-bottom: 1px solid black;
+}
+.q-col-gutter-sm{
+  .no-padding{
+    padding: 0px !important;
+  }
 }
 </style>

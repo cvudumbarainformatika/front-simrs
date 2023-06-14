@@ -50,6 +50,7 @@ export const useEditPenerimaanStore = defineStore('edit_penerimaan', {
       this.setForm('pengirim', val.pengirim)
       this.setForm('surat_jalan', val.surat_jalan)
       this.setForm('faktur', val.faktur)
+
       this.cariPesanan()
     },
 

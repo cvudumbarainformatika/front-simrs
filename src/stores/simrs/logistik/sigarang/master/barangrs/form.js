@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { notifSuccess } from 'src/modules/utils'
+import { findWithAttr, notifSuccess } from 'src/modules/utils'
 import { api } from 'boot/axios'
 import { useMasterBarangRSTable } from './table'
 
@@ -32,8 +32,21 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     ],
     depos: [],
     barang108s: [],
+    rekening50s: [],
     loading108: false,
-    edited: false
+    loading50: false,
+    edited: false,
+    autocompleteParams: {
+      per_page: 10,
+      page: 1,
+      q: ''
+    },
+    autocompleteParam50s: {
+      per_page: 10,
+      page: 1,
+      q: ''
+    }
+
   }),
   actions: {
     // local related actions
@@ -94,8 +107,26 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
       })
+      console.log('edit', val)
+      const index108 = findWithAttr(this.barang108s, 'kode', val.barang108.kode)
+      const index50 = findWithAttr(this.rekening50s, 'kode', val.rekening50.kode)
+      // console.log('index 108 ', index108, index50)
+      if (index108 < 0) {
+        this.barang108s.push(val.barang108)
+      }
+      if (index50 < 0) {
+        this.rekening50s.push(val.rekening50)
+      }
+      // console.log('val barnag ', val.barang108, val.rekening50)
+      // const temp108=this.barang108s
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen
+    },
+    getInitialData() {
+      this.getDataSatuans()
+      this.getData108s()
+      this.getRekening50()
+      this.getDataDepos()
     },
     // api related actions
     // ambil data satuan
@@ -143,19 +174,38 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     },
     // ambil data barang108
     getData108s () {
+      const param = { params: this.autocompleteParams }
       // loading diambil dari tambah baru barang 108
       if (!this.barang108s.length || this.loading108) {
         return new Promise(resolve => {
-          api.get('v1/barang108/barang108')
+          // api.get('v1/barang108/barang108')
+          api.get('v1/barang108/index', param)
             .then(resp => {
               if (resp.status === 200) {
-                // console.log('108', resp.data)
-                this.barang108s = resp.data
+                // console.log('108', resp.data.data)
+                // this.barang108s = resp.data
+                this.barang108s = resp.data.data
               }
               this.loading108 = false
             }).catch(() => { this.loading108 = false })
         })
       }
+    }, // ambil rekening 50
+    getRekening50 () {
+      const params = { params: this.autocompleteParam50s }
+      return new Promise(resolve => {
+        this.loading50 = true
+        // api.get('v1/mapingbarang/maping', params)
+        api.get('v1/rekening50/index', params)
+          .then(resp => {
+            // console.log('rekening 50', resp.data.data)
+            this.rekening50s = resp.data.data
+            // console.log(resp.data)
+            this.loading50 = false
+            resolve(resp)
+          })
+          .catch(() => { this.loading50 = false })
+      })
     },
     // tambah
     saveForm () {

@@ -169,7 +169,7 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
     // get initial data
     getInitialData() {
       this.getDataGudangDepo()
-      this.getDataTable()
+      // this.getDataTable()
     },
     prosesData(val) {
       // this.items = val
