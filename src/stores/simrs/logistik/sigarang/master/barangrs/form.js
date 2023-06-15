@@ -78,15 +78,16 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     },
     setKode (kode) {
       // console.log('kode', kode)
-      const anu = this.input_kode === '' ? this.input_kode.split('') : false
-      const temp = anu || kode.split('')
-      const apem = temp.length
-      apem >= 5 ? this.form.kode = 'RS-' + this.input_kode
-        : apem === 4 ? this.form.kode = 'RS-0' + this.input_kode
-          : apem === 3 ? this.form.kode = 'RS-00' + this.input_kode
-            : apem === 2 ? this.form.kode = 'RS-000' + this.input_kode
-              : apem === 1 ? this.form.kode = 'RS-0000' + this.input_kode : this.form.kode = 'RS-00000'
-
+      if (!this.edited) {
+        const anu = this.input_kode === '' ? this.input_kode.split('') : false
+        const temp = anu || kode.split('')
+        const apem = temp.length
+        apem >= 5 ? this.form.kode = 'RS-' + this.input_kode
+          : apem === 4 ? this.form.kode = 'RS-0' + this.input_kode
+            : apem === 3 ? this.form.kode = 'RS-00' + this.input_kode
+              : apem === 2 ? this.form.kode = 'RS-000' + this.input_kode
+                : apem === 1 ? this.form.kode = 'RS-0000' + this.input_kode : this.form.kode = 'RS-00000'
+      }
       // console.log('apem', apem)
     },
     setForm (nama, val) {
@@ -102,6 +103,7 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
       this.getIndexNumber()
     },
     editData (val) {
+      this.input_kode = ''
       this.edited = true
       const keys = Object.keys(val)
       keys.forEach((key, index) => {
