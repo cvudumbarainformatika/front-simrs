@@ -175,11 +175,11 @@
 import { Dialog } from 'quasar'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
-import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
+// import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
 import { ref } from 'vue'
 const store = useMasterBarangRSForm()
 const mapingbarang = useMasterMapingBarangForm()
-const pemesanan = useTransaksiPemensananForm()
+// const pemesanan = useTransaksiPemensananForm()
 // const form108 = useMasterBarang108Form()
 const formReff = ref(null)
 const refNama = ref(null)
@@ -208,7 +208,7 @@ const onSubmit = () => {
     store.setForm('uraian_108', ur108[0].uraian)
   }
   // isi uraian 50
-  const ur50 = pemesanan.rekening50s.filter(data => {
+  const ur50 = store.rekening50s.filter(data => {
     return data.kode === store.form.kode_50
   })
   if (ur50.length) {

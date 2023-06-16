@@ -37,12 +37,12 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
     loading50: false,
     edited: false,
     autocompleteParams: {
-      per_page: 10,
+      per_page: 50,
       page: 1,
       q: ''
     },
     autocompleteParam50s: {
-      per_page: 10,
+      per_page: 50,
       page: 1,
       q: ''
     }

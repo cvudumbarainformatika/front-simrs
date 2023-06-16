@@ -318,6 +318,11 @@ export const useTransaksiPemensananForm = defineStore('transaksi_pemensanan_form
       this.setForm('kode_50', val)
       this.setForm('uraian_50', kode[0].uraian)
     },
+    getInitialData() {
+      this.getRekening50()
+      this.getCurrentStok()
+      this.getMinMaxDepo()
+    },
     // api related actions
     // ambil data kontrak pekerjaan
     getKontrakPekerjaan () {
