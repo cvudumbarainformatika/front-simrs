@@ -875,7 +875,7 @@ function getKurang(row) {
     for (let i = 0; i < data.length; i++) {
       const kategoryMasuk = data[i].kategory ? data[i].kategory.masuk : '00:00:00'
       const jamMasukServer = formatJam(data[i].created_at)
-      const tglMasukServer = dateDbFormat(data[i].created_at)
+      const tglMasukServer = dateDbFormat(data[i].tanggal) // baru diubah
 
       const terlambat = new Date(tglMasukServer + ' ' + jamMasukServer) > new Date(tglMasukServer + ' ' + kategoryMasuk)
 
