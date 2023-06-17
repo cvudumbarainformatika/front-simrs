@@ -30,6 +30,63 @@ const pendaftaran = {
       ]
     },
     {
+      path: '/pendaftaran/bpjs',
+      name: 'pendaftaran.bpjs',
+      component: () => import('pages/simrs/pendaftaran/bpjs/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/bpjs',
+          name: 'pendaftaran.form.bpjs',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/bpjs/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/umum',
+          name: 'pendaftaran.bpjs.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/pendaftaran/umum',
+      name: 'pendaftaran.umum',
+      component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/pendaftaran/umum',
+      name: 'pendaftaran.umum',
+      component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        }
+      ]
+    },
+    {
       path: '/pendaftaran/pasien',
       name: 'pendaftaran.pasien',
       component: () => import('pages/simrs/pendaftaran/pasien/IndexPage.vue'),

@@ -1,0 +1,3 @@
+<template>
+  Halaman Kandungan
+</template>
