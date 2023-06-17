@@ -10,10 +10,10 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
   state: () => ({
     isOpen: true,
     loading: false,
-    auth: useAuthStore(),
+    auth: useAuthStore().currentUser.pegawai,
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      kode_ruang: useAuthStore().kode_ruang
+      kode_ruang: useAuthStore().currentUser.pegawai.kode_ruang
     },
     nomor: null,
     nama: {
@@ -84,6 +84,8 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
         this.setNama('ruang', 'ruang tidak ditemukan')
       }
       // console.log('pengguna Ruang', this.penggunaruangs)
+      console.log('auth ', this.auth)
+      console.log('Ruang ', ruang)
     },
     // api related function
     // get data stok by barang

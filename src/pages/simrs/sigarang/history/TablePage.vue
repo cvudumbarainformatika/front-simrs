@@ -307,7 +307,7 @@
             </template>
             <template #left-action="{row,index}">
               <q-btn
-                v-if="(role==='root' || role==='PTK' || role==='gizi' || role==='gudang')
+                v-if="(role==='root' || role==='PTK' || role==='gizi' || role==='gudang' || role==='depo')
                   && (row.nama === 'PEMESANAN' || row.nama === 'PENERIMAAN' || row.nama==='DISTRIBUSI DEPO' || row.nama==='PERMINTAAN RUANGAN')"
                 unelevated
                 color="dark"
@@ -442,7 +442,7 @@
                     || table.params.nama === 'Penerimaan'
                     || table.params.nama === 'Gudang'
                     || table.params.nama === 'Penerimaan Ruangan'
-                    ||table.params.nama === 'Permintaan Ruangan'"
+                    ||table.params.nama === 'Distribusi Ruangan'"
                   v-model="table.params.q"
                   class="search-big"
                   borderless
@@ -761,19 +761,179 @@
                 NO. {{ item.no_penerimaan }}
               </div>
 
-              <div class="row justify-start">
-                Sudah Diterima dari {{ item.perusahaan?item.perusahaan.nama:'-' }}
+              <div class="q-mb-md">
+                Pada hari ini <span class="text-weight-bold text-italic">{{ date.formatDate(item.tanggal,'dddd') }}</span>
+                tanggal <span class="text-weight-bold text-italic">{{ tanggalTerbilang(date.formatDate(item.tanggal,'DD')) }}</span>
+                bulan <span class="text-weight-bold text-italic">{{ date.formatDate(item.tanggal,'MMMM') }}</span>
+                tahun <span class="text-weight-bold text-italic">{{ tahunTerbilang(date.formatDate(item.tanggal,'YYYY')) }}</span>,
+                <!-- tahun <span class="text-weight-bold text-italic">{{ tahunTerbilang('3211') }}</span>, -->
+                bertempat di UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo, kami yang bertanda tangan di bawah ini:
               </div>
-
-              <div class="row justify-start q-mt-md q-mb-md">
-                Barang dengan spesifikasi,
+              <!-- Pihak pertama start -->
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1">
+                  <div class="row">
+                    <div class="col-4" />
+                    <div class="col-4">
+                      I.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  Nama
+                </div>
+                <div class="col-7">
+                  <app-input
+                    v-model="namaSupplier"
+                    label="Nama PIC penyedia"
+                    :filled="false"
+                    class="print-hide"
+                  />
+                  <div class="print-only">
+                    {{ namaSupplier }}
+                  </div>
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Jabatan
+                </div>
+                <div class="col-7">
+                  <app-input
+                    v-model="jabatanSupplier"
+                    label="Jabatan PIC penyedia"
+                    :filled="false"
+                    class="print-hide"
+                  />
+                  <div class="print-only">
+                    {{ jabatanSupplier }}
+                  </div>
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Instansi / Perusahaan
+                </div>
+                <div class="col-7">
+                  {{ item.perusahaan?item.perusahaan.nama:'Nama perusahaan tidak ditemukan' }}
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Alamat
+                </div>
+                <div class="col-7">
+                  {{ item.perusahaan?item.perusahaan.alamat:'Alamat perusahaan tidak ditemukan' }}
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-11">
+                  yang selanjutnya disebut <span class="text-weight-bold">PIHAK PERTAMA.</span>
+                </div>
+              </div>
+              <!-- Pihak pertama end -->
+              <!-- Pihak kedua start -->
+              <!-- {{ tandatangan.data.ppk }} -->
+              <div class="print-hide text-italic">
+                identitas PPK :
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1">
+                  <div class="row">
+                    <div class="col-4" />
+                    <div class="col-4">
+                      II.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  Nama
+                </div>
+                <div class="col-7">
+                  {{ tandatangan.data.ppk.nama }}
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  NIP
+                </div>
+                <div class="col-7">
+                  {{ tandatangan.data.ppk.nip_baru===''?tandatangan.data.ppk.nip:tandatangan.data.ppk.nip_baru }}
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Jabatan
+                </div>
+                <div class="col-7">
+                  {{ tandatangan.data.ppk.relasi_jabatan?tandatangan.data.ppk.relasi_jabatan.jabatan:'jabatan tidak ditemukan' }}
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Instansi / Perusahaan
+                </div>
+                <div class="col-7">
+                  UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-3">
+                  Alamat
+                </div>
+                <div class="col-7">
+                  Jalan Mayjen Panjaitan No.65, Kota Probolinggo
+                </div>
+              </div>
+              <div class="fit row no-wrap justify-start items-center q-my-sm">
+                <div class="col-1" />
+                <div class="col-11">
+                  yang ditugaskan sebagai Pejabat Penandatanganan Kontrak berdasarkan Keputusan Direktur UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Nomor:100.3/01/KEP/425.102.8/2023 tanggal 02 Januari 2023 Tentang Penunjukan dan Pengangkatan Pejabat Penandatangan Kontrak (PPK), Pejabat Teknis Kegiatan (PTK), dan Pembantu PTK Anggaran Badan Layanan Umum Daerah pada UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Tahun Anggaran 2023,
+                  yang selanjutnya disebut <span class="text-weight-bold">PIHAK KEDUA.</span>
+                </div>
+              </div>
+              <!-- Pihak kedua end -->
+              <!-- {{ item }} -->
+              <div class="print-hide">
+                <app-input
+                  v-model="namaRekeningBelanja"
+                  class="print-hide"
+                  label="nama rekening belanja"
+                  :filled="false"
+                />
+              </div>
+              <p class="q-my-md">
+                <span class="q-mr-md" /> <span class="text-weight-bold">PIHAK PERTAMA</span> dan <span class="text-weight-bold">PIHAK KEDUA</span> bersepakat dan setuju untuk melaksanakan serah terima hasil pekerjaan
+                <span class="text-weight-bold">{{ namaRekeningBelanja }}</span> yang dijelaskan sebagai berikut:
+              </p>
+              <div class="row no-wrap q-my-md">
+                <div
+                  class="col-shrink text-weight-bold"
+                  style="width:20px;"
+                >
+                  a.
+                </div>
+                <div class="col">
+                  <span class="text-weight-bold">PIHAK PERTAMA</span> menyerahkan hasil pekerjaan <span class="text-weight-bold">{{ namaRekeningBelanja }}</span> kepada <span class="text-weight-bold">PIHAK KEDUA</span> sesuai dengan ketentuan yang tercantum dalam Surat Pesanan, dengan rincian sebagai berikut:
+                </div>
               </div>
               <!-- no details -->
               <div v-if="!item.details">
                 <app-no-data />
               </div>
               <!-- details -->
-              <div v-if="item.details">
+              <div
+                v-if="item.details"
+                class="q-mt-md"
+              >
                 <!-- header detail -->
                 <div class="row justify-between q-col-gutter-sm">
                   <div class="col-7 text-weight-bold border-tb border-left">
@@ -812,13 +972,29 @@
                   </div>
                   <q-separator />
                 </div>
+                <!-- penutup -->
+                <div class="row no-wrap q-my-md">
+                  <div
+                    class="col-shrink text-weight-bold"
+                    style="width:20px;"
+                  >
+                    b.
+                  </div>
+                  <div class="col">
+                    <span class="text-weight-bold">PIHAK KEDUA</span> menyatakan menerima hasil sebagaimana tersebut di atas pekerjaan <span class="text-weight-bold">{{ namaRekeningBelanja }}</span> dari <span class="text-weight-bold">PIHAK PERTAMA</span> dalam keadaan baik dan lengkap
+                  </div>
+                </div>
+                <div>
+                  <span class="q-mr-md" />Demikian Berita Acara Serah Terima ini dibuat dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.
+                </div>
               </div>
             </div>
-            <div v-if="item.nama === 'PERMINTAAN RUANGAN'">
+            <!-- penerimaan end -->
+            <div v-if="item.nama === 'DISTRIBUSI DEPO'">
               <!-- Top words -->
               <!-- {{ item }} -->
               <div class="row justify-center q-my-md f-16 text-weight-bold">
-                DATA PERMINTAAN RUANGAN
+                DATA DISTRIBUSI DEPO
               </div>
               <div class="row justify-center q-mb-sm">
                 <div class="col-2">
@@ -830,19 +1006,19 @@
               </div>
               <div class="row justify-center q-mb-sm">
                 <div class="col-2">
-                  No. Permintaan
+                  No. Distribusi
                 </div>
                 <div class="col-10">
-                  {{ item.no_permintaan }}
+                  {{ item.no_distribusi }}
                 </div>
               </div>
-              <div class="row justify-center q-mb-sm">
-                <div class="col-2">
-                  Ruangan
-                </div>
-                <div class="col-10">
-                  {{ item.ruangan.uraian }}
-                </div>
+              <div class="row justify-start q-mb-md">
+                <p>
+                  Telah dikirimkan ke
+                  <span class="text-weight-bold">
+                    {{ item.depo?item.depo.nama:'-' }}
+                  </span> barang dalam list dibawah ini :
+                </p>
               </div>
 
               <!-- no details -->
@@ -857,18 +1033,12 @@
                     Nama Barang
                   </div>
                   <div class="col-1 text-weight-bold border-tb border-left">
-                    Stok ruangan
+                    Jumlah
                   </div>
-                  <div class="col-1 text-weight-bold border-tb border-left">
-                    Jumlah minta
-                  </div>
-                  <div class="col-1 text-weight-bold border-tb border-left">
-                    Jumlah diberi
-                  </div>
-                  <div class="col-1 text-weight-bold border-tb border-left">
+                  <div class="col-2 text-weight-bold border-tb border-left">
                     Satuan
                   </div>
-                  <div class="col-3 text-weight-bold border-box">
+                  <div class="col-4 text-weight-bold border-box">
                     Keterangan
                   </div>
                 </div>
@@ -884,26 +1054,21 @@
                       {{ i+1 }}. {{ det.barangrs?det.barangrs.nama:'Nama barang tidak ditemukan' }}
                     </div>
                     <div class="col-1 border-bottom border-left">
-                      {{ det.sisastok?det.sisastok.filter(val=>val.kode_ruang===det.tujuan).map(anu=>anu.sisa_stok).reduce((a,b)=>a+b,0):0 }}
-                    </div>
-                    <div class="col-1 border-bottom border-left">
                       {{ det.jumlah===null?0:det.jumlah }}
                     </div>
-                    <div class="col-1 border-bottom border-left" />
                     <div
-                      class="col-1 border-bottom border-left"
+                      class="col-2 border-bottom border-left"
                     >
                       {{ det.satuan?det.satuan.nama:'-' }}
                     </div>
-                    <div class="col-3 border-bottom border-left border-right">
-                      {{ det.alasan?det.alasan:'-' }}
+                    <div class="col-4 border-bottom border-left border-right">
+                      {{ det.merk?det.merk:'-' }}
                     </div>
                   </div>
                   <q-separator />
                 </div>
               </div>
             </div>
-            <!-- penerimaan end -->
           </q-card-section>
           <!-- tanda tangan -->
           <q-card-section>
@@ -981,7 +1146,16 @@
               <div class="col-6 text-center">
                 <div v-if="!tandatangan.onKiri.ada">
                   <div v-if="tandatangan.tt.kiri!==null">
-                    (...................)
+                    <div class="print-hide">
+                      <app-input
+                        v-model="freeTextKiri"
+                        label="Nama"
+                        :filled="false"
+                      />
+                    </div>
+                    <div class="print-only">
+                      {{ freeTextKiri===''?'(.......................................)':freeTextKiri }}
+                    </div>
                   </div>
                 </div>
                 <div v-if="tandatangan.onKiri.ada">
@@ -996,7 +1170,16 @@
               <div class="col-6 text-center">
                 <div v-if="!tandatangan.onKanan.ada">
                   <div v-if="tandatangan.tt.kanan!==null">
-                    (...................)
+                    <div class="print-hide">
+                      <app-input
+                        v-model="freeTextKanan"
+                        label="Nama"
+                        :filled="false"
+                      />
+                    </div>
+                    <div class="print-only">
+                      {{ freeTextKanan===''?'(.......................................)':freeTextKanan }}
+                    </div>
                   </div>
                 </div>
                 <div v-if="tandatangan.onKanan.ada">
@@ -1047,7 +1230,16 @@
                 v-if="tandatangan.tt.tengah!==null"
                 class="row justify-center"
               >
-                (...................)
+                <div class="print-hide">
+                  <app-input
+                    v-model="freeTextBawah"
+                    label="Nama"
+                    :filled="false"
+                  />
+                </div>
+                <div class="print-only">
+                  {{ freeTextBawah===''?'(.......................................)':freeTextBawah }}
+                </div>
               </div>
             </div>
             <div v-if="tandatangan.onTengah.ada">
@@ -1071,6 +1263,7 @@
   </q-page>
 </template>
 <script setup>
+// import { date } from '.quasar'
 import { computed, onMounted, ref, watch } from 'vue'
 import { dateFullFormat, dateFull, formatRp } from 'src/modules/formatter'
 import { useDetailHistoryTable } from 'src/stores/simrs/logistik/sigarang/history/details'
@@ -1085,7 +1278,7 @@ import FormPemesananBarang from './edit/FormPemesananBarang.vue'
 // import PrintPage from './PrintPage.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
-import { Dialog } from 'quasar'
+import { Dialog, date } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
 import { useKontrakPemensananStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/kontrak'
@@ -1093,10 +1286,178 @@ const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const tandatangan = useTandaTanganStore()
 tandatangan.getInitialData()
+// identitas supplier
+const namaSupplier = ref('')
+const jabatanSupplier = ref('')
 
+const namaRekeningBelanja = ref('')
+
+const freeTextKiri = ref('')
+const freeTextKanan = ref('')
+const freeTextBawah = ref('')
+// tanggal terbilang
+function tanggalTerbilang(val) {
+  console.log(val)
+  switch (val) {
+    case '01':
+      return 'Satu'
+
+    case '02':
+      return 'Dua'
+
+    case '03':
+      return 'Tiga'
+
+    case '04':
+      return 'Empat'
+
+    case '05':
+      return 'Lima'
+
+    case '06':
+      return 'Enam'
+
+    case '07':
+      return 'Tujuh'
+
+    case '08':
+      return 'Delapan'
+
+    case '09':
+      return 'Sembilan'
+
+    case '10':
+      return 'Sepuluh'
+
+    case '11':
+      return 'Sebelas'
+
+    case '12':
+      return 'Dua Belas'
+
+    case '13':
+      return 'Tiga Belas'
+
+    case '14':
+      return 'Empat Belas'
+
+    case '15':
+      return 'Lima Belas'
+
+    case '16':
+      return 'Enam Belas'
+
+    case '17':
+      return 'Tujuh Belas'
+
+    case '18':
+      return 'Delapan Belas'
+
+    case '19':
+      return 'Sembilan Belas'
+
+    case '20':
+      return 'Dua Puluh'
+
+    case '21':
+      return 'Dua Puluh Satu'
+
+    case '22':
+      return 'Dua Puluh Dua'
+
+    case '23':
+      return 'Dua Puluh Tiga'
+
+    case '24':
+      return 'Dua Puluh Empat'
+
+    case '25':
+      return 'Dua Puluh Lima'
+
+    case '26':
+      return 'Dua Puluh Enam'
+
+    case '27':
+      return 'Dua Puluh Tujuh'
+
+    case '28':
+      return 'Dua Puluh Delapan'
+
+    case '29':
+      return 'Dua Puluh Sembilan'
+
+    case '30':
+      return 'Tiga Puluh'
+
+    case '31':
+      return 'Tiga Puluh Satu'
+
+    default:
+      return ''
+  }
+}
+// tahun terbilang
+function tahunTerbilang(val) {
+  const temp = val.split('')
+  let satuan = ''
+  let puluhan = ''
+  if (temp[2] === '1') {
+    if (temp[3] === '1') {
+      puluhan = 'Sebelas'
+    } else {
+      puluhan = bilangan(temp[3])
+      satuan = 'belas'
+    }
+  } else {
+    puluhan = bilangan(temp[2]) + ' puluh'
+    satuan = bilangan(temp[3])
+  }
+  const ratusan = temp[1] === '1' ? 'Seratus' : temp[1] === '0' ? '' : (bilangan(temp[0]) + ' ratus')
+  const ribuan = temp[0] === '1' ? 'Seribu' : temp[0] === '0' ? '' : (bilangan(temp[0]) + ' ribu')
+  console.log('tahun', ribuan, ratusan, puluhan, satuan)
+  return ribuan + ' ' + ratusan + ' ' + puluhan + ' ' + satuan
+}
+// bilangan
+function bilangan(val) {
+  switch (val) {
+    case '1':
+      return 'Satu'
+
+    case '2':
+      return 'Dua'
+
+    case '3':
+      return 'Tiga'
+
+    case '4':
+      return 'Empat'
+
+    case '5':
+      return 'Lima'
+
+    case '6':
+      return 'Enam'
+
+    case '7':
+      return 'Tujuh'
+
+    case '8':
+      return 'Delapan'
+
+    case '9':
+      return 'Sembilan'
+
+    case '0':
+      return ''
+
+    default:
+      return ''
+  }
+}
 const auth = useAuthStore()
+console.log('auth', auth.currentUser.pegawai.role.nama)
 const role = computed(() => {
-  return auth.role ? auth.role : ''
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 // set tanggal print
 function setTanggal(val) {
@@ -1298,6 +1659,26 @@ const label = (status, nama) => {
         break
       case 4:
         return 'Diterima Seluruhnya'
+        // eslint-disable-next-line no-unreachable
+        break
+
+      default:
+        return 'Belum di definisikan'
+        // eslint-disable-next-line no-unreachable
+        break
+    }
+  } else if (nama === 'PENERIMAAN') {
+    switch (status) {
+      case 1:
+        return 'Draft'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 2:
+        return 'Diteriman Gudang'
+        // eslint-disable-next-line no-unreachable
+        break
+      case 3:
+        return 'Sudah di Distribusikan ke Depo'
         // eslint-disable-next-line no-unreachable
         break
 

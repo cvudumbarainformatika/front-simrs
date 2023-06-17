@@ -1,9 +1,9 @@
 const pendaftaran = {
   path: '/pendaftaran',
-  component: () => import('layouts/pegawai/AdminLayout.vue'),
+  component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', name: 'pendaftaran', redirect: '/pendaftaran/form/umum' },
+    { path: '/pendaftaran', name: 'pendaftaran', redirect: '/pendaftaran/form/umum' },
     {
       path: '/pendaftaran/form',
       name: 'pendaftaran.form',
@@ -26,6 +26,63 @@ const pendaftaran = {
           name: 'pendaftaran.form.igd',
           component: () =>
             import('pages/simrs/pendaftaran/form/igd/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/pendaftaran/bpjs',
+      name: 'pendaftaran.bpjs',
+      component: () => import('pages/simrs/pendaftaran/bpjs/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/bpjs',
+          name: 'pendaftaran.form.bpjs',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/bpjs/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/umum',
+          name: 'pendaftaran.bpjs.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/pendaftaran/umum',
+      name: 'pendaftaran.umum',
+      component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/pendaftaran/umum',
+      name: 'pendaftaran.umum',
+      component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
+      children: [
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/form/umum',
+          name: 'pendaftaran.form.umum',
+          component: () =>
+            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
         }
       ]
     },

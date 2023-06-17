@@ -671,11 +671,12 @@ const auth = useAuthStore()
 const masterBarangForm = useMasterBarangRSForm()
 // store.setToday()
 table.getDataTable()
-store.getCurrentStok()
-store.getMinMaxDepo()
+store.getInitialData()
+// store.getCurrentStok()
+// store.getMinMaxDepo()
 
 const role = computed(() => {
-  return auth.role ? auth.role : ''
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 
 function addNewBarang() {

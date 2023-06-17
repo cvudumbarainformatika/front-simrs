@@ -295,7 +295,7 @@
         >
           <tr
             class="text-left"
-            :class="clickAble ? item.highlight===true? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
+            :class="clickAble ? item.highlight===true ? 'cursor-pointer bg-light-blue-11':'cursor-pointer':''"
             @click="clickAble?clicked(item,i):''"
           >
             <td v-if="isChecked">

@@ -21,13 +21,15 @@
       :bar-style="barStyle"
       :style="`height:${h}px;
       width:100% ;`"
+      class="flex-center items-center"
     >
       <div
-        class="container"
+        class="container flex-center items-center"
+        :style="`height:${h}px;`"
       >
         <div
           v-if="filterApps.length"
-          class="row justify-center flex-wrap q-col-gutter-xl"
+          class="row full-height flex-center justify-center flex-wrap q-col-gutter-xl"
         >
           <div
             v-for="(item, i) in filterApps"

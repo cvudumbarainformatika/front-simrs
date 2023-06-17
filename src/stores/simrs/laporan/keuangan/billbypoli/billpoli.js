@@ -52,6 +52,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
           const kodeDokter = filterDuplicateArrays(pol.kunjungan.map(x => x.dokter.rs1))
           const tempRekMed = []
           const tempAptRacik = []
+          let tempAptRelasiRacik = 0
           const tempAptPoli = []
           const tempLab = []
           const tempPendBpjs = []
@@ -72,9 +73,13 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
                 k.rekammdedikumum.forEach(a => tempRekMed.push(a))
               }
               if (k.apotekracikanrajalumum.length) {
+                // console.log('racik', k.apotekracikanrajalumum)
                 k.apotekracikanrajalumum.forEach(a => tempAptRacik.push(a))
+                tempAptRelasiRacik = tempAptRacik.length ? tempAptRacik.map(x => x.relasihederracikan.rs8).reduce((a, b) => a + b, 0) : 0
+                // console.log('relasi racik', tempAptRelasiRacik)
               }
               if (k.apotekrajalpolilaluumum.length) {
+                // console.log('poli', k.apotekrajalpolilaluumum)
                 k.apotekrajalpolilaluumum.forEach(a => tempAptPoli.push(a))
               }
               if (k.laborat.length) {
@@ -125,16 +130,26 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
             })
           }
           pol.rekamMedikUmum = tempRekMed.length ? tempRekMed.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
-          pol.aptRacik = tempAptRacik.length ? tempAptRacik.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
+          pol.listRekamMedikUmum = tempRekMed.length ? tempRekMed.map(x => x.subtotal) : []
+          pol.aptRacik = tempAptRacik.length ? Math.round(tempAptRacik.map(x => x.subtotal).reduce((a, b) => a + b, 0) + tempAptRelasiRacik) : 0
+          pol.listAptRacik = tempAptRacik.length ? tempAptRacik.map(x => x.subtotal) : []
           pol.aptPoli = tempAptPoli.length ? tempAptPoli.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
+          pol.listAptPoli = tempAptPoli.length ? tempAptPoli.map(x => x.subtotal) : []
           pol.lab = tempLab.length ? tempLab.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
           pol.psiko = tempPsiko.length ? tempPsiko.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
           pol.rad = tempRad.length ? tempRad.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
           pol.tinPol = tempTinPol.length ? tempTinPol.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
           pol.visite = tempVisite.length ? tempVisite.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
+          pol.listLab = tempLab.length ? tempLab.map(x => x.subtotal) : []
+          pol.listPsiko = tempPsiko.length ? tempPsiko.map(x => x.subtotal) : []
+          pol.listRad = tempRad.length ? tempRad.map(x => x.subtotal) : []
+          pol.listTinPol = tempTinPol.length ? tempTinPol.map(x => x.subtotal) : []
+          pol.listVisite = tempVisite.length ? tempVisite.map(x => x.subtotal) : []
 
           pol.penBpjs = tempPendBpjs.length ? tempPendBpjs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
           pol.pendUmum = tempPendUmum.length ? tempPendUmum.map(x => x.total).reduce((a, b) => a + b, 0) : 0
+          pol.listPenBpjs = tempPendBpjs.length ? tempPendBpjs.map(x => x.subtotal) : []
+          pol.listPendUmum = tempPendUmum.length ? tempPendUmum.map(x => x.total) : []
           // console.log('temp rek med', tempRekMed)
           // const rekamMedikUmum = pol.kunjungan.map(x => x.rekammdedikumum.map(y => y.subtotal)).reduce((a, b) => a + b, 0)
           pol.poli = {
@@ -157,6 +172,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
             if (dok.kunjungan.length) {
               const tempDokRekMed = []
               const tempDokAptRacik = []
+              let tempDokAptRelasiRacik = 0
               const tempDokAptPoli = []
               const tempDokLab = []
               const tempDokPendBpjs = []
@@ -178,7 +194,10 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
                   k.rekammdedikumum.forEach(a => tempDokRekMed.push(a))
                 }
                 if (k.apotekracikanrajalumum.length) {
+                  // console.log('racik', k.apotekracikanrajalumum)
                   k.apotekracikanrajalumum.forEach(a => tempDokAptRacik.push(a))
+                  tempDokAptRelasiRacik = tempDokAptRacik.length ? tempDokAptRacik.map(x => x.relasihederracikan.rs8).reduce((a, b) => a + b, 0) : 0
+                  // console.log('relasi racik dokter', tempDokAptRelasiRacik)
                 }
                 if (k.apotekrajalpolilaluumum.length) {
                   k.apotekrajalpolilaluumum.forEach(a => tempDokAptPoli.push(a))
@@ -222,7 +241,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
                 }
               })
               dok.rekamMedikUmum = tempDokRekMed.length ? tempDokRekMed.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
-              dok.aptRacik = tempDokAptRacik.length ? tempDokAptRacik.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
+              dok.aptRacik = tempDokAptRacik.length ? Math.round(tempDokAptRacik.map(x => x.subtotal).reduce((a, b) => a + b, 0) + tempDokAptRelasiRacik) : 0
               dok.aptPoli = tempDokAptPoli.length ? tempDokAptPoli.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
               dok.lab = tempDokLab.length ? tempDokLab.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
               dok.psiko = tempDokPsiko.length ? tempDokPsiko.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0
@@ -234,7 +253,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
               dok.pendUmum = tempDokPendUmum.length ? tempDokPendUmum.map(x => x.total).reduce((a, b) => a + b, 0) : 0
 
               dok.poli = {
-                poli: dok.kunjungan[0].relmpoli.rs2,
+                poli: '',
                 dokter: dok.kunjungan[0].dokter.rs2,
                 kunjungan: dok.kunjungan.length,
                 tagihan: dok.rekamMedikUmum + dok.aptRacik + dok.aptPoli + dok.lab + dok.psiko + dok.rad + dok.tinPol + dok.visite,
@@ -263,6 +282,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
 
     // api related function
     getDataTable() {
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {

@@ -133,6 +133,7 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
     },
     updateHarga () {
       // console.log('stok', this.stok)
+
       if (this.stok.max_stok) {
         if (this.stok.sisaStok) {
           this.stok.maxBeli = this.stok.max_stok - this.stok.sisaStok
@@ -140,14 +141,17 @@ export const useEditPemesananStore = defineStore('edit_pemesanan', {
       }
       if (this.stok.maxBeli) {
         if (this.stok.maxBeli > 0) {
-          if (parseFloat(this.form.qty) > this.stok.maxBeli) {
+          if (parseFloat(this.form.jumlah) > this.stok.maxBeli) {
             notifErrVue('Jumlah Pembelian tidak boleh melebihi jumlah maksimal pembelian')
-            this.form.qty = this.stok.maxBeli
+            this.form.jumlah = this.stok.maxBeli
           }
         }
       }
-      this.form.sub_total = (this.form.harga ? parseFloat(this.form.harga) : 0) * (this.form.qty ? this.form.qty : 0)
+      this.form.sub_total = (this.form.harga ? parseFloat(this.form.harga) : 0) * (this.form.jumlah ? this.form.jumlah : 0)
       // this.setToday()
+      console.log('subtotal', this.form.sub_total)
+      console.log('harga', this.form.harga)
+      console.log('qty', this.form.jumlah)
     },
     getInitData() {
       this.getMinMaxDepo()

@@ -50,11 +50,49 @@ const sigarang =
     {
       path: '/sigarang/history',
       name: 'sigarang.history',
-      component: () => import('pages/simrs/sigarang/history/IndexPage.vue')
-      // children: [
-      //   { path: '/history/pegawai', name: 'history.pegawai', component: () => import('pages/simrs/sigarang/history/pegawai/IndexPage.vue') },
-      //   { path: '/history/user', name: 'history.user', component: () => import('pages/simrs/sigarang/history/user/IndexPage.vue') }
-      // ]
+      component: () => import('pages/simrs/sigarang/history/IndexPage.vue'),
+      children: [
+        {
+          path: '/sigarang/history/pemesanan',
+          name: 'sigarang.history.pemesanan',
+          component: () => import('pages/simrs/sigarang/history/pemesanan/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/penerimaan',
+          name: 'sigarang.history.penerimaan',
+          component: () => import('pages/simrs/sigarang/history/penerimaan/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/permintaan',
+          name: 'sigarang.history.permintaan',
+          component: () => import('pages/simrs/sigarang/history/permintaan/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/distribusidepo',
+          name: 'sigarang.history.distribusidepo',
+          component: () => import('pages/simrs/sigarang/history/distribusidepo/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/pemakaianruangan',
+          name: 'sigarang.history.pemakaianruangan',
+          component: () => import('pages/simrs/sigarang/history/pemakaianruangan/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/penerimaanruangan',
+          name: 'sigarang.history.penerimaanruangan',
+          component: () => import('pages/simrs/sigarang/history/penerimaanruangan/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/gudang',
+          name: 'sigarang.history.gudang',
+          component: () => import('pages/simrs/sigarang/history/gudang/IndexPage.vue')
+        },
+        {
+          path: '/sigarang/history/retur',
+          name: 'sigarang.history.retur',
+          component: () => import('pages/simrs/sigarang/history/retur/IndexPage.vue')
+        }
+      ]
     },
     {
       path: '/sigarang/master',

@@ -41,7 +41,7 @@
       <q-card-section>
         <app-table-extend
           id="printMe"
-          :key="store.params.tgldari"
+          :key="store.items"
           :columns="store.columns"
           :meta="store.meta"
           :column-hide="store.columnHide"
@@ -55,7 +55,6 @@
           :default-btn="false"
           :ada-tambah="false"
           :enable-head="false"
-          row-no
           top-row
           @goto="store.setPage"
           @set-row="store.setPerPage"
@@ -174,11 +173,11 @@
             </div>
           </template>
           <template #top-row>
-            <th>
+            <!-- <th>
               <div class="row items-center text-weight-bold">
                 No
               </div>
-            </th>
+            </th> -->
             <th>
               <div class="row items-center text-weight-bold">
                 Poli
@@ -324,7 +323,7 @@
               v-if="row.dokter==='semua'"
               class="text-weight-bold"
             >
-              {{ row.dokter }}
+              <!-- {{ row.dokter }} -->
             </div>
             <div v-if="row.dokter!=='semua'">
               {{ row.dokter }}
@@ -360,7 +359,6 @@ store.getInitialData()
 //   loading.value = false
 // }
 const jsonFields = {
-  No: 'no',
   Poli: 'poli',
   Dokter: 'dokter',
   'Jumlah Kunjungan': 'kunjungan',

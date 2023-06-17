@@ -50,6 +50,6 @@ import StokPage from './StokPage.vue'
 const tab = ref('stok')
 const auth = useAuthStore()
 const role = computed(() => {
-  return auth.role ? auth.role : false
+  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
 })
 </script>

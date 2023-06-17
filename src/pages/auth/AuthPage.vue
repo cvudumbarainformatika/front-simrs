@@ -70,7 +70,7 @@ import { useAuthStore } from 'src/stores/auth'
 // import { useAuthStoreAccess } from 'src/stores/authAccess'
 import { useAppStore } from 'src/stores/app'
 import { pathImg } from 'src/boot/axios'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 
 const storeAuth = useAuthStore()
 // const storeAuth = useAuthStoreAccess()
@@ -96,24 +96,36 @@ const logo = computed(() => {
 // console.log(logo)
 // console.log(form)
 // console.log(storeAuth)
-const router = useRouter()
+// const router = useRouter()
 function onSubmit () {
   const formData = new FormData()
   formData.append('email', form.value.email + '@app.com')
   formData.append('password', form.value.password)
   formData.append('device_name', form.value.device_name)
-  storeAuth.login2(formData)
-    .then(() => {
-      console.log('loading false', storeAuth.aplications)
-      if (storeAuth.aplications.length === 1) {
-        if (storeAuth.aplications[0].aplikasi === 'pegawai') {
-          router.push('pegawai/user/list')
-        } else {
-          router.push(storeAuth.route.link)
-        }
-      }
-      window.location.reload()
-    })
+  storeAuth.login(formData)
+  // .then(() => {
+  //   console.log('loading false', storeAuth.aplications)
+  //   if (storeAuth.aplications.length === 1) {
+  //     if (storeAuth.aplications[0].aplikasi === 'pegawai') {
+  //       router.push('pegawai/user/list')
+  //     } else {
+  //       router.push(storeAuth.route.link)
+  //     }
+  //   }
+  //   window.location.reload()
+  // })
+  // storeAuth.login2(formData)
+  //   .then(() => {
+  //     console.log('loading false', storeAuth.aplications)
+  //     if (storeAuth.aplications.length === 1) {
+  //       if (storeAuth.aplications[0].aplikasi === 'pegawai') {
+  //         router.push('pegawai/user/list')
+  //       } else {
+  //         router.push(storeAuth.route.link)
+  //       }
+  //     }
+  //     window.location.reload()
+  //   })
 }
 
 </script>

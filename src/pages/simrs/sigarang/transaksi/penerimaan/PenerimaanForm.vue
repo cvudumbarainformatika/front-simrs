@@ -237,16 +237,19 @@
               Harga
             </div>
             <div class="col-md-1 col-xs-12">
-              Jumlah Pemesanan
+              Pemesanan
+            </div>
+            <div class="col-md-1 col-xs-12">
+              Diterima Sekarang
             </div>
             <div class="col-md-2 col-xs-12">
-              Jumlah Diterima Sekarang
+              Sub Total
+            </div>
+            <div class="col-md-1 col-xs-12">
+              Diterima Sebelumnya
             </div>
             <div class="col-md-2 col-xs-12">
-              Jumlah Diterima Sebelumnya
-            </div>
-            <div class="col-md-2 col-xs-12">
-              Jumlah Seluruh Penerimaan
+              Seluruh Penerimaan
             </div>
             <!-- <div class="col-md-2 col-xs-12">
               Sub Total
@@ -266,6 +269,7 @@
               <div class="col-md-1 col-xs-12 cursor-pointer">
                 {{ formatRp(item.harga) }}
                 <q-popup-edit
+                  v-if="item.qty!==item.qtysblm"
                   v-slot="scope"
                   v-model="item.harga"
                   :validate="validasiharga"
@@ -318,7 +322,7 @@
                   </q-chip>
                 </div>
               </div>
-              <div class="col-md-2 col-xs-12">
+              <div class="col-md-1 col-xs-12">
                 <div class="bold cursor-pointer">
                   {{ item.qtyskr }}
                   <q-popup-edit
@@ -353,6 +357,9 @@
                 </div>
               </div>
               <div class="col-md-2 col-xs-12">
+                {{ formatDouble(parseFloat(item.qtyskr) * parseFloat(item.harga)) }}
+              </div>
+              <div class="col-md-1 col-xs-12">
                 {{ item.qtysblm }}
               </div>
               <div class="col-md-2 col-xs-12">
@@ -384,7 +391,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatRp, formatDouble } from 'src/modules/formatter'
 import { ref } from 'vue'
 import { notifNegativeCenterVue } from 'src/modules/utils'
 import { useTransaksiPenerimaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/penerimaan/form'
@@ -443,8 +450,8 @@ function saveHarga(val) {
     return notifNegativeCenterVue('Isi Jumlah penerimaan terlebih dahulu')
   }
   store.setForm('harga', val)
-  store.setForm('total', val * store.form.qty)
-  store.setForm('sub_total', val * store.form.qty)
+  store.setForm('total', parseFloat(val) * parseFloat(store.form.qty))
+  store.setForm('sub_total', parseFloat(val) * parseFloat(store.form.qty))
   store.setForm('statuspemesanan', 3)
   console.log('masih lanjut coy', store.form)
   const valid = validasi()
@@ -454,8 +461,8 @@ function saveHarga(val) {
 const save = val => {
   // if ((parseFloat(val) + terimaSebelum.value) > pesanan.value) return notifNegativeCenterVue('Jumlah input melebihi jumlah pemesanan')
   store.setForm('qty', val)
-  store.setForm('total', val * store.form.harga)
-  store.setForm('sub_total', val * store.form.harga)
+  store.setForm('total', parseFloat(val) * parseFloat(store.form.harga))
+  store.setForm('sub_total', parseFloat(val) * parseFloat(store.form.harga))
   store.setForm('statuspemesanan', 3)
   const valid = validasi()
   // if ((parseFloat(val) + parseFloat(terimaSebelum.value)) < parseFloat(pesanan.value)) {
@@ -502,7 +509,7 @@ const init = val => {
   refqty.value[0].select()
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
-  // console.log('init', val)
+  console.log('init', val)
 }
 function hideQty() {
   refqty.value[0].blur()

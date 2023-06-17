@@ -259,19 +259,20 @@ function kirimPenerimaan(val) {
   const oldreff = val.reff.split('-')
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
-  const tanggal = store.form.tanggal.split('')
-  store.setForm('tanggal', tanggal[0] + ' ' + jamIni)
+  const tanggal = store.form.tanggal + jamIni
+  // console.log('tanggal ', store.form.tanggal, tanggal)
+  // store.setForm('tanggal', store.form.tanggal + jamIni)
   const data = {
     details: val.details,
     reff: newreff,
     trmreff: val.reff,
     trmid: val.id,
-    tanggal: store.form.tanggal,
+    tanggal,
     kode_depo: val.kode_depo,
     no_distribusi: val.no_distribusi,
     status: 2
   }
-  // console.log('kirim ', val, data)
+  // console.log('kirim ', data)
   val.loading = true
   store.saveForm(data)
 }
@@ -280,8 +281,7 @@ function kirimDetailPenerimaan(val, detail) {
   const oldreff = val.reff.split('-')
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
-  const tanggal = store.form.tanggal.split('')
-  store.setForm('tanggal', tanggal[0] + ' ' + jamIni)
+  const tanggal = store.form.tanggal + jamIni
   const data = {
     kode_rs: detail.kode_rs,
     no_penerimaan: detail.no_penerimaan,
@@ -293,7 +293,7 @@ function kirimDetailPenerimaan(val, detail) {
     reff: newreff,
     trmreff: val.reff,
     trmid: val.id,
-    tanggal: store.form.tanggal,
+    tanggal,
     kode_depo: val.kode_depo,
     no_distribusi: val.no_distribusi,
     status: 2
@@ -302,7 +302,7 @@ function kirimDetailPenerimaan(val, detail) {
   val.loading = true
   detail.loading = true
   store.saveDetailPenerimaan(data)
-  // console.log('kirim detail', val, detail)
+  // console.log('kirim detail', data)
 }
 // ganti status penerimaan
 function sudahDiDistribusikan(val) {
