@@ -2,8 +2,8 @@
   <q-dialog>
     <app-card
       class="my-card"
-      title="Form Satuan"
-      desc="Input data Satuan"
+      title="Form Jenis Perbekalan"
+      desc="Input data Jenis Perbekalan"
     >
       <template #content>
         <q-form
