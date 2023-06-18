@@ -82,7 +82,11 @@ const routes = [
     children: [
       // { path: '', component: () => import('pages/auth/AuthPage.vue') }
       // { path: '', component: () => import('pages/auth/LoginPage.vue') }
-      { path: '', component: () => import('pages/auth/LoginPageV2.vue') }
+
+      { path: '', redirect: '/login/mode/qr' },
+      { path: '/login/mode', redirect: '/login/mode/qr' },
+
+      { path: '/login/mode/:mode', component: () => import('pages/auth/LoginPageV2.vue') }
     ]
   },
 

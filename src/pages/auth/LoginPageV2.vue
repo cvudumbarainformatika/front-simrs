@@ -8,7 +8,7 @@
       <BoxAnimation class="absolute" />
       <BgAnimation class="z--" />
       <div class="inner-top-page column flex-center">
-        <LoginForm class="login-form" />
+        <LoginMode class="login-form" />
       </div>
 
       <!-- <bgAnimation /> -->
@@ -25,7 +25,7 @@
 import { useAuthStore } from 'src/stores/auth'
 import BgAnimation from './comp/BgAnimation.vue'
 import BoxAnimation from './comp/BoxAnimation.vue'
-import LoginForm from './comp/LoginForm.vue'
+import LoginMode from './v2/LoginMode.vue'
 
 const store = useAuthStore()
 

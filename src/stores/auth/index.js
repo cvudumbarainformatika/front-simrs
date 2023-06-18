@@ -23,7 +23,8 @@ export const useAuthStore = defineStore('auth', {
     route: {},
     ruang: {},
     kode_ruang: null,
-    depo: {}
+    depo: {},
+    mode: 'qr'
   }),
   getters: {
     isAuth (state) {
