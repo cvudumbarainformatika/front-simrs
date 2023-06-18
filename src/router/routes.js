@@ -81,7 +81,8 @@ const routes = [
     meta: { requireAuth: false },
     children: [
       // { path: '', component: () => import('pages/auth/AuthPage.vue') }
-      { path: '', component: () => import('pages/auth/LoginPage.vue') }
+      // { path: '', component: () => import('pages/auth/LoginPage.vue') }
+      { path: '', component: () => import('pages/auth/LoginPageV2.vue') }
     ]
   },
 
