@@ -80,7 +80,6 @@ const routes = [
     component: () => import('layouts/Auth/AuthLayout.vue'),
     meta: { requireAuth: false },
     children: [
-      // { path: '', component: () => import('pages/auth/AuthPage.vue') }
       // { path: '', component: () => import('pages/auth/LoginPage.vue') }
 
       { path: '', redirect: '/login/mode/qr' },

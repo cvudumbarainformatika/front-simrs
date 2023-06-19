@@ -38,6 +38,7 @@ window.Echo = new Echo({
 // })
 
 const channel = window.Echo.channel('public.playground.1')
+const channelLogin = window.Echo.channel('public.login.qr')
 const qrcodeChannel = window.Echo.channel('qrcode')
 
 const antreanChannel = window.Echo.channel('public.antrean')
@@ -54,4 +55,4 @@ const anjunganChannel = window.Echo.channel('public.anjungan')
 //   return msg
 // }
 
-export { channel, qrcodeChannel, antreanChannel, anjunganChannel }
+export { channel, qrcodeChannel, antreanChannel, anjunganChannel, channelLogin }

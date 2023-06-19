@@ -19,7 +19,10 @@
     </div>
     <div class="">
       <div class="row items-center text-white">
-        <div class="q-mr-md text-subtitle">
+        <div
+          :key="user"
+          class="q-mr-md text-subtitle"
+        >
           {{ user? user.nama:'-' }}
         </div>
         <q-avatar
