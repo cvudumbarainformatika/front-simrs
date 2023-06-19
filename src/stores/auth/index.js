@@ -257,7 +257,7 @@ export const useAuthStore = defineStore('auth', {
     async loginQr(payload) {
       this.loading = true
       try {
-        await api.post('/v1/loginQr', payload).then(resp => {
+        await api.post('/v1/login-qr', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
           const hdd = storage.getLocalToken()
@@ -270,10 +270,8 @@ export const useAuthStore = defineStore('auth', {
           }, 1000)
         })
       } catch (error) {
-        // waitLoad('done')
         this.loading = false
-        // console.log('err login', error.response)
-        // notifErr(error.response)
+        console.log('err loginQr', error.response)
       }
     },
     async login (payload) {

@@ -48,7 +48,7 @@ channelLogin.subscribed(() => {
 function login(email, token) {
   console.log('email', email)
   const formData = new FormData()
-  formData.append('email', email + '@app.com')
+  formData.append('email', email)
   store.loginQr(formData)
 }
 
