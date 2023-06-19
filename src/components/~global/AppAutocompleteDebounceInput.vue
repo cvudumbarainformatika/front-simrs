@@ -5,7 +5,7 @@
     dense
     :options="optionx"
     :label="label"
-    :filled="!outlined ? filled : !filled"
+    :filled="outlined ? !filled : filled"
     :outlined="outlined"
     hide-bottom-space
     no-error-icon
@@ -40,29 +40,6 @@
       />
     </template>
     <template #option="scope">
-      <!-- <div
-        v-bind="scope.itemProps"
-        class="q-px-sm q-py-xs"
-      >
-        <div v-if="typeof(props.optionLabel)==='object'">
-          <div
-            v-for="(item, i) in props.optionLabel"
-            :key="i"
-          >
-            <div
-              class="ellipsis"
-            >
-              {{ scope.opt[item] }}
-            </div>
-          </div>
-        </div>
-        <div
-          v-else
-          class="ellipsis"
-        >
-          {{ scope.opt[optionLabel] }}
-        </div>
-      </div> -->
       <q-item v-bind="scope.itemProps">
         <q-item-section>
           <div v-if="typeof(props.optionLabel)==='object'">
@@ -90,8 +67,11 @@
     </template>
     <template #no-option>
       <q-item>
-        <q-item-section class="text-grey">
-          No results
+        <q-item-section
+          class="text-grey cursor-pointer"
+          @click="emits('newOption')"
+        >
+          {{ noOption }}
         </q-item-section>
       </q-item>
     </template>
@@ -99,7 +79,6 @@
       <div v-if="typeof(props.optionLabel)==='object'">
         <div class="ellipsis">
           {{ scope.opt?scope.opt[optionLabel[0]]:'' }}
-          <!-- {{ props.optionLabel[0] }} -->
         </div>
       </div>
       <div v-else>
@@ -113,16 +92,17 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear', 'new-val', 'cari'])
+const emits = defineEmits(['on-enter', 'getSource', 'set-model', 'buang', 'on-select', 'clear', 'new-val', 'cari', 'newOption'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
-  label: { type: String, default: 'Label' },
+  label: { type: String, default: '' },
   searchBy: { type: String, default: 'nama' },
+  noOption: { type: String, default: 'No Result' },
   disable: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   optionValue: { type: [Object, Array, String], default: 'id' },
   optionLabel: { type: [Object, Array, String], default: 'nama' },
-  filled: { type: Boolean, default: true },
+  filled: { type: Boolean, default: false },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
   model: { type: [String, Number], default: '' },
@@ -226,7 +206,7 @@ function myDebounce(func, timeout = 800) {
   }
 }
 const inputValue = myDebounce((val) => {
-  console.log('proses val', val)
+  // console.log('proses val', val)
   if (val !== '') emits('buang', val)
 }
 )

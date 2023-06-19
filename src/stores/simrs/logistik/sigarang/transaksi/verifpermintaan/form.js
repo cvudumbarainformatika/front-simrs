@@ -184,6 +184,10 @@ export const useVerifPermintaanRuangan = defineStore('verif_permintaan_ruangan',
           // console.log('disetujui cek alokasi', data.jumlah_disetujui)
           notifErrVue('Jumlah di setujui tidak boleh melebihi jumlah alokasi')
           lanjut = false
+        } else if (parseInt(data.jumlah_disetujui) === null) {
+          // console.log('disetujui cek alokasi', data.jumlah_disetujui)
+          data.jumlah_disetujui = 0
+          lanjut = false
         } else {
           // console.log('disetujui else', data.jumlah_disetujui)
           lanjut = true
