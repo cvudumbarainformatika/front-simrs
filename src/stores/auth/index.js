@@ -254,11 +254,32 @@ export const useAuthStore = defineStore('auth', {
     },
 
     //
+    async loginQr(payload) {
+      this.loading = true
+      try {
+        await api.post('/v1/loginQr', payload).then(resp => {
+          storage.setLocalToken(resp.data.token)
+          storage.setUser(resp.data.user)
+          const hdd = storage.getLocalToken()
+          const hddUser = storage.getUser()
+          if (hdd && hddUser) {
+            this.SET_TOKEN_USER(hdd, hddUser)
+          }
+          setTimeout(() => {
+            this.loading = false
+          }, 1000)
+        })
+      } catch (error) {
+        // waitLoad('done')
+        this.loading = false
+        // console.log('err login', error.response)
+        // notifErr(error.response)
+      }
+    },
     async login (payload) {
       this.loading = true
       // waitLoad('show')
       try {
-        // await api.post('/v2/login', payload).then(resp => {
         await api.post('/v1/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)

@@ -21,13 +21,36 @@
   </q-page>
 </template>
 <script setup>
-// import { computed } from 'vue'
-import { useAuthStore } from 'src/stores/auth'
+// import { comput } from 'vue'
 import BgAnimation from './comp/BgAnimation.vue'
 import BoxAnimation from './comp/BoxAnimation.vue'
 import LoginMode from './v2/LoginMode.vue'
+import { useIdentityStore } from 'src/stores/auth/identity'
+import { useAuthStore } from 'src/stores/auth'
+import { channelLogin } from 'src/modules/sockets'
 
+const ids = useIdentityStore()
 const store = useAuthStore()
+
+channelLogin.subscribed(() => {
+  console.log('subscribed login!!!')
+}).listen('.login-qr', (e) => {
+  console.log('listen', e)
+  const msg = e.message
+  const browser = msg.data
+  const match = ids.qrCode === browser
+  if (match) {
+    console.log('matches !!!')
+    login(msg.email, msg.token)
+  }
+})
+
+function login(email, token) {
+  console.log('email', email)
+  const formData = new FormData()
+  formData.append('email', email + '@app.com')
+  store.loginQr(formData)
+}
 
 </script>
 
