@@ -69,22 +69,4 @@ anjunganChannel.subscribed(() => {
     callstore.ubahStatus(data)
   }
 })
-// timer
-// const angka = ref(0)
-// const hitung = () => {
-//   angka.value = angka.value + 1
-//   console.log('hitung', angka.value)
-//   // if (angka.value === store.time) {
-//   //   store.setTab('awal')
-//   //   goTo('/')
-//   // }
-// }
-// const updateTimeInterval = setInterval(hitung, 1000)
-// onBeforeUnmount(() => {
-//   clearInterval(updateTimeInterval)
-// })
-// onUpdated(() => {
-//   angka.value = 0
-//   console.log('updated', angka.value)
-// })
 </script>

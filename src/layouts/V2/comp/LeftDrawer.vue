@@ -12,12 +12,12 @@
     <!-- drawer content -->
     <q-scroll-area
       class="fit"
-      style="height:calc(100%-60px); "
+      style="height:calc(100%-60px);"
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
     >
       <q-list
-        :class="dark?'bg-dark':'bg-white text-dark'"
+        :class="dark?'bg-dark q-mb-xl':'bg-white text-dark q-mb-xl'"
       >
         <!-- INI JIKA TIDAK PUNYA SUBMENU -->
         <template

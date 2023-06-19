@@ -416,7 +416,7 @@
     </div>
     <!-- Pagination -->
     <AppPaginationTable
-      v-if="items.length > 0"
+      v-if="items.length > 0 && adaPaginasi"
       class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
@@ -455,6 +455,7 @@ const props = defineProps({
   adaCari: { type: Boolean, default: true },
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
+  adaPaginasi: { type: Boolean, default: true },
   textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
