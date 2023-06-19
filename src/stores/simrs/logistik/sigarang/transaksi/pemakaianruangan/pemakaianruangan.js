@@ -240,7 +240,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
       const det = this.items.filter(x => x.jumlah > 0)
       if (det.length) {
         this.form.details = this.items.filter(x => x.jumlah > 0)
-        // console.log('input saved', this.form)
+        console.log('input saved', this.form)
         this.loading = true
         return new Promise(resolve => {
           api.post('v1/transaksi/pemakaianruangan/store', this.form)
@@ -248,7 +248,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
               this.loading = false
               notifSuccess(resp)
               this.resetAll()
-              const auth = useAuthStore()
+              const auth = useAuthStore().currentUser.pegawai
               this.setRuangan(auth.kode_ruang)
               // this.getData()
               this.getItemsData()
@@ -294,7 +294,7 @@ export const usePemakaianRuanganStore = defineStore('pemakaian_ruangan_store', {
               this.loadingMaping = false
               // console.log('maping', resp)
               this.mapingbarang = resp.data
-              const auth = useAuthStore()
+              const auth = useAuthStore().currentUser.pegawai
               this.setRuangan(auth.kode_ruang)
               resolve(resp)
             }).catch(() => {
