@@ -335,6 +335,9 @@ export const useAuthStore = defineStore('auth', {
       this.user = user
       this.loading = false
       routerInstance.push({ path: '/' })
+      setTimeout(() => {
+        this.loading = false
+      }, 2000)
     },
     REMOVE_LOKAL () {
       storage.deleteLocalToken()
@@ -365,8 +368,10 @@ export const useAuthStore = defineStore('auth', {
         await api.get('/v1/authuser').then(resp => {
           console.log('authuser', resp)
           if (resp.status === 200) {
-            storage.setUser(resp.data.user)
-            // storage.setApps(resp.data.apps)
+            const hdd = storage.setUser(resp.data.user)
+            if (hdd) {
+              this.currentUser = resp.data.user
+            }
             apps.setItems(resp.data.apps)
             apps.setAksesApps(resp.data.akses)
             // console.log('me again', resp)

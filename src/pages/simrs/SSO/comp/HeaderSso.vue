@@ -10,6 +10,7 @@
         <div class="q-ml-sm text-white">
           <div class="text-h6">
             UOBK RSUD MOHAMAD SALEH
+            {{ user }}
           </div>
           <!-- <div class="text-subtitle">
             KOTA PROBOLINGGO
@@ -20,10 +21,18 @@
     <div class="">
       <div class="row items-center text-white">
         <div
-          :key="user"
           class="q-mr-md text-subtitle"
         >
-          {{ user? user.nama:'-' }}
+          <q-skeleton
+            v-if="loading"
+            type="text"
+          />
+          <div
+            v-else
+            :key="loading"
+          >
+            {{ user? user.nama:'-' }}
+          </div>
         </div>
         <q-avatar
           size="40px"
@@ -83,11 +92,23 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 const emits = defineEmits(['signOut'])
-defineProps({
-  user: {
+const props = defineProps({
+  userLocal: {
     type: Object,
-    default: null
+    default: () => {}
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
+})
+
+const user = ref({})
+
+watch(() => props.userLocal, (obj) => {
+  console.log('watch user', obj)
+  user.value = obj
 })
 </script>
