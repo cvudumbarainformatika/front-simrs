@@ -3,7 +3,10 @@
     <Suspense>
       <NewSsoPage />
       <template #fallback>
-        <app-loading />
+        <!-- <app-loading /> -->
+        <app-loader
+          class="dimmed"
+        />
       </template>
     </Suspense>
     <!-- <app-loading /> -->
@@ -13,4 +16,5 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
 const NewSsoPage = defineAsyncComponent(() => import('./NewSsoPage.vue'))
+
 </script>

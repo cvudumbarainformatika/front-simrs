@@ -360,6 +360,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async getUserNew() {
+      this.loading = true
       try {
         await api.get('/v1/authuser').then(resp => {
           console.log('authuser', resp)
@@ -368,12 +369,14 @@ export const useAuthStore = defineStore('auth', {
             // storage.setApps(resp.data.apps)
             apps.setItems(resp.data.apps)
             apps.setAksesApps(resp.data.akses)
-            console.log('me again', resp)
+            // console.log('me again', resp)
+            this.loading = false
             // storage.setAkses(resp.data.akses)
           }
         })
       } catch (error) {
         removeToken()
+        this.loading = false
       }
     },
 
