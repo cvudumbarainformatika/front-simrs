@@ -10,7 +10,6 @@
         <div class="q-ml-sm text-white">
           <div class="text-h6">
             UOBK RSUD MOHAMAD SALEH
-            {{ user }}
           </div>
           <!-- <div class="text-subtitle">
             KOTA PROBOLINGGO
@@ -26,12 +25,12 @@
           <q-skeleton
             v-if="loading"
             type="text"
+            width="200px"
           />
           <div
             v-else
-            :key="loading"
           >
-            {{ user? user.nama:'-' }}
+            {{ userLocal? userLocal.nama:'-' }}
           </div>
         </div>
         <q-avatar
@@ -92,6 +91,8 @@
 </template>
 
 <script setup>
+// import { LocalStorage } from 'quasar'
+// import { useAuthStore } from 'src/stores/auth'
 import { ref, watch } from 'vue'
 const emits = defineEmits(['signOut'])
 const props = defineProps({
@@ -104,6 +105,8 @@ const props = defineProps({
     default: false
   }
 })
+
+// const store = useAuthStore()
 
 const user = ref({})
 

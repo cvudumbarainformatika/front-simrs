@@ -33,9 +33,9 @@
           </div>
           <div class="col-auto bg-primary corner">
             <HeaderSso
-              :key="store.currentUser"
-              :user-local="store.currentUser"
+              :key="apps.user"
               :loading="store.loading"
+              :user-local="apps.user"
               @sign-out="signOut"
             />
           </div>
@@ -49,16 +49,20 @@ import HeaderSso from './comp/HeaderSso.vue'
 import KumpulanAplikasi from './comp/KumpulanAplikasi.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const store = useAuthStore()
 const apps = useAplikasiStore()
 const router = useRouter()
 
+const num = ref(0)
+
 onMounted(() => {
   store.getUserNew()
-  apps.getItems()
+  // apps.getItems()
+  num.value = num.value +
+  console.log('newSsoPage', apps.user)
 })
 
 const goTo = (item) => {
