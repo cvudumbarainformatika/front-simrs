@@ -144,8 +144,9 @@
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template>
             <!-- Custom BTN -->
+            <!--
             <template #custom-btn="{row}">
-              <q-btn
+                <q-btn
                 flat
                 class=""
                 size="sm"
@@ -162,6 +163,7 @@
                 </q-tooltip>
               </q-btn>
             </template>
+              -->
           </app-table>
         </div>
         <q-separator />
@@ -202,24 +204,24 @@ const gudangCleared = () => {
   store.params.search = ''
   store.getDataTable()
 }
-const kartuStok = val => {
-  const skr = Date.now()
-  store.setParamsDetails('from', date.formatDate(skr, 'YYYY-MM-') + '01')
-  store.setParamsDetails('to', date.formatDate(skr, 'YYYY-MM-DD'))
+// const kartuStok = val => {
+//   const skr = Date.now()
+//   store.setParamsDetails('from', date.formatDate(skr, 'YYYY-MM-') + '01')
+//   store.setParamsDetails('to', date.formatDate(skr, 'YYYY-MM-DD'))
 
-  store.setOpen()
-  store.setParamsDetails('kode_rs', val.kode_rs)
-  store.setParamsDetails('kode_ruang', val.kode_ruang)
-  // const anu = Object.keys(val)
-  // if (anu.length) {
-  //   anu.forEach(y => {
-  //     if (val[y] !== null || val[y] !== '') {
-  //     }
-  //   })
-  // }
-  // console.log('anu', anu)
-  store.getDataByBarang()
-}
+//   store.setOpen()
+//   store.setParamsDetails('kode_rs', val.kode_rs)
+//   store.setParamsDetails('kode_ruang', val.kode_ruang)
+//   // const anu = Object.keys(val)
+//   // if (anu.length) {
+//   //   anu.forEach(y => {
+//   //     if (val[y] !== null || val[y] !== '') {
+//   //     }
+//   //   })
+//   // }
+//   // console.log('anu', anu)
+//   store.getDataByBarang()
+// }
 // const searchEnter = () => {
 //   console.log(store.params.search)
 // }

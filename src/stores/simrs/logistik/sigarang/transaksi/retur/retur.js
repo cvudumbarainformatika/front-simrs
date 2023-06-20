@@ -10,7 +10,10 @@ export const useReturStore = defineStore('retur_store', {
 
     // custom for this store
     gudangOptions: [
-      { nama: 'Gudang', value: 'GUDANG' },
+      { nama: 'Gudang', value: 'Gd-02010100' },
+      { nama: 'Depo PNM', value: 'Gd-02010101' },
+      { nama: 'Depo Gizi', value: 'Gd-02010102' },
+      { nama: 'Depo Habis Pakai', value: 'Gd-02010103' },
       { nama: 'Penyedia', value: 'PENYEDIA' }
     ],
     form: {
@@ -39,8 +42,8 @@ export const useReturStore = defineStore('retur_store', {
     ruangans: [],
     mapingbarangdepos: [],
     gudangUmum: {
-      kode: 'Gd-00000000',
-      nama: 'GUDANG SELURUH RUMAH SAKIT'
+      kode: 'Gd-02010100',
+      nama: 'Gudang Habis Pakai'
     }
   }),
   actions: {
