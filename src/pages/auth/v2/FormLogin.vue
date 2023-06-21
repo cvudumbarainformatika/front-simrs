@@ -19,7 +19,7 @@
           :rules="[val => !!val || 'Harap diisi terlebih dahulu']"
           autocorrect="off"
           autocapitalize="off"
-          autocomplete="off"
+          autocomplete="chrome-off"
           spellcheck="false"
         >
           <template #label>
@@ -39,7 +39,7 @@
           :type="isPasw ? 'password' : 'text'"
           autocorrect="off"
           autocapitalize="off"
-          autocomplete="off"
+          autocomplete="chrome-off"
           spellcheck="false"
         >
           <template #label>
@@ -124,35 +124,19 @@ function onSubmit () {
   right: 20px;
 }
 
-// input:-webkit-autofill,
-//   input:-webkit-autofill:focus {
-//     transition: background-color 600000s 0s, color 600000s 0s !important;
-//   }
+.q-field__native{
 
-// .q-field__native{
-//   background-clip:content-box;
-//   &:-webkit-autofill{
-//     background-clip:content-box;
-//   }
-//   &:-internal-autofill-selected{
-//     background-clip:content-box;
-//   }
-// }
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active{
+      transition: background-color 9999s ease-in-out 0s;
+  }
 
-// .q-field__native{
-//   &:-webkit-autofill, &:-internal-autofill-selected{
-//     background-clip:content-box;
-//   }
-//   &, &:hover, &:focus{
-//     transition: background-color 5000s ease-in-out 0s;
-//   }
-// }
+  // &input:-internal-autofill-previewed,
+  // &input:-internal-autofill-selected{
+  //   -webkit-box-shadow: none;
+  // }
 
-// input, select {
-//   color: #187DC1 !important;
-//   -webkit-text-fill-color:#187DC1 !important;
-//   -webkit-background-clip: #fff !important;
-//   background-clip:  #fff !important;
-// }
-
+}
 </style>
