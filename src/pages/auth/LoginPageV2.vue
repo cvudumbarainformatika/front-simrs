@@ -78,10 +78,17 @@ $grad:#187DC1;
 
 .login-form {
   width: 50%;
-  margin-top: 40px;
+  // margin-top: 40px;
   z-index: 2;
 }
 
+@media(max-width:800px) {
+  .login-form {
+    width: 90%;
+    // margin-top: 40px;
+    z-index: 2;
+  }
+}
 .bot {
   position: absolute;
   width: 100%;

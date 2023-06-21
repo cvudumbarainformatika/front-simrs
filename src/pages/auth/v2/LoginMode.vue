@@ -23,7 +23,8 @@
     <div class="container">
       <div class="row q-pa-sm">
         <div
-          class="col-6 bg-x min-h"
+          v-if="!isMobile"
+          class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 bg-x min-h"
         >
           <div class="column flex-center full-height  text-white">
             <div class="text-subtitle1">
@@ -45,13 +46,28 @@
             </div>
           </div>
         </div>
-        <div class="col-6 min-h">
-          <FormLogin v-if="route.params.mode==='login-yang-menyusahkan'" />
+        <!-- <div class="col-6 min-h"> -->
+        <div
+          v-if="routeForm && !isMobile"
+          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+        >
+          <FormLogin />
+        </div>
+        <div
+          v-else-if="routeQr && isMobile"
+          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+        >
+          <FormLogin />
+        </div>
+        <div
+          v-else
+          class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+        >
           <FormQr
-            v-else
             :qr="store.qrCode"
           />
         </div>
+        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -59,18 +75,22 @@
 
 <script setup>
 // import { useAuthStore } from 'src/stores/simrs/logistik/sigarang/auth'
-// import { useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useIdentityStore } from 'src/stores/auth/identity'
 import FormLogin from './FormLogin.vue'
 import FormQr from './FormQr.vue'
 
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 // const store = useAuthStore()
 const route = useRoute()
 const store = useIdentityStore()
-// const $q = useQuasar()
+const $q = useQuasar()
+
+const isMobile = ref($q.platform.is.mobile)
+const routeForm = ref(route.params.mode === 'login-yang-menyusahkan')
+const routeQr = ref(route.params.mode === 'qr')
 
 const img = computed(() => {
   return new URL('../../../assets/images/mad_saleh_minum.png', import.meta.url).href
@@ -78,7 +98,7 @@ const img = computed(() => {
 
 onMounted(() => {
   store.makeQr()
-  console.log('login', store.qrCode)
+  console.log('login', $q)
 })
 
 </script>
