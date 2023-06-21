@@ -134,10 +134,10 @@ export const useStokOpnameStore = defineStore('stok_opnam_store', {
         'kode',
         'no_penerimaan',
         'barang',
-        'sisa_stok',
+        'sisa_stok'
         // 'totalStok',
-        'stok_transaksi',
-        'selisih'
+        // 'stok_transaksi',
+        // 'selisih'
       ]
       // this.columns.sort()
       // this.columns.reverse()

@@ -66,13 +66,13 @@ const formatRpDouble = (value, dg) => {
   }
 }
 const formatDouble = (value, dg) => {
-  if (value !== null) {
+  if (value !== null && value !== 0) {
     return Number(value)
       .toFixed(dg)
       .replace('.', ',')
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
       // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
-  }
+  } else { return 0 }
 }
 
 const dateFullFormat = (val) => {
