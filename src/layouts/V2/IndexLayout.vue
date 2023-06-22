@@ -9,7 +9,6 @@
       @go-to-sso="()=>{router.push({path:'/admin/sso'})}"
     />
     <LeftDrawer
-      v-if="!mobile"
       :dark="dark"
     />
     <!--
