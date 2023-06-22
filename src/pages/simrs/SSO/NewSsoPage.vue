@@ -92,7 +92,6 @@ const signOut = () => {
     // background: rgba(255,255,255,0.1);
     animation: animate 10s linear infinite;
     animation-delay: calc(-1s * var(--i));
-
   }
 
   @keyframes animate {

@@ -1,7 +1,8 @@
 <template>
   <div
     ref="main"
-    class="full-height full-width column flex-center items-center q-px-xl q-py-md"
+    class="full-height full-width column flex-center items-center"
+    :class="isMobile? 'q-px-sm q-py-md': 'q-px-xl q-py-md'"
   >
     <div class="self-end q-mb-md">
       <q-input
@@ -20,7 +21,7 @@
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
       :style="`height:${h}px;
-      width:100% ;`"
+      width:100%;`"
       class="flex-center items-center"
     >
       <div
@@ -29,7 +30,8 @@
       >
         <div
           v-if="filterApps.length"
-          class="row full-height flex-center justify-center flex-wrap q-col-gutter-xl"
+          class="row full-height flex-center justify-center flex-wrap"
+          :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
         >
           <div
             v-for="(item, i) in filterApps"
@@ -37,7 +39,8 @@
             class="col-auto"
           >
             <div
-              class="card bg-white full-width q-pa-md cursor-pointer"
+              v-if="!isMobile"
+              class="card bg-white cursor-pointer"
               @click="goTo(item)"
             >
               <div class="imgBx column flex-center">
@@ -65,6 +68,22 @@
                 </div>
               </div>
             </div>
+            <div
+              v-else
+              class="card-mobile bg-white cursor-pointer"
+              @click="goTo(item)"
+            >
+              <div class="img-mob column flex-center items-center">
+                <q-icon
+                  :name="item.icon"
+                  :color="item.color"
+                  size="30px"
+                />
+                <div class="txt f-10">
+                  {{ item.julukan }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -73,6 +92,7 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { computed, onMounted, ref } from 'vue'
 
 const h = ref()
@@ -105,6 +125,8 @@ const props = defineProps({
 })
 const emits = defineEmits(['goTo'])
 
+const $q = useQuasar()
+const isMobile = ref($q.platform.is.mobile)
 const filterApps = computed(() => {
   const allApp = props.items
   const akses = props.akses
@@ -135,6 +157,25 @@ function goTo(item) {
 </script>
 
 <style lang="scss" scoped>
+
+.card-mobile {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    padding:5px;
+    border-radius: 5px;
+    // justify-content: center;
+    // align-items: center;
+      // display: flow-root;
+    .img-mob{
+      display: flex;
+      overflow: hidden;
+      // justify-content: center;
+      // align-items: center;
+      width: 100%;
+      white-space: nowrap;
+    }
+
 .container {
   width: 100%;
   height: 100%;
@@ -142,12 +183,15 @@ function goTo(item) {
   overflow: auto;
   padding: 20px 0;
 
+  }
+
   .card {
     position: relative;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width:120px;
     height:120px;
+    padding:16px;
 
     .content {
       width: 120px;
@@ -173,7 +217,6 @@ function goTo(item) {
       .imgg{
         max-width: 80px;
         font-size: 50px;
-
       }
 
     }

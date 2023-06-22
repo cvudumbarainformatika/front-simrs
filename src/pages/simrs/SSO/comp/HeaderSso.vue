@@ -2,12 +2,15 @@
   <div class="row justify-between q-pa-md">
     <div class="">
       <div class="row items-center">
-        <div>
+        <div v-if="!isMobile">
           <q-avatar size="40px">
             <img src="~assets/logos/logo-rsud.png">
           </q-avatar>
         </div>
-        <div class="q-ml-sm text-white">
+        <div
+          v-if="!isMobile"
+          class="q-ml-sm text-white"
+        >
           <div class="text-h6">
             UOBK RSUD MOHAMAD SALEH
           </div>
@@ -93,7 +96,9 @@
 <script setup>
 // import { LocalStorage } from 'quasar'
 // import { useAuthStore } from 'src/stores/auth'
+import { useQuasar } from 'quasar'
 import { ref, watch } from 'vue'
+
 const emits = defineEmits(['signOut'])
 const props = defineProps({
   userLocal: {
@@ -109,6 +114,9 @@ const props = defineProps({
 // const store = useAuthStore()
 
 const user = ref({})
+const $q = useQuasar()
+
+const isMobile = ref($q.platform.is.mobile)
 
 watch(() => props.userLocal, (obj) => {
   console.log('watch user', obj)
