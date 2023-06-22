@@ -70,10 +70,10 @@ const masters = {
             import('pages/simrs/master/farmasi/kode50/IndexPage.vue')
         },
         {
-          path: '/master/farmasi/kode108',
-          name: 'master.farmasi.kode108',
+          path: '/master/farmasi/kodeBelanja',
+          name: 'master.farmasi.kodeBelanja',
           component: () =>
-            import('pages/simrs/master/farmasi/kode108/IndexPage.vue')
+            import('pages/simrs/master/farmasi/kodeBelanja/IndexPage.vue')
         },
         {
           path: '/master/farmasi/merk',
