@@ -41,8 +41,8 @@ const pendaftaran = {
             import('pages/simrs/pendaftaran/form/bpjs/IndexPage.vue')
         },
         {
-          path: '/pendaftaran/bpjs/umum',
-          name: 'pendaftaran.bpjs.umum',
+          path: '/pendaftaran/bpjs/pasien',
+          name: 'pendaftaran.bpjs.pasien',
           component: () =>
             import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
         }
@@ -60,29 +60,29 @@ const pendaftaran = {
             import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
         },
         {
-          path: '/pendaftaran/form/umum',
-          name: 'pendaftaran.form.umum',
+          path: '/pendaftaran/umum/pasien',
+          name: 'pendaftaran.umum.pasien',
           component: () =>
-            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+            import('pages/simrs/pendaftaran/umum/pasien/IndexPage.vue')
         }
       ]
     },
     {
-      path: '/pendaftaran/umum',
-      name: 'pendaftaran.umum',
-      component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
+      path: '/pendaftaran/igd',
+      name: 'pendaftaran.igd',
+      component: () => import('pages/simrs/pendaftaran/igd/IndexPage.vue'),
       children: [
         {
-          path: '/pendaftaran/form/umum',
-          name: 'pendaftaran.form.umum',
+          path: '/pendaftaran/form/igd',
+          name: 'pendaftaran.form.igd',
           component: () =>
-            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+            import('pages/simrs/pendaftaran/form/igd/IndexPage.vue')
         },
         {
-          path: '/pendaftaran/form/umum',
-          name: 'pendaftaran.form.umum',
+          path: '/pendaftaran/igd/pasien',
+          name: 'pendaftaran.igd.pasien',
           component: () =>
-            import('pages/simrs/pendaftaran/form/umum/IndexPage.vue')
+            import('pages/simrs/pendaftaran/igd/pasien/IndexPage.vue')
         }
       ]
     },
