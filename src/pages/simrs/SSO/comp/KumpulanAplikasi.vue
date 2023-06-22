@@ -25,12 +25,12 @@
       class="flex-center items-center"
     >
       <div
-        class="container flex-center items-center"
+        class="container flex-center"
         :style="`height:${h}px;`"
       >
         <div
           v-if="filterApps.length"
-          class="row full-height flex-center justify-center flex-wrap"
+          class="wrapper"
           :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
         >
           <div
@@ -43,7 +43,7 @@
               class="card bg-white cursor-pointer"
               @click="goTo(item)"
             >
-              <div class="imgBx column flex-center">
+              <div class="imgBx column flex-center items-center">
                 <q-icon
                   :name="item.icon"
                   :color="item.color"
@@ -54,31 +54,34 @@
                 </div>
               </div>
               <div class="content text-right">
-                <div>
-                  <div class="text-h6 text-negative text-weight-bold">
-                    {{ item.singkatan }}
-                  </div>
-                  <div class="text-subtitle">
-                    {{ item.julukan }}
-                  </div>
-                  <q-btn
-                    :label="item.singkatan"
-                    :color="item.color"
-                  />
+                <div class="text-h6 text-negative text-weight-bold">
+                  {{ item.singkatan }}
                 </div>
+                <div class="text-subtitle">
+                  {{ item.julukan }}
+                </div>
+                <q-btn
+                  :label="item.singkatan"
+                  :color="item.color"
+                  dense
+                  padding="sm"
+                  class="absolute-bottom"
+                />
               </div>
             </div>
             <div
               v-else
-              class="card-mobile bg-white cursor-pointer"
+              class="card-mobile bg-white cursor-pointer justify-center"
               @click="goTo(item)"
             >
               <div class="img-mob column flex-center items-center">
-                <q-icon
-                  :name="item.icon"
-                  :color="item.color"
-                  size="30px"
-                />
+                <div>
+                  <q-icon
+                    :name="item.icon"
+                    :color="item.color"
+                    size="30px"
+                  />
+                </div>
                 <div class="txt f-10">
                   {{ item.julukan }}
                 </div>
@@ -170,12 +173,12 @@ function goTo(item) {
     .img-mob{
       display: flex;
       overflow: hidden;
-      // justify-content: center;
-      // align-items: center;
+      justify-content: center;
+      align-items: center;
       width: 100%;
       white-space: nowrap;
     }
-
+}
 .container {
   width: 100%;
   height: 100%;
@@ -183,18 +186,27 @@ function goTo(item) {
   overflow: auto;
   padding: 20px 0;
 
+    .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-content: stretch;
+        justify-content: center;
+    }
+
   }
 
   .card {
     position: relative;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    width:120px;
+    width:130px;
     height:120px;
-    padding:16px;
+    padding:10px;
+    // overflow: hidden;
 
     .content {
-      width: 120px;
+      // width: 120px;
     }
     .imgBx{
       position: absolute;
@@ -232,5 +244,4 @@ function goTo(item) {
         display: none;
       }
   }
-}
 </style>
