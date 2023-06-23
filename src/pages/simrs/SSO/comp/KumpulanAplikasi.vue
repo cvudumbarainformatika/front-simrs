@@ -205,9 +205,6 @@ function goTo(item) {
     padding:10px;
     // overflow: hidden;
 
-    .content {
-      // width: 120px;
-    }
     .imgBx{
       position: absolute;
       top: 5px;
