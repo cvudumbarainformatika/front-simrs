@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { titleCase } from 'src/modules/formatter'
 import { changeArrayIndex, notifCenterVue, notifErrVue, notifSuccess } from 'src/modules/utils'
-import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useTransaksiPermintaanForm } from './form'
 
 export const useTransaksiPermintaanTable = defineStore('table_transaksi_permintaan', {
@@ -56,7 +56,7 @@ export const useTransaksiPermintaanTable = defineStore('table_transaksi_perminta
     },
     resetForm() {
       const store = useTransaksiPermintaanForm()
-      const auth = useAuthStore()
+      const auth = useAplikasiStore().user.pegawai
       store.setForm('kode_pengguna', null)
       store.setForm('kode_ruang', auth.kode_ruang)
       store.setForm('kode_penanggungjawab', null)

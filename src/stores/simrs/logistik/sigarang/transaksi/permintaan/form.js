@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { uniqueId } from 'src/modules/utils'
-import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useMinMaxPenggunaStockStore } from '../../master/minmaxstok/pengguna/pengguna'
 import { useTransaksiPermintaanTable } from './permintaan'
 
@@ -10,10 +10,10 @@ export const useTransaksiPermintaanForm = defineStore('form_transaksi_permintaan
   state: () => ({
     isOpen: true,
     loading: false,
-    auth: useAuthStore().currentUser.pegawai,
+    auth: useAplikasiStore().user.pegawai,
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      kode_ruang: useAuthStore().currentUser.pegawai.kode_ruang
+      kode_ruang: useAplikasiStore().user.pegawai.kode_ruang
     },
     nomor: null,
     nama: {
