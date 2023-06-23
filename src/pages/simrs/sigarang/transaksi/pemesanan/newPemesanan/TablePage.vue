@@ -661,12 +661,13 @@ import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/t
 import { useTransaksiPemesananTable } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/table'
 import { computed, ref } from 'vue'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
-import { useAuthStore } from 'src/stores/auth'
+
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const table = useTransaksiPemesananTable()
 const store = useTransaksiPemensananForm()
 
-const auth = useAuthStore()
+const auth = useAplikasiStore()
 // store master barang
 const masterBarangForm = useMasterBarangRSForm()
 // store.setToday()
@@ -676,7 +677,7 @@ store.getInitialData()
 // store.getMinMaxDepo()
 
 const role = computed(() => {
-  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
+  return auth.user.pegawai ? auth.user.pegawai.role.nama : ''
 })
 
 function addNewBarang() {

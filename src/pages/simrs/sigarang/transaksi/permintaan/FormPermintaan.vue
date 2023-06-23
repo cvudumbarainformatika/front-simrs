@@ -459,7 +459,7 @@
 // import { notifErrVue } from 'src/modules/utils'
 // import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 import { date } from 'quasar'
-import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useMinMaxPenggunaStockStore } from 'src/stores/simrs/logistik/sigarang/master/minmaxstok/pengguna/pengguna'
 import { useTransaksiPermintaanForm } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/form'
 import { useTransaksiPermintaanTable } from 'src/stores/simrs/logistik/sigarang/transaksi/permintaan/permintaan'
@@ -468,9 +468,9 @@ import { ref, computed } from 'vue'
 const table = useTransaksiPermintaanTable()
 const store = useTransaksiPermintaanForm()
 const maksRuangan = useMinMaxPenggunaStockStore()
-const auth = useAuthStore()
+const auth = useAplikasiStore()
 const role = computed(() => {
-  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
+  return auth.user.pegawai ? auth.user.pegawai.role.nama : ''
 })
 // const mapingbarang = useMasterMapingBarangForm()
 

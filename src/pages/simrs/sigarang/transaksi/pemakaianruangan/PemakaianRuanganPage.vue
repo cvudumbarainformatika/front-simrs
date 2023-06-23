@@ -309,7 +309,7 @@
 // import { routerInstance } from 'src/boot/router'
 import { dateFull } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
-import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import { setTempData } from 'src/modules/storage'
 import { usePemakaianRuanganStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemakaianruangan/pemakaianruangan'
 import { ref } from 'vue'
@@ -360,20 +360,20 @@ const penggunaCleared = () => {
 //   // console.log('detail', detail)
 //   // console.log('temp', store.form)
 // }
-const auth = useAuthStore()
+const auth = useAplikasiStore()
 // let timer = true
 // if (timer) {
 // }
-console.log('auth', auth.currentUser)
+console.log('auth', auth.user)
 const loading = ref(false)
 const timer = setInterval(() => {
   caller()
 }, 1000)
 function caller() {
   loading.value = true
-  if (auth.currentUser.pegawai.kode_ruang && store.penanggungjawabs.length) {
-    console.log('caller', auth.currentUser.pegawai.kode_ruang, store.penanggungjawabs)
-    store.setRuangan(auth.currentUser.pegawai.kode_ruang)
+  if (auth.user.pegawai.kode_ruang && store.penanggungjawabs.length) {
+    console.log('caller', auth.user.pegawai.kode_ruang, store.penanggungjawabs)
+    store.setRuangan(auth.user.pegawai.kode_ruang)
     loading.value = false
     clearInterval(timer)
   }

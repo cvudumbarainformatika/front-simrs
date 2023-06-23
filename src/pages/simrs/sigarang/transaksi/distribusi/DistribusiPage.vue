@@ -757,13 +757,15 @@ import { date, Dialog } from 'quasar'
 import { dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { notifErrVue } from 'src/modules/utils'
 import { useTransaksiDistribusiStore } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusi/distribusi'
-import { useAuthStore } from 'src/stores/auth'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import FormDialog from './FormDialog.vue'
 const store = useTransaksiDistribusiStore()
-const auth = useAuthStore()
+
+const apps = useAplikasiStore()
+
 const ruang = computed(() => {
-  const depo = auth.currentUser.pegawai.depo ? auth.currentUser.pegawai.depo.nama : false
-  // console.log('cur depo', auth.currentUser.pegawai)
+  const depo = apps.user.pegawai.depo ? apps.user.pegawai.depo.nama : false
+
   return depo
 })
 

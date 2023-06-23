@@ -18,7 +18,7 @@
         />
         <q-tab
           v-if="role?(role==='root' || role==='depo' || role==='gudang' || role==='gizi'):role"
-          name="kartustok"
+          name="kartu"
           no-caps
           label="Kartu Stok"
         />
@@ -39,7 +39,8 @@
         <q-tab-panel name="stok">
           <StokPage />
         </q-tab-panel>
-        <q-tab-panel name="kartustok">
+
+        <q-tab-panel name="kartu">
           <KartuStok
             :role="role"
             :pegawai="pegawai"
@@ -54,18 +55,19 @@
   </div>
 </template>
 <script setup>
-import { useAuthStore } from 'src/stores/auth'
 import { computed, ref } from 'vue'
 import StokOpnamePage from './StockOpnamePage.vue'
 // import StokOpnamePage from './StockOpnamePageOld.vue'
 import StokPage from './StokPage.vue'
 import KartuStok from './KartuStok.vue'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const tab = ref('stok')
-const auth = useAuthStore()
+const apps = useAplikasiStore
 const role = computed(() => {
-  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
+  return apps.user.pegawai ? apps.user.pegawai.role.nama : ''
 })
+
 const pegawai = computed(() => {
-  return auth.currentUser.pegawai ? auth.currentUser.pegawai : {}
+  return apps.user.pegawai ? apps.user.pegawai : {}
 })
 </script>

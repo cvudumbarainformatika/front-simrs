@@ -32,23 +32,32 @@
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.nama"
+              <app-autocomplete-debounce-input
+                v-model="store.form.kelompok_psikotropika"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
                 valid
-                label="Kelompok Napza"
-                :filled="false"
+                label="Kelompok Nppza / Psikotropika"
                 autofocus
+                :source="store.optionNapzas"
               />
             </div>
           </div>
           <!-- merk dan kandungan -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.merk"
+                autocomplete="merk"
+                option-label="merk"
+                option-value="merk"
                 valid
                 label="Merk"
-                :filled="false"
+                autofocus
+                :source="store.merks"
+                :loading="store.loadingMerk"
+                @buang="cariMerk"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -98,93 +107,134 @@
             </div>
           </div>
           <!-- Kode 108 dan Kode 50 -->
-          <div class="row q-col-gutter-md q-mb-xs">
+          <div class="row q-col-gutter-md q-mb-xs items-center">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.kode108"
+                autocomplete="uraian"
+                option-label="uraian"
+                option-value="kode"
                 valid
                 label="Kode 108"
-                :filled="false"
+                autofocus
+                :source="store.kodeBelanjas"
+                :loading="store.loadingKodeBelanja"
+                @buang="cariKodeBelanja"
+                @on-select="kodeBelanjaDipilih"
               />
             </div>
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.nama"
-                valid
+                v-if="store.form.uraian50"
+                v-model="store.form.uraian50"
+                disable
                 label="Kode 50"
                 :filled="false"
-                autofocus
               />
+              {{ store.form.uraian50?'':'pilih kode 108' }}
             </div>
           </div>
           <!-- Satuan dan satuan besar -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.satuan_b"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="nama"
                 valid
-                label="Satuan"
-                :filled="false"
+                label="Satuan Besar"
+                autofocus
+                :source="store.satuanBs"
+                :loading="store.loadingSatuanB"
+                @buang="cariSatuanB"
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.nama"
+              <app-autocomplete-debounce-input
+                v-model="store.form.satuan_k"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="nama"
                 valid
-                label="Satuan besar"
-                :filled="false"
+                label="Satuan Kecil"
                 autofocus
+                :source="store.satuanKs"
+                :loading="store.loadingSatuanK"
+                @buang="cariSatuanK"
               />
             </div>
           </div>
           <!-- Kelompok penyimpanan dan Kelompok RKO -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.kelompok_penyimpanan"
+                autocomplete="kelompokpenyimpanan"
+                option-label="kelompokpenyimpanan"
+                option-value="kelompokpenyimpanan"
                 valid
                 label="Kelompok Penyimpanan"
-                :filled="false"
+                autofocus
+                :source="store.kelompokPenyimpanans"
+                :loading="store.loadingKelompokPenyimpanan"
+                @buang="cariKelompokPenyimpanan"
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.nama"
+              <app-autocomplete-debounce-input
+                v-model="store.form.kelompok_rko"
+                autocomplete="rs2"
+                option-label="rs2"
+                option-value="rs2"
                 valid
                 label="Kelompok RKO"
-                :filled="false"
                 autofocus
+                :source="store.kelompokRKOs"
+                :loading="store.loadingKelompokRKO"
+                @buang="cariKelompokRKO"
               />
             </div>
           </div>
           <!-- Status Generik dan Status Forkit -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.status_generik"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
                 valid
                 label="Status Generik"
-                :filled="false"
+                autofocus
+                :source="store.optionStatusGeneriks"
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.nama"
+              <app-autocomplete-debounce-input
+                v-model="store.form.status_forkid"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
                 valid
                 label="Status Forkit"
-                :filled="false"
                 autofocus
+                :source="store.optionStatusForkits"
               />
             </div>
           </div>
           <!-- Status fornas dan Kekuatan Dosis -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.kd_obat"
+              <app-autocomplete-debounce-input
+                v-model="store.form.status_fornas"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
                 valid
                 label="Status Fornas"
-                :filled="false"
+                autofocus
+                :source="store.optionStatusFornases"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -219,12 +269,17 @@
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-model="store.form.nama"
+              <app-autocomplete-debounce-input
+                v-model="store.form.kelas_terapi"
+                autocomplete="kelasterapi"
+                option-label="kelasterapi"
+                option-value="kelasterapi"
                 valid
                 label="Kelas Terapi"
-                :filled="false"
                 autofocus
+                :source="store.kelasTerapis"
+                :loading="store.loadingKelasTerapi"
+                @buang="cariKelasTerapi"
               />
             </div>
           </div>
@@ -269,6 +324,7 @@
 </template>
 
 <script setup>
+import { findWithAttr } from 'src/modules/utils'
 import { useMasterObatForm } from 'src/stores/simrs/master/farmasi/obat/form'
 import { ref } from 'vue'
 const store = useMasterObatForm()
@@ -302,6 +358,63 @@ function cariKekuatanDosis(val) {
 function cariVolumeSediaan(val) {
   // console.log('cari kandungan ', val)
   store.getVolumeSediaan(val)
+}
+
+// cari Satuan Besar
+function cariSatuanB(val) {
+  // console.log('cari kandungan ', val)
+  store.getSatuanBes(val)
+}
+
+// cari Satuan Kecil
+function cariSatuanK(val) {
+  // console.log('cari kandungan ', val)
+  store.getSatuanKec(val)
+}
+
+// cari Satuan Merk
+function cariMerk(val) {
+  // console.log('cari kandungan ', val)
+  // store.getMerk(val)
+}
+
+// cari Satuan kelompok penyimpanan
+function cariKelompokPenyimpanan(val) {
+  // console.log('cari kandungan ', val)
+  // store.getMerk(val)
+}
+
+// cari Satuan kelompok RKO
+function cariKelompokRKO(val) {
+  // console.log('cari kandungan ', val)
+  store.getKelompokRKO(val)
+}
+
+// cari Kelas Terapi
+function cariKelasTerapi(val) {
+  // console.log('cari kandungan ', val)
+  // store.getKelompokRKO(val)
+}
+
+// cari Kode Belanja
+function cariKodeBelanja(val) {
+  // console.log('cari kandungan ', val)
+  // store.getMerk(val)
+}
+
+// Satuan Belanja Dipilih
+function kodeBelanjaDipilih(val) {
+  // console.log('kode belanja dipilih ', val)
+  const index = findWithAttr(store.kodeBelanjas, 'kode', val)
+  // console.log('kode belanja dipilih ', index)
+  if (index >= 0) {
+    const temp = store.kodeBelanjas[index]
+    store.setForm('uraian108', temp.uraian)
+    store.setForm('uraian50', temp.uraianB)
+    store.setForm('kode50', temp.kodeB)
+    // console.log('kode', temp)
+  }
+  // store.getMerk(val)
 }
 
 // simpan

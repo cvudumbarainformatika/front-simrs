@@ -1279,9 +1279,9 @@ import FormPemesananBarang from './edit/FormPemesananBarang.vue'
 import { routerInstance } from 'src/boot/router'
 // import { notifCenterVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
-import { useAuthStore } from 'src/stores/auth'
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
 import { useKontrakPemensananStore } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/kontrak'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const table = useHistoryTable()
 const detail = useDetailHistoryTable()
 const tandatangan = useTandaTanganStore()
@@ -1454,10 +1454,9 @@ function bilangan(val) {
       return ''
   }
 }
-const auth = useAuthStore()
-console.log('auth', auth.currentUser.pegawai.role.nama)
+const apps = useAplikasiStore()
 const role = computed(() => {
-  return auth.currentUser.pegawai ? auth.currentUser.pegawai.role.nama : ''
+  return apps.user.pegawai ? apps.user.pegawai.role.nama : ''
 })
 // set tanggal print
 function setTanggal(val) {

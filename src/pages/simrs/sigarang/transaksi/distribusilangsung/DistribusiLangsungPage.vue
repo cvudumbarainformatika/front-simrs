@@ -76,7 +76,7 @@
             Petugas Depo
           </div>
           <div class="col-9">
-            {{ auth.currentUser? auth.currentUser.nama:'tekan f5 karena nama anda belum terbaca' }}
+            {{ auth.user? auth.user.nama:'tekan f5 karena nama anda belum terbaca' }}
           </div>
 
           <!-- {{ store.form }} -->
@@ -130,18 +130,19 @@
 </template>
 <script setup>
 import { date, Dialog } from 'quasar'
-import { useAuthStore } from 'src/stores/auth'
 import FormBasah from './FormBasah.vue'
 // import FormKering from './FormKering.vue'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 import { computed, ref } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const store = useTransaksiDistribusiLangsung()
-const auth = useAuthStore()
+
+const auth = useAplikasiStore()
 store.getInitialData()
 const ruang = computed(() => {
-  const depo = auth.depo ? auth.depo.nama : false
+  const depo = auth.user.depo ? auth.user.depo.nama : false
   if (depo) {
     return depo
   } else {
@@ -224,7 +225,7 @@ function selesai() {
     refDist.value.$refs.refInput.resetValidation()
   })
 }
-// watch(() => auth.currentUser, (data) => {
+// watch(() => auth.user, (data) => {
 // console.log('watch', data)
 //   store.setForm('pegawai_id', data.pegawai_id)
 // })

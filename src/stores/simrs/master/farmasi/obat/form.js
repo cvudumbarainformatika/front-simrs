@@ -17,10 +17,39 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     loadingBentukSediaan: false,
     loadingKekuatanDosis: false,
     loadingVolumeSediaan: false,
+    loadingKelasTerapi: false,
+    loadingKelompokPenyimpanan: false,
+    loadingKelompokRKO: false,
+    loadingSatuanB: false,
+    loadingSatuanK: false,
+    loadingMerk: false,
 
+    optionNapzas: [
+      { nama: 'YA', value: '1' },
+      { nama: 'TIDAK', value: '0' }
+    ],
+    optionStatusGeneriks: [
+      { nama: 'YA', value: '1' },
+      { nama: 'TIDAK', value: '0' }
+    ],
+    optionStatusForkits: [
+      { nama: 'YA', value: '1' },
+      { nama: 'TIDAK', value: '0' }
+    ],
+    optionStatusFornases: [
+      { nama: 'YA', value: '1' },
+      { nama: 'TIDAK', value: '0' }
+    ],
+
+    kelasTerapis: [],
+    kelompokPenyimpanans: [],
+    kelompokRKOs: [],
+    satuanBs: [],
+    satuanKs: [],
+    merks: [],
+    kandungans: [],
     jenisPerbekalans: [],
     kodeBelanjas: [],
-    kandungans: [],
     bentukSediaans: [],
     kekuatanDosiss: [],
     volumeSediaans: [],
@@ -66,8 +95,104 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.getBetukSediaan('')
       this.getKekuatanDosis('')
       this.getVolumeSediaan('')
+      this.getSatuanBes('')
+      this.getSatuanKec('')
+      this.getMerk('')
+      this.getKelompokPenyimpanan('')
+      this.getKelompokRKO('')
+      this.getKelasTerapi('')
     },
     // api related actions
+    // ambil kelas terapi
+    async getKelasTerapi(val) {
+      this.loadingKelasTerapi = true
+      const param = { params: { q: val } }
+      await api.get('v1/simrs/farmasi/master/listkelasterapi', param)
+        .then(resp => {
+          this.loadingKelasTerapi = false
+          // console.log('rko', resp.data)
+          this.kelasTerapis = resp.data
+        })
+        .catch(() => {
+          this.loadingKelasTerapi = false
+        })
+    },
+    // ambil kelompok Rko
+    async getKelompokRKO(val) {
+      this.loadingKelompokRKO = true
+      const param = { params: { q: val } }
+      await api.get('v1/simrs/farmasi/master/listrko', param)
+        .then(resp => {
+          this.loadingKelompokRKO = false
+          // console.log('rko', resp.data)
+          this.kelompokRKOs = resp.data
+        })
+        .catch(() => {
+          this.loadingKelompokRKO = false
+        })
+    },
+    // ambil kelompok penyimpanan
+    async getKelompokPenyimpanan(val) {
+      this.loadingKelompokPenyimpanan = true
+      const param = { params: { q: val } }
+      await api.get('v1/simrs/farmasi/master/listkelompokpenyimpanan', param)
+        .then(resp => {
+          this.loadingKelompokPenyimpanan = false
+          this.kelompokPenyimpanans = resp.data
+        })
+        .catch(() => {
+          this.loadingKelompokPenyimpanan = false
+        })
+    },
+    // ambil Merk
+    async getMerk(val) {
+      this.loadingMerk = true
+      const param = { params: { q: val } }
+      await api.get('v1/simrs/farmasi/master/listmerk', param)
+        .then(resp => {
+          this.loadingMerk = false
+          this.merks = resp.data
+        })
+        .catch(() => {
+          this.loadingMerk = false
+        })
+    },
+    // ambil satuan Kecil
+    async getSatuanKec(val) {
+      this.loadingSatuanK = true
+      const param = {
+        params: {
+          q: val,
+          per_page: 20
+        }
+      }
+      await api.get('v1/satuan/index', param)
+        .then(resp => {
+          this.loadingSatuanK = false
+          this.satuanKs = resp.data.data
+        })
+        .catch(() => {
+          this.loadingSatuanK = false
+        })
+    },
+    // ambil satuan besar
+    async getSatuanBes(val) {
+      this.loadingSatuanB = true
+      const param = {
+        params: {
+          q: val,
+          per_page: 20
+        }
+      }
+      await api.get('v1/satuan/index', param)
+        .then(resp => {
+          this.loadingSatuanB = false
+          this.satuanBs = resp.data.data
+        })
+        .catch(() => {
+          this.loadingSatuanB = false
+        })
+    },
     // ambil list jenis perbekalan
     async getJenisPerbekalan(val) {
       this.loadingJenisPerbekalan = true
@@ -88,6 +213,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       await api.get('v1/simrs/farmasi/master/listkodebelanjaobat', param)
         .then(resp => {
           this.loadingKodeBelanja = false
+          // console.log('kode belanja', resp.data)
           this.kodeBelanjas = resp.data
         })
         .catch(() => {
