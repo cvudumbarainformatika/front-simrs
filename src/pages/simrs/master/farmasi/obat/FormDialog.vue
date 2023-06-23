@@ -54,9 +54,11 @@
           <!-- merk dan kandungan -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <div class="row items-center">
+              <div
+                :key="store.form.merk"
+                class="row items-center justify-between"
+              >
                 <app-autocomplete-debounce-input
-                  :key="store.form.merk"
                   style="width:90%"
                   :model="store.form.merk"
                   autocomplete="merk"
@@ -93,53 +95,128 @@
               </div>
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.kandungan"
-                autocomplete="nama"
-                option-label="nama"
-                option-value="nama"
-                valid
-                label="Kandungan"
-                autofocus
-                :source="store.kandungans"
-                :loading="store.loadingKandungan"
-                @buang="cariKandungan"
-              />
+              <div
+                :key="store.form.kandungan"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.kandungan"
+                  style="width:90%"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="nama"
+                  valid
+                  label="Kandungan"
+                  autofocus
+                  :source="store.kandungans"
+                  :loading="store.loadingKandungan"
+                  @buang="cariKandungan"
+                  @on-enter="store.simpanCepatKandungan"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
           </div>
           <!-- jenis perbekalan dan bentuk sediaan -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                :model="store.form.jenis_perbekalan"
-                autocomplete="jenisperbekalan"
-                option-label="jenisperbekalan"
-                option-value="jenisperbekalan"
-                valid
-                label="Jenis Perbekalan"
-                autofocus
-                :source="store.jenisPerbekalans"
-                :loading="store.loadingJenisPerbekalan"
-                @buang="cariJenisPerbekalan"
-                @on-select="jenisPerbekalanSelected"
-                @clear="jenisPerbekalanCleared"
-              />
+              <div
+                :key="store.form.jenis_perbekalan"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  :model="store.form.jenis_perbekalan"
+                  style="width:90%"
+                  autocomplete="jenisperbekalan"
+                  option-label="jenisperbekalan"
+                  option-value="jenisperbekalan"
+                  valid
+                  label="Jenis Perbekalan"
+                  autofocus
+                  :source="store.jenisPerbekalans"
+                  :loading="store.loadingJenisPerbekalan"
+                  @buang="cariJenisPerbekalan"
+                  @on-select="jenisPerbekalanSelected"
+                  @clear="jenisPerbekalanCleared"
+                  @on-enter="store.simpanCepatJenisPerbekalan"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                :model="store.form.bentuk_sediaan"
-                autocomplete="bentuksediaan"
-                option-label="bentuksediaan"
-                option-value="bentuksediaan"
-                valid
-                label="Bentuk Sediaan"
-                autofocus
-                :source="store.bentukSediaans"
-                :loading="store.loadingBentukSediaan"
-                @buang="cariBentukSediaan"
-                @on-select="bentukSediaanSelected"
-                @clear="bentukSediaanCleared"
-              />
+              <div
+                :key="store.form.bentuk_sediaan"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  :model="store.form.bentuk_sediaan"
+                  style="width:90%"
+                  autocomplete="bentuksediaan"
+                  option-label="bentuksediaan"
+                  option-value="bentuksediaan"
+                  valid
+                  label="Bentuk Sediaan"
+                  autofocus
+                  :source="store.bentukSediaans"
+                  :loading="store.loadingBentukSediaan"
+                  @buang="cariBentukSediaan"
+                  @on-select="bentukSediaanSelected"
+                  @clear="bentukSediaanCleared"
+                  @on-enter="store.simpanCepatBentukSediaan"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
           </div>
           <!-- Kode 108 dan Kode 50 -->
@@ -173,32 +250,82 @@
           <!-- Satuan dan satuan besar -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.satuan_b"
-                autocomplete="nama"
-                option-label="nama"
-                option-value="nama"
-                valid
-                label="Satuan Besar"
-                autofocus
-                :source="store.satuanBs"
-                :loading="store.loadingSatuanB"
-                @buang="cariSatuanB"
-              />
+              <div
+                :key="store.form.satuan_b"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.satuan_b"
+                  style="width:90%"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="nama"
+                  valid
+                  label="Satuan Besar"
+                  autofocus
+                  :source="store.satuanBs"
+                  :loading="store.loadingSatuanB"
+                  @buang="cariSatuanB"
+                  @on-enter="store.simpanCepatSatuanBes"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.satuan_k"
-                autocomplete="nama"
-                option-label="nama"
-                option-value="nama"
-                valid
-                label="Satuan Kecil"
-                autofocus
-                :source="store.satuanKs"
-                :loading="store.loadingSatuanK"
-                @buang="cariSatuanK"
-              />
+              <div
+                :key="store.form.satuan_b"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.satuan_k"
+                  style="width:90%"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="nama"
+                  valid
+                  label="Satuan Kecil"
+                  autofocus
+                  :source="store.satuanKs"
+                  :loading="store.loadingSatuanK"
+                  @buang="cariSatuanK"
+                  @on-enter="store.simpanCepatSatuanKec"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
           </div>
           <!-- Kelompok penyimpanan dan Kelompok RKO -->
@@ -274,53 +401,128 @@
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                :model="store.form.kekuatan_dosis"
-                autocomplete="kekuatandosis"
-                option-label="kekuatandosis"
-                option-value="kekuatandosis"
-                valid
-                label="Kekuatan Dosis"
-                autofocus
-                :source="store.kekuatanDosiss"
-                :loading="store.loadingKekuatanDosis"
-                @buang="cariKekuatanDosis"
-                @on-select="kekuatanDosisSelected"
-                @clear="kekuatanDosisCleared"
-              />
+              <div
+                :key="store.form.kekuatan_dosis"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  :model="store.form.kekuatan_dosis"
+                  style="width:90%"
+                  autocomplete="kekuatandosis"
+                  option-label="kekuatandosis"
+                  option-value="kekuatandosis"
+                  valid
+                  label="Kekuatan Dosis"
+                  autofocus
+                  :source="store.kekuatanDosiss"
+                  :loading="store.loadingKekuatanDosis"
+                  @buang="cariKekuatanDosis"
+                  @on-select="kekuatanDosisSelected"
+                  @clear="kekuatanDosisCleared"
+                  @on-enter="store.simpanCepatKekuatanDosis"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
           </div>
           <!-- Volume Sediaan dan Kelas Terapi -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.volumesediaan"
-                autocomplete="volumesediaan"
-                option-label="volumesediaan"
-                option-value="volumesediaan"
-                valid
-                label="Volume Sediaan"
-                autofocus
-                :source="store.volumeSediaans"
-                :loading="store.loadingVolumeSediaan"
-                @buang="cariVolumeSediaan"
-                @on-select="volumeSediaanSelected"
-                @clear="volumeSediaanCleared"
-              />
+              <div
+                :key="store.form.volumesediaan"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.volumesediaan"
+                  style="width:90%"
+                  autocomplete="volumesediaan"
+                  option-label="volumesediaan"
+                  option-value="volumesediaan"
+                  valid
+                  label="Volume Sediaan"
+                  autofocus
+                  :source="store.volumeSediaans"
+                  :loading="store.loadingVolumeSediaan"
+                  @buang="cariVolumeSediaan"
+                  @on-select="volumeSediaanSelected"
+                  @clear="volumeSediaanCleared"
+                  @on-enter="store.simpanCepatVolumeSediaan"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.kelas_terapi"
-                autocomplete="kelasterapi"
-                option-label="kelasterapi"
-                option-value="kelasterapi"
-                valid
-                label="Kelas Terapi"
-                autofocus
-                :source="store.kelasTerapis"
-                :loading="store.loadingKelasTerapi"
-                @buang="cariKelasTerapi"
-              />
+              <div
+                :key="store.form.kelas_terapi"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.kelas_terapi"
+                  style="width:90%"
+                  autocomplete="kelasterapi"
+                  option-label="kelasterapi"
+                  option-value="kelasterapi"
+                  valid
+                  label="Kelas Terapi"
+                  autofocus
+                  :source="store.kelasTerapis"
+                  :loading="store.loadingKelasTerapi"
+                  @buang="cariKelasTerapi"
+                  @on-enter="store.simpanCepatKelasTerapi"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
           </div>
           <!-- Nilai KDN dan Sertifikat KDN -->
@@ -522,9 +724,7 @@ function kodeBelanjaDipilih(val) {
 // simpan
 const onSubmit = () => {
   console.log('simpan', store.form)
-  // store.saveForm().then(() => {
-  //   if (formReff.value != null) { formReff.value.resetValidation() }
-  // })
+  store.saveForm()
 }
 const onReset = () => {
   store.setOpen()

@@ -7,6 +7,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
   state: () => ({
     isOpen: false,
     form: {
+      kd_obat: 'sdadasdasdasd',
       jenis_perbekalan: null
     },
     namaObat: {
@@ -60,20 +61,23 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     bentukSediaans: [],
     kekuatanDosiss: [],
     volumeSediaans: [],
-
+    countSatuan: 0,
     paramsKandungan: { q: '' }
   }),
   actions: {
     // local related actions
     resetFORM () {
+      console.log('reset form')
       this.form = {}
       const columns = [
-        'kekuatan_dosis'
+        'kekuatan_dosis',
+        'jenis_perbekalan'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      // this.setForm('isi', 1)
+      this.setForm('kd_obat', 'dasdasdasds')
+      this.setForm('sistembayar', 'Ngutang')
     },
     setForm (nama, val) {
       this.form[nama] = val
@@ -127,12 +131,12 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.getKelompokPenyimpanan('')
       this.getKelompokRKO('')
       this.getKelasTerapi('')
+      this.getCountSatuan()
     },
     quickSet(key, val, array, pushed) {
       array.push(pushed)
       this.setForm(key, val)
       this.setNamaObat(key, val)
-      this.setFormNamaObat()
     },
     // api related actions
     // ambil kelas terapi
@@ -223,6 +227,14 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
         })
         .catch(() => {
           this.loadingSatuanB = false
+        })
+    },
+    // ambil jumlah satuan
+    async getCountSatuan() {
+      await api.get('v1/satuan/count')
+        .then(resp => {
+          this.countSatuan = resp.data + 1
+          console.log('count satuan', this.countSatuan)
         })
     },
     // ambil list jenis perbekalan
@@ -326,18 +338,122 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
           })
       })
     },
-    // simpan cepat
+    // simpan cepat start----
+    async simpanCepatKelasTerapi(val) {
+      // console.log('simpan cepat', val)
+      this.loadingKelasTerapi = true
+      const form = { kelasterapi: val }
+      await api.post('v1/simrs/farmasi/master/simpankelasterapi', form)
+        .then(resp => {
+          this.loadingKelasTerapi = false
+          // console.log('dosis', resp.data)
+          const temp = resp.data.data
+          this.quickSet('kelas_terapi', temp.kelasterapi, this.kelasTerapis, temp)
+        }).catch(() => { this.loadingKelasTerapi = false })
+    },
+    async simpanCepatVolumeSediaan(val) {
+      // console.log('simpan cepat', val)
+      this.loadingVolumeSediaan = true
+      const form = { volumesediaan: val }
+      await api.post('v1/simrs/farmasi/master/simpanvolumesediaan', form)
+        .then(resp => {
+          this.loadingVolumeSediaan = false
+          // console.log('dosis', resp.data)
+          const temp = resp.data.data
+          this.quickSet('volumesediaan', temp.volumesediaan, this.volumeSediaans, temp)
+          this.setFormNamaObat()
+        }).catch(() => { this.loadingVolumeSediaan = false })
+    },
+    async simpanCepatKekuatanDosis(val) {
+      // console.log('simpan cepat', val)
+      this.loadingKekuatanDosis = true
+      const form = { kekuatandosis: val }
+      await api.post('v1/simrs/farmasi/master/simpankekuatandosis', form)
+        .then(resp => {
+          this.loadingKekuatanDosis = false
+          console.log('dosis', resp.data)
+          const temp = resp.data.data
+          this.quickSet('kekuatan_dosis', temp.kekuatandosis, this.kekuatanDosiss, temp)
+          this.setFormNamaObat()
+        }).catch(() => { this.loadingKekuatanDosis = false })
+    },
+    async simpanCepatBentukSediaan(val) {
+      // console.log('simpan cepat', val)
+      this.loadingBentukSediaan = true
+      const form = { bentuksediaan: val }
+      await api.post('v1/simrs/farmasi/master/simpanbentuksediaan', form)
+        .then(resp => {
+          this.loadingBentukSediaan = false
+          // console.log('merk', resp.data)
+          const temp = resp.data.data
+          this.quickSet('bentuk_sediaan', temp.bentuksediaan, this.bentukSediaans, temp)
+          this.setFormNamaObat()
+        }).catch(() => { this.loadingBentukSediaan = false })
+    },
+    async simpanCepatSatuanBes(val) {
+      // console.log('simpan cepat', val)
+      this.loadingSatuanB = true
+      const form = { nama: val, kode: this.countSatuan }
+      await api.post('v1/satuan/store', form)
+        .then(resp => {
+          this.loadingSatuanB = false
+          // console.log('merk', resp.data)
+          const temp = resp.data.data
+          this.quickSet('satuan_b', temp.nama, this.satuanBs, temp)
+          this.getCountSatuan()
+        }).catch(() => { this.loadingSatuanB = false })
+    },
+    async simpanCepatSatuanKec(val) {
+      // console.log('simpan cepat', val)
+      this.loadingSatuanK = true
+      const form = { nama: val, kode: this.countSatuan }
+      await api.post('v1/satuan/store', form)
+        .then(resp => {
+          this.loadingSatuanK = false
+          // console.log('merk', resp.data)
+          const temp = resp.data.data
+          this.quickSet('satuan_k', temp.nama, this.satuanKs, temp)
+          this.getCountSatuan()
+        }).catch(() => { this.loadingSatuanK = false })
+    },
     async simpanCepatMerk(val) {
-      console.log('simpan cepat', val)
+      // console.log('simpan cepat', val)
       this.loadingMerk = true
       const form = { merk: val }
       await api.post('v1/simrs/farmasi/master/simpanmerk', form)
         .then(resp => {
           this.loadingMerk = false
-          console.log('merk', resp.data)
+          // console.log('merk', resp.data)
           const temp = resp.data.data
           this.quickSet('merk', temp.merk, this.merks, temp)
+          this.setFormNamaObat()
         }).catch(() => { this.loadingMerk = false })
+    },
+    async simpanCepatKandungan(val) {
+      // console.log('simpan cepat', val)
+      this.loadingKandungan = true
+      const form = { nama: val }
+      await api.post('v1/simrs/farmasi/master/simpankandungan_namagenerik', form)
+        .then(resp => {
+          this.loadingKandungan = false
+          // console.log('kandungan', resp.data)
+          const temp = resp.data.data
+          this.quickSet('kandungan', temp.nama, this.kandungans, temp)
+        }).catch(() => { this.loadingKandungan = false })
+    },
+    async simpanCepatJenisPerbekalan(val) {
+      console.log('simpan cepat', val)
+      this.loadingJenisPerbekalan = true
+      const form = { jenisperbekalan: val }
+      await api.post('v1/simrs/farmasi/master/simpanjenisperbekalan', form)
+        .then(resp => {
+          this.loadingJenisPerbekalan = false
+          console.log('jenis perbekalan', resp.data)
+          const temp = resp.data.data
+          this.quickSet('jenis_perbekalan', temp.jenisperbekalan, this.jenisPerbekalans, temp)
+          this.setFormNamaObat()
+        }).catch(() => { this.loadingJenisPerbekalan = false })
     }
+    // simpan cepat end----
   }
 })
