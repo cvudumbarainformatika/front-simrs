@@ -1,13 +1,19 @@
 <template>
   <q-dialog>
-    <app-card
-      class="my-card"
-      title="Form Obat Baru"
-      desc="Input data Obat Baru"
+    <q-card
+      class="lebar"
     >
-      <template #content>
+      <q-card-section>
+        <div class="f-14 text-weight-bold">
+          Form Obat Baru
+        </div>
+        <div class="title-desc">
+          Input data Obat Baru
+        </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
         <q-form
-          ref="formReff"
           @submit="onSubmit"
           @reset="onReset"
         >
@@ -48,20 +54,43 @@
           <!-- merk dan kandungan -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                :model="store.form.merk"
-                autocomplete="merk"
-                option-label="merk"
-                option-value="merk"
-                valid
-                label="Merk"
-                autofocus
-                :source="store.merks"
-                :loading="store.loadingMerk"
-                @buang="cariMerk"
-                @on-select="merkSelected"
-                @clear="merkCleared"
-              />
+              <div class="row items-center">
+                <app-autocomplete-debounce-input
+                  :key="store.form.merk"
+                  style="width:90%"
+                  :model="store.form.merk"
+                  autocomplete="merk"
+                  option-label="merk"
+                  option-value="merk"
+                  valid
+                  label="Merk"
+                  autofocus
+                  :source="store.merks"
+                  :loading="store.loadingMerk"
+                  @buang="cariMerk"
+                  @on-select="merkSelected"
+                  @clear="merkCleared"
+                  @on-enter="store.simpanCepatMerk"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
@@ -329,18 +358,16 @@
             />
           </div>
         </q-form>
-      </template>
-    </app-card>
+      </q-card-section>
+    </q-card>
   </q-dialog>
 </template>
 
 <script setup>
 import { findWithAttr } from 'src/modules/utils'
 import { useMasterObatForm } from 'src/stores/simrs/master/farmasi/obat/form'
-import { ref } from 'vue'
+// import { ref } from 'vue'
 const store = useMasterObatForm()
-const formReff = ref(null)
-
 // set nama obat start---
 function setNama(val) {
   if (!val.length) {
@@ -500,7 +527,12 @@ const onSubmit = () => {
   // })
 }
 const onReset = () => {
-  formReff.value.resetValidation()
   store.setOpen()
 }
 </script>
+<style lang="scss" scoped>
+.lebar{
+  max-width:80vw;
+  width:60vw;
+}
+</style>

@@ -128,6 +128,12 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.getKelompokRKO('')
       this.getKelasTerapi('')
     },
+    quickSet(key, val, array, pushed) {
+      array.push(pushed)
+      this.setForm(key, val)
+      this.setNamaObat(key, val)
+      this.setFormNamaObat()
+    },
     // api related actions
     // ambil kelas terapi
     async getKelasTerapi(val) {
@@ -319,6 +325,19 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
             reject(err)
           })
       })
+    },
+    // simpan cepat
+    async simpanCepatMerk(val) {
+      console.log('simpan cepat', val)
+      this.loadingMerk = true
+      const form = { merk: val }
+      await api.post('v1/simrs/farmasi/master/simpanmerk', form)
+        .then(resp => {
+          this.loadingMerk = false
+          console.log('merk', resp.data)
+          const temp = resp.data.data
+          this.quickSet('merk', temp.merk, this.merks, temp)
+        }).catch(() => { this.loadingMerk = false })
     }
   }
 })
