@@ -29,6 +29,7 @@
                 label="Nama Barang"
                 :filled="false"
                 autofocus
+                @update:model-value="setNama"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -48,7 +49,7 @@
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
-                v-model="store.form.merk"
+                :model="store.form.merk"
                 autocomplete="merk"
                 option-label="merk"
                 option-value="merk"
@@ -58,6 +59,8 @@
                 :source="store.merks"
                 :loading="store.loadingMerk"
                 @buang="cariMerk"
+                @on-select="merkSelected"
+                @clear="merkCleared"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -79,7 +82,7 @@
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
-                v-model="store.form.jenis_perbekalan"
+                :model="store.form.jenis_perbekalan"
                 autocomplete="jenisperbekalan"
                 option-label="jenisperbekalan"
                 option-value="jenisperbekalan"
@@ -89,11 +92,13 @@
                 :source="store.jenisPerbekalans"
                 :loading="store.loadingJenisPerbekalan"
                 @buang="cariJenisPerbekalan"
+                @on-select="jenisPerbekalanSelected"
+                @clear="jenisPerbekalanCleared"
               />
             </div>
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
-                v-model="store.form.bentuk_sediaan"
+                :model="store.form.bentuk_sediaan"
                 autocomplete="bentuksediaan"
                 option-label="bentuksediaan"
                 option-value="bentuksediaan"
@@ -103,6 +108,8 @@
                 :source="store.bentukSediaans"
                 :loading="store.loadingBentukSediaan"
                 @buang="cariBentukSediaan"
+                @on-select="bentukSediaanSelected"
+                @clear="bentukSediaanCleared"
               />
             </div>
           </div>
@@ -239,7 +246,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
-                v-model="store.form.kekuatan_dosis"
+                :model="store.form.kekuatan_dosis"
                 autocomplete="kekuatandosis"
                 option-label="kekuatandosis"
                 option-value="kekuatandosis"
@@ -249,6 +256,8 @@
                 :source="store.kekuatanDosiss"
                 :loading="store.loadingKekuatanDosis"
                 @buang="cariKekuatanDosis"
+                @on-select="kekuatanDosisSelected"
+                @clear="kekuatanDosisCleared"
               />
             </div>
           </div>
@@ -266,6 +275,8 @@
                 :source="store.volumeSediaans"
                 :loading="store.loadingVolumeSediaan"
                 @buang="cariVolumeSediaan"
+                @on-select="volumeSediaanSelected"
+                @clear="volumeSediaanCleared"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -287,7 +298,7 @@
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.kd_obat"
+                v-model="store.form.nilai_kdn"
                 valid
                 label="Nilai KDN"
                 :filled="false"
@@ -295,7 +306,7 @@
             </div>
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.nama"
+                v-model="store.form.sertifikatkdn"
                 valid
                 label="Sertifikat KDN"
                 :filled="false"
@@ -330,6 +341,69 @@ import { ref } from 'vue'
 const store = useMasterObatForm()
 const formReff = ref(null)
 
+// set nama obat start---
+function setNama(val) {
+  if (!val.length) {
+    store.deleteNamaObat('nama')
+    store.setFormNamaObat()
+    return
+  }
+  store.setNamaObat('nama', val)
+  store.setFormNamaObat()
+}
+function jenisPerbekalanSelected(val) {
+  store.setForm('jenis_perbekalan', val)
+  store.setFormNamaObat()
+}
+function jenisPerbekalanCleared() {
+  store.setFormNamaObat()
+  store.deleteForm('jenis_perbekalan')
+}
+function merkSelected(val) {
+  store.setForm('merk', val)
+  store.setNamaObat('merk', val)
+  store.setFormNamaObat()
+}
+function merkCleared() {
+  // console.log('merk cleared', val)
+  store.deleteForm('merk')
+  store.deleteNamaObat('merk')
+  store.setFormNamaObat()
+}
+function bentukSediaanSelected(val) {
+  store.setForm('bentuk_sediaan', val)
+  store.setNamaObat('bentukSediaan', val)
+  store.setFormNamaObat()
+}
+function bentukSediaanCleared() {
+  // console.log('bentukSediaan cleared', val)
+  store.deleteNamaObat('bentukSediaan')
+  store.deleteForm('bentuk_sediaan')
+  store.setFormNamaObat()
+}
+function kekuatanDosisSelected(val) {
+  // console.log('kekuatan dosis', val)
+  store.setForm('kekuatan_dosis', val)
+  store.setNamaObat('kekuatanDosis', val)
+  store.setFormNamaObat()
+}
+function kekuatanDosisCleared() {
+  store.deleteNamaObat('kekuatanDosis')
+  store.deleteForm('kekuatan_dosis')
+  store.setFormNamaObat()
+}
+function volumeSediaanSelected(val) {
+  store.setForm('volumesediaan', val)
+  store.setNamaObat('volumeSediaan', val)
+  store.setFormNamaObat()
+}
+function volumeSediaanCleared() {
+  store.deleteNamaObat('volumeSediaan')
+  store.deleteForm('volumesediaan')
+  store.setFormNamaObat()
+}
+// set nama obat end---
+// cari start----
 // cari kandungan
 function cariKandungan(val) {
   // console.log('cari kandungan ', val)
@@ -401,6 +475,7 @@ function cariKodeBelanja(val) {
   // console.log('cari kandungan ', val)
   // store.getMerk(val)
 }
+// cari end----
 
 // Satuan Belanja Dipilih
 function kodeBelanjaDipilih(val) {

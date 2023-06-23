@@ -7,7 +7,14 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
   state: () => ({
     isOpen: false,
     form: {
-      kekuatan_dosis: null
+      jenis_perbekalan: null
+    },
+    namaObat: {
+      nama: null,
+      bentukSediaan: null,
+      kekuatanDosis: null,
+      volumeSediaan: null,
+      merk: null
     },
     gedungs: [],
     loading: false,
@@ -70,6 +77,25 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     },
     setForm (nama, val) {
       this.form[nama] = val
+    },
+    deleteForm (nama) {
+      this.form[nama] = null
+    },
+    setNamaObat(key, val) {
+      this.namaObat[key] = val
+    },
+    deleteNamaObat(key) {
+      this.namaObat[key] = null
+    },
+    setFormNamaObat() {
+      const jenisPerbekalan = !!(this.form.jenis_perbekalan === 'Reagen' || (this.form.jenis_perbekalan ? this.form.jenis_perbekalan.includes('Alkes') : false))
+      const nama = this.namaObat.nama ? this.namaObat.nama : ''
+      const merk = this.namaObat.merk && jenisPerbekalan ? ' ' + this.namaObat.merk : ''
+      const bentukSediaan = this.namaObat.bentukSediaan ? ' ' + this.namaObat.bentukSediaan : ''
+      const volumeSediaan = this.namaObat.volumeSediaan ? ' ' + this.namaObat.volumeSediaan : ''
+      const kekuatanDosis = this.namaObat.kekuatanDosis ? ' ' + this.namaObat.kekuatanDosis : ''
+      const namaObat = nama + kekuatanDosis + volumeSediaan + bentukSediaan + merk
+      this.setForm('nama_obat', namaObat)
     },
     setOpen () {
       this.isOpen = !this.isOpen
