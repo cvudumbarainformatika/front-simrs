@@ -22,7 +22,7 @@
             <div class="col-md-6 col-xs-12">
               Nama Obat :
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-6 col-xs-12 text-weight-bold text-red">
               {{ store.form.nama_obat ? store.form.nama_obat:'belum terbetuk nama obat' }}
             </div>
           </div>
@@ -72,7 +72,7 @@
                   @buang="cariMerk"
                   @on-select="merkSelected"
                   @clear="merkCleared"
-                  @on-enter="store.simpanCepatMerk"
+                  @on-enter="scMerk"
                 />
                 <q-icon
                   size="16px"
@@ -106,12 +106,12 @@
                   option-label="nama"
                   option-value="nama"
                   valid
-                  label="Kandungan"
+                  label="Kandungan / Nama Generik"
                   autofocus
                   :source="store.kandungans"
                   :loading="store.loadingKandungan"
                   @buang="cariKandungan"
-                  @on-enter="store.simpanCepatKandungan"
+                  @on-enter="scKandungan"
                 />
                 <q-icon
                   size="16px"
@@ -155,7 +155,7 @@
                   @buang="cariJenisPerbekalan"
                   @on-select="jenisPerbekalanSelected"
                   @clear="jenisPerbekalanCleared"
-                  @on-enter="store.simpanCepatJenisPerbekalan"
+                  @on-enter="scJenisPerbekalan"
                 />
                 <q-icon
                   size="16px"
@@ -196,7 +196,7 @@
                   @buang="cariBentukSediaan"
                   @on-select="bentukSediaanSelected"
                   @clear="bentukSediaanCleared"
-                  @on-enter="store.simpanCepatBentukSediaan"
+                  @on-enter="scBentukSediaan"
                 />
                 <q-icon
                   size="16px"
@@ -219,7 +219,7 @@
               </div>
             </div>
           </div>
-          <!-- Kode 108 dan Kode 50 -->
+          <!-- Kode 108 dan sistem bayar -->
           <div class="row q-col-gutter-md q-mb-xs items-center">
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
@@ -237,14 +237,16 @@
               />
             </div>
             <div class="col-md-6 col-xs-12">
-              <app-input
-                v-if="store.form.uraian50"
-                v-model="store.form.uraian50"
-                disable
-                label="Kode 50"
-                :filled="false"
+              <app-autocomplete-debounce-input
+                v-model="store.form.sistembayar"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
+                valid
+                label="Sistem Bayar"
+                autofocus
+                :source="store.optionSistemBayars"
               />
-              {{ store.form.uraian50?'':'pilih kode 108' }}
             </div>
           </div>
           <!-- Satuan dan satuan besar -->
@@ -266,7 +268,7 @@
                   :source="store.satuanBs"
                   :loading="store.loadingSatuanB"
                   @buang="cariSatuanB"
-                  @on-enter="store.simpanCepatSatuanBes"
+                  @on-enter="scSatuanBes"
                 />
                 <q-icon
                   size="16px"
@@ -305,7 +307,7 @@
                   :source="store.satuanKs"
                   :loading="store.loadingSatuanK"
                   @buang="cariSatuanK"
-                  @on-enter="store.simpanCepatSatuanKec"
+                  @on-enter="scSatuanKec"
                 />
                 <q-icon
                   size="16px"
@@ -331,18 +333,43 @@
           <!-- Kelompok penyimpanan dan Kelompok RKO -->
           <div class="row q-col-gutter-md q-mb-xs">
             <div class="col-md-6 col-xs-12">
-              <app-autocomplete-debounce-input
-                v-model="store.form.kelompok_penyimpanan"
-                autocomplete="kelompokpenyimpanan"
-                option-label="kelompokpenyimpanan"
-                option-value="kelompokpenyimpanan"
-                valid
-                label="Kelompok Penyimpanan"
-                autofocus
-                :source="store.kelompokPenyimpanans"
-                :loading="store.loadingKelompokPenyimpanan"
-                @buang="cariKelompokPenyimpanan"
-              />
+              <div
+                :key="store.form.kelompok_penyimpanan"
+                class="row items-center justify-between"
+              >
+                <app-autocomplete-debounce-input
+                  v-model="store.form.kelompok_penyimpanan"
+                  style="width:90%"
+                  autocomplete="kelompokpenyimpanan"
+                  option-label="kelompokpenyimpanan"
+                  option-value="kelompokpenyimpanan"
+                  valid
+                  label="Kelompok Penyimpanan"
+                  autofocus
+                  :source="store.kelompokPenyimpanans"
+                  :loading="store.loadingKelompokPenyimpanan"
+                  @buang="cariKelompokPenyimpanan"
+                  @on-enter="scKelompokPenyimpanan"
+                />
+                <q-icon
+                  size="16px"
+                  name="icon-mat-help_outline"
+                  color="info"
+                  class="cursor-pointer"
+                >
+                  <q-tooltip
+                    anchor="top middle"
+                    self="bottom middle"
+                    :offset="[10, 10]"
+                  >
+                    <strong>Untuk Masukkan data ?</strong> <br>
+                    <em>ketik data yang akan di input</em><br>
+                    <em>contoh</em><br>
+                    <strong>RSUD</strong><br>
+                    <em>Lalu tekan Enter </em>
+                  </q-tooltip>
+                </q-icon>
+              </div>
             </div>
             <div class="col-md-6 col-xs-12">
               <app-autocomplete-debounce-input
@@ -463,7 +490,7 @@
                   @buang="cariVolumeSediaan"
                   @on-select="volumeSediaanSelected"
                   @clear="volumeSediaanCleared"
-                  @on-enter="store.simpanCepatVolumeSediaan"
+                  @on-enter="scVolumeSediaan"
                 />
                 <q-icon
                   size="16px"
@@ -502,7 +529,7 @@
                   :source="store.kelasTerapis"
                   :loading="store.loadingKelasTerapi"
                   @buang="cariKelasTerapi"
-                  @on-enter="store.simpanCepatKelasTerapi"
+                  @on-enter="scKelasTerapi"
                 />
                 <q-icon
                   size="16px"
@@ -566,10 +593,40 @@
 </template>
 
 <script setup>
+import { Dialog } from 'quasar'
 import { findWithAttr } from 'src/modules/utils'
 import { useMasterObatForm } from 'src/stores/simrs/master/farmasi/obat/form'
 // import { ref } from 'vue'
 const store = useMasterObatForm()
+// simpan cepat start --
+function scKelompokPenyimpanan(val) {
+  myDialog(store.simpanCepatKelompokPenyimpanan, val, 'Kelompok Penyimpanan')
+}
+function scSatuanKec(val) {
+  myDialog(store.simpanCepatSatuanKec, val, 'Satuan Kecil')
+}
+function scSatuanBes(val) {
+  myDialog(store.simpanCepatSatuanBes, val, 'Satuan Besar')
+}
+function scBentukSediaan(val) {
+  myDialog(store.simpanCepatBentukSediaan, val, 'Bentuk Sediaan')
+}
+function scJenisPerbekalan(val) {
+  myDialog(store.simpanCepatJenisPerbekalan, val, 'Jenis Perbekalan')
+}
+function scKandungan(val) {
+  myDialog(store.simpanCepatKandungan, val, 'Kandungan / Nama Generik')
+}
+function scMerk(val) {
+  myDialog(store.simpanCepatMerk, val, 'Merk')
+}
+function scVolumeSediaan(val) {
+  myDialog(store.simpanCepatVolumeSediaan, val, 'Volume Sediaan')
+}
+function scKelasTerapi(val) {
+  myDialog(store.simpanCepatKelasTerapi, val, 'Kelas Terapi')
+}
+// simpan cepat end --
 // set nama obat start---
 function setNama(val) {
   if (!val.length) {
@@ -721,6 +778,33 @@ function kodeBelanjaDipilih(val) {
   // store.getMerk(val)
 }
 
+// dialog
+function myDialog(func, val, anu) {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: `apakah anda akan menyimpan <strong>${anu} : <span style="color: red;" >${val}</span></strong> ?`,
+    html: true,
+    ok: {
+      label: 'Simpan',
+      push: true,
+      color: 'primary',
+      'no-caps': true
+    },
+    cancel: {
+      label: 'Batal',
+      color: 'dark',
+      push: true,
+      'no-caps': true
+    }
+  })
+    .onOk((a) => {
+      func(val)
+    })
+}
+// trial function
+// function coba(val) {
+//   console.log('coba anu', val)
+// }
 // simpan
 const onSubmit = () => {
   console.log('simpan', store.form)
@@ -728,6 +812,7 @@ const onSubmit = () => {
 }
 const onReset = () => {
   store.setOpen()
+  // myDialog(coba, 'anu coab')
 }
 </script>
 <style lang="scss" scoped>

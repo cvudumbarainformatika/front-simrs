@@ -48,6 +48,11 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       { nama: 'YA', value: '1' },
       { nama: 'TIDAK', value: '0' }
     ],
+    optionSistemBayars: [
+      { nama: 'SEMUA', value: 'semua' },
+      { nama: 'UMUM', value: 'umum' },
+      { nama: 'BPJS', value: 'bpjs' }
+    ],
 
     kelasTerapis: [],
     kelompokPenyimpanans: [],
@@ -70,14 +75,13 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       console.log('reset form')
       this.form = {}
       const columns = [
-        'kekuatan_dosis',
-        'jenis_perbekalan'
+        // 'kekuatan_dosis',
+        // 'jenis_perbekalan'
       ]
       for (let i = 0; i < columns.length; i++) {
         this.setForm(columns[i], null)
       }
-      this.setForm('kd_obat', 'dasdasdasds')
-      this.setForm('sistembayar', 'Ngutang')
+      // this.setForm('kd_obat', 'dasdasdasds1')
     },
     setForm (nama, val) {
       this.form[nama] = val
@@ -339,6 +343,18 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       })
     },
     // simpan cepat start----
+    async simpanCepatKelompokPenyimpanan(val) {
+      // console.log('simpan cepat', val)
+      this.loadingKelompokPenyimpanan = true
+      const form = { kelompokpenyimpanan: val }
+      await api.post('v1/simrs/farmasi/master/simpankelompokpenyimpanan', form)
+        .then(resp => {
+          this.loadingKelompokPenyimpanan = false
+          // console.log('dosis', resp.data)
+          const temp = resp.data.data
+          this.quickSet('kelompok_penyimpanan', temp.kelompokpenyimpanan, this.kelompokPenyimpanans, temp)
+        }).catch(() => { this.loadingKelompokPenyimpanan = false })
+    },
     async simpanCepatKelasTerapi(val) {
       // console.log('simpan cepat', val)
       this.loadingKelasTerapi = true
