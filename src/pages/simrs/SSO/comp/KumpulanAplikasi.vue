@@ -150,8 +150,8 @@ const filterApps = computed(() => {
 onMounted(() => {
   console.log(main.value.offsetHeight)
   h.value = main.value.offsetHeight - (80 + 10)
-  console.log('kumpulan apps', filterApps.value)
-  console.log('kumpulan akses', props.akses)
+  // console.log('kumpulan apps', filterApps.value)
+  // console.log('kumpulan akses', props.akses)
 })
 
 function goTo(item) {

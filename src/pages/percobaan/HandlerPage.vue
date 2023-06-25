@@ -62,8 +62,6 @@
 </template>
 
 <script setup>
-import { api } from 'src/boot/axios'
-import { chatChannel } from 'src/modules/sockets'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { onMounted, ref } from 'vue'
 
@@ -75,55 +73,17 @@ const text = ref(null)
 const txtSM = ref(null)
 const typing = ref(false)
 
-chatChannel.here((users) => {
-  console.log({ users })
-  console.log('subscribed chat channel!!!')
-  onlineUsers.value = [...users]
-})
-  .joining((user) => {
-    console.log({ user }, 'joined')
-  })
-  .leaving((user) => {
-    console.log({ user }, 'leaving')
-  })
-  .listen('.chat-message', (e) => {
-    console.log('listen', e)
-    const thumb = [...chatMessages.value]
-    if (e.message !== null || e.message !== '') { thumb.push(e.message) }
-    chatMessages.value = thumb
-  })
-  .listenForWhisper('typing', (e) => {
-    console.log('whisper', e)
-    typing.value = true
-  })
-  .listenForWhisper('stop-typing', (e) => {
-    text.value = null
-    typing.value = false
-  })
+console.log(app.user)
+
+function updatePost() {
+  const socket = new WebSocket('ws://localhost:6003/app/simrs_key_harry141312?protocol=7&client=js&version=7.4.0&flash=false/socket/update-post')
+
+  socket.onopen = function(e) {
+    console.log('socket open', e)
+  }
+}
 
 onMounted(() => {
-  coba()
+  updatePost()
 })
-
-async function coba() {
-  txtSM.value = text.value
-  const params = {
-    message: text.value
-  }
-  text.value = null
-  typing.value = false
-  await api.post('/v1/percobaan', params)
-    .then(resp => {
-      txtSM.value = null
-      typing.value = false
-    })
-}
-
-function whisper() {
-  if (text.value === null || text.value === '') {
-    chatChannel.here().whisper('stop-typing', app.user.id)
-  } else {
-    chatChannel.here().whisper('typing', app.user.id)
-  }
-}
 </script>

@@ -69,4 +69,8 @@ anjunganChannel.subscribed(() => {
     callstore.ubahStatus(data)
   }
 })
+
+// chatChannel.subscribed(() => {
+//   console.log('subscribed chat channel!!!')
+// })
 </script>
