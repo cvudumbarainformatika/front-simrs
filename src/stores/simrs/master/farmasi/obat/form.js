@@ -136,7 +136,21 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
         if (key === 'volumesediaan') this.setNamaObat('volumeSediaan', val[key])
         if (key === 'kekuatan_dosis') this.setNamaObat('kekuatanDosis', val[key])
       })
-      // kecuali yang ada di object user
+      const namaObat = val.nama_obat.split(' ')
+      const numIn = []
+      for (let index = 0; index < namaObat.length; index++) {
+        const element = namaObat[index]
+        if (!isNaN(parseInt(element))) numIn.push(index)
+        // console.log('element', element, ' p ', parseInt(element), ' t ', typeof (parseInt(element)))
+      }
+      // console.log('numIn ', numIn[0])
+      let nama = ''
+      for (let index = 0; index < numIn[0]; index++) {
+        if (index === 0) nama = namaObat[index]
+        else nama += ' ' + namaObat[index]
+      }
+      this.setForm('nama', nama)
+      this.setNamaObat('nama', nama)
       this.isOpen = !this.isOpen
     },
     getInitialData() {
