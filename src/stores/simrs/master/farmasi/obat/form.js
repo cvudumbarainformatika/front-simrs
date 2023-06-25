@@ -74,13 +74,21 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     resetFORM () {
       console.log('reset form')
       this.form = {}
-      const columns = [
-        // 'kekuatan_dosis',
-        // 'jenis_perbekalan'
-      ]
-      for (let i = 0; i < columns.length; i++) {
-        this.setForm(columns[i], null)
+      this.namaObat = {
+        nama: null,
+        bentukSediaan: null,
+        kekuatanDosis: null,
+        volumeSediaan: null,
+        merk: null
       }
+      this.setFormNamaObat()
+      // const columns = [
+      //   // 'kekuatan_dosis',
+      //   // 'jenis_perbekalan'
+      // ]
+      // for (let i = 0; i < columns.length; i++) {
+      //   this.setForm(columns[i], null)
+      // }
       // this.setForm('kd_obat', 'dasdasdasds1')
     },
     setForm (nama, val) {
@@ -115,9 +123,18 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     },
     editData (val) {
       this.edited = true
+      // nama: null,
+      //   bentukSediaan: bentuk_sediaan,
+      //   kekuatanDosis: kekuatan_dosis,
+      //   volumeSediaan: volumesediaan,
+      //   merk: merk
       const keys = Object.keys(val)
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
+        if (key === 'merk') this.setNamaObat(key, val[key])
+        if (key === 'bentuk_sediaan') this.setNamaObat('bentukSediaan', val[key])
+        if (key === 'volumesediaan') this.setNamaObat('volumeSediaan', val[key])
+        if (key === 'kekuatan_dosis') this.setNamaObat('kekuatanDosis', val[key])
       })
       // kecuali yang ada di object user
       this.isOpen = !this.isOpen

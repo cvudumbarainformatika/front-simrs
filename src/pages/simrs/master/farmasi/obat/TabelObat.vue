@@ -1,6 +1,7 @@
 <template>
   <q-page class="q-pa-sm q-mb-xl">
     <div>
+      <!-- <app-box-caption /> -->
       <app-card :is-header="false">
         <template #content>
           <app-table
@@ -21,6 +22,7 @@
             @find="table.setSearch"
             @set-order="table.setOder"
             @new-data="store.newData"
+            @edit-data="store.editData"
             @delete="table.deletesData"
           >
             <!-- @edit-data="store.editData" -->
@@ -89,6 +91,14 @@
                   {{ row.merk }}
                 </div>
               </div>
+              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+                <div class="col-5">
+                  Perbekalan
+                </div>
+                <div class="col-7">
+                  {{ row.jenis_perbekalan }}
+                </div>
+              </div>
             </template>
             <template #cell-kelompok="{row}">
               <div class="row box q-col-gutter-sm q-mb-sm">
@@ -105,14 +115,6 @@
                 </div>
                 <div class="col-7">
                   {{ row.kandungan }}
-                </div>
-              </div>
-              <div class="row box q-col-gutter-sm q-mb-sm">
-                <div class="col-5">
-                  Perbekalan
-                </div>
-                <div class="col-7">
-                  {{ row.jenis_perbekalan }}
                 </div>
               </div>
               <div class="row box q-col-gutter-sm q-mb-sm">
