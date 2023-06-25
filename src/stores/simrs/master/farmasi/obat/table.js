@@ -47,8 +47,9 @@ export const useMasterObatTable = defineStore('master_Obat_table', {
       this.getDataTable()
     },
     setColumns (payload) {
-      const thumb = payload.map((x) => Object.keys(x))
-      this.columns = thumb[0]
+      // const thumb = payload.map((x) => Object.keys(x))
+      // this.columns = thumb[0]
+      this.columns = ['obat', 'nama', 'kelompok', 'belanja', 'status', 'satuan']
       // console.log('columns', this.columns)
     },
 
