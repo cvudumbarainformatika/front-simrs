@@ -241,7 +241,7 @@
                 v-model="store.form.sistembayar"
                 autocomplete="nama"
                 option-label="nama"
-                option-value="value"
+                option-value="nama"
                 valid
                 label="Sistem Bayar"
                 autofocus
