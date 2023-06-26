@@ -1,35 +1,31 @@
 <template>
-  <div
-    ref="refPasien"
-    class="q-pa-xs"
-  >
+  <div ref="refPasien">
     <!-- :simpanData="simpanData" -->
     <q-card
       class="full-width"
-      flat
     >
-      <div class="row items-center justify-between bg-grey q-pa-md">
-        <div class="col-10 f-14 text-weight-bold">
-          Form Identitas Pasien I.1
-        </div>
-        <div class="col-2 text-right">
-          <q-checkbox
-            v-model="store.edit"
-            label="Edit Form "
-            dense
-          />
-        </div>
-      </div>
-      <!-- <q-card-section>
+      <q-card-section>
         <div class="f-14 text-weight-bold">
-          PASIEN BARU (JKN)
+          Form Pendaftaran
         </div>
         <div class="title-desc">
-          Form Pendaftaran Pasien JKN
+          Form Pendaftaran Pasien Umum
         </div>
-      </q-card-section> -->
-      <!-- <q-separator /> -->
+      </q-card-section>
+      <q-separator />
       <q-card-section>
+        <div class="row items-center q-mr-sm">
+          <div class="col-10 f-14 text-weight-bold q-mb-md">
+            Form Identitas Pasien I.1
+          </div>
+          <div class="col-2">
+            <q-checkbox
+              v-model="store.edit"
+              label="Edit Form "
+              dense
+            />
+          </div>
+        </div>
         <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
           <div class="col-4">

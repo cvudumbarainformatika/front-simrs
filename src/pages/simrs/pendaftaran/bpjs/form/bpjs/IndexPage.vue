@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./PageBpjs.vue')
+  import('./FormBpjs.vue')
 )
 </script>
