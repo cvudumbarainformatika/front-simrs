@@ -21,7 +21,7 @@
       class="full-width"
       flat
     >
-      <q-card-actions align="right">
+      <q-card-actions>
         <div class="">
           <app-btn
             label="Simpan Form"

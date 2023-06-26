@@ -4,7 +4,7 @@
     class="column full-height q-pa-md"
   >
     <div class="col-auto">
-      <PageHead />
+      <PageHead @togle-draw="toggleDraw()" />
     </div>
     <div
       class="col bg-white full-width full-height"
@@ -15,63 +15,68 @@
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
-        <!-- <router-view
-          v-slot="{ Component }"
-          class="transition"
-        >
-          <transition
-            :name="transition.pageTransition.name"
-            :mode="transition.pageTransition.mode"
-          >
+        <router-view v-slot="{ Component, route }">
+          <!-- {{ route.meta }} -->
+          <transition :name="route.meta.transition || 'fade'">
             <component :is="Component" />
           </transition>
-        </router-view> -->
-        <router-view />
+        </router-view>
       </q-scroll-area>
-      <!-- <q-tab-panels
-        v-model="tab"
-        animated
-        vertical
-        class="col-grow"
-        style="max-height: 100%;"
-      >
-        <q-tab-panel
-          name="form"
-          class="full-height full-width"
-          style="padding:0px !important"
-        >
-          <q-scroll-area
-            :style="`height: ${h-120}px; max-width: 100%;`"
-            :thumb-style="thumbStyle"
-            :bar-style="barStyle"
-          >
-            <FormBpjs />
-          </q-scroll-area>
-        </q-tab-panel>
-
-        <q-tab-panel name="daftar-pasien">
-          <div class="text-h6">
-            Alarms
-          </div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </q-tab-panel>
-
-        <q-tab-panel name="movies">
-          <div class="text-h6">
-            Movies
-          </div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </q-tab-panel>
-      </q-tab-panels> -->
     </div>
+
+    <q-dialog
+      v-model="drawerRight"
+      position="right"
+    >
+      <q-card style="width: 300px">
+        <q-linear-progress
+          :value="0.6"
+          color="pink"
+        />
+
+        <q-card-section class="row items-center no-wrap">
+          <div>
+            <div class="text-weight-bold">
+              Panggil Antrian
+            </div>
+            <div class="text-grey">
+              Call || Recall
+            </div>
+          </div>
+
+          <q-space />
+
+          <q-btn
+            flat
+            round
+            icon="icon-mat-volume_up"
+            class="q-mr-md"
+          >
+            <q-tooltip>
+              <strong>Call</strong>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            icon="icon-mat-refresh"
+          >
+            <q-tooltip>
+              <strong>Recall</strong>
+            </q-tooltip>
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
 import PageHead from './PageHead.vue'
 import { onMounted, ref } from 'vue'
 
-// const tab = ref('form')
+const drawerRight = ref(false)
 // const tabs = ref([
 //   { nama: 'form', label: 'Pasien Baru', icon: '' },
 //   { nama: 'daftar-pasien', label: 'Daftar Pasien', icon: '' }
@@ -93,8 +98,14 @@ const barStyle = ref({
   width: '5px',
   opacity: 0.2
 })
+
+const page = useRoute()
 onMounted(() => {
-  console.log('page ', pageRef.value.$el.clientHeight)
+  console.log('page ', page)
   h.value = pageRef.value.$el.clientHeight
 })
+
+function toggleDraw() {
+  drawerRight.value = !drawerRight.value
+}
 </script>

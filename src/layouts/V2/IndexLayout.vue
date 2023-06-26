@@ -3,6 +3,7 @@
     view="hhh LpR lFr"
     :class="dark?'':'page-light'"
   >
+    <!-- hHr lpR fFr || hhh LpR lFr-->
     <HeaderComp
       :dark="dark"
       :mobile="mobile"
@@ -11,14 +12,22 @@
     <LeftDrawer
       :dark="dark"
     />
-    <!--
-    <q-drawer
+
+    <!-- <q-drawer
       v-model="rightDrawerOpen"
+      show-if-above
       side="right"
       overlay
       behavior="desktop"
       bordered
-    /> -->
+    >
+      <div
+        v-for="n in 50"
+        :key="n"
+      >
+        Drawer {{ n }} / 50
+      </div>
+    </q-drawer> -->
 
     <!-- menu bottom mobile -->
     <!-- <adm-footer-menu

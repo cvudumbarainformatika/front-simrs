@@ -117,12 +117,13 @@
                   label="Nomor KTP"
                   type="number"
                   :filled="false"
+                  :right-icon="true"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                 />
               </div>
               <div
                 v-if="bpjs"
-                class="col-2"
+                class="col-2 text-right"
               >
                 <q-btn
                   color="primary"

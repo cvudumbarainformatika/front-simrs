@@ -38,14 +38,16 @@ const pendaftaran = {
         {
           path: '/pendaftaran/bpjs/form',
           name: 'pendaftaran.form.bpjs',
+          meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/pendaftaran/bpjs/form/bpjs/IndexPage.vue')
         },
         {
           path: '/pendaftaran/bpjs/pasien',
           name: 'pendaftaran.bpjs.pasien',
+          meta: { transition: 'slide-up' },
           component: () =>
-            import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
+            import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
         }
       ]
     },
