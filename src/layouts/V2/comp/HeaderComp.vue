@@ -3,19 +3,19 @@
     :bordered="!mobile"
     reveal
     class="glass"
-    height-hint="90"
+    height-hint="60"
   >
     <!-- header class old
     :class="dark?'bg-dark':'bg-white text-dark'"
   -->
     <div
-      class="q-px-sm q-py-sm flex items-center justify-between"
-      style="height:60px"
+      class="q-px-sm flex items-center justify-between"
+      style="height:50px"
     >
       <!-- LEFT -->
       <div @click="emit('goToSso')">
         <q-avatar
-          size="40px"
+          size="35px"
           class="cursor-pointer bg-white"
         >
           <img src="~assets/logos/logo-rsud.png">

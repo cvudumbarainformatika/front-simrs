@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-4 q-ma-sm">
+  <q-page class="">
     <DataPasien
       ref="refDataPasien"
       bpjs
@@ -40,7 +40,7 @@
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
     />
-  </div>
+  </q-page>
 </template>
 <script setup>
 import DialogListSuplesi from './DialogListSuplesi.vue'

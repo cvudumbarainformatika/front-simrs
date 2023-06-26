@@ -31,22 +31,23 @@ const pendaftaran = {
     },
     {
       path: '/pendaftaran/bpjs',
-      name: 'pendaftaran.bpjs',
-      component: () => import('pages/simrs/pendaftaran/bpjs/IndexPage.vue')
-      // children: [
-      //   {
-      //     path: '/pendaftaran/form/bpjs',
-      //     name: 'pendaftaran.form.bpjs',
-      //     component: () =>
-      //       import('pages/simrs/pendaftaran/form/bpjs/IndexPage.vue')
-      //   },
-      //   {
-      //     path: '/pendaftaran/bpjs/pasien',
-      //     name: 'pendaftaran.bpjs.pasien',
-      //     component: () =>
-      //       import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
-      //   }
-      // ]
+      // name: 'pendaftaran.bpjs',
+      component: () => import('pages/simrs/pendaftaran/bpjs/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/pendaftaran/bpjs/form' },
+        {
+          path: '/pendaftaran/bpjs/form',
+          name: 'pendaftaran.form.bpjs',
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/form/bpjs/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/pasien',
+          name: 'pendaftaran.bpjs.pasien',
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/pasien/IndexPage.vue')
+        }
+      ]
     },
     {
       path: '/pendaftaran/umum',

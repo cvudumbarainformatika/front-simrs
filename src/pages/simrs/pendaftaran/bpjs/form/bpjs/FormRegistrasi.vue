@@ -1,12 +1,14 @@
 <template>
-  <div class="q-pa-xs">
+  <div class="">
+    <div
+      class="row items-center justify-between bg-grey q-pa-md"
+      style="z-index: 10;"
+    >
+      <div class="f-14 text-weight-bold">
+        Registrasi / Kunjungan
+      </div>
+    </div>
     <q-card flat>
-      <q-card-section>
-        <div class="f-14 text-weight-bold">
-          Registrasi / Kunjungan
-        </div>
-      </q-card-section>
-      <q-separator />
       <q-card-section>
         <div class="row fit q-col-gutter-sm q-mb-md">
           <!-- kiri -->

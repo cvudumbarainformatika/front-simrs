@@ -1,54 +1,34 @@
 <template>
   <q-page
     ref="pageRef"
-    class="column full-height q-pa-xs"
+    class="column full-height q-pa-md"
   >
     <div class="col-auto">
-      <q-toolbar class="bg-grey-9 text-white shadow-2">
-        <!-- <div class="row items-center q-mr-md">
-          <q-icon
-            name="icon-mat-verified_user"
-            size="sm"
-          />
-          <div class="q-ml-sm text-h6">
-            BPJS / JKN
-          </div>
-        </div> -->
-        <!-- <q-separator
-          dark
-          vertical
-          inset
-        /> -->
-        <q-tabs
-          v-model="tab"
-          shrink
-        >
-          <q-tab
-            v-for="(item, i) in tabs"
-            :key="i"
-            :name="item.nama"
-            :label="item.label"
-            no-caps
-          />
-        </q-tabs>
-
-        <q-space />
-
-        <q-btn
-          flat
-          round
-          dense
-          icon="icon-mat-menu"
-          class="q-mr-xs"
-          size="sm"
-        />
-      </q-toolbar>
+      <PageHead />
     </div>
     <div
       class="col bg-white full-width full-height"
       :style="`max-height: ${h-60}px; overflow:hidden`"
     >
-      <q-tab-panels
+      <q-scroll-area
+        :style="`height: ${h-100}px; max-width: 100%;`"
+        :thumb-style="thumbStyle"
+        :bar-style="barStyle"
+      >
+        <!-- <router-view
+          v-slot="{ Component }"
+          class="transition"
+        >
+          <transition
+            :name="transition.pageTransition.name"
+            :mode="transition.pageTransition.mode"
+          >
+            <component :is="Component" />
+          </transition>
+        </router-view> -->
+        <router-view />
+      </q-scroll-area>
+      <!-- <q-tab-panels
         v-model="tab"
         animated
         vertical
@@ -82,28 +62,20 @@
           </div>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </q-tab-panel>
-      </q-tab-panels>
+      </q-tab-panels> -->
     </div>
-    <!-- <div class="q-pa-xs col-grow full-height"> -->
-    <!-- <div
-        class="bg-white"
-        style="height: 100%;"
-      > -->
-
-    <!-- </div> -->
-    <!-- </div> -->
   </q-page>
 </template>
 
 <script setup>
-import FormBpjs from './form/bpjs/FormBpjs.vue'
+import PageHead from './PageHead.vue'
 import { onMounted, ref } from 'vue'
 
-const tab = ref('form')
-const tabs = ref([
-  { nama: 'form', label: 'Pasien Baru', icon: '' },
-  { nama: 'daftar-pasien', label: 'Daftar Pasien', icon: '' }
-])
+// const tab = ref('form')
+// const tabs = ref([
+//   { nama: 'form', label: 'Pasien Baru', icon: '' },
+//   { nama: 'daftar-pasien', label: 'Daftar Pasien', icon: '' }
+// ])
 
 const pageRef = ref()
 const h = ref(0)

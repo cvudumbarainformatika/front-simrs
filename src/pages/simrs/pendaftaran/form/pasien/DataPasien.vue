@@ -4,31 +4,26 @@
     class="q-pa-xs"
   >
     <!-- :simpanData="simpanData" -->
+    <div
+      class="fixed-top row items-center justify-between bg-grey q-pa-md"
+      style="z-index: 10;"
+    >
+      <div class="col-10 f-14 text-weight-bold">
+        Form Identitas Pasien I.1
+      </div>
+      <div class="col-2 text-right">
+        <q-checkbox
+          v-model="store.edit"
+          label="Edit Form "
+          dense
+        />
+      </div>
+    </div>
     <q-card
       class="full-width"
       flat
+      style="margin-top: 60px;"
     >
-      <div class="row items-center justify-between bg-grey q-pa-md">
-        <div class="col-10 f-14 text-weight-bold">
-          Form Identitas Pasien I.1
-        </div>
-        <div class="col-2 text-right">
-          <q-checkbox
-            v-model="store.edit"
-            label="Edit Form "
-            dense
-          />
-        </div>
-      </div>
-      <!-- <q-card-section>
-        <div class="f-14 text-weight-bold">
-          PASIEN BARU (JKN)
-        </div>
-        <div class="title-desc">
-          Form Pendaftaran Pasien JKN
-        </div>
-      </q-card-section> -->
-      <!-- <q-separator /> -->
       <q-card-section>
         <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
