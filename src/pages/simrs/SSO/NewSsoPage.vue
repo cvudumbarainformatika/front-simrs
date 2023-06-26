@@ -1,5 +1,13 @@
 <template>
   <div class="column flex-center full-height">
+    <Transition>
+      <div
+        v-if="loading || store.loading"
+        class="fullscreen column flex-center"
+      >
+        <app-loader />
+      </div>
+    </Transition>
     <div class="box">
       <div
         class="square"
@@ -58,21 +66,30 @@ const router = useRouter()
 
 const num = ref(0)
 
+const loading = ref(false)
+
+// onBeforeMount(() => {
+//   loading.value
+// })
+
 onMounted(() => {
   store.getUserNew()
-  // apps.getItems()
-  num.value = num.value +
-  console.log('newSsoPage', apps.user)
+  num.value = num.value + 1
 })
 
 const goTo = (item) => {
+  loading.value = true
   apps.setCurrentApp(item)
-  router.push({ path: item.url })
+  router.push({ path: item.url, replace: true })
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
 }
 
 const signOut = () => {
   store.logout()
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -163,5 +180,20 @@ const signOut = () => {
     border-bottom-right-radius: 10px;
   }
 
+}
+
+/* we will explain what these classes do next! */
+.v-enter-active{
+  opacity: 1;
+}
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from{
+  opacity: 1;
+}
+.v-leave-to {
+  opacity: 0;
 }
 </style>

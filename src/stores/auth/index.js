@@ -375,9 +375,7 @@ export const useAuthStore = defineStore('auth', {
             apps.setUser(resp.data.user)
             apps.setItems(resp.data.apps)
             apps.setAksesApps(resp.data.akses)
-            // console.log('me again', resp)
             this.loading = false
-            // storage.setAkses(resp.data.akses)
           }
         })
       } catch (error) {
