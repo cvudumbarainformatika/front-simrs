@@ -10,6 +10,7 @@ const percobaan =
         path: '/percobaan/aplikasi',
         name: 'percobaan.aplikasi',
         component: () => import('pages/percobaan/IndexPage.vue')
+        // component: () => import('pages/percobaan/HandlerPage.vue')
       }
 
     ]
