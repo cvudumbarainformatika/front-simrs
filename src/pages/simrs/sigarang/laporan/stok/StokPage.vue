@@ -169,7 +169,7 @@
         <q-separator />
       </q-card-section>
     </q-card>
-    <KartuStok v-model="store.isOpen" />
+    <!-- <KartuStok v-model="store.isOpen" /> -->
   </div>
 </template>
 <script setup>
@@ -180,7 +180,7 @@ import { date } from 'quasar'
 import { ref } from 'vue'
 import { useStokStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stok'
 import { dateFullFormat } from 'src/modules/formatter'
-import KartuStok from './KartuStok.vue'
+// import KartuStok from './KartuStok.vue'
 
 const tanggalStokOpname = ref(date.formatDate(Date.now(), 'DD MMMM YYYY'))
 const store = useStokStore()
