@@ -62,8 +62,9 @@ import StokPage from './StokPage.vue'
 import KartuStok from './KartuStok.vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const tab = ref('stok')
-const apps = useAplikasiStore
+const apps = useAplikasiStore()
 const role = computed(() => {
+  console.log('apps ', apps.user)
   return apps.user.pegawai ? apps.user.pegawai.role.nama : ''
 })
 
