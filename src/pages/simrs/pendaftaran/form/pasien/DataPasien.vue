@@ -8,14 +8,20 @@
       class="fixed-top row items-center justify-between bg-grey q-pa-md"
       style="z-index: 10;"
     >
-      <div class="col-10 f-14 text-weight-bold">
+      <div class="f-14 text-weight-bold">
         Form Identitas Pasien I.1
       </div>
-      <div class="col-2 text-right">
+      <div>
         <q-checkbox
           v-model="store.edit"
           label="Edit Form "
           dense
+        />
+        <q-icon
+          name="icon-mat-fullscreen"
+          size="sm"
+          class="q-ml-md cursor-pointer"
+          @click="emits('fullScreen')"
         />
       </div>
     </div>
@@ -105,12 +111,12 @@
               </div>
             </div>
             <!-- ktp -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
               <!-- <div class="col-4">
                 No. KTP
               </div>
               <div class="col-8"> -->
-              <div :class="bpjs?'col-10':'col-12'">
+              <div style="width:90%">
                 <app-input
                   ref="refKtp"
                   v-model="store.form.nik"
@@ -118,12 +124,14 @@
                   type="number"
                   :filled="false"
                   :right-icon="true"
+                  right-icon-name="icon-mat-dvr"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
+                  @icon-right-click="()=> console.log('ok')"
                 />
               </div>
               <div
                 v-if="bpjs"
-                class="col-2 text-right"
+                class="text-right"
               >
                 <q-btn
                   color="primary"
@@ -1133,7 +1141,8 @@ const emits = defineEmits([
   'bisa-simpan',
   'tidak-simpan',
   'surat',
-  'gantiPasien'
+  'gantiPasien',
+  'fullScreen'
 ])
 const props = defineProps({
   bpjs: { type: Boolean, default: false },

@@ -7,6 +7,7 @@
       :noka="registrasi.form.noka"
       :tglsep="registrasi.form.tglsep"
       @ganti-pasien="clearFormRegistrasi"
+      @full-screen="goToFullScreen"
     />
     <!-- @bisa-simpan="bisaSimpan" -->
     <!-- @surat="bisaCekSurat" -->
@@ -56,6 +57,11 @@ const registrasi = useRegistrasiPasienBPJSStore()
 const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
+
+function goToFullScreen() {
+  console.log('ok')
+}
+
 function clearFormRegistrasi() {
   registrasi.clearForm()
 }

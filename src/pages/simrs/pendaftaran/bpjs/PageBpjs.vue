@@ -68,6 +68,9 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <!-- app-pasein -->
+    <app-pasien-rajal v-model="pasien" />
   </q-page>
 </template>
 
@@ -76,6 +79,7 @@ import { useRoute } from 'vue-router'
 import PageHead from './PageHead.vue'
 import { onMounted, ref } from 'vue'
 
+const pasien = ref(true)
 const drawerRight = ref(false)
 // const tabs = ref([
 //   { nama: 'form', label: 'Pasien Baru', icon: '' },
