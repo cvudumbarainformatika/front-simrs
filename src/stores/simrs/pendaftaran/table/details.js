@@ -85,7 +85,7 @@ export const useDetailPasien = defineStore('detail_pasien', {
     setPageRanap(val) {
       const arr = this.kunjunganRanap
       this.ranap.current_page = val
-      this.paginasiRajal(arr)
+      this.paginasiRanap(arr)
     },
     setAwal() {
       // if (this.dialogOpen === false) {

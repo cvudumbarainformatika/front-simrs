@@ -157,7 +157,7 @@
                 </div>
                 <div v-if="!store.loading">
                   <q-scroll-area
-                    style="height: 85vh; width:100%;"
+                    style="height: 49vh; width:100%;"
                   >
                     <div
                       v-if="store.kunjunganRanap.length > 0"
@@ -181,8 +181,8 @@
                                 <div>DPJP </div>
                               </div>
                               <div class="q-ml-md text-weight-bold">
-                                <div> : {{ data.relmpoli?data.relmpoli.poli:'-' }}</div>
-                                <div> : {{ data.dokter?data.dokter.namadokter:'-' }}</div>
+                                <div> : {{ data.relmasterruangranap?data.relmasterruangranap.namaruang:'-' }}</div>
+                                <div> : {{ data.reldokter?data.reldokter.dokter:'-' }}</div>
                               </div>
                             </div>
                           </div>
@@ -193,7 +193,7 @@
                                 align="middle"
                                 color="primary"
                               >
-                                {{  }}
+                                {{ data.relsistembayar?data.relsistembayar.sistembayar:'-' }}
                               </q-badge>
                             </div>
                           </template>
@@ -203,7 +203,7 @@
                     <div v-else>
                       <div
                         class="column flex-center"
-                        style="min-height: 80vh;"
+                        style="min-height: 45vh;"
                       >
                         <div class="text-h3">
                           👨🏽‍🍼
@@ -217,26 +217,26 @@
                 </div>
                 <div
                   v-else
-                  style="min-height: 80vh;"
+                  style="min-height: 45vh;"
                 >
                   <app-loading />
                 </div>
 
                 <div
-                  v-if="store.rajal.data.length > 0"
+                  v-if="store.ranap.data.length > 0"
                   class="absolute-bottom full-width bg-white"
                   style="z-index:1"
                 >
                   <div class="q-pa-sm shadow-2">
                     <div class="row justify-between items-center">
                       <div>
-                        Hal. <strong>{{ store.rajal.current_page }}</strong> dari <strong>{{ store.rajal.total_page }}</strong>
-                        halaman dan <strong>{{ store.kunjunganPoli.length }}</strong> data keseluruhan
+                        Hal. <strong>{{ store.ranap.current_page }}</strong> dari <strong>{{ store.ranap.total_page }}</strong>
+                        halaman dan <strong>{{ store.kunjunganRanap.length }}</strong> data keseluruhan
                       </div>
                       <div>
                         <div class="flex items-center justify-end">
                           <q-btn
-                            :disable="store.rajal.current_page===1"
+                            :disable="store.ranap.current_page===1"
                             flat
                             round
                             color="primary"
@@ -245,34 +245,34 @@
                             @click="store.setPageRajal(1)"
                           />
                           <q-btn
-                            :disable="store.rajal.current_page === 1"
+                            :disable="store.ranap.current_page === 1"
                             flat
                             round
                             color="primary"
                             icon="icon-mat-chevron_left"
                             size="xs"
-                            @click="store.setPageRajal(store.rajal.current_page - 1)"
+                            @click="store.setPageRajal(store.ranap.current_page - 1)"
                           />
                           <div class="bold q-pa-xs">
-                            {{ store.rajal.current_page }}
+                            {{ store.ranap.current_page }}
                           </div>
                           <q-btn
-                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            :disable="store.ranap.current_page === store.ranap.total_page"
                             flat
                             round
                             color="primary"
                             icon="icon-mat-chevron_right"
                             size="xs"
-                            @click="store.setPageRajal(store.rajal.current_page + 1)"
+                            @click="store.setPageRajal(store.ranap.current_page + 1)"
                           />
                           <q-btn
-                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            :disable="store.ranap.current_page === store.ranap.total_page"
                             flat
                             round
                             color="primary"
                             icon="icon-mat-skip_next"
                             size="xs"
-                            @click="store.setPageRajal(store.rajal.total_page)"
+                            @click="store.setPageRajal(store.ranap.total_page)"
                           />
                         </div>
                       </div>
