@@ -4,9 +4,14 @@
     class="column full-height q-pa-md"
   >
     <div class="col-auto">
-      <PageHead @togle-draw="toggleDraw()" />
+      <PageHead
+        :title="title"
+        :subtitle="subtitle"
+        @togle-draw="toggleDraw()"
+      />
     </div>
-    <div
+    <q-card
+      flat
       class="col bg-white full-width full-height"
       :style="`max-height: ${h-60}px; overflow:hidden`"
     >
@@ -22,7 +27,7 @@
           </transition>
         </router-view>
       </q-scroll-area>
-    </div>
+    </q-card>
 
     <q-dialog
       v-model="drawerRight"
@@ -70,21 +75,16 @@
     </q-dialog>
 
     <!-- app-pasein -->
-    <app-pasien-rajal v-model="pasien" />
+    <!-- <app-pasien-rajal v-model="pasien" /> -->
   </q-page>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
 import PageHead from './PageHead.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
-const pasien = ref(true)
 const drawerRight = ref(false)
-// const tabs = ref([
-//   { nama: 'form', label: 'Pasien Baru', icon: '' },
-//   { nama: 'daftar-pasien', label: 'Daftar Pasien', icon: '' }
-// ])
 
 const pageRef = ref()
 const h = ref(0)
@@ -104,12 +104,25 @@ const barStyle = ref({
 })
 
 const page = useRoute()
+const title = computed(() => {
+  if (page.path === '/pendaftaran/bpjs/form') {
+    return 'RAJAL BPJS || JKN'
+  }
+  return 'MASTER PASIEN'
+})
+const subtitle = computed(() => {
+  if (page.path === '/pendaftaran/bpjs/form') {
+    return 'Pendaftaran Pasien Baru Rajal BPJS || JKN'
+  }
+  return 'Daftar Pasien'
+})
 onMounted(() => {
-  console.log('page ', page)
+  console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
 })
 
 function toggleDraw() {
   drawerRight.value = !drawerRight.value
 }
+
 </script>

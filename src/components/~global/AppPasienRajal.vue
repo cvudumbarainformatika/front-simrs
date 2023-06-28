@@ -4,12 +4,14 @@
     :maximized="maximizedToggle"
     transition-show="slide-up"
     transition-hide="slide-down"
+    class="fullscreen"
   >
     <q-card
       class="bg-grey-4"
       flat
     >
-      <q-bar class="bg-primary text-white">
+      <!-- HEADER BAR -->
+      <q-bar class="bg-dark text-white fixed-top">
         <q-space />
 
         <q-btn
@@ -41,162 +43,427 @@
           </q-tooltip>
         </q-btn>
         <q-btn
-          v-close-popup
           dense
           flat
           icon="icon-mat-close"
+          @click="emits('closeDialog')"
         >
           <q-tooltip class="bg-white text-primary">
             Close
           </q-tooltip>
         </q-btn>
       </q-bar>
-
-      <q-card-section>
-        <div class="row q-col-gutter-md">
-          <!-- IDENTITAS PASIEN -->
-          <div class="col-md-3 col-lg-3 col-xl-3 col-sm-12 col-xs-12">
-            <q-card flat>
-              <q-img
-                src="https://picsum.photos/500/300"
-                :ratio="1"
-              />
-              <q-card-section>
-                <div class="text-h6">
-                  ini nanti Nama Pasien
-                </div>
-                <div class="text-subtitle2 text-right">
-                  <div class="text-caption">
-                    NO. REKAM MEDIS
-                  </div>
-                  <div class="text-weight-bold">
-                    56789678
-                  </div>
-                </div>
-              </q-card-section>
-              <q-separator />
-              <q-list separator>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      💳 Nik
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      🃏 Noka JKN
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      📞 phone / Hp
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      📍 Alamat
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      ⚥ Jenis Kelamin
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      ✒️ Usia
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label caption>
-                      ♡ ♥💕 Status Pernikahan
-                    </q-item-label>
-                    <q-item-label>
-                      Alamat
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </div>
-          <div class="col-md-9 col-lg-9 col-xl-9 col-sm-12 col-xs-12">
-            <!-- RIWAYAT KUNJUNGAN -->
-            <q-card flat>
-              <div class="bg-deep-orange text-white q-pa-md">
-                <div class="row items-center justify-between">
-                  <div class="text-subtitle1">
-                    📜 Riwayat Kunjungan Rawat Jalan Pasien
-                  </div>
-                  <div>
-                    <q-icon
-                      name="icon-mat-fullscreen"
-                      size="md"
-                      class="cursor-pointer"
-                    />
-                  </div>
-                </div>
-              </div>
-              <q-card-section>
-                <q-timeline color="secondary">
-                  <q-timeline-entry
-                    title="Event Title"
-                    subtitle="February 22, 1986"
-                  >
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      <q-scroll-area
+        class="bg-grey-3 full-height"
+      >
+        <div
+          class="q-pa-md"
+          style="margin-top:30px"
+        >
+          <div class="row q-col-gutter-md">
+            <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12">
+              <q-card flat>
+                <q-card-section>
+                  <div class="row">
+                    <div
+                      class="foto bg-grey-4"
+                      style="width:120px"
+                    >
+                      <q-img
+                        :src="foto"
+                        :ratio="1"
+                      />
                     </div>
-                  </q-timeline-entry>
-
-                  <q-timeline-entry
-                    title="Event Title"
-                    subtitle="February 21, 1986"
-                    icon="icon-mat-delete"
-                  >
-                    <div>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <div class="q-ml-md text-h6">
+                      <div class="text-weight-bold">
+                        {{ pasien? pasien.nama: '-' }}
+                      </div>
+                      <div class="f-14 q-mb-xs">
+                        {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
+                      </div>
+                      <div class="f-14 text-grey q-mb-xs">
+                        💳 {{ pasien? pasien.nik:'-' }}
+                      </div>
+                      <div class="f-14 q-mb-xs">
+                        ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
+                      </div>
+                      <div class="f-12">
+                        🏠 {{ pasien? pasien.alamat: '-' }}
+                      </div>
+                      <div class="f-14 text-grey">
+                        ☎️ 📱  {{ pasien? pasien.noteleponhp:'-' }}
+                      </div>
+                      <div class="f-14">
+                        ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
+                      </div>
                     </div>
-                  </q-timeline-entry>
-                </q-timeline>
-              </q-card-section>
-            </q-card>
+                  </div>
+                  <div class=" absolute-top-right text-right q-pa-md">
+                    <div class="f-12">
+                      NO. REKAM MEDIS
+                    </div>
+                    <div class="f-16 text-weight-bold">
+                      {{ pasien? pasien.norm:'-' }}
+                    </div>
+                  </div>
+                </q-card-section>
+                <q-separator />
+                <q-list separator>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label>
+                        🃏 Noka JKN / BPJS
+                      </q-item-label>
+                      <q-item-label class="text-weight-bold">
+                        {{ pasien? pasien.nokabpjs:'-' }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item>
+                    <q-item-section>
+                      <q-item-label>
+                        🆔 SATU SEHAT
+                      </q-item-label>
+                      <q-item-label class="text-weight-bold">
+                        -
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <!-- <q-item>
+                    <q-item-section>
+                      <q-item-label>
+                        ♡ ♥💕 Status Pernikahan
+                      </q-item-label>
+                      <q-item-label class="text-weight-bold">
+                        {{ pasien? pasien.statuspernikahan:'-' }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item> -->
+                </q-list>
+              </q-card>
+
+              <!-- KUNJUNGAN RANAP -->
+              <q-card
+                flat
+                class="q-mt-md"
+              >
+                <div class="bg-dark text-white q-pa-sm">
+                  <div class="row items-center justify-between">
+                    <div class="text-subtitle1">
+                      📜 Riwayat Kunjungan RAWAT INAP Pasien
+                    </div>
+                  </div>
+                </div>
+                <div v-if="!store.loading">
+                  <q-scroll-area
+                    style="height: 85vh; width:100%;"
+                  >
+                    <div
+                      v-if="store.kunjunganRanap.length > 0"
+                      style="padding-bottom: 40px;"
+                      class="q-px-xl"
+                    >
+                      <q-timeline color="primary">
+                        <q-timeline-entry
+                          v-for="(data, n) in store.ranap.data"
+                          :key="n"
+                          :subtitle="`${dateFullFormat(data.rs3)}, jam ${formatJam(data.rs3)}`"
+                          icon="icon-mat-event"
+                        >
+                          <div
+                            class="row justify-between f-14"
+                            style="margin-top:-10px"
+                          >
+                            <div class="flex items-center">
+                              <div>
+                                <div>Tujuan </div>
+                                <div>DPJP </div>
+                              </div>
+                              <div class="q-ml-md text-weight-bold">
+                                <div> : {{ data.relmpoli?data.relmpoli.poli:'-' }}</div>
+                                <div> : {{ data.dokter?data.dokter.namadokter:'-' }}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <template #title>
+                            <div>
+                              <q-badge
+                                outline
+                                align="middle"
+                                color="primary"
+                              >
+                                {{  }}
+                              </q-badge>
+                            </div>
+                          </template>
+                        </q-timeline-entry>
+                      </q-timeline>
+                    </div>
+                    <div v-else>
+                      <div
+                        class="column flex-center"
+                        style="min-height: 80vh;"
+                      >
+                        <div class="text-h3">
+                          👨🏽‍🍼
+                        </div>
+                        <div class="f-14">
+                          Belum Ada Data
+                        </div>
+                      </div>
+                    </div>
+                  </q-scroll-area>
+                </div>
+                <div
+                  v-else
+                  style="min-height: 80vh;"
+                >
+                  <app-loading />
+                </div>
+
+                <div
+                  v-if="store.rajal.data.length > 0"
+                  class="absolute-bottom full-width bg-white"
+                  style="z-index:1"
+                >
+                  <div class="q-pa-sm shadow-2">
+                    <div class="row justify-between items-center">
+                      <div>
+                        Hal. <strong>{{ store.rajal.current_page }}</strong> dari <strong>{{ store.rajal.total_page }}</strong>
+                        halaman dan <strong>{{ store.kunjunganPoli.length }}</strong> data keseluruhan
+                      </div>
+                      <div>
+                        <div class="flex items-center justify-end">
+                          <q-btn
+                            :disable="store.rajal.current_page===1"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-skip_previous"
+                            size="xs"
+                            @click="store.setPageRajal(1)"
+                          />
+                          <q-btn
+                            :disable="store.rajal.current_page === 1"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-chevron_left"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.current_page - 1)"
+                          />
+                          <div class="bold q-pa-xs">
+                            {{ store.rajal.current_page }}
+                          </div>
+                          <q-btn
+                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-chevron_right"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.current_page + 1)"
+                          />
+                          <q-btn
+                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-skip_next"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.total_page)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </q-card>
+            </div>
+
+            <!-- KUNJUNGAN RAJAL -->
+            <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12">
+              <q-card flat>
+                <div class="bg-secondary text-white q-pa-sm">
+                  <div class="row items-center justify-between">
+                    <div class="text-subtitle1">
+                      📜 Riwayat Kunjungan RAWAT JALAN Pasien
+                    </div>
+                  </div>
+                </div>
+                <div v-if="!store.loading">
+                  <q-scroll-area
+                    style="height: 85vh; width:100%;"
+                  >
+                    <div
+                      v-if="store.kunjunganPoli.length > 0"
+                      style="padding-bottom: 40px;"
+                      class="q-px-xl"
+                    >
+                      <q-timeline color="deep-orange">
+                        <q-timeline-entry
+                          v-for="(data, i) in store.rajal.data"
+                          :key="i"
+                          :subtitle="`${dateFullFormat(data.tglkunjungan)}, jam ${formatJam(data.tglkunjungan)}`"
+                          icon="icon-mat-event"
+                        >
+                          <div
+                            class="row justify-between f-14"
+                            style="margin-top:-10px"
+                          >
+                            <div class="flex items-center">
+                              <div>
+                                <div>Tujuan </div>
+                                <div>DPJP </div>
+                              </div>
+                              <div class="q-ml-md text-weight-bold">
+                                <div> : {{ data.relmpoli?data.relmpoli.poli:'-' }}</div>
+                                <div> : {{ data.dokter?data.dokter.namadokter:'-' }}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <template #title>
+                            <div
+                              v-if="data.rs14==='UMUM'|| data.rs14===''"
+                            >
+                              <q-badge
+                                outline
+                                align="middle"
+                                color="primary"
+                              >
+                                TANPA ASURANSI / UMUM
+                              </q-badge>
+                            </div>
+                            <div
+                              v-else
+                            >
+                              <q-badge
+                                outline
+                                align="middle"
+                                color="primary"
+                              >
+                                {{ data.msistembayar? data.msistembayar.sistembayar:'-' }}
+                              </q-badge>
+                            </div>
+                          </template>
+                        </q-timeline-entry>
+                      </q-timeline>
+                    </div>
+                    <div v-else>
+                      <div
+                        class="column flex-center"
+                        style="min-height: 80vh;"
+                      >
+                        <div class="text-h3">
+                          👨🏽‍🍼
+                        </div>
+                        <div class="f-14">
+                          Belum Ada Data
+                        </div>
+                      </div>
+                    </div>
+                  </q-scroll-area>
+                </div>
+                <div
+                  v-else
+                  style="min-height: 80vh;"
+                >
+                  <app-loading />
+                </div>
+
+                <div
+                  v-if="store.rajal.data.length > 0"
+                  class="absolute-bottom full-width bg-white"
+                  style="z-index:1"
+                >
+                  <div class="q-pa-sm shadow-2">
+                    <div class="row justify-between items-center">
+                      <div>
+                        Hal. <strong>{{ store.rajal.current_page }}</strong> dari <strong>{{ store.rajal.total_page }}</strong>
+                        halaman dan <strong>{{ store.kunjunganPoli.length }}</strong> data keseluruhan
+                      </div>
+                      <div>
+                        <div class="flex items-center justify-end">
+                          <q-btn
+                            :disable="store.rajal.current_page===1"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-skip_previous"
+                            size="xs"
+                            @click="store.setPageRajal(1)"
+                          />
+                          <q-btn
+                            :disable="store.rajal.current_page === 1"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-chevron_left"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.current_page - 1)"
+                          />
+                          <div class="bold q-pa-xs">
+                            {{ store.rajal.current_page }}
+                          </div>
+                          <q-btn
+                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-chevron_right"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.current_page + 1)"
+                          />
+                          <q-btn
+                            :disable="store.rajal.current_page === store.rajal.total_page"
+                            flat
+                            round
+                            color="primary"
+                            icon="icon-mat-skip_next"
+                            size="xs"
+                            @click="store.setPageRajal(store.rajal.total_page)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </q-card>
+            </div>
           </div>
         </div>
-      </q-card-section>
+      </q-scroll-area>
     </q-card>
   </q-dialog>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { useDetailPasien } from 'src/stores/simrs/pendaftaran/table/details'
+import { dateFullFormat, formatJam } from 'src/modules/formatter'
+import { computed, ref } from 'vue'
 
 const maximizedToggle = ref(true)
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
+const emits = defineEmits(['closeDialog'])
+
+const foto = computed(() => {
+  if (props.pasien.kelamin === 'Perempuan') {
+    return new URL('../../assets/images/actress.svg', import.meta.url).href
+  }
+  return new URL('../../assets/images/actor.svg', import.meta.url).href
+})
+
+const store = useDetailPasien()
 </script>
+
+<style scoped lang="scss">
+.q-bar {
+  z-index: 1;
+}
+</style>

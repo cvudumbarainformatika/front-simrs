@@ -9,10 +9,10 @@
       </div>
       <div class="left">
         <div class="text-h6">
-          BPJS || JKN
+          {{ title }}
         </div>
         <div class="f-12">
-          <span>Pasien Baru JKN / BPJS</span>
+          <span>{{ subtitle }}</span>
         </div>
       </div>
     </div>
@@ -76,6 +76,16 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const emits = defineEmits(['togleDraw'])
+defineProps({
+  title: {
+    type: String,
+    default: null
+  },
+  subtitle: {
+    type: String,
+    default: null
+  }
+})
 
 function goTo(val) {
   router.push({ path: val, replace: true })
