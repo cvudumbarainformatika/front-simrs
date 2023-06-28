@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 import { useListPasien } from 'src/stores/simrs/pendaftaran/table/index'
 import { useDetailPasien } from 'src/stores/simrs/pendaftaran/table/details'
@@ -79,10 +79,6 @@ const det = useDetailPasien()
 const pasien = ref(null)
 onMounted(() => {
   store.getDataTable()
-})
-
-onUnmounted(() => {
-  store.setAwal()
 })
 
 function previewDetail(row) {
