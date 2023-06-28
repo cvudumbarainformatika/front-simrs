@@ -82,7 +82,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  store.setAwalRajal()
+  store.setAwal()
 })
 
 function previewDetail(row) {
