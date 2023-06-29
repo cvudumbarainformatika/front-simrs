@@ -21,6 +21,7 @@
       <q-btn-group outline>
         <q-btn
           outline
+          glossy
           color="pink"
           label="Antrian"
           icon-right="icon-mat-volume_up"
@@ -28,21 +29,26 @@
           @click="emits('togleDraw')"
         />
         <q-btn
-          outline
+          :outline="path!=='/pendaftaran/bpjs/pasien'"
+          glossy
+          push
           color="dark"
           label="List Pasien"
           size="md"
           @click="goTo('/pendaftaran/bpjs/pasien')"
         />
         <q-btn
-          outline
+          :outline="path!=='/pendaftaran/bpjs/kunjungan'"
+          glossy
+          push
           color="teal"
           label="List Pengunjung"
           size="md"
-          @click="goTo('/pendaftaran/bpjs/pasien')"
+          @click="goTo('/pendaftaran/bpjs/kunjungan')"
         />
         <q-btn
-          outline
+          :outline="path !== '/pendaftaran/bpjs/form'"
+          glossy
           size="md"
           color="primary"
           label="Pasien Baru"
@@ -113,6 +119,10 @@ defineProps({
     default: null
   },
   subtitle: {
+    type: String,
+    default: null
+  },
+  path: {
     type: String,
     default: null
   }

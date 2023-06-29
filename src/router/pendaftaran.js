@@ -48,6 +48,13 @@ const pendaftaran = {
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/kunjungan',
+          name: 'pendaftaran.bpjs.kunjungan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/kunjungan/IndexPage.vue')
         }
       ]
     },

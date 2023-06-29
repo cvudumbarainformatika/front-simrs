@@ -7,6 +7,7 @@
       <PageHead
         :title="title"
         :subtitle="subtitle"
+        :path="page.path"
         @togle-draw="toggleDraw()"
       />
     </div>
@@ -107,14 +108,20 @@ const page = useRoute()
 const title = computed(() => {
   if (page.path === '/pendaftaran/bpjs/form') {
     return 'RAJAL BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+    return 'LIST KUNJUNGAN'
+  } else {
+    return 'MASTER PASIEN'
   }
-  return 'MASTER PASIEN'
 })
 const subtitle = computed(() => {
   if (page.path === '/pendaftaran/bpjs/form') {
     return 'Pendaftaran Pasien Baru Rajal BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+    return 'List Kunjungan Pasien BPJS || JKN'
+  } else {
+    return 'Daftar Pasien'
   }
-  return 'Daftar Pasien'
 })
 onMounted(() => {
   console.log('page ', page.path)

@@ -65,11 +65,11 @@
     </q-scroll-area>
     <q-page-sticky
       position="bottom-right"
-      :offset="[18, 18]"
+      :offset="[5, 5]"
     >
       <q-fab
-        size="sm"
-        padding="sm"
+        size="xs"
+        padding="xs"
         icon="icon-mat-display_settings"
         color="primary"
         direction="up"

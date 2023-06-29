@@ -117,35 +117,6 @@
                           </q-item-label>
                         </q-item>
                       </q-list>
-                      <!-- <div class="text-weight-bold">
-                        {{ pasien? pasien.nama: '-' }}
-                      </div>
-                      <q-item-label lines="2">
-                        <div class="f-14 q-mb-xs">
-                          {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
-                        </div>
-                      </q-item-label>
-
-                      <div class="f-14 text-grey q-mb-xs">
-                        💳 {{ pasien? pasien.nik:'-' }}
-                      </div>
-                      <div class="f-14 q-mb-xs">
-                        ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
-                      </div>
-                      <q-item-section>
-                        <q-item-label lines="2">
-                          <div class="f-12">
-                            🏠 {{ pasien? pasien.alamat: '-' }}
-                          </div>
-                        </q-item-label>
-                      </q-item-section>
-                      <div class="f-14 text-grey">
-                        ☎️ 📱  {{ pasien? pasien.noteleponhp:'-' }}
-                      </div>
-                      <div class="f-14">
-                        ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
-                      </div>
-                    </div> -->
                     </div>
                     <!-- <div class=" absolute-top-right text-right q-pa-md">
                       <div class="f-12">
@@ -179,17 +150,6 @@
                       </q-item-label>
                     </q-item-section>
                   </q-item>
-
-                <!-- <q-item>
-                    <q-item-section>
-                      <q-item-label>
-                        ♡ ♥💕 Status Pernikahan
-                      </q-item-label>
-                      <q-item-label class="text-weight-bold">
-                        {{ pasien? pasien.statuspernikahan:'-' }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item> -->
                 </q-list>
               </q-card>
 
@@ -503,10 +463,34 @@ const props = defineProps({
 const emits = defineEmits(['closeDialog'])
 
 const foto = computed(() => {
-  if (props.pasien.kelamin === 'Perempuan') {
-    return new URL('../../assets/images/actress.svg', import.meta.url).href
+  const perempuan = props.pasien.kelamin === 'Perempuan'
+  const usia = props.pasien.usia
+  const usiath = usia !== '' || usia !== null ? parseInt(usia.substring(0, 2)) : 25
+  if (perempuan) {
+    if (usiath <= 99 && usiath > 59) {
+      return new URL('../../assets/images/grandma.png', import.meta.url).href
+    } else if (usiath <= 59 && usiath > 25) {
+      return new URL('../../assets/images/user-girl.svg', import.meta.url).href
+    } else if (usiath <= 25 && usiath > 15) {
+      return new URL('../../assets/images/user-girl2.svg', import.meta.url).href
+    } else if (usiath <= 15) {
+      return new URL('../../assets/images/young-girl.svg', import.meta.url).href
+    } else {
+      return new URL('../../assets/images/user-girl3.svg', import.meta.url).href
+    }
+  } else {
+    if (usiath <= 99 && usiath > 59) {
+      return new URL('../../assets/images/grandpa.svg', import.meta.url).href
+    } else if (usiath <= 59 && usiath > 25) {
+      return new URL('../../assets/images/user-man2.svg', import.meta.url).href
+    } else if (usiath <= 25 && usiath > 15) {
+      return new URL('../../assets/images/user-man.svg', import.meta.url).href
+    } else if (usiath <= 15) {
+      return new URL('../../assets/images/young-man.svg', import.meta.url).href
+    } else {
+      return new URL('../../assets/images/actor.svg', import.meta.url).href
+    }
   }
-  return new URL('../../assets/images/actor.svg', import.meta.url).href
 })
 
 const store = useDetailPasien()
