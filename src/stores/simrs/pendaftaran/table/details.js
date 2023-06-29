@@ -30,16 +30,16 @@ export const useDetailPasien = defineStore('detail_pasien', {
       this.loading = true
       const resp = await api.get(`/v1/simrs/pendaftaran/historypasien?norm=${payload}`)
       if (resp.status === 200) {
-        console.log('detail pasien', resp)
         const poli = resp.data.kunjunganpoli
         const ranap = resp.data.kunjunganranap
-        const spoli = poli.sort((a, b) => a.tglkunjungan + b.tglkunjungan)
-        const sranap = ranap.sort((a, b) => a.rs3 + b.rs3)
+        const spoli = poli.sort((a, b) => new Date(b.tglkunjungan) - new Date(a.tglkunjungan))
+        const sranap = ranap.sort((a, b) => new Date(b.rs3) - new Date(a.rs3))
         this.kunjunganPoli = spoli
         this.kunjunganRanap = sranap
         this.paginasiRajal(spoli)
         this.paginasiRanap(sranap)
         this.loading = false
+        // console.log('detail pasien', spoli)
       }
 
       this.loading = false
