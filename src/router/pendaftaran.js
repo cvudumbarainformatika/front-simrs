@@ -3,7 +3,7 @@ const pendaftaran = {
   component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', redirect: '/pendaftaran/bpjs' },
+    { path: '', redirect: '/pendaftaran/middleware' },
     {
       path: '/pendaftaran/form',
       name: 'pendaftaran.form',
@@ -101,6 +101,11 @@ const pendaftaran = {
       //       import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
       //   }
       // ]
+    },
+
+    {
+      path: '/pendaftaran/middleware',
+      component: () => import('pages/simrs/pendaftaran/middleware/IndexPage.vue')
     },
 
     {

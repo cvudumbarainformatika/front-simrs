@@ -2,8 +2,8 @@
   <q-dialog
     persistent
     :maximized="maximizedToggle"
-    transition-show="slide-up"
-    transition-hide="slide-down"
+    transition-show="slide-left"
+    transition-hide="slide-right"
     class="fullscreen"
   >
     <q-card
@@ -11,10 +11,10 @@
       flat
     >
       <!-- HEADER BAR -->
-      <q-bar class="bg-dark text-white fixed-top">
+      <q-bar class="bg-dark text-white full-width fixed-top">
         <q-space />
 
-        <q-btn
+        <!-- <q-btn
           dense
           flat
           icon="icon-mat-minimize"
@@ -41,7 +41,7 @@
           >
             Maximize
           </q-tooltip>
-        </q-btn>
+        </q-btn> -->
         <q-btn
           dense
           flat
@@ -62,49 +62,99 @@
         >
           <div class="row q-col-gutter-md">
             <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12">
-              <q-card flat>
+              <q-card
+                flat
+                class="full-width"
+              >
                 <q-card-section>
-                  <div class="row">
+                  <div class="row flex-wrap">
                     <div
-                      class="foto bg-grey-4"
-                      style="width:120px"
+                      class="foto bg-grey-4 col-3"
                     >
                       <q-img
                         :src="foto"
                         :ratio="1"
                       />
+                      <div class="text-center">
+                        <q-item-label class="f-16 text-weight-bold">
+                          {{ pasien? pasien.norm:'-' }}
+                        </q-item-label>
+                      </div>
                     </div>
-                    <div class="q-ml-md text-h6">
-                      <div class="text-weight-bold">
+                    <div class="col-9">
+                      <q-list
+                        dense
+                        separator
+                      >
+                        <q-item>
+                          <q-item-label class="text-weight-bold">
+                            {{ pasien? pasien.nama: '-' }}
+                          </q-item-label>
+                        </q-item>
+                        <q-item>
+                          <q-item-label class="">
+                            {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
+                          </q-item-label>
+                        </q-item>
+                        <q-item>
+                          <q-item-label class="">
+                            💳 {{ pasien? pasien.nik:'-' }}
+                          </q-item-label>
+                        </q-item>
+                        <q-item>
+                          <q-item-label class="">
+                            ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
+                          </q-item-label>
+                        </q-item>
+                        <q-item>
+                          <q-item-label class="">
+                            🏠 {{ pasien? pasien.alamat: '-' }}
+                          </q-item-label>
+                        </q-item>
+                        <q-item>
+                          <q-item-label class="">
+                            ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
+                          </q-item-label>
+                        </q-item>
+                      </q-list>
+                      <!-- <div class="text-weight-bold">
                         {{ pasien? pasien.nama: '-' }}
                       </div>
-                      <div class="f-14 q-mb-xs">
-                        {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
-                      </div>
+                      <q-item-label lines="2">
+                        <div class="f-14 q-mb-xs">
+                          {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
+                        </div>
+                      </q-item-label>
+
                       <div class="f-14 text-grey q-mb-xs">
                         💳 {{ pasien? pasien.nik:'-' }}
                       </div>
                       <div class="f-14 q-mb-xs">
                         ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
                       </div>
-                      <div class="f-12">
-                        🏠 {{ pasien? pasien.alamat: '-' }}
-                      </div>
+                      <q-item-section>
+                        <q-item-label lines="2">
+                          <div class="f-12">
+                            🏠 {{ pasien? pasien.alamat: '-' }}
+                          </div>
+                        </q-item-label>
+                      </q-item-section>
                       <div class="f-14 text-grey">
                         ☎️ 📱  {{ pasien? pasien.noteleponhp:'-' }}
                       </div>
                       <div class="f-14">
                         ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
                       </div>
+                    </div> -->
                     </div>
-                  </div>
-                  <div class=" absolute-top-right text-right q-pa-md">
-                    <div class="f-12">
-                      NO. REKAM MEDIS
-                    </div>
-                    <div class="f-16 text-weight-bold">
-                      {{ pasien? pasien.norm:'-' }}
-                    </div>
+                    <!-- <div class=" absolute-top-right text-right q-pa-md">
+                      <div class="f-12">
+                        NO. REKAM MEDIS
+                      </div>
+                      <div class="f-16 text-weight-bold">
+                        {{ pasien? pasien.norm:'-' }}
+                      </div>
+                    </div> -->
                   </div>
                 </q-card-section>
                 <q-separator />
@@ -130,7 +180,7 @@
                     </q-item-section>
                   </q-item>
 
-                  <!-- <q-item>
+                <!-- <q-item>
                     <q-item-section>
                       <q-item-label>
                         ♡ ♥💕 Status Pernikahan

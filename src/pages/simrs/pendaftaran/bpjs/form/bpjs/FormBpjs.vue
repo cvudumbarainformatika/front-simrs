@@ -6,6 +6,7 @@
       :nik="registrasi.form.nik"
       :noka="registrasi.form.noka"
       :tglsep="registrasi.form.tglsep"
+      :full="fullscreenC"
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="goToFullScreen"
     />
@@ -41,6 +42,48 @@
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
     />
+
+    <app-fullscreen v-model="fullscreenC">
+      <DataPasien
+        ref="refDataPasien"
+        bpjs
+        :nik="registrasi.form.nik"
+        :noka="registrasi.form.noka"
+        :tglsep="registrasi.form.tglsep"
+        :full="fullscreenC"
+        @ganti-pasien="clearFormRegistrasi"
+        @full-screen="goToFullScreen"
+      />
+      <FormRegistrasi
+        ref="refRegistrasi"
+        @get-list-surat-kontrol="getListSuratKontrol"
+        @get-list-rujukan="getListRujukan"
+        @cek-suplesi="cekSuplesi"
+      />
+      <q-card
+        class="full-width"
+        flat
+      >
+        <q-card-actions>
+          <div class="">
+            <app-btn
+              label="Simpan Form"
+              :loading="loading"
+              :disable="loading"
+              @click="simpanData"
+            />
+          </div>
+        </q-card-actions>
+      </q-card>
+      <DialogListRujukan v-model="registrasi.tampilRujukan" />
+      <DialogListKontrol
+        v-model="registrasi.tampilKontrol"
+        @kode-poli="setKodepoli"
+      />
+      <DialogListSuplesi
+        v-model="registrasi.tampilSuplesi"
+      />
+    </app-fullscreen>
   </div>
 </template>
 <script setup>
@@ -58,8 +101,10 @@ const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
 
+const fullscreenC = ref(false)
+
 function goToFullScreen() {
-  console.log('ok')
+  fullscreenC.value = !fullscreenC.value
 }
 
 function clearFormRegistrasi() {

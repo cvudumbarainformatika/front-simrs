@@ -5,7 +5,7 @@
   >
     <!-- :simpanData="simpanData" -->
     <div
-      class="fixed-top row items-center justify-between bg-grey q-pa-md"
+      class="fixed-top row items-center justify-between bg-grey q-pa-sm"
       style="z-index: 10;"
     >
       <div class="f-14 text-weight-bold">
@@ -17,10 +17,13 @@
           label="Edit Form "
           dense
         />
-        <q-icon
-          name="icon-mat-fullscreen"
+        <q-btn
+          flat
+          :icon="!full?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
+          round
           size="sm"
-          class="q-ml-md cursor-pointer"
+          class="q-ml-md"
+          color="white"
           @click="emits('fullScreen')"
         />
       </div>
@@ -30,7 +33,7 @@
       flat
       style="margin-top: 60px;"
     >
-      <q-card-section>
+      <q-card-section no-padding>
         <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
           <div class="col-4">
@@ -1149,7 +1152,8 @@ const props = defineProps({
   tampil: { type: Boolean, default: false },
   nik: { type: [String, Number], default: '' },
   noka: { type: [String, Number], default: '' },
-  tglsep: { type: [String, Number], default: '' }
+  tglsep: { type: [String, Number], default: '' },
+  full: { type: Boolean, default: false }
 })
 
 const dialog = useDialogCariPasienPendaftaranUmum()

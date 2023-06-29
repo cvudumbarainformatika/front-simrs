@@ -7,7 +7,7 @@
     <HeaderComp
       :dark="dark"
       :mobile="mobile"
-      @go-to-sso="()=>{router.push({path:'/admin/sso'})}"
+      @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
     />
     <LeftDrawer
       :dark="dark"

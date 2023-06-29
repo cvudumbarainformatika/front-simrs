@@ -39,7 +39,7 @@
         </div>
         <slot
           name="header-left-after-search"
-          class="q-ml-md"
+          class="q-mr-md"
         />
       </div>
       <div class="col-one">
@@ -69,6 +69,7 @@
           unelevated
           round
           size="sm"
+          color="teal"
           icon="icon-mat-refresh"
           @click="emits('refresh')"
         >

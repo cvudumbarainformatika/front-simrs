@@ -2,7 +2,7 @@
   <q-header
     :bordered="!mobile"
     reveal
-    class="glass"
+    :class="dark?'bg-dark':'bg-white text-dark'"
     height-hint="60"
   >
     <!-- header class old

@@ -18,7 +18,38 @@
     </div>
 
     <div class="row items-center">
-      <q-btn
+      <q-btn-group outline>
+        <q-btn
+          outline
+          color="pink"
+          label="Antrian"
+          icon-right="icon-mat-volume_up"
+          size="md"
+          @click="emits('togleDraw')"
+        />
+        <q-btn
+          outline
+          color="dark"
+          label="List Pasien"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/pasien')"
+        />
+        <q-btn
+          outline
+          color="teal"
+          label="List Pengunjung"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/pasien')"
+        />
+        <q-btn
+          outline
+          size="md"
+          color="primary"
+          label="Pasien Baru"
+          @click="goTo('/pendaftaran/bpjs/form')"
+        />
+      </q-btn-group>
+      <!-- <q-btn
         class="glossy q-mr-sm"
         round
         color="pink"
@@ -65,7 +96,7 @@
         >
           <strong>Tambah</strong> <em>Pasien Baru</em>
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
     </div>
   </div>
 </template>
