@@ -4,13 +4,20 @@
       class="col-auto fixed-top"
       style="z-index:1"
     >
-      <HeaderComp />
+      <HeaderComp
+        :tanggal="store.params.tgl"
+        @fullscreen="style.setComponentFull"
+        @set-tanggal="(val)=>store.setDate(val)"
+      />
     </div>
     <div
       class="col full-height"
       style="padding-bottom: 60px; padding-top:60px"
     >
-      <ListKunjungan />
+      <ListKunjungan
+        :items="store.items"
+        :loading="store.loading"
+      />
     </div>
     <div class="fixed-bottom">
       <BottomComp />
@@ -22,4 +29,14 @@
 import HeaderComp from './comp/HeaderComp.vue'
 import ListKunjungan from './comp/ListKunjungan.vue'
 import BottomComp from './comp/BottomComp.vue'
+import { useStyledStore } from 'src/stores/app/styled'
+import { useListKunjunganBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/lists'
+import { onMounted } from 'vue'
+
+const style = useStyledStore()
+const store = useListKunjunganBpjsStore()
+
+onMounted(() => {
+  store.getLists()
+})
 </script>

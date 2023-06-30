@@ -9,11 +9,39 @@
 <script setup>
 import { computed } from 'vue'
 
-defineProps({
-  width: { type: String, default: '60px' }
+const props = defineProps({
+  width: { type: String, default: '60px' },
+  pasien: { type: Object, default: null }
 })
 
 const foto = computed(() => {
-  return new URL('../../assets/images/user-man.svg', import.meta.url).href
+  const perempuan = props.pasien.kelamin === 'Perempuan'
+  const usia = props.pasien.usia
+  const usiath = usia !== '' || usia !== null ? parseInt(usia.substring(0, 2)) : 25
+  if (perempuan) {
+    if (usiath <= 99 && usiath > 59) {
+      return new URL('../../assets/images/grandma.png', import.meta.url).href
+    } else if (usiath <= 59 && usiath > 25) {
+      return new URL('../../assets/images/user-girl.svg', import.meta.url).href
+    } else if (usiath <= 25 && usiath > 15) {
+      return new URL('../../assets/images/user-girl2.svg', import.meta.url).href
+    } else if (usiath <= 15) {
+      return new URL('../../assets/images/young-girl.svg', import.meta.url).href
+    } else {
+      return new URL('../../assets/images/user-girl3.svg', import.meta.url).href
+    }
+  } else {
+    if (usiath <= 99 && usiath > 59) {
+      return new URL('../../assets/images/grandpa.svg', import.meta.url).href
+    } else if (usiath <= 59 && usiath > 25) {
+      return new URL('../../assets/images/user-man2.svg', import.meta.url).href
+    } else if (usiath <= 25 && usiath > 15) {
+      return new URL('../../assets/images/user-man.svg', import.meta.url).href
+    } else if (usiath <= 15) {
+      return new URL('../../assets/images/young-man.svg', import.meta.url).href
+    } else {
+      return new URL('../../assets/images/actor.svg', import.meta.url).href
+    }
+  }
 })
 </script>
