@@ -6,8 +6,10 @@
     >
       <HeaderComp
         :tanggal="store.params.tgl"
+        :search="store.params.q"
         @fullscreen="style.setComponentFull"
         @set-tanggal="(val)=>store.setDate(val)"
+        @set-search="store.setQ"
       />
     </div>
     <div

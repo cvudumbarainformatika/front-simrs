@@ -5,12 +5,13 @@
   >
     <div>
       <q-input
-        v-model="text"
+        v-model="q"
         outlined
         dark
         color="white"
         dense
         placeholder="Cari Kunjungan ..."
+        debounce="500"
       />
     </div>
     <div>
@@ -18,7 +19,7 @@
         flat
         :color="textColor"
         icon-right="icon-mat-event"
-        label="tanggal"
+        :label="tanggal"
         size="sm"
         padding="xs"
         class="q-mr-sm"
@@ -77,7 +78,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch'])
 const props = defineProps({
   color: {
     type: String,
@@ -87,6 +88,10 @@ const props = defineProps({
     type: String,
     default: 'white'
   },
+  search: {
+    type: String,
+    default: ''
+  },
   tanggal: {
     type: String,
     default: dateDbFormat(new Date())
@@ -94,14 +99,20 @@ const props = defineProps({
   fullscreen: { type: Boolean, default: false }
 })
 
-const text = ref(null)
-
 const date = computed({
   get() {
     return props.tanggal
   },
   set(newVal) {
     emits('setTanggal', newVal)
+  }
+})
+const q = computed({
+  get() {
+    return props.search
+  },
+  set(newVal) {
+    emits('setSearch', newVal)
   }
 })
 </script>

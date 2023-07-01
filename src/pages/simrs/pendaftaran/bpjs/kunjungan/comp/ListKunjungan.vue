@@ -58,11 +58,12 @@
           >
             <q-item-label caption>
               <div class="row">
-                <div>Voted!</div>
+                <!-- <div>Voted!</div> -->
                 <div class="q-ml-sm">
                   <q-badge
-                    color="teal"
-                    label="10k"
+                    outline
+                    :color="item.seprajal?'teal':'negative'"
+                    :label="item.seprajal?'SEP terbit':'SEP Belum terbit'"
                   />
                 </div>
               </div>
