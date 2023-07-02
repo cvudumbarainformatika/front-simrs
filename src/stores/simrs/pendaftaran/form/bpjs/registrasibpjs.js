@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { usePendaftaranAutocompleteStore } from '../../autocomplete'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
+    autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
     tampilRujukan: false,
     tampilKontrol: false,
@@ -47,21 +49,23 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       { nama: 'Tidak', value: '0' },
       { nama: 'Ya', value: '1' }
     ],
+    // auto com
     asalrujukans: [],
     sistembayars: [],
-    sistembayars1: [],
     polis: [],
-    kasrcispoli: null,
     jenisKarcises: [],
-    dpjps: [],
     jenisKunjungans: [],
+    prosedurs: [],
+    assesmens: [],
+    penunjangs: [],
+    ///
+    sistembayars1: [],
+    kasrcispoli: null,
+    dpjps: [],
     tujuanKunjungans: [
       { nama: 'Prosedur', value: 1 },
       { nama: 'Konsul Dokter', value: 2 }
     ],
-    prosedurs: [],
-    assesmens: [],
-    penunjangs: [],
     diagnosaAwals: [],
     ppkRujukans: [],
     listSuratKontrols: [],
@@ -137,14 +141,53 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     // initial data
     getInitialData() {
-      this.getAsalRujukan()
-      this.getSistemBayar()
-      this.getPoli()
-      this.getJenisKarcis()
-      this.getJenisKunjungan()
-      this.getProsedur()
-      this.getAssesmen()
-      this.getPenunjang()
+      if (this.autocompleteStore.asalrujukans.length) {
+        this.asalrujukans = this.autocompleteStore.asalrujukans
+      } else {
+        this.getAsalRujukan()
+      }
+
+      if (this.autocompleteStore.sistembayars1.length) {
+        this.sistembayars1 = this.autocompleteStore.sistembayars1
+      } else {
+        this.getSistemBayar()
+      }
+
+      if (this.autocompleteStore.polis.length) {
+        this.polis = this.autocompleteStore.polis
+      } else {
+        this.getPoli()
+      }
+
+      if (this.autocompleteStore.jenisKarcises.length) {
+        this.jenisKarcises = this.autocompleteStore.jenisKarcises
+      } else {
+        this.getJenisKarcis()
+      }
+
+      if (this.autocompleteStore.jenisKunjungans.length) {
+        this.jenisKunjungans = this.autocompleteStore.jenisKunjungans
+      } else {
+        this.getJenisKunjungan()
+      }
+
+      if (this.autocompleteStore.prosedurs.length) {
+        this.prosedurs = this.autocompleteStore.prosedurs
+      } else {
+        this.getProsedur()
+      }
+
+      if (this.autocompleteStore.assesmens.length) {
+        this.assesmens = this.autocompleteStore.assesmens
+      } else {
+        this.getAssesmen()
+      }
+
+      if (this.autocompleteStore.penunjangs.length) {
+        this.penunjangs = this.autocompleteStore.penunjangs
+      } else {
+        this.getPenunjang()
+      }
       // this.getDiagnosaAwal()
       // this.getPpkRujukan('anu')
     },
@@ -336,7 +379,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.penunjangs = resp.data
-          console.log('Penunjang BPJS', resp.data)
+          this.autocompleteStore.setPenunjang(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -348,7 +391,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.assesmens = resp.data
-          console.log('Assesmen BPJS', resp.data)
+          this.autocompleteStore.setAssesmen(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -360,7 +403,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.prosedurs = resp.data
-          console.log('Prosedur BPJS', resp.data)
+          this.autocompleteStore.setProsedur(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -372,7 +415,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.jenisKunjungans = resp.data
-          console.log('Jenis kunjungan BPJS', resp.data)
+          this.autocompleteStore.setJenisKunjungan(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -397,7 +440,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.jenisKarcises = resp.data
-          console.log('jenis karcis ', resp.data)
+          this.autocompleteStore.setJenisKarcis(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -409,7 +452,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.polis = resp.data
-          console.log('poli', resp.data)
+          this.autocompleteStore.setPoli(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -421,6 +464,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.sistembayars1 = resp.data
+          this.autocompleteStore.setSistemBayar(resp.data)
           console.log('sistem bayar', resp.data)
         })
         .catch(() => {
@@ -434,7 +478,6 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.sistembayars = resp.data
-          console.log('sistem bayar', resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -446,7 +489,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .then(resp => {
           this.loading = false
           this.asalrujukans = resp.data
-          console.log('asal rujukan', resp.data)
+          this.autocompleteStore.setAsalRujukan(resp.data)
         })
         .catch(() => {
           this.loading = false

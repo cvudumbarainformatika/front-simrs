@@ -228,7 +228,7 @@
                       :filled="false"
                       :source="store.sapaans"
                       :loading="store.loading"
-                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                      :disable="(store.form.barulama!=='baru'&&!store.edit)||store.loading"
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       @selected="sapaanSelected"
                       @keyup.enter="sapaanEnter"
@@ -656,7 +656,7 @@
                   :filled="false"
                   :source="store.negaras"
                   :loading="store.loadingSelect"
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :disable="(store.form.barulama!=='baru'&&!store.edit)||store.loadingSelect"
                   @on-select="negaraSelected"
                   @clear="store.clearNegara"
                 />
