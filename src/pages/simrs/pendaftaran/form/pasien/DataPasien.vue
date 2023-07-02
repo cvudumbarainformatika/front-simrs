@@ -39,10 +39,6 @@
           <div class="col-4">
             <!-- lama / baru -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Pasien Baru / Lama
-              </div>
-              <div :class="store.form.barulama==='baru'?'col-8':'col-7'">-->
               <div :class="store.form.barulama==='baru'?'col-12':'col-11'">
                 <app-autocomplete-new
                   ref="refJenisPasien"
@@ -89,16 +85,11 @@
             </div>
             <!-- no rm -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Nomor RM
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refNoRM"
                   v-model="store.form.norm"
                   label="Nomor RM"
-                  type="number"
                   autofocus
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -106,6 +97,7 @@
                   :rules="[
                     val => (!!val) || 'Harap diisi',
                     val => val?val.length > 5:!val || 'Harus 6 Karakter',
+                    val=>regex.test(val)||'Hanya angka'
                   ]"
                   @keyup.enter="inputNoRmSelesai"
                   @update:model-value="updateValNoRM"
@@ -114,43 +106,24 @@
               </div>
             </div>
             <!-- ktp -->
-            <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. KTP
-              </div>
-              <div class="col-8"> -->
-              <div style="width:90%">
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
                 <app-input
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
-                  type="number"
                   :filled="false"
-                  :right-icon="true"
+                  :right-icon="!!bpjs"
                   right-icon-name="icon-mat-dvr"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
-                  @icon-right-click="()=> console.log('ok')"
-                />
-              </div>
-              <div
-                v-if="bpjs"
-                class="text-right"
-              >
-                <q-btn
-                  color="primary"
-                  dense
-                  label="BPJS"
-                  :loading="store.loadingNik"
-                  @click="cekBpjsbyNik"
+                  right-icon-tooltip="Cek BPJS"
+                  :rules="[val=>regex.test(val)||'Hanya angka']"
+                  @icon-right-click="cekBpjsbyNik"
                 />
               </div>
             </div>
             <!-- kitas -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. Paspor / KITAS
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refKitas"
@@ -159,15 +132,12 @@
                   valid
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val=>regex.test(val)||'Hanya angka']"
                 />
               </div>
             </div>
             <!-- Nama ibu kandung -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. Paspor / KITAS
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refIbu"
@@ -179,12 +149,8 @@
               </div>
             </div>
             <!-- KA BPJS -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. KA BPJS
-              </div>
-              <div class="col-8"> -->
-              <div :class="bpjs?'col-8':'col-12'">
+            <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
+              <div :class="bpjs?'bagi-tiga':'satu'">
                 <app-input
                   ref="refNoKaBpjs"
                   v-model="store.form.noka"
@@ -196,11 +162,11 @@
               </div>
               <div
                 v-if="bpjs"
-                class="col-2"
               >
                 <q-btn
                   color="primary"
                   dense
+                  flat
                   label="BPJS"
                   :loading="store.loadingNoka"
                   @click="cekBpjsByNoka"
@@ -208,12 +174,12 @@
               </div>
               <div
                 v-if="bpjs"
-                class="col-2"
               >
                 <q-btn
                   no-caps
                   color="primary"
                   dense
+                  flat
                   label="finger"
                   :loading="store.loadingFinger"
                   @click="cekFinger"
@@ -1156,6 +1122,9 @@ const props = defineProps({
   full: { type: Boolean, default: false }
 })
 
+const regex = /^\d+$/
+// console.log(regex.test('3231'))
+// console.log(regex.test('3231f'))
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
@@ -1672,3 +1641,11 @@ onBeforeUpdate(() => {
   // console.log('jenis pasien', refJenisPasien.value)
 })
 </script>
+<style lang="scss" scoped>
+.bagi-tiga{
+  width:70%;
+}
+.satu{
+  width:100%;
+}
+</style>
