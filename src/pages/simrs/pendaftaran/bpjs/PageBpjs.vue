@@ -113,6 +113,8 @@ const title = computed(() => {
     return 'RAJAL BPJS || JKN'
   } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
     return 'LIST KUNJUNGAN'
+  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+    return 'LIST MOBILE JKN'
   } else {
     return 'MASTER PASIEN'
   }
@@ -122,6 +124,8 @@ const subtitle = computed(() => {
     return 'Pendaftaran Pasien Baru Rajal BPJS || JKN'
   } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
     return 'List Kunjungan Pasien BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+    return 'List Kunjungan dari m-JKN'
   } else {
     return 'Daftar Pasien'
   }
