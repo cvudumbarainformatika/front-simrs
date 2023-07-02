@@ -35,25 +35,26 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-bold">
-              {{ item.nama }} | <span class="text-primary">{{ item.norm }}</span>
+              {{ item.nama? item.nama:'-' }} | <span class="text-primary">{{ item.norm? item.norm:'-' }}</span>
             </q-item-label>
             <q-item-label>
-              NOREG : <span class="text-weight-bold">{{ item.noreg }} </span> | Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
+              NOREG : <span class="text-weight-bold">{{ item.noreg?item.noreg:'-' }} </span>
+              | Penjamin : <span class="text-weight-bold"> JKN</span>
             </q-item-label>
             <q-item-label>
-              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span> | RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter?item.dokter:'-' }}</span> | RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli?item.poli:'-' }}</span>
             </q-item-label>
             <q-item-label caption>
-              USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
+              USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin?item.kelamin:'-' }}</span>
             </q-item-label>
             <!-- <q-item-label>
               Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
             </q-item-label> -->
-            <q-item-label
+            <!-- <q-item-label
               caption
             >
               Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span>
-            </q-item-label>
+            </q-item-label> -->
           </q-item-section>
 
           <q-item-section
@@ -70,7 +71,16 @@
                   />
                 </div>
               </div>
-              <div class="row q-mt-sm text-end">
+              <div class="row justify-end q-mt-sm">
+                <div class="q-ml-sm">
+                  <q-badge
+                    outline
+                    :color="item.checkin?'teal':'negative'"
+                    :label="item.checkin?'Sudah Check-in':'Belum Check-in'"
+                  />
+                </div>
+              </div>
+              <!-- <div class="row q-mt-sm text-end">
                 <div class="q-ml-sm">
                   <q-badge
                     outline
@@ -78,7 +88,7 @@
                     :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
                   />
                 </div>
-              </div>
+              </div> -->
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -99,46 +109,46 @@ defineProps({
   items: { type: Array, default: () => [] }
 })
 
-function getStatus(arr) {
-  if (arr.length === 0) {
-    return '-'
-  }
+// function getStatus(arr) {
+//   if (arr.length === 0) {
+//     return '-'
+//   }
 
-  // 1 (mulai waktu tunggu admisi),
-  // 2 (akhir waktu tunggu admisi/mulai waktu layan admisi),
-  // 3 (akhir waktu layan admisi/mulai waktu tunggu poli),
-  // 4 (akhir waktu tunggu poli/mulai waktu layan poli),
-  // 5 (akhir waktu layan poli/mulai waktu tunggu farmasi),
-  // 6 (akhir waktu tunggu farmasi/mulai waktu layan farmasi membuat obat),
-  // 7 (akhir waktu obat selesai dibuat),
-  // 99 (tidak hadir/batal)
-  const arr0 = arr[0].taskid
-  let text
-  switch (arr0) {
-    case '1' || 1:
-      text = 'Menunggu di Admisi'
-      break
-    case '2' || 2:
-      text = 'Pelayanan di Admisi'
-      break
-    case '3' || 3:
-      text = 'Menunggu di Poli'
-      break
-    case '4' || 4:
-      text = 'Pelayanan di Poli'
-      break
-    case '5' || 5:
-      text = 'Menunggu di Farmasi'
-      break
-    case '6' || 6:
-      text = 'Farmasi'
-      break
-    case '7' || 7:
-      text = 'Sudah Ambil Obat di Farmasi'
-      break
-    default:
-      text = 'Tidak Hadir/ Batal'
-  }
-  return text
-}
+//   // 1 (mulai waktu tunggu admisi),
+//   // 2 (akhir waktu tunggu admisi/mulai waktu layan admisi),
+//   // 3 (akhir waktu layan admisi/mulai waktu tunggu poli),
+//   // 4 (akhir waktu tunggu poli/mulai waktu layan poli),
+//   // 5 (akhir waktu layan poli/mulai waktu tunggu farmasi),
+//   // 6 (akhir waktu tunggu farmasi/mulai waktu layan farmasi membuat obat),
+//   // 7 (akhir waktu obat selesai dibuat),
+//   // 99 (tidak hadir/batal)
+//   const arr0 = arr[0].taskid
+//   let text
+//   switch (arr0) {
+//     case '1' || 1:
+//       text = 'Menunggu di Admisi'
+//       break
+//     case '2' || 2:
+//       text = 'Pelayanan di Admisi'
+//       break
+//     case '3' || 3:
+//       text = 'Menunggu di Poli'
+//       break
+//     case '4' || 4:
+//       text = 'Pelayanan di Poli'
+//       break
+//     case '5' || 5:
+//       text = 'Menunggu di Farmasi'
+//       break
+//     case '6' || 6:
+//       text = 'Farmasi'
+//       break
+//     case '7' || 7:
+//       text = 'Sudah Ambil Obat di Farmasi'
+//       break
+//     default:
+//       text = 'Tidak Hadir/ Batal'
+//   }
+//   return text
+// }
 </script>

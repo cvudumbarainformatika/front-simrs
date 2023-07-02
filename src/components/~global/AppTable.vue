@@ -474,7 +474,7 @@ const props = defineProps({
   enableHead: { type: Boolean, default: true },
   adaPaginasi: { type: Boolean, default: true },
   textSize: { type: Number, default: 12 },
-  stickyHeader: { type: Boolean, default: true }
+  stickyHeader: { type: Boolean, default: false }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 

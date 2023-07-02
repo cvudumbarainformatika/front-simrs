@@ -31,6 +31,7 @@
         :add-data="false"
         :stick-header="true"
         :row-no="true"
+        :sticky-header="true"
         @set-order="store.setOder"
         @set-row="store.setPerPage"
         @goto="store.setPage"

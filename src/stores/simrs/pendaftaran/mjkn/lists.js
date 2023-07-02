@@ -24,9 +24,9 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       this.loading = true
       const params = { params: this.params }
       try {
-        const resp = await api.get('/v1/simrs/pendaftaran/listmjkn', params)
+        const resp = await api.get('/v1/simrs/pendaftaran/antrianmobilejkn', params)
         if (resp.status === 200) {
-          console.log('kunjungan', resp)
+          console.log('antrianmobilejkn', resp)
           this.items = resp.data.data
           this.meta = resp.data
           this.loading = false
