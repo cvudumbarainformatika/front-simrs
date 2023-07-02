@@ -42,6 +42,15 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       this.params.page = 1
       this.params.q = payload
       this.getLists()
+    },
+    setPage(payload) {
+      this.params.page = payload
+      this.getLists()
+    },
+    setPerPage(payload) {
+      this.params.page = 1
+      this.params.per_page = payload
+      this.getLists()
     }
   }
 })

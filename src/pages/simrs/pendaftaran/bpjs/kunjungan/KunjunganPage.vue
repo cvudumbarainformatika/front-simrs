@@ -7,9 +7,11 @@
       <HeaderComp
         :tanggal="store.params.tgl"
         :search="store.params.q"
+        :per-page="store.params.per_page"
         @fullscreen="style.setComponentFull"
         @set-tanggal="(val)=>store.setDate(val)"
         @set-search="store.setQ"
+        @set-row="store.setPerPage"
       />
     </div>
     <div
@@ -17,12 +19,18 @@
       style="padding-bottom: 60px; padding-top:60px"
     >
       <ListKunjungan
+        :key="store.items"
         :items="store.items"
         :loading="store.loading"
       />
     </div>
     <div class="fixed-bottom">
-      <BottomComp />
+      <BottomComp
+        v-if="store.meta !==null"
+        :key="store.meta"
+        :meta="store.meta"
+        @go-to="store.setPage"
+      />
     </div>
   </div>
 </template>

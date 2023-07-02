@@ -15,9 +15,9 @@ const props = defineProps({
 })
 
 const foto = computed(() => {
-  const perempuan = props.pasien.kelamin === 'Perempuan'
+  const perempuan = props.pasien ? props.pasien.kelamin === 'Perempuan' : false
   const usia = props.pasien.usia
-  const usiath = usia !== '' || usia !== null ? parseInt(usia.substring(0, 2)) : 25
+  const usiath = usia ? parseInt(usia.substring(0, 2)) : 25
   if (perempuan) {
     if (usiath <= 99 && usiath > 59) {
       return new URL('../../assets/images/grandma.png', import.meta.url).href
