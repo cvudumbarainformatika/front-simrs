@@ -1,19 +1,82 @@
 <template>
   <q-dialog
+    position="top"
+    class="q-mt-lg"
     @hide="emits('hide')"
   >
-    <q-card style="min-width:75vw;">
-      <q-card-section>
+    <q-card style="min-width:50vw;">
+      <q-card-section class="row items-center q-pb-none">
         <div class="f-14 text-weight-bold">
-          Cari Pasien
+          Cari Data Pasien
         </div>
-        <div class="title-desc">
+        <!-- <div class="title-desc">
           Dialog pencarian pasien
-        </div>
+        </div> -->
+        <q-space />
+        <q-btn
+          v-close-popup
+          icon="icon-mat-clear"
+          flat
+          round
+          dense
+        />
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <app-table
+        <q-select
+          v-model="dialog.search"
+          dense
+          outlined
+          label="Cari Data"
+          use-input
+          clearable
+          option-value="id"
+          option-label="nama"
+          :options="dialog.options"
+          behavior="menu"
+          hide-dropdown-icon
+          @filter="dialog.filterOptions"
+        >
+          <template #prepend>
+            <q-icon name="icon-mat-search" />
+          </template>
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                Tidak ditemukan
+              </q-item-section>
+            </q-item>
+          </template>
+          <template #option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section avatar>
+                <app-avatar-pasien
+                  :pasien="scope.opt"
+                  width="50px"
+                />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label class="text-weight-bold">
+                  {{ scope.opt.nama }} | <span class="text-primary"> {{ scope.opt.norm }}</span>
+                </q-item-label>
+                <q-item-label caption>
+                  🏡 {{ scope.opt.alamat?scope.opt.alamat:'-' }}
+                </q-item-label>
+                <q-item-label
+                  caption
+                  class="text-weight-bold"
+                >
+                  💳 NIK :  <strong>{{ scope.opt.nik? scope.opt.nik:'-' }}</strong>
+                </q-item-label>
+                <q-item-label caption>
+                  USIA : <strong>{{ scope.opt.usia? scope.opt.usia : '-' }} | {{ scope.opt.kelamin?scope.opt.kelamin:'-' }}</strong>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+
+        <!-- <app-table
           title="Data Barang RS"
           :columns="dialog.columns"
           :column-hide="dialog.columnHide"
@@ -99,7 +162,7 @@
               </q-btn>
             </div>
           </template>
-        </app-table>
+        </app-table> -->
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -107,10 +170,12 @@
 <script setup>
 
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
-import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
+// import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
+import { usePencarianPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pencarianpasien'
 
-const dialog = useDialogCariPasienPendaftaranUmum()
+// const dialog = useDialogCariPasienPendaftaranUmum()
+const dialog = usePencarianPasienStore()
 const store = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
 const emits = defineEmits(['hide', 'gantiPasien'])
@@ -118,6 +183,7 @@ const props = defineProps({
   bpjs: { type: Boolean, default: false }
 })
 
+// eslint-disable-next-line no-unused-vars
 function pilihPasienIni(val) {
   val.noka = val.nokabpjs
   store.form = val
