@@ -20,18 +20,6 @@ export const useTransitionStore = defineStore('transition', {
         this.pageTransition.mode = 'router-view-back'
         this.pageTransition.mode = ''
       }
-      // if (payload === 'default') {
-      //   // app.set(state, 'pageTransition', {
-      //   //   name: 'router-view',
-      //   //   mode: 'in-out'
-      //   // })
-      //   this.pageTransition.name = 'router-view',
-      //   this.pageTransition.mode = 'in-out',
-      // }
-      // if (payload === 'back') {
-      //   this.pageTransition.name = 'router-view',
-      //   this.pageTransition.mode = '',
-      // }
     }
   }
 })

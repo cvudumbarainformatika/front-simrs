@@ -2,9 +2,11 @@ import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { findWithAttr } from 'src/modules/utils'
 import { date } from 'quasar'
+import { usePendaftaranAutocompleteStore } from '../../autocomplete'
 
 export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
   state: () => ({
+    autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
     cariPasienDialog: false,
     alamataDomisiliSama: true,
@@ -45,27 +47,28 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       sapaan: 'Bpk.',
       agama: ''
     },
-    sapaans: [],
     jenisPasiens: [
       { nama: 'Baru', value: 'baru' },
       { nama: 'Lama', value: 'lama' }
     ],
-    kelamins: [],
-    agamas: [],
-    statuspernikahans: [],
-    pendidikans: [],
-    pekerjaans: [],
     loadingSelectDomisili: false,
-    negaras: [],
     propinsies: [],
     kabupatens: [],
     kecamatans: [],
     kelurahans: [],
-    domisiliNegaras: [],
     domisiliPropinsies: [],
     domisiliKabupatens: [],
     domisiliKecamatans: [],
     domisiliKelurahans: [],
+    // autocomp
+    statuspernikahans: [],
+    pendidikans: [],
+    pekerjaans: [],
+    sapaans: [],
+    kelamins: [],
+    agamas: [],
+    negaras: [],
+    domisiliNegaras: [],
     // cek bpjs
     alert: false,
     alertMsg: {},
@@ -493,16 +496,56 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     // initial data
     getInitialData() {
-      // this.lahirHariIni()
       this.setTanggalLahir()
-      this.getNegara()
-      this.getNegaraDomisili()
-      this.getAgama()
-      this.getSapaan()
-      this.getKelamin()
-      this.getPendidikan()
-      this.getStatusPernikahan()
-      this.getPekerjaan()
+      if (this.autocompleteStore.negaras.length) {
+        this.negaras = this.autocompleteStore.negaras
+      } else {
+        this.getNegara()
+      }
+
+      if (this.autocompleteStore.domisiliNegaras.length) {
+        this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
+      } else {
+        this.getNegaraDomisili()
+      }
+
+      if (this.autocompleteStore.agamas.length) {
+        this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
+        this.agamas = this.autocompleteStore.agamas
+      } else {
+        this.getAgama()
+      }
+
+      if (this.autocompleteStore.sapaans.length) {
+        this.domisiliNegaras = this.autocompleteStore.domisiliNegaras
+        this.sapaans = this.autocompleteStore.sapaans
+      } else {
+        this.getSapaan()
+      }
+
+      if (this.autocompleteStore.kelamins.length) {
+        this.kelamins = this.autocompleteStore.kelamins
+      } else {
+        this.getKelamin()
+      }
+
+      if (this.autocompleteStore.pendidikans.length) {
+        this.pendidikans = this.autocompleteStore.pendidikans
+      } else {
+        this.getPendidikan()
+      }
+
+      if (this.autocompleteStore.statuspernikahans.length) {
+        this.statuspernikahans = this.autocompleteStore.statuspernikahans
+      } else {
+        this.getStatusPernikahan()
+      }
+
+      if (this.autocompleteStore.pekerjaans.length) {
+        this.pekerjaans = this.autocompleteStore.pekerjaans
+      } else {
+        this.getPekerjaan()
+      }
     },
     // api related functions
     async cekFingerBpjs(val) {
@@ -522,8 +565,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       await api.get('v1/simrs/master/pekerjaan')
         .then(resp => {
           this.loading = false
-
           this.pekerjaans = resp.data
+          this.autocompleteStore.setPekerjaan(resp.data)
         })
         .catch(() => { this.loading = false })
     },
@@ -532,7 +575,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       await api.get('v1/simrs/master/statuspernikahan')
         .then(resp => {
           this.loading = false
-
+          this.autocompleteStore.setStatusPernikahan(resp.data)
           this.statuspernikahans = resp.data
         })
         .catch(() => { this.loading = false })
@@ -543,6 +586,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         .then(resp => {
           this.loading = false
           this.pendidikans = resp.data
+          this.autocompleteStore.setPendidikan(resp.data)
         })
         .catch(() => { this.loading = false })
     },
@@ -552,6 +596,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         .then(resp => {
           this.loading = false
           this.kelamins = resp.data
+          this.autocompleteStore.setKelamin(resp.data)
         })
         .catch(() => {
           this.kelamins = [
@@ -567,6 +612,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         .then(resp => {
           this.loading = false
           this.sapaans = resp.data
+          this.autocompleteStore.setSapaan(resp.data)
         })
         .catch(() => { this.loading = false })
     },
@@ -576,6 +622,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         .then(resp => {
           this.loading = false
           this.agamas = resp.data
+          this.autocompleteStore.setAgama(resp.data)
         })
         .catch(() => { this.loading = false })
     },
@@ -588,6 +635,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           this.loadingSelect = false
           // )
           this.negaras = resp.data[0]
+          this.autocompleteStore.setNegara(resp.data[0])
         }).catch(() => {
           this.loadingSelect = false
         })
@@ -650,6 +698,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         .then((resp) => {
           this.loadingSelectDomisili = false
           this.domisiliNegaras = resp.data[0]
+          this.autocompleteStore.setNegaraDomisili(resp.data[0])
         }).catch(() => {
           this.loadingSelectDomisili = false
         })

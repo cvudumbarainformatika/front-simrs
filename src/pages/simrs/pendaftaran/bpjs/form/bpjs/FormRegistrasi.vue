@@ -41,24 +41,28 @@
             </div>
             <!-- No rujukan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-9">
+              <div class="col-12">
                 <app-input
                   ref="refNoRujukan"
                   v-model="store.form.norujukan"
                   label="nomor Rujukan"
+                  right-icon
+                  right-icon-name="icon-mat-format_list_numbered"
+                  right-icon-tooltip="List Rujukan"
                   :filled="false"
                   :loading="store.loadingListRujukan"
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @icon-right-click="listSuratRujukan"
                 />
               </div>
-              <div class="col-3">
+              <!-- <div class="col-3">
                 <app-btn
                   label="List Rujukan"
                   :loading="store.loadingListRujukan"
                   :disable="store.loadingListRujukan || store.loading"
                   @click="listSuratRujukan"
                 />
-              </div>
+              </div> -->
               <!-- <div class="col-3">
                 <app-btn
                   label="Cek Rujukan"
@@ -208,24 +212,28 @@
             </div>
             <!-- No Surat kontrol -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-9">
+              <div class="col-12">
                 <app-input
                   ref="refNoSuratKontrol"
                   v-model="store.form.nosuratkontrol"
                   label="nomor Surat Kontrol"
+                  right-icon
+                  right-icon-name="icon-mat-format_list_numbered"
+                  right-icon-tooltip="List Surat Kontrol"
                   :filled="false"
                   :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @icon-right-click="cekSuratKontrol"
                 />
               </div>
-              <div class="col-3">
+              <!-- <div class="col-3">
                 <app-btn
                   label="List surat kontrol"
                   :loading="store.loadingSuratKontrol"
                   :disable="store.loadingSuratKontrol || store.loading"
                   @click="cekSuratKontrol"
                 />
-              </div>
+              </div> -->
             </div>
             <!-- Tujuan Kunjungan -->
             <div

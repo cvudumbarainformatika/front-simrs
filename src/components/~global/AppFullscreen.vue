@@ -1,0 +1,63 @@
+<template>
+  <q-dialog
+    persistent
+    :maximized="maximizedToggle"
+    transition-show="slide-left"
+    transition-hide="fade"
+  >
+    <q-card flat>
+      <q-bar>
+        <q-space />
+
+        <q-btn
+          dense
+          flat
+          icon="icon-mat-minimize"
+          :disable="!maximizedToggle"
+          @click="maximizedToggle = false"
+        >
+          <q-tooltip
+            v-if="maximizedToggle"
+            class="bg-white text-primary"
+          >
+            Minimize
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          dense
+          flat
+          icon="icon-mat-crop_square"
+          :disable="maximizedToggle"
+          @click="maximizedToggle = true"
+        >
+          <q-tooltip
+            v-if="!maximizedToggle"
+            class="bg-white text-primary"
+          >
+            Maximize
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          v-close-popup
+          dense
+          flat
+          icon="icon-mat-close"
+        >
+          <q-tooltip class="bg-white text-primary">
+            Close
+          </q-tooltip>
+        </q-btn>
+      </q-bar>
+
+      <q-card-section>
+        <slot />
+      </q-card-section>
+    </q-card>
+  </q-dialog>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+const maximizedToggle = ref(true)
+</script>

@@ -1,12 +1,14 @@
 <template>
-  <q-page class="">
+  <div>
     <DataPasien
       ref="refDataPasien"
       bpjs
       :nik="registrasi.form.nik"
       :noka="registrasi.form.noka"
       :tglsep="registrasi.form.tglsep"
+      :full="style.componentfull"
       @ganti-pasien="clearFormRegistrasi"
+      @full-screen="style.setComponentFull"
     />
     <!-- @bisa-simpan="bisaSimpan" -->
     <!-- @surat="bisaCekSurat" -->
@@ -18,7 +20,7 @@
       @cek-suplesi="cekSuplesi"
     />
     <q-card
-      class="full-width"
+      class="full-width q-pb-xl"
       flat
     >
       <q-card-actions>
@@ -40,7 +42,7 @@
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
     />
-  </q-page>
+  </div>
 </template>
 <script setup>
 import DialogListSuplesi from './DialogListSuplesi.vue'
@@ -51,11 +53,15 @@ import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
+import { useStyledStore } from 'src/stores/app/styled'
 
 const registrasi = useRegistrasiPasienBPJSStore()
 const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
+
+const style = useStyledStore()
+
 function clearFormRegistrasi() {
   registrasi.clearForm()
 }

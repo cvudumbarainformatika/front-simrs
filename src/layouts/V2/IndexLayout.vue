@@ -5,12 +5,13 @@
   >
     <!-- hHr lpR fFr || hhh LpR lFr-->
     <HeaderComp
+      v-if="!style.componentfull"
       :dark="dark"
       :mobile="mobile"
-      @go-to-sso="()=>{router.push({path:'/admin/sso'})}"
+      @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
     />
     <LeftDrawer
-      :dark="dark"
+      :tampil="!style.componentfull"
     />
 
     <!-- <q-drawer
@@ -64,12 +65,13 @@
       </q-page-container>
     </q-scroll-area>
     <q-page-sticky
+      v-if="!style.componentfull"
       position="bottom-right"
-      :offset="[18, 18]"
+      :offset="[5, 5]"
     >
       <q-fab
-        size="sm"
-        padding="sm"
+        size="xs"
+        padding="xs"
         icon="icon-mat-display_settings"
         color="primary"
         direction="up"
@@ -96,10 +98,12 @@ import { useAuthStore } from 'src/stores/auth'
 import { useTransitionStore } from 'src/stores/app/transition'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRouter } from 'vue-router'
+import { useStyledStore } from 'src/stores/app/styled'
 
 const router = useRouter()
 const transition = useTransitionStore()
 const store = useAuthStore()
+const style = useStyledStore()
 // const apps = useAplikasiStore()
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)

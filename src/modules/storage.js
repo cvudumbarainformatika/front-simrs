@@ -24,3 +24,9 @@ export const setAkses = data => localStorage.setItem('akses', JSON.stringify(dat
 export const getAkses = () => JSON.parse(localStorage.getItem('akses'))
 export const delAkses = () => localStorage.removeItem('akses')
 export const delX = () => localStorage.removeItem('aplikasiX')
+
+// presist pendaftaran
+export const setAutoPend = data => localStorage.setItem('autoPend', JSON.stringify(data))
+export const getAutoPend = () => JSON.parse(localStorage.getItem('autoPend'))
+export const delAutoPend = () => localStorage.removeItem('autoPend')
+export const delAPend = () => localStorage.removeItem('pendaftaranAutocomplete')

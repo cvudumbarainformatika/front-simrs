@@ -1,17 +1,25 @@
 <template>
   <q-page
     ref="pageRef"
-    class="column full-height q-pa-md"
+    class="column full-height full-width"
+    :class="!style.componentfull?'q-pa-md':'q-pa-xs'"
   >
-    <div class="col-auto">
-      <PageHead @togle-draw="toggleDraw()" />
+    <div class="col-auto ">
+      <PageHead
+        v-if="!style.componentfull"
+        :title="title"
+        :subtitle="subtitle"
+        :path="page.path"
+        @togle-draw="toggleDraw()"
+      />
     </div>
-    <div
-      class="col bg-white full-width full-height"
-      :style="`max-height: ${h-60}px; overflow:hidden`"
+    <q-card
+      flat
+      class="col full-width full-height"
+      :style="`max-height: ${!style.componentfull? h-60:h+40}px; overflow:hidden`"
     >
       <q-scroll-area
-        :style="`height: ${h-100}px; max-width: 100%;`"
+        :style="`height: ${!style.componentfull? h-95:h+40}px; max-width: 100%;`"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
@@ -22,7 +30,7 @@
           </transition>
         </router-view>
       </q-scroll-area>
-    </div>
+    </q-card>
 
     <q-dialog
       v-model="drawerRight"
@@ -68,20 +76,20 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <!-- app-pasein -->
+    <!-- <app-pasien-rajal v-model="pasien" /> -->
   </q-page>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
 import PageHead from './PageHead.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useStyledStore } from 'src/stores/app/styled'
 
 const drawerRight = ref(false)
-// const tabs = ref([
-//   { nama: 'form', label: 'Pasien Baru', icon: '' },
-//   { nama: 'daftar-pasien', label: 'Daftar Pasien', icon: '' }
-// ])
-
+const style = useStyledStore()
 const pageRef = ref()
 const h = ref(0)
 const thumbStyle = ref({
@@ -100,12 +108,35 @@ const barStyle = ref({
 })
 
 const page = useRoute()
+const title = computed(() => {
+  if (page.path === '/pendaftaran/bpjs/form') {
+    return 'RAJAL BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+    return 'LIST KUNJUNGAN'
+  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+    return 'LIST MOBILE JKN'
+  } else {
+    return 'MASTER PASIEN'
+  }
+})
+const subtitle = computed(() => {
+  if (page.path === '/pendaftaran/bpjs/form') {
+    return 'Pendaftaran Pasien Baru Rajal BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/kunjungan') {
+    return 'List Kunjungan Pasien BPJS || JKN'
+  } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
+    return 'List Kunjungan dari m-JKN'
+  } else {
+    return 'Daftar Pasien'
+  }
+})
 onMounted(() => {
-  console.log('page ', page)
+  console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
 })
 
 function toggleDraw() {
   drawerRight.value = !drawerRight.value
 }
+
 </script>

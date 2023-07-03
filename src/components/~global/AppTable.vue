@@ -6,12 +6,17 @@
         name="header-for-print"
       />
     </div>
-    <div class="flex items-center justify-between q-mb-md print-hide">
+    <div
+      class="flex items-center justify-between q-mb-md print-hide"
+      :class="stickyHeader?'sticky-header bg-white shadow-2':''"
+    >
       <!-- title -->
       <!-- <div class="title-table q-pr-sm f-14 text-bold">
         {{ title }}
       </div> -->
-      <div class="col-one flex items-center">
+      <div
+        class="col-one flex items-center"
+      >
         <div v-if="adaCari">
           <q-input
             v-model="search"
@@ -21,7 +26,7 @@
             :debounce="debounce"
             clearable
             dense
-            placeholder="Search..."
+            placeholder="Cari ..."
             @keydown.enter.prevent="searchEnter"
           >
             <template #prepend>
@@ -34,7 +39,7 @@
         </div>
         <slot
           name="header-left-after-search"
-          class="q-ml-md"
+          class="q-mr-md"
         />
       </div>
       <div class="col-one">
@@ -64,6 +69,7 @@
           unelevated
           round
           size="sm"
+          color="teal"
           icon="icon-mat-refresh"
           @click="emits('refresh')"
         >
@@ -177,7 +183,7 @@
         </q-btn>
       </div>
     </div>
-    <q-separator />
+    <q-separator :style="stickyHeader?'margin-top:70px':''" />
     <!-- table -->
     <q-markup-table
       ref="refCellTable"
@@ -186,7 +192,9 @@
       bordered
       separator="horizontal"
       class="screenwide"
+      :class="stickyHeader?'head-x bg-white':''"
     >
+      <!-- <div :class="stickyHeader?'head-x':''"> -->
       <thead>
         <tr v-if="enableHead">
           <th
@@ -208,8 +216,8 @@
             width="5%"
             class="text-left"
           >
-            <div class="">
-              No
+            <div class="text-weight-bold">
+              NO
             </div>
           </th>
           <th
@@ -258,11 +266,19 @@
           >
             #
           </th>
+          <th
+            v-else-if="customBtnLabel !== null"
+            class="text-right"
+          >
+            {{ customBtnLabel }}
+          </th>
         </tr>
         <!-- <tr>
           <slot name="top-row" />
         </tr> -->
       </thead>
+      <!-- </div> -->
+
       <tbody v-if="!loading">
         <tr v-if="!items.length > 0">
           <transition
@@ -309,7 +325,7 @@
             v-if="rowNo"
             class="text-left"
           >
-            {{ i+1 }}
+            {{ meta.from + i }}
           </td>
           <td
             v-if="rowImage !== null"
@@ -449,6 +465,7 @@ const props = defineProps({
   toSearch: { type: String, default: '' },
   isChecked: { type: Boolean, default: false },
   defaultBtn: { type: Boolean, default: true },
+  customBtnLabel: { type: String, default: null },
   adaEdit: { type: Boolean, default: true },
   adaDelete: { type: Boolean, default: true },
   adaTambah: { type: Boolean, default: true },
@@ -456,7 +473,8 @@ const props = defineProps({
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
   adaPaginasi: { type: Boolean, default: true },
-  textSize: { type: Number, default: 12 }
+  textSize: { type: Number, default: 12 },
+  stickyHeader: { type: Boolean, default: false }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 
@@ -598,6 +616,20 @@ $pfs: v-bind(pts);
   }
 }
 
+.sticky-header{
+  position: fixed;
+  top:0;
+  right:0;
+  z-index: 10;
+  width: 100%;
+  padding:15px 10px;
+}
+
+.head-x thead tr th{
+  position: sticky;
+  top: 0;
+}
+
 .app-table {
   width: 100%; /* print width */
   font-size:$fs;
@@ -608,6 +640,7 @@ $pfs: v-bind(pts);
   .q-table {
     max-width: 100% !important;
   }
+
   // .q-table td {
   //   padding: 10px 10px;
   //   font-size: $fs;
@@ -652,6 +685,7 @@ $pfs: v-bind(pts);
     .screenwide{
       max-width: 100% !important;
     }
+
   }
 }
 </style>

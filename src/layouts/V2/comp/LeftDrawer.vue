@@ -4,7 +4,7 @@
     side="left"
     :mini="miniState"
     mini-to-overlay
-    behavior="desktop"
+    :behavior="tampil?'desktop':'mobile'"
     bordered
     @mouseover="miniState = false"
     @mouseout="miniState = true"
@@ -133,6 +133,10 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useAuthStore } from 'src/stores/auth'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+defineProps({
+  tampil: { type: Boolean, default: true }
+})
 
 const miniState = ref(true)
 const route = useRoute()

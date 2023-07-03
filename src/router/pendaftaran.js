@@ -3,7 +3,7 @@ const pendaftaran = {
   component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', redirect: '/pendaftaran/bpjs' },
+    { path: '', redirect: '/pendaftaran/middleware' },
     {
       path: '/pendaftaran/form',
       name: 'pendaftaran.form',
@@ -48,6 +48,20 @@ const pendaftaran = {
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/kunjungan',
+          name: 'pendaftaran.bpjs.kunjungan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/kunjungan/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/bpjs/listmjkn',
+          name: 'pendaftaran.bpjs.listmjkn',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/mjkn/IndexPage.vue')
         }
       ]
     },
@@ -101,6 +115,11 @@ const pendaftaran = {
       //       import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
       //   }
       // ]
+    },
+
+    {
+      path: '/pendaftaran/middleware',
+      component: () => import('pages/simrs/pendaftaran/middleware/IndexPage.vue')
     },
 
     {

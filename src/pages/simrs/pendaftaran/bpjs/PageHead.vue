@@ -9,16 +9,62 @@
       </div>
       <div class="left">
         <div class="text-h6">
-          BPJS || JKN
+          {{ title }}
         </div>
         <div class="f-12">
-          <span>Pasien Baru JKN / BPJS</span>
+          <span>{{ subtitle }}</span>
         </div>
       </div>
     </div>
 
     <div class="row items-center">
-      <q-btn
+      <q-btn-group outline>
+        <q-btn
+          outline
+          glossy
+          color="pink"
+          label="Antrian"
+          icon-right="icon-mat-volume_up"
+          size="md"
+          @click="emits('togleDraw')"
+        />
+        <q-btn
+          :outline="path!=='/pendaftaran/bpjs/pasien'"
+          glossy
+          push
+          color="dark"
+          label="Master  Pasien"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/pasien')"
+        />
+        <q-btn
+          :outline="path!=='/pendaftaran/bpjs/kunjungan'"
+          glossy
+          push
+          color="teal"
+          label="List Pengunjung"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/kunjungan')"
+        />
+        <q-btn
+          :outline="path!=='/pendaftaran/bpjs/listmjkn'"
+          glossy
+          push
+          color="accent"
+          label="List mJKN"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/listmjkn')"
+        />
+        <q-btn
+          :outline="path !== '/pendaftaran/bpjs/form'"
+          glossy
+          size="md"
+          color="primary"
+          label="Pasien Baru"
+          @click="goTo('/pendaftaran/bpjs/form')"
+        />
+      </q-btn-group>
+      <!-- <q-btn
         class="glossy q-mr-sm"
         round
         color="pink"
@@ -65,7 +111,7 @@
         >
           <strong>Tambah</strong> <em>Pasien Baru</em>
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
     </div>
   </div>
 </template>
@@ -76,6 +122,20 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const emits = defineEmits(['togleDraw'])
+defineProps({
+  title: {
+    type: String,
+    default: null
+  },
+  subtitle: {
+    type: String,
+    default: null
+  },
+  path: {
+    type: String,
+    default: null
+  }
+})
 
 function goTo(val) {
   router.push({ path: val, replace: true })

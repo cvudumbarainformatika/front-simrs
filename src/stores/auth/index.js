@@ -347,6 +347,7 @@ export const useAuthStore = defineStore('auth', {
       storage.delAkses()
       storage.delApps()
       storage.delX()
+      storage.delAutoPend()
       this.user = null
       this.token = ''
     },

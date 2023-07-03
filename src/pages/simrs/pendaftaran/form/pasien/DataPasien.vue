@@ -5,17 +5,26 @@
   >
     <!-- :simpanData="simpanData" -->
     <div
-      class="fixed-top row items-center justify-between bg-grey q-pa-md"
+      class="fixed-top row items-center justify-between bg-grey q-pa-sm"
       style="z-index: 10;"
     >
-      <div class="col-10 f-14 text-weight-bold">
+      <div class="f-14 text-weight-bold">
         Form Identitas Pasien I.1
       </div>
-      <div class="col-2 text-right">
+      <div>
         <q-checkbox
           v-model="store.edit"
           label="Edit Form "
           dense
+        />
+        <q-btn
+          flat
+          :icon="!full?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
+          round
+          size="sm"
+          class="q-ml-md"
+          color="white"
+          @click="emits('fullScreen')"
         />
       </div>
     </div>
@@ -24,16 +33,12 @@
       flat
       style="margin-top: 60px;"
     >
-      <q-card-section>
+      <q-card-section no-padding>
         <div class="row fit q-col-gutter-md q-mb-md">
           <!-- kiri -->
           <div class="col-4">
             <!-- lama / baru -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Pasien Baru / Lama
-              </div>
-              <div :class="store.form.barulama==='baru'?'col-8':'col-7'">-->
               <div :class="store.form.barulama==='baru'?'col-12':'col-11'">
                 <app-autocomplete-new
                   ref="refJenisPasien"
@@ -80,16 +85,11 @@
             </div>
             <!-- no rm -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                Nomor RM
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refNoRM"
                   v-model="store.form.norm"
                   label="Nomor RM"
-                  type="number"
                   autofocus
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -97,6 +97,7 @@
                   :rules="[
                     val => (!!val) || 'Harap diisi',
                     val => val?val.length > 5:!val || 'Harus 6 Karakter',
+                    val=>regex.test(val)||'Hanya angka'
                   ]"
                   @keyup.enter="inputNoRmSelesai"
                   @update:model-value="updateValNoRM"
@@ -106,40 +107,23 @@
             </div>
             <!-- ktp -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. KTP
-              </div>
-              <div class="col-8"> -->
-              <div :class="bpjs?'col-10':'col-12'">
+              <div class="col-12">
                 <app-input
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
-                  type="number"
                   :filled="false"
-                  :right-icon="true"
+                  :right-icon="!!bpjs"
+                  right-icon-name="icon-mat-dvr"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
-                />
-              </div>
-              <div
-                v-if="bpjs"
-                class="col-2 text-right"
-              >
-                <q-btn
-                  color="primary"
-                  dense
-                  label="BPJS"
-                  :loading="store.loadingNik"
-                  @click="cekBpjsbyNik"
+                  right-icon-tooltip="Cek BPJS"
+                  :rules="[val=>regex.test(val)||'Hanya angka']"
+                  @icon-right-click="cekBpjsbyNik"
                 />
               </div>
             </div>
             <!-- kitas -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. Paspor / KITAS
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refKitas"
@@ -148,15 +132,12 @@
                   valid
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val=>regex.test(val)||'Hanya angka']"
                 />
               </div>
             </div>
             <!-- Nama ibu kandung -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. Paspor / KITAS
-              </div>
-              <div class="col-8"> -->
               <div class="col-12">
                 <app-input
                   ref="refIbu"
@@ -168,12 +149,8 @@
               </div>
             </div>
             <!-- KA BPJS -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <!-- <div class="col-4">
-                No. KA BPJS
-              </div>
-              <div class="col-8"> -->
-              <div :class="bpjs?'col-8':'col-12'">
+            <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
+              <div :class="bpjs?'bagi-tiga':'satu'">
                 <app-input
                   ref="refNoKaBpjs"
                   v-model="store.form.noka"
@@ -185,11 +162,11 @@
               </div>
               <div
                 v-if="bpjs"
-                class="col-2"
               >
                 <q-btn
                   color="primary"
                   dense
+                  flat
                   label="BPJS"
                   :loading="store.loadingNoka"
                   @click="cekBpjsByNoka"
@@ -197,12 +174,12 @@
               </div>
               <div
                 v-if="bpjs"
-                class="col-2"
               >
                 <q-btn
                   no-caps
                   color="primary"
                   dense
+                  flat
                   label="finger"
                   :loading="store.loadingFinger"
                   @click="cekFinger"
@@ -1133,16 +1110,21 @@ const emits = defineEmits([
   'bisa-simpan',
   'tidak-simpan',
   'surat',
-  'gantiPasien'
+  'gantiPasien',
+  'fullScreen'
 ])
 const props = defineProps({
   bpjs: { type: Boolean, default: false },
   tampil: { type: Boolean, default: false },
   nik: { type: [String, Number], default: '' },
   noka: { type: [String, Number], default: '' },
-  tglsep: { type: [String, Number], default: '' }
+  tglsep: { type: [String, Number], default: '' },
+  full: { type: Boolean, default: false }
 })
 
+const regex = /^\d+$/
+// console.log(regex.test('3231'))
+// console.log(regex.test('3231f'))
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
@@ -1659,3 +1641,11 @@ onBeforeUpdate(() => {
   // console.log('jenis pasien', refJenisPasien.value)
 })
 </script>
+<style lang="scss" scoped>
+.bagi-tiga{
+  width:70%;
+}
+.satu{
+  width:100%;
+}
+</style>

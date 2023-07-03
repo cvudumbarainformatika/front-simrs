@@ -39,10 +39,34 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     },
     // initial data
     getInitialData() {
-      this.getAsalRujukan()
-      this.getSistemBayar()
-      this.getPoli()
-      this.getJenisKarcis()
+      // this.getAsalRujukan()
+      // this.getSistemBayar()
+      // this.getPoli()
+      // this.getJenisKarcis()
+
+      if (this.autocompleteStore.asalrujukans.length) {
+        this.asalrujukans = this.autocompleteStore.asalrujukans
+      } else {
+        this.getAsalRujukan()
+      }
+
+      if (this.autocompleteStore.sistembayars1.length) {
+        this.sistembayars1 = this.autocompleteStore.sistembayars1
+      } else {
+        this.getSistemBayar()
+      }
+
+      if (this.autocompleteStore.polis.length) {
+        this.polis = this.autocompleteStore.polis
+      } else {
+        this.getPoli()
+      }
+
+      if (this.autocompleteStore.jenisKarcises.length) {
+        this.jenisKarcises = this.autocompleteStore.jenisKarcises
+      } else {
+        this.getJenisKarcis()
+      }
     },
 
     // api related function
@@ -79,7 +103,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
               this.setForm(key, resp.data[key])
             })
           }
-          console.log('jenis karcis ', resp.data)
+          // console.log('jenis karcis ', resp.data)
           return new Promise(resolve => { resolve(resp.data) })
         })
         .catch(() => {
@@ -92,7 +116,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .then(resp => {
           this.loading = false
           this.jenisKarcises = resp.data
-          console.log('jenis karcis ', resp.data)
+          this.autocompleteStore.setJenisKarcis(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -104,7 +128,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .then(resp => {
           this.loading = false
           this.polis = resp.data
-          console.log('poli', resp.data)
+          this.autocompleteStore.setPoli(resp.data)
         })
         .catch(() => {
           this.loading = false
@@ -116,6 +140,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .then(resp => {
           this.loading = false
           this.sistembayars1 = resp.data
+          this.autocompleteStore.setSistemBayar(resp.data)
           console.log('sistem bayar', resp.data)
         })
         .catch(() => {
@@ -141,6 +166,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
         .then(resp => {
           this.loading = false
           this.asalrujukans = resp.data
+          this.autocompleteStore.setAsalRujukan(resp.data)
           console.log('asal rujukan', resp.data)
         })
         .catch(() => {
