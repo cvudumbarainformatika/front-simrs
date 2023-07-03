@@ -63,11 +63,11 @@
 
 <script setup>
 import { api } from 'src/boot/axios'
-import { chatChannel } from 'src/modules/sockets'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { chatChannel } from 'src/modules/sockets'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { onMounted, ref } from 'vue'
 
-const app = useAplikasiStore()
+// const app = useAplikasiStore()
 
 const onlineUsers = ref([])
 const chatMessages = ref([])
@@ -75,31 +75,31 @@ const text = ref(null)
 const txtSM = ref(null)
 const typing = ref(false)
 
-chatChannel.here((users) => {
-  console.log({ users })
-  console.log('subscribed chat channel!!!')
-  onlineUsers.value = [...users]
-})
-  .joining((user) => {
-    console.log({ user }, 'joined')
-  })
-  .leaving((user) => {
-    console.log({ user }, 'leaving')
-  })
-  .listen('.chat-message', (e) => {
-    console.log('listen', e)
-    const thumb = [...chatMessages.value]
-    if (e.message !== null || e.message !== '') { thumb.push(e.message) }
-    chatMessages.value = thumb
-  })
-  .listenForWhisper('typing', (e) => {
-    console.log('whisper', e)
-    typing.value = true
-  })
-  .listenForWhisper('stop-typing', (e) => {
-    text.value = null
-    typing.value = false
-  })
+// chatChannel.here((users) => {
+//   console.log({ users })
+//   console.log('subscribed chat channel!!!')
+//   onlineUsers.value = [...users]
+// })
+//   .joining((user) => {
+//     console.log({ user }, 'joined')
+//   })
+//   .leaving((user) => {
+//     console.log({ user }, 'leaving')
+//   })
+//   .listen('.chat-message', (e) => {
+//     console.log('listen', e)
+//     const thumb = [...chatMessages.value]
+//     if (e.message !== null || e.message !== '') { thumb.push(e.message) }
+//     chatMessages.value = thumb
+//   })
+//   .listenForWhisper('typing', (e) => {
+//     console.log('whisper', e)
+//     typing.value = true
+//   })
+//   .listenForWhisper('stop-typing', (e) => {
+//     text.value = null
+//     typing.value = false
+//   })
 
 onMounted(() => {
   coba()
@@ -119,11 +119,11 @@ async function coba() {
     })
 }
 
-function whisper() {
-  if (text.value === null || text.value === '') {
-    chatChannel.here().whisper('stop-typing', app.user.id)
-  } else {
-    chatChannel.here().whisper('typing', app.user.id)
-  }
-}
+// function whisper() {
+//   if (text.value === null || text.value === '') {
+//     chatChannel.here().whisper('stop-typing', app.user.id)
+//   } else {
+//     chatChannel.here().whisper('typing', app.user.id)
+//   }
+// }
 </script>
