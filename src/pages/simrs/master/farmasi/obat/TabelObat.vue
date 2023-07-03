@@ -59,31 +59,46 @@
               </div>
             </template>
             <template #cell-nama="{row}">
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kekuatan_dosis"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <app-chip
                   outline
                   :label="'Dosis : ' + row.kekuatan_dosis "
                 />
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.volumesediaan"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <app-chip
                   outline
                   :label="'Volume : ' + row.volumesediaan "
                 />
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.bentuk_sediaan"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <app-chip
                   outline
                   :label="'Bentuk : ' + row.bentuk_sediaan "
                 />
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.merk"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <app-chip
                   outline
                   :label="'Merk : ' + row.merk "
                 />
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.jenis_perbekalan"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <app-chip
                   font="f-10"
                   square
@@ -93,7 +108,10 @@
               </div>
             </template>
             <template #cell-kelompok="{row}">
-              <div class="row box q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kelompok_psikotropika"
+                class="row box q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-5">
                   Napza
                 </div>
@@ -104,7 +122,10 @@
                   {{ row.kelompok_psikotropika==='1'?'YA':'TIDAK' }}
                 </div>
               </div>
-              <div class="row box q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kandungan"
+                class="row box q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-5">
                   Kandungan
                 </div>
@@ -112,7 +133,10 @@
                   {{ row.kandungan }}
                 </div>
               </div>
-              <div class="row box q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kelas_terapi"
+                class="row box q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-5">
                   Terapi
                 </div>
@@ -120,7 +144,10 @@
                   {{ row.kelas_terapi }}
                 </div>
               </div>
-              <div class="row box q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kelompok_penyimpanan"
+                class="row box q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-5">
                   Penyimpanan
                 </div>
@@ -128,7 +155,10 @@
                   {{ row.kelompok_penyimpanan }}
                 </div>
               </div>
-              <div class="row box q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.kelompok_rko"
+                class="row box q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-5">
                   RKO
                 </div>
@@ -138,7 +168,10 @@
               </div>
             </template>
             <template #cell-belanja="{row}">
-              <div class="row box-dua q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.uraian108"
+                class="row box-dua q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-2">
                   108
                 </div>
@@ -146,7 +179,10 @@
                   {{ row.uraian108 }}
                 </div>
               </div>
-              <div class="row box-dua q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.uraian50"
+                class="row box-dua q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-2">
                   50
                 </div>
@@ -156,7 +192,10 @@
               </div>
             </template>
             <template #cell-satuan="{row}">
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.satuan_b"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   besar
                 </div>
@@ -164,7 +203,10 @@
                   {{ row.satuan_b }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.satuan_k"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   kecil
                 </div>
@@ -174,7 +216,10 @@
               </div>
             </template>
             <template #cell-status="{row}">
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.status_generik"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Generik
                 </div>
@@ -185,7 +230,10 @@
                   {{ row.status_generik==='1'?'YA':'TIDAK' }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.status_fornas"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Fornas
                 </div>
@@ -196,7 +244,10 @@
                   {{ row.status_fornas==='1'?'YA':'TIDAK' }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.status_forkid"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Forkit
                 </div>
@@ -207,7 +258,10 @@
                   {{ row.status_forkid==='1'?'YA':'TIDAK' }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.nilai_kdn"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Nilai KDN
                 </div>
@@ -215,7 +269,10 @@
                   {{ row.nilai_kdn }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.sertifikatkdn"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Sertifikat KDN
                 </div>
@@ -223,7 +280,10 @@
                   {{ row.sertifikatkdn }}
                 </div>
               </div>
-              <div class="row box-tiga q-col-gutter-sm q-mb-sm">
+              <div
+                v-if="row.sistembayar"
+                class="row box-tiga q-col-gutter-sm q-mb-sm"
+              >
                 <div class="col-7">
                   Sistem Bayar
                 </div>
