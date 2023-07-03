@@ -161,6 +161,7 @@
                   label="Nomor KA BPJS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val=> (!!val ? regex.test(val) : true) ||'Hanya angka']"
                   @update:model-value="setNokaBPJS"
                 />
               </div>
@@ -1146,7 +1147,7 @@ function cekBpjsbyNik() {
   }
 }
 function cekBpjsByNoka() {
-  if (refNoKaBpjs.value.$refs.refInput.validate()) {
+  if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
     store.cekPesertaByNoka(form)
   } else {
@@ -1154,7 +1155,7 @@ function cekBpjsByNoka() {
   }
 }
 function cekFinger() {
-  if (refNoKaBpjs.value.$refs.refInput.validate()) {
+  if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
     store.cekPesertaFinger(form)
   } else {

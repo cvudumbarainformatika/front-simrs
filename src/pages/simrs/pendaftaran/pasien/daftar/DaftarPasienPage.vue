@@ -105,6 +105,7 @@
           ref="refDataPasien"
           bpjs
           :not-edit="false"
+          :tglsep="today"
         />
         <div class="row justify-end q-my-lg q-mx-lg">
           <app-btn
@@ -127,6 +128,7 @@ import { usePendaftaranEditPasienStore } from 'src/stores/simrs/pendaftaran/tabl
 import { useStyledStore } from 'src/stores/app/styled'
 import PaginateBottom from './PaginateBottom.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
+import { date } from 'quasar'
 
 const store = useListPasien()
 const det = useDetailPasien()
@@ -135,6 +137,7 @@ const edit = usePendaftaranEditPasienStore()
 
 const pasien = ref(null)
 const refDataPasien = ref(null)
+const today = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 
 onMounted(() => {
   store.getDataTable()
