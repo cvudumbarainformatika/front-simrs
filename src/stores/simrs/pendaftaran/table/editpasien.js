@@ -8,6 +8,9 @@ export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran
     pasien: usePendaftaranPasienStore()
   }),
   actions: {
+    clearFormPasien() {
+      this.pasien.clearForm()
+    },
     openDialogEdit() {
       this.openEdit = !this.openEdit
     },

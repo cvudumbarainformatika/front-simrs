@@ -42,6 +42,7 @@
           dense
           flat
           icon="icon-mat-close"
+          @click="emits('close')"
         >
           <q-tooltip class="bg-white text-primary">
             Close
@@ -60,4 +61,5 @@
 import { ref } from 'vue'
 
 const maximizedToggle = ref(true)
+const emits = defineEmits(['close'])
 </script>
