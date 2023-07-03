@@ -195,7 +195,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     // tempat kecelakaan -- start --
     async getPropinsiKecelakaan() {
       this.loadingKecelakaan = true
-      await api.post('v1/simrs/pendaftaran/provinsibpjs', this.paramKecelakaan)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/provinsibpjs', this.paramKecelakaan)
         .then(resp => {
           this.loadingKecelakaan = false
           this.propinsies = resp.data.result.list ? resp.data.result.list : []
@@ -207,7 +207,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getKabupatenKecelakaan() {
       this.loadingKecelakaan = true
-      await api.post('v1/simrs/pendaftaran/kabupatenbpjs', this.paramKecelakaan)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/kabupatenbpjs', this.paramKecelakaan)
         .then(resp => {
           this.loadingKecelakaan = false
           this.kabupatens = resp.data.result.list ? resp.data.result.list : []
@@ -219,7 +219,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getKecamatanKecelakaan() {
       this.loadingKecelakaan = true
-      await api.post('v1/simrs/pendaftaran/kecamatanbpjs', this.paramKecelakaan)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/kecamatanbpjs', this.paramKecelakaan)
         .then(resp => {
           this.loadingKecelakaan = false
           this.kecamatans = resp.data.result.list ? resp.data.result.list : []
@@ -233,7 +233,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     async getListSuplesi(val) {
       this.loadingSuplesi = true
       this.tampilSuplesi = true
-      await api.post('v1/simrs/pendaftaran/ceksuplesibpjs', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/ceksuplesibpjs', val)
         .then(resp => {
           this.loadingSuplesi = false
           this.listSuplesi = resp.data.result.jaminan ? resp.data.result.jaminan : []
@@ -245,7 +245,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListRujukanPCare(val) {
       this.loadingListRujukan = true
-      await api.post('v1/simrs/pendaftaran/listrujukanpcare', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/listrujukanpcare', val)
         .then(resp => {
           this.loadingListRujukan = false
           this.listRujukanPcare = resp.data.result.rujukan ? resp.data.result.rujukan : []
@@ -258,7 +258,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListRujukanRs(val) {
       this.loadingListRujukanRS = true
-      await api.post('v1/simrs/pendaftaran/listrujukanrs', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/listrujukanrs', val)
         .then(resp => {
           this.loadingListRujukanRS = false
           this.listRujukanRs = resp.data.result.rujukan ? resp.data.result.rujukan : []
@@ -271,7 +271,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListSepMrs(val) {
       this.loadingListRujukanMrs = true
-      await api.post('v1/simrs/pendaftaran/listsepmrs', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/listsepmrs', val)
         .then(resp => {
           this.loadingListRujukanMrs = false
           this.listRujukanSepMrs = resp.data
@@ -283,7 +283,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     async getListRencanaKontrol(val) {
       this.loadingRencanaKontrol = true
-      await api.post('v1/simrs/pendaftaran/rencanakontrolbpjs', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/rencanakontrolbpjs', val)
         .then(resp => {
           this.loadingRencanaKontrol = false
           this.listRencanaKontrols = resp.data.result.list ? resp.data.result.list : []
@@ -296,7 +296,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     async cekRujukanPeserta(val) {
       this.loading = true
       const param = { faskesasal: val }
-      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/faskesasalbpjs', param)
         .then(resp => {
           this.loading = false
           this.ppkRujukans = resp.data.result.faskes

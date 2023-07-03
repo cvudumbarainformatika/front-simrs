@@ -755,7 +755,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     // cek bpjs
     async cekPesertaByNik (val) {
       this.loadingNik = true
-      await api.post('v1/simrs/pendaftaran/cekpsertabpjsbynik', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynik', val)
         .then((resp) => {
           this.loadingNik = false
           console.log('Nik', resp.data)
@@ -768,7 +768,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     async cekPesertaByNoka (val) {
       this.loadingNoka = true
-      await api.post('v1/simrs/pendaftaran/cekpsertabpjsbynoka', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
         .then((resp) => {
           this.loadingNoka = false
           console.log('Noka', resp.data)
@@ -781,7 +781,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     async cekPesertaFinger (val) {
       this.loadingFinger = true
-      await api.post('v1/simrs/pendaftaran/cekfingerprint', val)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekfingerprint', val)
         .then((resp) => {
           this.loadingFinger = false
           console.log('finger', resp.data)
