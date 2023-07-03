@@ -5,6 +5,7 @@
   >
     <!-- :simpanData="simpanData" -->
     <div
+      v-if="notEdit"
       class="fixed-top row items-center justify-between bg-grey q-pa-sm"
       style="z-index: 10;"
     >
@@ -34,12 +35,16 @@
       style="margin-top: 60px;"
     >
       <q-card-section no-padding>
-        <div class="row fit q-col-gutter-md q-mb-md">
+        <div
+          class="row fit q-col-gutter-md q-mb-md"
+        >
           <!-- kiri -->
           <div class="col-4">
             <!-- lama / baru -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div :class="store.form.barulama==='baru'?'col-12':'col-11'">
+            <div
+              class="row justify-between items-center q-mb-xs"
+            >
+              <div :class="store.form.barulama==='baru'?'satu':'bagi-dua'">
                 <app-autocomplete-new
                   ref="refJenisPasien"
                   :model="store.form.barulama"
@@ -50,14 +55,13 @@
                   autofocus
                   :filled="false"
                   :loading="store.loading"
-                  :disable="store.loading"
+                  :disable="store.loading || !notEdit"
                   :source="store.jenisPasiens"
                   @on-select="setJenisPasien"
                 />
               </div>
               <div
                 v-if="store.form.barulama==='lama'"
-                class="col-1"
               >
                 <q-btn
                   dense
@@ -1119,12 +1123,11 @@ const props = defineProps({
   nik: { type: [String, Number], default: '' },
   noka: { type: [String, Number], default: '' },
   tglsep: { type: [String, Number], default: '' },
-  full: { type: Boolean, default: false }
+  full: { type: Boolean, default: false },
+  notEdit: { type: Boolean, default: true }
 })
 
 const regex = /^\d+$/
-// console.log(regex.test('3231'))
-// console.log(regex.test('3231f'))
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
@@ -1644,6 +1647,9 @@ onBeforeUpdate(() => {
 <style lang="scss" scoped>
 .bagi-tiga{
   width:70%;
+}
+.bagi-dua{
+  width:90%;
 }
 .satu{
   width:100%;

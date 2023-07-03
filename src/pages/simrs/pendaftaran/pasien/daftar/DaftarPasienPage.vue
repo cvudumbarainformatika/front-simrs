@@ -59,6 +59,18 @@
           <q-btn
             round
             flat
+            icon="icon-mat-edit"
+            color="grey-8"
+            size="sm"
+            @click="editPasien(row)"
+          >
+            <q-tooltip>
+              Edit Data Pasien
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            round
+            flat
             icon="icon-mat-visibility"
             color="grey-8"
             size="sm"
@@ -78,6 +90,31 @@
       :pasien="pasien"
       @close-dialog="det.setDialogOpen"
     />
+
+    <!-- Dialog edit pasien -->
+    <app-fullscreen v-model="edit.openEdit">
+      <template #default>
+        <div
+          class="row items-center justify-between bg-grey q-pa-sm"
+        >
+          <div class="f-14 text-weight-bold">
+            Form Identitas Pasien I.1
+          </div>
+        </div>
+        <DataPasien
+          ref="refDataPasien"
+          bpjs
+          :not-edit="false"
+        />
+        <div class="row justify-end q-my-lg q-mx-lg">
+          <app-btn
+            push
+            label="simpan"
+            @click="simpan"
+          />
+        </div>
+      </template>
+    </app-fullscreen>
   </div>
 </template>
 
@@ -86,14 +123,19 @@ import { onMounted, ref } from 'vue'
 
 import { useListPasien } from 'src/stores/simrs/pendaftaran/table/index'
 import { useDetailPasien } from 'src/stores/simrs/pendaftaran/table/details'
-import PaginateBottom from './PaginateBottom.vue'
+import { usePendaftaranEditPasienStore } from 'src/stores/simrs/pendaftaran/table/editpasien'
 import { useStyledStore } from 'src/stores/app/styled'
+import PaginateBottom from './PaginateBottom.vue'
+import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 
 const store = useListPasien()
 const det = useDetailPasien()
 const style = useStyledStore()
+const edit = usePendaftaranEditPasienStore()
 
 const pasien = ref(null)
+const refDataPasien = ref(null)
+
 onMounted(() => {
   store.getDataTable()
 })
@@ -104,4 +146,17 @@ function previewDetail(row) {
   det.getDetails(row.norm)
   // console.log(row)
 }
+
+function editPasien(val) {
+  // console.log('edit ', val)
+  edit.openDialogEdit()
+  edit.editPasienIni(val)
+}
+
+function simpan() {
+  const dataPasien = refDataPasien.value.set()
+  console.log('data pasien', dataPasien)
+  edit.saveForm()
+}
+
 </script>
