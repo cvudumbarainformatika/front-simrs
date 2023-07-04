@@ -8,7 +8,8 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     isOpen: false,
     form: {
       kd_obat: 'sdadasdasdasd',
-      jenis_perbekalan: null
+      jenis_perbekalan: null,
+      kelasterapis: []
     },
     namaObat: {
       nama: null,
@@ -17,9 +18,11 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       volumeSediaan: null,
       merk: null
     },
+    temp: { kelas_terapi: '' },
     gedungs: [],
     loading: false,
     loadingJenisPerbekalan: false,
+    loadingJenisProduk: false,
     loadingKodeBelanja: false,
     loadingKandungan: false,
     loadingBentukSediaan: false,
@@ -62,6 +65,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     merks: [],
     kandungans: [],
     jenisPerbekalans: [],
+    jenisProduks: [],
     kodeBelanjas: [],
     bentukSediaans: [],
     kekuatanDosiss: [],
@@ -73,7 +77,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     // local related actions
     resetFORM () {
       console.log('reset form')
-      this.form = {}
+      this.form = { kelasterapis: [] }
       this.namaObat = {
         nama: null,
         bentukSediaan: null,
@@ -93,6 +97,12 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     },
     setForm (nama, val) {
       this.form[nama] = val
+    },
+    pushKelasTerapi(val) {
+      this.form.kelasterapis.push({ kelasterapi: val })
+    },
+    removeKelasTerapi(i) {
+      this.form.kelasterapis.splice(i, 1)
     },
     deleteForm (nama) {
       this.form[nama] = null
@@ -154,6 +164,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.isOpen = !this.isOpen
     },
     getInitialData() {
+      this.getJenisProduk()
       this.getJenisPerbekalan('')
       this.getKodeBelanja('')
       this.getKandungan('')
@@ -174,6 +185,20 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.setNamaObat(key, val)
     },
     // api related actions
+    // ambil Jenis produk
+    async getJenisProduk(val) {
+      this.loadingJenisProduk = true
+      const param = { params: { q: val } }
+      await api.get('v1/simrs/farmasi/master/listjenisproduk', param)
+        .then(resp => {
+          this.loadingJenisProduk = false
+          // console.log('rko', resp.data)
+          this.jenisProduks = resp.data
+        })
+        .catch(() => {
+          this.loadingJenisProduk = false
+        })
+    },
     // ambil kelas terapi
     async getKelasTerapi(val) {
       this.loadingKelasTerapi = true
@@ -354,6 +379,9 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     // tambah
     saveForm () {
       this.loading = true
+      if (!this.form.kelasterapis.length) {
+        delete this.form.kelasterapis
+      }
       return new Promise((resolve, reject) => {
         api
           .post('v1/simrs/farmasi/master/simpanobat', this.form)
@@ -374,6 +402,18 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       })
     },
     // simpan cepat start----
+    async simpanCepatJenisProduk(val) {
+      // console.log('simpan cepat', val)
+      this.loadingJenisProduk = true
+      const form = { jenisproduk: val }
+      await api.post('v1/simrs/farmasi/master/simpankelompokpenyimpanan', form)
+        .then(resp => {
+          this.loadingJenisProduk = false
+          // console.log('dosis', resp.data)
+          const temp = resp.data.data
+          this.quickSet('jenisproduk', temp.jenisproduk, this.jenisProduks, temp)
+        }).catch(() => { this.loadingJenisProduk = false })
+    },
     async simpanCepatKelompokPenyimpanan(val) {
       // console.log('simpan cepat', val)
       this.loadingKelompokPenyimpanan = true
@@ -395,7 +435,10 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
           this.loadingKelasTerapi = false
           // console.log('dosis', resp.data)
           const temp = resp.data.data
-          this.quickSet('kelas_terapi', temp.kelasterapi, this.kelasTerapis, temp)
+          // this.quickSet('kelas_terapi', temp.kelasterapi, this.kelasTerapis, temp)
+          this.pushKelasTerapi(temp.kelasterapi)
+          this.kelasTerapis.push(temp)
+          this.temp.kelas_terapi = temp.kelasterapi
         }).catch(() => { this.loadingKelasTerapi = false })
     },
     async simpanCepatVolumeSediaan(val) {

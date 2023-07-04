@@ -65,7 +65,9 @@
               >
                 <app-chip
                   outline
-                  :label="'Dosis : ' + row.kekuatan_dosis "
+                  ada-tooltip
+                  tooltip="Dosis"
+                  :label="row.kekuatan_dosis "
                 />
               </div>
               <div
@@ -74,7 +76,9 @@
               >
                 <app-chip
                   outline
-                  :label="'Volume : ' + row.volumesediaan "
+                  ada-tooltip
+                  tooltip="Volume"
+                  :label="row.volumesediaan "
                 />
               </div>
               <div
@@ -83,7 +87,9 @@
               >
                 <app-chip
                   outline
-                  :label="'Bentuk : ' + row.bentuk_sediaan "
+                  ada-tooltip
+                  tooltip="Bentuk Sediaan"
+                  :label="row.bentuk_sediaan "
                 />
               </div>
               <div
@@ -92,7 +98,9 @@
               >
                 <app-chip
                   outline
-                  :label="'Merk : ' + row.merk "
+                  ada-tooltip
+                  tooltip="Merk"
+                  :label="row.merk "
                 />
               </div>
               <div
@@ -102,21 +110,23 @@
                 <app-chip
                   font="f-10"
                   square
+                  ada-tooltip
+                  tooltip="Perbekalan"
                   :outline="row.jenis_perbekalan.includes('Reagen') || row.jenis_perbekalan.includes('Alkes')?true:false"
-                  :label="'Perbekalan : ' + row.jenis_perbekalan "
+                  :label="row.jenis_perbekalan "
                 />
               </div>
             </template>
             <template #cell-kelompok="{row}">
               <div
                 v-if="row.kelompok_psikotropika"
-                class="row box q-col-gutter-sm q-mb-sm"
+                class="row box justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-5">
+                <div>
                   Napza
                 </div>
                 <div
-                  class="col-7 text-weight-bold"
+                  class="q-ml-xs text-weight-bold text-right"
                   :class="row.kelompok_psikotropika==='1'?'text-red':'text-green'"
                 >
                   {{ row.kelompok_psikotropika==='1'?'YA':'TIDAK' }}
@@ -124,45 +134,69 @@
               </div>
               <div
                 v-if="row.kandungan"
-                class="row box q-col-gutter-sm q-mb-sm"
+                class="row box justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-5">
+                <div class="">
                   Kandungan
                 </div>
-                <div class="col-7 text-weight-bold">
+                <div class=" q-ml-xs text-weight-bold text-right">
                   {{ row.kandungan }}
                 </div>
               </div>
               <div
-                v-if="row.kelas_terapi"
-                class="row box q-col-gutter-sm q-mb-sm"
+                v-if="row.mkelasterapi.length"
+                class="row items-center box justify-between no-wrap q-mb-sm"
               >
-                <div class="col-5">
+                <div>
                   Terapi
                 </div>
-                <div class="col-7 text-weight-bold">
+                <div>
+                  <div
+                    v-for="(te,i) in row.mkelasterapi"
+                    :key="i"
+                    class="text-weight-bold text-right q-mb-xs"
+                  >
+                    <!-- {{ i+1 }}. -->
+                    {{ te.kelas_terapi }}
+                    <!-- <app-chip
+                      outline
+                      square
+                      color="dark"
+                      :label="te.kelas_terapi "
+                    /> -->
+                  </div>
+                </div>
+              </div>
+              <div
+                v-if="row.kelas_terapi"
+                class="row box justify-between items-center no-wrap q-mb-sm"
+              >
+                <div class="">
+                  Jenis Produk
+                </div>
+                <div class=" q-ml-xs text-weight-bold text-right">
                   {{ row.kelas_terapi }}
                 </div>
               </div>
               <div
                 v-if="row.kelompok_penyimpanan"
-                class="row box q-col-gutter-sm q-mb-sm"
+                class="row box justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-5">
+                <div class="">
                   Penyimpanan
                 </div>
-                <div class="col-7 text-weight-bold">
+                <div class=" q-ml-xs text-weight-bold text-right">
                   {{ row.kelompok_penyimpanan }}
                 </div>
               </div>
               <div
                 v-if="row.kelompok_rko"
-                class="row box q-col-gutter-sm q-mb-sm"
+                class="row box justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-5">
+                <div class="">
                   RKO
                 </div>
-                <div class="col-7 text-weight-bold">
+                <div class=" q-ml-xs text-weight-bold text-right">
                   {{ row.kelompok_rko }}
                 </div>
               </div>
@@ -170,23 +204,23 @@
             <template #cell-belanja="{row}">
               <div
                 v-if="row.uraian108"
-                class="row box-dua q-col-gutter-sm q-mb-sm"
+                class="row box-dua justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-2">
+                <div class="">
                   108
                 </div>
-                <div class="col-8">
+                <div class="text-right">
                   {{ row.uraian108 }}
                 </div>
               </div>
               <div
                 v-if="row.uraian50"
-                class="row box-dua q-col-gutter-sm q-mb-sm"
+                class="row box-dua justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-2">
+                <div class="">
                   50
                 </div>
-                <div class="col-8">
+                <div class="text-right">
                   {{ row.uraian50 }}
                 </div>
               </div>
@@ -218,13 +252,13 @@
             <template #cell-status="{row}">
               <div
                 v-if="row.status_generik"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Generik
                 </div>
                 <div
-                  class="col-5 text-weight-bold"
+                  class="text-right text-weight-bold"
                   :class="row.status_generik==='1'?'text-green':'text-negative'"
                 >
                   {{ row.status_generik==='1'?'YA':'TIDAK' }}
@@ -232,13 +266,13 @@
               </div>
               <div
                 v-if="row.status_fornas"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Fornas
                 </div>
                 <div
-                  class="col-5 text-weight-bold"
+                  class="text-right text-weight-bold"
                   :class="row.status_fornas==='1'?'text-green':'text-negative'"
                 >
                   {{ row.status_fornas==='1'?'YA':'TIDAK' }}
@@ -246,13 +280,13 @@
               </div>
               <div
                 v-if="row.status_forkid"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Forkit
                 </div>
                 <div
-                  class="col-5 text-weight-bold"
+                  class="text-right text-weight-bold"
                   :class="row.status_forkid==='1'?'text-green':'text-negative'"
                 >
                   {{ row.status_forkid==='1'?'YA':'TIDAK' }}
@@ -260,35 +294,35 @@
               </div>
               <div
                 v-if="row.nilai_kdn"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Nilai KDN
                 </div>
-                <div class="col-5">
+                <div class="text-right">
                   {{ row.nilai_kdn }}
                 </div>
               </div>
               <div
                 v-if="row.sertifikatkdn"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Sertifikat KDN
                 </div>
-                <div class="col-5">
+                <div class="text-right">
                   {{ row.sertifikatkdn }}
                 </div>
               </div>
               <div
                 v-if="row.sistembayar"
-                class="row box-tiga q-col-gutter-sm q-mb-sm"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
-                <div class="col-7">
+                <div class="">
                   Sistem Bayar
                 </div>
                 <div
-                  class="col-5 text-weight-bold"
+                  class="text-right text-weight-bold"
                   :class="sisBay(row.sistembayar)"
                 >
                   {{ row.sistembayar }}
