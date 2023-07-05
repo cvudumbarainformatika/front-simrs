@@ -32,7 +32,7 @@
           :outline="path!=='/pendaftaran/bpjs/pasien'"
           glossy
           push
-          color="dark"
+          color="deep-orange"
           label="Master  Pasien"
           size="md"
           @click="goTo('/pendaftaran/bpjs/pasien')"

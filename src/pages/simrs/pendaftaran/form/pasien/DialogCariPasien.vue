@@ -2,7 +2,7 @@
   <q-dialog
     position="top"
     class="q-mt-lg"
-    @hide="emits('hide')"
+    @hide="hiddenDialog()"
   >
     <q-card style="min-width:50vw;">
       <q-card-section class="row items-center q-pb-none">
@@ -36,6 +36,7 @@
           behavior="menu"
           hide-dropdown-icon
           @filter="dialog.filterOptions"
+          @update:model-value="(val)=>pilihPasienIni(val)"
         >
           <template #prepend>
             <q-icon name="icon-mat-search" />
@@ -183,8 +184,14 @@ const props = defineProps({
   bpjs: { type: Boolean, default: false }
 })
 
+function hiddenDialog() {
+  dialog.setSearch('')
+  emits('hide')
+}
+
 // eslint-disable-next-line no-unused-vars
 function pilihPasienIni(val) {
+  if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
   store.form = val
   if (store.alamataDomisiliSama) {

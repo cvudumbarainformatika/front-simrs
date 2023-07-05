@@ -8,7 +8,7 @@
     </div>
     <div
       class="flex items-center justify-between q-mb-md print-hide"
-      :class="stickyHeader?'sticky-header bg-white shadow-2':''"
+      :class="[stickyHeader?'sticky-header shadow-2':'', dark?'bg-dark':'bg-white']"
     >
       <!-- title -->
       <!-- <div class="title-table q-pr-sm f-14 text-bold">
@@ -192,7 +192,7 @@
       bordered
       separator="horizontal"
       class="screenwide"
-      :class="stickyHeader?'head-x bg-white':''"
+      :class="[stickyHeader?'head-x':'', dark?'bg-dark':'bg-white']"
     >
       <!-- <div :class="stickyHeader?'head-x':''"> -->
       <thead>
@@ -479,6 +479,9 @@ const props = defineProps({
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 
 // const per_page = ref(5)
+const dark = computed(() => {
+  return $q.dark.isActive
+})
 const refCellTable = ref(null)
 const options = ref([5, 10, 20, 50, 100, 1000])
 const checkAll = ref(false)

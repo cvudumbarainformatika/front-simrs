@@ -41,12 +41,16 @@ import ListKunjungan from './comp/ListKunjungan.vue'
 import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListKunjunganBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/lists'
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 
 const style = useStyledStore()
 const store = useListKunjunganBpjsStore()
 
 onMounted(() => {
   store.getLists()
+})
+
+onUnmounted(() => {
+  store.setTglAwal()
 })
 </script>

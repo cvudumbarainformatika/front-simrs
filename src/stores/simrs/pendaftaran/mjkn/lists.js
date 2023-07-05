@@ -55,6 +55,9 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
+    },
+    setTglAwal() {
+      this.params.tgl = dateDbFormat(new Date())
     }
   }
 })

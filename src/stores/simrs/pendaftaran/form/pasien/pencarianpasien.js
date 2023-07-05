@@ -11,18 +11,9 @@ export const usePencarianPasienStore = defineStore('pencarian_pasien_store', {
     doubleCount: (state) => state.counter * 2
   },
   actions: {
-    // async searchPasien() {
-    //   this.loading = true
-    //   try {
-    //     const params = { params: { search: this.search } }
-    //     const resp = await api.get('/v1/simrs/pendaftaran/caripasien', params)
-    //     if (resp.status === 200) {
-    //       console.log('cariPasien', resp)
-    //     }
-    //   } catch (error) {
-    //     this.loading = false
-    //   }
-    // }
+    setSearch(payload) {
+      this.search = payload
+    },
 
     async filterOptions (val, update) {
       if (!val) {
