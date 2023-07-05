@@ -296,12 +296,13 @@ function setPegawai(val) {
       userMenu.forEach(dat => {
         const appInd = findWithAttr(menu, 'id', dat.aplikasi_id)
         const menuInd = findWithAttr(menu[appInd].menus, 'id', dat.menu_id)
-        const subInd = findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id)
-        menu[appInd].checked = true
-        menu[appInd].menus[menuInd].checked = true
+        const subInd = menu[appInd].menus[menuInd] ? findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id) : -1
+        console.log('index nya', appInd, menuInd, subInd)
+        if (appInd >= 0) menu[appInd].checked = true
+        if (menuInd >= 0) menu[appInd].menus[menuInd].checked = true
         if (subInd >= 0) menu[appInd].menus[menuInd].submenus[subInd].checked = true
       })
-      console.log('user menu', userMenu, menu)
+      // console.log('user menu', userMenu, menu)
       val.menus = menu
     } else {
       val.menus = menus

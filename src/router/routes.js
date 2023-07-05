@@ -1,7 +1,7 @@
 
 import {
   pegawai, sigarang, antrian, laborat, laporan, settings,
-  masters, pendaftaran, percobaan
+  masters, pendaftaran, percobaan, farmasi
 } from './modules'
 
 const routes = [
@@ -42,6 +42,7 @@ const routes = [
   pendaftaran,
   laborat,
   percobaan,
+  farmasi,
 
   {
     path: '/display_antrian',

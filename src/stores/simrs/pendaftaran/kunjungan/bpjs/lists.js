@@ -43,6 +43,9 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       this.params.q = payload
       this.getLists()
     },
+    setTglAwal() {
+      this.params.tgl = dateDbFormat(new Date())
+    },
     setPage(payload) {
       this.params.page = payload
       this.getLists()

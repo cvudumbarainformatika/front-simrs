@@ -1,3 +1,3 @@
 <template>
-  Halaman Pasien UMUM
+  Pemesanan
 </template>

@@ -7,8 +7,9 @@ import settings from './settings'
 import masters from './masters'
 import pendaftaran from './pendaftaran'
 import percobaan from './percobaan'
+import farmasi from './farmasi'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
-  masters, pendaftaran, percobaan
+  masters, pendaftaran, percobaan, farmasi
 }
