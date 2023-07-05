@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { usePendaftaranAutocompleteStore } from '../../autocomplete'
 
 export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum', {
   state: () => ({
+    autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
     form: {
       tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
