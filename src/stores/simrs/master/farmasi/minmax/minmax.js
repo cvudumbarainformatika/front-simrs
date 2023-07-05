@@ -174,7 +174,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       this.loading = true
       const params = { params: { q: this.filterRuang } }
       return new Promise(resolve => {
-        api.get('v1/ruang/cari-ruang', params)
+        api.get('v1/simrs/farmasi/master/listruangan', params)
           .then(resp => {
             this.loading = false
             this.ruangs = resp.data

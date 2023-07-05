@@ -29,9 +29,10 @@
                 :model="store.form.koderuang"
                 label="Cari Ruang"
                 outlined
-                autocomplete="uraian"
+                autocomplete="ruang"
                 option-value="kode"
-                option-label="uraian"
+                option-label="ruang"
+                :hint="'kode ' + store.form.koderuang"
                 :source="store.ruangs"
                 :loading="store.loading"
                 @on-select="store.ruangSelected"
