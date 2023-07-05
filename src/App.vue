@@ -7,9 +7,10 @@
 import { useQuasar } from 'quasar'
 
 import customIcons from 'src/custom-icons/custom-icons'
-import { anjunganChannel, channel } from 'src/modules/sockets'
+// import { anjunganChannel, channel } from 'src/modules/sockets'
+import { channel } from 'src/modules/sockets'
 // import { onBeforeUnmount, onUpdated, ref } from 'vue'
-import { useCallStore } from './stores/antrian/call'
+// import { useCallStore } from './stores/antrian/call'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from './stores/simrs/penunjang/laborat/transaksi_laborat'
 
@@ -53,22 +54,22 @@ channel.subscribed(() => {
 // })
 
 // antrean local
-const callstore = useCallStore()
-anjunganChannel.subscribed(() => {
-  console.log('subscribed anjungan channel!!!')
-}).listen('.anjungan', (e) => {
-  console.log('anjungan-channel', e)
-  if (e.message.menu === 'cetak-antrean') {
-    const data = e.message.data
-    if (parseInt(data.layanan_id) === callstore.unit) {
-      callstore.getDataTable(true) // true maksudnya no loading
-    }
-  }
-  if (e.message.menu === 'panggilan-berakhir') {
-    const data = e.message.data
-    callstore.ubahStatus(data)
-  }
-})
+// const callstore = useCallStore()
+// anjunganChannel.subscribed(() => {
+//   console.log('subscribed anjungan channel!!!')
+// }).listen('.anjungan', (e) => {
+//   console.log('anjungan-channel', e)
+//   if (e.message.menu === 'cetak-antrean') {
+//     const data = e.message.data
+//     if (parseInt(data.layanan_id) === callstore.unit) {
+//       callstore.getDataTable(true) // true maksudnya no loading
+//     }
+//   }
+//   if (e.message.menu === 'panggilan-berakhir') {
+//     const data = e.message.data
+//     callstore.ubahStatus(data)
+//   }
+// })
 
 // chatChannel.subscribed(() => {
 //   console.log('subscribed chat channel!!!')

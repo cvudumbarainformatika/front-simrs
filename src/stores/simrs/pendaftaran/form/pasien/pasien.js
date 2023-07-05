@@ -39,9 +39,6 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     form: {
       barulama: 'baru'
-      // nanti di hapus
-      // noka: '0000113317244',
-      // norm: '091209'
     },
     display: {
       sapaan: 'Bpk.',
@@ -78,6 +75,12 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     // --
   }),
   actions: {
+    clearForm() {
+      this.form = {
+        barulama: 'baru'
+      }
+      this.edit = false
+    },
     setForm(key, val) {
       this.form[key] = val
     },

@@ -92,7 +92,10 @@
     />
 
     <!-- Dialog edit pasien -->
-    <app-fullscreen v-model="edit.openEdit">
+    <app-fullscreen
+      v-model="edit.openEdit"
+      @close="clearForm"
+    >
       <template #default>
         <div
           class="row items-center justify-between bg-grey q-pa-sm"
@@ -155,7 +158,9 @@ function editPasien(val) {
   edit.openDialogEdit()
   edit.editPasienIni(val)
 }
-
+function clearForm() {
+  edit.clearFormPasien()
+}
 function simpan() {
   const dataPasien = refDataPasien.value.set()
   console.log('data pasien', dataPasien)
