@@ -102,6 +102,11 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.form.kelasterapis.push({ kelasterapi: val })
     },
     removeKelasTerapi(i) {
+      const ter = this.form.kelasterapis[i]
+      if (this.edited && Object.keys(ter).length) {
+        // console.log('ter ', ter)
+        this.hapusMaping(ter.id)
+      }
       this.form.kelasterapis.splice(i, 1)
     },
     deleteForm (nama) {
@@ -133,6 +138,15 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     },
     editData (val) {
       this.edited = true
+      console.log('edit ', val)
+      if (val.mkelasterapi.length) {
+        this.form.kelasterapis = []
+        console.log('kelas terapi ', val.mkelasterapi)
+        val.mkelasterapi.forEach(ter => {
+          ter.kelasterapi = ter.kelas_terapi
+          this.form.kelasterapis.push(ter)
+        })
+      }
       // nama: null,
       //   bentukSediaan: bentuk_sediaan,
       //   kekuatanDosis: kekuatan_dosis,
@@ -543,7 +557,21 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
           this.quickSet('jenis_perbekalan', temp.jenisperbekalan, this.jenisPerbekalans, temp)
           this.setFormNamaObat()
         }).catch(() => { this.loadingJenisPerbekalan = false })
-    }
+    },
     // simpan cepat end----
+    // hapus maping kelas terapi
+    async hapusMaping(val) {
+      console.log('hapus maping', val)
+      this.loadingKelasTerapi = true
+      const form = { id: val }
+      await api.post('v1/simrs/farmasi/master/hapus-maping-terapi', form)
+        .then(resp => {
+          const table = useMasterObatTable()
+          table.getDataTable()
+          notifSuccess(resp)
+          this.loadingKelasTerapi = false
+        }).catch(() => { this.loadingKelasTerapi = false })
+    }
+
   }
 })
