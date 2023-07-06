@@ -8,7 +8,7 @@
           style="min-height:50vh"
         >
           <div class="text-h3">
-            👨🏽‍🍼
+            🏷️
           </div>
           <div class="f-14">
             Belum Ada Data
@@ -72,10 +72,13 @@
               </div>
               <div class="row q-mt-sm text-end">
                 <div class="q-ml-sm">
-                  <q-badge
+                  <q-btn
                     outline
+                    size="sm"
+                    padding="xs"
                     :color="item.generalconsent?'teal':'negative'"
                     :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
+                    @click="genCon(item)"
                   />
                 </div>
               </div>
@@ -89,10 +92,28 @@
         />
       </q-list>
     </div>
+
+    <!-- General COnsent -->
+    <app-general-consent
+      :key="pasien"
+      v-model="openGen"
+      :pasien="pasien"
+      @close="openGen = !openGen"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const pasien = ref(null)
+const openGen = ref(false)
+
+function genCon(row) {
+  pasien.value = row
+  openGen.value = !openGen.value
+  console.log(pasien)
+}
 
 defineProps({
   loading: { type: Boolean, default: false },

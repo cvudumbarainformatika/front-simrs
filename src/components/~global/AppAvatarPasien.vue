@@ -3,6 +3,7 @@
     :src="foto"
     :ratio="1"
     :width="width"
+    style="max-width: 100%;"
   />
 </template>
 
