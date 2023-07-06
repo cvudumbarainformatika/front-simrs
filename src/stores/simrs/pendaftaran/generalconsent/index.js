@@ -1,10 +1,20 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { dateDbFormat } from 'src/modules/formatter'
 
 export const useGeneralConsentStore = defineStore('general_consent', {
   state: () => ({
     items: [],
-    loading: false
+    loading: false,
+
+    form: {
+      tanggal: dateDbFormat(new Date()),
+      petugas: null,
+      nama: null,
+      alamat: null,
+      nohp: null,
+      hubunganpasien: 'Diri Sendiri'
+    }
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2

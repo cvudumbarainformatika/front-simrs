@@ -67,20 +67,19 @@ const pendaftaran = {
     },
     {
       path: '/pendaftaran/umum',
-      name: 'pendaftaran.umum',
       component: () => import('pages/simrs/pendaftaran/umum/IndexPage.vue'),
       children: [
         { path: '', redirect: '/pendaftaran/umum/form' },
         {
           path: '/pendaftaran/umum/form',
-          name: 'pendaftaran.umum.kunjungan',
+          name: 'pendaftaran.umum.form',
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/pendaftaran/umum/form/IndexPage.vue')
         },
         {
           path: '/pendaftaran/umum/kunjungan',
-          name: 'pendaftaran.form.umum',
+          name: 'pendaftaran.umum.kunjungan',
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/pendaftaran/umum/kunjungan/IndexPage.vue')
@@ -95,7 +94,6 @@ const pendaftaran = {
     },
     {
       path: '/pendaftaran/igd',
-      name: 'pendaftaran.igd',
       component: () => import('pages/simrs/pendaftaran/igd/IndexPage.vue')
       // children: [
       //   {
@@ -114,7 +112,6 @@ const pendaftaran = {
     },
     {
       path: '/pendaftaran/pasien',
-      name: 'pendaftaran.pasien',
       component: () => import('pages/simrs/pendaftaran/pasien/IndexPage.vue')
       // children: [
       //   {

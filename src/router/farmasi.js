@@ -11,7 +11,7 @@ const farmasi = {
     },
     {
       path: '/farmasi/pemesanan',
-      name: 'farmasi.pemesanan',
+      // name: 'farmasi.pemesanan', //sing duwe children tak boleh pake name
       component: () => import('pages/simrs/farmasi/pemesanan/IndexPage.vue'),
       children: [
         { path: '', redirect: '/farmasi/pemesanan/rencana' },

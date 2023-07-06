@@ -99,6 +99,11 @@
       v-model="openGen"
       :pasien="pasien"
       @close="openGen = !openGen"
+      @open-preview-gc="openPreviewGc()"
+    />
+    <app-preview-general-consent
+      v-model="openPrevGc"
+      @close="openPrevGc = !openPrevGc"
     />
   </div>
 </template>
@@ -108,11 +113,15 @@ import { ref } from 'vue'
 
 const pasien = ref(null)
 const openGen = ref(false)
+const openPrevGc = ref(false)
 
 function genCon(row) {
   pasien.value = row
   openGen.value = !openGen.value
-  console.log(pasien)
+}
+
+function openPreviewGc() {
+  openPrevGc.value = !openPrevGc.value
 }
 
 defineProps({

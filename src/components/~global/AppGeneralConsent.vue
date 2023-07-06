@@ -6,52 +6,56 @@
     transition-hide="slide-right"
   >
     <q-card flat>
-      <q-bar>
-        <div>📝 Form General Consent Pasien</div>
-        <q-space />
+      <div
+        class="fixed-top"
+        style="z-index: 1;"
+      >
+        <q-bar class="bg-grey">
+          <div>📝 Form General Consent Pasien</div>
+          <q-space />
 
-        <q-btn
-          dense
-          flat
-          icon="icon-mat-minimize"
-          :disable="!maximizedToggle"
-          @click="maximizedToggle = false"
-        >
-          <q-tooltip
-            v-if="maximizedToggle"
-            class="bg-white text-primary"
+          <q-btn
+            dense
+            flat
+            icon="icon-mat-minimize"
+            :disable="!maximizedToggle"
+            @click="maximizedToggle = false"
           >
-            Minimize
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          dense
-          flat
-          icon="icon-mat-crop_square"
-          :disable="maximizedToggle"
-          @click="maximizedToggle = true"
-        >
-          <q-tooltip
-            v-if="!maximizedToggle"
-            class="bg-white text-primary"
+            <q-tooltip
+              v-if="maximizedToggle"
+              class="bg-white text-primary"
+            >
+              Minimize
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            dense
+            flat
+            icon="icon-mat-crop_square"
+            :disable="maximizedToggle"
+            @click="maximizedToggle = true"
           >
-            Maximize
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          v-close-popup
-          dense
-          flat
-          icon="icon-mat-close"
-          @click="emits('close')"
-        >
-          <q-tooltip class="bg-white text-primary">
-            Close
-          </q-tooltip>
-        </q-btn>
-      </q-bar>
-
-      <q-card-section>
+            <q-tooltip
+              v-if="!maximizedToggle"
+              class="bg-white text-primary"
+            >
+              Maximize
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            v-close-popup
+            dense
+            flat
+            icon="icon-mat-close"
+            @click="emits('close')"
+          >
+            <q-tooltip class="bg-white text-primary">
+              Close
+            </q-tooltip>
+          </q-btn>
+        </q-bar>
+      </div>
+      <q-card-section class="q-mt-xl">
         <div class="text-center text-weight-bold text-subtitle2">
           PERSETUJUAN UMUM / GENERAL CONSENT RAWAT JALAN & IGD
         </div>
@@ -59,29 +63,46 @@
       <q-separator />
       <q-card-section>
         <div class="row justify-between">
-          <app-input-date label="tanggal" />
-          <app-autocomplete label="petugas" />
+          <app-input-date
+            v-model="store.form.tanggal"
+            label="tanggal"
+          />
+          <app-autocomplete
+            v-model="store.form.petugas"
+            label="petugas"
+          />
         </div>
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <div class="text-weight-bold">
+        <div class="text-weight-bold text-center">
           IDENTITAS YANG BERTANDATANGAN
+        </div>
+        <div class="text-caption text-center">
+          (Abaikan Jika yang mengisi pasiennya sendiri)
         </div>
         <div class="row justify-between q-mt-md">
           <div>
             <app-input
+              v-model="store.form.nama"
               label="nama"
               class="q-mb-sm"
             />
-            <app-input label="Alamat" />
+            <app-input
+              v-model="store.form.alamat"
+              label="Alamat"
+            />
           </div>
           <div>
             <app-input
+              v-model="store.form.nohp"
               label="No Telp / Hp"
               class="q-mb-sm"
             />
-            <app-input label="Hubungan Pasien" />
+            <app-input
+              v-model="store.form.hubunganpasien"
+              label="Hubungan Pasien"
+            />
           </div>
         </div>
       </q-card-section>
@@ -89,9 +110,12 @@
       <q-card-section>
         <div class="text-center ">
           <div class="text-weight-bold text-subtitle1 q-mb-md">
-            PASIEN DAN/ ATAU WALI HUKUM HARUS MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
+            PASIEN DAN/ ATAU WALI HUKUM MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
           </div>
-          <q-btn color="teal">
+          <q-btn
+            color="teal"
+            @click="emits('openPreviewGc')"
+          >
             <q-icon
               left
               size="sm"
@@ -99,12 +123,14 @@
             />
             <div>Informasi General Consent</div>
           </q-btn>
-          <q-btn color="primary q-ma-md">
+          <q-btn
+            color="primary q-ma-md"
+            @click="emits('openPreviewGc')"
+          >
             <q-icon
               left
               size="sm"
               name="icon-mat-menu_book"
-              @click="dialog == !dialog"
             />
             <div>Hak Dan Kewajiban Pasien</div>
           </q-btn>
@@ -127,10 +153,7 @@
           <div class="col-6">
             <div class="text-center">
               <div>Pasien / Wali</div>
-              <div
-                class="ttd-pasien q-px-xl"
-                style="min-height:150px; border:1px solid gray"
-              />
+              <app-ttd />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
@@ -146,8 +169,6 @@ import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalcons
 
 const maximizedToggle = ref(true)
 const emits = defineEmits(['close', 'openPreviewGc'])
-
-const dialog = ref(false)
 
 defineProps({
   pasien: {
