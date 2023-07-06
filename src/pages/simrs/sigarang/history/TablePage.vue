@@ -639,7 +639,7 @@
                 <!-- header detail -->
                 <div class="row justify-between q-col-gutter-sm">
                   <div class="col-7 text-weight-bold border-tb border-left">
-                    Nama Barang
+                    No. Nama Barang
                   </div>
                   <div class="col-1 text-weight-bold border-tb border-left">
                     Jumlah
@@ -937,7 +937,7 @@
                 <!-- header detail -->
                 <div class="row justify-between q-col-gutter-sm">
                   <div class="col-7 text-weight-bold border-tb border-left">
-                    Nama Barang
+                    No. Nama Barang
                   </div>
                   <div class="col-1 text-weight-bold border-tb border-left">
                     Jumlah

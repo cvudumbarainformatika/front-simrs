@@ -3,7 +3,7 @@
     <div class="flex items-center">
       <div class="icon q-mr-md">
         <q-icon
-          name="icon-mat-next_plan"
+          name="icon-mat-verified_user"
           size="lg"
         />
       </div>
@@ -20,22 +20,22 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
-          :outline="path!=='/pendaftaran/umum/pasien'"
+          :outline="path!=='/farmasi/pemesanan/rencana'"
           glossy
           push
           color="deep-orange"
           label="Rencana Pemesanan"
           size="md"
-          @click="goTo('/pendaftaran/umum/pasien')"
+          @click="goTo('/farmasi/pemesanan/rencana')"
         />
         <q-btn
-          :outline="path!=='/pendaftaran/umum/kunjungan'"
+          :outline="path!=='/farmasi/pemesanan/pesanan'"
           glossy
           push
           color="green"
           label="Pemesanan"
           size="md"
-          @click="goTo('/pendaftaran/umum/kunjungan')"
+          @click="goTo('/farmasi/pemesanan/pesanan')"
         />
       </q-btn-group>
     </div>
