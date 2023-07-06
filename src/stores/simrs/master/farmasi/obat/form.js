@@ -164,7 +164,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       this.isOpen = !this.isOpen
     },
     getInitialData() {
-      this.getJenisProduk()
+      this.getJenisProduk('')
       this.getJenisPerbekalan('')
       this.getKodeBelanja('')
       this.getKandungan('')
@@ -406,7 +406,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       // console.log('simpan cepat', val)
       this.loadingJenisProduk = true
       const form = { jenisproduk: val }
-      await api.post('v1/simrs/farmasi/master/simpankelompokpenyimpanan', form)
+      await api.post('v1/simrs/farmasi/master/simpanjenisproduk', form)
         .then(resp => {
           this.loadingJenisProduk = false
           // console.log('dosis', resp.data)

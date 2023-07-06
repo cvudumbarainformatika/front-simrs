@@ -178,6 +178,9 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
           .then(resp => {
             this.loading = false
             this.ruangs = resp.data
+            this.ruangs.forEach(anu => {
+              if (anu.kode.includes('Gd-')) anu.keterangan = 'JENIS FUNGSI SEBAGAI GUDANG/DEPO'
+            })
             console.log('ruang', resp.data)
             resolve(resp)
           })

@@ -31,7 +31,7 @@
                 outlined
                 autocomplete="ruang"
                 option-value="kode"
-                option-label="ruang"
+                :option-label="['ruang','keterangan']"
                 :hint="'kode ' + store.form.koderuang"
                 :source="store.ruangs"
                 :loading="store.loading"
