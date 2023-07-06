@@ -1,3 +1,5 @@
 <template>
-  Halaman farmasi
+  <q-page padding>
+    halaman Farmasi
+  </q-page>
 </template>

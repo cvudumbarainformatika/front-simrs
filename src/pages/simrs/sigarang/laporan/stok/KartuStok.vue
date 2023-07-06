@@ -90,6 +90,14 @@
           <div class="col-6">
             <div class="row items-center q-mb-sm">
               <div class="col-4">
+                Satuan
+              </div>
+              <div class="col-8 text-weight-bold">
+                {{ store.item.satuan?store.item.satuan.nama:'-' }}
+              </div>
+            </div>
+            <div class="row items-center q-mb-sm">
+              <div class="col-4">
                 Maping Depo
               </div>
               <div class="col-8 text-weight-bold">
@@ -131,13 +139,13 @@
               </div>
             </div>
           </div>
-          <div class="col-1">
+          <!-- <div class="col-1">
             Satuan
-          </div>
+          </div> -->
           <div class="col-1">
             Harga
           </div>
-          <div class="col-2">
+          <div class="col-3">
             Keterangan
           </div>
         </div>
@@ -176,13 +184,13 @@
                 </div>
               </div>
             </div>
-            <div class="col-1">
+            <!-- <div class="col-1">
               {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan.nama:'-' }}
-            </div>
+            </div> -->
             <div class="col-1">
               {{ item.harga?formatDouble( item.harga):'-' }}
             </div>
-            <div class="col-2">
+            <div class="col-3">
               {{ item.pemesanan?item.pemesanan.perusahaan?item.pemesanan.perusahaan.nama:'-':item.depo?item.depo.nama:item.trx==='stokAwal'?'Stok Awal':item.trx==='stokAkhir'?'Stok Akhir':'' }}
             </div>
           </div>
@@ -210,6 +218,14 @@
             </div>
           </div>
           <div class="col-6">
+            <div class="row items-center q-mb-sm">
+              <div class="col-4">
+                Satuan
+              </div>
+              <div class="col-8 text-weight-bold">
+                {{ store.item.satuan?store.item.satuan.nama:'-' }}
+              </div>
+            </div>
             <div class="row items-center q-mb-sm">
               <div class="col-4">
                 Maping Depo
@@ -253,13 +269,13 @@
               </div>
             </div>
           </div>
-          <div class="col-1">
+          <!-- <div class="col-1">
             Satuan
-          </div>
+          </div> -->
           <div class="col-1">
             Harga
           </div>
-          <div class="col-2">
+          <div class="col-3">
             Keterangan
           </div>
         </div>
@@ -298,13 +314,13 @@
                 </div>
               </div>
             </div>
-            <div class="col-1">
+            <!-- <div class="col-1">
               {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan.nama:'-' }}
-            </div>
+            </div> -->
             <div class="col-1">
               {{ item.harga?formatDouble(item.harga):'-' }}
             </div>
-            <div class="col-2">
+            <div class="col-3">
               {{ item.ruangan?item.ruangan.uraian:item.depo?item.depo.nama:item.trx==='stokAwal'?'Stok Awal':item.trx==='stokAkhir'?'Stok Opname bulan ini':'' }}
             </div>
           </div>
@@ -332,6 +348,14 @@
             </div>
           </div>
           <div class="col-6">
+            <div class="row items-center q-mb-sm">
+              <div class="col-4">
+                Satuan
+              </div>
+              <div class="col-8 text-weight-bold">
+                {{ store.item.satuan?store.item.satuan.nama:'-' }}
+              </div>
+            </div>
             <div class="row items-center q-mb-sm">
               <div class="col-4">
                 Maping Depo
@@ -375,9 +399,9 @@
               </div>
             </div>
           </div>
-          <div class="col-1">
+          <!-- <div class="col-1">
             Satuan
-          </div>
+          </div> -->
           <!-- <div class="col-1">
             Harga
           </div> -->
@@ -420,9 +444,9 @@
                 </div>
               </div>
             </div>
-            <div class="col-1">
+            <!-- <div class="col-1">
               {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan:'-' }}
-            </div>
+            </div> -->
             <!-- <div class="col-1">
               {{ item.harga?formatDouble(item.harga):'-' }}
             </div> -->
