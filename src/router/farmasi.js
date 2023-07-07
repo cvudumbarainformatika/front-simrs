@@ -11,9 +11,32 @@ const farmasi = {
     },
     {
       path: '/farmasi/pemesanan',
-      name: 'farmasi.pemesanan',
-      component: () => import('pages/simrs/farmasi/pemesanan/IndexPage.vue')
+      // name: 'farmasi.pemesanan', //sing duwe children tak boleh pake name
+      component: () => import('pages/simrs/farmasi/pemesanan/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/pemesanan/rencana' },
+        {
+          path: '/farmasi/pemesanan/rencana',
+          name: 'farmasi.pemesanan.rencana',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemesanan/rencana/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/pemesanan/pesanan',
+          name: 'farmasi.pemesanan.pesanan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemesanan/pesanan/IndexPage.vue')
+        }
+      ]
+    },
+
+    {
+      path: '/farmasi/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
+
   ]
 }
 export default farmasi

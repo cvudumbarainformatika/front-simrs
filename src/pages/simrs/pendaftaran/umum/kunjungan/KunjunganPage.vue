@@ -40,11 +40,11 @@ import HeaderComp from './comp/HeaderComp.vue'
 import ListKunjungan from './comp/ListKunjungan.vue'
 import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
-import { useListKunjunganBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/lists'
 import { onMounted, onUnmounted } from 'vue'
+import { useListKunjunganUmumStore } from '../../../../../stores/simrs/pendaftaran/kunjungan/umum/lists'
 
 const style = useStyledStore()
-const store = useListKunjunganBpjsStore()
+const store = useListKunjunganUmumStore()
 
 onMounted(() => {
   store.getLists()
