@@ -67,10 +67,12 @@
             v-model="store.form.tanggal"
             label="tanggal"
           />
-          <app-autocomplete
-            v-model="store.form.petugas"
-            label="petugas"
-          />
+          <div style="min-width: 200px;">
+            <app-autocomplete
+              v-model="store.form.petugas"
+              label="petugas"
+            />
+          </div>
         </div>
       </q-card-section>
       <q-separator />
@@ -81,8 +83,8 @@
         <div class="text-caption text-center">
           (Abaikan Jika yang mengisi pasiennya sendiri)
         </div>
-        <div class="row justify-between q-mt-md">
-          <div>
+        <div class="row justify-between q-mt-md q-col-gutter-md">
+          <div class="col-6">
             <app-input
               v-model="store.form.nama"
               label="nama"
@@ -91,9 +93,10 @@
             <app-input
               v-model="store.form.alamat"
               label="Alamat"
+              type="text-area"
             />
           </div>
-          <div>
+          <div class="col-6">
             <app-input
               v-model="store.form.nohp"
               label="No Telp / Hp"
@@ -170,7 +173,7 @@ import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalcons
 const maximizedToggle = ref(true)
 const emits = defineEmits(['close', 'openPreviewGc'])
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -181,5 +184,9 @@ const store = useGeneralConsentStore()
 
 onMounted(() => {
   store.getData()
+  console.log(props.pasien)
+  store.setForm('nama', props.pasien.nama)
+  store.setForm('alamat', props.pasien.alamat)
+  store.setForm('nohp', props.pasien.nohp)
 })
 </script>

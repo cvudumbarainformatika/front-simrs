@@ -33,6 +33,10 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       } catch (error) {
         this.loading = false
       }
+    },
+
+    setForm(frm, val) {
+      this.form[frm] = val
     }
   }
 })
