@@ -6,8 +6,11 @@
     <div>No Perencanaan: </div>
     <div class="row items-center no-wrap">
       <app-input-date-human
+        :model="store.disp.tanggal"
         label="Tanggal"
         :filled="false"
+        @set-display="setDispTanggal"
+        @db-model="setTanggal"
       />
     </div>
     <div>
@@ -29,6 +32,16 @@
 </template>
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
+import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 
 const style = useStyledStore()
+const store = useRencanaPemesananObatStore()
+
+function setDispTanggal(val) {
+  store.disp.tanggal = val
+}
+function setTanggal(val) {
+  store.setForm('tanggal', val)
+  console.log('form ', store.form)
+}
 </script>
