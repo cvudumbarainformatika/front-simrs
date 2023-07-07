@@ -772,6 +772,10 @@ function setSistembayar1(val) {
   // store.setForm('sistembayar', val)
   if (store.form.sistembayar) { delete store.form.sistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
+  const index = findWithAttr(store.sistembayars1, 'kode', val)
+  if (index >= 0) {
+    store.setForm('jkn', store.sistembayars1[index].groupsistembayar)
+  }
   store.getSistemBayar2(val)
   console.log('form', store.form)
 }
@@ -799,6 +803,12 @@ function findNamaDiagnosa(val) {
 // jenis kunjungan
 function setJenisKunjungan(val) {
   console.log('jenis kunjungan ', val)
+  const kunj = findWithAttr(store.jenisKunjungans, 'nilai', val)
+  if (kunj >= 0) {
+    const jen = store.jenisKunjungans[kunj]
+    store.setForm('id_kunjungan', jen.id)
+    store.setForm('jenis_kunjungan', val)
+  }
   if (val === 'Rujukan FKTP' || val === 'Rujukan Antar RS') {
     store.setForm('tujuanKunj', 0) // Normal
     store.setForm('flagProcedure', '')
