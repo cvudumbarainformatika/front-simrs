@@ -2,7 +2,9 @@
   <div>
     <DataPasien
       ref="refDataPasien"
+      :full="style.componentfull"
       @ganti-pasien="clearFormRegistrasi"
+      @full-screen="style.setComponentFull"
     />
     <!-- @bisa-simpan="bisaSimpan" -->
     <FormRegistrasi
@@ -32,6 +34,7 @@ import { ref } from 'vue'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
 import { Dialog } from 'quasar'
+import { useStyledStore } from 'src/stores/app/styled'
 const pasien = usePendaftaranPasienStore()
 const register = useRegistrasiPasienUmumStore()
 
@@ -40,6 +43,8 @@ const refRegistrasi = ref(null)
 function clearFormRegistrasi() {
   register.clearForm()
 }
+
+const style = useStyledStore()
 // let canSavePasien = false
 // let canSaveRegis = false
 // function bisaSimpan(val) {
