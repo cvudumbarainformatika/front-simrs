@@ -185,8 +185,8 @@ const store = useGeneralConsentStore()
 onMounted(() => {
   store.getData()
   console.log(props.pasien)
-  store.setForm('nama', props.pasien.nama)
-  store.setForm('alamat', props.pasien.alamat)
-  store.setForm('nohp', props.pasien.nohp)
+  // store.setForm('nama', props.pasien.nama)
+  // store.setForm('alamat', props.pasien.alamat)
+  // store.setForm('nohp', props.pasien.nohp)
 })
 </script>
