@@ -753,6 +753,17 @@
                 />
               </div>
             </div>
+            <!-- Antrian -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refNoAntrian"
+                  v-model="store.form.noantrian"
+                  label="Nomor Antrian"
+                  :filled="false"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <!-- check box alamat domisili sama -->
@@ -1180,6 +1191,7 @@ const refAlamat = ref(null)
 const refSuku = ref(null)
 const refIbu = ref(null)
 const refKodePos = ref(null)
+const refNoAntrian = ref(null)
 const refKodePosDom = ref(null)
 const refTahunLahir = ref(null)
 const refBulanLahir = ref(null)
@@ -1243,6 +1255,7 @@ function resetValidation() {
   refNoTlp.value.$refs.refInput.resetValidation()
   refBahasa.value.$refs.refInput.resetValidation()
   refKodePos.value.$refs.refInput.resetValidation()
+  refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
@@ -1589,6 +1602,7 @@ function validasi() {
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
   const Bahasa = refBahasa.value.$refs.refInput.validate()
   const KodePos = refKodePos.value.$refs.refInput.validate()
+  const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
   const Ktp = refKtp.value.$refs.refInput.validate()
   const NoKaBpjs = refNoKaBpjs.value.$refs.refInput.validate()
   const Alamat = refAlamat.value.$refs.refInput.validate()
@@ -1615,7 +1629,7 @@ function validasi() {
     JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
   TempatLahir && HariLahir && BulanLahir && TahunLahir && Ibu &&
   Pendidikan && StatusPernikahan && Pekerjaan && InputPekerjaan &&
-  Agama && TulisAgama && Suku && NoTlp && Bahasa && KodePos &&
+  Agama && TulisAgama && Suku && NoTlp && Bahasa && KodePos && NoAntrian &&
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&

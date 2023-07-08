@@ -74,7 +74,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     // api related function
     async getDokterDpjp() {
       this.loading = true
-      await api.post('v1/simrs/pendaftaran/dpjpbpjs', this.paramDpjp)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
         .then(resp => {
           this.loading = false
           if (resp.data.result.list.length) {
@@ -178,7 +178,7 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
     simpanRegistrasi() {
       return new Promise(resolve => {
         this.loading = true
-        api.post('v1/simrs/pendaftaran/rajalumumsimpan', this.form)
+        api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
           .then(resp => {
             console.log('simpan pendaftaran', resp)
             this.loading = false
