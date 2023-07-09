@@ -101,7 +101,11 @@ const masters = {
         }
       ]
     },
-
+    {
+      path: '/master/general-consent',
+      name: 'master.generalconsent',
+      component: () => import('pages/simrs/master/generalconsent/IndexPage.vue')
+    },
     {
       path: '/master/notfound',
       component: () => import('pages/MidlewareNotFound.vue')

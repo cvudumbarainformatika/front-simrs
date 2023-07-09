@@ -21,10 +21,13 @@ p, pre{
   margin: 0 !important;
 }
 h1,h2,h3,h4,h5 {
-  line-height: 0 !important;
+  // line-height: 0;
   margin-block-start: .75em;
   margin-block-end: .75em;
 }
+// h1{
+//   line-height: 90px !important;
+// }
 .page-light {
   background-color: $grey-3;
 }

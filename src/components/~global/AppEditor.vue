@@ -6,6 +6,7 @@
     />
     <editor-content
       :editor="editor"
+      class="content-editor-A4"
     />
     <bubble-menu
       v-if="editor"

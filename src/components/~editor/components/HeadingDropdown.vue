@@ -58,11 +58,11 @@ defineProps({
   },
   icon: {
     type: String,
-    default: 'format_size'
+    default: 'icon-mat-format_size'
   },
   iconFirst: {
     type: String,
-    default: 'view_headline'
+    default: 'icon-mat-format_size'
   },
   avatar: {
     type: Boolean,

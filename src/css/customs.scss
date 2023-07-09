@@ -31,3 +31,47 @@
   max-width:150px;
   padding:5px;
 }
+
+// ===========================================================================
+
+
+.fixed--toolbar.q-editor__toolbars-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.content-editor-A4{
+  background: white;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10vh;
+  // margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+  // width: 21cm;
+  width: 595pt;
+}
+
+.q-editor__content hr {
+    border: 0;
+    outline: 0;
+    margin: 1px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.5);
+
+
+}
+
+.q-editor__content p {
+  img{
+    border: 4px solid black;
+    cursor: pointer;
+  }
+}
+
+@media print {
+  .content-editor-A4{
+    margin: 0;
+  }
+}

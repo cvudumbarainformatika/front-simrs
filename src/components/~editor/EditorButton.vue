@@ -1,17 +1,21 @@
 <template>
-  <div v-if="editor">
+  <div
+    v-if="editor"
+    class="fixed-top full-width"
+    style="z-index: 1;"
+  >
     <div class="row items-center q-gutter-xs q-mb-sm bg-grey-2 q-py-xs">
       <!-- <add-more-btn
         @code-block="editor.chain().focus().toggleCodeBlock().run()"
       /> -->
 
       <menu-bar-btn
-        icon="undo"
+        icon="icon-mat-undo"
         tooltip="kembali -1 langkah"
         @click="editor.chain().focus().undo().run()"
       />
       <menu-bar-btn
-        icon="redo"
+        icon="icon-mat-redo"
         tooltip="kembali +1 langkah"
         @click="editor.chain().focus().redo().run()"
       />
@@ -19,31 +23,31 @@
         vertical
       />
       <menu-bar-btn
-        icon="format_bold"
+        icon="icon-mat-format_bold"
         :active="editor.isActive('bold')"
         tooltip="Huruf Tebal"
         @click="editor.chain().focus().toggleBold().run()"
       />
       <menu-bar-btn
-        icon="format_italic"
+        icon="icon-mat-format_italic"
         tooltip="Huruf Miring"
         :active="editor.isActive('italic')"
         @click="editor.chain().focus().toggleItalic().run()"
       />
       <menu-bar-btn
-        icon="format_underlined"
+        icon="icon-mat-format_underlined"
         tooltip="Garis Bawah"
         :active="editor.isActive('underline')"
         @click="editor.chain().focus().toggleUnderline().run()"
       />
       <menu-bar-btn
-        icon="strikethrough_s"
+        icon="icon-mat-strikethrough_s"
         tooltip="Garis tengah"
         :active="editor.isActive('strike')"
         @click="editor.chain().focus().toggleStrike().run()"
       />
       <menu-bar-btn
-        icon="code"
+        icon="icon-mat-code"
         tooltip="Model Code"
         :active="editor.isActive('code')"
         @click="editor.chain().focus().toggleCode().run()"
@@ -54,34 +58,36 @@
 
       <heading-dropdown
         :headings="headings"
+        icon="icon-mat-format_size"
         @paragraph="editor.chain().focus().setParagraph().run()"
         @heading="handleClickHeading"
       />
       <heading-dropdown
         :headings="aligns"
-        icon="subject"
+        icon="icon-mat-format_align_left"
         avatar
         label-first="Left"
-        icon-first="format_align_left"
+        icon-first="icon-mat-format_align_left"
         tooltip="Align format"
         @paragraph="editor.chain().focus().setTextAlign('left').run()"
         @heading="(val)=>editor.chain().focus().setTextAlign(val).run()"
       />
       <btn-dropdown-color
-        icon="border_color"
+        icon="icon-mat-text_format"
         @set-color="(val)=> editor.chain().focus().toggleHighlight({ color: val }).run()"
       />
       <btn-dropdown-color
+        icon="icon-mat-edit"
         @set-color="(val)=> editor.chain().focus().setColor(val).run()"
       />
       <menu-bar-btn
-        icon="subscript"
+        icon="icon-mat-vertical_align_top"
         tooltip="Subscript"
         :active="editor.isActive('subscript')"
         @click="editor.chain().focus().toggleSubscript().run()"
       />
       <menu-bar-btn
-        icon="superscript"
+        icon="icon-mat-vertical_align_bottom"
         tooltip="Superscript"
         :active="editor.isActive('superscript')"
         @click="editor.chain().focus().toggleSuperscript().run()"
@@ -90,13 +96,13 @@
         vertical
       />
       <menu-bar-btn
-        icon="format_quote"
+        icon="icon-mat-format_quote"
         tooltip="Quote"
         :active="editor.isActive('blockquote')"
         @click="editor.chain().focus().toggleBlockquote().run()"
       />
       <menu-bar-btn
-        icon="data_object"
+        icon="icon-mat-font_download"
         tooltip="Code Block"
         :active="editor.isActive('codeBlock')"
         @click="editor.chain().focus().toggleCodeBlock().run()"
@@ -105,25 +111,25 @@
         vertical
       />
       <menu-bar-btn
-        icon="format_list_bulleted"
+        icon="icon-mat-format_list_bulleted"
         tooltip="Format list Bullet"
         :active="editor.isActive('bulletList')"
         @click="editor.chain().focus().toggleBulletList().run()"
       />
       <menu-bar-btn
-        icon="format_list_numbered"
+        icon="icon-mat-format_list_numbered"
         tooltip="Format list Nomor"
         :active="editor.isActive('orderedList')"
         @click="editor.chain().focus().toggleOrderedList().run()"
       />
       <menu-bar-btn
-        icon="checklist"
+        icon="icon-mat-check"
         tooltip="List Check"
         :active="editor.isActive('taskList')"
         @click="editor.chain().focus().toggleTaskList().run()"
       />
       <menu-bar-btn
-        icon="horizontal_rule"
+        icon="icon-mat-horizontal_rule"
         tooltip="Garis Mendatar"
         @click="editor.chain().focus().setHorizontalRule().run()"
       />
@@ -131,12 +137,12 @@
         vertical
       />
       <menu-bar-btn
-        icon="format_clear"
+        icon="icon-mat-format_clear"
         tooltip="Format Clear"
         @click="editor.chain().focus().unsetAllMarks().run()"
       />
       <menu-bar-btn
-        icon="layers_clear"
+        icon="icon-mat-clear_all"
         tooltip="Clear Fiture"
         @click="editor.chain().focus().clearNodes().run()"
       />
@@ -144,11 +150,11 @@
         vertical
       />
       <menu-bar-btn
-        icon="image"
+        icon="icon-mat-image"
         tooltip="masukkan gambar"
       />
       <menu-bar-btn
-        icon="collections"
+        icon="icon-mat-upload"
         tooltip="gallery & upload gambar"
         @click="dialogGallery"
       />
@@ -217,9 +223,9 @@ const headings = ref([
   { label: 'Heading 5', icon: 'H5', value: 5 }
 ])
 const aligns = ref([
-  { label: 'center', icon: 'format_align_center', value: 'center' },
-  { label: 'right', icon: 'format_align_right', value: 'right' },
-  { label: 'justify', icon: 'format_align_justify', value: 'justify' }
+  { label: 'center', icon: 'icon-mat-format_align_center', value: 'center' },
+  { label: 'right', icon: 'icon-mat-format_align_right', value: 'right' },
+  { label: 'justify', icon: 'icon-mat-format_align_justify', value: 'justify' }
 ])
 // const listsMenu = ref([
 //   { link: 'Upload Gambar', icon: 'cloud' },
