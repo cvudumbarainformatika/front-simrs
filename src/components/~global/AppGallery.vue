@@ -25,7 +25,7 @@
             <q-uploader
               bordered
               label="Upload Gambar"
-              :url="SERVER+'/v1/gallery/upload'"
+              :url="SERVER+'/v1/galleries/upload'"
               field-name="images[]"
               :headers="[
                 {name: 'Authorization', value: `Bearer ${token}`}
@@ -45,7 +45,7 @@
                     style="min-height:250px"
                   >
                     <q-icon
-                      name="cloud_upload"
+                      name="icon-mat-cloud_upload"
                       size="40px"
                       color="primary"
                     />
@@ -92,7 +92,7 @@
                           </div>
                           <div class="absolute no-padding transparent">
                             <q-icon
-                              :name="file.__status==='uploaded'?'done_all':'warnimg'"
+                              :name="file.__status==='uploaded'?'icon-mat-done_all':'icon-mat-warnimg'"
                               size="sm"
                               :color="file.__status==='idle'?'negative':'green-5'"
                               class="q-pa-xs"
@@ -105,7 +105,7 @@
                             round
                             color="grey"
                             size="sm"
-                            icon="content_copy"
+                            icon="icon-mat-content_copy"
                             @click="handleCopyUrl(`${pathImg}gallery/${file.name}`)"
                           />
                           <q-btn
@@ -113,7 +113,7 @@
                             round
                             color="negative"
                             size="sm"
-                            icon="delete"
+                            icon="icon-mat-delete"
                             @click="handleRemoveImage(file)"
                           />
                         </q-card-actions>
@@ -161,7 +161,7 @@
                       round
                       color="grey"
                       size="xs"
-                      icon="content_copy"
+                      icon="icon-mat-content_copy"
                       @click="handleCopyUrl(`${pathImg}gallery/${item.original}`)"
                     />
                   </q-card-section>
@@ -190,12 +190,12 @@
 import { computed, onMounted, ref } from 'vue'
 import * as storage from 'src/modules/storage'
 import { SERVER, pathImg } from 'src/boot/axios'
-import { useGalleryTable } from 'src/stores/admin/gallery/table'
 import { copyToClipboard } from 'quasar'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { useGallerySimrsTable } from 'src/stores/simrs/gallery/table'
 
 const token = storage.getLocalToken()
-const gallery = useGalleryTable()
+const gallery = useGallerySimrsTable()
 
 onMounted(() => {
   gallery.getDataTable()
@@ -205,8 +205,8 @@ const emits = defineEmits(['selectImage'])
 
 const link = ref(0)
 const listsMenu = ref([
-  { link: 'Upload', icon: 'upload_file' },
-  { link: 'Gallery', icon: 'collections' }
+  { link: 'Upload', icon: 'icon-mat-upload_file' },
+  { link: 'Gallery', icon: 'icon-mat-collections' }
 ])
 
 const selected = ref(null)

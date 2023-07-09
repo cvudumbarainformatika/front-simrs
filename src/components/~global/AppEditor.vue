@@ -8,23 +8,22 @@
       :editor="editor"
       class="content-editor-A4"
     />
-    <bubble-menu
+    <!-- <bubble-menu
       v-if="editor"
       v-show="editor.isActive('custom-image')"
       :editor="editor"
     >
-      <!-- <q-btn-group rounded> -->
       <bubble-image :editor="editor" />
-      <!-- </q-btn-group> -->
-    </bubble-menu>
+    </bubble-menu> -->
   </div>
 </template>
 
 <script setup>
 import EditorButton from '../~editor/EditorButton.vue'
-import BubbleImage from 'src/components/~editor/BubbleImage.vue'
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/vue-3'
+// import BubbleImage from 'src/components/~editor/BubbleImage.vue'
+import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import MyImage from '../~editor/extensions/my-image'
 
 // plugins
 import Underline from '@tiptap/extension-underline'
@@ -36,11 +35,13 @@ import { Color } from '@tiptap/extension-color'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextAlign from '@tiptap/extension-text-align'
-import CustomImage from '../~editor/extensions/custom-image'
+// import CustomImage from '../~editor/extensions/custom-image'
 // import { computed } from 'vue'
 
 const editor = useEditor({
   content: '<p>Silahkan Ketik Berita disini</p>',
+  editable: true,
+  showToolbar: true,
   extensions: [
     StarterKit,
     Underline,
@@ -53,13 +54,19 @@ const editor = useEditor({
     TextAlign.configure({
       types: ['heading', 'paragraph']
     }),
-    CustomImage.configure({
-      inline: true,
-      HTMLAttributes: {
-        class: 'custom-image'
-      }
-    }),
-    BubbleMenu
+    // CustomImage.configure({
+    //   inline: true
+    // })
+    // CustomImage.configure({
+    //   inline: true,
+    //   HTMLAttributes: {
+    //     class: 'custom-image'
+    //   }
+    // }),
+    MyImage.configure({
+      inline: true
+    })
+    // BubbleMenu
     // new TipTapCustomImage()
   ]
 })

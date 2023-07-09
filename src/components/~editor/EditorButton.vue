@@ -236,12 +236,24 @@ function pickFile() {
   refWord.value.pickFiles()
 }
 
+function uniqueI(prefix) {
+  let uniqueId = null
+  if (!uniqueId) uniqueId = (new Date()).getTime()
+  return (prefix || 'id') + (uniqueId++)
+}
+
 function getImage() {
   console.log('on-ok', imageSelected.value)
+
   if (imageSelected.value === null) {
     return notifErrVue('pilih Gambar terlebih dahulu')
   }
-  props.editor.chain().focus().setImage({ src: imageSelected.value }).run()
+  props.editor.chain().focus().setImage({
+    src: imageSelected.value,
+    alt: imageSelected.value,
+    ref: uniqueI('id'),
+    width: 100
+  }).run()
   dialogImage.value = false
 }
 function imageGetter(val) {
@@ -250,20 +262,22 @@ function imageGetter(val) {
 
 async function startImport() {
   console.log('word', word.value)
-  const formData = new FormData()
-  formData.append('doc', word.value)
-  try {
-    await api.post('/v1/berita/upload_word', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then((resp) => {
-      // console.log(resp)
-      emits('onimportword', resp.data)
-    })
-  } catch (error) {
-    // this.loading = false
-  }
+  console.log('word', api)
+  console.log('word', emits)
+  // const formData = new FormData()
+  // formData.append('doc', word.value)
+  // try {
+  //   await api.post('/v1/berita/upload_word', formData, {
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data'
+  //     }
+  //   }).then((resp) => {
+  //     // console.log(resp)
+  //     emits('onimportword', resp.data)
+  //   })
+  // } catch (error) {
+  //   // this.loading = false
+  // }
 }
 
 function handleClickHeading(val) {

@@ -1,12 +1,15 @@
 import Image from '@tiptap/extension-image'
 import { mergeAttributes } from '@tiptap/core'
+// import { VueNodeViewRenderer } from '@tiptap/vue-3'
+// import OImageView from '../components/OImageView.vue'
 
 export default Image.extend({
   name: 'custom-image',
 
   addOptions: {
     ...Image.options,
-    sizes: ['small', 'medium', 'large']
+    sizes: ['small', 'medium', 'large'],
+    isDraggable: [true, false]
   },
 
   addAttributes() {
@@ -37,12 +40,6 @@ export default Image.extend({
 
   addCommands() {
     return {
-      // This is unchanged from the original
-      // Image setImage function
-      // However, if I extended addComands in
-      // the same way as addAttributes `this`
-      // seemed to lose context, so I've just
-      // copied it in here directly
       setImage: (options) => ({ tr, dispatch }) => {
         const { selection } = tr
         const node = this.type.create(options)
@@ -61,20 +58,6 @@ export default Image.extend({
 
         const { selection } = tr
 
-        // We're calling, for example:
-        //
-        // editor
-        //   .chain()
-        //   .focus()
-        //   .setSize({ size: 'small' })
-        //   .run()
-        //
-        // from the bubble menu
-        // so `attributes` is { size: 'small' }
-        // which will add/overwrite the current
-        // `selection.node.attrs` attributes
-        // including, importantly, `src` :)
-
         const options = {
           ...selection.node.attrs,
           ...attributes
@@ -86,15 +69,29 @@ export default Image.extend({
           tr.replaceRangeWith(selection.from, selection.to, node)
         }
       }
+
+      // toggleResizable: (attributes) => ({ tr, dispatch }) => {
+      //   // Check it's a valid size option
+      //   // if (!this.options.sizes.includes(attributes.size)) {
+      //   //   return false
+      //   // }
+
+      //   const { node } = tr?.selection
+
+      //   if (node?.type?.name === 'custom-image') {
+      //     node.attrs.isDraggable = !node.attrs.isDraggable
+      //   }
+      // }
     }
   },
 
-  renderHTML({ node, HTMLAttributes }) {
-    // When we render the HTML, grab the
-    // size and add an appropriate
-    // corresponding class
+  // addNodeView() {
+  //   return VueNodeViewRenderer(OImageView)
+  // },
 
+  renderHTML({ node, HTMLAttributes }) {
     const size = node.attrs.size
+    // const isDraggable = node.attrs.isDraggable
     HTMLAttributes.class = ' custom-image-' + size
 
     return [
