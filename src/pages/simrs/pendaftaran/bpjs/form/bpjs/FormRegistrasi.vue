@@ -451,6 +451,7 @@
                   :source="store.dpjps"
                   :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="dpjpSelected"
                 />
                 <q-tooltip
                   v-if="!store.form.kodepoli"
@@ -651,6 +652,7 @@ function cekSuratKontrol() {
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
+
   const index = findWithAttr(store.polis, 'kodepoli', val)
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
@@ -663,9 +665,25 @@ function setPoliTujuan(val) {
       })
     }
   }
-  console.log(val)
+  console.log('set poli ', store.polis[index])
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+  store.paramDpjp.kodepoli = store.polis[index].kodemapingbpjs
+  store.setForm('kodepoli', store.polis[index].kodemapingbpjs)
+  store.setForm('namapoli', store.polis[index].polimapingbpjs)
+  store.getjadwalDokterDpjp()
   store.getDokterDpjp()
+}
+// dpdjp selected
+function dpjpSelected(val) {
+  console.log('dpjp selected ', val)
+  const index = findWithAttr(store.jadwalDpjps, 'dpjp', val)
+  console.log('index  ', index)
+  if (index >= 0) {
+    // console.log('jadwal  ', store.jadwalDpjps[index])
+    store.setForm('namadokter', store.jadwalDpjps[index].namadokter)
+    store.setForm('jampraktek', store.jadwalDpjps[index].jadwal)
+    // console.log('form  ', store.form)
+  }
 }
 // set flag karcis
 function setFlagKarcis(val) {
