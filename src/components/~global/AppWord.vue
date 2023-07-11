@@ -25,80 +25,12 @@
         tip: 'Pilih Gambar',
         icon: 'icon-mat-cloud_upload',
         // label: 'Upload',
-        handler: pilihImage
+        handler: insertImage
       },
 
     }"
-    :toolbar="[
-      ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-      ['left', 'center', 'right', 'justify'],
-      ['token', 'hr', 'link', 'custom_btn'],
-      [
-        {
-          label: $q.lang.editor.formatting,
-          icon: $q.iconSet.editor.formatting,
-          list: 'no-icons',
-          options: [
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6',
-            'p',
-            'code'
-          ]
-        },
-        {
-          label: $q.lang.editor.fontSize,
-          icon: $q.iconSet.editor.fontSize,
-          fixedLabel: true,
-          fixedIcon: true,
-          list: 'no-icons',
-          options: [
-            'size-1',
-            'size-2',
-            'size-3',
-            'size-4',
-            'size-5',
-            'size-6',
-            'size-7'
-          ]
-        },
-        {
-          label: $q.lang.editor.defaultFont,
-          icon: $q.iconSet.editor.font,
-          list: 'no-icons',
-          options: [
-            'default_font',
-            'arial',
-            'arial_black',
-            'comic_sans',
-            'courier_new',
-            'impact',
-            'lucida_grande',
-            'times_new_roman',
-            'verdana'
-          ]
-        },
-        'removeFormat'
-      ],
-      // ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-      ['quote', 'unordered', 'ordered'],
-      ['undo', 'redo'],
-      ['viewsource','print','image','save', 'fullscreen'],
-
-    ]"
-    :fonts="{
-      arial: 'Arial',
-      arial_black: 'Arial Black',
-      comic_sans: 'Comic Sans MS',
-      courier_new: 'Courier New',
-      impact: 'Impact',
-      lucida_grande: 'Lucida Grande',
-      times_new_roman: 'Times New Roman',
-      verdana: 'Verdana'
-    }"
+    :toolbar="toolbar"
+    :fonts="fonts"
     @paste="evt => pasteCapture(evt)"
     @drop="evt => dropCapture(evt)"
   >
@@ -162,55 +94,43 @@
         </q-list>
       </q-btn-dropdown>
     </template>
-    <template #custom_btn>
-      <q-btn-dropdown
-        dense
-        no-caps
-        no-wrap
-        unelevated
-        color="white"
-        text-color="primary"
-        label="Insert Quasar Components"
-        size="sm"
-      >
-        <q-list dense>
-          <q-item
-            tag="label"
-            clickable
-            @click="insertComponent('q-btn', { label: 'ayooo', color:'primary'})"
-          >
-            <q-item-section side>
-              <q-icon name="icon-mat-visibility" />
-            </q-item-section>
-            <q-item-section>q-icon with shopping_cart name prop</q-item-section>
-          </q-item>
-          <q-item
-            tag="label"
-            clickable
-            @click="insertComponent('app-btn', { label: 'ayooo22', color:'primary'})"
-          >
-            <q-item-section side>
-              <q-icon name="icon-mat-stars" />
-            </q-item-section>
-            <q-item-section>q-circular-progress with lots of props</q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
-    </template>
   </q-editor>
+  <div
+    v-show="false"
+    ref="renderC"
+  >
+    <component
+      :is="renderTheseComponent"
+      v-bind="renderTheseProps"
+    />
+  </div>
+  <app-dialog
+    v-model="dialogImage"
+    label="File Image Manager"
+    @on-ok="getImage"
+  >
+    <template #default>
+      <app-gallery @select-image="imageGetter" />
+    </template>
+  </app-dialog>
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
-// import { useCounter } from 'src/composable/counter'
-// import AddImage from 'src/components/~componentEditor/AddImage.vue'
+import { useToolbar } from 'src/components/~componentEdior/toolbars/toolbar'
+import { notifErrVue } from 'src/modules/utils'
+
 const style = useStyledStore()
-// const { counter, increment } = useCounter()
+const { toolbar, fonts } = useToolbar()
 const refQeditor = ref()
 const token = ref()
-const editor = ref('Select some text,' +
-        ' then select a highlight or text color!')
+const editor = ref('Select some text,' + ' then select a highlight or text color!')
+const renderC = ref()
+const renderTheseComponent = ref('q-btn')
+const renderTheseProps = ref({})
+const dialogImage = ref(false)
+const imageSelected = ref(null)
 
 const foreColor = ref('#000000')
 const highlight = ref('#ffff00aa')
@@ -220,36 +140,45 @@ onMounted(() => {
   const toolbar = refQeditor.value.$el.children[0]
   toolbar.classList.add('fixed--toolbar')
   toolbar.firstChild.classList.remove('no-wrap')
-  // refQeditor.value.$el.children[0].$el.children[0].classList.remove('no-wrap')
   console.log(toolbar.firstChild.classList)
+  imageSelected.value = null
 })
 
 function pageFull() {
   style.setComponentFull()
 }
 
-// function getUniqueName(prefix) {
-//   let uniqueId = null
-//   if (!uniqueId) uniqueId = (new Date()).getTime()
-//   return (prefix || 'id') + (uniqueId++)
-// };
-
-// const createMyApp = (options) => {
-//   const app = createApp(options)
-//   app.directive('focus' /* ... */)
-
-//   return app
-// }
-
-function insertComponent(name, props) {
+async function insertComponent(name, props) {
   const edit = refQeditor.value
-  // const uniq = getUniqueName('comp')
-  const AddImage = defineAsyncComponent(() => import('../~componentEdior/AddImage.vue'))
-  // await nextTick()
+  const render = renderC.value
+  renderTheseComponent.value = name
+  renderTheseProps.value = props
+  await nextTick()
   edit.caret.restore()
-  edit.runCmd('insertHTML', AddImage)
-  // createMyApp(AddImage).mount(`#${uniq}`)
-  // edit.focus()
+  edit.runCmd('insertHTML', render.innerHTML)
+  edit.focus()
+}
+
+function insertImage() {
+  dialogImage.value = true
+}
+function imageGetter(val) {
+  imageSelected.value = val
+}
+function getImage() {
+  // console.log(e)
+
+  if (imageSelected.value === null) {
+    return notifErrVue('pilih Gambar terlebih dahulu')
+  }
+  insertComponent('add-image', { url: imageSelected.value, width: 100, ref: uniqueI('id') })
+
+  dialogImage.value = false
+}
+function uniqueI(prefix) {
+  let uniqueId = null
+  if (!uniqueId) uniqueId = (new Date()).getTime()
+  return (prefix || 'id') + (uniqueId++)
 }
 
 function Saved() {
@@ -263,13 +192,7 @@ function colorChange(cmd, name) {
   edit.focus()
   // console.log(edit)
 }
-function pilihImage() {
-  console.log('image')
-  const edit = refQeditor.value
-  edit.caret.restore()
-  edit.runCmd('insertHTML',
-    insertImage())
-}
+
 function pasteCapture(evt) {
   console.log('paste', evt)
 }
@@ -277,9 +200,6 @@ function dropCapture(evt) {
   console.log('drop', evt)
 }
 
-function insertImage() {
-  return '`<span class="img-wrapper"><img on src="http://dummyimage.com/160x90"></span>`'
-}
 </script>
 
 <style lang="scss">
