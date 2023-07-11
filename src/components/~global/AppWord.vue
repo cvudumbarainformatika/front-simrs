@@ -201,7 +201,7 @@
 </template>
 
 <script setup>
-import { createApp, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 // import { useCounter } from 'src/composable/counter'
 // import AddImage from 'src/components/~componentEditor/AddImage.vue'
@@ -228,28 +228,28 @@ function pageFull() {
   style.setComponentFull()
 }
 
-function getUniqueName(prefix) {
-  let uniqueId = null
-  if (!uniqueId) uniqueId = (new Date()).getTime()
-  return (prefix || 'id') + (uniqueId++)
-};
+// function getUniqueName(prefix) {
+//   let uniqueId = null
+//   if (!uniqueId) uniqueId = (new Date()).getTime()
+//   return (prefix || 'id') + (uniqueId++)
+// };
 
-const createMyApp = (options) => {
-  const app = createApp(options)
-  app.directive('focus' /* ... */)
+// const createMyApp = (options) => {
+//   const app = createApp(options)
+//   app.directive('focus' /* ... */)
 
-  return app
-}
+//   return app
+// }
 
-async function insertComponent(name, props) {
+function insertComponent(name, props) {
   const edit = refQeditor.value
-  const uniq = getUniqueName('comp')
-  await nextTick()
+  // const uniq = getUniqueName('comp')
+  const AddImage = defineAsyncComponent(() => import('../~componentEdior/AddImage.vue'))
+  // await nextTick()
   edit.caret.restore()
-  edit.runCmd('insertHTML', `<span id="${uniq}"></span>`)
-  const AddImage = defineAsyncComponent(() => import('../../../../components/~componentEdior/AddImage.vue'))
-  createMyApp(AddImage).mount(`#${uniq}`)
-  edit.focus()
+  edit.runCmd('insertHTML', AddImage)
+  // createMyApp(AddImage).mount(`#${uniq}`)
+  // edit.focus()
 }
 
 function Saved() {
