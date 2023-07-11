@@ -15,7 +15,7 @@ module.exports = configure(function (ctx) {
   // console.log('process', process.env)
   return {
     eslint: {
-      // fix: true,
+      fix: true,
       // include = [],
       // exclude = [],
       // rawOptions = {},

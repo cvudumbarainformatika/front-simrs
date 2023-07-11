@@ -34,9 +34,9 @@ import { Color } from '@tiptap/extension-color'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextAlign from '@tiptap/extension-text-align'
+import FontFamily from '@tiptap/extension-font-family'
 // import CustomImage from '../~editor/extensions/custom-image'
 import MyImage from '../~editor/extensions/my-image'
-// import FontFamily from '../~editor/extensions/font-family'
 // import { computed } from 'vue'
 
 const editor = useEditor({
@@ -55,6 +55,7 @@ const editor = useEditor({
     TextAlign.configure({
       types: ['heading', 'paragraph']
     }),
+    FontFamily,
     // CustomImage.configure({
     //   inline: true
     // })

@@ -178,11 +178,11 @@
         class="hidden"
         @update:model-value="startImport"
       />
-      <!-- <menu-bar-btn
-        icon="icon-mat-clear_all"
+      <menu-bar-btn
+        icon="icon-mat-menu"
         tooltip="Ubah Font"
-        @click="editor.chain().focus().clearNodes().run()"
-      /> -->
+        @click="editor.chain().focus().setFontFamily('Inter').run()"
+      />
 
       <!-- <button @click="editor.chain().focus().setHardBreak().run()">
         hard break
