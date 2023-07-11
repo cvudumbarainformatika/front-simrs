@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-btn-dropdown
-      :icon="icon"
+      :icon="icon "
       size="sm"
       elevated
       padding="xs"
@@ -39,6 +39,7 @@
 </template>
 <script setup>
 // import MenuBarBtn from './MenuBarBtn.vue'
+// import { computed } from 'vue'
 import CommonItem from './CommonItem.vue'
 
 const emits = defineEmits(['paragraph', 'heading'])

@@ -56,11 +56,16 @@
         vertical
       />
 
-      <heading-dropdown
+      <!-- <heading-dropdown
         :headings="headings"
         icon="icon-mat-format_size"
         @paragraph="editor.chain().focus().setParagraph().run()"
         @heading="handleClickHeading"
+      /> -->
+      <btn-menu
+        :items="headings"
+        :item="heading"
+        @set-text="handleClickHeading"
       />
       <heading-dropdown
         :headings="aligns"
@@ -173,6 +178,11 @@
         class="hidden"
         @update:model-value="startImport"
       />
+      <!-- <menu-bar-btn
+        icon="icon-mat-clear_all"
+        tooltip="Ubah Font"
+        @click="editor.chain().focus().clearNodes().run()"
+      /> -->
 
       <!-- <button @click="editor.chain().focus().setHardBreak().run()">
         hard break
@@ -192,12 +202,13 @@
 </template>
 <script setup>
 import { api } from 'src/boot/axios'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 
 // import AddMoreBtn from 'src/components/~editor/components/AddMoreBtn.vue'
 import MenuBarBtn from './components/MenuBarBtn.vue'
 import HeadingDropdown from 'src/components/~editor/components/HeadingDropdown.vue'
+import BtnMenu from './components/BtnMenu.vue'
 import BtnDropdownColor from './BtnDropdownColor.vue'
 
 const props = defineProps({
@@ -205,6 +216,10 @@ const props = defineProps({
     type: Object,
     default: null
   }
+})
+
+onMounted(() => {
+  heading.value = headings.value[0]
 })
 
 const emits = defineEmits(['onimportword'])
@@ -215,16 +230,29 @@ const dialogImage = ref(false)
 
 const imageSelected = ref(null)
 
+const heading = ref(null)
 const headings = ref([
+  { label: 'Paragraph', icon: 'Tt', value: 'p' },
   { label: 'Heading 1', icon: 'H1', value: 1 },
   { label: 'Heading 2', icon: 'H2', value: 2 },
   { label: 'Heading 3', icon: 'H3', value: 3 },
   { label: 'Heading 4', icon: 'H4', value: 4 },
-  { label: 'Heading 5', icon: 'H5', value: 5 }
+  { label: 'Heading 5', icon: 'H5', value: 5 },
+  { label: 'Heading 6', icon: 'H6', value: 6 }
 ])
+function handleClickHeading(val) {
+  if (val.value === 'p') {
+    props.editor.chain().focus().setParagraph().run()
+  } else {
+    props.editor.chain().focus().toggleHeading({ level: val.value }).run()
+  }
+
+  heading.value = val
+}
 const aligns = ref([
-  { label: 'center', icon: 'icon-mat-format_align_center', value: 'center' },
+  { label: 'left', icon: 'icon-mat-format_align_left', value: 'left' },
   { label: 'right', icon: 'icon-mat-format_align_right', value: 'right' },
+  { label: 'center', icon: 'icon-mat-format_align_center', value: 'center' },
   { label: 'justify', icon: 'icon-mat-format_align_justify', value: 'justify' }
 ])
 // const listsMenu = ref([
@@ -279,10 +307,6 @@ async function startImport() {
   // } catch (error) {
   //   // this.loading = false
   // }
-}
-
-function handleClickHeading(val) {
-  props.editor.chain().focus().toggleHeading({ level: val }).run()
 }
 
 function dialogGallery() {

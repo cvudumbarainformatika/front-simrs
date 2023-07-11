@@ -23,7 +23,6 @@ import EditorButton from '../~editor/EditorButton.vue'
 // import BubbleImage from 'src/components/~editor/BubbleImage.vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import MyImage from '../~editor/extensions/my-image'
 
 // plugins
 import Underline from '@tiptap/extension-underline'
@@ -36,6 +35,8 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextAlign from '@tiptap/extension-text-align'
 // import CustomImage from '../~editor/extensions/custom-image'
+import MyImage from '../~editor/extensions/my-image'
+// import FontFamily from '../~editor/extensions/font-family'
 // import { computed } from 'vue'
 
 const editor = useEditor({
@@ -57,15 +58,10 @@ const editor = useEditor({
     // CustomImage.configure({
     //   inline: true
     // })
-    // CustomImage.configure({
-    //   inline: true,
-    //   HTMLAttributes: {
-    //     class: 'custom-image'
-    //   }
-    // }),
     MyImage.configure({
       inline: true
     })
+    // FontFamily
     // BubbleMenu
     // new TipTapCustomImage()
   ]
@@ -90,13 +86,21 @@ function setcontenteditor(content) {
 .ProseMirror{
   width: 100% !important;
   overflow: auto !important;
-  height:100vh;
-  padding: 10px;
+  min-height:400px;
+  padding: 5px;
+  // font-family: 'Courier New', Courier, monospace;
+  // font-family: 'Times New Roman', Times, serif;
+  // font-family: Arial, Helvetica, sans-serif;
+  // font-family: Impact, 'Arial Narrow Bold', sans-serif;
+  // font-family: 'Times';
+  // font-size: 12pt;
   // display: flex;
   // flex-direction: column;
-
+  h1,h2,h3,h4,h5,h6 {
+    margin: 0
+  }
   p {
-    display:flex;
+    // display:flex;
     img{
       margin:5px;
     }
@@ -146,7 +150,7 @@ function setcontenteditor(content) {
 }
 
 hr.ProseMirror-selectednode {
-  border-top: 1px solid $grey;
+  border-top: 1px solid $grey-4;
 }
 
 ul[data-type="taskList"] {
