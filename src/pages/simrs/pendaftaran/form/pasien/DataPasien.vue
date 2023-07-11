@@ -761,6 +761,7 @@
                   v-model="store.form.noantrian"
                   label="Nomor Antrian"
                   :filled="false"
+                  @update:model-value="setNoAntrian"
                 />
               </div>
             </div>
@@ -1324,6 +1325,15 @@ function setRW(val) {
   if (val.length === 3) {
     refRW.value.$refs.refInput.blur()
     refNegara.value.$refs.refAuto.focus()
+  }
+}
+// set nomor Antrian
+function setNoAntrian(val) {
+  if (val.length > 1) {
+    const temp = parseInt(val.slice(1, val.length))
+    console.log('antrian ', val.length)
+    console.log('temp ', temp)
+    store.setForm('angkaantrean', temp)
   }
 }
 // -- dialog cari pasien, untuk pasien lama--end--

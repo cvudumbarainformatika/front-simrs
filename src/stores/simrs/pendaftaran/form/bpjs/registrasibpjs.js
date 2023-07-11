@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
+import { findWithAttr } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -62,6 +63,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     sistembayars1: [],
     kasrcispoli: null,
     dpjps: [],
+    jadwalDpjps: [],
     tujuanKunjungans: [
       { nama: 'Prosedur', value: 1 },
       { nama: 'Konsul Dokter', value: 2 }
@@ -319,6 +321,36 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingSuratKontrol = false
         })
     },
+    async getjadwalDokterDpjp() {
+      this.loading = true
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/jadwaldokter', this.paramDpjp)
+        .then(resp => {
+          this.loading = false
+          // console.log('get jadwal dokter dpjp', resp.data.result)
+          if (resp.data.result.length) {
+            const data = resp.data.result
+            data.forEach(anu => {
+              anu.dpjp = String(anu.kodedokter)
+            })
+            this.jadwalDpjps = data
+            console.log('jadwal dpjp ', data)
+          }
+          console.log('Jadwal DPJp ', resp.data.result)
+          if (this.dpjpSuratKontrol !== '') {
+            // this.form.dpjp = this.dpjpSuratKontrol
+            const index = findWithAttr(this.jadwalDpjps, 'dpjp', this.dpjpSuratKontrol)
+            if (index >= 0) {
+              this.setForm('namadokter', this.jadwalDpjps[index].namadokter)
+              this.setForm('jampraktek', this.jadwalDpjps[index].jadwal)
+              console.log('log form ', this.form)
+            }
+          }
+          return new Promise(resolve => { resolve(resp.data) })
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
     async getDokterDpjp() {
       this.loading = true
       await api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
@@ -332,7 +364,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.dpjps = data
             console.log('result ', data)
           }
-          console.log('dokter DPJp ', resp.data)
+          // console.log('dokter DPJp ', resp.data)
           if (this.dpjpSuratKontrol !== '') this.form.dpjp = this.dpjpSuratKontrol
           return new Promise(resolve => { resolve(resp.data) })
         })
@@ -363,7 +395,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     async getPpkRujukan(val) {
       this.loadingPpkRujukan = true
       const param = { faskesasal: val }
-      await api.post('v1/simrs/pendaftaran/faskesasalbpjs', param)
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/faskesasalbpjs', param)
         .then(resp => {
           this.loadingPpkRujukan = false
           this.ppkRujukans = resp.data.result.faskes
