@@ -5,6 +5,3 @@
     @click="()=> console.log('okkkkkkkkk')"
   >
 </template>
-<script>
-
-</script>

@@ -201,7 +201,7 @@
 </template>
 
 <script setup>
-import { createApp, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
+import { createApp, defineAsyncComponent, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 // import { useCounter } from 'src/composable/counter'
 // import AddImage from 'src/components/~componentEditor/AddImage.vue'
@@ -241,13 +241,14 @@ const createMyApp = (options) => {
   return app
 }
 
-async function insertComponent(name, props) {
+function insertComponent(name, props) {
   const edit = refQeditor.value
   const uniq = getUniqueName('comp')
-  await nextTick()
+  const AddImage = defineAsyncComponent(() => import('../../../../components/~componentEdior/AddImage.vue'))
+  // await nextTick()
   edit.caret.restore()
   edit.runCmd('insertHTML', `<span id="${uniq}"></span>`)
-  const AddImage = defineAsyncComponent(() => import('../../../../components/~componentEdior/AddImage.vue'))
+  // edit.runCmd('insertHTML', AddImage)
   createMyApp(AddImage).mount(`#${uniq}`)
   edit.focus()
 }
