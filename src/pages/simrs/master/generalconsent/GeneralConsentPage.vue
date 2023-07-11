@@ -21,7 +21,7 @@
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
-        <ContentPage />
+        <ContentP />
       </q-scroll-area>
     </q-card>
   </q-page>
@@ -31,8 +31,8 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { onMounted, ref } from 'vue'
 import PageHead from './PageHead.vue'
-import ContentPage from './ContentPage.vue'
-// import ContentP from './ContentP.vue'
+// import ContentPage from './ContentPage.vue'
+import ContentP from './ContentP.vue'
 // const editor = ref('')
 const style = useStyledStore()
 const pageRef = ref()
