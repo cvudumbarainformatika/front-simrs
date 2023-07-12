@@ -123,6 +123,9 @@ function setcontenteditor(content) {
     img{
       margin:5px;
     }
+    // .img-absolute{
+    //   display: flex;
+    // }
   }
 
    pre {

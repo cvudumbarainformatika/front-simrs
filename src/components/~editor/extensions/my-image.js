@@ -14,7 +14,8 @@ export default Image.extend({
       width: { default: null },
       height: { default: null },
       src: { default: null },
-      ref: { default: null }
+      ref: { default: null },
+      class: { default: 'center' }
     }
   },
   addCommands() {
@@ -28,6 +29,9 @@ export default Image.extend({
         }
 
         return true
+      },
+      setImageAlignmentClass: (alignment) => ({ commands }) => {
+        return commands.updateAttributes('image', { class: alignment })
       }
     }
   },

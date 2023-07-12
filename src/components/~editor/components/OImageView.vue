@@ -2,7 +2,7 @@
   <node-view-wrapper
     as="span"
     class="image-container"
-    :class="{ 'selected': selected || resizing }"
+    :class="{ 'selected': selected || resizing,'left': left, 'right':right}"
     :contenteditable="selected || resizing"
   >
     <img
@@ -10,19 +10,11 @@
       :src="src"
       :width="node.attrs.width"
       :height="node.attrs.height"
-      :class="{ 'selected': selected || resizing, 'cursor-pointer': node.attrs.ref }"
+      :class="{ 'selected': selected || resizing, 'cursor-pointer text-left': node.attrs.ref }"
       @click="selectImage"
+      @mousedown="onHover"
+      @mouseout="hovered = false"
     >
-    <!-- <div class="absolute-top-right">
-      <q-icon
-        name="icon-mat-settings"
-        class="cursor-pointer"
-        size="md"
-        color="primary"
-        style="z-index:1"
-        @click="()=>console.log('settings')"
-      />
-    </div> -->
     <div
       v-if="editor.view.editable"
       v-show="selected || resizing"
@@ -35,6 +27,85 @@
         class="image-resizer__handler"
         @mousedown="(evt)=> onMouseDown(evt, item.value)"
       />
+    </div>
+
+    <!-- toolbar -->
+    <div class="row items-center o-toolbar">
+      <div class="col-auto actions">
+        <q-btn
+          v-if="selected || resizing"
+          color="yellow"
+          icon="icon-mat-settings"
+          size="xs"
+          padding="xs"
+          flat
+        >
+          <q-tooltip
+            anchor="top middle"
+            self="bottom middle"
+          >
+            Setting Image
+          </q-tooltip>
+          <q-menu
+            ref="optRef"
+            anchor="top right"
+            self="top left"
+            content-class="o-menu o-image-menu"
+          >
+            <section class="q-px-md q-pb-sm">
+              <div class="row justify-between items-center text-bold q-py-sm">
+                <div>Settings</div>
+                <div>
+                  <q-btn
+                    v-close-popup
+                    icon="icon-mat-close"
+                    size="0.7rem"
+                    flat
+                    dense
+                  />
+                </div>
+              </div>
+              <q-separator />
+              <div class="row col-12 items-start q-pa-sm">
+                <q-btn
+                  icon="icon-mat-menu"
+                  color="primary"
+                  @click="handleClassP"
+                />
+                <!-- <q-input
+                  v-model="imgOption.width"
+                  type="number"
+                  debounce="500"
+                  standout
+                  :hint="$o.lang.image.width"
+                  suffix="px"
+                  @input="onInput($event, 'width')"
+                /> -->
+                <!-- <div class="q-px-sm">
+                  <q-btn
+                    :icon="keepRatio ? 'link' : 'link_off'"
+                    dense
+                    flat
+                    @click="keepRatio = !keepRatio"
+                  >
+                    <q-tooltip>{{ keepRatio ? $o.lang.image.lockAspectRatio : $o.lang.image.unlockAspectRatio }}</q-tooltip>
+                  </q-btn>
+                </div> -->
+                <!-- <q-input
+                  v-model="imgOption.height"
+                  type="number"
+                  debounce="500"
+                  standout
+                  :hint="$o.lang.image.height"
+                  suffix="px"
+                  @input="onInput($event, 'height')"
+                /> -->
+              </div>
+              <div />
+            </section>
+          </q-menu>
+        </q-btn>
+      </div>
     </div>
   </node-view-wrapper>
 </template>
@@ -50,6 +121,11 @@ const props = defineProps(nodeViewProps)
 const maxWidth = ref(0)
 const keepRatio = ref(true)
 const resizing = ref(false)
+
+const hovered = ref(false)
+const optRef = ref()
+const left = ref(false)
+const right = ref(false)
 
 const imgOption = ref({
   src: '',
@@ -108,9 +184,19 @@ function getMaxSize () {
 function selectImage (e) {
   console.log(props.decorations)
 }
-// function hoverImage() {
-//   resizing.value = true
-// }
+function onHover() {
+  // console.log('onMouse', props.editor.view.dom.firstChild.classList)
+  hovered.value = true
+}
+
+function handleClassP() {
+  // console.log('handleClassP', props.editor.view.dom.firstChild.classList)
+  // const p = props.editor.view.dom.firstChild
+  // p.classList.add('row')
+  // console.log('handleClassP', props)
+  left.value = true
+  right.value = false
+}
 
 function onMouseDown(e, direction) {
   e.preventDefault()
@@ -206,13 +292,15 @@ function offEvents () {
   clear: both;
   box-sizing: border-box;
 
-  img {
-    display: block;
+  &.left{
+    float: left;
+  }
+  &.right{
+    float: right;
   }
 
-  &:hover {
-    // outline-style dashed
-    // outline-color rgba(#1976D2, 0.3)
+  img {
+    display: block;
   }
 
   &.selected {
@@ -263,6 +351,15 @@ function offEvents () {
         right: -6px;
       }
     }
+  }
+
+  .o-toolbar {
+    position :absolute;
+    top :0;
+    margin :0;
+    right: 0;
+    visibility :visible;
+    z-index :10;
   }
 }
 </style>
