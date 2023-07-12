@@ -13,6 +13,7 @@
         class="q-ml-sm"
         icon="icon-mat-save"
         tooltip="Simpan"
+        :active="onUpdateEditor"
       />
       <q-separator
         vertical
@@ -220,6 +221,9 @@ const props = defineProps({
   editor: {
     type: Object,
     default: null
+  },
+  onUpdateEditor: {
+    type: Boolean, default: false
   }
 })
 

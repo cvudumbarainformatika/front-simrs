@@ -2,19 +2,18 @@
   <div class="editor">
     <editor-button
       :editor="editor"
+      :on-update-editor="updateModel"
       @onimportword="setcontenteditor"
     />
     <editor-content
       :editor="editor"
       class="content-editor-A4"
     />
-    <!-- <bubble-menu
+    <bubble-menu
       v-if="editor"
-      v-show="editor.isActive('custom-image')"
       :editor="editor"
-    >
-      <bubble-image :editor="editor" />
-    </bubble-menu> -->
+      :tippy-options="{ duration: 100 }"
+    />
   </div>
 </template>
 
@@ -35,9 +34,13 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextAlign from '@tiptap/extension-text-align'
 import FontFamily from '@tiptap/extension-font-family'
+import BubbleMenu from '@tiptap/extension-bubble-menu'
 // import CustomImage from '../~editor/extensions/custom-image'
 import MyImage from '../~editor/extensions/my-image'
+import { ref } from 'vue'
 // import { computed } from 'vue'
+
+const updateModel = ref(false)
 
 const editor = useEditor({
   content: '<p>Silahkan Ketik Berita disini</p>',
@@ -56,6 +59,10 @@ const editor = useEditor({
       types: ['heading', 'paragraph']
     }),
     FontFamily,
+    BubbleMenu.configure({
+      pluginKey: 'bubleImage',
+      element: document.querySelector('.menu-one')
+    }),
     // CustomImage.configure({
     //   inline: true
     // })
@@ -63,11 +70,11 @@ const editor = useEditor({
       inline: true
     })
     // FontFamily
-    // BubbleMenu
     // new TipTapCustomImage()
   ],
   onUpdate: ({ editor }) => {
-    console.log('onUpdate', editor)
+    // console.log('onUpdate', editor)
+    updateModel.value = true
   }
 })
 

@@ -13,6 +13,16 @@
       :class="{ 'selected': selected || resizing, 'cursor-pointer': node.attrs.ref }"
       @click="selectImage"
     >
+    <!-- <div class="absolute-top-right">
+      <q-icon
+        name="icon-mat-settings"
+        class="cursor-pointer"
+        size="md"
+        color="primary"
+        style="z-index:1"
+        @click="()=>console.log('settings')"
+      />
+    </div> -->
     <div
       v-if="editor.view.editable"
       v-show="selected || resizing"
@@ -96,18 +106,11 @@ function getMaxSize () {
 }
 
 function selectImage (e) {
-  // if (!props.view.editable && props.node.attrs.ref) {
-  //   window.open(refImage.value, '_blank')
-  // }
-
-  // const { state } = props.editor.view
-  // let { tr } = state
-  // const selection = NodeSelection.create(state.doc, props.getPos())
-  // tr = tr.se
-  // props.view.dispatch(tr)
-  // const node = e.type.create(e)
   console.log(props.decorations)
 }
+// function hoverImage() {
+//   resizing.value = true
+// }
 
 function onMouseDown(e, direction) {
   e.preventDefault()
