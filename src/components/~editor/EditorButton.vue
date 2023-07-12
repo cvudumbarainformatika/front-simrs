@@ -10,6 +10,14 @@
       /> -->
 
       <menu-bar-btn
+        class="q-ml-sm"
+        icon="icon-mat-save"
+        tooltip="Simpan"
+      />
+      <q-separator
+        vertical
+      />
+      <menu-bar-btn
         icon="icon-mat-undo"
         tooltip="kembali -1 langkah"
         @click="editor.chain().focus().undo().run()"
@@ -69,13 +77,10 @@
       />
       <heading-dropdown
         :headings="aligns"
-        icon="icon-mat-format_align_left"
+        :item="align"
         avatar
-        label-first="Left"
-        icon-first="icon-mat-format_align_left"
         tooltip="Align format"
-        @paragraph="editor.chain().focus().setTextAlign('left').run()"
-        @heading="(val)=>editor.chain().focus().setTextAlign(val).run()"
+        @heading="handleAlign"
       />
       <btn-dropdown-color
         icon="icon-mat-text_format"
@@ -154,12 +159,12 @@
       <q-separator
         vertical
       />
-      <menu-bar-btn
+      <!-- <menu-bar-btn
         icon="icon-mat-image"
         tooltip="masukkan gambar"
-      />
+      /> -->
       <menu-bar-btn
-        icon="icon-mat-upload"
+        icon="icon-mat-insert_photo"
         tooltip="gallery & upload gambar"
         @click="dialogGallery"
       />
@@ -220,6 +225,7 @@ const props = defineProps({
 
 onMounted(() => {
   heading.value = headings.value[0]
+  align.value = aligns.value[0]
 })
 
 const emits = defineEmits(['onimportword'])
@@ -249,12 +255,18 @@ function handleClickHeading(val) {
 
   heading.value = val
 }
+
+const align = ref(null)
 const aligns = ref([
   { label: 'left', icon: 'icon-mat-format_align_left', value: 'left' },
   { label: 'right', icon: 'icon-mat-format_align_right', value: 'right' },
   { label: 'center', icon: 'icon-mat-format_align_center', value: 'center' },
   { label: 'justify', icon: 'icon-mat-format_align_justify', value: 'justify' }
 ])
+function handleAlign(val) {
+  align.value = val
+  props.editor.chain().focus().setTextAlign(val.value).run()
+}
 // const listsMenu = ref([
 //   { link: 'Upload Gambar', icon: 'cloud' },
 //   { link: 'Gallery', icon: 'collections' }

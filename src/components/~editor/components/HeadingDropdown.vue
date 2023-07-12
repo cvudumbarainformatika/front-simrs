@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-btn-dropdown
-      :icon="icon "
+      :icon="item?item.icon:'icon-mat-menu'"
       size="sm"
       elevated
       padding="xs"
@@ -16,13 +16,6 @@
       </template>
       <q-list>
         <section>
-          <common-item
-            v-close-popup
-            :icon="iconFirst"
-            :label="labelFirst"
-            @click="emits('paragraph')"
-          />
-          <q-separator />
           <common-item
             v-for="(list , i) in headings"
             :key="i"
@@ -53,17 +46,13 @@ defineProps({
     type: String,
     default: 'Heading / Paragraph'
   },
-  labelFirst: {
-    type: String,
-    default: 'Paragraph'
-  },
   icon: {
     type: String,
     default: 'icon-mat-format_size'
   },
-  iconFirst: {
-    type: String,
-    default: 'icon-mat-format_size'
+  item: {
+    type: Object,
+    default: null
   },
   avatar: {
     type: Boolean,
@@ -73,6 +62,6 @@ defineProps({
 })
 
 function hanleHeading(item) {
-  emits('heading', item.value)
+  emits('heading', item)
 }
 </script>

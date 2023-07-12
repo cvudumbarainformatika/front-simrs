@@ -65,7 +65,10 @@ const editor = useEditor({
     // FontFamily
     // BubbleMenu
     // new TipTapCustomImage()
-  ]
+  ],
+  onUpdate: ({ editor }) => {
+    console.log('onUpdate', editor)
+  }
 })
 
 function setcontenteditor(content) {
@@ -78,6 +81,7 @@ function setcontenteditor(content) {
   const index = content.indexOf('{"result":')
   editor.value.commands.setContent(content.substring(0, index - 1), false)
 }
+
 </script>
 
 <style lang="scss">
