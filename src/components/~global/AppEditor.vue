@@ -9,15 +9,23 @@
       :editor="editor"
       class="content-editor-A4"
     />
-    <bubble-menu
+    <!-- <bubble-menu
       v-if="editor"
       :editor="editor"
       :tippy-options="{ duration: 100 }"
+    >
+    <menu-bar-btn
+      icon="icon-mat-format_bold"
+      :active="editor.isActive('bold')"
+      tooltip="Huruf Tebal"
+      @click="editor.chain().focus().toggleBold().run()"
     />
+  </bubble-menu> -->
   </div>
 </template>
 
 <script setup>
+// import MenuBarBtn from '../~editor/components/MenuBarBtn.vue'
 import EditorButton from '../~editor/EditorButton.vue'
 // import BubbleImage from 'src/components/~editor/BubbleImage.vue'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
@@ -34,7 +42,7 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import TextAlign from '@tiptap/extension-text-align'
 import FontFamily from '@tiptap/extension-font-family'
-import BubbleMenu from '@tiptap/extension-bubble-menu'
+// import BubbleMenu from '@tiptap/extension-bubble-menu'
 // import CustomImage from '../~editor/extensions/custom-image'
 import MyImage from '../~editor/extensions/my-image'
 import { ref } from 'vue'
@@ -59,10 +67,9 @@ const editor = useEditor({
       types: ['heading', 'paragraph']
     }),
     FontFamily,
-    BubbleMenu.configure({
-      pluginKey: 'bubleImage',
-      element: document.querySelector('.menu-one')
-    }),
+    // BubbleMenu.configure({
+    //   element: document.querySelector('.menu-one')
+    // }),
     // CustomImage.configure({
     //   inline: true
     // })
