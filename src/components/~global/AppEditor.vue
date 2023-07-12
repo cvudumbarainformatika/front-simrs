@@ -44,6 +44,12 @@ import TextAlign from '@tiptap/extension-text-align'
 import FontFamily from '@tiptap/extension-font-family'
 // import BubbleMenu from '@tiptap/extension-bubble-menu'
 // import CustomImage from '../~editor/extensions/custom-image'
+
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+
 import MyImage from '../~editor/extensions/my-image'
 import { ref } from 'vue'
 // import { computed } from 'vue'
@@ -75,9 +81,15 @@ const editor = useEditor({
     // })
     MyImage.configure({
       inline: true
-    })
+    }),
     // FontFamily
     // new TipTapCustomImage()
+    Table.configure({
+      resizable: true
+    }),
+    TableRow,
+    TableHeader,
+    TableCell
   ],
   onUpdate: ({ editor }) => {
     // console.log('onUpdate', editor)
@@ -102,6 +114,32 @@ function setcontenteditor(content) {
   .editor {
     border:1px solid $grey-3;
   }
+  hr.ProseMirror-selectednode {
+  border-top: 1px solid $grey-4;
+}
+
+ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+  p {
+    margin: 0;
+    line-height: 0.8rem;
+  }
+
+  li {
+    display: flex;
+    > label {
+      flex: 0 0 auto;
+      margin-right: 0.5rem;
+      user-select: none;
+    }
+
+    > div {
+      flex: 1 1 auto;
+    }
+  }
+}
+
 .ProseMirror{
   width: 100% !important;
   overflow: auto !important;
@@ -169,31 +207,67 @@ function setcontenteditor(content) {
     padding-left: .75rem;
     border-left: 3px solid rgba(#0D0D0D, 0.1);
   }
-}
 
-hr.ProseMirror-selectednode {
-  border-top: 1px solid $grey-4;
-}
-
-ul[data-type="taskList"] {
-  list-style: none;
-  padding: 0;
-  p {
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
     margin: 0;
-    line-height: 0.8rem;
-  }
+    overflow: hidden;
 
-  li {
-    display: flex;
-    > label {
-      flex: 0 0 auto;
-      margin-right: 0.5rem;
-      user-select: none;
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid #ced4da;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: relative;
+
+      > * {
+        margin-bottom: 0;
+      }
     }
 
-    > div {
-      flex: 1 1 auto;
+    th {
+      font-weight: bold;
+      text-align: left;
+      background-color: #f1f3f5;
+    }
+
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: "";
+      left: 0; right: 0; top: 0; bottom: 0;
+      background: rgba(200, 200, 255, 0.4);
+      pointer-events: none;
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: -2px;
+      width: 4px;
+      background-color: #adf;
+      pointer-events: none;
+    }
+
+    p {
+      margin: 0;
     }
   }
 }
+
+.tableWrapper {
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+
 </style>

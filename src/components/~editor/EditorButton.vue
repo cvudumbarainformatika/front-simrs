@@ -184,12 +184,28 @@
         class="hidden"
         @update:model-value="startImport"
       />
+      <q-separator
+        vertical
+      />
       <menu-bar-btn
         icon="icon-mat-menu"
         tooltip="Ubah Font"
         @click="editor.chain().focus().setFontFamily('Inter').run()"
       />
+      <q-separator
+        vertical
+      />
 
+      <menu-bar-btn
+        icon="icon-mat-menu"
+        tooltip="Table View"
+        @click="editor.chain().focus().insertTable({ rows: 1, cols: 2, withHeaderRow: false }).run()"
+      />
+      <menu-bar-btn
+        icon="icon-mat-close"
+        tooltip="Delete Table"
+        @click="editor.chain().focus().deleteTable().run()"
+      />
       <!-- <button @click="editor.chain().focus().setHardBreak().run()">
         hard break
       </button> -->
