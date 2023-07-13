@@ -70,6 +70,7 @@ function simpanData() {
   // refRegistrasi.value.set()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
+  refDataPasien.value.cekBpjs()
   console.log('pasien', dataPasien,
     'regis', dataRegis
   )
@@ -146,7 +147,7 @@ function getListRujukan() {
 function dialogCetak() {
   Dialog.create({
     title: 'Konfirmasi.',
-    message: 'Cetak SEP?',
+    message: 'Buat SEP?',
     persistent: true,
     ok: {
       push: true,

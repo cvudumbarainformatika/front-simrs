@@ -151,12 +151,12 @@
   </div>
 </template>
 <script setup>
-import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
+import { useRegistrasiPasienIgdStore } from 'src/stores/simrs/pendaftaran/form/igd/registrasi'
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 // const pasien = usePendaftaranPasienStore()
-const store = useRegistrasiPasienUmumStore()
+const store = useRegistrasiPasienIgdStore()
 store.getInitialData()
 function setSistembayar1(val) {
   // store.setForm('sistembayar1', val)
@@ -167,7 +167,7 @@ function setSistembayar1(val) {
 }
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
-  console.log('form', store.form)
+  // console.log('form', store.form)
 }
 // emits
 const emits = defineEmits(['bisaSimpan'])

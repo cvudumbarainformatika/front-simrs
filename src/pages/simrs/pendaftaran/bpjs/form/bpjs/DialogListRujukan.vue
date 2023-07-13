@@ -261,6 +261,7 @@
   </q-dialog>
 </template>
 <script setup>
+import { date } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 
@@ -268,7 +269,7 @@ const store = useRegistrasiPasienBPJSStore()
 // pilih rujukan p care
 function pilihRujukanPCare(val) {
   console.log('karcis', store.jenisKarcises)
-  console.log('rujukan p care', val, store.polis)
+  console.log('rujukan p care', val)
 
   const index = findWithAttr(store.polis, 'kodemapingbpjs', val.poliRujukan.kode)
   if (index >= 0) {
@@ -303,6 +304,9 @@ function pilihRujukanPCare(val) {
   // ppk rujukan
   store.display.kode = val.provPerujuk.kode
   store.setForm('ppkRujukan', val.provPerujuk.kode)
+  store.setForm('tglrujukan', val.tglKunjungan)
+  store.setForm('jnspelayanan', val.pelayanan.kode)
+  store.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
 
   store.tampilRujukan = false
 }

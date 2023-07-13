@@ -756,31 +756,40 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
     },
     // cek bpjs
-    async cekPesertaByNik (val) {
+    cekPesertaByNik (val) {
       this.loadingNik = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynik', val)
-        .then((resp) => {
-          this.loadingNik = false
-          console.log('Nik', resp.data)
-          this.alertMsg = resp.data.result
-          this.alert = true
-          return new Promise(resolve => { resolve(resp.data.result) })
-        }).catch(() => {
-          this.loadingNik = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynik', val)
+          .then((resp) => {
+            this.loadingNik = false
+            console.log('Nik', resp.data)
+            // this.alertMsg = resp.data.result
+            // this.alert = true
+            this.setForm('jenispeserta', resp.data.result.peserta.jenisPeserta.keterangan)
+            resolve(resp.data.result)
+          }).catch(() => {
+            this.loadingNik = false
+          })
+      })
     },
-    async cekPesertaByNoka (val) {
+    cekPesertaByNoka (val) {
       this.loadingNoka = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
-        .then((resp) => {
-          this.loadingNoka = false
-          console.log('Noka', resp.data)
-          this.alert = true
-          this.alertMsg = resp.data.result
-          return new Promise(resolve => { resolve(resp.data.result) })
-        }).catch(() => {
-          this.loadingNoka = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
+          .then((resp) => {
+            this.loadingNoka = false
+            console.log('Noka', resp.data.result)
+            // this.alert = true
+            // this.alertMsg = resp.data.result
+            const hasil = resp.data.result
+            this.setForm('jenispeserta', hasil.peserta.jenisPeserta.keterangan)
+            // this.setForm('jnspelayanan', hasil.pelayanan.kode)
+            this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
+            resolve(resp.data.result)
+          }).catch(() => {
+            this.loadingNoka = false
+          })
+      })
     },
     async cekPesertaFinger (val) {
       this.loadingFinger = true

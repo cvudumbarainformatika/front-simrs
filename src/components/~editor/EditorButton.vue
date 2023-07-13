@@ -4,173 +4,175 @@
     class="fixed-top full-width"
     style="z-index: 1;"
   >
-    <div class="row items-center q-gutter-xs q-mb-sm bg-grey-2 q-py-xs">
-      <!-- <add-more-btn
+    <div class="row items-center bg-grey-2">
+      <div class="col-auto">
+        <div class="row items-center q-gutter-xs q-py-xs">
+          <!-- <add-more-btn
         @code-block="editor.chain().focus().toggleCodeBlock().run()"
       /> -->
 
-      <menu-bar-btn
-        class="q-ml-sm"
-        icon="icon-mat-save"
-        tooltip="Simpan"
-        :active="onUpdateEditor"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-undo"
-        tooltip="kembali -1 langkah"
-        @click="editor.chain().focus().undo().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-redo"
-        tooltip="kembali +1 langkah"
-        @click="editor.chain().focus().redo().run()"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_bold"
-        :active="editor.isActive('bold')"
-        tooltip="Huruf Tebal"
-        @click="editor.chain().focus().toggleBold().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_italic"
-        tooltip="Huruf Miring"
-        :active="editor.isActive('italic')"
-        @click="editor.chain().focus().toggleItalic().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_underlined"
-        tooltip="Garis Bawah"
-        :active="editor.isActive('underline')"
-        @click="editor.chain().focus().toggleUnderline().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-strikethrough_s"
-        tooltip="Garis tengah"
-        :active="editor.isActive('strike')"
-        @click="editor.chain().focus().toggleStrike().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-code"
-        tooltip="Model Code"
-        :active="editor.isActive('code')"
-        @click="editor.chain().focus().toggleCode().run()"
-      />
-      <q-separator
-        vertical
-      />
+          <menu-bar-btn
+            class="q-ml-sm"
+            icon="icon-mat-save"
+            tooltip="Simpan"
+            :active="onUpdateEditor"
+          />
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-undo"
+            tooltip="kembali -1 langkah"
+            @click="editor.chain().focus().undo().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-redo"
+            tooltip="kembali +1 langkah"
+            @click="editor.chain().focus().redo().run()"
+          />
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_bold"
+            :active="editor.isActive('bold')"
+            tooltip="Huruf Tebal"
+            @click="editor.chain().focus().toggleBold().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_italic"
+            tooltip="Huruf Miring"
+            :active="editor.isActive('italic')"
+            @click="editor.chain().focus().toggleItalic().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_underlined"
+            tooltip="Garis Bawah"
+            :active="editor.isActive('underline')"
+            @click="editor.chain().focus().toggleUnderline().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-strikethrough_s"
+            tooltip="Garis tengah"
+            :active="editor.isActive('strike')"
+            @click="editor.chain().focus().toggleStrike().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-code"
+            tooltip="Model Code"
+            :active="editor.isActive('code')"
+            @click="editor.chain().focus().toggleCode().run()"
+          />
+          <q-separator
+            vertical
+          />
 
-      <!-- <heading-dropdown
+          <!-- <heading-dropdown
         :headings="headings"
         icon="icon-mat-format_size"
         @paragraph="editor.chain().focus().setParagraph().run()"
         @heading="handleClickHeading"
       /> -->
-      <btn-menu
-        :items="headings"
-        :item="heading"
-        @set-text="handleClickHeading"
-      />
-      <heading-dropdown
-        :headings="aligns"
-        :item="align"
-        avatar
-        tooltip="Align format"
-        @heading="handleAlign"
-      />
-      <btn-dropdown-color
-        icon="icon-mat-text_format"
-        @set-color="(val)=> editor.chain().focus().toggleHighlight({ color: val }).run()"
-      />
-      <btn-dropdown-color
-        icon="icon-mat-edit"
-        @set-color="(val)=> editor.chain().focus().setColor(val).run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-vertical_align_top"
-        tooltip="Subscript"
-        :active="editor.isActive('subscript')"
-        @click="editor.chain().focus().toggleSubscript().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-vertical_align_bottom"
-        tooltip="Superscript"
-        :active="editor.isActive('superscript')"
-        @click="editor.chain().focus().toggleSuperscript().run()"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_quote"
-        tooltip="Quote"
-        :active="editor.isActive('blockquote')"
-        @click="editor.chain().focus().toggleBlockquote().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-font_download"
-        tooltip="Code Block"
-        :active="editor.isActive('codeBlock')"
-        @click="editor.chain().focus().toggleCodeBlock().run()"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_list_bulleted"
-        tooltip="Format list Bullet"
-        :active="editor.isActive('bulletList')"
-        @click="editor.chain().focus().toggleBulletList().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_list_numbered"
-        tooltip="Format list Nomor"
-        :active="editor.isActive('orderedList')"
-        @click="editor.chain().focus().toggleOrderedList().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-check"
-        tooltip="List Check"
-        :active="editor.isActive('taskList')"
-        @click="editor.chain().focus().toggleTaskList().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-horizontal_rule"
-        tooltip="Garis Mendatar"
-        @click="editor.chain().focus().setHorizontalRule().run()"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-format_clear"
-        tooltip="Format Clear"
-        @click="editor.chain().focus().unsetAllMarks().run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-clear_all"
-        tooltip="Clear Fiture"
-        @click="editor.chain().focus().clearNodes().run()"
-      />
-      <q-separator
-        vertical
-      />
-      <!-- <menu-bar-btn
+          <btn-menu
+            :items="headings"
+            :item="heading"
+            @set-text="handleClickHeading"
+          />
+          <heading-dropdown
+            :headings="aligns"
+            :item="align"
+            avatar
+            tooltip="Align format"
+            @heading="handleAlign"
+          />
+          <btn-dropdown-color
+            icon="icon-mat-text_format"
+            @set-color="(val)=> editor.chain().focus().toggleHighlight({ color: val }).run()"
+          />
+          <btn-dropdown-color
+            icon="icon-mat-edit"
+            @set-color="(val)=> editor.chain().focus().setColor(val).run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-subscript"
+            tooltip="Subscript"
+            :active="editor.isActive('subscript')"
+            @click="editor.chain().focus().toggleSubscript().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-superscript"
+            tooltip="Superscript"
+            :active="editor.isActive('superscript')"
+            @click="editor.chain().focus().toggleSuperscript().run()"
+          />
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_quote"
+            tooltip="Quote"
+            :active="editor.isActive('blockquote')"
+            @click="editor.chain().focus().toggleBlockquote().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-font_download"
+            tooltip="Code Block"
+            :active="editor.isActive('codeBlock')"
+            @click="editor.chain().focus().toggleCodeBlock().run()"
+          />
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_list_bulleted"
+            tooltip="Format list Bullet"
+            :active="editor.isActive('bulletList')"
+            @click="editor.chain().focus().toggleBulletList().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_list_numbered"
+            tooltip="Format list Nomor"
+            :active="editor.isActive('orderedList')"
+            @click="editor.chain().focus().toggleOrderedList().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-check"
+            tooltip="List Check"
+            :active="editor.isActive('taskList')"
+            @click="editor.chain().focus().toggleTaskList().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-horizontal_rule"
+            tooltip="Garis Mendatar"
+            @click="editor.chain().focus().setHorizontalRule().run()"
+          />
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-format_clear"
+            tooltip="Format Clear"
+            @click="editor.chain().focus().unsetAllMarks().run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-clear_all"
+            tooltip="Clear Fiture"
+            @click="editor.chain().focus().clearNodes().run()"
+          />
+          <q-separator
+            vertical
+          />
+          <!-- <menu-bar-btn
         icon="icon-mat-image"
         tooltip="masukkan gambar"
       /> -->
-      <menu-bar-btn
-        icon="icon-mat-insert_photo"
-        tooltip="gallery & upload gambar"
-        @click="dialogGallery"
-      />
+          <menu-bar-btn
+            icon="icon-mat-insert_photo"
+            tooltip="gallery & upload gambar"
+            @click="dialogGallery"
+          />
 
-      <menu-bar-btn
+          <!-- <menu-bar-btn
         icon="icon-my-word"
         tooltip="upload doc word"
         @click="pickFile"
@@ -183,33 +185,50 @@
         accept=".doc, .docx"
         class="hidden"
         @update:model-value="startImport"
-      />
-      <q-separator
-        vertical
-      />
-      <menu-bar-btn
-        icon="icon-mat-menu"
-        tooltip="Ubah Font"
-        @click="editor.chain().focus().setFontFamily('Inter').run()"
-      />
-      <q-separator
-        vertical
-      />
+      /> -->
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            icon="icon-mat-abc"
+            tooltip="Ubah Font"
+            @click="editor.chain().focus().setFontFamily('Inter').run()"
+          />
+          <q-separator
+            vertical
+          />
 
-      <menu-bar-btn
-        icon="icon-mat-menu"
-        tooltip="Table View"
-        @click="editor.chain().focus().insertTable({ rows: 1, cols: 2, withHeaderRow: false }).run()"
-      />
-      <menu-bar-btn
-        icon="icon-mat-close"
-        tooltip="Delete Table"
-        @click="editor.chain().focus().deleteTable().run()"
-      />
-      <!-- <button @click="editor.chain().focus().setHardBreak().run()">
+          <menu-bar-btn
+            icon="icon-mat-table_view"
+            tooltip="Table View"
+            @click="editor.chain().focus().insertTable({ rows: 1, cols: 2, withHeaderRow: false }).run()"
+          />
+          <menu-bar-btn
+            icon="icon-mat-backup_table"
+            tooltip="Delete Table"
+            @click="editor.chain().focus().deleteTable().run()"
+          />
+          <!-- <button @click="editor.chain().focus().setHardBreak().run()">
         hard break
       </button> -->
+        </div>
+      </div>
+      <div class="col ">
+        <div class="flex justify-end">
+          <q-separator
+            vertical
+          />
+          <menu-bar-btn
+            class="q-mx-sm"
+            :icon="fullpage?'icon-mat-close_fullscreen':'icon-mat-fullscreen'"
+            tooltip="Full Page"
+            :active="onUpdateEditor"
+            @click="emits('onFullPage')"
+          />
+        </div>
+      </div>
     </div>
+
     <!-- dialog gallery -->
     <app-dialog
       v-model="dialogImage"
@@ -223,7 +242,7 @@
   </div>
 </template>
 <script setup>
-import { api } from 'src/boot/axios'
+// import { api } from 'src/boot/axios'
 import { onMounted, ref } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 
@@ -240,6 +259,9 @@ const props = defineProps({
   },
   onUpdateEditor: {
     type: Boolean, default: false
+  },
+  fullpage: {
+    type: Boolean, default: false
   }
 })
 
@@ -248,10 +270,10 @@ onMounted(() => {
   align.value = aligns.value[0]
 })
 
-const emits = defineEmits(['onimportword'])
+const emits = defineEmits(['onimportword', 'onFullPage'])
 
-const word = ref(null)
-const refWord = ref(null)
+// const word = ref(null)
+// const refWord = ref(null)
 const dialogImage = ref(false)
 
 const imageSelected = ref(null)
@@ -292,10 +314,6 @@ function handleAlign(val) {
 //   { link: 'Gallery', icon: 'collections' }
 // ])
 
-function pickFile() {
-  refWord.value.pickFiles()
-}
-
 function uniqueI(prefix) {
   let uniqueId = null
   if (!uniqueId) uniqueId = (new Date()).getTime()
@@ -321,25 +339,29 @@ function imageGetter(val) {
   imageSelected.value = val
 }
 
-async function startImport() {
-  console.log('word', word.value)
-  console.log('word', api)
-  console.log('word', emits)
-  // const formData = new FormData()
-  // formData.append('doc', word.value)
-  // try {
-  //   await api.post('/v1/berita/upload_word', formData, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     }
-  //   }).then((resp) => {
-  //     // console.log(resp)
-  //     emits('onimportword', resp.data)
-  //   })
-  // } catch (error) {
-  //   // this.loading = false
-  // }
-}
+// function pickFile() {
+//   refWord.value.pickFiles()
+// }
+
+// async function startImport() {
+//   console.log('word', word.value)
+//   console.log('word', api)
+//   console.log('word', emits)
+//   // const formData = new FormData()
+//   // formData.append('doc', word.value)
+//   // try {
+//   //   await api.post('/v1/berita/upload_word', formData, {
+//   //     headers: {
+//   //       'Content-Type': 'multipart/form-data'
+//   //     }
+//   //   }).then((resp) => {
+//   //     // console.log(resp)
+//   //     emits('onimportword', resp.data)
+//   //   })
+//   // } catch (error) {
+//   //   // this.loading = false
+//   // }
+// }
 
 function dialogGallery() {
   dialogImage.value = true

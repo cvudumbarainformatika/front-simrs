@@ -94,21 +94,22 @@ const pendaftaran = {
     },
     {
       path: '/pendaftaran/igd',
-      component: () => import('pages/simrs/pendaftaran/igd/IndexPage.vue')
-      // children: [
-      //   {
-      //     path: '/pendaftaran/form/igd',
-      //     name: 'pendaftaran.form.igd',
-      //     component: () =>
-      //       import('pages/simrs/pendaftaran/form/igd/IndexPage.vue')
-      //   },
-      //   {
-      //     path: '/pendaftaran/igd/pasien',
-      //     name: 'pendaftaran.igd.pasien',
-      //     component: () =>
-      //       import('pages/simrs/pendaftaran/igd/pasien/IndexPage.vue')
-      //   }
-      // ]
+      component: () => import('pages/simrs/pendaftaran/igd/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/pendaftaran/igd/form' },
+        {
+          path: '/pendaftaran/igd/form',
+          name: 'pendaftaran.form.igd',
+          component: () =>
+            import('pages/simrs/pendaftaran/igd/form/igd/IndexPage.vue')
+        }
+        // {
+        //   path: '/pendaftaran/igd/pasien',
+        //   name: 'pendaftaran.igd.pasien',
+        //   component: () =>
+        //     import('pages/simrs/pendaftaran/igd/pasien/IndexPage.vue')
+        // }
+      ]
     },
     {
       path: '/pendaftaran/pasien',
