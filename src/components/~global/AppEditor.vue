@@ -3,7 +3,9 @@
     <editor-button
       :editor="editor"
       :on-update-editor="updateModel"
+      :fullpage="style.componentfull"
       @onimportword="setcontenteditor"
+      @on-full-page="style.setComponentFull"
     />
     <editor-content
       :editor="editor"
@@ -52,7 +54,10 @@ import TableRow from '@tiptap/extension-table-row'
 
 import MyImage from '../~editor/extensions/my-image'
 import { ref } from 'vue'
+import { useStyledStore } from 'src/stores/app/styled'
 // import { computed } from 'vue'
+
+const style = useStyledStore()
 
 const updateModel = ref(false)
 
