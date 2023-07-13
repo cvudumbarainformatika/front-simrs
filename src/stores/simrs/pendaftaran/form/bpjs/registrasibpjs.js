@@ -8,6 +8,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
   state: () => ({
     autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
+    loadingdiagnosa: false,
+    loadingsistembayar: false,
     tampilRujukan: false,
     tampilKontrol: false,
     tampilSuplesi: false,
@@ -454,16 +456,16 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getDiagnosaAwal() {
-      this.loading = true
-      const param = { params: this.paramDiagnosa }
-      await api.get('v1/simrs/pendaftaran/getDiagnosa', param)
+      this.loadingdiagnosa = true
+      // const param = { params: this.paramDiagnosa }
+      await api.post('v1/simrs/bridgingbpjs/pendaftaran/diagnosabybpjs', this.paramDiagnosa)
         .then(resp => {
-          this.loading = false
-          this.diagnosaAwals = resp.data
-          console.log('karcis poli', resp.data)
+          this.loadingdiagnosa = false
+          this.diagnosaAwals = resp.data.result.diagnosa
+          console.log('dignosa awal', resp.data.result)
         })
         .catch(() => {
-          this.loading = false
+          this.loadingdiagnosa = false
         })
     },
     async getJenisKarcis() {
@@ -491,28 +493,32 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         })
     },
     async getSistemBayar() {
-      this.loading = true
+      this.loadingsistembayar = true
       await api.get('v1/simrs/master/sistembayar')
         .then(resp => {
-          this.loading = false
+          this.loadingsistembayar = false
           this.sistembayars1 = resp.data
           this.autocompleteStore.setSistemBayar(resp.data)
           console.log('sistem bayar', resp.data)
         })
         .catch(() => {
-          this.loading = false
+          this.loadingsistembayar = false
         })
     },
     async getSistemBayar2(val) {
       const param = { params: { sistembayar1: val } }
-      this.loading = true
+      this.loadingsistembayar = true
       await api.get('v1/simrs/master/sistembayar2', param)
         .then(resp => {
-          this.loading = false
+          this.loadingsistembayar = false
           this.sistembayars = resp.data
+          if (this.sistembayars.length === 1) {
+            this.setForm('sistembayar', this.sistembayars[0].rs2)
+            this.display.rs2 = this.sistembayars[0].rs2
+          }
         })
         .catch(() => {
-          this.loading = false
+          this.loadingsistembayar = false
         })
     },
     async getAsalRujukan() {

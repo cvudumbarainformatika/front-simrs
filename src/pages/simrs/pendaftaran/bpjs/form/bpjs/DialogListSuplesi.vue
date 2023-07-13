@@ -96,7 +96,7 @@ import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/
 const store = useRegistrasiPasienBPJSStore()
 // surat kontrol
 function pilihSuplesi(val) {
-  store.form.nosuplesi = val.noSep
+  store.form.nosepsuplesi = val.noSep
   store.tampilSuplesi = false
 }
 </script>
