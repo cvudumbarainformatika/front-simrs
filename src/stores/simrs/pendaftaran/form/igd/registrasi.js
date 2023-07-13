@@ -186,16 +186,17 @@ export const useRegistrasiPasienIgdStore = defineStore('registrasi_pasien_igd', 
         })
     },
     simpanRegistrasi() {
-      return new Promise(resolve => {
-        this.loading = true
-        api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
-          .then(resp => {
-            console.log('simpan pendaftaran', resp)
-            this.loading = false
-            resolve(resp.data)
-          })
-          .catch(() => { this.loading = false })
-      })
+      console.log('simpan form igd', this.form)
+      // return new Promise(resolve => {
+      //   this.loading = true
+      //   api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
+      //     .then(resp => {
+      //       console.log('simpan pendaftaran', resp)
+      //       this.loading = false
+      //       resolve(resp.data)
+      //     })
+      //     .catch(() => { this.loading = false })
+      // })
     }
   }
 })

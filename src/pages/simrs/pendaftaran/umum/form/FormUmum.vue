@@ -33,7 +33,7 @@ import FormRegistrasi from './FormRegistrasi.vue'
 import { ref } from 'vue'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
-import { Dialog } from 'quasar'
+// import { Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
 const pasien = usePendaftaranPasienStore()
 const register = useRegistrasiPasienUmumStore()
@@ -84,32 +84,32 @@ function simpanData(val) {
     console.log('form registrasi ', register.form)
     register.simpanRegistrasi().then(resp => {
       console.log(resp)
-      dialogCetak()
+      // dialogCetak()
     })
   }
   // console.log('simpan value', refDataPasien.value)
   // console.log('form pasien ', pasien.form)
 }
-function dialogCetak() {
-  Dialog.create({
-    title: 'Konfirmasi.',
-    message: 'Print Karcis?',
-    persistent: true,
-    ok: {
-      push: true,
-      'no-caps': true,
-      label: 'Print',
-      color: 'green'
-    },
-    cancel: {
-      'no-caps': true,
-      push: true,
-      color: 'dark'
-    }
-  }).onOk(() => {
-    console.log('Cetak')
-  }).onCancel(() => {
-    console.log('tidak Cetak')
-  })
-}
+// function dialogCetak() {
+//   Dialog.create({
+//     title: 'Konfirmasi.',
+//     message: 'Print Karcis?',
+//     persistent: true,
+//     ok: {
+//       push: true,
+//       'no-caps': true,
+//       label: 'Print',
+//       color: 'green'
+//     },
+//     cancel: {
+//       'no-caps': true,
+//       push: true,
+//       color: 'dark'
+//     }
+//   }).onOk(() => {
+//     console.log('Cetak')
+//   }).onCancel(() => {
+//     console.log('tidak Cetak')
+//   })
+// }
 </script>

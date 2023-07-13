@@ -146,7 +146,7 @@ function getListRujukan() {
 function dialogCetak() {
   Dialog.create({
     title: 'Konfirmasi.',
-    message: 'Cetak SEP?',
+    message: 'Buat SEP?',
     persistent: true,
     ok: {
       push: true,
