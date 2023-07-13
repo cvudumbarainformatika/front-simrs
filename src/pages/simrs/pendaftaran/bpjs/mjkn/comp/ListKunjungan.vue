@@ -42,7 +42,7 @@
               | Penjamin : <span class="text-weight-bold"> JKN</span>
             </q-item-label>
             <q-item-label>
-              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter?item.dokter:'-' }}</span> | RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli?item.poli:'-' }}</span>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.namadokter?item.namadokter:'-' }}</span> | RUANGAN : <span class="text-teal text-weight-bold"> {{ item.namapoli?item.namapoli:'-' }}</span>
             </q-item-label>
             <q-item-label caption>
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin?item.kelamin:'-' }}</span>

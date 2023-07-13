@@ -65,8 +65,8 @@
                 <div class="q-ml-sm">
                   <q-badge
                     outline
-                    :color="item.seprajal?'teal':'negative'"
-                    :label="item.seprajal?'SEP terbit':'SEP Belum terbit'"
+                    :color="item.sep?'teal':'negative'"
+                    :label="item.sep?'SEP terbit':'SEP Belum terbit'"
                   />
                 </div>
               </div>
