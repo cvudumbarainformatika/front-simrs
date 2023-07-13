@@ -1153,7 +1153,10 @@ function setNokaBPJS(val) {
 function cekBpjsbyNik() {
   if (refKtp.value.$refs.refInput.validate()) {
     const form = { nik: store.form.nik, tglsep: props.tglsep }
-    store.cekPesertaByNik(form)
+    store.cekPesertaByNik(form).then(resp => {
+      store.alert = true
+      store.alertMsg = resp.data.result
+    })
   } else {
     notifErrVue('Nomor KTP Kosong')
   }
@@ -1161,7 +1164,10 @@ function cekBpjsbyNik() {
 function cekBpjsByNoka() {
   if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
-    store.cekPesertaByNoka(form)
+    store.cekPesertaByNoka(form).then(resp => {
+      store.alert = true
+      store.alertMsg = resp.data.result
+    })
   } else {
     notifErrVue('Nomor BPJS Kosong')
   }
@@ -1662,7 +1668,19 @@ function set() {
   }
 }
 
-defineExpose({ set, resetValidation, validateNokaAndNorm, validateNoka })
+function cekBpjs() {
+  console.log('Cek bpjs awal')
+  if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
+    const form = { noka: store.form.noka, tglsep: props.tglsep }
+    store.cekPesertaByNoka(form).then(() => {
+      console.log('Cek bpjs', store.form)
+    })
+  } else {
+    notifErrVue('Nomor BPJS Kosong')
+  }
+}
+
+defineExpose({ set, cekBpjs, resetValidation, validateNokaAndNorm, validateNoka })
 
 store.getInitialData()
 onBeforeUpdate(() => {

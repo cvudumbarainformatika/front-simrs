@@ -70,6 +70,7 @@ function simpanData() {
   // refRegistrasi.value.set()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
+  refDataPasien.value.cekBpjs()
   console.log('pasien', dataPasien,
     'regis', dataRegis
   )
