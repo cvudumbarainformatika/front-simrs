@@ -1,8 +1,10 @@
 <template>
-  <q-page class="q-mb-xl">
+  <div>
     <DataPasien
       ref="refDataPasien"
+      :full="style.componentfull"
       @ganti-pasien="clearFormRegistrasi"
+      @full-screen="style.setComponentFull"
     />
     <!-- @bisa-simpan="bisaSimpan" -->
     <FormRegistrasi
@@ -23,7 +25,7 @@
         </div>
       </q-card-actions>
     </q-card>
-  </q-page>
+  </div>
 </template>
 <script setup>
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
@@ -32,6 +34,7 @@ import { ref } from 'vue'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
 import { Dialog } from 'quasar'
+import { useStyledStore } from 'src/stores/app/styled'
 const pasien = usePendaftaranPasienStore()
 const register = useRegistrasiPasienUmumStore()
 
@@ -40,29 +43,8 @@ const refRegistrasi = ref(null)
 function clearFormRegistrasi() {
   register.clearForm()
 }
-// let canSavePasien = false
-// let canSaveRegis = false
-// function bisaSimpan(val) {
-//   // console.log('pasien simpan', val)
-//   canSavePasien = val.save
-//   if (val.save) {
-//     const keys = Object.keys(val.form)
-//     if (keys.length) {
-//       keys.forEach(key => {
-//         register.setForm(key, val.form[key])
-//       })
-//     }
-//   }
-//   // console.log('simpan pasien key', key)
-//   // register.form.concat(val)
-// }
-// function simpanRegistrasi(val) {
-//   // console.log('simpan regestrasi', val)
-//   canSaveRegis = val.save
-//   // const key = Object.keys(val)
-//   // console.log('simpan regis key', key)
-//   // console.log('form registrasi dua', register.form)
-// }
+
+const style = useStyledStore()
 function simpanData(val) {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
