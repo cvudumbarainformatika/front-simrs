@@ -30,3 +30,5 @@ export const setAutoPend = data => localStorage.setItem('autoPend', JSON.stringi
 export const getAutoPend = () => JSON.parse(localStorage.getItem('autoPend'))
 export const delAutoPend = () => localStorage.removeItem('autoPend')
 export const delAPend = () => localStorage.removeItem('pendaftaranAutocomplete')
+
+export const clearStore = () => localStorage.clear()
