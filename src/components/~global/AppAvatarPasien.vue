@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 const foto = computed(() => {
-  const perempuan = props.pasien ? props.pasien.kelamin === 'Perempuan' : false
+  const perempuan = props.pasien ? props.pasien.kelamin === 'Perempuan' || props.pasien.kelamin === 'perempuan' : false
   const usia = props.pasien.usia
   const usiath = usia ? parseInt(usia.substring(0, 2)) : 25
   if (perempuan) {

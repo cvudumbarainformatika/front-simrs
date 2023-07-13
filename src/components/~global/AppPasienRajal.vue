@@ -71,9 +71,14 @@
                     <div
                       class="foto bg-grey-4 col-3"
                     >
-                      <q-img
+                      <!-- <q-img
                         :src="foto"
                         :ratio="1"
+                      /> -->
+                      <app-avatar-pasien
+                        :key="pasien"
+                        :pasien="pasien"
+                        width="150px"
                       />
                       <div class="text-center">
                         <q-item-label class="f-16 text-weight-bold">
@@ -450,7 +455,7 @@
 <script setup>
 import { useDetailPasien } from 'src/stores/simrs/pendaftaran/table/details'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 const maximizedToggle = ref(true)
 const props = defineProps({
@@ -460,38 +465,40 @@ const props = defineProps({
   }
 })
 
+console.log(props)
+
 const emits = defineEmits(['closeDialog'])
 
-const foto = computed(() => {
-  const perempuan = props.pasien.kelamin === 'Perempuan'
-  const usia = props.pasien.usia
-  const usiath = usia !== '' || usia !== null ? parseInt(usia.substring(0, 2)) : 25
-  if (perempuan) {
-    if (usiath <= 99 && usiath > 59) {
-      return new URL('../../assets/images/grandma.png', import.meta.url).href
-    } else if (usiath <= 59 && usiath > 25) {
-      return new URL('../../assets/images/user-girl.svg', import.meta.url).href
-    } else if (usiath <= 25 && usiath > 15) {
-      return new URL('../../assets/images/user-girl2.svg', import.meta.url).href
-    } else if (usiath <= 15) {
-      return new URL('../../assets/images/young-girl.svg', import.meta.url).href
-    } else {
-      return new URL('../../assets/images/user-girl3.svg', import.meta.url).href
-    }
-  } else {
-    if (usiath <= 99 && usiath > 59) {
-      return new URL('../../assets/images/grandpa.svg', import.meta.url).href
-    } else if (usiath <= 59 && usiath > 25) {
-      return new URL('../../assets/images/user-man2.svg', import.meta.url).href
-    } else if (usiath <= 25 && usiath > 15) {
-      return new URL('../../assets/images/user-man.svg', import.meta.url).href
-    } else if (usiath <= 15) {
-      return new URL('../../assets/images/young-man.svg', import.meta.url).href
-    } else {
-      return new URL('../../assets/images/actor.svg', import.meta.url).href
-    }
-  }
-})
+// const foto = computed(() => {
+//   const perempuan = props.pasien.kelamin === 'Perempuan'
+//   const usia = props.pasien.usia
+//   const usiath = usia !== '' || usia !== null ? parseInt(usia.substring(0, 2)) : 25
+//   if (perempuan) {
+//     if (usiath <= 99 && usiath > 59) {
+//       return new URL('../../assets/images/grandma.png', import.meta.url).href
+//     } else if (usiath <= 59 && usiath > 25) {
+//       return new URL('../../assets/images/user-girl.svg', import.meta.url).href
+//     } else if (usiath <= 25 && usiath > 15) {
+//       return new URL('../../assets/images/user-girl2.svg', import.meta.url).href
+//     } else if (usiath <= 15) {
+//       return new URL('../../assets/images/young-girl.svg', import.meta.url).href
+//     } else {
+//       return new URL('../../assets/images/user-girl3.svg', import.meta.url).href
+//     }
+//   } else {
+//     if (usiath <= 99 && usiath > 59) {
+//       return new URL('../../assets/images/grandpa.svg', import.meta.url).href
+//     } else if (usiath <= 59 && usiath > 25) {
+//       return new URL('../../assets/images/user-man2.svg', import.meta.url).href
+//     } else if (usiath <= 25 && usiath > 15) {
+//       return new URL('../../assets/images/user-man.svg', import.meta.url).href
+//     } else if (usiath <= 15) {
+//       return new URL('../../assets/images/young-man.svg', import.meta.url).href
+//     } else {
+//       return new URL('../../assets/images/actor.svg', import.meta.url).href
+//     }
+//   }
+// })
 
 const store = useDetailPasien()
 </script>
