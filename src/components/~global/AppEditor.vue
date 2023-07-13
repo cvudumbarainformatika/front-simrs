@@ -261,7 +261,7 @@ ul[data-type="taskList"] {
 }
 
 .tableWrapper {
-  padding: 1rem 0;
+  padding: 0;
   overflow-x: auto;
 }
 
