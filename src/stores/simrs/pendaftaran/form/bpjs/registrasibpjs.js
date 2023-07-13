@@ -544,6 +544,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           })
           .catch(() => { this.loading = false })
       })
+    },
+    buatSep() {
+      return new Promise(resolve => {
+        this.loading = true
+        api.post('v1/simrs/simrs/bridgingbpjs/pendaftaran/createsep', this.form)
+          .then(resp => {
+            console.log('simpan pendaftaran', resp)
+            this.loading = false
+            resolve(resp.data)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })
