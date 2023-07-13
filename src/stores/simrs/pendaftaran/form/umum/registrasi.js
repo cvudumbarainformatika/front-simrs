@@ -157,6 +157,10 @@ export const useRegistrasiPasienUmumStore = defineStore('registrasi_pasien_umum'
           this.loading = false
           this.sistembayars = resp.data
           console.log('sistem bayar', resp.data)
+          if (this.sistembayars.length === 1) {
+            this.setForm('sistembayar', this.sistembayars[0].rs2)
+            this.display.rs2 = this.sistembayars[0].rs2
+          }
         })
         .catch(() => {
           this.loading = false
