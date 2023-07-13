@@ -162,6 +162,7 @@ function dialogCetak() {
     }
   }).onOk(() => {
     console.log('Cetak')
+    registrasi.buatSep()
   }).onCancel(() => {
     console.log('tidak Cetak')
   })
