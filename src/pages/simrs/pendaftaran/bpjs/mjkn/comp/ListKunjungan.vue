@@ -80,6 +80,33 @@
                   />
                 </div>
               </div>
+              <div class="row justify-end q-mt-sm">
+                <div
+                  v-if="!(loadingSend && (item.norm ? rm === item.norm:false))"
+                  class="q-ml-sm"
+                  :class="item.noreg?'':'cursor-pointer'"
+                  @click="emits('kirimPoli', item)"
+                >
+                  <!-- @click="kirimPoli(item)" -->
+                  <q-badge
+                    outline
+                    :color="item.noreg?'teal':'negative'"
+                    :label="item.noreg?'Sudah di poli':'Kirim ke Poli'"
+                  />
+                </div>
+                <div
+                  v-if="loadingSend && (item.norm ? rm === item.norm:false)"
+                  class="q-ml-sm"
+                >
+                  <q-btn
+                    loading
+                    outline
+                    size="sm"
+                    :color="item.noreg?'teal':'negative'"
+                    :label="item.noreg?'Sudah di poli':'Kirim ke Poli'"
+                  />
+                </div>
+              </div>
               <!-- <div class="row q-mt-sm text-end">
                 <div class="q-ml-sm">
                   <q-badge
@@ -105,9 +132,17 @@
 <script setup>
 
 defineProps({
+  rm: { type: String, default: '' },
   loading: { type: Boolean, default: false },
+  loadingSend: { type: Boolean, default: false },
   items: { type: Array, default: () => [] }
 })
+const emits = defineEmits(['kirimPoli'])
+// krirm ke poli
+// function kirimPoli(val) {
+//   console.log('kirim poli ', val)
+//   emits('kirimPoli', val)
+// }
 
 // function getStatus(arr) {
 //   if (arr.length === 0) {
