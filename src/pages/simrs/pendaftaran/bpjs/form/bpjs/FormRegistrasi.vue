@@ -51,7 +51,7 @@
                   right-icon-tooltip="List Rujukan"
                   :filled="false"
                   :loading="store.loadingListRujukan"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
                 />
               </div>
@@ -224,7 +224,7 @@
                   right-icon-tooltip="List Surat Kontrol"
                   :filled="false"
                   :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
                   @icon-right-click="cekSuratKontrol"
                 />
               </div>
