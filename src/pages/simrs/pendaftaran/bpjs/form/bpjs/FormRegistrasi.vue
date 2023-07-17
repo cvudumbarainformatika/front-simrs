@@ -807,6 +807,11 @@ function setSistembayar1(val) {
 function setSistembayar(val) {
   // val is rs2
   store.setForm('sistembayar', val)
+  const index = findWithAttr(store.sistembayars, 'rs2', val)
+  console.log('sistem bayar dua ', store.sistembayars[index])
+  if (index >= 0) {
+    store.setForm('kodesistembayar', store.sistembayars[index].rs1)
+  }
   console.log('form', store.form)
 }
 // diagnosa
