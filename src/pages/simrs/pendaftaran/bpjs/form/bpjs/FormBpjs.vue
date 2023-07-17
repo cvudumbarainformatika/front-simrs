@@ -50,7 +50,7 @@ import DialogListKontrol from './DialogListKontrol.vue'
 import DialogListRujukan from './DialogListRujukan.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from './FormRegistrasi.vue'
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
@@ -167,4 +167,10 @@ function dialogCetak() {
     console.log('tidak Cetak')
   })
 }
+
+onBeforeUnmount(() => {
+  refDataPasien.value.clearForm()
+  registrasi.clearForm()
+  // console.log('unmounted')
+})
 </script>

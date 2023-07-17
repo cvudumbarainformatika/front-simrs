@@ -1818,7 +1818,18 @@ function cekBpjs() {
   }
 }
 
-defineExpose({ set, cekBpjs, resetValidation, validateNokaAndNorm, validateNoka })
+function clearForm() {
+  store.clearForm()
+}
+
+defineExpose({
+  set,
+  cekBpjs,
+  resetValidation,
+  validateNokaAndNorm,
+  validateNoka,
+  clearForm
+})
 
 store.getInitialData()
 onBeforeUpdate(() => {
