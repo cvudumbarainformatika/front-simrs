@@ -242,8 +242,8 @@ store.getInitialData()
 
 // tanggal
 function setTanggal(val) {
-  const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
-  store.setForm('tanggal', val + jamIni)
+  // const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
+  store.setForm('tanggal', val)
 }
 function setTanggalDisp(val) {
   store.display.tanggal = val
