@@ -72,10 +72,13 @@
               </div>
               <div class="row q-mt-sm text-end">
                 <div class="q-ml-sm">
-                  <q-badge
+                  <q-btn
                     outline
+                    size="sm"
+                    padding="xs"
                     :color="item.generalconsent?'teal':'negative'"
                     :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
+                    @click="genCon(item)"
                   />
                 </div>
               </div>
@@ -89,15 +92,37 @@
         />
       </q-list>
     </div>
+
+    <!-- General COnsent -->
+    <app-general-consent
+      :key="pasien"
+      v-model="openGen"
+      :pasien="pasien"
+      @close="openGen = !openGen"
+      @open-preview-gc="openPreviewGc()"
+    />
+    <app-preview-general-consent
+      v-model="openPrevGc"
+      @close="openPrevGc = !openPrevGc"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 
 defineProps({
   loading: { type: Boolean, default: false },
   items: { type: Array, default: () => [] }
 })
+
+const pasien = ref(null)
+const openGen = ref(false)
+const openPrevGc = ref(false)
+
+function openPreviewGc() {
+  openPrevGc.value = !openPrevGc.value
+}
 
 function getStatus(arr) {
   if (arr.length === 0) {
@@ -140,5 +165,11 @@ function getStatus(arr) {
       text = 'Tidak Hadir/ Batal'
   }
   return text
+}
+
+function genCon(row) {
+  // console.log(row)
+  pasien.value = row
+  openGen.value = !openGen.value
 }
 </script>
