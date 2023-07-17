@@ -56,18 +56,22 @@ const pasien = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
 const Rm = ref('')
 function kirimPoli(val) {
-  Rm.value = val.norm
-  console.log('kirim poli ', val)
-  store.getPasien(val.norm).then(resp => {
-    if (resp.length === 1) {
-      pilihPasienIni(resp[0])
-    } else {
-      const index = findWithAttr(resp, 'norm', val.norm)
-      if (index >= 0) {
-        pilihPasienIni(resp[index])
+  // val.noreg = ''
+  // console.log('kirim poli ', val)
+  if (!val.noreg) {
+    Rm.value = val.norm
+    console.log('kirim poli ', val)
+    store.getPasien(val.norm).then(resp => {
+      if (resp.length === 1) {
+        pilihPasienIni(resp[0])
+      } else {
+        const index = findWithAttr(resp, 'norm', val.norm)
+        if (index >= 0) {
+          pilihPasienIni(resp[index])
+        }
       }
-    }
-  })
+    })
+  }
 }
 // eslint-disable-next-line no-unused-vars
 function pilihPasienIni(val) {
@@ -107,8 +111,10 @@ function pilihPasienIni(val) {
     console.log('noka', val.noka === undefined)
     const form = { noka: val.noka, tglsep: regis.form.tglsep }
     pasien.cekPesertaByNoka(form).then(resp => {
+      pasien.alert = true
+      pasien.alertMsg = resp
       console.log('cek noka', resp)
-      if (Object.keys(resp.peserta.provUmum).length) {
+      if (resp.peserta.provUmum) {
         const rujukan = {
           kode: resp.peserta.provUmum.kdProvider,
           nama: resp.peserta.provUmum.nmProvider

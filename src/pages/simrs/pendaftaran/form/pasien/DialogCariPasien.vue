@@ -213,10 +213,13 @@ function pilihPasienIni(val) {
     if (val.nik !== '') {
       const form = { nik: val.nik, tglsep: regis.form.tglsep }
       store.cekPesertaByNik(form).then(resp => {
-        if (Object.keys(resp.provUmum).length) {
+        console.log('nik ', resp)
+        store.alert = true
+        store.alertMsg = resp
+        if (resp.peserta.provUmum) {
           const rujukan = {
-            kode: resp.provUmum.kdProvider,
-            nama: resp.provUmum.nmProvider
+            kode: resp.peserta.provUmum.kdProvider,
+            nama: resp.peserta.provUmum.nmProvider
           }
           regis.ppkRujukans.push(rujukan)
           regis.display.kode = rujukan.kode
@@ -227,10 +230,11 @@ function pilihPasienIni(val) {
       console.log('noka', val.noka === undefined)
       const form = { noka: val.noka, tglsep: regis.form.tglsep }
       store.cekPesertaByNoka(form).then(resp => {
-        if (Object.keys(resp.provUmum).length) {
+        console.log('noka ', resp)
+        if (resp.peserta.provUmum) {
           const rujukan = {
-            kode: resp.provUmum.kdProvider,
-            nama: resp.provUmum.nmProvider
+            kode: resp.peserta.provUmum.kdProvider,
+            nama: resp.peserta.provUmum.nmProvider
           }
           regis.ppkRujukans.push(rujukan)
           regis.display.kode = rujukan.kode

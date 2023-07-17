@@ -123,6 +123,7 @@
                   right-icon-tooltip="Cek BPJS"
                   :rules="[val=>regex.test(val)||'Hanya angka']"
                   @icon-right-click="cekBpjsbyNik"
+                  @update:model-value="cekKtpKitas"
                 />
               </div>
             </div>
@@ -139,6 +140,7 @@
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   :rules="[val => ( !store.form.nik ? regex.test(val) : true) || 'Hanya angka']"
+                  @update:model-value="cekKtpKitas"
                 />
               </div>
             </div>
@@ -979,9 +981,10 @@
       @hide="cariPasienHide"
       @ganti-pasien="emits('gantiPasien')"
     />
-    <app-dialog
+    <app-dialog-not-full
       v-model="store.alert"
       :label="store.alertMsg.kode==='0'?'Status Finger Pasien':'Data Peserta BPJS'"
+      style="width:500px;"
       @on-ok="dialogOk"
       @keyup="store.alert=false"
     >
@@ -998,7 +1001,7 @@
           v-if="store.alertMsg.peserta"
           class="q-pa-md"
         >
-          <div class="row items-center q-my-sm">
+          <!-- <div class="row items-center q-my-sm">
             <div class="col-4">
               Nama
             </div>
@@ -1101,7 +1104,139 @@
             <div class="col-8">
               {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
             </div>
-          </div>
+          </div> -->
+          <q-card
+            flat
+            class="full-width"
+          >
+            <q-card-section>
+              <div class="row flex-wrap">
+                <div
+                  class="foto bg-grey-4 col-3"
+                >
+                  <!-- <q-img
+                        :src="foto"
+                        :ratio="1"
+                      /> -->
+                  <app-avatar-pasien
+                    :key="pasien"
+                    :pasien="pasien"
+                    width="150px"
+                  />
+                  <div class="text-center">
+                    <q-item-label class="f-16 text-weight-bold">
+                      {{ pasien? pasien.norm:'-' }}
+                    </q-item-label>
+                  </div>
+                </div>
+                <div class="col-9">
+                  <q-list
+                    dense
+                    separator
+                  >
+                    <q-item>
+                      <q-item-label class="text-weight-bold">
+                        {{ store.alertMsg.peserta.nama }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        💳 {{ pasien? pasien.nik:'-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        🏠 {{ pasien? pasien.alamat: '-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
+                      </q-item-label>
+                    </q-item>
+                  </q-list>
+                </div>
+                <!-- <div class=" absolute-top-right text-right q-pa-md">
+                      <div class="f-12">
+                        NO. REKAM MEDIS
+                      </div>
+                      <div class="f-16 text-weight-bold">
+                        {{ pasien? pasien.norm:'-' }}
+                      </div>
+                    </div> -->
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-list separator>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    🃏 Noka JKN / BPJS
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.noKartu }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Hak Kelas
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.hakKelas.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Status Peserta
+                  </q-item-label>
+                  <q-item-label
+                    class="text-weight-bold"
+                    :class="store.alertMsg.peserta.statusPeserta.keterangan === 'AKTIF' ? ' text-primary': ' text-negative'"
+                  >
+                    {{ store.alertMsg.peserta.statusPeserta.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Jenis Peserta
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.jenisPeserta.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    🆔 SATU SEHAT
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    -
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
         </div>
         <div v-if="store.alertMsg.kode&&(store.alertMsg.kode!=='' && store.alertMsg.status!=='')">
           <app-no-selected-page
@@ -1112,13 +1247,14 @@
         </div>
         <!-- {{ store.alertMsg }} -->
       </template>
-    </app-dialog>
+    </app-dialog-not-full>
   </div>
 </template>
 <script setup>
 
 import { date } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { dateFullFormat } from 'src/modules/formatter'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { computed, onBeforeUpdate, ref } from 'vue'
 import dialogCariPasien from './DialogCariPasien.vue'
@@ -1141,11 +1277,13 @@ const props = defineProps({
   full: { type: Boolean, default: false },
   notEdit: { type: Boolean, default: true }
 })
-
 const regex = /^\d+$/
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
+const pasien = computed(() => {
+  return store.form
+})
 
 // set noka bpjs
 function setNokaBPJS(val) {
@@ -1217,6 +1355,7 @@ const refRWDomisili = ref(null)
 const refNoTlp = ref(null)
 const refBahasa = ref(null)
 const refKtp = ref(null)
+const refKitas = ref(null)
 const refNoKaBpjs = ref(null)
 const refStatusPernikahan = ref(null)
 const refPekerjaan = ref(null)
@@ -1226,6 +1365,11 @@ const refPropinsi = ref(null)
 const refKabupaten = ref(null)
 const refKecamatan = ref(null)
 const refKelurahan = ref(null)
+// validasi ktp dan kitas
+function cekKtpKitas() {
+  refKtp.value.$refs.refInput.validate()
+  if (refKitas.value) refKitas.value.$refs.refInput.validate()
+}
 // validasi noka dan norm
 function validateNokaAndNorm() {
   if (refNoRM.value.$refs.refInput.validate() &&
@@ -1266,6 +1410,7 @@ function resetValidation() {
   refKodePos.value.$refs.refInput.resetValidation()
   refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
+  refKitas.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
   refRT.value.$refs.refInput.resetValidation()
@@ -1622,6 +1767,7 @@ function validasi() {
   const KodePos = refKodePos.value.$refs.refInput.validate()
   const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
   const Ktp = refKtp.value.$refs.refInput.validate()
+  const Kitas = refKitas.value ? refKitas.value.$refs.refInput.validate() : true
   const NoKaBpjs = refNoKaBpjs.value.$refs.refInput.validate()
   const Alamat = refAlamat.value.$refs.refInput.validate()
   const RT = refRT.value.$refs.refInput.validate()
@@ -1641,8 +1787,6 @@ function validasi() {
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
   const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
 
-  console.log('StatusPernikahan', StatusPernikahan)
-
   if (
     JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
   TempatLahir && HariLahir && BulanLahir && TahunLahir && Ibu &&
@@ -1651,7 +1795,7 @@ function validasi() {
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
-  KecamatanDomisili && KodePosDom && KelurahanDomisili) {
+  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas) {
     valid = true
   } else { valid = false }
 }
@@ -1682,7 +1826,19 @@ function cekBpjs() {
   }
 }
 
-defineExpose({ set, cekBpjs, resetValidation, validateNokaAndNorm, validateNoka })
+function clearForm() {
+  store.clearForm()
+  return store.form
+}
+
+defineExpose({
+  set,
+  cekBpjs,
+  resetValidation,
+  validateNokaAndNorm,
+  validateNoka,
+  clearForm
+})
 
 store.getInitialData()
 onBeforeUpdate(() => {
