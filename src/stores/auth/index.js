@@ -340,6 +340,7 @@ export const useAuthStore = defineStore('auth', {
       }, 2000)
     },
     REMOVE_LOKAL () {
+      storage.clearStore()
       storage.deleteLocalToken()
       storage.deleteHeaderToken()
       storage.deleteUser()

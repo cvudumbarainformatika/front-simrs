@@ -127,16 +127,18 @@
               </div>
             </div>
             <!-- kitas -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              v-if="!bpjs"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-input
                   ref="refKitas"
                   v-model="store.form.kitas"
                   label="Nomor Paspor / KITAS"
-                  valid
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[val=>regex.test(val)||'Hanya angka']"
+                  :rules="[val => ( !store.form.nik ? regex.test(val) : true) || 'Hanya angka']"
                 />
               </div>
             </div>
@@ -161,7 +163,7 @@
                   label="Nomor KA BPJS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[val=> (!!val ? regex.test(val) : true) ||'Hanya angka']"
+                  :rules="[val=> (!!val ? regex.test( val ) : true) ||'Hanya angka']"
                   @update:model-value="setNokaBPJS"
                 />
               </div>
@@ -661,7 +663,7 @@
                   :filled="false"
                   :source="store.propinsies"
                   :disable="!store.propinsies.length || (store.form.barulama!=='baru' && !store.edit)"
-                  :loading="store.loadingSelect"
+                  :loading="store.loadingPropinsi"
                   @on-select="propinsiSelected"
                   @clear="store.clearPropinsi"
                 />
@@ -683,7 +685,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.kabupatens"
-                  :loading="store.loadingSelect"
+                  :loading="store.loadingKabupaten"
                   :disable="!store.kabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kabupatenSelected"
                   @clear="store.clearKabupaten"
@@ -706,7 +708,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.kecamatans"
-                  :loading="store.loadingSelect"
+                  :loading="store.loadingKecamatan"
                   :disable="!store.kecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kecamatanSelected"
                   @clear="store.clearKecamatan"
@@ -729,7 +731,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.kelurahans"
-                  :loading="store.loadingSelect"
+                  :loading="store.loadingKelurahan"
                   :disable="!store.kelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kelurahanSelected"
                   @clear="store.clearKelurahan"
@@ -877,7 +879,7 @@
                   :filled="false"
                   :source="store.domisiliPropinsies"
                   :disable="!store.domisiliPropinsies.length || (store.form.barulama!=='baru' && !store.edit)"
-                  :loading="store.loadingSelectDomisili"
+                  :loading="store.loadingPropinsiDomisili"
                   @on-select="propinsiDomisiliSelected"
                   @clear="store.clearPropinsiDomisili"
                 />
@@ -900,7 +902,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.domisiliKabupatens"
-                  :loading="store.loadingSelectDomisili"
+                  :loading="store.loadingKabupatenDomisili"
                   :disable="!store.domisiliKabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kabupatenDomisiliSelected"
                   @clear="store.clearKabupatenDomisili"
@@ -922,7 +924,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.domisiliKecamatans"
-                  :loading="store.loadingSelectDomisili"
+                  :loading="store.loadingKecamatanDomisili"
                   :disable="!store.domisiliKecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kecamatanDomisiliSelected"
                   @clear="store.clearKecamatanDomisili"
@@ -944,7 +946,7 @@
                   option-label="wilayah"
                   :filled="false"
                   :source="store.domisiliKelurahans"
-                  :loading="store.loadingSelectDomisili"
+                  :loading="store.loadingKelurahanDomisili"
                   :disable="!store.domisiliKelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
                   @on-select="kelurahanDomisiliSelected"
                   @clear="store.clearKelurahanDomisili"
@@ -1153,7 +1155,10 @@ function setNokaBPJS(val) {
 function cekBpjsbyNik() {
   if (refKtp.value.$refs.refInput.validate()) {
     const form = { nik: store.form.nik, tglsep: props.tglsep }
-    store.cekPesertaByNik(form)
+    store.cekPesertaByNik(form).then(resp => {
+      store.alert = true
+      store.alertMsg = resp.data.result
+    })
   } else {
     notifErrVue('Nomor KTP Kosong')
   }
@@ -1161,7 +1166,10 @@ function cekBpjsbyNik() {
 function cekBpjsByNoka() {
   if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
-    store.cekPesertaByNoka(form)
+    store.cekPesertaByNoka(form).then(resp => {
+      store.alert = true
+      store.alertMsg = resp.data.result
+    })
   } else {
     notifErrVue('Nomor BPJS Kosong')
   }
@@ -1662,7 +1670,19 @@ function set() {
   }
 }
 
-defineExpose({ set, resetValidation, validateNokaAndNorm, validateNoka })
+function cekBpjs() {
+  console.log('Cek bpjs awal')
+  if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
+    const form = { noka: store.form.noka, tglsep: props.tglsep }
+    store.cekPesertaByNoka(form).then(() => {
+      console.log('Cek bpjs', store.form)
+    })
+  } else {
+    notifErrVue('Nomor BPJS Kosong')
+  }
+}
+
+defineExpose({ set, cekBpjs, resetValidation, validateNokaAndNorm, validateNoka })
 
 store.getInitialData()
 onBeforeUpdate(() => {

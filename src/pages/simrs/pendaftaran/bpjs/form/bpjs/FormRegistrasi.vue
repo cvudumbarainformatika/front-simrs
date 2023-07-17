@@ -51,7 +51,7 @@
                   right-icon-tooltip="List Rujukan"
                   :filled="false"
                   :loading="store.loadingListRujukan"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
                 />
               </div>
@@ -160,7 +160,7 @@
               class="row q-col-gutter-sm items-center q-mb-xs"
             >
               <div class="col-4">
-                <app-autocomplete-new
+                <app-autocomplete-debounce-input
                   ref="refKodeDiagnosa"
                   :model="store.display.diagnosa.kode"
                   label="Kode Diagnosa"
@@ -169,14 +169,15 @@
                   option-label="kode"
                   :filled="false"
                   :source="store.diagnosaAwals"
-                  :loading="store.loading"
+                  :loading="store.loadingdiagnosa"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @on-select="setKodeDiagnosa"
                   @buang="findKodeDiagnosa"
+                  @clear="clearKodeDiagnosa"
                 />
               </div>
               <div class="col-8">
-                <app-autocomplete-new
+                <app-autocomplete-debounce-input
                   ref="refNamaDiagnosa"
                   :model="store.display.diagnosa.nama"
                   label="Nama Diagnosa"
@@ -185,10 +186,11 @@
                   option-label="nama"
                   :filled="false"
                   :source="store.diagnosaAwals"
-                  :loading="store.loading"
+                  :loading="store.loadingdiagnosa"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @on-select="setNamaDiagnosa"
                   @buang="findNamaDiagnosa"
+                  @clear="clearNamaDiagnosa"
                 />
               </div>
             </div>
@@ -222,7 +224,7 @@
                   right-icon-tooltip="List Surat Kontrol"
                   :filled="false"
                   :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
                   @icon-right-click="cekSuratKontrol"
                 />
               </div>
@@ -371,7 +373,7 @@
                   option-label="groupsistembayar"
                   :filled="false"
                   :source="store.sistembayars1"
-                  :loading="store.loading"
+                  :loading="store.loadingsistembayar"
 
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="setSistembayar1"
@@ -393,7 +395,7 @@
                   option-label="rs2"
                   :filled="false"
                   :source="store.sistembayars"
-                  :loading="store.loading"
+                  :loading="store.loadingsistembayar"
 
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="setSistembayar"
@@ -500,7 +502,7 @@
                 <div class="col-6">
                   <app-autocomplete
                     ref="refKecelakaan"
-                    v-model="store.display.suplesi"
+                    v-model="store.form.suplesi"
                     label="Suplesi"
                     autocomplete="nama"
                     option-value="value"
@@ -514,13 +516,13 @@
               </div>
               <!-- Nomor Suplesi -->
               <div
-                v-if="store.display.suplesi===1"
+                v-if="store.form.suplesi===1"
                 class="row q-col-gutter-md items-center q-mb-xs"
               >
                 <div class="col-10">
                   <app-input
                     ref="refSuplesi"
-                    v-model="store.form.nosuplesi"
+                    v-model="store.form.nosepsuplesi"
                     label="Nomor Suplesi"
                     :filled="false"
                   />
@@ -701,6 +703,7 @@ function setFlagKarcis(val) {
 // autocomplete kecelakaan
 function setKecelakaan(val) {
   console.log('kecelakaan ', val)
+  store.setForm('lakalantas', val)
   store.getPropinsiKecelakaan()
 }
 function setPropisiKecelakaan(val) {
@@ -710,6 +713,7 @@ function setPropisiKecelakaan(val) {
   if (index >= 0) {
     store.form.propinsikecelakaan = store.propinsies[index].nama
     store.form.kodepropinsikecelakaan = val
+    store.form.kdpropinsi = val
     store.getKabupatenKecelakaan()
   } else {
     notifErrVue('Propinsi tidak ditemukan')
@@ -722,6 +726,7 @@ function setKabupatenKecelakaan(val) {
   if (index >= 0) {
     store.form.kabupatenkecelakaan = store.kabupatens[index].nama
     store.form.kodekabupatenkecelakaan = val
+    store.form.kecelakaandkabupaten = val
     store.getKecamatanKecelakaan()
   } else {
     notifErrVue('kabupaten tidak ditemukan')
@@ -734,6 +739,7 @@ function setKecamatanKecelakaan(val) {
   if (index >= 0) {
     store.form.kecamatankecelakaan = store.kecamatans[index].nama
     store.form.kodekecamatankecelakaan = val
+    store.form.kdkecamatan = val
     console.log('form', store.form)
   } else {
     notifErrVue('Kecamatan tidak ditemukan')
@@ -742,6 +748,7 @@ function setKecamatanKecelakaan(val) {
 // tanggal kecelakaan
 function setTglKecelakaan(val) {
   store.setForm('tglKecelakaan', val)
+  store.setForm('tglkejadian', val)
 }
 function setDispTglKecelakaan(val) {
   store.display.tanggal.kecelakaan = val
@@ -798,25 +805,53 @@ function setSistembayar1(val) {
   console.log('form', store.form)
 }
 function setSistembayar(val) {
+  // val is rs2
   store.setForm('sistembayar', val)
   console.log('form', store.form)
 }
 // diagnosa
 function setKodeDiagnosa(val) {
+  const index = findWithAttr(store.diagnosaAwals, 'kode', val)
+  // console.log('index kode', index)
+  if (index >= 0) {
+    const diag = store.diagnosaAwals[index]
+    // console.log('kode diag', diag)
+    store.display.diagnosa.nama = diag.nama
+    store.setForm('namadiagnosa', diag.nama)
+  }
   store.display.diagnosa.kode = val
   store.setForm('kodediagnosa', val)
 }
 function setNamaDiagnosa(val) {
+  const index = findWithAttr(store.diagnosaAwals, 'nama', val)
+  if (index >= 0) {
+    const diag = store.diagnosaAwals[index]
+    // console.log('kode diag', diag)
+    store.display.diagnosa.kode = diag.kode
+    store.setForm('kodediagnosa', diag.kode)
+  }
   store.display.diagnosa.nama = val
   store.setForm('namadiagnosa', val)
 }
 function findKodeDiagnosa(val) {
-  store.paramDiagnosa.q = val
+  store.paramDiagnosa.kodediagnosa = val
   store.getDiagnosaAwal()
 }
 function findNamaDiagnosa(val) {
-  store.paramDiagnosa.q = val
+  store.paramDiagnosa.diagnosa = val
   store.getDiagnosaAwal()
+}
+function clearKodeDiagnosa(val) {
+  store.display.diagnosa.kode = null
+  store.setForm('kodediagnosa', null)
+  store.display.diagnosa.nama = null
+  store.setForm('namadiagnosa', null)
+}
+function clearNamaDiagnosa(val) {
+  store.display.diagnosa.kode = null
+  store.setForm('kodediagnosa', null)
+  store.display.diagnosa.nama = null
+  store.setForm('namadiagnosa', null)
 }
 // jenis kunjungan
 function setJenisKunjungan(val) {

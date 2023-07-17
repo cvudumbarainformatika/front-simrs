@@ -94,7 +94,7 @@
     </div>
 
     <!-- General COnsent -->
-    <app-general-consent
+    <!-- <app-general-consent
       :key="pasien"
       v-model="openGen"
       :pasien="pasien"
@@ -104,7 +104,7 @@
     <app-preview-general-consent
       v-model="openPrevGc"
       @close="openPrevGc = !openPrevGc"
-    />
+    /> -->
   </div>
 </template>
 
@@ -113,16 +113,16 @@ import { ref } from 'vue'
 
 const pasien = ref(null)
 const openGen = ref(false)
-const openPrevGc = ref(false)
+// const openPrevGc = ref(false)
 
 function genCon(row) {
   pasien.value = row
   openGen.value = !openGen.value
 }
 
-function openPreviewGc() {
-  openPrevGc.value = !openPrevGc.value
-}
+// function openPreviewGc() {
+//   openPrevGc.value = !openPrevGc.value
+// }
 
 defineProps({
   loading: { type: Boolean, default: false },

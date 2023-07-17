@@ -38,7 +38,7 @@ export const useDialogCariPasienPendaftaranUmum = defineStore('dialog_cari_pasie
       this.getDataPasien()
     },
     getInitialData() {
-      this.getDataPasien()
+      // this.getDataPasien()
     },
     // api related function
     async getDataPasien() {

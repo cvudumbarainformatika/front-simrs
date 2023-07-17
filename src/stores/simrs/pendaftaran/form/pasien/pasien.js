@@ -48,7 +48,16 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       { nama: 'Baru', value: 'baru' },
       { nama: 'Lama', value: 'lama' }
     ],
+    loadingSelect: false,
+    loadingPropinsi: false,
+    loadingKabupaten: false,
+    loadingKecamatan: false,
+    loadingKelurahan: false,
     loadingSelectDomisili: false,
+    loadingPropinsiDomisili: false,
+    loadingKabupatenDomisili: false,
+    loadingKecamatanDomisili: false,
+    loadingKelurahanDomisili: false,
     propinsies: [],
     kabupatens: [],
     kecamatans: [],
@@ -577,8 +586,9 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.loading = true
       await api.get('v1/simrs/master/statuspernikahan')
         .then(resp => {
+          console.log('status pernikahan', resp.data)
           this.loading = false
-          this.autocompleteStore.setStatusPernikahan(resp.data)
+          this.autocompleteStore.setStatusPenikahan(resp.data)
           this.statuspernikahans = resp.data
         })
         .catch(() => { this.loading = false })
@@ -644,54 +654,54 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
     },
     async getProvinces () {
-      this.loadingSelect = true
+      this.loadingPropinsi = true
       const param = { params: this.paramWilayah }
       await api.get('v1/simrs/master/getpropinsi', param)
         .then((resp) => {
-          this.loadingSelect = false
+          this.loadingPropinsi = false
 
           this.propinsies = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelect = false
+          this.loadingPropinsi = false
         })
     },
     async getKota () {
-      this.loadingSelect = true
+      this.loadingKabupaten = true
       const param = { params: this.paramWilayah }
       await api.get('v1/simrs/master/getkotakabupaten', param)
         .then((resp) => {
           this.kabupatens = resp.data[0]
-          this.loadingSelect = false
+          this.loadingKabupaten = false
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelect = false
+          this.loadingKabupaten = false
         })
     },
     async getKec () {
-      this.loadingSelect = true
+      this.loadingKecamatan = true
       const param = { params: this.paramWilayah }
       await api.get('v1/simrs/master/getkecamatan', param)
         .then((resp) => {
           // )
-          this.loadingSelect = false
+          this.loadingKecamatan = false
           this.kecamatans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelect = false
+          this.loadingKecamatan = false
         })
     },
     async getKels () {
-      this.loadingSelect = true
+      this.loadingKelurahan = true
       const param = { params: this.paramWilayah }
       await api.get('v1/simrs/master/getkelurahan', param)
         .then((resp) => {
           // )
-          this.loadingSelect = false
+          this.loadingKelurahan = false
           this.kelurahans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelect = false
+          this.loadingKelurahan = false
         })
     },
     async getNegaraDomisili () {
@@ -707,80 +717,89 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         })
     },
     async getProvincesDomisili () {
-      this.loadingSelectDomisili = true
+      this.loadingPropinsiDomisili = true
       const param = { params: this.paramWilayahDomisili }
       await api.get('v1/simrs/master/getpropinsi', param)
         .then((resp) => {
-          this.loadingSelectDomisili = false
+          this.loadingPropinsiDomisili = false
           this.domisiliPropinsies = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelectDomisili = false
+          this.loadingPropinsiDomisili = false
         })
     },
     async getKotaDomisili () {
-      this.loadingSelectDomisili = true
+      this.loadingKabupatenDomisili = true
       const param = { params: this.paramWilayahDomisili }
       await api.get('v1/simrs/master/getkotakabupaten', param)
         .then((resp) => {
           this.domisiliKabupatens = resp.data[0]
-          this.loadingSelectDomisili = false
+          this.loadingKabupatenDomisili = false
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelectDomisili = false
+          this.loadingKabupatenDomisili = false
         })
     },
     async getKecDomisili () {
-      this.loadingSelectDomisili = true
+      this.loadingKecamatanDomisili = true
       const param = { params: this.paramWilayahDomisili }
       await api.get('v1/simrs/master/getkecamatan', param)
         .then((resp) => {
           // )
-          this.loadingSelectDomisili = false
+          this.loadingKecamatanDomisili = false
           this.domisiliKecamatans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelectDomisili = false
+          this.loadingKecamatanDomisili = false
         })
     },
     async getKelsDomisili () {
-      this.loadingSelectDomisili = true
+      this.loadingKelurahanDomisili = true
       const param = { params: this.paramWilayahDomisili }
       await api.get('v1/simrs/master/getkelurahan', param)
         .then((resp) => {
-          this.loadingSelectDomisili = false
+          this.loadingKelurahanDomisili = false
           this.domisiliKelurahans = resp.data[0]
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
-          this.loadingSelectDomisili = false
+          this.loadingKelurahanDomisili = false
         })
     },
     // cek bpjs
-    async cekPesertaByNik (val) {
+    cekPesertaByNik (val) {
       this.loadingNik = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynik', val)
-        .then((resp) => {
-          this.loadingNik = false
-          console.log('Nik', resp.data)
-          this.alertMsg = resp.data.result
-          this.alert = true
-          return new Promise(resolve => { resolve(resp.data.result) })
-        }).catch(() => {
-          this.loadingNik = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynik', val)
+          .then((resp) => {
+            this.loadingNik = false
+            console.log('Nik', resp.data)
+            // this.alertMsg = resp.data.result
+            // this.alert = true
+            this.setForm('jenispeserta', resp.data.result.peserta.jenisPeserta.keterangan)
+            resolve(resp.data.result)
+          }).catch(() => {
+            this.loadingNik = false
+          })
+      })
     },
-    async cekPesertaByNoka (val) {
+    cekPesertaByNoka (val) {
       this.loadingNoka = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
-        .then((resp) => {
-          this.loadingNoka = false
-          console.log('Noka', resp.data)
-          this.alert = true
-          this.alertMsg = resp.data.result
-          return new Promise(resolve => { resolve(resp.data.result) })
-        }).catch(() => {
-          this.loadingNoka = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
+          .then((resp) => {
+            this.loadingNoka = false
+            console.log('Noka', resp.data.result)
+            // this.alert = true
+            // this.alertMsg = resp.data.result
+            const hasil = resp.data.result
+            this.setForm('jenispeserta', hasil.peserta.jenisPeserta.keterangan)
+            // this.setForm('jnspelayanan', hasil.pelayanan.kode)
+            this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
+            resolve(resp.data.result)
+          }).catch(() => {
+            this.loadingNoka = false
+          })
+      })
     },
     async cekPesertaFinger (val) {
       this.loadingFinger = true

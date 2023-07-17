@@ -305,6 +305,7 @@ function pilihRujukanPCare(val) {
   store.display.kode = val.provPerujuk.kode
   store.setForm('ppkRujukan', val.provPerujuk.kode)
   store.setForm('tglrujukan', val.tglKunjungan)
+  store.setForm('jnspelayanan', val.pelayanan.kode)
   store.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
 
   store.tampilRujukan = false

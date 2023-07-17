@@ -93,7 +93,7 @@
             class="primary"
             :offset="[10, 10]"
           >
-            Filter Table
+            Per Baris
           </q-tooltip>
           <q-menu
             transition-show="flip-left"

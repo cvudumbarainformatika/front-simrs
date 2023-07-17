@@ -14,7 +14,8 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       order_by: 'id',
       tgl: dateDbFormat(new Date())
     },
-    loading: false
+    loading: false,
+    loadingSend: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -58,6 +59,25 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
     },
     setTglAwal() {
       this.params.tgl = dateDbFormat(new Date())
+    },
+    getPasien(val) {
+      this.loadingSend = true
+      const params = {
+        params: {
+          q: val
+        }
+      }
+      return new Promise((resolve, reject) => {
+        api.get('/v1/simrs/pendaftaran/caripasien', params)
+          .then(resp => {
+            this.loadingSend = false
+            resolve(resp.data)
+          })
+          .catch((err) => {
+            this.loadingSend = false
+            reject(err)
+          })
+      })
     }
   }
 })
