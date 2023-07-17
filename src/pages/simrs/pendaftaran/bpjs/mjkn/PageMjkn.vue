@@ -57,7 +57,7 @@ const regis = useRegistrasiPasienBPJSStore()
 const Rm = ref('')
 function kirimPoli(val) {
   // val.noreg = ''
-  console.log('kirim poli ', val)
+  // console.log('kirim poli ', val)
   if (!val.noreg) {
     Rm.value = val.norm
     console.log('kirim poli ', val)
