@@ -56,7 +56,7 @@ const pasien = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
 const Rm = ref('')
 function kirimPoli(val) {
-  val.noreg = ''
+  // val.noreg = ''
   console.log('kirim poli ', val)
   if (!val.noreg) {
     Rm.value = val.norm
