@@ -127,16 +127,18 @@
               </div>
             </div>
             <!-- kitas -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              v-if="!bpjs"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-input
                   ref="refKitas"
                   v-model="store.form.kitas"
                   label="Nomor Paspor / KITAS"
-                  valid
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[val=>regex.test(val)||'Hanya angka']"
+                  :rules="[val => ( !store.form.nik ? regex.test(val) : true) || 'Hanya angka']"
                 />
               </div>
             </div>
@@ -161,7 +163,7 @@
                   label="Nomor KA BPJS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[val=> (!!val ? regex.test(val) : true) ||'Hanya angka']"
+                  :rules="[val=> (!!val ? regex.test( val ) : true) ||'Hanya angka']"
                   @update:model-value="setNokaBPJS"
                 />
               </div>
