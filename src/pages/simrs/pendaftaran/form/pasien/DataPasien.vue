@@ -123,6 +123,7 @@
                   right-icon-tooltip="Cek BPJS"
                   :rules="[val=>regex.test(val)||'Hanya angka']"
                   @icon-right-click="cekBpjsbyNik"
+                  @update:model-value="cekKtpKitas"
                 />
               </div>
             </div>
@@ -139,6 +140,7 @@
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   :rules="[val => ( !store.form.nik ? regex.test(val) : true) || 'Hanya angka']"
+                  @update:model-value="cekKtpKitas"
                 />
               </div>
             </div>
@@ -1353,6 +1355,7 @@ const refRWDomisili = ref(null)
 const refNoTlp = ref(null)
 const refBahasa = ref(null)
 const refKtp = ref(null)
+const refKitas = ref(null)
 const refNoKaBpjs = ref(null)
 const refStatusPernikahan = ref(null)
 const refPekerjaan = ref(null)
@@ -1362,6 +1365,11 @@ const refPropinsi = ref(null)
 const refKabupaten = ref(null)
 const refKecamatan = ref(null)
 const refKelurahan = ref(null)
+// validasi ktp dan kitas
+function cekKtpKitas() {
+  refKtp.value.$refs.refInput.validate()
+  if (refKitas.value) refKitas.value.$refs.refInput.validate()
+}
 // validasi noka dan norm
 function validateNokaAndNorm() {
   if (refNoRM.value.$refs.refInput.validate() &&
@@ -1402,6 +1410,7 @@ function resetValidation() {
   refKodePos.value.$refs.refInput.resetValidation()
   refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
+  refKitas.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
   refRT.value.$refs.refInput.resetValidation()
@@ -1758,6 +1767,7 @@ function validasi() {
   const KodePos = refKodePos.value.$refs.refInput.validate()
   const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
   const Ktp = refKtp.value.$refs.refInput.validate()
+  const Kitas = refKitas.value ? refKitas.value.$refs.refInput.validate() : true
   const NoKaBpjs = refNoKaBpjs.value.$refs.refInput.validate()
   const Alamat = refAlamat.value.$refs.refInput.validate()
   const RT = refRT.value.$refs.refInput.validate()
@@ -1777,8 +1787,6 @@ function validasi() {
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
   const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
 
-  console.log('StatusPernikahan', StatusPernikahan)
-
   if (
     JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
   TempatLahir && HariLahir && BulanLahir && TahunLahir && Ibu &&
@@ -1787,7 +1795,7 @@ function validasi() {
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
-  KecamatanDomisili && KodePosDom && KelurahanDomisili) {
+  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas) {
     valid = true
   } else { valid = false }
 }
