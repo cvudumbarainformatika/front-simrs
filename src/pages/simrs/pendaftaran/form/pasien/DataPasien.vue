@@ -1410,7 +1410,7 @@ function resetValidation() {
   refKodePos.value.$refs.refInput.resetValidation()
   refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
-  refKitas.value.$refs.refInput.resetValidation()
+  if (refKitas.value) refKitas.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
   refAlamat.value.$refs.refInput.resetValidation()
   refRT.value.$refs.refInput.resetValidation()
