@@ -979,9 +979,10 @@
       @hide="cariPasienHide"
       @ganti-pasien="emits('gantiPasien')"
     />
-    <app-dialog
+    <app-dialog-not-full
       v-model="store.alert"
       :label="store.alertMsg.kode==='0'?'Status Finger Pasien':'Data Peserta BPJS'"
+      style="width:500px;"
       @on-ok="dialogOk"
       @keyup="store.alert=false"
     >
@@ -998,7 +999,7 @@
           v-if="store.alertMsg.peserta"
           class="q-pa-md"
         >
-          <div class="row items-center q-my-sm">
+          <!-- <div class="row items-center q-my-sm">
             <div class="col-4">
               Nama
             </div>
@@ -1101,7 +1102,139 @@
             <div class="col-8">
               {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
             </div>
-          </div>
+          </div> -->
+          <q-card
+            flat
+            class="full-width"
+          >
+            <q-card-section>
+              <div class="row flex-wrap">
+                <div
+                  class="foto bg-grey-4 col-3"
+                >
+                  <!-- <q-img
+                        :src="foto"
+                        :ratio="1"
+                      /> -->
+                  <app-avatar-pasien
+                    :key="pasien"
+                    :pasien="pasien"
+                    width="150px"
+                  />
+                  <div class="text-center">
+                    <q-item-label class="f-16 text-weight-bold">
+                      {{ pasien? pasien.norm:'-' }}
+                    </q-item-label>
+                  </div>
+                </div>
+                <div class="col-9">
+                  <q-list
+                    dense
+                    separator
+                  >
+                    <q-item>
+                      <q-item-label class="text-weight-bold">
+                        {{ store.alertMsg.peserta.nama }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        {{ pasien? pasien.templahir: '-' }}, {{ pasien? dateFullFormat(pasien.tgllahir) : '-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        💳 {{ pasien? pasien.nik:'-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        ⚥ {{ pasien? pasien.kelamin:'-' }} / ✒️ {{ pasien? pasien.usia:'-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        🏠 {{ pasien? pasien.alamat: '-' }}
+                      </q-item-label>
+                    </q-item>
+                    <q-item>
+                      <q-item-label class="">
+                        ♡ ♥💕 {{ pasien? pasien.statuspernikahan:'-' }}
+                      </q-item-label>
+                    </q-item>
+                  </q-list>
+                </div>
+                <!-- <div class=" absolute-top-right text-right q-pa-md">
+                      <div class="f-12">
+                        NO. REKAM MEDIS
+                      </div>
+                      <div class="f-16 text-weight-bold">
+                        {{ pasien? pasien.norm:'-' }}
+                      </div>
+                    </div> -->
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-list separator>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    🃏 Noka JKN / BPJS
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.noKartu }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Hak Kelas
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.hakKelas.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Status Peserta
+                  </q-item-label>
+                  <q-item-label
+                    class="text-weight-bold"
+                    :class="store.alertMsg.peserta.statusPeserta.keterangan === 'AKTIF' ? ' text-primary': ' text-negative'"
+                  >
+                    {{ store.alertMsg.peserta.statusPeserta.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    Jenis Peserta
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.jenisPeserta.keterangan }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    🆔 SATU SEHAT
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    -
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
         </div>
         <div v-if="store.alertMsg.kode&&(store.alertMsg.kode!=='' && store.alertMsg.status!=='')">
           <app-no-selected-page
@@ -1112,13 +1245,14 @@
         </div>
         <!-- {{ store.alertMsg }} -->
       </template>
-    </app-dialog>
+    </app-dialog-not-full>
   </div>
 </template>
 <script setup>
 
 import { date } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { dateFullFormat } from 'src/modules/formatter'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { computed, onBeforeUpdate, ref } from 'vue'
 import dialogCariPasien from './DialogCariPasien.vue'
@@ -1141,11 +1275,13 @@ const props = defineProps({
   full: { type: Boolean, default: false },
   notEdit: { type: Boolean, default: true }
 })
-
 const regex = /^\d+$/
 const dialog = useDialogCariPasienPendaftaranUmum()
 dialog.getInitialData()
 const store = usePendaftaranPasienStore()
+const pasien = computed(() => {
+  return store.form
+})
 
 // set noka bpjs
 function setNokaBPJS(val) {
