@@ -139,9 +139,12 @@ const notifErr = (resp) => {
       }
     })
   } else if (status === 500) {
-    // const msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
+    let msgs = 'Ada Kesalahan Harap ulangi'
+    if (resp.data) {
+      msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
+    }
     Notify.create({
-      message: 'Ada Kesalahan Harap ulangi',
+      message: msgs,
       icon: 'icon-eva-message-circle-outline',
       position: 'top-right',
       color: 'negative',

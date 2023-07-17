@@ -260,7 +260,7 @@ function kirimPenerimaan(val) {
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
   const tanggal = store.form.tanggal + jamIni
-  // console.log('tanggal ', store.form.tanggal, tanggal)
+  console.log('tanggal ', store.form.tanggal, tanggal)
   // store.setForm('tanggal', store.form.tanggal + jamIni)
   const data = {
     details: val.details,
