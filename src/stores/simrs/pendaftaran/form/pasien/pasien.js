@@ -88,6 +88,11 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.form = {
         barulama: 'baru'
       }
+      this.tanggal = {
+        tahun: '1900',
+        bulan: '01',
+        hari: '01'
+      }
       this.edit = false
     },
     setForm(key, val) {

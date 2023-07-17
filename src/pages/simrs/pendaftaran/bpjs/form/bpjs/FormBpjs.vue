@@ -171,6 +171,6 @@ function dialogCetak() {
 onBeforeUnmount(() => {
   refDataPasien.value.clearForm()
   registrasi.clearForm()
-  // console.log('unmounted')
+  console.log('unmounted', refDataPasien.value.clearForm())
 })
 </script>

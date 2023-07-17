@@ -1820,6 +1820,7 @@ function cekBpjs() {
 
 function clearForm() {
   store.clearForm()
+  return store.form
 }
 
 defineExpose({
