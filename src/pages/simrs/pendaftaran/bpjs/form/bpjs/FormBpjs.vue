@@ -152,7 +152,7 @@ function dialogCetak() {
     ok: {
       push: true,
       'no-caps': true,
-      label: 'Cetak',
+      label: 'Buat SEP',
       color: 'green'
     },
     cancel: {
