@@ -7,7 +7,7 @@
           class="column flex-center"
           style="min-height:50vh"
         >
-          <div class="text-h3">
+          <div class="text-h3 q-mb-md">
             🏷️
           </div>
           <div class="f-14">
