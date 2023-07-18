@@ -1,5 +1,5 @@
 <template>
   <q-page>
-    <router-view />
+    Ranap Page
   </q-page>
 </template>

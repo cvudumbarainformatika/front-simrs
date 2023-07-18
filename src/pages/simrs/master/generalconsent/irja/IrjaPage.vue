@@ -1,5 +1,5 @@
 <template>
   <q-page>
-    <router-view />
+    IrjaPage
   </q-page>
 </template>
