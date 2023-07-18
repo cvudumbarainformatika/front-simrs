@@ -10,6 +10,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     loading: false,
     loadingdiagnosa: false,
     loadingsistembayar: false,
+    loadingCekBpjs: false,
     tampilRujukan: false,
     tampilKontrol: false,
     tampilSuplesi: false,
@@ -533,6 +534,38 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         .catch(() => {
           this.loading = false
         })
+    },
+    getJumlahSep(val) {
+      const params = { params: val }
+      this.loadingCekBpjs = true
+      return new Promise(resolve => {
+        api.get('/v1/anjungan/cek-jumlah-sep', params)
+          .then(resp => {
+            this.loadingCekBpjs = false
+            // this.asalrujukans = resp.data
+            console.log('jumlah sep', resp.data)
+            resolve(resp.data.result)
+          })
+          .catch(() => {
+            this.loadingCekBpjs = false
+          })
+      })
+    },
+    cekSuratKontrol(val) {
+      const params = { params: val }
+      this.loadingCekBpjs = true
+      return new Promise(resolve => {
+        api.get('/v1/anjungan/cari-rencana-kontrol', params)
+          .then(resp => {
+            this.loadingCekBpjs = false
+            // this.asalrujukans = resp.data
+            console.log('jumlah sep', resp.data)
+            resolve(resp.data.result)
+          })
+          .catch(() => {
+            this.loadingCekBpjs = false
+          })
+      })
     },
     simpanRegistrasi() {
       return new Promise(resolve => {

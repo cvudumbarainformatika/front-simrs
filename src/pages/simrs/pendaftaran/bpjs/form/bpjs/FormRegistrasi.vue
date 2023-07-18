@@ -22,23 +22,6 @@
                 : {{ store.form.noreg }}
               </div>
             </div>
-            <!-- asal rujukan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refAsalRujukan"
-                  v-model="store.form.asalrujukan"
-                  label="Asal Rujukan"
-                  autocomplete="asalrujukan"
-                  option-value="kode"
-                  option-label="asalrujukan"
-                  :filled="false"
-                  :source="store.asalrujukans"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                />
-              </div>
-            </div>
             <!-- No rujukan -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <div class="col-12">
@@ -70,6 +53,67 @@
                   @click="cekSuratRujukan"
                 />
               </div> -->
+            </div>
+            <!-- No Surat kontrol -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refNoSuratKontrol"
+                  v-model="store.form.nosuratkontrol"
+                  label="nomor Surat Kontrol"
+                  right-icon
+                  right-icon-name="icon-mat-format_list_numbered"
+                  right-icon-tooltip="List Surat Kontrol"
+                  :filled="false"
+                  :loading="store.loading"
+                  :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
+                  @icon-right-click="cekSuratKontrol"
+                />
+              </div>
+              <!-- <div class="col-3">
+                <app-btn
+                  label="List surat kontrol"
+                  :loading="store.loadingSuratKontrol"
+                  :disable="store.loadingSuratKontrol || store.loading"
+                  @click="cekSuratKontrol"
+                />
+              </div> -->
+            </div>
+            <!-- Jenis Kunjungan -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refJenisKunjungan"
+                  v-model="store.display.jeniskunjungan"
+                  label="Jenis Kunjungan"
+                  autocomplete="nilai"
+                  option-value="nilai"
+                  option-label="nilai"
+                  disable
+                  :filled="false"
+                  :source="store.jenisKunjungans"
+                  :loading="store.loading"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  @selected="setJenisKunjungan"
+                />
+              </div>
+            </div>
+            <!-- asal rujukan -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refAsalRujukan"
+                  v-model="store.form.asalrujukan"
+                  label="Asal Rujukan"
+                  autocomplete="asalrujukan"
+                  option-value="kode"
+                  option-label="asalrujukan"
+                  :filled="false"
+                  :source="store.asalrujukans"
+                  :loading="store.loading"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+              </div>
             </div>
             <!-- poli tujuan -->
             <div
@@ -193,49 +237,6 @@
                   @clear="clearNamaDiagnosa"
                 />
               </div>
-            </div>
-            <!-- Jenis Kunjungan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refJenisKunjungan"
-                  v-model="store.display.jeniskunjungan"
-                  label="Jenis Kunjungan"
-                  autocomplete="nilai"
-                  option-value="nilai"
-                  option-label="nilai"
-                  :filled="false"
-                  :source="store.jenisKunjungans"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setJenisKunjungan"
-                />
-              </div>
-            </div>
-            <!-- No Surat kontrol -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refNoSuratKontrol"
-                  v-model="store.form.nosuratkontrol"
-                  label="nomor Surat Kontrol"
-                  right-icon
-                  right-icon-name="icon-mat-format_list_numbered"
-                  right-icon-tooltip="List Surat Kontrol"
-                  :filled="false"
-                  :loading="store.loading"
-                  :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
-                  @icon-right-click="cekSuratKontrol"
-                />
-              </div>
-              <!-- <div class="col-3">
-                <app-btn
-                  label="List surat kontrol"
-                  :loading="store.loadingSuratKontrol"
-                  :disable="store.loadingSuratKontrol || store.loading"
-                  @click="cekSuratKontrol"
-                />
-              </div> -->
             </div>
             <!-- Tujuan Kunjungan -->
             <div
@@ -433,6 +434,7 @@
                 <app-input
                   v-model="store.form.sep"
                   label="No SEP"
+                  disable
                   :filled="false"
                   valid
                 />

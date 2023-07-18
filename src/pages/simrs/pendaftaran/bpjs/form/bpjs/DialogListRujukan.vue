@@ -10,7 +10,7 @@
         </div>
         <div v-if="!store.listRujukanPcare.length">
           <app-loading v-if="store.loadingListRujukan" />
-          <app-no-data v-else />
+          <app-no-data-small v-else />
         </div>
         <div v-if="store.listRujukanPcare.length">
           <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
@@ -104,7 +104,7 @@
         </div>
         <div v-if="!store.listRujukanRs.length">
           <app-loading v-if="store.loadingListRujukanRS" />
-          <app-no-data v-else />
+          <app-no-data-small v-else />
         </div>
         <div v-if="store.listRujukanRs.length">
           <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
@@ -182,13 +182,14 @@
             <div class="col-1">
               <app-btn
                 label="pilih"
-                @click="pilihRujukanPCare(list)"
+                @click="pilihRujukanRS(list)"
               />
             </div>
           </div>
         </div>
       </q-card-section>
       <q-separator />
+      <!--
       <q-card-section>
         <div class="f-14 text-weight-bold q-mt-md">
           NO SEP Waktu MRS
@@ -198,7 +199,7 @@
         </div>
         <div v-if="!store.listRujukanSepMrs.length">
           <app-loading v-if="store.loadingListRujukanMrs" />
-          <app-no-data v-else />
+          <app-no-data-small v-else />
         </div>
         <div v-if="store.listRujukanSepMrs.length">
           <div class="row no-wrap justify-center items-center q-col-gutter-sm text-weight-bold q-mb-sm">
@@ -256,6 +257,7 @@
           </div>
         </div>
       </q-card-section>
+      -->
       <q-separator />
     </q-card>
   </q-dialog>
@@ -267,7 +269,7 @@ import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/
 
 const store = useRegistrasiPasienBPJSStore()
 // pilih rujukan p care
-function pilihRujukanPCare(val) {
+function pilihRujukan(val, jenis) {
   console.log('karcis', store.jenisKarcises)
   console.log('rujukan p care', val)
 
@@ -308,12 +310,40 @@ function pilihRujukanPCare(val) {
   store.setForm('jnspelayanan', val.pelayanan.kode)
   store.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
 
+  store.setForm('flagProcedure', '')
+  store.setForm('kdPenunjang', '')
+
   store.tampilRujukan = false
+}
+function pilihRujukanRS(val) {
+  const param = {
+    jenisrujukan: 2,
+    norujukan: val.noKunjungan
+  }
+  store.getJumlahSep(param)
+  pilihRujukan(val)
+  store.setForm('id_kunjungan', 4)
+  store.setForm('jenis_kunjungan', 'Rujukan Antar RS')
+  const idexKun = findWithAttr(store.jenisKunjungans, 'id', 4)
+  store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
+}
+function pilihRujukanPCare(val) {
+  const param = {
+    jenisrujukan: 2,
+    norujukan: val.noKunjungan
+
+  }
+  store.getJumlahSep(param)
+  pilihRujukan(val)
+  store.setForm('id_kunjungan', 1)
+  store.setForm('jenis_kunjungan', 'Rujukan FKTP')
+  const idexKun = findWithAttr(store.jenisKunjungans, 'id', 1)
+  store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
 }
 // pilih rujukan p care
-function pilihRujukanMrs(val) {
-  console.log('rujukan Mrs', val)
-  store.setForm('norujukan', val.rs8)
-  store.tampilRujukan = false
-}
+// function pilihRujukanMrs(val) {
+//   console.log('rujukan Mrs', val)
+//   store.setForm('norujukan', val.rs8)
+//   store.tampilRujukan = false
+// }
 </script>
