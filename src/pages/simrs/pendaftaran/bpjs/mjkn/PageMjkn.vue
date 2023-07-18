@@ -63,18 +63,18 @@ function kirimPoli(val) {
     console.log('kirim poli ', val)
     store.getPasien(val.norm).then(resp => {
       if (resp.length === 1) {
-        pilihPasienIni(resp[0])
+        pilihPasienIni(resp[0], val)
       } else {
         const index = findWithAttr(resp, 'norm', val.norm)
         if (index >= 0) {
-          pilihPasienIni(resp[index])
+          pilihPasienIni(resp[index], val)
         }
       }
     })
   }
 }
 // eslint-disable-next-line no-unused-vars
-function pilihPasienIni(val) {
+function pilihPasienIni(val, jkn) {
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
   pasien.form = val
@@ -126,6 +126,7 @@ function pilihPasienIni(val) {
     })
   }
 
+  pasien.setForm('noantrian', jkn.nomorantrean)
   const tglLahir = val.tgllahir.split('-')
   pasien.setForm('barulama', 'lama')
   if (tglLahir.length) {

@@ -244,9 +244,15 @@ store.getInitialData()
 function setTanggal(val) {
   // const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
   store.setForm('tanggal', val)
+  console.log('set tanggal ', val)
+  // if (!val) {
+  //   console.log('set tanggal dsp', store.display.tanggal)
+  //   console.log('set tanggal tr', date.formatDate(store.display.tanggal, ' YYYY'))
+  // }
 }
 function setTanggalDisp(val) {
   store.display.tanggal = val
+  // console.log('set display ', val)
 }
 // click
 function onClick(val) {
@@ -282,6 +288,7 @@ function kirimDetailPenerimaan(val, detail) {
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
   const tanggal = store.form.tanggal + jamIni
+  console.log('tanggal ', store.form.tanggal, tanggal)
   const data = {
     kode_rs: detail.kode_rs,
     no_penerimaan: detail.no_penerimaan,

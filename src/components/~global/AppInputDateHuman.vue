@@ -130,13 +130,23 @@ const modelProp = computed({
       newTgl = temp[0] + ' August ' + temp[2]
     } else if (temp[1] === 'Desember') {
       newTgl = temp[0] + ' December ' + temp[2]
+    } else if (temp[1] === 'Juli') {
+      newTgl = temp[0] + ' July ' + temp[2]
+    } else if (temp[1] === 'Juni') {
+      newTgl = temp[0] + ' June ' + temp[2]
+    } else if (temp[1] === 'Januari') {
+      newTgl = temp[0] + ' January ' + temp[2]
+    } else if (temp[1] === 'Februari') {
+      newTgl = temp[0] + ' February ' + temp[2]
+    } else if (temp[1] === 'Maret') {
+      newTgl = temp[0] + ' March ' + temp[2]
     } else {
       newTgl = val
     }
-    console.log('app input date', newTgl)
     emits('setModel', newTgl)
     emits('setDisplay', val)
     emits('dbModel', date.formatDate(newTgl, 'YYYY-MM-DD'))
+    console.log('app input date', date.formatDate(newTgl, 'YYYY-MM-DD'))
   }
 })
 // const modelProp = toRef(props, 'model')// react to ref

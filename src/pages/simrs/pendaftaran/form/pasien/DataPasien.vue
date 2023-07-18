@@ -1489,7 +1489,7 @@ function setRW(val) {
 // set nomor Antrian
 function setNoAntrian(val) {
   if (val.length > 1) {
-    const temp = parseInt(val.slice(1, val.length))
+    const temp = parseInt(val.slice(2, val.length))
     console.log('antrian ', val.length)
     console.log('temp ', temp)
     store.setForm('angkaantrean', temp)

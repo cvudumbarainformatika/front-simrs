@@ -514,6 +514,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.sistembayars = resp.data
           if (this.sistembayars.length === 1) {
             this.setForm('sistembayar', this.sistembayars[0].rs2)
+            this.setForm('kodesistembayar', this.sistembayars[0].rs1)
             this.display.rs2 = this.sistembayars[0].rs2
           }
         })
