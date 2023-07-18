@@ -121,7 +121,10 @@
                   right-icon-name="icon-mat-dvr"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                   right-icon-tooltip="Cek BPJS"
-                  :rules="[val=>regex.test(val)||'Hanya angka']"
+                  :rules="[
+                    val=>( !store.form.kitas ? !!val : true)||'Harap di isi',
+                    val=>( (!store.form.kitas && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
+                  ]"
                   @icon-right-click="cekBpjsbyNik"
                   @update:model-value="cekKtpKitas"
                 />
@@ -139,7 +142,10 @@
                   label="Nomor Paspor / KITAS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :rules="[val => ( !store.form.nik ? regex.test(val) : true) || 'Hanya angka']"
+                  :rules="[
+                    val=>( !store.form.nik ? !!val : true)||'Harap di isi',
+                    val => ( (!store.form.nik && val.length > 0)? regex.test(val) : true) || 'Hanya angka'
+                  ]"
                   @update:model-value="cekKtpKitas"
                 />
               </div>
@@ -1483,7 +1489,7 @@ function setRW(val) {
 // set nomor Antrian
 function setNoAntrian(val) {
   if (val.length > 1) {
-    const temp = parseInt(val.slice(1, val.length))
+    const temp = parseInt(val.slice(2, val.length))
     console.log('antrian ', val.length)
     console.log('temp ', temp)
     store.setForm('angkaantrean', temp)
