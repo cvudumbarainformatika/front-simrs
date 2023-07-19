@@ -296,6 +296,17 @@ function pilihRujukan(val, jenis) {
   } else {
     notifErrVue('Poli tidak ditemukan')
   }
+  // sistaem bayar start
+  if (store.form.sistembayar) { delete store.form.sistembayar }
+  if (store.display.rs2) { delete store.display.rs2 }
+  store.display.bayar.kode = '1'
+  const indexbyr = findWithAttr(store.sistembayars1, 'kode', '1')
+  if (indexbyr >= 0) {
+    store.setForm('jkn', store.sistembayars1[indexbyr].groupsistembayar)
+  }
+  store.getSistemBayar2(1)
+
+  // sistaem bayar end
   store.diagnosaAwals.push(val.diagnosa)
   store.ppkRujukans.push(val.provPerujuk)
   store.display.diagnosa.kode = val.diagnosa.kode
@@ -320,7 +331,10 @@ function pilihRujukanRS(val) {
     jenisrujukan: 2,
     norujukan: val.noKunjungan
   }
-  store.getJumlahSep(param)
+  store.getJumlahSep(param).then(resp => {
+    console.log('jumlah sep Rs', resp)
+    store.jumlahSEP = parseInt(resp.jumlahSEP)
+  })
   pilihRujukan(val)
   store.setForm('id_kunjungan', 4)
   store.setForm('jenis_kunjungan', 'Rujukan Antar RS')
@@ -333,7 +347,10 @@ function pilihRujukanPCare(val) {
     norujukan: val.noKunjungan
 
   }
-  store.getJumlahSep(param)
+  store.getJumlahSep(param).then(resp => {
+    console.log('jumlah sep p care', resp)
+    store.jumlahSEP = parseInt(resp.jumlahSEP)
+  })
   pilihRujukan(val)
   store.setForm('id_kunjungan', 1)
   store.setForm('jenis_kunjungan', 'Rujukan FKTP')

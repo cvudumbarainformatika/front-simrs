@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -21,6 +21,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       katarak: '0'
     },
+    jumlahSEP: 0,
+    suratKontrolChecked: false,
     display: {
       diagnosa: {},
       prosedur: {},
@@ -143,6 +145,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         kodepropinsi: '',
         kodekabupaten: ''
       }
+      this.jumlahSEP = 0
     },
     // initial data
     getInitialData() {
@@ -537,13 +540,14 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     getJumlahSep(val) {
       const params = { params: val }
+      this.suratKontrolChecked = false
       this.loadingCekBpjs = true
       return new Promise(resolve => {
         api.get('/v1/anjungan/cek-jumlah-sep', params)
           .then(resp => {
             this.loadingCekBpjs = false
             // this.asalrujukans = resp.data
-            console.log('jumlah sep', resp.data)
+            // console.log('jumlah sep', resp.data)
             resolve(resp.data.result)
           })
           .catch(() => {
@@ -553,13 +557,22 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     cekSuratKontrol(val) {
       const params = { params: val }
+      this.suratKontrolChecked = true
       this.loadingCekBpjs = true
       return new Promise(resolve => {
         api.get('/v1/anjungan/cari-rencana-kontrol', params)
           .then(resp => {
             this.loadingCekBpjs = false
             // this.asalrujukans = resp.data
-            console.log('jumlah sep', resp.data)
+            // console.log('cari rencana kontrol', resp.data)
+            const rujukan = resp.data.result.provPerujuk.noRujukan
+            if (rujukan) {
+              if (rujukan !== this.form.norujukan) {
+                notifErrVue('Nomor Rujukan tidak sama')
+              }
+            } else {
+              notifErrVue('Nomor rujukan Tidak ditemukan')
+            }
             resolve(resp.data.result)
           })
           .catch(() => {
