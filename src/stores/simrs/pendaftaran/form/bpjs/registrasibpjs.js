@@ -548,6 +548,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.loadingCekBpjs = false
             // this.asalrujukans = resp.data
             // console.log('jumlah sep', resp.data)
+            this.jumlahSEP = parseInt(resp.data.result.jumlahSEP) >= 0 ? parseInt(resp.data.result.jumlahSEP) : 0
             resolve(resp.data.result)
           })
           .catch(() => {

@@ -333,7 +333,7 @@ function pilihRujukanRS(val) {
   }
   store.getJumlahSep(param).then(resp => {
     console.log('jumlah sep Rs', resp)
-    store.jumlahSEP = parseInt(resp.jumlahSEP)
+    // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
   })
   pilihRujukan(val)
   store.setForm('id_kunjungan', 4)
@@ -349,7 +349,7 @@ function pilihRujukanPCare(val) {
   }
   store.getJumlahSep(param).then(resp => {
     console.log('jumlah sep p care', resp)
-    store.jumlahSEP = parseInt(resp.jumlahSEP)
+    // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
   })
   pilihRujukan(val)
   store.setForm('id_kunjungan', 1)
