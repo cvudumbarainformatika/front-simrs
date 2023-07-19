@@ -23,6 +23,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     jumlahSEP: 0,
     suratKontrolChecked: false,
+    rencanaKontrolValid: false,
     display: {
       diagnosa: {},
       prosedur: {},
@@ -146,6 +147,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         kodekabupaten: ''
       }
       this.jumlahSEP = 0
+      this.suratKontrolChecked = false
+      this.rencanaKontrolValid = false
     },
     // initial data
     getInitialData() {
@@ -541,6 +544,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     getJumlahSep(val) {
       const params = { params: val }
       this.suratKontrolChecked = false
+      this.rencanaKontrolValid = false
       this.loadingCekBpjs = true
       return new Promise(resolve => {
         api.get('/v1/anjungan/cek-jumlah-sep', params)
@@ -614,6 +618,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
               if (rujukan) {
                 if (rujukan !== this.form.norujukan) {
                   notifErrVue('Nomor Rujukan tidak sama')
+                } else {
+                  this.rencanaKontrolValid = true
                 }
               } else {
                 notifErrVue('Nomor rujukan Tidak ditemukan')
