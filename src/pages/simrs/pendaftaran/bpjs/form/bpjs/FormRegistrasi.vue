@@ -55,7 +55,10 @@
               </div> -->
             </div>
             <!-- No Surat kontrol -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
+            <div
+              v-if="store.jumlahSEP >= 1"
+              class="row q-col-gutter-sm items-center q-mb-xs"
+            >
               <div class="col-12">
                 <app-input
                   ref="refNoSuratKontrol"
@@ -64,10 +67,12 @@
                   right-icon
                   right-icon-name="icon-mat-format_list_numbered"
                   right-icon-tooltip="List Surat Kontrol"
+                  debounce="1000"
                   :filled="false"
                   :loading="store.loading"
                   :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
                   @icon-right-click="cekSuratKontrol"
+                  @update:model-value="cekSuratKontrolIni"
                 />
               </div>
               <!-- <div class="col-3">
@@ -367,6 +372,7 @@
               <div :class="store.display.bayar.kode?'col-6':'col-12'">
                 <app-autocomplete
                   ref="refSistemBayar"
+                  :key="store.display.bayar.kode"
                   v-model="store.display.bayar.kode"
                   label="Sistem bayar"
                   autocomplete="groupsistembayar"
@@ -644,6 +650,16 @@ const refSuplesi = ref(null)
 // list Surat kontrol
 function listSuratRujukan() {
   emits('getListRujukan')
+}
+function cekSuratKontrolIni(val) {
+  if (!store.suratKontrolChecked) {
+    const param = {
+      search: val
+    }
+    store.cekSuratKontrol(param).then(resp => {
+      console.log('cek surat kontrol ', resp)
+    })
+  }
 }
 // cek Surat kontrol
 // function cekSuratRujukan() {
@@ -932,7 +948,7 @@ function resetValidation() {
   if (refTujuanKunjungan.value !== null) { refTujuanKunjungan.value.$refs.refAuto.resetValidation() }
   // input
   refNoRujukan.value.$refs.refInput.resetValidation()
-  refNoSuratKontrol.value.$refs.refInput.resetValidation()
+  if (refNoSuratKontrol.value) refNoSuratKontrol.value.$refs.refInput.resetValidation()
 }
 // validasi
 let valid = false
@@ -949,7 +965,7 @@ function validasi() {
   const JenisKunjungan = refJenisKunjungan.value.$refs.refAuto.validate()
   const TujuanKunjungan = refTujuanKunjungan.value === null ? true : refTujuanKunjungan.value.$refs.refAuto.validate()
   // ref input
-  const NoSuratKontrol = refNoSuratKontrol.value.$refs.refInput.validate()
+  const NoSuratKontrol = refNoSuratKontrol.value ? refNoSuratKontrol.value.$refs.refInput.validate() : true
   const noRujukan = refNoRujukan.value.$refs.refInput.validate()
   if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar &&
   noRujukan && NamaDiagnosa && KodeDiagnosa && JenisKunjungan &&

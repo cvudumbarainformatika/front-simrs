@@ -225,7 +225,9 @@ function pilihRencanaKontrol(val) {
   const param = {
     search: val.noSuratKontrol
   }
-  store.cekSuratKontrol(param)
+  store.cekSuratKontrol(param).then(resp => {
+    console.log('cek surat kontrol ', resp)
+  })
 
   store.setForm('id_kunjungan', 3)
   store.setForm('jenis_kunjungan', 'Kontrol')

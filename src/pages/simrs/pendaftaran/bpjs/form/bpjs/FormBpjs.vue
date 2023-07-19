@@ -132,7 +132,7 @@ function getListRujukan() {
   registrasi.listRujukanPcare = []
   registrasi.listRujukanRs = []
   registrasi.listRujukanSepMrs = []
-
+  registrasi.jumlahSEP = 0
   if (data) {
     if (Object.keys(data).length) {
       console.log('cek list rujukan', data)
