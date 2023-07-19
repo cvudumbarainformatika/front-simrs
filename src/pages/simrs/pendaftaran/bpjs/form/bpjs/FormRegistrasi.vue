@@ -69,8 +69,11 @@
                   right-icon-tooltip="List Surat Kontrol"
                   debounce="1000"
                   :filled="false"
-                  :loading="store.loading"
-                  :rules="[val => (!!val || !!store.form.norujukan) || 'Harap diisi',]"
+                  :loading="store.loadingCekBpjs"
+                  :rules="[
+                    val => (!!val ) || 'Harap diisi',
+                    val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
+                  ]"
                   @icon-right-click="cekSuratKontrol"
                   @update:model-value="cekSuratKontrolIni"
                 />
@@ -84,252 +87,263 @@
                 />
               </div> -->
             </div>
-            <!-- Jenis Kunjungan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refJenisKunjungan"
-                  v-model="store.display.jeniskunjungan"
-                  label="Jenis Kunjungan"
-                  autocomplete="nilai"
-                  option-value="nilai"
-                  option-label="nilai"
-                  disable
-                  :filled="false"
-                  :source="store.jenisKunjungans"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setJenisKunjungan"
-                />
-              </div>
-            </div>
-            <!-- asal rujukan -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refAsalRujukan"
-                  v-model="store.form.asalrujukan"
-                  label="Asal Rujukan"
-                  autocomplete="asalrujukan"
-                  option-value="kode"
-                  option-label="asalrujukan"
-                  :filled="false"
-                  :source="store.asalrujukans"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                />
-              </div>
-            </div>
-            <!-- poli tujuan -->
             <div
-              :key="store.form.kodepoli"
-              class="row q-col-gutter-md items-center q-mb-xs"
+              v-if="!store.loadingCekBpjs &&
+                ((!!store.form.norujukan && store.jumlahSEP === 0) ||
+                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
             >
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refPoliTujuan"
-                  v-model="store.form.kodepoli"
-                  label="Poli Tujuan"
-                  autocomplete="polirs"
-                  option-value="kodepoli"
-                  option-label="polirs"
-                  :filled="false"
-                  :source="store.polis"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setPoliTujuan"
-                />
+              <!-- Jenis Kunjungan -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refJenisKunjungan"
+                    v-model="store.display.jeniskunjungan"
+                    label="Jenis Kunjungan"
+                    autocomplete="nilai"
+                    option-value="nilai"
+                    option-label="nilai"
+                    disable
+                    :filled="false"
+                    :source="store.jenisKunjungans"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setJenisKunjungan"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- Katarak -->
-            <div class="row q-col-gutter-md items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refKatarak"
-                  :key="store.form.katarak"
-                  v-model="store.form.katarak"
-                  label="Katarak"
-                  autocomplete="nama"
-                  option-value="value"
-                  option-label="nama"
-                  :filled="false"
-                  :source="store.kataraks"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                />
+              <!-- asal rujukan -->
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refAsalRujukan"
+                    v-model="store.form.asalrujukan"
+                    label="Asal Rujukan"
+                    autocomplete="asalrujukan"
+                    option-value="kode"
+                    option-label="asalrujukan"
+                    :filled="false"
+                    :source="store.asalrujukans"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- kartu / karcis -->
-            <div
-              :key="store.form.jeniskarcis"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <q-tooltip
-                v-if="!store.paramKarcis.kd_poli"
-                class="primary"
-                :offset="[10, 10]"
+              <!-- poli tujuan -->
+              <div
+                :key="store.form.kodepoli"
+                class="row q-col-gutter-md items-center q-mb-xs"
               >
-                Pilih poli tujuan Terlebih dahulu
-              </q-tooltip>
-              <div class="col-6">
-                <app-autocomplete
-                  ref="refFlagKartu"
-                  v-model="store.form.jeniskarcis"
-                  label="Flag Kartu"
-                  autocomplete="jeniskarcis"
-                  option-value="jeniskarcis"
-                  option-label="jeniskarcis"
-                  :filled="false"
-                  :disable="!store.paramKarcis.kd_poli"
-                  :source="store.jenisKarcises"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setFlagKarcis"
-                />
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refPoliTujuan"
+                    v-model="store.form.kodepoli"
+                    label="Poli Tujuan"
+                    autocomplete="polirs"
+                    option-value="kodepoli"
+                    option-label="polirs"
+                    :filled="false"
+                    :source="store.polis"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setPoliTujuan"
+                  />
+                </div>
               </div>
-              <div class="col-6">
-                <app-input
-                  v-model="store.display.hargakarcis"
-                  label="Karcis"
-                  :filled="false"
-                  disable
-                />
+              <!-- Katarak -->
+              <div class="row q-col-gutter-md items-center q-mb-xs">
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refKatarak"
+                    :key="store.form.katarak"
+                    v-model="store.form.katarak"
+                    label="Katarak"
+                    autocomplete="nama"
+                    option-value="value"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.kataraks"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                  />
+                </div>
+              </div>
+              <!-- kartu / karcis -->
+              <div
+                :key="store.form.jeniskarcis"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
                 <q-tooltip
-                  v-if="store.paramKarcis.kd_poli"
+                  v-if="!store.paramKarcis.kd_poli"
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Terisi otomatis
+                  Pilih poli tujuan Terlebih dahulu
                 </q-tooltip>
+                <div class="col-6">
+                  <app-autocomplete
+                    ref="refFlagKartu"
+                    v-model="store.form.jeniskarcis"
+                    label="Flag Kartu"
+                    autocomplete="jeniskarcis"
+                    option-value="jeniskarcis"
+                    option-label="jeniskarcis"
+                    :filled="false"
+                    :disable="!store.paramKarcis.kd_poli"
+                    :source="store.jenisKarcises"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setFlagKarcis"
+                  />
+                </div>
+                <div class="col-6">
+                  <app-input
+                    v-model="store.display.hargakarcis"
+                    label="Karcis"
+                    :filled="false"
+                    disable
+                  />
+                  <q-tooltip
+                    v-if="store.paramKarcis.kd_poli"
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Terisi otomatis
+                  </q-tooltip>
+                </div>
               </div>
-            </div>
-            <!-- Diagnosa awal -->
-            <div
-              :key="store.display.diagnosa.nama"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-4">
-                <app-autocomplete-debounce-input
-                  ref="refKodeDiagnosa"
-                  :model="store.display.diagnosa.kode"
-                  label="Kode Diagnosa"
-                  autocomplete="kode"
-                  option-value="kode"
-                  option-label="kode"
-                  :filled="false"
-                  :source="store.diagnosaAwals"
-                  :loading="store.loadingdiagnosa"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @on-select="setKodeDiagnosa"
-                  @buang="findKodeDiagnosa"
-                  @clear="clearKodeDiagnosa"
-                />
+              <!-- Diagnosa awal -->
+              <div
+                :key="store.display.diagnosa.nama"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-4">
+                  <app-autocomplete-debounce-input
+                    ref="refKodeDiagnosa"
+                    :model="store.display.diagnosa.kode"
+                    label="Kode Diagnosa"
+                    autocomplete="kode"
+                    option-value="kode"
+                    option-label="kode"
+                    :filled="false"
+                    :source="store.diagnosaAwals"
+                    :loading="store.loadingdiagnosa"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @on-select="setKodeDiagnosa"
+                    @buang="findKodeDiagnosa"
+                    @clear="clearKodeDiagnosa"
+                  />
+                </div>
+                <div class="col-8">
+                  <app-autocomplete-debounce-input
+                    ref="refNamaDiagnosa"
+                    :model="store.display.diagnosa.nama"
+                    label="Nama Diagnosa"
+                    autocomplete="nama"
+                    option-value="nama"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.diagnosaAwals"
+                    :loading="store.loadingdiagnosa"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @on-select="setNamaDiagnosa"
+                    @buang="findNamaDiagnosa"
+                    @clear="clearNamaDiagnosa"
+                  />
+                </div>
               </div>
-              <div class="col-8">
-                <app-autocomplete-debounce-input
-                  ref="refNamaDiagnosa"
-                  :model="store.display.diagnosa.nama"
-                  label="Nama Diagnosa"
-                  autocomplete="nama"
-                  option-value="nama"
-                  option-label="nama"
-                  :filled="false"
-                  :source="store.diagnosaAwals"
-                  :loading="store.loadingdiagnosa"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @on-select="setNamaDiagnosa"
-                  @buang="findNamaDiagnosa"
-                  @clear="clearNamaDiagnosa"
-                />
+              <!-- Tujuan Kunjungan -->
+              <div
+                v-if="store.display.jeniskunjungan==='Kontrol'"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refTujuanKunjungan"
+                    v-model="store.display.tujuankunjungan"
+                    label="Tujuan Kunjungan"
+                    autocomplete="nama"
+                    option-value="value"
+                    option-label="nama"
+                    :filled="false"
+                    :source="store.tujuanKunjungans"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setTujuanKunjungan"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- Tujuan Kunjungan -->
-            <div
-              v-if="store.display.jeniskunjungan==='Kontrol'"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refTujuanKunjungan"
-                  v-model="store.display.tujuankunjungan"
-                  label="Tujuan Kunjungan"
-                  autocomplete="nama"
-                  option-value="value"
-                  option-label="nama"
-                  :filled="false"
-                  :source="store.tujuanKunjungans"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setTujuanKunjungan"
-                />
+              <!-- Tujuan Prosedur -->
+              <div
+                v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refProsedur"
+                    v-model="store.display.prosedur.kode"
+                    label="Prosedur"
+                    autocomplete="procedure"
+                    option-value="kode"
+                    option-label="procedure"
+                    :filled="false"
+                    :source="store.prosedurs"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setProsedur"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- Tujuan Prosedur -->
-            <div
-              v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refProsedur"
-                  v-model="store.display.prosedur.kode"
-                  label="Prosedur"
-                  autocomplete="procedure"
-                  option-value="kode"
-                  option-label="procedure"
-                  :filled="false"
-                  :source="store.prosedurs"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setProsedur"
-                />
+              <!-- Assesment pelayanan -->
+              <div
+                v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===2) || store.display.jeniskunjungan==='Rujukan Internal'"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refAssesmentPel"
+                    v-model="store.display.assesment.kode"
+                    label="Assesment Pelayanan"
+                    autocomplete="assesmentpel"
+                    option-value="kode"
+                    option-label="assesmentpel"
+                    :filled="false"
+                    :source="store.assesmens"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setAssesmentPelayanan"
+                  />
+                </div>
               </div>
-            </div>
-            <!-- Assesment pelayanan -->
-            <div
-              v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===2) || store.display.jeniskunjungan==='Rujukan Internal'"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refAssesmentPel"
-                  v-model="store.display.assesment.kode"
-                  label="Assesment Pelayanan"
-                  autocomplete="assesmentpel"
-                  option-value="kode"
-                  option-label="assesmentpel"
-                  :filled="false"
-                  :source="store.assesmens"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setAssesmentPelayanan"
-                />
-              </div>
-            </div>
-            <!-- Penunjang -->
-            <div
-              v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
-              class="row q-col-gutter-sm items-center q-mb-xs"
-            >
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refPenunjang"
-                  v-model="store.display.penunjang.kode"
-                  label="Penunjang"
-                  autocomplete="namapenunjang"
-                  option-value="kode"
-                  option-label="namapenunjang"
-                  :filled="false"
-                  :source="store.penunjangs"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setPenunjang"
-                />
+              <!-- Penunjang -->
+              <div
+                v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
+                class="row q-col-gutter-sm items-center q-mb-xs"
+              >
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refPenunjang"
+                    v-model="store.display.penunjang.kode"
+                    label="Penunjang"
+                    autocomplete="namapenunjang"
+                    option-value="kode"
+                    option-label="namapenunjang"
+                    :filled="false"
+                    :source="store.penunjangs"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setPenunjang"
+                  />
+                </div>
               </div>
             </div>
           </div>
           <!-- kanan -->
-          <div class="col-6">
+          <div
+            v-if="!store.loadingCekBpjs &&
+              ((!!store.form.norujukan && store.jumlahSEP === 0) ||
+                (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+            class="col-6"
+          >
             <!-- PPK Rujukan -->
             <div
               :key="store.display.kode"
@@ -403,8 +417,9 @@
                   :filled="false"
                   :source="store.sistembayars"
                   :loading="store.loadingsistembayar"
-
-                  :rules="[val => (!!val) || 'Harap diisi',]"
+                  :rules="[
+                    val => (!!val) || 'Harap diisi',
+                  ]"
                   @selected="setSistembayar"
                 />
               </div>
@@ -937,14 +952,14 @@ function setDispTglSEP(val) {
 // reset validasi
 function resetValidation() {
   // autocomplete
-  refAsalRujukan.value.$refs.refAuto.resetValidation()
-  refFlagKartu.value.$refs.refAuto.resetValidation()
-  refDPJP.value.$refs.refAuto.resetValidation()
-  refPoliTujuan.value.$refs.refAuto.resetValidation()
-  refSistemBayar.value.$refs.refAuto.resetValidation()
-  refKodeDiagnosa.value.$refs.refAuto.resetValidation()
-  refNamaDiagnosa.value.$refs.refAuto.resetValidation()
-  refJenisKunjungan.value.$refs.refAuto.resetValidation()
+  if (refAsalRujukan.value) refAsalRujukan.value.$refs.refAuto.resetValidation()
+  if (refFlagKartu.value) refFlagKartu.value.$refs.refAuto.resetValidation()
+  if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
+  if (refPoliTujuan.value) refPoliTujuan.value.$refs.refAuto.resetValidation()
+  if (refSistemBayar.value) refSistemBayar.value.$refs.refAuto.resetValidation()
+  if (refKodeDiagnosa.value) refKodeDiagnosa.value.$refs.refAuto.resetValidation()
+  if (refNamaDiagnosa.value) refNamaDiagnosa.value.$refs.refAuto.resetValidation()
+  if (refJenisKunjungan.value) refJenisKunjungan.value.$refs.refAuto.resetValidation()
   if (refTujuanKunjungan.value !== null) { refTujuanKunjungan.value.$refs.refAuto.resetValidation() }
   // input
   refNoRujukan.value.$refs.refInput.resetValidation()
@@ -954,15 +969,15 @@ function resetValidation() {
 let valid = false
 function validasi() {
   // ref auto complete
-  const asalRujukan = refAsalRujukan.value.$refs.refAuto.validate()
-  const flagKartu = refFlagKartu.value.$refs.refAuto.validate()
-  const dpjp = refDPJP.value.$refs.refAuto.validate()
+  const asalRujukan = refAsalRujukan.value === null ? true : refAsalRujukan.value.$refs.refAuto.validate()
+  const flagKartu = refFlagKartu.value == null ? true : refFlagKartu.value.$refs.refAuto.validate()
+  const dpjp = refDPJP.value === null ? true : refDPJP.value.$refs.refAuto.validate()
   // const dpjp = true
-  const poliTujuan = refPoliTujuan.value.$refs.refAuto.validate()
-  const sistemBayar = refSistemBayar.value.$refs.refAuto.validate()
-  const KodeDiagnosa = refKodeDiagnosa.value.$refs.refAuto.validate()
-  const NamaDiagnosa = refNamaDiagnosa.value.$refs.refAuto.validate()
-  const JenisKunjungan = refJenisKunjungan.value.$refs.refAuto.validate()
+  const poliTujuan = refPoliTujuan.value === null ? true : refPoliTujuan.value.$refs.refAuto.validate()
+  const sistemBayar = refSistemBayar.value === null ? true : refSistemBayar.value.$refs.refAuto.validate()
+  const KodeDiagnosa = refKodeDiagnosa.value === null ? true : refKodeDiagnosa.value.$refs.refAuto.validate()
+  const NamaDiagnosa = refNamaDiagnosa.value === null ? true : refNamaDiagnosa.value.$refs.refAuto.validate()
+  const JenisKunjungan = refJenisKunjungan.value === null ? true : refJenisKunjungan.value.$refs.refAuto.validate()
   const TujuanKunjungan = refTujuanKunjungan.value === null ? true : refTujuanKunjungan.value.$refs.refAuto.validate()
   // ref input
   const NoSuratKontrol = refNoSuratKontrol.value ? refNoSuratKontrol.value.$refs.refInput.validate() : true
