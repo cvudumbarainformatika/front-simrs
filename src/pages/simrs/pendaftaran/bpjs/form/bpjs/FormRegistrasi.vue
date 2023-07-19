@@ -33,7 +33,7 @@
                   right-icon-name="icon-mat-format_list_numbered"
                   right-icon-tooltip="List Rujukan"
                   :filled="false"
-                  :loading="store.loadingListRujukan"
+                  :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
                 />
@@ -72,7 +72,7 @@
                   :loading="store.loadingCekBpjs"
                   :rules="[
                     val => (!!val ) || 'Harap diisi',
-                    val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
+                    val => (!val && store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
                   @update:model-value="cekSuratKontrolIni"
@@ -88,7 +88,7 @@
               </div> -->
             </div>
             <div
-              v-if="!store.loadingCekBpjs &&
+              v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
                 ((!!store.form.norujukan && store.jumlahSEP === 0) ||
                   (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
             >
@@ -339,7 +339,7 @@
           </div>
           <!-- kanan -->
           <div
-            v-if="!store.loadingCekBpjs &&
+            v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
               ((!!store.form.norujukan && store.jumlahSEP === 0) ||
                 (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
             class="col-6"
@@ -691,7 +691,7 @@ function setPoliTujuan(val) {
   const index = findWithAttr(store.polis, 'kodepoli', val)
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
-  refDPJP.value.$refs.refAuto.resetValidation()
+  if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
   if (store.paramKarcis.flag) {
     if (store.paramKarcis.flag !== '') {
       store.getKarcisPoli().then(() => {
