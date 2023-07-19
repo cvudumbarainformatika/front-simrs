@@ -549,7 +549,48 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             // this.asalrujukans = resp.data
             // console.log('jumlah sep', resp.data)
             this.jumlahSEP = parseInt(resp.data.result.jumlahSEP) >= 0 ? parseInt(resp.data.result.jumlahSEP) : 0
+            if (resp.data.metadata.code !== '200') {
+              notifErrVue('cek jumlah sep : ' + resp.data.metadata.message)
+            }
             resolve(resp.data.result)
+          })
+          .catch(() => {
+            this.loadingCekBpjs = false
+          })
+      })
+    },
+    cekRujukanPcare(val) {
+      const params = { params: val }
+      this.suratKontrolChecked = false
+      this.loadingCekBpjs = true
+      return new Promise(resolve => {
+        api.get('/v1/anjungan/cari-rujukan', params)
+          .then(resp => {
+            this.loadingCekBpjs = false
+            console.log('rujukan ', resp.data)
+            if (resp.data.metadata.code !== '200') {
+              notifErrVue('Cari Rujukan P Care : ' + resp.data.metadata.message)
+            }
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingCekBpjs = false
+          })
+      })
+    },
+    cekRujukanRs(val) {
+      const params = { params: val }
+      this.suratKontrolChecked = false
+      this.loadingCekBpjs = true
+      return new Promise(resolve => {
+        api.get('/v1/anjungan/cari-rujukan-rs', params)
+          .then(resp => {
+            this.loadingCekBpjs = false
+            console.log('rujukan ', resp.data)
+            if (resp.data.metadata.code !== '200') {
+              notifErrVue('Cari Rujukan RS : ' + resp.data.metadata.message)
+            }
+            resolve(resp.data)
           })
           .catch(() => {
             this.loadingCekBpjs = false
@@ -564,17 +605,24 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         api.get('/v1/anjungan/cari-rencana-kontrol', params)
           .then(resp => {
             this.loadingCekBpjs = false
-            // this.asalrujukans = resp.data
-            // console.log('cari rencana kontrol', resp.data)
-            const rujukan = resp.data.result.provPerujuk.noRujukan
-            if (rujukan) {
-              if (rujukan !== this.form.norujukan) {
-                notifErrVue('Nomor Rujukan tidak sama')
-              }
+            console.log('surat kontrol resp', resp.data)
+            const rujukan = resp.data.result.sep.provPerujuk.noRujukan
+            console.log('surat kontrol rujukan', rujukan)
+            if (!this.form.norujukan) {
+              console.log('tidak ada nomor rujukan')
             } else {
-              notifErrVue('Nomor rujukan Tidak ditemukan')
+              if (rujukan) {
+                if (rujukan !== this.form.norujukan) {
+                  notifErrVue('Nomor Rujukan tidak sama')
+                }
+              } else {
+                notifErrVue('Nomor rujukan Tidak ditemukan')
+              }
             }
-            resolve(resp.data.result)
+            if (resp.data.metadata.code !== '200') {
+              notifErrVue('Cari Surat Kontrol : ' + resp.data.metadata.message)
+            }
+            resolve(resp.data)
           })
           .catch(() => {
             this.loadingCekBpjs = false

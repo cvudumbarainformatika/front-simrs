@@ -343,7 +343,7 @@ function pilihRujukanRS(val) {
 }
 function pilihRujukanPCare(val) {
   const param = {
-    jenisrujukan: 2,
+    jenisrujukan: 1,
     norujukan: val.noKunjungan
 
   }
