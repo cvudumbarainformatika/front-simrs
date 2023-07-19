@@ -1,9 +1,139 @@
 <template>
   <q-dialog>
-    <q-card style="min-width:75vw;">
-      <q-card-section>
+    <q-card style="min-width:90vw;">
+      <div>
+        <q-bar>
+          <q-icon name="icon-mat-dvr" />
+          <div class="f-12">
+            Daftar Rujukan Pasien JKN
+          </div>
+
+          <q-space />
+          <q-btn
+            v-close-popup
+            dense
+            flat
+            icon="icon-mat-close"
+          >
+            <q-tooltip>Tutup</q-tooltip>
+          </q-btn>
+        </q-bar>
+      </div>
+      <q-card-section
+        style="max-height: 80vh; padding:0"
+        horizontal
+        class="scroll"
+      >
+        <q-card-section
+          class="col-6 scroll"
+          style="max-height: 80vh; padding:0"
+        >
+          <div v-if="!store.listRujukanPcare.length">
+            <app-loading v-if="store.loadingListRujukan" />
+            <app-no-data-small
+              v-else
+              style="height: 40vh;"
+            />
+          </div>
+          <div v-else>
+            <q-list separator>
+              <q-item-section class="q-pa-md">
+                <q-item-label
+                  overline
+                  class="text-dark text-weight-bold"
+                >
+                  LIST RUJUKAN PCARE
+                </q-item-label>
+              </q-item-section>
+              <q-separator />
+              <q-item
+                v-for="(list,i) in store.listRujukanPcare"
+                :key="i"
+              >
+                <q-item-section>
+                  <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                  <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                </q-item-section>
+
+                <q-item-section
+                  side
+                  top
+                >
+                  <q-btn
+                    dense
+                    label="Pilih Rujukan"
+                    no-caps
+                    outline
+                    color="primary"
+                    size="sm"
+                    @click="pilihRujukanPCare(list)"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </q-card-section>
+
+        <q-separator vertical />
+
+        <q-card-section
+          class="col-6 scroll"
+          style="max-height: 80vh; padding:0"
+        >
+          <div v-if="!store.listRujukanRs.length">
+            <app-loading v-if="store.loadingListRujukan" />
+            <app-no-data-small
+              v-else
+              style="height: 40vh;"
+            />
+          </div>
+          <div v-else>
+            <q-list separator>
+              <q-item-section class="q-pa-md">
+                <q-item-label
+                  overline
+                  class="text-dark text-weight-bold"
+                >
+                  LIST RUJUKAN RS
+                </q-item-label>
+              </q-item-section>
+              <q-separator />
+              <q-item
+                v-for="(list,i) in store.listRujukanRs"
+                :key="i"
+              >
+                <q-item-section>
+                  <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                  <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                </q-item-section>
+
+                <q-item-section
+                  side
+                  top
+                >
+                  <!-- <app-btn
+                    dense
+                    label="pilih"
+                    @click="pilihRujukanPCare(list)"
+                  /> -->
+                  <q-btn
+                    dense
+                    label="Pilih Rujukan"
+                    no-caps
+                    outline
+                    color="primary"
+                    size="sm"
+                    @click="pilihRujukanRS(list)"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </q-card-section>
+      </q-card-section>
+      <!-- <q-card-section>
         <div class="f-14 text-weight-bold">
-          Rujukan P Care
+          Rujukan P Care oyee
         </div>
         <div class="title-desc q-mb-md">
           Daftar Rujukan P Care
@@ -187,8 +317,8 @@
             </div>
           </div>
         </div>
-      </q-card-section>
-      <q-separator />
+      </q-card-section> -->
+      <!-- <q-separator /> -->
       <!--
       <q-card-section>
         <div class="f-14 text-weight-bold q-mt-md">
@@ -258,7 +388,7 @@
         </div>
       </q-card-section>
       -->
-      <q-separator />
+      <!-- <q-separator /> -->
     </q-card>
   </q-dialog>
 </template>
@@ -326,6 +456,7 @@ function pilihRujukan(val, jenis) {
 
   store.tampilRujukan = false
 }
+// eslint-disable-next-line no-unused-vars
 function pilihRujukanRS(val) {
   const param = {
     jenisrujukan: 2,
@@ -341,6 +472,7 @@ function pilihRujukanRS(val) {
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 4)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
 }
+// eslint-disable-next-line no-unused-vars
 function pilihRujukanPCare(val) {
   const param = {
     jenisrujukan: 1,

@@ -15,11 +15,15 @@ export const usePencarianPasienStore = defineStore('pencarian_pasien_store', {
       this.search = payload
     },
 
-    async filterOptions (val, update) {
+    async filterOptions (val, update, abort) {
       if (!val) {
         update(() => {
           this.options = []
         })
+        return
+      }
+      if (val.length < 3) {
+        abort()
         return
       }
       const params = {

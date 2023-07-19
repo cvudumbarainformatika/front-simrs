@@ -27,7 +27,7 @@
           v-model="dialog.search"
           dense
           outlined
-          label="Cari Data"
+          label="Cari Pasien"
           use-input
           clearable
           option-value="id"
@@ -35,6 +35,7 @@
           :options="dialog.options"
           behavior="menu"
           hide-dropdown-icon
+          placeholder="Nik, Nama, Noka..."
           @filter="dialog.filterOptions"
           @update:model-value="(val)=>pilihPasienIni(val)"
         >
