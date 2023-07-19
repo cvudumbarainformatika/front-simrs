@@ -1,9 +1,53 @@
 <template>
   <q-dialog>
-    <q-card style="min-width:75vw;">
-      <q-card-section>
+    <q-card style="min-width:80vw;">
+      <div>
+        <q-bar>
+          <q-icon name="icon-mat-dvr" />
+          <div class="f-12">
+            Daftar Rujukan Pasien JKN
+          </div>
+
+          <q-space />
+          <q-btn
+            v-close-popup
+            dense
+            flat
+            icon="icon-mat-close"
+          >
+            <q-tooltip>Tutup</q-tooltip>
+          </q-btn>
+        </q-bar>
+      </div>
+      <q-card-section
+        style="max-height: 80vh"
+        horizontal
+        class="scroll"
+      >
+        <q-card-section
+          class="col-6 scroll"
+          style="max-height: 80vh"
+        >
+          <p
+            v-for="n in 15"
+            :key="n"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+          </p>
+        </q-card-section>
+
+        <q-separator vertical />
+
+        <q-card-section
+          class="col-6 scroll"
+          style="max-height: 80vh"
+        >
+          lorem
+        </q-card-section>
+      </q-card-section>
+      <!-- <q-card-section>
         <div class="f-14 text-weight-bold">
-          Rujukan P Care
+          Rujukan P Care oyee
         </div>
         <div class="title-desc q-mb-md">
           Daftar Rujukan P Care
@@ -187,8 +231,8 @@
             </div>
           </div>
         </div>
-      </q-card-section>
-      <q-separator />
+      </q-card-section> -->
+      <!-- <q-separator /> -->
       <!--
       <q-card-section>
         <div class="f-14 text-weight-bold q-mt-md">
@@ -258,7 +302,7 @@
         </div>
       </q-card-section>
       -->
-      <q-separator />
+      <!-- <q-separator /> -->
     </q-card>
   </q-dialog>
 </template>
@@ -326,6 +370,7 @@ function pilihRujukan(val, jenis) {
 
   store.tampilRujukan = false
 }
+// eslint-disable-next-line no-unused-vars
 function pilihRujukanRS(val) {
   const param = {
     jenisrujukan: 2,
@@ -341,6 +386,7 @@ function pilihRujukanRS(val) {
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 4)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
 }
+// eslint-disable-next-line no-unused-vars
 function pilihRujukanPCare(val) {
   const param = {
     jenisrujukan: 2,
