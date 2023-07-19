@@ -33,8 +33,34 @@
 }
 
 // ===========================================================================
-
-
+.ba-black{
+  border: 1px solid black;
+}
+.bl-black{
+  border-left: 1px solid black;
+}
+.br-black{
+  border-right: 1px solid black;
+}
+.bb-black{
+  border-bottom: 1px solid black;
+}
+.bt-black{
+  border-top: 1px solid black;
+}
+.mirror-editor {
+  ol {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 20px !important;
+    li{
+      margin-bottom: 1em;
+    }
+  }
+}
 
 
 
