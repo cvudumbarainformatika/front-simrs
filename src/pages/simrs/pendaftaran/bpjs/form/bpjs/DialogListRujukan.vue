@@ -81,7 +81,7 @@
           style="max-height: 80vh; padding:0"
         >
           <div v-if="!store.listRujukanRs.length">
-            <app-loading v-if="store.loadingListRujukan" />
+            <app-loading v-if="store.loadingListRujukanRS" />
             <app-no-data-small
               v-else
               style="height: 40vh;"
