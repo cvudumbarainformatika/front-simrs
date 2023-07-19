@@ -1,6 +1,7 @@
 <template>
   <div class="ttd-pad-form">
     <canvas
+      v-show="imgSrc === null"
       ref="canvasRef"
       class="ttd-pad"
       height="150"
@@ -9,16 +10,33 @@
       @pointermove="handlePointerMove"
       @pointerup="handlePointerUp"
     />
-    <q-btn
-      flat
-      icon="icon-mat-refresh"
-      size="md"
-      padding="xs"
-      round
-      color="teal"
-      class="absolute-bottom-right q-mb-md"
-      @click="clearPad()"
+    <q-img
+      v-show="imgSrc !== null"
+      :src="imgSrc"
+      height="150"
+      width="300"
     />
+    <div class="absolute-bottom-right q-ma-md">
+      <q-btn
+        flat
+        icon="icon-mat-refresh"
+        size="md"
+        padding="xs"
+        round
+        color="negative"
+
+        @click="clearPad()"
+      />
+      <q-btn
+        flat
+        icon="icon-mat-save"
+        size="md"
+        padding="xs"
+        round
+        color="primary"
+        @click="savePad()"
+      />
+    </div>
   </div>
 </template>
 
@@ -33,6 +51,8 @@ const ctx = ref()
 const writingMode = ref(false)
 const positionX = ref()
 const positionY = ref()
+
+const imgSrc = ref(null)
 
 onMounted(() => {
   // const canvas = document.querySelector('canvas')
@@ -73,7 +93,14 @@ function getTargetPosition(event) {
 }
 
 const clearPad = () => {
+  imgSrc.value = null
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+}
+
+const savePad = () => {
+  const imageURL = canvasRef.value.toDataURL()
+  imgSrc.value = imageURL
+  console.log(imageURL)
 }
 
 // onUnmounted(() => {

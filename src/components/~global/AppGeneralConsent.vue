@@ -126,7 +126,7 @@
             />
             <div>Informasi General Consent</div>
           </q-btn>
-          <q-btn
+          <!-- <q-btn
             color="primary q-ma-md"
             @click="emits('openPreviewGc')"
           >
@@ -136,20 +136,21 @@
               name="icon-mat-menu_book"
             />
             <div>Hak Dan Kewajiban Pasien</div>
-          </q-btn>
+          </q-btn> -->
         </div>
       </q-card-section>
       <q-separator />
 
-      <q-card-section>
+      <q-card-section class="q-pb-xl">
         <div class="row q-px-xl q-col-gutter-xl">
           <div class="col-6">
             <div class="text-center">
               <div>Petugas RS</div>
-              <div
+              <!-- <div
                 class="ttd-petugas q-px-xl"
                 style="min-height:150px; border:1px solid gray"
-              />
+              /> -->
+              <app-ttd />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
@@ -183,7 +184,7 @@ const props = defineProps({
 const store = useGeneralConsentStore()
 
 onMounted(() => {
-  store.getData()
+  // store.getData()
   console.log(props.pasien)
   // store.setForm('nama', props.pasien.nama)
   // store.setForm('alamat', props.pasien.alamat)

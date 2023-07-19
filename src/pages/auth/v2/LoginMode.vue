@@ -39,10 +39,9 @@
             <q-img
               :src="img"
               spinner-color="white"
-              style="max-width: 150px"
             />
             <div class="q-px-lg q-mt-md text-weight-thin">
-              silahkan Anda Scan Code di samping melalui Aplikasi Xenter atau Login pada form
+              silahkan Anda Scan Code di samping melalui Aplikasi Xenter
             </div>
           </div>
         </div>
@@ -93,7 +92,7 @@ const routeForm = ref(route.params.mode === 'login-yang-menyusahkan')
 const routeQr = ref(route.params.mode === 'qr')
 
 const img = computed(() => {
-  return new URL('../../../assets/images/mad_saleh_minum.png', import.meta.url).href
+  return new URL('../../../assets/images/Xenter.svg', import.meta.url).href
 })
 
 onMounted(() => {
