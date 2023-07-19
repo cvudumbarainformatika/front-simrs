@@ -38,6 +38,8 @@
     <DialogListKontrol
       v-model="registrasi.tampilKontrol"
       @kode-poli="setKodepoli"
+      @validasi-surat-kontrol="validasiSuratKontrol"
+      @jenis-kunjungan="jenisKunjungan"
     />
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
@@ -87,6 +89,14 @@ function simpanData() {
       dialogCetak()
     })
   }
+}
+function validasiSuratKontrol() {
+  console.log('validasi surat kontrol')
+  refRegistrasi.value.validasiSuratKontrol()
+}
+function jenisKunjungan(val) {
+  console.log('jenis kunjungan ', val)
+  refRegistrasi.value.setJenisKunjungan(val)
 }
 // data nik, norm, noka pasien
 // let dataPasien = null

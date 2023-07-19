@@ -173,7 +173,11 @@ import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 
 const store = useRegistrasiPasienBPJSStore()
-const emits = defineEmits(['kodePoli'])
+const emits = defineEmits([
+  'kodePoli',
+  'validasiSuratKontrol',
+  'jenisKunjungan'
+])
 // surat kontrol
 
 // function pilihSuratKontrol(val) {
@@ -227,13 +231,14 @@ function pilihRencanaKontrol(val) {
   }
   store.cekSuratKontrol(param).then(resp => {
     console.log('cek surat kontrol ', resp)
+    emits('validasiSuratKontrol')
   })
 
   store.setForm('id_kunjungan', 3)
   store.setForm('jenis_kunjungan', 'Kontrol')
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 3)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
-
+  emits('jenisKunjungan', store.jenisKunjungans[idexKun].nilai)
   if (poli) emits('kodePoli', store.polis[indPoli].kodepoli)
 
   store.tampilKontrol = false

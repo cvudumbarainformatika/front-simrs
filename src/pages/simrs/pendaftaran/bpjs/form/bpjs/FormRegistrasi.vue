@@ -72,7 +72,7 @@
                   :loading="store.loadingCekBpjs"
                   :rules="[
                     val => (!!val ) || 'Harap diisi',
-                    val => (!val && store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
+                    val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
                   @update:model-value="cekSuratKontrolIni"
@@ -121,11 +121,12 @@
                     autocomplete="asalrujukan"
                     option-value="kode"
                     option-label="asalrujukan"
+                    valid
                     :filled="false"
                     :source="store.asalrujukans"
                     :loading="store.loading"
-                    :rules="[val => (!!val) || 'Harap diisi',]"
                   />
+                  <!-- :rules="[val => (!!val) || 'Harap diisi',]" -->
                 </div>
               </div>
               <!-- poli tujuan -->
@@ -703,8 +704,9 @@ function setPoliTujuan(val) {
   console.log('set poli ', store.polis[index])
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   store.paramDpjp.kodepoli = store.polis[index].kodemapingbpjs
-  store.setForm('kodepoli', store.polis[index].kodemapingbpjs)
-  store.setForm('namapoli', store.polis[index].polimapingbpjs)
+  store.setForm('kodepoli', store.polis[index].kodepoli)
+  store.setForm('kodepolibpjs', store.polis[index].kodemapingbpjs)
+  store.setForm('namapolibpjs', store.polis[index].polimapingbpjs)
   store.getjadwalDokterDpjp()
   store.getDokterDpjp()
 }
@@ -999,6 +1001,9 @@ function set() {
   }
 }
 
+function validasiSuratKontrol() {
+  refNoSuratKontrol.value.$refs.refInput.validate()
+}
 // expose function
-defineExpose({ resetValidation, set, setPoliTujuan })
+defineExpose({ resetValidation, validasiSuratKontrol, set, setPoliTujuan, setJenisKunjungan })
 </script>
