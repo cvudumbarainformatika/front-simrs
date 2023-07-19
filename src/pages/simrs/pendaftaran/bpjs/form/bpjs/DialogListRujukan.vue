@@ -389,7 +389,7 @@ function pilihRujukanRS(val) {
 // eslint-disable-next-line no-unused-vars
 function pilihRujukanPCare(val) {
   const param = {
-    jenisrujukan: 2,
+    jenisrujukan: 1,
     norujukan: val.noKunjungan
 
   }

@@ -60,7 +60,7 @@ function kirimPoli(val) {
   // console.log('kirim poli ', val)
   if (!val.noreg) {
     Rm.value = val.norm
-    console.log('kirim poli ', val)
+    // console.log('kirim poli ', val)
     store.getPasien(val.norm).then(resp => {
       if (resp.length === 1) {
         pilihPasienIni(resp[0], val)
@@ -135,7 +135,28 @@ function pilihPasienIni(val, jkn) {
     pasien.tanggal.hari = tglLahir[2]
     pasien.setTanggalLahir()
   }
-  console.log('pasien terpilih', val)
+  const param = {
+    search: jkn.nomorreferensi
+  }
+  regis.cekRujukanPcare(param).then(resp => {
+    console.log('yang di P care', resp)
+    if (resp.result === 'Tidak ditemukan') {
+      regis.cekRujukanRs(param).then(resp => {
+        console.log('yang di Rujukan rs ', resp)
+        if (resp.result === 'Tidak ditemukan') {
+          console.log('mau cek Surat kontrol ')
+          regis.cekSuratKontrol(param).then(resp => {
+            console.log('yang Surat kontrol ', resp)
+          })
+        } else {
+          console.log('tidak cek Surat kontrol ')
+        }
+      })
+    } else {
+      console.log('tidak cek Rujukan rs ')
+    }
+  })
+  console.log('pasien terpilih', val, jkn)
   routerInstance.push({
     path: '/pendaftaran/bpjs/form',
     replace: true
