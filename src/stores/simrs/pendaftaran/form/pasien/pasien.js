@@ -781,6 +781,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             // this.alertMsg = resp.data.result
             // this.alert = true
             this.setForm('jenispeserta', resp.data.result.peserta.jenisPeserta.keterangan)
+            this.setForm('hakkelas', resp.data.result.peserta.hakKelas.kode)
             resolve(resp.data.result)
           }).catch(() => {
             this.loadingNik = false

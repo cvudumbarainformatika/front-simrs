@@ -31,6 +31,14 @@
             :disable="loading"
             @click="simpanData"
           />
+
+          <app-btn
+            class="q-ml-xl"
+            label="SEP"
+            :loading="loading"
+            :disable="loading"
+            @click="buatSEP"
+          />
         </div>
       </q-card-actions>
     </q-card>
@@ -66,6 +74,28 @@ const style = useStyledStore()
 
 function clearFormRegistrasi() {
   registrasi.clearForm()
+}
+
+function buatSEP() {
+  const dataPasien = refDataPasien.value.set()
+  refRegistrasi.value.set()
+  refDataPasien.value.cekBpjs()
+  // console.log('pasien', dataPasien,
+  //   'regis', dataRegis
+  // )
+  const keys = Object.keys(dataPasien.form)
+  if (keys.length) {
+    keys.forEach(key => {
+      registrasi.setForm(key, dataPasien.form[key])
+    })
+  }
+  console.log('form registrasi ', registrasi.form)
+  registrasi.buatSep().then(resp => {
+    console.log('resp bpjs', resp)
+    // dialogCetak()
+  })
+  // if (dataPasien.save && dataRegis.save) {
+  // }
 }
 function simpanData() {
   // refDataPasien.value.set()
