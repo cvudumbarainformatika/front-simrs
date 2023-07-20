@@ -36,7 +36,7 @@
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
-                  @keyup.enter="cekSuratRujukanIni"
+                  @keyup.enter="cekSuratRujukanIni(store.form.norujukan)"
                 />
               </div>
               <!-- <div class="col-3">
@@ -75,7 +75,7 @@
                     val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
-                  @keyup.enter="cekSuratKontrolIni"
+                  @keyup.enter="cekSuratKontrolIni(store.form.nosuratkontrol)"
                 />
               </div>
               <!-- <div class="col-3">
@@ -710,21 +710,22 @@ function cekSuratRujukanIni(val) {
           console.log('jumlah sep p care', resp)
           // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
         })
-      }
-      if (!store.rujukanRSChecked) {
-        store.cekRujukanRs(param).then(resp => {
-          if (resp.metadata.code === '200') {
-            const param = {
-              jenisrujukan: 2,
-              norujukan: val
-            }
-            store.getJumlahSep(param).then(resp => {
-              console.log('jumlah sep p care', resp)
+      } else {
+        if (!store.rujukanRSChecked) {
+          store.cekRujukanRs(param).then(resp => {
+            if (resp.metadata.code === '200') {
+              const param = {
+                jenisrujukan: 2,
+                norujukan: val
+              }
+              store.getJumlahSep(param).then(resp => {
+                console.log('jumlah sep p care', resp)
               // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
-            })
-          }
-          console.log('cek rujukan  RS', resp)
-        })
+              })
+            }
+            console.log('cek rujukan  RS', resp)
+          })
+        }
       }
     })
   }
