@@ -565,7 +565,7 @@
               <div class="col-12">
                 <app-input
                   ref="refNoTlp"
-                  v-model="store.form.teleponhp"
+                  v-model="store.form.noteleponhp"
                   label="No Ponsel"
                   :filled="false"
                   :prefix="'+'+(store.form.negara?store.form.negara:'62')"
@@ -1443,6 +1443,7 @@ function resetValidation() {
 const hariIni = Date.now()
 // jenis pasien lama / baru
 function setJenisPasien(val) {
+  emits('gantiPasien')
   store.setForm('barulama', val)
   if (val === 'baru') {
     refJenisPasien.value.$refs.refAuto.blur()
