@@ -32,6 +32,7 @@
                   right-icon
                   right-icon-name="icon-mat-format_list_numbered"
                   right-icon-tooltip="List Rujukan"
+                  debounce="1000"
                   :filled="false"
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
