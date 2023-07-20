@@ -1,6 +1,5 @@
 <template>
   <q-dialog
-    full-height
     persistent
     style="width:50vw;"
   >
@@ -13,7 +12,7 @@
 
       <q-separator />
       <div
-        style="max-height: 70vh; height:70vh"
+        style="max-height: 70vh;"
         class="scroll"
       >
         <slot />
