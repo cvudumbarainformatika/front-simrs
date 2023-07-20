@@ -141,7 +141,6 @@
                     autocomplete="polirs"
                     option-value="kodepoli"
                     option-label="polirs"
-                    :disable="store.tujuankunjungan!=='2'"
                     :filled="false"
                     :source="store.polis"
                     :loading="store.loading"
