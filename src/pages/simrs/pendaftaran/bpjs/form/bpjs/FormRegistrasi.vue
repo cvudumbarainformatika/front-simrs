@@ -924,6 +924,11 @@ function setTujuanKunjungan(val) {
 // prosedur
 function setProsedur(val) {
   store.setForm('flagProcedure', val)
+  if (val === 1) {
+    store.setForm('assesmentPel', '5')
+  } else {
+    delete store.form.assesmentPel
+  }
 }
 // assesment
 function setAssesmentPelayanan(val) {
