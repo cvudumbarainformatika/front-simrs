@@ -1,7 +1,9 @@
 <template>
   <q-dialog>
-    <q-card style="min-width:90vw;">
-      <div>
+    <q-card style="min-width:60vw;">
+      <div
+        class="bg-primary text-white"
+      >
         <q-bar>
           <q-icon name="icon-mat-dvr" />
           <div class="f-12">
@@ -20,6 +22,156 @@
         </q-bar>
       </div>
       <q-card-section
+        v-if="store.loadingListRujukan || store.loadingListRujukanRS"
+        style="height: 50vh;"
+        class="scroll"
+      >
+        <app-loading />
+      </q-card-section>
+      <!-- <q-card-section v-else>
+        <div
+          class="text-h6 text-uppercase"
+        >
+          List Rujukan {{ tab }}
+        </div>
+      </q-card-section>
+      <q-separator /> -->
+      <div
+        v-else
+      >
+        <q-tabs
+          v-model="tab"
+          class="text-primary"
+          align="justify"
+        >
+          <q-tab
+            label="Rujukan PCare"
+            name="pcare"
+          />
+          <q-tab
+            label="Rujukan RS"
+            name="rs"
+          />
+        </q-tabs>
+        <q-separator />
+
+        <q-tab-panels
+          v-model="tab"
+          animated
+        >
+          <q-tab-panel
+            name="pcare"
+            style="padding: 0;"
+          >
+            <div v-if="!store.listRujukanPcare.length">
+              <app-no-data-small
+                style="height: 50vh;"
+              />
+            </div>
+            <div
+              v-else
+              style="max-height: 50vh;"
+              class="scroll"
+            >
+              <q-list separator>
+                <q-item
+                  v-for="(list,i) in store.listRujukanPcare"
+                  :key="i"
+                  v-ripple
+                  clickable
+                >
+                  <q-item-section avatar>
+                    <q-avatar
+                      color="primary"
+                      text-color="white"
+                      size="md"
+                    >
+                      {{ i+1 }}
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                    <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                  </q-item-section>
+
+                  <q-item-section
+                    side
+                  >
+                    <q-btn
+                      dense
+                      no-caps
+                      color="primary"
+                      size="sm"
+                      padding="sm"
+                      flat
+                      @click="pilihRujukanPCare(list)"
+                    >
+                      <div class="text-weight-bold">
+                        Pilih Rujukan
+                      </div>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel name="rs">
+            <div v-if="!store.listRujukanRs.length">
+              <app-no-data-small
+                style="height: 30vh;"
+              />
+            </div>
+            <div
+              v-else
+              style="max-height: 50vh;"
+              class="scroll"
+            >
+              <q-list separator>
+                <q-item
+                  v-for="(list,i) in store.listRujukanRs"
+                  :key="i"
+                  v-ripple
+                  clickable
+                >
+                  <q-item-section avatar>
+                    <q-avatar
+                      color="primary"
+                      text-color="white"
+                      size="md"
+                    >
+                      {{ i+1 }}
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                    <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                  </q-item-section>
+
+                  <q-item-section
+                    side
+                  >
+                    <q-btn
+                      dense
+                      no-caps
+                      color="primary"
+                      size="sm"
+                      padding="sm"
+                      flat
+                      @click="pilihRujukanPCare(list)"
+                    >
+                      <div class="text-weight-bold">
+                        Pilih Rujukan
+                      </div>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
+      <!-- <q-card-section
         style="max-height: 80vh; padding:0"
         horizontal
         class="scroll"
@@ -111,11 +263,6 @@
                   side
                   top
                 >
-                  <!-- <app-btn
-                    dense
-                    label="pilih"
-                    @click="pilihRujukanPCare(list)"
-                  /> -->
                   <q-btn
                     dense
                     label="Pilih Rujukan"
@@ -130,7 +277,7 @@
             </q-list>
           </div>
         </q-card-section>
-      </q-card-section>
+      </q-card-section> -->
       <!-- <q-card-section>
         <div class="f-14 text-weight-bold">
           Rujukan P Care oyee
@@ -396,7 +543,9 @@
 import { date } from 'quasar'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
+import { ref } from 'vue'
 
+const tab = ref('pcare')
 const store = useRegistrasiPasienBPJSStore()
 // pilih rujukan p care
 function pilihRujukan(val, jenis) {
