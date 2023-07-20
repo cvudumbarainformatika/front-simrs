@@ -32,12 +32,11 @@
                   right-icon
                   right-icon-name="icon-mat-format_list_numbered"
                   right-icon-tooltip="List Rujukan"
-                  debounce="1000"
                   :filled="false"
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
-                  @update:model-value="cekSuratRujukanIni"
+                  @keyup.enter="cekSuratRujukanIni"
                 />
               </div>
               <!-- <div class="col-3">
@@ -69,7 +68,6 @@
                   right-icon
                   right-icon-name="icon-mat-format_list_numbered"
                   right-icon-tooltip="List Surat Kontrol"
-                  debounce="1000"
                   :filled="false"
                   :loading="store.loadingCekBpjs"
                   :rules="[
@@ -77,7 +75,7 @@
                     val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
-                  @update:model-value="cekSuratKontrolIni"
+                  @keyup.enter="cekSuratKontrolIni"
                 />
               </div>
               <!-- <div class="col-3">
