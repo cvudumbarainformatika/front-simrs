@@ -752,13 +752,37 @@ function setFlagKarcis(val) {
 // --- kecelakaan start ---
 // autocomplete kecelakaan
 function setKecelakaan(val) {
+  store.setForm('tglKecelakaan', '')
+  store.setForm('kodekecamatankecelakaan', '')
+  store.setForm('kodekabupatenkecelakaan', '')
+  store.setForm('kodepropinsikecelakaan', '')
+  store.setForm('propinsikecelakaan', '')
+  store.setForm('kabupatenkecelakaan', '')
+  store.setForm('kecamatankecelakaan', '')
+  store.setForm('nosepsuplesi', '')
+  store.setForm('suplesi', '0')
+  store.setForm('keterangan', '')
+
+  store.display.kecamatanKecelakaan.kode = ''
+  store.display.kabupatenKecelakaan.kode = ''
+  store.display.tempatKecelakaan.kode = ''
+
   console.log('kecelakaan ', val)
   store.setForm('lakalantas', val)
   if (parseInt(val) >= 1) {
     store.setForm('tglKecelakaan', date.formatDate(Date.now(), 'YYYY-MM-DD'))
     store.display.tanggal.kecelakaan = date.formatDate(Date.now(), 'DD MMMM YYYY')
   } else {
-    delete store.form.tglKecelakaan
+    store.setForm('tglKecelakaan', '')
+    store.setForm('kodekecamatankecelakaan', '')
+    store.setForm('kodekabupatenkecelakaan', '')
+    store.setForm('kodepropinsikecelakaan', '')
+    store.setForm('propinsikecelakaan', '')
+    store.setForm('kabupatenkecelakaan', '')
+    store.setForm('kecamatankecelakaan', '')
+    store.setForm('nosepsuplesi', '')
+    store.setForm('suplesi', '0')
+    store.setForm('keterangan', '')
   }
   store.getPropinsiKecelakaan()
 }
