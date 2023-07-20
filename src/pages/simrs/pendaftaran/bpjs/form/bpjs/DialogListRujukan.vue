@@ -158,7 +158,7 @@
                       size="sm"
                       padding="sm"
                       flat
-                      @click="pilihRujukanPCare(list)"
+                      @click="pilihRujukanRS(list)"
                     >
                       <div class="text-weight-bold">
                         Pilih Rujukan
