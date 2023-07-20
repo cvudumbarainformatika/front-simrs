@@ -14,13 +14,6 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     tampilRujukan: false,
     tampilKontrol: false,
     tampilSuplesi: false,
-    form: {
-      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      katarak: '0',
-      jnspelayanan: 2
-    },
     jumlahSEP: 0,
     suratKontrolChecked: false,
     rencanaKontrolValid: false,
@@ -38,8 +31,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       tempatKecelakaan: {},
       kabupatenKecelakaan: {},
       kecamatanKecelakaan: {},
-      kecelakaan: 0,
-      suplesi: 0
+      kecelakaan: '0',
+      suplesi: '0'
     },
     paramKarcis: {},
     paramDiagnosa: { q: '' },
@@ -110,7 +103,34 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
 
     propinsies: [],
     kabupatens: [],
-    kecamatans: []
+    kecamatans: [],
+
+    form: {
+      tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
+      katarak: '0',
+      jnspelayanan: '2',
+      dpjp: '',
+      nosuratkontrol: '',
+      assesmenPel: '',
+      kdPenunjang: '',
+      flagprocedure: '',
+      namadokter: '',
+      kodekecamatankecelakaan: '',
+      kodekabupatenkecelakaan: '',
+      kodepropinsikecelakaan: '',
+      propinsikecelakaan: '',
+      kabupatenkecelakaan: '',
+      kecamatankecelakaan: '',
+      nosepsuplesi: '',
+      suplesi: '0',
+      keterangan: '',
+      tglKecelakaan: '',
+      lakalantas: '0',
+      kodepolibpjs: '',
+      catatan: ''
+    }
   }),
   actions: {
     setForm(key, val) {
@@ -120,10 +140,30 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       this.form = {
         tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-        tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglKecelakaan: '',
         tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
         katarak: '0',
-        jnspelayanan: 2
+        jnspelayanan: '2',
+        dpjp: '',
+        nosuratkontrol: '',
+        assesmentPel: '',
+        asalRujukan: '1',
+        kdPenunjang: '',
+        flagprocedure: '',
+        namadokter: '',
+        kodekecamatankecelakaan: '',
+        kodekabupatenkecelakaan: '',
+        kodepropinsikecelakaan: '',
+        propinsikecelakaan: '',
+        kabupatenkecelakaan: '',
+        kecamatankecelakaan: '',
+        nosepsuplesi: '',
+        suplesi: '0',
+        keterangan: '',
+        lakalantas: '0',
+        kodepolibpjs: '',
+        catatan: '',
+        kdUnit: ''
       }
       this.display = {
         diagnosa: {},
@@ -139,8 +179,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         tempatKecelakaan: {},
         kabupatenKecelakaan: {},
         kecamatanKecelakaan: {},
-        kecelakaan: 0,
-        suplesi: 0
+        kecelakaan: '0',
+        suplesi: '0'
       }
       this.paramKarcis = {}
       this.paramDiagnosa = { q: '' }

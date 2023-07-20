@@ -141,6 +141,7 @@
                     autocomplete="polirs"
                     option-value="kodepoli"
                     option-label="polirs"
+                    :disable="store.tujuankunjungan!=='2'"
                     :filled="false"
                     :source="store.polis"
                     :loading="store.loading"
@@ -509,7 +510,7 @@
             </div>
             <!-- jika kecelakaan -->
             <div
-              v-if="store.display.kecelakaan>0"
+              v-if="parseInt(store.display.kecelakaan) > 0"
             >
               <!-- tanggal dan option sulpesi -->
               <div class="row q-col-gutter-md items-center q-mb-xs">
@@ -754,12 +755,10 @@ function setKecelakaan(val) {
   console.log('kecelakaan ', val)
   store.setForm('lakalantas', val)
   if (parseInt(val) >= 1) {
-    store.setForm('tglKecelakaan', date.formatDate(Date.now(), 'DD MMMM YYYY'))
-    store.tanggal.kecelakaan = date.formatDate(Date.now(), 'DD MMMM YYYY')
+    store.setForm('tglKecelakaan', date.formatDate(Date.now(), 'YYYY-MM-DD'))
+    store.display.tanggal.kecelakaan = date.formatDate(Date.now(), 'DD MMMM YYYY')
   } else {
-    (
-      delete store.form.tglKecelakaan
-    )
+    delete store.form.tglKecelakaan
   }
   store.getPropinsiKecelakaan()
 }

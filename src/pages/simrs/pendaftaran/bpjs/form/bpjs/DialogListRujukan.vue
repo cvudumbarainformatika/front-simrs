@@ -678,7 +678,7 @@ function pilihRujukan(val, jenis) {
   store.setForm('jnspelayanan', val.pelayanan.kode)
   store.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
 
-  store.setForm('flagProcedure', '')
+  store.setForm('flagprocedure', '')
   store.setForm('kdPenunjang', '')
 
   store.tampilRujukan = false
@@ -720,6 +720,7 @@ function pilihRujukanPCare(val) {
 }
 // pilih rujukan mrs
 function pilihRujukanMrs(val) {
+  store.setForm('asalRujukan', '1')
   console.log('rujukan Mrs', val)
   store.setForm('norujukan', val.rs8)
   store.tampilRujukan = false

@@ -38,7 +38,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       hari: '01'
     },
     form: {
-      barulama: 'baru'
+      barulama: 'baru',
+      teleponhp: ''
     },
     display: {
       sapaan: 'Bpk.',
@@ -86,7 +87,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
   actions: {
     clearForm() {
       this.form = {
-        barulama: 'baru'
+        barulama: 'baru',
+        teleponhp: ''
       }
       this.tanggal = {
         tahun: '1900',
@@ -782,6 +784,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             // this.alert = true
             this.setForm('jenispeserta', resp.data.result.peserta.jenisPeserta.keterangan)
             this.setForm('hakkelas', resp.data.result.peserta.hakKelas.kode)
+            if (this.form.teleponhp === '') this.setForm('teleponhp', resp.data.result.peserta.mr.noTelepon)
             resolve(resp.data.result)
           }).catch(() => {
             this.loadingNik = false
@@ -801,6 +804,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             this.setForm('jenispeserta', hasil.peserta.jenisPeserta.keterangan)
             // this.setForm('jnspelayanan', hasil.pelayanan.kode)
             this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
+            if (this.form.teleponhp === '') this.setForm('teleponhp', resp.data.result.peserta.mr.noTelepon)
             resolve(resp.data.result)
           }).catch(() => {
             this.loadingNoka = false
