@@ -1,6 +1,179 @@
 <template>
   <q-dialog>
-    <q-card style="min-width:75vw;">
+    <q-card style="min-width:60vw;">
+      <div
+        class="bg-teal text-white"
+      >
+        <q-bar>
+          <q-icon name="icon-mat-dvr" />
+          <div class="f-12">
+            Daftar Rencana Kontrol Pasien JKN
+          </div>
+
+          <q-space />
+          <q-btn
+            v-close-popup
+            dense
+            flat
+            icon="icon-mat-close"
+          >
+            <q-tooltip>Tutup</q-tooltip>
+          </q-btn>
+        </q-bar>
+      </div>
+      <q-card-section
+        v-if="store.loadingSuratKontrol || store.loadingRencanaKontrol"
+        style="height: 50vh;"
+        class="scroll"
+      >
+        <app-loading />
+      </q-card-section>
+      <div
+        v-else
+      >
+        <q-tabs
+          v-model="tab"
+          class=""
+          align="left"
+          active-class="bg-dark text-white"
+          dense
+        >
+          <q-tab
+            label="Rencana kontrol"
+            name="kontrol"
+            class="text-primary"
+          />
+          <q-tab
+            label="Rekom DPJP"
+            name="dpjp"
+            class="text-orange"
+          />
+        </q-tabs>
+        <q-separator />
+
+        <q-tab-panels
+          v-model="tab"
+          animated
+        >
+          <q-tab-panel
+            name="kontrol"
+            style="padding: 0;"
+          >
+            <div v-if="!store.listRencanaKontrols.length">
+              <app-no-data-small
+                style="height: 46vh;"
+              />
+            </div>
+            <div
+              v-else
+              style="height: 50vh;"
+              class="scroll"
+            >
+              <q-list separator>
+                <q-item
+                  v-for="(list,i) in store.listRencanaKontrols"
+                  :key="i"
+                  v-ripple
+                  clickable
+                >
+                  <q-item-section avatar>
+                    <q-avatar
+                      color="primary"
+                      text-color="white"
+                      size="md"
+                    >
+                      <div class="f-12">
+                        {{ i+1 }}
+                      </div>
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>tgl Rencana Kontrol : <span class="text-weight-bold text-primary">{{ list.tglRencanaKontrol?dateFullFormat(list.tglRencanaKontrol):'-' }}</span></q-item-label>
+                    <q-item-label>No. Kontrol : <span class="text-weight-bold text-teal">{{ list.noSuratKontrol }}</span></q-item-label>
+                  </q-item-section>
+
+                  <q-item-section
+                    side
+                  >
+                    <q-btn
+                      dense
+                      no-caps
+                      color="primary"
+                      size="sm"
+                      padding="sm"
+                      flat
+                      @click="pilihRencanaKontrol(list)"
+                    >
+                      <div class="text-weight-bold">
+                        Pilih Rencana Kontrol
+                      </div>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel
+            name="dpjp"
+            style="padding: 0;"
+          >
+            <div v-if="!store.listSuratKontrols.length">
+              <app-no-data-small
+                style="height: 46vh;"
+              />
+            </div>
+            <div
+              v-else
+              style="height: 50vh;"
+              class="scroll"
+            >
+              <q-list separator>
+                <q-item
+                  v-for="(list,i) in store.listSuratKontrols"
+                  :key="i"
+                  v-ripple
+                  clickable
+                >
+                  <q-item-section avatar>
+                    <q-avatar
+                      color="orange"
+                      text-color="white"
+                      size="md"
+                    >
+                      <div class="f-12">
+                        {{ i+1 }}
+                      </div>
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>tgl Rencana Kontrol : <span class="text-weight-bold text-primary">{{ list.tglKontrol?dateFullFormat(list.tglKontrol):'-' }}</span></q-item-label>
+                    <q-item-label>No. DPJP : <span class="text-weight-bold text-teal">{{ list.noDpjp }}</span></q-item-label>
+                  </q-item-section>
+
+                  <q-item-section
+                    side
+                  >
+                    <q-btn
+                      dense
+                      no-caps
+                      color="orange"
+                      size="sm"
+                      padding="sm"
+                      flat
+                      @click="pilihSuratKontrol(list)"
+                    >
+                      <div class="text-weight-bold">
+                        Pilih F Dpjp
+                      </div>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
       <!--
       <q-card-section>
         <div class="f-14 text-weight-bold">
@@ -85,9 +258,9 @@
       </q-card-section>
       -->
 
-      <q-separator />
+      <!-- <q-separator /> -->
 
-      <q-card-section>
+      <!-- <q-card-section>
         <div class="f-14 text-weight-bold q-mt-md">
           Surat kontrol
         </div>
@@ -159,19 +332,22 @@
             </div>
           </div>
         </div>
-      </q-card-section>
+      </q-card-section> -->
 
-      <q-separator />
+      <!-- <q-separator />
 
-      <q-separator />
+      <q-separator /> -->
     </q-card>
   </q-dialog>
 </template>
 <script setup>
+
 import { dateFullFormat } from 'src/modules/formatter'
 import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
+import { ref } from 'vue'
 
+const tab = ref('kontrol')
 const store = useRegistrasiPasienBPJSStore()
 const emits = defineEmits([
   'kodePoli',
@@ -217,6 +393,8 @@ const emits = defineEmits([
 // }
 
 // rencana kontrol
+
+// eslint-disable-next-line no-unused-vars
 function pilihRencanaKontrol(val) {
   store.form.nosuratkontrol = val.noSuratKontrol
   const findpoli = val.poliTujuan ? val.poliTujuan : ''

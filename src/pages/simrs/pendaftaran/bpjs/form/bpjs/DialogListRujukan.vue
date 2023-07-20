@@ -43,6 +43,8 @@
           v-model="tab"
           class=""
           align="left"
+          active-class="bg-dark text-white"
+          dense
         >
           <q-tab
             label="Rujukan PCare"
@@ -72,7 +74,7 @@
           >
             <div v-if="!store.listRujukanPcare.length">
               <app-no-data-small
-                style="height: 50vh;"
+                style="height: 46vh;"
               />
             </div>
             <div
@@ -93,7 +95,9 @@
                       text-color="white"
                       size="md"
                     >
-                      {{ i+1 }}
+                      <div class="f-12">
+                        {{ i+1 }}
+                      </div>
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
@@ -123,10 +127,13 @@
             </div>
           </q-tab-panel>
 
-          <q-tab-panel name="rs">
+          <q-tab-panel
+            name="rs"
+            style="padding: 0;"
+          >
             <div v-if="!store.listRujukanRs.length">
               <app-no-data-small
-                style="height: 50vh;"
+                style="height: 46vh;"
               />
             </div>
             <div
@@ -180,10 +187,13 @@
             </div>
           </q-tab-panel>
 
-          <q-tab-panel name="mrs">
-            <!-- <div v-if="!store.listRujukanRs.length">
+          <q-tab-panel
+            name="mrs"
+            style="padding: 0;"
+          >
+            <div v-if="!store.listRujukanSepMrs.length">
               <app-no-data-small
-                style="height: 50vh;"
+                style="height: 46vh;"
               />
             </div>
             <div
@@ -193,23 +203,25 @@
             >
               <q-list separator>
                 <q-item
-                  v-for="(list,i) in store.listRujukanRs"
+                  v-for="(list,i) in store.listRujukanSepMrs"
                   :key="i"
                   v-ripple
                   clickable
                 >
                   <q-item-section avatar>
                     <q-avatar
-                      color="primary"
+                      color="accent"
                       text-color="white"
                       size="md"
                     >
-                      {{ i+1 }}
+                      <div class="f-12">
+                        {{ i+1 }}
+                      </div>
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
-                    <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.rs6 }}</span></q-item-label>
+                    <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.rs8 }}</span></q-item-label>
                   </q-item-section>
 
                   <q-item-section
@@ -218,11 +230,11 @@
                     <q-btn
                       dense
                       no-caps
-                      color="primary"
+                      color="accent"
                       size="sm"
                       padding="sm"
                       flat
-                      @click="pilihRujukanRS(list)"
+                      @click="pilihRujukanMrs(list)"
                     >
                       <div class="text-weight-bold">
                         Pilih Rujukan
@@ -232,7 +244,7 @@
                 </q-item>
                 <q-separator />
               </q-list>
-            </div> -->
+            </div>
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -703,10 +715,10 @@ function pilihRujukanPCare(val) {
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 1)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
 }
-// pilih rujukan p care
-// function pilihRujukanMrs(val) {
-//   console.log('rujukan Mrs', val)
-//   store.setForm('norujukan', val.rs8)
-//   store.tampilRujukan = false
-// }
+// pilih rujukan mrs
+function pilihRujukanMrs(val) {
+  console.log('rujukan Mrs', val)
+  store.setForm('norujukan', val.rs8)
+  store.tampilRujukan = false
+}
 </script>
