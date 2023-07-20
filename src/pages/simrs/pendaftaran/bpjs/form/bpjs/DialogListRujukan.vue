@@ -673,6 +673,7 @@ function pilihRujukan(val, jenis) {
   // ppk rujukan
   store.display.kode = val.provPerujuk.kode
   store.setForm('ppkRujukan', val.provPerujuk.kode)
+  store.setForm('namappkRujukan', val.provPerujuk.nama)
   store.setForm('tglrujukan', val.tglKunjungan)
   store.setForm('jnspelayanan', val.pelayanan.kode)
   store.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
@@ -693,6 +694,7 @@ function pilihRujukanRS(val) {
     // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
   })
   pilihRujukan(val)
+  store.setForm('asalRujukan', '2')
   store.setForm('id_kunjungan', 4)
   store.setForm('jenis_kunjungan', 'Rujukan Antar RS')
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 4)
@@ -710,6 +712,7 @@ function pilihRujukanPCare(val) {
     // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
   })
   pilihRujukan(val)
+  store.setForm('asalRujukan', '1')
   store.setForm('id_kunjungan', 1)
   store.setForm('jenis_kunjungan', 'Rujukan FKTP')
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 1)
