@@ -41,16 +41,18 @@
       >
         <q-tabs
           v-model="tab"
-          class="text-primary"
-          align="justify"
+          class=""
+          align="left"
         >
           <q-tab
             label="Rujukan PCare"
             name="pcare"
+            class="text-purple"
           />
           <q-tab
             label="Rujukan RS"
             name="rs"
+            class="text-orange"
           />
         </q-tabs>
         <q-separator />
@@ -70,7 +72,7 @@
             </div>
             <div
               v-else
-              style="max-height: 50vh;"
+              style="height: 50vh;"
               class="scroll"
             >
               <q-list separator>
@@ -119,12 +121,12 @@
           <q-tab-panel name="rs">
             <div v-if="!store.listRujukanRs.length">
               <app-no-data-small
-                style="height: 30vh;"
+                style="height: 50vh;"
               />
             </div>
             <div
               v-else
-              style="max-height: 50vh;"
+              style="height: 50vh;"
               class="scroll"
             >
               <q-list separator>
@@ -166,6 +168,7 @@
                     </q-btn>
                   </q-item-section>
                 </q-item>
+                <q-separator />
               </q-list>
             </div>
           </q-tab-panel>
