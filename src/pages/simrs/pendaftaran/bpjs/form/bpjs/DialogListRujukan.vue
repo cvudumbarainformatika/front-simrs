@@ -101,7 +101,7 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
                   </q-item-section>
 
@@ -160,7 +160,7 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
                   </q-item-section>
 
@@ -220,7 +220,7 @@
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.rs6 }}</span></q-item-label>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.rs6) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.rs8 }}</span></q-item-label>
                   </q-item-section>
 
@@ -618,6 +618,7 @@
 </template>
 <script setup>
 import { date } from 'quasar'
+import { dateFullFormat } from 'src/modules/formatter'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { ref } from 'vue'
