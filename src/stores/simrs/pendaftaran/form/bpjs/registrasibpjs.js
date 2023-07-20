@@ -16,6 +16,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     tampilSuplesi: false,
     jumlahSEP: 0,
     suratKontrolChecked: false,
+    rujukanPCareChecked: false,
+    rujukanRSChecked: false,
     rencanaKontrolValid: false,
     display: {
       diagnosa: {},
@@ -196,6 +198,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       this.jumlahSEP = 0
       this.suratKontrolChecked = false
       this.rencanaKontrolValid = false
+
+      this.rujukanPCareChecked = false
+      this.rujukanRSChecked = false
     },
     // initial data
     getInitialData() {
@@ -592,6 +597,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       const params = { params: val }
       this.suratKontrolChecked = false
       this.rencanaKontrolValid = false
+      this.rujukanPCareChecked = false
+      this.rujukanRSChecked = false
       this.loadingCekBpjs = true
       return new Promise(resolve => {
         api.get('/v1/anjungan/cek-jumlah-sep', params)
@@ -618,6 +625,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         api.get('/v1/anjungan/cari-rujukan', params)
           .then(resp => {
             this.loadingCekBpjs = false
+            this.rujukanPCareChecked = true
             console.log('rujukan ', resp.data)
             if (resp.data.metadata.code !== '200') {
               notifErrVue('Cari Rujukan P Care : ' + resp.data.metadata.message)
@@ -637,6 +645,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         api.get('/v1/anjungan/cari-rujukan-rs', params)
           .then(resp => {
             this.loadingCekBpjs = false
+            this.rujukanRSChecked = true
             console.log('rujukan ', resp.data)
             if (resp.data.metadata.code !== '200') {
               notifErrVue('Cari Rujukan RS : ' + resp.data.metadata.message)

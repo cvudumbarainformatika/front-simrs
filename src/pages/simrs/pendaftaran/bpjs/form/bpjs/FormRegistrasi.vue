@@ -36,6 +36,7 @@
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
+                  @update:model-value="cekSuratRujukanIni"
                 />
               </div>
               <!-- <div class="col-3">
@@ -681,6 +682,8 @@ const refSuplesi = ref(null)
 // list Surat kontrol
 function listSuratRujukan() {
   emits('getListRujukan')
+  store.rujukanPCareChecked = true
+  store.rujukanRSChecked = true
 }
 function cekSuratKontrolIni(val) {
   if (!store.suratKontrolChecked) {
@@ -689,6 +692,41 @@ function cekSuratKontrolIni(val) {
     }
     store.cekSuratKontrol(param).then(resp => {
       console.log('cek surat kontrol ', resp)
+    })
+  }
+}
+function cekSuratRujukanIni(val) {
+  if (!store.rujukanPCareChecked) {
+    const param = {
+      search: val
+    }
+    store.cekRujukanPcare(param).then(resp => {
+      console.log('cek P care ', resp)
+      if (resp.metadata.code === '200') {
+        const param = {
+          jenisrujukan: 1,
+          norujukan: val
+        }
+        store.getJumlahSep(param).then(resp => {
+          console.log('jumlah sep p care', resp)
+          // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+        })
+      }
+      if (!store.rujukanRSChecked) {
+        store.cekRujukanRs(param).then(resp => {
+          if (resp.metadata.code === '200') {
+            const param = {
+              jenisrujukan: 2,
+              norujukan: val
+            }
+            store.getJumlahSep(param).then(resp => {
+              console.log('jumlah sep p care', resp)
+              // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+            })
+          }
+          console.log('cek rujukan  RS', resp)
+        })
+      }
     })
   }
 }
