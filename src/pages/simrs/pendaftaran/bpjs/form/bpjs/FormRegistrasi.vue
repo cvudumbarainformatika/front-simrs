@@ -87,11 +87,10 @@
                 />
               </div> -->
             </div>
-            <div
-              v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
+            <div>
+              <!-- v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
                 ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
-            >
+                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))" -->
               <!-- Jenis Kunjungan -->
               <div class="row q-col-gutter-sm items-center q-mb-xs">
                 <div class="col-12">
@@ -102,7 +101,6 @@
                     autocomplete="nilai"
                     option-value="nilai"
                     option-label="nilai"
-                    disable
                     :filled="false"
                     :source="store.jenisKunjungans"
                     :loading="store.loading"
@@ -253,8 +251,8 @@
                 </div>
               </div>
               <!-- Tujuan Kunjungan -->
+              <!-- v-if="store.display.jeniskunjungan==='Kontrol'" -->
               <div
-                v-if="store.display.jeniskunjungan==='Kontrol'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -275,7 +273,7 @@
               </div>
               <!-- Tujuan Prosedur -->
               <div
-                v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
+                v-if="store.form.tujuankunjungan==='1'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -295,8 +293,9 @@
                 </div>
               </div>
               <!-- Assesment pelayanan -->
+              <!-- v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuankunjungan===2) || store.display.jeniskunjungan==='Rujukan Internal'" -->
               <div
-                v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===2) || store.display.jeniskunjungan==='Rujukan Internal'"
+                v-if="store.form.tujuankunjungan!=='1'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -316,8 +315,9 @@
                 </div>
               </div>
               <!-- Penunjang -->
+              <!-- v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuankunjungan===1" -->
               <div
-                v-if="store.display.jeniskunjungan==='Kontrol' && store.form.tujuanKunj===1"
+                v-if="store.form.tujuankunjungan!=='0'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -895,37 +895,55 @@ function clearNamaDiagnosa(val) {
 }
 // jenis kunjungan
 function setJenisKunjungan(val) {
-  console.log('jenis kunjungan ', val)
+  // tujuan kunjungan 0 jika rujukan yang sepnya 0, atau post Mrs atau kontrol
+  // tujuan kunjungan 1 jika pasien mau ke penunjang langsung contoh rehab medis
+  // tujuan kunjungan 2 khusus untuk form dpjp
+  console.log('jenisKun ', val)
   const kunj = findWithAttr(store.jenisKunjungans, 'nilai', val)
   if (kunj >= 0) {
     const jen = store.jenisKunjungans[kunj]
     store.setForm('id_kunjungan', jen.id)
     store.setForm('jenis_kunjungan', val)
   }
-  if (val === 'Rujukan FKTP' || val === 'Rujukan Antar RS') {
-    store.setForm('tujuanKunj', 0) // Normal
-    store.setForm('flagProcedure', '')
+  if (val.includes('Rujukan FKTP') || val === 'Rujukan Antar RS') {
+    store.display.tujuankunjungan = '0'
+    store.setForm('tujuankunjungan', '0') // Normal
+    store.setForm('flagprocedure', '')
     store.setForm('kdPenunjang', '')
+    store.display.prosedur.kode = ''
+    store.setForm('assesmentPel', '4')
+    store.display.assesment.kode = '4'
   }
   if (val === 'Rujukan Internal') {
-    store.setForm('tujuanKunj', 0) // Normal
-    store.setForm('flagProcedure', '')
+    store.setForm('tujuankunjungan', '2')
+    store.setForm('flagprocedure', '')
     store.setForm('kdPenunjang', '')
+    store.display.prosedur.kode = ''
+    store.display.tujuankunjungan = '2'
+    store.setForm('assesmentPel', '4')
+    store.display.assesment.kode = '4'
   }
   if (val === 'Kontrol') {
-    if (store.form.tujuanKunj) { delete store.form.tujuanKunj }
+    store.display.prosedur.kode = ''
+    store.setForm('flagprocedure', '')
+    store.setForm('kdPenunjang', '')
+    store.setForm('tujuankunjungan', '0')
+    store.display.tujuankunjungan = '0'
+    store.setForm('assesmentPel', '4')
+    store.display.assesment.kode = '4'
   }
 }
 // tujuan kunjungan
 function setTujuanKunjungan(val) {
   console.log('tujuan kunjungan', val)
-  store.setForm('tujuanKunj', val)
+  store.setForm('tujuankunjungan', val)
 }
 // prosedur
 function setProsedur(val) {
-  store.setForm('flagProcedure', val)
+  store.setForm('flagprocedure', val)
   if (val === 1) {
     store.setForm('assesmentPel', '5')
+    store.display.assesment.kode = '5'
   } else {
     delete store.form.assesmentPel
   }

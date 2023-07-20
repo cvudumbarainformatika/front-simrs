@@ -19,7 +19,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-      katarak: '0'
+      katarak: '0',
+      jnspelayanan: 2
     },
     jumlahSEP: 0,
     suratKontrolChecked: false,
@@ -63,7 +64,12 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     jenisKarcises: [],
     jenisKunjungans: [],
     prosedurs: [],
-    assesmens: [],
+    assesmens: [
+      { id: 1, kode: '1', assesmentpel: 'Poli spesialis tidak tersedia pada hari sebelumnya' },
+      { id: 2, kode: '2', assesmentpel: 'Jam Poli telah berakhir pada hari sebelumnya' },
+      { id: 3, kode: '3', assesmentpel: 'Dokter Spesialis yang dimaksud tidak praktek pada hari sebelumnya' },
+      { id: 4, kode: '4', assesmentpel: 'Atas Instruksi RS' }
+    ],
     penunjangs: [],
     ///
     sistembayars1: [],
@@ -71,8 +77,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     dpjps: [],
     jadwalDpjps: [],
     tujuanKunjungans: [
-      { nama: 'Prosedur', value: 1 },
-      { nama: 'Konsul Dokter', value: 2 }
+      { nama: 'Normal', value: '0' },
+      { nama: 'Prosedur', value: '1' },
+      { nama: 'Konsul Dokter', value: '2' }
     ],
     diagnosaAwals: [],
     ppkRujukans: [],
@@ -116,7 +123,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
-        katarak: '0'
+        katarak: '0',
+        jnspelayanan: 2
       }
       this.display = {
         diagnosa: {},
@@ -188,11 +196,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         this.getProsedur()
       }
 
-      if (this.autocompleteStore.assesmens.length) {
-        this.assesmens = this.autocompleteStore.assesmens
-      } else {
-        this.getAssesmen()
-      }
+      // if (this.autocompleteStore.assesmens.length) {
+      //   this.assesmens = this.autocompleteStore.assesmens
+      // } else {
+      //   this.getAssesmen()
+      // }
 
       if (this.autocompleteStore.penunjangs.length) {
         this.penunjangs = this.autocompleteStore.penunjangs
@@ -652,7 +660,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         this.loading = true
         api.post('v1/simrs/simrs/bridgingbpjs/pendaftaran/createsep', this.form)
           .then(resp => {
-            console.log('simpan pendaftaran', resp)
+            console.log('Response SEP', resp)
             this.loading = false
             resolve(resp.data)
           })
