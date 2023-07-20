@@ -22,7 +22,7 @@
         </q-bar>
       </div>
       <q-card-section
-        v-if="store.loadingListRujukan || store.loadingListRujukanRS"
+        v-if="store.loadingListRujukan || store.loadingListRujukanRS || store.loadingListRujukanMrs"
         style="height: 50vh;"
         class="scroll"
       >
@@ -47,12 +47,17 @@
           <q-tab
             label="Rujukan PCare"
             name="pcare"
-            class="text-purple"
+            class="text-primary"
           />
           <q-tab
             label="Rujukan RS"
             name="rs"
             class="text-orange"
+          />
+          <q-tab
+            label="POST MRS"
+            name="mrs"
+            class="text-accent"
           />
         </q-tabs>
         <q-separator />
@@ -138,6 +143,63 @@
                 >
                   <q-item-section avatar>
                     <q-avatar
+                      color="orange"
+                      text-color="white"
+                      size="md"
+                    >
+                      <div class="f-12">
+                        {{ i+1 }}
+                      </div>
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ list.tglKunjungan }}</span></q-item-label>
+                    <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                  </q-item-section>
+
+                  <q-item-section
+                    side
+                  >
+                    <q-btn
+                      dense
+                      no-caps
+                      color="orange"
+                      size="sm"
+                      padding="sm"
+                      flat
+                      @click="pilihRujukanRS(list)"
+                    >
+                      <div class="text-weight-bold">
+                        Pilih Rujukan
+                      </div>
+                    </q-btn>
+                  </q-item-section>
+                </q-item>
+                <q-separator />
+              </q-list>
+            </div>
+          </q-tab-panel>
+
+          <q-tab-panel name="mrs">
+            <!-- <div v-if="!store.listRujukanRs.length">
+              <app-no-data-small
+                style="height: 50vh;"
+              />
+            </div>
+            <div
+              v-else
+              style="height: 50vh;"
+              class="scroll"
+            >
+              <q-list separator>
+                <q-item
+                  v-for="(list,i) in store.listRujukanRs"
+                  :key="i"
+                  v-ripple
+                  clickable
+                >
+                  <q-item-section avatar>
+                    <q-avatar
                       color="primary"
                       text-color="white"
                       size="md"
@@ -170,7 +232,7 @@
                 </q-item>
                 <q-separator />
               </q-list>
-            </div>
+            </div> -->
           </q-tab-panel>
         </q-tab-panels>
       </div>
