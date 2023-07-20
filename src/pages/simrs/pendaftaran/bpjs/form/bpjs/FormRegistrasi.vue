@@ -87,10 +87,11 @@
                 />
               </div> -->
             </div>
-            <div>
-              <!-- v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
+            <div
+              v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
                 ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))" -->
+                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+            >
               <!-- Jenis Kunjungan -->
               <div class="row q-col-gutter-sm items-center q-mb-xs">
                 <div class="col-12">
@@ -623,6 +624,18 @@
                   />
                 </div>
               </div>
+              <!-- keterangan -->
+              <div class="row q-col-gutter-md items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input
+                    ref="refKeterangan"
+                    v-model="store.form.keterangan"
+                    label="Keterangan"
+                    valid
+                    :filled="false"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -635,6 +648,7 @@ import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { date } from 'quasar'
 
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienBPJSStore()
@@ -739,6 +753,14 @@ function setFlagKarcis(val) {
 function setKecelakaan(val) {
   console.log('kecelakaan ', val)
   store.setForm('lakalantas', val)
+  if (parseInt(val) >= 1) {
+    store.setForm('tglKecelakaan', date.formatDate(Date.now(), 'DD MMMM YYYY'))
+    store.tanggal.kecelakaan = date.formatDate(Date.now(), 'DD MMMM YYYY')
+  } else {
+    (
+      delete store.form.tglKecelakaan
+    )
+  }
   store.getPropinsiKecelakaan()
 }
 function setPropisiKecelakaan(val) {
@@ -748,7 +770,6 @@ function setPropisiKecelakaan(val) {
   if (index >= 0) {
     store.form.propinsikecelakaan = store.propinsies[index].nama
     store.form.kodepropinsikecelakaan = val
-    store.form.kdpropinsi = val
     store.getKabupatenKecelakaan()
   } else {
     notifErrVue('Propinsi tidak ditemukan')
@@ -761,7 +782,6 @@ function setKabupatenKecelakaan(val) {
   if (index >= 0) {
     store.form.kabupatenkecelakaan = store.kabupatens[index].nama
     store.form.kodekabupatenkecelakaan = val
-    store.form.kecelakaandkabupaten = val
     store.getKecamatanKecelakaan()
   } else {
     notifErrVue('kabupaten tidak ditemukan')
@@ -774,7 +794,6 @@ function setKecamatanKecelakaan(val) {
   if (index >= 0) {
     store.form.kecamatankecelakaan = store.kecamatans[index].nama
     store.form.kodekecamatankecelakaan = val
-    store.form.kdkecamatan = val
     console.log('form', store.form)
   } else {
     notifErrVue('Kecamatan tidak ditemukan')

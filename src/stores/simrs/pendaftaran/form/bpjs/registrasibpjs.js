@@ -17,7 +17,6 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     form: {
       tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglrujukan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tglKecelakaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'),
       katarak: '0',
       jnspelayanan: 2
@@ -98,14 +97,14 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     loadingSuratKontrol: false,
     loadingRencanaKontrol: false,
     kecelakaans: [
-      { value: 0, nama: 'Bukan Kecelakaan Lalu Lintas [BKLL]' },
-      { value: 1, nama: 'KLL dan Bukan Kecelakaan Kerja [BKK]' },
-      { value: 2, nama: 'KLL dan KK' },
-      { value: 3, nama: 'KK' }
+      { value: '0', nama: 'Bukan Kecelakaan Lalu Lintas [BKLL]' },
+      { value: '1', nama: 'KLL dan Bukan Kecelakaan Kerja [BKK]' },
+      { value: '2', nama: 'KLL dan KK' },
+      { value: '3', nama: 'KK' }
     ],
     optionSuplesi: [
-      { value: 1, nama: 'Ya' },
-      { value: 0, nama: 'Tidak' }
+      { value: '1', nama: 'Ya' },
+      { value: '0', nama: 'Tidak' }
     ],
     loadingKecelakaan: false,
 
@@ -658,7 +657,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     buatSep() {
       return new Promise(resolve => {
         this.loading = true
-        api.post('v1/simrs/simrs/bridgingbpjs/pendaftaran/createsep', this.form)
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/createsep', this.form)
           .then(resp => {
             console.log('Response SEP', resp)
             this.loading = false
