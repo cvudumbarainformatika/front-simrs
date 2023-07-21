@@ -55,9 +55,15 @@
                 />
               </div> -->
             </div>
+            <!-- {{ (store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0) }}
+            {{ store.jumlahSEP >= 1 }}
+            {{ !!store.form.norujukan }}
+            {{ !store.form.norujukan }}
+            {{ store.jumlahSEP === 0 }} -->
             <!-- No Surat kontrol -->
+            <!-- v-if="store.jumlahSEP >= 1 || !store.form.norujukan" -->
             <div
-              v-if="store.jumlahSEP >= 1"
+              v-if="(store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0)"
               class="row q-col-gutter-sm items-center q-mb-xs"
             >
               <div class="col-12">
@@ -75,7 +81,7 @@
                     val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
-                  @keyup.enter="cekSuratKontrolIni(store.form.nosuratkontrol)"
+                  @keyup.enter="cekSuratKontrolIni($event)"
                 />
               </div>
               <!-- <div class="col-3">
@@ -120,12 +126,11 @@
                     autocomplete="asalrujukan"
                     option-value="kode"
                     option-label="asalrujukan"
-                    valid
+                    :rules="[val => (!!val) || 'Harap diisi',]"
                     :filled="false"
                     :source="store.asalrujukans"
                     :loading="store.loading"
                   />
-                  <!-- :rules="[val => (!!val) || 'Harap diisi',]" -->
                 </div>
               </div>
               <!-- poli tujuan -->
@@ -683,15 +688,53 @@ function listSuratRujukan() {
   store.rujukanPCareChecked = true
   store.rujukanRSChecked = true
 }
-function cekSuratKontrolIni(val) {
-  if (!store.suratKontrolChecked) {
-    const param = {
-      search: val
-    }
-    store.cekSuratKontrol(param).then(resp => {
-      console.log('cek surat kontrol ', resp)
-    })
+// cek surat kontrol
+function cekSuratKontrolIni(evt) {
+  const val = evt.target.value
+  console.log('cek surat kontol ini')
+  // if (!store.suratKontrolChecked) {
+  const param = {
+    search: val
   }
+  store.cekSuratKontrol(param).then(resp => {
+    console.log('cek surat kontrol ', resp)
+    if (resp.metadata.code === '200') {
+      assignSuratKontrol(resp.result)
+    }
+  })
+  // }
+}
+// assign surat kontrol ke form
+function assignSuratKontrol(val) {
+  console.log('assign surat kontrol ', val)
+  const findpoli = val.poliTujuan ? val.poliTujuan : ''
+  const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
+  const poli = indPoli >= 0 ? store.polis[indPoli] : false
+  store.dpjpSuratKontrol = val.kodeDokter
+  store.form.tglrujukan = val.tglTerbit
+
+  store.paramKarcis.flag = 'Kartu Lama'
+  store.form.jeniskarcis = 'Kartu Lama'
+  store.setForm('id_kunjungan', 3)
+  store.setForm('jenis_kunjungan', 'Kontrol')
+  setJenisKunjungan(val.namaJnsKontrol)
+  const idexKun = findWithAttr(store.jenisKunjungans, 'id', 3)
+  store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
+  if (poli) setPoliTujuan(store.polis[indPoli].kodepoli)
+
+  const diag = val.sep.diagnosa.split('-')
+  console.log(diag)
+  // if (diag.length) {
+  store.paramDiagnosa.diagnosa = diag[0]
+  store.getDiagnosaAwal().then(() => {
+    // if (diag.length === 1) {
+    setNamaDiagnosa(val.sep.diagnosa)
+    // } else {
+    // }
+    // setKodeDiagnosa(diag[0])
+  })
+  setSistembayar1('1')
+  // }
 }
 function cekSuratRujukanIni(evt) {
   // console.log(evt.target.value)
@@ -1106,8 +1149,15 @@ function set() {
 }
 
 function validasiSuratKontrol() {
-  refNoSuratKontrol.value.$refs.refInput.validate()
+  if (refNoSuratKontrol.value) refNoSuratKontrol.value.$refs.refInput.validate()
 }
 // expose function
-defineExpose({ resetValidation, validasiSuratKontrol, set, setPoliTujuan, setJenisKunjungan })
+defineExpose({
+  resetValidation,
+  validasiSuratKontrol,
+  set,
+  setPoliTujuan,
+  setJenisKunjungan,
+  assignSuratKontrol
+})
 </script>

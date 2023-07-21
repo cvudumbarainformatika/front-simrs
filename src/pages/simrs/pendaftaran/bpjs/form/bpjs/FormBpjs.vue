@@ -48,6 +48,7 @@
       @kode-poli="setKodepoli"
       @validasi-surat-kontrol="validasiSuratKontrol"
       @jenis-kunjungan="jenisKunjungan"
+      @assign-surat="assignSurat"
     />
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
@@ -75,11 +76,12 @@ const style = useStyledStore()
 function clearFormRegistrasi() {
   registrasi.clearForm()
 }
-
+function assignSurat(val) {
+  refRegistrasi.value.assignSuratKontrol(val)
+}
 function buatSEP() {
   const dataPasien = refDataPasien.value.set()
   refRegistrasi.value.set()
-  refDataPasien.value.cekBpjs()
   // console.log('pasien', dataPasien,
   //   'regis', dataRegis
   // )
@@ -102,7 +104,7 @@ function simpanData() {
   // refRegistrasi.value.set()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
-  refDataPasien.value.cekBpjs()
+  // refDataPasien.value.cekBpjs()
   console.log('pasien', dataPasien,
     'regis', dataRegis
   )

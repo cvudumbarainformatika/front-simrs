@@ -165,14 +165,17 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         lakalantas: '0',
         kodepolibpjs: '',
         catatan: '',
-        kdUnit: ''
+        kdUnit: '',
+        jkn: 'JKN'
       }
       this.display = {
         diagnosa: {},
         prosedur: {},
         assesment: {},
         penunjang: {},
-        bayar: {},
+        bayar: {
+          kode: '1'
+        },
         tanggal: {
           sep: date.formatDate(Date.now(), 'DD MMMM YYYY'),
           rujukan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -514,18 +517,21 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loading = false
         })
     },
-    async getDiagnosaAwal() {
+    getDiagnosaAwal() {
       this.loadingdiagnosa = true
       // const param = { params: this.paramDiagnosa }
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/diagnosabybpjs', this.paramDiagnosa)
-        .then(resp => {
-          this.loadingdiagnosa = false
-          this.diagnosaAwals = resp.data.result.diagnosa
-          console.log('dignosa awal', resp.data.result)
-        })
-        .catch(() => {
-          this.loadingdiagnosa = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/diagnosabybpjs', this.paramDiagnosa)
+          .then(resp => {
+            this.loadingdiagnosa = false
+            this.diagnosaAwals = resp.data.result.diagnosa
+            console.log('dignosa awal', resp.data.result)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingdiagnosa = false
+          })
+      })
     },
     async getJenisKarcis() {
       this.loading = true
@@ -605,7 +611,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           .then(resp => {
             this.loadingCekBpjs = false
             // this.asalrujukans = resp.data
-            // console.log('jumlah sep', resp.data)
+            console.log('jumlah sep', resp.data)
             this.jumlahSEP = parseInt(resp.data.result.jumlahSEP) >= 0 ? parseInt(resp.data.result.jumlahSEP) : 0
             if (resp.data.metadata.code !== '200') {
               notifErrVue('cek jumlah sep : ' + resp.data.metadata.message)
@@ -664,13 +670,29 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       return new Promise(resolve => {
         api.get('/v1/anjungan/cari-rencana-kontrol', params)
           .then(resp => {
-            this.loadingCekBpjs = false
             console.log('surat kontrol resp', resp.data)
             const rujukan = resp.data.result.sep.provPerujuk.noRujukan
             console.log('surat kontrol rujukan', rujukan)
             if (!this.form.norujukan) {
               console.log('tidak ada nomor rujukan')
+              if (rujukan) {
+                const param = {
+                  jenisrujukan: resp.data.result.sep.provPerujuk.asalRujukan,
+                  norujukan: rujukan
+
+                }
+                this.getJumlahSep(param).then(resp => {
+                  this.loadingCekBpjs = false
+                  console.log('jumlah sep', resp)
+                  // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+                  this.form.norujukan = rujukan
+                  this.rencanaKontrolValid = true
+                })
+              } else {
+                notifErrVue('Nomor Rujukan tidak ditemukan')
+              }
             } else {
+              this.loadingCekBpjs = false
               if (rujukan) {
                 if (rujukan !== this.form.norujukan) {
                   notifErrVue('Nomor Rujukan tidak sama')
@@ -697,6 +719,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
           .then(resp => {
             console.log('simpan pendaftaran', resp)
+            this.setForm('noreg', resp.data.noreg)
+            console.log('after simpan ', this.form.noreg)
             this.loading = false
             resolve(resp.data)
           })

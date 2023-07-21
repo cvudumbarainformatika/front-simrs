@@ -352,7 +352,8 @@ const store = useRegistrasiPasienBPJSStore()
 const emits = defineEmits([
   'kodePoli',
   'validasiSuratKontrol',
-  'jenisKunjungan'
+  'jenisKunjungan',
+  'assignSurat'
 ])
 // surat kontrol
 
@@ -409,6 +410,10 @@ function pilihRencanaKontrol(val) {
   }
   store.cekSuratKontrol(param).then(resp => {
     console.log('cek surat kontrol ', resp)
+    if (resp.metadata.code === '200') {
+      // assignSuratKontrol(resp.result)
+      emits('assignSurat', resp.result)
+    }
     emits('validasiSuratKontrol')
   })
 
