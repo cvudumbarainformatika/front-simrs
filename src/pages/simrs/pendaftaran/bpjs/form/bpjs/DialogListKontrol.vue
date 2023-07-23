@@ -343,7 +343,7 @@
 <script setup>
 
 import { dateFullFormat } from 'src/modules/formatter'
-import { findWithAttr } from 'src/modules/utils'
+// import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { ref } from 'vue'
 
@@ -398,12 +398,11 @@ const emits = defineEmits([
 // eslint-disable-next-line no-unused-vars
 function pilihRencanaKontrol(val) {
   store.form.nosuratkontrol = val.noSuratKontrol
-  const findpoli = val.poliTujuan ? val.poliTujuan : ''
-  const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
-  const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  store.dpjpSuratKontrol = val.kodeDokter
-  store.form.tglsep = val.tglSEP
-  store.form.tglrujukan = val.tglTerbitKontrol
+  // const findpoli = val.poliTujuan ? val.poliTujuan : ''
+  // const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
+  // const poli = indPoli >= 0 ? store.polis[indPoli] : false
+  // store.dpjpSuratKontrol = val.kodeDokter
+  // store.form.tglrujukan = val.tglTerbitKontrol
 
   const param = {
     search: val.noSuratKontrol
@@ -417,14 +416,14 @@ function pilihRencanaKontrol(val) {
     emits('validasiSuratKontrol')
   })
 
-  store.setForm('id_kunjungan', 3)
-  store.setForm('jenis_kunjungan', 'Kontrol')
-  const idexKun = findWithAttr(store.jenisKunjungans, 'id', 3)
-  store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
-  emits('jenisKunjungan', store.jenisKunjungans[idexKun].nilai)
-  if (poli) emits('kodePoli', store.polis[indPoli].kodepoli)
+  // store.setForm('id_kunjungan', 3)
+  // store.setForm('jenis_kunjungan', 'Kontrol')
+  // const idexKun = findWithAttr(store.jenisKunjungans, 'id', 3)
+  // store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
+  // emits('jenisKunjungan', store.jenisKunjungans[idexKun].nilai)
+  // if (poli) emits('kodePoli', store.polis[indPoli].kodepoli)
 
   store.tampilKontrol = false
-  console.log(' rencana kontrol ', val, poli, store.form)
+  // console.log(' rencana kontrol ', val, poli, store.form)
 }
 </script>

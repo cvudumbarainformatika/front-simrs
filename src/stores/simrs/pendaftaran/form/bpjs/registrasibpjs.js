@@ -57,12 +57,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     polis: [],
     jenisKarcises: [],
     jenisKunjungans: [],
-    prosedurs: [],
+    prosedurs: [
+      { id: 0, kode: '', procedure: '' },
+      { id: 1, kode: '0', procedure: 'Prosedur Tidak Berkelanjutan' },
+      { id: 2, kode: '1', procedure: 'Prosedur dan Terapi Berkelanjutan' }
+    ],
     assesmens: [
+      { id: 0, kode: '', assesmentpel: '' },
       { id: 1, kode: '1', assesmentpel: 'Poli spesialis tidak tersedia pada hari sebelumnya' },
       { id: 2, kode: '2', assesmentpel: 'Jam Poli telah berakhir pada hari sebelumnya' },
       { id: 3, kode: '3', assesmentpel: 'Dokter Spesialis yang dimaksud tidak praktek pada hari sebelumnya' },
-      { id: 4, kode: '4', assesmentpel: 'Atas Instruksi RS' }
+      { id: 4, kode: '4', assesmentpel: 'Atas Instruksi RS' },
+      { id: 5, kode: '5', assesmentpel: 'Tujuan Kontrol' }
     ],
     penunjangs: [],
     ///
@@ -115,7 +121,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       jnspelayanan: '2',
       dpjp: '',
       nosuratkontrol: '',
-      assesmenPel: '',
+      assesmentPel: '',
       kdPenunjang: '',
       flagprocedure: '',
       namadokter: '',
@@ -237,11 +243,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         this.getJenisKunjungan()
       }
 
-      if (this.autocompleteStore.prosedurs.length) {
-        this.prosedurs = this.autocompleteStore.prosedurs
-      } else {
-        this.getProsedur()
-      }
+      // if (this.autocompleteStore.prosedurs.length) {
+      //   this.prosedurs = this.autocompleteStore.prosedurs
+      // } else {
+      //   this.getProsedur()
+      // }
 
       // if (this.autocompleteStore.assesmens.length) {
       //   this.assesmens = this.autocompleteStore.assesmens
@@ -732,8 +738,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         this.loading = true
         api.post('v1/simrs/bridgingbpjs/pendaftaran/createsep', this.form)
           .then(resp => {
-            console.log('Response SEP', resp)
+            console.log('Response SEP', resp.data)
             this.loading = false
+            if (resp.data.metaData.code === '201') {
+              notifErrVue(resp.data.metaData.message)
+            }
             resolve(resp.data)
           })
           .catch(() => { this.loading = false })

@@ -279,7 +279,7 @@
               </div>
               <!-- Tujuan Prosedur -->
               <div
-                v-if="store.form.tujuankunjungan==='1'"
+                v-if="store.form.tujuankunjungan!==''"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -291,17 +291,18 @@
                     option-value="kode"
                     option-label="procedure"
                     :filled="false"
+                    valid
                     :source="store.prosedurs"
                     :loading="store.loading"
-                    :rules="[val => (!!val) || 'Harap diisi',]"
                     @selected="setProsedur"
                   />
+                  <!-- :rules="[val => (!!val) || 'Harap diisi',]" -->
                 </div>
               </div>
               <!-- Assesment pelayanan -->
               <!-- v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuankunjungan===2) || store.display.jeniskunjungan==='Rujukan Internal'" -->
               <div
-                v-if="store.form.tujuankunjungan!=='1'"
+                v-if="store.form.tujuankunjungan!==''"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -312,12 +313,13 @@
                     autocomplete="assesmentpel"
                     option-value="kode"
                     option-label="assesmentpel"
+                    valid
                     :filled="false"
                     :source="store.assesmens"
                     :loading="store.loading"
-                    :rules="[val => (!!val) || 'Harap diisi',]"
                     @selected="setAssesmentPelayanan"
                   />
+                  <!-- :rules="[val => (!!val) || 'Harap diisi',]" -->
                 </div>
               </div>
               <!-- Penunjang -->
@@ -402,7 +404,6 @@
                   :filled="false"
                   :source="store.sistembayars1"
                   :loading="store.loadingsistembayar"
-
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="setSistembayar1"
                 />
@@ -707,34 +708,44 @@ function cekSuratKontrolIni(evt) {
 // assign surat kontrol ke form
 function assignSuratKontrol(val) {
   console.log('assign surat kontrol ', val)
+
   const findpoli = val.poliTujuan ? val.poliTujuan : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  store.dpjpSuratKontrol = val.kodeDokter
-  store.form.tglrujukan = val.tglTerbit
-
   store.paramKarcis.flag = 'Kartu Lama'
   store.form.jeniskarcis = 'Kartu Lama'
-  store.setForm('id_kunjungan', 3)
-  store.setForm('jenis_kunjungan', 'Kontrol')
-  setJenisKunjungan(val.namaJnsKontrol)
-  const idexKun = findWithAttr(store.jenisKunjungans, 'id', 3)
-  store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
   if (poli) setPoliTujuan(store.polis[indPoli].kodepoli)
+
+  store.dpjpSuratKontrol = val.kodeDokter
+  store.setForm('asalRujukan', val.sep.provPerujuk.asalRujukan)
+  const indexPPK = findWithAttr(store.ppkRujukans, 'kode', val.sep.provPerujuk.kdProviderPerujuk)
+  if (indexPPK < 0) {
+    const pkrujukan = {
+      nama: val.sep.provPerujuk.nmProviderPerujuk,
+      kode: val.sep.provPerujuk.kdProviderPerujuk
+    }
+    store.ppkRujukans.push(pkrujukan)
+  }
+  setPpkRujukan(val.sep.provPerujuk.kdProviderPerujuk)
+
+  setTglRujukan(val.sep.provPerujuk.tglRujukan)
+
+  setDispTglRujukan(date.formatDate(val.sep.provPerujuk.tglRujukan, 'DD MMMM YYYY'))
+
+  setJenisKunjungan(val.namaJnsKontrol)
+  store.display.jeniskunjungan = val.namaJnsKontrol
+
+  setSistembayar1('1')
+  store.display.bayar.kode = '1'
+
+  store.setForm('asalrujukan', 'AR9999')
 
   const diag = val.sep.diagnosa.split('-')
   console.log(diag)
-  // if (diag.length) {
   store.paramDiagnosa.diagnosa = diag[0]
   store.getDiagnosaAwal().then(() => {
-    // if (diag.length === 1) {
     setNamaDiagnosa(val.sep.diagnosa)
-    // } else {
-    // }
-    // setKodeDiagnosa(diag[0])
   })
-  setSistembayar1('1')
-  // }
 }
 function cekSuratRujukanIni(evt) {
   // console.log(evt.target.value)
@@ -1048,29 +1059,32 @@ function setJenisKunjungan(val) {
     store.display.assesment.kode = '4'
   }
   if (val === 'Kontrol') {
-    store.display.prosedur.kode = ''
-    store.setForm('flagprocedure', '')
-    store.setForm('kdPenunjang', '')
-    store.setForm('tujuankunjungan', '0')
-    store.display.tujuankunjungan = '0'
-    store.setForm('assesmentPel', '4')
-    store.display.assesment.kode = '4'
+    store.setForm('flagprocedure', '0')
+    store.display.prosedur.kode = '0'
+    store.setForm('kdPenunjang', '10')
+    store.display.penunjang.kode = '10'
+    store.setForm('tujuankunjungan', '1')
+    store.display.tujuankunjungan = '1'
+    store.setForm('assesmentPel', '')
+    store.display.assesment.kode = ''
   }
 }
 // tujuan kunjungan
 function setTujuanKunjungan(val) {
   console.log('tujuan kunjungan', val)
   store.setForm('tujuankunjungan', val)
+  store.setForm('kdPenunjang', '')
+  store.display.penunjang.kode = ''
 }
 // prosedur
 function setProsedur(val) {
   store.setForm('flagprocedure', val)
-  if (val === 1) {
-    store.setForm('assesmentPel', '5')
-    store.display.assesment.kode = '5'
-  } else {
-    delete store.form.assesmentPel
-  }
+  // if (val === '1') {
+  //   store.setForm('assesmentPel', '5')
+  //   store.display.assesment.kode = '5'
+  // } else {
+  //   delete store.form.assesmentPel
+  // }
 }
 // assesment
 function setAssesmentPelayanan(val) {

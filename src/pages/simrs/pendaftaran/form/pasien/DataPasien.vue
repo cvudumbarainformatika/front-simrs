@@ -1301,7 +1301,8 @@ function cekBpjsbyNik() {
     const form = { nik: store.form.nik, tglsep: props.tglsep }
     store.cekPesertaByNik(form).then(resp => {
       store.alert = true
-      store.alertMsg = resp.data.result
+      // store.alertMsg = resp.data.result
+      store.alertMsg = resp
     })
   } else {
     notifErrVue('Nomor KTP Kosong')
@@ -1312,7 +1313,8 @@ function cekBpjsByNoka() {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
     store.cekPesertaByNoka(form).then(resp => {
       store.alert = true
-      store.alertMsg = resp.data.result
+      // store.alertMsg = resp.data.result
+      store.alertMsg = resp
     })
   } else {
     notifErrVue('Nomor BPJS Kosong')
