@@ -131,4 +131,8 @@ defineProps({ editableMaster: { type: Boolean, default: false } })
     border-right: 1px solid black;
   }
 }
+
+// .pt12 {
+//   font-size: 12pt !important;
+// }
 </style>
