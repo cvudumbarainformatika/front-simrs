@@ -1246,6 +1246,7 @@
         </div>
         <div v-if="store.alertMsg.kode&&(store.alertMsg.kode!=='' && store.alertMsg.status!=='')">
           <app-no-selected-page
+            class="q-mx-md"
             color="primary"
             :icon="store.alertMsg.kode==='1'?'icon-mat-done':'icon-mat-report'"
             :text="store.alertMsg.status"

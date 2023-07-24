@@ -480,8 +480,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       await api.get('v1/simrs/bpjs/master/penunjangbpjs')
         .then(resp => {
           this.loading = false
-          this.penunjangs = resp.data
-          this.autocompleteStore.setPenunjang(resp.data)
+          const data = resp.data
+          const tamb = { id: 0, kode: '', namapenunjang: 'penunjang belum dipilih' }
+          data.unshift(tamb)
+          this.penunjangs = data
+          this.autocompleteStore.setPenunjang(data)
         })
         .catch(() => {
           this.loading = false
