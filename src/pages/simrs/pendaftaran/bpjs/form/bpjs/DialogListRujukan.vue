@@ -103,6 +103,7 @@
                   <q-item-section>
                     <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-teal">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
                   </q-item-section>
 
                   <q-item-section
@@ -162,6 +163,7 @@
                   <q-item-section>
                     <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
+                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-teal">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
                   </q-item-section>
 
                   <q-item-section

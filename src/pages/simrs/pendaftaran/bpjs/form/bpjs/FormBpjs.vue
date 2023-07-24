@@ -155,7 +155,6 @@ function getListSuratKontrol() {
 function cekSuplesi() {
   const data = refDataPasien.value.validateNoka()
   if (data) {
-    data.tglsep = registrasi.form.tglKecelakaan
     console.log('noka', data)
     registrasi.getListSuplesi(data)
   }
