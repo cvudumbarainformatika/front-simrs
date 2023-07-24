@@ -1,3 +1,5 @@
+import { api } from 'src/boot/axios'
+import { notifSuccessVue } from 'src/modules/utils'
 import { onMounted, ref } from 'vue'
 
 export function useContent() {
@@ -5,22 +7,45 @@ export function useContent() {
   const pasien = ref({})
   const petugas = ref({})
   const isi = ref('What you see is <b>what</b> you get.')
+  const defaultForm = ref('..........................')
 
-  function changeIsi() {
-    alert('kirim isi ke database')
+  async function changeIsi(kelompok) {
+    const params = {
+      kelompok,
+      pernyataan: isi.value
+    }
+    await api.post('v1/simrs/pendaftaran/generalconscent/simpanmaster', params)
+      .then(resp => {
+        console.log(resp)
+        notifSuccessVue('Data Sukses tersimpan')
+      })
+  }
+
+  async function getDataIrja() {
+    const params = {
+      params: {
+        kelompok: 'irja'
+      }
+    }
+
+    await api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent', params)
+      .then(resp => {
+        console.log(resp)
+        if (resp.status === 200) {
+          isi.value = resp.data[0].pernyataan
+        }
+      })
   }
 
   onMounted(() => {
-    items.value = [
-      { value: 'Saya sudah mendapat informasi tentang <b>hak dan kewajiban </b> pasien dan juga peraturan yang berlaku di RSUD Dr.Mohamad Saleh seperti yang ada didalam lampiran persetujuan umum ini yang diberikan oleh petugas Penerimaan pasien (TPP) dan saya sudah memahaminya, menerimanya dan menyetujuinya.' },
-      { value: 'Saya sudah mendapat informasi tentang hak dan kewajiban pasien dan juga peraturan yang berlaku di RSUD Dr.Mohamad Saleh seperti yang ada didalam lampiran persetujuan umum ini yang diberikan oleh petugas Penerimaan pasien (TPP) dan saya sudah memahaminya, menerimanya dan menyetujuinya.' }
-    ]
+    getDataIrja()
   })
   return {
     items,
     pasien,
     petugas,
     isi,
+    defaultForm,
     changeIsi
   }
 }

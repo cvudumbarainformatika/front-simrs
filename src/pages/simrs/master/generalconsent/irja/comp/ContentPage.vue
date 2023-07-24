@@ -17,10 +17,10 @@
               <div>Hubungan dengan Pasien</div>
             </div>
             <div class="col-grow">
-              <div>: {{ pasien.nama? pasien.nama:'-' }}</div>
-              <div>: {{ pasien.nama? pasien.alamat:'-' }}</div>
-              <div>: {{ pasien.nohp?pasien.nohap:'-' }}</div>
-              <div>: {{ pasien.hub?pasien.hub:'-' }}</div>
+              <div>: {{ pasien.nama? pasien.nama:defaultForm }}</div>
+              <div>: {{ pasien.nama? pasien.alamat:defaultForm }}</div>
+              <div>: {{ pasien.nohp?pasien.nohap:defaultForm }}</div>
+              <div>: {{ pasien.hub?pasien.hub:defaultForm }}</div>
             </div>
           </div>
         </div>
@@ -30,11 +30,14 @@
             v-html="isi"
           />
           <q-popup-edit
+            v-if="editableMaster"
             v-model="isi"
           >
             <q-editor
               v-model="isi"
               min-height="5rem"
+              paragraph-tag="div"
+              placeholder="Silahkan Ketik disini .."
               :definitions="{
                 save: {
                   tip: 'Save your work',
@@ -89,12 +92,13 @@
 
 <script setup>
 import { useContent } from './content'
-const { isi, pasien, changeIsi } = useContent()
+const { isi, pasien, defaultForm, changeIsi } = useContent()
 
 const saveWork = () => {
-  console.log('ok', isi.value)
-  changeIsi()
+  changeIsi('irja')
 }
+
+defineProps({ editableMaster: { type: Boolean, default: false } })
 </script>
 
 <style lang="scss" scoped>

@@ -21,7 +21,7 @@
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
-        <ContentPage />
+        <ContentPage :editable-master="true" />
       </q-scroll-area>
     </q-card>
   </q-page>

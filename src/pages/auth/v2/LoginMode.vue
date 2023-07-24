@@ -92,7 +92,7 @@ const routeForm = ref(route.params.mode === 'login-yang-menyusahkan')
 const routeQr = ref(route.params.mode === 'qr')
 
 const img = computed(() => {
-  return new URL('../../../assets/images/Xenter.svg', import.meta.url).href
+  return new URL('../../../assets/images/Xenter_fix.svg', import.meta.url).href
 })
 
 onMounted(() => {
