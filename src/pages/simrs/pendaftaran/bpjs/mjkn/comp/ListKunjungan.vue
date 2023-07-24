@@ -91,7 +91,7 @@
                   <q-badge
                     outline
                     :color="item.noreg?'teal':'negative'"
-                    :label="item.noreg?'Sudah di poli':'Kirim ke Poli'"
+                    :label="item.noreg?'Sudah di poli':'Daftarkan Pasien'"
                   />
                 </div>
                 <div
@@ -103,7 +103,7 @@
                     outline
                     size="sm"
                     :color="item.noreg?'teal':'negative'"
-                    :label="item.noreg?'Sudah di poli':'Kirim ke Poli'"
+                    :label="item.noreg?'Sudah di poli':'Daftarkan Pasien'"
                   />
                 </div>
               </div>

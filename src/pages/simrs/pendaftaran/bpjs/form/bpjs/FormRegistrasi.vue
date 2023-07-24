@@ -279,7 +279,7 @@
               </div>
               <!-- Tujuan Prosedur -->
               <div
-                v-if="store.form.tujuankunjungan!==''"
+                v-if="store.form.tujuankunjungan!=='0'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -302,7 +302,7 @@
               <!-- Assesment pelayanan -->
               <!-- v-if="(store.display.jeniskunjungan==='Kontrol' && store.form.tujuankunjungan===2) || store.display.jeniskunjungan==='Rujukan Internal'" -->
               <div
-                v-if="store.form.tujuankunjungan!==''"
+                v-if="store.form.tujuankunjungan!=='1'"
                 class="row q-col-gutter-sm items-center q-mb-xs"
               >
                 <div class="col-12">
@@ -336,12 +336,13 @@
                     autocomplete="namapenunjang"
                     option-value="kode"
                     option-label="namapenunjang"
+                    valid
                     :filled="false"
                     :source="store.penunjangs"
                     :loading="store.loading"
-                    :rules="[val => (!!val) || 'Harap diisi',]"
                     @selected="setPenunjang"
                   />
+                  <!-- :rules="[val => (!!val) || 'Harap diisi',]" -->
                 </div>
               </div>
             </div>
@@ -1041,32 +1042,37 @@ function setJenisKunjungan(val) {
     store.setForm('jenis_kunjungan', val)
   }
   if (val.includes('Rujukan FKTP') || val === 'Rujukan Antar RS') {
-    store.display.tujuankunjungan = '0'
-    store.setForm('tujuankunjungan', '0') // Normal
-    store.setForm('flagprocedure', '')
-    store.setForm('kdPenunjang', '')
-    store.display.prosedur.kode = ''
-    store.setForm('assesmentPel', '4')
-    store.display.assesment.kode = '4'
+    setTujuanKunjungan('0')
+    // store.display.tujuankunjungan = '0'
+    // store.setForm('tujuankunjungan', '0') // Normal
+    // store.setForm('flagprocedure', '')
+    // store.display.prosedur.kode = ''
+    // store.setForm('kdPenunjang', '')
+    // store.display.prosedur.kode = ''
+    // store.setForm('assesmentPel', '')
+    // store.display.assesment.kode = ''
   }
   if (val === 'Rujukan Internal') {
-    store.setForm('tujuankunjungan', '2')
-    store.setForm('flagprocedure', '')
-    store.setForm('kdPenunjang', '')
-    store.display.prosedur.kode = ''
-    store.display.tujuankunjungan = '2'
-    store.setForm('assesmentPel', '4')
-    store.display.assesment.kode = '4'
+    setTujuanKunjungan('2')
+    // store.setForm('tujuankunjungan', '2')
+    // store.display.tujuankunjungan = '2'
+    // store.setForm('kdPenunjang', '')
+    // store.display.penunjang.kode = ''
+    // store.setForm('flagprocedure', '0')
+    // store.display.prosedur.kode = '0'
+    // store.setForm('assesmentPel', '4')
+    // store.display.assesment.kode = '4'
   }
   if (val === 'Kontrol') {
-    store.setForm('flagprocedure', '0')
-    store.display.prosedur.kode = '0'
-    store.setForm('kdPenunjang', '10')
-    store.display.penunjang.kode = '10'
-    store.setForm('tujuankunjungan', '1')
-    store.display.tujuankunjungan = '1'
-    store.setForm('assesmentPel', '')
-    store.display.assesment.kode = ''
+    setTujuanKunjungan('1')
+    // store.setForm('flagprocedure', '0')
+    // store.display.prosedur.kode = '0'
+    // store.setForm('kdPenunjang', '10')
+    // store.display.penunjang.kode = '10'
+    // store.setForm('tujuankunjungan', '1')
+    // store.display.tujuankunjungan = '1'
+    // store.setForm('assesmentPel', '')
+    // store.display.assesment.kode = ''
   }
 }
 // tujuan kunjungan
@@ -1075,6 +1081,28 @@ function setTujuanKunjungan(val) {
   store.setForm('tujuankunjungan', val)
   store.setForm('kdPenunjang', '')
   store.display.penunjang.kode = ''
+  if (val === '0') {
+    store.setForm('flagprocedure', '')
+    store.display.prosedur.kode = ''
+    store.setForm('kdPenunjang', '')
+    store.display.penunjang.kode = ''
+    store.setForm('assesmentPel', '')
+    store.display.assesment.kode = ''
+  } else if (val === '1') {
+    store.setForm('flagprocedure', '0')
+    store.display.prosedur.kode = '0'
+    store.setForm('kdPenunjang', '10')
+    store.display.penunjang.kode = '10'
+    store.setForm('assesmentPel', '')
+    store.display.assesment.kode = ''
+  } else if (val === '2') {
+    store.setForm('flagprocedure', '')
+    store.display.prosedur.kode = ''
+    store.setForm('kdPenunjang', '')
+    store.display.penunjang.kode = ''
+    store.setForm('assesmentPel', '1')
+    store.display.assesment.kode = '1'
+  }
 }
 // prosedur
 function setProsedur(val) {
