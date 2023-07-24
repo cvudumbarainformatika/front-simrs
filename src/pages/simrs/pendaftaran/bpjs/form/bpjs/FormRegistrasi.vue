@@ -1079,6 +1079,7 @@ function setJenisKunjungan(val) {
 function setTujuanKunjungan(val) {
   console.log('tujuan kunjungan', val)
   store.setForm('tujuankunjungan', val)
+  store.display.tujuankunjungan = val
   store.setForm('kdPenunjang', '')
   store.display.penunjang.kode = ''
   if (val === '0') {

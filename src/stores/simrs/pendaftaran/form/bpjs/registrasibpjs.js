@@ -743,8 +743,8 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           .then(resp => {
             console.log('Response SEP', resp.data)
             this.loading = false
-            if (resp.data.metaData.code === '201') {
-              notifErrVue(resp.data.metaData.message)
+            if (resp.data.metadata.code === '201') {
+              notifErrVue(resp.data.metadata.message)
             }
             resolve(resp.data)
           })
