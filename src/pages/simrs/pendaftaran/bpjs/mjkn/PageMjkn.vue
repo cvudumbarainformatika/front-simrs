@@ -48,7 +48,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { findWithAttr } from 'src/modules/utils'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
-import { routerInstance } from 'src/boot/router'
+// import { routerInstance } from 'src/boot/router'
 
 const style = useStyledStore()
 const store = useListBpjsAntrianStore()
@@ -157,10 +157,11 @@ function pilihPasienIni(val, jkn) {
     }
   })
   console.log('pasien terpilih', val, jkn)
-  routerInstance.push({
-    path: '/pendaftaran/bpjs/form',
-    replace: true
-  })
+  // routerInstance.push({
+  //   path: '/pendaftaran/bpjs/form',
+  //   replace: true
+  // })
+  store.setDialog()
 }
 onMounted(() => {
   store.getLists()
