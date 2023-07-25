@@ -1,5 +1,6 @@
 <template>
   <div class="column full-height">
+    <app-loading-bpjs />
     <div
       class="col-auto fixed-top"
       style="z-index:1"
@@ -42,11 +43,13 @@ import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListKunjunganBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/lists'
 import { onMounted, onUnmounted } from 'vue'
+// import { loadingBlock } from 'src/modules/utils'
 
 const style = useStyledStore()
 const store = useListKunjunganBpjsStore()
 
 onMounted(() => {
+  // loadingBlock('show')
   store.getLists()
 })
 

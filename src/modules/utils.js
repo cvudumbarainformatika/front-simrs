@@ -300,6 +300,21 @@ const daysInMonth = (month, year) => {
   return new Date(year, month, 0).getDate()
 }
 
+const loadingBlock = (cond) => {
+  if (cond === 'show') {
+    Loading.show({
+      message: '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong><div class="__dot f-24"></div></div>',
+      boxClass: 'bg-dark text-white box-anyar',
+      html: true,
+      spinner: QSpinnerCube,
+      // spinnerColor: 'yellow',
+      spinnerSize: 50
+    })
+  } else {
+    Loading.hide()
+  }
+}
+
 export {
   daysInMonth,
   notifCenterVue,
@@ -314,5 +329,6 @@ export {
   changeArrayIndex,
   notifNegativeCenterVue,
   removeToken,
-  filterDuplicateArraysInArrays
+  filterDuplicateArraysInArrays,
+  loadingBlock
 }
