@@ -15,12 +15,16 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       tgl: dateDbFormat(new Date())
     },
     loading: false,
-    loadingSend: false
+    loadingSend: false,
+    dialog: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    setDialog() {
+      this.dialog = !this.dialog
+    },
     async getLists() {
       this.loading = true
       const params = { params: this.params }

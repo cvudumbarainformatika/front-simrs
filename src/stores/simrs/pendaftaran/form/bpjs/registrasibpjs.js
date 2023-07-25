@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, loadingBlock, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -724,6 +724,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     simpanRegistrasi() {
       return new Promise(resolve => {
+        loadingBlock('show')
         this.loading = true
         api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
           .then(resp => {
@@ -731,9 +732,13 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.setForm('noreg', resp.data.noreg)
             console.log('after simpan ', this.form.noreg)
             this.loading = false
+            loadingBlock('hide')
             resolve(resp.data)
           })
-          .catch(() => { this.loading = false })
+          .catch(() => {
+            this.loading = false
+            loadingBlock('hide')
+          })
       })
     },
     buatSep() {
@@ -745,6 +750,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.loading = false
             if (resp.data.metadata.code === '201') {
               notifErrVue(resp.data.metadata.message)
+            }
+            if (resp.data.metadata.code === '200') {
+              notifSuccessVue(resp.data.metadata.message)
             }
             resolve(resp.data)
           })

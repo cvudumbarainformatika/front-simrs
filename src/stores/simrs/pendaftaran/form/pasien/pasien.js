@@ -784,6 +784,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             // this.alert = true
             this.setForm('jenispeserta', resp.data.result.peserta.jenisPeserta.keterangan)
             this.setForm('hakkelas', resp.data.result.peserta.hakKelas.kode)
+            this.setForm('kelas', resp.data.result.peserta.hakKelas.keterangan)
             console.log('no telep', this.form.noteleponhp)
             if (!this.form.noteleponhp) this.setForm('noteleponhp', resp.data.result.peserta.mr.noTelepon)
             resolve(resp.data.result)
@@ -805,6 +806,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             this.setForm('jenispeserta', hasil.peserta.jenisPeserta.keterangan)
             // this.setForm('jnspelayanan', hasil.pelayanan.kode)
             this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
+            this.setForm('kelas', hasil.peserta.hakKelas.keterangan)
             console.log('no telep', this.form.noteleponhp)
             if (!this.form.noteleponhp) this.setForm('noteleponhp', resp.data.result.peserta.mr.noTelepon)
             resolve(resp.data.result)
