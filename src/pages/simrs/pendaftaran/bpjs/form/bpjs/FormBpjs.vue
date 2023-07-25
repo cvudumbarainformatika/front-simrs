@@ -42,7 +42,10 @@
         </div>
       </q-card-actions>
     </q-card>
-    <DialogListRujukan v-model="registrasi.tampilRujukan" />
+    <DialogListRujukan
+      v-model="registrasi.tampilRujukan"
+      @kode-poli="setKodepoli"
+    />
     <DialogListKontrol
       v-model="registrasi.tampilKontrol"
       @kode-poli="setKodepoli"

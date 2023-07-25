@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, loadingBlock, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, loadingBlock, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -750,6 +750,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.loading = false
             if (resp.data.metadata.code === '201') {
               notifErrVue(resp.data.metadata.message)
+            }
+            if (resp.data.metadata.code === '200') {
+              notifSuccessVue(resp.data.metadata.message)
             }
             resolve(resp.data)
           })

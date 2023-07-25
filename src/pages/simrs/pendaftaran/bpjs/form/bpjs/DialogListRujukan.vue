@@ -628,6 +628,9 @@ import { ref } from 'vue'
 const tab = ref('pcare')
 const store = useRegistrasiPasienBPJSStore()
 // pilih rujukan p care
+const emits = defineEmits([
+  'kodePoli'
+])
 function pilihRujukan(val, jenis) {
   console.log('karcis', store.jenisKarcises)
   console.log('rujukan p care', val)
@@ -650,7 +653,8 @@ function pilihRujukan(val, jenis) {
       }
     }
     store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
-    store.setForm('kodepoli', store.polis[index].kodepoli)
+    emits('kodePoli', store.polis[index].kodepoli)
+    // store.setForm('kodepoli', store.polis[index].kodepoli)
     store.getDokterDpjp()
   } else {
     notifErrVue('Poli tidak ditemukan')
