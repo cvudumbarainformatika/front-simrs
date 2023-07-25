@@ -25,6 +25,7 @@
                   v-model="store.form.noreg"
                   label="No registrasi"
                   valid
+                  disable
                   :filled="false"
                 />
               </div>

@@ -36,9 +36,90 @@
       />
     </div>
   </div>
+  <app-fullscreen
+    v-model="store.dialog"
+    @close="clearFormRegistrasi"
+  >
+    <template #default>
+      <div>
+        <div
+          class="row items-center justify-between bg-grey q-pa-sm"
+        >
+          <div class="f-14 text-weight-bold">
+            Form Identitas Pasien I.1
+          </div>
+          <div>
+            <q-checkbox
+              v-model="pasien.edit"
+              label="Edit Form "
+              dense
+            />
+          </div>
+        </div>
+        <DataPasien
+          ref="refDataPasien"
+          bpjs
+          :bisa-full="false"
+          :not-edit="false"
+          :nik="regis.form.nik"
+          :noka="regis.form.noka"
+          :tglsep="regis.form.tglsep"
+          @ganti-pasien="clearFormRegistrasi"
+        />
+        <FormRegistrasi
+          ref="refRegistrasi"
+          @get-list-surat-kontrol="getListSuratKontrol"
+          @get-list-rujukan="getListRujukan"
+          @cek-suplesi="cekSuplesi"
+        />
+        <q-card
+          class="full-width q-pb-xl"
+          flat
+        >
+          <q-card-actions>
+            <div class="">
+              <app-btn
+                label="Simpan Form"
+                :loading="loading"
+                :disable="loading"
+                @click="simpanData"
+              />
+
+              <app-btn
+                class="q-ml-xl"
+                label="SEP"
+                :loading="loading"
+                :disable="loading"
+                @click="buatSEP"
+              />
+            </div>
+          </q-card-actions>
+        </q-card>
+        <DialogListRujukan
+          v-model="regis.tampilRujukan"
+          @kode-poli="setKodepoli"
+        />
+        <DialogListKontrol
+          v-model="regis.tampilKontrol"
+          @kode-poli="setKodepoli"
+          @validasi-surat-kontrol="validasiSuratKontrol"
+          @jenis-kunjungan="jenisKunjungan"
+          @assign-surat="assignSurat"
+        />
+        <DialogListSuplesi
+          v-model="regis.tampilSuplesi"
+        />
+      </div>
+    </template>
+  </app-fullscreen>
 </template>
 
 <script setup>
+import DialogListSuplesi from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListSuplesi.vue'
+import DialogListKontrol from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListKontrol.vue'
+import DialogListRujukan from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListRujukan.vue'
+import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
+import FormRegistrasi from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/FormRegistrasi.vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import ListKunjungan from './comp/ListKunjungan.vue'
 import BottomComp from './comp/BottomComp.vue'
@@ -48,12 +129,18 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { findWithAttr } from 'src/modules/utils'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
+import { date, Dialog } from 'quasar'
 // import { routerInstance } from 'src/boot/router'
 
 const style = useStyledStore()
 const store = useListBpjsAntrianStore()
 const pasien = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
+
+const refDataPasien = ref(null)
+const refRegistrasi = ref(null)
+const loading = ref(false)
+
 const Rm = ref('')
 function kirimPoli(val) {
   // val.noreg = ''
@@ -138,6 +225,7 @@ function pilihPasienIni(val, jkn) {
   const param = {
     search: jkn.nomorreferensi
   }
+  store.setDialog()
   regis.cekRujukanPcare(param).then(resp => {
     console.log('yang di P care', resp)
     if (resp.result === 'Tidak ditemukan') {
@@ -146,7 +234,14 @@ function pilihPasienIni(val, jkn) {
         if (resp.result === 'Tidak ditemukan') {
           console.log('mau cek Surat kontrol ')
           regis.cekSuratKontrol(param).then(resp => {
-            console.log('yang Surat kontrol ', resp)
+            // console.log('yang Surat kontrol ', resp)
+            if (resp.metadata.code === '200') {
+              console.log('ada Surat kontrol ', resp.result)
+              console.log('referensi ', jkn.nomorreferensi)
+              regis.setForm('nosuratkontrol', jkn.nomorreferensi)
+              assignSurat(resp.result)
+              validasiSuratKontrol()
+            }
           })
         } else {
           console.log('tidak cek Surat kontrol ')
@@ -161,7 +256,146 @@ function pilihPasienIni(val, jkn) {
   //   path: '/pendaftaran/bpjs/form',
   //   replace: true
   // })
+}
+// pasien
+// registrasi
+function clearFormRegistrasi() {
+  regis.clearForm()
   store.setDialog()
+}
+// cek surat Kontrol
+function getListSuratKontrol() {
+  const data = refDataPasien.value.validateNokaAndNorm()
+  data.bulan = date.formatDate(regis.form.tglsep, 'MM')
+  data.tahun = date.formatDate(regis.form.tglsep, 'YYYY')
+  regis.listSuratKontrols = []
+  regis.listRencanaKontrols = []
+  if (data) {
+    console.log('cek Surat kontrol', data)
+    regis.getListSuratKontrol(data)
+    regis.getListRencanaKontrol(data)
+    regis.tampilKontrol = true
+  }
+}
+
+// cek list rujukan
+function getListRujukan() {
+  console.log('validasi ', refDataPasien.value.validateNokaAndNorm())
+  const data = refDataPasien.value.validateNokaAndNorm()
+
+  regis.listRujukanPcare = []
+  regis.listRujukanRs = []
+  regis.listRujukanSepMrs = []
+  regis.jumlahSEP = 0
+  if (data) {
+    if (Object.keys(data).length) {
+      console.log('cek list rujukan', data)
+      regis.getListRujukanPCare(data)
+      regis.getListRujukanRs(data)
+      regis.getListSepMrs(data)
+      regis.tampilRujukan = true
+    }
+  }
+}
+
+// cek supplesi
+function cekSuplesi() {
+  const data = refDataPasien.value.validateNoka()
+  if (data) {
+    console.log('noka', data)
+    regis.getListSuplesi(data)
+  }
+}
+
+// setkodePoli
+function setKodepoli(val) {
+  console.log('poli ditemukan', val, refRegistrasi.value)
+  regis.form.kodepoli = val
+  refRegistrasi.value.setPoliTujuan(val)
+}
+
+// validasi surat kontrol
+function validasiSuratKontrol() {
+  console.log('validasi surat kontrol')
+  refRegistrasi.value.validasiSuratKontrol()
+}
+
+// jenis konjungan
+function jenisKunjungan(val) {
+  console.log('jenis kunjungan ', val)
+  refRegistrasi.value.setJenisKunjungan(val)
+}
+
+// assign surat kontrol
+function assignSurat(val) {
+  refRegistrasi.value.assignSuratKontrol(val)
+}
+function buatSEP() {
+  const dataPasien = refDataPasien.value.set()
+  refRegistrasi.value.set()
+  // console.log('pasien', dataPasien,
+  //   'regis', dataRegis
+  // )
+  const keys = Object.keys(dataPasien.form)
+  if (keys.length) {
+    keys.forEach(key => {
+      regis.setForm(key, dataPasien.form[key])
+    })
+  }
+  console.log('form registrasi ', regis.form)
+  regis.buatSep().then(resp => {
+    console.log('resp bpjs', resp)
+    // dialogCetak()
+  })
+  // if (dataPasien.save && dataRegis.save) {
+  // }
+}
+function simpanData() {
+  // refDataPasien.value.set()
+  // refRegis.value.set()
+  const dataPasien = refDataPasien.value.set()
+  const dataRegis = refRegistrasi.value.set()
+  // refDataPasien.value.cekBpjs()
+  console.log('pasien', dataPasien,
+    'regis', dataRegis
+  )
+  if (dataPasien.save && dataRegis.save) {
+    const keys = Object.keys(dataPasien.form)
+    if (keys.length) {
+      keys.forEach(key => {
+        regis.setForm(key, dataPasien.form[key])
+      })
+    }
+    console.log('form registrasi ', regis.form)
+    regis.simpanRegistrasi().then(resp => {
+      console.log('resp bpjs', resp)
+      dialogCetak()
+    })
+  }
+}
+
+function dialogCetak() {
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Buat SEP?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Buat SEP',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('Cetak')
+    regis.buatSep()
+  }).onCancel(() => {
+    console.log('tidak Cetak')
+  })
 }
 onMounted(() => {
   store.getLists()

@@ -19,6 +19,7 @@
           dense
         />
         <q-btn
+          v-if="bisaFull"
           flat
           :icon="!full?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
           round
@@ -1282,7 +1283,8 @@ const props = defineProps({
   noka: { type: [String, Number], default: '' },
   tglsep: { type: [String, Number], default: '' },
   full: { type: Boolean, default: false },
-  notEdit: { type: Boolean, default: true }
+  notEdit: { type: Boolean, default: true },
+  bisaFull: { type: Boolean, default: true }
 })
 const regex = /^\d+$/
 const dialog = useDialogCariPasienPendaftaranUmum()
