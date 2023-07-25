@@ -10,7 +10,7 @@
         class="fixed-top"
         style="z-index: 1;"
       >
-        <q-bar class="bg-grey">
+        <q-bar class="bg-primary text-white">
           <div>📝 Form General Consent Pasien</div>
           <q-space />
 
@@ -66,11 +66,13 @@
           <app-input-date
             v-model="store.form.tanggal"
             label="tanggal"
+            outlined
           />
           <div style="min-width: 200px;">
             <app-autocomplete
               v-model="store.form.petugas"
               label="petugas"
+              outlined
             />
           </div>
         </div>
@@ -89,11 +91,13 @@
               v-model="store.form.nama"
               label="nama"
               class="q-mb-sm"
+              outlined
             />
             <app-input
               v-model="store.form.alamat"
               label="Alamat"
               type="text-area"
+              outlined
             />
           </div>
           <div class="col-6">
@@ -101,10 +105,12 @@
               v-model="store.form.nohp"
               label="No Telp / Hp"
               class="q-mb-sm"
+              outlined
             />
             <app-input
               v-model="store.form.hubunganpasien"
               label="Hubungan Pasien"
+              outlined
             />
           </div>
         </div>
