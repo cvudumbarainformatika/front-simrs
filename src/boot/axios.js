@@ -7,11 +7,11 @@ import { notifErr } from 'src/modules/utils'
 // const SERV = 'http://192.168.101.79/api.laborat/public'
 // const SERV = 'http://api.laborat.test'
 // const SERV = 'http://api.laborat.test:8080'
-// const SERV = 'http://192.168.150.103:3507'
+const SERV = 'http://192.168.150.103:3507'
 // const SERV = 'https://xenter.my.id'
 // const SERV = 'http://192.168.150.103:3501' // gawe laborat
 // const SERV = 'http://192.168.101.80/api.laborat/public'
-const SERV = 'http://localhost/api.laborat/public'
+// const SERV = 'http://localhost/api.laborat/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
 const SERVER = SERV + '/api'
 

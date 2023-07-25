@@ -10,9 +10,6 @@
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />
-    <!-- @bisa-simpan="bisaSimpan" -->
-    <!-- @surat="bisaCekSurat" -->
-    <!-- @bisa-simpan="simpanRegistrasi" -->
     <FormRegistrasi
       ref="refRegistrasi"
       @get-list-surat-kontrol="getListSuratKontrol"
