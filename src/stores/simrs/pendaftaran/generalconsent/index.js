@@ -11,10 +11,15 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       tanggal: dateDbFormat(new Date()),
       petugas: null,
       nama: null,
+      norm: null,
       alamat: null,
       nohp: null,
-      hubunganpasien: 'Diri Sendiri'
-    }
+      hubunganpasien: 'Diri Sendiri',
+      ttdpasien: null,
+      ttdpetugas: null
+    },
+
+    options: ['Diri Sendiri', 'Ayah Kandung', 'Ibu Kandung', 'Kakak Kandung', 'Adik Kandung', 'Paman', 'Kakek', 'Cucu', 'Saudara']
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -37,6 +42,31 @@ export const useGeneralConsentStore = defineStore('general_consent', {
 
     setForm(frm, val) {
       this.form[frm] = val
+    },
+    resetFORM() {
+      this.form = {}
+      const columns = [
+        'tanggal',
+        'petugas',
+        'nama',
+        'norm',
+        'alamat',
+        'nohp',
+        'hubunganpasien',
+        'ttdpasien',
+        'ttdpetugas'
+      ]
+      for (let i = 0; i < columns.length; i++) {
+        this.setForm(columns[i], null)
+      }
+      this.setForm('tanggal', dateDbFormat(new Date()))
+    },
+    async saveGeneralConsentPasien() {
+      console.log('save general cons', this.form)
+      await api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
+        .then(resp => {
+          console.log(resp)
+        })
     }
   }
 })

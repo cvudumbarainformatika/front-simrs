@@ -1,7 +1,7 @@
 <template>
   <div class="ttd-pad-form">
     <canvas
-      v-show="imgSrc === null"
+      v-show="imgTtd === null"
       ref="canvasRef"
       class="ttd-pad"
       height="150"
@@ -11,8 +11,8 @@
       @pointerup="handlePointerUp"
     />
     <q-img
-      v-show="imgSrc !== null"
-      :src="imgSrc"
+      v-show="imgTtd !== null"
+      :src="imgTtd"
       height="150"
       width="300"
     />
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 // import { useTtd } from 'src/composable/ttd'
 // const { x, y } = useTtd()
@@ -52,7 +52,19 @@ const writingMode = ref(false)
 const positionX = ref()
 const positionY = ref()
 
-const imgSrc = ref(null)
+// const imgSrc = ref(null)
+
+const props = defineProps({ ttd: { type: String, default: null } })
+const emits = defineEmits(['saveTtd'])
+
+const imgTtd = computed({
+  get() {
+    return props.ttd
+  },
+  set(nwVal) {
+    emits('saveTtd', nwVal)
+  }
+})
 
 onMounted(() => {
   // const canvas = document.querySelector('canvas')
@@ -60,7 +72,7 @@ onMounted(() => {
   ctx.value.lineWidth = 3
   ctx.value.lineJoin = ctx.value.lineCap = 'round'
 
-  // console.log('doc', ctx.value)
+  console.log('ttd', props.ttd)
 })
 
 const handlePointerDown = (event) => {
@@ -93,14 +105,16 @@ function getTargetPosition(event) {
 }
 
 const clearPad = () => {
-  imgSrc.value = null
+  // imgSrc.value = null
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+  emits('saveTtd', null)
 }
 
 const savePad = () => {
   const imageURL = canvasRef.value.toDataURL()
-  imgSrc.value = imageURL
-  console.log(imageURL)
+  // imgSrc.value = imageURL
+  // console.log(imageURL)
+  emits('saveTtd', imageURL)
 }
 
 // onUnmounted(() => {

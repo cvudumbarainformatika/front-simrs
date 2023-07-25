@@ -1,6 +1,6 @@
 <template>
   <div class="column full-height">
-    <app-loading-bpjs />
+    <!-- <app-loading-bpjs /> -->
     <div
       class="col-auto fixed-top"
       style="z-index:1"
