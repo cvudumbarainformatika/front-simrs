@@ -33,6 +33,12 @@
         </div>
       </div>
     </q-card-section>
+    <q-btn
+      href="/print/antrian/B065"
+      target="_blank"
+      label="With href - open in new window"
+      color="purple"
+    />
   </q-card>
 </template>
 

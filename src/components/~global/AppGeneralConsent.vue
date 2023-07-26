@@ -185,7 +185,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section class="q-mb-xl">
+      <q-card-section class="q-mb-xl text-center">
         <q-btn
           color="primary"
           label="Simpan General Consent Pasien"

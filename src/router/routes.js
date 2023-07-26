@@ -29,6 +29,11 @@ const routes = [
         path: '/print/page/:slug',
         name: 'print.page',
         component: () => import('pages/simrs/print/IndexPage.vue')
+      },
+      {
+        path: '/print/antrian/:nomor',
+        name: 'print.antrian',
+        component: () => import('pages/simrs/PrintAntrian.vue')
       }
     ]
   },
