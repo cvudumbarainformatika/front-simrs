@@ -88,6 +88,7 @@
                   :key="i"
                   v-ripple
                   clickable
+                  class="q-py-md"
                 >
                   <q-item-section avatar>
                     <q-avatar
@@ -103,7 +104,9 @@
                   <q-item-section>
                     <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
-                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-teal">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
+                    <q-item-label>Jns Peserta : <span class="text-weight-bold text-negative">{{ list.peserta.jenisPeserta.keterangan }}</span></q-item-label>
+                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-accent">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
+                    <q-item-label>Asal Rujukan : <span class="text-weight-bold text-teal">{{ list.provPerujuk?list.provPerujuk.nama:'-' }}</span></q-item-label>
                   </q-item-section>
 
                   <q-item-section
@@ -124,6 +127,7 @@
                     </q-btn>
                   </q-item-section>
                 </q-item>
+                <q-separator />
               </q-list>
             </div>
           </q-tab-panel>
@@ -163,7 +167,11 @@
                   <q-item-section>
                     <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.tglKunjungan) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.noKunjungan }}</span></q-item-label>
-                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-teal">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
+                    <!-- <q-item-label>Poli Tujuan : <span class="text-weight-bold text-teal">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label> -->
+                    <q-item-label>Jns Peserta : <span class="text-weight-bold text-negative">{{ list.peserta.jenisPeserta.keterangan }}</span></q-item-label>
+                    <q-item-label>Poli Tujuan : <span class="text-weight-bold text-accent">{{ list.poliRujukan?list.poliRujukan.nama:'-' }}</span></q-item-label>
+                    <q-item-label>Asal Rujukan : <span class="text-weight-bold text-teal">{{ list.provPerujuk?list.provPerujuk.nama:'-' }}</span></q-item-label>
+                    <!-- <q-item-label>Asal Rujukan : <span class="text-weight-bold text-teal">{{ list.provPerujuk?list.provPerujuk.nama:'-' }}</span></q-item-label> -->
                   </q-item-section>
 
                   <q-item-section
@@ -224,6 +232,7 @@
                   <q-item-section>
                     <q-item-label>tanggal : <span class="text-weight-bold text-primary">{{ dateFullFormat(list.rs6) }}</span></q-item-label>
                     <q-item-label>No. Kunjungan : <span class="text-weight-bold text-teal">{{ list.rs8 }}</span></q-item-label>
+                    <q-item-label>Asal Rujukan : <span class="text-weight-bold text-negative">{{ list.rs17 }}</span></q-item-label>
                   </q-item-section>
 
                   <q-item-section
