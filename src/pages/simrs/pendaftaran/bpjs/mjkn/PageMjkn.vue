@@ -247,6 +247,70 @@ function pilihPasienIni(val, jkn) {
     }
   })
   console.log('pasien terpilih', val, jkn)
+
+  // metani kode2 dan alamat -- start --
+  // agama
+  const indexAgama = findWithAttr(store.agamas, 'keterangan', val.agama)
+  if (indexAgama >= 0) {
+    store.display.kode = store.agamas[indexAgama].kode
+  } else {
+    store.display.kode = '8'
+  }
+  // pekerjaan
+  const indexpekerjaan = findWithAttr(store.pekerjaans, 'pekerjaan', val.pekerjaan)
+  console.log('pekerjaan index', val.pekerjaan, indexpekerjaan)
+  if (indexpekerjaan >= 0) {
+    store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
+  } else {
+    // const indexpekerjaanlain = findWithAttr(store.pekerjaans, 'keterangan', 'Lain-lain')
+    store.display.pekerjaan = 'Lain-lain'
+  }
+  // negara
+  if (val.negara) {
+    store.negaraSelected(val.negara)
+    store.getProvinces().then(() => {
+      if (val.kodepropinsi) {
+        store.propinsiSelected(val.kodepropinsi)
+        store.getKota().then(() => {
+          if (val.kodekabupatenkota) {
+            store.kabupatenSelected(val.kodekabupatenkota)
+            store.getKec().then(() => {
+              if (val.kodekecamatan) {
+                store.kecamatanSelected(val.kodekecamatan)
+                store.getKels().then(() => {
+                  if (val.kodekelurahan) {
+                    store.kelurahanSelected(val.kodekelurahan)
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+  if (val.negaradomisili && !store.alamataDomisiliSama) {
+    store.negaraDomisiliSelected(val.negaradomisili)
+    store.getProvincesDomisili().then(() => {
+      if (val.propinsidomisili) {
+        store.propinsiDomisiliSelected(val.propinsidomisili)
+        store.getKotaDomisili().then(() => {
+          store.kabupatenDomisiliSelected(val.kabupatenkotadomisili)
+          store.getKecDomisili().then(() => {
+            if (val.kecamatandomisili) {
+              store.kecamatanDomisiliSelected(val.kecamatandomisili)
+              store.getKelsDomisili().then(() => {
+                if (val.kelurahandomisili) {
+                  store.kelurahanDomisiliSelected(val.kelurahandomisili)
+                }
+              })
+            }
+          })
+        })
+      }
+    })
+  }
+  // metani kode2 dan alamat -- end --
   // routerInstance.push({
   //   path: '/pendaftaran/bpjs/form',
   //   replace: true
