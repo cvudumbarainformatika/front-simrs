@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, loadingBlock, notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { findWithAttr, loadingBlock, notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -756,6 +756,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             }
             if (resp.data.metadata.code === '200') {
               notifSuccessVue(resp.data.metadata.message)
+              notifCenterVue('Berhasil Buat SEP')
             }
             resolve(resp.data)
           })
