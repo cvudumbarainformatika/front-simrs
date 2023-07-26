@@ -260,9 +260,11 @@ function pilihPasienIni(val) {
   const indexAgama = findWithAttr(store.agamas, 'keterangan', val.agama)
   if (indexAgama >= 0) {
     store.display.kode = store.agamas[indexAgama].kode
+  } else {
+    store.display.kode = '8'
   }
   // pekerjaan
-  const indexpekerjaan = findWithAttr(store.pekerjaans, 'keterangan', val.pekerjaan)
+  const indexpekerjaan = findWithAttr(store.pekerjaans, 'pekerjaan', val.pekerjaan)
   console.log('pekerjaan index', val.pekerjaan, indexpekerjaan)
   if (indexpekerjaan >= 0) {
     store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
