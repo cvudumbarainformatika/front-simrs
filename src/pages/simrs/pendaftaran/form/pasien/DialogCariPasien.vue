@@ -171,6 +171,7 @@
 </template>
 <script setup>
 
+import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 // import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
@@ -210,6 +211,7 @@ function pilihPasienIni(val) {
     if ((!store.form.kelurahandomisili ? true : store.form.kelurahandomisili === '') && store.form.kelurahan) store.setForm('kelurahandomisili', store.form.kelurahan)
     if ((!store.form.kodekelurahandomisili ? true : store.form.kodekelurahandomisili === '') && store.form.kodekelurahan) store.setForm('kodekelurahandomisili', store.form.kodekelurahan)
   }
+
   if (props.bpjs) {
     if (val.nik !== '') {
       const form = { nik: val.nik, tglsep: regis.form.tglsep }
@@ -252,6 +254,68 @@ function pilihPasienIni(val) {
     store.tanggal.hari = tglLahir[2]
     store.setTanggalLahir()
   }
+
+  // metani kode2 dan alamat -- start --
+  // agama
+  const indexAgama = findWithAttr(store.agamas, 'keterangan', val.agama)
+  if (indexAgama >= 0) {
+    store.display.kode = store.agamas[indexAgama].kode
+  }
+  // pekerjaan
+  const indexpekerjaan = findWithAttr(store.pekerjaans, 'keterangan', val.pekerjaan)
+  console.log('pekerjaan index', val.pekerjaan, indexpekerjaan)
+  if (indexpekerjaan >= 0) {
+    store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
+  } else {
+    // const indexpekerjaanlain = findWithAttr(store.pekerjaans, 'keterangan', 'Lain-lain')
+    store.display.pekerjaan = 'Lain-lain'
+  }
+  // negara
+  if (val.negara) {
+    store.negaraSelected(val.negara)
+    store.getProvinces().then(() => {
+      if (val.kodepropinsi) {
+        store.propinsiSelected(val.kodepropinsi)
+        store.getKota().then(() => {
+          if (val.kodekabupatenkota) {
+            store.kabupatenSelected(val.kodekabupatenkota)
+            store.getKec().then(() => {
+              if (val.kodekecamatan) {
+                store.kecamatanSelected(val.kodekecamatan)
+                store.getKels().then(() => {
+                  if (val.kodekelurahan) {
+                    store.kelurahanSelected(val.kodekelurahan)
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+  if (val.negaradomisili && !store.alamataDomisiliSama) {
+    store.negaraDomisiliSelected(val.negaradomisili)
+    store.getProvincesDomisili().then(() => {
+      if (val.propinsidomisili) {
+        store.propinsiDomisiliSelected(val.propinsidomisili)
+        store.getKotaDomisili().then(() => {
+          store.kabupatenDomisiliSelected(val.kabupatenkotadomisili)
+          store.getKecDomisili().then(() => {
+            if (val.kecamatandomisili) {
+              store.kecamatanDomisiliSelected(val.kecamatandomisili)
+              store.getKelsDomisili().then(() => {
+                if (val.kelurahandomisili) {
+                  store.kelurahanDomisiliSelected(val.kelurahandomisili)
+                }
+              })
+            }
+          })
+        })
+      }
+    })
+  }
+  // metani kode2 dan alamat -- end --
   store.cariPasienDialog = false
   emits('gantiPasien')
   console.log('pasien terpilih', val)

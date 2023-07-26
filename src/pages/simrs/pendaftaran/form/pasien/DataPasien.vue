@@ -570,10 +570,11 @@
                   label="No Ponsel"
                   :filled="false"
                   :prefix="'+'+(store.form.negara?store.form.negara:'62')"
-                  type="number"
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                  @update:model-value="setTlpHP"
+                  :disable=" store.form.barulama!=='baru' && !store.edit && (!!store.form.noteleponhp)"
+                  @blur="setTlpHP($event)"
                 />
+                <!-- @update:model-value="setTlpHP" -->
+                <!-- type="number" -->
               </div>
             </div>
           </div>
@@ -1720,9 +1721,10 @@ function setTlpRumah(val) {
     store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val)
   }
 }
-function setTlpHP(val) {
+function setTlpHP(evt) {
+  const val = evt.target.value
   // console.log('val', val)
-  if (val.charAt(0) === '0') {
+  if (val.charAt(0) === '0' || val.charAt(0) === '+') {
     // console.log('val', val.charAt(0), val.slice(1, val.length))
     store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
   } else {

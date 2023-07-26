@@ -9,17 +9,17 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
     cariPasienDialog: false,
-    alamataDomisiliSama: true,
-    edit: false,
+    alamataDomisiliSama: false,
+    edit: true,
     params: {},
     paramWilayah: {
-      kd_negara: '',
+      kd_negara: '62',
       kd_propinsi: '',
       kd_kotakabupaten: '',
       kd_kecamatan: ''
     },
     paramWilayahDomisili: {
-      kd_negara: '',
+      kd_negara: '62',
       kd_propinsi: '',
       kd_kotakabupaten: '',
       kd_kecamatan: ''
@@ -95,7 +95,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         bulan: '01',
         hari: '01'
       }
-      this.edit = false
+      this.edit = true
     },
     setForm(key, val) {
       this.form[key] = val

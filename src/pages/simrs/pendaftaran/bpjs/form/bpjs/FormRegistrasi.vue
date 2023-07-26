@@ -38,8 +38,8 @@
                   v-model="store.form.norujukan"
                   label="nomor Rujukan"
                   right-icon
-                  right-icon-name="icon-mat-format_list_numbered"
-                  right-icon-tooltip="List Rujukan"
+                  :right-icon-name="adaList?'icon-mat-format_list_numbered':''"
+                  :right-icon-tooltip="adaList?'List Rujukan':''"
                   :filled="false"
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
@@ -80,8 +80,8 @@
                   v-model="store.form.nosuratkontrol"
                   label="nomor Surat Kontrol"
                   right-icon
-                  right-icon-name="icon-mat-format_list_numbered"
-                  right-icon-tooltip="List Surat Kontrol"
+                  :right-icon-name="adaList?'icon-mat-format_list_numbered':''"
+                  :right-icon-tooltip="adaList?'List Surat Kontrol':''"
                   :filled="false"
                   :loading="store.loadingCekBpjs"
                   :rules="[
@@ -676,6 +676,9 @@ const emits = defineEmits([
   'cekSuratRujukan',
   'cekSuplesi'
 ])
+defineProps({
+  adaList: { type: Boolean, default: true }
+})
 
 store.getInitialData()
 // refs
