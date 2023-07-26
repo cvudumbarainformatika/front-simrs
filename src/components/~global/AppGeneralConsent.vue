@@ -10,7 +10,7 @@
         class="fixed-top"
         style="z-index: 1;"
       >
-        <q-bar class="bg-grey">
+        <q-bar class="bg-primary text-white">
           <div>📝 Form General Consent Pasien</div>
           <q-space />
 
@@ -66,11 +66,13 @@
           <app-input-date
             v-model="store.form.tanggal"
             label="tanggal"
+            outlined
           />
           <div style="min-width: 200px;">
             <app-autocomplete
               v-model="store.form.petugas"
               label="petugas"
+              outlined
             />
           </div>
         </div>
@@ -85,26 +87,39 @@
         </div>
         <div class="row justify-between q-mt-md q-col-gutter-md">
           <div class="col-6">
+            <!-- <app-input
+              v-model="store.form.hubunganpasien"
+              label="Hubungan Pasien"
+              class="q-mb-sm"
+              outlined
+            /> -->
+            <q-select
+              v-model="store.form.hubunganpasien"
+              outlined
+              :options="store.options"
+              dense
+              label="Outlined"
+              class="q-mb-sm"
+              @update:model-value="changeHubunganPasien"
+            />
             <app-input
               v-model="store.form.nama"
               label="nama"
               class="q-mb-sm"
+              outlined
             />
-            <app-input
-              v-model="store.form.alamat"
-              label="Alamat"
-              type="text-area"
-            />
-          </div>
-          <div class="col-6">
             <app-input
               v-model="store.form.nohp"
               label="No Telp / Hp"
               class="q-mb-sm"
+              outlined
             />
-            <app-input
-              v-model="store.form.hubunganpasien"
-              label="Hubungan Pasien"
+          </div>
+          <div class="col-6">
+            <q-input
+              v-model="store.form.alamat"
+              outlined
+              type="textarea"
             />
           </div>
         </div>
@@ -150,18 +165,32 @@
                 class="ttd-petugas q-px-xl"
                 style="min-height:150px; border:1px solid gray"
               /> -->
-              <app-ttd />
+              <app-ttd
+                :ttd="store.form.ttdpetugas"
+                @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
+              />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
           <div class="col-6">
             <div class="text-center">
               <div>Pasien / Wali</div>
-              <app-ttd />
+              <app-ttd
+                :ttd="store.form.ttdpasien"
+                @save-ttd="(val)=> store.setForm('ttdpasien',val)"
+              />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
         </div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section class="q-mb-xl">
+        <q-btn
+          color="primary"
+          label="Simpan General Consent Pasien"
+          @click="store.saveGeneralConsentPasien()"
+        />
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -186,8 +215,21 @@ const store = useGeneralConsentStore()
 onMounted(() => {
   // store.getData()
   console.log(props.pasien)
-  // store.setForm('nama', props.pasien.nama)
-  // store.setForm('alamat', props.pasien.alamat)
-  // store.setForm('nohp', props.pasien.nohp)
+  // store.resetFORM()
+  changeHubunganPasien()
 })
+
+function changeHubunganPasien() {
+  if (store.form.hubunganpasien === 'Diri Sendiri') {
+    store.setForm('nama', props.pasien ? props.pasien.nama : '-')
+    store.setForm('norm', props.pasien ? props.pasien.norm : '-')
+    store.setForm('alamat', props.pasien ? props.pasien.alamat : '-')
+    store.setForm('nohp', props.pasien ? props.pasien.nohp : '-')
+  } else {
+    store.setForm('nama', null)
+    store.setForm('norm', props.pasien ? props.pasien.norm : '-')
+    store.setForm('alamat', null)
+    store.setForm('nohp', null)
+  }
+}
 </script>

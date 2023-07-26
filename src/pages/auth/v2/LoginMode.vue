@@ -24,7 +24,7 @@
       <div class="row q-pa-sm">
         <div
           v-if="!isMobile"
-          class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 bg-x min-h"
+          class="col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 bg-x min-h"
         >
           <div class="column flex-center full-height  text-white">
             <div class="text-subtitle1">
@@ -48,19 +48,19 @@
         <!-- <div class="col-6 min-h"> -->
         <div
           v-if="routeForm && !isMobile"
-          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
           <FormLogin />
         </div>
         <div
           v-else-if="routeQr && isMobile"
-          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
           <FormLogin />
         </div>
         <div
           v-else
-          class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 min-h"
+          class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
           <FormQr
             :qr="store.qrCode"

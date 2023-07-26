@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, loadingBlock, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, loadingBlock, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -680,6 +680,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         api.get('/v1/anjungan/cari-rencana-kontrol', params)
           .then(resp => {
             console.log('surat kontrol resp', resp.data)
+            if (resp.data.metadata.code !== '200') {
+              notifErrVue('Cari Surat Kontrol : ' + resp.data.metadata.message)
+            }
             const rujukan = resp.data.result.sep.provPerujuk.noRujukan
             console.log('surat kontrol rujukan', rujukan)
             if (!this.form.norujukan) {
@@ -712,9 +715,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
                 notifErrVue('Nomor rujukan Tidak ditemukan')
               }
             }
-            if (resp.data.metadata.code !== '200') {
-              notifErrVue('Cari Surat Kontrol : ' + resp.data.metadata.message)
-            }
+            // if (resp.data.metadata.code === '201') {
+            //   notifErrVue(resp.data.metadata.message)
+            // }
             resolve(resp.data)
           })
           .catch(() => {
@@ -750,6 +753,9 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.loading = false
             if (resp.data.metadata.code === '201') {
               notifErrVue(resp.data.metadata.message)
+            }
+            if (resp.data.metadata.code === '200') {
+              notifSuccessVue(resp.data.metadata.message)
             }
             resolve(resp.data)
           })

@@ -21,7 +21,8 @@
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
-        <ContentPage :editable-master="true" />
+        <!-- <ContentPage :editable-master="true" /> -->
+        <master-general-consent :editable-master="true" />
       </q-scroll-area>
     </q-card>
   </q-page>
@@ -31,7 +32,7 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { onMounted, ref } from 'vue'
 import PageHead from './comp/PageHead.vue'
-import ContentPage from './comp/ContentPage.vue'
+// import ContentPage from './comp/ContentPage.vue'
 // import ContentP from './ContentP.vue'
 // const editor = ref('')
 const style = useStyledStore()

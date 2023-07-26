@@ -10,9 +10,6 @@
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />
-    <!-- @bisa-simpan="bisaSimpan" -->
-    <!-- @surat="bisaCekSurat" -->
-    <!-- @bisa-simpan="simpanRegistrasi" -->
     <FormRegistrasi
       ref="refRegistrasi"
       @get-list-surat-kontrol="getListSuratKontrol"
@@ -42,7 +39,10 @@
         </div>
       </q-card-actions>
     </q-card>
-    <DialogListRujukan v-model="registrasi.tampilRujukan" />
+    <DialogListRujukan
+      v-model="registrasi.tampilRujukan"
+      @kode-poli="setKodepoli"
+    />
     <DialogListKontrol
       v-model="registrasi.tampilKontrol"
       @kode-poli="setKodepoli"

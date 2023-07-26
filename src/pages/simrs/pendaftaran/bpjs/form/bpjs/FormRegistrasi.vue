@@ -19,7 +19,15 @@
                 Nomor Registrasi
               </div>
               <div class="col-8">
-                : {{ store.form.noreg }}
+                <!-- 53355/07/2023/J -->
+                <!-- : {{ store.form.noreg }} -->
+                <app-input
+                  v-model="store.form.noreg"
+                  label="No registrasi"
+                  valid
+                  disable
+                  :filled="false"
+                />
               </div>
             </div>
             <!-- No rujukan -->

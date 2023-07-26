@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { useContent } from './content'
+import { useContent } from '../~static/generalconsent/content'
 const { isi, pasien, defaultForm, changeIsi } = useContent()
 
 const saveWork = () => {
