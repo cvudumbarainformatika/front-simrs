@@ -638,7 +638,8 @@ const tab = ref('pcare')
 const store = useRegistrasiPasienBPJSStore()
 // pilih rujukan p care
 const emits = defineEmits([
-  'kodePoli'
+  'kodePoli',
+  'jenisKunjungan'
 ])
 function pilihRujukan(val, jenis) {
   console.log('karcis', store.jenisKarcises)
@@ -715,6 +716,7 @@ function pilihRujukanRS(val) {
   store.setForm('jenis_kunjungan', 'Rujukan Antar RS')
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 4)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
+  emits('jenisKunjungan', store.jenisKunjungans[idexKun].nilai)
 }
 // eslint-disable-next-line no-unused-vars
 function pilihRujukanPCare(val) {
@@ -733,6 +735,7 @@ function pilihRujukanPCare(val) {
   store.setForm('jenis_kunjungan', 'Rujukan FKTP')
   const idexKun = findWithAttr(store.jenisKunjungans, 'id', 1)
   store.display.jeniskunjungan = store.jenisKunjungans[idexKun].nilai
+  emits('jenisKunjungan', store.jenisKunjungans[idexKun].nilai)
 }
 // pilih rujukan mrs
 function pilihRujukanMrs(val) {

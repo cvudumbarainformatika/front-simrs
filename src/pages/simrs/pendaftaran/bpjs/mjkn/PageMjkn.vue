@@ -68,6 +68,7 @@
         />
         <FormRegistrasi
           ref="refRegistrasi"
+          :ada-list="false"
           @get-list-surat-kontrol="getListSuratKontrol"
           @get-list-rujukan="getListRujukan"
           @cek-suplesi="cekSuplesi"
@@ -126,7 +127,7 @@ import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListBpjsAntrianStore } from 'src/stores/simrs/pendaftaran/mjkn/lists'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
@@ -180,20 +181,6 @@ function pilihPasienIni(val, jkn) {
     if ((!pasien.form.kelurahandomisili ? true : pasien.form.kelurahandomisili === '') && pasien.form.kelurahan) pasien.setForm('kelurahandomisili', pasien.form.kelurahan)
     if ((!pasien.form.kodekelurahandomisili ? true : pasien.form.kodekelurahandomisili === '') && pasien.form.kodekelurahan) pasien.setForm('kodekelurahandomisili', pasien.form.kodekelurahan)
   }
-  // if (val.nik !== '') {
-  //   const form = { nik: val.nik, tglsep: regis.form.tglsep }
-  //   pasien.cekPesertaByNik(form).then(resp => {
-  //     if (Object.keys(resp.provUmum).length) {
-  //       const rujukan = {
-  //         kode: resp.provUmum.kdProvider,
-  //         nama: resp.provUmum.nmProvider
-  //       }
-  //       regis.ppkRujukans.push(rujukan)
-  //       regis.display.kode = rujukan.kode
-  //       regis.setForm('ppkRujukan', rujukan.kode)
-  //     }
-  //   })
-  // } else
   if (val.noka !== '') {
     console.log('noka', val.noka === undefined)
     const form = { noka: val.noka, tglsep: regis.form.tglsep }
@@ -228,9 +215,17 @@ function pilihPasienIni(val, jkn) {
   store.setDialog()
   regis.cekRujukanPcare(param).then(resp => {
     console.log('yang di P care', resp)
+    if (resp.metadata.code === '200') {
+      pilihRujukanPCare(resp.result.rujukan)
+    }
     if (resp.result === 'Tidak ditemukan') {
       regis.cekRujukanRs(param).then(resp => {
         console.log('yang di Rujukan rs ', resp)
+        if (resp.metadata.code === '200') {
+          console.log('Rujukan rs result ', resp.result)
+          pilihRujukanRS(resp.result.rujukan)
+        }
+
         if (resp.result === 'Tidak ditemukan') {
           console.log('mau cek Surat kontrol ')
           regis.cekSuratKontrol(param).then(resp => {
@@ -256,6 +251,111 @@ function pilihPasienIni(val, jkn) {
   //   path: '/pendaftaran/bpjs/form',
   //   replace: true
   // })
+}
+function pilihRujukan(val, jenis) {
+  console.log('karcis', regis.jenisKarcises)
+  console.log('rujukan p care', val)
+
+  regis.setForm('asalrujukan', 'AR9999')
+  const index = findWithAttr(regis.polis, 'kodemapingbpjs', val.poliRujukan.kode)
+  if (index >= 0) {
+    console.log('index', index, regis.polis[index])
+    regis.paramKarcis.kd_poli = regis.polis[index].kodepoli
+    regis.form.dpjp = ''
+    if (regis.jenisKarcises.length) {
+      regis.form.jeniskarcis = regis.jenisKarcises[0].jeniskarcis
+      regis.paramKarcis.flag = regis.jenisKarcises[0].jeniskarcis
+    }
+    if (regis.paramKarcis.flag) {
+      if (regis.paramKarcis.flag !== '') {
+        regis.getKarcisPoli().then(() => {
+          regis.display.hargakarcis = regis.kasrcispoli.tarif
+          regis.form.karcis = regis.kasrcispoli.tarif
+        })
+      }
+    }
+    regis.paramDpjp.kdmappolbpjs = regis.polis[index].kodemapingbpjs
+    // emits('kodePoli', regis.polis[index].kodepoli)
+    // regis.setForm('kodepoli', regis.polis[index].kodepoli)
+    setKodepoli(regis.polis[index].kodepoli)
+    regis.getDokterDpjp()
+  } else {
+    notifErrVue('Poli tidak ditemukan')
+  }
+  // sistaem bayar start
+  if (regis.form.sistembayar) { delete regis.form.sistembayar }
+  if (regis.display.rs2) { delete regis.display.rs2 }
+  regis.display.bayar.kode = '1'
+  const indexbyr = findWithAttr(regis.sistembayars1, 'kode', '1')
+  if (indexbyr >= 0) {
+    regis.setForm('jkn', regis.sistembayars1[indexbyr].groupsistembayar)
+  }
+  regis.getSistemBayar2(1)
+
+  // sistaem bayar end
+  regis.diagnosaAwals.push(val.diagnosa)
+  regis.ppkRujukans.push(val.provPerujuk)
+  regis.display.diagnosa.kode = val.diagnosa.kode
+  regis.setForm('kodediagnosa', val.diagnosa.kode)
+  regis.display.diagnosa.nama = val.diagnosa.nama
+  regis.setForm('namadiagnosa', val.diagnosa.nama)
+  regis.setForm('norujukan', val.noKunjungan)
+  // ppk rujukan
+  regis.display.kode = val.provPerujuk.kode
+  regis.setForm('ppkRujukan', val.provPerujuk.kode)
+  regis.setForm('namappkRujukan', val.provPerujuk.nama)
+  regis.setForm('tglrujukan', val.tglKunjungan)
+  regis.setForm('jnspelayanan', val.pelayanan.kode)
+  regis.display.tanggal.rujukan = date.formatDate(val.tglKunjungan, 'DD MMMM YYYY')
+
+  regis.setForm('flagprocedure', '')
+  regis.setForm('kdPenunjang', '')
+}
+// rujukan p care ketemu
+function pilihRujukanPCare(val) {
+  const param = {
+    jenisrujukan: 1,
+    norujukan: val.noKunjungan
+
+  }
+  regis.getJumlahSep(param).then(resp => {
+    console.log('jumlah sep p care', resp)
+    if (parseInt(resp.jumlahSEP) >= 1) {
+      notifErrVue('Jumlah SEP Rujukan pernah Dibuat. silahkan isi surat kontrol')
+    }
+    // regis.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+  })
+  pilihRujukan(val)
+  regis.setForm('asalRujukan', '1')
+  regis.setForm('id_kunjungan', 1)
+  regis.setForm('jenis_kunjungan', 'Rujukan FKTP')
+  const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 1)
+  regis.display.jeniskunjungan = regis.jenisKunjungans[idexKun].nilai
+  // emits('jenisKunjungan', regis.jenisKunjungans[idexKun].nilai)
+  jenisKunjungan(regis.jenisKunjungans[idexKun].nilai)
+}
+
+// rujukan RS
+function pilihRujukanRS(val) {
+  const param = {
+    jenisrujukan: 2,
+    norujukan: val.noKunjungan
+  }
+  regis.getJumlahSep(param).then(resp => {
+    console.log('jumlah sep Rs', resp)
+    if (parseInt(resp.jumlahSEP) >= 1) {
+      notifErrVue('Jumlah SEP Rujukan pernah Dibuat. silahkan isi surat kontrol')
+    }
+    // regis.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+  })
+  pilihRujukan(val)
+  regis.setForm('asalRujukan', '2')
+  regis.setForm('id_kunjungan', 4)
+  regis.setForm('jenis_kunjungan', 'Rujukan Antar RS')
+  const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 4)
+  regis.display.jeniskunjungan = regis.jenisKunjungans[idexKun].nilai
+  // emits('jenisKunjungan', regis.jenisKunjungans[idexKun].nilai)
+  jenisKunjungan(regis.jenisKunjungans[idexKun].nilai)
 }
 // pasien
 // registrasi

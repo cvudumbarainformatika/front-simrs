@@ -42,6 +42,7 @@
     <DialogListRujukan
       v-model="registrasi.tampilRujukan"
       @kode-poli="setKodepoli"
+      @jenis-kunjungan="jenisKunjungan"
     />
     <DialogListKontrol
       v-model="registrasi.tampilKontrol"
