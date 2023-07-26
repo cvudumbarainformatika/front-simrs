@@ -59,6 +59,29 @@
 
           <q-item-section
             side
+          >
+            {{ item.nomorkartu }}
+            <figure
+              class="qrcode full-width q-pa-sm"
+            >
+              <!-- value="1223443" -->
+              <vue-qrcode
+                :value="item.nomorkartu"
+                tag="svg"
+                :options="{
+                  errorCorrectionLevel: 'Q',
+                  color: {
+                    dark: '#000000',
+                    light: '#ffffff',
+                  },
+                  margin:2
+                }"
+              />
+            </figure>
+          </q-item-section>
+
+          <q-item-section
+            side
             top
           >
             <q-item-label caption>
@@ -187,3 +210,12 @@ const emits = defineEmits(['kirimPoli'])
 //   return text
 // }
 </script>
+<style scoped>
+.qrcode {
+  display: inline-block;
+  font-size: 0;
+  margin: 0;
+  position: relative;
+}
+
+</style>

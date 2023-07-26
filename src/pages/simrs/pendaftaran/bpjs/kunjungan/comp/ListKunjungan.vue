@@ -55,6 +55,28 @@
               Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span>
             </q-item-label>
           </q-item-section>
+          <q-item-section
+            side
+          >
+            {{ item.noka }}
+            <figure
+              class="qrcode full-width q-pa-sm"
+            >
+              <!-- value="1223443" -->
+              <vue-qrcode
+                :value="item.noka"
+                tag="svg"
+                :options="{
+                  errorCorrectionLevel: 'Q',
+                  color: {
+                    dark: '#000000',
+                    light: '#ffffff',
+                  },
+                  margin:2
+                }"
+              />
+            </figure>
+          </q-item-section>
 
           <q-item-section
             side
@@ -82,6 +104,19 @@
                   />
                 </div>
               </div>
+              <div class="row q-mt-sm justify-end">
+                <div class="q-ml-sm">
+                  <q-btn
+                    outline
+                    size="sm"
+                    padding="xs"
+                    color="teal"
+                    :loading="loadingP && temp===item.noka"
+                    label="Pengajuan SEP"
+                    @click="PengajuanSep(item)"
+                  />
+                </div>
+              </div>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -105,10 +140,24 @@
       v-model="openPrevGc"
       @close="openPrevGc = !openPrevGc"
     />
+    <app-dialog-form
+      v-model="dialog"
+      title="Alasan Pengajuan Finger"
+      @save-form="simpanPengajuan()"
+    >
+      <template #default>
+        <app-input
+          v-model="keterangan"
+          label="keterangan"
+        />
+      </template>
+    </app-dialog-form>
   </div>
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios'
+import { notifCenterVue } from 'src/modules/utils'
 import { ref } from 'vue'
 
 defineProps({
@@ -124,6 +173,38 @@ function openPreviewGc() {
   openPrevGc.value = !openPrevGc.value
 }
 
+const dialog = ref(false)
+const keterangan = ref('')
+const temp = ref(null)
+const loadingP = ref(false)
+function PengajuanSep(val) {
+  dialog.value = true
+  temp.value = val.noka
+}
+
+function simpanPengajuan() {
+  const data = {
+    noka: temp.value,
+    jenispengajuan: '2',
+    keterangan: keterangan.value
+  }
+  console.log(data)
+  dialog.value = false
+  return new Promise(resolve => {
+    loadingP.value = true
+    api.post('v1/simrs/bridgingbpjs/pendaftaran/pengajuansep', data)
+      .then(resp => {
+        loadingP.value = false
+        if (resp.metadata.code === '200' || resp.status === 200) {
+          notifCenterVue('Pengajuan SEP sudah disampaikan')
+        }
+        resolve(resp)
+      })
+      .catch(() => {
+        loadingP.value = false
+      })
+  })
+}
 function getStatus(arr) {
   if (arr.length === 0) {
     return '-'
@@ -173,3 +254,12 @@ function genCon(row) {
   openGen.value = !openGen.value
 }
 </script>
+<style scoped>
+.qrcode {
+  display: inline-block;
+  font-size: 0;
+  margin: 0;
+  position: relative;
+}
+
+</style>
