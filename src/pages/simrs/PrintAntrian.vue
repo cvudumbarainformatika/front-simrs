@@ -22,7 +22,8 @@ onMounted(() => {
   console.log('mounted print')
 })
 
-function print() {
-  this.$htmlToPaper('printMe')
+async function print () {
+  // Pass the element id here
+  await this.$htmlToPaper('printMe')
 }
 </script>
