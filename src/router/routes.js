@@ -31,7 +31,7 @@ const routes = [
         component: () => import('pages/simrs/print/IndexPage.vue')
       },
       {
-        path: '/print/antrian/:nomor',
+        path: '/print/antrian',
         name: 'print.antrian',
         component: () => import('pages/simrs/PrintAntrian.vue')
       }

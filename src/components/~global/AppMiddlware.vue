@@ -34,20 +34,26 @@
       </div>
     </q-card-section>
     <q-btn
-      href="/print/antrian/B065"
+      ref="btnPrint"
       target="_blank"
       label="With href - open in new window"
       color="purple"
+      style="display: none;"
+      @click="linkClick"
     />
   </q-card>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 // import madsaleh from 'src/assets/images/mad_saleh_minum.png'
 const gambar = computed(() => {
   return new URL('../../assets/images/mad_saleh_minum.png', import.meta.url).href
 })
+const router = useRouter()
+
+const btnPrint = ref()
 
 const info = ref([
   'Selamat Datang di Aplikasi Xenter UOBK RSUD MOHamad SALEH',
@@ -56,6 +62,15 @@ const info = ref([
   'Jangan Lupa Tersenyum ... Selamat Bekerja'
 
 ])
+
+onMounted(() => {
+  // btnPrint.value.click()
+})
+
+function linkClick() {
+  const routeData = router.resolve({ path: '/print/antrian', query: { nomor: 'B-006', poli: 'poli MATA', norm: '789609' } })
+  window.open(routeData.href, '_blank')
+}
 </script>
 
 <style lang="scss" scoped>

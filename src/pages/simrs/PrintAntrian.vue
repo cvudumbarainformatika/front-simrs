@@ -1,21 +1,66 @@
 <template>
   <div>
-    <div id="printMe">
-      Cobak Print Antrian
+    <div
+      id="printMe"
+      class="column items-center"
+    >
+      <div class="f-14">
+        UOBK RSUD dr.Mohamad Saleh
+      </div>
+      <div class="q-mb-xs">
+        Jl.Panjaitan No.65
+      </div>
+      <div class="garis" />
+      <div class="garis" />
+      <div class="f-14 q-mt-xs">
+        NOMOR ANTRIAN ANDA :
+      </div>
+      <div class="text-h5 text-weight-bold q-mb-xs">
+        {{ route.query.nomor }}
+      </div>
+      <div class="garis" />
+      <div class="garis" />
+      <div class="q-mt-xs">
+        Silahkan Menunggu Antrian di :
+      </div>
+      <div class="f-14 text-weight-bold">
+        {{ route.query.poli }}
+      </div>
+      <div>no.RM : {{ route.query.norm }}</div>
+      <div>{{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}</div>
+      <div class="f-14 text-weight-bold q-mb-xl">
+        TERIMAKASIH
+      </div>
     </div>
 
-    <q-btn
+    <!-- <q-btn
       ref="printBtn"
       label="print coba"
-    />
+    /> -->
   </div>
 </template>
 
 <script setup>
 // import VueHtmlToPaper from 'src/boot/VueHtmlToPaper'
-import { onMounted, ref } from 'vue'
+// import print from 'vue3-print-nb'
+// import { usePrintAntrian } from 'src/composable/printantrian'
+import { dateFullFormat, formatJam } from 'src/modules/formatter'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-const printBtn = ref()
+const route = useRoute()
+
+// defineProps({
+//   namaPoli: {
+//     type: String,
+//     default: '-'
+//   }
+// })
+// directives: {
+//   print
+// }
+
+// const printBtn = ref()
 
 // const printObj = ref({
 //   id: 'printMe',
@@ -37,28 +82,67 @@ onMounted(() => {
   // console.log('mounted print', printBtn.value.$.appContext.app.directive)
   // printBtn.value.print(printObj)
   // vPrint.mounted.c
+  // console.log(print)
+  // printBtn.value.click()
+  // console.log(route)
+  // setNomor('B-06')
+  myPrinting()
 })
 
-// function patchInputValue(el, value) {
-//   var event = new Event('print', printObj);
-//   el.value = value;
-//   el.dispatchEvent(event);
+function myPrinting () {
+  console.log('print ')
+  window.print()
+  setTimeout(function () {
+    afterPrint()
+  }, 100)
+}
+
+function afterPrint () {
+  // const r = confirm('Press a button!')
+  // if (r === true) {
+  // router.push({ path: store.prevUrl ? store.prevUrl : '/history' })
+  window.close()
+  // } else {
+  //   window.close()
+  // }
+}
+
+// function clickMounted(vue) {
+//   console.log('click mounted')
+// }
+
+// function patchInputValue(el) {
+//   const event = new Event('click', printObj)
+//   // el.value = value;
+//   el.dispatchEvent(event)
 // }
 
 // const vPrint = {
 //   mounted: (el, binding, vnode) => {
 //     // binding.value -> 'some string'
-//     // patchInputValue(el, 'new value');
+//     // patchInputValue(el)
+//     // el.click(() => {
+//     //   binding.value
+//     // })
+//     // el.focus()
 //     console.log('vPrint', el)
 //     console.log('vPrint', binding.value)
-//     console.log('vPrint', vnode)
-//     return binding.value
+//     console.log('vPrint', vnode.el.__vueParentComponent)
 //     // el.click()
 //   }
 // }
 
 // async function print () {
 //   // Pass the element id here
-//   await this.$htmlToPaper('printMe')
+//   console.log('print')
+//   printHTML('printMe')
 // }
 </script>
+
+<style lang="scss" scoped>
+.garis {
+  width: 90%;
+  border-top: 1px dashed black;
+  margin-bottom: 2px;
+}
+</style>
