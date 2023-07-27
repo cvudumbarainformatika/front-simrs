@@ -141,7 +141,7 @@
     />
     <app-dialog-form
       v-model="dialog"
-      title="Alasan Pengajuan Finger"
+      title="Alasan Pengajuan SEP"
       @save-form="simpanPengajuan()"
     >
       <template #default>
