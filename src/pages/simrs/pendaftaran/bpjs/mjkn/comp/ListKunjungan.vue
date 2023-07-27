@@ -35,7 +35,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-bold">
-              {{ item.nama? item.nama:'-' }} | <span class="text-primary">{{ item.norm? item.norm:'-' }}</span>
+              {{ item.nama? item.nama:'-' }} | <span class="text-primary">{{ item.norm? item.norm:'-' }}</span> | <span class="text-orange">{{ item.nomorantrean? item.nomorantrean:'-' }}</span>
             </q-item-label>
             <q-item-label>
               NOREG : <span class="text-weight-bold">{{ item.noreg?item.noreg:'-' }} </span>
@@ -57,14 +57,13 @@
             </q-item-label> -->
           </q-item-section>
 
-          <q-item-section
+          <!-- <q-item-section
             side
           >
             {{ item.nomorkartu }}
             <figure
               class="qrcode full-width q-pa-sm"
             >
-              <!-- value="1223443" -->
               <vue-qrcode
                 :value="item.nomorkartu"
                 tag="svg"
@@ -78,7 +77,7 @@
                 }"
               />
             </figure>
-          </q-item-section>
+          </q-item-section> -->
 
           <q-item-section
             side

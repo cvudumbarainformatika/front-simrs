@@ -55,14 +55,13 @@
               Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span>
             </q-item-label>
           </q-item-section>
-          <q-item-section
+          <!-- <q-item-section
             side
           >
             {{ item.noka }}
             <figure
               class="qrcode full-width q-pa-sm"
             >
-              <!-- value="1223443" -->
               <vue-qrcode
                 :value="item.noka"
                 tag="svg"
@@ -76,7 +75,7 @@
                 }"
               />
             </figure>
-          </q-item-section>
+          </q-item-section> -->
 
           <q-item-section
             side
