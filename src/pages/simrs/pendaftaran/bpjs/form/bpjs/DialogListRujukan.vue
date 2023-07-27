@@ -680,6 +680,7 @@ function pilihRujukan(val, jenis) {
   store.getSistemBayar2(1)
 
   // sistaem bayar end
+  console.log('diag ', store.diagnosaAwals, val.diagnosa)
   store.diagnosaAwals.push(val.diagnosa)
   store.ppkRujukans.push(val.provPerujuk)
   store.display.diagnosa.kode = val.diagnosa.kode

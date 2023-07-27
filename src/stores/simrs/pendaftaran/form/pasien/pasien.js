@@ -96,6 +96,26 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         hari: '01'
       }
       this.edit = true
+      this.paramWilayah = {
+        kd_negara: '62',
+        kd_propinsi: '',
+        kd_kotakabupaten: '',
+        kd_kecamatan: ''
+      }
+      this.paramWilayahDomisili = {
+        kd_negara: '62',
+        kd_propinsi: '',
+        kd_kotakabupaten: '',
+        kd_kecamatan: ''
+      }
+      this.wilayah = {
+        kecamatan: {},
+        kelurahan: {}
+      }
+      this.wilayahDomisili = {
+        kecamatan: {},
+        kelurahan: {}
+      }
     },
     setForm(key, val) {
       this.form[key] = val
@@ -815,18 +835,20 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           })
       })
     },
-    async cekPesertaFinger (val) {
+    cekPesertaFinger (val) {
       this.loadingFinger = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/cekfingerprint', val)
-        .then((resp) => {
-          this.loadingFinger = false
-          console.log('finger', resp.data)
-          this.alert = true
-          this.alertMsg = resp.data.result
-          return new Promise(resolve => { resolve(resp.data) })
-        }).catch(() => {
-          this.loadingFinger = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekfingerprint', val)
+          .then((resp) => {
+            this.loadingFinger = false
+            console.log('finger', resp.data)
+            // this.alert = true
+            // this.alertMsg = resp.data.result
+            resolve(resp.data)
+          }).catch(() => {
+            this.loadingFinger = false
+          })
+      })
     }
     // -------
   }
