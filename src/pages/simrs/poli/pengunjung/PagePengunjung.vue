@@ -1,7 +1,8 @@
 <script setup>
-// import { useStyledStore } from 'src/stores/app/styled'
+import { useStyledStore } from 'src/stores/app/styled'
+import ListPengunjung from './comp/ListPengunjung.vue'
 
-// const style = useStyledStore()
+const style = useStyledStore()
 </script>
 
 <template>
@@ -9,63 +10,46 @@
     ref="pageRef"
     class="column full-height full-width"
   >
-    <div class="col-auto bg-primary text-white">
-      <div class="row items-center justify-between q-pa-sm">
-        <!-- <div class="col">
-          <div class="row items-center">
-            <div>
-              <q-btn
-                flat
-                round
-                dense
-                icon="icon-mat-personal_injury"
-                class="q-mr-sm"
-              />
-            </div>
-            <div>
-              <div class="f-14 ">
-                My Pasien
-              </div>
-              <div class="f-10">
-                Daftar Pengunjung di Ruangan Ini
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="col">
-          afas
-        </div> -->
-        <!-- <q-header elevated>
-          <q-toolbar>
-            <q-btn
-              flat
-              round
-              dense
-              icon="icon-mat-personal_injury"
-              class="q-mr-sm"
-            />
+    <div
+      class="col-auto fixed-top"
+      :style="`z-index:1000; ${!style.componentfull?'margin-top:50px;':''}`"
+    >
+      <div class="bg-primary text-white">
+        <q-toolbar>
+          <q-btn
+            flat
+            round
+            dense
+            icon="icon-mat-personal_injury"
+            class="q-mr-sm"
+          />
 
-            <q-toolbar-title>
-              <div class="f-14 ">
-                My Pasien
-              </div>
-              <div class="f-10">
-                Daftar Pengunjung di Ruangan Ini
-              </div>
-            </q-toolbar-title>
+          <q-toolbar-title>
+            <div class="f-14 ">
+              My Pasien
+            </div>
+            <div class="f-10">
+              Daftar Pengunjung di Ruangan Ini
+            </div>
+          </q-toolbar-title>
 
-            <q-btn
-              flat
-              round
-              dense
-              icon="icon-mat-menu"
-            />
-          </q-toolbar>
-        </q-header> -->
+          <q-btn
+            flat
+            round
+            dense
+            :icon="style.componentfull?'icon-mat-close_fullscreen':'icon-mat-open_in_full'"
+            size="sm"
+            @click="style.setComponentFull"
+          />
+        </q-toolbar>
       </div>
     </div>
-    <div class="col-grow bg-teal">
-      <div>asdas</div>
-    </div>
+    <q-card
+      square
+      class="col-grow"
+      :style="`max-height: ${!style.componentfull? h-60:h+40}px; overflow:hidden`"
+    >
+      <list-pengunjung />
+    </q-card>
   </q-page>
 </template>
