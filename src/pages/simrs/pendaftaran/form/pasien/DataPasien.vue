@@ -1327,7 +1327,10 @@ function cekBpjsByNoka() {
 function cekFinger() {
   if (refNoKaBpjs.value.$refs.refInput.validate() && !!store.form.noka) {
     const form = { noka: store.form.noka, tglsep: props.tglsep }
-    store.cekPesertaFinger(form)
+    store.cekPesertaFinger(form).then(resp => {
+      store.alert = true
+      store.alertMsg = resp.result
+    })
   } else {
     notifErrVue('Nomor BPJS Kosong')
   }
@@ -1851,7 +1854,8 @@ defineExpose({
   resetValidation,
   validateNokaAndNorm,
   validateNoka,
-  clearForm
+  clearForm,
+  cekFinger
 })
 
 store.getInitialData()

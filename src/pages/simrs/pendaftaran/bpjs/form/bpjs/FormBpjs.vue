@@ -36,6 +36,14 @@
             :disable="loading"
             @click="buatSEP"
           />
+
+          <app-btn
+            class="q-ml-xl"
+            label="Bersihkan Form"
+            :loading="loading"
+            :disable="loading"
+            @click="clearAllRegistrasi"
+          />
         </div>
       </q-card-actions>
     </q-card>
@@ -66,14 +74,21 @@ import { onBeforeUnmount, ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
+import { useRouter } from 'vue-router'
+import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 
 const registrasi = useRegistrasiPasienBPJSStore()
+const pasien = usePendaftaranPasienStore()
 const loading = ref(false)
 const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
 
 const style = useStyledStore()
 
+function clearAllRegistrasi() {
+  registrasi.clearForm()
+  refDataPasien.value.clearForm()
+}
 function clearFormRegistrasi() {
   registrasi.clearForm()
 }
@@ -100,28 +115,47 @@ function buatSEP() {
   // if (dataPasien.save && dataRegis.save) {
   // }
 }
+
+const router = useRouter()
 function simpanData() {
   // refDataPasien.value.set()
   // refRegistrasi.value.set()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
-  // refDataPasien.value.cekBpjs()
-  console.log('pasien', dataPasien,
-    'regis', dataRegis
-  )
-  if (dataPasien.save && dataRegis.save) {
-    const keys = Object.keys(dataPasien.form)
-    if (keys.length) {
-      keys.forEach(key => {
-        registrasi.setForm(key, dataPasien.form[key])
+  const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }
+  pasien.cekPesertaFinger(form).then(resp => {
+    // refDataPasien.value.cekBpjs()
+    console.log('pasien', dataPasien,
+      'regis', dataRegis
+    )
+    const finger = resp.result.kode
+    console.log('finger', finger)
+
+    if (dataPasien.save && dataRegis.save && finger === '1') {
+      const keys = Object.keys(dataPasien.form)
+      if (keys.length) {
+        keys.forEach(key => {
+          registrasi.setForm(key, dataPasien.form[key])
+        })
+      }
+      console.log('form registrasi ', registrasi.form)
+      registrasi.simpanRegistrasi().then(resp => {
+        console.log('resp bpjs', resp)
+        const antrian = resp.antrian.data
+        const nomor = antrian ? antrian.nomor : '-'
+        const poli = antrian ? antrian.nama_layanan : '-'
+        const norm = antrian ? antrian.id_member : '-'
+        console.log('Antrian ', antrian)
+        const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+        window.open(routeData.href, '_blank')
+        dialogCetak()
       })
     }
-    console.log('form registrasi ', registrasi.form)
-    registrasi.simpanRegistrasi().then(resp => {
-      console.log('resp bpjs', resp)
-      dialogCetak()
-    })
-  }
+    if (finger === '0') {
+      pasien.alert = true
+      pasien.alertMsg = resp.result
+    }
+  })
 }
 function validasiSuratKontrol() {
   console.log('validasi surat kontrol')
