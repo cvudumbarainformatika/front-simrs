@@ -363,7 +363,7 @@ function pilihRujukan(val, jenis) {
   console.log('karcis', regis.jenisKarcises)
   console.log('rujukan p care', val)
 
-  regis.setForm('asalrujukan', 'AR9999')
+  // regis.setForm('asalrujukan', 'AR9999')
   const index = findWithAttr(regis.polis, 'kodemapingbpjs', val.poliRujukan.kode)
   if (index >= 0) {
     console.log('index', index, regis.polis[index])

@@ -7,7 +7,7 @@
       :noka="registrasi.form.noka"
       :tglsep="registrasi.form.tglsep"
       :full="style.componentfull"
-      @ganti-pasien="clearFormRegistrasi"
+      @ganti-pasien="clearAllRegistrasi()"
       @full-screen="style.setComponentFull"
     />
     <FormRegistrasi
@@ -89,9 +89,9 @@ function clearAllRegistrasi() {
   registrasi.clearForm()
   refDataPasien.value.clearForm()
 }
-function clearFormRegistrasi() {
-  registrasi.clearForm()
-}
+// function clearFormRegistrasi() {
+//   registrasi.clearForm()
+// }
 function assignSurat(val) {
   refRegistrasi.value.assignSuratKontrol(val)
 }
@@ -131,6 +131,7 @@ function simpanData() {
     const finger = resp.result.kode
     console.log('finger', finger)
 
+    // if (dataPasien.save && dataRegis.save) {
     if (dataPasien.save && dataRegis.save && finger === '1') {
       const keys = Object.keys(dataPasien.form)
       if (keys.length) {

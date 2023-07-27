@@ -750,7 +750,7 @@ function assignSuratKontrol(val) {
   setSistembayar1('1')
   store.display.bayar.kode = '1'
 
-  store.setForm('asalrujukan', 'AR9999')
+  // store.setForm('asalrujukan', 'AR9999')
 
   const diag = val.sep.diagnosa.split('-')
   console.log(diag)

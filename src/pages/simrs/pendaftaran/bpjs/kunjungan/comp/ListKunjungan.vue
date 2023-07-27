@@ -145,10 +145,27 @@
       @save-form="simpanPengajuan()"
     >
       <template #default>
-        <app-input
-          v-model="keterangan"
-          label="keterangan"
-        />
+        <div>
+          <div class="row q-mb-sm">
+            <div class="col-12">
+              <app-autocomplete
+                v-model="jenisPengajuan"
+                label="Jenis Pengajuan"
+                option-value="value"
+                option-label="nama"
+                :source="jenisPengajuans"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-input
+                v-model="keterangan"
+                label="keterangan"
+              />
+            </div>
+          </div>
+        </div>
       </template>
     </app-dialog-form>
   </div>
@@ -176,6 +193,11 @@ const dialog = ref(false)
 const keterangan = ref('')
 const temp = ref(null)
 const loadingP = ref(false)
+const jenisPengajuans = ref([
+  { nama: 'pengajuan backdate', value: '1' },
+  { nama: 'pengajuan finger print', value: '2' }
+])
+const jenisPengajuan = ref('2')
 function PengajuanSep(val) {
   dialog.value = true
   temp.value = val.noka
@@ -184,7 +206,7 @@ function PengajuanSep(val) {
 function simpanPengajuan() {
   const data = {
     noka: temp.value,
-    jenispengajuan: '2',
+    jenispengajuan: jenisPengajuan.value,
     keterangan: keterangan.value
   }
   console.log(data)
@@ -197,6 +219,8 @@ function simpanPengajuan() {
         if (resp.metadata.code === '200' || resp.status === 200) {
           notifCenterVue('Pengajuan SEP sudah disampaikan')
         }
+        jenisPengajuan.value = '2'
+        keterangan.value = ''
         resolve(resp)
       })
       .catch(() => {

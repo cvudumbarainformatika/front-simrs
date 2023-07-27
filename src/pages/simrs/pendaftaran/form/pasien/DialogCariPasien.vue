@@ -193,6 +193,7 @@ function hiddenDialog() {
 
 // eslint-disable-next-line no-unused-vars
 function pilihPasienIni(val) {
+  emits('gantiPasien')
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
   store.form = val
@@ -268,10 +269,11 @@ function pilihPasienIni(val) {
   console.log('pekerjaan index', val.pekerjaan, indexpekerjaan)
   if (indexpekerjaan >= 0) {
     store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
-  } else {
-    // const indexpekerjaanlain = findWithAttr(store.pekerjaans, 'keterangan', 'Lain-lain')
-    store.display.pekerjaan = 'Lain-lain'
   }
+  // else {
+  //   // const indexpekerjaanlain = findWithAttr(store.pekerjaans, 'keterangan', 'Lain-lain')
+  //   store.display.pekerjaan = 'Lain-lain'
+  // }
   // negara
   if (val.negara) {
     store.negaraSelected(val.negara)
@@ -319,7 +321,7 @@ function pilihPasienIni(val) {
   }
   // metani kode2 dan alamat -- end --
   store.cariPasienDialog = false
-  emits('gantiPasien')
+
   console.log('pasien terpilih', val)
 }
 </script>
