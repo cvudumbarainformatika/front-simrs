@@ -93,10 +93,24 @@
                 :disable="loading"
                 @click="buatSEP"
               />
+              <app-btn
+                class="q-ml-xl"
+                label="Bersihkan Form"
+                :loading="loading"
+                :disable="loading"
+                @click="clearAllRegistrasi"
+              />
+              <!-- <app-btn
+                class="q-ml-xl"
+                label="test qt"
+                :loading="loading"
+                :disable="loading"
+                @click="qrtest()"
+              /> -->
             </div>
           </q-card-actions>
         </q-card>
-        <DialogListRujukan
+        <!-- <DialogListRujukan
           v-model="regis.tampilRujukan"
           @kode-poli="setKodepoli"
         />
@@ -106,19 +120,44 @@
           @validasi-surat-kontrol="validasiSuratKontrol"
           @jenis-kunjungan="jenisKunjungan"
           @assign-surat="assignSurat"
-        />
+        /> -->
         <DialogListSuplesi
           v-model="regis.tampilSuplesi"
         />
       </div>
     </template>
   </app-fullscreen>
+  <app-dialog-not-full
+    v-model="dialogQr"
+    @on-ok="closeQr()"
+  >
+    <template #default>
+      <div style="width:25vw ">
+        <figure
+          class="qrcode full-width q-pa-sm"
+        >
+          <vue-qrcode
+            :value="nokaQr"
+            tag="svg"
+            :options="{
+              errorCorrectionLevel: 'Q',
+              color: {
+                dark: '#000000',
+                light: '#ffffff',
+              },
+              margin:2
+            }"
+          />
+        </figure>
+      </div>
+    </template>
+  </app-dialog-not-full>
 </template>
 
 <script setup>
 import DialogListSuplesi from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListSuplesi.vue'
-import DialogListKontrol from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListKontrol.vue'
-import DialogListRujukan from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListRujukan.vue'
+// import DialogListKontrol from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListKontrol.vue'
+// import DialogListRujukan from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/DialogListRujukan.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import FormRegistrasi from 'src/pages/simrs/pendaftaran/bpjs/form/bpjs/FormRegistrasi.vue'
 import HeaderComp from './comp/HeaderComp.vue'
@@ -142,6 +181,10 @@ const refDataPasien = ref(null)
 const refRegistrasi = ref(null)
 const loading = ref(false)
 
+function clearAllRegistrasi() {
+  regis.clearForm()
+  refDataPasien.value.clearForm()
+}
 const Rm = ref('')
 function kirimPoli(val) {
   // val.noreg = ''
@@ -509,10 +552,22 @@ function buatSEP() {
   console.log('form registrasi ', regis.form)
   regis.buatSep().then(resp => {
     console.log('resp bpjs', resp)
+    if (resp.metadata.code === '200') {
+      dialogQr.value = true
+    }
     // dialogCetak()
   })
   // if (dataPasien.save && dataRegis.save) {
   // }
+}
+const nokaQr = ref('')
+
+// function qrtest() {
+//   nokaQr.value = pasien.form.noka
+//   dialogQr.value = true
+// }
+function closeQr() {
+  dialogQr.value = false
 }
 function simpanData() {
   // refDataPasien.value.set()
@@ -523,21 +578,34 @@ function simpanData() {
   console.log('pasien', dataPasien,
     'regis', dataRegis
   )
-  if (dataPasien.save && dataRegis.save) {
-    const keys = Object.keys(dataPasien.form)
-    if (keys.length) {
-      keys.forEach(key => {
-        regis.setForm(key, dataPasien.form[key])
+  const form = { noka: pasien.form.noka, tglsep: regis.form.tglsep }
+  pasien.cekPesertaFinger(form).then(resp => {
+    nokaQr.value = pasien.form.noka
+    const finger = resp.result.kode
+    console.log('finger', finger)
+
+    if (dataPasien.save && dataRegis.save && finger === '1') {
+      const keys = Object.keys(dataPasien.form)
+      if (keys.length) {
+        keys.forEach(key => {
+          regis.setForm(key, dataPasien.form[key])
+        })
+      }
+      console.log('form registrasi ', regis.form)
+      regis.simpanRegistrasi().then(resp => {
+        console.log('resp bpjs', resp)
+        dialogCetak()
       })
     }
-    console.log('form registrasi ', regis.form)
-    regis.simpanRegistrasi().then(resp => {
-      console.log('resp bpjs', resp)
-      dialogCetak()
-    })
-  }
+
+    if (finger === '0') {
+      pasien.alert = true
+      pasien.alertMsg = resp.result
+    }
+  })
 }
 
+const dialogQr = ref(false)
 function dialogCetak() {
   Dialog.create({
     title: 'Konfirmasi.',
@@ -569,3 +637,13 @@ onUnmounted(() => {
   store.setTglAwal()
 })
 </script>
+
+<style scoped>
+.qrcode {
+  display: inline-block;
+  font-size: 0;
+  margin: 0;
+  position: relative;
+}
+
+</style>
