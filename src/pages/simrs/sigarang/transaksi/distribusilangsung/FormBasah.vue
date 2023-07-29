@@ -34,6 +34,12 @@
           <template #col-sisa_stok>
             <div>Sisa stok</div>
           </template>
+          <template #col-no_penerimaan_stok>
+            <div>Nomor Penerimaan</div>
+          </template>
+          <template #col-tanggal>
+            <div>Tanggal</div>
+          </template>
           <template #col-kode>
             <div>Kode Barang</div>
           </template>
@@ -42,6 +48,10 @@
           </template>
           <template #col-toDistribute>
             <div>Akan di Distribusikan</div>
+          </template>
+          <template #cell-tanggal="{row}">
+            <div>{{ row.tanggal ? humanDate(row.tanggal):'Transaksi tidak ditemukan' }}</div>
+            <!-- @focus="inputFokus(row,col)" -->
           </template>
           <template #left-acttion="{row,col}">
             <app-input
@@ -61,6 +71,7 @@
   </div>
 </template>
 <script setup>
+import { humanDate } from 'src/modules/formatter'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 
 const store = useTransaksiDistribusiLangsung()
