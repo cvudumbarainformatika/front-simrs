@@ -37,6 +37,11 @@
           <template #col-no_penerimaan_stok>
             <div>Nomor Penerimaan</div>
           </template>
+          <template #cell-no_penerimaan_stok="{row}">
+            <div class="box">
+              {{ row.no_penerimaan_stok }}
+            </div>
+          </template>
           <template #col-tanggal>
             <div>Tanggal</div>
           </template>
@@ -47,10 +52,14 @@
             <div>Nama Barang</div>
           </template>
           <template #col-toDistribute>
-            <div>Akan di Distribusikan</div>
+            <div style="max-width:5%;">
+              Akan di Distribusikan
+            </div>
           </template>
           <template #cell-tanggal="{row}">
-            <div>{{ row.tanggal ? humanDate(row.tanggal):'Transaksi tidak ditemukan' }}</div>
+            <div class="box">
+              {{ row.tanggal ? humanDate(row.tanggal):'Transaksi tidak ditemukan' }}
+            </div>
             <!-- @focus="inputFokus(row,col)" -->
           </template>
           <template #left-acttion="{row,col}">
@@ -88,3 +97,15 @@ function inputBlur(row, col) {
   emits('simpanList', col)
 }
 </script>
+<style lang="scss" scoped>
+.q-table{
+  td{
+    .box{
+
+      white-space: normal !important;
+      inline-size: 150px;
+      overflow-wrap: break-word;
+    }
+  }
+}
+</style>

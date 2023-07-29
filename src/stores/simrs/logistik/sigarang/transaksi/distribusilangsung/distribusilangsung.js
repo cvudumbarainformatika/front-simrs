@@ -50,6 +50,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     // table
     setSearch(val) {
       this.params.q = val
+      this.params.page = 1
       this.getDataTable()
     },
     setPerPage(payload) {
