@@ -134,6 +134,7 @@
                   label="dari tanggal"
                   outlined
                   :loading="store.loading"
+                  :disable="store.loading"
                   @db-model="setFrom"
                   @set-display="setFromDisp"
                 />
@@ -144,8 +145,21 @@
                   label="sampai tanggal"
                   outlined
                   :loading="store.loading"
+                  :disable="store.loading"
                   @db-model="setTo"
                   @set-display="setToDisp"
+                />
+              </div>
+              <div>
+                <app-autocomplete
+                  v-model="store.params.layanan"
+                  label="Layanan"
+                  option-label="nama"
+                  option-value="value"
+                  outlined
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  :source="store.layanans"
                 />
               </div>
               <div>
@@ -239,8 +253,14 @@
               </div>
             </td>
             <td>
-              <div class="text-weight-bold">
+              <div
+                v-if="store.items.length"
+                class="text-weight-bold"
+              >
                 Rp. {{ formatDouble(store.items.map(it=>it.subtotal).reduce((a,b)=>a+b,0)) }}
+              </div>
+              <div v-else>
+                -
               </div>
             </td>
           </template>

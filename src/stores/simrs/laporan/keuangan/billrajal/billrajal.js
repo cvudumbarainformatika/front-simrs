@@ -21,6 +21,7 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
       order_by: 'created_at',
       tgldari: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglsampai: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      layanan: '1',
       // tgldari: date.formatDate('01-01-2023', 'YYYY-MM-DD'),
       // tglsampai: date.formatDate('01-05-2023', 'YYYY-MM-DD'),
       sort: 'desc'
@@ -39,6 +40,11 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
       { nama: 'Oktober', value: 'Oktober', mo: '10' },
       { nama: 'November', value: 'November', mo: '11' },
       { nama: 'Desember', value: 'Desember', mo: '12' }
+    ],
+    layanans: [
+      { nama: 'Rawat Jalan', value: '1' },
+      { nama: 'IGD', value: '2' },
+      { nama: 'Rawat Inap', value: '3' }
     ],
     columns: ['tanggal', 'pasien', 'poli', 'apotikrajal', 'apotikpoli', 'laborat', 'radiologi', 'msistembayar', 'subtotal'],
     columnHide: ['id']
@@ -171,10 +177,12 @@ export const useSimrsLaporanKeuanganBillRajalStore = defineStore('simrs_laporan_
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/laporan/laporanallbillrajal', param)
+        api.get('v1/simrs/laporan/keuangan/laporanallbillrajal', param)
           .then(resp => {
             this.loading = false
-            this.items = resp.data
+            if (resp.data.length) {
+              this.items = resp.data
+            }
             if (this.items.length) {
               this.mapDataItems()
             }
