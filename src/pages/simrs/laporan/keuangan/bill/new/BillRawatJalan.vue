@@ -1,0 +1,829 @@
+<template>
+  <q-page padding>
+    <q-card :key="store.params.tgldari">
+      <q-card-section>
+        <div class="row garis-bawah">
+          <div class="col-2">
+            <q-img
+              src="~assets/images/logo-kota-grey.png"
+              spinner-color="white"
+              style="height: 3.56cm; max-width: 2.86cm"
+            />
+          </div>
+          <div class="col-10">
+            <div class="row justify-center f-18">
+              PEMERINTAH KOTA PROBOLINGGO
+            </div>
+            <div class="row justify-center f-14 text-weight-bold">
+              DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+            </div>
+            <div class="row justify-center f-28 text-weight-bold">
+              UOBK RSUD DOKTER MOHAMAD SALEH
+            </div>
+            <div class="row justify-center f-14">
+              Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+            </div>
+            <div class="row justify-center f-14">
+              E-mail : rsudprob@probolinggokota.go.id
+            </div>
+            <div class="row justify-center f-14 text-weight-bold">
+              PROBOLINGGO  67219
+            </div>
+          </div>
+        </div>
+        <div class="row fit justify-center items-center text-weight-bold f-18">
+          REKAP TAGIHAN PASIEN RAWAT JALAN
+        </div>
+        <div class="row fit justify-center items-center text-weight-bold f-14">
+          periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <CustomTable
+          id="printMe"
+          :key="store.params.tgldari"
+          :columns="store.columns"
+          :meta="store.meta"
+          :column-hide="store.columnHide"
+          :items="store.items"
+          :per-page="store.params.per_page"
+          :order-by="store.params.order_by"
+          :sort="store.params.sort"
+          :loading="store.loading"
+          :to-search="store.params.q"
+          :ada-cari="false"
+          :default-btn="false"
+          :ada-tambah="false"
+          :right-action="false"
+          row-no
+          @goto="store.setPage"
+          @set-row="store.setPerPage"
+          @refresh="store.refreshTable"
+          @find="store.setSearch"
+          @set-order="store.setOder"
+          @new-data="store.newData"
+          @edit-data="store.editData"
+          @delete="store.deletesData"
+        >
+          <!-- header print -->
+          <template #header-for-print>
+            <div class="row garis-bawah">
+              <div class="col-2">
+                <q-img
+                  src="~assets/images/logo-kota-grey.png"
+                  spinner-color="white"
+                  style="height: 3.56cm; max-width: 2.86cm"
+                />
+              </div>
+              <div class="col-10">
+                <div class="row justify-center f-18">
+                  PEMERINTAH KOTA PROBOLINGGO
+                </div>
+                <div class="row justify-center f-14 text-weight-bold">
+                  DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+                </div>
+                <div class="row justify-center f-28 text-weight-bold">
+                  UOBK RSUD DOKTER MOHAMAD SALEH
+                </div>
+                <div class="row justify-center f-14">
+                  Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+                </div>
+                <div class="row justify-center f-14">
+                  E-mail : rsudprob@probolinggokota.go.id
+                </div>
+                <div class="row justify-center f-14 text-weight-bold">
+                  PROBOLINGGO  67219
+                </div>
+              </div>
+            </div>
+            <div class="row justify-center f-18 text-weight-bold q-my-sm">
+              REKAP TAGIHAN PASIEN RAWAT JALAN
+            </div>
+            <div class="row justify-center f-14 text-weight-bold q-my-sm">
+              periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
+            </div>
+            <!-- <div class="row ">
+              <div>  REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}</div>
+            </div> -->
+          </template>
+          <!-- tombol print -->
+          <template #header-right-before>
+            <q-btn
+              ref="refPrint"
+              v-print="printObj"
+              unelevated
+              color="dark"
+              round
+              size="sm"
+              icon="icon-mat-print"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </template>
+          <!-- set periode -->
+          <template #header-left-after-search>
+            <div class="row q-col-gutter-sm">
+              <div>
+                <app-input-date-human
+                  :model="store.tanggal.from"
+                  label="dari tanggal"
+                  outlined
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @db-model="setFrom"
+                  @set-display="setFromDisp"
+                />
+              </div>
+              <div>
+                <app-input-date-human
+                  :model="store.tanggal.to"
+                  label="sampai tanggal"
+                  outlined
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @db-model="setTo"
+                  @set-display="setToDisp"
+                />
+              </div>
+              <div>
+                <app-autocomplete
+                  v-model="store.params.layanan"
+                  label="Layanan"
+                  option-label="nama"
+                  option-value="value"
+                  outlined
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  :source="store.layanans"
+                />
+              </div>
+              <div>
+                <app-btn
+                  label="cari"
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @click="ambilData"
+                />
+              </div>
+              <div v-if="store.items.length">
+                <download-excel
+                  class="btn"
+                  :fetch="fetchData"
+                  :fields="jsonFields"
+                  :before-generate="startDownload"
+                  :before-finish="finishDownload"
+                  name="tagihan.xls"
+                >
+                  <app-btn
+                    label="Download Excel"
+                    icon="icon-mat-download"
+                    push
+                    :loading="loading"
+                  />
+                </download-excel>
+              </div>
+            </div>
+          </template>
+          <!-- pengganti header karena header di disable -->
+          <!-- <template #top-row>
+            <th>
+              <div
+                style="min-width:10px; max-width:80px white-space: normal !important;"
+                class="row items-center text-weight-bold"
+              >
+                No
+              </div>
+            </th>
+            <th>
+              <div class="row items-center text-weight-bold">
+                Tanggal
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Pasien
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Poli
+              </div>
+            </th>
+            <th colspan="2">
+              <div class="row justify-center text-weight-bold">
+                Apotik
+              </div>
+              <div class="row justify-start text-weight-bold">
+                <div class="col-6">
+                  Racikan
+                </div>
+                <div class="col-6">
+                  Non Racikan
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Laborat
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Radiologi
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Sistem Bayar
+              </div>
+            </th>
+            <th>
+              <div class="row justify-center items-center text-weight-bold q-mb-sm">
+                Sub Total
+              </div>
+            </th>
+          </template> -->
+          <!-- Row paling bawah -->
+          <template #bottom-row>
+            <td colspan="7">
+              <div class="text-weight-bold">
+                Total periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
+              </div>
+            </td>
+            <td colspan="2">
+              <div
+                v-if="store.items.length"
+                class="text-weight-bold"
+              >
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Klaim BPJS
+                  </div>
+                  <div class="text-weight-bold">
+                    Rp. {{ formatDouble(store.items.map(it=>it.pendapatanBPJS).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Tagihan
+                  </div>
+                  <div>
+                    Rp. {{ formatDouble(store.items.map(it=>it.subtotal).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Selisih
+                  </div>
+                  <div :class="store.items.map(it=>it.selisih).reduce((a,b)=>a+b,0)<=0?'text-negative':'text-green'">
+                    Rp. {{ formatDouble(store.items.map(it=>it.selisih).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                -
+              </div>
+            </td>
+          </template>
+          <template #col-pendapatan>
+            Pendapatan BPJS
+          </template>
+          <template #col-tanggal>
+            Tanggal
+          </template>
+          <template #col-pasien>
+            Pasien
+          </template>
+          <template #col-poli>
+            Poli
+          </template>
+          <template #col-apotik>
+            Apotek
+          </template>
+          <template #col-biaya>
+            Biaya
+          </template>
+          <template #col-penunjang>
+            Penunjang dan Kamar
+          </template>
+          <template #col-tindakan>
+            Tindakan
+          </template>
+          <template #col-subtotal>
+            Klaim dan Tagihan
+          </template>
+          <template #cell-tanggal="{row}">
+            {{ dateFullFormat(row.rs3) }}
+          </template>
+          <template #cell-pasien="{row}">
+            <div v-if="row.masterpasien">
+              <div class="row no-wrap q-mb-xs text-weight-bold">
+                {{ row.rs1 }}
+              </div>
+              <div class="row no-wrap q-mb-xs text-weight-bold text-primary">
+                {{ row.masterpasien[0].rs1 }}
+              </div>
+              <div class="kecilin q-mb-xs text-weight-bold">
+                {{ row.masterpasien[0].rs2 }}
+              </div>
+            </div>
+            <div v-if="row.msistembayar">
+              <div class="kecilin text-weight-bold text-green">
+                {{ row.msistembayar.rs2 }}
+              </div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-poli="{row}">
+            <div class="kecilin">
+              {{ row.relmpoli?row.relmpoli.rs2:'-' }}
+            </div>
+          </template>
+          <template #cell-biaya="{row}">
+            <div v-if="row.administrasiigd">
+              <div class="row justify-between no-wrap">
+                <div class="q-mr-xs">
+                  Admin Igd
+                </div>
+                <div>{{ row.administrasiigd[0]?formatDouble(row.administrasiigd[0].rs7):'-' }}</div>
+              </div>
+            </div>
+            <div v-if="row.amb>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Ambulan
+                </div>
+                <div>{{ formatDouble(row.amb) }}</div>
+              </div>
+            </div>
+            <div v-if="row.mtri>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Materai
+                </div>
+                <div>{{ formatDouble(row.mtri) }}</div>
+              </div>
+            </div>
+            <div v-if="row.visitDok>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Visite
+                </div>
+                <div>{{ formatDouble(row.visitDok) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bId>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Kartu identitas
+                </div>
+                <div>{{ formatDouble(row.bId) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bKonsul>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Konsul
+                </div>
+                <div>{{ formatDouble(row.bKonsul) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bPelPoli>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Poli spesialis/anastesi
+                </div>
+                <div>{{ formatDouble(row.bPelPoli) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bRM>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Rekam Medik
+                </div>
+                <div>{{ formatDouble(row.bRM) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-apotik="{row}">
+            <div
+              v-if="row.obat>0"
+              class="row justify-between no-wrap"
+            >
+              <div>non-racikan</div>
+              <div>{{ formatDouble(row.obat) }}</div>
+            </div>
+            <div
+              v-if="row.obatRacik>0"
+              class="row justify-between no-wrap"
+            >
+              <div>racikan</div>
+              <div>{{ formatDouble(row.obatRacik) }}</div>
+            </div>
+            <div
+              v-if="row.nonRacikRajal>0"
+              class="row justify-between no-wrap"
+            >
+              <div>non-racikan</div>
+              <div>{{ formatDouble(row.nonRacikRajal) }}</div>
+            </div>
+            <div
+              v-if="row.racikrajal>0"
+              class="row justify-between no-wrap"
+            >
+              <div>racikan</div>
+              <div>{{ formatDouble(row.racikrajal) }}</div>
+            </div>
+          </template>
+          <template #cell-tindakan="{row}">
+            <div
+              v-if="row.tDokPer>0"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                dokter / perawat
+              </div>
+              <div>{{ formatDouble(row.tDokPer) }}</div>
+            </div>
+            <div v-if="row.okIGD>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  ok IGD
+                </div>
+                <div>{{ formatDouble(row.okIGD) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Operasi
+                </div>
+                <div>{{ formatDouble(row.tOperasi + row.kOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tAnasLuar>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Anastesi di luar OK dan ICU
+                </div>
+                <div>{{ formatDouble(row.tAnasLuar) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tCardio>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Cardio
+                </div>
+                <div>{{ formatDouble(row.tCardio) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tEeg>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  EEG
+                </div>
+                <div>{{ formatDouble(row.tEeg) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tEndo>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Endoscopy
+                </div>
+                <div>{{ formatDouble(row.tEndo) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tFisio>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Fisioterapi
+                </div>
+                <div>{{ formatDouble(row.tFisio) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tHd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Hemodialisa
+                </div>
+                <div>{{ formatDouble(row.tHd) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-penunjang="{row}">
+            <div
+              v-if="row.lab"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Lab
+              </div>
+              <div>
+                <div v-if="row.lab.length">
+                  {{ formatDouble(row.lab.map(l=>l.subtotal).reduce((a,b)=>a+b,0)) }}
+                </div>
+                <div v-else>
+                  -
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="row.transRad"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Trans Rodiologi
+              </div>
+              <div>
+                <div>
+                  {{ formatDouble(row.transRad) }}
+                </div>
+              </div>
+            </div>
+            <div v-if="row.bankDarah>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  BDRS
+                </div>
+                <div>{{ formatDouble(row.bankDarah) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kmrJnzh>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah
+                </div>
+                <div>{{ formatDouble(row.kmrJnzh) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kmrJnzhI>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah inap
+                </div>
+                <div>{{ formatDouble(row.kmrJnzhI) }}</div>
+              </div>
+            </div>
+            <!-- <div v-if="row.kOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Operasi
+                </div>
+                <div>{{ formatDouble(row.kOperasi) }}</div>
+              </div>
+            </div> -->
+            <div v-if="row.jPsikolog>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Psikologi
+                </div>
+                <div>{{ formatDouble(row.jPsikolog) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-pendapatan="{row}">
+            <div v-if="row.pendapatanallbpjs.length">
+              <div class="text-right">
+                {{ row.pendapatanallbpjs[0]?formatDouble(row.pendapatanallbpjs[0].subtotal):0 }}
+              </div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-subtotal="{row}">
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Klaim BPJS
+              </div>
+              <div class="text-weight-bold text-primary">
+                {{ formatDouble(row.pendapatanBPJS) }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Tagihan
+              </div>
+              <div class="text-weight-bold text-orange">
+                {{ formatDouble(row.subtotal) }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Selisih
+              </div>
+              <div
+                class="text-weight-bold"
+                :class="row.selisih<=0?'text-negative':'text-green'"
+              >
+                {{ formatDouble(row.selisih) }}
+              </div>
+            </div>
+          </template>
+        </CustomTable>
+        <!--
+            row-image="image"
+            @delete-ids="table.deletesData"
+            -->
+      </q-card-section>
+    </q-card>
+  </q-page>
+</template>
+<script setup>
+import { date } from 'quasar'
+import { dateFullFormat, formatDouble } from 'src/modules/formatter'
+import { useSimrsLaporanKeuanganNewBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/new/billrajal'
+import CustomTable from '../../../rekap/CustomTable.vue'
+import { ref } from 'vue'
+
+const store = useSimrsLaporanKeuanganNewBillRajalStore()
+
+// data for print --start--
+const loading = ref(false)
+function startDownload() {
+  loading.value = true
+}
+function finishDownload() {
+  loading.value = false
+}
+const jsonFields = {
+  No: 'no',
+  Tanggal: 'tanggal',
+  Pasien: 'pasien',
+  Poli: 'poli',
+  'Sistem Bayar': 'bayar',
+  'Pelayanan Rekam Medik': 'rekammedik',
+  'Biaya Kartu Identitas Paseian': 'idPasien',
+  'Poliklinik Spesialis / Anastesi': 'bPoli',
+  'Konsultasi Antar Poli': 'bKonsul',
+  Tindakan: 'tDokPer',
+  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
+  Laboratorium: 'laborat',
+  Radiologi: 'radiologi',
+  'Operasi One Day Care': 'operasi', // kamar operasi + tindakan operasi
+  Fisioterapi: 'fisio',
+  Hemodialisa: 'hd',
+  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
+  'Klinik Psikologi': 'psikologi',
+  Cardio: 'cardio',
+  EEG: 'eeg',
+  Endoscope: 'endos',
+  Apotek: 'apotek', // semua apotek di jumlah
+  'Klaim BPJS': 'pendapatan',
+  'Sub Total': 'subtotal',
+  Selisih: 'selisih'
+}
+function fetchData() {
+  loading.value = true
+  const data = []
+  store.items.forEach((item, i) => {
+    const temp = {}
+    temp.no = i + 1
+    temp.subtotal = item.subtotal
+    temp.pendapatan = item.pendapatanBPJS
+    temp.selisih = item.selisih
+    temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+    temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
+    temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+    temp.rekammedik = item.bRM
+    temp.idPasien = item.bId
+    temp.bPoli = item.bPelPoli
+    temp.bKonsul = item.bKonsul
+    temp.tDokPer = item.tDokPer
+    temp.visitDok = item.visitDok
+    temp.laborat = item.jLaborat
+    temp.radiologi = item.jRadiologi
+    temp.operasi = item.kOperasi + item.tOperasi
+    temp.fisio = item.tFisio
+    temp.hd = item.tHd
+    temp.tAnasLuar = item.tAnasLuar
+    temp.psikologi = item.jPsikolog
+    temp.cardio = item.tCardio
+    temp.eeg = item.tEeg
+    temp.endos = item.tEndo
+    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+    data.push(temp)
+
+    // console.log('in', i, 'item', item)
+  })
+  loading.value = false
+  return data
+}
+// data for print --end--
+
+function ambilData() {
+  store.getDataTable()
+}
+
+function setFrom(val) {
+  store.params.tgldari = val
+}
+function setFromDisp(val) {
+  store.tanggal.from = val
+  // console.log('params ', store.params)
+  // console.log('tanggal', store.tanggal)
+}
+function setTo(val) {
+  store.params.tglsampai = val
+}
+function setToDisp(val) {
+  store.tanggal.to = val
+  // console.log('params ', store.params)
+  // console.log('tanggal', store.tanggal)
+}
+
+const printed = ref(false)
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Laporan Rekap',
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback(vue) {
+    printed.value = true
+    console.log('wait...')
+  },
+  openCallback (vue) {
+    console.log('opened')
+  },
+  closeCallback (vue) {
+    printed.value = false
+    console.log('closePrint')
+  }
+}
+
+store.getInitialData()
+</script>
+<style lang="scss" scoped>
+.garis-bawah{
+  border-bottom: 6px solid black;
+  border-bottom-style: double;
+}
+.anu{
+  max-width: 150px;
+  min-width: 50px;
+}
+.wrap_it{
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  white-space: normal !important;
+  word-break: break-word;
+}
+.kecilin{
+  min-width: 10px;
+  max-width: 100px;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  word-break: break-word;
+}
+
+</style>

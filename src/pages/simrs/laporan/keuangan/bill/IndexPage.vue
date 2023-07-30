@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./BillRawatJalan.vue')
+  import('./new/BillRawatJalan.vue')
 )
 </script>
