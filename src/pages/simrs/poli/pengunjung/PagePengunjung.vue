@@ -28,6 +28,35 @@
 
           <q-btn
             flat
+            color="white"
+            icon-right="icon-mat-dataset"
+            :label="txt"
+            size="sm"
+            padding="xs"
+            class="q-mr-sm"
+          >
+            <q-menu
+              transition-show="flip-left"
+              transition-hide="flip-right"
+              :offset="[0,10]"
+            >
+              <q-list style="min-width: 150px">
+                <q-item
+                  v-for="(item, i) in txts"
+                  :key="i"
+                  v-close-popup
+                  clickable
+                  :class="item===txt?'bg-secondary text-white':''"
+                  @click="txt=item"
+                >
+                  <q-item-section>{{ item }}</q-item-section>
+                </q-item>
+                <q-separator />
+              </q-list>
+            </q-menu>
+          </q-btn>
+          <q-btn
+            flat
             round
             dense
             :icon="style.componentfull?'icon-mat-close_fullscreen':'icon-mat-open_in_full'"
@@ -45,8 +74,14 @@
       <list-pengunjung
         :key="store.items"
         :items="store.items"
+        @tindakan="bukaTindakan"
       />
     </q-card>
+
+    <page-tindakan
+      v-model="store.pageTindakan"
+      :pasien="pasien"
+    />
   </q-page>
 </template>
 
@@ -55,13 +90,25 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { onMounted, ref } from 'vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
+import PageTindakan from './comp/PageTindakan.vue'
 
 const style = useStyledStore()
 const store = usePengunjungPoliStore()
 const pageRef = ref()
 const h = ref(0)
+const pasien = ref(null)
+
+const txt = ref('SEMUA')
+const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
 onMounted(() => {
   store.getData()
   h.value = pageRef.value.$el.clientHeight
 })
+
+function bukaTindakan(val) {
+  const pasien = val
+  pasien.value = val
+  store.togglePageTindakan()
+  console.log(pasien)
+}
 </script>

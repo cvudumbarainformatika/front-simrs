@@ -10,7 +10,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     params: {
       // tgl: dateDbFormat(new Date())
       tgl: '2023-07-07'
-    }
+    },
+    pageTindakan: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -30,6 +31,9 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
           console.log(err)
           this.loading = false
         })
+    },
+    togglePageTindakan() {
+      this.pageTindakan = !this.pageTindakan
     }
   }
 })
