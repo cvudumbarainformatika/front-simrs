@@ -54,7 +54,7 @@
           :ada-cari="false"
           :default-btn="false"
           :ada-tambah="false"
-          :enable-head="false"
+          :right-action="false"
           row-no
           @goto="store.setPage"
           @set-row="store.setPerPage"
@@ -190,9 +190,12 @@
             </div>
           </template>
           <!-- pengganti header karena header di disable -->
-          <template #top-row>
+          <!-- <template #top-row>
             <th>
-              <div class="row items-center text-weight-bold">
+              <div
+                style="min-width:10px; max-width:80px white-space: normal !important;"
+                class="row items-center text-weight-bold"
+              >
                 No
               </div>
             </th>
@@ -244,25 +247,51 @@
                 Sub Total
               </div>
             </th>
-          </template>
+          </template> -->
           <!-- Row paling bawah -->
           <template #bottom-row>
-            <td colspan="9">
+            <td colspan="7">
               <div class="text-weight-bold">
-                Total Tagihan periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
+                Total periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
               </div>
             </td>
-            <td>
+            <td colspan="2">
               <div
                 v-if="store.items.length"
                 class="text-weight-bold"
               >
-                Rp. {{ formatDouble(store.items.map(it=>it.subtotal).reduce((a,b)=>a+b,0)) }}
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Klaim BPJS
+                  </div>
+                  <div class="text-weight-bold">
+                    Rp. {{ formatDouble(store.items.map(it=>it.pendapatanBPJS).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Tagihan
+                  </div>
+                  <div>
+                    Rp. {{ formatDouble(store.items.map(it=>it.subtotal).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
+                <div class=" row justify-between no-wrap">
+                  <div class="q-mr-xs">
+                    Selisih
+                  </div>
+                  <div :class="store.items.map(it=>it.selisih).reduce((a,b)=>a+b,0)<=0?'text-negative':'text-green'">
+                    Rp. {{ formatDouble(store.items.map(it=>it.selisih).reduce((a,b)=>a+b,0)) }}
+                  </div>
+                </div>
               </div>
               <div v-else>
                 -
               </div>
             </td>
+          </template>
+          <template #col-pendapatan>
+            Pendapatan BPJS
           </template>
           <template #col-tanggal>
             Tanggal
@@ -273,37 +302,39 @@
           <template #col-poli>
             Poli
           </template>
-          <template #col-apotikrajal>
-            Apotek Racikan
+          <template #col-apotik>
+            Apotek
           </template>
-          <template #col-apotikpoli>
-            Apotek Non racikan
+          <template #col-biaya>
+            Biaya
           </template>
-          <template #col-laborat>
-            Laborat
+          <template #col-penunjang>
+            Penunjang dan Kamar
           </template>
-          <template #col-radiologi>
-            Radiologi
-          </template>
-          <template #col-msistembayar>
-            Sitem Bayar
+          <template #col-tindakan>
+            Tindakan
           </template>
           <template #col-subtotal>
-            Sub Total
+            Klaim dan Tagihan
           </template>
           <template #cell-tanggal="{row}">
             {{ dateFullFormat(row.rs3) }}
           </template>
           <template #cell-pasien="{row}">
             <div v-if="row.masterpasien">
-              <div class="row no-wrap">
+              <div class="row no-wrap q-mb-xs text-weight-bold">
                 {{ row.rs1 }}
               </div>
-              <div class="row no-wrap">
+              <div class="row no-wrap q-mb-xs text-weight-bold text-primary">
                 {{ row.masterpasien[0].rs1 }}
               </div>
-              <div class="kecilin">
+              <div class="kecilin q-mb-xs text-weight-bold">
                 {{ row.masterpasien[0].rs2 }}
+              </div>
+            </div>
+            <div v-if="row.msistembayar">
+              <div class="kecilin text-weight-bold text-green">
+                {{ row.msistembayar.rs2 }}
               </div>
             </div>
             <div v-else>
@@ -315,197 +346,326 @@
               {{ row.relmpoli?row.relmpoli.rs2:'-' }}
             </div>
           </template>
-          <template #cell-apotikrajal="{row}">
-            <div v-if="row.rajalracik">
+          <template #cell-biaya="{row}">
+            <div v-if="row.administrasiigd">
+              <div class="row justify-between no-wrap">
+                <div class="q-mr-xs">
+                  Admin Igd
+                </div>
+                <div>{{ row.administrasiigd[0]?formatDouble(row.administrasiigd[0].rs7):'-' }}</div>
+              </div>
+            </div>
+            <div v-if="row.amb>0">
               <div
-                v-for="(nota,a) in row.rajalracik"
-                :key="a"
+                class="row justify-between no-wrap"
               >
-                <div class="row items-center q-col-gutter-sm text-weight-bold mb-xs q-mt-sm">
-                  <div class="col-12">
-                    {{ nota.nota }}
-                  </div>
+                <div class="q-mr-xs">
+                  Ambulan
                 </div>
-
-                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                  <div class="col-7">
-                    Nama
-                  </div>
-                  <div class="col-4">
-                    Jumlah
-                  </div>
+                <div>{{ formatDouble(row.amb) }}</div>
+              </div>
+            </div>
+            <div v-if="row.mtri>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Materai
                 </div>
-                <div
-                  v-for="(item,i) in nota.rinci"
-                  :key="i"
-                  class="anu row items-center q-mb-xs q-col-gutter-sm"
-                >
-                  <div class="col-8 wrap_it">
-                    {{ item.racikanrinci.rs2 }}
-                  </div>
-                  <div class="col-4 text-right">
-                    {{ formatDouble(item.subtotal) }}
-                  </div>
+                <div>{{ formatDouble(row.mtri) }}</div>
+              </div>
+            </div>
+            <div v-if="row.visitDok>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Visite
                 </div>
-                <div class="row items-center q-col-gutter-sm text-weight-bold">
-                  <div class="col-8">
-                    subtotal
-                  </div>
-                  <div class="col-4">
-                    {{ formatDouble(nota.subtotal) }}
-                  </div>
+                <div>{{ formatDouble(row.visitDok) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bId>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Kartu identitas
                 </div>
+                <div>{{ formatDouble(row.bId) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bKonsul>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Konsul
+                </div>
+                <div>{{ formatDouble(row.bKonsul) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bPelPoli>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Poli spesialis/anastesi
+                </div>
+                <div>{{ formatDouble(row.bPelPoli) }}</div>
+              </div>
+            </div>
+            <div v-if="row.bRM>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Rekam Medik
+                </div>
+                <div>{{ formatDouble(row.bRM) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-apotik="{row}">
+            <div
+              v-if="row.obat>0"
+              class="row justify-between no-wrap"
+            >
+              <div>non-racikan</div>
+              <div>{{ formatDouble(row.obat) }}</div>
+            </div>
+            <div
+              v-if="row.obatRacik>0"
+              class="row justify-between no-wrap"
+            >
+              <div>racikan</div>
+              <div>{{ formatDouble(row.obatRacik) }}</div>
+            </div>
+            <div
+              v-if="row.nonRacikRajal>0"
+              class="row justify-between no-wrap"
+            >
+              <div>non-racikan</div>
+              <div>{{ formatDouble(row.nonRacikRajal) }}</div>
+            </div>
+            <div
+              v-if="row.racikrajal>0"
+              class="row justify-between no-wrap"
+            >
+              <div>racikan</div>
+              <div>{{ formatDouble(row.racikrajal) }}</div>
+            </div>
+          </template>
+          <template #cell-tindakan="{row}">
+            <div
+              v-if="row.tDokPer>0"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                dokter / perawat
+              </div>
+              <div>{{ formatDouble(row.tDokPer) }}</div>
+            </div>
+            <div v-if="row.okIGD>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  ok IGD
+                </div>
+                <div>{{ formatDouble(row.okIGD) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Operasi
+                </div>
+                <div>{{ formatDouble(row.tOperasi + row.kOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tAnasLuar>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Anastesi di luar OK dan ICU
+                </div>
+                <div>{{ formatDouble(row.tAnasLuar) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tCardio>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Cardio
+                </div>
+                <div>{{ formatDouble(row.tCardio) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tEeg>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  EEG
+                </div>
+                <div>{{ formatDouble(row.tEeg) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tEndo>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Endoscopy
+                </div>
+                <div>{{ formatDouble(row.tEndo) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tFisio>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Fisioterapi
+                </div>
+                <div>{{ formatDouble(row.tFisio) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tHd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Hemodialisa
+                </div>
+                <div>{{ formatDouble(row.tHd) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-penunjang="{row}">
+            <div
+              v-if="row.lab"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Lab
+              </div>
+              <div>
+                <div v-if="row.lab.length">
+                  {{ formatDouble(row.lab.map(l=>l.subtotal).reduce((a,b)=>a+b,0)) }}
+                </div>
+                <div v-else>
+                  -
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="row.transRad"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Trans Rodiologi
+              </div>
+              <div>
+                <div>
+                  {{ formatDouble(row.transRad) }}
+                </div>
+              </div>
+            </div>
+            <div v-if="row.bankDarah>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  BDRS
+                </div>
+                <div>{{ formatDouble(row.bankDarah) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kmrJnzh>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah
+                </div>
+                <div>{{ formatDouble(row.kmrJnzh) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kmrJnzhI>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah inap
+                </div>
+                <div>{{ formatDouble(row.kmrJnzhI) }}</div>
+              </div>
+            </div>
+            <!-- <div v-if="row.kOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Operasi
+                </div>
+                <div>{{ formatDouble(row.kOperasi) }}</div>
+              </div>
+            </div> -->
+            <div v-if="row.jPsikolog>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Psikologi
+                </div>
+                <div>{{ formatDouble(row.jPsikolog) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-pendapatan="{row}">
+            <div v-if="row.pendapatanallbpjs.length">
+              <div class="text-right">
+                {{ row.pendapatanallbpjs[0]?formatDouble(row.pendapatanallbpjs[0].subtotal):0 }}
               </div>
             </div>
             <div v-else>
               -
-            </div>
-          </template>
-          <template #cell-apotikpoli="{row}">
-            <div v-if="row.rajalpoli">
-              <div
-                v-for="(nota,a) in row.rajalpoli"
-                :key="a"
-              >
-                <div class="row items-center q-col-gutter-sm mb-xs q-mt-sm text-weight-bold">
-                  <div class="col-12">
-                    {{ nota.nota }}
-                  </div>
-                </div>
-
-                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                  <div class="col-7">
-                    Nama
-                  </div>
-                  <div class="col-4 ">
-                    Jumlah
-                  </div>
-                </div>
-                <div
-                  v-for="(item,i) in nota.rinci"
-                  :key="i"
-                  class="anu row items-center q-mb-xs q-col-gutter-sm"
-                >
-                  <div class="col-8 wrap_it">
-                    {{ item.mobat.rs2 }}
-                  </div>
-                  <div class="col-4 text-right">
-                    {{ formatDouble(item.subtotal) }}
-                  </div>
-                </div>
-                <div class="row items-center q-col-gutter-sm text-weight-bold">
-                  <div class="col-8">
-                    subtotal
-                  </div>
-                  <div class="col-4">
-                    {{ formatDouble(nota.subtotal) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-else>
-              -
-            </div>
-          </template>
-          <template #cell-laborat="{row}">
-            <div v-if="row.lab">
-              <div
-                v-for="(nota,a) in row.lab"
-                :key="a"
-              >
-                <div class="row items-center q-col-gutter-sm text-weight-bold mb-xs q-mt-sm">
-                  <div class="col-12">
-                    {{ nota.nota }}
-                  </div>
-                </div>
-
-                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                  <div class="col-7">
-                    Nama
-                  </div>
-                  <div class="col-4">
-                    Jumlah
-                  </div>
-                </div>
-                <div
-                  v-for="(item,i) in nota.rinci"
-                  :key="i"
-                  class="anu row items-center q-mb-xs q-col-gutter-sm"
-                >
-                  <div class="col-8 wrap_it">
-                    {{ item.pemeriksaanlab.rs21!==''?item.pemeriksaanlab.rs21:item.pemeriksaanlab.rs2 }}
-                  </div>
-                  <div class="col-4 text-right">
-                    {{ formatDouble(item.subtotal) }}
-                  </div>
-                </div>
-                <div class="row items-center q-col-gutter-sm text-weight-bold">
-                  <div class="col-8">
-                    subtotal
-                  </div>
-                  <div class="col-4">
-                    {{ formatDouble(nota.subtotal) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-else>
-              -
-            </div>
-          </template>
-          <template #cell-radiologi="{row}">
-            <div v-if="row.radiolog">
-              <div
-                v-for="(nota,a) in row.radiolog"
-                :key="a"
-              >
-                <div class="row items-center q-col-gutter-sm text-weight-bold q-mb-xs q-mt-sm">
-                  <div class="col-12">
-                    {{ nota.nota }}
-                  </div>
-                </div>
-
-                <div class="anu row items-center q-mb-xs q-col-gutter-sm text-weight-bold">
-                  <div class="col-7">
-                    Nama
-                  </div>
-                  <div class="col-4">
-                    Jumlah
-                  </div>
-                </div>
-                <div
-                  v-for="(item,i) in nota.rinci"
-                  :key="i"
-                  class="anu row items-center q-mb-xs q-col-gutter-sm"
-                >
-                  <div class="col-8 wrap_it">
-                    {{ item.relmasterpemeriksaan?item.relmasterpemeriksaan.rs2:'-' }}
-                  </div>
-                  <div class="col-4 text-right">
-                    {{ formatDouble(item.subtotal) }}
-                  </div>
-                </div>
-                <div class="row items-center q-col-gutter-sm text-weight-bold">
-                  <div class="col-8">
-                    subtotal
-                  </div>
-                  <div class="col-4">
-                    {{ formatDouble(nota.subtotal) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-else>
-              -
-            </div>
-          </template>
-          <template #cell-msistembayar="{row}">
-            <div class="kecilin">
-              {{ row.msistembayar?row.msistembayar.rs2:'-' }}
             </div>
           </template>
           <template #cell-subtotal="{row}">
-            {{ formatDouble(row.subtotal) }}
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Klaim BPJS
+              </div>
+              <div class="text-weight-bold text-primary">
+                {{ formatDouble(row.pendapatanBPJS) }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Tagihan
+              </div>
+              <div class="text-weight-bold text-orange">
+                {{ formatDouble(row.subtotal) }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Selisih
+              </div>
+              <div
+                class="text-weight-bold"
+                :class="row.selisih<=0?'text-negative':'text-green'"
+              >
+                {{ formatDouble(row.selisih) }}
+              </div>
+            </div>
           </template>
         </CustomTable>
         <!--
@@ -519,11 +679,11 @@
 <script setup>
 import { date } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
-import { useSimrsLaporanKeuanganBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/billrajal'
-import CustomTable from '../../rekap/CustomTable.vue'
+import { useSimrsLaporanKeuanganNewBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/new/billrajal'
+import CustomTable from '../../../rekap/CustomTable.vue'
 import { ref } from 'vue'
 
-const store = useSimrsLaporanKeuanganBillRajalStore()
+const store = useSimrsLaporanKeuanganNewBillRajalStore()
 
 // data for print --start--
 const loading = ref(false)
@@ -538,12 +698,27 @@ const jsonFields = {
   Tanggal: 'tanggal',
   Pasien: 'pasien',
   Poli: 'poli',
-  'Apotek Racikan': 'racikan',
-  'Apotek Non Racikan': 'nonracikan',
-  Laborat: 'laborat',
-  Radiologi: 'radiologi',
   'Sistem Bayar': 'bayar',
-  'Sub Total': 'subtotal'
+  'Pelayanan Rekam Medik': 'rekammedik',
+  'Biaya Kartu Identitas Paseian': 'idPasien',
+  'Poliklinik Spesialis / Anastesi': 'bPoli',
+  'Konsultasi Antar Poli': 'bKonsul',
+  Tindakan: 'tDokPer',
+  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
+  Laboratorium: 'laborat',
+  Radiologi: 'radiologi',
+  'Operasi One Day Care': 'operasi', // kamar operasi + tindakan operasi
+  Fisioterapi: 'fisio',
+  Hemodialisa: 'hd',
+  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
+  'Klinik Psikologi': 'psikologi',
+  Cardio: 'cardio',
+  EEG: 'eeg',
+  Endoscope: 'endos',
+  Apotek: 'apotek', // semua apotek di jumlah
+  'Klaim BPJS': 'pendapatan',
+  'Sub Total': 'subtotal',
+  Selisih: 'selisih'
 }
 function fetchData() {
   loading.value = true
@@ -552,14 +727,30 @@ function fetchData() {
     const temp = {}
     temp.no = i + 1
     temp.subtotal = item.subtotal
+    temp.pendapatan = item.pendapatanBPJS
+    temp.selisih = item.selisih
     temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
     temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
     temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
-    temp.racikan = item.rajalracik ? 'Nota : ' + item.rajalracik.map(a => a.nota) + ', Subtotal ' + item.rajalracik.map(a => a.subtotal) + ', rinci : ' + item.rajalracik.map(a => a.rinci.map(anu => { return ' ' + anu.racikanrinci.rs2 + ' [' + anu.subtotal + ']' })) : '-'
-    temp.nonracikan = item.rajalpoli ? 'Nota : ' + item.rajalpoli.map(a => a.nota) + ', Subtotal ' + item.rajalpoli.map(a => a.subtotal) + ', rinci : ' + item.rajalpoli.map(a => a.rinci.map(anu => { return ' ' + anu.mobat.rs2 + ' [' + anu.subtotal + ']' })) : '-'
-    temp.laborat = item.lab ? 'Nota : ' + item.lab.map(a => a.nota) + ', Subtotal ' + item.lab.map(a => a.subtotal) + ', rinci : ' + item.lab.map(a => a.rinci.map(anu => { return ' ' + (anu.pemeriksaanlab.rs21 !== '' ? anu.pemeriksaanlab.rs21 : anu.pemeriksaanlab.rs2) + ' [' + anu.subtotal + ']' })) : '-'
-    temp.radiologi = item.radiolog ? 'Nota : ' + item.radiolog.map(a => a.nota) + ', Subtotal ' + item.radiolog.map(a => a.subtotal) + ', rinci : ' + item.radiolog.map(a => a.rinci.map(anu => { return ' ' + (anu.relmasterpemeriksaan ? anu.relmasterpemeriksaan.rs2 : '-') + ' [' + anu.subtotal + ']' })) : '-'
-    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+    temp.rekammedik = item.bRM
+    temp.idPasien = item.bId
+    temp.bPoli = item.bPelPoli
+    temp.bKonsul = item.bKonsul
+    temp.tDokPer = item.tDokPer
+    temp.visitDok = item.visitDok
+    temp.laborat = item.jLaborat
+    temp.radiologi = item.jRadiologi
+    temp.operasi = item.kOperasi + item.tOperasi
+    temp.fisio = item.tFisio
+    temp.hd = item.tHd
+    temp.tAnasLuar = item.tAnasLuar
+    temp.psikologi = item.jPsikolog
+    temp.cardio = item.tCardio
+    temp.eeg = item.tEeg
+    temp.endos = item.tEndo
+    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
     data.push(temp)
 
     // console.log('in', i, 'item', item)

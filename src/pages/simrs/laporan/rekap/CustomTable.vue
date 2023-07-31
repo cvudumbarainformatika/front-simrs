@@ -252,13 +252,16 @@
               </div>
             </div>
           </th>
-          <th class="text-right">
+          <th
+            v-if="rightAction"
+            class="text-right"
+          >
             <div class="">
               #
             </div>
           </th>
         </tr>
-        <tr>
+        <tr v-if="!enableHead">
           <slot name="top-row" />
         </tr>
       </thead>
@@ -306,6 +309,7 @@
           </td>
           <td
             v-if="rowNo"
+            width="5%"
             class="text-left"
           >
             {{ i+1 }}
@@ -460,6 +464,7 @@ const props = defineProps({
   clickAble: { type: Boolean, default: false },
   leftBtn: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
+  rightAction: { type: Boolean, default: true },
   textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])

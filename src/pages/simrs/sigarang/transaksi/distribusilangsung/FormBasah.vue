@@ -34,6 +34,17 @@
           <template #col-sisa_stok>
             <div>Sisa stok</div>
           </template>
+          <template #col-no_penerimaan_stok>
+            <div>Nomor Penerimaan</div>
+          </template>
+          <template #cell-no_penerimaan_stok="{row}">
+            <div class="box">
+              {{ row.no_penerimaan_stok }}
+            </div>
+          </template>
+          <template #col-tanggal>
+            <div>Tanggal</div>
+          </template>
           <template #col-kode>
             <div>Kode Barang</div>
           </template>
@@ -41,7 +52,15 @@
             <div>Nama Barang</div>
           </template>
           <template #col-toDistribute>
-            <div>Akan di Distribusikan</div>
+            <div style="max-width:5%;">
+              Akan di Distribusikan
+            </div>
+          </template>
+          <template #cell-tanggal="{row}">
+            <div class="box">
+              {{ row.tanggal ? humanDate(row.tanggal):'Transaksi tidak ditemukan' }}
+            </div>
+            <!-- @focus="inputFokus(row,col)" -->
           </template>
           <template #left-acttion="{row,col}">
             <app-input
@@ -61,6 +80,7 @@
   </div>
 </template>
 <script setup>
+import { humanDate } from 'src/modules/formatter'
 import { useTransaksiDistribusiLangsung } from 'src/stores/simrs/logistik/sigarang/transaksi/distribusilangsung/distribusilangsung'
 
 const store = useTransaksiDistribusiLangsung()
@@ -77,3 +97,15 @@ function inputBlur(row, col) {
   emits('simpanList', col)
 }
 </script>
+<style lang="scss" scoped>
+.q-table{
+  td{
+    .box{
+
+      white-space: normal !important;
+      inline-size: 150px;
+      overflow-wrap: break-word;
+    }
+  }
+}
+</style>

@@ -50,6 +50,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     // table
     setSearch(val) {
       this.params.q = val
+      this.params.page = 1
       this.getDataTable()
     },
     setPerPage(payload) {
@@ -71,6 +72,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       this.columns = [
         'kode',
         'nama',
+        'tanggal',
+        'no_penerimaan_stok',
         'sisa_stok',
         'satuan',
         'toDistribute'
@@ -129,9 +132,10 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       const params = { params: this.params }
       return new Promise(resolve => {
         // api.get('v1/transaksi/distribusilangsung/index', params)
-        api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
+        // api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
+        api.get('v1/transaksi/distribusilangsung/get-transaksi-with-barang', params)
           .then(resp => {
-            // console.log('items', resp.data.data.data)
+            console.log('items', resp.data)
             const data = resp.data.data.data
 
             this.items = data
