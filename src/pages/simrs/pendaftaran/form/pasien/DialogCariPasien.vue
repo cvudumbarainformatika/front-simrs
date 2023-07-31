@@ -261,6 +261,9 @@ function pilihPasienIni(val) {
   const indexAgama = findWithAttr(store.agamas, 'keterangan', val.agama)
   if (indexAgama >= 0) {
     store.display.kode = store.agamas[indexAgama].kode
+    if (!val.kodemapagama) {
+      store.setForm('kodemapagama', store.agamas[indexAgama].kodemapping)
+    }
   } else {
     store.display.kode = '8'
   }

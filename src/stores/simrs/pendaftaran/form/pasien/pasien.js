@@ -39,7 +39,12 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     form: {
       barulama: 'baru',
-      noteleponhp: ''
+      noteleponhp: '',
+      nomoridentitaslain: '',
+      nokabpjs: '',
+      gelardepan: '',
+      gelarbelakang: '',
+      noteleponrumah: ''
     },
     display: {
       sapaan: 'Bpk.',
@@ -88,7 +93,12 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     clearForm() {
       this.form = {
         barulama: 'baru',
-        noteleponhp: ''
+        noteleponhp: '',
+        nomoridentitaslain: '',
+        nokabpjs: '',
+        gelardepan: '',
+        gelarbelakang: '',
+        noteleponrumah: ''
       }
       this.tanggal = {
         tahun: '1900',
@@ -115,6 +125,11 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.wilayahDomisili = {
         kecamatan: {},
         kelurahan: {}
+      }
+
+      this.display = {
+        sapaan: 'Bpk.',
+        agama: ''
       }
     },
     setForm(key, val) {
@@ -143,6 +158,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      delete this.form.kodepos
       if (this.alamataDomisiliSama) {
         delete this.form.negaradomisili
         delete this.form.propinsidomisili
@@ -153,6 +169,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         delete this.form.kodekecamatandomisili
         delete this.form.kelurahandomisili
         delete this.form.kodekelurahandomisili
+        delete this.form.kodeposdomisili
       }
 
       this.wilayah.kd_negara = null
@@ -195,6 +212,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      delete this.form.kodepos
       if (this.alamataDomisiliSama) {
         delete this.form.propinsidomisili
         delete this.form.kodepropinsidomisili
@@ -204,6 +222,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         delete this.form.kodekecamatandomisili
         delete this.form.kelurahandomisili
         delete this.form.kodekelurahandomisili
+        delete this.form.kodeposdomisili
       }
 
       this.wilayah.propinsi = null
@@ -241,6 +260,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatan
       delete this.form.kelurahan
       delete this.form.kodekelurahan
+      delete this.form.kodepos
       if (this.alamataDomisiliSama) {
         delete this.form.kabupatenkotadomisili
         delete this.form.kodekabupatenkotadomisili
@@ -248,6 +268,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         delete this.form.kodekecamatandomisili
         delete this.form.kelurahandomisili
         delete this.form.kodekelurahandomisili
+        delete this.form.kodeposdomisili
       }
 
       this.wilayah.kotakabupaten = null
@@ -339,6 +360,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatandomisili
       delete this.form.kelurahandomisili
       delete this.form.kodekelurahandomisili
+      delete this.form.kodeposdomisili
 
       this.wilayahDomisili.kd_negara = null
       this.wilayahDomisili.propinsi = null
@@ -376,6 +398,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatandomisili
       delete this.form.kelurahandomisili
       delete this.form.kodekelurahandomisili
+      delete this.form.kodeposdomisili
 
       this.wilayahDomisili.propinsi = null
       this.wilayahDomisili.kotakabupaten = null
@@ -408,6 +431,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatandomisili
       delete this.form.kelurahandomisili
       delete this.form.kodekelurahandomisili
+      delete this.form.kodeposdomisili
 
       this.wilayahDomisili.kotakabupaten = null
       this.wilayahDomisili.kecamatan.kotakabupaten = null
@@ -434,6 +458,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       delete this.form.kodekecamatandomisili
       delete this.form.kelurahandomisili
       delete this.form.kodekelurahandomisili
+      delete this.form.kodeposdomisili
 
       this.wilayahDomisili.kecamatan.kotakabupaten = null
       this.wilayahDomisili.kelurahan.kotakabupaten = null

@@ -166,7 +166,7 @@ function setSistembayar1(val) {
   console.log('form', store.form)
 }
 function setSistembayar(val) {
-  store.setForm('sistembayar', val)
+  store.setForm('kodesistembayar', val)
   console.log('form', store.form)
 }
 // emits
@@ -212,17 +212,21 @@ function set() {
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
   const index = findWithAttr(store.polis, 'kodepoli', val)
+  setSistembayar1('2')
+  store.display.kode = '2'
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   refDPJP.value.$refs.refAuto.resetValidation()
-  if (store.paramKarcis.flag) {
-    if (store.paramKarcis.flag !== '') {
-      store.getKarcisPoli().then(() => {
-        store.display.hargakarcis = store.kasrcispoli.tarif
-        store.form.karcis = store.kasrcispoli.tarif
-      })
-    }
-  }
+  setFlagKarcis('Kartu Lama')
+  store.form.jeniskarcis = 'Kartu Lama'
+  // if (store.paramKarcis.flag) {
+  //   if (store.paramKarcis.flag !== '') {
+  //     store.getKarcisPoli().then(() => {
+  //       store.display.hargakarcis = store.kasrcispoli.tarif
+  //       store.form.karcis = store.kasrcispoli.tarif
+  //     })
+  //   }
+  // }
   console.log(val)
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   store.getDokterDpjp()

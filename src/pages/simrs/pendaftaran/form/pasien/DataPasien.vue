@@ -139,7 +139,7 @@
               <div class="col-12">
                 <app-input
                   ref="refKitas"
-                  v-model="store.form.kitas"
+                  v-model="store.form.nomoridentitaslain"
                   label="Nomor Paspor / KITAS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -382,7 +382,6 @@
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="pendidikanSelected"
                 />
-                <!-- @keyup.enter="pendidikanSelected" -->
               </div>
             </div>
             <!-- agama -->
@@ -407,7 +406,6 @@
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       @on-select="setAgama"
-                      @keyup.enter="setAgama"
                     />
                   </div>
                 </div>
@@ -545,7 +543,7 @@
               <div class="col-12">
                 <app-input
                   ref="refNoTlpRumah"
-                  v-model="store.form.teleponrumah"
+                  v-model="store.form.noteleponrumah"
                   label="No telepon rumah"
                   :filled="false"
                   valid
@@ -761,6 +759,7 @@
                   type="number"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                  @update:model-value="setKodepos"
                 />
               </div>
             </div>
@@ -1451,6 +1450,7 @@ function resetValidation() {
 const hariIni = Date.now()
 // jenis pasien lama / baru
 function setJenisPasien(val) {
+  store.clearForm()
   emits('gantiPasien')
   store.setForm('barulama', val)
   if (val === 'baru') {
@@ -1551,7 +1551,11 @@ function kelaminSelected(val) {
 }
 
 // ref pendidikan
-function pendidikanSelected() {
+function pendidikanSelected(val) {
+  const index = findWithAttr(store.pendidikans, 'pendidikan', val)
+  if (index >= 0) {
+    store.setForm('kodependidikan', store.pendidikans[index].kode)
+  }
   refPendidikan.value.$refs.refAuto.blur()
   refAgama.value.$refs.refAuto.focus()
 }
@@ -1560,20 +1564,24 @@ function pendidikanSelected() {
 const refTulisAgama = ref(null)
 function setAgama(val) {
   const index = findWithAttr(store.agamas, 'kode', val)
-  const temp = store.agamas[index]
-  // console.log('agama temp ', temp)
-  store.setForm('kodemapagama', temp.kodemapping)
-  store.display.agama = temp.keterangan
-  if (temp.keterangan === 'Lain-lain') {
-    if (store.form.agama) delete store.form.agama
-    setTimeout(() => {
+  if (index >= 0) {
+    const temp = store.agamas[index]
+    // console.log('agama temp ', temp)
+    store.setForm('kodemapagama', temp.kodemapping)
+    store.display.agama = temp.keterangan
+    if (temp.keterangan === 'Lain-lain') {
+      if (store.form.agama) delete store.form.agama
+      setTimeout(() => {
+        refAgama.value.$refs.refAuto.blur()
+        refTulisAgama.value.$refs.refInput.focus()
+      }, 500)
+    } else {
+      store.setForm('agama', temp.keterangan)
       refAgama.value.$refs.refAuto.blur()
-      refTulisAgama.value.$refs.refInput.focus()
-    }, 500)
+      refSuku.value.$refs.refInput.focus()
+    }
   } else {
-    store.setForm('agama', temp.keterangan)
-    refAgama.value.$refs.refAuto.blur()
-    refSuku.value.$refs.refInput.focus()
+    notifErrVue('kode Agama tidak ditemukan')
   }
   console.log('agama selected ', store.form)
 }
@@ -1678,7 +1686,12 @@ function kelurahanSelected(val) {
   refKodePos.value.$refs.refInput.focus()
 }
 // ---get negara to kelurahah end----
-
+function setKodepos(val) {
+  console.log('kodepos', val)
+  if (store.alamataDomisiliSama) {
+    store.setForm('kodeposdomisili', val)
+  }
+}
 // ---get negara to kelurahah domisili start----
 
 function negaraDomisiliSelected(val) {
@@ -1748,11 +1761,11 @@ function setPekerjaan(val) {
     if (store.form.pekerjaan) delete store.form.pekerjaan
     setTimeout(() => {
       refPekerjaan.value.$refs.refAuto.blur()
-      refInputPekerjaan.value.$refs.refInput.focus()
+      // refInputPekerjaan.value.$refs.refInput.focus()
     }, 500)
   } else {
     refPekerjaan.value.$refs.refAuto.blur()
-    refKtp.value.$refs.refInput.focus()
+    // refKtp.value.$refs.refInput.focus()
     store.setForm('pekerjaan', val)
   }
 }
