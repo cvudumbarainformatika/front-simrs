@@ -1603,6 +1603,7 @@ function setTanggalLahir() {
   store.form.umurhari = daysDiff < 0 ? parseInt(date.daysInMonth(tglLahir) - hariLahir + hariini) : daysDiff
   store.form.umurbln = monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff
   store.form.umurthn = monthsDiff < 0 ? yearsDiff - 1 : yearsDiff
+  store.setForm('tgllahir', tanggal)
 
   console.log('perbedaan ', yearsDiff, monthsDiff, daysDiff)
 }
