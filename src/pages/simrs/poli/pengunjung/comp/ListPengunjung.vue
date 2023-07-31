@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div style="padding-top:50px;">
-      <q-list separator>
+    <div style="padding-top:45px;">
+      <empty-data v-if="!items.length" />
+      <q-list
+        v-else
+        separator
+      >
         <q-item
           v-for="(item, i) in items"
           :key="i"
@@ -63,6 +67,7 @@
   </div>
 </template>
 <script setup>
+import EmptyData from './EmptyData.vue'
 const emits = defineEmits(['tindakan'])
 defineProps({
   items: {

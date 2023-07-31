@@ -3,7 +3,7 @@
     class="row items-center justify-between q-pa-sm"
     :class="`${color} text-${textColor}`"
   >
-    <div>
+    <div class="row">
       <q-input
         v-model="q"
         outlined
@@ -12,17 +12,34 @@
         dense
         placeholder="Cari Kunjungan ..."
         debounce="500"
-      />
-    </div>
-    <div>
+        style="min-width: 200px;"
+      >
+        <template
+          v-if="q"
+          #append
+        >
+          <q-icon
+            name="icon-mat-close"
+            size="xs"
+            class="cursor-pointer"
+            @click.stop.prevent="q = ''"
+          />
+        </template>
+        <template #prepend>
+          <q-icon
+            size="sm"
+            name="icon-mat-search"
+          />
+        </template>
+      </q-input>
       <q-btn
         flat
+        dense
         :color="textColor"
-        icon-right="icon-mat-event"
+        icon="icon-mat-event"
         :label="tanggal"
         size="sm"
-        padding="xs"
-        class="q-mr-sm"
+        class="q-ml-sm"
       >
         <q-popup-proxy ref="popup">
           <q-date
@@ -37,11 +54,10 @@
       <q-btn
         flat
         :color="textColor"
-        icon-right="icon-mat-dataset"
+        icon="icon-mat-dataset"
         :label="txt"
         size="sm"
-        padding="xs"
-        class="q-mr-sm"
+        class="q-ml-sm"
       >
         <q-menu
           transition-show="flip-left"
@@ -63,7 +79,8 @@
           </q-list>
         </q-menu>
       </q-btn>
-
+    </div>
+    <div>
       <!-- per_page -->
       <q-btn
         class="q-ml-sm"

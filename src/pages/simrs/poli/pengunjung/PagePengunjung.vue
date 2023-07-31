@@ -4,10 +4,19 @@
     class="column full-height q-pa-xs"
   >
     <div
-      class="col-auto fixed-top"
-      :style="`z-index:1000; ${!style.componentfull?'margin-top:50px;':''}`"
+      class="col-auto"
+      :style="`z-index:1000; ${!style.componentfull?'':''}`"
     >
-      <div class="">
+      <header-comp
+        :tanggal="store.params.tgl"
+        :search="store.params.q"
+        :per-page="store.params.per_page"
+        @fullscreen="style.setComponentFull"
+        @set-tanggal="(val)=>store.setDate(val)"
+        @set-search="store.setQ"
+        @set-row="store.setPerPage"
+      />
+      <!-- <div class="">
         <q-toolbar class="bg-primary text-white">
           <q-btn
             flat
@@ -26,6 +35,25 @@
             </div>
           </q-toolbar-title>
 
+          <q-btn
+            flat
+            color="white"
+            icon-right="icon-mat-event"
+            :label="tanggal"
+            size="sm"
+            padding="xs"
+            class="q-mr-sm"
+          >
+            <q-popup-proxy ref="popup">
+              <q-date
+
+                v-model="date"
+                minimal
+                mask="YYYY-MM-DD"
+                @update:model-value="lihatRef"
+              />
+            </q-popup-proxy>
+          </q-btn>
           <q-btn
             flat
             color="white"
@@ -64,12 +92,12 @@
             @click="style.setComponentFull"
           />
         </q-toolbar>
-      </div>
+      </div> -->
     </div>
     <q-card
       square
       class="col-grow scroll"
-      :style="`height: ${!style.componentfull? h-10:h+40}px;`"
+      :style="`height: ${!style.componentfull? h-100:h-20}px;`"
     >
       <list-pengunjung
         :key="store.items"
@@ -89,6 +117,7 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { onMounted, ref } from 'vue'
+import HeaderComp from './comp/HeaderComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
 import PageTindakan from './comp/PageTindakan.vue'
 
@@ -98,8 +127,8 @@ const pageRef = ref()
 const h = ref(0)
 const pasien = ref(null)
 
-const txt = ref('SEMUA')
-const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
+// const txt = ref('SEMUA')
+// const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
 onMounted(() => {
   store.getData()
   h.value = pageRef.value.$el.clientHeight

@@ -9,7 +9,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
 
     params: {
       // tgl: dateDbFormat(new Date())
-      tgl: '2023-07-07'
+      tgl: '2023-07-07',
+      q: ''
     },
     pageTindakan: false
   }),
@@ -34,6 +35,12 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
     togglePageTindakan() {
       this.pageTindakan = !this.pageTindakan
+    },
+    setDate(val) {
+      this.params.tgl = val
+    },
+    setQ(val) {
+      this.params.q = val
     }
   }
 })
