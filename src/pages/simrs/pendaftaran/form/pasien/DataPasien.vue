@@ -359,7 +359,6 @@
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="kelaminSelected"
                 />
-                <!-- @keyup.enter="kelaminSelected" -->
               </div>
             </div>
             <!-- pendidikan -->
@@ -1539,7 +1538,13 @@ function sapaanEnter() {
 }
 
 // refkelamin
-function kelaminSelected() {
+function kelaminSelected(val) {
+  const index = findWithAttr(store.kelamins, 'kelamin', val)
+
+  if (index >= 0) {
+    store.setForm('kodekelamin', store.kelamins[index].kode)
+  }
+  console.log('kelamin obj', store.form)
   refKelamin.value.$refs.refAuto.blur()
   refPendidikan.value.$refs.refAuto.focus()
   // refTempatLahir.value.$refs.refInput.focus()
