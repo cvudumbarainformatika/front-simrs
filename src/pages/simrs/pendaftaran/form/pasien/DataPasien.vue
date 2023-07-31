@@ -239,6 +239,31 @@
                 </div>
               </div>
             </div>
+            <!-- Gelar -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <div class="row  q-col-gutter-sm items-center">
+                  <div class="col-6">
+                    <app-input
+                      v-model="store.form.gelardepan"
+                      label="Gelar Depan"
+                      valid
+                      :filled="false"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <app-input
+                      v-model="store.form.gelarbelakang"
+                      label="Gelar Belakang"
+                      valid
+                      :filled="false"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- tempat lahir -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <!-- <div class="col-4">
