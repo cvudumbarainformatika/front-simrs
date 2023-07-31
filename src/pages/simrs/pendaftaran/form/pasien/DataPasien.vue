@@ -359,7 +359,6 @@
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="kelaminSelected"
                 />
-                <!-- @keyup.enter="kelaminSelected" -->
               </div>
             </div>
             <!-- pendidikan -->
@@ -1539,7 +1538,13 @@ function sapaanEnter() {
 }
 
 // refkelamin
-function kelaminSelected() {
+function kelaminSelected(val) {
+  const index = findWithAttr(store.kelamins, 'kelamin', val)
+
+  if (index >= 0) {
+    store.setForm('kodekelamin', store.kelamins[index].kode)
+  }
+  console.log('kelamin obj', store.form)
   refKelamin.value.$refs.refAuto.blur()
   refPendidikan.value.$refs.refAuto.focus()
   // refTempatLahir.value.$refs.refInput.focus()
@@ -1598,6 +1603,7 @@ function setTanggalLahir() {
   store.form.umurhari = daysDiff < 0 ? parseInt(date.daysInMonth(tglLahir) - hariLahir + hariini) : daysDiff
   store.form.umurbln = monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff
   store.form.umurthn = monthsDiff < 0 ? yearsDiff - 1 : yearsDiff
+  store.setForm('tgllahir', tanggal)
 
   console.log('perbedaan ', yearsDiff, monthsDiff, daysDiff)
 }

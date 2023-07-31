@@ -266,9 +266,19 @@ function pilihPasienIni(val) {
   }
   // pekerjaan
   const indexpekerjaan = findWithAttr(store.pekerjaans, 'pekerjaan', val.pekerjaan)
-  console.log('pekerjaan index', val.pekerjaan, indexpekerjaan)
   if (indexpekerjaan >= 0) {
     store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
+  }
+  // kelamin
+  if (!val.kodekelamin) {
+    if (!val.kd_kelamin) {
+      const indexkelamin = findWithAttr(store.kelamins, 'kelamin', val.kelamin)
+      if (indexkelamin >= 0) {
+        store.setForm('kodekelamin', store.kelamins[indexkelamin].kode)
+      }
+    } else {
+      store.setForm('kodekelamin', val.kd_kelamin)
+    }
   }
   // else {
   //   // const indexpekerjaanlain = findWithAttr(store.pekerjaans, 'keterangan', 'Lain-lain')
@@ -323,5 +333,6 @@ function pilihPasienIni(val) {
   store.cariPasienDialog = false
 
   console.log('pasien terpilih', val)
+  // console.log('Formnya', store.form)
 }
 </script>

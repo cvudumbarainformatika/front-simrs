@@ -123,11 +123,11 @@ function simpanData() {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }
+  console.log('pasien', dataPasien,
+    'regis', dataRegis
+  )
   pasien.cekPesertaFinger(form).then(resp => {
     // refDataPasien.value.cekBpjs()
-    console.log('pasien', dataPasien,
-      'regis', dataRegis
-    )
     const finger = resp.result.kode
     console.log('finger', finger)
 
