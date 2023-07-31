@@ -333,6 +333,6 @@ function pilihPasienIni(val) {
   store.cariPasienDialog = false
 
   console.log('pasien terpilih', val)
-  console.log('Formnya', store.form)
+  // console.log('Formnya', store.form)
 }
 </script>
