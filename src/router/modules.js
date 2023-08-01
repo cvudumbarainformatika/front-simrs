@@ -9,8 +9,9 @@ import pendaftaran from './pendaftaran'
 import percobaan from './percobaan'
 import farmasi from './farmasi'
 import poli from './poli'
+import monitoring from './monitoring'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
-  masters, pendaftaran, percobaan, farmasi, poli
+  masters, pendaftaran, percobaan, farmasi, poli, monitoring
 }
