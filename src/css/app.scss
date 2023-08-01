@@ -51,6 +51,19 @@ h1,h2,h3,h4,h5 {
   overflow: hidden;
 }
 
+
+
+.container--q-header {
+  display: flex;
+  flex-direction: column;
+  /*or min-height*/      height: calc(100vh - 52px);
+}
+.container-no-header {
+  display: flex;
+  flex-direction: column;
+  /*or min-height*/      height: 100vh;
+}
+
 .my-flex-1 {
   flex: 1;
 }

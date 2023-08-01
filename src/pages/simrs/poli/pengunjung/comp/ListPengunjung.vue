@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div style="padding-top:45px;">
-      <empty-data v-if="!items.length" />
+    <div class="q-pb-xl">
+      <LoadingList v-if="loading" />
+      <empty-data v-else-if="!items.length && !loading" />
       <q-list
         v-else
         separator
@@ -67,12 +68,17 @@
   </div>
 </template>
 <script setup>
+import LoadingList from './LoadingList.vue'
 import EmptyData from './EmptyData.vue'
 const emits = defineEmits(['tindakan'])
 defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
