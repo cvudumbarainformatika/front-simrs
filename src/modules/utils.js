@@ -3,6 +3,7 @@ import { routerInstance } from 'boot/router'
 import * as storage from 'src/modules/storage'
 
 const removeToken = () => {
+  storage.clearStore()
   storage.deleteLocalToken()
   storage.deleteHeaderToken()
   storage.deleteUser()

@@ -300,7 +300,12 @@
             Pasien
           </template>
           <template #col-poli>
-            Poli
+            <div v-if="store.params.layanan==='3'">
+              Ruangan
+            </div>
+            <div v-else>
+              Poli
+            </div>
           </template>
           <template #col-apotik>
             Apotek
@@ -326,10 +331,10 @@
                 {{ row.rs1 }}
               </div>
               <div class="row no-wrap q-mb-xs text-weight-bold text-primary">
-                {{ row.masterpasien[0].rs1 }}
+                {{ row.masterpasien.length?row.masterpasien[0].rs1: row.masterpasien.rs1 }}
               </div>
               <div class="kecilin q-mb-xs text-weight-bold">
-                {{ row.masterpasien[0].rs2 }}
+                {{ row.masterpasien.length?row.masterpasien[0].rs2: row.masterpasien.rs2 }}
               </div>
             </div>
             <div v-if="row.msistembayar">
@@ -337,13 +342,30 @@
                 {{ row.msistembayar.rs2 }}
               </div>
             </div>
+            <div v-if="row.relsistembayar">
+              <div class="kecilin text-weight-bold text-green">
+                {{ row.relsistembayar.rs2 }}
+              </div>
+            </div>
             <div v-else>
               -
             </div>
           </template>
           <template #cell-poli="{row}">
-            <div class="kecilin">
+            <div
+              v-if="row.relmpoli"
+              class="kecilin"
+            >
               {{ row.relmpoli?row.relmpoli.rs2:'-' }}
+            </div>
+            <div
+              v-else-if="row.relmasterruangranap"
+              class="kecilin"
+            >
+              {{ row.relmasterruangranap.rs2 }}
+            </div>
+            <div v-else>
+              -
             </div>
           </template>
           <template #cell-biaya="{row}">
@@ -353,6 +375,16 @@
                   Admin Igd
                 </div>
                 <div>{{ row.administrasiigd[0]?formatDouble(row.administrasiigd[0].rs7):'-' }}</div>
+              </div>
+            </div>
+            <div v-if="row.adminInap>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Admin
+                </div>
+                <div>{{ formatDouble(row.adminInap) }}</div>
               </div>
             </div>
             <div v-if="row.amb>0">
@@ -423,6 +455,46 @@
                   Rekam Medik
                 </div>
                 <div>{{ formatDouble(row.bRM) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jAsuhangizi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Asuhan Gizi
+                </div>
+                <div>{{ formatDouble(row.jAsuhangizi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jKeperawatan>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Keperawatan
+                </div>
+                <div>{{ formatDouble(row.jKeperawatan) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jMakanpasien>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Makan Pasien
+                </div>
+                <div>{{ formatDouble(row.jMakanpasien) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jOksigen>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Oksigen
+                </div>
+                <div>{{ formatDouble(row.jOksigen) }}</div>
               </div>
             </div>
           </template>
@@ -546,6 +618,26 @@
                 <div>{{ formatDouble(row.tHd) }}</div>
               </div>
             </div>
+            <div v-if="row.jTindakanperawat>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Perawat
+                </div>
+                <div>{{ formatDouble(row.jTindakanperawat) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jTindakandokter>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Dokter
+                </div>
+                <div>{{ formatDouble(row.jTindakandokter) }}</div>
+              </div>
+            </div>
           </template>
           <template #cell-penunjang="{row}">
             <div
@@ -607,16 +699,16 @@
                 <div>{{ formatDouble(row.kmrJnzhI) }}</div>
               </div>
             </div>
-            <!-- <div v-if="row.kOperasi>0">
+            <div v-if="row.jKamaroperasiIBS>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  kmr Operasi
+                  kmr Operasi ibs
                 </div>
-                <div>{{ formatDouble(row.kOperasi) }}</div>
+                <div>{{ formatDouble(row.jKamaroperasiIBS) }}</div>
               </div>
-            </div> -->
+            </div>
             <div v-if="row.jPsikolog>0">
               <div
                 class="row justify-between no-wrap"

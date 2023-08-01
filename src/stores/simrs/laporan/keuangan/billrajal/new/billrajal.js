@@ -234,10 +234,25 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.nonRacikRajal = poli
         item.jLaborat = laborat
         item.jRadiologi = radiologi
+
+        // ranap yang ga sama
+        const admin = item.admin ? item.admin : 0
+        item.jRstigalimax = item.rstigalimax ? (item.rstigalimax.length ? item.rstigalimax.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jRstigalimaxxx = item.rstigalimaxxx ? (item.rstigalimaxxx.length ? item.rstigalimaxxx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.adminInap = admin + item.jRstigalimax + item.jRstigalimaxxx
+        item.jAsuhangizi = item.asuhangizi ? (item.asuhangizi.length ? item.asuhangizi.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jKamaroperasiIBS = item.kamaroperasiibs ? (item.kamaroperasiibs.length ? item.kamaroperasiibs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jKeperawatan = item.keperawatan ? (item.keperawatan.length ? item.keperawatan.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jMakanpasien = item.makanpasien ? (item.makanpasien.length ? item.makanpasien.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jOksigen = item.oksigen ? (item.oksigen.length ? item.oksigen.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jTindakanperawat = item.tindakanperawat ? (item.tindakanperawat.length ? item.tindakanperawat.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jTindakandokter = item.tindakandokter ? (item.tindakandokter.length ? item.tindakandokter.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        // end ranap
         item.subtotal = item.adminIgd + item.amb + item.bankDarah + item.mtri + item.kmrJnzh + item.kmrJnzhI + item.kOperasi +
           item.okIGD + item.tAnasLuar + item.tCardio + item.tDokPer + item.tEeg + item.tEndo + item.tFisio + item.tHd + item.tOperasi +
           item.transRad + racik + poli + laborat + radiologi + item.obat + item.obatRacik + item.visitDok + item.bId + item.bKonsul +
-          item.bPelPoli + item.bRM + item.jPsikolog
+          item.bPelPoli + item.bRM + item.jPsikolog + item.adminInap + item.jAsuhangizi + item.jKamaroperasiIBS + item.jKeperawatan + item.jMakanpasien +
+          item.jOksigen + item.jTindakanperawat + item.jTindakandokter
 
         item.pendapatanBPJS = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.selisih = item.pendapatanBPJS - item.subtotal
