@@ -123,8 +123,8 @@
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                   right-icon-tooltip="Cek BPJS"
                   :rules="[
-                    val=>( !store.form.kitas ? !!val : true)||'Harap di isi',
-                    val=>( (!store.form.kitas && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
+                    val=>( !store.form.nomoridentitaslain ? !!val : true)||'Harap di isi',
+                    val=>( (!store.form.nomoridentitaslain && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
                   ]"
                   @icon-right-click="cekBpjsbyNik"
                   @update:model-value="cekKtpKitas"

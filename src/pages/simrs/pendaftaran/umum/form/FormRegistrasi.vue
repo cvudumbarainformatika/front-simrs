@@ -160,8 +160,10 @@ const store = useRegistrasiPasienUmumStore()
 store.getInitialData()
 function setSistembayar1(val) {
   // store.setForm('sistembayar1', val)
-  if (store.form.sistembayar) { delete store.form.sistembayar }
+  if (store.form.kodesistembayar) { delete store.form.kodesistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
+
+  store.setForm('kodesistembayar1', val)
   store.getSistemBayar2(val)
   console.log('form', store.form)
 }
