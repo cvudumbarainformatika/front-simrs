@@ -123,8 +123,8 @@
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                   right-icon-tooltip="Cek BPJS"
                   :rules="[
-                    val=>( !store.form.kitas ? !!val : true)||'Harap di isi',
-                    val=>( (!store.form.kitas && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
+                    val=>( !store.form.nomoridentitaslain ? !!val : true)||'Harap di isi',
+                    val=>( (!store.form.nomoridentitaslain && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
                   ]"
                   @icon-right-click="cekBpjsbyNik"
                   @update:model-value="cekKtpKitas"
@@ -232,6 +232,31 @@
                       ref="refNama"
                       v-model="store.form.nama"
                       label="Nama"
+                      :filled="false"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Gelar -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <div class="row  q-col-gutter-sm items-center">
+                  <div class="col-6">
+                    <app-input
+                      v-model="store.form.gelardepan"
+                      label="Gelar Depan"
+                      valid
+                      :filled="false"
+                      :disable="store.form.barulama!=='baru'&&!store.edit"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <app-input
+                      v-model="store.form.gelarbelakang"
+                      label="Gelar Belakang"
+                      valid
                       :filled="false"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
