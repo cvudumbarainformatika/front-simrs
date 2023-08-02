@@ -258,7 +258,7 @@ function simpanPengajuan() {
       .then(resp => {
         loadingP.value = false
         console.log('PEngajuan sep', resp)
-        if (resp.data.message === 'OK') {
+        if (resp.data.message === 'OK' || resp.data.metadata.code === '200') {
           bisaBuatSep.value = true
           pesanBPJS.value = 'Respon BPJS : ' + resp.data.message
           notifCenterVue('Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP')
