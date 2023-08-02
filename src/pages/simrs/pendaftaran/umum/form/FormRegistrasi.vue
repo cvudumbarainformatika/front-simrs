@@ -219,8 +219,8 @@ function setPoliTujuan(val) {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   refDPJP.value.$refs.refAuto.resetValidation()
-  setFlagKarcis('Kartu Lama')
-  store.form.jeniskarcis = 'Kartu Lama'
+  setFlagKarcis('Lama')
+  store.form.jeniskarcis = 'Lama'
   // if (store.paramKarcis.flag) {
   //   if (store.paramKarcis.flag !== '') {
   //     store.getKarcisPoli().then(() => {

@@ -343,7 +343,7 @@
 <script setup>
 
 import { dateFullFormat } from 'src/modules/formatter'
-// import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { ref } from 'vue'
 
@@ -357,41 +357,55 @@ const emits = defineEmits([
 ])
 // surat kontrol
 
-// function pilihSuratKontrol(val) {
-//   const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : val.relkunjunganpoli.rs8) : ''
-//   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
-//   const poli = indPoli >= 0 ? store.polis[indPoli] : false
+function pilihSuratKontrol(val) {
+  const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : val.relkunjunganpoli.rs8) : ''
+  const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
+  const poli = indPoli >= 0 ? store.polis[indPoli] : false
 
-//   // const findruangan = val.relkunjunganranap ? (val.relkunjunganranap.ruangan ? val.relkunjunganranap.ruangan.rs1 : val.relkunjunganranap.rs5) : ''
-//   // const indRuangan = findruangan !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
-//   // const ruangan = indRuangan >= 0 ? store.polis[indRuangan] : false
+  // const findruangan = val.relkunjunganranap ? (val.relkunjunganranap.ruangan ? val.relkunjunganranap.ruangan.rs1 : val.relkunjunganranap.rs5) : ''
+  // const indRuangan = findruangan !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
+  // const ruangan = indRuangan >= 0 ? store.polis[indRuangan] : false
 
-//   let datapoli = {}
-//   if (indPoli < 0) {
-//     if (!poli) {
-//       if (val.relkunjunganpoli.relmpoli) {
-//         datapoli = {
-//           kodepoli: val.relkunjunganpoli.relmpoli.rs1,
-//           polirs: val.relkunjunganpoli.relmpoli.rs2,
-//           jenispoli: val.relkunjunganpoli.relmpoli.rs3,
-//           jenisruangan: val.relkunjunganpoli.relmpoli.rs4,
-//           statukeaktifan: val.relkunjunganpoli.relmpoli.rs5,
-//           kodemapingbpjs: val.relkunjunganpoli.relmpoli.rs6,
-//           polimapingbpjs: val.relkunjunganpoli.relmpoli.rs7
-//         }
-//         store.polis.push(datapoli)
-//       }
-//     }
-//   }
+  let datapoli = {}
+  if (indPoli < 0) {
+    if (!poli) {
+      if (val.relkunjunganpoli.relmpoli) {
+        datapoli = {
+          kodepoli: val.relkunjunganpoli.relmpoli.rs1,
+          polirs: val.relkunjunganpoli.relmpoli.rs2,
+          jenispoli: val.relkunjunganpoli.relmpoli.rs3,
+          jenisruangan: val.relkunjunganpoli.relmpoli.rs4,
+          statukeaktifan: val.relkunjunganpoli.relmpoli.rs5,
+          kodemapingbpjs: val.relkunjunganpoli.relmpoli.rs6,
+          polimapingbpjs: val.relkunjunganpoli.relmpoli.rs7
+        }
+        store.polis.push(datapoli)
+      }
+    }
+  }
 
-//   if (poli || Object.keys(datapoli).length) emits('kodePoli', findpoli)
-//   store.form.nosuratkontrol = val.noDpjp
-//   store.tampilKontrol = false
-//   // console.log(' surat kontrol ', val, store.polis)
-//   // console.log(' find ', findpoli, findruangan)
-//   // console.log(' index ', indPoli, indRuangan)
-//   // console.log(' poli ', poli, ruangan)
-// }
+  if (poli || Object.keys(datapoli).length) emits('kodePoli', findpoli)
+  store.setForm('noDpjp', val.noDpjp)
+  let enol = ''
+  const panjang = 19 - val.noDpjp.length
+  for (let index = 0; index < panjang; index++) {
+    enol += '0'
+  }
+  const noSurat = enol + val.noDpjp
+  store.form.nosuratkontrol = noSurat
+  console.log('panjang', panjang)
+  console.log('no surat', noSurat)
+  const param = {
+    search: noSurat
+  }
+
+  cekSuratKontrol(param)
+  store.tampilKontrol = false
+  // console.log(' surat kontrol ', val, store.polis)
+  // console.log(' find ', findpoli, findruangan)
+  // console.log(' index ', indPoli, indRuangan)
+  // console.log(' poli ', poli, ruangan)
+}
 
 // rencana kontrol
 
@@ -407,14 +421,15 @@ function pilihRencanaKontrol(val) {
   const param = {
     search: val.noSuratKontrol
   }
-  store.cekSuratKontrol(param).then(resp => {
-    console.log('cek surat kontrol ', resp)
-    if (resp.metadata.code === '200') {
-      // assignSuratKontrol(resp.result)
-      emits('assignSurat', resp.result)
-    }
-    emits('validasiSuratKontrol')
-  })
+  cekSuratKontrol(param)
+  // store.cekSuratKontrol(param).then(resp => {
+  //   console.log('cek surat kontrol ', resp)
+  //   if (resp.metadata.code === '200') {
+  //     // assignSuratKontrol(resp.result)
+  //     emits('assignSurat', resp.result)
+  //   }
+  //   emits('validasiSuratKontrol')
+  // })
 
   // store.setForm('id_kunjungan', 3)
   // store.setForm('jenis_kunjungan', 'Kontrol')
@@ -425,5 +440,16 @@ function pilihRencanaKontrol(val) {
 
   store.tampilKontrol = false
   // console.log(' rencana kontrol ', val, poli, store.form)
+}
+
+function cekSuratKontrol(val) {
+  store.cekSuratKontrol(val).then(resp => {
+    console.log('cek surat kontrol ', resp)
+    if (resp.metadata.code === '200') {
+      // assignSuratKontrol(resp.result)
+      emits('assignSurat', resp.result)
+    }
+    emits('validasiSuratKontrol')
+  })
 }
 </script>

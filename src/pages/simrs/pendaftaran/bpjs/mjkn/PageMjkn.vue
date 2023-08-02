@@ -562,9 +562,9 @@ function buatSEP() {
   console.log('form registrasi ', regis.form)
   regis.buatSep().then(resp => {
     console.log('resp bpjs', resp)
-    if (resp.metadata.code === '200') {
-      dialogQr.value = true
-    }
+    // if (resp.metadata.code === '200') {
+    // dialogQr.value = true
+    // }
     // dialogCetak()
   })
   // if (dataPasien.save && dataRegis.save) {

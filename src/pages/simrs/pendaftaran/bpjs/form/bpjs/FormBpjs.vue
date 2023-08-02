@@ -34,7 +34,7 @@
             label="SEP"
             :loading="loading"
             :disable="loading"
-            @click="buatSEP"
+            @click="preSEP"
           />
 
           <app-btn
@@ -43,6 +43,13 @@
             :loading="loading"
             :disable="loading"
             @click="clearAllRegistrasi"
+          />
+          <app-btn
+            class="q-ml-xl"
+            label="cek dialog"
+            :loading="loading"
+            :disable="loading"
+            @click="dialog=true"
           />
         </div>
       </q-card-actions>
@@ -62,6 +69,52 @@
     <DialogListSuplesi
       v-model="registrasi.tampilSuplesi"
     />
+    <app-dialog-form
+      v-model="dialog"
+      title="Alasan Finger"
+      :loading="loadingP"
+      @save-form="simpanPengajuan()"
+    >
+      <template #default>
+        <div>
+          <div
+            v-if="pesanBPJS!==''"
+            class="row q-mb-sm"
+          >
+            <p>{{ pesanBPJS }}</p>
+            <!-- <div class="col-12">
+              <app-autocomplete
+                v-model="jenisPengajuan"
+                label="Jenis Pengajuan"
+                option-value="value"
+                option-label="nama"
+                :source="jenisPengajuans"
+              />
+            </div> -->
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-input
+                v-model="keterangan"
+                label="keterangan"
+              />
+            </div>
+          </div>
+          <div
+            v-if="bisaBuatSep"
+            class="row justify-end q-mr-lg q-my-lg"
+          >
+            <app-btn
+              class="q-ml-xl"
+              label="Buat SEP"
+              :loading="loading"
+              :disable="loading"
+              @click="preSEP"
+            />
+          </div>
+        </div>
+      </template>
+    </app-dialog-form>
   </div>
 </template>
 <script setup>
@@ -76,6 +129,8 @@ import { date, Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useRouter } from 'vue-router'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
+import { notifCenterVue, notifNegativeCenterVue } from 'src/modules/utils'
+import { api } from 'src/boot/axios'
 
 const registrasi = useRegistrasiPasienBPJSStore()
 const pasien = usePendaftaranPasienStore()
@@ -95,31 +150,41 @@ function clearAllRegistrasi() {
 function assignSurat(val) {
   refRegistrasi.value.assignSuratKontrol(val)
 }
-function buatSEP() {
-  const dataPasien = refDataPasien.value.set()
-  refRegistrasi.value.set()
-  // console.log('pasien', dataPasien,
-  //   'regis', dataRegis
-  // )
-  const keys = Object.keys(dataPasien.form)
-  if (keys.length) {
-    keys.forEach(key => {
-      registrasi.setForm(key, dataPasien.form[key])
-    })
+
+const dialog = ref(false)
+const bisaBuatSep = ref(false)
+const pesanBPJS = ref('')
+function preSEP() {
+  // refDataPasien.value.set()
+  // refRegistrasi.value.set()
+  if (refDataPasien.value.set() && refRegistrasi.value.set()) {
+    if (!registrasi.form.noreg) {
+      notifNegativeCenterVue('Nomor Registrasi belum ada')
+      dialogTidakAdaReg()
+    } else {
+      buatSEP()
+    }
   }
+}
+function buatSEP() {
   console.log('form registrasi ', registrasi.form)
   registrasi.buatSep().then(resp => {
     console.log('resp bpjs', resp)
-    // dialogCetak()
+    if (resp.metadata.code === '201') {
+      // notifErrVue(resp.data.metadata.message)
+      pesanBPJS.value = resp.metadata.message
+    }
+    if (resp.metadata.code === '200') {
+      dialog.value = false
+      pesanBPJS.value = resp.metadata.message
+      // notifSuccessVue(resp.data.metadata.message)
+      // notifCenterVue('Berhasil Buat SEP')
+    }
   })
-  // if (dataPasien.save && dataRegis.save) {
-  // }
 }
 
 const router = useRouter()
 function simpanData() {
-  // refDataPasien.value.set()
-  // refRegistrasi.value.set()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }
@@ -127,43 +192,125 @@ function simpanData() {
     'regis', dataRegis
   )
   if (dataPasien.save && dataRegis.save) {
-    if (registrasi.form.kodepoli === 'POL008') {
-      toSimpan(dataPasien)
-    } else {
-      pasien.cekPesertaFinger(form).then(resp => {
-      // refDataPasien.value.cekBpjs()
-        const finger = resp.result.kode
-        console.log('finger', finger)
-        if (finger === '1') {
-          toSimpan(dataPasien)
-        } else if (finger === '0') {
-          pasien.alert = true
-          pasien.alertMsg = resp.result
-        }
+    const keys = Object.keys(dataPasien.form)
+    if (keys.length) {
+      keys.forEach(key => {
+        registrasi.setForm(key, dataPasien.form[key])
       })
     }
-  }
-}
-function toSimpan(dataPasien) {
-  const keys = Object.keys(dataPasien.form)
-  if (keys.length) {
-    keys.forEach(key => {
-      registrasi.setForm(key, dataPasien.form[key])
+    console.log('form registrasi ', registrasi.form)
+    registrasi.simpanRegistrasi().then(resp => {
+      console.log('resp bpjs', resp)
+      const antrian = resp.antrian.data
+      const nomor = antrian ? antrian.nomor : '-'
+      const poli = antrian ? antrian.nama_layanan : '-'
+      const norm = antrian ? antrian.id_member : '-'
+      console.log('Antrian ', antrian)
+      const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+      window.open(routeData.href, '_blank')
+      // dialogCetak()
+      cekFingerPasien(form)
     })
   }
-  console.log('form registrasi ', registrasi.form)
-  registrasi.simpanRegistrasi().then(resp => {
-    console.log('resp bpjs', resp)
-    const antrian = resp.antrian.data
-    const nomor = antrian ? antrian.nomor : '-'
-    const poli = antrian ? antrian.nama_layanan : '-'
-    const norm = antrian ? antrian.id_member : '-'
-    console.log('Antrian ', antrian)
-    const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
-    window.open(routeData.href, '_blank')
-    dialogCetak()
+}
+
+function cekFingerPasien(form, dataPasien) {
+  pasien.cekPesertaFinger(form).then(resp => {
+    // refDataPasien.value.cekBpjs()
+    const finger = resp.result.kode
+    console.log('finger', finger)
+    if (finger === '1') {
+      // toSimpan(dataPasien)
+      dialogCetak()
+    } else if (finger === '0') {
+      // cek umur
+      // jika  < 17 thn pas cetak sep, jika tidak muncul popup pengajuan
+      if (registrasi.form.umurthn < 17) {
+        dialogCetak()
+      } else if (registrasi.form.umurthn === 17 && registrasi.form.umurbln === 0 && registrasi.form.umurhari === 0) {
+        dialogCetak()
+      } else {
+        dialog.value = true
+        // pasien.alert = true
+        // pasien.alertMsg = resp.result
+        pesanBPJS.value = resp.result.status
+      }
+    }
   })
 }
+// penajuan sep
+
+// const jenisPengajuans = ref([
+//   { nama: 'pengajuan backdate', value: '1' },
+//   { nama: 'pengajuan finger print', value: '2' }
+// ])
+const keterangan = ref('')
+// const jenisPengajuan = ref('2')
+const loadingP = ref(false)
+function simpanPengajuan() {
+  const data = {
+    noka: registrasi.form.noka,
+    jenispengajuan: '2',
+    keterangan: keterangan.value
+  }
+  console.log(data)
+  // dialog.value = false
+  return new Promise(resolve => {
+    loadingP.value = true
+    api.post('v1/simrs/bridgingbpjs/pendaftaran/pengajuansep', data)
+      .then(resp => {
+        loadingP.value = false
+        if (resp.metadata.code === '200' || resp.status === 200) {
+          notifCenterVue('Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP')
+          pesanBPJS.value = 'Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP'
+          bisaBuatSep.value = true
+        }
+        // jenisPengajuan.value = '2'
+        keterangan.value = ''
+        resolve(resp)
+      })
+      .catch(() => {
+        loadingP.value = false
+      })
+  })
+}
+// function simpanDataLama() {
+//   // refDataPasien.value.set()
+//   // refRegistrasi.value.set()
+//   const dataPasien = refDataPasien.value.set()
+//   const dataRegis = refRegistrasi.value.set()
+//   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }
+//   console.log('pasien', dataPasien,
+//     'regis', dataRegis
+//   )
+//   if (dataPasien.save && dataRegis.save) {
+//     if (registrasi.form.kodepoli === 'POL008') {
+//       toSimpan(dataPasien)
+//     } else {
+//       cekFingerPasien(form, dataPasien)
+//     }
+//   }
+// }
+// function toSimpan(dataPasien) {
+//   const keys = Object.keys(dataPasien.form)
+//   if (keys.length) {
+//     keys.forEach(key => {
+//       registrasi.setForm(key, dataPasien.form[key])
+//     })
+//   }
+//   console.log('form registrasi ', registrasi.form)
+//   registrasi.simpanRegistrasi().then(resp => {
+//     console.log('resp bpjs', resp)
+//     const antrian = resp.antrian.data
+//     const nomor = antrian ? antrian.nomor : '-'
+//     const poli = antrian ? antrian.nama_layanan : '-'
+//     const norm = antrian ? antrian.id_member : '-'
+//     console.log('Antrian ', antrian)
+//     const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+//     window.open(routeData.href, '_blank')
+//     dialogCetak()
+//   })
+// }
 function validasiSuratKontrol() {
   console.log('validasi surat kontrol')
   refRegistrasi.value.validasiSuratKontrol()
@@ -245,7 +392,30 @@ function dialogCetak() {
     }
   }).onOk(() => {
     console.log('Cetak')
-    registrasi.buatSep()
+    buatSEP()
+  }).onCancel(() => {
+    console.log('tidak Cetak')
+  })
+}
+function dialogTidakAdaReg() {
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Nomor Registrasi tidak ada, apakah akan dilanjutkan?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Buat SEP',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('Cetak')
+    buatSEP()
   }).onCancel(() => {
     console.log('tidak Cetak')
   })
