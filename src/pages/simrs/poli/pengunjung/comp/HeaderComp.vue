@@ -89,15 +89,16 @@
         flat
         size="sm"
         padding="xs"
-        icon="icon-mat-layers"
+        icon="icon-mat-refresh"
+        @click="emits('refresh')"
       >
         <q-tooltip
           class="primary"
           :offset="[10, 10]"
         >
-          per Baris List
+          Refresh Data
         </q-tooltip>
-        <q-menu
+        <!-- <q-menu
           transition-show="flip-left"
           transition-hide="flip-right"
           anchor="top left"
@@ -110,7 +111,6 @@
               v-ripple
               tag="label"
             >
-              <!-- <q-item-section> -->
               <q-radio
                 v-model="selectPerPage"
                 size="xs"
@@ -118,17 +118,15 @@
                 :label="opt + ' Baris'"
                 color="primary"
               />
-              <!-- </q-item-section> -->
-              <!-- <q-item-label /> -->
             </q-item>
           </q-list>
-        </q-menu>
+        </q-menu> -->
       </q-btn>
       <!-- fullscreen -->
       <q-btn
         flat
         :color="textColor"
-        :icon="!fullscreen?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
+        :icon="!full?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
         size="xs"
         padding="xs"
         @click="emits('fullscreen')"
@@ -149,8 +147,8 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow'])
-const options = ref([5, 10, 20, 50, 100])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh'])
+// const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   color: {
     type: String,
@@ -169,7 +167,7 @@ const props = defineProps({
     type: String,
     default: dateDbFormat(new Date())
   },
-  fullscreen: { type: Boolean, default: false }
+  full: { type: Boolean, default: false }
 })
 
 const popup = ref()
@@ -178,10 +176,10 @@ function lihatRef() {
   console.log(popup.value)
   popup.value.hide()
 }
-const selectPerPage = computed({
-  get () { return props.perPage },
-  set (val) { emits('setRow', val) }
-})
+// const selectPerPage = computed({
+//   get () { return props.perPage },
+//   set (val) { emits('setRow', val) }
+// })
 const date = computed({
   get() {
     return props.tanggal

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="q-py-sm">
     <div class="f-14">
       TOTAL PASIEN : <span class="text-weight-bold">{{ items.length }}</span>
     </div>

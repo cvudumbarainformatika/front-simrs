@@ -9,10 +9,12 @@
         :tanggal="store.params.tgl"
         :search="store.params.q"
         :per-page="store.params.per_page"
+        :full="style.componentfull"
         @fullscreen="style.setComponentFull"
         @set-tanggal="(val)=>store.setDate(val)"
         @set-search="store.setQ"
         @set-row="store.setPerPage"
+        @refresh="store.getData"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top q-pa-sm">
@@ -54,9 +56,8 @@ onMounted(() => {
 })
 
 function bukaTindakan(val) {
-  const pasien = val
   pasien.value = val
   store.togglePageTindakan()
-  console.log(pasien)
+  console.log('pasien', pasien.value)
 }
 </script>
