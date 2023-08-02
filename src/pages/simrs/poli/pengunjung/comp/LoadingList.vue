@@ -48,14 +48,14 @@
           type="text"
           square
           height="16px"
-          width="40vw"
+          width="10vw"
           animation="fade"
         />
         <q-skeleton
           type="text"
           square
           height="16px"
-          width="40vw"
+          width="12vw"
           animation="fade"
         />
       </q-item-section>

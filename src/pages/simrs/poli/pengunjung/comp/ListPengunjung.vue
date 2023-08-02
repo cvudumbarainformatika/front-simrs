@@ -64,6 +64,8 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div class="q-pb-xl" />
+      <div class="q-pb-xl" />
     </div>
   </div>
 </template>
