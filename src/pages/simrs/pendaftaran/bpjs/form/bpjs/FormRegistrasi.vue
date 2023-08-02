@@ -813,14 +813,16 @@ function setPoliTujuan(val) {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
-  if (store.paramKarcis.flag) {
-    if (store.paramKarcis.flag !== '') {
-      store.getKarcisPoli().then(() => {
-        store.display.hargakarcis = store.kasrcispoli.tarif
-        store.form.karcis = store.kasrcispoli.tarif
-      })
-    }
-  }
+  setFlagKarcis('Lama')
+  store.form.jeniskarcis = 'Lama'
+  // if (store.paramKarcis.flag) {
+  //   if (store.paramKarcis.flag !== '') {
+  //     store.getKarcisPoli().then(() => {
+  //       store.display.hargakarcis = store.kasrcispoli.tarif
+  //       store.form.karcis = store.kasrcispoli.tarif
+  //     })
+  //   }
+  // }
   console.log('set poli ', store.polis[index])
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   store.paramDpjp.kodepoli = store.polis[index].kodemapingbpjs

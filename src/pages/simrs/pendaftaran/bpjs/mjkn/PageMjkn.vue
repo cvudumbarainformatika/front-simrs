@@ -91,7 +91,7 @@
                 label="SEP"
                 :loading="loading"
                 :disable="loading"
-                @click="buatSEP"
+                @click="preSEP"
               />
               <app-btn
                 class="q-ml-xl"
@@ -100,6 +100,13 @@
                 :disable="loading"
                 @click="clearAllRegistrasi"
               />
+              <!-- <app-btn
+                class="q-ml-xl"
+                label="cek dialog"
+                :loading="loading"
+                :disable="loading"
+                @click="dialog=true"
+              /> -->
               <!-- <app-btn
                 class="q-ml-xl"
                 label="test qt"
@@ -127,6 +134,46 @@
       </div>
     </template>
   </app-fullscreen>
+  <app-dialog-form
+    v-model="dialog"
+    :title="loadingFinger?'Masih mengambil data .... ':'Alasan Finger'"
+    :loading="loadingP"
+    @save-form="simpanPengajuan()"
+  >
+    <template #default>
+      <div>
+        <div
+          v-if="pesanBPJS!==''"
+          class="row q-mb-sm"
+        >
+          <p>{{ pesanBPJS }}</p>
+        </div>
+        <div
+          v-if="!loadingFinger"
+          class="row"
+        >
+          <div class="col-12">
+            <app-input
+              v-model="keterangan"
+              label="keterangan"
+            />
+          </div>
+        </div>
+        <div
+          v-if="bisaBuatSep"
+          class="row justify-end q-mr-lg q-my-md"
+        >
+          <app-btn
+            class="q-mr-md"
+            label="Buat SEP"
+            :loading="loading"
+            :disable="loading"
+            @click="preSEP"
+          />
+        </div>
+      </div>
+    </template>
+  </app-dialog-form>
   <app-dialog-not-full
     v-model="dialogQr"
     @on-ok="closeQr()"
@@ -166,10 +213,11 @@ import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListBpjsAntrianStore } from 'src/stores/simrs/pendaftaran/mjkn/lists'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifCenterVue, notifErrVue, notifNegativeCenterVue, notifSuccessVue } from 'src/modules/utils'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
+import { api } from 'src/boot/axios'
 // import { routerInstance } from 'src/boot/router'
 
 const style = useStyledStore()
@@ -244,6 +292,12 @@ function pilihPasienIni(val, jkn) {
   }
 
   pasien.setForm('noantrian', jkn.nomorantrean)
+  if (jkn.nomorantrean.length > 1) {
+    const temp = parseInt(jkn.nomorantrean.slice(2, jkn.nomorantrean.length))
+    console.log('antrian ', jkn.nomorantrean.length)
+    console.log('temp ', temp)
+    pasien.setForm('angkaantrean', temp)
+  }
   const tglLahir = val.tgllahir.split('-')
   pasien.setForm('barulama', 'lama')
   if (tglLahir.length) {
@@ -259,6 +313,7 @@ function pilihPasienIni(val, jkn) {
   regis.cekRujukanPcare(param).then(resp => {
     console.log('yang di P care', resp)
     if (resp.metadata.code === '200') {
+      notifSuccessVue('Rujukan Pcare ditemukan, mengisi Data..')
       pilihRujukanPCare(resp.result.rujukan)
     }
     if (resp.result === 'Tidak ditemukan') {
@@ -266,6 +321,7 @@ function pilihPasienIni(val, jkn) {
         console.log('yang di Rujukan rs ', resp)
         if (resp.metadata.code === '200') {
           console.log('Rujukan rs result ', resp.result)
+          notifSuccessVue('Rujukan RS ditemukan, mengisi Data..')
           pilihRujukanRS(resp.result.rujukan)
         }
 
@@ -274,6 +330,7 @@ function pilihPasienIni(val, jkn) {
           regis.cekSuratKontrol(param).then(resp => {
             // console.log('yang Surat kontrol ', resp)
             if (resp.metadata.code === '200') {
+              notifSuccessVue('Surat kontrol ditemukan, mengisi Data..')
               console.log('ada Surat kontrol ', resp.result)
               console.log('referensi ', jkn.nomorreferensi)
               regis.setForm('nosuratkontrol', jkn.nomorreferensi)
@@ -293,46 +350,53 @@ function pilihPasienIni(val, jkn) {
 
   // metani kode2 dan alamat -- start --
   // agama
-  const indexAgama = findWithAttr(store.agamas, 'keterangan', val.agama)
+  const indexAgama = findWithAttr(pasien.agamas, 'keterangan', val.agama)
   if (indexAgama >= 0) {
-    store.display.kode = store.agamas[indexAgama].kode
+    pasien.display.kode = pasien.agamas[indexAgama].kode
     if (!val.kodemapagama) {
-      store.setForm('kodemapagama', store.agamas[indexAgama].kodemapping)
+      pasien.setForm('kodemapagama', pasien.agamas[indexAgama].kodemapping)
     }
-  } else {
-    store.display.kode = '8'
   }
   // pekerjaan
-  const indexpekerjaan = findWithAttr(store.pekerjaans, 'pekerjaan', val.pekerjaan)
+  const indexpekerjaan = findWithAttr(pasien.pekerjaans, 'pekerjaan', val.pekerjaan)
   if (indexpekerjaan >= 0) {
-    store.display.pekerjaan = store.pekerjaans[indexpekerjaan].pekerjaan
+    pasien.display.pekerjaan = pasien.pekerjaans[indexpekerjaan].pekerjaan
   }
   // kelamin
   if (!val.kodekelamin) {
     if (!val.kd_kelamin) {
-      const indexkelamin = findWithAttr(store.kelamins, 'kelamin', val.kelamin)
+      const indexkelamin = findWithAttr(pasien.kelamins, 'kelamin', val.kelamin)
       if (indexkelamin >= 0) {
-        store.setForm('kodekelamin', store.kelamins[indexkelamin].kode)
+        pasien.setForm('kodekelamin', pasien.kelamins[indexkelamin].kode)
       }
     } else {
-      store.setForm('kodekelamin', val.kd_kelamin)
+      pasien.setForm('kodekelamin', val.kd_kelamin)
+    }
+  }
+  // telepon
+  if (pasien.form.noteleponhp.length) {
+    if (pasien.form.noteleponhp.charAt(0) !== '0') {
+      if (pasien.form.noteleponhp.charAt(0) === '+' && pasien.form.noteleponhp.charAt(1) === '6' && pasien.form.noteleponhp.charAt(2) === '2') {
+        const telp = '0' + pasien.form.noteleponhp.slice(3, pasien.form.noteleponhp.length)
+        pasien.setForm('noteleponhp', telp)
+      }
     }
   }
   // negara
   if (val.negara) {
-    store.negaraSelected(val.negara)
-    store.getProvinces().then(() => {
+    pasien.negaraSelected(val.negara)
+    pasien.getProvinces().then(() => {
       if (val.kodepropinsi) {
-        store.propinsiSelected(val.kodepropinsi)
-        store.getKota().then(() => {
+        pasien.propinsiSelected(val.kodepropinsi)
+        pasien.getKota().then(() => {
           if (val.kodekabupatenkota) {
-            store.kabupatenSelected(val.kodekabupatenkota)
-            store.getKec().then(() => {
+            pasien.kabupatenSelected(val.kodekabupatenkota)
+            pasien.getKec().then(() => {
               if (val.kodekecamatan) {
-                store.kecamatanSelected(val.kodekecamatan)
-                store.getKels().then(() => {
+                pasien.kecamatanSelected(val.kodekecamatan)
+                pasien.getKels().then(() => {
                   if (val.kodekelurahan) {
-                    store.kelurahanSelected(val.kodekelurahan)
+                    pasien.kelurahanSelected(val.kodekelurahan)
                   }
                 })
               }
@@ -342,19 +406,19 @@ function pilihPasienIni(val, jkn) {
       }
     })
   }
-  if (val.negaradomisili && !store.alamataDomisiliSama) {
-    store.negaraDomisiliSelected(val.negaradomisili)
-    store.getProvincesDomisili().then(() => {
+  if (val.negaradomisili && !pasien.alamataDomisiliSama) {
+    pasien.negaraDomisiliSelected(val.negaradomisili)
+    pasien.getProvincesDomisili().then(() => {
       if (val.propinsidomisili) {
-        store.propinsiDomisiliSelected(val.propinsidomisili)
-        store.getKotaDomisili().then(() => {
-          store.kabupatenDomisiliSelected(val.kabupatenkotadomisili)
-          store.getKecDomisili().then(() => {
+        pasien.propinsiDomisiliSelected(val.propinsidomisili)
+        pasien.getKotaDomisili().then(() => {
+          pasien.kabupatenDomisiliSelected(val.kabupatenkotadomisili)
+          pasien.getKecDomisili().then(() => {
             if (val.kecamatandomisili) {
-              store.kecamatanDomisiliSelected(val.kecamatandomisili)
-              store.getKelsDomisili().then(() => {
+              pasien.kecamatanDomisiliSelected(val.kecamatandomisili)
+              pasien.getKelsDomisili().then(() => {
                 if (val.kelurahandomisili) {
-                  store.kelurahanDomisiliSelected(val.kelurahandomisili)
+                  pasien.kelurahanDomisiliSelected(val.kelurahandomisili)
                 }
               })
             }
@@ -547,28 +611,65 @@ function jenisKunjungan(val) {
 function assignSurat(val) {
   refRegistrasi.value.assignSuratKontrol(val)
 }
-function buatSEP() {
-  const dataPasien = refDataPasien.value.set()
-  refRegistrasi.value.set()
-  // console.log('pasien', dataPasien,
-  //   'regis', dataRegis
-  // )
-  const keys = Object.keys(dataPasien.form)
-  if (keys.length) {
-    keys.forEach(key => {
-      regis.setForm(key, dataPasien.form[key])
-    })
+const dialog = ref(false)
+const bisaBuatSep = ref(false)
+const pesanBPJS = ref('')
+function preSEP() {
+  // refDataPasien.value.set()
+  // refRegistrasi.value.set()
+  if (refDataPasien.value.set() && refRegistrasi.value.set()) {
+    if (!regis.form.noreg) {
+      notifNegativeCenterVue('Nomor Registrasi belum ada')
+      dialogTidakAdaReg()
+    } else {
+      buatSEP()
+    }
   }
+}
+function buatSEP() {
   console.log('form registrasi ', regis.form)
   regis.buatSep().then(resp => {
     console.log('resp bpjs', resp)
-    // if (resp.metadata.code === '200') {
-    // dialogQr.value = true
-    // }
-    // dialogCetak()
+    if (resp.metadata.code === '201') {
+      // notifErrVue(resp.data.metadata.message)
+      pesanBPJS.value = resp.metadata.message
+    }
+    if (resp.metadata.code === '200') {
+      dialog.value = false
+      pesanBPJS.value = resp.metadata.message
+      // notifSuccessVue(resp.data.metadata.message)
+      // notifCenterVue('Berhasil Buat SEP')
+    }
   })
-  // if (dataPasien.save && dataRegis.save) {
-  // }
+}
+
+const loadingFinger = ref(false)
+function cekFingerPasien(form) {
+  dialog.value = true
+  loadingFinger.value = true
+  pesanBPJS.value = 'Mengambil Data Finger Print dari BPJS'
+  pasien.cekPesertaFinger(form).then(resp => {
+    loadingFinger.value = false
+    // refDataPasien.value.cekBpjs()
+    const finger = resp.result.kode
+    console.log('finger', finger)
+    if (finger === '1') {
+      // toSimpan(dataPasien)
+      dialogCetak()
+    } else if (finger === '0') {
+      // cek umur
+      // jika  < 17 thn pas cetak sep, jika tidak muncul popup pengajuan
+      if (regis.form.umurthn < 17) {
+        dialogCetak()
+      } else if (regis.form.umurthn === 17 && regis.form.umurbln === 0 && regis.form.umurhari === 0) {
+        dialogCetak()
+      } else {
+        // pasien.alert = true
+        // pasien.alertMsg = resp.result
+        pesanBPJS.value = resp.result.status
+      }
+    }
+  })
 }
 const nokaQr = ref('')
 
@@ -590,25 +691,11 @@ function simpanData() {
   )
   const form = { noka: pasien.form.noka, tglsep: regis.form.tglsep }
   if (dataPasien.save && dataRegis.save) {
-    nokaQr.value = pasien.form.noka
-    if (regis.form.kodepoli === 'POL008') {
-      toSimpan(dataPasien)
-    } else {
-      pasien.cekPesertaFinger(form).then(resp => {
-        const finger = resp.result.kode
-        console.log('finger', finger)
-        if (finger === '1') {
-          toSimpan(dataPasien)
-        } else if (finger === '0') {
-          pasien.alert = true
-          pasien.alertMsg = resp.result
-        }
-      })
-    }
+    toSimpan(dataPasien, form)
   }
 }
 
-function toSimpan(dataPasien) {
+function toSimpan(dataPasien, form) {
   const keys = Object.keys(dataPasien.form)
   if (keys.length) {
     keys.forEach(key => {
@@ -618,12 +705,51 @@ function toSimpan(dataPasien) {
   console.log('form registrasi ', regis.form)
   regis.simpanRegistrasi().then(resp => {
     console.log('resp bpjs', resp)
-    dialogCetak()
+    cekFingerPasien(form)
+    // dialogCetak()
+  })
+}
+const keterangan = ref('')
+const loadingP = ref(false)
+function simpanPengajuan() {
+  const data = {
+    noka: regis.form.noka,
+    jenispengajuan: '2',
+    keterangan: keterangan.value
+  }
+  console.log(data)
+  // dialog.value = false
+  return new Promise(resolve => {
+    loadingP.value = true
+    api.post('v1/simrs/bridgingbpjs/pendaftaran/pengajuansep', data)
+      .then(resp => {
+        loadingP.value = false
+        console.log('PEngajuan sep', resp.data)
+        console.log('PEngajuan sep message ', !!resp.data.message, resp.data.message === 'OK')
+        if (resp.data.message === 'OK') {
+          bisaBuatSep.value = true
+          pesanBPJS.value = 'Respon BPJS : ' + resp.data.message
+          notifCenterVue('Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP')
+          console.log('PEngajuan sep message', resp.data.message)
+        }
+        if (resp.data.metadata.code === '201') {
+          bisaBuatSep.value = true
+          console.log('PEngajuan sep 201', resp.data.metadata)
+          pesanBPJS.value = resp.data.metadata.message
+        }
+        // jenisPengajuan.value = '2'
+        keterangan.value = ''
+        resolve(resp)
+      })
+      .catch(() => {
+        loadingP.value = false
+      })
   })
 }
 
 const dialogQr = ref(false)
 function dialogCetak() {
+  dialog.value = false
   Dialog.create({
     title: 'Konfirmasi.',
     message: 'Buat SEP?',
@@ -641,7 +767,31 @@ function dialogCetak() {
     }
   }).onOk(() => {
     console.log('Cetak')
-    regis.buatSep()
+    buatSEP()
+  }).onCancel(() => {
+    console.log('tidak Cetak')
+  })
+}
+
+function dialogTidakAdaReg() {
+  Dialog.create({
+    title: 'Konfirmasi.',
+    message: 'Nomor Registrasi tidak ada, apakah akan dilanjutkan?',
+    persistent: true,
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Buat SEP',
+      color: 'green'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark'
+    }
+  }).onOk(() => {
+    console.log('Cetak')
+    buatSEP()
   }).onCancel(() => {
     console.log('tidak Cetak')
   })

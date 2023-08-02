@@ -544,8 +544,9 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       const yearsDiff = tahunini - tahunLahir
 
       this.form.umurhari = daysDiff < 0 ? parseInt(date.daysInMonth(tglLahir) - hariLahir + hariini) : daysDiff
-      this.form.umurbln = monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff
-      this.form.umurthn = monthsDiff < 0 ? yearsDiff - 1 : yearsDiff
+      this.form.umurbln = (daysDiff < 0 && monthsDiff === 0) ? 11 : (monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff)
+      this.form.umurthn = (daysDiff < 0 && monthsDiff === 0) ? yearsDiff - 1 : (monthsDiff < 0 ? yearsDiff - 1 : yearsDiff)
+      this.setForm('tgllahir', tanggal)
     },
     lahirHariIni() {
       const hariIni = Date.now()
@@ -557,6 +558,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.form.umurthn = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'years')
       this.form.umurbln = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'months')
       this.form.umurhari = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'days')
+
+      this.setForm('tgllahir', tanggal)
     },
     // initial data
     getInitialData() {
