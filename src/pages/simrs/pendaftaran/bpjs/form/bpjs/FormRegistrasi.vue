@@ -724,8 +724,8 @@ function assignSuratKontrol(val) {
   const findpoli = val.poliTujuan ? val.poliTujuan : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  store.paramKarcis.flag = 'Kartu Lama'
-  store.form.jeniskarcis = 'Kartu Lama'
+  store.paramKarcis.flag = 'Lama'
+  store.form.jeniskarcis = 'Lama'
   if (poli) setPoliTujuan(store.polis[indPoli].kodepoli)
 
   store.dpjpSuratKontrol = val.kodeDokter

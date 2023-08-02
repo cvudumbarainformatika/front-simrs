@@ -562,9 +562,9 @@ function buatSEP() {
   console.log('form registrasi ', regis.form)
   regis.buatSep().then(resp => {
     console.log('resp bpjs', resp)
-    if (resp.metadata.code === '200') {
-      dialogQr.value = true
-    }
+    // if (resp.metadata.code === '200') {
+    // dialogQr.value = true
+    // }
     // dialogCetak()
   })
   // if (dataPasien.save && dataRegis.save) {
@@ -589,29 +589,36 @@ function simpanData() {
     'regis', dataRegis
   )
   const form = { noka: pasien.form.noka, tglsep: regis.form.tglsep }
-  pasien.cekPesertaFinger(form).then(resp => {
+  if (dataPasien.save && dataRegis.save) {
     nokaQr.value = pasien.form.noka
-    const finger = resp.result.kode
-    console.log('finger', finger)
-
-    if (dataPasien.save && dataRegis.save && finger === '1') {
-      const keys = Object.keys(dataPasien.form)
-      if (keys.length) {
-        keys.forEach(key => {
-          regis.setForm(key, dataPasien.form[key])
-        })
-      }
-      console.log('form registrasi ', regis.form)
-      regis.simpanRegistrasi().then(resp => {
-        console.log('resp bpjs', resp)
-        dialogCetak()
+    if (regis.form.kodepoli === 'POL008') {
+      toSimpan(dataPasien)
+    } else {
+      pasien.cekPesertaFinger(form).then(resp => {
+        const finger = resp.result.kode
+        console.log('finger', finger)
+        if (finger === '1') {
+          toSimpan(dataPasien)
+        } else if (finger === '0') {
+          pasien.alert = true
+          pasien.alertMsg = resp.result
+        }
       })
     }
+  }
+}
 
-    if (finger === '0') {
-      pasien.alert = true
-      pasien.alertMsg = resp.result
-    }
+function toSimpan(dataPasien) {
+  const keys = Object.keys(dataPasien.form)
+  if (keys.length) {
+    keys.forEach(key => {
+      regis.setForm(key, dataPasien.form[key])
+    })
+  }
+  console.log('form registrasi ', regis.form)
+  regis.simpanRegistrasi().then(resp => {
+    console.log('resp bpjs', resp)
+    dialogCetak()
   })
 }
 

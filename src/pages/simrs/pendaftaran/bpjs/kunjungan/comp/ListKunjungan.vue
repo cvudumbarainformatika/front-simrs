@@ -190,13 +190,13 @@ function openPreviewGc() {
 }
 
 const dialog = ref(false)
-const keterangan = ref('')
 const temp = ref(null)
 const loadingP = ref(false)
 const jenisPengajuans = ref([
   { nama: 'pengajuan backdate', value: '1' },
   { nama: 'pengajuan finger print', value: '2' }
 ])
+const keterangan = ref('')
 const jenisPengajuan = ref('2')
 function PengajuanSep(val) {
   dialog.value = true
