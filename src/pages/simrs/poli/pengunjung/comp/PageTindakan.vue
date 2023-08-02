@@ -39,16 +39,32 @@
       <div class="my-flex-1 q-card q-card--flat no-shadow no-border-radius scroll">
         <div class="container-no-header bg-yellow full-height">
           <div class="header-content bg-negative">
-            Header
+            <q-toolbar
+              style="padding:0 !important"
+              class="bg-grey text-white shadow-2 rounded-borders"
+            >
+              <q-tabs
+                v-model="tab"
+                shrink
+              >
+                <q-tab
+                  name="tab1"
+                  label="Tab 1"
+                />
+                <q-tab
+                  name="tab2"
+                  label="Tab 2"
+                />
+                <q-tab
+                  name="tab3"
+                  label="Tab 3"
+                />
+              </q-tabs>
+            </q-toolbar>
           </div>
           <div class="my-flex-1 q-card q-card--flat no-shadow no-border-radius scroll">
             <div>ataaas</div>
-            <div
-              v-for="n in 100"
-              :key="n"
-            >
-              sadas
-            </div>
+
             <div class="q-pb-xl">
               bawaaah
             </div>
@@ -60,9 +76,9 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue'
+import { ref } from 'vue'
 import HeaderPage from './comptindakan/HeaderPage.vue'
-// const tab = ref('mails')
+const tab = ref('mails')
 // const innerTab = ref('innerMails')
 // const splitterModel = ref(10)
 defineProps({
