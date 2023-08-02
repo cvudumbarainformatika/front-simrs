@@ -126,36 +126,42 @@ function simpanData() {
   console.log('pasien', dataPasien,
     'regis', dataRegis
   )
-  pasien.cekPesertaFinger(form).then(resp => {
-    // refDataPasien.value.cekBpjs()
-    const finger = resp.result.kode
-    console.log('finger', finger)
-
-    // if (dataPasien.save && dataRegis.save) {
-    if (dataPasien.save && dataRegis.save && finger === '1') {
-      const keys = Object.keys(dataPasien.form)
-      if (keys.length) {
-        keys.forEach(key => {
-          registrasi.setForm(key, dataPasien.form[key])
-        })
-      }
-      console.log('form registrasi ', registrasi.form)
-      registrasi.simpanRegistrasi().then(resp => {
-        console.log('resp bpjs', resp)
-        const antrian = resp.antrian.data
-        const nomor = antrian ? antrian.nomor : '-'
-        const poli = antrian ? antrian.nama_layanan : '-'
-        const norm = antrian ? antrian.id_member : '-'
-        console.log('Antrian ', antrian)
-        const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
-        window.open(routeData.href, '_blank')
-        dialogCetak()
+  if (dataPasien.save && dataRegis.save) {
+    if (registrasi.form.kodepoli === 'POL008') {
+      toSimpan(dataPasien)
+    } else {
+      pasien.cekPesertaFinger(form).then(resp => {
+      // refDataPasien.value.cekBpjs()
+        const finger = resp.result.kode
+        console.log('finger', finger)
+        if (finger === '1') {
+          toSimpan(dataPasien)
+        } else if (finger === '0') {
+          pasien.alert = true
+          pasien.alertMsg = resp.result
+        }
       })
     }
-    if (finger === '0') {
-      pasien.alert = true
-      pasien.alertMsg = resp.result
-    }
+  }
+}
+function toSimpan(dataPasien) {
+  const keys = Object.keys(dataPasien.form)
+  if (keys.length) {
+    keys.forEach(key => {
+      registrasi.setForm(key, dataPasien.form[key])
+    })
+  }
+  console.log('form registrasi ', registrasi.form)
+  registrasi.simpanRegistrasi().then(resp => {
+    console.log('resp bpjs', resp)
+    const antrian = resp.antrian.data
+    const nomor = antrian ? antrian.nomor : '-'
+    const poli = antrian ? antrian.nama_layanan : '-'
+    const norm = antrian ? antrian.id_member : '-'
+    console.log('Antrian ', antrian)
+    const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+    window.open(routeData.href, '_blank')
+    dialogCetak()
   })
 }
 function validasiSuratKontrol() {
