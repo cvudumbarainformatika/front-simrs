@@ -44,13 +44,13 @@
             :disable="loading"
             @click="clearAllRegistrasi"
           />
-          <app-btn
+          <!-- <app-btn
             class="q-ml-xl"
             label="cek dialog"
             :loading="loading"
             :disable="loading"
             @click="dialog=true"
-          />
+          /> -->
         </div>
       </q-card-actions>
     </q-card>
@@ -71,7 +71,7 @@
     />
     <app-dialog-form
       v-model="dialog"
-      title="Alasan Finger"
+      :title="loadingFinger?'Masih mengambil data .... ':'Alasan Finger'"
       :loading="loadingP"
       @save-form="simpanPengajuan()"
     >
@@ -82,17 +82,11 @@
             class="row q-mb-sm"
           >
             <p>{{ pesanBPJS }}</p>
-            <!-- <div class="col-12">
-              <app-autocomplete
-                v-model="jenisPengajuan"
-                label="Jenis Pengajuan"
-                option-value="value"
-                option-label="nama"
-                :source="jenisPengajuans"
-              />
-            </div> -->
           </div>
-          <div class="row">
+          <div
+            v-if="!loadingFinger"
+            class="row"
+          >
             <div class="col-12">
               <app-input
                 v-model="keterangan"
@@ -213,9 +207,13 @@ function simpanData() {
     })
   }
 }
-
-function cekFingerPasien(form, dataPasien) {
+const loadingFinger = ref(false)
+function cekFingerPasien(form) {
+  dialog.value = true
+  loadingFinger.value = true
+  pesanBPJS.value = 'Mengambil Data Finger Print dari BPJS'
   pasien.cekPesertaFinger(form).then(resp => {
+    loadingFinger.value = false
     // refDataPasien.value.cekBpjs()
     const finger = resp.result.kode
     console.log('finger', finger)
@@ -230,7 +228,6 @@ function cekFingerPasien(form, dataPasien) {
       } else if (registrasi.form.umurthn === 17 && registrasi.form.umurbln === 0 && registrasi.form.umurhari === 0) {
         dialogCetak()
       } else {
-        dialog.value = true
         // pasien.alert = true
         // pasien.alertMsg = resp.result
         pesanBPJS.value = resp.result.status
@@ -244,8 +241,8 @@ function cekFingerPasien(form, dataPasien) {
 //   { nama: 'pengajuan backdate', value: '1' },
 //   { nama: 'pengajuan finger print', value: '2' }
 // ])
-const keterangan = ref('')
 // const jenisPengajuan = ref('2')
+const keterangan = ref('')
 const loadingP = ref(false)
 function simpanPengajuan() {
   const data = {
@@ -260,10 +257,17 @@ function simpanPengajuan() {
     api.post('v1/simrs/bridgingbpjs/pendaftaran/pengajuansep', data)
       .then(resp => {
         loadingP.value = false
-        if (resp.metadata.code === '200' || resp.status === 200) {
-          notifCenterVue('Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP')
-          pesanBPJS.value = 'Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP'
+        console.log('PEngajuan sep', resp)
+        if (resp.data.message === 'OK' || resp.data.metadata.code === '200') {
           bisaBuatSep.value = true
+          pesanBPJS.value = 'Respon BPJS : ' + resp.data.message
+          notifCenterVue('Pengajuan SEP sudah disampaikan, tunggu konfirmasi dari penjaminan sebelum Buat SEP')
+          console.log('PEngajuan sep message', resp.data.message)
+        }
+        if (resp.data.metadata.code === '201') {
+          bisaBuatSep.value = true
+          console.log('PEngajuan sep 201', resp.data.metadata)
+          pesanBPJS.value = resp.data.metadata.message
         }
         // jenisPengajuan.value = '2'
         keterangan.value = ''
@@ -375,6 +379,7 @@ function getListRujukan() {
 }
 
 function dialogCetak() {
+  dialog.value = false
   Dialog.create({
     title: 'Konfirmasi.',
     message: 'Buat SEP?',

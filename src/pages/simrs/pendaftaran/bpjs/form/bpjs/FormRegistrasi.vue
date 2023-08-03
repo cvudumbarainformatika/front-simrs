@@ -71,7 +71,7 @@
             <!-- No Surat kontrol -->
             <!-- v-if="store.jumlahSEP >= 1 || !store.form.norujukan" -->
             <div
-              v-if="(store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0)"
+              v-if="(store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0) || store.rujukanPostMRS || store.rujukanPostMRS"
               class="row q-col-gutter-sm items-center q-mb-xs"
             >
               <div class="col-12">
@@ -86,10 +86,11 @@
                   :loading="store.loadingCekBpjs"
                   :rules="[
                     val => (!!val ) || 'Harap diisi',
-                    val => (store.rencanaKontrolValid) || 'Rencana Kontrol tidak valid',
+                    val => (store.rencanaKontrolValid || store.rujukanPostMRS ||store.kontrolDPJP) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
                   @keyup.enter="cekSuratKontrolIni($event)"
+                  @update:model-value="validasiSuratKontrol"
                 />
               </div>
               <!-- <div class="col-3">
@@ -104,7 +105,7 @@
             <div
               v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
                 ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid)) || (store.rujukanPostMRS ||store.kontrolDPJP)"
             >
               <!-- Jenis Kunjungan -->
               <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -359,7 +360,7 @@
           <div
             v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
               ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+                (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid)) || (store.rujukanPostMRS ||store.kontrolDPJP)"
             class="col-6"
           >
             <!-- PPK Rujukan -->
@@ -705,17 +706,17 @@ function listSuratRujukan() {
 function cekSuratKontrolIni(evt) {
   const val = evt.target.value
   console.log('cek surat kontol ini')
-  // if (!store.suratKontrolChecked) {
-  const param = {
-    search: val
-  }
-  store.cekSuratKontrol(param).then(resp => {
-    console.log('cek surat kontrol ', resp)
-    if (resp.metadata.code === '200') {
-      assignSuratKontrol(resp.result)
+  if (!store.rujukanPostMRS) {
+    const param = {
+      search: val
     }
-  })
-  // }
+    store.cekSuratKontrol(param).then(resp => {
+      console.log('cek surat kontrol ', resp)
+      if (resp.metadata.code === '200') {
+        assignSuratKontrol(resp.result)
+      }
+    })
+  }
 }
 // assign surat kontrol ke form
 function assignSuratKontrol(val) {
@@ -762,40 +763,40 @@ function assignSuratKontrol(val) {
 function cekSuratRujukanIni(evt) {
   // console.log(evt.target.value)
   const val = evt.target.value
-  // if (!store.rujukanPCareChecked) {
-  const param = {
-    search: val
-  }
-  store.cekRujukanPcare(param).then(resp => {
-    console.log('cek P care ', resp)
-    if (resp.metadata.code === '200') {
-      const param = {
-        jenisrujukan: 1,
-        norujukan: val
-      }
-      store.getJumlahSep(param).then(resp => {
-        console.log('jumlah sep p care', resp)
-        // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
-      })
-    } else {
-      if (!store.rujukanRSChecked) {
-        store.cekRujukanRs(param).then(resp => {
-          if (resp.metadata.code === '200') {
-            const param = {
-              jenisrujukan: 2,
-              norujukan: val
-            }
-            store.getJumlahSep(param).then(resp => {
-              console.log('jumlah sep p care', resp)
-              // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
-            })
-          }
-          console.log('cek rujukan  RS', resp)
-        })
-      }
+  if (!store.rujukanPostMRS) {
+    const param = {
+      search: val
     }
-  })
-  // }
+    store.cekRujukanPcare(param).then(resp => {
+      console.log('cek P care ', resp)
+      if (resp.metadata.code === '200') {
+        const param = {
+          jenisrujukan: 1,
+          norujukan: val
+        }
+        store.getJumlahSep(param).then(resp => {
+          console.log('jumlah sep p care', resp)
+        // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+        })
+      } else {
+        if (!store.rujukanRSChecked) {
+          store.cekRujukanRs(param).then(resp => {
+            if (resp.metadata.code === '200') {
+              const param = {
+                jenisrujukan: 2,
+                norujukan: val
+              }
+              store.getJumlahSep(param).then(resp => {
+                console.log('jumlah sep p care', resp)
+              // store.jumlahSEP = parseInt(resp.jumlahSEP) >= 0 ? parseInt(resp.jumlahSEP) : 0
+              })
+            }
+            console.log('cek rujukan  RS', resp)
+          })
+        }
+      }
+    })
+  }
 }
 // cek Surat kontrol
 // function cekSuratRujukan() {
@@ -813,14 +814,16 @@ function setPoliTujuan(val) {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
-  if (store.paramKarcis.flag) {
-    if (store.paramKarcis.flag !== '') {
-      store.getKarcisPoli().then(() => {
-        store.display.hargakarcis = store.kasrcispoli.tarif
-        store.form.karcis = store.kasrcispoli.tarif
-      })
-    }
-  }
+  setFlagKarcis('Lama')
+  store.form.jeniskarcis = 'Lama'
+  // if (store.paramKarcis.flag) {
+  //   if (store.paramKarcis.flag !== '') {
+  //     store.getKarcisPoli().then(() => {
+  //       store.display.hargakarcis = store.kasrcispoli.tarif
+  //       store.form.karcis = store.kasrcispoli.tarif
+  //     })
+  //   }
+  // }
   console.log('set poli ', store.polis[index])
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   store.paramDpjp.kodepoli = store.polis[index].kodemapingbpjs

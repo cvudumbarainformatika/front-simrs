@@ -120,6 +120,7 @@
                   :filled="false"
                   :right-icon="!!bpjs"
                   right-icon-name="icon-mat-dvr"
+                  :loading="store.loadingNik"
                   :disable="store.form.barulama!=='baru'&&!store.edit&&(!store.form.nik?false:store.form.nik.length>=16)"
                   right-icon-tooltip="Cek BPJS"
                   :rules="[
@@ -172,6 +173,7 @@
                   label="Nomor KA BPJS"
                   :filled="false"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :loading="store.loadingNoka"
                   :rules="[val=> (!!val ? regex.test( val ) : true) ||'Hanya angka']"
                   @update:model-value="setNokaBPJS"
                 />
@@ -572,11 +574,11 @@
                   label="No telepon rumah"
                   :filled="false"
                   valid
-                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
                   type="number"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   @update:model-value="setTlpRumah"
                 />
+                <!-- :prefix="'+'+(store.form.negara?store.form.negara:'62')" -->
               </div>
             </div>
             <!-- telepon -->
@@ -591,10 +593,10 @@
                   v-model="store.form.noteleponhp"
                   label="No Ponsel"
                   :filled="false"
-                  :prefix="'+'+(store.form.negara?store.form.negara:'62')"
                   :disable=" store.form.barulama!=='baru' && !store.edit && (!!store.form.noteleponhp)"
                   @blur="setTlpHP($event)"
                 />
+                <!-- :prefix="'+'+(store.form.negara?store.form.negara:'62')" -->
                 <!-- @update:model-value="setTlpHP" -->
                 <!-- type="number" -->
               </div>
@@ -1634,11 +1636,12 @@ function setTanggalLahir() {
   const yearsDiff = tahunini - tahunLahir
 
   store.form.umurhari = daysDiff < 0 ? parseInt(date.daysInMonth(tglLahir) - hariLahir + hariini) : daysDiff
-  store.form.umurbln = monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff
-  store.form.umurthn = monthsDiff < 0 ? yearsDiff - 1 : yearsDiff
+  store.form.umurbln = (daysDiff < 0 && monthsDiff === 0) ? 11 : (monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff)
+  store.form.umurthn = (daysDiff < 0 && monthsDiff === 0) ? yearsDiff - 1 : (monthsDiff < 0 ? yearsDiff - 1 : yearsDiff)
   store.setForm('tgllahir', tanggal)
 
   console.log('perbedaan ', yearsDiff, monthsDiff, daysDiff)
+  console.log('perbedaan umur asem', store.form.umurthn, store.form.umurbln, store.form.umurhari)
 }
 function fokusHariLahir() {
   refHariLahir.value.$refs.refInput.select()
@@ -1760,24 +1763,24 @@ function kelurahanDomisiliSelected(val) {
 
 function setTlpRumah(val) {
   // console.log('form', store.form)
-  if (val.charAt(0) === '0') {
-    // console.log('val', val.charAt(0), val.slice(1, val.length))
-    store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
-  } else {
-    // console.log('val', val.charAt(0), val.slice(0, 1))
-    store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val)
-  }
+  // if (val.charAt(0) === '0') {
+  //   // console.log('val', val.charAt(0), val.slice(1, val.length))
+  //   store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
+  // } else {
+  //   // console.log('val', val.charAt(0), val.slice(0, 1))
+  //   store.setForm('noteleponrumah', '+' + (store.form.negara ? store.form.negara : '62') + val)
+  // }
 }
 function setTlpHP(evt) {
-  const val = evt.target.value
+  // const val = evt.target.value
   // console.log('val', val)
-  if (val.charAt(0) === '0' || val.charAt(0) === '+') {
-    // console.log('val', val.charAt(0), val.slice(1, val.length))
-    store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
-  } else {
-    // console.log('val', val.charAt(0), val.slice(0, 1))
-    store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val)
-  }
+  // if (val.charAt(0) === '0' || val.charAt(0) === '+') {
+  //   // console.log('val', val.charAt(0), val.slice(1, val.length))
+  //   store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val.slice(1, val.length))
+  // } else {
+  //   // console.log('val', val.charAt(0), val.slice(0, 1))
+  //   store.setForm('noteleponhp', '+' + (store.form.negara ? store.form.negara : '62') + val)
+  // }
   // console.log('form', store.form)
 }
 function setPekerjaan(val) {

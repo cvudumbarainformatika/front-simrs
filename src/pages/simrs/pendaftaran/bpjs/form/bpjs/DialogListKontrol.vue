@@ -358,6 +358,7 @@ const emits = defineEmits([
 // surat kontrol
 
 function pilihSuratKontrol(val) {
+  store.kontrolDPJP = true
   const findpoli = val.relkunjunganpoli ? (val.relkunjunganpoli.relmpoli ? val.relkunjunganpoli.relmpoli.rs1 : val.relkunjunganpoli.rs8) : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodepoli', findpoli) : -1
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
@@ -395,11 +396,11 @@ function pilihSuratKontrol(val) {
   store.form.nosuratkontrol = noSurat
   console.log('panjang', panjang)
   console.log('no surat', noSurat)
-  const param = {
-    search: noSurat
-  }
+  // const param = {
+  //   search: noSurat
+  // }
 
-  cekSuratKontrol(param)
+  // cekSuratKontrol(param)
   store.tampilKontrol = false
   // console.log(' surat kontrol ', val, store.polis)
   // console.log(' find ', findpoli, findruangan)

@@ -544,8 +544,9 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       const yearsDiff = tahunini - tahunLahir
 
       this.form.umurhari = daysDiff < 0 ? parseInt(date.daysInMonth(tglLahir) - hariLahir + hariini) : daysDiff
-      this.form.umurbln = monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff
-      this.form.umurthn = monthsDiff < 0 ? yearsDiff - 1 : yearsDiff
+      this.form.umurbln = (daysDiff < 0 && monthsDiff === 0) ? 11 : (monthsDiff < 0 ? 12 - bulanLahir + bulahini : monthsDiff)
+      this.form.umurthn = (daysDiff < 0 && monthsDiff === 0) ? yearsDiff - 1 : (monthsDiff < 0 ? yearsDiff - 1 : yearsDiff)
+      this.setForm('tgllahir', tanggal)
     },
     lahirHariIni() {
       const hariIni = Date.now()
@@ -557,6 +558,8 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       this.form.umurthn = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'years')
       this.form.umurbln = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'months')
       this.form.umurhari = date.getDateDiff(new Date(this.form.tgllahir), new Date(tanggal), 'days')
+
+      this.setForm('tgllahir', tanggal)
     },
     // initial data
     getInitialData() {
@@ -853,7 +856,20 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
             this.setForm('kelas', hasil.peserta.hakKelas.keterangan)
             console.log('no telep', this.form.noteleponhp)
+            if (!this.form.nik) this.setForm('nik', hasil.peserta.nik)
             if (!this.form.noteleponhp) this.setForm('noteleponhp', resp.data.result.peserta.mr.noTelepon)
+            console.log('tgl lahir ', this.form.tgllahir)
+            if (!this.form.tgllahir || this.form.tgllahir === '1900-01-01') {
+              const lahir = hasil.peserta.tglLahir.split('-')
+              if (lahir.length) {
+                this.tanggal.tahun = lahir[0] ? lahir[0] : '1900'
+                this.tanggal.bulan = lahir[1] ? lahir[1] : '01'
+                this.tanggal.hari = lahir[2] ? lahir[2] : '01'
+
+                this.setTanggalLahir()
+              }
+              console.log('lahir', lahir)
+            }
             resolve(resp.data.result)
           }).catch(() => {
             this.loadingNoka = false
