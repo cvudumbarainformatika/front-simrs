@@ -457,14 +457,14 @@
                 <div>{{ formatDouble(row.bRM) }}</div>
               </div>
             </div>
-            <div v-if="row.jAsuhangizi>0">
+            <div v-if="row.jGizi>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  Asuhan Gizi
+                  Gizi
                 </div>
-                <div>{{ formatDouble(row.jAsuhangizi) }}</div>
+                <div>{{ formatDouble(row.jGizi) }}</div>
               </div>
             </div>
             <div v-if="row.jKeperawatan>0">
@@ -475,16 +475,6 @@
                   Keperawatan
                 </div>
                 <div>{{ formatDouble(row.jKeperawatan) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jMakanpasien>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Makan Pasien
-                </div>
-                <div>{{ formatDouble(row.jMakanpasien) }}</div>
               </div>
             </div>
             <div v-if="row.jOksigen>0">
