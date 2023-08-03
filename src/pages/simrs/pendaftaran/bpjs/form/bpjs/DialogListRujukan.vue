@@ -703,6 +703,7 @@ function pilihRujukan(val, jenis) {
 }
 // eslint-disable-next-line no-unused-vars
 function pilihRujukanRS(val) {
+  store.rujukanPostMRS = false
   const param = {
     jenisrujukan: 2,
     norujukan: val.noKunjungan
@@ -721,6 +722,7 @@ function pilihRujukanRS(val) {
 }
 // eslint-disable-next-line no-unused-vars
 function pilihRujukanPCare(val) {
+  store.rujukanPostMRS = false
   const param = {
     jenisrujukan: 1,
     norujukan: val.noKunjungan
@@ -743,6 +745,7 @@ function pilihRujukanMrs(val) {
   store.setForm('asalRujukan', '1')
   console.log('rujukan Mrs', val)
   store.setForm('norujukan', val.rs8)
+  store.rujukanPostMRS = true
   store.tampilRujukan = false
 }
 </script>

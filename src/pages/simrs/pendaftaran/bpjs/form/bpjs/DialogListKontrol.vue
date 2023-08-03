@@ -395,11 +395,11 @@ function pilihSuratKontrol(val) {
   store.form.nosuratkontrol = noSurat
   console.log('panjang', panjang)
   console.log('no surat', noSurat)
-  const param = {
-    search: noSurat
-  }
+  // const param = {
+  //   search: noSurat
+  // }
 
-  cekSuratKontrol(param)
+  // cekSuratKontrol(param)
   store.tampilKontrol = false
   // console.log(' surat kontrol ', val, store.polis)
   // console.log(' find ', findpoli, findruangan)

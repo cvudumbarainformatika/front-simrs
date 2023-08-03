@@ -856,7 +856,20 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             this.setForm('hakkelas', hasil.peserta.hakKelas.kode)
             this.setForm('kelas', hasil.peserta.hakKelas.keterangan)
             console.log('no telep', this.form.noteleponhp)
+            if (!this.form.nik) this.setForm('nik', hasil.peserta.nik)
             if (!this.form.noteleponhp) this.setForm('noteleponhp', resp.data.result.peserta.mr.noTelepon)
+            console.log('tgl lahir ', this.form.tgllahir)
+            if (!this.form.tgllahir || this.form.tgllahir === '1900-01-01') {
+              const lahir = hasil.peserta.tglLahir.split('-')
+              if (lahir.length) {
+                this.tanggal.tahun = lahir[0] ? lahir[0] : '1900'
+                this.tanggal.bulan = lahir[1] ? lahir[1] : '01'
+                this.tanggal.hari = lahir[2] ? lahir[2] : '01'
+
+                this.setTanggalLahir()
+              }
+              console.log('lahir', lahir)
+            }
             resolve(resp.data.result)
           }).catch(() => {
             this.loadingNoka = false
