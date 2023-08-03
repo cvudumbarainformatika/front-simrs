@@ -37,7 +37,7 @@
           icon="icon-mat-chevron_right"
           size="sm"
           round
-          :disable="meta.next_page===null"
+          :disable="meta.current_page===meta.last_page"
           @click="emits('goTo',meta.current_page+1)"
         />
         <q-btn

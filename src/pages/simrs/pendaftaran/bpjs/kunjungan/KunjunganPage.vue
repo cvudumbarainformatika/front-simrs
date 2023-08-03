@@ -13,6 +13,7 @@
         @set-tanggal="(val)=>store.setDate(val)"
         @set-search="store.setQ"
         @set-row="store.setPerPage"
+        @set-periode="store.setPeriodik"
       />
     </div>
     <div

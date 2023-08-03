@@ -46,13 +46,13 @@
             <q-item-label caption>
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
             </q-item-label>
-            <!-- <q-item-label>
-              Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
-            </q-item-label> -->
+            <q-item-label>
+              Tgl Kunjungan : <span class="text-weight-bold text-accent"> {{ dateFullFormat(item.tgl_kunjungan) }} </span> | jam : {{ formatJam(item.tgl_kunjungan) }}
+            </q-item-label>
             <q-item-label
               caption
             >
-              Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span>
+              <i>Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span></i>
             </q-item-label>
           </q-item-section>
           <!-- <q-item-section
@@ -173,6 +173,7 @@
 
 <script setup>
 import { api } from 'src/boot/axios'
+import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
 import { ref } from 'vue'
 

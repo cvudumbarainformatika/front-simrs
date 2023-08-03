@@ -32,7 +32,7 @@
           />
         </template>
       </q-input>
-      <q-btn
+      <!-- <q-btn
         flat
         dense
         :color="textColor"
@@ -50,7 +50,7 @@
             @update:model-value="lihatRef"
           />
         </q-popup-proxy>
-      </q-btn>
+      </q-btn> -->
       <q-btn
         flat
         :color="textColor"
@@ -170,24 +170,24 @@ const props = defineProps({
   full: { type: Boolean, default: false }
 })
 
-const popup = ref()
+// const popup = ref()
 
-function lihatRef() {
-  console.log(popup.value)
-  popup.value.hide()
-}
+// function lihatRef() {
+//   console.log(popup.value)
+//   popup.value.hide()
+// }
 // const selectPerPage = computed({
 //   get () { return props.perPage },
 //   set (val) { emits('setRow', val) }
 // })
-const date = computed({
-  get() {
-    return props.tanggal
-  },
-  set(newVal) {
-    emits('setTanggal', newVal)
-  }
-})
+// const date = computed({
+//   get() {
+//     return props.tanggal
+//   },
+//   set(newVal) {
+//     emits('setTanggal', newVal)
+//   }
+// })
 const q = computed({
   get() {
     return props.search

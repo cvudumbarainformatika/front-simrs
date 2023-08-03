@@ -13,6 +13,8 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       page: 1,
       order_by: 'id',
       tgl: dateDbFormat(new Date())
+      // to: dateDbFormat(new Date()),
+      // from: dateDbFormat(new Date())
     },
     loading: false,
     loadingSend: false,
@@ -46,6 +48,10 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
       this.params.page = 1
       this.params.tgl = payload
       this.getLists()
+    },
+
+    setPeriodik(val) {
+      console.log('periodik', val)
     },
     setQ(payload) {
       this.params.page = 1

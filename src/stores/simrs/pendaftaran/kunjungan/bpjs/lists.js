@@ -12,7 +12,9 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       sort: 'DESC',
       page: 1,
       order_by: 'id',
-      tgl: dateDbFormat(new Date())
+      // tgl: dateDbFormat(new Date()),
+      to: dateDbFormat(new Date()),
+      from: dateDbFormat(new Date())
     },
     loading: false
   }),
@@ -36,6 +38,13 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
     setDate(payload) {
       this.params.page = 1
       this.params.tgl = payload
+      this.getLists()
+    },
+    setPeriodik(val) {
+      const { to, from } = val
+      this.params.to = to
+      this.params.from = from
+      console.log('periodik', to)
       this.getLists()
     },
     setQ(payload) {
