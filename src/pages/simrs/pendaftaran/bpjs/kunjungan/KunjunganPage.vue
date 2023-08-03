@@ -14,6 +14,8 @@
         @set-search="store.setQ"
         @set-row="store.setPerPage"
         @set-periode="store.setPeriodik"
+        @refresh="store.getLists"
+        @filter="style.setRightDrawer"
       />
     </div>
     <div

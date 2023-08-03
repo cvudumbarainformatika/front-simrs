@@ -27,9 +27,22 @@
         style="min-width: 150px;"
         @update:model-value="gantiPeriode"
       />
+      <q-select
+        v-model="txt"
+        dense
+        outlined
+        dark
+        color="white"
+        :options="txts"
+        label="Periode"
+        class="q-ml-sm"
+        emit-value
+        map-options
+        style="min-width: 150px;"
+      />
     </div>
     <div>
-      <q-btn
+      <!-- <q-btn
         flat
         :color="textColor"
         icon-right="icon-mat-event"
@@ -47,8 +60,8 @@
             @update:model-value="lihatRef"
           />
         </q-popup-proxy>
-      </q-btn>
-      <q-btn
+      </q-btn> -->
+      <!-- <q-btn
         flat
         :color="textColor"
         icon-right="icon-mat-dataset"
@@ -76,9 +89,39 @@
             <q-separator />
           </q-list>
         </q-menu>
-      </q-btn>
+      </q-btn> -->
 
       <!-- per_page -->
+      <q-btn
+        flat
+        :color="textColor"
+        icon="icon-mat-dashboard"
+        size="xs"
+        padding="xs"
+        @click="emits('filter')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Filter
+        </q-tooltip>
+      </q-btn>
+      <q-btn
+        flat
+        color="orange"
+        icon="icon-mat-refresh"
+        size="xs"
+        padding="xs"
+        @click="emits('refresh')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Refresh
+        </q-tooltip>
+      </q-btn>
       <q-btn
         class="q-ml-sm"
         unelevated
@@ -147,7 +190,7 @@ import { date } from 'quasar'
 import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'setPeriode'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'setPeriode', 'refresh', 'filter'])
 const options = ref([5, 10, 20, 50, 100])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
@@ -178,7 +221,7 @@ const props = defineProps({
   fullscreen: { type: Boolean, default: false }
 })
 
-const popup = ref()
+// const popup = ref()
 
 const to = ref(dateDbFormat(new Date()))
 const from = ref(dateDbFormat(new Date()))
@@ -235,21 +278,21 @@ onMounted(() => {
   hariIni()
 })
 
-function lihatRef() {
-  popup.value.hide()
-}
-const selectPerPage = computed({
-  get () { return props.perPage },
-  set (val) { emits('setRow', val) }
-})
-const dateX = computed({
-  get() {
-    return props.tanggal
-  },
-  set(newVal) {
-    emits('setTanggal', newVal)
-  }
-})
+// function lihatRef() {
+//   popup.value.hide()
+// }
+// const selectPerPage = computed({
+//   get () { return props.perPage },
+//   set (val) { emits('setRow', val) }
+// })
+// const dateX = computed({
+//   get() {
+//     return props.tanggal
+//   },
+//   set(newVal) {
+//     emits('setTanggal', newVal)
+//   }
+// })
 const q = computed({
   get() {
     return props.search
