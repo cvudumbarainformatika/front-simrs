@@ -20,6 +20,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     rujukanRSChecked: false,
     rencanaKontrolValid: false,
     rujukanPostMRS: false,
+    kontrolDPJP: false,
     display: {
       diagnosa: {},
       prosedur: {},
@@ -739,6 +740,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             loadingBlock('hide')
             resolve(resp.data)
             this.rujukanPostMRS = false
+            this.kontrolDPJP = false
           })
           .catch(() => {
             this.loading = false

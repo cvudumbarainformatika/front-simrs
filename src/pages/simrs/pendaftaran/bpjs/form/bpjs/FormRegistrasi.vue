@@ -71,7 +71,7 @@
             <!-- No Surat kontrol -->
             <!-- v-if="store.jumlahSEP >= 1 || !store.form.norujukan" -->
             <div
-              v-if="(store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0) || store.rujukanPostMRS"
+              v-if="(store.jumlahSEP >= 1 && !!store.form.norujukan) || (!store.form.norujukan && store.jumlahSEP === 0) || store.rujukanPostMRS || store.rujukanPostMRS"
               class="row q-col-gutter-sm items-center q-mb-xs"
             >
               <div class="col-12">
@@ -86,7 +86,7 @@
                   :loading="store.loadingCekBpjs"
                   :rules="[
                     val => (!!val ) || 'Harap diisi',
-                    val => (store.rencanaKontrolValid || store.rujukanPostMRS) || 'Rencana Kontrol tidak valid',
+                    val => (store.rencanaKontrolValid || store.rujukanPostMRS ||store.kontrolDPJP) || 'Rencana Kontrol tidak valid',
                   ]"
                   @icon-right-click="cekSuratKontrol"
                   @keyup.enter="cekSuratKontrolIni($event)"
@@ -105,7 +105,7 @@
             <div
               v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
                 ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+                  (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid)) || (store.rujukanPostMRS ||store.kontrolDPJP)"
             >
               <!-- Jenis Kunjungan -->
               <div class="row q-col-gutter-sm items-center q-mb-xs">
@@ -360,7 +360,7 @@
           <div
             v-if="(!store.loadingCekBpjs || store.loadingListRujukan) &&
               ((!!store.form.norujukan && store.jumlahSEP === 0) ||
-                (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid))"
+                (!!store.form.norujukan && store.jumlahSEP >= 1 && !!store.form.nosuratkontrol && store.rencanaKontrolValid)) || (store.rujukanPostMRS ||store.kontrolDPJP)"
             class="col-6"
           >
             <!-- PPK Rujukan -->
