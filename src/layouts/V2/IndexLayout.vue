@@ -1,6 +1,6 @@
 <template>
   <q-layout
-    view="hhh LpR lFr"
+    view="hhr LpR lfr"
     :class="dark?'':'page-light'"
   >
     <!-- hHr lpR fFr || hhh LpR lFr-->
@@ -14,21 +14,20 @@
       :tampil="!style.componentfull"
     />
 
-    <!-- <q-drawer
-      v-model="rightDrawerOpen"
-      show-if-above
+    <q-drawer
+      v-model="style.rightDrawer"
       side="right"
       overlay
       behavior="desktop"
       bordered
     >
       <div
-        v-for="n in 50"
+        v-for="n in 150"
         :key="n"
       >
         Drawer {{ n }} / 50
       </div>
-    </q-drawer> -->
+    </q-drawer>
 
     <!-- menu bottom mobile -->
     <!-- <adm-footer-menu
