@@ -81,8 +81,8 @@
             flat
             round
             icon="icon-mat-elderly"
-            :loading="loading==='call lansian'"
-            @click="panggil('call lansian')"
+            :loading="loading==='call lansia'"
+            @click="panggil('call lansia')"
           >
             <q-tooltip>
               <strong>Call Lansia</strong>
@@ -91,7 +91,7 @@
           <q-btn
             flat
             round
-            icon="icon-mat-campaign"
+            icon="icon-mat-spatial_audio"
             :loading="loading==='recall lansia'"
             @click="panggil('recall lansia')"
           >
@@ -99,6 +99,35 @@
               <strong>Recall Lansia</strong>
             </q-tooltip>
           </q-btn>
+        </q-card-section>
+        <q-card-section
+          v-if="!!nomor && !loading"
+        >
+          <div class="row items-center no-wrap">
+            <div class="q-mr-sm">
+              Anda telah memanggil nomor antrian
+            </div>
+            <div class="text-weight-bold">
+              {{ nomor }}
+            </div>
+          </div>
+          <!-- <div class="row items-center no-wrap">
+            <div class="q-mr-sm">
+              Sisa Antrian :
+            </div>
+            <div class="text-weight-bold">
+              {{ sisaAntrian }}
+            </div>
+          </div> -->
+        </q-card-section>
+
+        <q-card-section
+          v-if="!!loading"
+          class="row items-center no-wrap"
+        >
+          <div class="q-mr-sm">
+            Mengirim Permintaan Panggilan
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -114,6 +143,7 @@ import PageHead from './PageHead.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { api } from 'src/boot/axios'
+import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 
 const drawerRight = ref(false)
 const style = useStyledStore()
@@ -158,7 +188,10 @@ const subtitle = computed(() => {
   }
 })
 
+const pasien = usePendaftaranPasienStore()
 const loading = ref('')
+const nomor = ref('')
+const sisaAntrian = ref('')
 function toggleDraw() {
   drawerRight.value = !drawerRight.value
   // panggil('Call')
@@ -174,7 +207,12 @@ function panggil(val) {
     api.get('v1/simrs/pendaftaran/antrian/call_layanan_ruang', param)
       .then(resp => {
         loading.value = ''
-        console.log(resp)
+        nomor.value = resp.data.data.nomor
+        sisaAntrian.value = resp.data.data.sisa_antrian
+        pasien.setForm('noantrian', resp.data.data.nomor)
+        const temp = parseInt(val.slice(1, resp.data.data.nomor.length))
+        pasien.setForm('angkaantrean', temp)
+        console.log(resp.data)
         resolve(resp)
       })
       .catch(err => {
