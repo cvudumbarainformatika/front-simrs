@@ -437,7 +437,6 @@ function pilihRujukan(val, jenis) {
   console.log('karcis', regis.jenisKarcises)
   console.log('rujukan p care', val)
 
-  // regis.setForm('asalrujukan', 'AR9999')
   const index = findWithAttr(regis.polis, 'kodemapingbpjs', val.poliRujukan.kode)
   if (index >= 0) {
     console.log('index', index, regis.polis[index])
@@ -508,6 +507,7 @@ function pilihRujukanPCare(val) {
   })
   pilihRujukan(val)
   regis.setForm('asalRujukan', '1')
+  regis.setForm('asalrujukan', '1')
   regis.setForm('id_kunjungan', 1)
   regis.setForm('jenis_kunjungan', 'Rujukan FKTP')
   const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 1)
@@ -531,6 +531,7 @@ function pilihRujukanRS(val) {
   })
   pilihRujukan(val)
   regis.setForm('asalRujukan', '2')
+  regis.setForm('asalrujukan', '2')
   regis.setForm('id_kunjungan', 4)
   regis.setForm('jenis_kunjungan', 'Rujukan Antar RS')
   const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 4)

@@ -731,6 +731,7 @@ function assignSuratKontrol(val) {
 
   store.dpjpSuratKontrol = val.kodeDokter
   store.setForm('asalRujukan', val.sep.provPerujuk.asalRujukan)
+  store.setForm('asalrujukan', val.sep.provPerujuk.asalRujukan)
   const indexPPK = findWithAttr(store.ppkRujukans, 'kode', val.sep.provPerujuk.kdProviderPerujuk)
   if (indexPPK < 0) {
     const pkrujukan = {
@@ -750,8 +751,6 @@ function assignSuratKontrol(val) {
 
   setSistembayar1('1')
   store.display.bayar.kode = '1'
-
-  // store.setForm('asalrujukan', 'AR9999')
 
   const diag = val.sep.diagnosa.split('-')
   console.log(diag)

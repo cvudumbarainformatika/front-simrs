@@ -250,7 +250,7 @@
           </template> -->
           <!-- Row paling bawah -->
           <template #bottom-row>
-            <td colspan="7">
+            <td :colspan="store.params.layanan==='3' ? 8 : 7">
               <div class="text-weight-bold">
                 Total periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
               </div>
@@ -299,13 +299,14 @@
           <template #col-pasien>
             Pasien
           </template>
+          <template #col-ruangan>
+            Ruangan
+          </template>
           <template #col-poli>
-            <div v-if="store.params.layanan==='3'">
-              Ruangan
-            </div>
-            <div v-else>
-              Poli
-            </div>
+            Poli
+          </template>
+          <template #col-ranap>
+            Ranap
           </template>
           <template #col-apotik>
             Apotek
@@ -358,14 +359,92 @@
             >
               {{ row.relmpoli?row.relmpoli.rs2:'-' }}
             </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-ruangan="{row}">
             <div
-              v-else-if="row.relmasterruangranap"
+              v-if="row.relmasterruangranap"
               class="kecilin"
             >
               {{ row.relmasterruangranap.rs2 }}
             </div>
             <div v-else>
               -
+            </div>
+          </template>
+          <template #cell-ranap="{row}">
+            <div v-if="row.visitDok>0 && store.params.layanan==='3'">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Visite
+                </div>
+                <div>{{ formatDouble(row.visitDok) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jGizi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Gizi
+                </div>
+                <div>{{ formatDouble(row.jGizi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jKeperawatan>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Keperawatan
+                </div>
+                <div>{{ formatDouble(row.jKeperawatan) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jOksigen>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Oksigen
+                </div>
+                <div>{{ formatDouble(row.jOksigen) }}</div>
+              </div>
+            </div>
+
+            <div v-if="row.jKamaroperasiIBS>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Operasi
+                </div>
+                <div>{{ formatDouble(row.jKamaroperasiIBS) }}</div>
+              </div>
+            </div>
+            <div v-if="row.OpIgd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Operasi IGD
+                </div>
+                <div>{{ formatDouble(row.OpIgd) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jPenunjangkeluar>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Penunjang keluar
+                </div>
+                <div>{{ formatDouble(row.jPenunjangkeluar) }}</div>
+              </div>
             </div>
           </template>
           <template #cell-biaya="{row}">
@@ -407,7 +486,7 @@
                 <div>{{ formatDouble(row.mtri) }}</div>
               </div>
             </div>
-            <div v-if="row.visitDok>0">
+            <div v-if="row.visitDok>0 && store.params.layanan!=='3'">
               <div
                 class="row justify-between no-wrap"
               >
@@ -455,36 +534,6 @@
                   Rekam Medik
                 </div>
                 <div>{{ formatDouble(row.bRM) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jGizi>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Gizi
-                </div>
-                <div>{{ formatDouble(row.jGizi) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jKeperawatan>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Keperawatan
-                </div>
-                <div>{{ formatDouble(row.jKeperawatan) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jOksigen>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Oksigen
-                </div>
-                <div>{{ formatDouble(row.jOksigen) }}</div>
               </div>
             </div>
           </template>
@@ -546,6 +595,16 @@
                   Operasi
                 </div>
                 <div>{{ formatDouble(row.tOperasi + row.kOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.JIrdtindakan>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  IRD
+                </div>
+                <div>{{ formatDouble(row.JIrdtindakan) }}</div>
               </div>
             </div>
             <div v-if="row.tAnasLuar>0">
@@ -689,16 +748,6 @@
                 <div>{{ formatDouble(row.kmrJnzhI) }}</div>
               </div>
             </div>
-            <div v-if="row.jKamaroperasiIBS>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  kmr Operasi ibs
-                </div>
-                <div>{{ formatDouble(row.jKamaroperasiIBS) }}</div>
-              </div>
-            </div>
             <div v-if="row.jPsikolog>0">
               <div
                 class="row justify-between no-wrap"
@@ -721,12 +770,26 @@
             </div>
           </template>
           <template #cell-subtotal="{row}">
-            <div class="row justify-between no-wrap">
+            <div
+              v-if="store.params.layanan!=='3'"
+              class="row justify-between no-wrap"
+            >
               <div class="q-mr-xs">
                 Klaim BPJS
               </div>
               <div class="text-weight-bold text-primary">
                 {{ formatDouble(row.pendapatanBPJS) }}
+              </div>
+            </div>
+            <div
+              v-if="store.params.layanan==='3'"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Tarif Ranap
+              </div>
+              <div class="text-weight-bold text-primary">
+                {{ formatDouble(row.groupingRanap) }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
