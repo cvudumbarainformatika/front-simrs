@@ -259,7 +259,8 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           item.jOksigen + item.jTindakanperawat + item.jTindakandokter
 
         item.pendapatanBPJS = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.selisih = item.pendapatanBPJS - item.subtotal
+        item.groupingRanap = item.groupingranap ? (item.groupingranap.length ? item.groupingranap.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.selisih = (item.pendapatanBPJS + item.groupingRanap) - item.subtotal
       })
       console.log('selesai')
     },

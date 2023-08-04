@@ -59,6 +59,7 @@
             round
             icon="icon-mat-volume_up"
             class="q-mr-md"
+            @click="panggil('Call')"
           >
             <q-tooltip>
               <strong>Call</strong>
@@ -68,6 +69,7 @@
             flat
             round
             icon="icon-mat-refresh"
+            @click="panggil('Recall')"
           >
             <q-tooltip>
               <strong>Recall</strong>
@@ -87,6 +89,7 @@ import { useRoute } from 'vue-router'
 import PageHead from './PageHead.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { api } from 'src/boot/axios'
 
 const drawerRight = ref(false)
 const style = useStyledStore()
@@ -130,13 +133,37 @@ const subtitle = computed(() => {
     return 'Daftar Pasien'
   }
 })
+
+const loading = ref(false)
+function toggleDraw() {
+  drawerRight.value = !drawerRight.value
+  // panggil('Call')
+}
+function panggil(val) {
+  const param = {
+    params: {
+      jenis: val
+    }
+  }
+  loading.value = true
+  return new Promise((resolve, reject) => {
+    api.get('v1/simrs/pendaftaran/antrian/call_layanan_ruang', param)
+      .then(resp => {
+        loading.value = false
+        console.log(resp)
+        resolve(resp)
+      })
+      .catch(err => {
+        loading.value = false
+        console.log(err)
+        reject(err)
+      })
+  })
+}
+
 onMounted(() => {
   console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
 })
-
-function toggleDraw() {
-  drawerRight.value = !drawerRight.value
-}
 
 </script>
