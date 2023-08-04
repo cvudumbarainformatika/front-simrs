@@ -59,7 +59,8 @@
             round
             icon="icon-mat-volume_up"
             class="q-mr-md"
-            @click="panggil('Call')"
+            :loading="loading==='call'"
+            @click="panggil('call')"
           >
             <q-tooltip>
               <strong>Call</strong>
@@ -69,10 +70,33 @@
             flat
             round
             icon="icon-mat-refresh"
-            @click="panggil('Recall')"
+            :loading="loading==='recall'"
+            @click="panggil('recall')"
           >
             <q-tooltip>
               <strong>Recall</strong>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            icon="icon-mat-elderly"
+            :loading="loading==='call lansian'"
+            @click="panggil('call lansian')"
+          >
+            <q-tooltip>
+              <strong>Call Lansia</strong>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            round
+            icon="icon-mat-campaign"
+            :loading="loading==='recall lansia'"
+            @click="panggil('recall lansia')"
+          >
+            <q-tooltip>
+              <strong>Recall Lansia</strong>
             </q-tooltip>
           </q-btn>
         </q-card-section>
@@ -134,7 +158,7 @@ const subtitle = computed(() => {
   }
 })
 
-const loading = ref(false)
+const loading = ref('')
 function toggleDraw() {
   drawerRight.value = !drawerRight.value
   // panggil('Call')
@@ -145,16 +169,16 @@ function panggil(val) {
       jenis: val
     }
   }
-  loading.value = true
+  loading.value = val
   return new Promise((resolve, reject) => {
     api.get('v1/simrs/pendaftaran/antrian/call_layanan_ruang', param)
       .then(resp => {
-        loading.value = false
+        loading.value = ''
         console.log(resp)
         resolve(resp)
       })
       .catch(err => {
-        loading.value = false
+        loading.value = ''
         console.log(err)
         reject(err)
       })
