@@ -34,7 +34,7 @@
         dark
         color="white"
         :options="txts"
-        label="Periode"
+        label="status pasien"
         class="q-ml-sm"
         emit-value
         map-options

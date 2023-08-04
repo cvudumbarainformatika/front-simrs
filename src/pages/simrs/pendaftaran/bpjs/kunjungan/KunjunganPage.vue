@@ -6,7 +6,6 @@
       style="z-index:1"
     >
       <HeaderComp
-        :tanggal="store.params.tgl"
         :search="store.params.q"
         :per-page="store.params.per_page"
         @fullscreen="style.setComponentFull"
@@ -15,7 +14,7 @@
         @set-row="store.setPerPage"
         @set-periode="store.setPeriodik"
         @refresh="store.getLists"
-        @filter="style.setRightDrawer"
+        @filter="store.setFilters"
       />
     </div>
     <div
@@ -36,6 +35,15 @@
         @go-to="store.setPage"
       />
     </div>
+    <!-- right -->
+    <FilterPage
+      v-model="store.filters"
+      :to="store.params.to"
+      :from="store.from"
+      @set-to="store.setTo"
+      @set-from="store.from"
+      @close="store.setFilters"
+    />
   </div>
 </template>
 
@@ -43,6 +51,7 @@
 import HeaderComp from './comp/HeaderComp.vue'
 import ListKunjungan from './comp/ListKunjungan.vue'
 import BottomComp from './comp/BottomComp.vue'
+import FilterPage from './comp/FilterPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListKunjunganBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/lists'
 import { onMounted, onUnmounted } from 'vue'
@@ -57,6 +66,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  store.setTglAwal()
+  // store.setTglAwal()
 })
 </script>

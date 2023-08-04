@@ -16,7 +16,8 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
     },
-    loading: false
+    loading: false,
+    filters: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -37,7 +38,7 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
 
     setDate(payload) {
       this.params.page = 1
-      this.params.tgl = payload
+      // this.params.tgl = payload
       this.getLists()
     },
     setPeriodik(val) {
@@ -46,6 +47,12 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       this.params.from = from
       console.log('periodik', to)
       this.getLists()
+    },
+    setTo(val) {
+      this.params.to = val
+    },
+    setFrom(val) {
+      this.params.from = val
     },
     setQ(payload) {
       this.params.page = 1
@@ -63,6 +70,9 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
+    },
+    setFilters() {
+      this.filters = !this.filters
     }
   }
 })

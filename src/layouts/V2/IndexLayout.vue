@@ -14,20 +14,15 @@
       :tampil="!style.componentfull"
     />
 
-    <q-drawer
+    <!-- <q-drawer
       v-model="style.rightDrawer"
       side="right"
       overlay
       behavior="desktop"
       bordered
     >
-      <div
-        v-for="n in 150"
-        :key="n"
-      >
-        Drawer {{ n }} / 50
-      </div>
-    </q-drawer>
+      <v-slot />
+    </q-drawer> -->
 
     <!-- menu bottom mobile -->
     <!-- <adm-footer-menu
