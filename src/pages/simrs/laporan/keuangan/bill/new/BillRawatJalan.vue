@@ -784,7 +784,7 @@
               class="row justify-between no-wrap"
             >
               <div class="q-mr-xs">
-                Tarif Ranap
+                Klaim BPJS
               </div>
               <div class="text-weight-bold text-primary">
                 {{ formatDouble(row.groupingRanap) }}
@@ -838,11 +838,11 @@ function startDownload() {
 function finishDownload() {
   loading.value = false
 }
-const jsonFields = store.params.layanan === '3' ? {
+const jsonFields = store.params.layanan !== '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
   Pasien: 'pasien',
-  Ruangan: 'ruangan',
+  Poli: 'poli',
   Admin: 'admin',
   'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
@@ -869,7 +869,7 @@ const jsonFields = store.params.layanan === '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
   Pasien: 'pasien',
-  Poli: 'poli',
+  Ruangan: 'ruangan',
   Admin: 'admin',
   'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
@@ -907,11 +907,11 @@ function fetchData() {
     if (store.params.layanan === '3') {
       temp.no = i + 1
       temp.subtotal = item.subtotal
-      temp.pendapatan = item.pendapatanBPJS
+      temp.pendapatan = item.groupingRanap
       temp.selisih = item.selisih
       temp.admin = item.adminInap
       temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
-      temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+      temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
       temp.pasien = item.relsistembayar ? item.rs1 + ', ' + item.relsistembayar.rs1 + ', ' + item.relsistembayar.rs2 : '-'
       temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
       temp.rekammedik = item.bRM
