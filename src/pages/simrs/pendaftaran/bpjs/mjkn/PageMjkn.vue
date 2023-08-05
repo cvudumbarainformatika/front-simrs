@@ -38,7 +38,7 @@
   </div>
   <app-fullscreen
     v-model="store.dialog"
-    @close="clearFormRegistrasi"
+    @close="clearAllRegistrasi"
   >
     <template #default>
       <div>
@@ -235,6 +235,7 @@ function clearAllRegistrasi() {
 }
 const Rm = ref('')
 function kirimPoli(val) {
+  pasien.clearForm()
   // val.noreg = ''
   // console.log('kirim poli ', val)
   if (!val.noreg) {
