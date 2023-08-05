@@ -177,8 +177,9 @@
                   :fields="jsonFields"
                   :before-generate="startDownload"
                   :before-finish="finishDownload"
-                  name="tagihan.xls"
+                  :name="namaFile"
                 >
+                  <!-- :name="'Tagihan ' + store.params.layanan === '1' ? store.layanans[0].nama : store.params.layanan === '2' ? store.layanans[1].nama : store.layanans[2].nama + ' periode ' + store.tanggal.from + ' - '+ store.tanggal.to +'.xls'" -->
                   <app-btn
                     label="Download Excel"
                     icon="icon-mat-download"
@@ -347,9 +348,6 @@
               <div class="kecilin text-weight-bold text-green">
                 {{ row.relsistembayar.rs2 }}
               </div>
-            </div>
-            <div v-else>
-              -
             </div>
           </template>
           <template #cell-poli="{row}">
@@ -826,10 +824,12 @@ import { date } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useSimrsLaporanKeuanganNewBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/new/billrajal'
 import CustomTable from '../../../rekap/CustomTable.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const store = useSimrsLaporanKeuanganNewBillRajalStore()
-
+const namaFile = computed(() => {
+  return 'Tagihan ' + (store.params.layanan === '1' ? store.layanans[0].nama : store.params.layanan === '2' ? store.layanans[1].nama : store.layanans[2].nama) + ' periode ' + store.tanggal.from + ' - ' + store.tanggal.to + '.xls'
+})
 // data for print --start--
 const loading = ref(false)
 function startDownload() {
@@ -838,11 +838,12 @@ function startDownload() {
 function finishDownload() {
   loading.value = false
 }
-const jsonFields = {
+const jsonFields = store.params.layanan === '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
   Pasien: 'pasien',
-  Poli: 'poli',
+  Ruangan: 'ruangan',
+  Admin: 'admin',
   'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
   'Biaya Kartu Identitas Paseian': 'idPasien',
@@ -864,39 +865,110 @@ const jsonFields = {
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
   Selisih: 'selisih'
+} : {
+  No: 'no',
+  Tanggal: 'tanggal',
+  Pasien: 'pasien',
+  Poli: 'poli',
+  Admin: 'admin',
+  'Sistem Bayar': 'bayar',
+  'Pelayanan Rekam Medik': 'rekammedik',
+  'Biaya Kartu Identitas Paseian': 'idPasien',
+  'Poliklinik Spesialis / Anastesi': 'bPoli',
+  'Konsultasi Antar Poli': 'bKonsul',
+  'Tindakan IRD': 'tIrd',
+  'Tindakan Perawat': 'tPerawat',
+  'Tindakan Dokter': 'tDok',
+  Gizi: 'gizi',
+  Keperawatan: 'keperawatan',
+  Oksigen: 'oksigen',
+  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
+  Laboratorium: 'laborat',
+  Radiologi: 'radiologi',
+  Operasi: 'operasi', // kamar operasi + tindakan operasi
+  Fisioterapi: 'fisio',
+  Hemodialisa: 'hd',
+  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
+  'Klinik Psikologi': 'psikologi',
+  Cardio: 'cardio',
+  EEG: 'eeg',
+  Endoscope: 'endos',
+  Apotek: 'apotek', // semua apotek di jumlah
+  'Penunjang Keluar': 'penkel',
+  'Klaim BPJS': 'pendapatan',
+  'Sub Total': 'subtotal',
+  Selisih: 'selisih'
 }
 function fetchData() {
   loading.value = true
   const data = []
   store.items.forEach((item, i) => {
     const temp = {}
-    temp.no = i + 1
-    temp.subtotal = item.subtotal
-    temp.pendapatan = item.pendapatanBPJS
-    temp.selisih = item.selisih
-    temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
-    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
-    temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
-    temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
-    temp.rekammedik = item.bRM
-    temp.idPasien = item.bId
-    temp.bPoli = item.bPelPoli
-    temp.bKonsul = item.bKonsul
-    temp.tDokPer = item.tDokPer
-    temp.visitDok = item.visitDok
-    temp.laborat = item.jLaborat
-    temp.radiologi = item.jRadiologi
-    temp.operasi = item.kOperasi + item.tOperasi
-    temp.fisio = item.tFisio
-    temp.hd = item.tHd
-    temp.tAnasLuar = item.tAnasLuar
-    temp.psikologi = item.jPsikolog
-    temp.cardio = item.tCardio
-    temp.eeg = item.tEeg
-    temp.endos = item.tEndo
-    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+    if (store.params.layanan === '3') {
+      temp.no = i + 1
+      temp.subtotal = item.subtotal
+      temp.pendapatan = item.pendapatanBPJS
+      temp.selisih = item.selisih
+      temp.admin = item.adminInap
+      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+      temp.pasien = item.relsistembayar ? item.rs1 + ', ' + item.relsistembayar.rs1 + ', ' + item.relsistembayar.rs2 : '-'
+      temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
+      temp.rekammedik = item.bRM
+      temp.keperawatan = item.jKeperawatan
+      temp.gizi = item.jGizi
+      temp.oksigen = item.jOksigen
+      temp.tIrd = item.JIrdtindakan
+      temp.penkel = item.jPenunjangkeluar
+      temp.idPasien = item.bId
+      temp.bPoli = item.bPelPoli
+      temp.bKonsul = item.bKonsul
+      temp.tPerawat = item.jTindakanperawat
+      temp.tDok = item.jTindakandokter
+      temp.visitDok = item.visitDok
+      temp.laborat = item.jLaborat
+      temp.radiologi = item.jRadiologi
+      temp.operasi = item.kOperasi + item.tOperasi + item.jKamaroperasiIBS + item.OpIgd
+      temp.fisio = item.tFisio
+      temp.hd = item.tHd
+      temp.tAnasLuar = item.tAnasLuar
+      temp.psikologi = item.jPsikolog
+      temp.cardio = item.tCardio
+      temp.eeg = item.tEeg
+      temp.endos = item.tEndo
+      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
 
-    data.push(temp)
+      data.push(temp)
+    } else {
+      temp.no = i + 1
+      temp.subtotal = item.subtotal
+      temp.pendapatan = item.pendapatanBPJS
+      temp.admin = item.adminIgd
+      temp.selisih = item.selisih
+      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+      temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
+      temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+      temp.rekammedik = item.bRM
+      temp.idPasien = item.bId
+      temp.bPoli = item.bPelPoli
+      temp.bKonsul = item.bKonsul
+      temp.tDokPer = item.tDokPer
+      temp.visitDok = item.visitDok
+      temp.laborat = item.jLaborat
+      temp.radiologi = item.jRadiologi
+      temp.operasi = item.kOperasi + item.tOperasi
+      temp.fisio = item.tFisio
+      temp.hd = item.tHd
+      temp.tAnasLuar = item.tAnasLuar
+      temp.psikologi = item.jPsikolog
+      temp.cardio = item.tCardio
+      temp.eeg = item.tEeg
+      temp.endos = item.tEndo
+      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+      data.push(temp)
+    }
 
     // console.log('in', i, 'item', item)
   })
