@@ -66,7 +66,27 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           'pasien',
           'ruangan',
           'biaya',
-          'ranap',
+          'ird',
+          'visite',
+          'materai',
+          'operasi',
+          'jenazah',
+          'kamar',
+          'apotik',
+          'tindakan',
+          'penunjang',
+          'subtotal'
+        ]
+      } else if (this.params.layanan === '2') {
+        this.columns = [
+          'tanggal',
+          'pasien',
+          'poli',
+          'biaya',
+          'visite',
+          'materai',
+          'operasi',
+          'jenazah',
           'apotik',
           'tindakan',
           'penunjang',
@@ -78,6 +98,9 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           'pasien',
           'poli',
           'biaya',
+          'visite',
+          'materai',
+          'operasi',
           'apotik',
           'tindakan',
           'penunjang',
@@ -261,19 +284,19 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.obatRacik = obatRacik + obatRacikx
         // console.log('yang di jumlah ', racik, poli, laborat, radiologi, item.obat, item.obatRacik)
         item.adminIgd = item.administrasiigd ? (item.administrasiigd.length ? item.administrasiigd[0].rs7 : 0) : 0
-        const amb = item.ambulan ? (item.ambulan.length ? item.ambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const bankDarah = item.bdrs ? (item.bdrs.length ? item.bdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const mtri = item.biayamaterai ? (item.biayamaterai.length ? item.biayamaterai[0].rs5 : 0) : 0
+        item.ambRJ = item.ambulan ? (item.ambulan.length ? item.ambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.bankDarahRJ = item.bdrs ? (item.bdrs.length ? item.bdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.mtriRJ = item.biayamaterai ? (item.biayamaterai.length ? item.biayamaterai[0].rs5 : 0) : 0
         item.kmrJnzh = item.kamarjenasah ? (item.kamarjenasah.length ? item.kamarjenasah.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.kmrJnzhI = item.kamarjenasahinap ? (item.kamarjenasahinap.length ? item.kamarjenasahinap.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.okIGD = item.okigd ? (item.okigd.length ? item.okigd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tAnasLuar = item.tindakananastesidiluarokdanicu ? (item.tindakananastesidiluarokdanicu.length ? item.tindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tAnasLuarRJ = item.tindakananastesidiluarokdanicu ? (item.tindakananastesidiluarokdanicu.length ? item.tindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tCardio = item.tindakancardio ? (item.tindakancardio.length ? item.tindakancardio.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tDokPer = item.tindakandokterperawat ? (item.tindakandokterperawat.length ? item.tindakandokterperawat.map(dok => dok.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tEeg = item.tindakaneeg ? (item.tindakaneeg.length ? item.tindakaneeg.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tEndo = item.tindakanendoscopy ? (item.tindakanendoscopy.length ? item.tindakanendoscopy.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tFisio = item.tindakanfisioterapi ? (item.tindakanfisioterapi.length ? item.tindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tHd = item.tindakanhd ? (item.tindakanhd.length ? item.tindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tFisioRJ = item.tindakanfisioterapi ? (item.tindakanfisioterapi.length ? item.tindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tHdRJ = item.tindakanhd ? (item.tindakanhd.length ? item.tindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.kOperasi = item.kamaroperasi ? (item.kamaroperasi.length ? item.kamaroperasi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tOperasi = item.tindakanoperasi ? (item.tindakanoperasi.length ? item.tindakanoperasi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.transRad = item.transradiologi ? (item.transradiologi ? item.transradiologi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
@@ -296,33 +319,33 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.jRstigalimaxxx = item.rstigalimaxxx ? (item.rstigalimaxxx.length ? item.rstigalimaxxx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.adminInap = admin + item.jRstigalimax + item.jRstigalimaxxx
 
-        const iramb = item.irambulan ? (item.irambulan.length ? item.irambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.amb = amb + iramb
+        item.iramb = item.irambulan ? (item.irambulan.length ? item.irambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.amb = item.ambRJ + item.iramb
 
-        const irBankDarah = item.irbdrs ? (item.irbdrs.length ? item.irbdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.bankDarah = bankDarah + irBankDarah
+        item.irBankDarah = item.irbdrs ? (item.irbdrs.length ? item.irbdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.bankDarah = item.bankDarahRJ + item.irBankDarah
 
-        const irmtri = item.irbiayamaterai ? (item.irbiayamaterai.length ? item.irbiayamaterai[0].rs5 : 0) : 0
-        item.mtri = mtri + irmtri
+        item.irmtri = item.irbiayamaterai ? (item.irbiayamaterai.length ? item.irbiayamaterai[0].rs5 : 0) : 0
+        item.mtri = item.mtriRJ + item.irmtri
 
-        const tAnasLuarird = item.irdtindakananastesidiluarokdanicu ? (item.irdtindakananastesidiluarokdanicu.length ? item.irdtindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tAnasLuar = tAnasLuar + tAnasLuarird
+        item.tAnasLuarird = item.irdtindakananastesidiluarokdanicu ? (item.irdtindakananastesidiluarokdanicu.length ? item.irdtindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tAnasLuar = item.tAnasLuarRJ + item.tAnasLuarird
 
-        const tFisioIRD = item.irdtindakanfisioterapi ? (item.irdtindakanfisioterapi.length ? item.irdtindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tFisio = tFisio + tFisioIRD
+        item.tFisioIRD = item.irdtindakanfisioterapi ? (item.irdtindakanfisioterapi.length ? item.irdtindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tFisio = item.tFisioRJ + item.tFisioIRD
 
-        const tHdird = item.irdtindakanhd ? (item.irdtindakanhd.length ? item.irdtindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tHd = tHd + tHdird
+        item.tHdird = item.irdtindakanhd ? (item.irdtindakanhd.length ? item.irdtindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tHd = item.tHdRJ + item.tHdird
 
-        const kamaroperasiIBS = item.kamaroperasiibs ? (item.kamaroperasiibs.length ? item.kamaroperasiibs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const kamaroperasiIBSx = item.kamaroperasiibsx ? (item.kamaroperasiibsx.length ? item.kamaroperasiibsx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tRanapOperasi = item.tindakanoperasi ? (item.tindakanoperasi.length ? item.tindakanoperasi.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tRanapOperasix = item.tindakanoperasix ? (item.tindakanoperasix.length ? item.tindakanoperasix.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.jKamaroperasiIBS = kamaroperasiIBS + kamaroperasiIBSx + tRanapOperasi + tRanapOperasix
+        item.kamaroperasiIBS = item.kamaroperasiibs ? (item.kamaroperasiibs.length ? item.kamaroperasiibs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.kamaroperasiIBSx = item.kamaroperasiibsx ? (item.kamaroperasiibsx.length ? item.kamaroperasiibsx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        // item.tRanapOperasi = item.tindakanoperasi ? (item.tindakanoperasi.length ? item.tindakanoperasi.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tRanapOperasix = item.tindakanoperasix ? (item.tindakanoperasix.length ? item.tindakanoperasix.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jKamaroperasiIBS = item.kamaroperasiIBS + item.kamaroperasiIBSx + item.tOperasi + item.tRanapOperasix
 
-        const kOperasiIgd = item.kamaroperasiigd ? (item.kamaroperasiigd.length ? item.kamaroperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        const tOperasiIgd = item.tindakanoperasiigd ? (item.tindakanoperasiigd.length ? item.tindakanoperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.OpIgd = kOperasiIgd + tOperasiIgd
+        item.kOperasiIgd = item.kamaroperasiigd ? (item.kamaroperasiigd.length ? item.kamaroperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tOperasiIgd = item.tindakanoperasiigd ? (item.tindakanoperasiigd.length ? item.tindakanoperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.OpIgd = item.kOperasiIgd + item.tOperasiIgd
 
         item.jKeperawatan = item.keperawatan ? (item.keperawatan.length ? item.keperawatan.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.JIrdtindakan = item.irdtindakan ? (item.irdtindakan.length ? item.irdtindakan.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
