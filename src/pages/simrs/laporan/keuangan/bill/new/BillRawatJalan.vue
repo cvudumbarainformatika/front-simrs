@@ -487,7 +487,7 @@
                 <div>{{ formatDouble(row.iramb) }}</div>
               </div>
             </div>
-            <div v-if="row.jRstigalimax>0">
+            <!-- <div v-if="row.jRstigalimaxxx>0">
               <div
                 class="row justify-between no-wrap"
               >
@@ -496,7 +496,7 @@
                 </div>
                 <div>{{ formatDouble(row.jRstigalimax) }}</div>
               </div>
-            </div>
+            </div> -->
 
             <div v-if="row.tRanapOperasix>0">
               <div

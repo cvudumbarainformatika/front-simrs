@@ -725,8 +725,13 @@ function assignSuratKontrol(val) {
   const findpoli = val.poliTujuan ? val.poliTujuan : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  store.paramKarcis.flag = 'Lama'
-  store.form.jeniskarcis = 'Lama'
+  // if (store.form.barulama === 'Baru') {
+  //   store.paramKarcis.flag = 'Baru'
+  //   store.form.jeniskarcis = 'Baru'
+  // } else {
+  //   store.paramKarcis.flag = 'Lama'
+  //   store.form.jeniskarcis = 'Lama'
+  // }
   if (poli) setPoliTujuan(store.polis[indPoli].kodepoli)
 
   store.dpjpSuratKontrol = val.kodeDokter
@@ -813,8 +818,8 @@ function setPoliTujuan(val) {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
-  setFlagKarcis('Lama')
-  store.form.jeniskarcis = 'Lama'
+  // setFlagKarcis('Lama')
+  // store.form.jeniskarcis = 'Lama'
   // if (store.paramKarcis.flag) {
   //   if (store.paramKarcis.flag !== '') {
   //     store.getKarcisPoli().then(() => {
