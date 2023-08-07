@@ -38,7 +38,7 @@
   </div>
   <app-fullscreen
     v-model="store.dialog"
-    @close="clearFormRegistrasi"
+    @close="clearAllRegistrasi"
   >
     <template #default>
       <div>
@@ -235,21 +235,45 @@ function clearAllRegistrasi() {
 }
 const Rm = ref('')
 function kirimPoli(val) {
+  pasien.clearForm()
   // val.noreg = ''
-  // console.log('kirim poli ', val)
   if (!val.noreg) {
-    Rm.value = val.norm
-    // console.log('kirim poli ', val)
-    store.getPasien(val.norm).then(resp => {
-      if (resp.length === 1) {
-        pilihPasienIni(resp[0], val)
-      } else {
-        const index = findWithAttr(resp, 'norm', val.norm)
-        if (index >= 0) {
-          pilihPasienIni(resp[index], val)
-        }
+    if (val.norm === '-') {
+      Rm.value = val.nomorkartu
+      const form = { noka: val.nomorkartu, tglsep: regis.form.tglsep }
+      pasien.cekPesertaByNoka(form).then(resp => {
+        pasien.alert = true
+        pasien.alertMsg = resp
+      })
+      pasien.setForm('barulama', 'baru')
+      pasien.setForm('noantrian', val.nomorantrean)
+      pasien.setForm('noka', val.nomorkartu)
+      pasien.setForm('nokabpjs', val.nomorkartu)
+      if (val.nomorantrean.length > 1) {
+        const temp = parseInt(val.nomorantrean.slice(2, val.nomorantrean.length))
+        console.log('antrian ', val.nomorantrean.length)
+        console.log('temp ', temp)
+        pasien.setForm('angkaantrean', temp)
       }
-    })
+      // regis.paramKarcis.flag = 'Baru'
+      cekReferensi(val.nomorreferensi)
+      console.log('pasien baru ', val)
+    } else {
+      console.log('pasien lama ', val)
+      Rm.value = val.norm
+
+      regis.paramKarcis.flag = 'Lama'
+      store.getPasien(val.norm).then(resp => {
+        if (resp.length === 1) {
+          pilihPasienIni(resp[0], val)
+        } else {
+          const index = findWithAttr(resp, 'norm', val.norm)
+          if (index >= 0) {
+            pilihPasienIni(resp[index], val)
+          }
+        }
+      })
+    }
   }
 }
 // eslint-disable-next-line no-unused-vars
@@ -306,46 +330,7 @@ function pilihPasienIni(val, jkn) {
     pasien.tanggal.hari = tglLahir[2]
     pasien.setTanggalLahir()
   }
-  const param = {
-    search: jkn.nomorreferensi
-  }
-  store.setDialog()
-  regis.cekRujukanPcare(param).then(resp => {
-    console.log('yang di P care', resp)
-    if (resp.metadata.code === '200') {
-      notifSuccessVue('Rujukan Pcare ditemukan, mengisi Data..')
-      pilihRujukanPCare(resp.result.rujukan)
-    }
-    if (resp.result === 'Tidak ditemukan') {
-      regis.cekRujukanRs(param).then(resp => {
-        console.log('yang di Rujukan rs ', resp)
-        if (resp.metadata.code === '200') {
-          console.log('Rujukan rs result ', resp.result)
-          notifSuccessVue('Rujukan RS ditemukan, mengisi Data..')
-          pilihRujukanRS(resp.result.rujukan)
-        }
-
-        if (resp.result === 'Tidak ditemukan') {
-          console.log('mau cek Surat kontrol ')
-          regis.cekSuratKontrol(param).then(resp => {
-            // console.log('yang Surat kontrol ', resp)
-            if (resp.metadata.code === '200') {
-              notifSuccessVue('Surat kontrol ditemukan, mengisi Data..')
-              console.log('ada Surat kontrol ', resp.result)
-              console.log('referensi ', jkn.nomorreferensi)
-              regis.setForm('nosuratkontrol', jkn.nomorreferensi)
-              assignSurat(resp.result)
-              validasiSuratKontrol()
-            }
-          })
-        } else {
-          console.log('tidak cek Surat kontrol ')
-        }
-      })
-    } else {
-      console.log('tidak cek Rujukan rs ')
-    }
-  })
+  cekReferensi(jkn.nomorreferensi)
   console.log('pasien terpilih', val, jkn)
 
   // metani kode2 dan alamat -- start --
@@ -433,28 +418,70 @@ function pilihPasienIni(val, jkn) {
   //   replace: true
   // })
 }
+
+function cekReferensi(referensi) {
+  const param = {
+    search: referensi
+  }
+  store.setDialog()
+  regis.cekRujukanPcare(param).then(resp => {
+    console.log('yang di P care', resp)
+    if (resp.metadata.code === '200') {
+      notifSuccessVue('Rujukan Pcare ditemukan, mengisi Data..')
+      pilihRujukanPCare(resp.result.rujukan)
+    }
+    if (resp.result === 'Tidak ditemukan') {
+      regis.cekRujukanRs(param).then(resp => {
+        console.log('yang di Rujukan rs ', resp)
+        if (resp.metadata.code === '200') {
+          console.log('Rujukan rs result ', resp.result)
+          notifSuccessVue('Rujukan RS ditemukan, mengisi Data..')
+          pilihRujukanRS(resp.result.rujukan)
+        }
+
+        if (resp.result === 'Tidak ditemukan') {
+          console.log('mau cek Surat kontrol ')
+          regis.cekSuratKontrol(param).then(resp => {
+            // console.log('yang Surat kontrol ', resp)
+            if (resp.metadata.code === '200') {
+              notifSuccessVue('Surat kontrol ditemukan, mengisi Data..')
+              console.log('ada Surat kontrol ', resp.result)
+              console.log('referensi ', referensi)
+              regis.setForm('nosuratkontrol', referensi)
+              assignSurat(resp.result)
+              validasiSuratKontrol()
+            }
+          })
+        } else {
+          console.log('tidak cek Surat kontrol ')
+        }
+      })
+    } else {
+      console.log('tidak cek Rujukan rs ')
+    }
+  })
+}
 function pilihRujukan(val, jenis) {
   console.log('karcis', regis.jenisKarcises)
   console.log('rujukan p care', val)
 
-  // regis.setForm('asalrujukan', 'AR9999')
   const index = findWithAttr(regis.polis, 'kodemapingbpjs', val.poliRujukan.kode)
   if (index >= 0) {
-    console.log('index', index, regis.polis[index])
-    regis.paramKarcis.kd_poli = regis.polis[index].kodepoli
+    // console.log('index', index, regis.polis[index])
+    // regis.paramKarcis.kd_poli = regis.polis[index].kodepoli
+    // // if (regis.jenisKarcises.length) {
+    // //   regis.form.jeniskarcis = regis.jenisKarcises[0].jeniskarcis
+    // //   regis.paramKarcis.flag = regis.jenisKarcises[0].jeniskarcis
+    // // }
+    // if (regis.paramKarcis.flag) {
+    //   if (regis.paramKarcis.flag !== '') {
+    //     regis.getKarcisPoli().then(() => {
+    //       regis.display.hargakarcis = regis.kasrcispoli.tarif
+    //       regis.form.karcis = regis.kasrcispoli.tarif
+    //     })
+    //   }
+    // }
     regis.form.dpjp = ''
-    if (regis.jenisKarcises.length) {
-      regis.form.jeniskarcis = regis.jenisKarcises[0].jeniskarcis
-      regis.paramKarcis.flag = regis.jenisKarcises[0].jeniskarcis
-    }
-    if (regis.paramKarcis.flag) {
-      if (regis.paramKarcis.flag !== '') {
-        regis.getKarcisPoli().then(() => {
-          regis.display.hargakarcis = regis.kasrcispoli.tarif
-          regis.form.karcis = regis.kasrcispoli.tarif
-        })
-      }
-    }
     regis.paramDpjp.kdmappolbpjs = regis.polis[index].kodemapingbpjs
     // emits('kodePoli', regis.polis[index].kodepoli)
     // regis.setForm('kodepoli', regis.polis[index].kodepoli)
@@ -508,8 +535,10 @@ function pilihRujukanPCare(val) {
   })
   pilihRujukan(val)
   regis.setForm('asalRujukan', '1')
+  regis.setForm('asalrujukan', '1')
   regis.setForm('id_kunjungan', 1)
   regis.setForm('jenis_kunjungan', 'Rujukan FKTP')
+  // console.log('jen kun ', regis.jenisKunjungans)
   const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 1)
   regis.display.jeniskunjungan = regis.jenisKunjungans[idexKun].nilai
   // emits('jenisKunjungan', regis.jenisKunjungans[idexKun].nilai)
@@ -531,6 +560,7 @@ function pilihRujukanRS(val) {
   })
   pilihRujukan(val)
   regis.setForm('asalRujukan', '2')
+  regis.setForm('asalrujukan', '2')
   regis.setForm('id_kunjungan', 4)
   regis.setForm('jenis_kunjungan', 'Rujukan Antar RS')
   const idexKun = findWithAttr(regis.jenisKunjungans, 'id', 4)

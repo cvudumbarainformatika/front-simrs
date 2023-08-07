@@ -725,12 +725,18 @@ function assignSuratKontrol(val) {
   const findpoli = val.poliTujuan ? val.poliTujuan : ''
   const indPoli = findpoli !== '' ? findWithAttr(store.polis, 'kodemapingbpjs', findpoli) : -1
   const poli = indPoli >= 0 ? store.polis[indPoli] : false
-  store.paramKarcis.flag = 'Lama'
-  store.form.jeniskarcis = 'Lama'
+  // if (store.form.barulama === 'Baru') {
+  //   store.paramKarcis.flag = 'Baru'
+  //   store.form.jeniskarcis = 'Baru'
+  // } else {
+  //   store.paramKarcis.flag = 'Lama'
+  //   store.form.jeniskarcis = 'Lama'
+  // }
   if (poli) setPoliTujuan(store.polis[indPoli].kodepoli)
 
   store.dpjpSuratKontrol = val.kodeDokter
   store.setForm('asalRujukan', val.sep.provPerujuk.asalRujukan)
+  store.setForm('asalrujukan', val.sep.provPerujuk.asalRujukan)
   const indexPPK = findWithAttr(store.ppkRujukans, 'kode', val.sep.provPerujuk.kdProviderPerujuk)
   if (indexPPK < 0) {
     const pkrujukan = {
@@ -750,8 +756,6 @@ function assignSuratKontrol(val) {
 
   setSistembayar1('1')
   store.display.bayar.kode = '1'
-
-  // store.setForm('asalrujukan', 'AR9999')
 
   const diag = val.sep.diagnosa.split('-')
   console.log(diag)
@@ -814,8 +818,8 @@ function setPoliTujuan(val) {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
-  setFlagKarcis('Lama')
-  store.form.jeniskarcis = 'Lama'
+  // setFlagKarcis('Lama')
+  // store.form.jeniskarcis = 'Lama'
   // if (store.paramKarcis.flag) {
   //   if (store.paramKarcis.flag !== '') {
   //     store.getKarcisPoli().then(() => {

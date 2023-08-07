@@ -59,6 +59,55 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
     columnHide: ['id']
   }),
   actions: {
+    setColumns() {
+      if (this.params.layanan === '3') {
+        this.columns = [
+          'tanggal',
+          'pasien',
+          'ruangan',
+          'biaya',
+          'ird',
+          'visite',
+          'materai',
+          'operasi',
+          'jenazah',
+          'kamar',
+          'apotik',
+          'tindakan',
+          'penunjang',
+          'subtotal'
+        ]
+      } else if (this.params.layanan === '2') {
+        this.columns = [
+          'tanggal',
+          'pasien',
+          'poli',
+          'biaya',
+          'visite',
+          'materai',
+          'operasi',
+          'jenazah',
+          'apotik',
+          'tindakan',
+          'penunjang',
+          'subtotal'
+        ]
+      } else {
+        this.columns = [
+          'tanggal',
+          'pasien',
+          'poli',
+          'biaya',
+          'visite',
+          'materai',
+          'operasi',
+          'apotik',
+          'tindakan',
+          'penunjang',
+          'subtotal'
+        ]
+      }
+    },
     setForm(key, val) {
       this.form[key] = val
     },
@@ -125,8 +174,9 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         }
 
         // console.log('before laborat')
-        const laboratKey = item.laborat ? (item.laborat.length ? item.laborat.map(anu => anu.rs2) : []) : []
-        // console.log('laborat key', laboratKey)
+        const filteredLab = item.laborat ? (item.laborat.length ? item.laborat.filter(anu => anu.pemeriksaanlab !== null) : []) : []
+        // console.log('filtered lab', filteredLab)
+        const laboratKey = filteredLab.length ? filteredLab.map(anu => anu.rs2) : []
         const laboratKeyFilt = laboratKey.length ? filterDuplicateArrays(laboratKey) : []
         // console.log('laborat keyfilt', laboratKeyFilt)
         if (laboratKeyFilt.length) {
@@ -134,7 +184,7 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           laboratKeyFilt.forEach(key => {
             const temp = {}
             temp.rinci = []
-            const l1 = item.laborat.filter(it => it.rs2 === key)
+            const l1 = filteredLab.filter(it => it.rs2 === key)
             const paket = l1.filter(l => l.pemeriksaanlab.rs21 !== '')
             const nonPaket = l1.filter(l => l.pemeriksaanlab.rs21 === '')
             // console.log('laborat paket', paket)
@@ -177,49 +227,82 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         }
 
         // console.log('before Obat lalu')
-        item.obat = 0
+        let obat = 0
+        let obatl = 0
         if (item.apotekranaplalu) {
           if (item.apotekranaplalu.length) {
-            item.obat = item.apotekranaplalu.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+            obatl = item.apotekranaplalu.map(r => r.subtotal).reduce((a, b) => a + b, 0)
           }
         }
         // console.log('before Obat')
         if (item.apotekranap) {
           if (item.apotekranap.length) {
-            item.obat = item.apotekranap.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+            obat = item.apotekranap.map(r => r.subtotal).reduce((a, b) => a + b, 0)
           }
         }
         // console.log('before Obat racik lalu')
-        item.obatRacik = 0
+        let obatRacik = 0
+        let obatRacikl = 0
         if (item.apotekranapracikanrincilalu) {
           if (item.apotekranapracikanrincilalu.length) {
             const biayaR = item.apotekranapracikanhederlalu ? (item.apotekranapracikanhederlalu.length ? item.apotekranapracikanhederlalu[0].rs8 : 0) : 0
-            item.obatRacik = item.apotekranapracikanrincilalu.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+            obatRacikl = item.apotekranapracikanrincilalu.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
           }
         }
         // console.log('before Obat racik ')
         if (item.apotekranapracikanrinci) {
           if (item.apotekranapracikanrinci.length) {
             const biayaR = item.apotekranapracikanheder ? (item.apotekranapracikanheder.length ? item.apotekranapracikanheder[0].rs8 : 0) : 0
-            item.obatRacik = item.apotekranapracikanrinci.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+            obatRacik = item.apotekranapracikanrinci.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
           }
         }
+        let obatx = 0
+        let obatxl = 0
+        if (item.apotekranaplalux) {
+          if (item.apotekranaplalux.length) {
+            obatxl = item.apotekranaplalux.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+          }
+        }
+        // console.log('before Obat')
+        if (item.apotekranapx) {
+          if (item.apotekranapx.length) {
+            obatx = item.apotekranapx.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+          }
+        }
+        // console.log('before Obat racik lalu')
+        let obatRacikx = 0
+        let obatRacikxl = 0
+        if (item.apotekranapracikanrincilalux) {
+          if (item.apotekranapracikanrincilalux.length) {
+            const biayaR = item.apotekranapracikanhederlalux ? (item.apotekranapracikanhederlalux.length ? item.apotekranapracikanhederlalux[0].rs8 : 0) : 0
+            obatRacikxl = item.apotekranapracikanrincilalux.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+          }
+        }
+        // console.log('before Obat racik ')
+        if (item.apotekranapracikanrincix) {
+          if (item.apotekranapracikanrincix.length) {
+            const biayaR = item.apotekranapracikanhederx ? (item.apotekranapracikanhederx.length ? item.apotekranapracikanhederx[0].rs8 : 0) : 0
+            obatRacikx = item.apotekranapracikanrincix.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+          }
+        }
+        item.obat = obat + obatx + obatl + obatxl
+        item.obatRacik = obatRacik + obatRacikx + obatRacikl + obatRacikxl
         // console.log('yang di jumlah ', racik, poli, laborat, radiologi, item.obat, item.obatRacik)
         item.adminIgd = item.administrasiigd ? (item.administrasiigd.length ? item.administrasiigd[0].rs7 : 0) : 0
-        item.amb = item.ambulan ? (item.ambulan.length ? item.ambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.bankDarah = item.bdrs ? (item.bdrs.length ? item.bdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.mtri = item.biayamaterai ? (item.biayamaterai.length ? item.biayamaterai[0].rs5 : 0) : 0
+        item.ambRJ = item.ambulan ? (item.ambulan.length ? item.ambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.bankDarahRJ = item.bdrs ? (item.bdrs.length ? item.bdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.mtriRJ = item.biayamaterai ? (item.biayamaterai.length ? item.biayamaterai[0].rs5 : 0) : 0
         item.kmrJnzh = item.kamarjenasah ? (item.kamarjenasah.length ? item.kamarjenasah.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.kmrJnzhI = item.kamarjenasahinap ? (item.kamarjenasahinap.length ? item.kamarjenasahinap.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.kOperasi = item.kamaroperasi ? (item.kamaroperasi.length ? item.kamaroperasi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.okIGD = item.okigd ? (item.okigd.length ? item.okigd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tAnasLuar = item.tindakananastesidiluarokdanicu ? (item.tindakananastesidiluarokdanicu.length ? item.tindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tAnasLuarRJ = item.tindakananastesidiluarokdanicu ? (item.tindakananastesidiluarokdanicu.length ? item.tindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tCardio = item.tindakancardio ? (item.tindakancardio.length ? item.tindakancardio.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tDokPer = item.tindakandokterperawat ? (item.tindakandokterperawat.length ? item.tindakandokterperawat.map(dok => dok.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tEeg = item.tindakaneeg ? (item.tindakaneeg.length ? item.tindakaneeg.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tEndo = item.tindakanendoscopy ? (item.tindakanendoscopy.length ? item.tindakanendoscopy.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tFisio = item.tindakanfisioterapi ? (item.tindakanfisioterapi.length ? item.tindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.tHd = item.tindakanhd ? (item.tindakanhd.length ? item.tindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tFisioRJ = item.tindakanfisioterapi ? (item.tindakanfisioterapi.length ? item.tindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tHdRJ = item.tindakanhd ? (item.tindakanhd.length ? item.tindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.kOperasi = item.kamaroperasi ? (item.kamaroperasi.length ? item.kamaroperasi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.tOperasi = item.tindakanoperasi ? (item.tindakanoperasi.length ? item.tindakanoperasi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.transRad = item.transradiologi ? (item.transradiologi ? item.transradiologi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
 
@@ -239,9 +322,38 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         const admin = item.admin ? item.admin : 0
         item.jRstigalimax = item.rstigalimax ? (item.rstigalimax.length ? item.rstigalimax.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jRstigalimaxxx = item.rstigalimaxxx ? (item.rstigalimaxxx.length ? item.rstigalimaxxx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.adminInap = admin + item.jRstigalimax + item.jRstigalimaxxx
-        item.jKamaroperasiIBS = item.kamaroperasiibs ? (item.kamaroperasiibs.length ? item.kamaroperasiibs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.adminInap = admin + item.jRstigalimaxxx
+
+        item.iramb = item.irambulan ? (item.irambulan.length ? item.irambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.amb = item.ambRJ + item.iramb
+
+        item.irBankDarah = item.irbdrs ? (item.irbdrs.length ? item.irbdrs.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.bankDarah = item.bankDarahRJ + item.irBankDarah
+
+        item.irmtri = item.irbiayamaterai ? (item.irbiayamaterai.length ? item.irbiayamaterai[0].rs5 : 0) : 0
+        item.mtri = item.mtriRJ + item.irmtri
+
+        item.tAnasLuarird = item.irdtindakananastesidiluarokdanicu ? (item.irdtindakananastesidiluarokdanicu.length ? item.irdtindakananastesidiluarokdanicu.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tAnasLuar = item.tAnasLuarRJ + item.tAnasLuarird
+
+        item.tFisioIRD = item.irdtindakanfisioterapi ? (item.irdtindakanfisioterapi.length ? item.irdtindakanfisioterapi.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tFisio = item.tFisioRJ + item.tFisioIRD
+
+        item.tHdird = item.irdtindakanhd ? (item.irdtindakanhd.length ? item.irdtindakanhd.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tHd = item.tHdRJ + item.tHdird
+
+        item.kamaroperasiIBS = item.kamaroperasiibs ? (item.kamaroperasiibs.length ? item.kamaroperasiibs.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.kamaroperasiIBSx = item.kamaroperasiibsx ? (item.kamaroperasiibsx.length ? item.kamaroperasiibsx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        // item.tRanapOperasi = item.tindakanoperasi ? (item.tindakanoperasi.length ? item.tindakanoperasi.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tRanapOperasix = item.tindakanoperasix ? (item.tindakanoperasix.length ? item.tindakanoperasix.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jKamaroperasiIBS = item.kamaroperasiIBS + item.kamaroperasiIBSx + item.tOperasi + item.tRanapOperasix
+
+        item.kOperasiIgd = item.kamaroperasiigd ? (item.kamaroperasiigd.length ? item.kamaroperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.tOperasiIgd = item.tindakanoperasiigd ? (item.tindakanoperasiigd.length ? item.tindakanoperasiigd.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.OpIgd = item.kOperasiIgd + item.tOperasiIgd
+
         item.jKeperawatan = item.keperawatan ? (item.keperawatan.length ? item.keperawatan.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.JIrdtindakan = item.irdtindakan ? (item.irdtindakan.length ? item.irdtindakan.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
 
         const jAsuhangizi = item.asuhangizi ? (item.asuhangizi.length ? item.asuhangizi.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         const jMakanpasien = item.makanpasien ? (item.makanpasien.length ? item.makanpasien.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
@@ -251,12 +363,21 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.jOksigen = item.oksigen ? (item.oksigen.length ? item.oksigen.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jTindakanperawat = item.tindakanperawat ? (item.tindakanperawat.length ? item.tindakanperawat.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jTindakandokter = item.tindakandokter ? (item.tindakandokter.length ? item.tindakandokter.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jPenunjangkeluar = item.penunjangkeluar ? (item.penunjangkeluar.length ? item.penunjangkeluar.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jAkomodasikamar = item.akomodasikamar ? (item.akomodasikamar.length ? item.akomodasikamar.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         // end ranap
+
         item.subtotal = item.adminIgd + item.amb + item.bankDarah + item.mtri + item.kmrJnzh + item.kmrJnzhI + item.kOperasi +
           item.okIGD + item.tAnasLuar + item.tCardio + item.tDokPer + item.tEeg + item.tEndo + item.tFisio + item.tHd + item.tOperasi +
           item.transRad + racik + poli + laborat + radiologi + item.obat + item.obatRacik + item.visitDok + item.bId + item.bKonsul +
           item.bPelPoli + item.bRM + item.jPsikolog + item.adminInap + item.jGizi + item.jKamaroperasiIBS + item.jKeperawatan +
-          item.jOksigen + item.jTindakanperawat + item.jTindakandokter
+          item.jOksigen + item.jTindakanperawat + item.jTindakandokter + item.JIrdtindakan + item.jPenunjangkeluar + item.jAkomodasikamar
+
+        // console.log('subtotal ', item.adminIgd, item.amb, item.bankDarah, item.mtri, item.kmrJnzh, item.kmrJnzhI, item.kOperasi,
+        //   item.okIGD, item.tAnasLuar, item.tCardio, item.tDokPer, item.tEeg, item.tEndo, item.tFisio, item.tHd, item.tOperasi,
+        //   item.transRad, racik, poli, laborat, radiologi, item.obat, item.obatRacik, item.visitDok, item.bId, item.bKonsul,
+        //   item.bPelPoli, item.bRM, item.jPsikolog, item.adminInap, item.jGizi, item.jKamaroperasiIBS, item.jKeperawatan,
+        //   item.jOksigen, item.jTindakanperawat, item.jTindakandokter, item.JIrdtindakan, item.jPenunjangkeluar)
 
         item.pendapatanBPJS = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.groupingRanap = item.groupingranap ? (item.groupingranap.length ? item.groupingranap.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
@@ -266,6 +387,7 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
     },
     // get data api
     getDataTable() {
+      this.setColumns()
       this.items = []
       this.loading = true
       const param = { params: this.params }

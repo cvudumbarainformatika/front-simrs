@@ -54,7 +54,10 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
       { nama: 'Ya', value: '1' }
     ],
     // auto com
-    asalrujukans: [],
+    asalrujukans: [
+      { asalrujukan: 'Faskes Tingkat 1', kode: '1' },
+      { asalrujukan: 'Faskes Tingkat 2', kode: '2' }
+    ],
     sistembayars: [],
     polis: [],
     jenisKarcises: [],
@@ -158,6 +161,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
         nosuratkontrol: '',
         assesmentPel: '',
         asalRujukan: '1',
+        asalrujukan: '1',
         kdPenunjang: '',
         flagprocedure: '',
         namadokter: '',
@@ -215,11 +219,11 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     // initial data
     getInitialData() {
-      if (this.autocompleteStore.asalrujukans.length) {
-        this.asalrujukans = this.autocompleteStore.asalrujukans
-      } else {
-        this.getAsalRujukan()
-      }
+      // if (this.autocompleteStore.asalrujukans.length) {
+      //   this.asalrujukans = this.autocompleteStore.asalrujukans
+      // } else {
+      //   this.getAsalRujukan()
+      // }
 
       if (this.autocompleteStore.sistembayars1.length) {
         this.sistembayars1 = this.autocompleteStore.sistembayars1
@@ -598,18 +602,18 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingsistembayar = false
         })
     },
-    async getAsalRujukan() {
-      this.loading = true
-      await api.get('v1/simrs/master/listasalrujukan')
-        .then(resp => {
-          this.loading = false
-          this.asalrujukans = resp.data
-          this.autocompleteStore.setAsalRujukan(resp.data)
-        })
-        .catch(() => {
-          this.loading = false
-        })
-    },
+    // async getAsalRujukan() {
+    //   this.loading = true
+    //   await api.get('v1/simrs/master/listasalrujukan')
+    //     .then(resp => {
+    //       this.loading = false
+    //       this.asalrujukans = resp.data
+    //       this.autocompleteStore.setAsalRujukan(resp.data)
+    //     })
+    //     .catch(() => {
+    //       this.loading = false
+    //     })
+    // },
     getJumlahSep(val) {
       const params = { params: val }
       this.suratKontrolChecked = false

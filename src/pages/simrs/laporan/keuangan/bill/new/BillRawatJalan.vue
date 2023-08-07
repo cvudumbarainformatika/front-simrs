@@ -177,8 +177,9 @@
                   :fields="jsonFields"
                   :before-generate="startDownload"
                   :before-finish="finishDownload"
-                  name="tagihan.xls"
+                  :name="namaFile"
                 >
+                  <!-- :name="'Tagihan ' + store.params.layanan === '1' ? store.layanans[0].nama : store.params.layanan === '2' ? store.layanans[1].nama : store.layanans[2].nama + ' periode ' + store.tanggal.from + ' - '+ store.tanggal.to +'.xls'" -->
                   <app-btn
                     label="Download Excel"
                     icon="icon-mat-download"
@@ -250,7 +251,7 @@
           </template> -->
           <!-- Row paling bawah -->
           <template #bottom-row>
-            <td colspan="7">
+            <td :colspan="store.params.layanan==='3' ? 8 : 7">
               <div class="text-weight-bold">
                 Total periode {{ store.tanggal.from }} - {{ store.tanggal.to }}
               </div>
@@ -299,22 +300,38 @@
           <template #col-pasien>
             Pasien
           </template>
+          <template #col-ruangan>
+            Ruangan
+          </template>
           <template #col-poli>
-            <div v-if="store.params.layanan==='3'">
-              Ruangan
-            </div>
-            <div v-else>
-              Poli
-            </div>
+            Poli
+          </template>
+          <template #col-ird>
+            IRD
           </template>
           <template #col-apotik>
             Apotek
           </template>
           <template #col-biaya>
-            Biaya
+            Admin
           </template>
           <template #col-penunjang>
-            Penunjang dan Kamar
+            Penunjang
+          </template>
+          <template #col-visite>
+            Visite
+          </template>
+          <template #col-materai>
+            Materai
+          </template>
+          <template #col-operasi>
+            Operasi
+          </template>
+          <template #col-jenazah>
+            Jenazah
+          </template>
+          <template #col-kamar>
+            Kamar
           </template>
           <template #col-tindakan>
             Tindakan
@@ -347,9 +364,6 @@
                 {{ row.relsistembayar.rs2 }}
               </div>
             </div>
-            <div v-else>
-              -
-            </div>
           </template>
           <template #cell-poli="{row}">
             <div
@@ -358,14 +372,171 @@
             >
               {{ row.relmpoli?row.relmpoli.rs2:'-' }}
             </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-ruangan="{row}">
             <div
-              v-else-if="row.relmasterruangranap"
+              v-if="row.relmasterruangranap"
               class="kecilin"
             >
               {{ row.relmasterruangranap.rs2 }}
             </div>
             <div v-else>
               -
+            </div>
+          </template>
+          <template #cell-visite="{row}">
+            <div
+              v-if="row.visitDok>0"
+            >
+              <div>{{ formatDouble(row.visitDok) }}</div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-operasi="{row}">
+            <div v-if="row.okIGD>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  ok IGD
+                </div>
+                <div>{{ formatDouble(row.okIGD) }}</div>
+              </div>
+            </div>
+            <div v-if="row.tOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Tindakan
+                </div>
+                <div>{{ formatDouble(row.tOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kOperasi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Kamar
+                </div>
+                <div>{{ formatDouble( row.kOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kamaroperasiIBS>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kamar
+                </div>
+                <div>{{ formatDouble(row.kamaroperasiIBS) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-materai="{row}">
+            <div
+              v-if="row.mtri>0"
+            >
+              <div>{{ formatDouble(row.mtri) }}</div>
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+          <template #cell-kamar="{row}">
+            <div v-if="row.jAkomodasikamar>0">
+              <div>{{ formatDouble(row.jAkomodasikamar) }}</div>
+            </div>
+          </template>
+          <template #cell-jenazah="{row}">
+            <div v-if="row.kmrJnzh>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah
+                </div>
+                <div>{{ formatDouble(row.kmrJnzh) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kmrJnzhI>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kmr Jenazah inap
+                </div>
+                <div>{{ formatDouble(row.kmrJnzhI) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-ird="{row}">
+            <div v-if="row.iramb>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Ambulan
+                </div>
+                <div>{{ formatDouble(row.iramb) }}</div>
+              </div>
+            </div>
+            <!-- <div v-if="row.jRstigalimaxxx>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kamar
+                </div>
+                <div>{{ formatDouble(row.jRstigalimax) }}</div>
+              </div>
+            </div> -->
+
+            <div v-if="row.tRanapOperasix>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  tindakan OP IBS IGD
+                </div>
+                <div>{{ formatDouble(row.tRanapOperasix) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kamaroperasiIBSx>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  kamar OP IBS IGD
+                </div>
+                <div>{{ formatDouble(row.kamaroperasiIBSx) }}</div>
+              </div>
+            </div>
+            <div v-if="row.OpIgd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Operasi IGD
+                </div>
+                <div>{{ formatDouble(row.OpIgd) }}</div>
+              </div>
+            </div>
+            <div v-if="row.JIrdtindakan>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Tindakan IGD
+                </div>
+                <div>{{ formatDouble(row.JIrdtindakan) }}</div>
+              </div>
             </div>
           </template>
           <template #cell-biaya="{row}">
@@ -385,36 +556,6 @@
                   Admin
                 </div>
                 <div>{{ formatDouble(row.adminInap) }}</div>
-              </div>
-            </div>
-            <div v-if="row.amb>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Ambulan
-                </div>
-                <div>{{ formatDouble(row.amb) }}</div>
-              </div>
-            </div>
-            <div v-if="row.mtri>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Materai
-                </div>
-                <div>{{ formatDouble(row.mtri) }}</div>
-              </div>
-            </div>
-            <div v-if="row.visitDok>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Visite
-                </div>
-                <div>{{ formatDouble(row.visitDok) }}</div>
               </div>
             </div>
             <div v-if="row.bId>0">
@@ -455,36 +596,6 @@
                   Rekam Medik
                 </div>
                 <div>{{ formatDouble(row.bRM) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jGizi>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Gizi
-                </div>
-                <div>{{ formatDouble(row.jGizi) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jKeperawatan>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Keperawatan
-                </div>
-                <div>{{ formatDouble(row.jKeperawatan) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jOksigen>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Oksigen
-                </div>
-                <div>{{ formatDouble(row.jOksigen) }}</div>
               </div>
             </div>
           </template>
@@ -528,24 +639,75 @@
               </div>
               <div>{{ formatDouble(row.tDokPer) }}</div>
             </div>
-            <div v-if="row.okIGD>0">
+            <div v-if="row.jTindakanperawat>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  ok IGD
+                  Perawat
                 </div>
-                <div>{{ formatDouble(row.okIGD) }}</div>
+                <div>{{ formatDouble(row.jTindakanperawat) }}</div>
               </div>
             </div>
-            <div v-if="row.tOperasi>0">
+            <div v-if="row.jTindakandokter>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  Operasi
+                  Dokter
                 </div>
-                <div>{{ formatDouble(row.tOperasi + row.kOperasi) }}</div>
+                <div>{{ formatDouble(row.jTindakandokter) }}</div>
+              </div>
+            </div>
+          </template>
+          <template #cell-penunjang="{row}">
+            <div v-if="row.ambRJ>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Ambulan
+                </div>
+                <div>{{ formatDouble(row.ambRJ) }}</div>
+              </div>
+            </div>
+            <div
+              v-if="row.lab"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Lab
+              </div>
+              <div>
+                <div v-if="row.lab.length">
+                  {{ formatDouble(row.lab.map(l=>l.subtotal).reduce((a,b)=>a+b,0)) }}
+                </div>
+                <div v-else>
+                  -
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="row.transRad"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Trans Rodiologi
+              </div>
+              <div>
+                <div>
+                  {{ formatDouble(row.transRad) }}
+                </div>
+              </div>
+            </div>
+            <div v-if="row.bankDarah>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  BDRS
+                </div>
+                <div>{{ formatDouble(row.bankDarah) }}</div>
               </div>
             </div>
             <div v-if="row.tAnasLuar>0">
@@ -608,97 +770,6 @@
                 <div>{{ formatDouble(row.tHd) }}</div>
               </div>
             </div>
-            <div v-if="row.jTindakanperawat>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Perawat
-                </div>
-                <div>{{ formatDouble(row.jTindakanperawat) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jTindakandokter>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Dokter
-                </div>
-                <div>{{ formatDouble(row.jTindakandokter) }}</div>
-              </div>
-            </div>
-          </template>
-          <template #cell-penunjang="{row}">
-            <div
-              v-if="row.lab"
-              class="row justify-between no-wrap"
-            >
-              <div class="q-mr-xs">
-                Lab
-              </div>
-              <div>
-                <div v-if="row.lab.length">
-                  {{ formatDouble(row.lab.map(l=>l.subtotal).reduce((a,b)=>a+b,0)) }}
-                </div>
-                <div v-else>
-                  -
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="row.transRad"
-              class="row justify-between no-wrap"
-            >
-              <div class="q-mr-xs">
-                Trans Rodiologi
-              </div>
-              <div>
-                <div>
-                  {{ formatDouble(row.transRad) }}
-                </div>
-              </div>
-            </div>
-            <div v-if="row.bankDarah>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  BDRS
-                </div>
-                <div>{{ formatDouble(row.bankDarah) }}</div>
-              </div>
-            </div>
-            <div v-if="row.kmrJnzh>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  kmr Jenazah
-                </div>
-                <div>{{ formatDouble(row.kmrJnzh) }}</div>
-              </div>
-            </div>
-            <div v-if="row.kmrJnzhI>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  kmr Jenazah inap
-                </div>
-                <div>{{ formatDouble(row.kmrJnzhI) }}</div>
-              </div>
-            </div>
-            <div v-if="row.jKamaroperasiIBS>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  kmr Operasi ibs
-                </div>
-                <div>{{ formatDouble(row.jKamaroperasiIBS) }}</div>
-              </div>
-            </div>
             <div v-if="row.jPsikolog>0">
               <div
                 class="row justify-between no-wrap"
@@ -707,6 +778,46 @@
                   Psikologi
                 </div>
                 <div>{{ formatDouble(row.jPsikolog) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jPenunjangkeluar>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Penunjang keluar
+                </div>
+                <div>{{ formatDouble(row.jPenunjangkeluar) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jGizi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Gizi
+                </div>
+                <div>{{ formatDouble(row.jGizi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jKeperawatan>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Keperawatan
+                </div>
+                <div>{{ formatDouble(row.jKeperawatan) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jOksigen>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Oksigen
+                </div>
+                <div>{{ formatDouble(row.jOksigen) }}</div>
               </div>
             </div>
           </template>
@@ -721,12 +832,26 @@
             </div>
           </template>
           <template #cell-subtotal="{row}">
-            <div class="row justify-between no-wrap">
+            <div
+              v-if="store.params.layanan!=='3'"
+              class="row justify-between no-wrap"
+            >
               <div class="q-mr-xs">
                 Klaim BPJS
               </div>
               <div class="text-weight-bold text-primary">
                 {{ formatDouble(row.pendapatanBPJS) }}
+              </div>
+            </div>
+            <div
+              v-if="store.params.layanan==='3'"
+              class="row justify-between no-wrap"
+            >
+              <div class="q-mr-xs">
+                Klaim BPJS
+              </div>
+              <div class="text-weight-bold text-primary">
+                {{ formatDouble(row.groupingRanap) }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -763,10 +888,12 @@ import { date } from 'quasar'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useSimrsLaporanKeuanganNewBillRajalStore } from 'src/stores/simrs/laporan/keuangan/billrajal/new/billrajal'
 import CustomTable from '../../../rekap/CustomTable.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const store = useSimrsLaporanKeuanganNewBillRajalStore()
-
+const namaFile = computed(() => {
+  return 'Tagihan ' + (store.params.layanan === '1' ? store.layanans[0].nama : store.params.layanan === '2' ? store.layanans[1].nama : store.layanans[2].nama) + ' periode ' + store.tanggal.from + ' - ' + store.tanggal.to + '.xls'
+})
 // data for print --start--
 const loading = ref(false)
 function startDownload() {
@@ -775,11 +902,15 @@ function startDownload() {
 function finishDownload() {
   loading.value = false
 }
-const jsonFields = {
+const jsonFields = store.params.layanan !== '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
   Pasien: 'pasien',
   Poli: 'poli',
+  Admin: 'admin',
+  Materai: 'mtri',
+  'Kamar Jenazah': 'jnz',
+  'Kamar Jenazah Inap': 'jnzi',
   'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
   'Biaya Kartu Identitas Paseian': 'idPasien',
@@ -801,39 +932,121 @@ const jsonFields = {
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
   Selisih: 'selisih'
+} : {
+  No: 'no',
+  Tanggal: 'tanggal',
+  Pasien: 'pasien',
+  Ruangan: 'ruangan',
+  Admin: 'admin',
+  Materai: 'mtri',
+  Kamar: 'kamar',
+  'Kamar Jenazah': 'jnz',
+  'Kamar Jenazah Inap': 'jnzi',
+  'Sistem Bayar': 'bayar',
+  'Pelayanan Rekam Medik': 'rekammedik',
+  'Biaya Kartu Identitas Paseian': 'idPasien',
+  'Poliklinik Spesialis / Anastesi': 'bPoli',
+  'Konsultasi Antar Poli': 'bKonsul',
+  'Tindakan IRD': 'tIrd',
+  'Tindakan Perawat': 'tPerawat',
+  'Tindakan Dokter': 'tDok',
+  Gizi: 'gizi',
+  Keperawatan: 'keperawatan',
+  Oksigen: 'oksigen',
+  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
+  Laboratorium: 'laborat',
+  Radiologi: 'radiologi',
+  Operasi: 'operasi', // kamar operasi + tindakan operasi
+  Fisioterapi: 'fisio',
+  Hemodialisa: 'hd',
+  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
+  'Klinik Psikologi': 'psikologi',
+  Cardio: 'cardio',
+  EEG: 'eeg',
+  Endoscope: 'endos',
+  Apotek: 'apotek', // semua apotek di jumlah
+  'Penunjang Keluar': 'penkel',
+  'Klaim BPJS': 'pendapatan',
+  'Sub Total': 'subtotal',
+  Selisih: 'selisih'
 }
 function fetchData() {
   loading.value = true
   const data = []
   store.items.forEach((item, i) => {
     const temp = {}
-    temp.no = i + 1
-    temp.subtotal = item.subtotal
-    temp.pendapatan = item.pendapatanBPJS
-    temp.selisih = item.selisih
-    temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
-    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
-    temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
-    temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
-    temp.rekammedik = item.bRM
-    temp.idPasien = item.bId
-    temp.bPoli = item.bPelPoli
-    temp.bKonsul = item.bKonsul
-    temp.tDokPer = item.tDokPer
-    temp.visitDok = item.visitDok
-    temp.laborat = item.jLaborat
-    temp.radiologi = item.jRadiologi
-    temp.operasi = item.kOperasi + item.tOperasi
-    temp.fisio = item.tFisio
-    temp.hd = item.tHd
-    temp.tAnasLuar = item.tAnasLuar
-    temp.psikologi = item.jPsikolog
-    temp.cardio = item.tCardio
-    temp.eeg = item.tEeg
-    temp.endos = item.tEndo
-    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+    if (store.params.layanan === '3') {
+      temp.no = i + 1
+      temp.subtotal = item.subtotal
+      temp.mtri = item.mtri
+      temp.jnz = item.kmrJnzh
+      temp.jnzi = item.kmrJnzhI
+      temp.pendapatan = item.groupingRanap
+      temp.selisih = item.selisih
+      temp.admin = item.adminInap
+      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
+      temp.pasien = item.relsistembayar ? item.rs1 + ', ' + item.relsistembayar.rs1 + ', ' + item.relsistembayar.rs2 : '-'
+      temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
+      temp.rekammedik = item.bRM
+      temp.keperawatan = item.jKeperawatan
+      temp.gizi = item.jGizi
+      temp.oksigen = item.jOksigen
+      temp.tIrd = item.JIrdtindakan
+      temp.penkel = item.jPenunjangkeluar
+      temp.idPasien = item.bId
+      temp.bPoli = item.bPelPoli
+      temp.bKonsul = item.bKonsul
+      temp.tPerawat = item.jTindakanperawat
+      temp.tDok = item.jTindakandokter
+      temp.visitDok = item.visitDok
+      temp.laborat = item.jLaborat
+      temp.radiologi = item.jRadiologi
+      temp.operasi = item.jKamaroperasiIBS + item.OpIgd
+      temp.fisio = item.tFisio
+      temp.hd = item.tHd
+      temp.kamar = item.jAkomodasikamar
+      temp.tAnasLuar = item.tAnasLuar
+      temp.psikologi = item.jPsikolog
+      temp.cardio = item.tCardio
+      temp.eeg = item.tEeg
+      temp.endos = item.tEndo
+      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
 
-    data.push(temp)
+      data.push(temp)
+    } else {
+      temp.no = i + 1
+      temp.subtotal = item.subtotal
+      temp.mtri = item.mtri
+      temp.jnz = item.kmrJnzh
+      temp.jnzi = item.kmrJnzhI
+      temp.pendapatan = item.pendapatanBPJS
+      temp.admin = item.adminIgd
+      temp.selisih = item.selisih
+      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+      temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
+      temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+      temp.rekammedik = item.bRM
+      temp.idPasien = item.bId
+      temp.bPoli = item.bPelPoli
+      temp.bKonsul = item.bKonsul
+      temp.tDokPer = item.tDokPer
+      temp.visitDok = item.visitDok
+      temp.laborat = item.jLaborat
+      temp.radiologi = item.jRadiologi
+      temp.operasi = item.kOperasi + item.tOperasi
+      temp.fisio = item.tFisio
+      temp.hd = item.tHd
+      temp.tAnasLuar = item.tAnasLuar
+      temp.psikologi = item.jPsikolog
+      temp.cardio = item.tCardio
+      temp.eeg = item.tEeg
+      temp.endos = item.tEndo
+      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+      data.push(temp)
+    }
 
     // console.log('in', i, 'item', item)
   })
@@ -900,7 +1113,7 @@ store.getInitialData()
   word-break: break-word;
 }
 .kecilin{
-  min-width: 10px;
+  min-width: 55px;
   max-width: 100px;
   white-space: normal !important;
   overflow-wrap: normal !important;
