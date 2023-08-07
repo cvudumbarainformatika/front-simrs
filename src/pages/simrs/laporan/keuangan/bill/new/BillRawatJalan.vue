@@ -450,8 +450,8 @@
             </div>
           </template>
           <template #cell-kamar="{row}">
-            <div v-if="row.jRstigalimax>0">
-              <div>{{ formatDouble(row.jRstigalimax) }}</div>
+            <div v-if="row.jAkomodasikamar>0">
+              <div>{{ formatDouble(row.jAkomodasikamar) }}</div>
             </div>
           </template>
           <template #cell-jenazah="{row}">
@@ -487,14 +487,14 @@
                 <div>{{ formatDouble(row.iramb) }}</div>
               </div>
             </div>
-            <div v-if="row.jRstigalimaxxx>0">
+            <div v-if="row.jRstigalimax>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
                   kamar
                 </div>
-                <div>{{ formatDouble(row.jRstigalimaxxx) }}</div>
+                <div>{{ formatDouble(row.jRstigalimax) }}</div>
               </div>
             </div>
 
@@ -548,14 +548,14 @@
                 <div>{{ row.administrasiigd[0]?formatDouble(row.administrasiigd[0].rs7):'-' }}</div>
               </div>
             </div>
-            <div v-if="row.admin>0">
+            <div v-if="row.adminInap>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
                   Admin
                 </div>
-                <div>{{ formatDouble(row.admin) }}</div>
+                <div>{{ formatDouble(row.adminInap) }}</div>
               </div>
             </div>
             <div v-if="row.bId>0">
@@ -939,6 +939,7 @@ const jsonFields = store.params.layanan !== '3' ? {
   Ruangan: 'ruangan',
   Admin: 'admin',
   Materai: 'mtri',
+  Kamar: 'kamar',
   'Kamar Jenazah': 'jnz',
   'Kamar Jenazah Inap': 'jnzi',
   'Sistem Bayar': 'bayar',
@@ -1004,6 +1005,7 @@ function fetchData() {
       temp.operasi = item.jKamaroperasiIBS + item.OpIgd
       temp.fisio = item.tFisio
       temp.hd = item.tHd
+      temp.kamar = item.jAkomodasikamar
       temp.tAnasLuar = item.tAnasLuar
       temp.psikologi = item.jPsikolog
       temp.cardio = item.tCardio

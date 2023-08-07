@@ -174,8 +174,9 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         }
 
         // console.log('before laborat')
-        const laboratKey = item.laborat ? (item.laborat.length ? item.laborat.map(anu => anu.rs2) : []) : []
-        // console.log('laborat key', laboratKey)
+        const filteredLab = item.laborat ? (item.laborat.length ? item.laborat.filter(anu => anu.pemeriksaanlab !== null) : []) : []
+        // console.log('filtered lab', filteredLab)
+        const laboratKey = filteredLab.length ? filteredLab.map(anu => anu.rs2) : []
         const laboratKeyFilt = laboratKey.length ? filterDuplicateArrays(laboratKey) : []
         // console.log('laborat keyfilt', laboratKeyFilt)
         if (laboratKeyFilt.length) {
@@ -183,7 +184,7 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           laboratKeyFilt.forEach(key => {
             const temp = {}
             temp.rinci = []
-            const l1 = item.laborat.filter(it => it.rs2 === key)
+            const l1 = filteredLab.filter(it => it.rs2 === key)
             const paket = l1.filter(l => l.pemeriksaanlab.rs21 !== '')
             const nonPaket = l1.filter(l => l.pemeriksaanlab.rs21 === '')
             // console.log('laborat paket', paket)
@@ -227,9 +228,10 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
 
         // console.log('before Obat lalu')
         let obat = 0
+        let obatl = 0
         if (item.apotekranaplalu) {
           if (item.apotekranaplalu.length) {
-            obat = item.apotekranaplalu.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+            obatl = item.apotekranaplalu.map(r => r.subtotal).reduce((a, b) => a + b, 0)
           }
         }
         // console.log('before Obat')
@@ -240,10 +242,11 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         }
         // console.log('before Obat racik lalu')
         let obatRacik = 0
+        let obatRacikl = 0
         if (item.apotekranapracikanrincilalu) {
           if (item.apotekranapracikanrincilalu.length) {
             const biayaR = item.apotekranapracikanhederlalu ? (item.apotekranapracikanhederlalu.length ? item.apotekranapracikanhederlalu[0].rs8 : 0) : 0
-            obatRacik = item.apotekranapracikanrincilalu.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+            obatRacikl = item.apotekranapracikanrincilalu.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
           }
         }
         // console.log('before Obat racik ')
@@ -254,9 +257,10 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
           }
         }
         let obatx = 0
+        let obatxl = 0
         if (item.apotekranaplalux) {
           if (item.apotekranaplalux.length) {
-            obatx = item.apotekranaplalux.map(r => r.subtotal).reduce((a, b) => a + b, 0)
+            obatxl = item.apotekranaplalux.map(r => r.subtotal).reduce((a, b) => a + b, 0)
           }
         }
         // console.log('before Obat')
@@ -267,10 +271,11 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         }
         // console.log('before Obat racik lalu')
         let obatRacikx = 0
+        let obatRacikxl = 0
         if (item.apotekranapracikanrincilalux) {
           if (item.apotekranapracikanrincilalux.length) {
             const biayaR = item.apotekranapracikanhederlalux ? (item.apotekranapracikanhederlalux.length ? item.apotekranapracikanhederlalux[0].rs8 : 0) : 0
-            obatRacikx = item.apotekranapracikanrincilalux.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
+            obatRacikxl = item.apotekranapracikanrincilalux.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
           }
         }
         // console.log('before Obat racik ')
@@ -280,8 +285,8 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
             obatRacikx = item.apotekranapracikanrincix.map(r => r.subtotal).reduce((a, b) => a + b, 0) + biayaR
           }
         }
-        item.obat = obat + obatx
-        item.obatRacik = obatRacik + obatRacikx
+        item.obat = obat + obatx + obatl + obatxl
+        item.obatRacik = obatRacik + obatRacikx + obatRacikl + obatRacikxl
         // console.log('yang di jumlah ', racik, poli, laborat, radiologi, item.obat, item.obatRacik)
         item.adminIgd = item.administrasiigd ? (item.administrasiigd.length ? item.administrasiigd[0].rs7 : 0) : 0
         item.ambRJ = item.ambulan ? (item.ambulan.length ? item.ambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
@@ -317,7 +322,7 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         const admin = item.admin ? item.admin : 0
         item.jRstigalimax = item.rstigalimax ? (item.rstigalimax.length ? item.rstigalimax.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jRstigalimaxxx = item.rstigalimaxxx ? (item.rstigalimaxxx.length ? item.rstigalimaxxx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.adminInap = admin + item.jRstigalimax + item.jRstigalimaxxx
+        item.adminInap = admin + item.jRstigalimaxxx
 
         item.iramb = item.irambulan ? (item.irambulan.length ? item.irambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.amb = item.ambRJ + item.iramb
@@ -359,13 +364,14 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.jTindakanperawat = item.tindakanperawat ? (item.tindakanperawat.length ? item.tindakanperawat.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jTindakandokter = item.tindakandokter ? (item.tindakandokter.length ? item.tindakandokter.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jPenunjangkeluar = item.penunjangkeluar ? (item.penunjangkeluar.length ? item.penunjangkeluar.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
+        item.jAkomodasikamar = item.akomodasikamar ? (item.akomodasikamar.length ? item.akomodasikamar.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         // end ranap
 
         item.subtotal = item.adminIgd + item.amb + item.bankDarah + item.mtri + item.kmrJnzh + item.kmrJnzhI + item.kOperasi +
           item.okIGD + item.tAnasLuar + item.tCardio + item.tDokPer + item.tEeg + item.tEndo + item.tFisio + item.tHd + item.tOperasi +
           item.transRad + racik + poli + laborat + radiologi + item.obat + item.obatRacik + item.visitDok + item.bId + item.bKonsul +
           item.bPelPoli + item.bRM + item.jPsikolog + item.adminInap + item.jGizi + item.jKamaroperasiIBS + item.jKeperawatan +
-          item.jOksigen + item.jTindakanperawat + item.jTindakandokter + item.JIrdtindakan + item.jPenunjangkeluar
+          item.jOksigen + item.jTindakanperawat + item.jTindakandokter + item.JIrdtindakan + item.jPenunjangkeluar + item.jAkomodasikamar
 
         // console.log('subtotal ', item.adminIgd, item.amb, item.bankDarah, item.mtri, item.kmrJnzh, item.kmrJnzhI, item.kOperasi,
         //   item.okIGD, item.tAnasLuar, item.tCardio, item.tDokPer, item.tEeg, item.tEndo, item.tFisio, item.tHd, item.tOperasi,
