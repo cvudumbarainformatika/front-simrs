@@ -117,7 +117,7 @@
                   />
                 </div>
                 <div
-                  v-if="loadingSend && (item.norm ? rm === item.norm:false)"
+                  v-if="loadingSend && (item.norm ? (item.norm !== '-' ? rm === item.norm : rm===item.nomorkartu):false)"
                   class="q-ml-sm"
                 >
                   <q-btn
