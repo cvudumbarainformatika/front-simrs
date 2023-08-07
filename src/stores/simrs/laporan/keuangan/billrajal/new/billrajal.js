@@ -317,7 +317,7 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         const admin = item.admin ? item.admin : 0
         item.jRstigalimax = item.rstigalimax ? (item.rstigalimax.length ? item.rstigalimax.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.jRstigalimaxxx = item.rstigalimaxxx ? (item.rstigalimaxxx.length ? item.rstigalimaxxx.map(x => x.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
-        item.adminInap = admin + item.jRstigalimax
+        item.adminInap = admin + item.jRstigalimaxxx
 
         item.iramb = item.irambulan ? (item.irambulan.length ? item.irambulan.map(itu => itu.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.amb = item.ambRJ + item.iramb

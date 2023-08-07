@@ -548,14 +548,14 @@
                 <div>{{ row.administrasiigd[0]?formatDouble(row.administrasiigd[0].rs7):'-' }}</div>
               </div>
             </div>
-            <div v-if="row.admin>0">
+            <div v-if="row.adminInap>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
                   Admin
                 </div>
-                <div>{{ formatDouble(row.admin) }}</div>
+                <div>{{ formatDouble(row.adminInap) }}</div>
               </div>
             </div>
             <div v-if="row.bId>0">
