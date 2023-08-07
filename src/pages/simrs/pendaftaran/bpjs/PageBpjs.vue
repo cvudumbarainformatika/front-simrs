@@ -66,6 +66,7 @@
               <strong>Call</strong>
             </q-tooltip>
           </q-btn>
+
           <q-btn
             flat
             round
@@ -77,10 +78,25 @@
               <strong>Recall</strong>
             </q-tooltip>
           </q-btn>
+        </q-card-section>
+
+        <q-card-section class="row items-center no-wrap">
+          <div>
+            <div class="text-weight-bold">
+              Antrian Lansia
+            </div>
+            <div class="text-grey">
+              Call || Recall
+            </div>
+          </div>
+
+          <q-space />
+
           <q-btn
             flat
             round
             icon="icon-mat-elderly"
+            class="q-mr-md"
             :loading="loading==='call lansia'"
             @click="panggil('call lansia')"
           >
@@ -100,6 +116,7 @@
             </q-tooltip>
           </q-btn>
         </q-card-section>
+
         <q-card-section
           v-if="!!nomor && !loading"
         >
@@ -111,14 +128,6 @@
               {{ nomor }}
             </div>
           </div>
-          <!-- <div class="row items-center no-wrap">
-            <div class="q-mr-sm">
-              Sisa Antrian :
-            </div>
-            <div class="text-weight-bold">
-              {{ sisaAntrian }}
-            </div>
-          </div> -->
         </q-card-section>
 
         <q-card-section

@@ -309,6 +309,9 @@
           <template #col-ird>
             IRD
           </template>
+          <template #col-gizi>
+            Gizi
+          </template>
           <template #col-apotik>
             Apotek
           </template>
@@ -408,6 +411,26 @@
                 <div>{{ formatDouble(row.okIGD) }}</div>
               </div>
             </div>
+            <div v-if="row.tOperasiIgd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Tindakan Op IGD
+                </div>
+                <div>{{ formatDouble( row.tOperasiIgd) }}</div>
+              </div>
+            </div>
+            <div v-if="row.kOperasiIgd>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Kamar Op IGD
+                </div>
+                <div>{{ formatDouble(row.kOperasiIgd) }}</div>
+              </div>
+            </div>
             <div v-if="row.tOperasi>0">
               <div
                 class="row justify-between no-wrap"
@@ -426,6 +449,16 @@
                   Kamar
                 </div>
                 <div>{{ formatDouble( row.kOperasi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jTindakanoperasiIBS>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Tindakan
+                </div>
+                <div>{{ formatDouble(row.jTindakanoperasiIBS) }}</div>
               </div>
             </div>
             <div v-if="row.kamaroperasiIBS>0">
@@ -476,8 +509,30 @@
               </div>
             </div>
           </template>
+          <template #cell-gizi="{row}">
+            <div v-if="row.jAsuhangizi>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Asuhan Gizi
+                </div>
+                <div>{{ formatDouble(row.jAsuhangizi) }}</div>
+              </div>
+            </div>
+            <div v-if="row.jMakanpasien>0">
+              <div
+                class="row justify-between no-wrap"
+              >
+                <div class="q-mr-xs">
+                  Makan Pasien
+                </div>
+                <div>{{ formatDouble(row.jMakanpasien) }}</div>
+              </div>
+            </div>
+          </template>
           <template #cell-ird="{row}">
-            <div v-if="row.iramb>0">
+            <!-- <div v-if="row.iramb>0">
               <div
                 class="row justify-between no-wrap"
               >
@@ -486,19 +541,9 @@
                 </div>
                 <div>{{ formatDouble(row.iramb) }}</div>
               </div>
-            </div>
-            <!-- <div v-if="row.jRstigalimaxxx>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  kamar
-                </div>
-                <div>{{ formatDouble(row.jRstigalimax) }}</div>
-              </div>
             </div> -->
 
-            <div v-if="row.tRanapOperasix>0">
+            <!-- <div v-if="row.tRanapOperasix>0">
               <div
                 class="row justify-between no-wrap"
               >
@@ -527,17 +572,17 @@
                 </div>
                 <div>{{ formatDouble(row.OpIgd) }}</div>
               </div>
-            </div>
-            <div v-if="row.JIrdtindakan>0">
+            </div> -->
+            <!-- <div v-if="row.JIrdtindakan>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
                   Tindakan IGD
                 </div>
-                <div>{{ formatDouble(row.JIrdtindakan) }}</div>
               </div>
-            </div>
+            </div> -->
+            <div>{{ formatDouble(row.JIrdtindakan) }}</div>
           </template>
           <template #cell-biaya="{row}">
             <div v-if="row.administrasiigd">
@@ -790,16 +835,7 @@
                 <div>{{ formatDouble(row.jPenunjangkeluar) }}</div>
               </div>
             </div>
-            <div v-if="row.jGizi>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Gizi
-                </div>
-                <div>{{ formatDouble(row.jGizi) }}</div>
-              </div>
-            </div>
+
             <div v-if="row.jKeperawatan>0">
               <div
                 class="row justify-between no-wrap"
