@@ -15,10 +15,17 @@
         @set-search="store.setQ"
         @set-row="store.setPerPage"
         @refresh="store.getData"
+        @set-periode="(val)=>store.setPeriodik(val)"
       />
     </div>
-    <div class="footer absolute-bottom bg-primary text-white z-top q-pa-sm">
-      <FooterComp :items="store.items" />
+    <div class="footer absolute-bottom bg-primary text-white z-top">
+      <!-- <FooterComp :items="store.items" /> -->
+      <BottomComp
+        v-if="store.meta !==null"
+        :key="store.meta"
+        :meta="store.meta"
+        @go-to="store.setPage"
+      />
     </div>
     <div class="my-flex-1 q-card q-card--flat no-shadow no-border-radius scroll">
       <list-pengunjung
@@ -41,7 +48,8 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { onMounted, ref } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
-import FooterComp from './comp/FooterComp.vue'
+// import FooterComp from './comp/FooterComp.vue'
+import BottomComp from './comp/BottomComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
 import PageTindakan from './comp/PageTindakan.vue'
 

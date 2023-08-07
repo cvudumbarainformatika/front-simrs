@@ -32,6 +32,33 @@
           />
         </template>
       </q-input>
+      <q-select
+        v-model="periode"
+        dense
+        outlined
+        dark
+        color="white"
+        :options="periods"
+        label="Periode"
+        class="q-ml-sm"
+        emit-value
+        map-options
+        style="min-width: 150px;"
+        @update:model-value="gantiPeriode"
+      />
+      <q-select
+        v-model="txt"
+        dense
+        outlined
+        dark
+        color="white"
+        :options="txts"
+        label="status pasien"
+        class="q-ml-sm"
+        emit-value
+        map-options
+        style="min-width: 150px;"
+      />
       <!-- <q-btn
         flat
         dense
@@ -51,7 +78,7 @@
           />
         </q-popup-proxy>
       </q-btn> -->
-      <q-btn
+      <!-- <q-btn
         flat
         :color="textColor"
         icon="icon-mat-dataset"
@@ -78,7 +105,7 @@
             <q-separator />
           </q-list>
         </q-menu>
-      </q-btn>
+      </q-btn> -->
     </div>
     <div>
       <!-- per_page -->
@@ -143,11 +170,20 @@
 </template>
 
 <script setup>
+import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode'])
+const periods = ref([
+  { value: 1, label: 'Hari ini' },
+  { value: 2, label: 'Minggu Ini' },
+  { value: 3, label: 'Bulan Ini' }
+  // { value: 4, label: 'Tahun Ini' }
+])
+
+const periode = ref(1)
 // const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   color: {
@@ -169,25 +205,6 @@ const props = defineProps({
   },
   full: { type: Boolean, default: false }
 })
-
-// const popup = ref()
-
-// function lihatRef() {
-//   console.log(popup.value)
-//   popup.value.hide()
-// }
-// const selectPerPage = computed({
-//   get () { return props.perPage },
-//   set (val) { emits('setRow', val) }
-// })
-// const date = computed({
-//   get() {
-//     return props.tanggal
-//   },
-//   set(newVal) {
-//     emits('setTanggal', newVal)
-//   }
-// })
 const q = computed({
   get() {
     return props.search
@@ -195,5 +212,60 @@ const q = computed({
   set(newVal) {
     emits('setSearch', newVal)
   }
+})
+
+const to = ref(dateDbFormat(new Date()))
+const from = ref(dateDbFormat(new Date()))
+
+function hariIni() {
+  const cDate = new Date()
+  to.value = dateDbFormat(cDate)
+  from.value = dateDbFormat(cDate)
+}
+function mingguIni() {
+  const curr = new Date()
+  const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+  const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+}
+function bulanIni() {
+  const curr = new Date()
+  const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
+  const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+}
+
+function tahunIni() {
+  const curr = new Date()
+  const firstday = date.formatDate(curr, 'YYYY') + '-01' + '-01'
+  const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+}
+
+function gantiPeriode(val) {
+  if (val === 1) {
+    hariIni()
+  } else if (val === 2) {
+    mingguIni()
+  } else if (val === 3) {
+    bulanIni()
+  } else {
+    tahunIni()
+  }
+
+  console.log(to.value)
+  console.log(from.value)
+  const per = {
+    to: to.value,
+    from: from.value
+  }
+  emits('setPeriode', per)
+}
+
+onMounted(() => {
+  hariIni()
 })
 </script>

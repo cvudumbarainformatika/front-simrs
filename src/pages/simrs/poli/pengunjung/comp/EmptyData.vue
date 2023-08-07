@@ -1,7 +1,7 @@
 <template>
   <div
     class="column flex-center full-height full-width"
-    style="min-height: 50vh;"
+    style="min-height: 70vh;"
   >
     <div class="text-h3 q-mb-md">
       🏷️
