@@ -73,6 +73,13 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
     },
     setFilters() {
       this.filters = !this.filters
+    },
+    filterData(val) {
+      const { to, from, q } = val // status
+      this.params.to = to
+      this.params.from = from
+      this.params.q = q
+      this.getLists()
     }
   }
 })

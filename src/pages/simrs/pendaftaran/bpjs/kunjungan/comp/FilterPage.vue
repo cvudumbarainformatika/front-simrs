@@ -8,7 +8,7 @@
     >
       <q-linear-progress
         :value="0.6"
-        color="pink"
+        color="primary"
       />
 
       <q-card-section class="row items-center no-wrap">
@@ -44,7 +44,7 @@
             label="dari tanggal"
             placeholder="tanggal"
             class="q-mb-sm"
-            @set-model="(val)=> emits('setTo', val)"
+            @set-model="(val)=> to=val"
           />
           <app-input-date
             :model="from"
@@ -52,7 +52,7 @@
             label="sampai tanggal"
             placeholder="tanggal"
             class="q-mb-sm"
-            @set-model="(val)=> emits('setFrom', val)"
+            @set-model="(val)=> from=val"
           />
         </div>
         <q-separator class="q-my-md" />
@@ -60,7 +60,51 @@
           <div class="text-weight-bold f-12 q-mb-sm text-right">
             Status Pasien
           </div>
-          <app-input label="" />
+          <q-select
+            v-model="txt"
+            dense
+            outlined
+            :options="txts"
+            label="status pasien"
+            class="q-ml-sm"
+            emit-value
+            map-options
+          />
+        </div>
+        <q-separator class="q-my-md" />
+        <div>
+          <div class="f-12 q-mb-sm text-right">
+            <div class="text-weight-bold ">
+              Pasien By
+            </div>
+            <div class="">
+              Cari Pasien By Nip, Noka, Norm Atau Nama
+            </div>
+          </div>
+          <q-input
+            v-model="q"
+            outlined
+            dense
+            placeholder="Cari Pasien ..."
+          />
+        </div>
+        <q-separator class="q-my-md" />
+        <div class="row q-col-gutter-sm">
+          <div class="col">
+            <app-btn
+              class="full-width"
+              label="Cari Data"
+              @click="sendData"
+            />
+          </div>
+          <div class="col">
+            <app-btn
+              class="full-width"
+              label="Reset"
+              color="negative"
+              @click="resetFilter"
+            />
+          </div>
         </div>
       </q-card-section>
     </q-card>
@@ -69,17 +113,31 @@
 
 <script setup>
 import { dateDbFormat } from 'src/modules/formatter'
+import { ref } from 'vue'
 
-const emits = defineEmits(['close', 'setTo', 'setFrom'])
+const emits = defineEmits(['close', 'setTo', 'setFrom', 'filterData'])
 
-defineProps({
-  to: {
-    type: String,
-    default: dateDbFormat(new Date())
-  },
-  from: {
-    type: String,
-    default: dateDbFormat(new Date())
+const to = ref(dateDbFormat(new Date()))
+const from = ref(dateDbFormat(new Date()))
+const txt = ref('SEMUA')
+const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
+const q = ref('')
+
+function sendData() {
+  const params = {
+    status: txt.value,
+    q: q.value,
+    to: to.value,
+    from: from.value
   }
-})
+
+  emits('filterData', params)
+}
+
+function resetFilter() {
+  to.value = dateDbFormat(new Date())
+  from.value = dateDbFormat(new Date())
+  txt.value = 'Semua'
+  q.value = ''
+}
 </script>

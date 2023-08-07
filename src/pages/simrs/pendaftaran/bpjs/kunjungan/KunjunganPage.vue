@@ -38,11 +38,9 @@
     <!-- right -->
     <FilterPage
       v-model="store.filters"
-      :to="store.params.to"
-      :from="store.from"
-      @set-to="store.setTo"
-      @set-from="store.from"
+
       @close="store.setFilters"
+      @filter-data="store.filterData"
     />
   </div>
 </template>
