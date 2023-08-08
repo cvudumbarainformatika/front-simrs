@@ -8,7 +8,7 @@ import { useQuasar } from 'quasar'
 
 import customIcons from 'src/custom-icons/custom-icons'
 // import { anjunganChannel, channel } from 'src/modules/sockets'
-import { channel, chatChannel } from 'src/modules/sockets'
+import { channel } from 'src/modules/sockets'
 // import { onBeforeUnmount, onUpdated, ref } from 'vue'
 // import { useCallStore } from './stores/antrian/call'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
@@ -71,7 +71,7 @@ channel.subscribed(() => {
 //   }
 // })
 
-chatChannel.subscribed(() => {
-  console.log('subscribed chat channel!!!')
-})
+// chatChannel.subscribed(() => {
+//   console.log('subscribed chat channel!!!')
+// })
 </script>
