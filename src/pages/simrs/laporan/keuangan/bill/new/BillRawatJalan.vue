@@ -570,16 +570,30 @@
                 <div>{{ formatDouble(row.OpIgd) }}</div>
               </div>
             </div> -->
-            <!-- <div v-if="row.JIrdtindakan>0">
+            <div v-if="row.JIrdtindakan>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  Tindakan IGD
+                  Tindakan
                 </div>
+                <div>{{ formatDouble(row.JIrdtindakan) }}</div>
               </div>
-            </div> -->
-            <div>{{ formatDouble(row.JIrdtindakan) }}</div>
+            </div>
+            <div
+              v-if="row.obatIGD>0"
+              class="row justify-between no-wrap"
+            >
+              <div>Farmasi</div>
+              <div>{{ formatDouble(row.obatIGD) }}</div>
+            </div>
+            <div
+              v-if="row.obatRacikIGD>0"
+              class="row justify-between no-wrap"
+            >
+              <div>Racikan</div>
+              <div>{{ formatDouble(row.obatRacikIGD) }}</div>
+            </div>
           </template>
           <template #cell-biaya="{row}">
             <div v-if="row.administrasiigd">
@@ -646,35 +660,22 @@
               v-if="row.obat>0"
               class="row justify-between no-wrap"
             >
-              <div>Farmasi</div>
+              <div>farmasi</div>
               <div>{{ formatDouble(row.obat) }}</div>
             </div>
             <div
               v-if="row.obatRacik>0"
               class="row justify-between no-wrap"
             >
-              <div>Racikan</div>
+              <div>racikan</div>
               <div>{{ formatDouble(row.obatRacik) }}</div>
             </div>
-            <div
-              v-if="row.obatIGD>0"
-              class="row justify-between no-wrap"
-            >
-              <div>Farmasi IGD</div>
-              <div>{{ formatDouble(row.obat) }}</div>
-            </div>
-            <div
-              v-if="row.obatRacikIGD>0"
-              class="row justify-between no-wrap"
-            >
-              <div>Racikan IGD</div>
-              <div>{{ formatDouble(row.obatRacik) }}</div>
-            </div>
+
             <div
               v-if="row.nonRacikRajal>0"
               class="row justify-between no-wrap"
             >
-              <div>non-racikan</div>
+              <div>farmasi</div>
               <div>{{ formatDouble(row.nonRacikRajal) }}</div>
             </div>
             <div
