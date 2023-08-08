@@ -266,7 +266,7 @@
                     Klaim BPJS
                   </div>
                   <div class="text-weight-bold">
-                    Rp. {{ formatDouble(store.items.map(it=>it.pendapatanBPJS).reduce((a,b)=>a+b,0)) }}
+                    Rp. {{ formatDouble(store.items.map(it=>it.pendapatanBPJS).reduce((a,b)=>a+b,0)+store.items.map(it=>it.groupingRanap).reduce((a,b)=>a+b,0)) }}
                   </div>
                 </div>
                 <div class=" row justify-between no-wrap">

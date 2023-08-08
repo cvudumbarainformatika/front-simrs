@@ -197,6 +197,7 @@ function pilihPasienIni(val) {
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
   store.form = val
+  store.setNoAntrian(store.noantrian)
   if (store.alamataDomisiliSama) {
     if ((!store.form.alamatdomisili ? true : store.form.alamatdomisili === '') && store.form.alamat) store.setForm('alamatdomisili', store.form.alamat)
     if ((!store.form.rtdomisili ? true : store.form.rtdomisili === '') && store.form.rt) store.setForm('rtdomisili', store.form.rt)

@@ -798,8 +798,9 @@
                   v-model="store.form.noantrian"
                   label="Nomor Antrian"
                   :filled="false"
-                  @update:model-value="setNoAntrian"
+                  @blur="setNoAntrian($event)"
                 />
+                <!-- @update:model-value="setNoAntrian" -->
               </div>
             </div>
           </div>
@@ -1523,13 +1524,10 @@ function setRW(val) {
   }
 }
 // set nomor Antrian
-function setNoAntrian(val) {
-  if (val.length > 1) {
-    const temp = parseInt(val.slice(2, val.length))
-    console.log('antrian ', val.length)
-    console.log('temp ', temp)
-    store.setForm('angkaantrean', temp)
-  }
+function setNoAntrian(evt) {
+  const val = evt.target.value
+  store.noantrian = val
+  store.setNoAntrian(val)
 }
 // -- dialog cari pasien, untuk pasien lama--end--
 // input no rm
