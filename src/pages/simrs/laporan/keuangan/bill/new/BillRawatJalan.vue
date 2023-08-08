@@ -327,6 +327,9 @@
           <template #col-materai>
             Materai
           </template>
+          <template #col-keperawaatan>
+            Keperawatan
+          </template>
           <template #col-operasi>
             Operasi
           </template>
@@ -344,6 +347,9 @@
           </template>
           <template #cell-tanggal="{row}">
             {{ dateFullFormat(row.rs3) }}
+          </template>
+          <template #cell-keperawaatan="{row}">
+            {{ row.jKeperawatan>0?formatDouble(row.jKeperawatan):'-' }}
           </template>
           <template #cell-pasien="{row}">
             <div v-if="row.masterpasien">
@@ -431,32 +437,23 @@
                 <div>{{ formatDouble(row.kOperasiIgd) }}</div>
               </div>
             </div>
-            <div v-if="row.tOperasi>0">
+
+            <!-- <div v-if="row.kOperasi>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  Tindakan
-                </div>
-                <div>{{ formatDouble(row.tOperasi) }}</div>
-              </div>
-            </div>
-            <div v-if="row.kOperasi>0">
-              <div
-                class="row justify-between no-wrap"
-              >
-                <div class="q-mr-xs">
-                  Kamar
+                  Operasi
                 </div>
                 <div>{{ formatDouble( row.kOperasi) }}</div>
               </div>
-            </div>
+            </div> -->
             <div v-if="row.jTindakanoperasiIBS>0">
               <div
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  Tindakan
+                  Ruang RR
                 </div>
                 <div>{{ formatDouble(row.jTindakanoperasiIBS) }}</div>
               </div>
@@ -466,7 +463,7 @@
                 class="row justify-between no-wrap"
               >
                 <div class="q-mr-xs">
-                  kamar
+                  Operasi
                 </div>
                 <div>{{ formatDouble(row.kamaroperasiIBS) }}</div>
               </div>
@@ -649,14 +646,28 @@
               v-if="row.obat>0"
               class="row justify-between no-wrap"
             >
-              <div>non-racikan</div>
+              <div>Farmasi</div>
               <div>{{ formatDouble(row.obat) }}</div>
             </div>
             <div
               v-if="row.obatRacik>0"
               class="row justify-between no-wrap"
             >
-              <div>racikan</div>
+              <div>Racikan</div>
+              <div>{{ formatDouble(row.obatRacik) }}</div>
+            </div>
+            <div
+              v-if="row.obatIGD>0"
+              class="row justify-between no-wrap"
+            >
+              <div>Farmasi IGD</div>
+              <div>{{ formatDouble(row.obat) }}</div>
+            </div>
+            <div
+              v-if="row.obatRacikIGD>0"
+              class="row justify-between no-wrap"
+            >
+              <div>Racikan IGD</div>
               <div>{{ formatDouble(row.obatRacik) }}</div>
             </div>
             <div
@@ -836,7 +847,7 @@
               </div>
             </div>
 
-            <div v-if="row.jKeperawatan>0">
+            <!-- <div v-if="row.jKeperawatan>0">
               <div
                 class="row justify-between no-wrap"
               >
@@ -845,7 +856,7 @@
                 </div>
                 <div>{{ formatDouble(row.jKeperawatan) }}</div>
               </div>
-            </div>
+            </div> -->
             <div v-if="row.jOksigen>0">
               <div
                 class="row justify-between no-wrap"
