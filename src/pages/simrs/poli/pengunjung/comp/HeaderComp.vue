@@ -59,25 +59,7 @@
         map-options
         style="min-width: 150px;"
       />
-      <!-- <q-btn
-        flat
-        dense
-        :color="textColor"
-        icon="icon-mat-event"
-        :label="tanggal"
-        size="sm"
-        class="q-ml-sm"
-      >
-        <q-popup-proxy ref="popup">
-          <q-date
 
-            v-model="date"
-            minimal
-            mask="YYYY-MM-DD"
-            @update:model-value="lihatRef"
-          />
-        </q-popup-proxy>
-      </q-btn> -->
       <!-- <q-btn
         flat
         :color="textColor"
@@ -108,7 +90,6 @@
       </q-btn> -->
     </div>
     <div>
-      <!-- per_page -->
       <q-btn
         class="q-ml-sm"
         unelevated
@@ -125,30 +106,24 @@
         >
           Refresh Data
         </q-tooltip>
-        <!-- <q-menu
-          transition-show="flip-left"
-          transition-hide="flip-right"
-          anchor="top left"
-          self="top right"
-        >
-          <q-list dense>
-            <q-item
-              v-for="(opt, i) in options"
-              :key="i"
-              v-ripple
-              tag="label"
-            >
-              <q-radio
-                v-model="selectPerPage"
-                size="xs"
-                :val="opt"
-                :label="opt + ' Baris'"
-                color="primary"
-              />
-            </q-item>
-          </q-list>
-        </q-menu> -->
       </q-btn>
+      <q-btn
+        flat
+        dense
+        :color="textColor"
+        icon="icon-mat-dashboard"
+        size="sm"
+        class="q-mx-sm"
+        @click="emits('filter')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Filter Data
+        </q-tooltip>
+      </q-btn>
+
       <!-- fullscreen -->
       <q-btn
         flat
@@ -175,7 +150,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter'])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
   { value: 2, label: 'Minggu Ini' },

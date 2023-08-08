@@ -16,6 +16,7 @@
         @set-row="store.setPerPage"
         @refresh="store.getData"
         @set-periode="(val)=>store.setPeriodik(val)"
+        @filter="store.setFilters"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">
@@ -27,14 +28,25 @@
         @go-to="store.setPage"
       />
     </div>
-    <div class="my-flex-1 q-card q-card--flat no-shadow no-border-radius scroll">
+    <q-card
+      flat
+      no-shadow
+      class="my-flex-1 scroll"
+    >
       <list-pengunjung
         :key="store.items"
         :items="store.items"
         :loading="store.loading"
         @tindakan="bukaTindakan"
       />
-    </div>
+    </q-card>
+
+    <FilterPage
+      v-model="store.filters"
+
+      @close="store.setFilters"
+      @filter-data="store.filterData"
+    />
 
     <page-tindakan
       v-model="store.pageTindakan"
@@ -49,6 +61,7 @@ import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunju
 import { onMounted, ref } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 // import FooterComp from './comp/FooterComp.vue'
+import FilterPage from './comp/FilterPage.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
 import PageTindakan from './comp/PageTindakan.vue'

@@ -17,7 +17,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       from: dateDbFormat(new Date()),
       per_page: 100
     },
-    pageTindakan: false
+    pageTindakan: false,
+    filters: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -74,6 +75,9 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     setPage(payload) {
       this.params.page = payload
       this.getData()
+    },
+    setFilters() {
+      this.filters = !this.filters
     }
   }
 })

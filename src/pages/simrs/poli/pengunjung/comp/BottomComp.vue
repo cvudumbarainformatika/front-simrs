@@ -51,7 +51,16 @@
         />
       </div>
     </div>
-    <div>{{ meta.total }} DATA DITEMUKAN</div>
+    <div class="q-pr-xl">
+      <q-badge
+        outline
+        align="middle"
+        color="orange"
+        class="q-mr-xs"
+      >
+        {{ meta.total }}
+      </q-badge> DATA DITEMUKAN
+    </div>
   </div>
 </template>
 
