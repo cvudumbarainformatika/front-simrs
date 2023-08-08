@@ -40,23 +40,6 @@
       <q-card class="my-flex-1 scroll">
         <div class="container-no-header bg-grey full-height">
           <div class="header-content">
-            <!-- <q-toolbar
-              style="padding:0 !important"
-              class="bg-primary text-white"
-            >
-              <q-tabs
-                v-model="tab"
-                shrink
-              >
-                <q-tab
-                  v-for="(tt, i) in tabs"
-                  :key="i"
-                  :name="tt.name"
-                  :label="tt.label"
-                  no-caps
-                />
-              </q-tabs>
-            </q-toolbar> -->
             <div class="row no-wrap shadow-1">
               <q-toolbar
                 class="col-8"
@@ -101,16 +84,10 @@
           >
             <div class="row full-height">
               <div
-                class="col-auto full-height bg-yellow scroll"
+                class="col-auto full-height scroll"
                 style="width:300px"
               >
-                <div
-                  v-for="n in 200"
-                  :key="n"
-                  class="q-my-md"
-                >
-                  {{ n }}. Lorem
-                </div>
+                <ListMenu :menus="menus" />
               </div>
               <div class="col full-height bg-red scroll">
                 <div
@@ -122,41 +99,6 @@
                 </div>
               </div>
             </div>
-            <!-- <q-splitter
-              v-model="splitterModel"
-              unit="px"
-              style="height: 500px"
-            >
-              <template #before>
-                <div class="q-pa-md">
-                  <div class="text-h4 q-mb-md">
-                    Before
-                  </div>
-                  <div
-                    v-for="n in 20"
-                    :key="n"
-                    class="q-my-md"
-                  >
-                    {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                  </div>
-                </div>
-              </template>
-
-              <template #after>
-                <div class="q-pa-md">
-                  <div class="text-h4 q-mb-md">
-                    After
-                  </div>
-                  <div
-                    v-for="n in 20"
-                    :key="n"
-                    class="q-my-md"
-                  >
-                    {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                  </div>
-                </div>
-              </template>
-            </q-splitter> -->
           </q-card>
         </div>
       </q-card>
@@ -167,13 +109,20 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import HeaderPage from './comptindakan/HeaderPage.vue'
+import ListMenu from './comptindakan/ListMenu.vue'
 // const splitterModel = ref(150)
 const refDialog = ref()
-// const tab = ref('anamnesis')
-// const tabs = ref([
-//   { name: 'anamnesis', label: 'Anamnesis' },
-//   { name: 'pemeriksaan', label: 'Pemeriksaan Fisik' }
-// ])
+// const menu = ref('anamnesis')
+const menus = ref([
+  { name: 'anamnesis', label: 'Anamnesis', icon: 'icon-mat-medical_information' },
+  { name: 'pemeriksaan', label: 'Pemeriksaan Fisik', icon: 'icon-my-stethoscope' },
+  { name: 'diagnosis', label: 'Diagnosis (ICD)', icon: 'icon-mat-analytics' },
+  { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
+  { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
+  { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
+  { name: 'resep', label: 'E-Resep', icon: 'icon-mat-receipt' },
+  { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
+])
 // const innerTab = ref('innerMails')
 // const splitterModel = ref(10)
 defineProps({

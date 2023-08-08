@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?441265742a7fc6a7fcf3e0805a4fe6c6") format("woff"),
-url("./icons.woff2?441265742a7fc6a7fcf3e0805a4fe6c6") format("woff2");
+    src: url("./icons.woff?bb44e5354af41e9f23c9e951891faf55") format("woff"),
+url("./icons.woff2?bb44e5354af41e9f23c9e951891faf55") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -558,45 +558,54 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-facebook:before {
     content: "\f1b5";
 }
-.icon-my-google:before {
+.icon-my-file_sign:before {
     content: "\f1b6";
 }
-.icon-my-how_to_reg:before {
+.icon-my-google:before {
     content: "\f1b7";
 }
-.icon-my-key:before {
+.icon-my-how_to_reg:before {
     content: "\f1b8";
 }
-.icon-my-local_hospital:before {
+.icon-my-key:before {
     content: "\f1b9";
 }
-.icon-my-local_pharmacy:before {
+.icon-my-local_hospital:before {
     content: "\f1ba";
 }
-.icon-my-medical_information:before {
+.icon-my-local_pharmacy:before {
     content: "\f1bb";
 }
-.icon-my-medical_services:before {
+.icon-my-medical_information:before {
     content: "\f1bc";
 }
-.icon-my-medication_liquid:before {
+.icon-my-medical_services:before {
     content: "\f1bd";
 }
-.icon-my-medication:before {
+.icon-my-medication_liquid:before {
     content: "\f1be";
 }
-.icon-my-monitor_heart:before {
+.icon-my-medication:before {
     content: "\f1bf";
 }
-.icon-my-personal_injury:before {
+.icon-my-monitor_heart:before {
     content: "\f1c0";
 }
-.icon-my-point_of_sale:before {
+.icon-my-personal_injury:before {
     content: "\f1c1";
 }
-.icon-my-print_setting:before {
+.icon-my-pill:before {
     content: "\f1c2";
 }
-.icon-my-word:before {
+.icon-my-point_of_sale:before {
     content: "\f1c3";
+}
+.icon-my-print_setting:before {
+    content: "\f1c4";
+}
+.icon-my-stethoscope:before {
+    content: "\f1c5";
+}
+.icon-my-word:before {
+    content: "\f1c6";
 }
