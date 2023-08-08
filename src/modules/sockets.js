@@ -10,24 +10,10 @@ const host = 'xenter.my.id'
 
 window.Pusher = Pusher
 
-window.Echo = new Echo({
-  broadcaster: 'pusher',
-  key: 'simrs_key_harry141312',
-  cluster: 'mt1',
-  // wsHost: host,
-  wsHost: host,
-  encrypted: true,
-  wssPort: 6002,
-  wsPort: 6002,
-  disableStats: true,
-  forceTLS: true, // default true
-  enabledTransports: ['ws', 'wss']
-})
-
 // window.Echo = new Echo({
 //   broadcaster: 'pusher',
-//   key: 'local_key_harry141312',
-//   cluster: 'mt2',
+//   key: 'simrs_key_harry141312',
+//   cluster: 'mt1',
 //   // wsHost: host,
 //   wsHost: host2,
 //   encrypted: false,
@@ -55,6 +41,19 @@ window.Echo = new Echo({
 //   }
 // })
 
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: 'simrs_key_harry141312',
+  cluster: 'mt1',
+  // wsHost: host,
+  wsHost: host,
+  encrypted: true,
+  wssPort: 6002,
+  wsPort: 6002,
+  disableStats: true,
+  forceTLS: true, // default true
+  enabledTransports: ['ws', 'wss']
+})
 const channel = window.Echo.channel('public.playground.1')
 const channelLogin = window.Echo.channel('public.login.qr')
 const qrcodeChannel = window.Echo.channel('qrcode')

@@ -9,6 +9,7 @@ import { useQuasar } from 'quasar'
 import customIcons from 'src/custom-icons/custom-icons'
 // import { anjunganChannel, channel } from 'src/modules/sockets'
 import { channel } from 'src/modules/sockets'
+// import { useAplikasiStore } from './stores/app/aplikasi'
 // import { onBeforeUnmount, onUpdated, ref } from 'vue'
 // import { useCallStore } from './stores/antrian/call'
 import { usePermintaanLuarLaboratTable } from './stores/simrs/penunjang/laborat/permintaanluar/table'
@@ -70,8 +71,14 @@ channel.subscribed(() => {
 //     callstore.ubahStatus(data)
 //   }
 // })
-
+// const apps = useAplikasiStore()
+// function anu() {
+//   if (apps.user) {
+//   }
+// }
 // chatChannel.subscribed(() => {
 //   console.log('subscribed chat channel!!!')
 // })
+
+// anu()
 </script>

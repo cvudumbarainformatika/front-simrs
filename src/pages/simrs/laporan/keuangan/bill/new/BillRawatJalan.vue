@@ -953,7 +953,9 @@ function finishDownload() {
 const jsonFields = store.params.layanan !== '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
+  Rm: 'rm',
   Pasien: 'pasien',
+  Noreg: 'noreg',
   Poli: 'poli',
   Admin: 'admin',
   Materai: 'mtri',
@@ -983,7 +985,9 @@ const jsonFields = store.params.layanan !== '3' ? {
 } : {
   No: 'no',
   Tanggal: 'tanggal',
+  RM: 'rm',
   Pasien: 'pasien',
+  Noreg: 'noreg',
   Ruangan: 'ruangan',
   Admin: 'admin',
   Materai: 'mtri',
@@ -1034,7 +1038,9 @@ function fetchData() {
       temp.admin = item.adminInap
       temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
       temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
-      temp.pasien = item.relsistembayar ? item.rs1 + ', ' + item.relsistembayar.rs1 + ', ' + item.relsistembayar.rs2 : '-'
+      temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
+      temp.noreg = item.rs1
+      temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
       temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
       temp.rekammedik = item.bRM
       temp.keperawatan = item.jKeperawatan
@@ -1073,7 +1079,9 @@ function fetchData() {
       temp.selisih = item.selisih
       temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
       temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
-      temp.pasien = item.masterpasien ? item.rs1 + ', ' + item.masterpasien[0].rs1 + ', ' + item.masterpasien[0].rs2 : '-'
+      temp.pasien = item.masterpasien ? item.masterpasien[0].rs2 : '-'
+      temp.rm = item.masterpasien ? item.masterpasien[0].rs1 : '-'
+      temp.noreg = item.rs1
       temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
       temp.rekammedik = item.bRM
       temp.idPasien = item.bId
