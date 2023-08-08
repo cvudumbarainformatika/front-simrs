@@ -44,6 +44,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       nokabpjs: '',
       gelardepan: '',
       gelarbelakang: '',
+      noantrian: '',
       noteleponrumah: ''
     },
     display: {
@@ -86,11 +87,13 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     alertMsg: {},
     loadingNik: false,
     loadingNoka: false,
-    loadingFinger: false
+    loadingFinger: false,
     // --
+    noantrian: ''
   }),
   actions: {
     clearForm() {
+      const nomorAntr = this.noantrian
       this.form = {
         barulama: 'baru',
         noteleponhp: '',
@@ -98,6 +101,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         nokabpjs: '',
         gelardepan: '',
         gelarbelakang: '',
+        noantrian: '',
         noteleponrumah: ''
       }
       this.tanggal = {
@@ -131,12 +135,31 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
         sapaan: 'Bpk.',
         agama: ''
       }
+      this.setNoAntrian(nomorAntr)
     },
     setForm(key, val) {
       this.form[key] = val
     },
+    setNoAntrian(val) {
+      console.log('antrian ', val)
+      if (val) {
+        const regex = /^\d+$/
+        if (val.length > 1) {
+          const txt = val.split('')
+          let txtTr = 0
+          txt.forEach((anu, i) => {
+            if (!regex.test(anu)) {
+              txtTr += 1
+            }
+          })
+          const temp = parseInt(val.slice(txtTr, val.length))
+          this.setForm('angkaantrean', temp)
+          this.setForm('noantrian', val)
+        }
+      }
+    },
     negaraSelected(val) {
-      // const index = findWithAttr(this.negaras, 'kd_negara', val)
+      // cnoantriannst index = findWithAttr(this.negaras, 'kd_negara', val)
       // const propinsi = this.negaras[index]
       this.wilayah.kd_negara = val
       this.paramWilayah.kd_negara = val

@@ -314,14 +314,15 @@ function pilihPasienIni(val, jkn) {
       }
     })
   }
-
-  pasien.setForm('noantrian', jkn.nomorantrean)
-  if (jkn.nomorantrean.length > 1) {
-    const temp = parseInt(jkn.nomorantrean.slice(2, jkn.nomorantrean.length))
-    console.log('antrian ', jkn.nomorantrean.length)
-    console.log('temp ', temp)
-    pasien.setForm('angkaantrean', temp)
-  }
+  store.noantrian = ''
+  pasien.setNoAntrian(jkn.nomorantrean)
+  // pasien.setForm('noantrian', jkn.nomorantrean)
+  // if (jkn.nomorantrean.length > 1) {
+  //   const temp = parseInt(jkn.nomorantrean.slice(2, jkn.nomorantrean.length))
+  //   console.log('antrian ', jkn.nomorantrean.length)
+  //   console.log('temp ', temp)
+  //   pasien.setForm('angkaantrean', temp)
+  // }
   const tglLahir = val.tgllahir.split('-')
   pasien.setForm('barulama', 'lama')
   if (tglLahir.length) {
