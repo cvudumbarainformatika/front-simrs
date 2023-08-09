@@ -14,13 +14,13 @@ window.Pusher = Pusher
 //   broadcaster: 'pusher',
 //   key: 'simrs_key_harry141312',
 //   cluster: 'mt1',
-//   // wsHost: host,
-//   wsHost: host2,
+//   wsHost: host,
+//   // wsHost: host2,
 //   encrypted: false,
-//   wssPort: 6003,
-//   wsPort: 6003,
+//   wssPort: 6002,
+//   wsPort: 6002,
 //   disableStats: false,
-//   forceTLS: false, // default true
+//   forceTLS: true, // default true
 //   enabledTransports: ['ws', 'wss'],
 //   // enabledTransports: ['ws'],
 //   authorizer: (channel) => {
@@ -59,7 +59,7 @@ const channelLogin = window.Echo.channel('public.login.qr')
 const qrcodeChannel = window.Echo.channel('qrcode')
 
 // INI CHANNEL LOCAL
-// const antreanChannel = window.Echo.channel('public.antrean')
+const antreanChannel = window.Echo.channel('public.antrean')
 // const anjunganChannel = window.Echo.channel('public.anjungan')
 // const chatChannel = window.Echo.join('presence.chat.1')
 // const socket = () => {
@@ -76,8 +76,8 @@ const qrcodeChannel = window.Echo.channel('qrcode')
 export {
   channel,
   qrcodeChannel,
-  channelLogin
-  // antreanChannel
+  channelLogin,
+  antreanChannel
   // anjunganChannel,
   // chatChannel
 }
