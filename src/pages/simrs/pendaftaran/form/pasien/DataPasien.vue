@@ -126,6 +126,7 @@
                   :rules="[
                     val=>( !store.form.nomoridentitaslain ? !!val : true)||'Harap di isi',
                     val=>( (!store.form.nomoridentitaslain && val.length > 0) ? regex.test(val) : true)||'Hanya angka',
+                    val=> (!store.form.nomoridentitaslain && val.length >= 16) ||'Minimal 16 angka',
                   ]"
                   @icon-right-click="cekBpjsbyNik"
                   @update:model-value="cekKtpKitas"

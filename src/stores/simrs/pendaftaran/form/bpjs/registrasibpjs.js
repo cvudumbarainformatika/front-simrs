@@ -760,6 +760,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             console.log('Response SEP', resp.data)
             this.loading = false
             if (resp.data.metadata.code === '201') {
+              notifSuccessVue('Perbaiki kesalahan, kemudian tak tekan tombol SEP')
               notifErrVue(resp.data.metadata.message)
             }
             if (resp.data.metadata.code === '200') {
