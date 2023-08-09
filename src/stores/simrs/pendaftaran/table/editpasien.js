@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { usePendaftaranPasienStore } from '../form/pasien/pasien'
 import { findWithAttr } from 'src/modules/utils'
 import { api } from 'src/boot/axios'
+import { date } from 'quasar'
 
 export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran', {
   state: () => ({
@@ -19,6 +20,8 @@ export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran
     editPasienIni(val) {
       console.log('store edit pasien', val)
       val.noka = val.nokabpjs
+      val.noantrian = 'Diabakansaja001'
+      val.tglmasuk = date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
       this.pasien.form = val
       if (this.pasien.alamataDomisiliSama) {
         if ((!this.pasien.form.alamatdomisili ? true : this.pasien.form.alamatdomisili === '') && this.pasien.form.alamat) this.pasien.setForm('alamatdomisili', this.pasien.form.alamat)
@@ -73,11 +76,13 @@ export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran
         }
       }
       // telepon
-      if (this.pasien.form.noteleponhp.length) {
-        if (this.pasien.form.noteleponhp.charAt(0) !== '0') {
-          if (this.pasien.form.noteleponhp.charAt(0) === '+' && this.pasien.form.noteleponhp.charAt(1) === '6' && this.pasien.form.noteleponhp.charAt(2) === '2') {
-            const telp = '0' + this.pasien.form.noteleponhp.slice(3, this.pasien.form.noteleponhp.length)
-            this.pasien.setForm('noteleponhp', telp)
+      if (this.pasien.form.noteleponhp) {
+        if (this.pasien.form.noteleponhp.length) {
+          if (this.pasien.form.noteleponhp.charAt(0) !== '0') {
+            if (this.pasien.form.noteleponhp.charAt(0) === '+' && this.pasien.form.noteleponhp.charAt(1) === '6' && this.pasien.form.noteleponhp.charAt(2) === '2') {
+              const telp = '0' + this.pasien.form.noteleponhp.slice(3, this.pasien.form.noteleponhp.length)
+              this.pasien.setForm('noteleponhp', telp)
+            }
           }
         }
       }
@@ -130,11 +135,16 @@ export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran
     },
     saveForm() {
       console.log('simpan', this.pasien.form)
+      this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/master/simpan-pasien', this.pasien.form)
           .then(resp => {
             console.log('simpan', resp)
+            this.loading = false
             resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
           })
       })
     }

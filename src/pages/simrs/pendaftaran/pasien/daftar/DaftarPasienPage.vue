@@ -114,6 +114,7 @@
           <app-btn
             push
             label="simpan"
+            :loading="edit.loading"
             @click="simpan"
           />
         </div>
@@ -132,6 +133,7 @@ import { useStyledStore } from 'src/stores/app/styled'
 import PaginateBottom from './PaginateBottom.vue'
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
 import { date } from 'quasar'
+import { notifSuccessVue } from 'src/modules/utils'
 
 const store = useListPasien()
 const det = useDetailPasien()
@@ -164,7 +166,11 @@ function clearForm() {
 function simpan() {
   const dataPasien = refDataPasien.value.set()
   console.log('data pasien', dataPasien)
-  edit.saveForm()
+  edit.saveForm().then(() => {
+    clearForm()
+    edit.openDialogEdit()
+    notifSuccessVue('Data Sudah Berhasil Disimpan')
+  })
 }
 
 </script>
