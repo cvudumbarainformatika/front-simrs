@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { usePendaftaranPasienStore } from '../form/pasien/pasien'
 import { findWithAttr } from 'src/modules/utils'
+import { api } from 'src/boot/axios'
 
 export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran', {
   state: () => ({
@@ -129,6 +130,13 @@ export const usePendaftaranEditPasienStore = defineStore('editPaseienPendaftaran
     },
     saveForm() {
       console.log('simpan', this.pasien.form)
+      return new Promise(resolve => {
+        api.post('v1/simrs/master/simpan-pasien', this.pasien.form)
+          .then(resp => {
+            console.log('simpan', resp)
+            resolve(resp)
+          })
+      })
     }
   }
 })
