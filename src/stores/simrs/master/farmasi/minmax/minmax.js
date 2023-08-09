@@ -130,7 +130,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       const params = { params: this.params }
       return new Promise((resolve, reject) => {
         api
-          .get('v1/simrs/maping/carilistminmaxbyobat', params)
+          .get('v1/simrs/farmasinew/carilistminmaxbyobat', params)
           .then((resp) => {
             this.loading = false
             // if (resp.status === 200) {
@@ -191,7 +191,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     simpanData() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/maping/minmaxobat', this.form)
+        api.post('v1/simrs/farmasinew/minmaxobat', this.form)
           .then(resp => {
             this.loading = false
             this.getDataTable()
