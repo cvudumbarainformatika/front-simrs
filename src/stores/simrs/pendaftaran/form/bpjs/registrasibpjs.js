@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, loadingRes, notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { findWithAttr, loadingBlock, notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -733,7 +733,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     simpanRegistrasi() {
       return new Promise(resolve => {
-        loadingRes('show')
+        loadingBlock('show')
         this.loading = true
         api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
           .then(resp => {
@@ -741,14 +741,14 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             this.setForm('noreg', resp.data.noreg)
             console.log('after simpan ', this.form.noreg)
             this.loading = false
-            loadingRes('hide')
+            loadingBlock('hide')
             resolve(resp.data)
             this.rujukanPostMRS = false
             this.kontrolDPJP = false
           })
           .catch(() => {
             this.loading = false
-            loadingRes('hide')
+            loadingBlock('hide')
           })
       })
     },
