@@ -71,10 +71,6 @@ channel.subscribed(() => {
 //     callstore.ubahStatus(data)
 //   }
 // })
-// const apps = useAplikasiStore()
-// function anu() {
-//   if (apps.user) {
-//   }
 // }
 // chatChannel.subscribed(() => {
 //   console.log('subscribed chat channel!!!')

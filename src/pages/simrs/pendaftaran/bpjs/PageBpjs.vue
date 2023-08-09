@@ -42,6 +42,37 @@
           color="pink"
         />
 
+        <q-card-section
+          v-if="curentAntrian || curentAntrianLansia"
+          class=""
+        >
+          <div
+            v-if="curentAntrian"
+            class="row items-center no-wrap q-mb-sm"
+          >
+            <div class="">
+              Antrian Terakhir
+            </div>
+            <q-space />
+            <div class="text-weight-bold q-mr-lg">
+              {{ curentAntrian }}
+            </div>
+          </div>
+
+          <div
+            v-if="curentAntrianLansia"
+            class="row items-center no-wrap"
+          >
+            <div class="">
+              Antrian Terakhir Lansia
+            </div>
+            <q-space />
+            <div class="text-weight-bold q-mr-lg">
+              {{ curentAntrianLansia }}
+            </div>
+          </div>
+        </q-card-section>
+
         <q-card-section class="row items-center no-wrap">
           <div>
             <div class="text-weight-bold">
@@ -153,6 +184,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { api } from 'src/boot/axios'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
+import { antreanChannel } from 'src/modules/sockets'
 
 const drawerRight = ref(false)
 const style = useStyledStore()
@@ -200,6 +232,8 @@ const subtitle = computed(() => {
 const pasien = usePendaftaranPasienStore()
 const loading = ref('')
 const nomor = ref('')
+const curentAntrian = ref('')
+const curentAntrianLansia = ref('')
 const sisaAntrian = ref('')
 function toggleDraw() {
   drawerRight.value = !drawerRight.value
@@ -232,6 +266,19 @@ function panggil(val) {
       })
   })
 }
+
+antreanChannel.subscribed(() => {
+  console.log('subscribed antrean channel!!!')
+}).listen('.antrean', (e) => {
+  console.log('listen to chanel antrean', e)
+  console.log('listen to chanel antrean data', e.message)
+  if (e.message.nomorAntrian) {
+    curentAntrian.value = e.message.nomorAntrian
+  }
+  if (e.message.nomorAntrianLansia) {
+    curentAntrianLansia.value = e.message.nomorAntrianLansia
+  }
+})
 
 onMounted(() => {
   console.log('page ', page.path)
