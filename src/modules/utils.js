@@ -1,6 +1,7 @@
 import { Notify, Loading, QSpinnerCube } from 'quasar'
 import { routerInstance } from 'boot/router'
 import * as storage from 'src/modules/storage'
+import { antreanChannel } from './sockets'
 
 const removeToken = () => {
   storage.clearStore()
@@ -316,6 +317,47 @@ const loadingBlock = (cond) => {
   }
 }
 
+const loadingRes = (cond) => {
+  if (cond === 'show') {
+    const mess = '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong></div>'
+    const dot = '<div class="__dot row f-24 justify-center"></div>'
+    antreanChannel.subscribed(() => {
+      console.log('subscribed antrean channel!!!')
+    }).listen('.antrean', (e) => {
+      console.log('util antrean', e)
+      console.log('util antrean data', e.message)
+      if (e.message.metadata) {
+        const url = e.message.url === 'antrean/add' ? 'Tambah Antrean' : (e.message.task === '1' || e.message.task === 1 ? 'Update waktu MULAI admisi' : (e.message.task === '2' || e.message.task === 2 ? 'Update waktu SELESAI admisi' : (e.message.task === '3' || e.message.task === 3 ? 'update WAKTU TUNGGU LAYANAN' : 'Task Id belum di identifikasi')))
+        const anu = e.message.metadata.code === '200' ? 'Sukses' : 'Gagal'
+        const pesan = e.message.metadata.message
+        const mess = '<div class="f-14 row">' + url + '</div>'
+        const mess2 = '<div class="f-16 row">' + anu + '</div>'
+        const mess3 = '<div class="f-12 row">' + pesan + '</div>'
+        Loading.hide()
+        Loading.show({
+          message: mess + mess2 + mess3 + dot,
+          boxClass: 'bg-dark text-white box-anyar',
+          html: true,
+          spinner: QSpinnerCube,
+          // spinnerColor: 'yellow',
+          spinnerSize: 50
+        })
+      }
+    })
+
+    Loading.show({
+      message: mess + dot,
+      boxClass: 'bg-dark text-white box-anyar',
+      html: true,
+      spinner: QSpinnerCube,
+      // spinnerColor: 'yellow',
+      spinnerSize: 50
+    })
+  } else {
+    Loading.hide()
+  }
+}
+
 export {
   daysInMonth,
   notifCenterVue,
@@ -331,5 +373,6 @@ export {
   notifNegativeCenterVue,
   removeToken,
   filterDuplicateArraysInArrays,
-  loadingBlock
+  loadingBlock,
+  loadingRes
 }
