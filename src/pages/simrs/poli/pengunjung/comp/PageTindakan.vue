@@ -48,9 +48,9 @@
                   flat
                   round
                   dense
-                  icon="icon-mat-menu"
+                  :icon="menu.icon"
                 />
-                <q-toolbar-title>Title</q-toolbar-title>
+                <q-toolbar-title>{{ menu.label }}</q-toolbar-title>
                 <q-btn
                   flat
                   round
@@ -85,18 +85,16 @@
             <div class="row full-height">
               <div
                 class="col-auto full-height scroll"
-                style="width:300px"
+                style="width:250px; border-right: 1px solid rgba(128, 128, 128, 0.577);"
               >
-                <ListMenu :menus="menus" />
+                <ListMenu
+                  :menus="menus"
+                  :menu="menu"
+                  @menu-click="(val)=> menu=val"
+                />
               </div>
-              <div class="col full-height bg-red scroll">
-                <div
-                  v-for="n in 200"
-                  :key="n"
-                  class="q-my-md"
-                >
-                  {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
-                </div>
+              <div class="col full-height scroll">
+                <TindakanContent :tab="menu.name" />
               </div>
             </div>
           </q-card>
@@ -110,9 +108,9 @@
 import { onMounted, ref } from 'vue'
 import HeaderPage from './comptindakan/HeaderPage.vue'
 import ListMenu from './comptindakan/ListMenu.vue'
+import TindakanContent from './comptindakan/TindakanContent.vue'
 // const splitterModel = ref(150)
 const refDialog = ref()
-// const menu = ref('anamnesis')
 const menus = ref([
   { name: 'anamnesis', label: 'Anamnesis', icon: 'icon-mat-medical_information' },
   { name: 'pemeriksaan', label: 'Pemeriksaan Fisik', icon: 'icon-my-stethoscope' },
@@ -123,6 +121,7 @@ const menus = ref([
   { name: 'resep', label: 'E-Resep', icon: 'icon-mat-receipt' },
   { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
 ])
+const menu = ref(menus.value[0])
 // const innerTab = ref('innerMails')
 // const splitterModel = ref(10)
 defineProps({

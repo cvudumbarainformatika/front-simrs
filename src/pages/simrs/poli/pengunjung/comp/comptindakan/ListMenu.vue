@@ -8,6 +8,9 @@
       :key="i"
       v-ripple
       clickable
+      :active="menu===item"
+      active-class="bg-primary text-white"
+      @click="emits('menuClick',item)"
     >
       <q-item-section avatar>
         <q-icon
@@ -21,10 +24,15 @@
 </template>
 
 <script setup>
+const emits = defineEmits(['menuClick'])
 defineProps({
   menus: {
     type: Array,
     default: () => []
+  },
+  menu: {
+    type: Object,
+    default: null
   }
 })
 </script>
