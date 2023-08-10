@@ -121,7 +121,7 @@ import { onBeforeUnmount, ref } from 'vue'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 import { date, Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { notifCenterVue, notifNegativeCenterVue } from 'src/modules/utils'
 import { api } from 'src/boot/axios'
@@ -180,7 +180,6 @@ function buatSEP() {
   })
 }
 
-const router = useRouter()
 function simpanData() {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
@@ -198,13 +197,13 @@ function simpanData() {
     console.log('form registrasi ', registrasi.form)
     registrasi.simpanRegistrasi().then(resp => {
       console.log('resp bpjs', resp)
-      const antrian = resp.antrian.data
-      const nomor = antrian ? antrian.nomor : '-'
-      const poli = antrian ? antrian.nama_layanan : '-'
-      const norm = antrian ? antrian.id_member : '-'
-      console.log('Antrian ', antrian)
-      const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
-      window.open(routeData.href, '_blank')
+      // const antrian = resp.antrian.data
+      // const nomor = antrian ? antrian.nomor : '-'
+      // const poli = antrian ? antrian.nama_layanan : '-'
+      // const norm = antrian ? antrian.id_member : '-'
+      // console.log('Antrian ', antrian)
+      // const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+      // window.open(routeData.href, '_blank')
       // dialogCetak()
       cekFingerPasien(form)
     })

@@ -287,7 +287,7 @@ export const useSimrsLaporanKeuanganBillPoliStore = defineStore('simrs_laporan_k
       const param = { params: this.params }
       return new Promise(resolve => {
         // api.get('v1/simrs/laporan/allbillperlopi', param)
-        api.get('v1/simrs/laporan/billpoli', param)
+        api.get('v1/simrs/laporan/keuangan/billpoli', param)
           .then(resp => {
             this.loading = false
             // this.items = resp.data
