@@ -89,7 +89,7 @@
                   <q-badge
                     outline
                     :color="item.seprajal?'teal':'negative'"
-                    :label="item.seprajal?'SEP terbit':'SEP Belum terbit'"
+                    :label="item.seprajal?item.seprajal:'SEP Belum terbit'"
                   />
                 </div>
               </div>

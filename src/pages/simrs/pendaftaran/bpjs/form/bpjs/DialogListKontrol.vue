@@ -90,6 +90,8 @@
                   <q-item-section>
                     <q-item-label>tgl Rencana Kontrol : <span class="text-weight-bold text-primary">{{ list.tglRencanaKontrol?dateFullFormat(list.tglRencanaKontrol):'-' }}</span></q-item-label>
                     <q-item-label>No. Kontrol : <span class="text-weight-bold text-teal">{{ list.noSuratKontrol }}</span></q-item-label>
+                    <q-item-label> <span class="text-purple">{{ list.namaPoliTujuan?list.namaPoliTujuan:'-' }}</span> | <span class="text-weight-bold text-orange">{{ list.namaDokter?list.namaDokter:'-' }}</span></q-item-label>
+                    <!-- <q-item-label>Dokter : <span class="text-weight-bold text-orange">{{ list.namaDokter?list.namaDokter:'-' }}</span></q-item-label> -->
                   </q-item-section>
 
                   <q-item-section
