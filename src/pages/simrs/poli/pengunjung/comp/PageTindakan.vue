@@ -7,7 +7,10 @@
     transition-hide="slide-right"
   >
     <q-card class="container-no-header">
-      <div class="header bg-primary text-white">
+      <div
+        v-if="!style.componentfull"
+        class="header bg-primary text-white"
+      >
         <q-bar
           class=""
           style="z-index:100;"
@@ -62,16 +65,17 @@
                 <q-space />
                 <q-btn
                   flat
-                  round
                   dense
                   icon="icon-mat-dvr"
                   class="q-mr-sm"
+                  size="sm"
                 />
                 <q-btn
                   flat
-                  round
                   dense
                   icon="icon-mat-open_in_full"
+                  size="sm"
+                  @click="style.setComponentFull"
                 />
               </q-toolbar>
             </div>
@@ -109,6 +113,7 @@ import { onMounted, ref } from 'vue'
 import HeaderPage from './comptindakan/HeaderPage.vue'
 import ListMenu from './comptindakan/ListMenu.vue'
 import TindakanContent from './comptindakan/TindakanContent.vue'
+import { useStyledStore } from 'src/stores/app/styled'
 // const splitterModel = ref(150)
 const refDialog = ref()
 const menus = ref([
@@ -124,6 +129,8 @@ const menus = ref([
 const menu = ref(menus.value[0])
 // const innerTab = ref('innerMails')
 // const splitterModel = ref(10)
+
+const style = useStyledStore()
 defineProps({
   pasien: {
     type: Object,
@@ -132,6 +139,6 @@ defineProps({
 })
 
 onMounted(() => {
-  // console.log('ref', refCard.value)
+  console.log('page Tindakan')
 })
 </script>
