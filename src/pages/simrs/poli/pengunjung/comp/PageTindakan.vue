@@ -114,7 +114,7 @@ const refDialog = ref()
 const menus = ref([
   { name: 'anamnesis', label: 'Anamnesis', icon: 'icon-mat-medical_information' },
   { name: 'pemeriksaan', label: 'Pemeriksaan Fisik', icon: 'icon-my-stethoscope' },
-  { name: 'diagnosis', label: 'Diagnosis (ICD)', icon: 'icon-mat-analytics' },
+  { name: 'layanan', label: 'Layanan', icon: 'icon-mat-analytics' },
   { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
   { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
   { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
