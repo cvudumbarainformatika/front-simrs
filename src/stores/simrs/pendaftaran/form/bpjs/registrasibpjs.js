@@ -3,7 +3,7 @@ import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
 import { findWithAttr, loadingRes, notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -743,17 +743,17 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             console.log('after simpan ', this.form.noreg)
             this.loading = false
             loadingRes('hide')
-            const router = useRouter()
-            const antrian = resp.data.antrian.data
-            const nomor = antrian ? antrian.nomor : '-'
-            const poli = antrian ? antrian.nama_layanan : '-'
-            const norm = antrian ? antrian.id_member : '-'
-            console.log('Antrian ', antrian)
-            const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
-            window.open(routeData.href, '_blank')
-            resolve(resp.data)
             this.rujukanPostMRS = false
             this.kontrolDPJP = false
+            resolve(resp.data)
+            // const antrian = resp.data.antrian.data
+            // const nomor = antrian ? antrian.nomor : '-'
+            // const poli = antrian ? antrian.nama_layanan : '-'
+            // const norm = antrian ? antrian.id_member : '-'
+            // console.log('Antrian ', antrian)
+            // const router = useRouter()
+            // const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+            // window.open(routeData.href, '_blank')
           })
           .catch(() => {
             this.loading = false

@@ -270,8 +270,8 @@ function panggil(val) {
 antreanChannel.subscribed(() => {
   console.log('subscribed antrean channel!!!')
 }).listen('.antrean', (e) => {
-  console.log('listen to chanel antrean', e)
-  console.log('listen to chanel antrean data', e.message)
+  // console.log('listen to chanel antrean', e)
+  // console.log('listen to chanel antrean data', e.message)
   if (e.message.nomorAntrian) {
     curentAntrian.value = e.message.nomorAntrian
   }

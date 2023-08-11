@@ -319,22 +319,24 @@ const loadingBlock = (cond) => {
 }
 
 const loadingRes = (cond) => {
-  if (cond === 'show') {
-    const app = useAplikasiStore()
-    const mess = '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong></div>'
-    const dot = '<div class="__dot row f-24 justify-center"></div>'
-    antreanChannel.subscribed(() => {
-      console.log('subscribed antrean channel!!!')
-    }).listen('.antrean', (e) => {
-      console.log('util antrean', app.user.id, e)
-      if (e.message.metadata && e.message.user === app.user.id) {
-        const url = e.message.url === 'antrean/add' ? 'Tambah Antrean' : (e.message.task === '1' || e.message.task === 1 ? 'Update waktu MULAI admisi' : (e.message.task === '2' || e.message.task === 2 ? 'Update waktu SELESAI admisi' : (e.message.task === '3' || e.message.task === 3 ? 'update WAKTU TUNGGU LAYANAN' : 'Task Id belum di identifikasi')))
-        const anu = e.message.metadata.code === '200' ? 'Sukses' : 'Gagal'
-        const pesan = e.message.metadata.message
-        const mess = '<div class="f-14 row">' + url + '</div>'
-        const mess2 = '<div class="f-16 row">' + anu + '</div>'
-        const mess3 = '<div class="f-12 row">' + pesan + '</div>'
-        Loading.hide()
+  const app = useAplikasiStore()
+  const mess = '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong></div>'
+  const dot = '<div class="__dot row f-24 justify-center"></div>'
+  antreanChannel.subscribed(() => {
+    console.log('subscribed antrean channel!!! on LoadingRes')
+  }).listen('.antrean', (e) => {
+    console.log('util antrean', app.user.id, e.message)
+    if (e.message[0] && e.message.user === app.user.id) {
+      // if (e.message[0]) {
+      // console.log('util metadata', e.message[0].metadata)
+      const url = e.message.url === 'antrean/add' ? 'Tambah Antrean' : (e.message.task === '1' || e.message.task === 1 ? 'Update waktu MULAI admisi' : (e.message.task === '2' || e.message.task === 2 ? 'Update waktu SELESAI admisi' : (e.message.task === '3' || e.message.task === 3 ? 'update WAKTU TUNGGU LAYANAN' : 'Task Id belum di identifikasi')))
+      const anu = e.message[0].metadata.code === '200' || e.message[0].metadata.code === 200 ? 'Sukses' : 'Gagal'
+      const pesan = e.message[0].metadata.message
+      const mess = '<div class="f-14 row">' + url + '</div>'
+      const mess2 = '<div class="f-16 row">' + anu + '</div>'
+      const mess3 = '<div class="f-12 row">' + pesan + '</div>'
+      Loading.hide()
+      if (cond === 'show') {
         Loading.show({
           message: mess + mess2 + mess3 + dot,
           boxClass: 'bg-dark text-white box-anyar',
@@ -344,8 +346,10 @@ const loadingRes = (cond) => {
           spinnerSize: 50
         })
       }
-    })
+    }
+  })
 
+  if (cond === 'show') {
     Loading.show({
       message: mess + dot,
       boxClass: 'bg-dark text-white box-anyar',
