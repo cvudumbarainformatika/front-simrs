@@ -61,7 +61,7 @@
   </div> -->
   <q-splitter
     v-model="splitterModel"
-    :style="`height: ${style.componentfull? 90: 70}vh`"
+    :style="`height: ${style.componentfull? 92: 78}vh`"
     class=""
     @update:model-value="dragWidth"
   >
