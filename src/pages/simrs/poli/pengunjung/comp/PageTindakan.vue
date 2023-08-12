@@ -92,13 +92,19 @@
                 style="width:250px; border-right: 1px solid rgba(128, 128, 128, 0.577);"
               >
                 <ListMenu
+                  :key="menu"
                   :menus="menus"
                   :menu="menu"
                   @menu-click="(val)=> menu=val"
                 />
               </div>
-              <div class="col full-height scroll">
-                <TindakanContent :tab="menu.name" />
+              <div
+                class="col full-height scroll"
+              >
+                <!-- <TindakanContent :tab="menu.name" /> -->
+                <div class="my-flex-1 full-height">
+                  <component :is="menu.comp" />
+                </div>
               </div>
             </div>
           </q-card>
@@ -109,22 +115,33 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import HeaderPage from './comptindakan/HeaderPage.vue'
 import ListMenu from './comptindakan/ListMenu.vue'
-import TindakanContent from './comptindakan/TindakanContent.vue'
+// import TindakanContent from './comptindakan/TindakanContent.vue'
+// import AnamnesisPage from './comptindakan/anamnesis/AnamnesisPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 // const splitterModel = ref(150)
 const refDialog = ref()
 const menus = ref([
-  { name: 'anamnesis', label: 'Anamnesis', icon: 'icon-mat-medical_information' },
-  { name: 'pemeriksaan', label: 'Pemeriksaan Fisik', icon: 'icon-my-stethoscope' },
-  { name: 'layanan', label: 'Layanan', icon: 'icon-mat-analytics' },
-  { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
-  { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
-  { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
-  { name: 'resep', label: 'E-Resep', icon: 'icon-mat-receipt' },
-  { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
+  {
+    name: 'AnamnesisPage',
+    label: 'Anamnesis',
+    icon: 'icon-mat-medical_information',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/AnamnesisPage.vue')))
+  },
+  {
+    name: 'PemeriksaanPage',
+    label: 'Pemeriksaan Fisik',
+    icon: 'icon-my-stethoscope',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))
+  }
+  // { name: 'layanan-page', label: 'Layanan', icon: 'icon-mat-analytics' },
+  // { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
+  // { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
+  // { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
+  // { name: 'resep', label: 'E-Resep', icon: 'icon-mat-receipt' },
+  // { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
 ])
 const menu = ref(menus.value[0])
 // const innerTab = ref('innerMails')
