@@ -64,7 +64,8 @@ import HeaderComp from './comp/HeaderComp.vue'
 import FilterPage from './comp/FilterPage.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
-import PageTindakan from './comp/PageTindakan.vue'
+// import PageTindakan from './comp/PageTindakan.vue'
+import PageTindakan from '../tindakan/IndexPage.vue'
 
 const style = useStyledStore()
 const store = usePengunjungPoliStore()
