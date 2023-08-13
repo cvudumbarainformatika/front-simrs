@@ -91,6 +91,6 @@ const menu = ref(menus.value[0])
     display: flex;
     flex-direction: column;
     height: calc(100vh - 50px);
-    // overflow: hidden;
+    overflow: hidden;
 }
 </style>
