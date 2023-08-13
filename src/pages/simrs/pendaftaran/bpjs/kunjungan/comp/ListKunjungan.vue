@@ -82,7 +82,10 @@
             top
           >
             <q-item-label caption>
-              <div class="row justify-end">
+              <div
+                class="row justify-end"
+                @click="bukaSep()"
+              >
                 <div class="q-ml-sm">
                   <q-badge
                     outline
@@ -168,13 +171,16 @@
         </div>
       </template>
     </app-dialog-form>
+    <DialogSep />
   </div>
 </template>
 
 <script setup>
+import DialogSep from './DialogSep.vue'
 import { api } from 'src/boot/axios'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
+import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
 
 defineProps({
@@ -203,7 +209,11 @@ function PengajuanSep(val) {
   dialog.value = true
   temp.value = val.noka
 }
-
+const sepStore = useSepBpjsStore()
+function bukaSep() {
+  console.log('buka sep')
+  sepStore.setOpen()
+}
 function simpanPengajuan() {
   const data = {
     noka: temp.value,
