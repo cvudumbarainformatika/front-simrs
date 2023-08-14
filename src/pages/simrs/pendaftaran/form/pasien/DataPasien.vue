@@ -1227,6 +1227,17 @@
               <q-item>
                 <q-item-section>
                   <q-item-label>
+                    Asal Faskes
+                  </q-item-label>
+                  <q-item-label class="text-weight-bold">
+                    {{ store.alertMsg.peserta.provUmum.nmProvider }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
                     Hak Kelas
                   </q-item-label>
                   <q-item-label class="text-weight-bold">
