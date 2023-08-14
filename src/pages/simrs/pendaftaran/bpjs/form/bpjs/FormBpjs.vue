@@ -180,8 +180,8 @@ function buatSEP() {
   })
 }
 
+const router = useRouter()
 function simpanData() {
-  const router = useRouter()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }

@@ -326,12 +326,12 @@ const loadingRes = (cond) => {
     console.log('subscribed antrean channel!!! on LoadingRes')
   }).listen('.antrean', (e) => {
     console.log('util antrean', app.user.id, e.message)
-    if (e.message[0] && e.message.user === app.user.id) {
-      // if (e.message[0]) {
-      // console.log('util metadata', e.message[0].metadata)
+    if (e.message.kode && e.message.user === app.user.id) {
+    // if (e.message.kode) {
+      // console.log('util metadata', e.message.kode.metadata)
       const url = e.message.url === 'antrean/add' ? 'Tambah Antrean' : (e.message.task === '1' || e.message.task === 1 ? 'Update waktu MULAI admisi' : (e.message.task === '2' || e.message.task === 2 ? 'Update waktu SELESAI admisi' : (e.message.task === '3' || e.message.task === 3 ? 'update WAKTU TUNGGU LAYANAN' : 'Task Id belum di identifikasi')))
-      const anu = e.message[0].metadata.code === '200' || e.message[0].metadata.code === 200 ? 'Sukses' : 'Gagal'
-      const pesan = e.message[0].metadata.message
+      const anu = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
+      const pesan = e.message.kode.metadata.message
       const mess = '<div class="f-14 row">' + url + '</div>'
       const mess2 = '<div class="f-16 row">' + anu + '</div>'
       const mess3 = '<div class="f-12 row">' + pesan + '</div>'

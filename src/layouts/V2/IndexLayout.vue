@@ -1,5 +1,6 @@
 <template>
   <q-layout
+    :key="tanggal"
     view="hhr LpR lfr"
     :class="dark?'':'page-light'"
   >
@@ -81,8 +82,8 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-import { computed, onMounted } from 'vue'
+import { date, useQuasar } from 'quasar'
+import { computed, onMounted, ref } from 'vue'
 
 import LeftDrawer from './comp/LeftDrawer.vue'
 // import AdmHeader from './AdmHeader.vue'
@@ -94,6 +95,7 @@ import { useTransitionStore } from 'src/stores/app/transition'
 import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
 
+const tanggal = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const router = useRouter()
 const transition = useTransitionStore()
 const store = useAuthStore()
