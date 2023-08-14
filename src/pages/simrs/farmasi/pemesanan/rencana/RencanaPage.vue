@@ -12,6 +12,7 @@
           v-model="store.form.no_rencbeliobat"
           label="Nomor rencana beli obat"
           :filled="false"
+          readonly
           valid
         />
       </div>
@@ -178,4 +179,5 @@ function setTanggal(val) {
   console.log('param ', store.param)
 }
 table.getInitialData()
+store.getInitialData()
 </script>
