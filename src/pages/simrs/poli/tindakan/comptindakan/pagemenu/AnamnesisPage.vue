@@ -232,7 +232,7 @@
       <div
         v-if="seamless"
         class="absolute-bottom full-width"
-        style="height: 60vh;"
+        style="height: 450px;"
       >
         <q-card
           class="full-height full-height"
@@ -424,7 +424,7 @@ const rows = ref([
 
 <style lang="scss">
 .my-sticky-header-table{
-  height: 290px;
+  height: 300px;
 
   .q-table__top,
   .q-table__bottom,
