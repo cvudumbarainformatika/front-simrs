@@ -742,7 +742,9 @@ function toSimpan(dataPasien, form) {
     const nomor = antrian ? antrian.nomor : '-'
     const poli = antrian ? antrian.nama_layanan : '-'
     const norm = antrian ? antrian.id_member : '-'
+
     console.log('Antrian List MJKN', antrian)
+
     const router = useRouter()
     const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
     window.open(routeData.href, '_blank')
