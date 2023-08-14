@@ -24,7 +24,7 @@
               @mouseover="hoverred = n"
               @mouseleave="hoverred = null"
             >
-              <div class="column flex-center items-center text-white q-pa-xs icon--item">
+              <div class="column flex-center items-center text-white q-px-xs icon--item">
                 <q-icon
                   class="icon--h"
                   :class="hoverred===n?'hoverred':''"
@@ -74,7 +74,7 @@ const hoverred = ref(null)
 .hoverred {
   transition: all .2s ease-in-out;
     // color: red !important;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 
 </style>
