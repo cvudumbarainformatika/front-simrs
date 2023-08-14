@@ -41,7 +41,7 @@
       <div class="absolute right-menu">
         asd
       </div>
-      <div class="column full-height items-center scroll">
+      <div class="column full-height scroll">
         <BodyPage />
       </div>
     </q-card>
