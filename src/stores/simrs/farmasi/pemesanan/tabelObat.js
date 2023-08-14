@@ -10,13 +10,16 @@ export const useTabelObatMauDibeliStore = defineStore('tabel_obat_may_di_beli', 
     columns: [
       'kd_obat',
       'nama_obat',
-      'stok_gudang',
-      'stok_rs',
-      'stok_max_rs',
-      'jml_bisa_beli',
+      'stok',
+      // 'stok_gudang',
+      // 'stok_rs',
+      // 'stok_max_rs',
+      // 'jml_bisa_beli',
       'pabrikan',
-      'pbf',
-      'jumlah_dipesan',
+      // 'pabrikan',
+      // 'pbf',
+      // 'jumlah_dipesan',
+      'jumlah',
       'centang'
     ],
     columnHide: []
@@ -33,6 +36,15 @@ export const useTabelObatMauDibeliStore = defineStore('tabel_obat_may_di_beli', 
           .then(resp => {
             this.loading = false
             console.log('obat mau dibeli', resp)
+            const temp = resp.data
+            temp.forEach(item => {
+              item.checked = false
+              item.stokGudang = item.stokrealgudang.length ? item.stokrealgudang.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+              item.stokRS = item.stokrealallrs.length ? item.stokrealallrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+              item.stokMaxRS = item.stokmaxrs.length ? item.stokmaxrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+              item.bisaBeli = (item.stokMaxRS - item.stokRS) > 0 ? (item.stokMaxRS - item.stokRS) : 0
+              item.jumlahBeli = item.bisaBeli
+            })
             this.items = resp.data
             resolve(resp)
           })
