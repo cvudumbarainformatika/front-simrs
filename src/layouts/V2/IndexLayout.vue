@@ -1,5 +1,6 @@
 <template>
   <q-layout
+    :key="tanggal"
     view="hhr LpR lfr"
     :class="dark?'':'page-light'"
   >
@@ -44,7 +45,7 @@
         opacity: 0.8,
       }"
     >
-      <q-page-container :key="tanggal">
+      <q-page-container>
         <router-view
           v-slot="{ Component }"
           class="transition"

@@ -44,13 +44,13 @@
             :disable="loading"
             @click="clearAllRegistrasi"
           />
-          <app-btn
+          <!-- <app-btn
             class="q-ml-xl"
             label="Loading"
             :loading="loading"
             :disable="loading"
             @click="loadingCek()"
-          />
+          /> -->
         </div>
       </q-card-actions>
     </q-card>
@@ -123,7 +123,7 @@ import { date, Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useRouter } from 'vue-router'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
-import { loadingRes, notifCenterVue, notifNegativeCenterVue } from 'src/modules/utils'
+import { notifCenterVue, notifNegativeCenterVue } from 'src/modules/utils'
 import { api } from 'src/boot/axios'
 
 const registrasi = useRegistrasiPasienBPJSStore()
@@ -134,9 +134,9 @@ const refRegistrasi = ref(null)
 
 const style = useStyledStore()
 
-function loadingCek() {
-  loadingRes('show')
-}
+// function loadingCek() {
+//   loadingRes('show')
+// }
 function clearAllRegistrasi() {
   registrasi.clearForm()
   refDataPasien.value.clearForm()
@@ -180,8 +180,8 @@ function buatSEP() {
   })
 }
 
+const router = useRouter()
 function simpanData() {
-  const router = useRouter()
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }

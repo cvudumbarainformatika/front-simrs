@@ -219,6 +219,7 @@ import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/
 import { date, Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 // import { routerInstance } from 'src/boot/router'
 
 const style = useStyledStore()
@@ -727,6 +728,7 @@ function simpanData() {
   }
 }
 
+const router = useRouter()
 function toSimpan(dataPasien, form) {
   const keys = Object.keys(dataPasien.form)
   if (keys.length) {
@@ -736,7 +738,7 @@ function toSimpan(dataPasien, form) {
   }
   console.log('form registrasi ', regis.form)
   regis.simpanRegistrasi().then(resp => {
-    console.log('resp bpjs', resp)
+    console.log('resp bpjs MJKN', resp)
 
     const antrian = resp.antrian.data
     const nomor = antrian ? antrian.nomor : '-'
@@ -745,7 +747,6 @@ function toSimpan(dataPasien, form) {
 
     console.log('Antrian List MJKN', antrian)
 
-    const router = useRouter()
     const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
     window.open(routeData.href, '_blank')
 
