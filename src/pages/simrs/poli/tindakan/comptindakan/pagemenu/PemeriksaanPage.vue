@@ -41,11 +41,15 @@
       <div class="absolute right-menu">
         asd
       </div>
+      <div class="column full-height items-center scroll">
+        <BodyPage />
+      </div>
     </q-card>
   </div>
 </template>
 
 <script setup>
+import BodyPage from './comppemeriksaan/Bodypage.vue'
 import { ref } from 'vue'
 
 const active = ref(1)
