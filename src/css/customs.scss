@@ -1,0 +1,121 @@
+
+
+// this custom template from quasar
+/*
+  ===================================================
+  FORM INPUT
+  ===================================================
+*/
+.q-field__bottom {
+  font-size: 10px;
+  min-height: 15px !important;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 3px 10px 0 !important;
+}
+.q-field__message-col>div {
+  font-size:10px !important;
+}
+.menu-button{
+  margin-left:-15px ;
+}
+.halaman{
+  margin-left: 5px;
+}
+// chip sizing
+.chip{
+  width:100px;
+  padding:5px;
+}
+.chip-able{
+  max-width:150px;
+  padding:5px;
+}
+
+// ===========================================================================
+.ba-black{
+  border: 1px solid black;
+}
+.bl-black{
+  border-left: 1px solid black;
+}
+.br-black{
+  border-right: 1px solid black;
+}
+.bb-black{
+  border-bottom: 1px solid black;
+}
+.bt-black{
+  border-top: 1px solid black;
+}
+.mirror-editor {
+  ol {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 20px !important;
+    li{
+      margin-bottom: 1em;
+    }
+  }
+}
+
+
+// ======================================================================== scrollbar
+::-webkit-scrollbar {
+    height: 5px;
+    width: 8px;
+    background: transparent;
+    z-index: 12;
+    overflow: visible;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: #066a886b;
+    border-radius: 3px;
+    z-index: 12;
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    transition: background-color .32s ease-in-out;
+    margin: 4px;
+    min-height: 32px;
+    min-width: 32px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #066a88de;
+}
+
+
+// ======================================================================== loading box
+.box-anyar{
+  padding:40px;
+}
+
+.__dot:after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  40% {
+    color: white;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 white;}}
