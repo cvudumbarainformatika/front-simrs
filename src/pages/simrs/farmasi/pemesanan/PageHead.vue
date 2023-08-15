@@ -29,13 +29,13 @@
           @click="goTo('/farmasi/pemesanan/rencana')"
         />
         <q-btn
-          :outline="path!=='/farmasi/pemesanan/pesanan'"
+          :outline="path!=='/farmasi/pemesanan/listrencanapesanan'"
           glossy
           push
           color="green"
-          label="Pemesanan"
+          label="List Rencana Pemesanan"
           size="md"
-          @click="goTo('/farmasi/pemesanan/pesanan')"
+          @click="goTo('/farmasi/pemesanan/listrencanapesanan')"
         />
       </q-btn-group>
     </div>
