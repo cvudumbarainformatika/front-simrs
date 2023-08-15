@@ -82,6 +82,8 @@ const handlePointerDown = (event) => {
 
   getTargetPosition(event)
   ctx.value.moveTo(positionX.value, positionY.value)
+  // ctx.value.arc(positionX, positionY, 10, 0, 2 * Math.PI)
+  // ctx.value.stroke()
 }
 const handlePointerUp = (event) => {
   // console.log('pointerup', event)
