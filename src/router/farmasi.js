@@ -23,6 +23,13 @@ const farmasi = {
             import('pages/simrs/farmasi/pemesanan/rencana/IndexPage.vue')
         },
         {
+          path: '/farmasi/pemesanan/listrencanapesanan',
+          name: 'farmasi.pemesanan.listrencanapesanan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemesanan/pesanan/IndexPage.vue')
+        },
+        {
           path: '/farmasi/pemesanan/pesanan',
           name: 'farmasi.pemesanan.pesanan',
           meta: { transition: 'slide-up' },

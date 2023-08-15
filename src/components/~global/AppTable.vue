@@ -66,6 +66,7 @@
         </q-btn>
         <!-- refresh Ids -->
         <q-btn
+          v-if="adaRefresh"
           unelevated
           round
           size="sm"
@@ -82,6 +83,7 @@
         </q-btn>
         <!-- per page -->
         <q-btn
+          v-if="adaPerPage"
           class="q-ml-sm"
           unelevated
           color="orange"
@@ -124,6 +126,7 @@
         </q-btn>
         <!-- filter table -->
         <q-btn
+          v-if="adaFilter"
           class="q-ml-sm"
           unelevated
           color="indigo"
@@ -470,6 +473,9 @@ const props = defineProps({
   adaDelete: { type: Boolean, default: true },
   adaTambah: { type: Boolean, default: true },
   adaCari: { type: Boolean, default: true },
+  adaRefresh: { type: Boolean, default: true },
+  adaPerPage: { type: Boolean, default: true },
+  adaFilter: { type: Boolean, default: true },
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
   adaPaginasi: { type: Boolean, default: true },

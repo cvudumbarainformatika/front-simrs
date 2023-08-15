@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed-top row no-wrap items-center justify-between q-mr-sm"
+    class="fixed-top row no-wrap items-center justify-between q-mx-sm bg-white"
     style="z-index: 10;"
   >
     <div>
@@ -14,7 +14,24 @@
           :filled="false"
           readonly
           valid
+          :loading="store.loading"
         />
+        <div class="q-ml-md">
+          <q-btn
+            flat
+            icon="icon-mat-refresh"
+            dense
+            color="primary"
+            @click="store.refreshForm()"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Refresh Form
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
     </div>
     <div>
@@ -56,17 +73,16 @@
           :per-page="table.params.per_page"
           :order-by="table.params.order_by"
           :sort="table.params.sort"
-          :loading="table.loading"
+          :loading="table.loading || store.loading"
           :to-search="table.params.q"
           :default-btn="false"
           :ada-paginasi="false"
-          @goto="table.setPage"
-          @set-row="table.setPerPage"
-          @refresh="table.refreshTable"
+          :ada-cari="false"
+          :ada-refresh="false"
+          :ada-per-page="false"
+          :ada-filter="false"
+          :ada-tambah="false"
           @find="table.setSearch"
-          @set-order="table.setOder"
-          @new-data="store.newData"
-          @delete="table.deletesData"
         >
           <!-- @edit-data="store.editData" -->
           <!--
@@ -140,6 +156,7 @@
                 v-model="row.jumlahBeli"
                 label="Jumlah Dipesan"
                 :filled="false"
+                :disable="row.bisaBeli<=0"
                 :rules="[
                   val=> (val <= row.bisaBeli) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
                 ]"
@@ -148,9 +165,18 @@
           </template>
           <template #cell-centang="{row}">
             <div v-if="row.bisaBeli>0">
-              <q-checkbox
+              <!-- <q-checkbox
                 v-model="row.checked"
                 dense
+              /> -->
+              <q-btn
+                flat
+                no-caps
+                icon-right="icon-mat-send"
+                label="kirim"
+                color="primary"
+                :loading="store.loading && (store.form.kd_obat === row.kd_obat)"
+                @click="store.kirimRencana(row)"
               />
             </div>
             <div v-else>
