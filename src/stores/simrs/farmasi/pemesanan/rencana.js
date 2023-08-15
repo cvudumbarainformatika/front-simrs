@@ -77,7 +77,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
         stok_max_rs: val.stokMaxRS,
         jumlah_bisa_dibeli: val.bisaBeli,
         tgl_stok: this.form.tanggal,
-        pabrikan: 'wew',
+        pabrikan: 'belum ada',
         pbf: 'wewewew',
         jumlahdpesan: val.jumlahBeli
       }
