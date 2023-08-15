@@ -47,10 +47,6 @@ function func() {
   bg.src = MyImg
   bg.onload = function () {
     console.log('bg', bg.height)
-    // console.log('ctx', cvn.width)
-    // ctx.drawImage(bg, 0, 0, bg.width, bg.height)
-    // const offsetX = 0.5 // center x
-    // const offsetY = 0.5
     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
     // const ratio = bg.width / bg.height
     const width = bg.width * scale
