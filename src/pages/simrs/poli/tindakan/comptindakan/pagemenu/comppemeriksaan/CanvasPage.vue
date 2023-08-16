@@ -8,48 +8,102 @@
         height="500"
         @mousedown="handlePointerDown"
         @mouseup="handlePointerUp"
-      />
-      <!-- <div class="absolute-bottom z-top">
-        <div class="text-right q-py-sm">
-          <div class="q-gutter-xs">
-            <q-btn
-              icon="icon-mat-refresh"
-              padding="sm"
-              color="orange"
+      >
+        <q-menu
+          ref="refMenu"
+          touch-position
+          @show="onShowInp"
+          @hide="writingMode=false"
+        >
+          <q-card
+            dark
+            flat
+            bordered
+            style="min-width:250px"
+          >
+            <q-card-section>
+              <q-input
+                v-model="txt"
+                standout="bg-yellow-2"
+                dense
+                dark
+                label="nama"
+                class="q-mb-sm"
+              />
+              <q-input
+                v-model="txt"
+                standout="bg-yellow-2"
+                dense
+                dark
+                label="keterangan"
+              />
+            </q-card-section>
+            <q-separator
+              dark
             />
-          </div>
-        </div>
-      </div> -->
+            <div class="row">
+              <q-btn
+                class="col"
+                color="primary"
+                square
+                icon="icon-mat-check"
+              />
+              <q-btn
+                class="col"
+                color="negative"
+                icon="icon-mat-close"
+                square
+                @click="refMenu.hide()"
+              />
+            </div>
+          </q-card>
+        </q-menu>
+      </canvas>
     </div>
-    <!-- <div
-      class="cursor-pointer non-selectable flex items-center flex-center bg-grey-2 q-py-sm tmp-t"
+    <div
+      class="cursor-pointer non-selectable flex items-center justify-between bg-grey-4 q-pa-sm tmp-t"
       style="margin-top:-5px"
     >
-      <q-btn
-        flat
-        padding="xs"
-        icon="icon-mat-circle"
-        color="negative"
-      />
-      <q-btn
-        flat
-        padding="xs"
-        color="negative"
-        icon="icon-mat-close"
-      />
-      <q-btn
-        flat
-        padding="xs"
-        color="negative"
-        icon="icon-mat-change_history"
-      />
-      <q-btn
-        flat
-        padding="xs"
-        color="negative"
-        icon="icon-mat-check_box_outline"
-      />
-    </div> -->
+      <div>
+        <q-btn
+          flat
+          padding="xs"
+          icon="icon-mat-circle"
+          color="negative"
+        />
+        <q-btn
+          flat
+          padding="xs"
+          color="negative"
+          icon="icon-mat-close"
+        />
+        <q-btn
+          flat
+          padding="xs"
+          color="negative"
+          icon="icon-mat-change_history"
+        />
+        <q-btn
+          flat
+          padding="xs"
+          color="negative"
+          icon="icon-mat-check_box_outline"
+        />
+      </div>
+      <div>
+        <q-btn
+          flat
+          padding="xs"
+          icon="icon-mat-refresh"
+          color="dark"
+          @click="clearPad"
+        >
+          <q-tooltip>
+            Bersihkan Penandaan
+          </q-tooltip>
+        </q-btn>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,26 +111,36 @@
 import MyImg from 'src/assets/human/human-body.jpg'
 import { onMounted, ref } from 'vue'
 
+const txt = ref(null)
 const canvasRef = ref()
+const refMenu = ref()
 const ctx = ref()
 const writingMode = ref(false)
 const positionX = ref()
 const positionY = ref()
 
 onMounted(() => {
-  console.log(window.innerWidth)
+  console.log(refMenu.value)
   ctx.value = canvasRef.value.getContext('2d')
 
   func()
 })
 
-const handlePointerDown = (event) => {
-  console.log('pointerdown', event)
+function onShowInp() {
+  console.log('show')
   writingMode.value = true
-  ctx.value.beginPath()
+  drawShapes(ctx.value, positionX.value, positionY.value)
+}
 
+const handlePointerDown = (event) => {
+  // console.log('pointerdown', event)
+  // writingMode.value = !writingMode.value
+  // console.log(writingMode.value)
+  // console.log(refMenu.value)
   const [x, y] = getTargetPosition(event)
-  drawShapes(ctx.value, x, y)
+  positionX.value = x
+  positionY.value = y
+  // drawShapes(ctx.value, x, y)
 }
 const handlePointerUp = (event) => {
   // console.log('pointerup', event)
@@ -92,6 +156,8 @@ function getTargetPosition(event) {
 
 function drawShapes(cx, x, y) {
   if (writingMode.value) {
+    console.log('ok')
+    cx.beginPath()
     cx.arc(x, y, 10, 0, 2 * Math.PI)
     cx.lineWidth = 4
     cx.strokeStyle = 'orange'
@@ -99,9 +165,10 @@ function drawShapes(cx, x, y) {
   }
 }
 
-// const clearPad = () => {
-//   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-// }
+const clearPad = () => {
+  ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+  func()
+}
 
 // const savePad = () => {
 //   const imageURL = canvasRef.value.toDataURL()
@@ -135,7 +202,6 @@ function func() {
   position: relative;
   canvas {
     background: #fff;
-    border: 1px solid rgba(128, 128, 128, 0.81);
     cursor: crosshair;
   }
   .fab-x{
@@ -145,7 +211,7 @@ function func() {
 
 .tmp-t{
   width: 100%;
-  border: 1px solid rgba(128, 128, 128, 0.81);
+  // border: 1px solid rgba(128, 128, 128, 0.81);
 }
 
 @media(pointer:coarse){

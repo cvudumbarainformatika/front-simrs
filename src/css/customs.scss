@@ -66,14 +66,14 @@
 // ======================================================================== scrollbar
 ::-webkit-scrollbar {
     height: 5px;
-    width: 8px;
+    width: 7px;
     background: transparent;
     z-index: 12;
     overflow: visible;
 }
 
 ::-webkit-scrollbar-thumb {
-    width: 10px;
+    width: 4px;
     background-color: #066a886b;
     border-radius: 3px;
     z-index: 12;
@@ -82,7 +82,7 @@
     transition: background-color .32s ease-in-out;
     margin: 4px;
     min-height: 32px;
-    min-width: 32px;
+    min-width: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

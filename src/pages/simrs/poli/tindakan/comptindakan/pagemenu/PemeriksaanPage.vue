@@ -5,98 +5,67 @@
       bordered
       class="full-height"
     >
-      <!-- <div class="absolute full-height left-menu z-top"> -->
-      <!-- <q-scroll-area style="height: calc(100vh-1px);"> -->
-      <!-- <q-list
-            padding
-            dense
-            class="rounded-borders text-primary"
-          > -->
-      <!-- <q-item
-              v-for="(n, i) in anats"
-              :key="i"
-              v-ripple
-              clickable
-              active-class="my-menu-link"
-              :active="(i) === active"
-              @click="active = i"
-            >
-              <q-item-section
-                avatar
-                thumbnail
-                @mouseover="hoverred = i"
-                @mouseleave="hoverred = null"
-              >
-                <div class="text-white icon--item q-py-xs q-px-sm ">
-                  <q-icon
-                    class="icon--h"
-                    :class="hoverred === i ? 'hoverred' : ''"
-                    :name="n.icon"
-                    size="sm"
-                    dense
-                  >
-                    <q-tooltip
-                      anchor="center right"
-                      self="center left"
-                      :offset="[10, 10]"
-                      class="bg-dark text-white"
-                    >
-                      <strong>{{ n.name }}</strong> on <em>template</em>
-                      (<q-icon name="icon-mat-keyboard_arrow_right" />)
-                    </q-tooltip>
-                  </q-icon>
-                </div>
-              </q-item-section>
-            </q-item> -->
-      <!-- </q-list> -->
-      <!-- </q-scroll-area> -->
-      <!-- </div> -->
-
       <div class="absolute right-menu invisible">
         {{ anats[active].name }}
       </div>
       <div class="row full-height">
         <div class="col full-height">
-          <div class="column full-height bg-grey q-pa-sm">
+          <div class="column full-height bg-grey q-pa-xs">
             <div class="col">
-              atass
+              <div class="f-14 text-weight-bold q-py-sm">
+                Vital Sign <span class="text-weight-light">({{ anats[active].name }})</span>
+              </div>
+              <q-separator />
             </div>
-            <div class="col-auto q-pa-sm">
-              sdsa
-            </div>
-            <div class="col-5 bg-red scroll">
-              <div
-                v-for="n in 100"
-                :key="n"
+            <div class="col-auto bg-white q-pa-md">
+              <q-input
+                v-model="search"
+                color="teal"
+                outlined
+                label="cari"
+                dense
               >
-                sadsa
+                <template #prepend>
+                  <q-icon
+                    name="icon-mat-search"
+                    size="sm"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <q-separator />
+            <div class="col-5 bg-white scroll">
+              <div class="row q-col-gutter-xs items-start q-py-sm q-pl-xs">
+                <div
+                  v-for="(item, n) in anats"
+                  :key="n"
+                  class="col-auto"
+                >
+                  <div class="">
+                    <q-btn
+                      :icon="item.icon"
+                      dense
+                      :text-color="active === n ? 'black' : 'white'"
+                      :glossy="active === n"
+                      :color="active===n?'amber':'dark'"
+                      size="xl"
+                      @click="active=n"
+                    >
+                      <q-tooltip
+                        anchor="top middle"
+                        self="top middle"
+                        class="bg-orange text-dark"
+                      >
+                        <strong>{{ item.name }}</strong>
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <!-- <div class="row full-height"> -->
-          <!-- <q-card
-            :square="true"
-            class="full-height card-left"
-          >
-            <q-card-section>
-              <div class="text-h5 text-white">
-                {{ anats[active].name }} <span class="f-12">(Template)</span>
-              </div>
-              <q-separator class="q-my-sm" />
-              <div class="text-caption text-grey">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </div>
-            </q-card-section>
-            <q-card-section
-              class="bg-dark full-height scroll"
-            >
-              asd
-            </q-card-section>
-          </q-card> -->
-          <!-- </div> -->
         </div>
         <div class="col-auto">
-          <!-- <div class=""> -->
           <div class="column full-height flex-center">
             <canvas-page />
           </div>
@@ -114,12 +83,13 @@
 import CanvasPage from './comppemeriksaan/CanvasPage.vue'
 import { ref } from 'vue'
 
+const search = ref(null)
 const anats = ref([
   { name: 'Body', icon: 'icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com' },
   { name: 'Kepala', icon: 'icon-my-human-skull-side-view-svgrepo-com' },
-  { name: 'Mata', icon: 'icon-mat-visibility' },
+  { name: 'Mata', icon: 'icon-my-eyebrow-svgrepo-com' },
   { name: 'Telinga', icon: 'icon-my-ear-outline-svgrepo-com' },
-  { name: 'Hidung', icon: 'icon-my-big-nose-svgrepo-com' },
+  { name: 'Hidung', icon: 'icon-my-nose-svgrepo-com' },
   { name: 'Rambut', icon: 'icon-my-male-black-short-hair-shape-silhouette-svgrepo-com' },
   { name: 'Bibir', icon: 'icon-my-thin-lips-outline-svgrepo-com' },
   { name: 'Gigi Geligi', icon: 'icon-my-tooth-outline-svgrepo-com' },
@@ -132,18 +102,17 @@ const anats = ref([
   { name: 'Punggung', icon: 'icon-my-human-back-svgrepo-com' },
   { name: 'Perut', icon: 'icon-my-stomach-svgrepo-com' },
   { name: 'Genital', icon: 'icon-my-penis-svgrepo-com' },
-  { name: 'Anus/Dubur', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Lengan Atas', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Lengan Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Lengan Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Jari Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Kuku Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Persendian Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Tungkai Atas', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Tungkai Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Jari Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Kuku Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Persendian Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' }
+  { name: 'Anus/Dubur', icon: 'icon-my-nose-outline-svgrepo-com' },
+  { name: 'Lengan Atas', icon: 'icon-my-men-elbow-svgrepo-com' },
+  { name: 'Lengan Bawah', icon: 'icon-my-arm-svgrepo-com' },
+  { name: 'Jari Tangan', icon: 'icon-my-human-hand-bones-svgrepo-com' },
+  { name: 'Kuku Tangan', icon: 'icon-my-finger-svgrepo-com' },
+  { name: 'Persendian Tangan', icon: 'icon-mat-report' },
+  { name: 'Tungkai Atas', icon: 'icon-my-men-leg-svgrepo-com' },
+  { name: 'Tungkai Bawah', icon: 'icon-my-foot-side-view-outline-svgrepo-com' },
+  { name: 'Jari Kaki', icon: 'icon-my-footprints-outline-variant-svgrepo-com' },
+  { name: 'Kuku Kaki', icon: 'icon-my-finger-svgrepo-com' },
+  { name: 'Persendian Kaki', icon: 'icon-my-articulation-bones-svgrepo-com' }
 ])
 
 const active = ref(1)
@@ -153,12 +122,11 @@ const active = ref(1)
 .left-menu{
   background-color: rgba($color: $primary, $alpha: 0.9);
   width:40px;
-  // height: calc(100% - 30px) !important;
   height:100%;
 }
 
 .card-left {
-    background-color: rgba($color: rgb(57, 56, 56), $alpha: 0.5);
+    background-color: rgba($color: rgb(57, 56, 56), $alpha: 0.3);
   }
 .right-menu{
   background-color: rgba($color: $grey, $alpha: 0.8);
@@ -175,7 +143,6 @@ const active = ref(1)
 
 .hoverred {
   transition: all .2s ease-in-out;
-    // color: red !important;
     transform: scale(1.1);
   }
 
