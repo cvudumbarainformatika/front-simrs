@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="col-auto">
-          <div class="column full-height flex-center">
+          <div class="column full-height">
             <canvas-page />
           </div>
         </div>
