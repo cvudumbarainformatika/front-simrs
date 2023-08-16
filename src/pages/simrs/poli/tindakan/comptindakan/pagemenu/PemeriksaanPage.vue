@@ -43,15 +43,19 @@
       <div class="absolute right-menu invisible">
         asd
       </div>
-      <div class="row full-height">
+      <div class="row full-height q-pa-xs">
         <!-- <BodyPage /> -->
-        <div class="col-4">
-          <div class="q-pa-md">
+        <div class="col bg-red">
+          sad
+        </div>
+        <div class="col-auto">
+          <!-- <div class=""> -->
+          <div class="column full-height flex-center">
             <canvas-page />
           </div>
         </div>
-        <div class="col-8 bg-red">
-          <div class="q-pa-md" />
+        <div class="col bg-red">
+          sad
         </div>
       </div>
     </q-card>
