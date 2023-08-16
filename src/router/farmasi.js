@@ -12,29 +12,44 @@ const farmasi = {
     {
       path: '/farmasi/pemesanan',
       // name: 'farmasi.pemesanan', //sing duwe children tak boleh pake name
-      component: () => import('pages/simrs/farmasi/pemesanan/IndexPage.vue'),
+      component: () => import('src/pages/simrs/farmasi/pemesanan/IndexPage.vue'),
       children: [
-        { path: '', redirect: '/farmasi/pemesanan/rencana' },
-        {
-          path: '/farmasi/pemesanan/rencana',
-          name: 'farmasi.pemesanan.rencana',
-          meta: { transition: 'slide-up' },
-          component: () =>
-            import('pages/simrs/farmasi/pemesanan/rencana/IndexPage.vue')
-        },
-        {
-          path: '/farmasi/pemesanan/listrencanapesanan',
-          name: 'farmasi.pemesanan.listrencanapesanan',
-          meta: { transition: 'slide-up' },
-          component: () =>
-            import('pages/simrs/farmasi/pemesanan/pesanan/IndexPage.vue')
-        },
+        { path: '', redirect: '/farmasi/pemesanan/pesanan' },
         {
           path: '/farmasi/pemesanan/pesanan',
           name: 'farmasi.pemesanan.pesanan',
           meta: { transition: 'slide-up' },
           component: () =>
-            import('pages/simrs/farmasi/pemesanan/pesanan/IndexPage.vue')
+            import('pages/simrs/farmasi/pemesanan/pemesanan/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/pemesanan/listpesanan',
+          name: 'farmasi.pemesanan.listpesanan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemesanan/listpesanan/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/farmasi/rencanapemesanan',
+      // name: 'farmasi.pemesanan', //sing duwe children tak boleh pake name
+      component: () => import('src/pages/simrs/farmasi/rencanapemesanan/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/rencanapemesanan/rencana' },
+        {
+          path: '/farmasi/rencanapemesanan/rencana',
+          name: 'farmasi.rencanapemesanan.rencana',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/rencanapemesanan/rencana/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/rencanapemesanan/listrencanapesanan',
+          name: 'farmasi.rencanapemesanan.listrencanapesanan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/rencanapemesanan/listrencanan/IndexPage.vue')
         }
       ]
     },
