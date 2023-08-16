@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?6bfebf602838f0715035dbe647508d0f") format("woff"),
-url("./icons.woff2?6bfebf602838f0715035dbe647508d0f") format("woff2");
+    src: url("./icons.woff?ff59d11c7f15ef6a62ca9e25c0e67695") format("woff"),
+url("./icons.woff2?ff59d11c7f15ef6a62ca9e25c0e67695") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -588,168 +588,207 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-mat-warning:before {
     content: "\f1bf";
 }
-.icon-my-big-nose-svgrepo-com:before {
+.icon-my-arm-svgrepo-com:before {
     content: "\f1c0";
 }
-.icon-my-bones-joint-svgrepo-com:before {
+.icon-my-articulation-bones-svgrepo-com:before {
     content: "\f1c1";
 }
-.icon-my-brain-upper-view-outline-svgrepo-com:before {
+.icon-my-big-nose-svgrepo-com:before {
     content: "\f1c2";
 }
-.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
+.icon-my-bones-joint-svgrepo-com:before {
     content: "\f1c3";
 }
-.icon-my-ear-outline-svgrepo-com:before {
+.icon-my-brain-upper-view-outline-svgrepo-com:before {
     content: "\f1c4";
 }
-.icon-my-facebook:before {
+.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
     content: "\f1c5";
 }
-.icon-my-file_sign:before {
+.icon-my-ear-outline-svgrepo-com:before {
     content: "\f1c6";
 }
-.icon-my-foot-bones-svgrepo-com-(1):before {
+.icon-my-eyebrow-svgrepo-com:before {
     content: "\f1c7";
 }
-.icon-my-foot-bones-svgrepo-com:before {
+.icon-my-facebook:before {
     content: "\f1c8";
 }
-.icon-my-foot-side-view-outline-svgrepo-com:before {
+.icon-my-female-torso-svgrepo-com:before {
     content: "\f1c9";
 }
-.icon-my-footprints-outline-variant-svgrepo-com:before {
+.icon-my-file_sign:before {
     content: "\f1ca";
 }
-.icon-my-google:before {
+.icon-my-finger-svgrepo-com:before {
     content: "\f1cb";
 }
-.icon-my-how_to_reg:before {
+.icon-my-foot-bones-svgrepo-com-(1):before {
     content: "\f1cc";
 }
-.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
+.icon-my-foot-bones-svgrepo-com:before {
     content: "\f1cd";
 }
-.icon-my-human-ear-svgrepo-com:before {
+.icon-my-foot-side-view-outline-svgrepo-com:before {
     content: "\f1ce";
 }
-.icon-my-human-fetus-svgrepo-com:before {
+.icon-my-footprints-outline-variant-svgrepo-com:before {
     content: "\f1cf";
 }
-.icon-my-human-finger-svgrepo-com:before {
+.icon-my-google:before {
     content: "\f1d0";
 }
-.icon-my-human-footprints-svgrepo-com:before {
+.icon-my-how_to_reg:before {
     content: "\f1d1";
 }
-.icon-my-human-hand-bones-svgrepo-com:before {
+.icon-my-human-back-svgrepo-com-(1):before {
     content: "\f1d2";
 }
-.icon-my-human-neck-svgrepo-com:before {
+.icon-my-human-back-svgrepo-com:before {
     content: "\f1d3";
 }
-.icon-my-human-ribs-svgrepo-com:before {
+.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
     content: "\f1d4";
 }
-.icon-my-human-skull-side-view-svgrepo-com:before {
+.icon-my-human-ear-svgrepo-com:before {
     content: "\f1d5";
 }
-.icon-my-human-teeth-svgrepo-com:before {
+.icon-my-human-fetus-svgrepo-com:before {
     content: "\f1d6";
 }
-.icon-my-human-trachea-svgrepo-com:before {
+.icon-my-human-finger-svgrepo-com:before {
     content: "\f1d7";
 }
-.icon-my-key:before {
+.icon-my-human-footprints-svgrepo-com:before {
     content: "\f1d8";
 }
-.icon-my-local_hospital:before {
+.icon-my-human-hand-bones-svgrepo-com:before {
     content: "\f1d9";
 }
-.icon-my-local_pharmacy:before {
+.icon-my-human-neck-svgrepo-com:before {
     content: "\f1da";
 }
-.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
+.icon-my-human-ribs-svgrepo-com:before {
     content: "\f1db";
 }
-.icon-my-male-hair-variant-svgrepo-com:before {
+.icon-my-human-skull-side-view-svgrepo-com:before {
     content: "\f1dc";
 }
-.icon-my-medical_information:before {
+.icon-my-human-teeth-svgrepo-com:before {
     content: "\f1dd";
 }
-.icon-my-medical_services:before {
+.icon-my-human-trachea-svgrepo-com:before {
     content: "\f1de";
 }
-.icon-my-medication_liquid:before {
+.icon-my-key:before {
     content: "\f1df";
 }
-.icon-my-medication:before {
+.icon-my-local_hospital:before {
     content: "\f1e0";
 }
-.icon-my-men-elbow-svgrepo-com:before {
+.icon-my-local_pharmacy:before {
     content: "\f1e1";
 }
-.icon-my-men-leg-svgrepo-com:before {
+.icon-my-lungs-svgrepo-com:before {
     content: "\f1e2";
 }
-.icon-my-men-shoulder-svgrepo-com:before {
+.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
     content: "\f1e3";
 }
-.icon-my-monitor_heart:before {
+.icon-my-male-hair-variant-svgrepo-com:before {
     content: "\f1e4";
 }
-.icon-my-nose-outline-svgrepo-com:before {
+.icon-my-medical_information:before {
     content: "\f1e5";
 }
-.icon-my-personal_injury:before {
+.icon-my-medical_services:before {
     content: "\f1e6";
 }
-.icon-my-pill:before {
+.icon-my-medication_liquid:before {
     content: "\f1e7";
 }
-.icon-my-point_of_sale:before {
+.icon-my-medication:before {
     content: "\f1e8";
 }
-.icon-my-print_setting:before {
+.icon-my-men-elbow-svgrepo-com:before {
     content: "\f1e9";
 }
-.icon-my-small-intestine-svgrepo-com:before {
+.icon-my-men-leg-svgrepo-com:before {
     content: "\f1ea";
 }
-.icon-my-standing-human-body-silhouette-svgrepo-com:before {
+.icon-my-men-shoulder-svgrepo-com:before {
     content: "\f1eb";
 }
-.icon-my-stethoscope:before {
+.icon-my-monitor_heart:before {
     content: "\f1ec";
 }
-.icon-my-stomach-svgrepo-com:before {
+.icon-my-nose-outline-svgrepo-com:before {
     content: "\f1ed";
 }
-.icon-my-thin-lips-outline-svgrepo-com:before {
+.icon-my-nose-svgrepo-com:before {
     content: "\f1ee";
 }
-.icon-my-tongue-and-mouth-svgrepo-com:before {
+.icon-my-pelvis-svgrepo-com:before {
     content: "\f1ef";
 }
-.icon-my-tongue-svgrepo-com:before {
+.icon-my-penis-svgrepo-com:before {
     content: "\f1f0";
 }
-.icon-my-tonsil-svgrepo-com:before {
+.icon-my-personal_injury:before {
     content: "\f1f1";
 }
-.icon-my-tooth-outline-svgrepo-com:before {
+.icon-my-pill:before {
     content: "\f1f2";
 }
-.icon-my-tooth-shape-outline-svgrepo-com:before {
+.icon-my-point_of_sale:before {
     content: "\f1f3";
 }
-.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
+.icon-my-print_setting:before {
     content: "\f1f4";
 }
-.icon-my-women-eyelashes-svgrepo-com:before {
+.icon-my-ribs-svgrepo-com:before {
     content: "\f1f5";
 }
-.icon-my-word:before {
+.icon-my-small-intestine-svgrepo-com:before {
     content: "\f1f6";
+}
+.icon-my-spine-svgrepo-com:before {
+    content: "\f1f7";
+}
+.icon-my-standing-human-body-silhouette-svgrepo-com:before {
+    content: "\f1f8";
+}
+.icon-my-stethoscope:before {
+    content: "\f1f9";
+}
+.icon-my-stomach-svgrepo-com:before {
+    content: "\f1fa";
+}
+.icon-my-thin-lips-outline-svgrepo-com:before {
+    content: "\f1fb";
+}
+.icon-my-tongue-and-mouth-svgrepo-com:before {
+    content: "\f1fc";
+}
+.icon-my-tongue-svgrepo-com:before {
+    content: "\f1fd";
+}
+.icon-my-tonsil-svgrepo-com:before {
+    content: "\f1fe";
+}
+.icon-my-tooth-outline-svgrepo-com:before {
+    content: "\f1ff";
+}
+.icon-my-tooth-shape-outline-svgrepo-com:before {
+    content: "\f200";
+}
+.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
+    content: "\f201";
+}
+.icon-my-women-eyelashes-svgrepo-com:before {
+    content: "\f202";
+}
+.icon-my-word:before {
+    content: "\f203";
 }

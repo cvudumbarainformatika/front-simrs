@@ -5,60 +5,80 @@
       bordered
       class="full-height"
     >
-      <div class="absolute left-menu z-top">
-        <q-list
-          padding
-          dense
-          class="rounded-borders text-primary"
-        >
-          <q-item
-            v-for="(n, i) in anats"
-            :key="i"
-            v-ripple
-            clickable
-            active-class="my-menu-link"
-            :active="(i)===active"
-            @click="active = i"
-          >
-            <q-item-section
-              avatar
-              thumbnail
-              @mouseover="hoverred = i"
-              @mouseleave="hoverred = null"
+      <!-- <div class="absolute full-height left-menu z-top"> -->
+      <!-- <q-scroll-area style="height: calc(100vh-1px);"> -->
+      <!-- <q-list
+            padding
+            dense
+            class="rounded-borders text-primary"
+          > -->
+      <!-- <q-item
+              v-for="(n, i) in anats"
+              :key="i"
+              v-ripple
+              clickable
+              active-class="my-menu-link"
+              :active="(i) === active"
+              @click="active = i"
             >
-              <div class="text-white icon--item q-pa-sm">
-                <q-icon
-                  class="icon--h"
-                  :class="hoverred===i?'hoverred':''"
-                  :name="n.icon"
-                  size="md"
-                >
-                  <q-tooltip
-                    anchor="center right"
-                    self="center left"
-                    :offset="[10, 10]"
-                    class="bg-dark text-white"
+              <q-item-section
+                avatar
+                thumbnail
+                @mouseover="hoverred = i"
+                @mouseleave="hoverred = null"
+              >
+                <div class="text-white icon--item q-py-xs q-px-sm ">
+                  <q-icon
+                    class="icon--h"
+                    :class="hoverred === i ? 'hoverred' : ''"
+                    :name="n.icon"
+                    size="sm"
+                    dense
                   >
-                    <strong>{{ n.name }}</strong> on <em>template</em>
-                    (<q-icon name="icon-mat-keyboard_arrow_right" />)
-                  </q-tooltip>
-                </q-icon>
-              </div>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
+                    <q-tooltip
+                      anchor="center right"
+                      self="center left"
+                      :offset="[10, 10]"
+                      class="bg-dark text-white"
+                    >
+                      <strong>{{ n.name }}</strong> on <em>template</em>
+                      (<q-icon name="icon-mat-keyboard_arrow_right" />)
+                    </q-tooltip>
+                  </q-icon>
+                </div>
+              </q-item-section>
+            </q-item> -->
+      <!-- </q-list> -->
+      <!-- </q-scroll-area> -->
+      <!-- </div> -->
 
       <div class="absolute right-menu invisible">
-        asd
+        {{ anats[active].name }}
       </div>
       <div class="row full-height">
-        <div class="col q-py-sm">
-          <q-card
-            :square="false"
+        <div class="col full-height">
+          <div class="column full-height bg-grey q-pa-sm">
+            <div class="col">
+              atass
+            </div>
+            <div class="col-auto q-pa-sm">
+              sdsa
+            </div>
+            <div class="col-5 bg-red scroll">
+              <div
+                v-for="n in 100"
+                :key="n"
+              >
+                sadsa
+              </div>
+            </div>
+          </div>
+          <!-- <div class="row full-height"> -->
+          <!-- <q-card
+            :square="true"
             class="full-height card-left"
           >
-            <q-card-section style="margin-left:50px">
+            <q-card-section>
               <div class="text-h5 text-white">
                 {{ anats[active].name }} <span class="f-12">(Template)</span>
               </div>
@@ -67,7 +87,13 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </div>
             </q-card-section>
-          </q-card>
+            <q-card-section
+              class="bg-dark full-height scroll"
+            >
+              asd
+            </q-card-section>
+          </q-card> -->
+          <!-- </div> -->
         </div>
         <div class="col-auto">
           <!-- <div class=""> -->
@@ -97,15 +123,15 @@ const anats = ref([
   { name: 'Rambut', icon: 'icon-my-male-black-short-hair-shape-silhouette-svgrepo-com' },
   { name: 'Bibir', icon: 'icon-my-thin-lips-outline-svgrepo-com' },
   { name: 'Gigi Geligi', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Lidah', icon: 'icon-my-tongue-svgrepo-com' },
-  { name: 'Leher', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Tenggorokan', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Tonsil', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Dada', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Payudara', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Punggung', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Perut', icon: 'icon-my-tooth-outline-svgrepo-com' },
-  { name: 'Genital', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Lidah', icon: 'icon-my-tongue-and-mouth-svgrepo-com' },
+  { name: 'Leher', icon: 'icon-my-human-neck-svgrepo-com' },
+  { name: 'Tenggorokan', icon: 'icon-my-human-trachea-svgrepo-com' },
+  { name: 'Tonsil', icon: 'icon-my-tonsil-svgrepo-com' },
+  { name: 'Dada', icon: 'icon-my-female-torso-svgrepo-com' },
+  { name: 'Payudara', icon: 'icon-my-upper-torso-of-a-woman-svgrepo-com' },
+  { name: 'Punggung', icon: 'icon-my-human-back-svgrepo-com' },
+  { name: 'Perut', icon: 'icon-my-stomach-svgrepo-com' },
+  { name: 'Genital', icon: 'icon-my-penis-svgrepo-com' },
   { name: 'Anus/Dubur', icon: 'icon-my-tooth-outline-svgrepo-com' },
   { name: 'Lengan Atas', icon: 'icon-my-tooth-outline-svgrepo-com' },
   { name: 'Lengan Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
@@ -121,12 +147,12 @@ const anats = ref([
 ])
 
 const active = ref(1)
-const hoverred = ref(null)
+// const hoverred = ref(null)
 </script>
 <style lang="scss" scoped>
 .left-menu{
   background-color: rgba($color: $primary, $alpha: 0.9);
-  width:50px;
+  width:40px;
   // height: calc(100% - 30px) !important;
   height:100%;
 }
