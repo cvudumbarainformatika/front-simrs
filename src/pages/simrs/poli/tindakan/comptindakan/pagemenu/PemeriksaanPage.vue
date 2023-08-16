@@ -5,9 +5,10 @@
       bordered
       class="full-height"
     >
-      <div class="absolute left-menu invisible">
+      <div class="absolute left-menu z-top">
         <q-list
           padding
+          dense
           class="rounded-borders text-primary"
         >
           <q-item
@@ -21,19 +22,27 @@
           >
             <q-item-section
               avatar
+              thumbnail
               @mouseover="hoverred = i"
               @mouseleave="hoverred = null"
             >
-              <div class="column flex-center items-center text-white q-px-xs icon--item">
+              <div class="text-white icon--item q-pa-sm">
                 <q-icon
                   class="icon--h"
                   :class="hoverred===i?'hoverred':''"
                   :name="n.icon"
-                  size="lg"
-                />
-                <div class="text-center q-mt-xs">
-                  {{ n.name }}
-                </div>
+                  size="md"
+                >
+                  <q-tooltip
+                    anchor="center right"
+                    self="center left"
+                    :offset="[10, 10]"
+                    class="bg-dark text-white"
+                  >
+                    <strong>{{ n.name }}</strong> on <em>template</em>
+                    (<q-icon name="icon-mat-keyboard_arrow_right" />)
+                  </q-tooltip>
+                </q-icon>
               </div>
             </q-item-section>
           </q-item>
@@ -43,10 +52,22 @@
       <div class="absolute right-menu invisible">
         asd
       </div>
-      <div class="row full-height q-pa-xs">
-        <!-- <BodyPage /> -->
-        <div class="col bg-red">
-          sad
+      <div class="row full-height">
+        <div class="col q-py-sm">
+          <q-card
+            :square="false"
+            class="full-height card-left"
+          >
+            <q-card-section style="margin-left:50px">
+              <div class="text-h5 text-white">
+                {{ anats[active].name }} <span class="f-12">(Template)</span>
+              </div>
+              <q-separator class="q-my-sm" />
+              <div class="text-caption text-grey">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </div>
+            </q-card-section>
+          </q-card>
         </div>
         <div class="col-auto">
           <!-- <div class=""> -->
@@ -72,10 +93,31 @@ const anats = ref([
   { name: 'Kepala', icon: 'icon-my-human-skull-side-view-svgrepo-com' },
   { name: 'Mata', icon: 'icon-mat-visibility' },
   { name: 'Telinga', icon: 'icon-my-ear-outline-svgrepo-com' },
-  { name: 'Hidung', icon: 'icon-my-nose-outline-svgrepo-com' },
+  { name: 'Hidung', icon: 'icon-my-big-nose-svgrepo-com' },
   { name: 'Rambut', icon: 'icon-my-male-black-short-hair-shape-silhouette-svgrepo-com' },
   { name: 'Bibir', icon: 'icon-my-thin-lips-outline-svgrepo-com' },
-  { name: 'Gigi Geligi', icon: 'icon-my-tooth-outline-svgrepo-com' }
+  { name: 'Gigi Geligi', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Lidah', icon: 'icon-my-tongue-svgrepo-com' },
+  { name: 'Leher', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Tenggorokan', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Tonsil', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Dada', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Payudara', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Punggung', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Perut', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Genital', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Anus/Dubur', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Lengan Atas', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Lengan Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Lengan Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Jari Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Kuku Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Persendian Tangan', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Tungkai Atas', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Tungkai Bawah', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Jari Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Kuku Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' },
+  { name: 'Persendian Kaki', icon: 'icon-my-tooth-outline-svgrepo-com' }
 ])
 
 const active = ref(1)
@@ -84,10 +126,14 @@ const hoverred = ref(null)
 <style lang="scss" scoped>
 .left-menu{
   background-color: rgba($color: $primary, $alpha: 0.9);
-  width:80px;
+  width:50px;
   // height: calc(100% - 30px) !important;
   height:100%;
 }
+
+.card-left {
+    background-color: rgba($color: rgb(57, 56, 56), $alpha: 0.5);
+  }
 .right-menu{
   background-color: rgba($color: $grey, $alpha: 0.8);
   width:350px;
