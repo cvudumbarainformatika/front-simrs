@@ -19,16 +19,16 @@
         <div class="q-ml-md">
           <q-btn
             flat
-            icon="icon-mat-refresh"
+            icon="icon-mat-done"
             dense
             color="primary"
-            @click="store.refreshForm()"
+            @click="store.selesaiDanKunci()"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Refresh Form
+              Selesai dan Kunci Rencana Pemesanan
             </q-tooltip>
           </q-btn>
         </div>

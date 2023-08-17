@@ -64,7 +64,7 @@
             v-for="(rin, i) in row.rincian"
             :key="i"
           >
-            <div class="row items-center">
+            <div class="row items-center anu">
               <div class="col-3">
                 {{ rin.kdobat }}
               </div>
@@ -113,3 +113,12 @@ function onClick (val) {
 }
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.anu{
+  padding-top:2px;
+  padding-bottom:2px;
+}
+.anu:hover{
+  background-color: #87e9df;
+}
+</style>

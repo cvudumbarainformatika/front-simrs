@@ -26,6 +26,8 @@
       :to-search="store.param.no_rencbeliobat"
       :click-able="true"
       :default-btn="false"
+      :ada-tambah="false"
+      :ada-filter="false"
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -57,14 +59,15 @@
               Stok Max
             </div>
             <div class="col-2">
-              Jumlah Bisa di beli
+              Rencana Beli
             </div>
           </div>
+          <q-separator />
           <div
             v-for="(rin, i) in row.rincian"
             :key="i"
           >
-            <div class="row items-center">
+            <div class="row items-center anu">
               <div class="col-3">
                 {{ rin.kdobat }}
               </div>
@@ -81,35 +84,92 @@
                 {{ rin.jumlah_bisa_dibeli }}
               </div>
             </div>
+            <q-separator />
           </div>
         </div>
         <div v-else>
           Tidak ada Rincian
         </div>
       </template>
-      <!-- <template #left-acttion="{row,col}">
-        <div>
-          row : {{ row.id }}
+      <template #left-acttion="{row}">
+        <div v-if="!row.flag">
+          <q-btn
+            flat
+            icon="icon-mat-lock_open"
+            dense
+            color="negative"
+            :loading="rencana.loading && row.no_rencbeliobat=== toloadBeli"
+            @click="kunci(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Rencana Pemesanan sudah selesai dan siap di kunci
+            </q-tooltip>
+          </q-btn>
         </div>
-        <div>
-          col : {{ col }}
+        <div v-if="row.flag">
+          <q-btn
+            flat
+            icon="icon-mat-lock"
+            dense
+            color="green"
+            @click="info(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Rencana Pemesanan sudah di kunci
+            </q-tooltip>
+          </q-btn>
         </div>
-      </template> -->
+      </template>
     </app-table-extend>
   </div>
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { notifSuccessVue } from 'src/modules/utils'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listrencana'
+import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
+import { ref } from 'vue'
 
 const style = useStyledStore()
 const store = useListRencanaPemesananStore()
+const rencana = useRencanaPemesananObatStore()
 // click
 function onClick (val) {
-  console.log('click', val)
+  console.log(val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
+function info(val) {
+  console.log(val)
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  notifSuccessVue('Rencana Pembelian nomor ' + val.no_rencbeliobat + ' Sudah dikunci dan dapat dilakukan Pemesanan')
+}
+const toloadBeli = ref('')
+function kunci(val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_rencbeliobat
+  rencana.kunci(val.no_rencbeliobat).then(() => {
+    toloadBeli.value = ''
+    val.flag = 1
+  })
+}
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.anu{
+  padding-top:2px;
+  padding-bottom:2px;
+}
+.anu:hover{
+  background-color: #87e9df;
+}
+</style>
