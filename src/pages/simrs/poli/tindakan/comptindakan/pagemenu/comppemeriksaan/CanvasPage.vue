@@ -1,5 +1,103 @@
 <template>
-  <div class="ttd-pad-form">
+  <div class="ttd-pad-form full-height">
+    <!-- tombol-atas -->
+    <div
+      class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-sm tmp-t"
+    >
+      <div class="row items-center">
+        <div class="q-gutter-xs">
+          <q-btn
+            v-for="(btnx, i) in btns"
+            :key="i"
+            :flat="btnx.name !== btn"
+            :glossy="btnx.name === btn"
+            padding="xs"
+            size="sm"
+            :icon="btnx.icon"
+            color="dark"
+            @click="btn = btnx.name"
+          >
+            <q-tooltip>
+              {{ btnx.name }}
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <q-separator
+          vertical
+          class="q-mx-sm"
+        />
+        <div
+          class="flex"
+          style="width: 75px;"
+        >
+          <div class="f-10">
+            Ketebalan {{ lineWidth }}
+          </div>
+          <q-slider
+            v-model="lineWidth"
+            :min="1"
+            :max="10"
+            label
+            switch-label-side
+            color="dark"
+            dense
+          />
+        </div>
+        <q-separator
+          vertical
+          class="q-mx-sm"
+        />
+        <div
+          class="flex"
+          style="width: 75px;"
+        >
+          <div class="f-10">
+            Luas {{ luas }} px
+          </div>
+          <q-slider
+            v-model="luas"
+            :min="1"
+            :max="20"
+            label
+            switch-label-side
+            color="primary"
+            dense
+          />
+        </div>
+        <q-separator
+          vertical
+          class="q-mx-sm"
+        />
+        <q-btn
+          flat
+          padding="xs"
+          size="xs"
+          label="CR"
+          :style="`background-color: ${hex};`"
+        >
+          <q-tooltip>
+            Ganti Warna
+          </q-tooltip>
+          <q-menu>
+            <q-item
+              v-close-popup
+              clickable
+              style="padding:0"
+            >
+              <q-color
+                v-model="hex"
+                no-header
+                no-footer
+                default-view="palette"
+                class="my-picker"
+              />
+            </q-item>
+          </q-menu>
+        </q-btn>
+      </div>
+      <div />
+    </div>
+    <!-- canvas -->
     <div class="t-canvas">
       <canvas
         id="canvas"
@@ -18,9 +116,12 @@
           <q-card
             dark
             flat
-            bordered
             style="min-width:250px"
           >
+            <q-card-section>
+              Keterangan
+            </q-card-section>
+            <q-separator dark />
             <q-card-section>
               <q-input
                 v-model="txt"
@@ -38,15 +139,14 @@
                 label="keterangan"
               />
             </q-card-section>
-            <q-separator
-              dark
-            />
+            <q-separator />
             <div class="row">
               <q-btn
                 class="col"
                 color="primary"
                 square
                 icon="icon-mat-check"
+                @click="saveShape()"
               />
               <q-btn
                 class="col"
@@ -60,48 +160,34 @@
         </q-menu>
       </canvas>
     </div>
+    <!-- tombol-bawah -->
     <div
-      class="cursor-pointer non-selectable flex items-center justify-between bg-grey-4 q-pa-sm tmp-t"
-      style="margin-top:-5px"
+      class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-xs tmp-t z-top absolute-bottom"
     >
-      <div>
+      <div>.</div>
+      <div class="q-gutter-xs">
         <q-btn
-          flat
-          padding="xs"
-          icon="icon-mat-circle"
-          color="negative"
-        />
-        <q-btn
-          flat
-          padding="xs"
-          color="negative"
-          icon="icon-mat-close"
-        />
-        <q-btn
-          flat
-          padding="xs"
-          color="negative"
-          icon="icon-mat-change_history"
-        />
-        <q-btn
-          flat
-          padding="xs"
-          color="negative"
-          icon="icon-mat-check_box_outline"
-        />
-      </div>
-      <div>
-        <q-btn
-          flat
-          padding="xs"
           icon="icon-mat-refresh"
-          color="dark"
+          color="negative"
+          size="sm"
+          padding="sm"
+          label="Reset Penandaan"
           @click="clearPad"
-        >
-          <q-tooltip>
-            Bersihkan Penandaan
-          </q-tooltip>
-        </q-btn>
+        />
+        <q-btn
+          icon="icon-mat-add"
+          color="dark"
+          size="sm"
+          padding="sm"
+          label="Baru"
+        />
+        <q-btn
+          icon="icon-mat-save"
+          color="primary"
+          size="sm"
+          padding="sm"
+          label="Simpan Gambar"
+        />
       </div>
     </div>
   </div>
@@ -112,13 +198,24 @@ import MyImg from 'src/assets/human/human-body.jpg'
 import { onMounted, ref } from 'vue'
 
 const txt = ref(null)
+const desc = ref(null)
 const canvasRef = ref()
 const refMenu = ref()
 const ctx = ref()
 const writingMode = ref(false)
 const positionX = ref()
 const positionY = ref()
+const lineWidth = ref(2)
+const luas = ref(15)
+const shapes = ref([])
 
+const btns = ref([
+  { name: 'circle', icon: 'icon-mat-circle' },
+  { name: 'kotak', icon: 'icon-mat-check_box_outline' }
+])
+
+const btn = ref(btns.value[0].name)
+const hex = ref('#000000')
 onMounted(() => {
   console.log(refMenu.value)
   ctx.value = canvasRef.value.getContext('2d')
@@ -129,45 +226,78 @@ onMounted(() => {
 function onShowInp() {
   console.log('show')
   writingMode.value = true
-  drawShapes(ctx.value, positionX.value, positionY.value)
+  drawShapes(btn.value, positionX.value, positionY.value, lineWidth.value, hex.value, luas.value)
+  const shape = {
+    penanda: btn.value,
+    width: lineWidth.value,
+    luas: luas.value,
+    x: positionX.value,
+    y: positionY.value,
+    nama: txt.value,
+    ket: desc.value,
+    warna: hex.value
+  }
+  shapes.value.push(shape)
+  //
+  // saveShape()
+}
+
+function saveShape() {
+  clearPad()
+  func()
+  shapes.value.forEach(el => {
+    drawShapes(el.penanda, el.x, el.y, el.width, el.warna, el.luas)
+  })
+  console.log('shapes', shapes.value)
+
+  setTimeout(() => {
+    refMenu.value.hide()
+  }, 500)
 }
 
 const handlePointerDown = (event) => {
-  // console.log('pointerdown', event)
-  // writingMode.value = !writingMode.value
-  // console.log(writingMode.value)
-  // console.log(refMenu.value)
   const [x, y] = getTargetPosition(event)
   positionX.value = x
   positionY.value = y
-  // drawShapes(ctx.value, x, y)
 }
 const handlePointerUp = (event) => {
-  // console.log('pointerup', event)
-  writingMode.value = false
+  console.log('pointer up')
 }
 
 function getTargetPosition(event) {
   positionX.value = event.clientX - event.target.getBoundingClientRect().x
   positionY.value = event.clientY - event.target.getBoundingClientRect().y
   return [positionX.value, positionY.value]
-  // console.log('positionX', positionX.value)
 }
 
-function drawShapes(cx, x, y) {
+function drawShapes(name, x, y, tebal, warna, p) {
+  const cx = ctx.value
   if (writingMode.value) {
-    console.log('ok')
     cx.beginPath()
-    cx.arc(x, y, 10, 0, 2 * Math.PI)
-    cx.lineWidth = 4
-    cx.strokeStyle = 'orange'
+    if (name === 'circle') {
+      cx.arc(x, y, p, 0, 2 * Math.PI)
+    } else if (name === 'kotak') {
+      cx.rect(x - p, y - p, p * 2, p * 2)
+    }
+    // else {
+    //   cx.moveTo(x, y)
+    //   cx.lineTo(x - p, y)
+    //   cx.lineTo(x - p, y - p)
+    //   cx.closePath()
+    // }
+    cx.lineWidth = tebal
+    cx.strokeStyle = warna
     cx.stroke()
+    // cx.fill()
+    cx.font = 'bold 16px Arial'
+    cx.fillStyle = warna
+    cx.textAlign = 'center'
+    cx.fillText('1', x - p * 1.5, y + p / 2)
   }
 }
 
 const clearPad = () => {
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-  func()
 }
 
 // const savePad = () => {
@@ -203,6 +333,7 @@ function func() {
   canvas {
     background: #fff;
     cursor: crosshair;
+    // border:1px solid black;
   }
   .fab-x{
     position: absolute;

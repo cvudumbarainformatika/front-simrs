@@ -13,7 +13,7 @@
           <div class="column full-height bg-grey q-pa-xs">
             <div class="col">
               <div class="f-14 text-weight-bold q-py-sm">
-                Vital Sign <span class="text-weight-light">({{ anats[active].name }})</span>
+                Template Gambar <span class="text-weight-light">({{ anats[active].name }})</span>
               </div>
               <q-separator />
             </div>
@@ -70,8 +70,16 @@
             <canvas-page />
           </div>
         </div>
-        <div class="col bg-red">
-          sad
+        <div class="col">
+          <q-card
+            flat
+            bordered
+            square
+            dark
+            class="full-height"
+          >
+            sdas
+          </q-card>
         </div>
       </div>
     </q-card>
