@@ -190,6 +190,17 @@ const notifErrVue = (msg) => {
     ]
   })
 }
+const notifInfVue = (msg) => {
+  Notify.create({
+    message: msg,
+    icon: 'icon-eva-message-circle-outline',
+    position: 'top-right',
+    color: 'info',
+    actions: [
+      { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+    ]
+  })
+}
 const notifSuccessVue = (msg) => {
   Notify.create({
     message: msg,
@@ -320,8 +331,37 @@ const loadingBlock = (cond) => {
 
 const loadingRes = (cond) => {
   const app = useAplikasiStore()
-  const mess = '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong></div>'
+  let mess = '<div class="f-20">Harap bersabar </br> Mengirim data Ke <strong>BPJS</strong></div>'
   const dot = '<div class="__dot row f-24 justify-center"></div>'
+  const space = '<div class="f-16 row"></br></div>'
+
+  let url = 'Menunggu Tambah Antrean'
+  let anu = 'Menunggu Respon'
+  let pesan = 'Menunggu Respon'
+  // let mess = '<div class="f-14 row">' + url + '</div>'
+  let mess2 = '<div class="f-16 row">' + anu + '</div>'
+  let mess3 = '<div class="f-12 row">' + pesan + '</div>'
+
+  let url1 = ''
+  let anu1 = ''
+  let pesan1 = ''
+  let mess01 = ''
+  let mess21 = ''
+  let mess31 = ''
+
+  let url2 = ''
+  let anu2 = ''
+  let pesan2 = ''
+  let mess02 = ''
+  let mess22 = ''
+  let mess32 = ''
+
+  let url3 = ''
+  let anu3 = ''
+  let pesan3 = ''
+  let mess03 = ''
+  let mess23 = ''
+  let mess33 = ''
   antreanChannel.subscribed(() => {
     console.log('subscribed antrean channel!!! on LoadingRes')
   }).listen('.antrean', (e) => {
@@ -329,16 +369,55 @@ const loadingRes = (cond) => {
     if (e.message.kode && e.message.user === app.user.id) {
     // if (e.message.kode) {
       // console.log('util metadata', e.message.kode.metadata)
-      const url = e.message.url === 'antrean/add' ? 'Tambah Antrean' : (e.message.task === '1' || e.message.task === 1 ? 'Update waktu MULAI admisi' : (e.message.task === '2' || e.message.task === 2 ? 'Update waktu SELESAI admisi' : (e.message.task === '3' || e.message.task === 3 ? 'update WAKTU TUNGGU LAYANAN' : 'Task Id belum di identifikasi')))
-      const anu = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
-      const pesan = e.message.kode.metadata.message
-      const mess = '<div class="f-14 row">' + url + '</div>'
-      const mess2 = '<div class="f-16 row">' + anu + '</div>'
-      const mess3 = '<div class="f-12 row">' + pesan + '</div>'
+      if (e.message.url === 'antrean/add') {
+        url = 'Tambah Antrean'
+        anu = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
+        pesan = e.message.kode.metadata.message
+        mess = '<div class="f-14 row">' + url + '</div>'
+        mess2 = '<div class="f-16 row">' + anu + '</div>'
+        mess3 = '<div class="f-12 row">' + pesan + '</div>'
+        url1 = 'Menunggu Update waktu MULAI admisi'
+        mess01 = '<div class="f-14 row">' + url1 + '</div>'
+      }
+
+      if ((e.message.task === '1' || e.message.task === 1) && e.message.url !== 'antrean/add') {
+        url1 = 'Update waktu MULAI admisi'
+        anu1 = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
+        pesan1 = e.message.kode.metadata.message
+        mess01 = '<div class="f-14 row">' + url1 + '</div>'
+        mess21 = '<div class="f-16 row">' + anu1 + '</div>'
+        mess31 = '<div class="f-12 row">' + pesan1 + '</div>'
+        url2 = 'Menunggu Update waktu SELESAI admisi'
+        mess02 = '<div class="f-14 row">' + url2 + '</div>'
+      }
+
+      if (e.message.task === '2' || e.message.task === 2) {
+        url2 = 'Update waktu SELESAI admisi'
+        anu2 = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
+        pesan2 = e.message.kode.metadata.message
+        mess02 = '<div class="f-14 row">' + url2 + '</div>'
+        mess22 = '<div class="f-16 row">' + anu2 + '</div>'
+        mess32 = '<div class="f-12 row">' + pesan2 + '</div>'
+        url3 = 'Menunggu update WAKTU TUNGGU LAYANAN'
+        mess03 = '<div class="f-14 row">' + url3 + '</div>'
+      }
+
+      if (e.message.task === '3' || e.message.task === 3) {
+        url3 = 'update WAKTU TUNGGU LAYANAN'
+        anu3 = e.message.kode.metadata.code === '200' || e.message.kode.metadata.code === 200 ? 'Sukses' : 'Gagal'
+        pesan3 = e.message.kode.metadata.message
+        mess03 = '<div class="f-14 row">' + url3 + '</div>'
+        mess23 = '<div class="f-16 row">' + anu3 + '</div>'
+        mess33 = '<div class="f-12 row">' + pesan3 + '</div>'
+      }
       Loading.hide()
       if (cond === 'show') {
         Loading.show({
-          message: mess + mess2 + mess3 + dot,
+          message: mess + mess2 + mess3 + space +
+          mess01 + mess21 + mess31 + space +
+          mess02 + mess22 + mess32 + space +
+          mess03 + mess23 + mess33 + space +
+          dot,
           boxClass: 'bg-dark text-white box-anyar',
           html: true,
           spinner: QSpinnerCube,
@@ -379,5 +458,6 @@ export {
   removeToken,
   filterDuplicateArraysInArrays,
   loadingBlock,
-  loadingRes
+  loadingRes,
+  notifInfVue
 }

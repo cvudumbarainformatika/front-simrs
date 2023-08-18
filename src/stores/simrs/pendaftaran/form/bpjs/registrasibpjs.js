@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
-import { findWithAttr, loadingRes, notifCenterVue, notifErrVue, notifSuccessVue } from 'src/modules/utils'
+import { findWithAttr, loadingRes, notifCenterVue, notifErrVue, notifInfVue, notifSuccessVue } from 'src/modules/utils'
 
 export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS', {
   state: () => ({
@@ -11,6 +11,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     loadingdiagnosa: false,
     loadingsistembayar: false,
     loadingCekBpjs: false,
+    loadingJadwalDokter: false,
     tampilRujukan: false,
     tampilKontrol: false,
     tampilSuplesi: false,
@@ -397,56 +398,83 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
           this.loadingSuratKontrol = false
         })
     },
-    async getjadwalDokterDpjp() {
-      this.loading = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/jadwaldokter', this.paramDpjp)
-        .then(resp => {
-          this.loading = false
-          // console.log('get jadwal dokter dpjp', resp.data.result)
-          if (resp.data.result.length) {
-            const data = resp.data.result
-            data.forEach(anu => {
-              anu.dpjp = String(anu.kodedokter)
-            })
-            this.jadwalDpjps = data
-            console.log('jadwal dpjp ', data)
-          }
-          console.log('Jadwal DPJp ', resp.data.result)
-          if (this.dpjpSuratKontrol !== '') {
-            // this.form.dpjp = this.dpjpSuratKontrol
-            const index = findWithAttr(this.jadwalDpjps, 'dpjp', this.dpjpSuratKontrol)
-            if (index >= 0) {
-              this.setForm('namadokter', this.jadwalDpjps[index].namadokter)
-              this.setForm('jampraktek', this.jadwalDpjps[index].jadwal)
-              console.log('log form ', this.form)
+    getjadwalDokterDpjp() {
+      this.jadwalDpjps = []
+      this.loadingJadwalDokter = true
+      // console.log('get jadwal dokter')
+
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/jadwaldokter', this.paramDpjp)
+          .then(resp => {
+            this.loadingJadwalDokter = false
+            console.log('get jadwal dokter dpjp', resp.data)
+            if (resp.data.metadata.code === 201 || resp.data.metadata.code === '201') {
+              notifInfVue('Jadwal Praktek Dokter di ' + this.form.namapolibpjs + ' tidak ditemukan di daftar jadwal Dokter BPJS, Tambah Antrian BPJS akan Gagal')
+              setTimeout(() => {
+                notifInfVue('Pendaftaran Tetap bisa dilakukan')
+              }, 1000)
+              const index = findWithAttr(this.dpjps, 'dpjp', this.dpjpSuratKontrol)
+              if (index >= 0) {
+                this.setForm('namadokter', this.dpjps[index].nama)
+                console.log('log form ', this.form)
+              }
             }
-          }
-          return new Promise(resolve => { resolve(resp.data) })
-        })
-        .catch(() => {
-          this.loading = false
-        })
+            if (typeof resp.data.result === 'object') {
+              console.log('Jadwal DPJp ', typeof resp.data.result) // object
+              const data = resp.data.result
+              data.forEach(anu => {
+                anu.dpjp = String(anu.kodedokter)
+              })
+              this.jadwalDpjps = data
+              console.log('jadwal dpjp ', data)
+              if (this.dpjpSuratKontrol !== '') {
+                // this.form.dpjp = this.dpjpSuratKontrol
+                const index = findWithAttr(this.jadwalDpjps, 'dpjp', this.dpjpSuratKontrol)
+                if (index >= 0) {
+                  this.setForm('namadokter', this.jadwalDpjps[index].namadokter)
+                  this.setForm('jampraktek', this.jadwalDpjps[index].jadwal)
+                  console.log('log form ', this.form)
+                } else {
+                  notifInfVue('Dokter ybs tidak ada di list Dokter yang praktek Hari ini, silakan pilih dokter yang lain')
+                  if (this.jadwalDpjps.length) {
+                    this.jadwalDpjps.forEach(a => {
+                      notifInfVue('Dokter yang praktek hari ini : ' + a.namadokter)
+                    })
+                  } else {
+                    notifInfVue('Dokter yang praktek hari ini : tidak Ditemukan')
+                  }
+                }
+              }
+            }
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingJadwalDokter = false
+          })
+      })
     },
-    async getDokterDpjp() {
+    getDokterDpjp() {
       this.loading = true
-      await api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
-        .then(resp => {
-          this.loading = false
-          if (resp.data.result.list.length) {
-            const data = resp.data.result.list
-            data.forEach(anu => {
-              anu.dpjp = anu.kode
-            })
-            this.dpjps = data
-            console.log('result ', data)
-          }
-          // console.log('dokter DPJp ', resp.data)
-          if (this.dpjpSuratKontrol !== '') this.form.dpjp = this.dpjpSuratKontrol
-          return new Promise(resolve => { resolve(resp.data) })
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/dpjpbpjs', this.paramDpjp)
+          .then(resp => {
+            this.loading = false
+            if (resp.data.result.list.length) {
+              const data = resp.data.result.list
+              data.forEach(anu => {
+                anu.dpjp = anu.kode
+              })
+              this.dpjps = data
+              console.log('result ', data)
+            }
+            // console.log('dokter DPJp ', resp.data)
+            if (this.dpjpSuratKontrol !== '') this.form.dpjp = this.dpjpSuratKontrol
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     },
     async getKarcisPoli() {
       this.loading = true
@@ -733,6 +761,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
     },
     simpanRegistrasi() {
       // const router = useRouter()
+
       return new Promise(resolve => {
         loadingRes('show')
         this.loading = true

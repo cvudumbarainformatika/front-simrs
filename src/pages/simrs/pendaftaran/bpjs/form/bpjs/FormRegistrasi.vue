@@ -492,7 +492,7 @@
                   option-label="nama"
                   :filled="false"
                   :source="store.dpjps"
-                  :loading="store.loading"
+                  :loading="store.loading || store.loadingJadwalDokter"
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   @selected="dpjpSelected"
                 />
@@ -663,7 +663,7 @@
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
-import { findWithAttr, notifErrVue } from 'src/modules/utils'
+import { findWithAttr, notifErrVue, notifInfVue } from 'src/modules/utils'
 import { date } from 'quasar'
 
 // const pasien = usePendaftaranPasienStore()
@@ -815,38 +815,42 @@ function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
 
   const index = findWithAttr(store.polis, 'kodepoli', val)
-  // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
   store.form.dpjp = ''
   if (refDPJP.value) refDPJP.value.$refs.refAuto.resetValidation()
-  // setFlagKarcis('Lama')
-  // store.form.jeniskarcis = 'Lama'
-  // if (store.paramKarcis.flag) {
-  //   if (store.paramKarcis.flag !== '') {
-  //     store.getKarcisPoli().then(() => {
-  //       store.display.hargakarcis = store.kasrcispoli.tarif
-  //       store.form.karcis = store.kasrcispoli.tarif
-  //     })
-  //   }
-  // }
+
   console.log('set poli ', store.polis[index])
   store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
   store.paramDpjp.kodepoli = store.polis[index].kodemapingbpjs
   store.setForm('kodepoli', store.polis[index].kodepoli)
   store.setForm('kodepolibpjs', store.polis[index].kodemapingbpjs)
   store.setForm('namapolibpjs', store.polis[index].polimapingbpjs)
-  store.getjadwalDokterDpjp()
-  store.getDokterDpjp()
+  store.getDokterDpjp().then(() => {
+    store.getjadwalDokterDpjp()
+  })
 }
 // dpdjp selected
 function dpjpSelected(val) {
   console.log('dpjp selected ', val)
+  store.dpjpSuratKontrol = val
   const index = findWithAttr(store.jadwalDpjps, 'dpjp', val)
-  console.log('index  ', index)
+  // console.log('index  ', index)
+  console.log('jadwal  ', store.jadwalDpjps)
+  // store.getjadwalDokterDpjp()
   if (index >= 0) {
     // console.log('jadwal  ', store.jadwalDpjps[index])
     store.setForm('namadokter', store.jadwalDpjps[index].namadokter)
     store.setForm('jampraktek', store.jadwalDpjps[index].jadwal)
     // console.log('form  ', store.form)
+  } else {
+    if (store.jadwalDpjps.length) {
+      const dok = store.jadwalDpjps.map(e => e.namadokter)
+      notifInfVue('Dokter Praktek hari ini : ' + dok)
+    } else {
+      notifInfVue('Dokter Praktek hari ini : tidak ditemukan')
+    }
+    notifInfVue('Pendaftaran Tetap bisa dilakukan, tetapi akan berpengaruh terhadap penilaian BPJS terhadap Rumah Sakit')
+    notifInfVue('Jika tidak diganti, Tambah Antrian BPJS akan gagal, dan SEP pasien dianggap tidak sejalan dengan antrian online')
+    notifInfVue('Jadwal Dokter Tidak ada, Silahkan Pilih dokter yang lain')
   }
 }
 // set flag karcis
