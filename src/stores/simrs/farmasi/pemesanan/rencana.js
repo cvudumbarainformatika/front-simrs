@@ -30,7 +30,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
     setParam(key, val) {
       this.param[key] = val
     },
-    refreshForm() {
+    resetForm() {
       this.form = {
         tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         no_rencbeliobat: ''
@@ -39,11 +39,45 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       const tabel = useTabelObatMauDibeliStore()
       tabel.getInitialData()
     },
-
     getInitialData() {
       this.cariRencanaBeli()
     },
     //
+    selesaiDanKunci() {
+      this.loading = true
+      const data = {
+        no_rencbeliobat: this.form.no_rencbeliobat
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/kuncirencana', data)
+          .then(resp => {
+            this.loading = false
+            this.resetForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    kunci(val) {
+      this.loading = true
+      const data = {
+        no_rencbeliobat: val
+      }
+      const tabel = useTabelObatMauDibeliStore()
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/kuncirencana', data)
+          .then(resp => {
+            this.loading = false
+            tabel.getInitialData()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
     cariRencanaBeli() {
       this.loading = true
       console.log('rencana beli ', this.param)
