@@ -243,16 +243,22 @@ function onShowInp() {
 }
 
 function saveShape() {
-  clearPad()
-  func()
-  shapes.value.forEach(el => {
-    drawShapes(el.penanda, el.x, el.y, el.width, el.warna, el.luas)
-  })
-  console.log('shapes', shapes.value)
+  refMenu.value.hide()
+  // clearPad()
+  // func()
+  // // shapes.value.forEach(el => {
+  // //   drawShapes(el.penanda, el.x, el.y, el.width, el.warna, el.luas)
+  // // })
+  // const arr = shapes.value
+  // for (let i = 0; i < arr.length; i++) {
+  //   drawShapes(arr[i].penanda, arr[i].x, arr[i].y, arr[i].width, arr[i].warna, arr[i].luas)
+  // }
+  // console.log('shapes', shapes.value)
+  // console.log('write', writingMode.value)
 
-  setTimeout(() => {
-    refMenu.value.hide()
-  }, 500)
+  // setTimeout(() => {
+  //   refMenu.value.hide()
+  // }, 500)
 }
 
 const handlePointerDown = (event) => {
