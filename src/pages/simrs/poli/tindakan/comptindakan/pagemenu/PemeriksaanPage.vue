@@ -123,7 +123,7 @@ const anats = ref([
   { name: 'Persendian Kaki', icon: 'icon-my-articulation-bones-svgrepo-com' }
 ])
 
-const active = ref(1)
+const active = ref(0)
 // const hoverred = ref(null)
 </script>
 <style lang="scss" scoped>
