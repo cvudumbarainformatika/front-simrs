@@ -226,7 +226,7 @@ onMounted(() => {
 function onShowInp() {
   console.log('show')
   writingMode.value = true
-  drawShapes(btn.value, positionX.value, positionY.value, lineWidth.value, hex.value, luas.value)
+  drawShapes(btn.value, positionX.value, positionY.value, lineWidth.value, hex.value, luas.value, '')
   const shape = {
     penanda: btn.value,
     width: lineWidth.value,
@@ -238,27 +238,16 @@ function onShowInp() {
     warna: hex.value
   }
   shapes.value.push(shape)
-  //
   // saveShape()
 }
 
 function saveShape() {
+  const arr = shapes.value
+  for (let i = 0; i < arr.length; i++) {
+    drawShapes(arr[i].penanda, arr[i].x, arr[i].y, arr[i].width, arr[i].warna, arr[i].luas, i + 1)
+  }
+  console.log('write', writingMode.value)
   refMenu.value.hide()
-  // clearPad()
-  // func()
-  // // shapes.value.forEach(el => {
-  // //   drawShapes(el.penanda, el.x, el.y, el.width, el.warna, el.luas)
-  // // })
-  // const arr = shapes.value
-  // for (let i = 0; i < arr.length; i++) {
-  //   drawShapes(arr[i].penanda, arr[i].x, arr[i].y, arr[i].width, arr[i].warna, arr[i].luas)
-  // }
-  // console.log('shapes', shapes.value)
-  // console.log('write', writingMode.value)
-
-  // setTimeout(() => {
-  //   refMenu.value.hide()
-  // }, 500)
 }
 
 const handlePointerDown = (event) => {
@@ -276,7 +265,7 @@ function getTargetPosition(event) {
   return [positionX.value, positionY.value]
 }
 
-function drawShapes(name, x, y, tebal, warna, p) {
+function drawShapes(name, x, y, tebal, warna, p, no) {
   const cx = ctx.value
   if (writingMode.value) {
     cx.beginPath()
@@ -298,12 +287,13 @@ function drawShapes(name, x, y, tebal, warna, p) {
     cx.font = 'bold 16px Arial'
     cx.fillStyle = warna
     cx.textAlign = 'center'
-    cx.fillText('1', x - p * 1.5, y + p / 2)
+    cx.fillText(no, x - p * 1.5, y + p / 2)
   }
 }
 
 const clearPad = () => {
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+  func()
 }
 
 // const savePad = () => {
