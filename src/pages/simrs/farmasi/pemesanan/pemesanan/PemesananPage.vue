@@ -191,11 +191,11 @@
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
-import { useTabelObatDirencanakaStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObatRencana'
+import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
 
 const style = useStyledStore()
 const store = usePemesananObatStore()
-const table = useTabelObatDirencanakaStore()
+const table = useTabelPemesananObatStore()
 
 function setDispTanggal(val) {
   store.disp.tanggal = val

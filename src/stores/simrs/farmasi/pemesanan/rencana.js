@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { useTabelObatMauDibeliStore } from './tabelObat'
+import { useTabelObatDirencanakaStore } from './tabelObatRencana'
 
 export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan_obat', {
   state: () => ({
@@ -36,7 +36,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
         no_rencbeliobat: ''
       }
       this.getInitialData()
-      const tabel = useTabelObatMauDibeliStore()
+      const tabel = useTabelObatDirencanakaStore()
       tabel.getInitialData()
     },
     getInitialData() {
@@ -65,7 +65,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       const data = {
         no_rencbeliobat: val
       }
-      const tabel = useTabelObatMauDibeliStore()
+      const tabel = useTabelObatDirencanakaStore()
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/kuncirencana', data)
           .then(resp => {
