@@ -9,13 +9,13 @@
           <q-btn
             v-for="(btnx, i) in btns"
             :key="i"
-            :flat="btnx.name !== store.dialogForm.penanda"
-            :glossy="btnx.name === store.dialogForm.penanda"
+            :flat="btnx.name !== btn"
+            :glossy="btnx.name === btn"
             padding="xs"
             size="sm"
             :icon="btnx.icon"
             color="dark"
-            @click="store.setDialogForm('penanda',btnx.name)"
+            @click="btn = btnx.name"
           >
             <q-tooltip>
               {{ btnx.name }}
@@ -31,10 +31,10 @@
           style="width: 75px;"
         >
           <div class="f-10">
-            Ketebalan {{ store.dialogForm.ketebalan }}
+            Ketebalan {{ lineWidth }}
           </div>
           <q-slider
-            v-model="store.dialogForm.ketebalan"
+            v-model="lineWidth"
             :min="1"
             :max="10"
             label
@@ -52,10 +52,10 @@
           style="width: 75px;"
         >
           <div class="f-10">
-            Luas {{ store.dialogForm.panjang }} px
+            Luas {{ luas }} px
           </div>
           <q-slider
-            v-model="store.dialogForm.panjang"
+            v-model="luas"
             :min="1"
             :max="20"
             label
@@ -73,7 +73,7 @@
           padding="xs"
           size="xs"
           label="CR"
-          :style="`background-color: ${store.dialogForm.warna};`"
+          :style="`background-color: ${hex};`"
         >
           <q-tooltip>
             Ganti Warna
@@ -85,7 +85,7 @@
               style="padding:0"
             >
               <q-color
-                v-model="store.dialogForm.warna"
+                v-model="hex"
                 no-header
                 no-footer
                 default-view="palette"
@@ -112,7 +112,7 @@
           ref="refMenu"
           touch-position
           @show="onShowInp"
-          @hide="onHideInp"
+          @hide="writingMode=false"
         >
           <q-card
             dark
@@ -125,7 +125,7 @@
             <q-separator dark />
             <q-card-section>
               <q-input
-                v-model="store.dialogForm.anatomy"
+                v-model="txt"
                 standout="bg-yellow-2"
                 dense
                 dark
@@ -133,7 +133,7 @@
                 class="q-mb-sm"
               />
               <q-input
-                v-model="store.dialogForm.ket"
+                v-model="txt"
                 standout="bg-yellow-2"
                 dense
                 dark
@@ -147,14 +147,14 @@
                 color="primary"
                 square
                 icon="icon-mat-check"
-                @click="saveShape"
+                @click="saveShape()"
               />
               <q-btn
                 class="col"
                 color="negative"
                 icon="icon-mat-close"
                 square
-                @click="cancelShape"
+                @click="refMenu.hide()"
               />
             </div>
           </q-card>
@@ -196,21 +196,27 @@
 
 <script setup>
 import MyImg from 'src/assets/human/human-body.jpg'
-import { computed, onMounted, ref, watch } from 'vue'
-import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+import { onMounted, ref } from 'vue'
 
-const store = usePemeriksaanFisik()
-
+const txt = ref(null)
+const desc = ref(null)
 const canvasRef = ref()
 const refMenu = ref()
 const ctx = ref()
 const writingMode = ref(false)
+const positionX = ref()
+const positionY = ref()
+const lineWidth = ref(2)
+const luas = ref(15)
+const shapes = ref([])
 
 const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
   { name: 'kotak', icon: 'icon-mat-check_box_outline' }
 ])
 
+const btn = ref(btns.value[0].name)
+const hex = ref('#000000')
 onMounted(() => {
   console.log(refMenu.value)
   ctx.value = canvasRef.value.getContext('2d')
@@ -221,59 +227,47 @@ onMounted(() => {
 function onShowInp() {
   console.log('show')
   writingMode.value = true
-  drawShapes(store.dialogForm.penanda, store.dialogForm.x, store.dialogForm.y, store.dialogForm.ketebalan, store.dialogForm.warna, store.dialogForm.panjang, '')
-
+  drawShapes(btn.value, positionX.value, positionY.value, lineWidth.value, hex.value, luas.value, '')
+  const shape = {
+    penanda: btn.value,
+    width: lineWidth.value,
+    luas: luas.value,
+    x: positionX.value,
+    y: positionY.value,
+    nama: txt.value,
+    ket: desc.value,
+    warna: hex.value
+  }
+  shapes.value.push(shape)
   // saveShape()
 }
 
-function onHideInp() {
-  // writingMode.value = false
-}
-
 function saveShape() {
-  const obj = {
-    penanda: store.dialogForm.penanda,
-    x: store.dialogForm.x,
-    y: store.dialogForm.y,
-    anatomy: store.dialogForm.anatomy,
-    ket: store.dialogForm.ket,
-    ketebalan: store.dialogForm.ketebalan,
-    panjang: store.dialogForm.panjang,
-    warna: store.dialogForm.warna
-  }
-  store.pushShapes(obj).then((x) => {
-    console.log('shapes')
-    setTimeout(() => {
-      refMenu.value.hide()
-    }, 300)
-  })
-}
-
-function cancelShape() {
   clearPad()
-  refMenu.value.hide()
+  setTimeout(() => {
+    refMenu.value.hide()
+  }, 300)
 }
 
 const handlePointerDown = (event) => {
   const [x, y] = getTargetPosition(event)
-  store.setDialogForm('x', x)
-  store.setDialogForm('y', y)
-  console.log(store.dialogForm)
+  positionX.value = x
+  positionY.value = y
 }
 const handlePointerUp = (event) => {
   console.log('pointer up')
 }
 
 function getTargetPosition(event) {
-  const x = event.clientX - event.target.getBoundingClientRect().x
-  const y = event.clientY - event.target.getBoundingClientRect().y
-  return [x, y]
+  positionX.value = event.clientX - event.target.getBoundingClientRect().x
+  positionY.value = event.clientY - event.target.getBoundingClientRect().y
+  return [positionX.value, positionY.value]
 }
 
 function drawShapes(name, x, y, tebal, warna, p, no) {
   const cx = ctx.value
-  cx.beginPath()
   if (writingMode.value) {
+    cx.beginPath()
     if (name === 'circle') {
       cx.arc(x, y, p, 0, 2 * Math.PI)
     } else if (name === 'kotak') {
@@ -297,25 +291,22 @@ function drawShapes(name, x, y, tebal, warna, p, no) {
 }
 
 const clearPad = () => {
-  // ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+  ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
   func()
 }
 
 const resetTanda = () => {
-  // store.resetShapes()
-  func()
+  shapes.value = []
+  clearPad()
 }
 
 // const savePad = () => {
 //   const imageURL = canvasRef.value.toDataURL()
 // }
-const arr = computed(() => {
-  return store.shapes
-})
 function func() {
   const cvn = canvasRef.value
   // const context = ctx.value
-  ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+
   cvn.height = cvn.width
   const bg = new Image()
   bg.src = MyImg
@@ -327,24 +318,12 @@ function func() {
     const x = cvn.width / 2 - width / 2
     const y = cvn.height / 2 - height / 2
     ctx.value.drawImage(bg, x, y, width, height)
-    console.log('func', arr)
-    if (arr.value.length > 0) {
-      for (let i = 0; i < arr.value.length; i++) {
-        drawShapes(arr.value[i].penanda,
-          arr.value[i].x, arr.value[i].y,
-          arr.value[i].ketebalan,
-          arr.value[i].warna,
-          arr.value[i].panjang, i + 1)
-      }
+    const arr = shapes.value
+    for (let i = 0; i < arr.length; i++) {
+      drawShapes(arr[i].penanda, arr[i].x, arr[i].y, arr[i].width, arr[i].warna, arr[i].luas, i + 1)
     }
   }
 }
-
-watch(() => arr, (obj) => {
-  console.log('watch', obj)
-  writingMode.value = true
-  func()
-}, { deep: true })
 
 </script>
 

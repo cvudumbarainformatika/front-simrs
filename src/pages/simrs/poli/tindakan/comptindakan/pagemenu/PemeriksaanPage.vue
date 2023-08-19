@@ -78,7 +78,47 @@
             dark
             class="full-height"
           >
-            sdas
+            <q-list
+              v-if="store.shapes.length"
+              dark
+              separator
+            >
+              <q-item
+                v-for="(item, i) in store.shapes"
+                :key="i"
+              >
+                <q-item-section>
+                  <q-item-label>{{ item.anatomy?item.anatomy:'...' }}</q-item-label>
+                  <q-item-label
+                    caption
+                    lines="2"
+                  >
+                    {{ item.ket?item.ket:'...' }}
+                  </q-item-label>
+                </q-item-section>
+
+                <q-item-section
+                  side
+                  style="padding: 0;"
+                >
+                  <q-btn
+                    flat
+                    icon="icon-mat-delete"
+                    size="xs"
+                    padding="xs"
+                    color="negative"
+                    @click="store.deleteObjShapes(i)"
+                  />
+                </q-item-section>
+              </q-item>
+              <q-separator dark />
+            </q-list>
+            <div
+              v-else
+              class="column full-height flex-center items-center"
+            >
+              Data Belum Ada
+            </div>
           </q-card>
         </div>
       </div>
@@ -90,6 +130,9 @@
 // import BodyPage from './comppemeriksaan/Bodypage.vue'
 import CanvasPage from './comppemeriksaan/CanvasPage.vue'
 import { ref } from 'vue'
+import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+
+const store = usePemeriksaanFisik()
 
 const search = ref(null)
 const anats = ref([
