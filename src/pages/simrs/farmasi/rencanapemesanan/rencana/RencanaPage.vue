@@ -18,6 +18,7 @@
         />
         <div class="q-ml-md">
           <q-btn
+            v-if="store.form.no_rencbeliobat"
             flat
             icon="icon-mat-done"
             dense
