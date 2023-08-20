@@ -6,7 +6,7 @@
     <div>
       <div class="row items-center">
         <div class="q-mr-md">
-          No Perencanaan:
+          No Pemesanan:
         </div>
         <app-input
           v-model="store.form.no_rencbeliobat"
@@ -18,6 +18,7 @@
         />
         <div class="q-ml-md">
           <q-btn
+            v-if="store.form.no_rencbeliobat"
             flat
             icon="icon-mat-done"
             dense
@@ -37,7 +38,7 @@
     <div>
       <div class="row items-center no-wrap">
         <div class="q-mr-md">
-          Tanggal Perencanaan:
+          Tanggal Pemesanan:
         </div>
         <app-input-date-human
           :model="store.disp.tanggal"
@@ -46,6 +47,21 @@
           @set-display="setDispTanggal"
           @db-model="setTanggal"
         />
+      </div>
+    </div>
+    <div>
+      <div class="row items-center no-wrap">
+        <div class="q-mr-md">
+          Penyedia:
+        </div>
+        <div>Auto complete nama penyedia</div>
+        <!-- <app-input-date-human
+          :model="store.disp.tanggal"
+          label="Tanggal"
+          :filled="false"
+          @set-display="setDispTanggal"
+          @db-model="setTanggal"
+        /> -->
       </div>
     </div>
     <div>
@@ -76,20 +92,20 @@
           :loading="table.loading || store.loading"
           :to-search="table.params.q"
           :default-btn="false"
-          :ada-paginasi="false"
           :ada-cari="false"
           :ada-refresh="false"
-          :ada-per-page="false"
           :ada-filter="false"
           :ada-tambah="false"
           @find="table.setSearch"
+          @set-row="table.setPerPage"
+          @goto="table.setPage"
         >
           <!-- @edit-data="store.editData" -->
           <!--
             row-image="image"
             @delete-ids="table.deletesData"
             -->
-          <template #col-kd_obat>
+          <!-- <template #col-kd_obat>
             <div>Kode Obat</div>
           </template>
           <template #col-nama_obat>
@@ -165,10 +181,6 @@
           </template>
           <template #cell-centang="{row}">
             <div v-if="row.bisaBeli>0">
-              <!-- <q-checkbox
-                v-model="row.checked"
-                dense
-              /> -->
               <q-btn
                 flat
                 no-caps
@@ -182,7 +194,7 @@
             <div v-else>
               Tidak bisa melakukan pemesanan
             </div>
-          </template>
+          </template> -->
         </app-table>
       </q-card-section>
     </q-card>
