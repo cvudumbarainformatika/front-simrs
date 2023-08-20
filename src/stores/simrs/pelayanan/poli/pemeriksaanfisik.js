@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 
 export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   state: () => ({
+    dialogTemplate: false,
     writingMode: false,
     dialogForm: {
       anatomy: '',
@@ -13,7 +14,15 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       warna: '#000000',
       penanda: 'circle'
     },
-    shapes: []
+    shapes: [],
+    formVital: {
+      denyutjantung: '', // string
+      pernapasan: '', // string
+      // Tekanan darah
+      sistole: 0, // numerik per mmHg
+      diastole: 0, // numerik per mmHg
+      suhutubuh: 0 // numerik derajat celcius
+    }
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
