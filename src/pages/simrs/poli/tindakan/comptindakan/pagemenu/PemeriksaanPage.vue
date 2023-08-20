@@ -5,70 +5,20 @@
       bordered
       class="full-height"
     >
-      <div class="absolute right-menu z-top invisible">
-        {{ filterredMenu()[active].name }}
-      </div>
+      <transition
+        appear
+        @enter="enter"
+        @leave="leave"
+      >
+        <div
+          v-if="store.dialogTemplate"
+          class="absolute left-menu"
+        >
+          <template-gambar style="border-right:2px solid gray;" />
+        </div>
+      </transition>
+
       <div class="row full-height">
-        <!-- <div class="col full-height">
-          <div
-            v-if="store.dialogTemplate"
-            class="column full-height bg-grey q-pa-xs"
-          >
-            <div class="col">
-              <div class="f-14 text-weight-bold q-py-sm">
-                Template Gambar <span class="text-weight-light">({{ filterredMenu()[active].name }})</span>
-              </div>
-              <q-separator />
-            </div>
-            <div class="col-auto bg-white q-pa-md">
-              <q-input
-                v-model="search"
-                color="teal"
-                outlined
-                label="cari"
-                dense
-                @update:model-value="filterredMenu()"
-              >
-                <template #prepend>
-                  <q-icon
-                    name="icon-mat-search"
-                    size="sm"
-                  />
-                </template>
-              </q-input>
-            </div>
-            <q-separator />
-            <div class="col-5 bg-white scroll">
-              <div class="row q-col-gutter-xs items-start q-py-sm q-pl-xs">
-                <div
-                  v-for="(item, n) in filterredMenu()"
-                  :key="n"
-                  class="col-auto"
-                >
-                  <div class="">
-                    <q-btn
-                      :icon="item.icon"
-                      dense
-                      :text-color="active === n ? 'black' : 'white'"
-                      :glossy="active === n"
-                      :color="active===n?'amber':'dark'"
-                      size="xl"
-                      @click="active=n"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="top middle"
-                        class="bg-orange text-dark"
-                      >
-                        <strong>{{ item.name }}</strong>
-                      </q-tooltip>
-                    </q-btn>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
         <div class="col-auto">
           <div class="column full-height">
             <canvas-page />
@@ -79,14 +29,18 @@
           style="border-left: 1px solid gray;"
         >
           <div class="column full-height">
-            <div class="col-4">
+            <div class="col-5">
               <div class="q-pa-md">
                 <div class="text-h6">
                   Vital Sign
                 </div>
               </div>
               <q-separator />
-              <div class="row q-col-gutter-sm q-pa-md">
+              <q-form
+                ref="formRef"
+                class="row q-col-gutter-sm q-pa-md"
+                @submit.prevent.stop="onSubmit"
+              >
                 <div class="">
                   <q-input
                     v-model="store.formVital.denyutjantung"
@@ -94,6 +48,7 @@
                     standout="bg-yellow-3 text-black"
                     outlined
                     label="Denyut Jantung"
+                    :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
                   />
                 </div>
                 <div class="">
@@ -103,6 +58,7 @@
                     standout="bg-yellow-3 text-black"
                     outlined
                     label="Pernapasan"
+                    :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
                   />
                 </div>
                 <div class="">
@@ -112,6 +68,10 @@
                     standout="bg-yellow-3 text-black"
                     outlined
                     label="Sistole per mmHg"
+                    :rules="[
+                      val => !!val || 'Harap diisi Terlebih dahulu',
+                      val => !isNaN(val) || 'Harus pakai Nomor',
+                    ]"
                   />
                 </div>
                 <div class="">
@@ -121,6 +81,10 @@
                     standout="bg-yellow-3 text-black"
                     outlined
                     label="Diastole per mmHg"
+                    :rules="[
+                      val => !!val || 'Harap diisi Terlebih dahulu',
+                      val => !isNaN(val) || 'Harus pakai Nomor',
+                    ]"
                   />
                 </div>
                 <div class="">
@@ -130,11 +94,30 @@
                     standout="bg-yellow-3 text-black"
                     outlined
                     label="Suhu Tubuh"
+                    :rules="[
+                      val => !!val || 'Harap diisi Terlebih dahulu',
+                      val => !isNaN(val) || 'Harus pakai Nomor',
+                    ]"
                   />
                 </div>
-              </div>
+                <div class="invisible">
+                  <q-btn
+                    ref="btnSubmit"
+                    label="Submit"
+                    type="submit"
+                    color="primary"
+                  />
+                  <q-btn
+                    label="Reset"
+                    type="reset"
+                    color="primary"
+                    flat
+                    class="q-ml-sm"
+                  />
+                </div>
+              </q-form>
             </div>
-            <div class="col-8">
+            <div class="col-7">
               <div class="full-height">
                 <div class="column full-height">
                   <div class="col-auto">
@@ -215,7 +198,7 @@
                         <q-btn
                           label="Simpan Pemeriksaan"
                           color="primary"
-                          @click="store.savePemeriksaan(pasien)"
+                          @click="onSubmit"
                         />
                       </div>
                     </q-card>
@@ -233,15 +216,18 @@
 <script setup>
 // import BodyPage from './comppemeriksaan/Bodypage.vue'
 import CanvasPage from './comppemeriksaan/CanvasPage.vue'
+import TemplateGambar from './comppemeriksaan/TemplateGambar.vue'
 import { onMounted, ref } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
+import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 
 const store = usePemeriksaanFisik()
 // eslint-disable-next-line no-unused-vars
 const { search, filterredMenu } = useMenuPemeriksaan()
-
-const active = ref(0)
+const { enter, leave } = useSlideFromLeft()
+// const active = ref(0)
+const formRef = ref()
 
 const props = defineProps({
   pasien: {
@@ -253,13 +239,15 @@ const props = defineProps({
 onMounted(() => {
   console.log('props', props.pasien)
 })
+
+async function onSubmit() {
+  const valid = await formRef.value?.validate()
+  if (valid) {
+    store.savePemeriksaan(props.pasien)
+  }
+}
 </script>
 <style lang="scss" scoped>
-.left-menu{
-  background-color: rgba($color: $primary, $alpha: 0.9);
-  width:40px;
-  height:100%;
-}
 
 .card-left {
     background-color: rgba($color: rgb(57, 56, 56), $alpha: 0.3);
@@ -270,6 +258,14 @@ onMounted(() => {
   right: 0;
   // height: calc(100% - 30px) !important;
   height:100%;
+}
+.left-menu{
+  background-color: rgba($color: $dark, $alpha: 0.98);
+  width:600px;
+  left: 0;
+  // height: calc(100% - 30px) !important;
+  height:100%;
+  z-index:120000;
 }
 .my-menu-link{
   color: white;

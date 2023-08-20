@@ -176,16 +176,27 @@
     <div
       class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-xs tmp-t z-top absolute-bottom"
     >
-      <div>.</div>
+      <div class="q-gutter-xs">
+        <q-btn
+          color="teal"
+          size="sm"
+          padding="sm"
+          label="Template Gambar"
+          @click="store.setDialogTemplate"
+        />
+      </div>
       <div class="q-gutter-xs">
         <q-btn
           icon="icon-mat-refresh"
           color="negative"
           size="sm"
           padding="sm"
-          label="Reset Penandaan"
           @click="resetTanda"
-        />
+        >
+          <q-tooltip>
+            Reset Penandaan
+          </q-tooltip>
+        </q-btn>
         <q-btn
           icon="icon-mat-add"
           color="dark"
@@ -230,7 +241,7 @@ onMounted(() => {
   console.log(refMenu.value)
   ctx.value = canvasRef.value.getContext('2d')
 
-  const opt = menus.value.map(x => x.name)
+  const opt = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
   options.value = opt
   func()
 })
@@ -238,7 +249,7 @@ onMounted(() => {
 const filterFn = (val, update) => {
   if (val === '') {
     update(() => {
-      options.value = menus.value.map(x => x.name)
+      options.value = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
     })
     return
   }
@@ -246,7 +257,7 @@ const filterFn = (val, update) => {
   update(() => {
     const needle = val.toLowerCase()
     const arr = menus.value.map(x => x.name)
-    options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1)
+    options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1 && v !== 'Body')
   })
 }
 
@@ -334,7 +345,7 @@ const clearPad = () => {
 }
 
 const resetTanda = () => {
-  // store.resetShapes()
+  store.resetShapes()
   func()
 }
 

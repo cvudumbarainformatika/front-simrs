@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
 
 export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   state: () => ({
@@ -53,17 +54,26 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     setDialogForm(key, val) {
       this.dialogForm[key] = val
     },
-    savePemeriksaan(pasien) {
-      const form = new FormData()
+    setDialogTemplate() {
+      console.log('oooi')
+      this.dialogTemplate = !this.dialogTemplate
+    },
+    async savePemeriksaan(pasien) {
+      // const form = new FormData()
 
-      form.append('noreg', pasien.noreg ? pasien.noreg === null || pasien.noreg === '' ? '' : pasien.noreg : '')
-      form.append('denyutjantung', this.formVital.denyutjantung)
-      form.append('pernapasan', this.formVital.pernapasan)
-      form.append('sistole', this.formVital.sistole)
-      form.append('diastole', this.formVital.diastole)
-      form.append('suhutubuh', this.formVital.suhutubuh)
+      // form.append('noreg', pasien.noreg ? pasien.noreg === null || pasien.noreg === '' ? '' : pasien.noreg : '')
+      // form.append('denyutjantung', this.formVital.denyutjantung)
+      // form.append('pernapasan', this.formVital.pernapasan)
+      // form.append('sistole', this.formVital.sistole)
+      // form.append('diastole', this.formVital.diastole)
+      // form.append('suhutubuh', this.formVital.suhutubuh)
+      // form.append('detail', this.shapes)
 
-      console.log(form)
+      const form = this.formVital
+      form.details = this.shapes
+
+      const resp = await api.post('v1/simrs/rajal/poli/save-pemeriksaanfisik', form)
+      console.log(resp)
     }
 
   }
