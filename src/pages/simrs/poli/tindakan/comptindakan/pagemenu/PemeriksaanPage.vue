@@ -164,6 +164,14 @@
                             v-for="(item, i) in store.shapes"
                             :key="i"
                           >
+                            <q-item-section avatar>
+                              <q-avatar
+                                size="24px"
+                                color="orange"
+                              >
+                                {{ i+1 }}
+                              </q-avatar>
+                            </q-item-section>
                             <q-item-section>
                               <q-item-label>{{ item.anatomy ? item.anatomy : '...' }}</q-item-label>
                               <q-item-label
@@ -207,6 +215,7 @@
                         <q-btn
                           label="Simpan Pemeriksaan"
                           color="primary"
+                          @click="store.savePemeriksaan(pasien)"
                         />
                       </div>
                     </q-card>
@@ -215,120 +224,6 @@
               </div>
             </div>
           </div>
-          <!-- <q-card
-            flat
-            bordered
-            square
-            class="full-height"
-          > -->
-          <!-- <div class="column full-height">
-              <div class="col-2 full-height bg-white text-dark">
-                <div class="q-pa-sm">
-                  <div class="text-h6">
-                    Vital Sign
-                  </div>
-                  <q-separator />
-                  <div class="row q-col-gutter-sm q-mt-md full-width">
-                    <div>
-                      <q-input
-                        v-model="txt"
-                        dense
-                        standout="bg-yellow-3 text-black"
-                        outlined
-                        label="Denyut Jantung"
-                      />
-                    </div>
-                    <div>
-                      <q-input
-                        v-model="txt"
-                        dense
-                        standout="bg-yellow text-black"
-                        outlined
-                        label="Denyut Jantung"
-                      />
-                    </div>
-                    <div>
-                      <q-input
-                        v-model="txt"
-                        dense
-                        standout="bg-yellow text-black"
-                        outlined
-                        label="Denyut Jantung"
-                      />
-                    </div>
-                    <div>
-                      <q-input
-                        v-model="txt"
-                        dense
-                        standout="bg-yellow text-black"
-                        outlined
-                        label="Denyut Jantung"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <q-bar
-                  dense
-                  class="bg-teal text-white"
-                >
-                  <div>Detail Penandaan Gambar</div>
-                </q-bar>
-              </div>
-              <div class="col-8 full-height">
-                <div class="absolute-bottom bg-yellow-2 text-white q-pa-xs z-top">
-                  <div class="text-right">
-                    <q-btn
-                      label="Simpan Pemeriksaan"
-                      color="primary"
-                    />
-                  </div>
-                </div>
-                <q-list
-                  v-if="store.shapes.length"
-                  dark
-                  separator
-                >
-                  <q-item
-                    v-for="(item, i) in store.shapes"
-                    :key="i"
-                  >
-                    <q-item-section>
-                      <q-item-label>{{ item.anatomy ? item.anatomy : '...' }}</q-item-label>
-                      <q-item-label
-                        caption
-                        lines="2"
-                      >
-                        {{ item.ket ? item.ket : '...' }}
-                      </q-item-label>
-                    </q-item-section>
-
-                    <q-item-section
-                      side
-                      style="padding: 0;"
-                    >
-                      <q-btn
-                        flat
-                        icon="icon-mat-delete"
-                        size="xs"
-                        padding="xs"
-                        color="negative"
-                        @click="store.deleteObjShapes(i)"
-                      />
-                    </q-item-section>
-                  </q-item>
-                  <q-separator dark />
-                </q-list>
-                <div
-                  v-else
-                  class="column full-height flex-center items-center"
-                >
-                  Data Belum Ada
-                </div>
-              </div>
-            </div> -->
-          <!-- </q-card> -->
         </div>
       </div>
     </q-card>
@@ -342,16 +237,21 @@ import { onMounted, ref } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 
-// eslint-disable-next-line no-unused-vars
 const store = usePemeriksaanFisik()
 // eslint-disable-next-line no-unused-vars
 const { search, filterredMenu } = useMenuPemeriksaan()
 
 const active = ref(0)
-// const txt = ref('')
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 
 onMounted(() => {
-  console.log(filterredMenu())
+  console.log('props', props.pasien)
 })
 </script>
 <style lang="scss" scoped>

@@ -52,6 +52,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     setDialogForm(key, val) {
       this.dialogForm[key] = val
+    },
+    savePemeriksaan(pasien) {
+      const form = new FormData()
+
+      form.append('noreg', pasien.noreg ? pasien.noreg === null || pasien.noreg === '' ? '' : pasien.noreg : '')
+      form.append('denyutjantung', this.formVital.denyutjantung)
+      form.append('pernapasan', this.formVital.pernapasan)
+      form.append('sistole', this.formVital.sistole)
+      form.append('diastole', this.formVital.diastole)
+      form.append('suhutubuh', this.formVital.suhutubuh)
+
+      console.log(form)
     }
 
   }

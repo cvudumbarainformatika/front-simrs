@@ -115,28 +115,39 @@
           @hide="onHideInp"
         >
           <q-card
-            dark
             flat
             style="min-width:250px"
           >
             <q-card-section>
               Keterangan
             </q-card-section>
-            <q-separator dark />
+            <q-separator />
             <q-card-section>
-              <q-input
+              <q-select
                 v-model="store.dialogForm.anatomy"
-                standout="bg-yellow-2"
+                outlined
+                standout="bg-yellow-2 text-dark"
+                use-input
+                input-debounce="0"
+                label="Nama Anatomy"
+                :options="options"
                 dense
-                dark
-                label="nama"
-                class="q-mb-sm"
-              />
+                class="q-mb-md"
+                @filter="filterFn"
+              >
+                <template #no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      Tidak ditemukan
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
               <q-input
                 v-model="store.dialogForm.ket"
                 standout="bg-yellow-2"
-                dense
-                dark
+                outlined
+                autogrow
                 label="keterangan"
               />
             </q-card-section>
@@ -198,8 +209,12 @@
 import MyImg from 'src/assets/human/human-body.jpg'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
 const store = usePemeriksaanFisik()
+const { menus } = useMenuPemeriksaan()
+
+const options = ref([])
 
 const canvasRef = ref()
 const refMenu = ref()
@@ -215,8 +230,25 @@ onMounted(() => {
   console.log(refMenu.value)
   ctx.value = canvasRef.value.getContext('2d')
 
+  const opt = menus.value.map(x => x.name)
+  options.value = opt
   func()
 })
+
+const filterFn = (val, update) => {
+  if (val === '') {
+    update(() => {
+      options.value = menus.value.map(x => x.name)
+    })
+    return
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    const arr = menus.value.map(x => x.name)
+    options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1)
+  })
+}
 
 function onShowInp() {
   console.log('show')

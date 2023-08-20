@@ -42,7 +42,10 @@
         <!-- CONTAINER ============================================================================================-->
         <q-page-container>
           <q-page class="contain bg-grey-3">
-            <component :is="menu.comp" />
+            <component
+              :is="menu.comp"
+              :pasien="pasien"
+            />
           </q-page>
         </q-page-container>
       </q-layout>
