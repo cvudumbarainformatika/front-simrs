@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const useTabelObatMauDibeliStore = defineStore('tabel_obat_may_di_beli', {
+export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
     loading: false,
     items: [],
