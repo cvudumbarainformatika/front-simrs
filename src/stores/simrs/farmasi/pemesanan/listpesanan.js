@@ -8,13 +8,13 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
     items: [],
     meta: {},
     param: {
-      no_rencbeliobat: '',
+      nopemesanan: '',
       per_page: 10,
       page: 1,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     columns: [
-      'no_rencbeliobat',
+      'nopemesanan',
       'tgl'
     ],
     columnHide: []
@@ -24,7 +24,7 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
       this.param[key] = val
     },
     setSearch(payload) {
-      this.setParam('no_rencbeliobat', payload)
+      this.setParam('nopemesanan', payload)
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },
@@ -46,13 +46,13 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
     },
     cariRencanaBeli() {
       this.loading = true
-      console.log('rencana beli ', this.param)
+      console.log('pesanan ', this.param)
       const params = { params: this.param }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/listrencanabeli', params)
+        api.get('v1/simrs/farmasinew/pemesananobat/listpemesanan', params)
           .then(resp => {
             this.loading = false
-            console.log('list rencana', resp)
+            console.log('list pesanan', resp)
             this.items = resp.data.data
             this.meta = resp.data
             resolve(resp)

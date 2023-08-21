@@ -11,17 +11,9 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       page: 1
     },
     columns: [
-      'kd_obat',
-      'nama_obat',
+      'rencana',
+      'obat',
       'stok',
-      // 'stok_gudang',
-      // 'stok_rs',
-      // 'stok_max_rs',
-      // 'jml_bisa_beli',
-      'pabrikan',
-      // 'pabrikan',
-      // 'pbf',
-      // 'jumlah_dipesan',
       'jumlah',
       'centang'
     ],
@@ -56,7 +48,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli', param)
           .then(resp => {
             this.loading = false
-            console.log('obat direncakan', resp)
+            console.log('obat direncakan', resp.data.data)
             // const temp = resp.data
             // temp.forEach(item => {
             //   item.checked = false
@@ -67,8 +59,17 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             //   item.jumlahBeli = item.bisaBeli
             // })
             this.items = resp.data.data
+            if (this.items.length) {
+              this.items.forEach(a => {
+                const dipesan = parseFloat(a.jumlahdipesan)
+                console.log('dipesan', dipesan, typeof dipesan)
+                a.jumlahdipesan = dipesan
+                a.jumlahdirencanakan = dipesan
+              })
+            }
+            console.log('item', this.items)
             this.meta = resp.data
-            this.setColumns(resp.data.data)
+            // this.setColumns(resp.data.data)
             resolve(resp)
           })
           .catch(() => {

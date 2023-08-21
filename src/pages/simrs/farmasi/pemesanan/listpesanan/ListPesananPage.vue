@@ -23,26 +23,28 @@
       :meta="store.meta"
       :per-page="store.param.per_page"
       :loading="store.loading"
-      :to-search="store.param.no_rencbeliobat"
+      :to-search="store.param.nopemesanan"
       :click-able="true"
       :default-btn="false"
+      :ada-tambah="false"
+      :ada-filter="false"
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
       @on-click="onClick"
     >
-      <template #col-no_rencbeliobat>
+      <template #col-nopemesanan>
         <div>Nomor Rencana Beli</div>
       </template>
       <template #col-tgl>
         <div>Tanggal</div>
       </template>
       <template #cell-tgl="{row}">
-        <div>{{ row.tgl? dateFullFormat( row.tgl) : '-' }}</div>
+        <div>{{ row.tgl_pemesanan? dateFullFormat( row.tgl_pemesanan) : '-' }}</div>
       </template>
       <template #expand="{row}">
-        <div v-if="row.rincian.length">
+        <div v-if="row.rinci.length">
           <div class="row items-center text-weight-bold">
             <div class="col-3">
               Kode Obat
@@ -61,7 +63,7 @@
             </div>
           </div>
           <div
-            v-for="(rin, i) in row.rincian"
+            v-for="(rin, i) in row.rinci"
             :key="i"
           >
             <div class="row items-center anu">
@@ -101,10 +103,10 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
-import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listrencana'
+import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
 
 const style = useStyledStore()
-const store = useListRencanaPemesananStore()
+const store = useListPemesananStore()
 // click
 function onClick (val) {
   console.log('click', val)
