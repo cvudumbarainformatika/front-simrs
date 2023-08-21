@@ -29,95 +29,160 @@
           style="border-left: 1px solid gray;"
         >
           <div class="column full-height">
-            <div class="col-5">
+            <!-- ===============================================================================KOLOM ISIAN PEMERIKSAAN -->
+            <div class="col-8">
               <div class="q-pa-md">
-                <div class="text-h6">
-                  Vital Sign
+                <div class="f-14 text-weight-bold">
+                  Pemeriksaan
                 </div>
               </div>
               <q-separator />
-              <q-form
-                ref="formRef"
-                class="row q-col-gutter-sm q-pa-md"
-                @submit.prevent.stop="onSubmit"
+              <q-scroll-area
+                style="height: calc(100% - 52px);"
               >
-                <div class="">
-                  <q-input
-                    v-model="store.formVital.denyutjantung"
-                    dense
-                    standout="bg-yellow-3 text-black"
-                    outlined
-                    label="Denyut Jantung"
-                    :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
-                  />
-                </div>
-                <div class="">
-                  <q-input
-                    v-model="store.formVital.pernapasan"
-                    dense
-                    standout="bg-yellow-3 text-black"
-                    outlined
-                    label="Pernapasan"
-                    :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
-                  />
-                </div>
-                <div class="">
-                  <q-input
-                    v-model="store.formVital.sistole"
-                    dense
-                    standout="bg-yellow-3 text-black"
-                    outlined
-                    label="Sistole per mmHg"
-                    :rules="[
-                      val => !!val || 'Harap diisi Terlebih dahulu',
-                      val => !isNaN(val) || 'Harus pakai Nomor',
-                    ]"
-                  />
-                </div>
-                <div class="">
-                  <q-input
-                    v-model="store.formVital.diastole"
-                    dense
-                    standout="bg-yellow-3 text-black"
-                    outlined
-                    label="Diastole per mmHg"
-                    :rules="[
-                      val => !!val || 'Harap diisi Terlebih dahulu',
-                      val => !isNaN(val) || 'Harus pakai Nomor',
-                    ]"
-                  />
-                </div>
-                <div class="">
-                  <q-input
-                    v-model="store.formVital.suhutubuh"
-                    dense
-                    standout="bg-yellow-3 text-black"
-                    outlined
-                    label="Suhu Tubuh"
-                    :rules="[
-                      val => !!val || 'Harap diisi Terlebih dahulu',
-                      val => !isNaN(val) || 'Harus pakai Nomor',
-                    ]"
-                  />
-                </div>
-                <div class="invisible">
-                  <q-btn
-                    ref="btnSubmit"
-                    label="Submit"
-                    type="submit"
-                    color="primary"
-                  />
-                  <q-btn
-                    label="Reset"
-                    type="reset"
-                    color="primary"
-                    flat
-                    class="q-ml-sm"
-                  />
-                </div>
-              </q-form>
+                <q-form
+                  ref="formRef"
+                  class="row q-col-gutter-sm q-pa-md"
+                  @submit.prevent.stop="onSubmit"
+                >
+                  <div class="col-12 f-12 text-weight-bold">
+                    Pemeriksaan Fisik
+                  </div>
+                  <div class="col-6">
+                    <q-input
+                      v-model="store.formVital.denyutjantung"
+                      dense
+                      standout="bg-yellow-3 text-black"
+                      outlined
+                      label="Denyut Jantung"
+                      :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <q-input
+                      v-model="store.formVital.pernapasan"
+                      dense
+                      standout="bg-yellow-3 text-black"
+                      outlined
+                      label="Pernapasan"
+                      :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <q-input
+                      v-model="store.formVital.sistole"
+                      dense
+                      standout="bg-yellow-3 text-black"
+                      outlined
+                      label="Sistole per mmHg"
+                      :rules="[
+                        val => !!val || 'Harap diisi Terlebih dahulu',
+                        val => !isNaN(val) || 'Harus pakai Nomor',
+                      ]"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <q-input
+                      v-model="store.formVital.diastole"
+                      dense
+                      standout="bg-yellow-3 text-black"
+                      outlined
+                      label="Diastole per mmHg"
+                      :rules="[
+                        val => !!val || 'Harap diisi Terlebih dahulu',
+                        val => !isNaN(val) || 'Harus pakai Nomor',
+                      ]"
+                    />
+                  </div>
+                  <div class="col-4">
+                    <q-input
+                      v-model="store.formVital.suhutubuh"
+                      dense
+                      standout="bg-yellow-3 text-black"
+                      outlined
+                      label="Suhu Tubuh"
+                      :rules="[
+                        val => !!val || 'Harap diisi Terlebih dahulu',
+                        val => !isNaN(val) || 'Harus pakai Nomor',
+                      ]"
+                    />
+                  </div>
+
+                  <div
+                    class="col-12 f-12 text-weight-bold"
+                    style="margin-top:-5px"
+                  >
+                    Pemeriksaan Psikologis, Sosial Ekonomi, Spiritual
+                    <q-separator class="q-my-sm" />
+                  </div>
+                  <div class="col-4">
+                    Status Psikologis
+                  </div>
+                  <div class="col-8">
+                    <div class="q-gutter-sm">
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Tidak ada kelainan"
+                        label="Tidak ada kelainan"
+                      />
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Cemas"
+                        label="Cemas"
+                      />
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Takut"
+                        label="Takut"
+                      />
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Marah"
+                        label="Marah"
+                      />
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Sedih"
+                        label="Sedih"
+                      />
+                      <q-radio
+                        v-model="store.formVital.statuspsikologis"
+                        dense
+                        val="Lain-lain"
+                        label="Lain-lain"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 row q-col-gutter-sm q-mt-sm">
+                    <div class="col-6">
+                      <q-input
+                        v-model="store.formVital.sosialekonomi"
+                        standout="bg-yellow-3 text-black"
+                        outlined
+                        label="Sosial Ekonomi"
+                        autogrow
+                      />
+                    </div>
+                    <div class="col-6">
+                      <q-input
+                        v-model="store.formVital.spiritual"
+                        standout="bg-yellow-3 text-black"
+                        outlined
+                        label="Spiritual"
+                        autogrow
+                      />
+                    </div>
+                  </div>
+                </q-form>
+              </q-scroll-area>
             </div>
-            <div class="col-7">
+            <!-- =================================================================================KOLOM TABEL PENANDAAN -->
+            <div class="col-4">
               <div class="full-height">
                 <div class="column full-height">
                   <div class="col-auto">
@@ -223,8 +288,7 @@ import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 
 const store = usePemeriksaanFisik()
-// eslint-disable-next-line no-unused-vars
-const { search, filterredMenu } = useMenuPemeriksaan()
+const { menus } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)
 const formRef = ref()
@@ -237,13 +301,16 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  console.log('props', props.pasien)
+  console.log('formRef', formRef.value)
+  store.initReset().then(() => {
+    formRef.value.resetValidation()
+  })
 })
 
 async function onSubmit() {
   const valid = await formRef.value?.validate()
   if (valid) {
-    store.savePemeriksaan(props.pasien)
+    store.savePemeriksaan(props.pasien, menus.value)
   }
 }
 </script>
