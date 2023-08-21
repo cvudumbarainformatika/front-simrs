@@ -1,5 +1,8 @@
 <template>
-  <div class="full-height q-pa-sm">
+  <div
+    class="full-height q-pa-sm"
+    style="overflow: hidden;"
+  >
     <q-card
       flat
       bordered
@@ -19,11 +22,26 @@
       </transition>
 
       <div class="row full-height">
-        <div class="col-auto">
-          <div class="column full-height">
-            <canvas-page />
+        <!-- ===============================================================================ROW CANVAS GAMBAR -->
+        <!-- <div class="col-auto"> -->
+        <div
+          ref="canvasEl"
+          class="col-5"
+        >
+          <div class="row full-height">
+            <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
+              Template Gambar
+            </div> -->
+            <div class="column full-height">
+              <canvas-page
+                :width="canvasWidth"
+                @save-image="saveImage"
+              />
+            </div>
           </div>
         </div>
+
+        <!-- ===============================================================================ROW FORM -->
         <div
           class="col scroll"
           style="border-left: 1px solid gray;"
@@ -190,7 +208,7 @@
                       dense
                       class="bg-teal text-white"
                     >
-                      <div>Detail Penandaan Gambar</div>
+                      <div>Detail Penandaan Kelainan Fisik / Penandaan Gambar</div>
                     </q-bar>
                   </div>
                   <div class="col">
@@ -292,7 +310,8 @@ const { menus } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)
 const formRef = ref()
-
+const canvasEl = ref()
+const canvasWidth = ref(0)
 const props = defineProps({
   pasien: {
     type: Object,
@@ -301,7 +320,8 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  console.log('formRef', formRef.value)
+  // console.log('canvas', canvasEl.value?.clientWidth)
+  canvasWidth.value = canvasEl.value?.clientWidth
   store.initReset().then(() => {
     formRef.value.resetValidation()
   })
@@ -313,9 +333,22 @@ async function onSubmit() {
     store.savePemeriksaan(props.pasien, menus.value)
   }
 }
+
+function saveImage(img) {
+  store.saveImage(img, props.pasien)
+}
 </script>
 <style lang="scss" scoped>
-
+.bingkai{
+  border: 2px solid rgb(219, 219, 219);
+  writing-mode: vertical-lr;
+  display: inline-block;
+  cursor: pointer;
+  z-index: 120001;
+  &:hover{
+    background-color: $dark;
+  }
+}
 .card-left {
     background-color: rgba($color: rgb(57, 56, 56), $alpha: 0.3);
   }
