@@ -9,8 +9,8 @@
           No Pemesanan:
         </div>
         <app-input
-          v-model="store.form.no_rencbeliobat"
-          label="Nomor rencana beli obat"
+          v-model="store.form.nopemesanan"
+          label="Nomor Pemesanan obat"
           :filled="false"
           readonly
           valid
@@ -18,7 +18,7 @@
         />
         <div class="q-ml-md">
           <q-btn
-            v-if="store.form.no_rencbeliobat"
+            v-if="store.form.nopemesanan"
             flat
             icon="icon-mat-done"
             dense
@@ -55,13 +55,6 @@
           Penyedia:
         </div>
         <div>Auto complete nama penyedia</div>
-        <!-- <app-input-date-human
-          :model="store.disp.tanggal"
-          label="Tanggal"
-          :filled="false"
-          @set-display="setDispTanggal"
-          @db-model="setTanggal"
-        /> -->
       </div>
     </div>
     <div>
@@ -89,7 +82,7 @@
           :per-page="table.params.per_page"
           :order-by="table.params.order_by"
           :sort="table.params.sort"
-          :loading="table.loading || store.loading"
+          :loading="table.loading"
           :to-search="table.params.q"
           :default-btn="false"
           :ada-cari="false"
@@ -105,17 +98,14 @@
             row-image="image"
             @delete-ids="table.deletesData"
             -->
-          <!-- <template #col-kd_obat>
-            <div>Kode Obat</div>
+          <template #col-rencana>
+            <div>Perencanaan</div>
           </template>
-          <template #col-nama_obat>
-            <div>Nama Obat</div>
+          <template #col-obat>
+            <div>Obat</div>
           </template>
           <template #col-stok>
             <div>Stok</div>
-          </template>
-          <template #col-pabrikan>
-            <div>Penyedia</div>
           </template>
           <template #col-jumlah>
             <div>Jumlah</div>
@@ -123,13 +113,49 @@
           <template #col-centang>
             <div>Beli</div>
           </template>
+          <template #cell-rencana="{row}">
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Nomor
+              </div>
+              <div>
+                {{ row.noperencanaan }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                tanggal
+              </div>
+              <div>
+                {{ row.tglperencanaan ? dateFullFormat( row.tglperencanaan):'-' }}
+              </div>
+            </div>
+          </template>
+          <template #cell-obat="{row}">
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Kode
+              </div>
+              <div>
+                {{ row.kdobat }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Nama
+              </div>
+              <div>
+                {{ row.namaobat }}
+              </div>
+            </div>
+          </template>
           <template #cell-stok="{row}">
             <div class="row justify-between no-wrap">
               <div class="q-mr-xs">
                 Gudang
               </div>
               <div>
-                {{ row.stokGudang }}
+                {{ row.stokgudang }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -137,7 +163,7 @@
                 Seluruh Rumah Sakit
               </div>
               <div>
-                {{ row.stokRS }}
+                {{ row.stokrs }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -145,62 +171,54 @@
                 Maksimal Rumah Sakit
               </div>
               <div>
-                {{ row.stokMaxRS }}
+                {{ row.stomaxkrs }}
               </div>
-            </div>
-          </template>
-          <template #cell-pabrikan="{row}">
-            nanti isinya pabrikan
-            <div v-if="row.stokrealgudang.length">
-              {{ row.stokrealgudang[0].jumlah }}
-            </div>
-            <div v-else>
-              -
             </div>
           </template>
           <template #cell-jumlah="{row}">
             <div class="row justify-between no-wrap">
               <div class="q-mr-xs">
-                Maksimal dibeli
+                di rencakan
               </div>
               <div>
-                {{ row.bisaBeli }}
+                {{ row.jumlahdirencanakan }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
               <app-input
-                v-model="row.jumlahBeli"
+                v-model="row.jumlahdipesan"
                 label="Jumlah Dipesan"
                 :filled="false"
-                :disable="row.bisaBeli<=0"
+                :disable="row.jumlahdirencanakan<=0"
                 :rules="[
-                  val=> (val <= row.bisaBeli) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
+                  val=> (val <= row.jumlahdirencanakan) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
                 ]"
               />
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.bisaBeli>0">
+            <div v-if="row.jumlahdirencanakan >0">
               <q-btn
                 flat
                 no-caps
                 icon-right="icon-mat-send"
                 label="kirim"
                 color="primary"
-                :loading="store.loading && (store.form.kd_obat === row.kd_obat)"
+                :loading="store.loading && (store.form.kdobat === row.kdobat) && (store.form.noperencanaan === row.noperencanaan)"
                 @click="store.kirimRencana(row)"
               />
             </div>
             <div v-else>
               Tidak bisa melakukan pemesanan
             </div>
-          </template> -->
+          </template>
         </app-table>
       </q-card-section>
     </q-card>
   </div>
 </template>
 <script setup>
+import { dateFullFormat } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
 import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
