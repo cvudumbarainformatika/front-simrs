@@ -135,9 +135,8 @@
             </div>
           </template>
           <template #cell-pabrikan="{row}">
-            nanti isinya pabrikan
             <div v-if="row.stokrealgudang.length">
-              {{ row.stokrealgudang[0].jumlah }}
+              nanti isinya pabrikan
             </div>
             <div v-else>
               -
@@ -150,6 +149,14 @@
               </div>
               <div>
                 {{ row.bisaBeli }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                sudah Direncanakan
+              </div>
+              <div>
+                {{ row.sudahDirencanakan }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
