@@ -44,7 +44,7 @@
           <q-page class="contain bg-grey-3">
             <component
               :is="menu.comp"
-              :pasien="pasien"
+              :key="pasien"
             />
           </q-page>
         </q-page-container>
@@ -56,7 +56,7 @@
 <script setup>
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 
 const drawer = ref(false)
 defineProps({
@@ -87,6 +87,14 @@ const menus = ref([
   // { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
 ])
 const menu = ref(menus.value[0])
+onMounted(() => {
+  menu.value = menus.value[0]
+})
+
+onBeforeUnmount(() => {
+  console.log('beforeunmount')
+  menu.value = menus.value[0]
+})
 </script>
 
 <style lang="scss">

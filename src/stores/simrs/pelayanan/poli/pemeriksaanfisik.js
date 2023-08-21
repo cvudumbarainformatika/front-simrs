@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api } from 'src/boot/axios'
+// import { api } from 'src/boot/axios'
 
 export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   state: () => ({
@@ -22,7 +22,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // Tekanan darah
       sistole: 0, // numerik per mmHg
       diastole: 0, // numerik per mmHg
-      suhutubuh: 0 // numerik derajat celcius
+      suhutubuh: 0, // numerik derajat celcius
+      // status
+      statuspsikologis: 'Tidak ada kelainan',
+      sosialekonomi: '',
+      spiritual: ''
     }
   }),
   // getters: {
@@ -58,22 +62,60 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       console.log('oooi')
       this.dialogTemplate = !this.dialogTemplate
     },
-    async savePemeriksaan(pasien) {
-      // const form = new FormData()
-
-      // form.append('noreg', pasien.noreg ? pasien.noreg === null || pasien.noreg === '' ? '' : pasien.noreg : '')
-      // form.append('denyutjantung', this.formVital.denyutjantung)
-      // form.append('pernapasan', this.formVital.pernapasan)
-      // form.append('sistole', this.formVital.sistole)
-      // form.append('diastole', this.formVital.diastole)
-      // form.append('suhutubuh', this.formVital.suhutubuh)
-      // form.append('detail', this.shapes)
-
+    async savePemeriksaan(pasien, menus) {
+      const arr = menus.length > 0 ? menus.filter(x => x.name !== 'Body').map(y => y.name) : []
+      const arr2 = this.shapes
+      const anatomys = []
+      for (let i = 0; i < arr.length; i++) {
+        const ada = arr2.filter(x => x.anatomy === arr[i])
+        let obj = { nama: arr[i], ket: 'Tidak diperiksa' }
+        if (ada.length > 0) {
+          obj = { nama: ada[0].anatomy, ket: ada[0].ket }
+        }
+        anatomys.push(obj)
+      }
       const form = this.formVital
-      form.details = this.shapes
+      form.noreg = pasien ? pasien.noreg : ''
+      form.norm = pasien ? pasien.norm : ''
+      form.details = arr2
+      form.anatomys = anatomys
 
-      const resp = await api.post('v1/simrs/rajal/poli/save-pemeriksaanfisik', form)
-      console.log(resp)
+      console.log(form)
+
+      // const resp = await api.post('v1/simrs/rajal/poli/save-pemeriksaanfisik', form)
+      // console.log(resp)
+    },
+
+    initReset() {
+      return new Promise((resolve, reject) => {
+        this.dialogTemplate = false
+        this.writingMode = false
+        this.dialogForm = {
+          anatomy: '',
+          ket: '',
+          x: 0,
+          y: 0,
+          ketebalan: 2,
+          panjang: 15,
+          warna: '#000000',
+          penanda: 'circle'
+        }
+        // this.shapes= [],
+        this.formVital = {
+          denyutjantung: '', // string
+          pernapasan: '', // string
+          // Tekanan darah
+          sistole: 0, // numerik per mmHg
+          diastole: 0, // numerik per mmHg
+          suhutubuh: 0, // numerik derajat celcius
+          // status
+          statuspsikologis: 'Tidak ada kelainan',
+          sosialekonomi: '',
+          spiritual: ''
+        }
+
+        resolve()
+      })
     }
 
   }

@@ -49,6 +49,7 @@
     />
 
     <page-tindakan
+      :key="pasien"
       v-model="store.pageTindakan"
       :pasien="pasien"
     />

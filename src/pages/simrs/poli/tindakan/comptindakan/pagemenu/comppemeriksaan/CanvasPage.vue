@@ -370,7 +370,7 @@ function func() {
     const x = cvn.width / 2 - width / 2
     const y = cvn.height / 2 - height / 2
     ctx.value.drawImage(bg, x, y, width, height)
-    console.log('func', arr)
+    // console.log('func', arr)
     if (arr.value.length > 0) {
       for (let i = 0; i < arr.value.length; i++) {
         drawShapes(arr.value[i].penanda,
