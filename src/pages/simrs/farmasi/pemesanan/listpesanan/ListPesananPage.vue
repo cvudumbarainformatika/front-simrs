@@ -40,6 +40,12 @@
       <template #col-tgl>
         <div>Tanggal</div>
       </template>
+      <template #col-penyedia>
+        <div>Penyedia</div>
+      </template>
+      <template #cell-penyedia="{row}">
+        <div>{{ row.pihakketiga? row.pihakketiga.nama:'-' }}</div>
+      </template>
       <template #cell-tgl="{row}">
         <div>{{ row.tgl_pemesanan? dateFullFormat( row.tgl_pemesanan) : '-' }}</div>
       </template>
