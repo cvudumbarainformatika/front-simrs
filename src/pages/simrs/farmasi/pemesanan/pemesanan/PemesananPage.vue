@@ -23,13 +23,13 @@
             icon="icon-mat-done"
             dense
             color="primary"
-            @click="store.refreshForm()"
+            @click="store.selesaiDanKunci()"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Refresh Form
+              Selesai dan Kunci Pemesanan
             </q-tooltip>
           </q-btn>
         </div>
@@ -55,6 +55,7 @@
           Penyedia:
         </div>
         <app-autocomplete-debounce-input
+          ref="refPbf"
           v-model="store.form.kdpbf"
           label="Penyedia"
           autocomplete="nama"
@@ -62,6 +63,9 @@
           option-value="kode"
           :loading="store.loadingPihakTiga"
           :source="store.pihakTigas"
+          :rules="[
+            val=> !!val || 'tidak boleh kosong'
+          ]"
           @buang="cariPihakTiga"
         />
       </div>
@@ -92,12 +96,12 @@
           :order-by="table.params.order_by"
           :sort="table.params.sort"
           :loading="table.loading"
-          :to-search="table.params.q"
+          :to-search="table.params.namaobat"
           :default-btn="false"
-          :ada-cari="false"
           :ada-refresh="false"
           :ada-filter="false"
           :ada-tambah="false"
+          :ada-cari="false"
           @find="table.setSearch"
           @set-row="table.setPerPage"
           @goto="table.setPage"
@@ -120,14 +124,14 @@
             <div>Jumlah</div>
           </template>
           <template #col-centang>
-            <div>Beli</div>
+            <div />
           </template>
           <template #cell-rencana="{row}">
             <div class="row justify-between no-wrap">
               <div class="q-mr-xs">
                 Nomor
               </div>
-              <div>
+              <div class="text-primary">
                 {{ row.noperencanaan }}
               </div>
             </div>
@@ -145,7 +149,7 @@
               <div class="q-mr-xs">
                 Kode
               </div>
-              <div>
+              <div class="text-orange">
                 {{ row.kdobat }}
               </div>
             </div>
@@ -153,7 +157,7 @@
               <div class="q-mr-xs">
                 Nama
               </div>
-              <div>
+              <div class=" text-weight-bold">
                 {{ row.namaobat }}
               </div>
             </div>
@@ -163,7 +167,7 @@
               <div class="q-mr-xs">
                 Gudang
               </div>
-              <div>
+              <div class="text-purple">
                 {{ row.stokgudang }}
               </div>
             </div>
@@ -171,7 +175,7 @@
               <div class="q-mr-xs">
                 Seluruh Rumah Sakit
               </div>
-              <div>
+              <div class="text-green">
                 {{ row.stokrs }}
               </div>
             </div>
@@ -179,7 +183,7 @@
               <div class="q-mr-xs">
                 Maksimal Rumah Sakit
               </div>
-              <div>
+              <div class="text-negative">
                 {{ row.stomaxkrs }}
               </div>
             </div>
@@ -189,7 +193,7 @@
               <div class="q-mr-xs">
                 di rencakan
               </div>
-              <div>
+              <div class="text-weight-bold">
                 {{ row.jumlahdirencanakan }}
               </div>
             </div>
@@ -211,10 +215,10 @@
                 flat
                 no-caps
                 icon-right="icon-mat-send"
-                label="kirim"
+                label="Beli"
                 color="primary"
                 :loading="store.loading && (store.form.kdobat === row.kdobat) && (store.form.noperencanaan === row.noperencanaan)"
-                @click="store.kirimRencana(row)"
+                @click="kirimRencana(row)"
               />
             </div>
             <div v-else>
@@ -231,6 +235,7 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
 import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
+import { ref } from 'vue'
 
 const style = useStyledStore()
 const store = usePemesananObatStore()
@@ -249,6 +254,13 @@ function cariPihakTiga(val) {
   store.namaPihakKetiga = val
   store.getPihakKetiga()
 }
+const refPbf = ref(null)
+function kirimRencana(val) {
+  if (refPbf.value.$refs.refAuto.validate()) {
+    store.kirimRencana(val)
+  }
+}
+
 table.getInitialData()
 store.getInitialData()
 </script>
