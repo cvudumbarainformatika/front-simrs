@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-8">
                   <q-input
-                    v-model="text"
+                    v-model="store.form.keluhanutama"
                     outlined
                     autogrow
                     standout="bg-yellow-3"
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-8">
                   <q-input
-                    v-model="text"
+                    v-model="store.form.riwayatpenyakit"
                     outlined
                     autogrow
                     standout="bg-yellow-3"
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-6">
                   <q-select
-                    v-model="model"
+                    v-model="store.form.riwayatalergi"
                     dense
                     outlined
                     :options="options"
@@ -94,11 +94,11 @@
                   >
                     <template #append>
                       <q-icon
-                        v-if="model !== null"
+                        v-if="store.form.riwayatalergi !== null || store.form.riwayatalergi !== ''"
                         class="cursor-pointer"
                         name="icon-mat-clear"
                         size="xs"
-                        @click.stop.prevent="model = ''"
+                        @click.stop.prevent="store.form.riwayatalergi = ''"
                       />
                     </template>
                   </q-select>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="col-8">
                   <q-input
-                    v-model="text"
+                    v-model="store.form.riwayatpengobatan"
                     outlined
                     autogrow
                     standout="bg-yellow-3"
@@ -281,15 +281,11 @@
 
 <script setup>
 import { useSlideup } from 'src/composable/gsap/slideup'
+import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 import { onMounted, ref } from 'vue'
+
+const store = useAnamnesis()
 const seamless = ref(false)
-// const options = [
-//   { value: '', label: '' },
-//   { value: 1, label: 'Obat' },
-//   { value: 2, label: 'Makanan' },
-//   { value: 3, label: 'Udara' },
-//   { value: 4, label: 'Lain-lain' }
-// ]
 const options = ['Obat', 'Makanan', 'Udara', 'Lain-lain']
 const model = ref(options[0])
 const text = ref('')
