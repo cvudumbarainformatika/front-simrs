@@ -70,7 +70,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         const ada = arr2.filter(x => x.anatomy === arr[i])
         let obj = { nama: arr[i], ket: 'Tidak diperiksa' }
         if (ada.length > 0) {
-          obj = { nama: ada[0].anatomy, ket: ada[0].ket }
+          obj = { nama: ada[0].anatomy, ket: ada.map(x => x.ket).join() }
         }
         anatomys.push(obj)
       }
@@ -84,6 +84,16 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
       // const resp = await api.post('v1/simrs/rajal/poli/save-pemeriksaanfisik', form)
       // console.log(resp)
+    },
+
+    async saveImage(img, pasien) {
+      const obj = {
+        noreg: pasien ? pasien.noreg : '',
+        norm: pasien ? pasien.norm : '',
+        image: img
+      }
+
+      console.log(obj)
     },
 
     initReset() {

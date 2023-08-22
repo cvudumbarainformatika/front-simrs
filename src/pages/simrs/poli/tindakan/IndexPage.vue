@@ -45,6 +45,7 @@
             <component
               :is="menu.comp"
               :key="pasien"
+              :pasien="pasien"
             />
           </q-page>
         </q-page-container>

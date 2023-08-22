@@ -1,5 +1,7 @@
 <template>
-  <div class="ttd-pad-form full-height">
+  <div
+    class="ttd-pad-form full-height"
+  >
     <!-- tombol-atas -->
     <div
       class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-sm tmp-t"
@@ -97,14 +99,14 @@
       </div>
       <div />
     </div>
-    <!-- canvas -->
+    <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
       <canvas
         id="canvas"
         ref="canvasRef"
         class="bg-template"
-        width="500"
-        height="500"
+        :width="props.width"
+        :height="props.width"
         @mousedown="handlePointerDown"
         @mouseup="handlePointerUp"
       >
@@ -116,12 +118,13 @@
         >
           <q-card
             flat
-            style="min-width:250px"
+            style="width:350px"
+            dark
           >
             <q-card-section>
               Keterangan
             </q-card-section>
-            <q-separator />
+            <q-separator dark />
             <q-card-section>
               <q-select
                 v-model="store.dialogForm.anatomy"
@@ -133,6 +136,7 @@
                 :options="options"
                 dense
                 class="q-mb-md"
+                style="background-color: #fff;"
                 @filter="filterFn"
               >
                 <template #no-option>
@@ -149,14 +153,16 @@
                 outlined
                 autogrow
                 label="keterangan"
+                style="background-color: #fff;"
               />
             </q-card-section>
-            <q-separator />
+            <q-separator dark />
             <div class="row">
               <q-btn
-                class="col"
+                class="col q-pa-md"
                 color="primary"
                 square
+                size="md"
                 icon="icon-mat-check"
                 @click="saveShape"
               />
@@ -165,6 +171,7 @@
                 color="negative"
                 icon="icon-mat-close"
                 square
+                size="md"
                 @click="cancelShape"
               />
             </div>
@@ -172,7 +179,7 @@
         </q-menu>
       </canvas>
     </div>
-    <!-- tombol-bawah -->
+    <!-- =====================================================================================================tombol-bawah -->
     <div
       class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-xs tmp-t z-top absolute-bottom"
     >
@@ -210,6 +217,7 @@
           size="sm"
           padding="sm"
           label="Simpan Gambar"
+          @click="saveImage"
         />
       </div>
     </div>
@@ -222,6 +230,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
+const emits = defineEmits(['saveImage'])
+
 const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 
@@ -232,19 +242,31 @@ const refMenu = ref()
 const ctx = ref()
 const writingMode = ref(false)
 
+const props = defineProps({
+  width: {
+    type: Number,
+    default: 300
+  }
+})
+
 const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
   { name: 'kotak', icon: 'icon-mat-check_box_outline' }
 ])
 
 onMounted(() => {
-  console.log(refMenu.value)
+  // console.log('document', window.innerWidth / 2)
   ctx.value = canvasRef.value.getContext('2d')
 
   const opt = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
   options.value = opt
+  // resizeCanvas()
   func()
 })
+
+// function resizeCanvas() {
+//   const cnv = canvasRef.value
+// }
 
 const filterFn = (val, update) => {
   if (val === '') {
@@ -340,18 +362,18 @@ function drawShapes(name, x, y, tebal, warna, p, no) {
 }
 
 const clearPad = () => {
-  // ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
   func()
 }
-
 const resetTanda = () => {
   store.resetShapes()
   func()
 }
 
-// const savePad = () => {
-//   const imageURL = canvasRef.value.toDataURL()
-// }
+const saveImage = () => {
+  const imageURL = canvasRef.value.toDataURL('image/jpeg', 0.5)
+  console.log('save', imageURL)
+  emits('saveImage', imageURL)
+}
 const arr = computed(() => {
   return store.shapes
 })
@@ -369,6 +391,8 @@ function func() {
     const height = bg.height * scale
     const x = cvn.width / 2 - width / 2
     const y = cvn.height / 2 - height / 2
+    ctx.value.fillStyle = '#FFFFFF'
+    ctx.value.fillRect(0, 0, cvn.width, cvn.height)
     ctx.value.drawImage(bg, x, y, width, height)
     // console.log('func', arr)
     if (arr.value.length > 0) {

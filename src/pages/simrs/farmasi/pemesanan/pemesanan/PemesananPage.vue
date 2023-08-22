@@ -54,7 +54,16 @@
         <div class="q-mr-md">
           Penyedia:
         </div>
-        <div>Auto complete nama penyedia</div>
+        <app-autocomplete-debounce-input
+          v-model="store.form.kdpbf"
+          label="Penyedia"
+          autocomplete="nama"
+          option-label="nama"
+          option-value="kode"
+          :loading="store.loadingPihakTiga"
+          :source="store.pihakTigas"
+          @buang="cariPihakTiga"
+        />
       </div>
     </div>
     <div>
@@ -233,6 +242,12 @@ function setDispTanggal(val) {
 function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
+}
+
+function cariPihakTiga(val) {
+  console.log('cari pihak tiga', val)
+  store.namaPihakKetiga = val
+  store.getPihakKetiga()
 }
 table.getInitialData()
 store.getInitialData()
