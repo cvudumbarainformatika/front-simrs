@@ -35,7 +35,7 @@
       @on-click="onClick"
     >
       <template #col-nopemesanan>
-        <div>Nomor Rencana Beli</div>
+        <div>Nomor Pemesanan</div>
       </template>
       <template #col-tgl>
         <div>Tanggal</div>
@@ -95,29 +95,76 @@
           Tidak ada Rincian
         </div>
       </template>
-      <!-- <template #left-acttion="{row,col}">
-        <div>
-          row : {{ row.id }}
+      <template #left-acttion="{row}">
+        <div v-if="!row.flag">
+          <q-btn
+            flat
+            icon="icon-mat-lock_open"
+            dense
+            color="negative"
+            :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
+            @click="kunci(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Rencana Pemesanan sudah selesai dan siap di kunci
+            </q-tooltip>
+          </q-btn>
         </div>
-        <div>
-          col : {{ col }}
+        <div v-if="row.flag">
+          <q-btn
+            flat
+            icon="icon-mat-lock"
+            dense
+            color="green"
+            @click="info(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Rencana Pemesanan sudah di kunci
+            </q-tooltip>
+          </q-btn>
         </div>
-      </template> -->
+      </template>
     </app-table-extend>
   </div>
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { notifSuccessVue } from 'src/modules/utils'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
+import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
+import { ref } from 'vue'
 
 const style = useStyledStore()
 const store = useListPemesananStore()
+const pemesanan = usePemesananObatStore()
 // click
 function onClick (val) {
   console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
+}
+
+function info (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  notifSuccessVue('Pembelian nomor ' + val.nopemesanan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
+}
+const toloadBeli = ref('')
+function kunci (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.nopemesanan
+  pemesanan.kunci(val.nopemesanan).then(() => {
+    toloadBeli.value = ''
+    if (!val.flag) val.flag = 1
+  })
 }
 store.getInitialData()
 </script>

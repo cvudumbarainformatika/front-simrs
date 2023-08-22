@@ -32,7 +32,11 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.setParam('page', payload)
       this.getObatMauBeli()
     },
-
+    setSearch(payload) {
+      this.setParam('namaobat', payload)
+      this.setParam('page', 1)
+      this.getObatMauBeli()
+    },
     setColumns (payload) {
       const thumb = payload.map((x) => Object.keys(x))
       this.columns = thumb[0]
@@ -62,7 +66,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             if (this.items.length) {
               this.items.forEach(a => {
                 const dipesan = parseFloat(a.jumlahdipesan)
-                console.log('dipesan', dipesan, typeof dipesan)
+                // console.log('dipesan', dipesan, typeof dipesan)
                 a.jumlahdipesan = dipesan
                 a.jumlahdirencanakan = dipesan
               })

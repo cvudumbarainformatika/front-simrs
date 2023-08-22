@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { useTabelPemesananObatStore } from './tabelObat'
 
 export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   state: () => ({
@@ -27,6 +28,16 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   actions: {
     setForm(key, val) {
       this.form[key] = val
+    },
+    resetForm() {
+      this.form = {
+        tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        nopemesanan: ''
+      }
+      this.namaPihakKetiga = ''
+      this.getInitialData()
+      const tabel = useTabelPemesananObatStore()
+      tabel.getInitialData()
     },
     getInitialData() {
       this.getPihakKetiga()
@@ -81,6 +92,41 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    selesaiDanKunci() {
+      this.loading = true
+      const data = {
+        nopemesanan: this.form.nopemesanan
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/pemesananobat/kuncipemesanan', data)
+          .then(resp => {
+            this.loading = false
+            this.resetForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    kunci(val) {
+      this.loading = true
+      const data = {
+        nopemesanan: val
+      }
+      const tabel = useTabelPemesananObatStore()
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/pemesananobat/kuncipemesanan', data)
+          .then(resp => {
+            this.loading = false
+            tabel.getInitialData()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
       })
     }
   }

@@ -159,7 +159,7 @@ function kunci(val) {
   toloadBeli.value = val.no_rencbeliobat
   rencana.kunci(val.no_rencbeliobat).then(() => {
     toloadBeli.value = ''
-    val.flag = 1
+    if (!val.flag) val.flag = 1
   })
 }
 store.getInitialData()
