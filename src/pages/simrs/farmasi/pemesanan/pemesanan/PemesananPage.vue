@@ -29,7 +29,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Refresh Form
+              Selesai dan Kunci Pemesanan
             </q-tooltip>
           </q-btn>
         </div>
