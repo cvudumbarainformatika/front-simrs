@@ -225,7 +225,7 @@
 </template>
 
 <script setup>
-import MyImg from 'src/assets/human/human-body.jpg'
+// import MyImg from 'src/assets/human/human-body.jpg'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
@@ -344,12 +344,6 @@ function drawShapes(name, x, y, tebal, warna, p, no) {
     } else if (name === 'kotak') {
       cx.rect(x - p, y - p, p * 2, p * 2)
     }
-    // else {
-    //   cx.moveTo(x, y)
-    //   cx.lineTo(x - p, y)
-    //   cx.lineTo(x - p, y - p)
-    //   cx.closePath()
-    // }
     cx.lineWidth = tebal
     cx.strokeStyle = warna
     cx.stroke()
@@ -377,13 +371,13 @@ const saveImage = () => {
 const arr = computed(() => {
   return store.shapes
 })
-function func() {
+async function func(filename) {
   const cvn = canvasRef.value
   // const context = ctx.value
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
   cvn.height = cvn.width
   const bg = new Image()
-  bg.src = MyImg
+  bg.src = '..' + store.fileGambar
   bg.onload = function () {
     console.log('bg', bg.height)
     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
@@ -409,6 +403,11 @@ function func() {
 
 watch(() => arr, (obj) => {
   console.log('watch', obj)
+  writingMode.value = true
+  func()
+}, { deep: true })
+watch(() => store.fileGambar, (obj) => {
+  console.log('watch file gambar', obj)
   writingMode.value = true
   func()
 }, { deep: true })

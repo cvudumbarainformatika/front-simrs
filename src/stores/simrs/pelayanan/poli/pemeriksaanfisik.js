@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
 // import { api } from 'src/boot/axios'
 
 export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   state: () => ({
     dialogTemplate: false,
+    templateActive: 'Body',
+    gambarActive: 0,
+    fileGambar: '/src/assets/human/anatomys/body-human.jpg',
     writingMode: false,
     dialogForm: {
       anatomy: '',
@@ -33,6 +37,13 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    setTemplateActive(val) {
+      this.templateActive = val
+    },
+    setGambarActive(val, file) {
+      this.gambarActive = val
+      this.fileGambar = file
+    },
     pushShapes(val) {
       return new Promise((resolve, reject) => {
         const newArr = [...this.shapes]
@@ -80,10 +91,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       form.details = arr2
       form.anatomys = anatomys
 
-      console.log(form)
+      // console.log('simpan pemeriksaan', form)
 
-      // const resp = await api.post('v1/simrs/rajal/poli/save-pemeriksaanfisik', form)
-      // console.log(resp)
+      const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
+      console.log(resp)
     },
 
     async saveImage(img, pasien) {
@@ -99,6 +110,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     initReset() {
       return new Promise((resolve, reject) => {
         this.dialogTemplate = false
+        this.templateActive = 'Body'
+        this.gambarActive = 0
+        this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
         this.writingMode = false
         this.dialogForm = {
           anatomy: '',

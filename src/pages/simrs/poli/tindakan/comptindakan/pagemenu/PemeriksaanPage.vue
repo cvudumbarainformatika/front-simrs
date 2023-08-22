@@ -17,7 +17,11 @@
           v-if="store.dialogTemplate"
           class="absolute left-menu"
         >
-          <template-gambar style="border-right:2px solid gray;" />
+          <template-gambar
+            style="border-right:2px solid gray;"
+            :active="store.templateActive"
+            :gambar-active="store.gambarActive"
+          />
         </div>
       </transition>
 
@@ -306,7 +310,7 @@ import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 
 const store = usePemeriksaanFisik()
-const { menus } = useMenuPemeriksaan()
+const { menus, getImage } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)
 const formRef = ref()
@@ -321,6 +325,7 @@ const props = defineProps({
 
 onMounted(() => {
   // console.log('canvas', canvasEl.value?.clientWidth)
+  getImage()
   canvasWidth.value = canvasEl.value?.clientWidth
   store.initReset().then(() => {
     formRef.value.resetValidation()

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 export function useMenuPemeriksaan() {
   const menus = ref(
     [
-      { name: 'Body', icon: 'icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com' },
+      { name: 'Body', icon: 'icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com', url: 'body' },
       { name: 'Kepala', icon: 'icon-my-human-skull-side-view-svgrepo-com' },
       { name: 'Mata', icon: 'icon-my-eyebrow-svgrepo-com' },
       { name: 'Telinga', icon: 'icon-my-ear-outline-svgrepo-com' },
@@ -48,5 +48,20 @@ export function useMenuPemeriksaan() {
     return newMenus
   }
 
-  return { menus, search, filterredMenu }
+  function getImage() {
+    const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
+    const moduleKeys = Object.keys(modules)
+    console.log(moduleKeys)
+    // try {
+    //   const modules = import.meta.glob('@/assets/images/**/*.{png,svg}', { eager: true })
+    //   const moduleKeys = Object.keys(modules)
+    //   const fileSrc = moduleKeys.find(key => key.includes(fileName))
+
+    //   return fileSrc ? modules[fileSrc].default : ''
+    // } catch (err) {
+    //   console.log(err)
+    // }
+  }
+
+  return { menus, search, filterredMenu, getImage }
 }
