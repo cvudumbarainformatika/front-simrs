@@ -747,7 +747,7 @@ function afterEditApp(val, i, key) {
 }
 function editMenu(val, i, key) {
   prevVal = val[key]
-  // console.log('Menu edit', val, i, key)
+  console.log('Menu edit', val, i, key)
 }
 function afterEditMenu(val, i, key) {
   if (val[key] !== prevVal) {
