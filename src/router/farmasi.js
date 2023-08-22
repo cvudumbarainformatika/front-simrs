@@ -55,24 +55,24 @@ const farmasi = {
     },
     {
       path: '/farmasi/penerimaan',
-      component: () => import('src/pages/simrs/farmasi/penerimaan/IndexPage.vue')
-      // children: [
-      //   { path: '', redirect: '/farmasi/rencanapemesanan/rencana' },
-      //   {
-      //     path: '/farmasi/rencanapemesanan/rencana',
-      //     name: 'farmasi.rencanapemesanan.rencana',
-      //     meta: { transition: 'slide-up' },
-      //     component: () =>
-      //       import('pages/simrs/farmasi/rencanapemesanan/rencana/IndexPage.vue')
-      //   },
-      //   {
-      //     path: '/farmasi/rencanapemesanan/listrencanapesanan',
-      //     name: 'farmasi.rencanapemesanan.listrencanapesanan',
-      //     meta: { transition: 'slide-up' },
-      //     component: () =>
-      //       import('pages/simrs/farmasi/rencanapemesanan/listrencanan/IndexPage.vue')
-      //   }
-      // ]
+      component: () => import('src/pages/simrs/farmasi/penerimaan/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/penerimaan/penerimaan' },
+        {
+          path: '/farmasi/penerimaan/penerimaan',
+          name: 'farmasi.penerimaan.penerimaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/penerimaan/penerimaan/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/penerimaan/listpenerimaan',
+          name: 'farmasi.penerimaan.listpenerimaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/penerimaan/listpenerimaan/IndexPage.vue')
+        }
+      ]
     },
 
     {
