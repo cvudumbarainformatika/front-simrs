@@ -131,7 +131,7 @@
               <div class="q-mr-xs">
                 Nomor
               </div>
-              <div class="text-primary">
+              <div class="text-primary text-weight-bold">
                 {{ row.noperencanaan }}
               </div>
             </div>
@@ -149,7 +149,7 @@
               <div class="q-mr-xs">
                 Kode
               </div>
-              <div class="text-orange">
+              <div class="text-deep-purple text-weight-bold">
                 {{ row.kdobat }}
               </div>
             </div>
@@ -163,33 +163,33 @@
             </div>
           </template>
           <template #cell-stok="{row}">
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-purple">
               <div class="q-mr-xs">
                 Gudang
               </div>
-              <div class="text-purple">
+              <div class="">
                 {{ row.stokgudang }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-cyan">
               <div class="q-mr-xs">
                 Seluruh Rumah Sakit
               </div>
-              <div class="text-green">
+              <div class="">
                 {{ row.stokrs }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-negative">
               <div class="q-mr-xs">
                 Maksimal Rumah Sakit
               </div>
-              <div class="text-negative">
+              <div class="">
                 {{ row.stomaxkrs }}
               </div>
             </div>
           </template>
           <template #cell-jumlah="{row}">
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-green">
               <div class="q-mr-xs">
                 di rencakan
               </div>

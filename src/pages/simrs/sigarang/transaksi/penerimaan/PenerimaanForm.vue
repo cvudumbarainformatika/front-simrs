@@ -484,6 +484,7 @@ const initHarga = val => {
     val.harga = store.form.harga
   }
   store.setForm('harga', store.form.harga ? store.form.harga !== val.harga ? store.form.harga : store.form.harga : val.harga)
+  console.log('init harga form', store.form)
 }
 function hideHarga() {
   // console.log('ref', refHarga.value[0])
@@ -495,7 +496,7 @@ const init = val => {
   store.setForm('kode_rs', val.kode_rs)
   store.setForm('kode_108', val.kode_108)
   store.setForm('kode_satuan', val.kode_satuan)
-  store.setForm('harga', store.form.harga ? store.form.harga !== val.harga ? store.form.harga : store.form.harga : val.harga)
+  store.setForm('harga', store.form.harga ? (store.form.harga !== val.harga ? val.harga : store.form.harga) : val.harga)
   store.setForm('nama_barang', val.nama_barang)
   store.setForm('uraian_108', val.uraian_108)
   store.setForm('uraian_50', val.uraian_50)
@@ -510,6 +511,7 @@ const init = val => {
   // store.setForm('total', val.harga * kuantiti.value)
   // store.setForm('qty', kuantiti.value)
   console.log('init', val)
+  console.log('init form', store.form)
 }
 function hideQty() {
   refqty.value[0].blur()

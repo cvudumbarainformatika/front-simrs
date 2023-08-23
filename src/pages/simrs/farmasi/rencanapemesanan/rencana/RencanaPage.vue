@@ -108,16 +108,21 @@
           <template #col-centang>
             <div>Beli</div>
           </template>
+          <template #cell-nama_obat="{row}">
+            <div class="text-amber-10">
+              {{ row.nama_obat }}
+            </div>
+          </template>
           <template #cell-stok="{row}">
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-brown">
               <div class="q-mr-xs">
                 Gudang
               </div>
-              <div>
+              <div class="">
                 {{ row.stokGudang }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-orange">
               <div class="q-mr-xs">
                 Seluruh Rumah Sakit
               </div>
@@ -125,7 +130,7 @@
                 {{ row.stokRS }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-purple">
               <div class="q-mr-xs">
                 Maksimal Rumah Sakit
               </div>
@@ -143,7 +148,7 @@
             </div>
           </template>
           <template #cell-jumlah="{row}">
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-weight-bold text-green">
               <div class="q-mr-xs">
                 Maksimal dibeli
               </div>
@@ -151,7 +156,7 @@
                 {{ row.bisaBeli }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between no-wrap text-red">
               <div class="q-mr-xs">
                 sudah Direncanakan
               </div>
@@ -163,6 +168,7 @@
               <app-input
                 v-model="row.jumlahBeli"
                 label="Jumlah Dipesan"
+                color="green"
                 :filled="false"
                 :disable="row.bisaBeli<=0"
                 :rules="[

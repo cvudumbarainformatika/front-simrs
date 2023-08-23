@@ -15,7 +15,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
       // 'stok_rs',
       // 'stok_max_rs',
       // 'jml_bisa_beli',
-      'pabrikan',
+      // 'pabrikan',
       // 'pabrikan',
       // 'pbf',
       // 'jumlah_dipesan',
