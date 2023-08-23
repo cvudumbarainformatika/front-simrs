@@ -239,7 +239,8 @@
             <div class="row justify-between no-wrap items-center">
               <div class="col-12">
                 <app-input
-                  v-model="det.trmskr"
+                  ref="refJmlDiterima"
+                  v-model="det.jml_diterima"
                   label="Diterima Sekarang"
                   :filled="false"
                 />
@@ -274,6 +275,7 @@
             <div class="row justify-between no-wrap items-center">
               <div class="col-12">
                 <app-input
+                  ref="refIsi"
                   v-model="det.isi"
                   label="Isi"
                   :filled="false"
@@ -300,6 +302,7 @@
             <div class="row justify-between no-wrap items-center">
               <div class="col-12">
                 <app-input-date
+                  ref="refExp"
                   :model="det.tgl_exp"
                   label="Tanggal Kadalwarsa"
                   :filled="false"
@@ -313,6 +316,7 @@
             <div class="row justify-between no-wrap items-center">
               <div class="col-12">
                 <app-input
+                  ref="refHarga"
                   v-model="det.harga"
                   label="Harga"
                   :filled="false"
@@ -367,7 +371,7 @@
               icon="icon-mat-save"
               color="primary"
               round
-              @click="validasi(i)"
+              @click="simpan(i)"
             >
               <q-tooltip
                 class="primary"
@@ -403,9 +407,30 @@ const style = useStyledStore()
 const store = usePenerimaanFarmasiStore()
 
 const refPpn = ref(null)
+const refJmlDiterima = ref(null)
+const refIsi = ref(null)
+const refExp = ref(null)
+const refHarga = ref(null)
 function validasi(index) {
   console.log('index', index)
-  console.log('ref ppn', refPpn.value[index].refInput.validate())
+  // console.log('ref ppn', refPpn.value[index].refInput.validate())
+  // console.log('ref diterima', refJmlDiterima.value[index].refInput.validate())
+  // console.log('ref isi', refIsi.value[index].refInput.validate())
+  // console.log('ref exp', refExp.value[index].$refs.refInputDate.validate())
+  // console.log('ref harga', refHarga.value[index].refInput.validate())
+  const ppn = refPpn.value[index].refInput.validate()
+  const diterima = refJmlDiterima.value[index].refInput.validate()
+  const isi = refIsi.value[index].refInput.validate()
+  const exp = refExp.value[index].$refs.refInputDate.validate()
+  const harga = refHarga.value[index].refInput.validate()
+  if (ppn && diterima && isi && exp && harga) return true
+  else return false
+}
+
+function simpan(index) {
+  if (validasi(index)) {
+    console.log('simpan valid')
+  }
 }
 function detKadal(evt, val) {
   // console.log('evt', evt)

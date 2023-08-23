@@ -55,6 +55,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         this.namaPenyedia = this.items.pihakketiga
         console.log('tem ', this.items)
         console.log('det ', this.details)
+        this.metanirinci()
       }
       this.setForm('nopemesanan', val)
     },
@@ -63,6 +64,15 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.items = []
       this.details = []
       this.namaPenyedia = null
+    },
+    metanirinci() {
+      if (this.details.length) {
+        this.details.forEach(a => {
+          a.diskon = 0
+          a.ppn = 0
+          a.jml_diterima = 0
+        })
+      }
     },
     gudangSelected(val) {
       this.setForm('gudang', val)
