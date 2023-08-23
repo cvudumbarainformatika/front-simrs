@@ -39,6 +39,7 @@
             <div class="column full-height">
               <canvas-page
                 :width="canvasWidth"
+                :pasien="pasien"
                 @save-image="saveImage"
               />
             </div>
@@ -223,7 +224,7 @@
                       class="column-break full-height"
                     >
                       <q-scroll-area
-                        v-if="store.shapes.length"
+                        v-if="filterShapes.length"
                         style="height: calc(100% - 52px);"
                       >
                         <q-list
@@ -231,7 +232,7 @@
                           separator
                         >
                           <q-item
-                            v-for="(item, i) in store.shapes"
+                            v-for="(item, i) in filterShapes"
                             :key="i"
                           >
                             <q-item-section avatar>
@@ -304,7 +305,7 @@
 // import BodyPage from './comppemeriksaan/Bodypage.vue'
 import CanvasPage from './comppemeriksaan/CanvasPage.vue'
 import TemplateGambar from './comppemeriksaan/TemplateGambar.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
@@ -321,6 +322,10 @@ const props = defineProps({
     type: Object,
     default: null
   }
+})
+
+const filterShapes = computed(() => {
+  return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
 
 onMounted(() => {
@@ -340,7 +345,7 @@ async function onSubmit() {
 }
 
 function saveImage(img) {
-  store.saveImage(img, props.pasien)
+  store.saveImage(img, props.pasien, filterShapes.value)
 }
 </script>
 <style lang="scss" scoped>

@@ -97,14 +97,20 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       console.log(resp)
     },
 
-    async saveImage(img, pasien) {
+    async saveImage(img, pasien, details) {
+      // console.log(details)
+      let keterangan = ''
+      if (details.length) {
+        keterangan = details.map(x => x.ket).join()
+      }
       const obj = {
         noreg: pasien ? pasien.noreg : '',
         norm: pasien ? pasien.norm : '',
-        image: img
+        image: img,
+        keterangan
       }
 
-      console.log(obj)
+      console.log('simpan gambar', obj)
     },
 
     initReset() {

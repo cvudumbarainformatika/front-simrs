@@ -246,6 +246,10 @@ const props = defineProps({
   width: {
     type: Number,
     default: 300
+  },
+  pasien: {
+    type: Object,
+    default: null
   }
 })
 
@@ -304,10 +308,15 @@ function saveShape() {
     ket: store.dialogForm.ket,
     ketebalan: store.dialogForm.ketebalan,
     panjang: store.dialogForm.panjang,
-    warna: store.dialogForm.warna
+    warna: store.dialogForm.warna,
+    templatemenu: store.templateActive,
+    templategambar: store.fileGambar,
+    templateindex: store.gambarActive,
+    noreg: props.pasien ? props.pasien.noreg : '',
+    norm: props.pasien ? props.pasien.norm : ''
   }
   store.pushShapes(obj).then((x) => {
-    console.log('shapes')
+    // console.log('shapes')
     setTimeout(() => {
       refMenu.value.hide()
     }, 300)
@@ -365,11 +374,11 @@ const resetTanda = () => {
 
 const saveImage = () => {
   const imageURL = canvasRef.value.toDataURL('image/jpeg', 0.5)
-  console.log('save', imageURL)
+  console.log('gambar', imageURL)
   emits('saveImage', imageURL)
 }
 const arr = computed(() => {
-  return store.shapes
+  return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
 async function func(filename) {
   const cvn = canvasRef.value
