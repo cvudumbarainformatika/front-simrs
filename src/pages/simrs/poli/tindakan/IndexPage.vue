@@ -79,8 +79,13 @@ const menus = ref([
     label: 'Pemeriksaan Fisik',
     icon: 'icon-my-stethoscope',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPage.vue')))
+  },
+  {
+    name: 'layanan-page',
+    label: 'Layanan',
+    icon: 'icon-mat-analytics',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))
   }
-  // { name: 'layanan-page', label: 'Layanan', icon: 'icon-mat-analytics' },
   // { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
   // { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
   // { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
