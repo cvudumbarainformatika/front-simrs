@@ -250,7 +250,7 @@
                 Diterima Sebelumnya
               </div>
               <div class="">
-                Diterima Sebelumnya
+                {{ det.jml_terima_lalu ? det.jml_terima_lalu : 0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap items-center">
@@ -258,7 +258,7 @@
                 Seluruh Penerimaan
               </div>
               <div class="">
-                Seluruh Penerimaan
+                {{ det.jml_all_penerimaan ? det.jml_all_penerimaan : 0 }}
               </div>
             </div>
           </div>
@@ -300,7 +300,7 @@
             <div class="row justify-between no-wrap items-center">
               <div class="col-12">
                 <app-input-date
-                  :model="det.tglKadalwarsa"
+                  :model="det.tgl_exp"
                   label="Tanggal Kadalwarsa"
                   :filled="false"
                   @set-model="detKadal($event,det)"
@@ -311,27 +311,37 @@
 
           <div class="anu q-mr-sm">
             <div class="row justify-between no-wrap items-center">
-              <div class="q-mr-sm">
-                Harga
-              </div>
-              <div class="">
-                Harga
-              </div>
-            </div>
-            <div class="row justify-between no-wrap items-center">
-              <div class="q-mr-sm">
-                Diskon
-              </div>
-              <div class="">
-                Diskon
+              <div class="col-12">
+                <app-input
+                  v-model="det.harga"
+                  label="Harga"
+                  :filled="false"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                />
               </div>
             </div>
             <div class="row justify-between no-wrap items-center">
-              <div class="q-mr-sm">
-                Ppn
+              <div class="col-12">
+                <app-input
+                  v-model="det.diskon"
+                  label="Diskon"
+                  :filled="false"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                />
               </div>
-              <div class="">
-                Ppn
+            </div>
+            <div class="row justify-between no-wrap items-center">
+              <div class="col-12">
+                <app-input
+                  ref="refPpn"
+                  v-model="det.ppn"
+                  label="Ppn"
+                  :filled="false"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                />
               </div>
             </div>
             <div class="row justify-between no-wrap items-center">
@@ -339,7 +349,7 @@
                 Harga Netto
               </div>
               <div class="">
-                Harga Netto
+                {{ det.harga_netto ? formatRp( det.harga_netto):0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap items-center">
@@ -347,12 +357,28 @@
                 Sub Total
               </div>
               <div class="">
-                Sub Total
+                {{ det.subtotal ? formatRp(det.subtotal) : 0 }}
               </div>
             </div>
           </div>
+          <div class="anu q-mr-sm">
+            <q-btn
+              flat
+              icon="icon-mat-save"
+              color="primary"
+              round
+              @click="validasi(i)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Simpan Rincian Penerimaan
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
-        <q-separator />
+        <q-separator class="q-mt-sm" />
       </div>
     </div>
     <div v-if="store.loading">
@@ -368,15 +394,23 @@
   </div>
 </template>
 <script setup>
+import { formatRp } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
+import { ref } from 'vue'
 
 const style = useStyledStore()
 const store = usePenerimaanFarmasiStore()
 
+const refPpn = ref(null)
+function validasi(index) {
+  console.log('index', index)
+  console.log('ref ppn', refPpn.value[index].refInput.validate())
+}
 function detKadal(evt, val) {
-  console.log('evt', evt)
-  console.log('val', val)
+  // console.log('evt', evt)
+  // console.log('val', val)
+  val.tgl_exp = evt
 }
 function setTanggal(val) {
   store.setForm('tanggal', val)
