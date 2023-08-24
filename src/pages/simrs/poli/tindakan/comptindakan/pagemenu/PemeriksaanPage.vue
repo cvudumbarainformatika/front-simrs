@@ -309,8 +309,10 @@ import { computed, onMounted, ref } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const store = usePemeriksaanFisik()
+// const storageApps = useAplikasiStore()
 const { menus, getImage } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)

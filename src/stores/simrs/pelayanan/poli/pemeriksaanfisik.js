@@ -39,6 +39,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   actions: {
     setTemplateActive(val) {
       this.templateActive = val
+      this.dialogForm.anatomy = val === 'Body' ? '' : val
     },
     setGambarActive(val, file) {
       this.gambarActive = val
@@ -74,6 +75,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.dialogTemplate = !this.dialogTemplate
     },
     async savePemeriksaan(pasien, menus) {
+      // console.log(storage.$state?.user?.id)
       const arr = menus.length > 0 ? menus.filter(x => x.name !== 'Body').map(y => y.name) : []
       const arr2 = this.shapes
       const anatomys = []
@@ -88,13 +90,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       const form = this.formVital
       form.noreg = pasien ? pasien.noreg : ''
       form.norm = pasien ? pasien.norm : ''
+      form.ruangan = pasien ? pasien.poli : ''
       form.details = arr2
       form.anatomys = anatomys
 
-      // console.log('simpan pemeriksaan', form)
+      console.log('simpan pemeriksaan', form)
 
       const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-      console.log(resp)
+      console.log('resp dari back end', resp)
     },
 
     async saveImage(img, pasien, details) {

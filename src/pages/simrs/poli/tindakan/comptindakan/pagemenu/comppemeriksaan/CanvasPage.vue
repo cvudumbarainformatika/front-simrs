@@ -129,14 +129,17 @@
               <q-select
                 v-model="store.dialogForm.anatomy"
                 outlined
-                standout="bg-yellow-2 text-dark"
+                standout="bg-yellow-2 text-black"
+                bg-color="white"
+                color="orange"
                 use-input
                 input-debounce="0"
                 label="Nama Anatomy"
                 :options="options"
                 dense
                 class="q-mb-md"
-                style="background-color: #fff;"
+                :rules="[val => !!val || 'Pilih Data Terlebih dahulu']"
+                :disable="store.templateActive !== 'Body'"
                 @filter="filterFn"
               >
                 <template #no-option>
@@ -153,7 +156,8 @@
                 outlined
                 autogrow
                 label="keterangan"
-                style="background-color: #fff;"
+                bg-color="white"
+                color="orange"
               />
             </q-card-section>
             <q-separator dark />
