@@ -9,12 +9,12 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     form: {
       nopenerimaan: '',
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tempo: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tempo: null,
       surat: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
-      tempo: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tempo: null,
       surat: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     params: {
@@ -46,8 +46,19 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     setDisp(key, val) {
       this.disp[key] = val
     },
+    setNexMonth() {
+      const now = new Date()
+      if (now.getMonth() === 11) {
+        return (new Date(now.getFullYear() + 1, 0, now.getDate()))
+      } else {
+        return (new Date(now.getFullYear(), now.getMonth() + 1, now.getDate()))
+      }
+    },
     pemesananSelected(val) {
-      console.log('pemesanan selected ', val)
+      this.items = []
+      this.details = {}
+      this.namaPenyedia = null
+      // console.log('pemesanan selected ', val)
       const pemesanan = this.pemesanans.filter(a => a.nopemesanan === val)
       if (pemesanan.length) {
         this.items = pemesanan[0]
@@ -74,6 +85,9 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           a.ppn_rp = 0
           a.jml_diterima = ''
           a.harga_netto = 0
+          a.subtotal = 0
+          if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
+          a.jml_all_penerimaan = a.jml_terima_lalu
         })
       }
     },
@@ -90,6 +104,9 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setForm('jenissurat', null)
     },
     getInitialData() {
+      this.setForm('tempo', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
+      this.setDisp('tempo', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
+
       this.ambilPemesanan()
     },
     ambilPemesanan() {

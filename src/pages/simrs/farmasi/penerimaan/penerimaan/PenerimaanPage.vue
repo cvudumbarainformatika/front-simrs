@@ -141,7 +141,7 @@
               :model="store.form.gudang"
               autocomplete="nama"
               option-label="nama"
-              option-value="nama"
+              option-value="value"
               label="Pilih Gudang"
               :filled="false"
               :source="store.gudangs"
@@ -188,7 +188,7 @@
           <div class="col-12">
             <app-input
               ref="refTotalFaktur"
-              v-model="store.form.totalFaktur"
+              v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
               :filled="false"
               :rules="[
@@ -227,6 +227,14 @@
             </div>
             <div class="row justify-between no-wrap items-center">
               <div class="q-mr-sm">
+                kode
+              </div>
+              <div class="text-deep-purple">
+                {{ det.masterobat ? det.masterobat.kd_obat :'-' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center">
+              <div class="q-mr-sm">
                 Pabrikan
               </div>
               <div class="text-deep-orange">
@@ -235,11 +243,11 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center text-green">
               <div class="q-mr-sm">
                 Dipesan
               </div>
-              <div class="">
+              <div class=" text-weight-bold">
                 {{ det.jumlahdpesan ? det.jumlahdpesan : '-' }}
               </div>
             </div>
@@ -253,23 +261,28 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor',
                     val => !!val || 'Harap di isi',
+                    val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
                   ]"
+                  @update:model-value="setDiterima($event, det)"
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center text-orange">
               <div class="q-mr-sm">
                 Diterima Sebelumnya
               </div>
-              <div class="">
+              <div class="text-weight-bold">
                 {{ det.jml_terima_lalu ? det.jml_terima_lalu : 0 }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div
+              class="row justify-between no-wrap items-center"
+              :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green':'text-negative'"
+            >
               <div class="q-mr-sm">
                 Seluruh Penerimaan
               </div>
-              <div class="">
+              <div class="text-weight-bold">
                 {{ det.jml_all_penerimaan ? det.jml_all_penerimaan : 0 }}
               </div>
             </div>
@@ -279,7 +292,7 @@
               <div class="q-mr-sm">
                 Satuan Besar
               </div>
-              <div class="">
+              <div class="text-weight-bold">
                 satuan
               </div>
             </div>
@@ -297,7 +310,7 @@
               <div class="q-mr-sm">
                 Satuan Kecil
               </div>
-              <div class="">
+              <div class="text-weight-bold">
                 satuan
               </div>
             </div>
@@ -476,6 +489,15 @@ function validasi(index) {
 }
 
 function simpan(index) {
+  const deta = store.details[index]
+  const key = Object.keys(deta)
+  key.forEach(a => {
+    if (a !== 'masterobat') store.setForm(a, deta[a])
+  })
+  console.log('aa', store.form)
+  // store.details[index].forEach(a => {
+  //   console.log('each', a)
+  // })
   if (validasi(index)) {
     console.log('simpan valid', store.details[index])
   }
@@ -503,7 +525,9 @@ function setHargaNet(val) {
     val.harga_netto = val.harga
     val.subtotal = val.harga * parseFloat(val.jml_diterima)
   }
-  console.log(val)
+  const total = store.details.map(a => a.subtotal).reduce((a, b) => a + b, 0)
+  store.setForm('total_faktur_pbf', total)
+  // console.log(val)
 }
 function setHarga(evt, val, index) {
   val.harga = parseFloat(evt)
@@ -517,7 +541,7 @@ function setHarga(evt, val, index) {
   } else {
     val.harga = 0
   }
-  console.log('harga', val)
+  // console.log('harga', val)
 }
 function setHargaKcl (evt, val, index) {
   val.harga_kcl = parseFloat(evt)
@@ -539,6 +563,10 @@ function setDiskon(evt, val) {
 function setPpn(evt, val) {
   val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
+}
+function setDiterima(evt, val) {
+  val.jml_diterima = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  val.jml_all_penerimaan = val.jml_diterima + val.jml_terima_lalu
 }
 function detKadal(evt, val) {
   val.tgl_exp = evt
