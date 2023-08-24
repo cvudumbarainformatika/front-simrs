@@ -70,7 +70,10 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         this.details.forEach(a => {
           a.diskon = 0
           a.ppn = 0
-          a.jml_diterima = 0
+          a.diskon_rp = 0
+          a.ppn_rp = 0
+          a.jml_diterima = ''
+          a.harga_netto = 0
         })
       }
     },
@@ -81,10 +84,10 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setForm('gudang', null)
     },
     jenisSuratSelected(val) {
-      this.setForm('jenisSurat', val)
+      this.setForm('jenissurat', val)
     },
     clearJenisSurat() {
-      this.setForm('jenisSurat', null)
+      this.setForm('jenissurat', null)
     },
     getInitialData() {
       this.ambilPemesanan()
