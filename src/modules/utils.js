@@ -5,6 +5,7 @@ import { antreanChannel } from './sockets'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const removeToken = () => {
+  caches.delete()
   storage.clearStore()
   storage.deleteLocalToken()
   storage.deleteHeaderToken()

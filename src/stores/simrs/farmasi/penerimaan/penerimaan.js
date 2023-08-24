@@ -124,7 +124,21 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           })
       })
     },
-    selesaiDanKunci() {},
-    simpanPenerimaan() {}
+    selesaiDanKunci() {
+    },
+    simpanPenerimaan() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('sudah simpan')
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    }
   }
 })

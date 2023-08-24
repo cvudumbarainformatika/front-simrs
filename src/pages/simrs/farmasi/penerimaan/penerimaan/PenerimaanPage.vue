@@ -500,6 +500,7 @@ function simpan(index) {
   // })
   if (validasi(index)) {
     console.log('simpan valid', store.details[index])
+    store.simpanPenerimaan()
   }
 }
 function setHargaNet(val) {
