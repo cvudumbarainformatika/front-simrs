@@ -99,7 +99,8 @@
         <div class="row">
           <div class="col-12">
             <app-autocomplete-new
-              :model="store.form.jenisSurat"
+              ref="refJenisSurat"
+              :model="store.form.jenissurat"
               autocomplete="nama"
               option-label="nama"
               option-value="nama"
@@ -114,9 +115,9 @@
         <div class="row">
           <div class="col-12">
             <app-input
-              v-model="store.form.no_surat"
+              ref="refNoSurat"
+              v-model="store.form.nomorsurat"
               label="Nomor Surat"
-              valid
               :filled="false"
             />
           </div>
@@ -124,6 +125,7 @@
         <div class="row">
           <div class="col-12">
             <app-input
+              ref="refPengirim"
               v-model="store.form.pengirim"
               label="Nama Pengirim"
               :filled="false"
@@ -135,6 +137,7 @@
         <div class="row">
           <div class="col-12">
             <app-autocomplete-new
+              ref="refGudang"
               :model="store.form.gudang"
               autocomplete="nama"
               option-label="nama"
@@ -184,9 +187,13 @@
         <div class="row">
           <div class="col-12">
             <app-input
+              ref="refTotalFaktur"
               v-model="store.form.totalFaktur"
               label="Total Faktur PBF"
               :filled="false"
+              :rules="[
+                val => !isNaN(val) || 'Harus pakai Nomor'
+              ]"
             />
           </div>
         </div>
@@ -243,6 +250,10 @@
                   v-model="det.jml_diterima"
                   label="Diterima Sekarang"
                   :filled="false"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor',
+                    val => !!val || 'Harap di isi',
+                  ]"
                 />
               </div>
             </div>
@@ -318,10 +329,26 @@
                 <app-input
                   ref="refHarga"
                   v-model="det.harga"
-                  label="Harga"
+                  label="Harga (Satuan besar)"
                   :filled="false"
                   :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                    val => !isNaN(val) || 'Harus pakai Nomor'
+                  ]"
+                  @update:model-value="setHarga($event,det,i)"
+                />
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center">
+              <div class="col-12">
+                <app-input
+                  ref="refHargaKcl"
+                  v-model="det.harga_kcl"
+                  label="Harga (Satuan kecil)"
+                  :filled="false"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor'
+                  ]"
+                  @update:model-value="setHargaKcl($event,det,i)"
                 />
               </div>
             </div>
@@ -329,10 +356,12 @@
               <div class="col-12">
                 <app-input
                   v-model="det.diskon"
-                  label="Diskon"
+                  label="Diskon (%)"
                   :filled="false"
                   :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                    val => !isNaN(val) || 'Harus pakai Nomor'
+                  ]"
+                  @update:model-value="setDiskon($event, det)"
                 />
               </div>
             </div>
@@ -341,10 +370,12 @@
                 <app-input
                   ref="refPpn"
                   v-model="det.ppn"
-                  label="Ppn"
+                  label="Ppn (%)"
                   :filled="false"
                   :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor']"
+                    val => !isNaN(val) || 'Harus pakai Nomor'
+                  ]"
+                  @update:model-value="setPpn($event, det)"
                 />
               </div>
             </div>
@@ -353,7 +384,7 @@
                 Harga Netto
               </div>
               <div class="">
-                {{ det.harga_netto ? formatRp( det.harga_netto):0 }}
+                {{ det.harga_netto ? formatRpDouble(det.harga_netto,2):0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap items-center">
@@ -361,7 +392,7 @@
                 Sub Total
               </div>
               <div class="">
-                {{ det.subtotal ? formatRp(det.subtotal) : 0 }}
+                {{ det.subtotal ? formatRpDouble(det.subtotal,2) : 0 }}
               </div>
             </div>
           </div>
@@ -398,7 +429,7 @@
   </div>
 </template>
 <script setup>
-import { formatRp } from 'src/modules/formatter'
+import { formatRpDouble } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
 import { ref } from 'vue'
@@ -406,35 +437,110 @@ import { ref } from 'vue'
 const style = useStyledStore()
 const store = usePenerimaanFarmasiStore()
 
+// head
+const refJenisSurat = ref(null) // inp
+const refNoSurat = ref(null) // inp
+const refPengirim = ref(null) // inp
+const refGudang = ref(null) // auto
+const refTotalFaktur = ref(null) // inp
+// det
 const refPpn = ref(null)
 const refJmlDiterima = ref(null)
 const refIsi = ref(null)
 const refExp = ref(null)
 const refHarga = ref(null)
+const refHargaKcl = ref(null)
 function validasi(index) {
-  console.log('index', index)
+  // console.log('index', index)
+  console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
   // console.log('ref ppn', refPpn.value[index].refInput.validate())
   // console.log('ref diterima', refJmlDiterima.value[index].refInput.validate())
   // console.log('ref isi', refIsi.value[index].refInput.validate())
   // console.log('ref exp', refExp.value[index].$refs.refInputDate.validate())
   // console.log('ref harga', refHarga.value[index].refInput.validate())
+
+  const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
+  const gudang = refGudang.value.$refs.refAuto.validate()
+  const noSurat = refNoSurat.value.$refs.refInput.validate()
+  const pengirim = refPengirim.value.$refs.refInput.validate()
+  const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
+
   const ppn = refPpn.value[index].refInput.validate()
   const diterima = refJmlDiterima.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
-  if (ppn && diterima && isi && exp && harga) return true
+  const hargaKcl = refHargaKcl.value[index].refInput.validate()
+  if (jenisSurat && gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }
 
 function simpan(index) {
   if (validasi(index)) {
-    console.log('simpan valid')
+    console.log('simpan valid', store.details[index])
   }
 }
+function setHargaNet(val) {
+  val.harga_netto = 0
+  if (val.harga > 0 && val.diskon > 0) {
+    val.diskon_rp = val.diskon / 100 * val.harga
+    val.harga_netto = val.harga - val.diskon_rp
+  }
+  if (val.harga > 0 && val.ppn > 0) {
+    if (val.harga_netto > 0) {
+      const harga = val.harga_netto
+      val.ppn_rp = val.ppn / 100 * harga
+      val.harga_netto = val.harga_netto + val.ppn_rp
+    } else {
+      const harga = val.harga
+      val.ppn_rp = val.ppn / 100 * harga
+      val.harga_netto = val.harga_netto + val.ppn_rp
+    }
+  }
+  if (val.harga_netto > 0) {
+    val.subtotal = val.harga_netto * parseFloat(val.jml_diterima)
+  } else {
+    val.harga_netto = val.harga
+    val.subtotal = val.harga * parseFloat(val.jml_diterima)
+  }
+  console.log(val)
+}
+function setHarga(evt, val, index) {
+  val.harga = parseFloat(evt)
+  const diterima = refJmlDiterima.value[index].refInput.validate()
+  const isi = refIsi.value[index].refInput.validate()
+  if (isi && diterima) {
+    const isi = parseFloat(val.isi)
+    val.isi = isi
+    val.harga_kcl = (val.harga / isi)
+    setHargaNet(val)
+  } else {
+    val.harga = 0
+  }
+  console.log('harga', val)
+}
+function setHargaKcl (evt, val, index) {
+  val.harga_kcl = parseFloat(evt)
+  const diterima = refJmlDiterima.value[index].refInput.validate()
+  const isi = refIsi.value[index].refInput.validate()
+  if (isi && diterima) {
+    const isi = parseFloat(val.isi)
+    val.isi = isi
+    val.harga = (val.harga_kcl * isi)
+    setHargaNet(val)
+  } else {
+    val.harga_kcl = 0
+  }
+}
+function setDiskon(evt, val) {
+  val.diskon = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  setHargaNet(val)
+}
+function setPpn(evt, val) {
+  val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  setHargaNet(val)
+}
 function detKadal(evt, val) {
-  // console.log('evt', evt)
-  // console.log('val', val)
   val.tgl_exp = evt
 }
 function setTanggal(val) {
