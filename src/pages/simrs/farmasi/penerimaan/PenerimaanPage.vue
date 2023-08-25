@@ -60,6 +60,8 @@ const page = useRoute()
 const title = computed(() => {
   if (page.path === '/farmasi/penerimaan/penerimaan') {
     return 'PENERIMAAN'
+  } else if (page.path === '/farmasi/penerimaan/penerimaanlangsung') {
+    return 'PENERIMAAN LANGSUNG'
   } else if (page.path === '/farmasi/penerimaan/listpenerimaan') {
     return 'LIST PENERIMAAN'
   } else {
@@ -69,6 +71,8 @@ const title = computed(() => {
 const subtitle = computed(() => {
   if (page.path === '/farmasi/penerimaan/penerimaan') {
     return 'Penerimaan Obat'
+  } else if (page.path === '/farmasi/penerimaan/penerimaanlangsung') {
+    return 'Penerimaan Langsung Obat'
   } else if (page.path === '/farmasi/penerimaan/listpenerimaan') {
     return 'List Penerimaan Obat'
   } else {
