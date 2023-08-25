@@ -5,6 +5,7 @@
     dense
     :filled="!outlined?filled:!filled"
     :outlined="outlined"
+    :standout="standout?standoutColor!==null?standoutColor:'bg-yellow-3':'bg-yellow-3'"
     :label="label"
     :placeholder="placeholder"
     :hide-bottom-space="true"
@@ -104,6 +105,8 @@ const props = defineProps({
   autofocus: { type: Boolean, default: false },
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
+  standout: { type: Boolean, default: true },
+  standoutColor: { type: String, default: null },
   disable: { type: Boolean, default: false },
   readonly: { type: Boolean, default: false },
   reverseFillMask: { type: Boolean, default: false },

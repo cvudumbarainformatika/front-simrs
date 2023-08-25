@@ -31,11 +31,9 @@
           <q-tab-panel
             name="Diagnosa"
             class="full-height"
+            style="padding:0"
           >
-            <div class="text-h6">
-              Diagnosa
-            </div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <DiagnosaPage />
           </q-tab-panel>
           <q-tab-panel
             name="Tindakan"
@@ -49,41 +47,12 @@
         </q-tab-panels>
       </div>
     </div>
-    <!-- <q-tabs
-      v-model="store.tab"
-      no-caps
-      inline-label
-      class="bg-primary text-white shadow-2"
-      align="left"
-      dense
-      active-color="yellow"
-    >
-      <q-tab
-        v-for="(item, i) in store.tabs"
-        :key="i"
-        :name="item"
-        :label="item"
-      />
-    </q-tabs>
-    <q-tab-panels
-      v-model="store.tab"
-      animated
-    >
-      <q-tab-panel
-        name="Diagnosa"
-        class="full-height"
-      >
-        <div class="text-h6">
-          Mails
-        </div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-      </q-tab-panel>
-    </q-tab-panels> -->
   </div>
 </template>
 
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 
 const store = useLayananPoli()
 </script>
