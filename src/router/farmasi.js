@@ -66,6 +66,13 @@ const farmasi = {
             import('pages/simrs/farmasi/penerimaan/penerimaan/IndexPage.vue')
         },
         {
+          path: '/farmasi/penerimaan/penerimaanlangsung',
+          name: 'farmasi.penerimaan.penerimaanlangsung',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/penerimaan/penerimaanlangsung/IndexPage.vue')
+        },
+        {
           path: '/farmasi/penerimaan/listpenerimaan',
           name: 'farmasi.penerimaan.listpenerimaan',
           meta: { transition: 'slide-up' },
