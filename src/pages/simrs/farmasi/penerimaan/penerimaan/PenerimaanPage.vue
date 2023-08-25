@@ -49,6 +49,7 @@
   </div>
   <!-- penerimaan -->
   <div class="q-mt-lg q-py-md q-px-sm">
+    <!-- header -->
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
         <div class="row q-col-gutter-md no-wrap">
@@ -200,6 +201,7 @@
       </div>
     </div>
     <q-separator />
+    <!-- details -->
     <div
       v-if="store.details.length && !store.loading"
       class="bg-grey-2"

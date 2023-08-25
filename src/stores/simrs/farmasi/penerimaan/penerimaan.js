@@ -5,6 +5,7 @@ import { api } from 'src/boot/axios'
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
     loading: false,
+    loadingPihakTiga: false,
     items: [],
     form: {
       nopenerimaan: '',
@@ -21,6 +22,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       per_page: 10,
       page: 1
     },
+    namaPihakKetiga: '',
     namaPenyedia: null,
     pemesanans: [],
     details: [],
@@ -28,9 +30,19 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       { nama: 'Faktur' },
       { nama: 'Surat Jalan' }
     ],
+    jenisSuratLs: [
+      { nama: 'Faktur' },
+      { nama: 'Surat Jalan' },
+      { nama: 'Nota' }
+    ],
     jenisPenerimaans: [
-      { nama: 'Pemesanan' },
-      { nama: 'Bukan Pemesanan' }
+      // Pembelian langsung, Pinjaman, Konsinyasi, APBD, APBN, penggantian barang
+      { nama: 'Pembelian langsung' },
+      { nama: 'Pinjaman' },
+      { nama: 'Konsinyasi' },
+      { nama: 'APBD' },
+      { nama: 'APBN' },
+      { nama: 'penggantian barang' }
 
     ],
     gudangs: [
@@ -97,6 +109,12 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     clearGudang() {
       this.setForm('gudang', null)
     },
+    jenisPenerimaanSelected(val) {
+      this.setForm('jenispenerimaan', val)
+    },
+    clearJenisPenerimaan() {
+      this.setForm('jenispenerimaan', null)
+    },
     jenisSuratSelected(val) {
       this.setForm('jenissurat', val)
     },
@@ -108,6 +126,20 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setDisp('tempo', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
 
       this.ambilPemesanan()
+      this.getPihakKetiga()
+    },
+    getPihakKetiga() {
+      const param = { params: { nama: this.namaPihakKetiga } }
+      this.loadingPihakTiga = true
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/pemesananobat/pihakketiga', param)
+          .then(resp => {
+            this.loadingPihakTiga = false
+            console.log('pihak tiga', resp.data)
+            this.pihakTigas = resp.data
+            resolve(resp)
+          })
+      })
     },
     ambilPemesanan() {
       this.loading = true
