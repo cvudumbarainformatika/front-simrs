@@ -5,12 +5,23 @@ export const useLayananPoli = defineStore('layanan-poli', {
   state: () => ({
     tab: 'Diagnosa',
     tabs: ['Diagnosa', 'Tindakan'],
+    // diagnosa
     searchdiagnosa: '',
     formdiagnosa: {
       code: '',
       keterangan: '',
-      kasusbaru: 'Tidak',
-      primer: 'Iya'
+      kasus: 'Baru',
+      tipe: 'Iya'
+    },
+    // tindakan
+    searchtindakan: '',
+    formtindakan: {
+      tindakan: '',
+      tarif: 0,
+      jumlah: 1,
+      subtotal: 0,
+      pelaksana: '',
+      keterangan: ''
     }
   }),
   // getters: {

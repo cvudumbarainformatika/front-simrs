@@ -85,12 +85,13 @@ const menus = ref([
     label: 'Layanan',
     icon: 'icon-mat-analytics',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))
+  },
+  {
+    name: 'penunjang-page',
+    label: 'Penunjang',
+    icon: 'icon-my-local_hospital',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PenunjangPage.vue')))
   }
-  // { name: 'penandaan', label: 'Penandaan Gambar', icon: 'icon-mat-palette' },
-  // { name: 'penunjang', label: 'Penunjang', icon: 'icon-mat-published_with_changes' },
-  // { name: 'perencanaan', label: 'Perencanaan', icon: 'icon-mat-today' },
-  // { name: 'resep', label: 'E-Resep', icon: 'icon-mat-receipt' },
-  // { name: 'penerbitan', label: 'Penerbitan Surat', icon: 'icon-mat-description' }
 ])
 const menu = ref(menus.value[0])
 onMounted(() => {

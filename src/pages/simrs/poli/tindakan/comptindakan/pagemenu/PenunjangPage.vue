@@ -30,17 +30,18 @@
           class="full-height"
         >
           <q-tab-panel
-            name="Diagnosa"
-            class="full-height"
-            style="padding:0"
-          >
-            <DiagnosaPage />
-          </q-tab-panel>
-          <q-tab-panel
-            name="Tindakan"
+            v-for="(panel, n) in store.tabs"
+            :key="n"
+            :name="panel"
             class="full-height q-pa-none"
           >
-            <TindakanPage />
+            <PageLaborat v-if="panel==='Laborat'" />
+            <div
+              v-else
+              class="full-height bg-yellow"
+            >
+              Belum Dikrjakan
+            </div>
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -49,9 +50,8 @@
 </template>
 
 <script setup>
-import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
-import TindakanPage from './complayanan/TindakanPage.vue'
+import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
+import PageLaborat from './comppenunjang/PageLaborat.vue'
 
-const store = useLayananPoli()
+const store = usePenunjangPoli()
 </script>

@@ -7,15 +7,19 @@
         square
         class="col-6 full-height"
       >
-        <FormDiagnosa />
-      </q-card>
-      <div class="col-6 full-height ">
         <div class="column full-height">
-          <div class="col-6">
-            <DiagnosaTable />
+          <div class="col">
+            <FormTindakan />
           </div>
           <div class="col-6">
             <SimulasiPage />
+          </div>
+        </div>
+      </q-card>
+      <div class="col-6 full-height ">
+        <div class="row full-height">
+          <div class="col-12">
+            <TindakanTable />
           </div>
         </div>
       </div>
@@ -24,8 +28,8 @@
 </template>
 
 <script setup>
-import FormDiagnosa from './FormDiagnosa.vue'
-import DiagnosaTable from './DiagnosaTable.vue'
+import FormTindakan from './FormTindakan.vue'
+import TindakanTable from './TindakanTable.vue'
 import SimulasiPage from './SimulasiPage.vue'
 // import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 
