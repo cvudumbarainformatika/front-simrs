@@ -11,7 +11,6 @@
         <app-input
           v-model="store.form.nopenerimaan"
           label="Nomor Penerimaan"
-          :filled="false"
           readonly
           valid
           :loading="store.loading"
@@ -71,7 +70,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               :model="store.form.jenispenerimaan"
@@ -87,7 +86,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               ref="refJenisSurat"
@@ -103,7 +102,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refNoSurat"
@@ -113,7 +112,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refPengirim"
@@ -125,7 +124,7 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               ref="refGudang"
@@ -142,7 +141,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.tanggal"
@@ -153,7 +152,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.surat"
@@ -164,7 +163,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.tempo"
@@ -175,7 +174,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refTotalFaktur"
