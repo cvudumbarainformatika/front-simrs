@@ -66,8 +66,9 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             if (this.items.length) {
               this.items.forEach(a => {
                 const dipesan = parseFloat(a.jumlahdipesan)
+                const dpesan = parseFloat(a.jumlahdpesan)
                 // console.log('dipesan', dipesan, typeof dipesan)
-                a.jumlahdipesan = dipesan
+                a.jumlahdipesan = dipesan - dpesan
                 a.jumlahdirencanakan = dipesan
               })
             }

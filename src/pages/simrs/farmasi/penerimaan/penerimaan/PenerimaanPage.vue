@@ -53,13 +53,13 @@
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
         <div class="row q-col-gutter-md no-wrap">
-          <div class="row">
+          <div class="row q-mb-xs">
             Penyedia :
           </div>
         </div>
         <div class="q-ml-xl q-pl-lg">
           <div v-if="store.namaPenyedia">
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div>
                 Nama
               </div>
@@ -67,7 +67,7 @@
                 {{ store.namaPenyedia ? store.namaPenyedia.nama : '-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div>
                 Alamat
               </div>
@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               :model="store.form.nopemesanan"
@@ -97,7 +97,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               ref="refJenisSurat"
@@ -113,7 +113,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refNoSurat"
@@ -123,7 +123,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refPengirim"
@@ -135,7 +135,7 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
               ref="refGudang"
@@ -152,7 +152,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.tanggal"
@@ -163,7 +163,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.surat"
@@ -174,7 +174,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.tempo"
@@ -185,7 +185,7 @@
             />
           </div>
         </div>
-        <div class="row">
+        <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refTotalFaktur"
@@ -219,7 +219,7 @@
       >
         <div class="row items-center q-mt-md justify-between no-wrap">
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Nama
               </div>
@@ -227,7 +227,7 @@
                 {{ det.masterobat ? det.masterobat.nama_obat :'-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 kode
               </div>
@@ -235,7 +235,7 @@
                 {{ det.masterobat ? det.masterobat.kd_obat :'-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Pabrikan
               </div>
@@ -245,7 +245,7 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center text-green">
+            <div class="row justify-between no-wrap items-center q-mb-xs text-green">
               <div class="q-mr-sm">
                 Dipesan
               </div>
@@ -253,7 +253,7 @@
                 {{ det.jumlahdpesan ? det.jumlahdpesan : '-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
@@ -269,7 +269,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center text-orange">
+            <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
               <div class="q-mr-sm">
                 Diterima Sebelumnya
               </div>
@@ -278,7 +278,7 @@
               </div>
             </div>
             <div
-              class="row justify-between no-wrap items-center"
+              class="row justify-between no-wrap items-center q-mb-xs"
               :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green':'text-negative'"
             >
               <div class="q-mr-sm">
@@ -290,7 +290,7 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Besar
               </div>
@@ -298,7 +298,7 @@
                 satuan
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refIsi"
@@ -308,7 +308,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Kecil
               </div>
@@ -325,7 +325,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input-date
                   ref="refExp"
@@ -339,7 +339,7 @@
           </div>
 
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refHarga"
@@ -353,7 +353,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refHargaKcl"
@@ -367,7 +367,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   v-model="det.diskon"
@@ -380,7 +380,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refPpn"
@@ -394,7 +394,7 @@
                 />
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Harga Netto
               </div>
@@ -402,7 +402,7 @@
                 {{ det.harga_netto ? formatRpDouble(det.harga_netto,2):0 }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center">
+            <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Sub Total
               </div>

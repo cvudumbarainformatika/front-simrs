@@ -161,6 +161,49 @@
                 {{ row.namaobat }}
               </div>
             </div>
+            <div class="row justify-between no-wrap anu">
+              <div class="q-mr-xs">
+                Fornas
+              </div>
+              <div
+                class=" text-weight-bold"
+                :class=" row.status_fornas === '1' ? 'text-green' : 'text-negative'"
+              >
+                {{ row.status_fornas==='1' ?'Ya':'Tidak' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap anu">
+              <div class="q-mr-xs">
+                Forkit
+              </div>
+              <div
+                class=" text-weight-bold"
+                :class=" row.status_forkid === '1' ? 'text-green' : 'text-negative'"
+              >
+                {{ row.status_forkid==='1' ?'Ya':'Tidak' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap anu">
+              <div class="q-mr-xs">
+                Generik
+              </div>
+              <div
+                class=" text-weight-bold"
+                :class=" row.status_generik === '1' ? 'text-green' : 'text-negative'"
+              >
+                {{ row.status_generik==='1' ?'Ya':'Tidak' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap anu">
+              <div class="q-mr-xs">
+                Sistem Bayar
+              </div>
+              <div
+                class=" text-weight-bold"
+              >
+                {{ row.sistembayar }}
+              </div>
+            </div>
           </template>
           <template #cell-stok="{row}">
             <div class="row justify-between no-wrap text-purple">
@@ -195,6 +238,14 @@
               </div>
               <div class="text-weight-bold">
                 {{ row.jumlahdirencanakan }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap text-green">
+              <div class="q-mr-xs">
+                sudah dipesan
+              </div>
+              <div class="text-weight-bold">
+                {{ row.jumlahdpesan }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -264,3 +315,9 @@ function kirimRencana(val) {
 table.getInitialData()
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+
+.anu:hover{
+  background-color: #87e9df;
+}
+</style>
