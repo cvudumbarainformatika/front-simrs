@@ -48,8 +48,10 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-
-    ]
+    ],
+    rincis: [],
+    filterObat: '',
+    obats: []
   }),
   actions: {
     setForm(key, val) {
@@ -127,6 +129,21 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
 
       this.ambilPemesanan()
       this.getPihakKetiga()
+    },
+    // cari obat
+    getDataObat() {
+      this.loading = true
+      const params = { params: { q: this.filterObat } }
+      return new Promise(resolve => {
+        api.get('v1/simrs/master/cariObat', params)
+          .then(resp => {
+            this.loading = false
+            this.obats = resp.data
+            console.log(resp)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     },
     getPihakKetiga() {
       const param = { params: { nama: this.namaPihakKetiga } }
