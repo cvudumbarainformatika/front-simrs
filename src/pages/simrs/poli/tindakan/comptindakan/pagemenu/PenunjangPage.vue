@@ -35,7 +35,11 @@
             :name="panel"
             class="full-height q-pa-none"
           >
-            <PageLaborat v-if="panel==='Laborat'" />
+            <PageLaborat
+              v-if="panel==='Laborat'"
+              :key="props.pasien"
+              :pasien="props.pasien"
+            />
             <div
               v-else
               class="full-height bg-yellow"
@@ -52,6 +56,13 @@
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 import PageLaborat from './comppenunjang/PageLaborat.vue'
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 
 const store = usePenunjangPoli()
 </script>

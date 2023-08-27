@@ -1,11 +1,39 @@
 import { defineStore } from 'pinia'
+import { dateDbFormat, formatJam } from 'src/modules/formatter'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
     tab: 'Laborat',
-    tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG', 'Thread Mill', 'Endoscope', 'Psikologi']
+    tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
+    // laborat
+    caripemeriksaanlab: '',
+    formlab: {
+      norm: '',
+      noreg: '',
+      nama: '',
+      nik: '',
+      tanggallahir: '',
+      jeniskelamin: '',
+      jam: formatJam(new Date()),
+      tanggal: dateDbFormat(new Date()),
+      pasienpuasa: 'Tidak',
+      cito: 'Tidak',
+      dokterpengirim: '',
+      // notelpdokter: '',
+      unitpengirim: '',
+      // diagnosa: '',
+      catatan: '',
+      detailpermintaans: []
+      // asalspesimenklinis: 5,
+      // lokasispesimen: '',
+      // jumlahspesimen: '',
+      // volumespesimen:
+    },
+    pemeriksaanlabs: []
   }),
   actions: {
-
+    saveOrderLaborat(pasien) {
+      console.log(pasien)
+    }
   }
 })
