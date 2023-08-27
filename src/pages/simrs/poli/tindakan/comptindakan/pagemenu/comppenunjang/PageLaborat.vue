@@ -7,9 +7,7 @@
         square
         class="col-5 full-height"
       >
-        <div class="column full-height bg-red">
-          div
-        </div>
+        <DaftarPemeriksaan />
       </q-card>
       <q-card
         flat
@@ -17,8 +15,25 @@
         square
         class="col-7 full-height"
       >
-        sad
+        <ListPemeriksaans
+          :key="props.pasien"
+          :pasien="props.pasien"
+        />
       </q-card>
     </div>
   </div>
 </template>
+<script setup>
+import DaftarPemeriksaan from './complaborat/DaftarPemeriksaan.vue'
+import ListPemeriksaans from './complaborat/ListPemeriksaans.vue'
+// import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
+
+// const store = usePenunjangPoli()
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+</script>
