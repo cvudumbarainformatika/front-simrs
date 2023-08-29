@@ -2,7 +2,7 @@
   <div class="column full-height">
     <q-bar class="col-auto bg-teal text-white">
       <div class="q-py-sm f-14 ">
-        Daftar Pemeriksaan
+        Daftar Pemeriksaan Laborat
       </div>
     </q-bar>
     <div class="col-grow">

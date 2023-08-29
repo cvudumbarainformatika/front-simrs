@@ -12,21 +12,21 @@
       </div>
     </div>
     <div class="col-3">
-      <div class="column  q-pa-md">
+      <div class="column q-pa-md">
         <div class="flex items-center">
-          <div class="q-mr-sm">
+          <div style="width:150px">
             Pasien Puasa ?
           </div>
           <div class="q-gutter-sm">
             <q-radio
-              v-model="store.formlab.pasienpuasa"
+              v-model="store.form.pasienpuasa"
               val="Tidak"
               label="Tidak"
               size="sm"
               dense
             />
             <q-radio
-              v-model="store.formlab.pasienpuasa"
+              v-model="store.form.pasienpuasa"
               val="Iya"
               label="Iya"
               size="sm"
@@ -34,20 +34,21 @@
             />
           </div>
         </div>
+        <q-separator class="q-my-sm" />
         <div class="flex items-center q-mt-sm">
-          <div class="q-mr-sm">
+          <div style="width:150px">
             Cito ?
           </div>
           <div class="q-gutter-sm">
             <q-radio
-              v-model="store.formlab.cito"
+              v-model="store.form.cito"
               val="Tidak"
               label="Tidak"
               size="sm"
               dense
             />
             <q-radio
-              v-model="store.formlab.cito"
+              v-model="store.form.cito"
               val="Iya"
               label="Iya"
               size="sm"
@@ -58,7 +59,7 @@
       </div>
       <div class="absolute-bottom bg-yellow-3 text-right q-pa-sm">
         <q-btn
-          label="Simpan Order"
+          label="Simpan & Kirim Order"
           color="primary"
           @click="saveOrder"
         />
