@@ -5,7 +5,7 @@
     dense
     :filled="!outlined?filled:!filled"
     :outlined="outlined"
-    :standout="standout?standoutColor!==null?standoutColor:'bg-yellow-3':'bg-yellow-3'"
+    :standout="standout?(standoutColor!==null?standoutColor:'bg-yellow-6'):'bg-yellow-6'"
     :label="label"
     :placeholder="placeholder"
     :hide-bottom-space="true"

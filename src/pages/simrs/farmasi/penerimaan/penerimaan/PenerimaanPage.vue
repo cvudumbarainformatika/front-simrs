@@ -192,6 +192,7 @@
               v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
               :filled="false"
+              :standout="false"
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"
