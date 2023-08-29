@@ -81,6 +81,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         console.log('tem ', this.items)
         console.log('det ', this.details)
         this.metanirinci()
+        this.setForm('kdpbf', this.namaPenyedia.kode)
       }
       this.setForm('nopemesanan', val)
     },
@@ -107,9 +108,11 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     },
     gudangSelected(val) {
       this.setForm('gudang', val)
+      this.setForm('kdruang', val)
     },
     clearGudang() {
       this.setForm('gudang', null)
+      this.setForm('kdruang', null)
     },
     jenisPenerimaanSelected(val) {
       this.setForm('jenispenerimaan', val)
