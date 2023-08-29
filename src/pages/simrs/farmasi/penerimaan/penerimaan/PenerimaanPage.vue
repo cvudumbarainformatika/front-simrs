@@ -139,7 +139,7 @@
           <div class="col-12">
             <app-autocomplete-new
               ref="refGudang"
-              :model="store.form.gudang"
+              :model="store.form.kdruang"
               autocomplete="nama"
               option-label="nama"
               option-value="value"
@@ -319,7 +319,7 @@
             <div class="row no-wrap items-center">
               <div class="col-12">
                 <app-input
-                  v-model="det.batch"
+                  v-model="det.no_batch"
                   label="No Batch"
                   :filled="false"
                 />
