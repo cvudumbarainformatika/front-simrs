@@ -14,6 +14,7 @@
           dense
           active-color="yellow"
           active-bg-color="dark"
+          @update:model-value="cekPanel"
         >
           <q-tab
             v-for="(item, i) in store.tabs"
@@ -35,17 +36,11 @@
             :name="panel"
             class="full-height q-pa-none"
           >
-            <PageLaborat
-              v-if="panel==='Laborat'"
+            <component
+              :is="cekPanel()"
               :key="props.pasien"
               :pasien="props.pasien"
             />
-            <div
-              v-else
-              class="full-height bg-yellow"
-            >
-              Belum Dikrjakan
-            </div>
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -55,7 +50,8 @@
 
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
-import PageLaborat from './comppenunjang/PageLaborat.vue'
+// import PageLaborat from './comppenunjang/PageLaborat.vue'
+import { defineAsyncComponent } from 'vue'
 
 const props = defineProps({
   pasien: {
@@ -65,4 +61,13 @@ const props = defineProps({
 })
 
 const store = usePenunjangPoli()
+
+const cekPanel = () => {
+  const val = store.tab
+  const ganti = val.replace(/ /g, '')
+  const modules = import.meta.glob('./comppenunjang/*.vue', { eager: true })
+  const arr2 = Object.keys(modules)
+  const filterred = arr2.find(key => key.includes(ganti))
+  return defineAsyncComponent(() => import(filterred))
+}
 </script>

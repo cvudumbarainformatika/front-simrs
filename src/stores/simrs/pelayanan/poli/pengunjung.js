@@ -78,6 +78,18 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
     setFilters() {
       this.filters = !this.filters
+    },
+    // inject pasien
+
+    injectDataPasien(pasien, val, kode) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        if (kode === 'anamnesis') {
+          data.anamnesis.push(val)
+        }
+        console.log('data ditemukan', data)
+      }
     }
   }
 })

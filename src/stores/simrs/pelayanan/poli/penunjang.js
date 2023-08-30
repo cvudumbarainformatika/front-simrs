@@ -7,7 +7,8 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
     // laborat
     caripemeriksaanlab: '',
-    formlab: {
+    caripemeriksaanradiologi: '',
+    form: {
       norm: '',
       noreg: '',
       nama: '',
@@ -22,14 +23,14 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       // notelpdokter: '',
       unitpengirim: '',
       // diagnosa: '',
-      catatan: '',
-      detailpermintaans: []
+      catatan: ''
       // asalspesimenklinis: 5,
       // lokasispesimen: '',
       // jumlahspesimen: '',
       // volumespesimen:
     },
-    pemeriksaanlabs: []
+    pemeriksaanslab: [],
+    pemeriksaansradiologi: []
   }),
   actions: {
     saveOrderLaborat(pasien) {

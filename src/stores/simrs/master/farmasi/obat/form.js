@@ -146,6 +146,8 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
           ter.kelasterapi = ter.kelas_terapi
           this.form.kelasterapis.push(ter)
         })
+      } else {
+        this.form.kelasterapis = []
       }
       // nama: null,
       //   bentukSediaan: bentuk_sediaan,
