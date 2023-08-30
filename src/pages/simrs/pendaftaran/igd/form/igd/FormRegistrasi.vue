@@ -30,7 +30,7 @@
                   autocomplete="asalrujukan"
                   option-value="kode"
                   option-label="asalrujukan"
-                  :filled="false"
+                  outlined
                   :source="store.asalrujukans"
                   :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -47,7 +47,7 @@
                   autocomplete="polirs"
                   option-value="kodepoli"
                   option-label="polirs"
-                  :filled="false"
+                  outlined
                   :source="store.polis"
                   :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -65,7 +65,7 @@
                   autocomplete="jeniskarcis"
                   option-value="jeniskarcis"
                   option-label="jeniskarcis"
-                  :filled="false"
+                  outlined
                   :disable="!store.paramKarcis.kd_poli"
                   :source="store.jenisKarcises"
                   :loading="store.loading"
@@ -77,7 +77,7 @@
                 <app-input
                   v-model="store.display.hargakarcis"
                   label="Karcis"
-                  :filled="false"
+                  outlined
                   disable
                 />
               </div>
@@ -95,7 +95,7 @@
                   autocomplete="groupsistembayar"
                   option-value="kode"
                   option-label="groupsistembayar"
-                  :filled="false"
+                  outlined
                   :source="store.sistembayars1"
                   :loading="store.loading"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -116,7 +116,7 @@
                   autocomplete="rs2"
                   option-value="rs2"
                   option-label="rs2"
-                  :filled="false"
+                  outlined
                   :source="store.sistembayars"
                   :loading="store.loading"
 
@@ -136,7 +136,7 @@
                   option-value="dpjp"
                   option-label="nama"
                   :disable="!store.dpjps.length"
-                  :filled="false"
+                  outlined
                   :source="store.dpjps"
                   :loading="store.loading"
 

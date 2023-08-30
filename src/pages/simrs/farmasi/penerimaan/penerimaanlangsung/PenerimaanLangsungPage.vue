@@ -78,7 +78,7 @@
               option-label="nama"
               option-value="nama"
               label="Jenis Penerimaan"
-              :filled="false"
+              outlined
               :source="store.jenisPenerimaans"
               @on-select="store.jenisPenerimaanSelected"
               @clear="store.clearJenisPenerimaan"
@@ -95,7 +95,7 @@
               option-label="nama"
               option-value="nama"
               label="Pilih Jenis Surat"
-              :filled="false"
+              outlined
               :source="store.jenisSuratLs"
               @on-select="store.jenisSuratSelected"
               @clear="store.clearJenisSurat"
@@ -108,7 +108,7 @@
               ref="refNoSurat"
               v-model="store.form.nomorsurat"
               label="Nomor Surat"
-              :filled="false"
+              outlined
             />
           </div>
         </div>
@@ -118,7 +118,7 @@
               ref="refPengirim"
               v-model="store.form.pengirim"
               label="Nama Pengirim"
-              :filled="false"
+              outlined
             />
           </div>
         </div>
@@ -133,7 +133,7 @@
               option-label="nama"
               option-value="value"
               label="Pilih Gudang"
-              :filled="false"
+              outlined
               :source="store.gudangs"
               @on-select="store.gudangSelected"
               @clear="store.clearGudang"
@@ -146,7 +146,7 @@
             <app-input-date-human
               :model="store.disp.tanggal"
               label="Tanggal Transaksi"
-              :filled="false"
+              outlined
               @set-display="dispTanggal"
               @db-model="setTanggal"
             />
@@ -157,7 +157,7 @@
             <app-input-date-human
               :model="store.disp.surat"
               label="Tanggal Surat"
-              :filled="false"
+              outlined
               @set-display="dispSurat"
               @db-model="setSurat"
             />
@@ -168,7 +168,7 @@
             <app-input-date-human
               :model="store.disp.tempo"
               label="Batas Akhir Pembayaran"
-              :filled="false"
+              outlined
               @set-display="dispTempo"
               @db-model="setTempo"
             />
@@ -180,7 +180,7 @@
               ref="refTotalFaktur"
               v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
-              :filled="false"
+              outlined
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"

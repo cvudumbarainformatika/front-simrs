@@ -26,7 +26,7 @@
                   label="No registrasi"
                   valid
                   disable
-                  :filled="false"
+                  outlined
                 />
               </div>
             </div>
@@ -40,7 +40,7 @@
                   right-icon
                   :right-icon-name="adaList?'icon-mat-format_list_numbered':''"
                   :right-icon-tooltip="adaList?'List Rujukan':''"
-                  :filled="false"
+                  outlined
                   :loading="store.loadingListRujukan || store.loadingCekBpjs"
                   :rules="[val => (!!val || !!store.form.nosuratkontrol) || 'Harap diisi',]"
                   @icon-right-click="listSuratRujukan"
@@ -82,7 +82,7 @@
                   right-icon
                   :right-icon-name="adaList?'icon-mat-format_list_numbered':''"
                   :right-icon-tooltip="adaList?'List Surat Kontrol':''"
-                  :filled="false"
+                  outlined
                   :loading="store.loadingCekBpjs"
                   :rules="[
                     val => (!!val ) || 'Harap diisi',
@@ -117,7 +117,7 @@
                     autocomplete="nilai"
                     option-value="nilai"
                     option-label="nilai"
-                    :filled="false"
+                    outlined
                     :source="store.jenisKunjungans"
                     :loading="store.loading"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -136,7 +136,7 @@
                     option-value="kode"
                     option-label="asalrujukan"
                     :rules="[val => (!!val) || 'Harap diisi',]"
-                    :filled="false"
+                    outlined
                     :source="store.asalrujukans"
                     :loading="store.loading"
                   />
@@ -155,7 +155,7 @@
                     autocomplete="polirs"
                     option-value="kodepoli"
                     option-label="polirs"
-                    :filled="false"
+                    outlined
                     :source="store.polis"
                     :loading="store.loading"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -174,7 +174,7 @@
                     autocomplete="nama"
                     option-value="value"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.kataraks"
                     :loading="store.loading"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -201,7 +201,7 @@
                     autocomplete="jeniskarcis"
                     option-value="jeniskarcis"
                     option-label="jeniskarcis"
-                    :filled="false"
+                    outlined
                     :disable="!store.paramKarcis.kd_poli"
                     :source="store.jenisKarcises"
                     :loading="store.loading"
@@ -213,7 +213,7 @@
                   <app-input
                     v-model="store.display.hargakarcis"
                     label="Karcis"
-                    :filled="false"
+                    outlined
                     disable
                   />
                   <q-tooltip
@@ -238,7 +238,7 @@
                     autocomplete="kode"
                     option-value="kode"
                     option-label="kode"
-                    :filled="false"
+                    outlined
                     :source="store.diagnosaAwals"
                     :loading="store.loadingdiagnosa"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -255,7 +255,7 @@
                     autocomplete="nama"
                     option-value="nama"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.diagnosaAwals"
                     :loading="store.loadingdiagnosa"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -278,7 +278,7 @@
                     autocomplete="nama"
                     option-value="value"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.tujuanKunjungans"
                     :loading="store.loading"
                     :rules="[val => (!!val) || 'Harap diisi',]"
@@ -299,7 +299,7 @@
                     autocomplete="procedure"
                     option-value="kode"
                     option-label="procedure"
-                    :filled="false"
+                    outlined
                     valid
                     :source="store.prosedurs"
                     :loading="store.loading"
@@ -323,7 +323,7 @@
                     option-value="kode"
                     option-label="assesmentpel"
                     valid
-                    :filled="false"
+                    outlined
                     :source="store.assesmens"
                     :loading="store.loading"
                     @selected="setAssesmentPelayanan"
@@ -346,7 +346,7 @@
                     option-value="kode"
                     option-label="namapenunjang"
                     valid
-                    :filled="false"
+                    outlined
                     :source="store.penunjangs"
                     :loading="store.loading"
                     @selected="setPenunjang"
@@ -376,7 +376,7 @@
                   autocomplete="nama"
                   option-value="kode"
                   option-label="nama"
-                  :filled="false"
+                  outlined
                   :source="store.ppkRujukans"
                   :loading="store.loadingPpkRujukan"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -393,7 +393,7 @@
                   ref="refTglRujukanr"
                   :model="store.display.tanggal.rujukan"
                   label="Tanggal Rujukan"
-                  :filled="false"
+                  outlined
                   :loading="store.loading"
                   @db-model="setTglRujukan"
                   @set-display="setDispTglRujukan"
@@ -411,7 +411,7 @@
                   autocomplete="groupsistembayar"
                   option-value="kode"
                   option-label="groupsistembayar"
-                  :filled="false"
+                  outlined
                   :source="store.sistembayars1"
                   :loading="store.loadingsistembayar"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -432,7 +432,7 @@
                   autocomplete="rs2"
                   option-value="rs2"
                   option-label="rs2"
-                  :filled="false"
+                  outlined
                   :source="store.sistembayars"
                   :loading="store.loadingsistembayar"
                   :rules="[
@@ -449,7 +449,7 @@
                   ref="refTglSEP"
                   :model="store.display.tanggal.sep"
                   label="Tanggal SEP"
-                  :filled="false"
+                  outlined
                   :loading="store.loading"
                   @db-model="setTglSEP"
                   @set-display="setDispTglSEP"
@@ -462,7 +462,7 @@
                 <app-input
                   v-model="store.form.catatan"
                   label="Catatan"
-                  :filled="false"
+                  outlined
                   valid
                 />
               </div>
@@ -474,7 +474,7 @@
                   v-model="store.form.sep"
                   label="No SEP"
                   disable
-                  :filled="false"
+                  outlined
                   valid
                 />
               </div>
@@ -490,7 +490,7 @@
                   autocomplete="nama"
                   option-value="dpjp"
                   option-label="nama"
-                  :filled="false"
+                  outlined
                   :source="store.dpjps"
                   :loading="store.loading || store.loadingJadwalDokter"
                   :rules="[val => (!!val) || 'Harap diisi',]"
@@ -515,7 +515,7 @@
                   autocomplete="nama"
                   option-value="value"
                   option-label="nama"
-                  :filled="false"
+                  outlined
                   :source="store.kecelakaans"
                   :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
                   :loading="store.loading"
@@ -534,7 +534,7 @@
                     ref="refTglKecelakaan"
                     :model="store.display.tanggal.kecelakaan"
                     label="Tanggal Kejadian"
-                    :filled="false"
+                    outlined
                     :loading="store.loading"
                     @db-model="setTglKecelakaan"
                     @set-display="setDispTglKecelakaan"
@@ -548,7 +548,7 @@
                     autocomplete="nama"
                     option-value="value"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.optionSuplesi"
                     :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
                     :loading="store.loading"
@@ -565,7 +565,7 @@
                     ref="refSuplesi"
                     v-model="store.form.nosepsuplesi"
                     label="Nomor Suplesi"
-                    :filled="false"
+                    outlined
                   />
                 </div>
                 <div class="col-2">
@@ -599,7 +599,7 @@
                     autocomplete="nama"
                     option-value="kode"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.propinsies"
                     :disable="!store.propinsies.length"
                     :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
@@ -615,7 +615,7 @@
                     autocomplete="nama"
                     option-value="kode"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.kabupatens"
                     :disable="!store.kabupatens.length"
                     :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
@@ -631,7 +631,7 @@
                     autocomplete="nama"
                     option-value="kode"
                     option-label="nama"
-                    :filled="false"
+                    outlined
                     :source="store.kecamatans"
                     :disable="!store.kecamatans.length"
                     :rules="[val => (!!val || val>=0) || 'Harap diisi',]"
@@ -648,7 +648,7 @@
                     v-model="store.form.keterangan"
                     label="Keterangan"
                     valid
-                    :filled="false"
+                    outlined
                   />
                 </div>
               </div>

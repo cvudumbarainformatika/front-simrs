@@ -11,7 +11,7 @@
         <app-input
           v-model="store.form.no_rencbeliobat"
           label="Nomor rencana beli obat"
-          :filled="false"
+          outlined
           readonly
           valid
           :loading="store.loading"
@@ -43,7 +43,7 @@
         <app-input-date-human
           :model="store.disp.tanggal"
           label="Tanggal"
-          :filled="false"
+          outlined
           @set-display="setDispTanggal"
           @db-model="setTanggal"
         />
@@ -169,7 +169,7 @@
                 v-model="row.jumlahBeli"
                 label="Jumlah Dipesan"
                 color="green"
-                :filled="false"
+                outlined
                 :disable="row.bisaBeli<=0"
                 :rules="[
                   val=> (val <= row.bisaBeli) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'

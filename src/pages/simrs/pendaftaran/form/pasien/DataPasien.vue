@@ -54,7 +54,7 @@
                   option-value="value"
                   option-label="nama"
                   autofocus
-                  :filled="false"
+                  outlined
                   :loading="store.loading"
                   :disable="store.loading || !notEdit"
                   :source="store.jenisPasiens"
@@ -96,7 +96,7 @@
                   v-model="store.form.norm"
                   label="Nomor RM"
                   autofocus
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   :loading="store.loading"
                   :rules="[
@@ -117,7 +117,7 @@
                   ref="refKtp"
                   v-model="store.form.nik"
                   label="Nomor KTP"
-                  :filled="false"
+                  outlined
                   :right-icon="!!bpjs"
                   right-icon-name="icon-mat-dvr"
                   :loading="store.loadingNik"
@@ -143,7 +143,7 @@
                   ref="refKitas"
                   v-model="store.form.nomoridentitaslain"
                   label="Nomor Paspor / KITAS"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   :rules="[
                     val=>( !store.form.nik ? !!val : true)||'Harap di isi',
@@ -172,7 +172,7 @@
                   ref="refNoKaBpjs"
                   v-model="store.form.noka"
                   label="Nomor KA BPJS"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   :loading="store.loadingNoka"
                   :rules="[val=> (!!val ? regex.test( val ) : true) ||'Hanya angka']"
@@ -221,7 +221,7 @@
                       autocomplete="sapaan"
                       option-value="sapaan"
                       option-label="sapaan"
-                      :filled="false"
+                      outlined
                       :source="store.sapaans"
                       :loading="store.loading"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -235,7 +235,7 @@
                       ref="refNama"
                       v-model="store.form.nama"
                       label="Nama"
-                      :filled="false"
+                      outlined
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
@@ -251,7 +251,7 @@
                       v-model="store.form.gelardepan"
                       label="Gelar Depan"
                       valid
-                      :filled="false"
+                      outlined
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
@@ -260,7 +260,7 @@
                       v-model="store.form.gelarbelakang"
                       label="Gelar Belakang"
                       valid
-                      :filled="false"
+                      outlined
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
                   </div>
@@ -278,7 +278,7 @@
                   ref="refTempatLahir"
                   v-model="store.form.templahir"
                   label="Tempat Lahir"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
@@ -296,7 +296,7 @@
                       ref="refHariLahir"
                       v-model="store.tanggal.hari"
                       label="Hari"
-                      :filled="false"
+                      outlined
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
@@ -310,7 +310,7 @@
                       ref="refBulanLahir"
                       v-model="store.tanggal.bulan"
                       label="Bulan"
-                      :filled="false"
+                      outlined
                       type="number"
                       error-message="Periksa kembali tanggal lahir"
                       :error="lahirValid"
@@ -323,7 +323,7 @@
                       ref="refTahunLahir"
                       v-model="store.tanggal.tahun"
                       label="Tahun"
-                      :filled="false"
+                      outlined
                       type="number"
                       :disable="store.form.barulama!=='baru' && !store.edit"
                       error-message="Periksa kembali tanggal lahir"
@@ -380,7 +380,7 @@
                   autocomplete="kelamin"
                   option-value="kelamin"
                   option-label="kelamin"
-                  :filled="false"
+                  outlined
                   :source="store.kelamins"
                   :loading="store.loading"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -403,7 +403,7 @@
                   autocomplete="pendidikan"
                   option-value="pendidikan"
                   option-label="pendidikan"
-                  :filled="false"
+                  outlined
                   :source="store.pendidikans"
                   :loading="store.loading"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -428,7 +428,7 @@
                       autocomplete="kode"
                       option-value="kode"
                       option-label="keterangan"
-                      :filled="false"
+                      outlined
                       :source="store.agamas"
                       :loading="store.loading"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -446,7 +446,7 @@
                       ref="refTulisAgama"
                       v-model="store.form.agama"
                       label="Tulis Agama"
-                      :filled="false"
+                      outlined
                     />
                   </div>
                 </div>
@@ -463,7 +463,7 @@
                   ref="refSuku"
                   v-model="store.form.suku"
                   label="Suku"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru' && !store.edit"
                 />
               </div>
@@ -479,7 +479,7 @@
                   ref="refBahasa"
                   v-model="store.form.bahasa"
                   label="Bahasa"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
@@ -498,7 +498,7 @@
                   autocomplete="statuspernikahan"
                   option-value="statuspernikahan"
                   option-label="statuspernikahan"
-                  :filled="false"
+                  outlined
                   :rules="[val => (!!val) || 'Harap diisi',]"
                   :source="store.statuspernikahans"
                   :loading="store.loading"
@@ -512,7 +512,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.kelurahans"
                   :loading="store.loadingSelect"
                   :disable="!store.kelurahans.length || store.form.barulama!=='baru'"
@@ -537,7 +537,7 @@
                       autocomplete="pekerjaan"
                       option-value="pekerjaan"
                       option-label="pekerjaan"
-                      :filled="false"
+                      outlined
                       :rules="[val => (!!val) || 'Harap diisi',]"
                       :source="store.pekerjaans"
                       :loading="store.loading"
@@ -555,7 +555,7 @@
                       ref="refInputPekerjaan"
                       v-model="store.form.pekerjaan"
                       label="tulis Pekerjaan"
-                      :filled="false"
+                      outlined
                     />
                   </div>
                 </div>
@@ -573,7 +573,7 @@
                   ref="refNoTlpRumah"
                   v-model="store.form.noteleponrumah"
                   label="No telepon rumah"
-                  :filled="false"
+                  outlined
                   valid
                   type="number"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -593,7 +593,7 @@
                   ref="refNoTlp"
                   v-model="store.form.noteleponhp"
                   label="No Ponsel"
-                  :filled="false"
+                  outlined
                   :disable=" store.form.barulama!=='baru' && !store.edit && (!!store.form.noteleponhp)"
                   @blur="setTlpHP($event)"
                 />
@@ -615,7 +615,7 @@
                 <app-input
                   ref="refAlamat"
                   v-model="store.form.alamat"
-                  :filled="false"
+                  outlined
                   label="Alamat"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   @update:model-value="setAlamat"
@@ -635,7 +635,7 @@
                       ref="refRT"
                       v-model="store.form.rt"
                       label="RT"
-                      :filled="false"
+                      outlined
                       type="number"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                       @update:model-value="setRT"
@@ -649,7 +649,7 @@
                       ref="refRW"
                       v-model="store.form.rw"
                       label="RW"
-                      :filled="false"
+                      outlined
                       type="number"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                       @update:model-value="setRW"
@@ -672,7 +672,7 @@
                   autocomplete="wilayah"
                   option-value="kd_negara"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.negaras"
                   :loading="store.loadingSelect"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -695,7 +695,7 @@
                   autocomplete="wilayah"
                   option-value="propinsi"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.propinsies"
                   :disable="!store.propinsies.length || (store.form.barulama!=='baru' && !store.edit)"
                   :loading="store.loadingPropinsi"
@@ -718,7 +718,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.kabupatens"
                   :loading="store.loadingKabupaten"
                   :disable="!store.kabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -741,7 +741,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.kecamatans"
                   :loading="store.loadingKecamatan"
                   :disable="!store.kecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -764,7 +764,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.kelurahans"
                   :loading="store.loadingKelurahan"
                   :disable="!store.kelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -785,7 +785,7 @@
                   v-model="store.form.kodepos"
                   label="Kode Pos"
                   type="number"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                   @update:model-value="setKodepos"
                 />
@@ -798,7 +798,7 @@
                   ref="refNoAntrian"
                   v-model="store.form.noantrian"
                   label="Nomor Antrian"
-                  :filled="false"
+                  outlined
                   @blur="setNoAntrian($event)"
                 />
                 <!-- @update:model-value="setNoAntrian" -->
@@ -839,7 +839,7 @@
                 <app-input
                   ref="refAlamatDomisili"
                   v-model="store.form.alamatdomisili"
-                  :filled="false"
+                  outlined
                   label="Alamat"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
@@ -857,7 +857,7 @@
                       ref="refRTDomisili"
                       v-model="store.form.rtdomisili"
                       label="RT"
-                      :filled="false"
+                      outlined
                       type="number"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
@@ -870,7 +870,7 @@
                       ref="refRWDomisili"
                       v-model="store.form.rwdomisili"
                       label="RW"
-                      :filled="false"
+                      outlined
                       type="number"
                       :disable="store.form.barulama!=='baru'&&!store.edit"
                     />
@@ -891,7 +891,7 @@
                   autocomplete="wilayah"
                   option-value="kd_negara"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.domisiliNegaras"
                   :loading="store.loadingSelectDomisili"
                   :disable="store.form.barulama!=='baru'&&!store.edit"
@@ -913,7 +913,7 @@
                   autocomplete="wilayah"
                   option-value="propinsi"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.domisiliPropinsies"
                   :disable="!store.domisiliPropinsies.length || (store.form.barulama!=='baru' && !store.edit)"
                   :loading="store.loadingPropinsiDomisili"
@@ -937,7 +937,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.domisiliKabupatens"
                   :loading="store.loadingKabupatenDomisili"
                   :disable="!store.domisiliKabupatens.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -959,7 +959,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.domisiliKecamatans"
                   :loading="store.loadingKecamatanDomisili"
                   :disable="!store.domisiliKecamatans.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -981,7 +981,7 @@
                   autocomplete="wilayah"
                   option-value="kotakabupaten"
                   option-label="wilayah"
-                  :filled="false"
+                  outlined
                   :source="store.domisiliKelurahans"
                   :loading="store.loadingKelurahanDomisili"
                   :disable="!store.domisiliKelurahans.length || (store.form.barulama!=='baru' && !store.edit)"
@@ -1001,7 +1001,7 @@
                   v-model="store.form.kodeposdomisili"
                   label="Kode Pos"
                   type="number"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
