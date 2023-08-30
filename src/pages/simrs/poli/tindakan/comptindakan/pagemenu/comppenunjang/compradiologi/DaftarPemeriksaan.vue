@@ -2,14 +2,14 @@
   <div class="column full-height">
     <q-bar class="col-auto bg-dark text-white">
       <div class="q-py-sm f-14 ">
-        Daftar Pemeriksaan Laborat
+        Daftar Pemeriksaan Radiologi
       </div>
     </q-bar>
     <div class="col-grow">
       <div class="q-pa-md">
         <q-input
-          v-model="store.caripemeriksaanlab"
-          label="Cari Pemeriksaan"
+          v-model="store.caripemeriksaanradiologi"
+          label="Cari Pemeriksaan Radiologi"
           dense
           outlined
           standout="bg-yellow-3"
@@ -31,13 +31,6 @@
           separator
           class="bg-white"
         >
-          <!-- <div
-                  v-if="store.pemeriksaanlabs === 0"
-                  class="column flex-center"
-                  style="height:calc(100% - 68px)"
-                >
-                  Belum Ada Data
-                </div> -->
           <q-item class="q-my-xs">
             <q-item-section>
               <q-item-label>Nama Item</q-item-label>
@@ -80,7 +73,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 

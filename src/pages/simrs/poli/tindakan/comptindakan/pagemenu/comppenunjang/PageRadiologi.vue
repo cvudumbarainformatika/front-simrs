@@ -7,7 +7,7 @@
         square
         class="col-5 full-height"
       >
-        {{ props.pasien }}
+        <DaftarPemeriksaan />
       </q-card>
       <q-card
         flat
@@ -15,12 +15,14 @@
         square
         class="col-7 full-height"
       >
-        List Pemeriksaan & Hasil Radiologi
+        <ListOrder :pasien="props.pasien" />
       </q-card>
     </div>
   </div>
 </template>
 <script setup>
+import DaftarPemeriksaan from './compradiologi/DaftarPemeriksaan.vue'
+import ListOrder from './compradiologi/ListOrder.vue'
 const props = defineProps({
   pasien: {
     type: Object,
