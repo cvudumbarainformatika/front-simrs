@@ -143,8 +143,13 @@
 import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 const store = useAnamnesis()
 const emits = defineEmits(['openHistory'])
-
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 function onSubmit() {
-  store.saveData()
+  store.saveData(props.pasien)
 }
 </script>

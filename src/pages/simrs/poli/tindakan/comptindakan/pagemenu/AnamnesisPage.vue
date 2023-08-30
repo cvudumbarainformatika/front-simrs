@@ -2,7 +2,11 @@
   <div class="full-height q-pa-sm">
     <div class="row q-col-gutter-x-xs full-height">
       <div class="col-7 full-height">
-        <FormAnamnesis @open-history="seamless = !seamless" />
+        <FormAnamnesis
+          :key="props.pasien"
+          :pasien="props.pasien"
+          @open-history="seamless = !seamless"
+        />
       </div>
       <div class="col-5 full-height">
         <ListAnamnesis />
@@ -27,11 +31,15 @@ import { onMounted, ref } from 'vue'
 
 // const store = useAnamnesis()
 const seamless = ref(false)
-const options = ['Obat', 'Makanan', 'Udara', 'Lain-lain']
-const model = ref(options[0])
 const text = ref('')
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 onMounted(() => {
-  console.log(model.value)
   console.log(text.value)
 })
 
