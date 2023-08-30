@@ -160,7 +160,7 @@
                   ref="refIbu"
                   v-model="store.form.namaibukandung"
                   label="Nama Ibu Kandung"
-                  :filled="false"
+                  outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
                 />
               </div>
