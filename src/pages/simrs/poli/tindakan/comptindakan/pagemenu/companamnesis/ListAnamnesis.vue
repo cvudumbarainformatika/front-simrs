@@ -23,57 +23,74 @@
     </q-bar>
     <q-card-section
       style="padding:0"
-      class="full-height"
+      class="full-height bg-grey"
     >
-      <q-scroll-area style="height:calc(100% - 40px);">
-        <q-list separator>
-          <q-item
-            v-for="n in 2"
-            :key="n"
-          >
-            <q-item-section>
-              <q-item-label
-                lines="2"
-                class="f-12"
-              >
-                <span class="text-weight-bold">Keluhan Utama</span> : ....
-              </q-item-label>
-              <q-item-label
-                lines="2"
-              >
-                <span class="text-weight-bold">Riwayat Penyakit</span> : ....
-              </q-item-label>
-              <q-item-label
-                lines="2"
-              >
-                <span class="text-weight-bold">Riwayat Alergi</span> : ....
-              </q-item-label>
-              <q-item-label
-                lines="2"
-              >
-                <span class="text-weight-bold">Riwayat Pengobatan</span> : ....
-              </q-item-label>
-            </q-item-section>
-
-            <q-item-section
-              side
-              top
+      <div
+        v-if="pasien.anamnesis.length <= 0"
+        class="column full-height flex-center"
+      >
+        <div class="text-white">
+          Belum Ada data tersimpan
+        </div>
+      </div>
+      <q-scroll-area
+        v-else
+        style="height:calc(100% - 32px);"
+      >
+        <q-list
+          class="bg-white"
+          separator
+        >
+          <transition-group name="list">
+            <q-item
+              v-for="(item , n) in pasien?.anamnesis"
+              :key="n"
+              class="list-move"
             >
-              <q-btn
-                flat
-                round
-                size="sm"
-                icon="icon-mat-edit"
-              />
-              <q-btn
-                flat
-                round
-                size="sm"
-                icon="icon-mat-delete"
-                color="negative"
-              />
-            </q-item-section>
-          </q-item>
+              <q-item-section>
+                <q-item-label
+                  lines="2"
+                  class="f-12"
+                >
+                  <span class="">Keluhan Utama</span> : <span class="text-weight-bold">{{ item?.rs4 }}</span>
+                </q-item-label>
+                <q-item-label
+                  lines="2"
+                >
+                  <span class="">Riwayat Penyakit</span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
+                </q-item-label>
+                <q-item-label
+                  lines="2"
+                >
+                  <span class="">Riwayat Penyakit</span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}</span>
+                </q-item-label>
+                <q-item-label
+                  lines="2"
+                >
+                  <span class="">Riwayat Pengobatan</span> : <span class="text-weight-bold">{{ item?.riwayatpengobatan }}</span>
+                </q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  icon="icon-mat-edit"
+                />
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  icon="icon-mat-delete"
+                  color="negative"
+                />
+              </q-item-section>
+            </q-item>
+          </transition-group>
           <q-separator />
         </q-list>
       </q-scroll-area>
@@ -84,4 +101,11 @@
 <script setup>
 // import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 // const store = useAnamnesis()
+
+defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 </script>

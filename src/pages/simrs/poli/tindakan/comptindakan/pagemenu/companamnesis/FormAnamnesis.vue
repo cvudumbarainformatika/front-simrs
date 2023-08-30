@@ -6,10 +6,11 @@
     class="full-height"
   >
     <q-form
+      ref="refForm"
       class="q-pa-sm"
       @submit="onSubmit"
     >
-      <q-card-section>
+      <q-card-section class="q-pa-sm">
         <div class="row items-center justify-between">
           <div class="f-14 text-weight-bold">
             Form Anamnesis
@@ -141,8 +142,11 @@
 
 <script setup>
 import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
+import { ref } from 'vue'
 const store = useAnamnesis()
 const emits = defineEmits(['openHistory'])
+
+const refForm = ref()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -150,6 +154,8 @@ const props = defineProps({
   }
 })
 function onSubmit() {
-  store.saveData(props.pasien)
+  store.saveData(props.pasien).then(() => {
+    refForm.value.resetValidation()
+  })
 }
 </script>

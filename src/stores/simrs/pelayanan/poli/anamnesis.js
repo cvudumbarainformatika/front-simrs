@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useAnamnesis = defineStore('anamnesis', {
   state: () => ({
@@ -22,13 +23,15 @@ export const useAnamnesis = defineStore('anamnesis', {
       this.form.norm = pasien ? pasien.norm : ''
       this.form.noreg = pasien ? pasien.noreg : ''
 
-      console.log(this.form)
+      // console.log(this.form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpananamnesis', this.form)
         if (resp.status === 200) {
           console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungPoliStore()
           storePasien.injectDataPasien(pasien, resp.data.result, 'anamnesis')
+          notifSuccess(resp)
+          this.initReset()
         }
       } catch (error) {
         console.log('anamnesis err', error)
@@ -41,6 +44,7 @@ export const useAnamnesis = defineStore('anamnesis', {
           keluhanutama: '',
           riwayatpenyakit: '',
           riwayatalergi: '',
+          keteranganalergi: '',
           riwayatpengobatan: ''
         }
 
