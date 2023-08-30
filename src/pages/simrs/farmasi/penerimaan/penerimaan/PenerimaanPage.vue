@@ -11,7 +11,7 @@
         <app-input
           v-model="store.form.nopenerimaan"
           label="Nomor Penerimaan"
-          :filled="false"
+          outlined
           readonly
           valid
           :loading="store.loading"
@@ -89,7 +89,7 @@
               option-label="nopemesanan"
               option-value="nopemesanan"
               label="Pilih Pemesanan"
-              :filled="false"
+              outlined
               :source="store.pemesanans"
               @on-select="store.pemesananSelected"
               @clear="store.clearPemesanan"
@@ -106,7 +106,7 @@
               option-label="nama"
               option-value="nama"
               label="Pilih Jenis Surat"
-              :filled="false"
+              outlined
               :source="store.jenisSurats"
               @on-select="store.jenisSuratSelected"
               @clear="store.clearJenisSurat"
@@ -119,7 +119,7 @@
               ref="refNoSurat"
               v-model="store.form.nomorsurat"
               label="Nomor Surat"
-              :filled="false"
+              outlined
             />
           </div>
         </div>
@@ -129,7 +129,7 @@
               ref="refPengirim"
               v-model="store.form.pengirim"
               label="Nama Pengirim"
-              :filled="false"
+              outlined
             />
           </div>
         </div>
@@ -144,7 +144,7 @@
               option-label="nama"
               option-value="value"
               label="Pilih Gudang"
-              :filled="false"
+              outlined
               :source="store.gudangs"
               @on-select="store.gudangSelected"
               @clear="store.clearGudang"
@@ -157,7 +157,7 @@
             <app-input-date-human
               :model="store.disp.tanggal"
               label="Tanggal Transaksi"
-              :filled="false"
+              outlined
               @set-display="dispTanggal"
               @db-model="setTanggal"
             />
@@ -168,7 +168,7 @@
             <app-input-date-human
               :model="store.disp.surat"
               label="Tanggal Surat"
-              :filled="false"
+              outlined
               @set-display="dispSurat"
               @db-model="setSurat"
             />
@@ -179,7 +179,7 @@
             <app-input-date-human
               :model="store.disp.tempo"
               label="Batas Akhir Pembayaran"
-              :filled="false"
+              outlined
               @set-display="dispTempo"
               @db-model="setTempo"
             />
@@ -191,7 +191,7 @@
               ref="refTotalFaktur"
               v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
-              :filled="false"
+              outlined
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"
@@ -243,6 +243,38 @@
                 {{ det.masterobat ? det.masterobat.merk :'-' }}
               </div>
             </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="q-mr-sm">
+                Bentuk Sediaan
+              </div>
+              <div class="text-deep-orange">
+                {{ det.masterobat ? det.masterobat.bentuk_sediaan :'-' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="q-mr-sm">
+                Kekuatan Dosis
+              </div>
+              <div class="text-deep-orange">
+                {{ det.masterobat ? det.masterobat.kekuatan_dosis :'-' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="q-mr-sm">
+                Kelas Terapi
+              </div>
+              <div class="text-deep-orange">
+                {{ det.masterobat ? det.masterobat.kelas_terapi :'-' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="q-mr-sm">
+                Volume Sediaan
+              </div>
+              <div class="text-deep-orange">
+                {{ det.masterobat ? det.masterobat.volumesediaan :'-' }}
+              </div>
+            </div>
           </div>
           <div class="anu q-mr-sm">
             <div class="row justify-between no-wrap items-center q-mb-xs text-green">
@@ -257,9 +289,9 @@
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
-                  v-model="det.jml_diterima"
+                  v-model="det.jumlah"
                   label="Diterima Sekarang"
-                  :filled="false"
+                  outlined
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor',
                     val => !!val || 'Harap di isi',
@@ -295,7 +327,7 @@
                 Satuan Besar
               </div>
               <div class="text-weight-bold">
-                satuan
+                {{ det.satuan_bsr }}
               </div>
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs">
@@ -304,7 +336,7 @@
                   ref="refIsi"
                   v-model="det.isi"
                   label="Isi"
-                  :filled="false"
+                  outlined
                 />
               </div>
             </div>
@@ -313,15 +345,15 @@
                 Satuan Kecil
               </div>
               <div class="text-weight-bold">
-                satuan
+                {{ det.satuan_kcl }}
               </div>
             </div>
-            <div class="row no-wrap items-center">
+            <div class="row no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   v-model="det.no_batch"
                   label="No Batch"
-                  :filled="false"
+                  outlined
                 />
               </div>
             </div>
@@ -331,7 +363,7 @@
                   ref="refExp"
                   :model="det.tgl_exp"
                   label="Tanggal Kadalwarsa"
-                  :filled="false"
+                  outlined
                   @set-model="detKadal($event,det)"
                 />
               </div>
@@ -345,7 +377,7 @@
                   ref="refHarga"
                   v-model="det.harga"
                   label="Harga (Satuan besar)"
-                  :filled="false"
+                  outlined
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -359,7 +391,7 @@
                   ref="refHargaKcl"
                   v-model="det.harga_kcl"
                   label="Harga (Satuan kecil)"
-                  :filled="false"
+                  outlined
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -372,7 +404,7 @@
                 <app-input
                   v-model="det.diskon"
                   label="Diskon (%)"
-                  :filled="false"
+                  outlined
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -386,7 +418,7 @@
                   ref="refPpn"
                   v-model="det.ppn"
                   label="Ppn (%)"
-                  :filled="false"
+                  outlined
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -515,25 +547,25 @@ function setHargaNet(val) {
     if (val.harga_netto > 0) {
       const harga = val.harga_netto
       val.ppn_rp = val.ppn / 100 * harga
-      val.harga_netto = val.harga_netto + val.ppn_rp
+      val.harga_netto = harga + val.ppn_rp
     } else {
       const harga = val.harga
       val.ppn_rp = val.ppn / 100 * harga
-      val.harga_netto = val.harga_netto + val.ppn_rp
+      val.harga_netto = harga + val.ppn_rp
     }
   }
   if (val.harga_netto > 0) {
-    val.subtotal = val.harga_netto * parseFloat(val.jml_diterima)
+    val.subtotal = val.harga_netto * parseFloat(val.jumlah)
   } else {
     val.harga_netto = val.harga
-    val.subtotal = val.harga * parseFloat(val.jml_diterima)
+    val.subtotal = val.harga * parseFloat(val.jumlah)
   }
   const total = store.details.map(a => a.subtotal).reduce((a, b) => a + b, 0)
   store.setForm('total_faktur_pbf', total)
-  // console.log(val)
+  console.log(val)
 }
 function setHarga(evt, val, index) {
-  val.harga = parseFloat(evt)
+  val.harga = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
   if (isi && diterima) {
@@ -547,7 +579,7 @@ function setHarga(evt, val, index) {
   // console.log('harga', val)
 }
 function setHargaKcl (evt, val, index) {
-  val.harga_kcl = parseFloat(evt)
+  val.harga_kcl = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
   if (isi && diterima) {
@@ -568,8 +600,8 @@ function setPpn(evt, val) {
   setHargaNet(val)
 }
 function setDiterima(evt, val) {
-  val.jml_diterima = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  val.jml_all_penerimaan = val.jml_diterima + val.jml_terima_lalu
+  val.jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  val.jml_all_penerimaan = val.jumlah + val.jml_terima_lalu
 }
 function detKadal(evt, val) {
   val.tgl_exp = evt

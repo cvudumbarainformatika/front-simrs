@@ -614,34 +614,36 @@
               </div>
             </div>
             <div class="col-6">
-              <div v-if="!store.form.kelasterapis.length">
+              <div v-if="!store.form.kelasterapis">
                 belum ada kelas terapi
               </div>
-              <div v-if="store.form.kelasterapis.length">
-                <div
-                  v-for="(ter,i) in store.form.kelasterapis"
-                  :key="i"
-                  class="row justify-between items-center"
-                >
-                  <div>
-                    {{ ter.kelasterapi }}
-                  </div>
-                  <div>
-                    <q-icon
-                      size="16px"
-                      name="icon-mat-cancel"
-                      color="negative"
-                      class="cursor-pointer"
-                      @click="hapusTerapi(i)"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="bottom middle"
-                        :offset="[10, 10]"
+              <div v-if="store.form.kelasterapis">
+                <div v-if="store.form.kelasterapis.length">
+                  <div
+                    v-for="(ter,i) in store.form.kelasterapis"
+                    :key="i"
+                    class="row justify-between items-center"
+                  >
+                    <div>
+                      {{ ter.kelasterapi }}
+                    </div>
+                    <div>
+                      <q-icon
+                        size="16px"
+                        name="icon-mat-cancel"
+                        color="negative"
+                        class="cursor-pointer"
+                        @click="hapusTerapi(i)"
                       >
-                        Hapus
-                      </q-tooltip>
-                    </q-icon>
+                        <q-tooltip
+                          anchor="top middle"
+                          self="bottom middle"
+                          :offset="[10, 10]"
+                        >
+                          Hapus
+                        </q-tooltip>
+                      </q-icon>
+                    </div>
                   </div>
                 </div>
               </div>

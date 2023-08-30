@@ -81,7 +81,7 @@
                 {{ rin.stok_max_rs }}
               </div>
               <div class="col-2">
-                {{ rin.jumlah_bisa_dibeli }}
+                {{ rin.jumlahdpesan }}
               </div>
             </div>
             <q-separator />
