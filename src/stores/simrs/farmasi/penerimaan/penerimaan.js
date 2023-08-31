@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifErrVue } from 'src/modules/utils'
+import { filterDuplicateArrays, notifErrVue } from 'src/modules/utils'
 
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
@@ -82,31 +82,24 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         console.log('tem ', this.items)
         console.log('det ', this.details)
         const terima = this.items.penerimaan ? this.items.penerimaan : []
+        const terRi = []
         if (terima.length) {
           terima.forEach(ter => {
             const rinci = ter.penerimaanrinci ? ter.penerimaanrinci : []
-            const anu = ter.penerimaanrinci ? ter.penerimaanrinci.map(a => {
-              const ai = {}
-              ai.jml_terima = parseFloat(a.jml_terima)
-              ai.kdobat = a.kdobat
-              return ai
-            }) : []
-            console.log('anu', anu)
-            console.log('ter', ter)
             if (rinci.length) {
-              // rinci.forEach(rin => {
-              //   // console.log('jml', rin.jml_terima)
-              //   // console.log('kode', rin.kdobat)
-              //   const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
-              //   if (index >= 0) {
-              //     const trmsblm = this.details[index].jml_terima_lalu ? this.details[index].jml_terima_lalu : 0
-              //     this.details[index].jml_terima_lalu = trmsblm + parseFloat(rin.jml_terima)
-              //   }
-              // })
+              const anu = rinci.map(a => {
+                const ai = {}
+                ai.jml_terima = parseFloat(a.jml_terima)
+                ai.kdobat = a.kdobat
+                return ai
+              })
+              terRi.push(anu)
             }
           })
         }
-        this.metanirinci()
+        console.log('terRi', terRi)
+
+        this.metanirinci(terRi)
         if (this.namaPenyedia) {
           this.setForm('kdpbf', this.namaPenyedia.kode)
         } else {
@@ -121,9 +114,32 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.details = []
       this.namaPenyedia = null
     },
-    metanirinci() {
+    metanirinci(pen) {
       if (this.details.length) {
+        const kod = this.details.map(a => a.kdobat) // ambil kode obat
+        const ter = []
+        if (kod.length) {
+          const filtKod = filterDuplicateArrays(kod) // pastikan tidak ada duplikasi kode obat
+          filtKod.forEach(a => {
+            let temp = 0
+            pen.forEach(apem => {
+              const tam = apem.filter(anu => anu.kdobat === a).map(b => b.jml_terima).reduce((c, d) => c + d, 0)
+              temp += tam
+            })
+            console.log('temp', temp)
+            const temp2 = {
+              kode: a,
+              jml: temp
+            }
+            ter.push(temp2)
+          })
+          // console.log('kod', kod)
+          // console.log('filtkod', filtKod)
+          // console.log('ter', ter)
+        }
+
         this.details.forEach(a => {
+          // console.log('det', a)
           a.diskon = 0
           a.ppn = 0
           a.diskon_rp = 0
@@ -134,8 +150,19 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           a.subtotal = 0
           a.satuan_bsr = a.masterobat ? a.masterobat.satuan_b : '-'
           a.satuan_kcl = a.masterobat ? a.masterobat.satuan_k : '-'
-          if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
-          a.jml_all_penerimaan = a.jml_terima_lalu
+          if (ter.length) {
+            const temp = ter.filter(b => b.kode === a.kdobat)
+            if (temp.length) {
+              a.jml_terima_lalu = temp[0].jml
+            } else {
+              a.jml_terima_lalu = 0
+            }
+            a.jml_all_penerimaan = a.jml_terima_lalu
+            // console.log('det temp', temp)
+          } else {
+            if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
+            a.jml_all_penerimaan = a.jml_terima_lalu
+          }
         })
       }
     },
