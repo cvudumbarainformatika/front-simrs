@@ -289,9 +289,10 @@
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
-                  v-model="det.jumlah"
-                  label="Diterima Sekarang"
+                  v-model="det.inpJumlah"
+                  label="Diterima"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor',
                     val => !!val || 'Harap di isi',
@@ -299,6 +300,17 @@
                   ]"
                   @update:model-value="setDiterima($event, det)"
                 />
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs text-primary">
+              <div class="q-mr-sm">
+                Diterima Sekarang
+              </div>
+              <div class="text-weight-bold">
+                {{ det.jumlah ? det.jumlah : 0 }}
+              </div>
+              <div class="">
+                {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
@@ -337,6 +349,8 @@
                   v-model="det.isi"
                   label="Isi"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  @update:model-value="setIsi($event, det, i)"
                 />
               </div>
             </div>
@@ -354,6 +368,7 @@
                   v-model="det.no_batch"
                   label="No Batch"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                 />
               </div>
             </div>
@@ -364,6 +379,7 @@
                   :model="det.tgl_exp"
                   label="Tanggal Kadalwarsa"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   @set-model="detKadal($event,det)"
                 />
               </div>
@@ -378,6 +394,7 @@
                   v-model="det.harga"
                   label="Harga (Satuan besar)"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -392,6 +409,7 @@
                   v-model="det.harga_kcl"
                   label="Harga (Satuan kecil)"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -405,6 +423,7 @@
                   v-model="det.diskon"
                   label="Diskon (%)"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -419,6 +438,7 @@
                   v-model="det.ppn"
                   label="Ppn (%)"
                   outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
@@ -449,6 +469,7 @@
               icon="icon-mat-save"
               color="primary"
               round
+              :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
               @click="simpan(i)"
             >
               <q-tooltip
@@ -600,8 +621,32 @@ function setPpn(evt, val) {
   setHargaNet(val)
 }
 function setDiterima(evt, val) {
-  val.jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  val.jml_all_penerimaan = val.jumlah + val.jml_terima_lalu
+  val.inpJumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  if (!val.isi) val.isi = 1
+  val.jumlah = val.inpJumlah * val.isi
+  const jmlAll = val.jumlah + val.jml_terima_lalu
+  if (jmlAll > val.jumlahdpesan) {
+    console.log('lebih')
+    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
+    val.jumlah = val.inpJumlah * val.isi
+  }
+}
+
+function setIsi(evt, val) {
+  console.log('isi', parseFloat(evt))
+  val.isi = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  if (!val.inpJumlah) val.inpJumlah = 1
+  if (parseFloat(val.inpJumlah) > 0 && val.isi > 0) {
+    console.log('isi if', parseFloat(evt))
+    val.jumlah = val.isi * parseFloat(val.inpJumlah)
+
+    const jmlAll = val.jumlah + val.jml_terima_lalu
+    if (jmlAll > val.jumlahdpesan) {
+      console.log('lebih')
+      val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
+      val.jumlah = val.inpJumlah * val.isi
+    }
+  }
 }
 function detKadal(evt, val) {
   val.tgl_exp = evt
