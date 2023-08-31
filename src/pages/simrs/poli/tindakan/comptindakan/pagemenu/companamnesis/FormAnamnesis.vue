@@ -21,7 +21,7 @@
               dense
               size="md"
               icon="icon-mat-history"
-              @click="emits('openHistory')"
+              @click="historyOpen"
             >
               <q-tooltip class="bg-dark text-white">
                 History Pasien
@@ -134,6 +134,7 @@
           tooltip="Simpan Data"
           type="submit"
           tip
+          :loading="store.loadingForm"
         />
       </q-card-actions>
     </q-form>
@@ -157,5 +158,10 @@ function onSubmit() {
   store.saveData(props.pasien).then(() => {
     refForm.value.resetValidation()
   })
+}
+
+function historyOpen() {
+  emits('openHistory')
+  store.getHistory(props.pasien?.norm)
 }
 </script>

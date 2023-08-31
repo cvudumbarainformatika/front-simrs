@@ -43,7 +43,7 @@
         >
           <transition-group name="list">
             <q-item
-              v-for="(item , n) in pasien?.anamnesis"
+              v-for="(item , n) in lists"
               :key="n"
               class="list-move"
             >
@@ -62,7 +62,7 @@
                 <q-item-label
                   lines="2"
                 >
-                  <span class="">Riwayat Penyakit</span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}</span>
+                  <span class="">Riwayat Alergi</span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}, {{ item?.keteranganalergi }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
@@ -80,6 +80,7 @@
                   round
                   size="sm"
                   icon="icon-mat-edit"
+                  @click="store.editForm(item)"
                 />
                 <q-btn
                   flat
@@ -87,6 +88,7 @@
                   size="sm"
                   icon="icon-mat-delete"
                   color="negative"
+                  @click="hapusItem(item.id)"
                 />
               </q-item-section>
             </q-item>
@@ -99,13 +101,37 @@
 </template>
 
 <script setup>
-// import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
-// const store = useAnamnesis()
-
-defineProps({
+import { useQuasar } from 'quasar'
+import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
+import { computed } from 'vue'
+const store = useAnamnesis()
+const $q = useQuasar()
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
+
+const lists = computed(() => {
+  const arr = props.pasien?.anamnesis
+  return arr.sort((a, b) => { return b.id - a.id })
+})
+
+function hapusItem(id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    store.deleteData(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 </script>
