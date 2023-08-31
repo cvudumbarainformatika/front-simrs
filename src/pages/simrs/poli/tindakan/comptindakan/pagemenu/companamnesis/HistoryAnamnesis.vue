@@ -65,10 +65,10 @@
 import { ref } from 'vue'
 import { useSlideup } from 'src/composable/gsap/slideup'
 import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
+import { humanDate } from 'src/modules/formatter'
 const { enter, leave } = useSlideup()
 
 const store = useAnamnesis()
-
 defineProps({
   seamless: {
     type: Boolean,
@@ -90,9 +90,7 @@ const columns = ref([
   },
   { name: 'riwayatpenyakit', align: 'left', label: 'Riwayat Penyakit', field: 'riwayatpenyakit', sortable: true },
   { name: 'riwayatalergi', align: 'left', label: 'Riwayat Alergi', field: 'riwayatalergi', sortable: true },
-  { name: 'tgl', align: 'left', label: 'Tanggal', field: 'tgl', sortable: true }
-  // { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  // { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+  { name: 'tgl', align: 'right', label: 'Tanggal', field: 'tgl', format: val => `${humanDate(val)}`, sortable: true }
 ])
 
 </script>

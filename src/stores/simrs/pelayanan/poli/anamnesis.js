@@ -87,7 +87,12 @@ export const useAnamnesis = defineStore('anamnesis', {
         const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
         console.log('history', resp)
         if (resp.status === 200) {
-          this.historys = resp.data
+          if (resp.data.length) {
+            const arr = resp.data
+            this.historys = arr
+          } else {
+            this.historys = []
+          }
         }
         this.loadingHistory = false
       } catch (error) {
