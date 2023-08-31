@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays, notifErrVue } from 'src/modules/utils'
+import { filterDuplicateArrays, findWithAttr, notifErrVue } from 'src/modules/utils'
 
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
@@ -11,12 +11,12 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     form: {
       nopenerimaan: '',
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      tempo: null,
+      batasbayar: null,
       surat: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
-      tempo: null,
+      batasbayar: null,
       surat: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     params: {
@@ -187,8 +187,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setForm('jenissurat', null)
     },
     getInitialData() {
-      this.setForm('tempo', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
-      this.setDisp('tempo', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
+      this.setForm('batasbayar', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
+      this.setDisp('batasbayar', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
 
       this.ambilPemesanan()
       this.getPihakKetiga()
@@ -248,6 +248,28 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             if (resp.data.heder) {
               if (resp.data.heder.nopenerimaan) {
                 this.setForm('nopenerimaan', resp.data.heder.nopenerimaan)
+              }
+            }
+            if (resp.data.rinci) {
+              const rin = resp.data.rinci
+              const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
+              if (index >= 0) {
+                const all = this.details[index].jml_all_penerimaan
+                this.details[index].jml_all_penerimaan = all + rin.jml_terima
+                this.details[index].jml_terima_lalu += rin.jml_terima
+                this.details[index].jumlah = 0
+                this.details[index].inpJumlah = 0
+                this.details[index].isi = 1
+                this.details[index].harga = 0
+                this.details[index].harga_kcl = 0
+                this.details[index].no_batch = ''
+                this.details[index].tgl_exp = ''
+                this.details[index].diskon = 0
+                this.details[index].ppn = 0
+                this.details[index].diskon_rp = 0
+                this.details[index].ppn_rp = 0
+                this.details[index].harga_netto = 0
+                this.details[index].subtotal = 0
               }
             }
             resolve(resp)

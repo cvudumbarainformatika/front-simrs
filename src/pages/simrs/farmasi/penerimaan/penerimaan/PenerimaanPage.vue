@@ -177,7 +177,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
-              :model="store.disp.tempo"
+              :model="store.disp.batasbayar"
               label="Batas Akhir Pembayaran"
               outlined
               @set-display="dispTempo"
@@ -306,7 +306,7 @@
               <div class="q-mr-sm">
                 Diterima Sekarang
               </div>
-              <div class="text-weight-bold">
+              <div class="text-weight-bold q-mr-sm">
                 {{ det.jumlah ? det.jumlah : 0 }}
               </div>
               <div class="">
@@ -582,7 +582,13 @@ function setHargaNet(val) {
     val.subtotal = val.harga * parseFloat(val.jumlah)
   }
   const total = store.details.map(a => a.subtotal).reduce((a, b) => a + b, 0)
-  store.setForm('total_faktur_pbf', total)
+  if (store.form.total_faktur_pbf) {
+    if (parseFloat(store.form.total_faktur_pbf) < total) {
+      store.setForm('total_faktur_pbf', total)
+    }
+  } else {
+    store.setForm('total_faktur_pbf', total)
+  }
   console.log(val)
 }
 function setHarga(evt, val, index) {
@@ -666,10 +672,10 @@ function dispSurat(val) {
 }
 
 function setTempo(val) {
-  store.setForm('tempo', val)
+  store.setForm('batasbayar', val)
 }
 function dispTempo(val) {
-  store.setDisp('tempo', val)
+  store.setDisp('batasbayar', val)
 }
 
 store.getInitialData()
