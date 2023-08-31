@@ -245,7 +245,7 @@
                 sudah dipesan
               </div>
               <div class="text-weight-bold">
-                {{ row.jumlahdpesan }}
+                {{ row.jumlahdpesan ? row.jumlahdpesan : 0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
