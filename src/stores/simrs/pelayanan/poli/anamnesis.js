@@ -101,6 +101,16 @@ export const useAnamnesis = defineStore('anamnesis', {
       }
     },
 
+    pilihHistory(val) {
+      this.form = {
+        keluhanutama: val.keluhanutama,
+        riwayatpenyakit: val.riwayatpenyakit,
+        riwayatalergi: val.riwayatalergi,
+        keteranganalergi: val.keteranganalergi,
+        riwayatpengobatan: val.riwayatpengobatan
+      }
+    },
+
     initReset() {
       this.form = null
       return new Promise((resolve, reject) => {

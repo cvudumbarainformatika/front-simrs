@@ -73,23 +73,24 @@
 
               <q-item-section
                 side
-                top
               >
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-edit"
-                  @click="store.editForm(item)"
-                />
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-delete"
-                  color="negative"
-                  @click="hapusItem(item.id)"
-                />
+                <div class="q-gutter-sm">
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-edit"
+                    @click="store.editForm(item)"
+                  />
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-delete"
+                    color="negative"
+                    @click="hapusItem(item.id)"
+                  />
+                </div>
               </q-item-section>
             </q-item>
           </transition-group>

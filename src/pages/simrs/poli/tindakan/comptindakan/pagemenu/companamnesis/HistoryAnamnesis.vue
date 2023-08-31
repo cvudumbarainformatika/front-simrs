@@ -47,7 +47,18 @@
             :columns="columns"
             row-key="keluhanutama"
             :loading="store.loadingHistory"
+            separator="cell"
           >
+            <template #body-cell-opt="props">
+              <q-td :props="props">
+                <q-btn
+                  flat
+                  style="color: #FF0080"
+                  label="Pilih"
+                  @click="pilihData(props.row)"
+                />
+              </q-td>
+            </template>
             <template #loading>
               <q-inner-loading
                 showing
@@ -90,17 +101,21 @@ const columns = ref([
   },
   { name: 'riwayatpenyakit', align: 'left', label: 'Riwayat Penyakit', field: 'riwayatpenyakit', sortable: true },
   { name: 'riwayatalergi', align: 'left', label: 'Riwayat Alergi', field: 'riwayatalergi', sortable: true },
-  { name: 'tgl', align: 'right', label: 'Tanggal', field: 'tgl', format: val => `${humanDate(val)}`, sortable: true }
+  { name: 'tgl', align: 'right', label: 'Tanggal', field: 'tgl', format: val => `${humanDate(val)}`, sortable: true },
+  { name: 'opt', align: 'right', label: '#', field: 'tgl' }
 ])
+
+function pilihData(row) {
+  // console.log(row)
+  store.pilihHistory(row)
+}
 
 </script>
 
 <style lang="scss" scoped>
 .my-sticky-header-table {
   height: 320px;
-  tbody{
-    scroll-margin-top: 48px;
-  }
+  cursor: pointer;
 }
 </style>
 
