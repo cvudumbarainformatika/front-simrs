@@ -19,7 +19,9 @@
     <!-- dialog -->
 
     <HistoryAnamnesis
+      :key="props.pasien"
       :seamless="seamless"
+      :pasien="props.pasien"
       @close="seamless =!seamless"
     />
   </div>

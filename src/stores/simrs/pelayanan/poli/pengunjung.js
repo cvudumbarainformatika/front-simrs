@@ -86,9 +86,32 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       if (findPasien.length) {
         const data = findPasien[0]
         if (kode === 'anamnesis') {
-          data.anamnesis.push(val)
+          // const ada = data.anamnesis.length
+          // if (ada > 0) {
+          const target = data.anamnesis.find(x => x.id === val.id)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            data.anamnesis.push(val)
+          }
+          // console.log('cek', cek)
+          // if (cek.length > 0) {
+          //   const target = cek.find((obj) => obj.id === 2);
+          // } else {
+          //   data.anamnesis.push(val)
+          // }
+          // // }
+          // untuk tambah data
         }
         console.log('data ditemukan', data)
+      }
+    },
+    hapusDataAnamnesis(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].anamnesis
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
       }
     }
   }
