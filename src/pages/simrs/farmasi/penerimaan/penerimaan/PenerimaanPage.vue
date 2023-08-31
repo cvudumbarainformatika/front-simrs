@@ -545,6 +545,7 @@ function validasi(index) {
 
 function simpan(index) {
   const deta = store.details[index]
+  deta.jml_all_penerimaan += deta.jumlah
   const key = Object.keys(deta)
   key.forEach(a => {
     if (a !== 'masterobat') store.setForm(a, deta[a])
