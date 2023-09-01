@@ -8,8 +8,8 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
     meta: {},
     params: {},
     columns: [
-      'kd_obat',
-      'nama_obat',
+      // 'kd_obat',
+      'obat',
       'stok',
       // 'stok_gudang',
       // 'stok_rs',

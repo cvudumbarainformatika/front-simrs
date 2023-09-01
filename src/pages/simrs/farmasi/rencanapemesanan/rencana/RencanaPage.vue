@@ -90,11 +90,8 @@
             row-image="image"
             @delete-ids="table.deletesData"
             -->
-          <template #col-kd_obat>
-            <div>Kode Obat</div>
-          </template>
-          <template #col-nama_obat>
-            <div>Nama Obat</div>
+          <template #col-obat>
+            <div>Obat</div>
           </template>
           <template #col-stok>
             <div>Stok</div>
@@ -108,9 +105,65 @@
           <template #col-centang>
             <div>Beli</div>
           </template>
-          <template #cell-nama_obat="{row}">
-            <div class="text-amber-10">
-              {{ row.nama_obat }}
+          <template #cell-obat="{row}">
+            <div class="row justify-between no-wrap ">
+              <div class="q-mr-xs">
+                Kode Obat
+              </div>
+              <div class="text-weight-bold text-green">
+                {{ row.kd_obat }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center">
+              <div class="q-mr-xs">
+                Nama Obat
+              </div>
+              <div class="text-weight-bold text-amber-10 box text-right">
+                {{ row.nama_obat }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap ">
+              <div class="q-mr-xs">
+                Fornas
+              </div>
+              <div
+                class="text-weight-bold"
+                :class="row.status_fornas === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_fornas==='1' ?'YA':'TIDAK' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap ">
+              <div class="q-mr-xs">
+                Forkit
+              </div>
+              <div
+                class="text-weight-bold"
+                :class="row.status_forkid === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_forkid==='1' ?'YA':'TIDAK' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap ">
+              <div class="q-mr-xs">
+                Generik
+              </div>
+              <div
+                class="text-weight-bold"
+                :class="row.status_generik === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_generik==='1' ?'YA':'TIDAK' }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap ">
+              <div class="q-mr-xs">
+                Sistem Bayar
+              </div>
+              <div
+                class="text-weight-bold"
+              >
+                {{ row.sistembayar ? row.sistembayar :'-' }}
+              </div>
             </div>
           </template>
           <template #cell-stok="{row}">
@@ -221,3 +274,10 @@ function setTanggal(val) {
 table.getInitialData()
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.box {
+  white-space: normal !important;
+    inline-size: 200px;
+    overflow-wrap: break-word;
+}
+</style>
