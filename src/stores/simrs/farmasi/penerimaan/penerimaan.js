@@ -10,9 +10,9 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     items: [],
     form: {
       nopenerimaan: '',
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       batasbayar: null,
-      surat: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -238,6 +238,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     },
     selesaiDanKunci() {
     },
+    kunci() {
+    },
     simpanPenerimaan() {
       this.loading = true
       return new Promise(resolve => {
@@ -254,8 +256,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               const rin = resp.data.rinci
               const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
               if (index >= 0) {
-                this.details[index].jml_terima_lalu += rin.jml_terima
-                this.details[index].jml_all_penerimaan = this.details[index].jml_terima_lalu + rin.jml_terima
+                this.details[index].jml_terima_lalu = rin.jml_terima_lalu
+                this.details[index].jml_all_penerimaan = rin.jml_all_penerimaan
                 this.details[index].jumlah = 0
                 this.details[index].inpJumlah = 0
                 this.details[index].isi = 1

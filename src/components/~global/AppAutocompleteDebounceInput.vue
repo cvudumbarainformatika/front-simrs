@@ -5,7 +5,7 @@
     dense
     :options="optionx"
     :label="label"
-    :filled="outlined ? !filled : filled"
+    :filled="!outlined ? filled : !filled"
     :outlined="outlined"
     hide-bottom-space
     no-error-icon
@@ -102,7 +102,7 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   optionValue: { type: [Object, Array, String], default: 'id' },
   optionLabel: { type: [Object, Array, String], default: 'nama' },
-  filled: { type: Boolean, default: false },
+  filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false },
   model: { type: [String, Number], default: '' },

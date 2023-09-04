@@ -638,14 +638,28 @@ function setDiterima(evt, val) {
     val.jumlah = val.inpJumlah * val.isi
   }
 }
-
+let isiPrev = 0
 function setIsi(evt, val) {
+  console.log('val', val)
   console.log('isi', parseFloat(evt))
   val.isi = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   if (!val.inpJumlah) val.inpJumlah = 1
   if (parseFloat(val.inpJumlah) > 0 && val.isi > 0) {
-    console.log('isi if', parseFloat(evt))
-    val.jumlah = val.isi * parseFloat(val.inpJumlah)
+    console.log('isi if', parseFloat(evt), isiPrev)
+    if (isiPrev > val.isi) {
+      if (parseFloat(val.inpJumlah) < 1) {
+        const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
+        val.jumlah = jml
+        val.inpJumlah = jml / val.isi
+      }
+      if (parseFloat(val.isi) <= 1) {
+        const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
+        val.jumlah = jml
+        val.inpJumlah = jml / val.isi
+      }
+    } else {
+      val.jumlah = val.isi * parseFloat(val.inpJumlah)
+    }
 
     const jmlAll = val.jumlah + val.jml_terima_lalu
     if (jmlAll > val.jumlahdpesan) {
@@ -653,20 +667,21 @@ function setIsi(evt, val) {
       val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
       val.jumlah = val.inpJumlah * val.isi
     }
+    isiPrev = val.isi
   }
 }
 function detKadal(evt, val) {
   val.tgl_exp = evt
 }
 function setTanggal(val) {
-  store.setForm('tanggal', val)
+  store.setForm('tglpenerimaan', val)
 }
 function dispTanggal(val) {
   store.setDisp('tanggal', val)
 }
 
 function setSurat(val) {
-  store.setForm('surat', val)
+  store.setForm('tglpenerimaan', val)
 }
 function dispSurat(val) {
   store.setDisp('surat', val)
