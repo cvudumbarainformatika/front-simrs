@@ -102,6 +102,7 @@
     <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
       <canvas
+        v-show="tab === null"
         id="canvas"
         ref="canvasRef"
         class="bg-template"
@@ -182,47 +183,112 @@
           </q-card>
         </q-menu>
       </canvas>
+      <div v-show="tab !==null">
+        <q-img
+          :src="`${pathImg + tab}`"
+          loading="lazy"
+          spinner-color="white"
+          :width="`${props.width}px`"
+        />
+      </div>
     </div>
     <!-- =====================================================================================================tombol-bawah -->
     <div
-      class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-xs tmp-t z-top absolute-bottom"
+      class="tmp-t z-top absolute-bottom "
     >
-      <div class="q-gutter-xs">
-        <q-btn
-          color="teal"
-          size="sm"
-          padding="sm"
-          label="Template Gambar"
-          @click="store.setDialogTemplate"
-        />
-      </div>
-      <div class="q-gutter-xs">
-        <q-btn
-          icon="icon-mat-refresh"
-          color="negative"
-          size="sm"
-          padding="sm"
-          @click="resetTanda"
+      <div v-if="pasien?.gambars.length">
+        <div class="flex">
+          <div class="q-py-xs q-px-sm f-10 bg-dark text-white">
+            Gambar Tersimpan
+          </div>
+        </div>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="bg-dark text-white q-pa-none"
+          align="center"
+          :breakpoint="0"
+          indicator-color="transparent"
+          mobile-arrows
+          outside-arrows
         >
-          <q-tooltip>
-            Reset Penandaan
-          </q-tooltip>
-        </q-btn>
-        <q-btn
-          icon="icon-mat-add"
-          color="dark"
-          size="sm"
-          padding="sm"
-          label="Baru"
-        />
-        <q-btn
-          icon="icon-mat-save"
-          color="primary"
-          size="sm"
-          padding="sm"
-          label="Simpan Gambar"
-          @click="saveImage"
-        />
+          <q-tab
+            v-for="(src , i) in pasien?.gambars"
+            :key="i"
+            :name="src.gambar"
+            class="q-pa-xs"
+          >
+            <q-img
+              :src="`${pathImg + src.gambar}`"
+              loading="lazy"
+              spinner-color="white"
+              width="100px"
+            />
+          </q-tab>
+        </q-tabs>
+      </div>
+      <div
+        v-if="tab === null"
+        class="cursor-pointer non-selectable row items-center justify-between bg-yellow-2 q-pa-xs full-width"
+      >
+        <div class="q-gutter-xs">
+          <q-btn
+            color="teal"
+            size="sm"
+            padding="sm"
+            label="Template Gambar"
+            @click="store.setDialogTemplate"
+          />
+        </div>
+        <div
+          class="q-gutter-xs"
+        >
+          <q-btn
+            icon="icon-mat-refresh"
+            color="negative"
+            size="sm"
+            padding="sm"
+            @click="resetTanda"
+          >
+            <q-tooltip>
+              Reset Penandaan
+            </q-tooltip>
+          </q-btn>
+
+          <q-btn
+            icon="icon-mat-save"
+            color="primary"
+            size="sm"
+            padding="sm"
+            label="Simpan Gambar"
+            @click="saveImage"
+          />
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="cursor-pointer non-selectable row items-center justify-between bg-yellow-2 q-pa-xs full-width"
+      >
+        <div class="q-gutter-xs">
+          <q-btn
+            icon="icon-mat-close"
+            color="negative"
+            size="sm"
+            padding="sm"
+            label="Hapus Gambar"
+          />
+        </div>
+        <div class="q-gutter-xs">
+          <q-btn
+            icon="icon-mat-add"
+            color="dark"
+            size="sm"
+            padding="sm"
+            label="Baru"
+            @click="tab=null"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -233,6 +299,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
+import { pathImg } from 'src/boot/axios'
 
 const emits = defineEmits(['saveImage'])
 
@@ -240,6 +307,7 @@ const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 
 const options = ref([])
+const tab = ref(null)
 
 const canvasRef = ref()
 const refMenu = ref()
@@ -265,6 +333,7 @@ const btns = ref([
 onMounted(() => {
   // console.log('document', window.innerWidth / 2)
   ctx.value = canvasRef.value.getContext('2d')
+  tab.value = null
 
   const opt = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
   options.value = opt
@@ -377,7 +446,7 @@ const resetTanda = () => {
 }
 
 const saveImage = () => {
-  const imageURL = canvasRef.value.toDataURL('image/jpeg', 0.5)
+  const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
   console.log('gambar', imageURL)
   emits('saveImage', imageURL)
 }
@@ -422,6 +491,11 @@ watch(() => arr, (obj) => {
 watch(() => store.fileGambar, (obj) => {
   console.log('watch file gambar', obj)
   writingMode.value = true
+  func()
+}, { deep: true })
+watch(() => tab.value, (obj) => {
+  console.log('watch tab gambar', obj)
+  writingMode.value = false
   func()
 }, { deep: true })
 

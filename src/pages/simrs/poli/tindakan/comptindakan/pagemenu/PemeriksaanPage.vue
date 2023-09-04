@@ -30,7 +30,7 @@
         <!-- <div class="col-auto"> -->
         <div
           ref="canvasEl"
-          class="col-5"
+          class="col-4"
         >
           <div class="row full-height">
             <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
@@ -48,7 +48,7 @@
 
         <!-- ===============================================================================ROW FORM -->
         <div
-          class="col scroll"
+          class="col-4 scroll"
           style="border-left: 1px solid gray;"
         >
           <div class="column full-height">
@@ -68,9 +68,9 @@
                   class="row q-col-gutter-sm q-pa-md"
                   @submit.prevent.stop="onSubmit"
                 >
-                  <div class="col-12 f-12 text-weight-bold">
+                  <!-- <div class="col-12 f-12 text-weight-bold">
                     Pemeriksaan Fisik
-                  </div>
+                  </div> -->
                   <div class="col-6">
                     <q-input
                       v-model="store.formVital.denyutjantung"
@@ -213,7 +213,9 @@
                       dense
                       class="bg-teal text-white"
                     >
-                      <div>Detail Penandaan Kelainan Fisik / Penandaan Gambar</div>
+                      <div class="f-12">
+                        Detail Penandaan Kelainan Fisik / Penandaan Gambar
+                      </div>
                     </q-bar>
                   </div>
                   <div class="col">

@@ -112,8 +112,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         image: img,
         keterangan
       }
+      const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
 
-      console.log('simpan gambar', obj)
+      console.log('simpan gambar', resp)
     },
 
     initReset() {
