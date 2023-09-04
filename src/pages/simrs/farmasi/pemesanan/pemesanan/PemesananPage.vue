@@ -50,27 +50,6 @@
       </div>
     </div>
     <div>
-      <div class="row items-center no-wrap">
-        <div class="q-mr-md">
-          Penyedia:
-        </div>
-        <app-autocomplete-debounce-input
-          ref="refPbf"
-          v-model="store.form.kdpbf"
-          label="Penyedia"
-          autocomplete="nama"
-          option-label="nama"
-          option-value="kode"
-          :loading="store.loadingPihakTiga"
-          :source="store.pihakTigas"
-          :rules="[
-            val=> !!val || 'tidak boleh kosong'
-          ]"
-          @buang="cariPihakTiga"
-        />
-      </div>
-    </div>
-    <div>
       <q-btn
         flat
         :icon="!style.componentfull?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
@@ -84,6 +63,47 @@
   </div>
   <!-- perencanaan -->
   <div class="q-mt-lg q-pt-lg">
+    <!-- header -->
+    <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
+      <div class="col-6">
+        <div class="row q-mb-xs">
+          <div class="col-12">
+            <app-autocomplete-new
+              :model="store.form.nopemesanan"
+              autocomplete="nopemesanan"
+              option-label="nopemesanan"
+              option-value="nopemesanan"
+              label="Pilih Nomor Rencana Pemesanan"
+              outlined
+              :source="store.pemesanans"
+              @on-select="store.pemesananSelected"
+              @clear="store.clearPemesanan"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="row items-center no-wrap">
+          <div class="col-12">
+            <app-autocomplete-debounce-input
+              ref="refPbf"
+              v-model="store.form.kdpbf"
+              label="Penyedia"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              outlined
+              :loading="store.loadingPihakTiga"
+              :source="store.pihakTigas"
+              :rules="[
+                val => !!val || 'tidak boleh kosong'
+              ]"
+              @buang="cariPihakTiga"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     <q-card>
       <q-card-section>
         <app-table
@@ -96,13 +116,11 @@
           :order-by="table.params.order_by"
           :sort="table.params.sort"
           :loading="table.loading"
-          :to-search="table.params.namaobat"
           :default-btn="false"
           :ada-refresh="false"
           :ada-filter="false"
           :ada-tambah="false"
           :ada-cari="false"
-          @find="table.setSearch"
           @set-row="table.setPerPage"
           @goto="table.setPage"
         >

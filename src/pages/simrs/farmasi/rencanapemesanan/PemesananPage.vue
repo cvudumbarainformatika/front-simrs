@@ -61,9 +61,9 @@ const title = computed(() => {
   if (page.path === '/farmasi/rencanapemesanan/rencana') {
     return 'RENCANA'
   } else if (page.path === '/farmasi/rencanapemesanan/listrencanapesanan') {
-    return 'PEMESANAN'
+    return 'LIST RENCANA PEMESANAN'
   } else {
-    return 'Pemesanan'
+    return 'Rencana'
   }
 })
 const subtitle = computed(() => {

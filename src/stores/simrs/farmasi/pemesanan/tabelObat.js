@@ -8,6 +8,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     meta: {},
     params: {
       per_page: 10,
+      namaobat: '',
       page: 1
     },
     columns: [
@@ -52,7 +53,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli', param)
           .then(resp => {
             this.loading = false
-            console.log('obat direncakan', resp.data.data)
+            console.log('obat direncakan', resp.data)
             // const temp = resp.data
             // temp.forEach(item => {
             //   item.checked = false
@@ -62,7 +63,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             //   item.bisaBeli = (item.stokMaxRS - item.stokRS) > 0 ? (item.stokMaxRS - item.stokRS) : 0
             //   item.jumlahBeli = item.bisaBeli
             // })
-            this.items = resp.data.data
+            this.items = resp.data
             if (this.items.length) {
               this.items.forEach(a => {
                 const dipesan = !isNaN(parseFloat(a.jumlahdipesan)) ? parseFloat(a.jumlahdipesan) : 0

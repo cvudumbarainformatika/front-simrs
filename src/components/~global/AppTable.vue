@@ -26,7 +26,7 @@
             :debounce="debounce"
             clearable
             dense
-            placeholder="Cari ..."
+            :placeholder="textCari"
             @keydown.enter.prevent="searchEnter"
           >
             <template #prepend>
@@ -455,6 +455,7 @@ const props = defineProps({
   addData: { type: Boolean, default: true },
   title: { type: String, default: '' },
   debounce: { type: String, default: '700' },
+  textCari: { type: String, default: 'Cari ...' },
   loading: { type: Boolean, default: false },
   columns: { type: Array, default: () => [] },
   columnHide: { type: Array, default: () => [] },

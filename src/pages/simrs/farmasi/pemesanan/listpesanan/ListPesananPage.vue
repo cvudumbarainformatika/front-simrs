@@ -52,7 +52,7 @@
       <template #expand="{row}">
         <div v-if="row.rinci.length">
           <div class="row items-center text-weight-bold">
-            <div class="col-3">
+            <div class="col-2">
               Kode Obat
             </div>
             <div class="col-2">
@@ -67,13 +67,16 @@
             <div class="col-2">
               Jumlah Bisa di beli
             </div>
+            <div class="col-2">
+              Jumlah Dipesan
+            </div>
           </div>
           <div
             v-for="(rin, i) in row.rinci"
             :key="i"
           >
             <div class="row items-center anu">
-              <div class="col-3">
+              <div class="col-2">
                 {{ rin.kdobat }}
               </div>
               <div class="col-2">
@@ -87,6 +90,9 @@
               </div>
               <div class="col-2">
                 {{ rin.jumlah_bisa_dibeli }}
+              </div>
+              <div class="col-2">
+                {{ rin.jumlahdpesan }}
               </div>
             </div>
           </div>
