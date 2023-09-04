@@ -101,7 +101,7 @@
           :ada-refresh="false"
           :ada-filter="false"
           :ada-tambah="false"
-          :ada-cari="false"
+          text-cari="Cari Nama Obat ..."
           @find="table.setSearch"
           @set-row="table.setPerPage"
           @goto="table.setPage"

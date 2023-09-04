@@ -151,12 +151,14 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             }
             this.loading = false
             this.setColumns()
-            this.items.forEach(anu => {
-              anu.loading = false
-              if (!anu.detail_distribusi_langsung.length) { anu.toDistribute = 0 } else {
-                anu.toDistribute = anu.detail_distribusi_langsung.map(m => m.jumlah).reduce((a, b) => a + b, 0)
-              }
-            })
+            if (this.items.length) {
+              this.items.forEach(anu => {
+                anu.loading = false
+                if (!anu.detail_distribusi_langsung.length) { anu.toDistribute = 0 } else {
+                  anu.toDistribute = anu.detail_distribusi_langsung.map(m => m.jumlah).reduce((a, b) => a + b, 0)
+                }
+              })
+            }
           })
       })
     },

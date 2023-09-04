@@ -544,17 +544,17 @@ function validasi(index) {
 }
 
 function simpan(index) {
-  const deta = store.details[index]
-  deta.jml_all_penerimaan += deta.jumlah
-  const key = Object.keys(deta)
-  key.forEach(a => {
-    if (a !== 'masterobat') store.setForm(a, deta[a])
-  })
-  console.log('aa', store.form)
   // store.details[index].forEach(a => {
   //   console.log('each', a)
   // })
   if (validasi(index)) {
+    const deta = store.details[index]
+    deta.jml_all_penerimaan += deta.jumlah
+    const key = Object.keys(deta)
+    key.forEach(a => {
+      if (a !== 'masterobat') store.setForm(a, deta[a])
+    })
+    console.log('aa', store.form)
     console.log('simpan valid', store.details[index])
     store.simpanPenerimaan()
   }
