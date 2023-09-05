@@ -498,6 +498,9 @@ watch(() => tab.value, (obj) => {
   writingMode.value = false
   func()
 }, { deep: true })
+watch(() => props.width, (obj) => {
+  console.log('watch width', obj)
+}, { deep: true })
 
 </script>
 
