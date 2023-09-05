@@ -127,9 +127,6 @@
                 <q-slide-transition>
                   <div v-show="expanded===i+1">
                     <q-separator dark />
-                    <!-- <q-card-section class="text-subtitle2">
-                      Detail Anatomy
-                    </q-card-section> -->
                     <q-list
                       v-if="item.detailgambars.length"
                       separator
@@ -147,6 +144,9 @@
                         </q-item-section>
                       </q-item>
                     </q-list>
+                    <div class="text-center q-pa-md">
+                      Tidak ada detail
+                    </div>
                   </div>
                 </q-slide-transition>
               </q-card>
