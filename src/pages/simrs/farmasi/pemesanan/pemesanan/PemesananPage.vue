@@ -291,7 +291,9 @@
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.jumlahdirencanakan >0 && row.bolehdipesan>0">
+            <!-- {{ parseFloat(row.jumlahallpesan) }} -->
+            <!-- {{ row.jumlahdirencanakan >= parseFloat(row.jumlahallpesan) }} -->
+            <div v-if="row.jumlahdirencanakan > 0 && row.bolehdipesan > 0 && (row.jumlahdirencanakan >= (isNaN(parseFloat(row.jumlahallpesan) ? 0: parseFloat(row.jumlahallpesan) )))">
               <q-btn
                 flat
                 no-caps
@@ -329,6 +331,12 @@
                 class="row"
               >
                 Perencanaan {{ row.jumlahdirencanakan }}
+              </div>
+              <div
+                v-if="(row.jumlahdirencanakan <= parseFloat(row.jumlahallpesan))"
+                class="row"
+              >
+                Jumlah Pesanan <strong>sudah sama dengan</strong> / <strong>melebihi</strong>  jumlah Direncanakan
               </div>
             </div>
           </template>

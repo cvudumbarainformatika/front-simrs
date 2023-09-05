@@ -53,7 +53,12 @@
               <div>{{ row.obat.namaobat }}</div>
             </template>
             <template #cell-Ruangan="{row}">
-              <div>{{ row.ruanganx.namaruangan }}</div>
+              <div v-if="row.ruanganx">
+                {{ row.ruanganx.namaruangan }}
+              </div>
+              <div v-if="row.gudang">
+                {{ row.gudang.namaruangan }}
+              </div>
             </template>
             <template #cell-Min="{row}">
               <div>{{ row.min }}</div>
