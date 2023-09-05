@@ -127,9 +127,26 @@
                 <q-slide-transition>
                   <div v-show="expanded===i+1">
                     <q-separator dark />
-                    <q-card-section class="text-subtitle2">
-                      fdsfdsf
-                    </q-card-section>
+                    <!-- <q-card-section class="text-subtitle2">
+                      Detail Anatomy
+                    </q-card-section> -->
+                    <q-list
+                      v-if="item.detailgambars.length"
+                      separator
+                      dark
+                    >
+                      <q-item
+                        v-for="(row, n) in item.detailgambars"
+                        :key="n"
+                      >
+                        <q-item-section>
+                          <q-item-label>{{ row.anatomy }}</q-item-label>
+                          <q-item-label caption>
+                            {{ row.ket }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
                   </div>
                 </q-slide-transition>
               </q-card>
