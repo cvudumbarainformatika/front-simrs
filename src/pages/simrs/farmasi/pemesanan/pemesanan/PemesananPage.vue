@@ -393,7 +393,11 @@ function cariPihakTiga(val) {
 const refPbf = ref(null)
 function kirimRencana(val) {
   if (refPbf.value.$refs.refAuto.validate()) {
-    store.kirimRencana(val)
+    store.kirimRencana(val).then(() => {
+      table.getObatMauBeli().then(() => {
+        table.rencanaSelected(store.form.no_rencbeliobat)
+      })
+    })
   }
 }
 
