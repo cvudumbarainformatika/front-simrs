@@ -88,6 +88,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
                 this.setForm('tgl_pemesanan', resp.data.tgl_pemesanan)
                 this.disp.tanggal = date.formatDate(resp.data.tgl_pemesanan, 'DD MMMM YYYY')
               }
+              val.jumlahallpesan += val.jumlahdipesan
             }
             resolve(resp)
           })

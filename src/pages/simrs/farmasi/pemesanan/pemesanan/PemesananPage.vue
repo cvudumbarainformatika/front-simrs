@@ -64,21 +64,29 @@
   <!-- perencanaan -->
   <div class="q-mt-lg q-pt-lg">
     <!-- header -->
-    <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
+    <div class="row q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
-              :model="store.form.nopemesanan"
-              autocomplete="nopemesanan"
-              option-label="nopemesanan"
-              option-value="nopemesanan"
+              :model="store.form.no_rencbeliobat"
+              autocomplete="no_rencbeliobat"
+              option-label="no_rencbeliobat"
+              option-value="no_rencbeliobat"
               label="Pilih Nomor Rencana Pemesanan"
               outlined
-              :source="store.pemesanans"
-              @on-select="store.pemesananSelected"
-              @clear="store.clearPemesanan"
+              :source="table.norencanas"
+              @on-select="table.rencanaSelected"
+              @clear="table.clearRencana"
             />
+          </div>
+        </div>
+        <div class="row q-my-md q-ml-xs">
+          <div class="col-6">
+            Tanggal Perencanaan
+          </div>
+          <div class="col-6">
+            {{ table.tglRencana? dateFullFormat(table.tglRencana):'-' }}
           </div>
         </div>
       </div>
@@ -176,9 +184,10 @@
                 Nama
               </div>
               <div class=" text-weight-bold">
-                {{ row.namaobat }}
+                {{ row.namaobat ? row.namaobat:'-' }}
               </div>
             </div>
+            <!-- <div v-if="row.mobat"> -->
             <div class="row justify-between no-wrap anu">
               <div class="q-mr-xs">
                 Fornas
@@ -212,6 +221,7 @@
                 {{ row.status_generik==='1' ?'Ya':'Tidak' }}
               </div>
             </div>
+
             <div class="row justify-between no-wrap anu">
               <div class="q-mr-xs">
                 Sistem Bayar
@@ -222,6 +232,7 @@
                 {{ row.sistembayar }}
               </div>
             </div>
+            <!-- </div> -->
           </template>
           <template #cell-stok="{row}">
             <div class="row justify-between no-wrap text-purple">
@@ -263,7 +274,7 @@
                 sudah dipesan
               </div>
               <div class="text-weight-bold">
-                {{ row.jumlahdpesan ? row.jumlahdpesan : 0 }}
+                {{ row.jumlahallpesan ? row.jumlahallpesan : 0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -275,11 +286,12 @@
                 :rules="[
                   val=> (val <= row.jumlahdirencanakan) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
                 ]"
+                @update:model-value="setJumlah($event, row)"
               />
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.jumlahdirencanakan >0">
+            <div v-if="row.jumlahdirencanakan >0 && row.bolehdipesan>0">
               <q-btn
                 flat
                 no-caps
@@ -288,10 +300,36 @@
                 color="primary"
                 :loading="store.loading && (store.form.kdobat === row.kdobat) && (store.form.noperencanaan === row.noperencanaan)"
                 @click="kirimRencana(row)"
-              />
+              >
+                <q-tooltip
+                  anchor="top middle"
+                  self="center middle"
+                >
+                  <div class="row">
+                    Maksimal Pemesanan {{ row.bolehdipesan }}
+                  </div>
+                  <div class="row">
+                    Rencana Pemesanan {{ row.jumlahdirencanakan }}
+                  </div>
+                </q-tooltip>
+              </q-btn>
             </div>
             <div v-else>
-              Tidak bisa melakukan pemesanan
+              <div class="row">
+                Tidak bisa melakukan pemesanan
+              </div>
+              <div
+                v-if="row.bolehdipesan <= 0"
+                class="row"
+              >
+                Maksimal Pemesanan {{ row.bolehdipesan }}
+              </div>
+              <div
+                v-if="row.jumlahdirencanakan > 0"
+                class="row"
+              >
+                Perencanaan {{ row.jumlahdirencanakan }}
+              </div>
             </div>
           </template>
         </app-table>
@@ -301,6 +339,7 @@
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
 import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
@@ -316,6 +355,26 @@ function setDispTanggal(val) {
 function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
+}
+
+function setJumlah(evt, val) {
+  const dipesan = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  if (dipesan > val.bolehdipesan) {
+    if (val.bolehdipesan > val.jumlahdirencanakan) {
+      val.jumlahdipesan = val.jumlahdirencanakan
+      notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.jumlahdirencanakan)
+    } else {
+      notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.bolehdipesan)
+      val.jumlahdipesan = val.bolehdipesan
+    }
+  } else {
+    if (dipesan > val.jumlahdirencanakan) {
+      val.jumlahdipesan = val.jumlahdirencanakan
+      notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.jumlahdirencanakan)
+    } else {
+      val.jumlahdipesan = dipesan
+    }
+  }
 }
 
 function cariPihakTiga(val) {

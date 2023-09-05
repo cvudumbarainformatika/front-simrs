@@ -72,7 +72,7 @@
                     v-model="store.form.nama"
                     valid
                     label="Nama Barang"
-                    :filled="false"
+                    outlined
                     autofocus
                     @update:model-value="setNama"
                   />
@@ -552,7 +552,7 @@
                     v-model="store.form.nilai_kdn"
                     valid
                     label="Nilai TKDN"
-                    :filled="false"
+                    outlined
                   />
                 </div>
               </div>
@@ -563,7 +563,7 @@
                     v-model="store.form.sertifikatkdn"
                     valid
                     label="Sertifikat TKDN"
-                    :filled="false"
+                    outlined
                     autofocus
                   />
                 </div>
