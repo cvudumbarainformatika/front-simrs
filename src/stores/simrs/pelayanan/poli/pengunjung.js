@@ -90,7 +90,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
           if (target) {
             Object.assign(target, val)
           } else {
-            data.anamnesis.push(val)
+            // data.anamnesis.push(val)
             data.anamnesis.splice(0, 0, val)
           }
         }
@@ -99,7 +99,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
           if (target) {
             Object.assign(target, val)
           } else {
-            data.gambars.push(val)
+            // data.gambars.push(val)
             data.gambars.splice(0, 0, val)
           }
         }
@@ -108,7 +108,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
           if (target) {
             Object.assign(target, val)
           } else {
-            data.pemeriksaanfisik.push(val)
+            // data.pemeriksaanfisik.push(val)
             data.pemeriksaanfisik.splice(0, 0, val)
           }
         }
@@ -120,6 +120,22 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       if (findPasien.length) {
         const data = findPasien[0].anamnesis
         const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataPemeriksaanfisik(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].pemeriksaanfisik
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusGambars(pasien, nama) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].gambars
+        const pos = data.findIndex(el => el.gambar === nama)
         if (pos >= 0) { data.splice(pos, 1) }
       }
     }
