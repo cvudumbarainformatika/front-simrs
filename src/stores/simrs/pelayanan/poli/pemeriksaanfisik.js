@@ -111,20 +111,27 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       form.anatomys = anatomys
 
       // console.log('simpan pemeriksaan', form)
-      const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-      if (resp.status === 200) {
-        const storePasien = usePengunjungPoliStore()
-        const isi = resp.data.result
-        storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
+        console.log('save', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp.data.result
+          storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
 
-        notifSuccess(resp)
-        this.initReset()
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingform = false
+          return new Promise((resolve, reject) => {
+            resolve()
+          })
+        }
         this.loadingform = false
-        return new Promise((resolve, reject) => {
-          resolve()
-        })
+      } catch (error) {
+        console.log('savepemeriksaan', error)
+        // notifErr(error.response)
+        this.loadingform = false
       }
-      this.loadingform = false
     },
 
     async deleteData(pasien, id) {

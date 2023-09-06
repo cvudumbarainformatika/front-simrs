@@ -81,7 +81,7 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPage.vue')))
   },
   {
-    name: 'layanan-page',
+    name: 'LayananPage',
     label: 'Layanan',
     icon: 'icon-mat-analytics',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))

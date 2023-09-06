@@ -30,6 +30,7 @@ const interceptResErrors = (err) => {
     // if (!err.response) {
     //   removeToken()
     // }
+    console.log('axios', err)
     notifErr(err.response)
     // notifErr(err)
   } catch (e) {
