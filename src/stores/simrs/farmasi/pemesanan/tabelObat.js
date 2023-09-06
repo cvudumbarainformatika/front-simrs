@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { usePemesananObatStore } from './pesanan'
+import { filterDuplicateArrays } from 'src/modules/utils'
 
 export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
@@ -12,13 +14,16 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       page: 1
     },
     columns: [
-      'rencana',
       'obat',
       'stok',
       'jumlah',
       'centang'
     ],
-    columnHide: []
+    columnHide: [],
+    rencanas: [],
+    norencanas: [],
+    pesan: usePemesananObatStore(),
+    tglRencana: null
   }),
   actions: {
     setParam(key, val) {
@@ -43,10 +48,33 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.columns = thumb[0]
       // console.log('columns', this.columns)
     },
+    rencanaSelected(val) {
+      this.pesan.setForm('no_rencbeliobat', val)
+      const item = this.rencanas.filter(a => a.noperencanaan === val)
+      if (item.length) {
+        this.tglRencana = item[0].tglperencanaan
+        this.items = item
+
+        this.items.forEach(a => {
+          const dipesan = !isNaN(parseFloat(a.jumlahdipesandiperencanaan)) ? parseFloat(a.jumlahdipesandiperencanaan) : 0
+          const dpesan = !isNaN(parseFloat(a.jumlahallpesan)) ? parseFloat(a.jumlahallpesan) : 0
+          const bolehDipesan = ((parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan) > 0 ? (parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan : 0
+          console.log('boleh dipesan', bolehDipesan)
+          a.jumlahdipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
+          a.jumlahdirencanakan = dipesan
+          a.bolehdipesan = bolehDipesan
+        })
+      }
+      console.log('pesanan', item)
+    },
+    clearRencana(val) {
+      this.pesan.setForm('no_rencbeliobat', null)
+    },
     getInitialData() {
       this.getObatMauBeli()
     },
     getObatMauBeli() {
+      this.norencanas = []
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -54,6 +82,20 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
           .then(resp => {
             this.loading = false
             console.log('obat direncakan', resp.data)
+            const rencana = resp.data
+            if (rencana.length) {
+              this.rencanas = rencana
+              const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
+              if (noren.length) {
+                noren.forEach(a => {
+                  const anu = { no_rencbeliobat: a }
+                  this.norencanas.push(anu)
+                })
+              }
+              console.log('no ren', noren)
+            }
+
+            // this.rencanas = resp.data
             // const temp = resp.data
             // temp.forEach(item => {
             //   item.checked = false
@@ -63,17 +105,8 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             //   item.bisaBeli = (item.stokMaxRS - item.stokRS) > 0 ? (item.stokMaxRS - item.stokRS) : 0
             //   item.jumlahBeli = item.bisaBeli
             // })
-            this.items = resp.data
-            if (this.items.length) {
-              this.items.forEach(a => {
-                const dipesan = !isNaN(parseFloat(a.jumlahdipesan)) ? parseFloat(a.jumlahdipesan) : 0
-                const dpesan = !isNaN(parseFloat(a.jumlahdpesan)) ? parseFloat(a.jumlahdpesan) : 0
-                // console.log('dipesan', dipesan, typeof dipesan)
-                a.jumlahdipesan = dipesan - dpesan
-                a.jumlahdirencanakan = dipesan
-              })
-            }
-            console.log('item', this.items)
+
+            // console.log('item', this.items)
             this.meta = resp.data
             // this.setColumns(resp.data.data)
             resolve(resp)
