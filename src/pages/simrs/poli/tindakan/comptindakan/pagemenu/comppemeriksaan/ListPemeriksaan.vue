@@ -144,8 +144,11 @@
                         </q-item-section>
                       </q-item>
                     </q-list>
-                    <div class="text-center q-pa-md">
-                      Tidak ada detail
+                    <div
+                      v-else
+                      class="text-center q-pa-md"
+                    >
+                      Tidak ada detail anatomy
                     </div>
                   </div>
                 </q-slide-transition>

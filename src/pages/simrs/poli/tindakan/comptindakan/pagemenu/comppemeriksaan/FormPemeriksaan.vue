@@ -19,6 +19,22 @@
           <!-- <div class="col-12 f-12 text-weight-bold">
                     Pemeriksaan Fisik
                   </div> -->
+          <div class="col-12">
+            <q-select
+              v-model="store.formVital.tingkatkesadaran"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Tingkat Kesadaran"
+              :options="store.optionsTingkatkesadaran"
+              stack-label
+              emit-value
+              map-options
+              input-class="ellipsis"
+              use-input
+              fill-input
+            />
+          </div>
           <div class="col-6">
             <q-input
               v-model="store.formVital.denyutjantung"
@@ -287,7 +303,9 @@ onMounted(() => {
 async function onSubmit() {
   const valid = await formRef.value?.validate()
   if (valid) {
-    store.savePemeriksaan(props.pasien, menus.value)
+    store.savePemeriksaan(props.pasien, menus.value).then(() => {
+      formRef.value.resetValidation()
+    })
   }
 }
 </script>

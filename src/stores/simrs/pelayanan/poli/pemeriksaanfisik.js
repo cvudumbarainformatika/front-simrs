@@ -25,6 +25,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     },
     shapes: [],
     formVital: {
+      tingkatkesadaran: 0,
       denyutjantung: '', // string
       pernapasan: '', // string
       // Tekanan darah
@@ -43,7 +44,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       { value: 3, label: 'Pasien tidak sadar / Unresponsive' },
       { value: 4, label: 'Gelisah atau bingung' },
       { value: 5, label: 'Acute Confusional States' }
-    ]
+    ],
+    loadingform: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -87,8 +89,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('oooi')
       this.dialogTemplate = !this.dialogTemplate
     },
-    async savePemeriksaan(pasien, menus) {
+    savePemeriksaan(pasien, menus) {
       // console.log(storage.$state?.user?.id)
+      this.loadingform = true
       const arr = menus.length > 0 ? menus.filter(x => x.name !== 'Body').map(y => y.name) : []
       const arr2 = this.shapes
       const anatomys = []
@@ -107,14 +110,29 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       form.details = arr2
       form.anatomys = anatomys
 
-      console.log('simpan pemeriksaan', form)
+      // console.log('simpan pemeriksaan', form)
 
-      const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-      console.log('resp dari back end', resp)
-      if (resp.status === 200) {
-        notifSuccess(resp)
-        this.initReset()
-      }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
+          .then(resp => {
+            console.log('resp dari back end', resp)
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const isi = resp.data.result
+              storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
+
+              notifSuccess(resp)
+              this.initReset()
+              this.loadingform = false
+              resolve(resp)
+            }
+            this.loadingform = false
+          }).catch(err => {
+            console.log('error', err)
+            this.loadingform = false
+            reject(err)
+          })
+      })
     },
 
     async saveImage(img, pasien, details) {
@@ -158,6 +176,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         this.shapes = []
         this.formVital = {
+          tingkatkesadaran: 0,
           denyutjantung: '', // string
           pernapasan: '', // string
           // Tekanan darah

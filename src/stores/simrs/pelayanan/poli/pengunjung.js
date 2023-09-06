@@ -91,6 +91,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             Object.assign(target, val)
           } else {
             data.anamnesis.push(val)
+            data.anamnesis.splice(0, 0, val)
           }
         }
         if (kode === 'gambars') {
@@ -99,6 +100,16 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             Object.assign(target, val)
           } else {
             data.gambars.push(val)
+            data.gambars.splice(0, 0, val)
+          }
+        }
+        if (kode === 'pemeriksaanfisik') {
+          const target = data.pemeriksaanfisik?.find(x => x.id === val.id)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            data.pemeriksaanfisik.push(val)
+            data.pemeriksaanfisik.splice(0, 0, val)
           }
         }
         console.log('data ditemukan', data)
