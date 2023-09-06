@@ -163,12 +163,11 @@ function filterFn(val, update, abort) {
     const arr = store.listDiagnosa
     const filter = ['kode', 'keterangan']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
-      data.filter((item) =>
-        filterKeys.some(
-          (key) =>
-            item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+      data.filter((item) => filterKeys.some(
+        (key) =>
+          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
             item[key]
-        )
+      )
       )
     const filteredData = multiFilter(arr, filter, needle)
     options.value = filteredData
