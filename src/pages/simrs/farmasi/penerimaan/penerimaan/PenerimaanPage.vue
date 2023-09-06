@@ -628,7 +628,7 @@ function setPpn(evt, val) {
   setHargaNet(val)
 }
 function setDiterima(evt, val) {
-  val.inpJumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
   val.jumlah = val.inpJumlah * val.isi
   const jmlAll = val.jumlah + val.jml_terima_lalu

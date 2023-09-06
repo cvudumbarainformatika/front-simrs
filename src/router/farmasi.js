@@ -81,6 +81,27 @@ const farmasi = {
         }
       ]
     },
+    {
+      path: '/farmasi/permintaandepo',
+      component: () => import('src/pages/simrs/farmasi/permintaandepo/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/permintaandepo/permintaan' },
+        {
+          path: '/farmasi/permintaandepo/permintaan',
+          name: 'farmasi.permintaandepo.permintaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/permintaandepo/permintaan/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/permintaandepo/listpermintaan',
+          name: 'farmasi.permintaandepo.listpermintaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/permintaandepo/listpermintaan/IndexPage.vue')
+        }
+      ]
+    },
 
     {
       path: '/farmasi/notfound',

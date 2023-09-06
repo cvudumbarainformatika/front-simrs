@@ -227,6 +227,7 @@
                 :rules="[
                   val=> (val <= row.bisaBeli) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
                 ]"
+                @update:model-value="setJumlah($event, row)"
               />
             </div>
           </template>
@@ -270,6 +271,11 @@ function setDispTanggal(val) {
 function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
+}
+
+function setJumlah(evt, val) {
+  const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  val.jumlahBeli = beli
 }
 table.getInitialData()
 store.getInitialData()

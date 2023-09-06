@@ -366,7 +366,7 @@ function setTanggal(val) {
 }
 
 function setJumlah(evt, val) {
-  const dipesan = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (dipesan > val.bolehdipesan) {
     if (val.bolehdipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan
