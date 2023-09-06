@@ -8,7 +8,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
     items: [],
     meta: {},
     param: {
-      nopenerimaan: '',
+      cari: '',
       per_page: 10,
       page: 1,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
@@ -27,7 +27,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       this.param[key] = val
     },
     setSearch(payload) {
-      this.setParam('nopenerimaan', payload)
+      this.setParam('cari', payload)
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },

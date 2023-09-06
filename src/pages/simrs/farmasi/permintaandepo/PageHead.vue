@@ -20,31 +20,22 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
-          :outline="path !== '/farmasi/penerimaan/penerimaan'"
+          :outline="path !== '/farmasi/permintaandepo/permintaan'"
           glossy
           push
           color="deep-orange"
-          label="Penerimaan"
+          label="Permintaan Depo"
           size="md"
-          @click="goTo('/farmasi/penerimaan/penerimaan')"
+          @click="goTo('/farmasi/permintaandepo/permintaan')"
         />
         <q-btn
-          :outline="path !== '/farmasi/penerimaan/penerimaanlangsung'"
-          glossy
-          push
-          color="cyan"
-          label="Penerimaan Langsung"
-          size="md"
-          @click="goTo('/farmasi/penerimaan/penerimaanlangsung')"
-        />
-        <q-btn
-          :outline="path !== '/farmasi/penerimaan/listpenerimaan'"
+          :outline="path !== '/farmasi/permintaandepo/listpermintaan'"
           glossy
           push
           color="green"
-          label="List Penerimaan"
+          label="List Permintaan Depo"
           size="md"
-          @click="goTo('/farmasi/penerimaan/listpenerimaan')"
+          @click="goTo('/farmasi/permintaandepo/listpermintaan')"
         />
       </q-btn-group>
     </div>

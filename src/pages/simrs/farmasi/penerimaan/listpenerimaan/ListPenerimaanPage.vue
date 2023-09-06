@@ -23,7 +23,7 @@
       :meta="store.meta"
       :per-page="store.param.per_page"
       :loading="store.loading"
-      :to-search="store.param.nopemesanan"
+      :to-search="store.param.cari"
       :click-able="true"
       :default-btn="false"
       :ada-tambah="false"
@@ -102,49 +102,150 @@
         </div>
       </template>
       <template #expand="{ row }">
-        <div v-if="row.rinci">
+        <div v-if="row.penerimaanrinci">
           <div class="row items-center text-weight-bold">
-            <div class="col-2">
-              Kode Obat
+            <div class="col-4">
+              Obat
             </div>
             <div class="col-2">
-              Stok Gudang
+              Jumlah
             </div>
             <div class="col-2">
-              Stok RS
+              Harga
             </div>
             <div class="col-2">
-              Stok Max
+              Satuan
             </div>
             <div class="col-2">
-              Jumlah Bisa di beli
-            </div>
-            <div class="col-2">
-              Jumlah Dipesan
+              Info
             </div>
           </div>
           <div
-            v-for="(rin, i) in row.rinci"
+            v-for="(rin, i) in row.penerimaanrinci"
             :key="i"
           >
-            <div class="row items-center anu">
-              <div class="col-2">
-                {{ rin.kdobat }}
+            <div class="row items-center q-col-gutter-sm anu">
+              <div class="col-4">
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Kode
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.kdobat }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Nama
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.masterobat? rin.masterobat.nama_obat:'-' }}
+                  </div>
+                </div>
               </div>
               <div class="col-2">
-                {{ rin.stok_real_gudang }}
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Pesan
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.jml_pesan }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Terima
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.jml_terima }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Seluruhnya
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.jml_all_penerimaan }}
+                  </div>
+                </div>
               </div>
               <div class="col-2">
-                {{ rin.stok_real_rs }}
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Harga
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ formatRp( rin.harga) }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Diskon
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.diskon }} %
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Ppn
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.ppn }} %
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Netto
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ formatRp( rin.harga_netto) }}
+                  </div>
+                </div>
               </div>
               <div class="col-2">
-                {{ rin.stok_max_rs }}
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Besar
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.satuan_bsr }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Isi
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.isi }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Kecil
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.satuan_kcl }}
+                  </div>
+                </div>
               </div>
               <div class="col-2">
-                {{ rin.jumlah_bisa_dibeli }}
-              </div>
-              <div class="col-2">
-                {{ rin.jumlahdpesan }}
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Batch
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin.no_batch }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    Expired
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ dateFullFormat( rin.tgl_exp) }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -228,8 +329,8 @@ store.getInitialData()
 </script>
 <style lang="scss" scoped>
 .anu {
-  padding-top: 2px;
-  padding-bottom: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .anu:hover {
