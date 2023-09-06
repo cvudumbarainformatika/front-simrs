@@ -66,8 +66,9 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
         stok_real_gudang: val.stokgudang,
         stok_real_rs: val.stokrs,
         stok_max_rs: val.stomaxkrs,
-        jumlah_bisa_dibeli: val.jumlahdirencanakan,
+        jumlah_bisa_dibeli: val.jumlah_bisa_dibeli,
         jumlahdpesan: val.jumlahdipesan,
+        jumlahdirencanakan: val.jumlahdirencanakan,
         tgl_stok: val.tglperencanaan ? val.tglperencanaan : date.formatDate(Date.now(), 'YYYY-MM-DD')
 
       }
