@@ -89,7 +89,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('oooi')
       this.dialogTemplate = !this.dialogTemplate
     },
-    savePemeriksaan(pasien, menus) {
+    async savePemeriksaan(pasien, menus) {
       // console.log(storage.$state?.user?.id)
       this.loadingform = true
       const arr = menus.length > 0 ? menus.filter(x => x.name !== 'Body').map(y => y.name) : []
@@ -111,28 +111,34 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       form.anatomys = anatomys
 
       // console.log('simpan pemeriksaan', form)
+      const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
+      if (resp.status === 200) {
+        const storePasien = usePengunjungPoliStore()
+        const isi = resp.data.result
+        storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
 
-      return new Promise((resolve, reject) => {
-        api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-          .then(resp => {
-            console.log('resp dari back end', resp)
-            if (resp.status === 200) {
-              const storePasien = usePengunjungPoliStore()
-              const isi = resp.data.result
-              storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
+        notifSuccess(resp)
+        this.initReset()
+        this.loadingform = false
+        return new Promise((resolve, reject) => {
+          resolve()
+        })
+      }
+      this.loadingform = false
+    },
 
-              notifSuccess(resp)
-              this.initReset()
-              this.loadingform = false
-              resolve(resp)
-            }
-            this.loadingform = false
-          }).catch(err => {
-            console.log('error', err)
-            this.loadingform = false
-            reject(err)
-          })
-      })
+    async deleteData(pasien, id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/hapuspemeriksaanfisik', payload)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          storePasien.hapusDataPemeriksaanfisik(pasien, id)
+          notifSuccess(resp)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     async saveImage(img, pasien, details) {
@@ -154,6 +160,25 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         const isi = resp.data.result
         storePasien.injectDataPasien(pasien, isi, 'gambars')
         notifSuccess(resp)
+      }
+    },
+
+    async deleteGambar(pasien, nama) {
+      this.loadingform = true
+      const payload = { nama }
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/hapusgambar', payload)
+        if (resp.status === 200) {
+          // console.log(resp)
+          const storePasien = usePengunjungPoliStore()
+          storePasien.hapusGambars(pasien, nama)
+          notifSuccess(resp)
+          this.loadingform = false
+        }
+        this.loadingform = false
+      } catch (error) {
+        console.log(error)
+        this.loadingform = false
       }
     },
 

@@ -259,6 +259,8 @@
                 <q-btn
                   label="Simpan Pemeriksaan"
                   color="primary"
+                  :loading="store.loadingform"
+                  :disable="store.loadingform"
                   @click="onSubmit"
                 />
               </div>

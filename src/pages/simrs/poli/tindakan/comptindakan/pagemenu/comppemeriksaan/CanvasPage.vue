@@ -277,6 +277,9 @@
             size="sm"
             padding="sm"
             label="Hapus Gambar"
+            :loading="store.loadingform"
+            :disable="store.loadingform"
+            @click="hapusGambar()"
           />
         </div>
         <div class="q-gutter-xs">
@@ -300,11 +303,13 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 import { pathImg } from 'src/boot/axios'
+import { useQuasar } from 'quasar'
 
 const emits = defineEmits(['saveImage'])
 
 const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
+const $q = useQuasar()
 
 const options = ref([])
 const tab = ref(null)
@@ -450,6 +455,25 @@ const saveImage = () => {
   console.log('gambar', imageURL)
   emits('saveImage', imageURL)
 }
+
+function hapusGambar() {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Gambar ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('hapus gambar', tab.value)
+    store.deleteGambar(props.pasien, tab.value)
+    // console.log('OK')
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
 const arr = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
