@@ -10,7 +10,6 @@
     <q-form
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
-      @reset="onReset"
     >
       <div class="col-9">
         <q-input

@@ -109,12 +109,6 @@
                       flat
                       round
                       size="sm"
-                      icon="icon-mat-edit"
-                    />
-                    <q-btn
-                      flat
-                      round
-                      size="sm"
                       icon="icon-mat-delete"
                       color="negative"
                       @click="hapusItem(item.id)"

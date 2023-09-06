@@ -174,6 +174,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           storePasien.hapusGambars(pasien, nama)
           notifSuccess(resp)
           this.loadingform = false
+          this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
+          return new Promise((resolve, reject) => {
+            resolve()
+          })
         }
         this.loadingform = false
       } catch (error) {
@@ -181,6 +185,26 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         this.loadingform = false
       }
     },
+
+    // editForm(val) {
+    //   this.formVital = {
+    //     tingkatkesadaran: val.tingkatkesadaran,
+    //     denyutjantung: val.rs4, // string
+    //     pernapasan: val.pernapasan, // string
+    //     // Tekanan darah
+    //     sistole: val.sistole, // numerik per mmHg
+    //     diastole: val.diastole, // numerik per mmHg
+    //     suhutubuh: val.suhutubuh, // numerik derajat celcius
+    //     // status
+    //     statuspsikologis: val.statuspsikologis,
+    //     sosialekonomi: val.sosialekonomi,
+    //     spiritual: val.spiritual
+    //   }
+    //   this.shapes = val.detailgambars
+    //   this.fileGambar = this.shapes[0]?.templategambar
+    //   console.log('form', this.form)
+    //   console.log('xxx', val)
+    // },
 
     initReset() {
       return new Promise((resolve, reject) => {

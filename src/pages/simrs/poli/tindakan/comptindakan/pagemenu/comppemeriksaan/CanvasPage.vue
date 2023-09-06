@@ -452,7 +452,7 @@ const resetTanda = () => {
 
 const saveImage = () => {
   const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
-  console.log('gambar', imageURL)
+  // console.log('gambar', imageURL)
   emits('saveImage', imageURL)
 }
 
@@ -465,7 +465,9 @@ function hapusGambar() {
     persistent: true
   }).onOk(() => {
     // console.log('hapus gambar', tab.value)
-    store.deleteGambar(props.pasien, tab.value)
+    store.deleteGambar(props.pasien, tab.value).then(() => {
+      clearPad()
+    })
     // console.log('OK')
   }).onCancel(() => {
     // console.log('Cancel')

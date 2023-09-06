@@ -59,6 +59,7 @@
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { onMounted, ref } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 // import FooterComp from './comp/FooterComp.vue'
@@ -70,12 +71,14 @@ import PageTindakan from '../tindakan/IndexPage.vue'
 
 const style = useStyledStore()
 const store = usePengunjungPoliStore()
+const diagnosa = useLayananPoli()
 const pasien = ref(null)
 
 // const txt = ref('SEMUA')
 // const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
 onMounted(() => {
   store.getData()
+  diagnosa.getDiagnosaDropdown()
 })
 
 function bukaTindakan(val) {

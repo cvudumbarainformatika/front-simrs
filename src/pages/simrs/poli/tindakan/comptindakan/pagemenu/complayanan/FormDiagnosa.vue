@@ -9,20 +9,66 @@
   <q-form
     class="row q-pa-md q-col-gutter-xs"
     @submit="onSubmit"
-    @reset="onReset"
   >
     <div class="col-3">
       <div>Diagnosa (ICD)</div>
     </div>
     <div class="col-9">
+      <q-select
+        v-model="store.searchdiagnosa"
+        use-input
+        hide-selected
+        fill-input
+        outlined
+        standout="bg-yellow-3"
+        dense
+        emit-value
+        map-options
+        option-value="kode"
+        :option-label="opt => Object(opt) === opt && 'keterangan' in opt ? opt.kode +' ~ '+ opt.keterangan : '- Null -'"
+        input-debounce="0"
+        :options="options"
+        label="Cari Diagnosa (ICD)"
+        @filter="filterFn"
+      >
+        <template #no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              Tidak ditemukan
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+    </div>
+    <div class="col-3">
+      <div>Kode (ICD)</div>
+    </div>
+    <div class="col-9">
       <q-input
-        v-model="store.formdiagnosa.code"
-        label="Cari ICD"
+        v-model="store.formdiagnosa.kode"
+        label="Kode (Automatis)"
         dense
         outlined
         standout="bg-yellow-3"
         :rules="[val => !!val || 'Harus diisi']"
         hide-bottom-space
+        readonly
+        style="max-width: 150px;"
+      />
+    </div>
+    <div class="col-3">
+      <div>Diagnosa</div>
+    </div>
+    <div class="col-9">
+      <q-input
+        v-model="store.formdiagnosa.diagnosa"
+        label="Diagnosa (Automatis)"
+        outlined
+        autogrow
+        standout="bg-yellow-3"
+        :rules="[val => !!val || 'Harus diisi']"
+        hide-bottom-space
+        readonly
       />
     </div>
     <div class="col-3">
@@ -31,11 +77,9 @@
     <div class="col-9">
       <q-input
         v-model="store.formdiagnosa.keterangan"
-        label="Keterangan"
         autogrow
         outlined
         standout="bg-yellow-3"
-        :rules="[val => !!val || 'Harus diisi']"
         hide-bottom-space
       />
     </div>
@@ -94,10 +138,41 @@
 
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { onMounted, ref } from 'vue'
 
 const store = useLayananPoli()
 
 function onSubmit() {
   console.log('ok')
+}
+
+const options = ref([])
+
+onMounted(() => {
+  options.value = store.listDiagnosa
+})
+
+function filterFn(val, update, abort) {
+  if (val.length < 1) {
+    abort()
+    return
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    const arr = store.listDiagnosa
+    const filter = ['kode', 'keterangan']
+    const multiFilter = (data = [], filterKeys = [], value = '') =>
+      data.filter((item) =>
+        filterKeys.some(
+          (key) =>
+            item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+            item[key]
+        )
+      )
+    const filteredData = multiFilter(arr, filter, needle)
+    options.value = filteredData
+    // options.value = arr.filter(v => v.kode.toLowerCase().indexOf(needle) > -1 || v.keterangan.toLowerCase().indexOf(needle) > -1)
+  })
 }
 </script>
