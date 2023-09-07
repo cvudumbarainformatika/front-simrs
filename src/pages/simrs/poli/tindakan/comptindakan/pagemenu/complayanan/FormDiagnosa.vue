@@ -171,7 +171,6 @@ function filterFn(val, update, abort) {
       )
     const filteredData = multiFilter(arr, filter, needle)
     options.value = filteredData
-    // options.value = arr.filter(v => v.kode.toLowerCase().indexOf(needle) > -1 || v.keterangan.toLowerCase().indexOf(needle) > -1)
   })
 }
 </script>
