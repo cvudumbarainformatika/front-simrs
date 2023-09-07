@@ -17,6 +17,10 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
       { kode: 'Gd-03010101' },
       { kode: 'Gd-04010101' }
     ],
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ],
     obats: [
       {
         id: 20,
