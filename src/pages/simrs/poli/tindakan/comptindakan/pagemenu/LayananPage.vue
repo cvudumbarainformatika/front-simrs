@@ -52,8 +52,10 @@
 
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
+import { onMounted } from 'vue'
 
 const props = defineProps({
   pasien: {
@@ -63,4 +65,10 @@ const props = defineProps({
 })
 
 const store = useLayananPoli()
+
+const inacbg = useInacbgPoli()
+onMounted(() => {
+  // console.log('layananPage')
+  inacbg.getDataIna(props.pasien)
+})
 </script>

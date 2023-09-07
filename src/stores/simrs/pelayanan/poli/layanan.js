@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
+import { useInacbgPoli } from './inacbg'
 import { notifSuccess } from 'src/modules/utils'
 // import { api } from 'src/boot/axios'
 
@@ -29,13 +30,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
       subtotal: 0,
       pelaksana: '',
       keterangan: ''
-    },
-
-    inacbg: {
-      code: '',
-      tarifIna: 0,
-      tarifRs: 0
     }
+
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -105,6 +101,12 @@ export const useLayananPoli = defineStore('layanan-poli', {
           notifSuccess(resp)
           this.initReset()
           this.loadingFormDiagnosa = false
+
+          if (resp.data.inacbg?.metadata?.code === 200) {
+            const storeIna = useInacbgPoli()
+            storeIna.setIna(resp.data.inacbg?.response)
+          }
+
           return new Promise((resolve, reject) => {
             resolve()
           })
@@ -121,7 +123,9 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const resp = await api.post('v1/simrs/pelayanan/hapusdiagnosa', payload)
       if (resp.status === 200) {
         const storePasien = usePengunjungPoliStore()
+        const storeIna = useInacbgPoli()
         storePasien.hapusDataDiagnosa(pasien, id)
+        storeIna.getDataIna(pasien)
         notifSuccess(resp)
       }
     },

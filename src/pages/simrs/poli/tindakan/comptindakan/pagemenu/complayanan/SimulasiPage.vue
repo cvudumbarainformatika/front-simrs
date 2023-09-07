@@ -23,8 +23,20 @@
               <div class="text-caption">
                 Code InaCBG
               </div>
-              <div class="text-subtitle2 text-orange">
-                X-0
+              <div
+                v-if="ina.loading || store.loadingFormDiagnosa"
+              >
+                <q-skeleton
+                  square
+                  width="70px"
+                  dark
+                />
+              </div>
+              <div
+                v-else
+                class="text-subtitle2 text-orange"
+              >
+                {{ ina.kodeIna }}
               </div>
             </div>
           </q-card-section>
@@ -34,8 +46,20 @@
               <div class="text-subtitle1">
                 Tarif InaCBG
               </div>
-              <div class="text-subtitle1 text-orange">
-                Rp. 200.000
+              <div
+                v-if="ina.loading || store.loadingFormDiagnosa"
+              >
+                <q-skeleton
+                  square
+                  width="70px"
+                  dark
+                />
+              </div>
+              <div
+                v-else
+                class="text-subtitle1 text-orange"
+              >
+                {{ formatRp(ina.tarifIna) }}
               </div>
             </div>
           </q-card-section>
@@ -45,8 +69,20 @@
               <div class="text-subtitle1">
                 Tarif Rumah Sakit
               </div>
-              <div class="text-subtitle1 text-orange">
-                Rp. 200.000
+              <div
+                v-if="ina.loading || store.loadingFormDiagnosa"
+              >
+                <q-skeleton
+                  square
+                  width="70px"
+                  dark
+                />
+              </div>
+              <div
+                v-else
+                class="text-subtitle1 text-orange"
+              >
+                {{ formatRp(ina.tarifRs) }}
               </div>
             </div>
           </q-card-section>
@@ -56,8 +92,19 @@
               <div class="text-subtitle1">
                 Selisih
               </div>
-              <div class="text-subtitle1 text-white">
-                Rp. 0
+              <div
+                v-if="ina.loading || store.loadingFormDiagnosa"
+              >
+                <q-skeleton
+                  square
+                  width="70px"
+                />
+              </div>
+              <div
+                v-else
+                class="text-subtitle1 text-white"
+              >
+                {{ formatRp(hitungSelisih()) }}
               </div>
             </div>
           </q-card-section>
@@ -66,3 +113,21 @@
     </div>
   </q-card>
 </template>
+<script setup>
+import { formatRp } from 'src/modules/formatter'
+import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
+import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { watch } from 'vue'
+
+const store = useLayananPoli()
+const ina = useInacbgPoli()
+
+function hitungSelisih() {
+  return ina.tarifIna - ina.tarifRs
+}
+
+watch(() => ina.tarifIna, (obj) => {
+  console.log('watch tarifIna', obj)
+  hitungSelisih()
+}, { deep: true })
+</script>
