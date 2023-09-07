@@ -112,6 +112,15 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             data.pemeriksaanfisik.splice(0, 0, val)
           }
         }
+        if (kode === 'diagnosa') {
+          const target = data.diagnosa?.find(x => x.id === val.id)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            // data.diagnosa.push(val)
+            data.diagnosa.splice(0, 0, val)
+          }
+        }
         console.log('data ditemukan', data)
       }
     },
@@ -136,6 +145,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       if (findPasien.length) {
         const data = findPasien[0].gambars
         const pos = data.findIndex(el => el.gambar === nama)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataDiagnosa(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].diagnosa
+        const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
     }

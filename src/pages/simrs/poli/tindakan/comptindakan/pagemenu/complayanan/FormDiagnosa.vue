@@ -7,6 +7,7 @@
   </div>
   <q-separator />
   <q-form
+    ref="formRef"
     class="row q-pa-md q-col-gutter-xs"
     @submit="onSubmit"
   >
@@ -25,7 +26,7 @@
         emit-value
         map-options
         option-value="kode"
-        :option-label="opt => Object(opt) === opt && 'keterangan' in opt ? opt.kode +' ~ '+ opt.keterangan : '- Null -'"
+        :option-label="opt => Object(opt) === opt && 'keterangan' in opt ? opt.kode +' ~ '+ opt.keterangan : ' Cari Diagnosa '"
         input-debounce="0"
         :options="options"
         label="Cari Diagnosa (ICD)"
@@ -132,6 +133,8 @@
         label="Simpan Diagnosa"
         color="primary"
         type="submit"
+        :loading="store.loadingFormDiagnosa"
+        :disable="store.loadingFormDiagnosa"
       />
     </div>
   </q-form>
@@ -141,6 +144,7 @@
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { onMounted, ref } from 'vue'
 
+const formRef = ref(null)
 const store = useLayananPoli()
 const emits = defineEmits(['savePemeriksaan'])
 
@@ -148,10 +152,17 @@ function onSubmit() {
   emits('savePemeriksaan')
 }
 
+function resetValidation() {
+  formRef.value.resetValidation()
+}
+defineExpose({ resetValidation })
 const options = ref([])
 
 onMounted(() => {
   options.value = store.listDiagnosa
+  store.initReset().then(() => {
+    resetValidation()
+  })
 })
 
 function filterFn(val, update, abort) {

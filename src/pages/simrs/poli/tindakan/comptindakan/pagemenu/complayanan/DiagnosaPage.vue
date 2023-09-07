@@ -7,12 +7,15 @@
         square
         class="col-6 full-height"
       >
-        <FormDiagnosa @save-pemeriksaan="store.simpanDiagnosa(pasien)" />
+        <FormDiagnosa
+          ref="refForm"
+          @save-pemeriksaan="savePemeriksaan"
+        />
       </q-card>
       <div class="col-6 full-height ">
         <div class="column full-height">
           <div class="col-6">
-            <DiagnosaTable />
+            <DiagnosaTable :pasien="props.pasien" />
           </div>
           <div class="col-6">
             <SimulasiPage />
@@ -28,6 +31,7 @@ import FormDiagnosa from './FormDiagnosa.vue'
 import DiagnosaTable from './DiagnosaTable.vue'
 import SimulasiPage from './SimulasiPage.vue'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { ref } from 'vue'
 
 const store = useLayananPoli()
 const props = defineProps({
@@ -36,6 +40,14 @@ const props = defineProps({
     default: null
   }
 })
+
+const refForm = ref()
+function savePemeriksaan() {
+  store.simpanDiagnosa(props.pasien).then(() => {
+    // console.log(refForm.value)
+    refForm.value.resetValidation()
+  })
+}
 
 console.log('diagnosa page', props.pasien)
 </script>

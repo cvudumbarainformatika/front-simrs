@@ -26,7 +26,7 @@
       class="full-height bg-grey"
     >
       <div
-        v-if="pasien.anamnesis.length <= 0"
+        v-if="pasien?.anamnesis?.length <= 0"
         class="column full-height flex-center"
       >
         <div class="text-white">
@@ -116,7 +116,7 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.pasien?.anamnesis
-  return arr.sort((a, b) => { return b.id - a.id })
+  return arr?.sort((a, b) => { return b.id - a.id })
 })
 
 function hapusItem(id) {

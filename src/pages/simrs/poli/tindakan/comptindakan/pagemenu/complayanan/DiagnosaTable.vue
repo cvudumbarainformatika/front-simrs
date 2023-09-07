@@ -16,65 +16,106 @@
     </div>
     <div class="col-grow">
       <div class="full-height">
-        <q-scroll-area style="height:calc(100% - 1px)">
-          <q-list separator>
-            <q-item
-              v-for="n in 2"
-              :key="n"
-            >
-              <q-item-section>
-                <q-item-label
-                  lines="2"
-                  class="f-12"
-                >
-                  <span class="">Diagnosa</span> : ....
-                </q-item-label>
-                <q-item-label
-                  lines="2"
-                >
-                  <span class="">Keterangan</span> : ....
-                </q-item-label>
-                <q-item-label
-                  lines="2"
-                >
-                  <span class="">Kasus Baru?</span> : ....
-                </q-item-label>
-                <q-item-label
-                  lines="2"
-                >
-                  <span class="">Diagnosa Utama?</span> : ....
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section
-                side
-                top
+        <q-scroll-area
+          v-if="pasien?.diagnosa?.length"
+          style="height:calc(100% - 1px)"
+          class="bg-grey"
+        >
+          <q-list
+            separator
+            class="bg-white"
+          >
+            <transition-group name="list">
+              <q-item
+                v-for="(item , n) in pasien?.diagnosa"
+                :key="n"
+                class="list-move q-pa-none"
               >
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-edit"
-                />
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-delete"
-                  color="negative"
-                />
-              </q-item-section>
-            </q-item>
+                <q-item-section class="q-px-md q-py-sm">
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <em class="">ICD Kode</em> : <span class="text-weight-bold">{{ item.rs3 }}</span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="3"
+                  >
+                    <em class="">diagnosa</em> : <span class="text-weight-bold">{{ item.masterdiagnosa?.rs4 }}</span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                  >
+                    <em class="">Kasus</em>  <span class="text-weight-bold">{{ item.rs7 }}</span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                  >
+                    <em class="">Tipe</em>  <span class="text-weight-bold">{{ item.rs4 }}</span>
+                  </q-item-label>
+                </q-item-section>
+
+                <q-item-section
+                  side
+                  top
+                  class="text-right q-py-sm"
+                >
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-edit"
+                    @click="store.editFormDiagnosa(item)"
+                  />
+                  <q-btn
+                    flat
+                    round
+                    size="sm"
+                    icon="icon-mat-delete"
+                    color="negative"
+                    @click="hapusItem(item.id)"
+                  />
+                </q-item-section>
+              </q-item>
+            </transition-group>
             <q-separator />
           </q-list>
         </q-scroll-area>
+        <div class="column full-height bg-grey text-white flex-center">
+          <div>Belum Ada Data Diagnosa</div>
+        </div>
       </div>
-
-      <!-- </q-scroll-area> -->
     </div>
   </q-card>
 </template>
 
 <script setup>
+import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { useQuasar } from 'quasar'
 
+const store = useLayananPoli()
+const $q = useQuasar()
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
+function hapusItem(id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('OK')
+    store.deleteDiagnosa(props.pasien, id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 </script>
