@@ -10,10 +10,10 @@
     class="row q-pa-md q-col-gutter-xs"
     @submit="onSubmit"
   >
-    <div class="col-3">
+    <!-- <div class="col-3">
       <div>Diagnosa (ICD)</div>
-    </div>
-    <div class="col-9">
+    </div> -->
+    <div class="col-12 q-mb-sm">
       <q-select
         v-model="store.searchdiagnosa"
         use-input
@@ -30,6 +30,7 @@
         :options="options"
         label="Cari Diagnosa (ICD)"
         @filter="filterFn"
+        @update:model-value="(val)=>store.setKode(val)"
       >
         <template #no-option>
           <q-item>
@@ -45,8 +46,8 @@
     </div>
     <div class="col-9">
       <q-input
-        v-model="store.formdiagnosa.kode"
-        label="Kode (Automatis)"
+        v-model="store.formdiagnosa.kddiagnosa"
+        placeholder="Kode (Automatis)"
         dense
         outlined
         standout="bg-yellow-3"
@@ -62,7 +63,7 @@
     <div class="col-9">
       <q-input
         v-model="store.formdiagnosa.diagnosa"
-        label="Diagnosa (Automatis)"
+        placeholder="Diagnosa (Automatis)"
         outlined
         autogrow
         standout="bg-yellow-3"
@@ -111,13 +112,13 @@
     </div>
     <div class="col-9 q-gutter-sm">
       <q-radio
-        v-model="store.formdiagnosa.tipe"
+        v-model="store.formdiagnosa.tipediagnosa"
         dense
         val="Primer"
         label="Iya"
       />
       <q-radio
-        v-model="store.formdiagnosa.tipe"
+        v-model="store.formdiagnosa.tipediagnosa"
         dense
         val="Sekunder"
         label="Tidak"
@@ -141,9 +142,10 @@ import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { onMounted, ref } from 'vue'
 
 const store = useLayananPoli()
+const emits = defineEmits(['savePemeriksaan'])
 
 function onSubmit() {
-  console.log('ok')
+  emits('savePemeriksaan')
 }
 
 const options = ref([])

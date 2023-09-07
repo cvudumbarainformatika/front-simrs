@@ -7,7 +7,7 @@
         square
         class="col-6 full-height"
       >
-        <FormDiagnosa />
+        <FormDiagnosa @save-pemeriksaan="store.simpanDiagnosa(pasien)" />
       </q-card>
       <div class="col-6 full-height ">
         <div class="column full-height">
@@ -27,7 +27,15 @@
 import FormDiagnosa from './FormDiagnosa.vue'
 import DiagnosaTable from './DiagnosaTable.vue'
 import SimulasiPage from './SimulasiPage.vue'
-// import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 
-// const store = useLayananPoli()
+const store = useLayananPoli()
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
+console.log('diagnosa page', props.pasien)
 </script>

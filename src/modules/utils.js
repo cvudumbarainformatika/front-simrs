@@ -17,13 +17,13 @@ const removeToken = () => {
 const notifErr = (resp) => {
   // const msg = resp ? resp.data.message : 'Ada Kesalahan, Harap ulangi!'
   // console.log('before utility', resp.response)
-  const status = (resp === 'undefined' || resp === undefined) ? 500 : resp.status
-  const statusText = (resp === 'undefined' || resp === undefined) ? 500 : resp.statusText
-  const statusMsg = (resp === 'undefined' || resp === undefined) ? 500 : resp.data ? resp.data.message : 'ER'
+
+  console.log('utility', resp)
+  const status = (resp === 'undefined' || resp === undefined) ? 500 : resp?.status
+  const statusText = (resp === 'undefined' || resp === undefined) ? 500 : resp?.statusText
+  const statusMsg = (resp === 'undefined' || resp === undefined) ? 500 : resp?.data ? resp?.data?.message : 'ER'
 
   // unauthenticated
-
-  console.log('utility', resp.status)
   if (status === 401 || statusText === 'Unauthorized' || statusMsg === 'Unauthenticated.') {
     console.log('remove token', resp.status)
     return removeToken()
@@ -289,8 +289,8 @@ const findWithAttr = (array, attr, value) => {
 const changeArrayIndex = (array, from, to) => {
   const toIn = array.indexOf(to)
   const fromIn = array.indexOf(from)
-  const element = array.splice(fromIn, 1)[0]
-  array.splice(toIn, 0, element)
+  const element = array?.splice(fromIn, 1)[0]
+  array?.splice(toIn, 0, element)
 }
 
 const notifCenterVue = (msg) => {

@@ -13,7 +13,7 @@
       </div>
       <div class="col-grow">
         <q-scroll-area
-          v-if="pasien?.pemeriksaanfisik.length"
+          v-if="pasien?.pemeriksaanfisik?.length"
           style="height:calc(100% - 1px)"
         >
           <q-list

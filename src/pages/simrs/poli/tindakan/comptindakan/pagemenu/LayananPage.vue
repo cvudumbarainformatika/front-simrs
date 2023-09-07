@@ -23,7 +23,10 @@
           />
         </q-tabs>
       </div>
-      <div class="col-grow bg-yellow">
+      <div
+        class="col-grow"
+        style="overflow: hidden;"
+      >
         <q-tab-panels
           v-model="store.tab"
           animated
@@ -31,10 +34,9 @@
         >
           <q-tab-panel
             name="Diagnosa"
-            class="full-height"
-            style="padding:0"
+            class="full-height q-pa-none"
           >
-            <DiagnosaPage />
+            <DiagnosaPage :pasien="props.pasien" />
           </q-tab-panel>
           <q-tab-panel
             name="Tindakan"
@@ -52,6 +54,13 @@
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 
 const store = useLayananPoli()
 </script>
