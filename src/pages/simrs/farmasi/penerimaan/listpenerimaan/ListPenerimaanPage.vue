@@ -54,7 +54,7 @@
       </template>
       <template #cell-total="{ row }">
         <div class="text-weight-bold">
-          {{ formatRp( row.total) }}
+          {{ row.total_faktur_pbf? formatRp(row.total_faktur_pbf) :(row.total?formatRp(row.total):'-') }}
         </div>
       </template>
       <template #cell-surat="{ row }">
@@ -261,7 +261,7 @@
             icon="icon-mat-lock_open"
             dense
             color="negative"
-            :loading="penerimaan.loading && row.nopemesanan === toloadBeli"
+            :loading="penerimaan.loadingKunci && row.nopemesanan === toloadBeli"
             @click="kunci(row)"
           >
             <q-tooltip

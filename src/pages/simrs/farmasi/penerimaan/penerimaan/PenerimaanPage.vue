@@ -23,6 +23,7 @@
             icon="icon-mat-done"
             dense
             color="primary"
+            :loading="store.loadingKunci"
             @click="store.selesaiDanKunci()"
           >
             <q-tooltip
@@ -136,7 +137,10 @@
       </div>
       <div class="col-6">
         <div class="row q-mb-xs">
-          <div class="col-12">
+          <div
+            v-if="!gudang"
+            class="col-12"
+          >
             <app-autocomplete-new
               ref="refGudang"
               :model="store.form.kdruang"
@@ -149,6 +153,17 @@
               @on-select="store.gudangSelected"
               @clear="store.clearGudang"
             />
+          </div>
+          <div
+            v-if="gudang"
+            class="col-12"
+          >
+            <div class="row justify-between no-wrap">
+              <div>Gudang tujuan </div>
+              <div class="text-weight-bold q-mr-lg">
+                {{ gudang.nama }}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -498,9 +513,10 @@
 </template>
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const style = useStyledStore()
 const store = usePenerimaanFarmasiStore()
@@ -693,6 +709,18 @@ function setTempo(val) {
 function dispTempo(val) {
   store.setDisp('batasbayar', val)
 }
-
+const apps = useAplikasiStore()
+const gudang = computed(() => {
+  let gud = null
+  if (apps.user.pegawai.kode_ruang !== '') {
+    const anu = store.gudangs.filter(a => a.value === apps.user.pegawai.kode_ruang)
+    if (anu.length) {
+      gud = anu[0]
+      store.setForm('kdruang', gud.value)
+    }
+  }
+  return gud
+})
+console.log('gudang', gudang.value)
 store.getInitialData()
 </script>

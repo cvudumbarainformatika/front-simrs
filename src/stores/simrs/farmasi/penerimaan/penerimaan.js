@@ -7,6 +7,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
     loading: false,
     loadingPihakTiga: false,
+    loadingKunci: false,
     items: [],
     form: {
       nopenerimaan: '',
@@ -237,8 +238,22 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       })
     },
     selesaiDanKunci() {
+      this.kunci(this.form.nopenerimaan)
     },
-    kunci() {
+    kunci(val) {
+      const data = {
+        nopenerimaan: val
+      }
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan', data)
+          .then(resp => {
+            this.loadingKunci = false
+            console.log('kunci penerimaan ', resp)
+            resolve(resp)
+          })
+          .catch(() => { this.loadingKunci = false })
+      })
     },
     simpanPenerimaan() {
       this.loading = true
