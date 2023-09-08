@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays, findWithAttr, notifErrVue } from 'src/modules/utils'
+import { filterDuplicateArrays, findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
@@ -288,6 +288,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
                 this.details[index].subtotal = 0
               }
             }
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => {
