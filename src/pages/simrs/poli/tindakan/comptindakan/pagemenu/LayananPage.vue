@@ -42,7 +42,7 @@
             name="Tindakan"
             class="full-height q-pa-none"
           >
-            <TindakanPage />
+            <TindakanPage :pasien="props.pasien" />
           </q-tab-panel>
         </q-tab-panels>
       </div>

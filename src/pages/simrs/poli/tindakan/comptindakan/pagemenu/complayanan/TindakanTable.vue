@@ -13,9 +13,12 @@
       </q-bar>
     </div>
     <div class="col-grow">
-      <div class="full-height">
+      <div class="full-height bg-grey">
         <q-scroll-area style="height:calc(100% - 1px)">
-          <q-list separator>
+          <q-list
+            separator
+            class="bg-white"
+          >
             <q-item
               v-for="n in 2"
               :key="n"

@@ -8,22 +8,65 @@
   <q-separator />
   <q-scroll-area style="height: calc(100% - 50px);">
     <q-form
+      ref="formmRef"
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
     >
-      <div class="col-9">
+      <div class="col-12 q-mb-sm">
+        <q-select
+          v-model="store.searchtindakan"
+          use-input
+          hide-selected
+          fill-input
+          outlined
+          standout="bg-yellow-3"
+          dense
+          emit-value
+          map-options
+          option-value="kdtindakan"
+          :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
+          input-debounce="0"
+          :options="options"
+          label="Cari Tindakan"
+          @filter="filterFn"
+          @update:model-value="(val)=> updateSearchTindakan(val)"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                Tidak ditemukan
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </div>
+      <div class="col-12">
         <q-input
           v-model="store.formtindakan.tindakan"
-          label="Cari Tindakan"
+          label="Tindakan (Otomatis)"
           dense
           outlined
           standout="bg-yellow-3"
           :rules="[val => !!val || 'Harus diisi']"
           hide-bottom-space
+          readonly
+        />
+      </div>
+      <div class="col-9">
+        <q-input
+          v-model="store.formtindakan.biaya"
+          label="Biaya (Otomatis)"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+          readonly
         />
       </div>
       <div class="col-3">
         <q-input
+          ref="inpQtyRef"
           v-model="store.formtindakan.jumlah"
           label="Qty"
           dense
@@ -62,10 +105,56 @@
 
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { onMounted, ref } from 'vue'
 
 const store = useLayananPoli()
 
+const options = ref([])
+const formmRef = ref(null)
+const inpQtyRef = ref(null)
+
+// function resetValidasi() {
+//   formmRef.value?.resetValidation()
+// }
+
+// defineExpose({ resetValidasi })
+
+onMounted(() => {
+  console.log(formmRef.value)
+  options.value = store.listTindakan
+  // store.initReset()
+  // formmRef.value?.resetValidation()
+})
+
+function updateSearchTindakan(val) {
+  store.setKdTindakan(val).then(() => {
+    inpQtyRef.value.focus()
+  })
+}
+
 function onSubmit() {
   console.log('ok')
+}
+
+function filterFn(val, update, abort) {
+  if (val.length < 1) {
+    abort()
+    return
+  }
+
+  update(() => {
+    const needle = val.toLowerCase()
+    const arr = store.listTindakan
+    const filter = ['kdtindakan', 'tindakan']
+    const multiFilter = (data = [], filterKeys = [], value = '') =>
+      data.filter((item) => filterKeys.some(
+        (key) =>
+          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+          item[key]
+      )
+      )
+    const filteredData = multiFilter(arr, filter, needle)
+    options.value = filteredData
+  })
 }
 </script>

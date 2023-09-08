@@ -79,6 +79,7 @@ const pasien = ref(null)
 onMounted(() => {
   store.getData()
   diagnosa.getDiagnosaDropdown()
+  diagnosa.getTindakanDropdown()
 })
 
 function bukaTindakan(val) {

@@ -12,6 +12,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
     // diagnosa
     searchdiagnosa: '',
     listDiagnosa: [],
+    listTindakan: [],
     loadingFormDiagnosa: false,
     formdiagnosa: {
       kddiagnosa: '',
@@ -24,13 +25,18 @@ export const useLayananPoli = defineStore('layanan-poli', {
     // tindakan
     searchtindakan: '',
     formtindakan: {
+      kdtindakan: '',
       tindakan: '',
+      biaya: 0,
+      sarana: 0,
       tarif: 0,
+      pelayanan: 0,
       jumlah: 1,
       subtotal: 0,
       pelaksana: '',
       keterangan: ''
-    }
+    },
+    loadingFormTindakan: false
 
   }),
   // getters: {
@@ -42,6 +48,12 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const resp = await api.get('v1/simrs/pelayanan/listdiagnosa')
       if (resp.status === 200) {
         this.listDiagnosa = resp.data
+      }
+    },
+    async getTindakanDropdown() {
+      const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
+      if (resp.status === 200) {
+        this.listTindakan = resp.data
       }
     },
 
@@ -57,6 +69,37 @@ export const useLayananPoli = defineStore('layanan-poli', {
           ? this.formdiagnosa.dtd = target[0].dtd ? target[0].dtd : ''
           : this.formdiagnosa.dtd = ''
       }
+    },
+
+    setKdTindakan(val) {
+      this.formtindakan.kdtindakan = val
+      const ada = this.listTindakan.length > 0
+      if (ada) {
+        const target = this.listTindakan.filter(x => x.kdtindakan === val)
+        target.length
+          ? this.formtindakan.tindakan = target[0].tindakan
+          : this.formtindakan.tindakan = ''
+        target.length
+          ? this.formtindakan.tarif = target[0].tarif
+          : this.formtindakan.tarif = 0
+        target.length
+          ? this.formtindakan.sarana = target[0].sarana
+          : this.formtindakan.sarana = 0
+        target.length
+          ? this.formtindakan.pelayanan = target[0].pelayanan
+          : this.formtindakan.pelayanan = 0
+        target.length
+          ? this.formtindakan.biaya = (parseInt(target[0].tarif) + parseInt(target[0].pelayanan) + parseInt(target[0].sarana))
+          : this.formtindakan.biaya = 0
+        target.length
+          ? this.formtindakan.subtotal = parseInt(this.formtindakan.biaya) * this.formtindakan.jumlah
+          : this.formtindakan.subtotal = 0
+      }
+
+      console.log('setKdTindakana', this.formtindakan)
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
     },
 
     async simpanDiagnosa(pasien) {
@@ -161,8 +204,12 @@ export const useLayananPoli = defineStore('layanan-poli', {
         // tindakan
         this.searchtindakan = ''
         this.formtindakan = {
+          kdtindakan: '',
           tindakan: '',
+          biaya: 0,
+          sarana: 0,
           tarif: 0,
+          pelayanan: 0,
           jumlah: 1,
           subtotal: 0,
           pelaksana: '',
