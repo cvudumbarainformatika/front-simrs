@@ -10,7 +10,7 @@
           No Permintaan:
         </div>
         <app-input
-          v-model="store.form.nopermintaan"
+          v-model="store.form.no_permintaan"
           label="Nomor Permintaan"
           outlined
           readonly
@@ -19,7 +19,7 @@
         />
         <div class="q-ml-md">
           <q-btn
-            v-if="store.form.nopermintaan"
+            v-if="store.form.no_permintaan"
             flat
             icon="icon-mat-done"
             dense
@@ -56,7 +56,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
-              :model="store.disp.tanggal"
+              :model="store.disp.tgl_permintaan"
               label="Tanggal Transaksi"
               outlined
               @set-display="dispTanggal"
@@ -271,10 +271,10 @@ const style = useStyledStore()
 const store = useFarmasiPermintaanDepoStore()
 
 function setTanggal (val) {
-  store.setForm('tanggal', val)
+  store.setForm('tgl_permintaan', val)
 }
 function dispTanggal (val) {
-  store.setDisp('tanggal', val)
+  store.setDisp('tgl_permintaan', val)
 }
 
 const apps = useAplikasiStore()

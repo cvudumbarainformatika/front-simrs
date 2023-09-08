@@ -7,11 +7,11 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     loadingKunci: false,
     loadingObat: false,
     form: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       konsinyasi: 'non-konsinyasi'
     },
     disp: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     floor: [ // racikan
       { kode: 'Gd-03010101' },
@@ -92,6 +92,35 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
         stok: 10
       }
 
+    ],
+    details: [
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000037-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      },
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000038-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      },
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000039-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      }
     ]
   }),
   actions: {
