@@ -138,7 +138,7 @@
       <div class="col-6">
         <div class="row q-mb-xs">
           <div
-            v-if="!gudang"
+            v-if="!gudang && apps.user.pegawai.role_id===1"
             class="col-12"
           >
             <app-autocomplete-new
@@ -155,13 +155,22 @@
             />
           </div>
           <div
-            v-if="gudang"
+            v-else
             class="col-12"
           >
             <div class="row justify-between no-wrap">
               <div>Gudang tujuan </div>
-              <div class="text-weight-bold q-mr-lg">
+              <div
+                v-if="gudang"
+                class="text-weight-bold q-mr-lg"
+              >
                 {{ gudang.nama }}
+              </div>
+              <div
+                v-if="!gudang"
+                class="text-negative text-weight-bold q-mr-lg"
+              >
+                Anda tidak memiliki akses Penerimaan Gudang
               </div>
             </div>
           </div>
@@ -513,6 +522,7 @@
 </template>
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
@@ -544,7 +554,7 @@ function validasi(index) {
   // console.log('ref harga', refHarga.value[index].refInput.validate())
 
   const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
-  const gudang = refGudang.value.$refs.refAuto.validate()
+  const gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : false
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
   const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
@@ -555,6 +565,7 @@ function validasi(index) {
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
+  if (!gudang && !store.form.kdruang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
   if (jenisSurat && gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }

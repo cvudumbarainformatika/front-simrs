@@ -10,7 +10,7 @@
           No Permintaan:
         </div>
         <app-input
-          v-model="store.form.nopermintaan"
+          v-model="store.form.no_permintaan"
           label="Nomor Permintaan"
           outlined
           readonly
@@ -19,7 +19,7 @@
         />
         <div class="q-ml-md">
           <q-btn
-            v-if="store.form.nopermintaan"
+            v-if="store.form.no_permintaan"
             flat
             icon="icon-mat-done"
             dense
@@ -51,17 +51,46 @@
   </div>
   <!-- Permintaan -->
   <div class="q-mt-lg q-py-md q-px-sm">
-    <div class="row q-col-gutter-md items-center">
+    <div class="row q-col-gutter-md ">
       <div class="col-6">
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
-              :model="store.disp.tanggal"
+              :model="store.disp.tgl_permintaan"
               label="Tanggal Transaksi"
               outlined
               @set-display="dispTanggal"
               @db-model="setTanggal"
             />
+          </div>
+        </div>
+
+        <div v-if="apps.user.pegawai.role_id === 1">
+          <div class="row no-wrap q-mb-xs">
+            <div class="col-12">
+              <app-autocomplete
+                v-model="store.form.gudang"
+                label="Pilih Gudang"
+                option-label="nama"
+                option-value="value"
+                outlined
+                clearable
+                :source="store.gudangs"
+              />
+            </div>
+          </div>
+          <div class="row no-wrap q-mb-xs">
+            <div class="col-12">
+              <app-autocomplete
+                v-model="store.form.depo"
+                label="Pilih Depo"
+                option-label="nama"
+                option-value="value"
+                outlined
+                clearable
+                :source="store.depos"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -74,26 +103,46 @@
             {{ user.nama }}
           </div>
         </div>
-        <div class="row no-wrap q-mb-xs">
-          <div class="col-4">
-            Gudang Asal :
+        <div v-if="apps.user.pegawai.role_id !== 1">
+          <div class="row no-wrap q-mb-xs">
+            <div class="col-4">
+              Gudang Asal :
+            </div>
+            <div
+              v-if="store.disp.gudang"
+              class="col-4 text-weight-bold"
+            >
+              {{ store.disp.gudang }}
+            </div>
+            <div
+              v-if="!store.disp.gudang"
+              class="col-4 text-weight-bold text-negative"
+            >
+              Anda Tidak Memiliki Akses Permintaan Depo
+            </div>
+            <div class="col-4 text-cyan">
+              ({{ store.form.gudang ? store.form.gudang :'-' }})
+            </div>
           </div>
-          <div class="col-4 text-weight-bold">
-            {{ store.disp.depo? store.disp.depo :'-' }}
-          </div>
-          <div class="col-4 text-cyan">
-            ({{ store.form.depo ? store.form.depo :'-' }})
-          </div>
-        </div>
-        <div class="row no-wrap q-mb-xs">
-          <div class="col-4 ">
-            Depo Tujuan :
-          </div>
-          <div class="col-4 text-weight-bold">
-            {{ store.disp.depo? store.disp.depo :'-' }}
-          </div>
-          <div class="col-4 text-cyan">
-            ({{ store.form.depo ? store.form.depo :'-' }})
+          <div class="row no-wrap q-mb-xs">
+            <div class="col-4 ">
+              Depo Tujuan :
+            </div>
+            <div
+              v-if="store.disp.depo"
+              class="col-4 text-weight-bold"
+            >
+              {{ store.disp.depo }}
+            </div>
+            <div
+              v-if="!store.disp.depo"
+              class="col-4 text-weight-bold text-negative"
+            >
+              Anda Tidak Memiliki Akses Permintaan Depo
+            </div>
+            <div class="col-4 text-cyan">
+              ({{ store.form.depo ? store.form.depo :'-' }})
+            </div>
           </div>
         </div>
       </div>
@@ -181,9 +230,6 @@
             </div>
           </div>
           <div class="row q-mb-xs">
-            gudang asal
-          </div>
-          <div class="row q-mb-xs">
             Stok user
           </div>
           <div class="row q-mb-xs">
@@ -197,6 +243,7 @@
       <div class="row q-my-sm q-mr-lg justify-end">
         <app-btn
           label="Simpan Rincian"
+          @click="simpan"
         />
       </div>
       <div
@@ -224,10 +271,10 @@ const style = useStyledStore()
 const store = useFarmasiPermintaanDepoStore()
 
 function setTanggal (val) {
-  store.setForm('tanggal', val)
+  store.setForm('tgl_permintaan', val)
 }
 function dispTanggal (val) {
-  store.setDisp('tanggal', val)
+  store.setDisp('tgl_permintaan', val)
 }
 
 const apps = useAplikasiStore()
@@ -236,8 +283,22 @@ const user = computed(() => {
     if (apps.user.pegawai.depo) {
       store.setForm('depo', apps.user.pegawai.depo.kode)
       store.setDisp('depo', apps.user.pegawai.depo.nama)
+      const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
+      console.log('dep', dep)
+      if (dep.length) {
+        store.setForm('gudang', 'Gd-03010100')
+        store.setDisp('gudang', 'Gudang Farmasi(Floor Stok)')
+      } else {
+        store.setForm('gudang', 'Gd-05010100')
+        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+      }
     }
   }
   return apps.user
 })
+
+function simpan() {
+  console.log('form', store.form)
+  console.log('disp', store.disp)
+}
 </script>

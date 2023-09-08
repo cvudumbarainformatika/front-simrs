@@ -7,11 +7,11 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     loadingKunci: false,
     loadingObat: false,
     form: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       konsinyasi: 'non-konsinyasi'
     },
     disp: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     floor: [ // racikan
       { kode: 'Gd-03010101' },
@@ -20,6 +20,13 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ],
+    depos: [
+      { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
+      { nama: 'Floor Stock 2 (Obat)', value: 'Gd-04010101' },
+      { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
+      { nama: 'Depo OK', value: 'Gd-04010103' },
+      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' }
     ],
     obats: [
       {
@@ -85,6 +92,35 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
         stok: 10
       }
 
+    ],
+    details: [
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000037-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      },
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000038-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      },
+      {
+        id: 1,
+        no_permintaan: 'dasda',
+        kdobat: '0000039-FAR',
+        stok_alokasi: 10,
+        mak_stok: 20,
+        jumlah_minta: 10,
+        status_obat: '1'
+      }
     ]
   }),
   actions: {

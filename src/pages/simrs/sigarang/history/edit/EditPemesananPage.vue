@@ -206,7 +206,7 @@
               </div>
               <div class="col-1 border-bottom border-left">
                 <div class="text-right">
-                  {{ formatRpDouble(detail.harga) }}
+                  {{ formatRpDouble(detail.harga,3) }}
                 </div>
               </div>
               <div class="col-1 border-bottom border-left">
