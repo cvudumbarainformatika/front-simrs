@@ -51,10 +51,10 @@
         </div>
         =>
         <div
-          v-if="scope.opt.stok"
+          v-if="scope.opt.stokalokasi"
           class="q-ml-xs text-weight-bold tetx-green"
         >
-          {{ scope.opt.stok }}
+          {{ scope.opt.stokalokasi }}
         </div>
         <div
           v-if="scope.opt.satuan_k"

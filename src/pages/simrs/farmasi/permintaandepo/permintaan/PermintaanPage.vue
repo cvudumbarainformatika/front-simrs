@@ -76,6 +76,7 @@
                 outlined
                 clearable
                 :source="store.gudangs"
+                @selected="gudangSelected"
               />
             </div>
           </div>
@@ -287,18 +288,24 @@ const user = computed(() => {
       console.log('dep', dep)
       if (dep.length) {
         store.setForm('gudang', 'Gd-03010100')
+        store.setParam('kdgudang', 'Gd-03010100')
         store.setDisp('gudang', 'Gudang Farmasi(Floor Stok)')
       } else {
         store.setForm('gudang', 'Gd-05010100')
+        store.setParam('kdgudang', 'Gd-05010100')
         store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
       }
     }
   }
   return apps.user
 })
-
+function gudangSelected(val) {
+  console.log('gudang', val)
+  store.setParam('kdgudang', val)
+}
 function simpan() {
   console.log('form', store.form)
   console.log('disp', store.disp)
 }
+store.getInitialData()
 </script>
