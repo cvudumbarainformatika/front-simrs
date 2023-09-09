@@ -261,7 +261,7 @@
             icon="icon-mat-lock_open"
             dense
             color="negative"
-            :loading="penerimaan.loadingKunci && row.nopemesanan === toloadBeli"
+            :loading="penerimaan.loadingKunci && row.nopenerimaan === toloadBeli"
             @click="kunci(row)"
           >
             <q-tooltip

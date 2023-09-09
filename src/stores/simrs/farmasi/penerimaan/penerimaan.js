@@ -262,6 +262,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           .then(resp => {
             this.loading = false
             console.log('sudah simpan', resp.data)
+            notifSuccess(resp)
             if (resp.data.heder) {
               if (resp.data.heder.nopenerimaan) {
                 this.setForm('nopenerimaan', resp.data.heder.nopenerimaan)
@@ -288,7 +289,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
                 this.details[index].subtotal = 0
               }
             }
-            notifSuccess(resp)
+
             resolve(resp)
           })
           .catch(() => {
