@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { filterDuplicateArrays, findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
+import { useListPenerimaanStore } from './listpenerimaan'
 
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
   state: () => ({
@@ -250,6 +251,9 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           .then(resp => {
             this.loadingKunci = false
             console.log('kunci penerimaan ', resp)
+            notifSuccess(resp)
+            const list = useListPenerimaanStore()
+            list.cariRencanaBeli()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
