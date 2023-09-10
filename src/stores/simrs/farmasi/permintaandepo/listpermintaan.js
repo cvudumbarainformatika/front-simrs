@@ -55,7 +55,7 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
         api.get('v1/simrs/farmasinew/depo/listpermintaandepo', params)
           .then(resp => {
             this.loading = false
-            console.log('list permintaan', resp)
+            console.log('list permintaan', resp.data)
             this.items = resp.data
             // this.meta = resp.data
             resolve(resp)
