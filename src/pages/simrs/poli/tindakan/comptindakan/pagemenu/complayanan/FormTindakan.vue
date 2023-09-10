@@ -12,6 +12,16 @@
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
     >
+      <!-- <div class="col-12 q-mb-sm">
+        <q-select
+          v-model="store.notaTindakan"
+          outlined
+          standout="bg-yellow-3"
+          dense
+          :options="store.notaTindakans"
+          label="NOTA TINDAKAN"
+        />
+      </div> -->
       <div class="col-12 q-mb-sm">
         <q-select
           v-model="store.searchtindakan"
@@ -96,6 +106,8 @@
           label="Simpan Tindakan"
           color="primary"
           type="submit"
+          :loading="store.loadingFormTindakan"
+          :disable="store.loadingFormTindakan"
         />
       </div>
     </q-form>
@@ -112,6 +124,13 @@ const store = useLayananPoli()
 const options = ref([])
 const formmRef = ref(null)
 const inpQtyRef = ref(null)
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 
 // function resetValidasi() {
 //   formmRef.value?.resetValidation()
@@ -133,7 +152,7 @@ function updateSearchTindakan(val) {
 }
 
 function onSubmit() {
-  console.log('ok')
+  store.saveTindakan(props.pasien)
 }
 
 function filterFn(val, update, abort) {

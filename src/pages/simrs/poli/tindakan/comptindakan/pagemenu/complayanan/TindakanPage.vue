@@ -11,6 +11,7 @@
           <div class="col-12">
             <FormTindakan
               ref="reffForm"
+              :pasien="props.pasien"
             />
           </div>
         </div>
@@ -39,4 +40,10 @@ import { ref } from 'vue'
 // const store = useLayananPoli()
 
 const reffForm = ref()
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 </script>

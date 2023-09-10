@@ -6,9 +6,25 @@
     class="column full-height"
   >
     <div class="col-auto">
-      <q-bar class="bg-teal text-white">
-        <div class="f-12 q-pa-xs">
+      <q-bar
+        class="bg-teal text-white q-pa-sm"
+        style="min-height: 45px;"
+      >
+        <div class="f-12">
           Table Tindakan
+        </div>
+        <q-space />
+        <div class="q-py-xs">
+          <q-select
+            v-model="store.notaTindakan"
+            outlined
+            standout="bg-yellow-3"
+            bg-color="white"
+            dense
+            :options="store.notaTindakans"
+            :display-value="`NOTA: ${store.notaTindakan==='' || store.notaTindakan === 'BARU'? 'BARU': store.notaTindakan}`"
+            style="min-width: 200px;"
+          />
         </div>
       </q-bar>
     </div>
@@ -83,5 +99,7 @@
 </template>
 
 <script setup>
+import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 
+const store = useLayananPoli()
 </script>

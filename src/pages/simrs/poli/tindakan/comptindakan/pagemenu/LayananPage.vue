@@ -70,5 +70,6 @@ const inacbg = useInacbgPoli()
 onMounted(() => {
   // console.log('layananPage')
   inacbg.getDataIna(props.pasien)
+  store.getNota(props.pasien)
 })
 </script>

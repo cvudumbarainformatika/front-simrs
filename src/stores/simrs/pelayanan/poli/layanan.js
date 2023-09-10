@@ -24,6 +24,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
     // tindakan
     searchtindakan: '',
+    notaTindakans: [],
+    notaTindakan: 'BARU',
     formtindakan: {
       kdtindakan: '',
       tindakan: '',
@@ -33,7 +35,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       pelayanan: 0,
       jumlah: 1,
       subtotal: 0,
-      pelaksana: '',
+      // pelaksana: '',
       keterangan: ''
     },
     loadingFormTindakan: false
@@ -187,6 +189,45 @@ export const useLayananPoli = defineStore('layanan-poli', {
       console.log('xxx', val)
     },
 
+    // ==================================================================================== TINDAKAN =========================================================================
+
+    async saveTindakan(pasien) {
+      this.loadingFormTindakan = true
+
+      const form = this.formtindakan
+      form.noreg = pasien.noreg
+      form.norm = pasien.norm
+      form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
+        console.log('simpan tindakan', resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          this.loadingFormTindakan = false
+        }
+        this.loadingFormTindakan = false
+      } catch (error) {
+        this.loadingFormTindakan = false
+      }
+    },
+
+    async getNota(pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+
+      const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
+      console.log('notas', resp)
+      if (resp.status === 200) {
+        const arr = resp.data.map(x => x.nota)
+        this.notaTindakans = arr
+        this.notaTindakans.push('BARU')
+        this.notaTindakan = this.notaTindakans[0]
+      }
+    },
+
     initReset() {
       return new Promise((resolve, reject) => {
         this.tab = 'Diagnosa'
@@ -212,7 +253,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           pelayanan: 0,
           jumlah: 1,
           subtotal: 0,
-          pelaksana: '',
+          // pelaksana: '',
           keterangan: ''
         }
 
