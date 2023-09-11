@@ -30,76 +30,92 @@
     </div>
     <div class="col-grow">
       <div class="full-height bg-grey">
-        <q-scroll-area style="height:calc(100% - 1px)">
+        <q-scroll-area
+          v-if="props.pasien?.tindakan?.length"
+          style="height:calc(100% - 1px)"
+        >
           <q-list
             separator
             class="bg-white"
           >
-            <q-item
-              v-for="n in 2"
-              :key="n"
+            <template
+              v-for="(item, i) in props.pasien?.tindakan"
+              :key="i"
             >
-              <q-item-section>
-                <q-item-label
-                  lines="2"
-                  class="f-12"
-                >
-                  <span class="">Tindakan & Jumlah</span> : ....
-                </q-item-label>
-                <q-item-label lines="2">
-                  <span class="">Keterangan</span> : ....
-                </q-item-label>
-                <q-item-label lines="2">
-                  <span class="">Pelaksana</span> : ....
-                </q-item-label>
-                <q-item-label lines="2">
-                  <span class="">Tanggal</span> : ....
-                </q-item-label>
-                <!-- <q-item-label lines="2">
-                  <span class="">Subtotal</span> : ....
-                </q-item-label> -->
-              </q-item-section>
+              <q-item>
+                <q-item-section>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class="">Nota</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
+                  </q-item-label>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class="">Tindakan x Jml</span> : <span class="text-weight-bold">{{ item.mastertindakan?.rs2 }} </span> x <span class="text-negative">{{ item.rs5?item.rs5:0 }}</span>
+                  </q-item-label>
+                </q-item-section>
 
-              <q-item-section
-                side
-                top
-              >
-                <q-item-label
-                  lines="1"
+                <q-item-section
+                  side
+                  top
                 >
-                  <span class="text-orange">Tanggal</span>
-                </q-item-label>
-
-                <q-item-label>
-                  <span class="text-orange">SubTotal</span>
-                </q-item-label>
-                <div class="row q-my-sm">
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="icon-mat-edit"
-                  />
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="icon-mat-delete"
-                    color="negative"
-                  />
-                </div>
-              </q-item-section>
-            </q-item>
-            <q-separator />
+                  <div class="row q-my-xs">
+                    <q-btn
+                      flat
+                      round
+                      size="sm"
+                      icon="icon-mat-edit"
+                    />
+                    <q-btn
+                      flat
+                      round
+                      size="sm"
+                      icon="icon-mat-delete"
+                      color="negative"
+                    />
+                  </div>
+                  <q-item-label>
+                    <!-- <span
+                    class="text-primary f-14 text-weight-bold"
+                    style="border:1px solid blue;
+                      margin-bottom:10px; padding: 5px;
+                    "
+                  >{{ item.subtotal }}</span> -->
+                    <q-badge
+                      outline
+                      color="primary"
+                      :label="`Rp. ${formatRp(item.subtotal)}`"
+                    />
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator size="2px" />
+            </template>
           </q-list>
         </q-scroll-area>
+        <div
+          v-else
+          class="column full-height flex-center"
+        >
+          <div>Data Belum Ada</div>
+        </div>
       </div>
     </div>
   </q-card>
 </template>
 
 <script setup>
+import { formatRp } from 'src/modules/formatter'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 
 const store = useLayananPoli()
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 </script>

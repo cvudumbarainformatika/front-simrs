@@ -30,10 +30,10 @@ export const useLayananPoli = defineStore('layanan-poli', {
       kdtindakan: '',
       tindakan: '',
       biaya: 0,
-      sarana: 0,
+      hargasarana: 0,
       tarif: 0,
-      pelayanan: 0,
-      jumlah: 1,
+      hargapelayanan: 0,
+      jmltindakan: 1,
       subtotal: 0,
       // pelaksana: '',
       keterangan: ''
@@ -54,6 +54,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
     async getTindakanDropdown() {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
+      console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
       }
@@ -85,13 +86,13 @@ export const useLayananPoli = defineStore('layanan-poli', {
           ? this.formtindakan.tarif = target[0].tarif
           : this.formtindakan.tarif = 0
         target.length
-          ? this.formtindakan.sarana = target[0].sarana
+          ? this.formtindakan.hargasarana = target[0].sarana
           : this.formtindakan.sarana = 0
         target.length
-          ? this.formtindakan.pelayanan = target[0].pelayanan
+          ? this.formtindakan.hargapelayanan = target[0].pelayanan
           : this.formtindakan.pelayanan = 0
         target.length
-          ? this.formtindakan.biaya = (parseInt(target[0].tarif) + parseInt(target[0].pelayanan) + parseInt(target[0].sarana))
+          ? this.formtindakan.biaya = (parseInt(target[0].pelayanan) + parseInt(target[0].sarana))
           : this.formtindakan.biaya = 0
         target.length
           ? this.formtindakan.subtotal = parseInt(this.formtindakan.biaya) * this.formtindakan.jumlah
@@ -197,6 +198,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const form = this.formtindakan
       form.noreg = pasien.noreg
       form.norm = pasien.norm
+      form.kdpoli = pasien?.kodepoli
+      form.kdsistembayar = pasien?.kodesistembayar
       form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
@@ -222,7 +225,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
-        this.notaTindakans = arr
+        this.notaTindakans = arr.length ? arr : []
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]
       }
@@ -248,10 +251,10 @@ export const useLayananPoli = defineStore('layanan-poli', {
           kdtindakan: '',
           tindakan: '',
           biaya: 0,
-          sarana: 0,
+          hargasarana: 0,
           tarif: 0,
-          pelayanan: 0,
-          jumlah: 1,
+          hargapelayanan: 0,
+          jmltindakan: 1,
           subtotal: 0,
           // pelaksana: '',
           keterangan: ''

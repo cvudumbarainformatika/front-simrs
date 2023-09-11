@@ -64,7 +64,7 @@
       </div>
       <div class="col-9">
         <q-input
-          v-model="store.formtindakan.biaya"
+          v-model="store.formtindakan.tarif"
           label="Biaya (Otomatis)"
           dense
           outlined
@@ -77,7 +77,7 @@
       <div class="col-3">
         <q-input
           ref="inpQtyRef"
-          v-model="store.formtindakan.jumlah"
+          v-model="store.formtindakan.jmltindakan"
           label="Qty"
           dense
           outlined

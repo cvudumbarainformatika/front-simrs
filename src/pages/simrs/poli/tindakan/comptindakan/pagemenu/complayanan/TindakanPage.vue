@@ -19,7 +19,10 @@
       <div class="col-6 full-height ">
         <div class="column full-height">
           <div class="col">
-            <TindakanTable />
+            <TindakanTable
+              :key="pasien"
+              :pasien="props.pasien"
+            />
           </div>
           <div class="col-6">
             <SimulasiPage />
