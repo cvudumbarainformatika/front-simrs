@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
 import { dateDbFormat, formatJam } from 'src/modules/formatter'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
@@ -35,6 +36,10 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     pemeriksaansradiologi: []
   }),
   actions: {
+    async getMasterLaborat() {
+      const resp = await api.get('v1/simrs/penunjang/laborat/dialoglaboratpoli')
+      console.log('masterlaborat', resp)
+    },
     saveOrderLaborat(pasien) {
       console.log(pasien)
     }
