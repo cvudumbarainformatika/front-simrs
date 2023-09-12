@@ -51,7 +51,7 @@
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 // import PageLaborat from './comppenunjang/PageLaborat.vue'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 
 const props = defineProps({
   pasien: {
@@ -70,4 +70,8 @@ const cekPanel = () => {
   const filterred = arr2.find(key => key.includes(ganti))
   return defineAsyncComponent(() => import(filterred))
 }
+
+onMounted(() => {
+  store.getMasterLaborat()
+})
 </script>

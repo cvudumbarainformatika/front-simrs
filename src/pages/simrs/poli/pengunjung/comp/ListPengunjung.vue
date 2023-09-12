@@ -23,20 +23,47 @@
             <q-item-label>
               <span class="text-weight-bold">{{ item.noreg }} </span> | Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
             </q-item-label>
-            <q-item-label>
+            <!-- <q-item-label>
               DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span> | RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
-            </q-item-label>
+            </q-item-label> -->
             <q-item-label caption>
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
             </q-item-label>
-            <q-item-label>
+            <!-- <q-item-label>
               Tanggal Kunjungan : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
-            </q-item-label>
+            </q-item-label> -->
             <q-item-label
               caption
             >
               status : <span :class="getStatus(item.status)?'text-accent':'text-negative'">{{ getStatus(item.status)?'SUDAH DILAYANI':'BELUM DILAYANI' }}</span>
             </q-item-label>
+          </q-item-section>
+          <q-separator
+            vertical
+            class="q-mx-md"
+          />
+          <q-item-section>
+            <!-- <q-item-label>
+              <span class="text-weight-bold">{{ item.nama }}</span> | <span class="text-primary text-weight-bold">{{ item.norm }}</span>
+            </q-item-label> -->
+            <!-- <q-item-label>
+              <span class="text-weight-bold">{{ item.noreg }} </span> | Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
+            </q-item-label> -->
+            <q-item-label caption>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span>
+            </q-item-label>
+            <q-item-label>
+              RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
+            </q-item-label>
+
+            <q-item-label>
+              Tanggal : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
+            </q-item-label>
+            <!-- <q-item-label
+              caption
+            >
+              status : <span :class="getStatus(item.status)?'text-accent':'text-negative'">{{ getStatus(item.status)?'SUDAH DILAYANI':'BELUM DILAYANI' }}</span>
+            </q-item-label> -->
           </q-item-section>
           <q-item-section
             side
@@ -62,6 +89,7 @@
             />
           </q-item-section>
         </q-item>
+        <q-separator />
       </q-list>
       <div class="q-pb-xl" />
       <div class="q-pb-xl" />

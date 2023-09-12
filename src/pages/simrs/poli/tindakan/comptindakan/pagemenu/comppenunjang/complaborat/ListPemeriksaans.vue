@@ -11,7 +11,7 @@
         Belum Ada Permintaan Order ke Laborat
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="column q-pa-md">
         <div class="flex items-center">
           <div style="width:150px">
