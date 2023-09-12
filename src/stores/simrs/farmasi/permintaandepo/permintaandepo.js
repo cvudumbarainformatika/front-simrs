@@ -15,7 +15,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
       nama_obat: ''
     },
     form: {
-      tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      tgl_permintaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       konsinyasi: 'non-konsinyasi'
     },
     disp: {
@@ -102,33 +102,33 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
 
     ],
     details: [
-      {
-        id: 1,
-        no_permintaan: 'dasda',
-        kdobat: '0000037-FAR',
-        stok_alokasi: 10,
-        mak_stok: 20,
-        jumlah_minta: 10,
-        status_obat: '1'
-      },
-      {
-        id: 1,
-        no_permintaan: 'dasda',
-        kdobat: '0000038-FAR',
-        stok_alokasi: 10,
-        mak_stok: 20,
-        jumlah_minta: 10,
-        status_obat: '1'
-      },
-      {
-        id: 1,
-        no_permintaan: 'dasda',
-        kdobat: '0000039-FAR',
-        stok_alokasi: 10,
-        mak_stok: 20,
-        jumlah_minta: 10,
-        status_obat: '1'
-      }
+      // {
+      //   id: 1,
+      //   no_permintaan: 'dasda',
+      //   kdobat: '0000037-FAR',
+      //   stok_alokasi: 10,
+      //   mak_stok: 20,
+      //   jumlah_minta: 10,
+      //   status_obat: '1'
+      // },
+      // {
+      //   id: 1,
+      //   no_permintaan: 'dasda',
+      //   kdobat: '0000038-FAR',
+      //   stok_alokasi: 10,
+      //   mak_stok: 20,
+      //   jumlah_minta: 10,
+      //   status_obat: '1'
+      // },
+      // {
+      //   id: 1,
+      //   no_permintaan: 'dasda',
+      //   kdobat: '0000039-FAR',
+      //   stok_alokasi: 10,
+      //   mak_stok: 20,
+      //   jumlah_minta: 10,
+      //   status_obat: '1'
+      // }
     ]
   }),
   actions: {
@@ -148,7 +148,9 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
       if (anu.length) {
         const obat = anu[0]
         console.log('obat ketemu', obat)
-        // this.setForm()
+        this.setForm('stok_alokasi', obat.stokalokasi)
+
+        console.log('form', this.form)
       }
     },
     clearObat(val) {
@@ -175,10 +177,10 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
       }
       this.loadingKunci = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan', data)
+        api.post('v1/simrs/farmasinew/depo/kuncipermintaan', data)
           .then(resp => {
             this.loadingKunci = false
-            console.log('kunci penerimaan ', resp)
+            console.log('kunci permintaan ', resp)
             notifSuccess(resp)
             const list = useListPermintaanStore()
             list.ambilPermintaan()
@@ -203,6 +205,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             this.loadingObat = false
           })
       })
-    }
+    },
+    simpan() {}
   }
 })
