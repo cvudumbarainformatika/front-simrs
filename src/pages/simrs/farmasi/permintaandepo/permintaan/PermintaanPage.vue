@@ -69,7 +69,7 @@
           <div class="row no-wrap q-mb-xs">
             <div class="col-12">
               <app-autocomplete
-                v-model="store.form.gudang"
+                v-model="store.form.dari"
                 label="Pilih Gudang"
                 option-label="nama"
                 option-value="value"
@@ -83,13 +83,24 @@
           <div class="row no-wrap q-mb-xs">
             <div class="col-12">
               <app-autocomplete
-                v-model="store.form.depo"
+                v-model="store.form.tujuan"
                 label="Pilih Depo"
                 option-label="nama"
                 option-value="value"
                 outlined
                 clearable
                 :source="store.depos"
+                @selected="depoSelected"
+              />
+            </div>
+          </div>
+          <div class="row no-wrap q-mb-xs">
+            <div class="">
+              <app-btn
+                label="Ambil data Obat"
+                :disable="store.loadingObat"
+                :loading="store.loadingObat"
+                @click="store.getListObat"
               />
             </div>
           </div>
@@ -190,12 +201,13 @@
             <div class="col-12">
               <app-input
                 ref="JumlahMinta"
-                v-model="store.form.jumlahminta"
+                v-model="store.form.jumlah_minta"
                 label="Jumlah Minta"
                 outlined
                 :rules="[
                   val => !isNaN(val) || 'Harus pakai Nomor'
                 ]"
+                @update:model-value="setJumlahMinta($event)"
               />
             </div>
           </div>
@@ -226,7 +238,7 @@
         <div class="col-6">
           <div class="row q-mb-xs">
             <div>Kode Barang</div>
-            <div class="q-ml-sm">
+            <div class="q-ml-sm text-weight-bold">
               {{ store.form.kdobat ? store.form.kdobat:'-' }}
             </div>
           </div>
@@ -234,7 +246,10 @@
             Stok user
           </div>
           <div class="row q-mb-xs">
-            Stok alokasi
+            <div>Stok Alokasi</div>
+            <div class="q-ml-sm text-weight-bold">
+              {{ store.form.stok_alokasi ? store.form.stok_alokasi:0 }}
+            </div>
           </div>
           <div class="row q-mb-xs">
             Max Stok
@@ -261,6 +276,7 @@
   </div>
 </template>
 <script setup>
+import { notifInfVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
@@ -303,9 +319,25 @@ function gudangSelected(val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
 }
+function depoSelected (val) {
+  console.log('depo', val)
+  store.setParam('kddepo', val)
+}
+
+function setJumlahMinta(evt) {
+  const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
+  if (alokasi < jumlah) {
+    store.setForm('jumlah_minta', alokasi)
+    notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
+  } else {
+    store.setForm('jumlah_minta', jumlah)
+  }
+}
 function simpan() {
   console.log('form', store.form)
   console.log('disp', store.disp)
+  store.simpan()
 }
 store.getInitialData()
 </script>
