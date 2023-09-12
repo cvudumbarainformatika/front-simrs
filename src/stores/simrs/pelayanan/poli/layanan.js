@@ -200,7 +200,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       form.norm = pasien.norm
       form.kdpoli = pasien?.kodepoli
       form.kdsistembayar = pasien?.kodesistembayar
-      form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan
+      form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
         console.log('simpan tindakan', resp)
