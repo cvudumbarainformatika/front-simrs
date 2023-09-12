@@ -87,7 +87,7 @@
             </div>
           </q-card-section>
           <q-separator dark />
-          <q-card-section class="bg-primary">
+          <q-card-section :class="minus?'bg-negative':'bg-primary'">
             <div class="row justify-between">
               <div class="text-subtitle1">
                 Selisih
@@ -117,17 +117,35 @@
 import { formatRp } from 'src/modules/formatter'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 
 const store = useLayananPoli()
 const ina = useInacbgPoli()
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+// const totalPemeriksaan = computed(() => {
+//   const arr = props?.pasien?.tindakan
+//   return arr.length ? arr.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
+// })
 
 function hitungSelisih() {
   return ina.tarifIna - ina.tarifRs
 }
+const minus = computed(() => {
+  return ina.tarifIna - ina.tarifRs < 0
+})
 
 watch(() => ina.tarifIna, (obj) => {
   console.log('watch tarifIna', obj)
   hitungSelisih()
 }, { deep: true })
+watch(() => props.pasien?.tindakan, (obj) => {
+  console.log('watch tindakan', obj)
+  ina.setTotalTindakan(props.pasien)
+}, { deep: true })
+
 </script>

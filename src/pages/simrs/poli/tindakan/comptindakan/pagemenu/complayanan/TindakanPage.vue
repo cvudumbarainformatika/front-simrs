@@ -25,7 +25,7 @@
             />
           </div>
           <div class="col-6">
-            <SimulasiPage />
+            <SimulasiPage :pasien="props.pasien" />
           </div>
         </div>
       </div>

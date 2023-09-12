@@ -205,8 +205,14 @@ export const useLayananPoli = defineStore('layanan-poli', {
         const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
         console.log('simpan tindakan', resp)
         if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result
+          isi.mastertindakan = { rs2: form.tindakan }
+          storePasien.injectDataPasien(pasien, isi, 'tindakan')
+          this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
           this.loadingFormTindakan = false
+          this.initReset('Tindakan')
         }
         this.loadingFormTindakan = false
       } catch (error) {
@@ -231,9 +237,34 @@ export const useLayananPoli = defineStore('layanan-poli', {
       }
     },
 
-    initReset() {
+    async hapusTindakan(pasien, id) {
+      const payload = { id, noreg: pasien?.noreg }
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/hapustindakanpoli', payload)
+        console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          storePasien.hapusDataTindakan(pasien, id)
+          this.setNotas(resp?.data?.nota)
+          notifSuccess(resp)
+        }
+      } catch (error) {
+        console.log('hapus tindakan poli', error)
+      }
+    },
+
+    setNotas(array) {
+      const arr = array.map(x => x.nota)
+      this.notaTindakans = arr.length ? arr : []
+      this.notaTindakans.push('BARU')
+      this.notaTindakan = this.notaTindakans[0]
+    },
+
+    initReset(x) {
+      const tabbed = x ?? 'Diagnosa'
       return new Promise((resolve, reject) => {
-        this.tab = 'Diagnosa'
+        this.tab = tabbed
         this.tabs = ['Diagnosa', 'Tindakan']
 
         this.searchdiagnosa = ''

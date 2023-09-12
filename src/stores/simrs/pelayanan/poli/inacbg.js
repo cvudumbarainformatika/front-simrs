@@ -46,6 +46,11 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       this.kodeIna = obj?.cbg?.code ?? '---'
       this.tarifIna = obj?.cbg?.tariff ?? '0'
       this.desc = obj?.cbg?.description ?? ''
+    },
+
+    setTotalTindakan(pasien) {
+      const arr = pasien?.tindakan
+      this.tarifRs = arr.length ? arr.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
     }
   }
 })

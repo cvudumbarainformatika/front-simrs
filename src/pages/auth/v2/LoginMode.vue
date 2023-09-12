@@ -88,7 +88,7 @@ const store = useIdentityStore()
 const $q = useQuasar()
 
 const isMobile = ref($q.platform.is.mobile)
-const routeForm = ref(route.params.mode === 'login-yang-menyusahkan')
+const routeForm = ref(route.params.mode === 'login-model-jadul')
 const routeQr = ref(route.params.mode === 'qr')
 
 const img = computed(() => {

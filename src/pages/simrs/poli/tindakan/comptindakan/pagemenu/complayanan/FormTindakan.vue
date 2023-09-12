@@ -12,16 +12,6 @@
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
     >
-      <!-- <div class="col-12 q-mb-sm">
-        <q-select
-          v-model="store.notaTindakan"
-          outlined
-          standout="bg-yellow-3"
-          dense
-          :options="store.notaTindakans"
-          label="NOTA TINDAKAN"
-        />
-      </div> -->
       <div class="col-12 q-mb-sm">
         <q-select
           v-model="store.searchtindakan"
@@ -152,7 +142,9 @@ function updateSearchTindakan(val) {
 }
 
 function onSubmit() {
-  store.saveTindakan(props.pasien)
+  store.saveTindakan(props.pasien).then(() => {
+    formmRef.value.resetValidation()
+  })
 }
 
 function filterFn(val, update, abort) {

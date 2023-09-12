@@ -1,5 +1,5 @@
 <template>
-  <q-scroll-area :style="`height: calc(100% - ${tinggiDetailPas}px); margin-top: ${tinggiDetailPas}px; border-right: 1px solid #ddd`">
+  <q-scroll-area :style="`height: calc(100% - ${tinggiDetailPas * 2}px); margin-top: ${tinggiDetailPas}px; border-right: 1px solid #ddd`">
     <q-separator />
     <ListMenu
       :key="menu"
@@ -8,6 +8,13 @@
       @menu-click="(val) => emits('clickMenu', val)"
     />
   </q-scroll-area>
+
+  <div
+    class="absolute-bottom"
+    :style="`height: ${tinggiDetailPas}px`"
+  >
+    <SimulasiPageTwo :pasien="pasien" />
+  </div>
 
   <div
     class="absolute-top bg-dark text-white"
@@ -65,9 +72,11 @@
 </template>
 
 <script setup>
+import SimulasiPageTwo from '../comptindakan/pagemenu/complayanan/SimulasiPageTwo.vue'
 import ListMenu from './ListMenu.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
+// const tinggiBot = ref(180)
 const emits = defineEmits(['clickMenu'])
 defineProps({
   pasien: {

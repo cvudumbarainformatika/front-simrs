@@ -7,7 +7,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
     // laborat
     caripemeriksaanlab: '',
+    masterlaborat: [],
     caripemeriksaanradiologi: '',
+    masterradiologi: [],
     form: {
       norm: '',
       noreg: '',
