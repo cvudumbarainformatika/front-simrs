@@ -5,15 +5,15 @@
         flat
         bordered
         square
-        class="col-5 full-height"
+        class="col-7 full-height"
       >
-        <DaftarPemeriksaan />
+        <FormOrder :pasien="props.pasien" />
       </q-card>
       <q-card
         flat
         bordered
         square
-        class="col-7 full-height"
+        class="col-5 full-height"
       >
         <ListPemeriksaans
           :key="props.pasien"
@@ -24,7 +24,8 @@
   </div>
 </template>
 <script setup>
-import DaftarPemeriksaan from './complaborat/DaftarPemeriksaan.vue'
+import FormOrder from './complaborat/FormOrder.vue'
+// import DaftarPemeriksaan from './complaborat/DaftarPemeriksaan.vue'
 import ListPemeriksaans from './complaborat/ListPemeriksaans.vue'
 // import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 
