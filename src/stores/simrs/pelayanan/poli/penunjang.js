@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateDbFormat, formatJam } from 'src/modules/formatter'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
     tab: 'Laborat',
     tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
     // laborat
-    caripemeriksaanlab: '',
+    caripemeriksaanlab: null,
     masterlaborat: [],
     loadingMasterLab: false,
     caripemeriksaanradiologi: '',
@@ -23,25 +23,29 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       pasienpuasa: 'Tidak',
       cito: 'Tidak',
       diagnosamasalah: '',
-      unitpengirim: '',
       catatan: '',
+      unitpengirim: '',
       asalsumberspesimen: '',
       lokasipengambilanspesimen: '',
       jumlahspesimenklinis: 1,
       volumespesimenklinis: 0,
       metodepengambilanspesimen: '',
-      waktupengambilanspesimen: dateFullFormat(new Date()),
+      tanggalpengambilanspesimen: dateDbFormat(new Date()),
+      jampengambilanspesimen: formatJam(new Date()),
       kondisispesimen: '',
       metodepengirimanhasil: 'Penyerahan langsung', // || Dikirim via surel
-      waktufiksasi: '',
+      tanggalfiksasi: dateDbFormat(new Date()),
+      jamfiksasi: dateDbFormat(new Date()),
       cairanfiksasi: 0, // ml
       volumecairanfiksasi: 0, // ml
       petugas: ''
     },
+    loadingSaveLab: false,
     pemeriksaanslab: [],
     pemeriksaansradiologi: []
   }),
   actions: {
+    // =============================================================================================================================================LABORAT
     async getMasterLaborat() {
       this.loadingMasterLab = true
       try {
@@ -84,8 +88,15 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       const arr = Array.from(map, ([name, value]) => ({ name, value }))
       return arr
     },
+    setCariLabNull() {
+      this.caripemeriksaanlab = null
+    },
+    setForm(key, value) {
+      this.form[key] = value
+    },
     saveOrderLaborat(pasien) {
       console.log(pasien)
     }
+    // =============================================================================================================================================LABORAT
   }
 })
