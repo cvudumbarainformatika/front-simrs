@@ -9,17 +9,18 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     loading: false,
     loadingKunci: false,
     loadingObat: false,
+    loadingMax: false,
     params: {
-      kdgudang: 'Gd-05010100',
-      kddepo: 'Gd-04010103',
+      kdgudang: '',
+      kddepo: '',
       nama_obat: ''
     },
     form: {
       tgl_permintaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      konsinyasi: 'non-konsinyasi',
+      status_obat: 'non-konsinyasi',
       no_permintaan: '',
-      dari: 'Gd-04010103',
-      tujuan: 'Gd-05010100'
+      dari: '',
+      tujuan: ''
     },
     disp: {
       tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
@@ -150,6 +151,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     },
     obatSelected(val) {
       this.setForm('kdobat', val)
+      this.setForm('jumlah_minta', 0)
       console.log('obat ', val)
       const anu = this.obats.filter(a => a.kd_obat === val)
       if (anu.length) {
@@ -179,8 +181,11 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
         notifErrVue('Depo belum dipilih')
       }
     },
-    clearObat(val) {
+    clearObat() {
       this.setForm('kdobat', null)
+      this.setForm('stok_alokasi', 0)
+      this.setForm('mak_stok', 0)
+      this.setForm('jumlah_minta', 0)
     },
     cariObat(val) {
       console.log('cari obat ', val)
@@ -192,7 +197,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
       }
     },
     getInitialData() {
-      this.getListObat()
+      // this.getListObat()
     },
     selesaiDanKunci(val) {
       this.kunci(this.form.no_permintaan)
@@ -210,6 +215,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             notifSuccess(resp)
             const list = useListPermintaanStore()
             list.ambilPermintaan()
+            this.details = []
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
@@ -242,12 +248,37 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
           .then(resp => {
             this.loading = false
             console.log('simpan permintaan depo', resp.data)
+
             if (resp.data.notrans) {
               this.setForm('no_permintaan', resp.data.notrans)
             }
+            if (resp.data.rinci) {
+              const rinc = resp.data.rinci
+              if (rinc.kdobat) {
+                const anu = this.obats.filter(a => a.kd_obat === rinc.kdobat)
+                if (anu.length) {
+                  const obat = anu[0]
+                  rinc.nama_obat = obat.nama_obat
+                }
+                this.details.push(rinc)
+              }
+            }
+            this.clearObat()
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    simpanMintaMax(val) {
+      this.loadingMax = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/simpanminta', val)
+          .then(resp => {
+            this.loadingMax = false
+            console.log('max', resp.data)
+            notifSuccess(resp)
+            resolve(resp)
+          }).catch(() => { this.loadingMax = false })
       })
     }
   }

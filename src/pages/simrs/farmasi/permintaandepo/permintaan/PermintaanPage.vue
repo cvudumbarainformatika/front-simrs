@@ -217,7 +217,7 @@
             </div>
             <div class="q-mr-sm">
               <q-radio
-                v-model="store.form.konsinyasi"
+                v-model="store.form.status_obat"
                 checked-icon="icon-mat-task_alt"
                 unchecked-icon="icon-mat-panorama_fish_eye"
                 val="non-konsinyasi"
@@ -226,7 +226,7 @@
             </div>
             <div class="q-mr-sm">
               <q-radio
-                v-model="store.form.konsinyasi"
+                v-model="store.form.status_obat"
                 checked-icon="icon-mat-task_alt"
                 unchecked-icon="icon-mat-panorama_fish_eye"
                 val="konsinyasi"
@@ -254,10 +254,56 @@
               {{ store.form.stok_alokasi ? store.form.stok_alokasi:0 }}
             </div>
           </div>
-          <div class="row q-mb-xs">
+          <div class="row no-wrap q-mb-xs items-center">
             <div>Max Stok</div>
-            <div class="q-ml-sm text-weight-bold">
-              {{ store.form.mak_stok ? store.form.mak_stok : 'tidak ada' }}
+            <div
+              v-if="store.form.mak_stok"
+              class="q-ml-sm text-weight-bold"
+            >
+              {{ store.form.mak_stok }}
+            </div>
+            <div
+              v-if="!store.form.mak_stok"
+              class="q-ml-sm "
+            >
+              <div class="row no-wrap items-center">
+                <div class="q-mr-sm text-weight-bold">
+                  tidak ada
+                </div>
+                <div
+                  v-if="(store.form.kdobat && !mintaMax) "
+                  class="q-mr-sm"
+                >
+                  <app-btn
+                    label="Minta Max Stok"
+                    color="orange"
+                    @click="setMinta"
+                  />
+                </div>
+                <div
+                  v-if="store.form.kdobat && mintaMax"
+                  class="q-mr-sm"
+                >
+                  <app-input
+                    v-model="JumlahMintaMax"
+                    label="Jumlah Minta Max"
+                    outlined
+                    :loading="store.loadingMax"
+                  />
+                </div>
+                <div
+                  v-if="store.form.kdobat && mintaMax"
+                  class="q-mr-sm"
+                >
+                  <app-btn
+                    label="Simpan Permintaan Max Depo"
+                    color="primary"
+                    :disable="store.loadingMax"
+                    :loading="store.loadingMax"
+                    @click="simpanMintaAlokasi"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -265,6 +311,8 @@
       <div class="row q-my-sm q-mr-lg justify-end">
         <app-btn
           label="Simpan Rincian"
+          :disable="store.loading"
+          :loading="store.loading"
           @click="simpan"
         />
       </div>
@@ -332,17 +380,39 @@
   </div>
 </template>
 <script setup>
-import { notifInfVue } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
 const style = useStyledStore()
 const store = useFarmasiPermintaanDepoStore()
 
+const mintaMax = ref(false)
+const JumlahMintaMax = ref(0)
+function setMinta() {
+  mintaMax.value = true
+}
+function simpanMintaAlokasi() {
+  const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
+  if (mintamax > 0) {
+    const data = {
+      kd_obat: store.form.kdobat,
+      kd_ruang: store.form.dari,
+      min: 10,
+      max: mintamax
+    }
+    store.simpanMintaMax(data).then(() => {
+      mintaMax.value = false
+      store.setForm('mak_stok', mintamax)
+    })
+  } else {
+    notifErrVue('Jumlah Minta Max harus lebih besar dari 0')
+  }
+}
 function setTanggal (val) {
   store.setForm('tgl_permintaan', val)
 }
@@ -353,7 +423,13 @@ function dispTanggal (val) {
 const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
-    if (apps.user.pegawai.depo) {
+    if (apps.user.pegawai.role_id === 1) {
+      store.setForm('dari', 'Gd-04010103')
+      store.setParam('kddepo', 'Gd-04010103')
+      store.setForm('tujuan', 'Gd-05010100')
+      store.setParam('kdgudang', 'Gd-05010100')
+      store.getListObat()
+    } else if (apps.user.pegawai.depo) {
       store.setForm('dari', apps.user.pegawai.depo.kode)
       store.setDisp('depo', apps.user.pegawai.depo.nama)
       const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
@@ -362,10 +438,12 @@ const user = computed(() => {
         store.setForm('tujuan', 'Gd-03010100')
         store.setParam('kdgudang', 'Gd-03010100')
         store.setDisp('gudang', 'Gudang Farmasi(Floor Stok)')
+        store.getListObat()
       } else {
         store.setForm('tujuan', 'Gd-05010100')
         store.setParam('kdgudang', 'Gd-05010100')
         store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+        store.getListObat()
       }
     }
   }
@@ -382,18 +460,34 @@ function depoSelected (val) {
 
 function setJumlahMinta(evt) {
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
-  if (alokasi < jumlah) {
-    store.setForm('jumlah_minta', alokasi)
-    notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
+  store.setForm('jumlah_minta', jumlah)
+  // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
+  // if (alokasi < jumlah) {
+  //   store.setForm('jumlah_minta', alokasi)
+  //   notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
+  // } else {
+  //   store.setForm('jumlah_minta', jumlah)
+  // }
+}
+function validasi() {
+  const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
+  const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
+  const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
+  if (adaMax && adaAlokasi && adaJumlahMinta) {
+    return true
   } else {
-    store.setForm('jumlah_minta', jumlah)
+    if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
+    if (!adaAlokasi) notifErrVue('Tidak Ada Jumlah Stok Alokasi, Pastikan ada Stok di gudang dan pastikan tidak ada transaksi permintaan yang belum selesai')
+    if (!adaJumlahMinta) notifErrVue('Tidak Ada Jumlah Minta, Silahkan Isi Jumlah Minta')
+    return false
   }
 }
 function simpan() {
   console.log('form', store.form)
-  console.log('disp', store.disp)
-  store.simpan()
+  if (validasi()) {
+    console.log('disp', store.disp)
+    store.simpan()
+  }
 }
 store.getInitialData()
 </script>
