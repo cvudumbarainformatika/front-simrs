@@ -37,67 +37,19 @@
       <template #col-no_permintaan>
         <div>Nomor Permintaan</div>
       </template>
-      <template #col-tgl>
+      <template #col-tgl_permintaan>
         <div>Tanggal</div>
       </template>
-      <template #col-penyedia>
-        <div>Penyedia</div>
+      <template #col-dari>
+        <div>Dari</div>
       </template>
-      <template #col-surat>
-        <div>Surat</div>
+      <template #col-tujuan>
+        <div>Tujuan</div>
       </template>
-      <template #col-total>
-        <div>Total</div>
-      </template>
-      <template #cell-penyedia="{ row }">
-        <div>{{ row.pbf ? row.pbf : '-' }}</div>
-      </template>
-      <template #cell-total="{ row }">
-        <div class="text-weight-bold">
-          {{ row.total_faktur_pbf ? formatRp(row.total_faktur_pbf) : (row.total ? formatRp(row.total) : '-') }}
-        </div>
-      </template>
-      <template #cell-surat="{ row }">
+      <template #cell-tgl_permintaan="{ row }">
         <div class="row items-center justify-between no-wrap q-mb-xs">
-          <div class="q-mr-sm">
-            Nomor
-          </div>
-          <div class="q-mr-xs text-weight-bold">
-            {{ row.nomorsurat ? row.nomorsurat : '-' }}
-          </div>
-        </div>
-        <div class="row items-center justify-between no-wrap q-mb-xs">
-          <div class="q-mr-sm">
-            Jenis
-          </div>
-          <div class="q-mr-xs text-weight-bold">
-            {{ row.jenissurat ? row.jenissurat : '-' }}
-          </div>
-        </div>
-      </template>
-      <template #cell-tgl="{ row }">
-        <div class="row items-center justify-between no-wrap q-mb-xs">
-          <div class="q-mr-sm">
-            Penerimaan
-          </div>
-          <div class="q-mr-xs text-weight-bold">
-            {{ row.tglpenerimaan ? dateFullFormat(row.tglpenerimaan) : '-' }}
-          </div>
-        </div>
-        <div class="row items-center justify-between no-wrap q-mb-xs text-primary">
-          <div class="q-mr-sm">
-            Surat
-          </div>
-          <div class="q-mr-xs text-weight-bold">
-            {{ row.tglsurat ? dateFullFormat(row.tglsurat) : '-' }}
-          </div>
-        </div>
-        <div class="row items-center justify-between no-wrap q-mb-xs text-deep-orange">
-          <div class="q-mr-sm">
-            Batas Bayar
-          </div>
-          <div class="q-mr-xs text-weight-bold">
-            {{ row.batasbayar ? dateFullFormat(row.batasbayar) : '-' }}
+          <div class="">
+            {{ row.tgl_permintaan ? dateFullFormat(row.tgl_permintaan) : '-' }}
           </div>
         </div>
       </template>
@@ -109,15 +61,6 @@
             </div>
             <div class="col-2">
               Jumlah
-            </div>
-            <div class="col-2">
-              Harga
-            </div>
-            <div class="col-2">
-              Satuan
-            </div>
-            <div class="col-2">
-              Info
             </div>
           </div>
           <div
@@ -146,104 +89,26 @@
               <div class="col-2">
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
-                    Pesan
+                    Minta
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.jml_pesan }}
+                    {{ rin.jumlah_minta }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
-                    Terima
+                    Disetujui
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.jml_terima }}
+                    {{ rin.jumlah_disetujui? rin.jumlah_disetujui:'-' }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
-                    Seluruhnya
+                    Maks Stok
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.jml_all_penerimaan }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Harga
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ formatRp(rin.harga) }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Diskon
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.diskon }} %
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Ppn
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.ppn }} %
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Netto
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ formatRp(rin.harga_netto) }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Besar
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.satuan_bsr }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Isi
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.isi }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Kecil
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.satuan_kcl }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Batch
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.no_batch }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap">
-                  <div class="q-mr-sm">
-                    Expired
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ dateFullFormat(rin.tgl_exp) }}
+                    {{ rin.mak_stok? rin.mak_stok:'-' }}
                   </div>
                 </div>
               </div>
@@ -293,7 +158,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListPermintaanStore } from 'src/stores/simrs/farmasi/permintaandepo/listpermintaan'
@@ -305,7 +170,7 @@ const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
 // click
 function onClick (val) {
-  console.log('click', val)
+  // console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }

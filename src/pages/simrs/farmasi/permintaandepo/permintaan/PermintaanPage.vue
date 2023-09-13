@@ -69,7 +69,7 @@
           <div class="row no-wrap q-mb-xs">
             <div class="col-12">
               <app-autocomplete
-                v-model="store.form.dari"
+                v-model="store.form.tujuan"
                 label="Pilih Gudang"
                 option-label="nama"
                 option-value="value"
@@ -83,7 +83,7 @@
           <div class="row no-wrap q-mb-xs">
             <div class="col-12">
               <app-autocomplete
-                v-model="store.form.tujuan"
+                v-model="store.form.dari"
                 label="Pilih Depo"
                 option-label="nama"
                 option-value="value"
@@ -133,7 +133,7 @@
               Anda Tidak Memiliki Akses Permintaan Depo
             </div>
             <div class="col-4 text-cyan">
-              ({{ store.form.gudang ? store.form.gudang :'-' }})
+              ({{ store.form.tujuan ? store.form.tujuan :'-' }})
             </div>
           </div>
           <div class="row no-wrap q-mb-xs">
@@ -153,7 +153,7 @@
               Anda Tidak Memiliki Akses Permintaan Depo
             </div>
             <div class="col-4 text-cyan">
-              ({{ store.form.depo ? store.form.depo :'-' }})
+              ({{ store.form.dari ? store.form.dari :'-' }})
             </div>
           </div>
         </div>
@@ -243,7 +243,10 @@
             </div>
           </div>
           <div class="row q-mb-xs">
-            Stok user
+            <div>Stok user</div>
+            <div class="q-ml-sm text-weight-bold">
+              {{ store.form.stok ? store.form.stok : 0 }}
+            </div>
           </div>
           <div class="row q-mb-xs">
             <div>Stok Alokasi</div>
@@ -252,7 +255,10 @@
             </div>
           </div>
           <div class="row q-mb-xs">
-            Max Stok
+            <div>Max Stok</div>
+            <div class="q-ml-sm text-weight-bold">
+              {{ store.form.mak_stok ? store.form.mak_stok : 'tidak ada' }}
+            </div>
           </div>
         </div>
       </div>
@@ -269,8 +275,58 @@
           Rincian Permintaan Tersimpan
         </div>
       </div>
-      <div class="row">
-        anu
+      <div v-if="store.details.length">
+        <div
+          v-for="(det,i) in store.details"
+          :key="i"
+          class="anu"
+        >
+          <div class="row no-wrap">
+            <div class="col-6">
+              <div class="row no-wrap justify-between q-mr-sm det">
+                <div>Kode</div>
+                <div class="text-weight-bold">
+                  {{ det.kdobat? det.kdobat:'-' }}
+                </div>
+              </div>
+              <div class="row no-wrap justify-between q-mr-sm det">
+                <div>Nama</div>
+                <div class="text-weight-bold">
+                  {{ det.nama_obat? det.nama_obat:'-' }}
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row no-wrap justify-between q-mr-md det">
+                <div>Jumlah Minta</div>
+                <div class="text-weight-bold">
+                  {{ det.jumlah_minta ? det.jumlah_minta : '-' }}
+                </div>
+              </div>
+              <div class="row no-wrap justify-between q-mr-md det">
+                <div>Stok Alokasi</div>
+                <div class="text-weight-bold">
+                  {{ det.stok_alokasi ? det.stok_alokasi : '-' }}
+                </div>
+              </div>
+              <div class="row no-wrap justify-between q-mr-md det">
+                <div>Stok Maksimal</div>
+                <div class="text-weight-bold">
+                  {{ det.mak_stok ? det.mak_stok : '-' }}
+                </div>
+              </div>
+              <div class="row no-wrap justify-between q-mr-md det">
+                <div>Status obat</div>
+                <div class="text-weight-bold">
+                  {{ det.status_obat ? det.status_obat : '-' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="!store.details.length">
+        <app-no-data />
       </div>
     </div>
   </div>
@@ -298,16 +354,16 @@ const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
     if (apps.user.pegawai.depo) {
-      store.setForm('depo', apps.user.pegawai.depo.kode)
+      store.setForm('dari', apps.user.pegawai.depo.kode)
       store.setDisp('depo', apps.user.pegawai.depo.nama)
       const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
       console.log('dep', dep)
       if (dep.length) {
-        store.setForm('gudang', 'Gd-03010100')
+        store.setForm('tujuan', 'Gd-03010100')
         store.setParam('kdgudang', 'Gd-03010100')
         store.setDisp('gudang', 'Gudang Farmasi(Floor Stok)')
       } else {
-        store.setForm('gudang', 'Gd-05010100')
+        store.setForm('tujuan', 'Gd-05010100')
         store.setParam('kdgudang', 'Gd-05010100')
         store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
       }
@@ -341,3 +397,17 @@ function simpan() {
 }
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.anu {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.anu:hover {
+  background-color: #87e9df;
+}
+.det:hover {
+  background-color: #3555f7;
+  color: rgb(255, 255, 255);
+}
+</style>

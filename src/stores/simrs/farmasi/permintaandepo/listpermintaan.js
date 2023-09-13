@@ -15,10 +15,9 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
     },
     columns: [
       'no_permintaan',
-      'tgl',
-      'surat',
-      'penyedia',
-      'total'
+      'tgl_permintaan',
+      'dari',
+      'tujuan'
     ],
     columnHide: []
   }),
