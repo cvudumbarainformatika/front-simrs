@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { dateDbFormat, formatJam } from 'src/modules/formatter'
+import { dateFullFormat } from 'src/modules/formatter'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
@@ -13,25 +13,30 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     caripemeriksaanradiologi: '',
     masterradiologi: [],
     form: {
-      norm: '',
-      noreg: '',
-      nama: '',
-      nik: '',
-      tanggallahir: '',
-      jeniskelamin: '',
-      jam: formatJam(new Date()),
-      tanggal: dateDbFormat(new Date()),
+      // norm: '',
+      // noreg: '',
+      // kdpoli: '',
+      kdpemeriksaan: '',
+      namapemeriksaan: '',
+      biaya: 0,
+      jumlah: 1,
       pasienpuasa: 'Tidak',
       cito: 'Tidak',
-      dokterpengirim: '',
-      // notelpdokter: '',
+      diagnosamasalah: '',
       unitpengirim: '',
-      // diagnosa: '',
-      catatan: ''
-      // asalspesimenklinis: 5,
-      // lokasispesimen: '',
-      // jumlahspesimen: '',
-      // volumespesimen:
+      catatan: '',
+      asalsumberspesimen: '',
+      lokasipengambilanspesimen: '',
+      jumlahspesimenklinis: 1,
+      volumespesimenklinis: 0,
+      metodepengambilanspesimen: '',
+      waktupengambilanspesimen: dateFullFormat(new Date()),
+      kondisispesimen: '',
+      metodepengirimanhasil: 'Penyerahan langsung', // || Dikirim via surel
+      waktufiksasi: '',
+      cairanfiksasi: 0, // ml
+      volumecairanfiksasi: 0, // ml
+      petugas: ''
     },
     pemeriksaanslab: [],
     pemeriksaansradiologi: []
