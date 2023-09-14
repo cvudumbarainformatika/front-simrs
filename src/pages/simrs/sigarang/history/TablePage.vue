@@ -483,6 +483,27 @@
                 </q-input>
               </div>
               <div>
+                <q-input
+                  v-if=" table.params.nama === 'Permintaan Ruangan'"
+                  v-model="table.params.ruang"
+                  class="search-big"
+                  borderless
+                  debounce="500"
+                  clearable
+                  dense
+                  placeholder="Cari ruangan"
+                  clear-icon="icon-mat-close"
+                  @update:model-value="table.setRuang"
+                >
+                  <template #prepend>
+                    <q-icon
+                      name="icon-mat-search"
+                      size="20px"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div>
                 Periode :
                 <q-badge>
                   {{ table.params.from ? dateFullFormat(table.params.from) : '-' }}

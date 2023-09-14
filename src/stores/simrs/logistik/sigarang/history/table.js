@@ -109,6 +109,10 @@ export const useHistoryTable = defineStore('history_table', {
       this.params.kontrak = val
       this.getDataTransactions()
     },
+    setRuang (val) {
+      this.params.ruang = val
+      this.getDataTransactions()
+    },
     searchTanggal (val) {
       // console.log('tipe tanggal ', Object.getPrototypeOf(val).constructor.name)
       // console.log('tanggal ', val)

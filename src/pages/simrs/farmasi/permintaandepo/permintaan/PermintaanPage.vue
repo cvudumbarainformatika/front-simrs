@@ -285,6 +285,17 @@
                   class="q-mr-sm"
                 >
                   <app-input
+                    v-model="JumlahMintaMin"
+                    label="Jumlah Minta Min"
+                    outlined
+                    :loading="store.loadingMax"
+                  />
+                </div>
+                <div
+                  v-if="store.form.kdobat && mintaMax"
+                  class="q-mr-sm"
+                >
+                  <app-input
                     v-model="JumlahMintaMax"
                     label="Jumlah Minta Max"
                     outlined
@@ -393,16 +404,18 @@ const store = useFarmasiPermintaanDepoStore()
 
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
+const JumlahMintaMin = ref(10)
 function setMinta() {
   mintaMax.value = true
 }
 function simpanMintaAlokasi() {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
+  const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0
   if (mintamax > 0) {
     const data = {
       kd_obat: store.form.kdobat,
       kd_ruang: store.form.dari,
-      min: 10,
+      min: mintamin,
       max: mintamax
     }
     store.simpanMintaMax(data).then(() => {
@@ -424,11 +437,16 @@ const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
     if (apps.user.pegawai.role_id === 1) {
-      store.setForm('dari', 'Gd-04010103')
-      store.setParam('kddepo', 'Gd-04010103')
-      store.setForm('tujuan', 'Gd-05010100')
-      store.setParam('kdgudang', 'Gd-05010100')
-      store.getListObat()
+      if (!store.form.dari) {
+        store.setForm('dari', 'Gd-04010103')
+        store.setParam('kddepo', 'Gd-04010103')
+        store.getListObat()
+      }
+      if (!store.form.tujuan) {
+        store.setForm('tujuan', 'Gd-05010100')
+        store.setParam('kdgudang', 'Gd-05010100')
+        store.getListObat()
+      }
     } else if (apps.user.pegawai.depo) {
       store.setForm('dari', apps.user.pegawai.depo.kode)
       store.setDisp('depo', apps.user.pegawai.depo.nama)
