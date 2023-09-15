@@ -16,9 +16,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       // norm: '',
       // noreg: '',
       // kdpoli: '',
-      kdpemeriksaan: '',
-      namapemeriksaan: '',
-      biaya: 0,
+      // kdpemeriksaan: '',
+      biayasarana: 0,
+      biayalayanan: 0,
       jumlah: 1,
       pasienpuasa: 'Tidak',
       cito: 'Tidak',
@@ -37,8 +37,8 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       tanggalfiksasi: dateDbFormat(new Date()),
       jamfiksasi: dateDbFormat(new Date()),
       cairanfiksasi: 0, // ml
-      volumecairanfiksasi: 0, // ml
-      petugas: ''
+      volumecairanfiksasi: 0 // ml
+      // petugas: ''
     },
     loadingSaveLab: false,
     pemeriksaanslab: [],
@@ -94,8 +94,23 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setForm(key, value) {
       this.form[key] = value
     },
-    saveOrderLaborat(pasien) {
-      console.log(pasien)
+    saveOrderLaborat(pasien, pemeriksaan) {
+      // console.log('save', pemeriksaan)
+      const thumb = []
+      for (let i = 0; i < pemeriksaan?.value.length; i++) {
+        const element = pemeriksaan?.value[i]
+        this.form.biayalayanan = element?.aslix?.hargapelayananpolispesialis // ini bisa element?.aslix?.hargapelayananpoliumum
+        this.form.biayasarana = element?.aslix?.hargasaranapolispesialis // ini bisa element?.aslix?.hargasaranapoliumum
+        const obj = {
+          kode: element?.aslix?.kode,
+          gruper: element?.aslix.gruper
+        }
+        thumb.push(obj)
+      }
+      this.form.norm = pasien?.norm
+      this.form.noreg = pasien?.noreg
+      this.form.details = thumb
+      console.log('save', this.form)
     }
     // =============================================================================================================================================LABORAT
   }
