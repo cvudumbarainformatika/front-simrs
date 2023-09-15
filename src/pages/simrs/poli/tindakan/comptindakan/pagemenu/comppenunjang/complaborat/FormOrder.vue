@@ -7,7 +7,10 @@
     </q-bar>
     <div class="col full-height">
       <q-scroll-area style="height: calc(100% - 1px);">
-        <q-form class="row q-pa-md q-col-gutter-xs">
+        <q-form
+          class="row q-pa-md q-col-gutter-xs"
+          @submit="saveOrderLaborat"
+        >
           <div class="col-12">
             <q-select
               v-model="store.caripemeriksaanlab"
@@ -302,6 +305,10 @@ const metodeOptions = ['Eksisi', 'Kerokan', 'Operasi', 'Aspirasi / Biopsi']
 const asalSumberSpesimenOptions = ref([])
 const metodePengambilanSpesimenOptions = ref([])
 
+const props = defineProps({
+  pasien: { type: Object, default: null }
+})
+
 onMounted(() => {
   options.value = store.masterlaborat
   asalSumberSpesimenOptions.value = asalOptions
@@ -332,7 +339,8 @@ async function filterFn(val, update, abort) {
 }
 
 function insertList(val) {
-  console.log(val)
+  // console.log('inserList', val)
+  store.saveOrderLaborat(props.pasien, val)
 }
 
 function filterAs(val, update) {
