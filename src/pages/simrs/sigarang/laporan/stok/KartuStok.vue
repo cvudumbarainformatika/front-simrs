@@ -66,398 +66,427 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <div v-if="store.itemsGudang.length">
-        <div class="row q-col-gutter-sm items-center">
-          <!-- {{ store.item }} -->
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Kode Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.kode }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Nama Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.nama }}
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Satuan
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.satuan?store.item.satuan.nama:'-' }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Maping Depo
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.depo?store.item.depo.nama:'-' }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
-          <div class="col-1">
-            Tanggal
-          </div>
-          <div class="col-3">
-            <div class="row justify-center">
-              Nomor
-            </div>
-            <div class="row q-col-gutter-md">
-              <div class="col-6">
-                Pemesanan
-              </div>
-              <div class="col-6">
-                Penerimaan
-              </div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="row justify-center">
-              Mutasi
-            </div>
-            <div class="row q-col-gutter-sm">
-              <div class="col-4 text-center">
-                Masuk
-              </div>
-              <div class="col-4 text-center">
-                Keluar
-              </div>
-              <div class="col-4 text-center">
-                Sisa
-              </div>
-            </div>
-          </div>
-          <!-- <div class="col-1">
-            Satuan
-          </div> -->
-          <div class="col-1">
-            Harga
-          </div>
-          <div class="col-3">
-            Keterangan
-          </div>
-        </div>
-        <div
-          v-for="(item,i) in store.itemsGudang"
-          :key="i"
-        >
-          <div
-            class="row q-col-gutter-sm items-center zero"
-            :class="item.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
+      <div v-if="store.itemsGudang.length || store.itemsDepo.length || store.itemsRuangan.length">
+        <div class="row items-center justify-end">
+          <q-btn
+            v-print="printObj"
+            unelevated
+            color="dark"
+            round
+            size="sm"
+            icon="icon-mat-print"
           >
-            <!-- {{ item }} -->
-            <div class="col-1">
-              {{ dateFullFormat(item.tanggal) }}
-            </div>
-            <div class="col-3">
-              <div class="row q-col-gutter-md items-center">
-                <div class="col-6 ww">
-                  {{ item.nomor?item.nomor:'-' }}
-                </div>
-                <div class="col-6 ww">
-                  {{ item.no_penerimaan?item.no_penerimaan:'-' }}
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="row q-col-gutter-sm justify-center items-center">
-                <div class="col-4 text-center">
-                  {{ item.saldo>0?item.saldo:'' }}
-                </div>
-                <div class="col-4 text-center">
-                  {{ item.saldo<0?-(item.saldo):'' }}
-                </div>
-                <div class="col-4 text-center">
-                  {{ item.sisaStok?item.sisaStok:item.sisa_stok }}
-                </div>
-              </div>
-            </div>
-            <!-- <div class="col-1">
-              {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan.nama:'-' }}
-            </div> -->
-            <div class="col-1">
-              {{ item.harga?formatDouble( item.harga):'-' }}
-            </div>
-            <div class="col-3">
-              {{ item.pemesanan?item.pemesanan.perusahaan?item.pemesanan.perusahaan.nama:'-':item.depo?item.depo.nama:item.trx==='stokAwal'?'Stok Awal':item.trx==='stokAkhir'?'Stok Akhir':'' }}
-            </div>
-          </div>
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Print
+            </q-tooltip>
+          </q-btn>
         </div>
       </div>
-      <div v-else-if="store.itemsDepo.length">
-        <div class="row q-col-gutter-sm items-center">
-          <!-- {{ store.item }} -->
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Kode Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.kode }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Nama Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.nama }}
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Satuan
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.satuan?store.item.satuan.nama:'-' }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Maping Depo
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.depo?store.item.depo.nama:'-' }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
-          <div class="col-1">
-            Tanggal
-          </div>
-          <div class="col-3">
-            <div class="row justify-center">
-              Nomor
-            </div>
-            <div class="row q-col-gutter-md">
-              <div class="col-6">
-                Penerimaan
-              </div>
-              <div class="col-6">
-                Distribusi
-              </div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="row justify-center">
-              Mutasi
-            </div>
-            <div class="row q-col-gutter-sm">
-              <div class="col-4 text-center">
-                Masuk
-              </div>
-              <div class="col-4 text-center">
-                Keluar
-              </div>
-              <div class="col-4 text-center">
-                Sisa
-              </div>
-            </div>
-          </div>
-          <!-- <div class="col-1">
-            Satuan
-          </div> -->
-          <div class="col-1">
-            Harga
-          </div>
-          <div class="col-3">
-            Keterangan
-          </div>
-        </div>
-        <div
-          v-for="(item,i) in store.itemsDepo"
-          :key="i"
-        >
-          <div
-            class="row q-col-gutter-sm items-center zero"
-            :class="item.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
-          >
-            <!-- {{ item }} -->
-            <div class="col-1">
-              {{ dateFullFormat(item.tanggal) }}
-            </div>
-            <div class="col-3">
-              <div class="row q-col-gutter-md items-center">
-                <div class="col-6 ww">
-                  {{ item.no_penerimaan?item.no_penerimaan:'-' }}
+      <div
+        id="printMe"
+      >
+        <!-- style="width:210mm; height:310mm; margin:10mm; " -->
+        <div v-if="store.itemsGudang.length">
+          <div class="row q-col-gutter-sm items-center">
+            <!-- {{ store.item }} -->
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Kode Barang
                 </div>
-                <div class="col-6 ww">
-                  {{ item.no_distribusi?item.no_distribusi:'-' }}
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.kode }}
+                </div>
+              </div>
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Nama Barang
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.nama }}
                 </div>
               </div>
             </div>
-            <div class="col-4">
-              <div class="row q-col-gutter-sm justify-center items-center">
-                <div class="col-4 text-center">
-                  {{ item.saldo>0?item.saldo:'' }}
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Satuan
                 </div>
-                <div class="col-4 text-center">
-                  {{ item.saldo<0?-(item.saldo):'' }}
-                </div>
-                <div class="col-4 text-center">
-                  {{ item.sisaStok?item.sisaStok:0 }}
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.satuan?store.item.satuan.nama:'-' }}
                 </div>
               </div>
-            </div>
-            <!-- <div class="col-1">
-              {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan.nama:'-' }}
-            </div> -->
-            <div class="col-1">
-              {{ item.harga?formatDouble(item.harga):'-' }}
-            </div>
-            <div class="col-3">
-              {{ item.ruangan?item.ruangan.uraian:item.depo?item.depo.nama:item.trx==='stokAwal'?'Stok Awal':item.trx==='stokAkhir'?'Stok Opname bulan ini':'' }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="store.itemsRuangan.length">
-        <div class="row q-col-gutter-sm items-center">
-          <!-- {{ store.item }} -->
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Kode Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.kode }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Nama Barang
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.nama }}
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Maping Depo
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.depo?store.item.depo.nama:'-' }}
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Satuan
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.satuan?store.item.satuan.nama:'-' }}
-              </div>
-            </div>
-            <div class="row items-center q-mb-sm">
-              <div class="col-4">
-                Maping Depo
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ store.item.depo?store.item.depo.nama:'-' }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
-          <div class="col-2">
-            Tanggal
-          </div>
-          <div class="col-3">
-            <div class="row justify-center">
-              Nomor
-            </div>
-            <div class="row q-col-gutter-md">
-              <div class="col-6">
-                Penerimaan
-              </div>
-              <div class="col-6">
-                Distribusi
-              </div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="row justify-center">
-              Mutasi
-            </div>
-            <div class="row q-col-gutter-sm">
-              <div class="col-4 text-center">
-                Masuk
-              </div>
-              <div class="col-4 text-center">
-                Keluar
-              </div>
-              <div class="col-4 text-center">
-                Sisa
-              </div>
-            </div>
-          </div>
-          <!-- <div class="col-1">
-            Satuan
-          </div> -->
-          <!-- <div class="col-1">
-            Harga
-          </div> -->
-          <div class="col-2">
-            Keterangan
-          </div>
-        </div>
-        <div
-          v-for="(item,i) in store.itemsRuangan"
-          :key="i"
-        >
-          <div
-            class="row q-col-gutter-sm items-center zero"
-            :class="item.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
-          >
-            <!-- {{ item }} -->
+          <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
             <div class="col-2">
-              {{ dateFullFormat(item.tanggal) }}
+              Tanggal
             </div>
             <div class="col-3">
-              <div class="row q-col-gutter-md items-center">
-                <div class="col-6 ww">
-                  {{ item.no_penerimaan?item.no_penerimaan:'-' }}
+              <div class="row justify-center">
+                Nomor
+              </div>
+              <div class="row q-col-gutter-md">
+                <div class="col-6">
+                  Pemesanan
                 </div>
-                <div class="col-6 ww">
-                  {{ item.no_distribusi?item.no_distribusi:'-' }}
+                <div class="col-6">
+                  Penerimaan
                 </div>
               </div>
             </div>
             <div class="col-4">
-              <div class="row q-col-gutter-sm justify-center items-center">
+              <div class="row justify-center">
+                Mutasi
+              </div>
+              <div class="row q-col-gutter-sm">
                 <div class="col-4 text-center">
-                  {{ item.saldo>0?item.saldo:'' }}
+                  Masuk
                 </div>
                 <div class="col-4 text-center">
-                  {{ item.saldo<0?-(item.saldo):'' }}
+                  Keluar
                 </div>
                 <div class="col-4 text-center">
-                  {{ item.sisaStok?item.sisaStok:0 }}
+                  Sisa
                 </div>
               </div>
             </div>
             <!-- <div class="col-1">
-              {{ item.satuan_besar?item.satuan_besar:item.satuan?item.satuan:'-' }}
-            </div> -->
-            <!-- <div class="col-1">
-              {{ item.harga?formatDouble(item.harga):'-' }}
-            </div> -->
+            Satuan
+          </div> -->
+            <div class="col-1">
+              Harga
+            </div>
             <div class="col-2">
-              {{ item.ruanganmaster?item.ruanganmaster.uraian:item.masterdepo?item.masterdepo.nama:item.trx==='stokAwal'?'Stok Awal':item.trx==='stokAkhir'?'Stok Opname bulan ini':'' }}
+              Keterangan
             </div>
           </div>
+          <div
+            v-for="(gud,i) in store.itemsGudang"
+            :key="i"
+          >
+            <div
+              class="row q-col-gutter-sm items-center zero"
+              :class="gud.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
+            >
+              <!-- {{ gud }} -->
+              <div class="col-2">
+                {{ dateFullFormat(gud.tanggal) }}
+              </div>
+              <div class="col-3">
+                <div class="row q-col-gutter-md items-center">
+                  <div class="col-6 ww">
+                    {{ gud.nomor?gud.nomor:'-' }}
+                  </div>
+                  <div class="col-6 ww">
+                    {{ gud.no_penerimaan?gud.no_penerimaan:'-' }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row q-col-gutter-sm justify-center items-center">
+                  <div class="col-4 text-center">
+                    {{ gud.saldo>0?gud.saldo:'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ gud.saldo<0?-(gud.saldo):'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ gud.sisaStok?gud.sisaStok:gud.sisa_stok }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-1">
+              {{ gud.satuan_besar?gud.satuan_besar:gud.satuan?gud.satuan.nama:'-' }}
+            </div> -->
+              <div class="col-1">
+                {{ gud.harga?formatDouble( gud.harga):'-' }}
+              </div>
+              <div class="col-2 ww">
+                {{ gud.pemesanan?gud.pemesanan.perusahaan?gud.pemesanan.perusahaan.nama:'-':gud.depo?gud.depo.nama:gud.trx==='stokAwal'?'Stok Awal':gud.trx==='stokAkhir'?'Stok Akhir':'' }}
+              </div>
+            </div>
+
+            <q-separator />
+          </div>
         </div>
+        <div v-else-if="store.itemsDepo.length">
+          <div class="row q-col-gutter-sm items-center">
+            <!-- {{ store.item }} -->
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Kode Barang
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.kode }}
+                </div>
+              </div>
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Nama Barang
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.nama }}
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Satuan
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.satuan?store.item.satuan.nama:'-' }}
+                </div>
+              </div>
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Maping Depo
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.depo?store.item.depo.nama:'-' }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
+            <div class="col-2">
+              Tanggal
+            </div>
+            <div class="col-3">
+              <div class="row justify-center">
+                Nomor
+              </div>
+              <div class="row q-col-gutter-md">
+                <div class="col-6">
+                  Penerimaan
+                </div>
+                <div class="col-6">
+                  Distribusi
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row justify-center">
+                Mutasi
+              </div>
+              <div class="row q-col-gutter-sm">
+                <div class="col-4 text-center">
+                  Masuk
+                </div>
+                <div class="col-4 text-center">
+                  Keluar
+                </div>
+                <div class="col-4 text-center">
+                  Sisa
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-1">
+            Satuan
+          </div> -->
+            <div class="col-1">
+              Harga
+            </div>
+            <div class="col-2">
+              Keterangan
+            </div>
+          </div>
+          <div
+            v-for="(dep,i) in store.itemsDepo"
+            :key="i"
+          >
+            <div
+              class="row q-col-gutter-sm items-center zero"
+              :class="dep.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
+            >
+              <!-- {{ dep }} -->
+              <div class="col-2">
+                {{ dateFullFormat(dep.tanggal) }}
+              </div>
+              <div class="col-3">
+                <div class="row q-col-gutter-md items-center">
+                  <div class="col-6 ww">
+                    {{ dep.no_penerimaan?dep.no_penerimaan:'-' }}
+                  </div>
+                  <div class="col-6 ww">
+                    {{ dep.no_distribusi?dep.no_distribusi:'-' }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row q-col-gutter-sm justify-center items-center">
+                  <div class="col-4 text-center">
+                    {{ dep.saldo>0?dep.saldo:'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ dep.saldo<0?-(dep.saldo):'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ dep.sisaStok?dep.sisaStok:0 }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-1">
+              {{ dep.satuan_besar?dep.satuan_besar:dep.satuan?dep.satuan.nama:'-' }}
+            </div> -->
+              <div class="col-1">
+                {{ dep.harga?formatDouble(dep.harga):'-' }}
+              </div>
+              <div class="col-2 ww">
+                {{ dep.ruangan?dep.ruangan.uraian:dep.depo?dep.depo.nama:dep.trx==='stokAwal'?'Stok Awal':dep.trx==='stokAkhir'?'Stok Opname bulan ini':'' }}
+              </div>
+            </div>
+            <q-separator />
+          </div>
+        </div>
+        <div v-else-if="store.itemsRuangan.length">
+          <div class="row q-col-gutter-sm items-center">
+            <!-- {{ store.item }} -->
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Kode Barang
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.kode }}
+                </div>
+              </div>
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Nama Barang
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.nama }}
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Satuan
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.satuan?store.item.satuan.nama:'-' }}
+                </div>
+              </div>
+              <div class="row items-center q-mb-sm">
+                <div class="col-4">
+                  Maping Depo
+                </div>
+                <div class="col-8 text-weight-bold">
+                  {{ store.item.depo?store.item.depo.nama:'-' }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
+            <div class="col-3">
+              Tanggal
+            </div>
+            <div class="col-3">
+              <div class="row justify-center">
+                Nomor
+              </div>
+              <div class="row q-col-gutter-md">
+                <div class="col-6">
+                  Penerimaan
+                </div>
+                <div class="col-6">
+                  Distribusi
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="row justify-center">
+                Mutasi
+              </div>
+              <div class="row q-col-gutter-sm">
+                <div class="col-4 text-center">
+                  Masuk
+                </div>
+                <div class="col-4 text-center">
+                  Keluar
+                </div>
+                <div class="col-4 text-center">
+                  Sisa
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-1">
+            Satuan
+          </div> -->
+            <!-- <div class="col-1">
+            Harga
+          </div> -->
+            <div class="col-2">
+              Keterangan
+            </div>
+          </div>
+          <div
+            v-for="(rua,i) in store.itemsRuangan"
+            :key="i"
+          >
+            <div
+              class="row q-col-gutter-sm items-center zero"
+              :class="rua.trx==='stokAkhir'?'bg-red-10 text-white':i%2===0?'':'bg-grey-4'"
+            >
+              <!-- {{ rua }} -->
+              <div class="col-3">
+                {{ dateFullFormat(rua.tanggal) }}
+              </div>
+              <div class="col-3">
+                <div class="row q-col-gutter-md items-center">
+                  <div class="col-6 ww">
+                    {{ rua.no_penerimaan?rua.no_penerimaan:'-' }}
+                  </div>
+                  <div class="col-6 ww">
+                    {{ rua.no_distribusi?rua.no_distribusi:'-' }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row q-col-gutter-sm justify-center items-center">
+                  <div class="col-4 text-center">
+                    {{ rua.saldo>0?rua.saldo:'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ rua.saldo<0?-(rua.saldo):'' }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ rua.sisaStok?rua.sisaStok:0 }}
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-1">
+              {{ rua.satuan_besar?rua.satuan_besar:rua.satuan?rua.satuan:'-' }}
+            </div> -->
+              <!-- <div class="col-1">
+              {{ rua.harga?formatDouble(rua.harga):'-' }}
+            </div> -->
+              <div class="col-2">
+                {{ rua.ruanganmaster?rua.ruanganmaster.uraian:rua.masterdepo?rua.masterdepo.nama:rua.trx==='stokAwal'?'Stok Awal':rua.trx==='stokAkhir'?'Stok Opname bulan ini':'' }}
+              </div>
+            </div>
+
+            <q-separator />
+          </div>
+        </div>
+        <app-loading v-else-if="store.loading" />
+        <app-no-data v-else />
       </div>
-      <app-loading v-else-if="store.loading" />
-      <app-no-data v-else />
     </q-card-section>
   </q-card>
 </template>
@@ -542,6 +571,38 @@ function cariDataStok() {
   }
   console.log('params ', store.params)
 }
+
+// print
+const openPrint = ref(false)
+// let title = ''
+const printed = ref(false)
+const item = ref({})
+// function toPrint (val) {
+//   // console.log('print', val)
+//   item.value = val
+//   // title = 'Print ' + val.nama
+//   openPrint.value = true
+// }
+const printObj = {
+  id: 'printMe',
+  // popTitle: title,
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback (vue) {
+    printed.value = true
+    console.log('wait...', vue)
+  },
+  openCallback (vue) {
+    console.log('opened', vue)
+  },
+  closeCallback (vue) {
+    openPrint.value = false
+    printed.value = false
+    // changePeriode()
+    item.value = {}
+    console.log('closePrint')
+  }
+}
 store.getInitialData()
 // store.getDataByBarang()
 </script>
@@ -552,4 +613,8 @@ store.getInitialData()
 .zero{
     margin: 0px;
 }
+.grey{
+    background-color: #cfcbcbc3;
+}
+
 </style>
