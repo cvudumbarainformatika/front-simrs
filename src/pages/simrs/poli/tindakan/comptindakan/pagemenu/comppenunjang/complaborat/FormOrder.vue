@@ -13,6 +13,7 @@
         >
           <div class="col-12">
             <q-select
+              ref="cariRef"
               v-model="store.caripemeriksaanlab"
               dense
               outlined
@@ -29,6 +30,8 @@
               behavior="menu"
               hide-dropdown-icon
               style="width:100%"
+              :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+              hide-bottom-space
               @filter="filterFn"
               @update:model-value="val => insertList(val)"
             >
@@ -71,6 +74,7 @@
           </div>
           <div class="col-12">
             <q-input
+              ref="diagnosaRef"
               v-model="store.form.diagnosamasalah"
               label="Diagnosa Masalah"
               dense
@@ -157,7 +161,6 @@
               dense
               outlined
               standout="bg-yellow-3"
-              :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
               hide-bottom-space
             />
           </div>
@@ -299,6 +302,9 @@ import { formatRp } from 'src/modules/formatter'
 
 const store = usePenunjangPoli()
 
+const cariRef = ref(null)
+const diagnosaRef = ref(null)
+
 const options = ref()
 const asalOptions = ['Darah', 'Urine', 'Feses', 'Jaringan Tubuh']
 const metodeOptions = ['Eksisi', 'Kerokan', 'Operasi', 'Aspirasi / Biopsi']
@@ -313,6 +319,8 @@ onMounted(() => {
   options.value = store.masterlaborat
   asalSumberSpesimenOptions.value = asalOptions
   metodePengambilanSpesimenOptions.value = metodeOptions
+
+  cariRef.value.focus()
 })
 
 async function filterFn(val, update, abort) {
@@ -339,8 +347,9 @@ async function filterFn(val, update, abort) {
 }
 
 function insertList(val) {
-  // console.log('inserList', val)
-  store.saveOrderLaborat(props.pasien, val)
+  store.setDetails(val).then(() => {
+    diagnosaRef.value.focus()
+  })
 }
 
 function filterAs(val, update) {
@@ -384,6 +393,10 @@ function createValueMetodePengambilanSpesimen(val, done) {
     }
     done(val, 'add-unique')
   }
+}
+
+function saveOrderLaborat() {
+  store.saveOrderLaborat(props.pasien)
 }
 
 </script>
