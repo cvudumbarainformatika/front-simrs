@@ -3,11 +3,6 @@
     <div>
       <app-card :is-header="false">
         <template #content>
-          <!--
-            Tombol Edit barang di hilangkan karena:
-            - Ada barang yang sudah di print di pemesanan tapi master barangnya tidak ada
-              dan tidak ada master barang dengan nama tsb yang terhapus.
-          -->
           <app-table
             title="Data Barang RS"
             :columns="table.columns"
@@ -22,7 +17,7 @@
             :wrap-cells="true"
             :ada-tambah="role==='gudang'||role==='root'||role==='gizi'"
             :default-btn="role==='gudang'||role==='root'||role==='gizi'"
-            :ada-edit="false"
+
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"
