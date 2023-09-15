@@ -40,6 +40,7 @@
                 ref="refNama"
                 v-model="store.form.nama"
                 label="Nama*"
+                :disable="store.edited"
                 outlined
                 autofocus
               />
