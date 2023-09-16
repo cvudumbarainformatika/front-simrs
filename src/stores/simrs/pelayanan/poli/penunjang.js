@@ -37,8 +37,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       tanggalfiksasi: dateDbFormat(new Date()),
       jamfiksasi: dateDbFormat(new Date()),
       cairanfiksasi: 0, // ml
-      volumecairanfiksasi: 0 // ml
+      volumecairanfiksasi: 0, // ml
       // petugas: ''
+      details: []
     },
     loadingSaveLab: false,
     pemeriksaanslab: [],
@@ -94,8 +95,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setForm(key, value) {
       this.form[key] = value
     },
-    saveOrderLaborat(pasien, pemeriksaan) {
-      // console.log('save', pemeriksaan)
+    setDetails(pemeriksaan) {
       const thumb = []
       for (let i = 0; i < pemeriksaan?.value.length; i++) {
         const element = pemeriksaan?.value[i]
@@ -107,9 +107,15 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         }
         thumb.push(obj)
       }
+      this.form.details = thumb
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    },
+    saveOrderLaborat(pasien) {
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
-      this.form.details = thumb
+
       console.log('save', this.form)
     }
     // =============================================================================================================================================LABORAT
