@@ -83,10 +83,30 @@
                 />
               </div>
             </div>
+            <div class="fit row no-wrap justify-end items-center q-col-gutter-sm">
+              <div class="col-3">
+                <div>
+                  <q-btn
+                    v-print="printObj"
+                    unelevated
+                    color="dark"
+                    round
+                    size="sm"
+                    icon="icon-mat-print"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Print
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <!-- button stok opname -->
-        <!-- <div class="fit row no-wrap justify-end items-center q-mb-sm">
+          <!-- button stok opname -->
+          <!-- <div class="fit row no-wrap justify-end items-center q-mb-sm">
           <q-btn
             :label="!store.allItems.length ? 'Mulai Opname':'Sudah ada data'"
             no-caps
@@ -107,8 +127,13 @@
             </q-tooltip>
           </q-btn>
         </div> -->
+        </div>
         <q-separator />
-        <div class="q-mt-sm">
+        <div
+          id="printMe"
+
+          class="q-mt-sm"
+        >
           <!-- table -->
           <app-table
             :key="store.kode_tempat"
@@ -137,6 +162,17 @@
             <template #header-left-after-search>
               <div class="q-ml-md">
                 <!-- store.meta -->
+              </div>
+            </template>
+            <template #header-for-print>
+              <div class="row justify-center f-16 text-weight-bold">
+                Data Stok Opname Per {{ date.formatDate(tanggalStokOpname, 'DD MMMM YYYY') }}
+              </div>
+              <div class="row justify-center f-16 text-weight-bold">
+                {{ namaTempat }}
+              </div>
+              <div class="row justify-center f-16 text-weight-bold">
+                UOBK RSUD DR. MOHAMAD SALEH KOTA PROBOLINGGO
               </div>
             </template>
             <!-- kolom -->
@@ -176,9 +212,14 @@
             <template #cell-tanggal="{row}">
               {{ dateFullFormat(row.tanggal) }}
             </template>
+            <template #cell-kode="{row}">
+              <div class="kode">
+                {{ row.kode }}
+              </div>
+            </template>
             <template #cell-barang="{row}">
-              <div style="width:7vw;">
-                <div class="ellipsis">
+              <div>
+                <div class="box">
                   {{ row.nama }}
                 </div>
                 <q-tooltip
@@ -190,8 +231,8 @@
               </div>
             </template>
             <template #cell-tempat="{row}">
-              <div style="width:5vw;">
-                <div class="ellipsis">
+              <div>
+                <div class="box">
                   {{ row.depo?row.depo.nama:(row.ruang?row.ruang.uraian:'-') }}
                 </div>
                 <q-tooltip
@@ -227,8 +268,8 @@
             </template>
 
             <template #cell-no_penerimaan="{row}">
-              <div style="width:8vw;">
-                <div class="ellipsis">
+              <div>
+                <div class="box">
                   {{ noPenerimaanDepo(row.monthly) }}
                 </div>
                 <q-tooltip
@@ -257,7 +298,7 @@
               {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
             </template> -->
             <template #left-acttion="{row,col}">
-              <div class="row no-wrap fit items-center">
+              <div class="row no-wrap fit items-center print-hide">
                 <div style="width:5vw">
                   <app-input
                     v-model="row.stok_fisik"
@@ -314,10 +355,237 @@
               </div>
             </template>
           </app-table>
+          <div class="q-my-md f-10">
+            <div class="row q-mb-md">
+              <div class="col-4" />
+              <div class="col-4" />
+              <div class="col-4">
+                <div class="text-center">
+                  {{ pojokKananAtas }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kiriAtasSatu }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ tengahAtasSatu }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kananAtasSatu }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kiriAtasDua }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ tengahAtasDua }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kananAtasDua }}
+                </div>
+              </div>
+            </div>
+            <div class="row q-mt-xl text-weight-bold">
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kiriBawahSatu }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ tengahBawahSatu }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kananBawahSatu }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kiriBawahDua }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ tengahBawahDua }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="text-center">
+                  {{ kananBawahDua }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <q-separator />
       </q-card-section>
     </q-card>
+    <div>
+      <div>
+        <div class="q-my-md">
+          <div class="row ">
+            <div class="col-4" />
+            <div class="col-4" />
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="pojokKananAtas"
+                  label="tanggal"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kiriAtasSatu"
+                  label="kiri atas satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="tengahAtasSatu"
+                  label="tengah atas satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kananAtasSatu"
+                  label="kanan atas satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kiriAtasDua"
+                  label="kiri atas dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="tengahAtasDua"
+                  label="tengah atas dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kananAtasDua"
+                  label="kanan atas dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kiriBawahSatu"
+                  label="kiri bawah satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="tengahBawahSatu"
+                  label="tengah bawah satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kananBawahSatu"
+                  label="kanan bawah satu"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kiriBawahDua"
+                  label="kiri bawah dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="tengahBawahDua"
+                  label="tengah bawah dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="text-center">
+                <app-input
+                  v-model="kananBawahDua"
+                  label="kanan bawah dua"
+                  valid
+                  outlined
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <formDialog v-model="store.isOpen" />
     <kartuStokOpname v-model="store.kartuStokOpen" />
   </div>
@@ -327,7 +595,7 @@
 // tombol stok opname
 // pilih bulan
 import { date } from 'quasar'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useStokOpnameStore } from 'stores/simrs/logistik/sigarang/laporan/stok/stokOpname'
 import { dateFullFormat } from 'src/modules/formatter'
 import formDialog from './FormDialog.vue'
@@ -337,6 +605,27 @@ import { daysInMonth } from 'src/modules/utils'
 const store = useStokOpnameStore()
 const tanggalStokOpname = ref('')
 const dayInMonth = ref(0)
+// text tanda tangan start
+
+const kiriAtasSatu = ref('Mengetahui')
+const kiriAtasDua = ref('Kepala Bagian Umum')
+const kiriBawahSatu = ref('Jumadi, S.Sos, MM')
+const kiriBawahDua = ref('NIP . 19691223 199302 1 002')
+
+const tengahAtasSatu = ref('')
+const tengahAtasDua = ref('Pejabat Teknik Kegiatan')
+const tengahBawahSatu = ref('Yuliana, S.A.P')
+const tengahBawahDua = ref('NIP. 19740304 200801 2 005')
+
+const kananAtasSatu = ref('')
+const kananAtasDua = ref('Petugas Bagian Barang')
+const kananBawahSatu = ref('SARWANI')
+const kananBawahDua = ref('NIP. 19760311 200801 1 008')
+
+const pojokKananAtas = ref('Probolinggo, ' + date.formatDate(Date.now(), 'DD MMMM YYYY'))
+
+// text tanda tangan end
+
 const setDate = () => {
   // const tempDate = Date.now()
   const sekarang = new Date()
@@ -398,6 +687,14 @@ const tahunSelected = val => {
   setDate()
   store.getDataTable()
 }
+const namaTempat = computed(() => {
+  const temp = store.gudangDepo.filter(a => a.kode === store.kode_tempat)
+  if (temp.length) {
+    return temp[0].nama
+  } else {
+    return '-'
+  }
+})
 const gudangSelected = (val) => {
   // console.log('gudang', val)
   store.kode_tempat = val
@@ -436,4 +733,70 @@ const kartuStok = (val) => {
 // const searchEnter = () => {
 //   console.log(store.params.search)
 // }
+
+// print
+const openPrint = ref(false)
+// let title = ''
+const printed = ref(false)
+const item = ref({})
+// function toPrint (val) {
+//   // console.log('print', val)
+//   item.value = val
+//   // title = 'Print ' + val.nama
+//   openPrint.value = true
+// }
+const printObj = {
+  id: 'printMe',
+  // popTitle: title,
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+  beforeOpenCallback (vue) {
+    printed.value = true
+    console.log('wait...', vue)
+  },
+  openCallback (vue) {
+    console.log('opened', vue)
+  },
+  closeCallback (vue) {
+    openPrint.value = false
+    printed.value = false
+    // changePeriode()
+    item.value = {}
+    console.log('closePrint')
+  }
+}
 </script>
+<style scoped>
+.box {
+  white-space: normal !important;
+  inline-size: 170px;
+  overflow-wrap: break-word;
+}
+.kode {
+  white-space: normal !important;
+  inline-size: 80px;
+  overflow-wrap: break-word;
+}
+.q-table td box {
+  white-space: normal !important;
+    inline-size: 150px;
+    overflow-wrap: break-word;
+}
+.q-table--no-wrap th, .q-table--no-wrap td {
+  white-space: normal !important;
+}
+.print{
+  position: absolute;
+    left: 30px;
+    right: 30px;
+    top: 5px;
+    z-index: 10;
+}
+.anu:hover {
+  background-color: rgba(166, 173, 144, 0.548);
+}
+
+.anudua:hover {
+  background-color: rgb(54, 196, 231);
+}
+</style>
