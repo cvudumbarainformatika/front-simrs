@@ -25,6 +25,16 @@ const laporan = {
       name: 'laporan.keuangan.billpoli',
       component: () => import('pages/simrs/laporan/keuangan/billpoli/IndexPage.vue')
     },
+    {
+      path: '/laporan/sigarang/penerimaansimperda108',
+      name: 'laporan.sigarang.penerimaansimperda108',
+      component: () => import('pages/simrs/laporan/sigarang/penerimaansimperda108/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/penerimaansimperdarinci',
+      name: 'laporan.sigarang.penerimaansimperdarinci',
+      component: () => import('pages/simrs/laporan/sigarang/penerimaansimperdarinci/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',
