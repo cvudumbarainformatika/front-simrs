@@ -27,7 +27,6 @@
               option-label="name"
               label="Cari Pemeriksaan"
               :options="options"
-              behavior="menu"
               hide-dropdown-icon
               style="width:100%"
               :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
@@ -35,17 +34,6 @@
               @filter="filterFn"
               @update:model-value="val => insertList(val)"
             >
-              <template
-                v-if="store.caripemeriksaanlab"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  size="xs"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setCariLabNull"
-                />
-              </template>
               <template #no-option>
                 <q-item>
                   <q-item-section class="text-grey">
