@@ -255,24 +255,9 @@ const store = useSimrsLaporanSigarangPenerimaanSimperdaRinciStore()
 const tahun = ref(date.formatDate(Date.now(), 'YYYY'))
 
 // print start
-const openPrint = ref(false)
-const printed = ref(false)
-const item = ref({})
 const printObj = {
   id: 'printMe',
-  beforeOpenCallback (vue) {
-    printed.value = true
-    console.log('wait...', vue)
-  },
-  openCallback (vue) {
-    console.log('opened', vue)
-  },
-  closeCallback (vue) {
-    openPrint.value = false
-    printed.value = false
-    item.value = {}
-    console.log('closePrint')
-  }
+  popTitle: 'Penerimaan 108'
 }
 // print end
 store.getInitialData()
