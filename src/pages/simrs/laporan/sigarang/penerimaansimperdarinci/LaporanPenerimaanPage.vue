@@ -139,7 +139,7 @@
               {{ store.level5.uraian50 }}
             </div>
           </div>
-          <div class="col-2 garis-bawah">
+          <div class="col-2">
             <div class="q-ml-sm">
               {{ formatRp( store.level5.nilai) }}
             </div>
@@ -164,7 +164,7 @@
                 {{ limaP.uraian50 }}
               </div>
             </div>
-            <div class="col-2 garis-bawah">
+            <div class="col-2 garis-atas">
               <div class="q-ml-sm">
                 {{ formatRp(limaP.subtotal) }}
               </div>
@@ -189,7 +189,7 @@
                   {{ satuNol.uraian_108 }}
                 </div>
               </div>
-              <div class="col-2 garis-bawah">
+              <div class="col-2 garis-atas">
                 <div class="q-ml-sm">
                   {{ formatRp(satuNol.subtotal) }}
                 </div>
@@ -213,7 +213,7 @@
                     {{ barang.nama_barang }}
                   </div>
                 </div>
-                <div class="col-2 garis-bawah">
+                <div class="col-2">
                   <div class="q-ml-sm">
                     {{ formatRp(barang.subtotal) }}
                   </div>
@@ -297,7 +297,6 @@ store.getInitialData()
 }
 .garis-bawah{
   border-bottom: 2px solid black;
-  padding-top:1px;
   padding-bottom:2px;
   margin: 0px;
 }
@@ -309,7 +308,6 @@ store.getInitialData()
 }
 .garis-kanan{
   border-right: 2px solid black;
-  padding-top:1px;
   padding-bottom:2px;
   margin: 0px;
 }

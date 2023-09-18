@@ -13,8 +13,8 @@ export const useSimrsLaporanSigarangPenerimaanSimperdaRinciStore = defineStore('
       q: '',
       per_page: 10,
       page: 1,
-      tgl: date.formatDate(Date.now(), 'YYYY-05-01'),
-      // tgl: date.formatDate(Date.now(), 'YYYY-MM-01'),
+      // tgl: date.formatDate(Date.now(), 'YYYY-05-01'),
+      tgl: date.formatDate(Date.now(), 'YYYY-MM-01'),
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD')
     }
   }),
