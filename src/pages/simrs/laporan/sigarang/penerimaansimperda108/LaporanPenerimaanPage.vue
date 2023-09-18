@@ -62,7 +62,7 @@
       <div class="row items-center">
         <div class="col-2">
           <q-img
-            src="~assets/images/logo-kota-original .png"
+            src="~assets/images/logo_kota_original.png"
             spinner-color="white"
             style="height: 3.56cm; max-width: 2.86cm"
           />
