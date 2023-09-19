@@ -102,6 +102,48 @@ const farmasi = {
         }
       ]
     },
+    {
+      path: '/farmasi/verifpermintaandepo',
+      component: () => import('src/pages/simrs/farmasi/verifpermintaandepo/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/verifpermintaandepo/verifpermintaan' },
+        {
+          path: '/farmasi/verifpermintaandepo/verifpermintaan',
+          name: 'farmasi.verifpermintaandepo.verifpermintaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/verifpermintaandepo/verif/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/verifpermintaandepo/listverif',
+          name: 'farmasi.verifpermintaandepo.listverif',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/verifpermintaandepo/listverif/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/farmasi/distribusipermintaandepo',
+      component: () => import('src/pages/simrs/farmasi/distribusipermintaandepo/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/distribusipermintaandepo/distribusipermintaan' },
+        {
+          path: '/farmasi/distribusipermintaandepo/distribusipermintaan',
+          name: 'farmasi.distribusipermintaandepo.distribusipermintaan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/distribusipermintaandepo/distribusi/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/distribusipermintaandepo/listdistribusi',
+          name: 'farmasi.distribusipermintaandepo.listdistribusi',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/distribusipermintaandepo/listdistribusi/IndexPage.vue')
+        }
+      ]
+    },
 
     {
       path: '/farmasi/notfound',

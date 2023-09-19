@@ -46,6 +46,11 @@
       <template #col-tujuan>
         <div>Tujuan</div>
       </template>
+      <template #col-flag>
+        <div class="text-center">
+          Status
+        </div>
+      </template>
       <template #cell-tgl_permintaan="{ row }">
         <div class="row items-center justify-between no-wrap q-mb-xs">
           <div class="">
@@ -53,8 +58,16 @@
           </div>
         </div>
       </template>
+      <template #cell-flag="{ row }">
+        <q-chip
+          class="f-12"
+          :color="color(row.flag)"
+          text-color="white"
+          :label="label(row.flag)"
+        />
+      </template>
       <template #expand="{ row }">
-        <div v-if="row.permintaanrinci">
+        <div v-if="row.permintaanrinci.length">
           <div class="row items-center text-weight-bold">
             <div class="col-4">
               Obat
@@ -73,7 +86,7 @@
                   <div class="q-mr-sm">
                     Kode
                   </div>
-                  <div class="text-weight-bold">
+                  <div class="text-weight-bold text-primary">
                     {{ rin.kdobat }}
                   </div>
                 </div>
@@ -81,8 +94,16 @@
                   <div class="q-mr-sm">
                     Nama
                   </div>
-                  <div class="text-weight-bold">
+                  <div class="text-weight-bold text-primary">
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
+                  </div>
+                </div>
+                <div class="row justify-between no-wrap">
+                  <div class="q-mr-sm">
+                    satuan
+                  </div>
+                  <div class="text-weight-bold text-deep-purple">
+                    {{ rin.masterobat ? rin.masterobat.satuan_k : '-' }}
                   </div>
                 </div>
               </div>
@@ -138,20 +159,25 @@
           </q-btn>
         </div>
         <div v-if="row.flag">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="green"
-            @click="info(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Permintaan Depo sudah di kunci
-            </q-tooltip>
-          </q-btn>
+          <div class="row items-center">
+            <div class="q-mr-sm" />
+            <div>
+              <q-btn
+                flat
+                icon="icon-mat-lock"
+                dense
+                color="green"
+                @click="info(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Permintaan Depo sudah di kunci
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
         </div>
       </template>
     </app-table-extend>
@@ -189,6 +215,71 @@ function kunci (val) {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
   })
+}
+
+function color(val) {
+  switch (val) {
+    case '':
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'cyan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      // return 'grey'
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      // return 'grey'
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      // return 'grey'
+      return 'purple'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+function label (val) {
+  switch (val) {
+    case '':
+      return 'Draft'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'Dikirim Ke Gudang'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      // return 'grey'
+      return 'Sudah Diverif'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      // return 'grey'
+      return 'Sudah Di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      // return 'grey'
+      return 'Status (-)'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
 }
 store.getInitialData()
 </script>
