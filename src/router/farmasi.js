@@ -144,6 +144,27 @@ const farmasi = {
         }
       ]
     },
+    {
+      path: '/farmasi/permintaanruangan',
+      component: () => import('src/pages/simrs/farmasi/permintaanruangan/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/permintaanruangan/permintaanruangan' },
+        {
+          path: '/farmasi/permintaanruangan/permintaanruangan',
+          name: 'farmasi.permintaanruangan.permintaanruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/permintaanruangan/permintaan/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/permintaanruangan/listpermintaanruangan',
+          name: 'farmasi.permintaanruangan.listpermintaanruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/permintaanruangan/listpermintaan/IndexPage.vue')
+        }
+      ]
+    },
 
     {
       path: '/farmasi/notfound',
