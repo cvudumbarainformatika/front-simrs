@@ -1,5 +1,9 @@
 <template>
-  Halaman Distribusi permintaan depo
+  <app-no-selected-page
+    color="orange"
+    text="Sedang Dalam Proses Pembuatan"
+    icon="icon-mat-construction"
+  />
 </template>
 
 <script setup>
