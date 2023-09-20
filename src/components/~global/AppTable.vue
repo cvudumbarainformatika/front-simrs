@@ -348,6 +348,7 @@
             <slot
               :name="'cell-' + col"
               :row="item"
+              :index="i"
             >
               {{ item[col] }}
             </slot>

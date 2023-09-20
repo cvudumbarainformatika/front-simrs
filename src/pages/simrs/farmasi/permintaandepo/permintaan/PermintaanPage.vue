@@ -470,6 +470,7 @@ const user = computed(() => {
   }
   return apps.user
 })
+
 function gudangSelected(val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
