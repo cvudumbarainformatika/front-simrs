@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./VerifPermintaanPage.vue')
+  import('./VerifPage.vue')
 )
 </script>

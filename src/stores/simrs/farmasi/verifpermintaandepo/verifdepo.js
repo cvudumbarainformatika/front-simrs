@@ -18,10 +18,22 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
     disp: { no_permintaan: '' },
     terpilih: {},
     columns: [
-      'obat',
-      'stok',
-      'jumlah',
-      'centang'
+      'no_permintaan',
+      'tgl_permintaan',
+      'dari',
+      'tujuan',
+      'user'
+    ],
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ],
+    depos: [
+      { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
+      { nama: 'Floor Stock 2 (Obat)', value: 'Gd-04010101' },
+      { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
+      { nama: 'Depo OK', value: 'Gd-04010103' },
+      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' }
     ]
   }),
   actions: {
@@ -30,6 +42,24 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
     },
     setParams(key, val) {
       this.params[key] = val
+    },
+    setSearch(val) {
+      this.setParams('no_permintaan', val)
+      this.setParams('page', 1)
+      this.getPermintaanDepo()
+    },
+    setPage(val) {
+      this.setParams('page', val)
+      this.getPermintaanDepo()
+    },
+    setPerPage(val) {
+      this.setParams('per_page', val)
+      this.setParams('page', 1)
+      this.getPermintaanDepo()
+    },
+    refreshTable(val) {
+      this.setParams('page', 1)
+      this.getPermintaanDepo()
     },
     permintaanSelected(val) {
       this.disp.no_permintaan = val
@@ -69,17 +99,17 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
       this.getPermintaanDepo()
     },
     getPermintaanDepo() {
-      this.loadingCariPermintaan = true
+      this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
           .then(resp => {
-            this.loadingCariPermintaan = false
+            this.loading = false
             console.log('list PErmintaan depo', resp.data)
             this.items = resp.data
             resolve(resp)
           })
-          .catch(() => { this.loadingCariPermintaan = false })
+          .catch(() => { this.loading = false })
       })
     }
   }

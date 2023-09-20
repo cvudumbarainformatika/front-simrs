@@ -100,7 +100,6 @@
                 {{ row.masterobat ? row.masterobat.nama_obat : '-' }}
               </div>
             </div>
-            <!-- <div v-if="row.mobat"> -->
             <div class="row justify-between no-wrap anu">
               <div class="q-mr-xs">
                 Fornas
