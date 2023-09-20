@@ -9,14 +9,17 @@
         <div class="q-mr-md">
           No Permintaan:
         </div>
-        <app-input
+        <div class="q-mr-sm">
+          {{ store.form.no_permintaan ? store.form.no_permintaan :'-' }}
+        </div>
+        <!-- <app-input
           v-model="store.form.no_permintaan"
           label="Nomor Permintaan"
           outlined
           readonly
           valid
           :loading="store.loading"
-        />
+        /> -->
         <div class="q-ml-md">
           <q-btn
             v-if="store.form.no_permintaan"

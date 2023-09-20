@@ -1,8 +1,6 @@
 <template>
-  <app-no-selected-page
-    color="orange"
+  <app-maintenance
     text="Sedang Dalam Proses Pembuatan"
-    icon="icon-mat-construction"
   />
 </template>
 
