@@ -32,7 +32,7 @@
           @on-click="onClick"
         >
           <template #header-left-after-search>
-            <div class="row q-col-guttes-sm q-ml-sm">
+            <div class="row q-col-gutter-sm q-ml-sm">
               <div class="q-col">
                 <app-input
                   v-model="store.params.r"
@@ -46,11 +46,6 @@
                 />
               </div>
               <div class="col cursor-pointer">
-                <!-- <div class="row q-items-center"> -->
-                <!-- <div class="col-6 text-left">
-                    Status
-                  </div>
-                  <div class="col-6 text-right cursor-pointer"> -->
                 <q-chip
                   class="f-12"
                   :color="color(store.paramStatus.value)"

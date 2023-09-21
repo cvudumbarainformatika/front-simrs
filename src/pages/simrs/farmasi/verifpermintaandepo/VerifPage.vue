@@ -7,49 +7,6 @@
         Halaman Verifikasi Permintaan Depo
       </div>
     </div>
-    <!-- <div class="row no-wrap">
-      <div class="col-6">
-        <div>
-          <app-autocomplete-debounce-input
-            :model="store.disp.no_permintaan"
-            label="Cari Nomor permintaan"
-            autocomplete="no_permintaan"
-            option-label="no_permintaan"
-            option-value="no_permintaan"
-            outlined
-            :loading="store.loadingCariPermintaan"
-            :disable="store.loadingCariPermintaan"
-            :source="store.items"
-            @on-select="store.permintaanSelected"
-            @buang="store.cariPermintaan"
-          />
-        </div>
-        <div v-if="store.terpilih">
-          <div class="row no-wrap justify-between items-center q-pr-md q-my-sm">
-            <div>Tanggal Permintaan</div>
-            <div class="text-weight-bold">
-              {{ store.terpilih.tgl_permintaan ? dateFullFormat(store.terpilih.tgl_permintaan) : '-' }}
-            </div>
-          </div>
-          <div class="row no-wrap justify-between items-center q-pr-md q-my-sm">
-            user peminta (info / cari)
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="row no-wrap text-primary text-weight-bold q-px-md q-my-sm">
-          {{ user.nama }}
-        </div>
-        <div
-          v-if="user.pegawai"
-          class="row no-wrap q-px-md q-my-sm"
-        >
-          <div v-if="user.pegawai.depo">
-            {{ user.pegawai.depo.nama }}
-          </div>
-        </div>
-      </div>
-    </div> -->
     <app-table-extend
       :columns="store.columns"
       :items="store.items"
@@ -62,6 +19,7 @@
       :ada-tambah="false"
       :ada-filter="false"
       row-no
+      text-cari="Cari No Permintaan ..."
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -76,7 +34,41 @@
 
       <template #header-left-after-search>
         <div class="q-ml-md">
-          filter status
+          <div class="row">
+            <div class="col cursor-pointer">
+              <q-chip
+                class="f-12"
+                :color="color(store.paramStatus.value)"
+                :text-color="store.paramStatus.value === 99 ? 'dark' : 'white'"
+                :label="label(store.paramStatus.value)"
+              />
+              <q-menu
+                transition-show="jump-down"
+                transition-hide="jump-up"
+                anchor="center middle"
+                self="center middle"
+                :offset="[-50, 0]"
+              >
+                <q-list>
+                  <q-item
+                    v-for="(item, i) in store.statuses"
+                    :key="i"
+                    v-close-popup
+                    style="min-width:250px"
+                    clickable
+                    :style="(item.value === 99 ? 'color:black; ' : 'color:white; ') + 'background-color:' + color(item.value) + ';'"
+                    @click="store.setParamStatus(item)"
+                  >
+                    <q-item-section>
+                      {{ item.nama }}
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+              <!-- </div> -->
+              <!-- </div> -->
+            </div>
+          </div>
         </div>
       </template>
       <template #col-no_permintaan>
@@ -93,6 +85,9 @@
       </template>
       <template #col-user>
         <div>User Entri</div>
+      </template>
+      <template #col-act>
+        <div>#</div>
       </template>
       <template #cell-tgl_permintaan="{ row }">
         {{ dateFullFormat(row.tgl_permintaan) }}
@@ -138,9 +133,24 @@
           </div>
         </div>
       </template>
+      <template #cell-status="{ row }">
+        <div class="row">
+          <q-chip
+            class="f-12"
+            :color="color(row.flag)"
+            :text-color="row.flag === 99 ? 'dark' : 'white'"
+            :label="label(row.flag)"
+          />
+        </div>
+      </template>
       <template #cell-user="{ row }">
         <div class="row">
           {{ row.user?row.user.nama:'-' }}
+        </div>
+      </template>
+      <template #cell-act="{ row }">
+        <div class="row">
+          kunci {{ row.flag }}
         </div>
       </template>
       <template #expand="{ row }">
@@ -280,13 +290,15 @@
                     class="col-12"
                   >
                     <app-input
+                      ref="refInputVerif"
                       v-model="rin.jumlah_diverif"
                       label="Jumlah Diverif"
                       outlined
                       :rules="[
+                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
                         val => ((parseFloat(val) <= parseFloat(rin.jumlah_minta))) || 'Tidak Boleh Lebih dari Jumlah minta'
                       ]"
-                      @keyup.enter="kirim(rin)"
+                      @keyup.enter="kirim(rin,i)"
                       @update:model-value="setJumlah($event, rin)"
                     />
                   </div>
@@ -329,7 +341,7 @@
                       label="Verif"
                       color="green"
                       :loading="store.loading && (store.form.id === rin.id)"
-                      @click="kirim(row)"
+                      @click="kirim(rin,i)"
                     >
                       <q-tooltip
                         anchor="top middle"
@@ -372,8 +384,8 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
-// import { computed } from 'vue'
 import { useVerifPermintaanDepoStore } from 'src/stores/simrs/farmasi/verifpermintaandepo/verifdepo'
+import { ref } from 'vue'
 const store = useVerifPermintaanDepoStore()
 
 // const apps = useAplikasiStore()
@@ -419,10 +431,90 @@ function onClick (val) {
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
-function kirim (val) {
+
+const refInputVerif = ref(null)
+function kirim (val, i) {
+  const valid = refInputVerif.value[i].$refs.refInput.validate()
+  // console.log('ref', refInputVerif.value[i].$refs.refInput, i, valid)
   console.log('kirim', val)
+  if (valid) {
+    const form = {
+      id: val.id,
+      jumlah_diverif: val.jumlah_diverif
+    }
+    console.log('form', form)
+    // store.simpanDetail()
+  }
 }
 store.getInitialData()
+
+const color = val => {
+  switch (val) {
+    case 99:
+      return 'white'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '':
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'cyan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+
+const label = (status) => {
+  switch (status) {
+    case '':
+      return 'Tampilkan semua'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'Menunggu verifikasi'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'Telah di verifikasi'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'Telah di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'Telah di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 99:
+      return 'Status belum di filter'
+      // eslint-disable-next-line no-unreachable
+      break
+
+    default:
+      return 'Belum di definisikan'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
 </script>
 
 <style>

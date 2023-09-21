@@ -1,18 +1,20 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', {
   state: () => ({
     loading: false,
     loadingCariPermintaan: false,
     items: [],
-    meta: { from: 1 },
+    meta: { },
     params: {
       page: 1,
       q: '',
       per_page: 10,
       no_permintaan: '',
-      kdgudang: ''
+      kdgudang: '',
+      flag: ''
     },
     form: {},
     disp: { no_permintaan: '' },
@@ -22,7 +24,9 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
       'tgl_permintaan',
       'dari',
       'tujuan',
-      'user'
+      'status',
+      'user',
+      'act'
     ],
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -34,7 +38,18 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
       { nama: 'Depo OK', value: 'Gd-04010103' },
       { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' }
-    ]
+    ],
+    statuses: [
+      { nama: 'Tampilkan semua', value: '', color: 'grey' },
+      { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
+      { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
+      // { nama: 'Barang sudah bisa diambil', value: 6, color: 'green' },
+      // { nama: 'Telah di distribusikan', value: 7, color: 'orange' },
+      // { nama: 'Ditolak', value: 20, color: 'red' }
+    ],
+    paramStatus: {
+      nama: 'Belum di filter', value: 99, color: 'cyan'
+    }
   }),
   actions: {
     setForm(key, val) {
@@ -60,6 +75,19 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
     refreshTable(val) {
       this.setParams('page', 1)
       this.getPermintaanDepo()
+    },
+    setParamStatus(val) {
+      console.log('status ', val)
+      if (val.value === 99) {
+        this.paramStatus = val
+        delete this.params.status
+        this.setParams('flag', '')
+        this.getPermintaanDepo()
+      } else {
+        this.paramStatus = val
+        this.setParams('flag', val.value)
+        this.getPermintaanDepo()
+      }
     },
     permintaanSelected(val) {
       this.disp.no_permintaan = val
@@ -106,7 +134,21 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
           .then(resp => {
             this.loading = false
             console.log('list PErmintaan depo', resp.data)
-            this.items = resp.data
+            this.items = resp.data.data
+            this.meta = resp.data
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    simpanDetail(val) {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/verifpermintaanobat', val)
+          .then(resp => {
+            this.loading = false
+            notifSuccess(resp)
+            this.getPermintaanDepo()
             resolve(resp)
           })
           .catch(() => { this.loading = false })
