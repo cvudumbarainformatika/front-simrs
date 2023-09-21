@@ -88,7 +88,7 @@
               :to-search="store.params.q"
               :ada-tambah="false"
               :default-btn="false"
-
+              row-no
               @goto="store.setPage"
               @set-row="store.setPerPage"
               @refresh="store.refreshTable"
