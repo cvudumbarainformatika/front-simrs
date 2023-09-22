@@ -131,7 +131,14 @@
           </div>
           <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
             <div class="col-2">
-              Tanggal
+              <div class="row">
+                <div class="q-px-xs">
+                  No
+                </div>
+                <div>
+                  Tanggal
+                </div>
+              </div>
             </div>
             <div class="col-3">
               <div class="row justify-center">
@@ -182,7 +189,14 @@
             >
               <!-- {{ gud }} -->
               <div class="col-2">
-                {{ dateFullFormat(gud.tanggal) }}
+                <div class="row">
+                  <div class="q-px-xs">
+                    {{ i + 1 }}.
+                  </div>
+                  <div>
+                    {{ dateFullFormat(gud.tanggal) }}
+                  </div>
+                </div>
               </div>
               <div class="col-3">
                 <div class="row q-col-gutter-md items-center">
@@ -263,7 +277,14 @@
           </div>
           <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
             <div class="col-2">
-              Tanggal
+              <div class="row">
+                <div class="q-px-xs">
+                  No
+                </div>
+                <div>
+                  Tanggal
+                </div>
+              </div>
             </div>
             <div class="col-3">
               <div class="row justify-center">
@@ -314,7 +335,14 @@
             >
               <!-- {{ dep }} -->
               <div class="col-2">
-                {{ dateFullFormat(dep.tanggal) }}
+                <div class="row">
+                  <div class="q-px-xs">
+                    {{ i +1 }}.
+                  </div>
+                  <div>
+                    {{ dateFullFormat(dep.tanggal) }}
+                  </div>
+                </div>
               </div>
               <div class="col-3">
                 <div class="row q-col-gutter-md items-center">
@@ -394,7 +422,14 @@
           </div>
           <div class="q-mb-md row q-col-gutter-sm items-center text-weight-bold bg-grey-4">
             <div class="col-3">
-              Tanggal
+              <div class="row">
+                <div class="q-px-xs">
+                  No
+                </div>
+                <div>
+                  Tanggal
+                </div>
+              </div>
             </div>
             <div class="col-3">
               <div class="row justify-center">
@@ -445,7 +480,14 @@
             >
               <!-- {{ rua }} -->
               <div class="col-3">
-                {{ dateFullFormat(rua.tanggal) }}
+                <div class="row">
+                  <div class="q-px-xs">
+                    {{ i + 1 }}.
+                  </div>
+                  <div>
+                    {{ dateFullFormat(rua.tanggal) }}
+                  </div>
+                </div>
               </div>
               <div class="col-3">
                 <div class="row q-col-gutter-md items-center">

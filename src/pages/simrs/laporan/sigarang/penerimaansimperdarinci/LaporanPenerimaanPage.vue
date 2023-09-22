@@ -7,60 +7,10 @@
         Laporan Penerimaan Simperda Rinci
       </div>
     </div>
-    <!-- req tanggl -->
-    <div class="row justify-end items-center print-hide q-my-sm">
-      <app-input-date
-        :model="store.params.tgl"
-        label="dari tangal"
-        outlined
-        :disable="store.loading"
-        :loading="store.loading"
-        @set-model="val=>{store.params.tgl=val}"
-      />
-      <app-input-date
-        class="q-ml-md"
-        :model="store.params.tglx"
-        label="sampai tangal"
-        outlined
-        :disable="store.loading"
-        :loading="store.loading"
-        @set-model="val=>{store.params.tglx=val}"
-      />
-      <div class="q-ml-md">
-        <app-btn
-          label="ambil data"
-          :disable="store.loading"
-          :loading="store.loading"
-          @click="store.getDataPenerimaan()"
-        />
-      </div>
-    </div>
-    <!-- tgl dan print -->
-    <div class="row justify-end items-center print-hide">
-      <app-input
-        v-model="tahun"
-        label="Isi tahun jika tahun tidak sesuai"
-        outlined
-      />
-      <div class="q-ml-md">
-        <q-btn
-          v-print="printObj"
-          unelevated
-          color="dark"
-          round
-          size="sm"
-          icon="icon-mat-print"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
-          >
-            Print
-          </q-tooltip>
-        </q-btn>
-      </div>
-    </div>
-    <div id="printMe">
+    <div
+      id="printMe"
+      class="q-px-md"
+    >
       <div class="row items-center">
         <div class="col-2">
           <q-img
@@ -69,7 +19,7 @@
             style="height: 3.56cm; max-width: 2.86cm"
           />
         </div>
-        <div class="col-10">
+        <div class="col-8">
           <div class="row justify-center f-20 text-weight-bold q-mb-md">
             PEMERINTAH KOTA PROBOLINGGO
           </div>
@@ -78,6 +28,74 @@
           </div>
           <div class="row justify-center f-14 text-weight-bold">
             TAHUN ANGGARAN {{ tahun }}
+          </div>
+        </div>
+        <div class="col-2">
+          <q-img
+            src="~assets/logos/logo-rsud.png"
+            spinner-color="white"
+            style="height: 3cm; max-width: 3cm"
+          />
+        </div>
+      </div>
+      <div class="row items-center print-hide q-my-sm">
+        <!-- req tanggl -->
+        <div class="col-6">
+          <div class="row items-center">
+            <app-input-date
+              :model="store.params.tgl"
+              label="dari tangal"
+              outlined
+              :disable="store.loading"
+              :loading="store.loading"
+              @set-model="val => { store.params.tgl = val }"
+            />
+            <app-input-date
+              class="q-ml-md"
+              :model="store.params.tglx"
+              label="sampai tangal"
+              outlined
+              :disable="store.loading"
+              :loading="store.loading"
+              @set-model="val => { store.params.tglx = val }"
+            />
+            <div class="q-ml-md">
+              <app-btn
+                label="ambil data"
+                :disable="store.loading"
+                :loading="store.loading"
+                @click="store.getDataPenerimaan()"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- tgl dan print -->
+        <div class="col-6">
+          <div class="row items-center justify-end q-mr-md">
+            <div class="q-ml-md">
+              <app-input
+                v-model="tahun"
+                label="Isi tahun jika tahun tidak sesuai"
+                outlined
+              />
+            </div>
+            <div class="q-ml-md text-right">
+              <q-btn
+                v-print="printObj"
+                unelevated
+                color="dark"
+                round
+                size="sm"
+                icon="icon-mat-print"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
         </div>
       </div>
@@ -120,7 +138,7 @@
           </div>
           <div class="col-2">
             <div class="q-ml-sm">
-              {{ formatRp( store.level4.nilai) }}
+              Rp. {{ formatRp( store.level4.nilai) }}
             </div>
           </div>
         </div>
@@ -141,7 +159,7 @@
           </div>
           <div class="col-2">
             <div class="q-ml-sm">
-              {{ formatRp( store.level5.nilai) }}
+              Rp. {{ formatRp( store.level5.nilai) }}
             </div>
           </div>
         </div>
@@ -166,7 +184,7 @@
             </div>
             <div class="col-2 garis-atas">
               <div class="q-ml-sm">
-                {{ formatRp(limaP.subtotal) }}
+                Rp. {{ formatRp(limaP.subtotal) }}
               </div>
             </div>
           </div>
@@ -190,8 +208,8 @@
                 </div>
               </div>
               <div class="col-2 garis-atas">
-                <div class="q-ml-sm">
-                  {{ formatRp(satuNol.subtotal) }}
+                <div class="q-ml-sm text-center">
+                  Rp. {{ formatRp(satuNol.subtotal) }}
                 </div>
               </div>
             </div>
@@ -214,8 +232,8 @@
                   </div>
                 </div>
                 <div class="col-2">
-                  <div class="q-ml-sm">
-                    {{ formatRp(barang.subtotal) }}
+                  <div class="q-ml-sm text-right">
+                    Rp. {{ formatRp(barang.subtotal) }}
                   </div>
                 </div>
               </div>
@@ -234,7 +252,7 @@
           </div>
           <div class="col-2">
             <div class="q-ml-sm">
-              {{ formatRp(store.level5.nilai) }}
+              Rp. {{ formatRp(store.level5.nilai) }}
             </div>
           </div>
         </div>

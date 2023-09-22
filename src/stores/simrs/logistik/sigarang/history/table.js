@@ -64,7 +64,9 @@ export const useHistoryTable = defineStore('history_table', {
       'flag_siasik',
       'updated_by',
       'pj',
-      'created_by'
+      'created_by',
+      'bast_by',
+      'pembayaran_by'
     ],
     kanan: '',
     kiri: '',

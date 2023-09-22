@@ -2,7 +2,7 @@
   <q-page padding>
     <q-card :key="store.items">
       <q-card-section>
-        <div class="row garis-bawah">
+        <div class="row items-center garis-bawah">
           <div class="col-2">
             <q-img
               src="~assets/images/logo-kota-grey.png"
@@ -10,14 +10,14 @@
               style="height: 3.56cm; max-width: 2.86cm"
             />
           </div>
-          <div class="col-10">
+          <div class="col-8">
             <div class="row justify-center f-18">
               PEMERINTAH KOTA PROBOLINGGO
             </div>
-            <div class="row justify-center f-14 text-weight-bold">
+            <div class="row justify-center f-12 text-weight-bold">
               DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
             </div>
-            <div class="row justify-center f-28 text-weight-bold">
+            <div class="row justify-center f-20 text-weight-bold">
               UOBK RSUD DOKTER MOHAMAD SALEH
             </div>
             <div class="row justify-center f-14">
@@ -29,6 +29,13 @@
             <div class="row justify-center f-14 text-weight-bold">
               PROBOLINGGO  67219
             </div>
+          </div>
+          <div class="col-2">
+            <q-img
+              src="~assets/logos/logo-rsud.png"
+              spinner-color="white"
+              style="height: 4cm; max-width: 4cm"
+            />
           </div>
         </div>
         <div class="row fit justify-center items-center text-weight-bold f-18">
@@ -62,7 +69,7 @@
         >
           <!-- header print -->
           <template #header-for-print>
-            <div class="row garis-bawah">
+            <div class="row items-center garis-bawah">
               <div class="col-2">
                 <q-img
                   src="~assets/images/logo-kota-grey.png"
@@ -70,14 +77,14 @@
                   style="height: 3.56cm; max-width: 2.86cm"
                 />
               </div>
-              <div class="col-10">
+              <div class="col-8">
                 <div class="row justify-center f-18">
                   PEMERINTAH KOTA PROBOLINGGO
                 </div>
-                <div class="row justify-center f-14 text-weight-bold">
+                <div class="row justify-center f-12 text-weight-bold">
                   DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
                 </div>
-                <div class="row justify-center f-28 text-weight-bold">
+                <div class="row justify-center f-20 text-weight-bold">
                   UOBK RSUD DOKTER MOHAMAD SALEH
                 </div>
                 <div class="row justify-center f-14">
@@ -90,7 +97,15 @@
                   PROBOLINGGO  67219
                 </div>
               </div>
+              <div class="col-2">
+                <q-img
+                  src="~assets/logos/logo-rsud.png"
+                  spinner-color="white"
+                  style="height: 3cm; max-width: 3cm"
+                />
+              </div>
             </div>
+
             <div class="row justify-center f-18 text-weight-bold q-my-sm">
               REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}
             </div>

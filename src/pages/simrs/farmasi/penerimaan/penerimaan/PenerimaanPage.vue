@@ -8,14 +8,17 @@
         <div class="q-mr-md">
           No Penerimaan:
         </div>
-        <app-input
+        <div class="q-mr-sm">
+          {{ store.form.nopenerimaan ? store.form.nopenerimaan :'-' }}
+        </div>
+        <!-- <app-input
           v-model="store.form.nopenerimaan"
           label="Nomor Penerimaan"
           outlined
           readonly
           valid
           :loading="store.loading"
-        />
+        /> -->
         <div class="q-ml-md">
           <q-btn
             v-if="store.form.nopenerimaan"

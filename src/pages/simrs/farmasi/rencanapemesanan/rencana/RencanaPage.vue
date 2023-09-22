@@ -8,14 +8,18 @@
         <div class="q-mr-md">
           No Perencanaan:
         </div>
-        <app-input
+        <div class="q-mr-sm">
+          {{ store.form.no_rencbeliobat? store.form.no_rencbeliobat:'-' }}
+        </div>
+        <!-- <app-input
           v-model="store.form.no_rencbeliobat"
           label="Nomor rencana beli obat"
           outlined
           readonly
           valid
           :loading="store.loading"
-        />
+        /> -->
+
         <div class="q-ml-md">
           <q-btn
             v-if="store.form.no_rencbeliobat"
