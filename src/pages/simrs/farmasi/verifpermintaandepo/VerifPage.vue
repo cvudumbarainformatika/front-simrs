@@ -149,8 +149,43 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div class="row">
-          kunci {{ row.flag }}
+        <div v-if="parseInt(row.flag)<2 && parseInt(row.flag) >= 1">
+          <q-btn
+            flat
+            icon="icon-mat-lock_open"
+            dense
+            color="negative"
+            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            @click="kunci(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Verifikasi Permintaan Depo sudah selesai dan siap di kunci
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div v-if="parseInt(row.flag) >= 2">
+          <div class="row items-center">
+            <div class="q-mr-sm" />
+            <div>
+              <q-btn
+                flat
+                icon="icon-mat-lock"
+                dense
+                color="green"
+                @click="info(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Verifikasi Permintaan Depo sudah di kunci
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
         </div>
       </template>
       <template #expand="{ row }">
@@ -255,7 +290,7 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.map(a => parseFloat(a.stokdendiri)).reduce((a, b) => a + b, 0) }}
+                        {{ rin.stokreal.filter(x=>x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a, b) => a + b, 0) }}
                       </div>
                     </div>
                   </div>
@@ -294,16 +329,35 @@
                       v-model="rin.jumlah_diverif"
                       label="Jumlah Diverif"
                       outlined
+                      debounce="800"
                       :rules="[
                         val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
                         val => ((parseFloat(val) <= parseFloat(rin.jumlah_minta))) || 'Tidak Boleh Lebih dari Jumlah minta'
                       ]"
+                      @focus="setNol(rin)"
                       @keyup.enter="kirim(rin,i)"
                       @update:model-value="setJumlah($event, rin)"
                     />
                   </div>
-                  <div v-else>
-                    {{ rin.jumlah_diverif }}
+                  <div
+                    v-else
+                    class="col-12"
+                  >
+                    <app-input
+                      ref="refInputVerif"
+                      v-model="rin.jumlah_diverif"
+                      label="Jumlah Diverif"
+                      outlined
+                      debounce="800"
+                      readonly
+                      :rules="[
+                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
+                        val => ((parseFloat(val) <= parseFloat(rin.jumlah_minta))) || 'Tidak Boleh Lebih dari Jumlah minta'
+                      ]"
+                      @keyup.enter="gaKirim(rin, i)"
+                      @update:model-value="sudah($event, rin)"
+                    />
+                    <!-- {{ rin.jumlah_diverif }} -->
                   </div>
                 </div>
               </div>
@@ -421,10 +475,18 @@ function gudang(val) {
   }
 }
 
-function setJumlah (evt, val) {
-  const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
-  console.log('beli', beli)
+function setNol (val) {
+  const beli = !isNaN(parseFloat(val.jumlah_diverif)) ? (parseFloat(val.jumlah_diverif) <= 0 ? 0 : parseFloat(val.jumlah_diverif)) : 0
   val.jumlah_diverif = beli
+}
+function setJumlah (evt, val) {
+  const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
+  val.jumlah_diverif = beli
+  console.log('beli', beli)
+}
+function sudah(evt, val) {
+  const anu = val.jumlah_diverif
+  val.jumlah_diverif = anu
 }
 function onClick (val) {
   // console.log('click', val)
@@ -434,17 +496,51 @@ function onClick (val) {
 
 const refInputVerif = ref(null)
 function kirim (val, i) {
+  console.log('ref', refInputVerif.value, i)
   const valid = refInputVerif.value[i].$refs.refInput.validate()
-  // console.log('ref', refInputVerif.value[i].$refs.refInput, i, valid)
   console.log('kirim', val)
   if (valid) {
+    store.setForm('id', val.id)
     const form = {
       id: val.id,
+      jumlah_minta: val.jumlah_minta,
       jumlah_diverif: val.jumlah_diverif
     }
     console.log('form', form)
-    // store.simpanDetail()
+    store.simpanDetail(form)
   }
+}
+function gaKirim (val, i) {
+  console.log('ref', refInputVerif.value, i)
+  // const valid = refInputVerif.value[i].$refs.refInput.validate()
+  // console.log('kirim', val)
+  // if (valid) {
+  //   store.setForm('id', val.id)
+  //   const form = {
+  //     id: val.id,
+  //     jumlah_minta: val.jumlah_minta,
+  //     jumlah_diverif: val.jumlah_diverif
+  //   }
+  //   console.log('form', form)
+  //   store.simpanDetail(form)
+  // }
+}
+
+function info (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  console.log('info', val)
+}
+const toloadBeli = ref('')
+function kunci (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  store.kunci(val.no_permintaan)
+  // .then(() => {
+  //   toloadBeli.value = ''
+  //   // if (!val.flag) val.flag = 1
+  // })
 }
 store.getInitialData()
 

@@ -6,6 +6,7 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
   state: () => ({
     loading: false,
     loadingCariPermintaan: false,
+    loadingKunci: false,
     items: [],
     meta: { },
     params: {
@@ -153,6 +154,9 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
           })
           .catch(() => { this.loading = false })
       })
+    },
+    kunci() {
+      console.log('store.kunci')
     }
   }
 })
