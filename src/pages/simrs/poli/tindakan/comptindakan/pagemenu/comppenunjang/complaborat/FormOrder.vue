@@ -63,7 +63,7 @@
           <div class="col-12">
             <q-input
               ref="diagnosaRef"
-              v-model="store.form.diagnosamasalah"
+              v-model="store.form.diagnosa_masalah"
               label="Diagnosa Masalah"
               dense
               outlined
@@ -72,7 +72,7 @@
           </div>
           <div class="col-12">
             <q-input
-              v-model="store.form.diagnosamasalah"
+              v-model="store.form.catatan_permintaan"
               label="Catatan"
               dense
               outlined
@@ -85,7 +85,7 @@
           </div>
           <div class="col-6">
             <q-select
-              v-model="store.form.asalsumberspesimen"
+              v-model="store.form.asal_sumber_spesimen"
               label="Asal Sumber Spesimen"
               dense
               outlined
@@ -99,7 +99,7 @@
           </div>
           <div class="col-6">
             <q-input
-              v-model="store.form.lokasipengambilanspesimen"
+              v-model="store.form.lokasi_pengambilan_spesimen"
               label="Lokasi Pengambilan Spesimen"
               dense
               outlined
@@ -108,7 +108,7 @@
           </div>
           <div class="col-3">
             <q-input
-              v-model="store.form.jumlahspesimenklinis"
+              v-model="store.form.jumlah_spesimen_klinis"
               label="Jumlah Spesimen"
               dense
               outlined
@@ -119,7 +119,7 @@
           </div>
           <div class="col-3">
             <q-input
-              v-model="store.form.volumespesimenklinis"
+              v-model="store.form.volume_spesimen_klinis"
               label="Volume Spesimen / ml"
               dense
               outlined
@@ -130,7 +130,7 @@
           </div>
           <div class="col-6">
             <q-select
-              v-model="store.form.metodepengambilanspesimen"
+              v-model="store.form.metode_pengambilan_spesimen"
               label="Metode Pengambilan Spesimen"
               dense
               outlined
@@ -144,7 +144,7 @@
           </div>
           <div class="col-6">
             <q-input
-              v-model="store.form.kondisispesimen"
+              v-model="store.form.kondisi_spesimen"
               label="Kondisi Spesimen : Warna, Bau, Dst"
               dense
               outlined
@@ -192,7 +192,7 @@
           </div>
           <div class="col-3">
             <q-input
-              v-model="store.form.cairanfiksasi"
+              v-model="store.form.cairan_fiksasi"
               label="Cairan Fiksasi / ml"
               dense
               outlined
@@ -203,7 +203,7 @@
           </div>
           <div class="col-3">
             <q-input
-              v-model="store.form.volumecairanfiksasi"
+              v-model="store.form.volume_cairan_fiksasi"
               label="Volume Cairan Fiks / ml"
               dense
               outlined
@@ -222,14 +222,14 @@
               </div>
               <div class="q-gutter-sm">
                 <q-radio
-                  v-model="store.form.pasienpuasa"
+                  v-model="store.form.puasa_pasien"
                   val="Tidak"
                   label="Tidak"
                   size="sm"
                   dense
                 />
                 <q-radio
-                  v-model="store.form.pasienpuasa"
+                  v-model="store.form.puasa_pasien"
                   val="Iya"
                   label="Iya"
                   size="sm"
@@ -245,14 +245,14 @@
               </div>
               <div class="q-gutter-sm">
                 <q-radio
-                  v-model="store.form.cito"
+                  v-model="store.form.prioritas_pemeriksaan"
                   val="Tidak"
                   label="Tidak"
                   size="sm"
                   dense
                 />
                 <q-radio
-                  v-model="store.form.cito"
+                  v-model="store.form.prioritas_pemeriksaan"
                   val="Iya"
                   label="Iya"
                   size="sm"

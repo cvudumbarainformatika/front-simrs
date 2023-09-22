@@ -73,5 +73,6 @@ const cekPanel = () => {
 
 onMounted(() => {
   store.getMasterLaborat()
+  store.getNota(props.pasien)
 })
 </script>
