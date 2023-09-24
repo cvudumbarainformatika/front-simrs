@@ -165,6 +165,27 @@ const farmasi = {
         }
       ]
     },
+    {
+      path: '/farmasi/pemakaianruangan',
+      component: () => import('src/pages/simrs/farmasi/pemakaianruangan/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/pemakaianruangan/pemakaianruangan' },
+        {
+          path: '/farmasi/pemakaianruangan/pemakaianruangan',
+          name: 'farmasi.pemakaianruangan.pemakaianruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemakaianruangan/pemakaian/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/pemakaianruangan/listpemakaianruangan',
+          name: 'farmasi.pemakaianruangan.listpemakaianruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/pemakaianruangan/listpemakaian/IndexPage.vue')
+        }
+      ]
+    },
 
     {
       path: '/farmasi/notfound',

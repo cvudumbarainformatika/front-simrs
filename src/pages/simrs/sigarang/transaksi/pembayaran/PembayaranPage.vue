@@ -26,13 +26,13 @@
             </div>
             <div class="row fit q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
-                Nomor Kwitansi
+                Nomor NPD
               </div>
               <div class="col-8">
                 <app-input
                   ref="refKwitansi"
                   v-model="store.form.no_kwitansi"
-                  label="isi Nomor Kwitansi"
+                  label="isi Nomor NPD"
                   outlined
                   :loading="store.loading"
                 />

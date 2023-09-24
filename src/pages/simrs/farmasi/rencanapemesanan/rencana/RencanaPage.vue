@@ -171,7 +171,10 @@
             </div>
           </template>
           <template #cell-stok="{row}">
-            <div class="row justify-between no-wrap text-brown">
+            <div
+              class="row justify-between no-wrap "
+              :class="row.stokGudang > 0 ? 'text-brown' : ''"
+            >
               <div class="q-mr-xs">
                 Gudang
               </div>
@@ -179,7 +182,10 @@
                 {{ row.stokGudang }}
               </div>
             </div>
-            <div class="row justify-between no-wrap text-orange">
+            <div
+              class="row justify-between no-wrap "
+              :class="row.stokRS > 0 ? 'text-orange' : ''"
+            >
               <div class="q-mr-xs">
                 Seluruh Rumah Sakit
               </div>
@@ -187,7 +193,10 @@
                 {{ row.stokRS }}
               </div>
             </div>
-            <div class="row justify-between no-wrap text-purple">
+            <div
+              class="row justify-between no-wrap "
+              :class="row.stokMaxRS > 0 ? 'text-purple' : ''"
+            >
               <div class="q-mr-xs">
                 Maksimal Rumah Sakit
               </div>
@@ -205,15 +214,21 @@
             </div>
           </template>
           <template #cell-jumlah="{row}">
-            <div class="row justify-between no-wrap text-weight-bold text-green">
+            <div
+              class="row justify-between no-wrap text-weight-bold"
+              :class="row.bisaBeli>0?'text-green':'text-negative'"
+            >
               <div class="q-mr-xs">
-                Maksimal dibeli
+                Maksimal Direncanakan
               </div>
               <div>
                 {{ row.bisaBeli }}
               </div>
             </div>
-            <div class="row justify-between no-wrap text-red">
+            <div
+              class="row justify-between no-wrap"
+              :class="row.sudahDirencanakan > 0 ? 'text-cyan' : ''"
+            >
               <div class="q-mr-xs">
                 sudah Direncanakan
               </div>
@@ -224,7 +239,7 @@
             <div class="row justify-between no-wrap">
               <app-input
                 v-model="row.jumlahBeli"
-                label="Jumlah Dipesan"
+                label="Jumlah Direncanakan"
                 color="green"
                 outlined
                 :disable="row.bisaBeli<=0"
@@ -252,7 +267,7 @@
               />
             </div>
             <div v-else>
-              Tidak bisa melakukan pemesanan
+              Tidak bisa melakukan perencanaan
             </div>
           </template>
         </app-table>

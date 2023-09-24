@@ -45,14 +45,14 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
               nom2 = tempNom[1].split('/')
               const dua = nom2[0] === '' ? nom2[1] + '/' + nom2[2] + '/' + nom2[3] : tempNom[1]
               if (nom.length > 3) {
-                this.setForm('no_kwitansi', noByr + '/KWTS/SP-' + nom[2] + '/' + dua)
+                // this.setForm('no_kwitansi', noByr + '/KWTS/SP-' + nom[2] + '/' + dua)
                 this.setForm('no_pembayaran', noByr + '/BYR/SP-' + nom[2] + '/' + dua)
               } else {
-                this.setForm('no_kwitansi', noByr + '/KWTS/' + tempNom[1])
+                // this.setForm('no_kwitansi', noByr + '/KWTS/' + tempNom[1])
                 this.setForm('no_pembayaran', noByr + '/BYR/' + tempNom[1])
               }
             } else {
-              this.setForm('no_kwitansi', noByr + '/KWTS/' + nomor)
+              // this.setForm('no_kwitansi', noByr + '/KWTS/' + nomor)
               this.setForm('no_pembayaran', noByr + '/BYR/' + nomor)
             }
             console.log('nom length', tempNom.length)

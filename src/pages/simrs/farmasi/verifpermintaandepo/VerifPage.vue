@@ -321,7 +321,7 @@
                       rin.user_verif === ''
                     )" -->
                   <div
-                    v-if="rin.user_verif === ''"
+                    v-if="rin.user_verif === '' || rin.editable"
                     class="col-12"
                   >
                     <app-input
@@ -363,27 +363,6 @@
               </div>
               <div class="col-3 ">
                 <div v-if="parseFloat(rin.jumlah_diverif) > 0 && rin.user_verif === ''">
-                  <!-- <div class="row justify-end">
-                    <q-btn
-                      dense
-                      glossy
-                      no-caps
-                      icon="icon-mat-edit"
-                      label="Edit"
-                      color="primary"
-                      :loading="store.loading && (store.form.id === rin.id)"
-                      @click="() => { rin.jumlah_diverif = rin.jumlah_minta - 1 }"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="center middle"
-                      >
-                        <div>
-                          Ganti Jumlah Verif
-                        </div>
-                      </q-tooltip>
-                    </q-btn>
-                  </div> -->
                   <div
                     v-if="parseFloat(rin.jumlah_diverif) <= parseFloat(rin.jumlah_minta) "
                     class="row justify-end"
@@ -421,6 +400,32 @@
                   >
                     Sudah Di verif
                   </div>
+                  <div
+                    v-if="rin.user_verif !== '' && !rin.editable && row.flag=== '1' "
+                    class="row justify-end text-weight-bold text-green q-py-xs"
+                  >
+                    <div class="row justify-end">
+                      <q-btn
+                        dense
+                        glossy
+                        no-caps
+                        icon="icon-mat-edit"
+                        label="Edit"
+                        color="primary"
+                        :loading="store.loading && (store.form.id === rin.id)"
+                        @click="setEdit(rin)"
+                      >
+                        <q-tooltip
+                          anchor="top middle"
+                          self="center middle"
+                        >
+                          <div>
+                            edit
+                          </div>
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -456,6 +461,11 @@ const store = useVerifPermintaanDepoStore()
 //   console.log('computed', val)
 //   return val
 // })
+
+function setEdit(val) {
+  console.log('edit ', val)
+  val.editable = true
+}
 function depo(val) {
   const temp = store.depos.filter(a => a.value === val)
   // console.log('temp', temp)
@@ -507,8 +517,11 @@ function kirim (val, i) {
       jumlah_diverif: val.jumlah_diverif
     }
     console.log('form', form)
-    store.simpanDetail(form)
+    store.simpanDetail(form).then(() => {
+      val.editable = false
+    })
   }
+  val.editable = false
 }
 function gaKirim (val, i) {
   console.log('ref', refInputVerif.value, i)
