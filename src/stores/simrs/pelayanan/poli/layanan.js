@@ -54,7 +54,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
     async getTindakanDropdown() {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
-      console.log('list tindakan', resp)
+      // console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
       }
