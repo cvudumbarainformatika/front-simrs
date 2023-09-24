@@ -6,6 +6,8 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
     kodeIna: '',
     tarifIna: 0,
     tarifRs: 0,
+    totalTindakan: 0,
+    totalLaborat: 0,
     desc: '',
 
     loading: false
@@ -50,7 +52,23 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
 
     setTotalTindakan(pasien) {
       const arr = pasien?.tindakan
-      this.tarifRs = arr.length ? arr.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
+      this.totalTindakan = arr?.length ? arr?.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
+      this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
+    },
+    setTotalLaborat(pasien) {
+      const arr = pasien?.laborats
+      const lab = arr?.map(x => {
+        const obj = {
+          biayaLayanan: x?.details[0]?.rs13,
+          biayaSarana: x?.details[0]?.rs6
+        }
+        const subtotal = parseInt(obj?.biayaLayanan) + parseInt(obj?.biayaSarana)
+        return subtotal
+      })
+
+      this.totalLaborat = lab?.length ? lab?.reduce((acc, cur) => acc + cur, 0) : 0
+      console.log('total lab', this.totalLaborat)
+      this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
     }
   }
 })

@@ -5,7 +5,7 @@
         flat
         bordered
         square
-        class="col-7 full-height"
+        class="col-6 full-height"
       >
         <FormOrder :pasien="props.pasien" />
       </q-card>
@@ -13,7 +13,7 @@
         flat
         bordered
         square
-        class="col-5 full-height"
+        class="col-6 full-height"
       >
         <ListPemeriksaans
           :key="props.pasien"

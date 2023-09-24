@@ -129,7 +129,26 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             data.tindakan.splice(0, 0, val)
           }
         }
-        console.log('data ditemukan', data)
+        if (kode === 'laborats') {
+          const target = data?.laborats?.find(x => x.id === val.id)
+
+          // console.log('data laborat ditemukan', target)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            data.laborats.splice(0, 0, val)
+          }
+        }
+
+        if (kode === 'radiologi') {
+          const target = data.radiologi?.find(x => x.id === val.id)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            data.radiologi.splice(0, 0, val)
+          }
+        }
+        // console.log('data ditemukan', data)
       }
     },
     hapusDataAnamnesis(pasien, id) {
@@ -168,6 +187,22 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].tindakan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataLaborat(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].laborats
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataRadiologi(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.radiologi
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

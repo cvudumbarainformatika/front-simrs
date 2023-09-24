@@ -52,7 +52,7 @@
 
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
+// import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
 import { onMounted } from 'vue'
@@ -66,11 +66,11 @@ const props = defineProps({
 
 const store = useLayananPoli()
 
-const inacbg = useInacbgPoli()
+// const inacbg = useInacbgPoli()
 onMounted(() => {
   // console.log('layananPage')
-  inacbg.getDataIna(props.pasien)
-  inacbg.setTotalTindakan(props.pasien)
+  // inacbg.getDataIna(props.pasien)
+  // inacbg.setTotalTindakan(props.pasien)
   store.getNota(props.pasien)
 })
 </script>

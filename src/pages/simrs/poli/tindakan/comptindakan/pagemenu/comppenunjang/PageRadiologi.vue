@@ -5,15 +5,18 @@
         flat
         bordered
         square
-        class="col-5 full-height"
+        class="col-6 full-height"
       >
-        <DaftarPemeriksaan />
+        <FormOrder
+          :key="props.pasien"
+          :pasien="props.pasien"
+        />
       </q-card>
       <q-card
         flat
         bordered
         square
-        class="col-7 full-height"
+        class="col-6 full-height"
       >
         <ListOrder :pasien="props.pasien" />
       </q-card>
@@ -21,12 +24,22 @@
   </div>
 </template>
 <script setup>
-import DaftarPemeriksaan from './compradiologi/DaftarPemeriksaan.vue'
+import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
 import ListOrder from './compradiologi/ListOrder.vue'
+import FormOrder from './compradiologi/FormOrder.vue'
+import { onMounted } from 'vue'
+
+const store = useRadiologiPoli()
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
+})
+
+onMounted(() => {
+  store.getRadiologi()
+  store.getJenisRadiologi()
+  store.getNota(props.pasien)
 })
 </script>
