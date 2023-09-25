@@ -186,6 +186,27 @@ const farmasi = {
         }
       ]
     },
+    {
+      path: '/farmasi/retur',
+      component: () => import('src/pages/simrs/farmasi/retur/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/retur/depo' },
+        {
+          path: '/farmasi/retur/depo',
+          name: 'farmasi.retur.depo',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/retur/depo/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/retur/ruangan',
+          name: 'farmasi.retur.ruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/retur/ruangan/IndexPage.vue')
+        }
+      ]
+    },
 
     {
       path: '/farmasi/notfound',
