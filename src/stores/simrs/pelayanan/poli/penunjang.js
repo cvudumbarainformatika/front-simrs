@@ -7,7 +7,12 @@ import { notifSuccess } from 'src/modules/utils'
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
     tab: 'Laborat',
-    tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
+    // tabs: ['Laborat', 'Radiologi', 'Cardio', 'EEG', 'Hemodialisa', 'USG 4 Dimensi', 'Thread Mill', 'Endoscope', 'Psikologi'],
+    tabs: [
+      { name: 'Laborat', page: 'Laborat' },
+      { name: 'Radiologi', page: 'Radiologi' },
+      { name: 'Penunjang Lain', page: 'PenunjangLain' }
+    ],
     // laborat
     caripemeriksaanlab: null,
     masterlaborat: [],
