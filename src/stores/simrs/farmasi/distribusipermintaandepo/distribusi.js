@@ -23,12 +23,13 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
     disp: { no_permintaan: '' },
     terpilih: {},
     columns: [
+      'obat',
       'no_permintaan',
       'tgl_permintaan',
-      'dari',
+      'jumlah',
       'status',
-      'user',
-      'act'
+      'act',
+      'user'
     ],
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -146,9 +147,10 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
     simpanDetail(val) {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/gudang/distribusi/verifpermintaanobat', val)
+        api.post('v1/simrs/farmasinew/gudang/distribusi/simpandistribusidepo', val)
           .then(resp => {
             this.loading = false
+            console.log('didtribusi', resp)
             notifSuccess(resp)
             this.getPermintaanDepo()
             resolve(resp)

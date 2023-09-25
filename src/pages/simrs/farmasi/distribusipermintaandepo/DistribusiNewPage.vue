@@ -2,7 +2,7 @@
   <div class="q-pa-md bg-white">
     <div class="row bg-grey q-pa-xs q-my-md">
       <div class="f-16 text-weight-bold">
-        Halaman Verifikasi Permintaan Depo
+        Halaman Distribusi Permintaan Depo
       </div>
     </div>
     <app-table-extend
@@ -59,17 +59,20 @@
           </div>
         </div>
       </template>
+      <template #col-obat>
+        <div>Obat</div>
+      </template>
       <template #col-no_permintaan>
-        <div>Nomor Pemintaan</div>
+        <div>Pemintaan</div>
       </template>
       <template #col-tgl_permintaan>
-        <div>Tanggal Permintaan</div>
+        <div>Tanggal</div>
       </template>
       <template #col-dari>
         <div>Dari</div>
       </template>
-      <template #col-tujuan>
-        <div>Tujuan</div>
+      <template #col-jumlah>
+        <div>Jumlah</div>
       </template>
       <template #col-user>
         <div>User Entri</div>
@@ -77,46 +80,132 @@
       <template #col-act>
         <div>#</div>
       </template>
-      <template #cell-tgl_permintaan="{ row }">
-        {{ row.permintaanobatheder ? dateFullFormat(row.permintaanobatheder.tgl_permintaan):'-' }}
-      </template>
-      <template #cell-dari="{ row }">
-        <div class="">
-          {{ row.permintaanobatheder?depo(row.permintaanobatheder.dari) :'-' }}
+      <template #cell-obat="{ row }">
+        <div class="row justify-between no-wrap q-mt-xs">
+          <div class="q-mr-xs">
+            Kode
+          </div>
+          <div class="text-deep-purple text-weight-bold">
+            {{ row.kdobat }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs">
+          <div class="q-mr-xs">
+            Nama
+          </div>
+          <div class=" text-weight-bold">
+            {{ row.masterobat ? row.masterobat.nama_obat : '-' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs anu">
+          <div class="q-mr-xs">
+            Fornas
+          </div>
+          <div
+            class=" text-weight-bold"
+            :class="row.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
+          >
+            {{ row.masterobat.status_fornas === '1' ? 'Ya' : 'Tidak' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs anu">
+          <div class="q-mr-xs">
+            Forkit
+          </div>
+          <div
+            class=" text-weight-bold"
+            :class="row.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
+          >
+            {{ row.masterobat.status_forkid === '1' ? 'Ya' : 'Tidak' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs anu">
+          <div class="q-mr-xs">
+            Generik
+          </div>
+          <div
+            class=" text-weight-bold"
+            :class="row.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
+          >
+            {{ row.masterobat.status_generik === '1' ? 'Ya' : 'Tidak' }}
+          </div>
+        </div>
+
+        <div class="row justify-between no-wrap q-mt-xs anu">
+          <div class="q-mr-xs">
+            Sistem Bayar
+          </div>
+          <div class=" text-weight-bold">
+            {{ row.masterobat.sistembayar }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs anu">
+          <div class="q-mr-xs">
+            Satuan
+          </div>
+          <div class=" text-weight-bold">
+            {{ row.masterobat.satuan_k }}
+          </div>
         </div>
       </template>
-      <template #cell-tujuan="{ row }">
-        <div class="">
-          <div class="">
-            {{ gudang(row.tujuan) }}
+      <template #cell-tgl_permintaan="{ row }">
+        <div class="row justify-between no-wrap">
+          <div>
+            Permintaan
+          </div>
+          <div class="q-ml-sm text-weight-bold">
+            {{ row.permintaanobatheder ? dateFullFormat(row.permintaanobatheder.tgl_permintaan):'-' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap">
+          <div>
+            Verif
+          </div>
+          <div class="q-ml-sm text-weight-bold">
+            {{ row.tgl_verif ? dateFullFormat(row.tgl_verif):'-' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap">
+          <div>
+            Distribusi
+          </div>
+          <div class="q-ml-sm text-weight-bold">
+            {{ row.tgl_distribusi ? dateFullFormat(row.tgl_distribusi):'-' }}
+          </div>
+        </div>
+      </template>
+      <template #cell-no_permintaan="{ row }">
+        <div class="row justify-between no-wrap q-mt-xs">
+          <div class="q-mr-xs">
+            Nomor
+          </div>
+          <div class=" text-weight-bold">
+            {{ row.no_permintaan }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap q-mt-xs">
+          <div class="q-mr-xs">
+            Dari
+          </div>
+          <div class=" text-weight-bold">
+            {{ row.permintaanobatheder?depo(row.permintaanobatheder.dari) :'-' }}
           </div>
         </div>
       </template>
       <template #cell-jumlah="{ row }">
-        <div class="row justify-between no-wrap text-green">
+        <div class="row justify-between no-wrap">
           <div class="q-mr-xs">
             Permintaan
           </div>
-          <div class="text-weight-bold">
+          <div class="text-weight-bold text-blue">
             {{ row.jumlah_minta }}
           </div>
         </div>
-        <div class="row justify-between no-wrap">
-          <div
-            v-if="((parseFloat(row.jumlah_diverif) < parseFloat(row.jumlah_minta)) || parseFloat(row.jumlah_diverif) > parseFloat(row.jumlah_minta) && row.user_verif === '')"
-          >
-            <app-input
-              v-model="row.jumlah_diverif"
-              label="Jumlah Diverif"
-              outlined
-              :rules="[
-                val => ((parseFloat(val) <= parseFloat(row.jumlah_minta))) || 'Tidak Boleh Lebih dari Jumlah minta'
-              ]"
-              @keyup.enter="kirim(row)"
-              @update:model-value="setJumlah($event, row)"
-            />
+        <div class="row justify-between no-wrap text-weight-bold text-green">
+          <div class="q-mr-xs">
+            Verif
           </div>
-          <div v-else>
+          <div class="">
             {{ row.jumlah_diverif }}
           </div>
         </div>
@@ -125,9 +214,9 @@
         <div class="row">
           <q-chip
             class="f-12"
-            :color="color(row.flag)"
-            :text-color="row.flag === 99 ? 'dark' : 'white'"
-            :label="label(row.flag)"
+            :color="!row.flag_distribusi ? 'green' : 'blue'"
+            :text-color="!row.flag_distribusi ? 'yellow' : 'white'"
+            :label="!row.flag_distribusi ? 'Belum' : 'Sudah'"
           />
         </div>
       </template>
@@ -137,12 +226,12 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="parseInt(row.flag) < 2 && parseInt(row.flag) >= 1">
+        <div v-if="!row.flag_distribusi">
           <q-btn
             flat
-            icon="icon-mat-lock_open"
+            icon="icon-mat-send"
             dense
-            color="negative"
+            color="green"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
@@ -150,33 +239,24 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Verifikasi Permintaan Depo sudah selesai dan siap di kunci
+              Distribusikan
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="parseInt(row.flag) >= 2">
-          <div class="row items-center">
-            <div class="q-mr-sm" />
-            <div>
-              <q-btn
-                flat
-                icon="icon-mat-lock"
-                dense
-                color="green"
-                @click="info(row)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Verifikasi Permintaan Depo sudah di kunci
-                </q-tooltip>
-              </q-btn>
-            </div>
-          </div>
+        <div
+          v-else
+          class="text-primary text-weight-bold"
+        >
+          Sudah
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Sudah Distribusikan
+          </q-tooltip>
         </div>
       </template>
-      <template #expand="{ row }">
+      <!-- <template #expand="{ row }">
         <div v-if="row.permintaanrinci.length">
           <div class="row items-center text-weight-bold">
             <div class="col-3 text-center">
@@ -300,11 +380,7 @@
                 </div>
 
                 <div class="row justify-between no-wrap q-mt-xs">
-                  <!-- v-if="(
-                      (parseFloat(rin.jumlah_diverif) < parseFloat(rin.jumlah_minta) ||
-                        parseFloat(rin.jumlah_diverif) > parseFloat(rin.jumlah_minta)) &&
-                      rin.user_verif === ''
-                    )" -->
+
                   <div
                     v-if="rin.user_verif === '' || rin.editable"
                     class="col-12"
@@ -342,7 +418,6 @@
                       @keyup.enter="gaKirim(rin, i)"
                       @update:model-value="sudah($event, rin)"
                     />
-                    <!-- {{ rin.jumlah_diverif }} -->
                   </div>
                 </div>
               </div>
@@ -420,7 +495,7 @@
         <div v-else>
           Tidak ada Rincian
         </div>
-      </template>
+      </template> -->
     </app-table-extend>
   </div>
 </template>
@@ -431,10 +506,6 @@ import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distr
 import { ref } from 'vue'
 const store = useDistribusiPermintaanDepoStore()
 
-function setEdit (val) {
-  console.log('edit ', val)
-  val.editable = true
-}
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)
   // console.log('temp', temp)
@@ -444,81 +515,28 @@ function depo (val) {
     return val
   }
 }
-function gudang (val) {
-  const temp = store.gudangs.filter(a => a.value === val)
-  // console.log('temp', temp)
-  if (temp.length) {
-    return temp[0].nama
-  } else {
-    return val
-  }
-}
-
-function setNol (val) {
-  const beli = !isNaN(parseFloat(val.jumlah_diverif)) ? (parseFloat(val.jumlah_diverif) <= 0 ? 0 : parseFloat(val.jumlah_diverif)) : 0
-  val.jumlah_diverif = beli
-}
-function setJumlah (evt, val) {
-  const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
-  val.jumlah_diverif = beli
-  console.log('beli', beli)
-}
-function sudah (evt, val) {
-  const anu = val.jumlah_diverif
-  val.jumlah_diverif = anu
-}
-// function onClick (val) {
-//   // console.log('click', val)
-//   val.item.expand = !val.item.expand
-//   val.item.highlight = !val.item.highlight
+// function gudang (val) {
+//   const temp = store.gudangs.filter(a => a.value === val)
+//   // console.log('temp', temp)
+//   if (temp.length) {
+//     return temp[0].nama
+//   } else {
+//     return val
+//   }
 // }
 
-const refInputVerif = ref(null)
-function kirim (val, i) {
-  console.log('ref', refInputVerif.value, i)
-  const valid = refInputVerif.value[i].$refs.refInput.validate()
-  console.log('kirim', val)
-  if (valid) {
-    store.setForm('id', val.id)
-    const form = {
-      id: val.id,
-      jumlah_minta: val.jumlah_minta,
-      jumlah_diverif: val.jumlah_diverif
-    }
-    console.log('form', form)
-    store.simpanDetail(form).then(() => {
-      val.editable = false
-    })
-  }
-  val.editable = false
-}
-function gaKirim (val, i) {
-  console.log('ref', refInputVerif.value, i)
-  // const valid = refInputVerif.value[i].$refs.refInput.validate()
-  // console.log('kirim', val)
-  // if (valid) {
-  //   store.setForm('id', val.id)
-  //   const form = {
-  //     id: val.id,
-  //     jumlah_minta: val.jumlah_minta,
-  //     jumlah_diverif: val.jumlah_diverif
-  //   }
-  //   console.log('form', form)
-  //   store.simpanDetail(form)
-  // }
-}
-
-function info (val) {
-  val.expand = !val.expand
-  val.highlight = !val.highlight
-  console.log('info', val)
-}
 const toloadBeli = ref('')
 function kunci (val) {
-  val.expand = !val.expand
-  val.highlight = !val.highlight
   toloadBeli.value = val.no_permintaan
-  store.kunci(val.no_permintaan)
+  const form = {
+    id: val.id,
+    jumlah_diverif: val.jumlah_diverif,
+    kdobat: val.kdobat,
+    kdruang: val.permintaanobatheder.tujuan
+  }
+  console.log('val', val, form)
+
+  store.simpanDetail(val)
   // .then(() => {
   //   toloadBeli.value = ''
   //   // if (!val.flag) val.flag = 1
@@ -526,73 +544,73 @@ function kunci (val) {
 }
 store.getInitialData()
 
-const color = val => {
-  switch (val) {
-    case 99:
-      return 'white'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '':
-      return 'grey'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '1':
-      return 'cyan'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '2':
-      return 'blue'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '3':
-      return 'orange'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '4':
-      return 'grey'
-      // eslint-disable-next-line no-unreachable
-      break
+// const color = val => {
+//   switch (val) {
+//     case 99:
+//       return 'white'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '':
+//       return 'grey'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '1':
+//       return 'cyan'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '2':
+//       return 'blue'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '3':
+//       return 'orange'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '4':
+//       return 'grey'
+//       // eslint-disable-next-line no-unreachable
+//       break
 
-    default:
-      return 'red'
-      // eslint-disable-next-line no-unreachable
-      break
-  }
-}
+//     default:
+//       return 'red'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//   }
+// }
 
-const label = (status) => {
-  switch (status) {
-    case '':
-      return 'Tampilkan semua'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '1':
-      return 'Menunggu verifikasi'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '2':
-      return 'Telah di verifikasi'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '3':
-      return 'Telah di distribusikan'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '4':
-      return 'Telah di distribusikan'
-      // eslint-disable-next-line no-unreachable
-      break
-    case 99:
-      return 'Status belum di filter'
-      // eslint-disable-next-line no-unreachable
-      break
+// const label = (status) => {
+//   switch (status) {
+//     case '':
+//       return 'Tampilkan semua'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '1':
+//       return 'Menunggu verifikasi'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '2':
+//       return 'Telah di verifikasi'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '3':
+//       return 'Telah di distribusikan'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case '4':
+//       return 'Telah di distribusikan'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//     case 99:
+//       return 'Status belum di filter'
+//       // eslint-disable-next-line no-unreachable
+//       break
 
-    default:
-      return 'Belum di definisikan'
-      // eslint-disable-next-line no-unreachable
-      break
-  }
-}
+//     default:
+//       return 'Belum di definisikan'
+//       // eslint-disable-next-line no-unreachable
+//       break
+//   }
+// }
 </script>
 
 <style>
