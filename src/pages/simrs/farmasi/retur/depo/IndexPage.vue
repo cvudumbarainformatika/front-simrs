@@ -14,6 +14,6 @@
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./DistribusiNewPage.vue')
+  import('./ReturDepo.vue')
 )
 </script>
