@@ -370,7 +370,7 @@
                     <q-btn
                       flat
                       no-caps
-                      icon-right="icon-mat-done_all"
+                      icon-right="icon-mat-send"
                       label="Verif"
                       color="green"
                       :loading="store.loading && (store.form.id === rin.id)"
