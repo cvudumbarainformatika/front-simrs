@@ -100,13 +100,13 @@
             >
               <!-- header pRint -->
               <template #header-for-print>
-                <div class="row justify-center f-16 text-weight-bold">
+                <div class="row justify-center f-14 text-weight-bold">
                   Data Stok Per {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
                 </div>
-                <div class="row justify-center f-16 text-weight-bold">
+                <div class="row justify-center f-14 text-weight-bold">
                   {{ namaTempat }}
                 </div>
-                <div class="row justify-center f-16 text-weight-bold">
+                <div class="row justify-center f-14 text-weight-bold">
                   UOBK RSUD DR. MOHAMAD SALEH KOTA PROBOLINGGO
                 </div>
               </template>
@@ -151,28 +151,44 @@
                 {{ dateFullFormat(row.tanggal) }}
               </template>
               <template #cell-barang="{row}">
-                {{ row.barang?row.barang.nama:'master barang tidak ditemukan' }}
+                <div class="box">
+                  {{ row.barang?row.barang.nama:'master barang tidak ditemukan' }}
+                </div>
               </template>
               <template #cell-tempat="{row}">
-                {{ (row.depo?row.depo.nama:row.ruang?row.ruang.uraian:'-') }}
+                <div class="box-sm">
+                  {{ (row.depo?row.depo.nama:row.ruang?row.ruang.uraian:'-') }}
+                </div>
               </template>
               <template #cell-kode_108="{row}">
-                {{ row.barang?(row.barang.kode_108):'master barang tidak ditemukan' }}
+                <div class="box-sm">
+                  {{ row.barang?(row.barang.kode_108):'master barang tidak ditemukan' }}
+                </div>
               </template>
               <template #cell-uraian="{row}">
-                {{ row.barang?(row.barang.uraian_108):'master barang tidak ditemukan' }}
+                <div class="box">
+                  {{ row.barang?(row.barang.uraian_108):'master barang tidak ditemukan' }}
+                </div>
               </template>
               <template #cell-satuan="{row}">
-                {{ row.barang?(row.barang.satuan?row.barang.satuan.nama:'belum ada satuan'):'master barang tidak ditemukan' }}
+                <div class="box-xs">
+                  {{ row.barang?(row.barang.satuan?row.barang.satuan.nama:'belum ada satuan'):'master barang tidak ditemukan' }}
+                </div>
               </template>
               <template #cell-stok_fisik="{row}">
-                {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+                <div class="box">
+                  {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+                </div>
               </template>
               <template #cell-selisih="{row}">
-                {{ row.penyesuaian?row.penyesuaian.selisih:'-' }}
+                <div class="box">
+                  {{ row.penyesuaian?row.penyesuaian.selisih:'-' }}
+                </div>
               </template>
               <template #cell-sisa_stok="{row}">
-                {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+                <div class="box-xs">
+                  {{ row.penyesuaian?row.penyesuaian.jumlah:row.sisa_stok }}
+                </div>
               </template>
             <!-- Custom BTN -->
             <!--
@@ -201,75 +217,75 @@
                 <div class="col-4" />
                 <div class="col-4" />
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ pojokKananAtas }}
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kiriAtasSatu }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ tengahAtasSatu }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kananAtasSatu }}
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kiriAtasDua }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ tengahAtasDua }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kananAtasDua }}
                   </div>
                 </div>
               </div>
               <div class="row q-mt-xl text-weight-bold">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kiriBawahSatu }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ tengahBawahSatu }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kananBawahSatu }}
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kiriBawahDua }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ tengahBawahDua }}
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     {{ kananBawahDua }}
                   </div>
                 </div>
@@ -282,7 +298,7 @@
                 <div class="col-4" />
                 <div class="col-4" />
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="pojokKananAtas"
                       label="tanggal"
@@ -294,7 +310,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kiriAtasSatu"
                       label="kiri atas satu"
@@ -304,7 +320,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="tengahAtasSatu"
                       label="tengah atas satu"
@@ -314,7 +330,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kananAtasSatu"
                       label="kanan atas satu"
@@ -326,7 +342,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kiriAtasDua"
                       label="kiri atas dua"
@@ -336,7 +352,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="tengahAtasDua"
                       label="tengah atas dua"
@@ -346,7 +362,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kananAtasDua"
                       label="kanan atas dua"
@@ -358,7 +374,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kiriBawahSatu"
                       label="kiri bawah satu"
@@ -368,7 +384,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="tengahBawahSatu"
                       label="tengah bawah satu"
@@ -378,7 +394,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kananBawahSatu"
                       label="kanan bawah satu"
@@ -390,7 +406,7 @@
               </div>
               <div class="row">
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kiriBawahDua"
                       label="kiri bawah dua"
@@ -400,7 +416,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="tengahBawahDua"
                       label="tengah bawah dua"
@@ -410,7 +426,7 @@
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="text-center">
+                  <div class="text-center f-10">
                     <app-input
                       v-model="kananBawahDua"
                       label="kanan bawah dua"
@@ -510,10 +526,10 @@ const gudangCleared = () => {
 // }
 
 // print
-const openPrint = ref(false)
-// let title = ''
-const printed = ref(false)
-const item = ref({})
+// const openPrint = ref(false)
+// // let title = ''
+// const printed = ref(false)
+// const item = ref({})
 // function toPrint (val) {
 //   // console.log('print', val)
 //   item.value = val
@@ -521,23 +537,92 @@ const item = ref({})
 //   openPrint.value = true
 // }
 const printObj = {
-  id: 'printMe',
+  id: 'printMe'
   // popTitle: title,
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback (vue) {
-    printed.value = true
-    console.log('wait...', vue)
-  },
-  openCallback (vue) {
-    console.log('opened', vue)
-  },
-  closeCallback (vue) {
-    openPrint.value = false
-    printed.value = false
-    // changePeriode()
-    item.value = {}
-    console.log('closePrint')
-  }
+  // beforeOpenCallback (vue) {
+  //   printed.value = true
+  //   console.log('wait...', vue)
+  // },
+  // openCallback (vue) {
+  //   console.log('opened', vue)
+  // },
+  // closeCallback (vue) {
+  //   openPrint.value = false
+  //   printed.value = false
+  //   // changePeriode()
+  //   item.value = {}
+  //   console.log('closePrint')
+  // }
 }
 </script>
+<style scoped>
+.q-table td box {
+  white-space: normal !important;
+  inline-size: 150px;
+  overflow-wrap: break-word;
+}
+.box-xl {
+  white-space: normal !important;
+  inline-size: 200px;
+  overflow-wrap: break-word;
+}
+.box-lg {
+  white-space: normal !important;
+  inline-size: 175px;
+  overflow-wrap: break-word;
+}
+.box {
+  white-space: normal !important;
+  inline-size: 150px;
+  overflow-wrap: break-word;
+}
+.box-sm {
+  white-space: normal !important;
+  inline-size: 100px;
+  overflow-wrap: break-word;
+}
+.box-xs {
+  white-space: normal !important;
+  inline-size: 50px;
+  overflow-wrap: break-word;
+}
+
+.q-table--no-wrap th,
+.q-table--no-wrap td {
+  white-space: normal !important;
+}
+
+.print {
+  position: absolute;
+  right: 30px;
+  top: 5px;
+  z-index: 10;
+}
+
+.garis-bawah {
+  border-bottom: 6px solid black;
+  border-bottom-style: double;
+}
+
+.border-box {
+  border: 1px solid black;
+}
+
+.border-tb {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.border-left {
+  border-left: 1px solid black;
+}
+
+.border-right {
+  border-right: 1px solid black;
+}
+
+.border-bottom {
+  border-bottom: 1px solid black;
+}</style>
