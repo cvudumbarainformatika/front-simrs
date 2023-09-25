@@ -12,7 +12,7 @@
           class="row q-pa-md q-col-gutter-xs"
           @submit="saveOrder"
         >
-          <div class="col-12">
+          <div class="col-6">
             <q-select
               v-model="store.form.kodepenunjang"
               label="Penunjang Tujuan"
@@ -24,10 +24,34 @@
               :options="store.penunjangs"
               option-label="nama"
               option-value="kode"
-              :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+              emit-value
+              map-options
+              :rules="[val => !!val || 'Harap Pilih Tujuan Permintaan']"
+              hide-bottom-space
             />
           </div>
-          div
+          <div class="col-12">
+            <q-input
+              v-model="store.form.keterangan"
+              label="Keterangan"
+              autogrow
+              outlined
+              standout="bg-yellow-3"
+            />
+          </div>
+
+          <div class="col-12">
+            <q-separator class=" q-my-lg" />
+            <div class="text-right q-gutter-sm">
+              <q-btn
+                label="Simpan & Kirim Order"
+                color="primary"
+                type="submit"
+                :loading="store.loadingOrder"
+                :disable="store.loadingOrder"
+              />
+            </div>
+          </div>
         </q-form>
       </q-scroll-area>
     </div>
@@ -41,7 +65,14 @@ import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penun
 const formRef = ref()
 const store = usePenunjangLainPoliStore()
 
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
 function saveOrder() {
-  console.log('ok')
+  store.saveOrder(props.pasien)
 }
 </script>

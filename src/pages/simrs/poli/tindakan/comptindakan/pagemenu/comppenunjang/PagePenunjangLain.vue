@@ -41,5 +41,6 @@ const store = usePenunjangLainPoliStore()
 
 onMounted(() => {
   store.getPenunjangLain()
+  store.getNota(props.pasien)
 })
 </script>
