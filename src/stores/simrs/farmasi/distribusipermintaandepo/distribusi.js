@@ -101,6 +101,11 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
         console.log('item', item)
       }
     },
+    gantiJenisDistribusi(val) {
+      console.log('jenis dist', val)
+      this.setParams('jenisdistribusi', val)
+      this.getPermintaanDepo()
+    },
     cariPermintaan(val) {
       const needle = val.toLowerCase()
       const arr = 'no_permintaan'

@@ -44,6 +44,7 @@
                 val="non-konsinyasi"
                 label="Non-Konsinyasi"
                 :disable="store.loading"
+                @update:model-value="store.gantiJenisDistribusi"
               />
             </div>
             <div class="q-mr-sm">
@@ -54,6 +55,7 @@
                 val="konsinyasi"
                 label="Konsinyasi"
                 :disable="store.loading"
+                @update:model-value="store.gantiJenisDistribusi"
               />
             </div>
           </div>
@@ -213,7 +215,7 @@
       <template #cell-status="{ row }">
         <div class="row">
           <q-chip
-            class="f-12"
+            class="f-10"
             :color="!row.flag_distribusi ? 'green' : 'blue'"
             :text-color="!row.flag_distribusi ? 'yellow' : 'white'"
             :label="!row.flag_distribusi ? 'Belum' : 'Sudah'"
