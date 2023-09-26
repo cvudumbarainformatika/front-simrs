@@ -148,6 +148,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             data.radiologi.splice(0, 0, val)
           }
         }
+        if (kode === 'penunjanglain') {
+          const target = data?.penunjanglain?.find(x => x.id === val.id)
+          if (target) {
+            Object.assign(target, val)
+          } else {
+            data?.penunjanglain.splice(0, 0, val)
+          }
+        }
         // console.log('data ditemukan', data)
       }
     },
@@ -203,6 +211,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.radiologi
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataPenunjangLain(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.penunjanglain
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

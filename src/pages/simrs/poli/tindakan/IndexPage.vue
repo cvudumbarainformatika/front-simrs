@@ -92,6 +92,12 @@ const menus = ref([
     label: 'Penunjang',
     icon: 'icon-my-local_hospital',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PenunjangPage.vue')))
+  },
+  {
+    name: 'perencanaan-page',
+    label: 'Perencanaan',
+    icon: 'icon-mat-style',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PerencanaanPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])
