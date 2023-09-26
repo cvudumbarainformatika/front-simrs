@@ -54,6 +54,7 @@
   </div>
   <!-- Permintaan -->
   <div class="q-mt-lg q-py-md q-px-sm">
+    Ruangan minta kemana?
     <div class="row q-col-gutter-md ">
       <div class="col-6">
         <div class="row q-mb-xs">
