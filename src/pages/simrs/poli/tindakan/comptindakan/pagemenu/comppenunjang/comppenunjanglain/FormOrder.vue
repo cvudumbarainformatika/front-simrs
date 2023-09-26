@@ -73,6 +73,8 @@ const props = defineProps({
 })
 
 function saveOrder() {
-  store.saveOrder(props.pasien)
+  store.saveOrder(props.pasien).then(() => {
+    formRef.value.resetValidation()
+  })
 }
 </script>

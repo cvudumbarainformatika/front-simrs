@@ -18,7 +18,7 @@
         square
         class="col-6 full-height"
       >
-        <!-- <ListOrder :pasien="props.pasien" /> -->
+        <ListOrder :pasien="props.pasien" />
         sadas
       </q-card>
     </div>
@@ -28,6 +28,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import FormOrder from './comppenunjanglain/FormOrder.vue'
+import ListOrder from './comppenunjanglain/ListOrder.vue'
 import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
 
 const props = defineProps({
