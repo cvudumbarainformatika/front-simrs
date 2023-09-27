@@ -79,7 +79,7 @@
                 option-value="value"
                 outlined
                 clearable
-                :source="store.gudangs"
+                :source="store.depos"
                 @selected="gudangSelected"
               />
             </div>
@@ -122,7 +122,7 @@
         <div v-if="apps.user.pegawai.role_id !== 1">
           <div class="row no-wrap q-mb-xs">
             <div class="col-4">
-              Gudang Asal :
+              Depo Asal :
             </div>
             <div
               v-if="store.disp.gudang"
@@ -142,16 +142,16 @@
           </div>
           <div class="row no-wrap q-mb-xs">
             <div class="col-4 ">
-              Depo Tujuan :
+              Ruangan Tujuan :
             </div>
             <div
-              v-if="store.disp.depo"
+              v-if="store.disp.ruang"
               class="col-4 text-weight-bold"
             >
-              {{ store.disp.depo }}
+              {{ store.disp.ruang }}
             </div>
             <div
-              v-if="!store.disp.depo"
+              v-if="!store.disp.ruang"
               class="col-4 text-weight-bold text-negative"
             >
               Anda Tidak Memiliki Akses Permintaan Depo
@@ -204,6 +204,7 @@
                 v-model="store.form.jumlah_minta"
                 label="Jumlah Minta"
                 outlined
+                :disable="!store.form.kdobat"
                 :rules="[
                   val => !isNaN(val) || 'Harus pakai Nomor'
                 ]"
@@ -441,26 +442,26 @@ const user = computed(() => {
         store.getListObat()
       }
       if (!store.form.tujuan) {
-        store.setForm('tujuan', 'Gd-05010100')
-        store.setParam('kdgudang', 'Gd-05010100')
+        store.setForm('tujuan', 'Gd-04010101')
+        store.setParam('kdgudang', 'Gd-04010101')
         store.getListObat()
       }
-    } else if (apps.user.pegawai.depo) {
-      store.setForm('dari', apps.user.pegawai.depo.kode)
-      store.setDisp('depo', apps.user.pegawai.depo.nama)
-      const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
-      console.log('dep', dep)
-      if (dep.length) {
-        store.setForm('tujuan', 'Gd-03010100')
-        store.setParam('kdgudang', 'Gd-03010100')
-        store.setDisp('gudang', 'Gudang Farmasi(Floor Stok)')
-        store.getListObat()
-      } else {
-        store.setForm('tujuan', 'Gd-05010100')
-        store.setParam('kdgudang', 'Gd-05010100')
-        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
-        store.getListObat()
-      }
+    } else if (apps.user.pegawai.ruang) {
+      store.setForm('dari', apps.user.pegawai.ruang.kode)
+      store.setDisp('ruang', apps.user.pegawai.ruang.uraian)
+      // const dep = store.floor.filter(a => a.kode === apps.user.pegawai.ruang.kode)
+      // console.log('dep', dep)
+      // if (dep.length) {
+      store.setForm('tujuan', 'Gd-04010101')
+      store.setParam('kdgudang', 'Gd-04010101')
+      store.setDisp('gudang', 'Floor Stock 2 (Obat)')
+      store.getListObat()
+      // } else {
+      // store.setForm('tujuan', 'Gd-05010100')
+      // store.setParam('kdgudang', 'Gd-05010100')
+      // store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+      // store.getListObat()
+      // }
     }
   }
   return apps.user

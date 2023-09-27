@@ -98,7 +98,7 @@
                   autofocus
                   outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
-                  :loading="store.loading"
+                  :loading="store.loading || store.loadingNorm"
                   :rules="[
                     val => (!!val) || 'Harap diisi',
                     val => val?val.length > 5:!val || 'Harus 6 Karakter',
@@ -106,6 +106,7 @@
                   ]"
                   @keyup.enter="inputNoRmSelesai"
                   @update:model-value="updateValNoRM"
+                  @blur="store.cekDulu($event,'norm')"
                 />
                 <!-- val => val?val.length < 7:!val || 'Harus 6 Karakter', -->
               </div>
@@ -130,6 +131,7 @@
                   ]"
                   @icon-right-click="cekBpjsbyNik"
                   @update:model-value="cekKtpKitas"
+                  @blur="store.cekDulu($event, 'nik')"
                 />
               </div>
             </div>
@@ -177,6 +179,7 @@
                   :loading="store.loadingNoka"
                   :rules="[val=> (!!val ? regex.test( val ) : true) ||'Hanya angka']"
                   @update:model-value="setNokaBPJS"
+                  @blur="store.cekDulu($event, 'noka')"
                 />
               </div>
               <div

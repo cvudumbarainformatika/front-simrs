@@ -55,6 +55,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
       { nama: 'Baru', value: 'baru' },
       { nama: 'Lama', value: 'lama' }
     ],
+    loadingNorm: false,
     loadingSelect: false,
     loadingPropinsi: false,
     loadingKabupaten: false,
@@ -911,6 +912,35 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
             resolve(resp.data)
           }).catch(() => {
             this.loadingFinger = false
+          })
+      })
+    },
+
+    cekDulu(evt, val) {
+      console.log('cek dulu', evt.target.value)
+      console.log('val', val)
+      this.loadingNorm = val === 'norm'
+      this.loadingNik = val === 'nik'
+      this.loadingNoka = val === 'noka'
+      const param = {
+        params: {
+          q: evt.target.value,
+          cek: val
+        }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pendaftaran/cek-data-pasien', param)
+          .then(resp => {
+            this.loadingNorm = false
+            this.loadingNik = false
+            this.loadingNoka = false
+            console.log('hasil cek', resp.data)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingNorm = false
+            this.loadingNik = false
+            this.loadingNoka = false
           })
       })
     }
