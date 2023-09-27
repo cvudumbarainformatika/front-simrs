@@ -19,17 +19,18 @@
         class="col-6 full-height"
       >
         <ListOrder :pasien="props.pasien" />
+        sadas
       </q-card>
     </div>
   </div>
 </template>
-<script setup>
-import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
-import ListOrder from './compradiologi/ListOrder.vue'
-import FormOrder from './compradiologi/FormOrder.vue'
-import { onMounted } from 'vue'
 
-const store = useRadiologiPoli()
+<script setup>
+import { onMounted } from 'vue'
+import FormOrder from './comppenunjanglain/FormOrder.vue'
+import ListOrder from './comppenunjanglain/ListOrder.vue'
+import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
+
 const props = defineProps({
   pasien: {
     type: Object,
@@ -37,9 +38,10 @@ const props = defineProps({
   }
 })
 
+const store = usePenunjangLainPoliStore()
+
 onMounted(() => {
-  store.getRadiologi()
-  store.getJenisRadiologi()
+  store.getPenunjangLain()
   store.getNota(props.pasien)
 })
 </script>

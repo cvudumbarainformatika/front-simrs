@@ -58,9 +58,10 @@
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 
 const drawer = ref(false)
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -91,11 +92,22 @@ const menus = ref([
     label: 'Penunjang',
     icon: 'icon-my-local_hospital',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PenunjangPage.vue')))
+  },
+  {
+    name: 'perencanaan-page',
+    label: 'Plann',
+    icon: 'icon-mat-style',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PerencanaanPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])
+
+const inacbg = useInacbgPoli()
 onMounted(() => {
   menu.value = menus.value[0]
+  inacbg.getDataIna(props.pasien)
+  inacbg.setTotalTindakan(props.pasien)
+  inacbg.setTotalLaborat(props.pasien)
 })
 
 onBeforeUnmount(() => {

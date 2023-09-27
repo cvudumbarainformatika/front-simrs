@@ -2,7 +2,7 @@
   <div class="column full-height">
     <q-bar class="col-auto bg-teal text-white">
       <div class="q-py-sm f-14 ">
-        List Order Radiologi
+        List Permintaan
       </div>
       <q-space />
       <div class="q-py-xs">
@@ -19,12 +19,11 @@
       </div>
     </q-bar>
     <div class="col-grow bg-grey">
-      <!-- jika belum ada pemeriksaan -->
       <div
         v-if="filterredTable.length === 0"
         class="column full-height flex-center text-white"
       >
-        Belum Ada Permintaan Order
+        Belum Ada Permintaan Order ke Laborat
       </div>
       <q-scroll-area
         v-else
@@ -38,42 +37,48 @@
               v-for="(item, i) in filterredTable"
               :key="i"
             >
-              <q-item class="bg-white">
+              <q-item class="bg-white list-move">
                 <q-item-section>
-                  <q-item-label caption>
-                    NOMOR : <span class="text-primary">{{ item?.rs2 }}</span>
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class="">NOMOR</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
                   </q-item-label>
-                  <q-item-label caption>
-                    PERMINTAAN
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span class=""> Tujuan : </span> <span class="text-weight-bold"> {{ item?.masterpenunjang?.rs2 }} </span>
                   </q-item-label>
-                  <q-item-label lines="6">
-                    {{ item?.rs4 }}
-                  </q-item-label>
-                  <q-item-label caption>
-                    KETERANGAN
-                  </q-item-label>
-                  <q-item-label lines="6">
-                    {{ item?.rs7 }}
+                  <q-item-label
+                    lines="2"
+                    class="f-12"
+                  >
+                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs7 }} </em>
                   </q-item-label>
                 </q-item-section>
+
                 <q-item-section
                   side
+                  top
                 >
-                  <q-btn
-                    flat
-                    dense
-                    icon="icon-mat-delete"
-                    color="negative"
-                    size="sm"
-                    rounded
-                    @click="hapusItem(item?.id)"
-                  />
-                  <q-badge
-                    outline
-                    :color="item?.cito==='Cito'?'orange':'primary'"
-                    :label="item?.cito==='Cito'? item?.cito:'Normal'"
-                    class="q-my-sm"
-                  />
+                  <div class="row q-my-xs">
+                    <q-btn
+                      flat
+                      round
+                      size="sm"
+                      icon="icon-mat-edit"
+                    />
+                    <q-btn
+                      flat
+                      round
+                      size="sm"
+                      icon="icon-mat-delete"
+                      color="negative"
+                      @click="hapusItem(item?.id)"
+                    />
+                  </div>
                 </q-item-section>
               </q-item>
             </template>
@@ -86,11 +91,11 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { useRadiologiPoli } from 'src/stores/simrs/pelayanan/poli/radiologi'
+import { usePenunjangLainPoliStore } from 'src/stores/simrs/pelayanan/poli/penunjanglain'
 import { computed } from 'vue'
 
 const $q = useQuasar()
-const store = useRadiologiPoli()
+const store = usePenunjangLainPoliStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -99,9 +104,9 @@ const props = defineProps({
 })
 
 const filterredTable = computed(() => {
-  const val = store.form.nota
-  const arr = props?.pasien?.radiologi
-  return arr.filter(x => x.rs2 === val)
+  const val = store?.form?.nota
+  const arr = props?.pasien?.penunjanglain
+  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 })
 
 function hapusItem(id) {
@@ -113,7 +118,7 @@ function hapusItem(id) {
     persistent: true
   }).onOk(() => {
     // console.log('HAPUS', id)
-    store.hapusRadiologi(props.pasien, id)
+    store.hapusPermintaan(props.pasien, id)
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {

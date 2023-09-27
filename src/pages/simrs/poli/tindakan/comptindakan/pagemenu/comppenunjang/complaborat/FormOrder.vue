@@ -8,6 +8,7 @@
     <div class="col full-height">
       <q-scroll-area style="height: calc(100% - 1px);">
         <q-form
+          ref="formRef"
           class="row q-pa-md q-col-gutter-xs"
           @submit="saveOrderLaborat"
         >
@@ -60,7 +61,7 @@
               </template>
             </q-select>
           </div>
-          <div class="col-12">
+          <div class="col-6">
             <q-input
               ref="diagnosaRef"
               v-model="store.form.diagnosa_masalah"
@@ -70,7 +71,7 @@
               standout="bg-yellow-3"
             />
           </div>
-          <div class="col-12">
+          <div class="col-6">
             <q-input
               v-model="store.form.catatan_permintaan"
               label="Catatan"
@@ -262,13 +263,13 @@
             </div>
           </div>
           <div class="col-12">
-            <q-separator class=" q-my-sm" />
+            <q-separator class=" q-my-md" />
             <div class="text-right q-gutter-sm">
-              <q-btn
+              <!-- <q-btn
                 label="Reset Form"
                 color="dark"
                 type="reset"
-              />
+              /> -->
               <q-btn
                 label="Simpan & Kirim Order"
                 color="primary"
@@ -291,6 +292,7 @@ import { formatRp } from 'src/modules/formatter'
 const store = usePenunjangPoli()
 
 const cariRef = ref(null)
+const formRef = ref(null)
 const diagnosaRef = ref(null)
 
 const options = ref()
@@ -335,9 +337,12 @@ async function filterFn(val, update, abort) {
 }
 
 function insertList(val) {
-  store.setDetails(val).then(() => {
-    diagnosaRef.value.focus()
-  })
+  // store.setDetails(val).then(() => {
+  //   // store.setForm('details', [])
+  //   diagnosaRef.value.focus()
+  // })
+  store.setDetails(val)
+  diagnosaRef.value.focus()
 }
 
 function filterAs(val, update) {
@@ -384,7 +389,11 @@ function createValueMetodePengambilanSpesimen(val, done) {
 }
 
 function saveOrderLaborat() {
-  store.saveOrderLaborat(props.pasien)
+  store.saveOrderLaborat(props.pasien).then(() => {
+    console.log(formRef.value)
+    formRef.value.resetValidation()
+    cariRef.value.focus()
+  })
 }
 
 </script>

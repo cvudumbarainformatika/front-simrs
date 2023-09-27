@@ -169,20 +169,41 @@ const farmasi = {
       path: '/farmasi/pemakaianruangan',
       component: () => import('src/pages/simrs/farmasi/pemakaianruangan/IndexPage.vue'),
       children: [
-        { path: '', redirect: '/farmasi/pemakaianruangan/pemakaianruangan' },
+        { path: '', redirect: '/farmasi/pemakaianruangan/pemakaian' },
         {
-          path: '/farmasi/pemakaianruangan/pemakaianruangan',
-          name: 'farmasi.pemakaianruangan.pemakaianruangan',
+          path: '/farmasi/pemakaianruangan/pemakaian',
+          name: 'farmasi.pemakaianruangan.pemakaian',
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/farmasi/pemakaianruangan/pemakaian/IndexPage.vue')
         },
         {
-          path: '/farmasi/pemakaianruangan/listpemakaianruangan',
-          name: 'farmasi.pemakaianruangan.listpemakaianruangan',
+          path: '/farmasi/pemakaianruangan/listpemakaian',
+          name: 'farmasi.pemakaianruangan.listpemakaian',
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/farmasi/pemakaianruangan/listpemakaian/IndexPage.vue')
+        }
+      ]
+    },
+    {
+      path: '/farmasi/retur',
+      component: () => import('src/pages/simrs/farmasi/retur/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/farmasi/retur/depo' },
+        {
+          path: '/farmasi/retur/depo',
+          name: 'farmasi.retur.depo',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/retur/depo/IndexPage.vue')
+        },
+        {
+          path: '/farmasi/retur/ruangan',
+          name: 'farmasi.retur.ruangan',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/farmasi/retur/ruangan/IndexPage.vue')
         }
       ]
     },

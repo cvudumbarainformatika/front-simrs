@@ -19,8 +19,8 @@
           <q-tab
             v-for="(item, i) in store.tabs"
             :key="i"
-            :name="item"
-            :label="item"
+            :name="item.page"
+            :label="item.name"
           />
         </q-tabs>
       </div>
@@ -33,7 +33,7 @@
           <q-tab-panel
             v-for="(panel, n) in store.tabs"
             :key="n"
-            :name="panel"
+            :name="panel.page"
             class="full-height q-pa-none"
           >
             <component
