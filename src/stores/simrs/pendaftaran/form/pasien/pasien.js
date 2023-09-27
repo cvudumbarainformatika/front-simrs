@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { date } from 'quasar'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
 
@@ -919,30 +919,51 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     cekDulu(evt, val) {
       console.log('cek dulu', evt.target.value)
       console.log('val', val)
-      this.loadingNorm = val === 'norm'
-      this.loadingNik = val === 'nik'
-      this.loadingNoka = val === 'noka'
-      const param = {
-        params: {
-          q: evt.target.value,
-          cek: val
+      const cari = evt.target.value
+      if (cari !== '' && this.form.barulama === 'baru') {
+        this.loadingNorm = val === 'norm'
+        this.loadingNik = val === 'nik'
+        this.loadingNoka = val === 'noka'
+        const param = {
+          params: {
+            q: cari,
+            cek: val
+          }
         }
+        return new Promise(resolve => {
+          api.get('v1/simrs/pendaftaran/cek-data-pasien', param)
+            .then(resp => {
+              this.loadingNorm = false
+              this.loadingNik = false
+              this.loadingNoka = false
+              console.log('hasil cek', resp.data)
+              resolve(resp)
+            })
+            .catch((err) => {
+              const pasien = err.response.data.data
+              console.log('error', pasien)
+              if (val === 'norm') {
+                notifErrVue('dan Noka : ' + pasien.rs46)
+                notifErrVue('dengan NIK : ' + pasien.rs49)
+                notifErrVue('atas nama : ' + pasien.rs2)
+                notifErrVue('No Rm Sudah Ada ')
+              } else if (val === 'nik') {
+                notifErrVue('dan Noka : ' + pasien.rs46)
+                notifErrVue('dengan No Rm : ' + pasien.rs1)
+                notifErrVue('atas nama : ' + pasien.rs2)
+                notifErrVue('NIK Sudah Ada ')
+              } else if (val === 'noka') {
+                notifErrVue('dan NIK : ' + pasien.rs49)
+                notifErrVue('dengan No Rm : ' + pasien.rs1)
+                notifErrVue('atas nama : ' + pasien.rs2)
+                notifErrVue('Noka BPJS Sudah Ada ')
+              }
+              this.loadingNorm = false
+              this.loadingNik = false
+              this.loadingNoka = false
+            })
+        })
       }
-      return new Promise(resolve => {
-        api.get('v1/simrs/pendaftaran/cek-data-pasien', param)
-          .then(resp => {
-            this.loadingNorm = false
-            this.loadingNik = false
-            this.loadingNoka = false
-            console.log('hasil cek', resp.data)
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loadingNorm = false
-            this.loadingNik = false
-            this.loadingNoka = false
-          })
-      })
     }
     // -------
   }
