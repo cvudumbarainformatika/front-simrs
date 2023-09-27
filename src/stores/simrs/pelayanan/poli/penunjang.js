@@ -11,6 +11,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     tabs: [
       { name: 'Laborat', page: 'Laborat' },
       { name: 'Radiologi', page: 'Radiologi' },
+      { name: 'Operasi', page: 'Operasi' },
       { name: 'Penunjang Lain', page: 'PenunjangLain' }
     ],
     // laborat
