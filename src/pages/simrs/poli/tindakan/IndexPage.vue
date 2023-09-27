@@ -95,7 +95,7 @@ const menus = ref([
   },
   {
     name: 'perencanaan-page',
-    label: 'Perencanaan',
+    label: 'Plann',
     icon: 'icon-mat-style',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PerencanaanPage.vue')))
   }
