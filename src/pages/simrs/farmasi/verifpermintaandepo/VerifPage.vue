@@ -167,24 +167,21 @@
           </q-btn>
         </div>
         <div v-if="parseInt(row.flag) >= 2">
-          <div class="row items-center">
-            <div class="q-mr-sm" />
-            <div>
-              <q-btn
-                flat
-                icon="icon-mat-lock"
-                dense
-                color="green"
-                @click="info(row)"
+          <div>
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="green"
+              @click="info(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
               >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Verifikasi Permintaan Depo sudah di kunci
-                </q-tooltip>
-              </q-btn>
-            </div>
+                Verifikasi Permintaan Depo sudah di kunci
+              </q-tooltip>
+            </q-btn>
           </div>
         </div>
       </template>
@@ -407,7 +404,7 @@
                     <div class="row justify-end">
                       <q-btn
                         dense
-                        glossy
+                        push
                         no-caps
                         icon="icon-mat-edit"
                         label="Edit"
