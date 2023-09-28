@@ -81,7 +81,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           const groupped = this.groupBy(arr2, gruper => gruper.gruper)
           this.masterlaborat = groupped
           this.loadingMasterLab = false
-          console.log('group pemeriksaan', groupped)
+          // console.log('group pemeriksaan', groupped)
         }
         this.loadingMasterLab = false
       } catch (error) {
@@ -124,7 +124,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setDetails(pemeriksaan) {
       // this.form.details = []
       const thumb = []
-      console.log('pemeriksaan', pemeriksaan)
+      // console.log('pemeriksaan', pemeriksaan)
       for (let i = 0; i < pemeriksaan?.value.length; i++) {
         const element = pemeriksaan?.value[i]
         this.form.biaya_layanan = element?.aslix?.hargapelayananpolispesialis // ini bisa element?.aslix?.hargapelayananpoliumum
@@ -158,7 +158,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       console.log('save', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaborat', this.form)
-        console.log('save resp', resp)
+        // console.log('save resp', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -187,7 +187,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       const payload = { id, noreg: pasien?.noreg }
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaborat', payload)
-        console.log('hapus laborat', resp)
+        // console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataLaborat(pasien, id)
