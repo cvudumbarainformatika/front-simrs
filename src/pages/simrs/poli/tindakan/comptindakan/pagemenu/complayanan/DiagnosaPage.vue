@@ -9,6 +9,7 @@
       >
         <FormDiagnosa
           ref="refForm"
+          :pasien="props.pasien"
           @save-pemeriksaan="savePemeriksaan"
         />
       </q-card>

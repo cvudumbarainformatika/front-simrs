@@ -18,8 +18,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
       kddiagnosa: '',
       diagnosa: '',
       keterangan: '',
-      kasus: 'Baru',
-      tipediagnosa: 'Primer',
+      kasus: '',
+      tipediagnosa: '',
       dtd: ''
     },
     // tindakan
@@ -72,6 +72,10 @@ export const useLayananPoli = defineStore('layanan-poli', {
           ? this.formdiagnosa.dtd = target[0].dtd ? target[0].dtd : ''
           : this.formdiagnosa.dtd = ''
       }
+    },
+
+    setFormDianosa(key, val) {
+      this.formdiagnosa[key] = val
     },
 
     setKdTindakan(val) {
@@ -132,8 +136,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
           isi.masterdiagnosa = { rs4: form.diagnosa }
           storePasien.injectDataPasien(pasien, isi, 'diagnosa')
           notifSuccess(resp)
-          this.initReset()
           this.loadingFormDiagnosa = false
+          this.initReset()
 
           if (resp.data.inacbg?.metadata?.code === 200) {
             const storeIna = useInacbgPoli()
@@ -259,8 +263,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
           kddiagnosa: '',
           diagnosa: '',
           keterangan: '',
-          kasus: 'Baru',
-          tipediagnosa: 'Primer',
+          kasus: '',
+          tipediagnosa: '',
           dtd: ''
         }
         // tindakan
