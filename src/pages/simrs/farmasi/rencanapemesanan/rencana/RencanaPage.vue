@@ -126,18 +126,27 @@
                 {{ row.nama_obat }}
               </div>
             </div>
-            <div class="row justify-between no-wrap ">
-              <div class="q-mr-xs">
-                Fornas
-              </div>
+            <div class="row justify-start no-wrap q-my-xs">
               <div
                 class="text-weight-bold"
                 :class="row.status_fornas === '1'?'text-green':'text-negative'"
               >
-                {{ row.status_fornas==='1' ?'YA':'TIDAK' }}
+                {{ row.status_fornas==='1' ?'Fornas':'Non-Fornas' }}
+              </div>
+              <div
+                class="text-weight-bold q-ml-sm"
+                :class="row.status_forkid === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_forkid==='1' ?'Forkit':'Non-Forkit' }}
+              </div>
+              <div
+                class="text-weight-bold q-ml-sm"
+                :class="row.status_generik === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap ">
+            <!-- <div class="row justify-between no-wrap ">
               <div class="q-mr-xs">
                 Forkit
               </div>
@@ -158,8 +167,18 @@
               >
                 {{ row.status_generik==='1' ?'YA':'TIDAK' }}
               </div>
+            </div> -->
+            <div class="row justify-between no-wrap text-italic f-10">
+              <div class="q-mr-xs">
+                Satuan
+              </div>
+              <div
+                class="text-weight-bold"
+              >
+                {{ row.satuan_k ? row.satuan_k :'-' }}
+              </div>
             </div>
-            <div class="row justify-between no-wrap ">
+            <div class="row justify-between no-wrap text-italic f-10">
               <div class="q-mr-xs">
                 Sistem Bayar
               </div>

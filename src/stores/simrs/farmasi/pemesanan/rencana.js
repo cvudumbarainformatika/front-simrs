@@ -112,7 +112,8 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
         jumlah_bisa_dibeli: val.bisaBeli,
         tgl_stok: this.form.tanggal,
         pabrikan: 'belum ada',
-        pbf: 'wewewew',
+        pbf: 'belum tersedia',
+        satuan_k: val.satuan_k,
         jumlahdpesan: val.jumlahBeli
       }
       console.log('data kirim', data)

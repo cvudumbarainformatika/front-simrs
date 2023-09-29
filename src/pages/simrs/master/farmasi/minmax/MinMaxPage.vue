@@ -50,7 +50,15 @@
               </div>
             </template>
             <template #cell-Obat="{row}">
-              <div>{{ row.obat.namaobat }}</div>
+              <div class="row">
+                {{ row.obat.namaobat }}
+              </div>
+              <div class="row no-wrap justify-between text-italic f-10">
+                <div>satuan</div>
+                <div class="text-weight-bold">
+                  {{ row.obat.satuan_k }}
+                </div>
+              </div>
             </template>
             <template #cell-Ruangan="{row}">
               <div v-if="row.ruanganx">
