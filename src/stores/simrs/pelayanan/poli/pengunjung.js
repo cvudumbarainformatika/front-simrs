@@ -85,77 +85,85 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]
-        if (kode === 'anamnesis') {
-          const target = data.anamnesis.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            // data.anamnesis.push(val)
-            data.anamnesis.splice(0, 0, val)
-          }
+        const target = data[kode]?.find(x => x.id === val.id)
+        if (target) {
+          Object.assign(target, val)
+        } else {
+          data[kode]?.splice(0, 0, val)
         }
-        if (kode === 'gambars') {
-          const target = data.gambars?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            // data.gambars.push(val)
-            data.gambars.splice(0, 0, val)
-          }
-        }
-        if (kode === 'pemeriksaanfisik') {
-          const target = data.pemeriksaanfisik?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            // data.pemeriksaanfisik.push(val)
-            data.pemeriksaanfisik.splice(0, 0, val)
-          }
-        }
-        if (kode === 'diagnosa') {
-          const target = data.diagnosa?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            // data.diagnosa.push(val)
-            data.diagnosa.splice(0, 0, val)
-          }
-        }
-        if (kode === 'tindakan') {
-          const target = data.tindakan?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            data.tindakan.splice(0, 0, val)
-          }
-        }
-        if (kode === 'laborats') {
-          const target = data?.laborats?.find(x => x.id === val.id)
+        // if (kode === 'anamnesis') {
+        //   const target = data.anamnesis.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.anamnesis.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'gambars') {
+        //   const target = data.gambars?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.gambars.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'pemeriksaanfisik') {
+        //   const target = data.pemeriksaanfisik?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.pemeriksaanfisik.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'diagnosa') {
+        //   const target = data.diagnosa?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.diagnosa.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'tindakan') {
+        //   const target = data.tindakan?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.tindakan.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'laborats') {
+        //   const target = data?.laborats?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.laborats.splice(0, 0, val)
+        //   }
+        // }
 
-          // console.log('data laborat ditemukan', target)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            data.laborats.splice(0, 0, val)
-          }
-        }
-
-        if (kode === 'radiologi') {
-          const target = data.radiologi?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            data.radiologi.splice(0, 0, val)
-          }
-        }
-        if (kode === 'penunjanglain') {
-          const target = data?.penunjanglain?.find(x => x.id === val.id)
-          if (target) {
-            Object.assign(target, val)
-          } else {
-            data?.penunjanglain.splice(0, 0, val)
-          }
-        }
+        // if (kode === 'radiologi') {
+        //   const target = data.radiologi?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data.radiologi.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'penunjanglain') {
+        //   const target = data?.penunjanglain?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data?.penunjanglain.splice(0, 0, val)
+        //   }
+        // }
+        // if (kode === 'ok') {
+        //   const target = data?.ok?.find(x => x.id === val.id)
+        //   if (target) {
+        //     Object.assign(target, val)
+        //   } else {
+        //     data?.ok.splice(0, 0, val)
+        //   }
+        // }
         // console.log('data ditemukan', data)
       }
     },
@@ -219,6 +227,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.penunjanglain
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataOk(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.ok
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

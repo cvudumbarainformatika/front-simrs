@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minmax_obat', {
   state: () => ({
@@ -8,6 +8,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     loading: false,
     items: [],
     obats: [],
+    filteredObats: [],
     ruangs: [],
     item: {},
     meta: {},
@@ -74,9 +75,9 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
         this.ruangs.push(rua)
       }
       this.formOpen = !this.formOpen
-      console.log('obat', obatnya)
-      console.log('ruang', ruangnya)
-      console.log(this.form)
+      // console.log('obat', obatnya)
+      // console.log('ruang', ruangnya)
+      // console.log(this.form)
     },
     setSearch (val) {
       this.params.q = val
@@ -121,8 +122,38 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       console.log('ruang', val)
       this.form.kd_ruang = val
       this.form.koderuang = val
+      this.getDataObatByRuang()
     },
-    // api relatec function
+    mapingFilteredObat(data) {
+      console.log('filterd data', data)
+      data.forEach(anu => {
+        if (anu.stokmaxrs.length) {
+          anu.min = anu.stokmaxrs[0].min
+          anu.max = anu.stokmaxrs[0].max
+        } else {
+          anu.min = 0
+          anu.max = 0
+        }
+      })
+      this.obats = data
+      this.filteredObats = data
+      // if (this.filteredObats.length) {
+      //   this.filteredObats.forEach(ob => {
+      //     ob.min = 0
+      //     ob.max = 0
+      //   })
+      //   data.forEach(dat => {
+      //     // const ind = this.filterObat.filter(a => a.kodeobat === dat.kd_obat)
+      //     const ind = findWithAttr(this.filterObat, 'kodeobat', dat.kd_obat)
+
+      //     if (ind >= 0) {
+      //       this.filterObat[ind].min = dat.min
+      //       this.filterObat[ind].max = dat.max
+      //     }
+      //   })
+      // }
+    },
+    // api related function
 
     // ambil
     getDataTable () {
@@ -159,11 +190,28 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       this.loading = true
       const params = { params: { q: this.filterObat } }
       return new Promise(resolve => {
-        api.get('v1/simrs/master/cariObat', params)
+        api.get('v1/simrs/farmasinew/carilistminmaxbyruang', params)
           .then(resp => {
             this.loading = false
             this.obats = resp.data
-            console.log(resp)
+            this.filteredObats = resp.data
+            console.log('obat', resp.data)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    getDataObatByRuang() {
+      this.loading = true
+      const params = { params: { kd_ruang: this.form.kd_ruang, q: this.filterObat } }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/carilistminmaxbyruang', params)
+          .then(resp => {
+            this.loading = false
+            // this.obats = resp.data
+            // this.filteredObats = resp.data
+            // console.log('min max by ruang', resp.data)
+            this.mapingFilteredObat(resp.data)
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -188,17 +236,29 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       })
     },
     // simpan
-    simpanData() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/minmaxobat', this.form)
-          .then(resp => {
-            this.loading = false
-            this.getDataTable()
-            resolve(resp)
-          })
-          .catch(() => { this.loading = false })
-      })
+    simpanData(val) {
+      const form = {
+        kd_ruang: this.form.kd_ruang,
+        kd_obat: val.kd_obat,
+        min: val.min,
+        max: val.max
+      }
+      if (val.min <= val.max) {
+        console.log(form)
+        val.loading = true
+        return new Promise(resolve => {
+          api.post('v1/simrs/farmasinew/minmaxobat', form)
+            .then(resp => {
+              val.loading = false
+              this.getDataObatByRuang()
+              this.getDataTable()
+              resolve(resp)
+            })
+            .catch(() => { val.loading = false })
+        })
+      } else {
+        notifErrVue('nilai minimal todak boleh lebih besar dari maksimal')
+      }
     }
   }
 })

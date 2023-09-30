@@ -105,7 +105,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
     initReset() {
       this.form = {
         noreg: '', // rs1
-        nota: '', // rs2
+        // nota: '', // rs2
         // rs3:'', //tgl
         permintaan: '', // rs4
         keterangan: '', // rs7
