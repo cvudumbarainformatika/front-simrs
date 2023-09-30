@@ -13,7 +13,7 @@ const kasir = {
       path: '/kasir/rajal',
       component: () => import('src/pages/simrs/kasir/rajal/IndexPage.vue'),
       children: [
-        { path: '', redirect: '/kasir/rajal/billing' },
+        { path: '', redirect: '/kasir/rajal/listkunjungan' },
         {
           path: '/kasir/rajal/listkunjungan',
           name: 'kasir.rajal.listkunjungan',
