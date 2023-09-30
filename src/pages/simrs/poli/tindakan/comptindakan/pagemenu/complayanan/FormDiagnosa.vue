@@ -252,16 +252,21 @@ function filterFn(val, update, abort) {
 }
 
 function kasusDiUbah(val) {
-  // console.log(val)
-  const arr = store.listDiagnosa
-  if (val === 'Baru') {
-    listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
-  } else {
-    listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
-  }
+  ganti(val)
+}
 
-  // cek diagnosa
+function ganti(val) {
+  const arr = store.listDiagnosa
   const arr2 = props.pasien?.diagnosa
+  if (val === 'Baru' && arr2.length === 0) {
+    listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+  } else if (val === 'Baru' && arr2.length > 0) {
+    listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+  } else if (val === 'Lama' && arr2.length === 0) {
+    listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+  } else if (val === 'Lama' && arr2.length > 0) {
+    listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+  }
   arr2.length ? store.setFormDianosa('tipediagnosa', 'Sekunder') : store.setFormDianosa('tipediagnosa', 'Primer')
 }
 
@@ -276,12 +281,13 @@ function diagnosaUtamaDiubah(val) {
       position: 'top-left'
     })
 
-    store.setFormDianosa('tipediagnosa', '')
+    // store.setFormDianosa('tipediagnosa', '')
   }
 }
 
 watch(() => props.pasien?.diagnosa, (obj) => {
   console.log('watch pilihan kasus', obj)
+  ganti(store.formdiagnosa.kasus)
 }, { deep: true })
 
 </script>

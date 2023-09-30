@@ -89,7 +89,11 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         if (target) {
           Object.assign(target, val)
         } else {
-          data[kode]?.splice(0, 0, val)
+          if (kode === 'diagnosa') {
+            data[kode]?.push(val)
+          } else {
+            data[kode]?.splice(0, 0, val)
+          }
         }
         // if (kode === 'anamnesis') {
         //   const target = data.anamnesis.find(x => x.id === val.id)

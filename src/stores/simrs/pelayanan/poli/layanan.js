@@ -263,7 +263,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           kddiagnosa: '',
           diagnosa: '',
           keterangan: '',
-          kasus: '',
+          // kasus: '',
           tipediagnosa: '',
           dtd: ''
         }

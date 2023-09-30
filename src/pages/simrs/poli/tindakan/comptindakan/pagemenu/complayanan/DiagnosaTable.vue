@@ -46,13 +46,25 @@
                   <q-item-label
                     lines="2"
                   >
-                    <em class="">Kasus</em>  <span class="text-weight-bold">{{ item.rs7 }}</span>
+                    <!-- <em class="">Kasus</em>  <span class="text-weight-bold">{{ item.rs7 }}</span> -->
+                    <div class="row q-gutter-sm">
+                      <q-badge
+                        outline
+                        :label="`Kasus ${item?.rs7}`"
+                        color="accent"
+                      />
+                      <q-badge
+                        outline
+                        :label="`Tipe ${item?.rs4}`"
+                        :color="item?.rs4==='Primer'? 'primary':'negative'"
+                      />
+                    </div>
                   </q-item-label>
-                  <q-item-label
+                  <!-- <q-item-label
                     lines="2"
                   >
                     <em class="">Tipe</em>  <span class="text-weight-bold">{{ item.rs4 }}</span>
-                  </q-item-label>
+                  </q-item-label> -->
                 </q-item-section>
 
                 <q-item-section
