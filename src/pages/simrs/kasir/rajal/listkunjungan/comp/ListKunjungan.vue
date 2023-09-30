@@ -109,25 +109,165 @@
       v-model="billOpen"
     >
       <template #default>
-        <BillingPage :pasien="pasien" />
+        <BillingPage
+          :pasien="pasien"
+          @print="openPrint"
+        />
       </template>
     </app-fullscreen>
+    <!-- print nota -->
+    <app-dialog-not-full
+      v-model="printOpen"
+    >
+      <template #default>
+        <div
+          id="printMe"
+          class="q-pa-xs"
+        >
+          <div class="row">
+            UOBK RSUD dr. MOHAMAD SALEH
+          </div>
+          <div class="row">
+            Jl. Mayjend Panjaitan No. 65 Probolinggo Jawa Timur
+          </div>
+          <div class="row garis-bawah-double">
+            Telp. (0335) 433478,433119,421118 Fax. (0335) 432702
+          </div>
+          <div class="row no-wrap q-my-md bg-grey-3">
+            <div class="col-6">
+              <div class="row no-wrap">
+                <div class="col-3">
+                  No Rm
+                </div>
+                <div class="col-9">
+                  {{ pasien.norm }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Nama
+                </div>
+                <div class="col-9">
+                  {{ pasien.nama }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Kelamin
+                </div>
+                <div class="col-9">
+                  {{ pasien.kelamin }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Alamat
+                </div>
+                <div class="col-9">
+                  {{ pasien.alamat }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Tgl Masuk
+                </div>
+                <div class="col-9">
+                  {{ dateFullFormat( pasien.tgl_kunjungan) }}
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row no-wrap">
+                <div class="col-3">
+                  No Reg
+                </div>
+                <div class="col-9">
+                  {{ pasien.rs1 }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Tgl Lahir
+                </div>
+                <div class="col-9">
+                  {{ dateFullFormat( pasien.tgllahir) }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Ruang
+                </div>
+                <div class="col-9">
+                  {{ pasien.poli }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
+                  Sistem Bayar
+                </div>
+                <div class="col-9">
+                  {{ pasien.sistembayar }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- header -->
+          <div class="row items-center no-wrap garis-bawah-double garis-atas-double">
+            <div class="col-1">
+              No
+            </div>
+            <div class="col-9">
+              Tindakan
+            </div>
+            <div class="col-2">
+              Harga
+            </div>
+          </div>
+          <!-- List -->
+          <div class="row items-center no-wrap ">
+            <div class="col-1">
+              1
+            </div>
+            <div class="col-9">
+              Tindakan nya
+            </div>
+            <div class="col-2 garis-bawah-double text-right">
+              Harga nya
+            </div>
+          </div>
+          <!-- total -->
+          <div class="row items-center no-wrap ">
+            <div class="col-10 text-right">
+              Rp.
+            </div>
+            <div class="col-2 text-right">
+              Harga
+            </div>
+          </div>
+        </div>
+      </template>
+    </app-dialog-not-full>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import BillingPage from './BillingPage.vue'
+import { dateFullFormat } from 'src/modules/formatter'
 
 const pasien = ref(null)
 const billOpen = ref(false)
+const printOpen = ref(false)
 // const openPrevGc = ref(false)
 
 function openBill(row) {
   pasien.value = row
   billOpen.value = !billOpen.value
 }
-
+function openPrint(val) {
+  console.log('print', val)
+  printOpen.value = true
+}
 // function openPreviewGc() {
 //   openPrevGc.value = !openPrevGc.value
 // }
@@ -180,3 +320,13 @@ function getStatus(arr) {
   return text
 }
 </script>
+<style lang="scss" scoped>
+.garis-bawah-double{
+  border-bottom: 4px solid black;
+  border-bottom-style: double;
+}
+.garis-atas-double{
+  border-top: 4px solid black;
+  border-top-style: double;
+}
+</style>

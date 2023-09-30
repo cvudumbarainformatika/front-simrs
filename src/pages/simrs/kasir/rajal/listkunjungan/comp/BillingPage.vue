@@ -110,7 +110,7 @@
       <div class="col-9">
         <div class="q-ml-xs row no-wrap bg-grey q-pa-xs q-pt-sm">
           <div class="f-12 text-weight-bold">
-            Kwitansi
+            Pembayaran
           </div>
         </div>
       </div>
@@ -119,7 +119,9 @@
       <div class="col-3">
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Tindakan"
             color="primary"
             no-caps
@@ -136,7 +138,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Laboratorium"
             color="primary"
             no-caps
@@ -153,7 +157,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Radiologi"
             color="primary"
             no-caps
@@ -170,7 +176,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Farmasi"
             color="primary"
             no-caps
@@ -187,7 +195,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Operasi (Tindakan Besar)"
             color="primary"
             no-caps
@@ -204,7 +214,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Operasi (Tindakan Kecil)"
             color="primary"
             no-caps
@@ -221,7 +233,9 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-btn
+            class="col-12"
             dense
+            size="12px"
             label="Sharing BPJS"
             color="primary"
             no-caps
@@ -352,15 +366,41 @@
         </div>
         <!-- pembayaran -->
         <div class="q-py-sm">
-          <div class="row no-wrap">
+          <div class="row no-wrap items-center">
             <div class="q-mr-xs">
-              pilih nota
+              Nota {{ nota }}
             </div>
             <div class="q-mr-xs">
-              pilih metode
+              <app-autocomplete
+                v-model="choice"
+                label="Pilih Nota"
+                autocomplite="nota"
+                option-label="nota"
+                option-value="nota"
+                outlined
+                :source="options"
+              />
             </div>
             <div class="q-mr-xs">
-              buat kwitansi
+              <app-btn
+                label="Buat Qris"
+                color="blue"
+                push
+              />
+            </div>
+            <div class="q-mr-xs">
+              <app-btn
+                label="Bayar Tunai"
+                color="green"
+                push
+              />
+            </div>
+            <div class="q-mr-xs">
+              <app-btn
+                label="Buat VA"
+                color="lime-7"
+                push
+              />
             </div>
           </div>
         </div>
@@ -370,16 +410,53 @@
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
-
+import { ref } from 'vue'
 defineProps({
   pasien: { type: Object, default: () => {} }
 })
+const emits = defineEmits(['print'])
+const nota = ref('')
+const options = ref([
+  { nota: '-' },
+  { nota: 'kldksjal' },
+  { nota: 'sdasda' },
+  { nota: 'sdasdawwwa' }
+])
+const choice = ref('-')
 
-function cetakTindakan() { console.log('cetak Tindakan') }
-function cetakLaboratorium() { console.log('cetak Laboratorium') }
-function cetakRadiologi() { console.log('cetak Radiologi') }
-function cetakFarmasi() { console.log('cetak Farmasi') }
-function cetakOperasiBesar() { console.log('cetak Operasi Tindakan Besar') }
-function cetakOperasiKecil() { console.log('cetak Operasi Tindakan Kecil') }
-function cetakSharingBPJS() { console.log('cetak Sharing BPJS') }
+function cetakTindakan() {
+  nota.value = ' Tindakan'
+  emits('print', { value: 'Tindakan' })
+  console.log('cetak Tindakan')
+}
+function cetakLaboratorium() {
+  nota.value = ' Laboratorium'
+  emits('print')
+  console.log('cetak Laboratorium')
+}
+function cetakRadiologi() {
+  nota.value = ' Radiologi'
+  emits('print')
+  console.log('cetak Radiologi')
+}
+function cetakFarmasi() {
+  nota.value = ' Farmasi'
+  emits('print')
+  console.log('cetak Farmasi')
+}
+function cetakOperasiBesar() {
+  nota.value = ' Tindakan'
+  emits('print')
+  console.log('cetak Operasi Tindakan Besar')
+}
+function cetakOperasiKecil() {
+  nota.value = ' Tindakan Operasi'
+  emits('print')
+  console.log('cetak Operasi Tindakan Kecil')
+}
+function cetakSharingBPJS() {
+  nota.value = ' Sharing'
+  emits('print')
+  console.log('cetak Sharing BPJS')
+}
 </script>
