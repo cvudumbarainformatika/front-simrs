@@ -36,6 +36,24 @@
             :menus="menus"
             :menu="menu"
             @click-menu="(val)=> menu = val"
+            @history-pasien="historyPasien"
+          />
+        </q-drawer>
+
+        <!-- RIGHT DRAWER ======================================================================================-->
+        <q-drawer
+          v-model="drawerRight"
+          side="right"
+          show-if-above
+          overlay
+          bordered
+          :width="560"
+          :breakpoint="500"
+        >
+          <RightDrawer
+            :key="pasien"
+            :pasien="pasien"
+            @close="drawerRight = false"
           />
         </q-drawer>
 
@@ -56,11 +74,13 @@
 
 <script setup>
 import LeftDrawer from './complayout/LeftDrawer.vue'
+import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 
 const drawer = ref(false)
+const drawerRight = ref(false)
 const props = defineProps({
   pasien: {
     type: Object,
@@ -114,6 +134,10 @@ onBeforeUnmount(() => {
   console.log('beforeunmount')
   menu.value = menus.value[0]
 })
+
+function historyPasien() {
+  drawerRight.value = !drawerRight.value
+}
 </script>
 
 <style lang="scss">

@@ -61,6 +61,7 @@
           flat
           icon="icon-mat-history"
           class="gt-xs"
+          @click="emits('historyPasien')"
         >
           <q-tooltip class="bg-dark text-white">
             History Pasien
@@ -77,7 +78,7 @@ import ListMenu from './ListMenu.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
 // const tinggiBot = ref(180)
-const emits = defineEmits(['clickMenu'])
+const emits = defineEmits(['clickMenu', 'historyPasien'])
 defineProps({
   pasien: {
     type: Object,
