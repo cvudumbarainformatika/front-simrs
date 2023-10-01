@@ -10,6 +10,7 @@
         :search="store.params.q"
         :per-page="store.params.per_page"
         :full="style.componentfull"
+        :custom="store.custom"
         @fullscreen="style.setComponentFull"
         @set-tanggal="(val)=>store.setDate(val)"
         @set-search="store.setQ"
@@ -17,6 +18,7 @@
         @refresh="store.getData"
         @set-periode="(val)=>store.setPeriodik(val)"
         @filter="store.setFilters"
+        @normal="store.setCustom"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">

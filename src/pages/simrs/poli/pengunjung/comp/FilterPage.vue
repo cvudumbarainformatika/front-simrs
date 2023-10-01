@@ -119,16 +119,16 @@ const emits = defineEmits(['close', 'setTo', 'setFrom', 'filterData'])
 
 const to = ref(dateDbFormat(new Date()))
 const from = ref(dateDbFormat(new Date()))
-const txt = ref('SEMUA')
+const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
 const q = ref('')
 
 function sendData() {
   const params = {
-    status: txt.value,
     q: q.value,
     to: to.value,
-    from: from.value
+    from: from.value,
+    status: gantiStatus(txt.value)
   }
 
   emits('filterData', params)
@@ -137,7 +137,17 @@ function sendData() {
 function resetFilter() {
   to.value = dateDbFormat(new Date())
   from.value = dateDbFormat(new Date())
-  txt.value = 'Semua'
+  txt.value = 'BELUM TERLAYANI'
   q.value = ''
+}
+
+function gantiStatus(val) {
+  if (val === 'BELUM TERLAYANI') {
+    return ''
+  } else if (val === 'TERLAYANI') {
+    return '1'
+  } else {
+    return 'all'
+  }
 }
 </script>

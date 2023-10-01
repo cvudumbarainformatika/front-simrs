@@ -71,21 +71,25 @@
           >
             <q-btn
               dense
+              outline
               size="sm"
               no-caps
-              color="secondary"
-              label="Tindakan"
+              color="primary"
+              label="Layanan"
               class="q-mb-sm"
               icon-right="icon-mat-description"
+              style="min-width: 100px;"
               @click="emits('tindakan', item)"
             />
             <q-btn
               dense
               size="sm"
+              outline
               no-caps
               color="orange"
               label="Panggil"
               icon-right="icon-mat-volume_up"
+              style="min-width: 100px;"
             />
           </q-item-section>
         </q-item>

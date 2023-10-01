@@ -8,17 +8,20 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     meta: null,
     loading: false,
 
+    statuses: ['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'],
     params: {
       // tgl: dateDbFormat(new Date())
       // tgl: '2023-07-07',
       page: 1,
       q: '',
+      status: '',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
       per_page: 100
     },
     pageTindakan: false,
-    filters: false
+    filters: false,
+    custom: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -49,6 +52,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     setQ(val) {
       this.params.page = 1
       this.params.q = val
+      this.getData()
     },
     setTo(val) {
       this.params.to = val
@@ -58,26 +62,37 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
     setPeriodik(val) {
       this.params.page = 1
-      const { to, from } = val
+      const { to, from, status } = val
       this.params.to = to
       this.params.from = from
-      console.log('periodik', to)
+      this.params.status = status
+      console.log('periodik', this.params)
       this.getData()
     },
     filterData(val) {
       this.params.page = 1
-      const { to, from, q } = val // status
+      const { to, from, q, status } = val // status
       this.params.to = to
       this.params.from = from
       this.params.q = q
+      this.params.status = status
+      this.setCustom()
       this.getData()
+      // console.log(val)
     },
     setPage(payload) {
       this.params.page = payload
       this.getData()
     },
+    setPerPage(payload) {
+      this.params.per_page = payload
+      this.getData()
+    },
     setFilters() {
       this.filters = !this.filters
+    },
+    setCustom() {
+      this.custom = !this.custom
     },
     // inject pasien
 

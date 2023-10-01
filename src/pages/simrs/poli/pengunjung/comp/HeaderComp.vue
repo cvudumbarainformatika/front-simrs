@@ -3,7 +3,10 @@
     class="row items-center justify-between q-pa-sm"
     :class="`${color} text-${textColor}`"
   >
-    <div class="row">
+    <div
+      v-if="!custom"
+      class="row"
+    >
       <q-input
         v-model="q"
         outlined
@@ -58,6 +61,7 @@
         emit-value
         map-options
         style="min-width: 150px;"
+        @update:model-value="gantiTxt"
       />
 
       <!-- <q-btn
@@ -88,6 +92,15 @@
           </q-list>
         </q-menu>
       </q-btn> -->
+    </div>
+    <div v-else>
+      <q-btn
+        label="Kembali Ke Normal Filter"
+        icon="icon-mat-keyboard_arrow_left"
+        color="white"
+        flat
+        @click="kembaliNormal"
+      />
     </div>
     <div>
       <q-btn
@@ -148,9 +161,9 @@
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
 import { computed, onMounted, ref } from 'vue'
-const txt = ref('SEMUA')
+const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal'])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
   { value: 2, label: 'Minggu Ini' },
@@ -178,7 +191,8 @@ const props = defineProps({
     type: String,
     default: dateDbFormat(new Date())
   },
-  full: { type: Boolean, default: false }
+  full: { type: Boolean, default: false },
+  custom: { type: Boolean, default: false }
 })
 const q = computed({
   get() {
@@ -220,6 +234,20 @@ function tahunIni() {
   from.value = dateDbFormat(lastday)
 }
 
+function gantiStatus(val) {
+  if (val === 'BELUM TERLAYANI') {
+    return ''
+  } else if (val === 'TERLAYANI') {
+    return '1'
+  } else {
+    return 'all'
+  }
+}
+
+function gantiTxt() {
+  gantiPeriode(periode.value)
+}
+
 function gantiPeriode(val) {
   if (val === 1) {
     hariIni()
@@ -235,9 +263,17 @@ function gantiPeriode(val) {
   console.log(from.value)
   const per = {
     to: to.value,
-    from: from.value
+    from: from.value,
+    status: gantiStatus(txt.value)
   }
   emits('setPeriode', per)
+}
+
+function kembaliNormal() {
+  periode.value = 1
+  txt.value = 'BELUM TERLAYANI'
+  gantiPeriode(periode.value)
+  emits('normal')
 }
 
 onMounted(() => {
