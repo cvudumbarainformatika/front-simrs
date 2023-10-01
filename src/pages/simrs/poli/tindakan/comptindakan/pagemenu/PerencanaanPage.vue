@@ -11,7 +11,6 @@
       </div>
       <div class="col-6 full-height">
         {{ props?.pasien }}
-        {{ masterPlann }}
       </div>
     </div>
   </div>
@@ -20,7 +19,7 @@
 <script setup>
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import PlanningPage from './compperencanaan/PlanningPage.vue'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 const store = usePerencanaanPoliStore()
 const props = defineProps({
@@ -30,20 +29,8 @@ const props = defineProps({
   }
 })
 
-const masterPlann = computed(() => {
-  const arr = store?.plannings
-  const plans = arr?.length
-    ? arr.map(x => {
-      const obj = {
-        label: x?.keterangan,
-        value: x?.planing
-      }
-      return obj
-    }) : []
-  return plans
-})
-
 onMounted(() => {
   store.getMasterPlanning()
+  store.getMasterPoli()
 })
 </script>
