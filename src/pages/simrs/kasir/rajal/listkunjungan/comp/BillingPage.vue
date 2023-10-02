@@ -9,7 +9,7 @@
     </div>
     <div class="row no-wrap q-py-xs">
       <div class="col-6">
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             No Rm
           </div>
@@ -17,7 +17,7 @@
             {{ pasien.norm }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Nama
           </div>
@@ -25,7 +25,7 @@
             {{ pasien.nama }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Kelamin
           </div>
@@ -33,7 +33,7 @@
             {{ pasien.kelamin }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Alamat
           </div>
@@ -41,7 +41,7 @@
             {{ pasien.alamat }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Tgl Masuk
           </div>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             No Reg
           </div>
@@ -59,7 +59,7 @@
             {{ pasien.rs1 }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Tgl Lahir
           </div>
@@ -67,7 +67,7 @@
             {{ dateFullFormat( pasien.tgllahir) }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Ruang
           </div>
@@ -75,7 +75,7 @@
             {{ pasien.poli }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Sistem Bayar
           </div>
@@ -94,20 +94,20 @@
       </div>
     </div>
     <div class="row no-wrap q-pt-sm">
-      <div class="col-3">
+      <div class="col-2">
         <div class="row no-wrap bg-grey q-pa-xs items-center">
-          <div class="q-mr-sm">
+          <!-- <div class="q-mr-sm">
             <q-icon
               name="icon-mat-print"
               size="16px"
             />
-          </div>
-          <div class="f-12 text-weight-bold">
-            Cetak
+          </div> -->
+          <div class="f-12 text-weight-bold q-mr-sm">
+            Pilih
           </div>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-10">
         <div class="q-ml-xs row no-wrap bg-grey q-pa-xs q-pt-sm">
           <div class="f-12 text-weight-bold">
             Pembayaran
@@ -116,7 +116,7 @@
       </div>
     </div>
     <div class="row no-wrap q-pt-sm">
-      <div class="col-3">
+      <div class="col-2">
         <div class="row no-wrap q-ma-xs">
           <q-btn
             class="col-12"
@@ -250,8 +250,27 @@
             </q-tooltip>
           </q-btn>
         </div>
+        <div class="row no-wrap q-ma-xs q-mt-md">
+          <q-btn
+            class="col-12"
+            dense
+            size="12px"
+            label="Cetak Rekap Billing"
+            color="primary"
+            no-caps
+            push
+            @click="cetakFakturRekap(pasien)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Faktur Rekap
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
-      <div class="col-9">
+      <div class="col-10">
         <!-- belum dibayar -->
         <div class="q-py-md">
           <!-- header -->
@@ -414,7 +433,7 @@ import { ref } from 'vue'
 defineProps({
   pasien: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['print'])
+const emits = defineEmits(['print', 'rekap'])
 const nota = ref('')
 const options = ref([
   { nota: '-' },
@@ -424,6 +443,11 @@ const options = ref([
 ])
 const choice = ref('-')
 
+function cetakFakturRekap(val) {
+  // nota.value = ' Tindakan'
+  emits('rekap', val)
+  console.log('cetak faktur', val)
+}
 function cetakTindakan() {
   nota.value = ' Tindakan'
   emits('print', { value: 'Tindakan' })

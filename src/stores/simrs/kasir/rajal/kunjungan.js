@@ -14,24 +14,13 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       order_by: 'id',
       tgl: dateDbFormat(new Date())
     },
-    loading: false
+    loading: false,
+    pasien: {}
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getLists() {
-      this.loading = true
-      const params = { params: this.params }
-      const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
-      if (resp.status === 200) {
-        console.log('kunjungan', resp)
-        this.items = resp.data.data
-        this.meta = resp.data
-        this.loading = false
-      }
-      this.loading = false
-    },
 
     setDate(payload) {
       this.params.page = 1
@@ -54,6 +43,32 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
+    },
+    async getLists() {
+      this.loading = true
+      const params = { params: this.params }
+      // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
+      const resp = await api.get('/v1/simrs/kasir/rajal/kunjunganpoli', params)
+      if (resp.status === 200) {
+        console.log('kunjungan', resp)
+        this.items = resp.data.data
+        this.meta = resp.data
+        this.loading = false
+      }
+      this.loading = false
+    },
+    async getBill(val) {
+      this.pasien = {}
+      this.loading = true
+      const params = { params: val }
+      // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
+      const resp = await api.get('/v1/simrs/kasir/rajal/billbynoreg', params)
+      if (resp.status === 200) {
+        console.log('bill', resp)
+        this.pasien = resp.data
+        this.loading = false
+      }
+      this.loading = false
     }
   }
 })
