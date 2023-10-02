@@ -63,6 +63,6 @@ import formDialog from './FormDialog.vue'
 const table = useMasterPenggunaRuangTable()
 const store = useMasterPenggunaRuangForm()
 table.getDataTable()
-// store.getDataPenggunas()
-// store.getDataRuangs()
+store.getDataPenggunas()
+store.getDataRuangs()
 </script>

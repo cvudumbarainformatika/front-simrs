@@ -99,7 +99,7 @@ export const useMasterRuangForm = defineStore('master_ruang_form', {
         api.get('v1/gedung/gedung', params)
           .then(resp => {
             console.log(resp)
-            this.gedungs = resp.data.data
+            this.gedungs = resp.data
             this.loading = false
             resolve(resp)
           })

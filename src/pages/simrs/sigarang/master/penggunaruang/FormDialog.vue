@@ -13,7 +13,7 @@
         >
           <div class="row q-col-gutter-md">
             <div class="col-md-4 col-xs-12">
-              <app-autocomplete-new
+              <app-autocomplete
                 v-model="store.form.kode_ruang"
                 outlined
                 label="Ruangan"
@@ -25,7 +25,7 @@
               <!-- <SelectMenu title="Ruang" optionLabel="uraian" url="v1/ruang/index" @on-select="pilihRuang" /> -->
             </div>
             <div class="col-md-4 col-xs-12">
-              <app-autocomplete-new
+              <app-autocomplete
                 v-model="store.form.kode_penanggungjawab"
                 outlined
                 label="Penanggung Jawab"
@@ -38,7 +38,7 @@
                 @on-select="pilihPenanggungjawab" /> -->
             </div>
             <div class="col-md-4 col-xs-12">
-              <app-autocomplete-new
+              <app-autocomplete
                 v-model="store.form.kode_pengguna"
                 outlined
                 label="Pengguna"
