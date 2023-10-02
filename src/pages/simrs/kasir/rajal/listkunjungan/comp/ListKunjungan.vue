@@ -421,7 +421,7 @@
                 3
               </div>
               <div class="col-9">
-                Poliklinik Konsultasi (Gizi, Jiwa)
+                Poliklinik
               </div>
               <div class="col-2 garis-bawah-dablue text-right">
                 {{ formatRp(store.rekapBill.poliklinik) }}
@@ -537,7 +537,7 @@
                 Anestesi Di Luar OK & ICU
               </div>
               <div class="col-2 garis-bawah-dablue text-right">
-                {{ formatRp(store.rekapBill.anas) }}
+                {{ formatRp(store.rekapBill.penunjanglain) }}
               </div>
             </div>
             <div class="row items-center no-wrap ">
