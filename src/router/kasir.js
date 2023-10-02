@@ -20,14 +20,14 @@ const kasir = {
           meta: { transition: 'slide-up' },
           component: () =>
             import('pages/simrs/kasir/rajal/listkunjungan/IndexPage.vue')
-        },
-        {
-          path: '/kasir/rajal/billing',
-          name: 'kasir.rajal.billing',
-          meta: { transition: 'slide-up' },
-          component: () =>
-            import('pages/simrs/kasir/rajal/rajal/IndexPage.vue')
         }
+        // {
+        //   path: '/kasir/rajal/billing',
+        //   name: 'kasir.rajal.billing',
+        //   meta: { transition: 'slide-up' },
+        //   component: () =>
+        //     import('pages/simrs/kasir/rajal/rajal/IndexPage.vue')
+        // }
 
       ]
     },

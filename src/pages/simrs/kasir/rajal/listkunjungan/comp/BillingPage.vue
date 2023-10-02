@@ -9,7 +9,7 @@
     </div>
     <div class="row no-wrap q-py-xs">
       <div class="col-6">
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             No Rm
           </div>
@@ -17,7 +17,7 @@
             {{ pasien.norm }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Nama
           </div>
@@ -25,7 +25,7 @@
             {{ pasien.nama }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Kelamin
           </div>
@@ -33,7 +33,7 @@
             {{ pasien.kelamin }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Alamat
           </div>
@@ -41,7 +41,7 @@
             {{ pasien.alamat }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Tgl Masuk
           </div>
@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             No Reg
           </div>
@@ -59,7 +59,7 @@
             {{ pasien.rs1 }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Tgl Lahir
           </div>
@@ -67,7 +67,7 @@
             {{ dateFullFormat( pasien.tgllahir) }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Ruang
           </div>
@@ -75,7 +75,7 @@
             {{ pasien.poli }}
           </div>
         </div>
-        <div class="row no-wrap q-py-xs">
+        <div class="row no-wrap ">
           <div class="col-3">
             Sistem Bayar
           </div>
@@ -94,20 +94,20 @@
       </div>
     </div>
     <div class="row no-wrap q-pt-sm">
-      <div class="col-3">
+      <div class="col-2">
         <div class="row no-wrap bg-grey q-pa-xs items-center">
-          <div class="q-mr-sm">
+          <!-- <div class="q-mr-sm">
             <q-icon
               name="icon-mat-print"
               size="16px"
             />
-          </div>
-          <div class="f-12 text-weight-bold">
-            Cetak
+          </div> -->
+          <div class="f-12 text-weight-bold q-mr-sm">
+            Pilih
           </div>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-10">
         <div class="q-ml-xs row no-wrap bg-grey q-pa-xs q-pt-sm">
           <div class="f-12 text-weight-bold">
             Pembayaran
@@ -116,9 +116,18 @@
       </div>
     </div>
     <div class="row no-wrap q-pt-sm">
-      <div class="col-3">
+      <div class="col-2">
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="tindakan"
+            label="Tindakan"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -134,10 +143,19 @@
             >
               Cetak Tindakan
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="laboratorium"
+            label="Laboratorium"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -153,10 +171,19 @@
             >
               Cetak Laboratorium
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="radiologi"
+            label="Radiologi"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -172,10 +199,19 @@
             >
               Cetak Radiologi
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="farmasi"
+            label="Farmasi"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -191,10 +227,19 @@
             >
               Cetak Farmasi
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="operasi besar"
+            label="Operasi (Tindakan Besar)"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -210,10 +255,19 @@
             >
               Cetak Operasi (Tindakan Besar)
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="operasi kecil"
+            label="Operasi (Tindakan Kecil)"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -229,10 +283,19 @@
             >
               Cetak Operasi (Tindakan Kecil)
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
         </div>
         <div class="row no-wrap q-ma-xs">
-          <q-btn
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="sharing bpjs"
+            label="Sharing BPJS"
+            @update:model-value="gantiDataNota"
+          />
+          <!-- <q-btn
             class="col-12"
             dense
             size="12px"
@@ -248,10 +311,29 @@
             >
               Cetak Sharing BPJS
             </q-tooltip>
+          </q-btn> -->
+        </div>
+        <div class="row no-wrap q-ma-xs q-mt-md">
+          <q-btn
+            class="col-12"
+            dense
+            size="12px"
+            label="Cetak Rekap Billing"
+            color="primary"
+            no-caps
+            push
+            @click="cetakFakturRekap(pasien)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Faktur Rekap
+            </q-tooltip>
           </q-btn>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-10">
         <!-- belum dibayar -->
         <div class="q-py-md">
           <!-- header -->
@@ -266,11 +348,11 @@
                 </div>
               </div>
             </div>
-            <div class="col-3">
-              No VA
+            <div class="col-2">
+              Pembayaran
             </div>
             <div class="col-2">
-              Tanggal Cetak
+              Tanggal
             </div>
             <div class="col-3">
               <div class="row no-wrap">
@@ -282,14 +364,79 @@
                 </div>
               </div>
             </div>
-            <div class="col-1">
+            <div class="col-2 text-center">
               #
             </div>
           </div>
           <!-- child -->
-          <div class="q-ml-xs row no-wrap q-col-gutter-xs">
-            <div class="">
-              List
+          <div class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs">
+            <div class="col-3">
+              <div class="row no-wrap">
+                <div class="col-2">
+                  1
+                </div>
+                <div class="col-10">
+                  No Kwitansi
+                </div>
+              </div>
+            </div>
+            <div class="col-2">
+              Pembayaran : Tunai / Va/ Qris
+            </div>
+            <div class="col-2">
+              Tanggal trx
+            </div>
+            <div class="col-3">
+              <div class="row no-wrap">
+                <div class="col-6 text-right">
+                  Total : Rp ....
+                </div>
+                <div class="col-6 text-right">
+                  Total Batal (jika ada)
+                </div>
+              </div>
+            </div>
+            <div class="col-2 text-right">
+              <div class="q-mr-xs">
+                <app-btn
+                  label="Buat Qris"
+                  color="blue"
+                  push
+                  dense
+                />
+              </div>
+              <div class="q-mr-xs">
+                <app-btn
+                  label="Bayar Tunai"
+                  color="green"
+                  push
+                  dense
+                />
+              </div>
+              <div class="q-mr-xs">
+                <app-btn
+                  label="Buat VA"
+                  color="lime-7"
+                  push
+                  dense
+                />
+              </div>
+              <div class="q-mr-xs">
+                <app-btn
+                  label="Batal"
+                  color="grey-7"
+                  push
+                  dense
+                />
+              </div>
+              <div class="q-mr-xs">
+                <app-btn
+                  label="Cetak"
+                  color="blue-grey-7"
+                  push
+                  dense
+                />
+              </div>
             </div>
           </div>
           <!-- Bottom -->
@@ -297,7 +444,7 @@
             <div class="col-3">
             <!--  -->
             </div>
-            <div class="col-3">
+            <div class="col-2">
             <!--  -->
             </div>
             <div class="col-2 text-weight-bold">
@@ -305,22 +452,21 @@
             </div>
             <div class="col-3">
               <div class="row no-wrap">
-                <div class="col-6">
+                <div class="col-6 text-right">
                   Total
                 </div>
-                <div class="col-6">
+                <div class="col-6 text-right">
                   Total Batal
                 </div>
               </div>
             </div>
-            <div class="col-1">
+            <div class="col-2">
             <!-- # -->
             </div>
           </div>
         </div>
         <!-- Sudah dibayar -->
-        <div class="q-py-md">
-          <!-- header -->
+        <!-- <div class="q-py-md">
           <div class="q-ml-xs row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
             <div class="col-3">
               <div class="row no-wrap">
@@ -342,19 +488,15 @@
               Total
             </div>
           </div>
-          <!-- child -->
           <div class="q-ml-xs row no-wrap q-col-gutter-xs">
             <div class="">
               List
             </div>
           </div>
-          <!-- Bottom -->
           <div class="q-ml-xs row no-wrap q-col-gutter-xs">
             <div class="col-3">
-            <!--  -->
             </div>
             <div class="col-3">
-            <!--  -->
             </div>
             <div class="col-2 text-weight-bold">
               Total
@@ -363,9 +505,9 @@
               Total
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- pembayaran -->
-        <div class="q-py-sm">
+        <!-- <div class="q-py-sm">
           <div class="row no-wrap items-center">
             <div class="q-mr-xs">
               Nota {{ nota }}
@@ -403,7 +545,7 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -414,49 +556,59 @@ import { ref } from 'vue'
 defineProps({
   pasien: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['print'])
-const nota = ref('')
-const options = ref([
-  { nota: '-' },
-  { nota: 'kldksjal' },
-  { nota: 'sdasda' },
-  { nota: 'sdasdawwwa' }
-])
-const choice = ref('-')
+const emits = defineEmits(['print', 'rekap'])
+// const nota = ref('')
+// const options = ref([
+//   { nota: '-' },
+//   { nota: 'kldksjal' },
+//   { nota: 'sdasda' },
+//   { nota: 'sdasdawwwa' }
+// ])
+// const choice = ref('-')
 
-function cetakTindakan() {
-  nota.value = ' Tindakan'
-  emits('print', { value: 'Tindakan' })
-  console.log('cetak Tindakan')
+function cetakFakturRekap(val) {
+  // nota.value = ' Tindakan'
+  emits('rekap', val)
+  console.log('cetak faktur', val)
 }
-function cetakLaboratorium() {
-  nota.value = ' Laboratorium'
-  emits('print')
-  console.log('cetak Laboratorium')
+
+const dataNotas = ref('')
+function gantiDataNota(val) {
+  console.log('radio', val)
 }
-function cetakRadiologi() {
-  nota.value = ' Radiologi'
-  emits('print')
-  console.log('cetak Radiologi')
-}
-function cetakFarmasi() {
-  nota.value = ' Farmasi'
-  emits('print')
-  console.log('cetak Farmasi')
-}
-function cetakOperasiBesar() {
-  nota.value = ' Tindakan'
-  emits('print')
-  console.log('cetak Operasi Tindakan Besar')
-}
-function cetakOperasiKecil() {
-  nota.value = ' Tindakan Operasi'
-  emits('print')
-  console.log('cetak Operasi Tindakan Kecil')
-}
-function cetakSharingBPJS() {
-  nota.value = ' Sharing'
-  emits('print')
-  console.log('cetak Sharing BPJS')
-}
+// function cetakTindakan() {
+//   nota.value = ' Tindakan'
+//   emits('print', { value: 'Tindakan' })
+//   console.log('cetak Tindakan')
+// }
+// function cetakLaboratorium() {
+//   nota.value = ' Laboratorium'
+//   emits('print')
+//   console.log('cetak Laboratorium')
+// }
+// function cetakRadiologi() {
+//   nota.value = ' Radiologi'
+//   emits('print')
+//   console.log('cetak Radiologi')
+// }
+// function cetakFarmasi() {
+//   nota.value = ' Farmasi'
+//   emits('print')
+//   console.log('cetak Farmasi')
+// }
+// function cetakOperasiBesar() {
+//   nota.value = ' Tindakan'
+//   emits('print')
+//   console.log('cetak Operasi Tindakan Besar')
+// }
+// function cetakOperasiKecil() {
+//   nota.value = ' Tindakan Operasi'
+//   emits('print')
+//   console.log('cetak Operasi Tindakan Kecil')
+// }
+// function cetakSharingBPJS() {
+//   nota.value = ' Sharing'
+//   emits('print')
+//   console.log('cetak Sharing BPJS')
+// }
 </script>

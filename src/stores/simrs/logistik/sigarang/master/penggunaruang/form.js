@@ -64,8 +64,8 @@ export const useMasterPenggunaRuangForm = defineStore('master_Pengguna_ruang_for
       return new Promise(resolve => {
         api.get('v1/ruang/ruang')
           .then(resp => {
-            this.ruangs = resp.data.data
-            // console.log('ruangs', resp)
+            this.ruangs = resp.data
+            // console.log('ruangs', resp.data)
             resolve(resp)
           })
       })
@@ -74,8 +74,8 @@ export const useMasterPenggunaRuangForm = defineStore('master_Pengguna_ruang_for
       return new Promise(resolve => {
         api.get('v1/pengguna/pengguna')
           .then(resp => {
-            this.penggunas = resp.data.data
-            // console.log('penggunas', resp)
+            this.penggunas = resp.data
+            // console.log('penggunas', resp.data)
             resolve(resp)
           })
       })

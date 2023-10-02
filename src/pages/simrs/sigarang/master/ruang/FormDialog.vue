@@ -15,13 +15,13 @@
             <div class="col-md-3 col-xs-12">
               <!-- <app-input v-model="store.form.gedung" valid label="Gedung*" outlined autofocus /> -->
               <app-autocomplete
-                :model="store.form.gedung"
+                v-model="store.form.gedung"
                 outlined
                 label="cari gedung*"
                 autocomplete="nama"
                 option-value="nomor"
-                :loading="store.loading"
                 option-label="nama"
+                :loading="store.loading"
                 :source="store.gedungs"
                 autofocus
                 @on-select="gedungSelected"
