@@ -1,7 +1,6 @@
 <template>
   <q-dialog
     persistent
-    style="width:50vw;"
   >
     <q-card style="max-width:80vw;">
       <q-card-section>
