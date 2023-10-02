@@ -17,7 +17,22 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       kdpoli_asal: '',
       kdpoli_tujuan: '',
       kddokter_asal: ''
-    }
+    },
+
+    formRsLain: {
+      norm: '',
+      noka: '',
+      nosep: '',
+      tglrujukan: '',
+      tglrencanakunjungan: '',
+      ppkdirujuk: '',
+      jenispelayanan: '',
+      catatan: '',
+      diagnosarujukan: '',
+      tiperujukan: '',
+      polirujukan: ''
+    },
+    loadingSave: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -64,6 +79,21 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         console.log(error)
         this.loadingSaveKonsul = false
       }
+    },
+
+    // ====================================================================================================================================================RUmah sakit lain
+
+    initPasien(pasien) {
+      this.formRsLain.norm = pasien?.norm
+      this.formRsLain.noka = pasien?.noka
+      this.formRsLain.nosep = pasien?.sep
+      this.formRsLain.norujukan = pasien?.norujukan
+      this.formRsLain.tglrujukan = dateDbFormat(new Date())
+      this.formRsLain.tglrencanakunjungan = dateDbFormat(new Date())
+      this.formRsLain.tiperujukan = '2'
+    },
+    setFormRsLain(key, val) {
+      this.formKonsul[key] = val
     }
   }
 })

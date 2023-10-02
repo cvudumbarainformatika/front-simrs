@@ -1,17 +1,205 @@
 <template>
-  <div>
-    Form Rumah sakit lain
-    <div>
-      {{ props.pasien }}
+  <q-form
+    ref="formRef"
+    @submit="simpan"
+  >
+    <div class="row q-col-gutter-sm">
+      <div class="col-3">
+        <q-input
+          v-model="store.formRsLain.norm"
+          label="NORM (Automatis)"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          readonly
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+        />
+      </div>
+      <div class="col-3">
+        <q-input
+          v-model="store.formRsLain.noka"
+          label="NOKA (Automatis)"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          readonly
+        />
+      </div>
+      <div class="col-6">
+        <q-input
+          v-model="store.formRsLain.nosep"
+          label="SEP (Automatis)"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          readonly
+        />
+      </div>
+      <div class="col-3">
+        <q-select
+          v-model="store.formRsLain.jenispelayanan"
+          label="Jenis Pelayanan"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionsJnsKunjungan"
+          map-options
+          emit-value
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+        />
+      </div>
+      <div class="col-3">
+        <app-input-date
+          :model="store.formRsLain.tglrujukan"
+          label="Tgl Rujukan"
+          outlined
+          @set-model="(val) => store.setForm('tglrujukan', val)"
+        />
+      </div>
+      <div class="col-3">
+        <app-input-date
+          :model="store.formRsLain.tglrencanakunjungan"
+          label="Tgl Rencana Kunjungan"
+          outlined
+          @set-model="(val) => store.setForm('tglrencanakunjungan', val)"
+        />
+      </div>
+
+      <div class="col-3">
+        <q-select
+          v-model="store.formRsLain.tiperujukan"
+          label="Tipe Faskes"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionTipe"
+          map-options
+          emit-value
+        />
+      </div>
+      <div class="col-8">
+        <q-select
+          v-model="store.formRsLain.ppkdirujuk"
+          label="di rujuk Ke"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionsRs"
+          option-value="kode"
+          option-label="nama"
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+          @filter="onFilterTest"
+        />
+      </div>
+      <div class="col-7">
+        <q-select
+          v-model="store.formRsLain.polirujukan"
+          label="Poli Rujukan"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionsPoli"
+          option-value="kode"
+          option-label="nama"
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+          @filter="filterPoli"
+        />
+      </div>
+      <div class="col-12">
+        <q-separator class=" q-my-md" />
+        <div class="text-right q-gutter-sm">
+          <q-btn
+            label="Simpan"
+            color="primary"
+            type="submit"
+            :loading="store.loadingSave"
+            :disable="store.loadingSave"
+          />
+        </div>
+      </div>
     </div>
-  </div>
+  </q-form>
 </template>
 
 <script setup>
+import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
+import { onMounted, ref } from 'vue'
+import { api } from 'src/boot/axios'
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
+
+const store = usePerencanaanPoliStore()
+const optionsJnsKunjungan = ref([
+  { value: '', label: '-------' },
+  { value: '1', label: 'Rawat Inap' },
+  { value: '2', label: 'Rawat Jalan' }
+])
+const optionTipe = ref([
+  { value: '2', label: 'Faskes 2' }
+])
+const optionsRs = ref([])
+const optionsPoli = ref([])
+
+const onFilterTest = async (val, update, abort) => {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+  const params = {
+    params: {
+      namafaskes: val,
+      jnsfaskes: store?.formRsLain?.tipeRujukan
+    }
+  }
+  const response = await api.get('v1/simrs/pelayanan/faskes', params)
+  const code = response?.data?.metadata?.code
+  if (code === '200') {
+    update(() => {
+      optionsRs.value = response?.data?.result?.faskes
+    })
+  }
+}
+const filterPoli = async (val, update, abort) => {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+  const params = {
+    params: {
+      namapoli: val
+    }
+  }
+  const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
+  console.log(response)
+  const code = response?.data?.metadata?.code
+  if (code === '200') {
+    update(() => {
+      optionsPoli.value = response?.data?.result?.poli
+    })
+  }
+}
+
+onMounted(() => {
+  store.initPasien(props.pasien)
+})
+
+function simpan() {
+  console.log('ok')
+}
 </script>
