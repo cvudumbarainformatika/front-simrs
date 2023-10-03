@@ -113,6 +113,7 @@
           :pasien="pasien"
           @print="openPrint"
           @rekap="openFaktur"
+          @nota="getNota"
         />
       </template>
     </app-fullscreen>
@@ -706,9 +707,11 @@ function actPrintRekap() {
   console.log('act print rekap')
   printRekap.value = false
 }
-// function openPreviewGc() {
-//   openPrevGc.value = !openPrevGc.value
-// }
+function getNota(val) {
+  const param = { golongan: val }
+  console.log('golongan nota', param)
+  store.getNotas(param)
+}
 
 defineProps({
   loading: { type: Boolean, default: false },

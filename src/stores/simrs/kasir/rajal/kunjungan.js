@@ -15,7 +15,8 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       tgl: dateDbFormat(new Date())
     },
     loading: false,
-    rekapBill: {}
+    rekapBill: {},
+    notas: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -66,6 +67,19 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       if (resp.status === 200) {
         console.log('bill', resp.data)
         this.rekapBill = resp.data
+        this.loading = false
+      }
+      this.loading = false
+    },
+    async getNotas(val) {
+      this.notas = []
+      this.loading = true
+      const params = { params: val }
+      // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
+      const resp = await api.get('/v1/simrs/kasir/rajal/tagihanpergolongan', params)
+      if (resp.status === 200) {
+        console.log('resp notas ', resp.data)
+        this.notas = resp.data
         this.loading = false
       }
       this.loading = false
