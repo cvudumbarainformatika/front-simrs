@@ -1,8 +1,7 @@
 <template>
-  <div>
-    Form RAwat Inap
-    <div>
-      {{ props.pasien }}
+  <div class="full-height flex-center">
+    <div class="text-weight-bold">
+      ALUR BELUM JELAS
     </div>
   </div>
 </template>
@@ -14,4 +13,5 @@ const props = defineProps({
     default: null
   }
 })
+console.log(props)
 </script>
