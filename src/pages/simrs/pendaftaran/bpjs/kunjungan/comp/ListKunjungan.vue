@@ -84,9 +84,18 @@
             <q-item-label caption>
               <div
                 class="row justify-end"
-                @click="bukaSep()"
+                @click="bukaSep(item)"
               >
-                <div class="q-ml-sm">
+                <div v-if="loadingReSep === item.noreg && sepStore.loading">
+                  <app-btn
+                    dense
+                    loading
+                  />
+                </div>
+                <div
+                  v-else
+                  class="q-ml-sm cursor-pointer"
+                >
                   <q-badge
                     outline
                     :color="item.sep?'teal':'negative'"
@@ -210,9 +219,17 @@ function PengajuanSep(val) {
   temp.value = val.noka
 }
 const sepStore = useSepBpjsStore()
-function bukaSep() {
-  console.log('buka sep')
-  sepStore.setOpen()
+const loadingReSep = ref(null)
+function bukaSep(val) {
+  console.log('buka sep', val)
+  // sepStore.setOpen()
+  loadingReSep.value = val.noreg
+  // const form = {
+  //   noreg: val.noreg,
+  //   norm: val.norm,
+  //   noka: val.noka
+  // }
+  sepStore.getSep(val)
 }
 function simpanPengajuan() {
   const data = {
