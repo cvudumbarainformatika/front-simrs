@@ -32,6 +32,19 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       tiperujukan: '',
       polirujukan: ''
     },
+    formPrb: {
+      norm: '',
+      noka: '',
+      nosep: '',
+      tglrujukan: '',
+      tglrencanakunjungan: '',
+      ppkdirujuk: '',
+      jenispelayanan: '',
+      catatan: '',
+      diagnosarujukan: '',
+      tiperujukan: '',
+      polirujukan: ''
+    },
     loadingSave: false
   }),
   // getters: {
@@ -85,15 +98,25 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
 
     initPasien(pasien) {
       this.formRsLain.norm = pasien?.norm
+      this.formPrb.norm = pasien?.norm
       this.formRsLain.noka = pasien?.noka
+      this.formPrb.noka = pasien?.noka
       this.formRsLain.nosep = pasien?.sep
+      this.formPrb.nosep = pasien?.sep
       this.formRsLain.norujukan = pasien?.norujukan
+      this.formPrb.norujukan = pasien?.norujukan
       this.formRsLain.tglrujukan = dateDbFormat(new Date())
+      this.formPrb.tglrujukan = dateDbFormat(new Date())
       this.formRsLain.tglrencanakunjungan = dateDbFormat(new Date())
+      this.formPrb.tglrencanakunjungan = dateDbFormat(new Date())
       this.formRsLain.tiperujukan = '2'
+      this.formPrb.tiperujukan = '1'
     },
     setFormRsLain(key, val) {
-      this.formKonsul[key] = val
+      this.formRsLain[key] = val
+    },
+    setFormPrb(key, val) {
+      this.formPrb[key] = val
     }
   }
 })

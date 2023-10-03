@@ -57,7 +57,7 @@
           :model="store.formRsLain.tglrujukan"
           label="Tgl Rujukan"
           outlined
-          @set-model="(val) => store.setForm('tglrujukan', val)"
+          @set-model="(val) => store.setFormRsLain('tglrujukan', val)"
         />
       </div>
       <div class="col-3">
@@ -65,7 +65,7 @@
           :model="store.formRsLain.tglrencanakunjungan"
           label="Tgl Rencana Kunjungan"
           outlined
-          @set-model="(val) => store.setForm('tglrencanakunjungan', val)"
+          @set-model="(val) => store.setFormRsLain('tglrencanakunjungan', val)"
         />
       </div>
 
@@ -84,7 +84,7 @@
         />
       </div>
       <div class="col-8">
-        <q-select
+        <!-- <q-select
           v-model="store.formRsLain.ppkdirujuk"
           label="di rujuk Ke"
           dense
@@ -98,10 +98,24 @@
           :rules="[val => !!val || 'Harus diisi']"
           hide-bottom-space
           @filter="onFilterTest"
+        /> -->
+        <q-select
+          v-model="store.formRsLain.ppkdirujuk"
+          label="di rujuk Ke"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionsRs"
+          option-value="kode"
+          option-label="nama"
+          hide-bottom-space
+          @filter="onFilterTest"
         />
       </div>
       <div class="col-7">
-        <q-select
+        <!-- <q-select
           v-model="store.formRsLain.polirujukan"
           label="Poli Rujukan"
           dense
@@ -113,6 +127,20 @@
           option-value="kode"
           option-label="nama"
           :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+          @filter="filterPoli"
+        /> -->
+        <q-select
+          v-model="store.formRsLain.polirujukan"
+          label="Poli Rujukan"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionsPoli"
+          option-value="kode"
+          option-label="nama"
           hide-bottom-space
           @filter="filterPoli"
         />
@@ -137,6 +165,7 @@
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { onMounted, ref } from 'vue'
 import { api } from 'src/boot/axios'
+import { useQuasar } from 'quasar'
 const props = defineProps({
   pasien: {
     type: Object,
@@ -145,6 +174,7 @@ const props = defineProps({
 })
 
 const store = usePerencanaanPoliStore()
+const $q = useQuasar()
 const optionsJnsKunjungan = ref([
   { value: '', label: '-------' },
   { value: '1', label: 'Rawat Inap' },
@@ -201,5 +231,11 @@ onMounted(() => {
 
 function simpan() {
   console.log('ok')
+  $q.notify({
+    type: 'negative',
+    message: 'Maaf, Anda tidak terhubung ke BPJS',
+    position: 'top-right',
+    color: 'negative'
+  })
 }
 </script>
