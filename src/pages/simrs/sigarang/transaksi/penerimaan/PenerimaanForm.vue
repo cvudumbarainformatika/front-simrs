@@ -20,6 +20,7 @@
                   outlined
                   hint="SESUAIKAN NOMOR PENERIMAAN"
                   dense
+                  disable
                   :loading="store.loadingJumlah"
                 />
                 <!-- bg-color="red-2" -->
@@ -286,6 +287,8 @@
                     autofocus
                     type="number"
                     counter
+                    :loading="store.loadingJumlah"
+                    :disable="store.loadingJumlah"
                     @keyup.enter="scope.set"
                   />
                 </q-popup-edit>
@@ -343,6 +346,8 @@
                       dense
                       autofocus
                       counter
+                      :loading="store.loadingJumlah"
+                      :disable="store.loadingJumlah"
                       @keyup.enter="scope.set"
                     />
                   </q-popup-edit>
@@ -607,6 +612,9 @@ const validasi = (val) => {
   // 'surat', surat.value,
   // 'tanggal surat', tglSurat.value
   // )
+  // cek ref
+  const referens = !(store.form.reff < 5)
+  const noTrm = store.form.no_penerimaan !== '000.3.2/02.0/.../BAST-../1.02.2.14.0.00.03.0301/..bulan../' + date.formatDate(Date.now(), 'YYYY')
   if (!pemesanan.value || !pengirim.value || !statusPembelian.value || !pilihSurat.value) {
     // if (!diterima.value) {
     //   notifNegativeCenterVue('Anda belum memasukkan jumlah barang diterima')
@@ -615,7 +623,18 @@ const validasi = (val) => {
     return true
     // }
   } else {
-    return false
+    if (!referens || !noTrm) {
+      if (!referens) {
+        notifNegativeCenterVue('No referensi salah, silahkan referesh terlebih dahulu')
+        return true
+      } else if (!noTrm) {
+        notifNegativeCenterVue('No Penerimaan salah, silahkan pilih kembali nomor pemesanan')
+
+        return true
+      }
+    } else {
+      return false
+    }
   }
 }
 const resetValidation = () => {
