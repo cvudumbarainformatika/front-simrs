@@ -123,6 +123,17 @@
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
+            val="karcis"
+            label="Karcis"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
             val="tindakan"
             label="Tindakan"
             @update:model-value="gantiDataNota"
@@ -556,7 +567,7 @@ import { ref } from 'vue'
 defineProps({
   pasien: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['print', 'rekap'])
+const emits = defineEmits(['print', 'rekap', 'nota'])
 // const nota = ref('')
 // const options = ref([
 //   { nota: '-' },
@@ -574,7 +585,8 @@ function cetakFakturRekap(val) {
 
 const dataNotas = ref('')
 function gantiDataNota(val) {
-  console.log('radio', val)
+  // console.log('radio', val)
+  emits('nota', val)
 }
 // function cetakTindakan() {
 //   nota.value = ' Tindakan'

@@ -26,18 +26,18 @@ export const useSimrsLaporanSigarangPenerimaanSimperdaRinciStore = defineStore('
       // kode108
       // kode_barang
 
-      const adaisi = val.filter(a => a.rincianpenerimaan.length)
+      const adaisi = val.filter(a => a.barangrs.length)
       if (adaisi.length) {
         adaisi.forEach(isi => {
           // ambil kode 108
-          const satuNol = isi.rincianpenerimaan.map(rin => rin.kode_108)
+          const satuNol = isi.barangrs.map(rin => rin.kode_108)
           isi.kode108 = []
           if (satuNol.length) {
             // filter duplicated
             // console.log('satunol', satuNol)
             const filtSatu = filterDuplicateArrays(satuNol)
             filtSatu.forEach(sat => {
-              const anu = isi.rincianpenerimaan.filter(is => is.kode_108 === sat)
+              const anu = isi.barangrs.filter(is => is.kode_108 === sat)
               const jumlah = anu.map(rin => rin.subtotal).reduce((a, b) => a + b, 0)
               // console.log('jumlah', jumlah)
               const temp = {

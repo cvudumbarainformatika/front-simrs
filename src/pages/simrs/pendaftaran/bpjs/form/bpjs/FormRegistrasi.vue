@@ -737,6 +737,7 @@ function assignSuratKontrol(val) {
   store.dpjpSuratKontrol = val.kodeDokter
   store.setForm('asalRujukan', val.sep.provPerujuk.asalRujukan)
   store.setForm('asalrujukan', val.sep.provPerujuk.asalRujukan)
+  store.setForm('namappkRujukan', val.sep.provPerujuk.nmProviderPerujuk)
   const indexPPK = findWithAttr(store.ppkRujukans, 'kode', val.sep.provPerujuk.kdProviderPerujuk)
   if (indexPPK < 0) {
     const pkrujukan = {
