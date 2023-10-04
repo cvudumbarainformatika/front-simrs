@@ -118,6 +118,12 @@ const menus = ref([
     label: 'Plann',
     icon: 'icon-mat-style',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PerencanaanPage.vue')))
+  },
+  {
+    name: 'e-resep-page',
+    label: 'EResep',
+    icon: 'icon-mat-receipt',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/EResepPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])

@@ -194,7 +194,7 @@ const onFilterTest = async (val, update, abort) => {
   const params = {
     params: {
       namafaskes: val,
-      jnsfaskes: store?.formPrb?.tipeRujukan
+      jnsfaskes: store?.formPrb?.tiperujukan
     }
   }
   const response = await api.get('v1/simrs/pelayanan/faskes', params)

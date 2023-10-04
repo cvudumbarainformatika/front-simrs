@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { notifSuccess } from 'src/modules/utils'
+import { usePengunjungPoliStore } from './pengunjung'
 
 export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
   state: () => ({
@@ -84,6 +85,9 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKonsul)
         console.log(resp)
         if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result
+          storePasien.injectDataPasien(pasien, isi, 'planning')
           notifSuccess(resp)
           this.loadingSaveKonsul = false
         }
@@ -94,8 +98,27 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
 
-    // ====================================================================================================================================================RUmah sakit lain
+    async hapusItem(pasien, id) {
+      const payload = { noreg: pasien?.noreg, id }
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/hapusplaningpasien', payload)
+        console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          storePasien.hapusDataPlanning(pasien, id)
+          notifSuccess(resp)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
 
+    // ====================================================================================================================================================RUmah sakit lain
+    async saveRsLain(pasien) {
+      this.formKonsul.norm = pasien?.norm
+      this.formKonsul.noreg = pasien?.noreg
+      this.formKonsul.planing = 'Rumah Sakit Lain'
+    },
     initPasien(pasien) {
       this.formRsLain.norm = pasien?.norm
       this.formPrb.norm = pasien?.norm

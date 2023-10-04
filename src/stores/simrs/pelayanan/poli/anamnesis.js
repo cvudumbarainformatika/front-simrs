@@ -7,14 +7,18 @@ export const useAnamnesis = defineStore('anamnesis', {
   state: () => ({
     loadingForm: false,
     loadingHistory: false,
+
     form: {
       keluhanutama: '',
       riwayatpenyakit: '',
+      riwayatpenyakitsekarang: '',
       riwayatalergi: '',
       keteranganalergi: '',
       riwayatpengobatan: ''
     },
+
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain'],
+    selection: [],
     historys: []
   }),
   // getters: {
@@ -64,6 +68,10 @@ export const useAnamnesis = defineStore('anamnesis', {
       }
       console.log('form', this.form)
       console.log('xxx', val)
+    },
+
+    setForm(key, val) {
+      this.form[key] = val
     },
 
     async deleteData(pasien, id) {
@@ -117,6 +125,7 @@ export const useAnamnesis = defineStore('anamnesis', {
         this.form = {
           keluhanutama: '',
           riwayatpenyakit: '',
+          riwayatpenyakitsekarang: '',
           riwayatalergi: '',
           keteranganalergi: '',
           riwayatpengobatan: ''
