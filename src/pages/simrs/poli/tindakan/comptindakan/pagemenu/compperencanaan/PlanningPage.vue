@@ -38,7 +38,7 @@
         </div>
         <div
           v-else
-          class="q-pa-md"
+          class="column full-height flex-center q-pa-md"
         >
           Belum Ada Pemilihan Planning Pasien
         </div>

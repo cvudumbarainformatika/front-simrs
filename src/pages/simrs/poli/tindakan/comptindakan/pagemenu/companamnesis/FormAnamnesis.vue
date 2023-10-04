@@ -59,6 +59,24 @@
           <div class="row q-col-gutter-md q-mb-md">
             <div class="col-4">
               <div class="text-weight-bold">
+                Riwayat Penyakit (Sekarang)
+              </div>
+              <div class="text-grey-8 f-10">
+                penyakit yang diderita oleh pasien
+              </div>
+            </div>
+            <div class="col-8">
+              <q-input
+                v-model="store.form.riwayatpenyakitsekarang"
+                outlined
+                autogrow
+                standout="bg-yellow-3"
+              />
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mb-md">
+            <div class="col-4">
+              <div class="text-weight-bold">
                 Riwayat Penyakit
               </div>
               <div class="text-grey-8 f-10">
@@ -85,13 +103,30 @@
                 oleh pasien
               </div>
             </div>
-            <div class="col-6">
-              <q-radio
+            <div class="col-8">
+              <!-- <q-radio
                 v-for="(al, i) in store.alergis"
                 :key="i"
                 v-model="store.form.riwayatalergi"
                 :val="al"
                 :label="al"
+              /> -->
+              <q-checkbox
+                v-for="(al, i) in store.alergis"
+                :key="i"
+                v-model="store.selection"
+                :val="al"
+                :label="al"
+                color="primary"
+                @update:model-value="updateSelection"
+              />
+              <q-input
+                v-model="store.form.riwayatalergi"
+                outlined
+                label="Riwayat"
+                standout="bg-yellow-3"
+                readonly
+                class="q-mb-sm"
               />
               <q-input
                 v-model="store.form.keteranganalergi"
@@ -163,5 +198,10 @@ function onSubmit() {
 function historyOpen() {
   emits('openHistory')
   store.getHistory(props.pasien?.norm)
+}
+
+function updateSelection(val) {
+  // console.log(val.join(','))
+  store.setForm('riwayatalergi', val.join(', '))
 }
 </script>

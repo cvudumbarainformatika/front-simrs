@@ -165,7 +165,7 @@
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { onMounted, ref } from 'vue'
 import { api } from 'src/boot/axios'
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
 const props = defineProps({
   pasien: {
     type: Object,
@@ -174,7 +174,7 @@ const props = defineProps({
 })
 
 const store = usePerencanaanPoliStore()
-const $q = useQuasar()
+// const $q = useQuasar()
 const optionsJnsKunjungan = ref([
   { value: '', label: '-------' },
   { value: '1', label: 'Rawat Inap' },
@@ -194,7 +194,7 @@ const onFilterTest = async (val, update, abort) => {
   const params = {
     params: {
       namafaskes: val,
-      jnsfaskes: store?.formRsLain?.tipeRujukan
+      jnsfaskes: store?.formRsLain?.tiperujukan
     }
   }
   const response = await api.get('v1/simrs/pelayanan/faskes', params)
@@ -231,11 +231,11 @@ onMounted(() => {
 
 function simpan() {
   console.log('ok')
-  $q.notify({
-    type: 'negative',
-    message: 'Maaf, Anda tidak terhubung ke BPJS',
-    position: 'top-right',
-    color: 'negative'
-  })
+  // $q.notify({
+  //   type: 'negative',
+  //   message: 'Maaf, Anda tidak terhubung ke BPJS',
+  //   position: 'top-right',
+  //   color: 'negative'
+  // })
 }
 </script>

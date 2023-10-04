@@ -14,12 +14,6 @@
         Data Anamnesis
       </div>
       <q-space />
-      <q-btn
-        dense
-        size="sm"
-        icon="icon-mat-close"
-        flat
-      />
     </q-bar>
     <q-card-section
       style="padding:0"
@@ -53,6 +47,11 @@
                   class="f-12"
                 >
                   <span class="">Keluhan Utama</span> : <span class="text-weight-bold">{{ item?.rs4 }}</span>
+                </q-item-label>
+                <q-item-label
+                  lines="2"
+                >
+                  <span class="">Riwayat Penyakit (Sekarang)</span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
