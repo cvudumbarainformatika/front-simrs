@@ -94,7 +94,7 @@
                 </div>
                 <div
                   v-else
-                  class="q-ml-sm cursor-pointer"
+                  :class="item.sep?'q-ml-sm':'q-ml-sm cursor-pointer'"
                 >
                   <q-badge
                     outline
