@@ -107,6 +107,7 @@
     <!-- Billing -->
     <app-fullscreen
       v-model="billOpen"
+      @close="store.notas={}"
     >
       <template #default>
         <BillingPage
