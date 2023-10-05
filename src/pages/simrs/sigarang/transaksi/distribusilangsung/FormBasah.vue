@@ -76,6 +76,7 @@
                   dense
                   outlined
                   :loading="row.loading"
+                  :disable="row.loading"
                   @update:model-value="setJmlDist($event, row)"
                   @keyup.enter="inputBlur(row,col)"
                 />

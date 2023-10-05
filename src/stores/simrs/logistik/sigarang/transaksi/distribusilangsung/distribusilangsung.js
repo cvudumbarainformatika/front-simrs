@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess, uniqueId } from 'src/modules/utils'
+import { notifInfVue, notifSuccess, uniqueId } from 'src/modules/utils'
 import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
 
@@ -220,6 +220,10 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             this.items[i].jumlah = this.form.jumlah
             this.items[i].toDistribute = 0
             this.items[i].total_stok = resp.data.stok_update > 0 ? resp.data.stok_update : (this.items[i].total_stok - this.form.jumlah)
+            if (resp.data.stok_update === 0) {
+              notifInfVue(this.items[i].nama + ' sudah habis dan sudah dihapus dari list. silahkan refresh tabel jika list data sudah habis')
+              this.items.splice(i, 1)
+            }
             // this.getDataTable()
             notifSuccess(resp)
             resolve(resp)

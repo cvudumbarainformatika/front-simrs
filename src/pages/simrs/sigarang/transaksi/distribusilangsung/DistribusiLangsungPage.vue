@@ -11,7 +11,7 @@
           Distribusi Langsung {{ ruang }}
         </div>
         <div class="title-desc">
-          Halaman Distribusi Langsung dari {{ ruang }}
+          Halaman Distribusi Langsung {{ ruang }}
         </div>
       </q-card-section>
       <q-separator />
@@ -146,7 +146,7 @@ const ruang = computed(() => {
   if (depo) {
     return depo
   } else {
-    return '-'
+    return ''
   }
 })
 const tipeSelected = val => {
