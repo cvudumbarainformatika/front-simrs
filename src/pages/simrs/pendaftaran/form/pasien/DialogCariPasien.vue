@@ -171,7 +171,7 @@
 </template>
 <script setup>
 
-import { findWithAttr } from 'src/modules/utils'
+import { findWithAttr, notifErrVue } from 'src/modules/utils'
 import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/bpjs/registrasibpjs'
 // import { useDialogCariPasienPendaftaranUmum } from 'src/stores/simrs/pendaftaran/form/pasien/dialogCariPasien'
 import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
@@ -215,10 +215,28 @@ function pilihPasienIni(val) {
   }
 
   if (props.bpjs) {
-    if (val.nik !== '') {
-      const form = { nik: val.nik, tglsep: regis.form.tglsep }
-      store.cekPesertaByNik(form).then(resp => {
-        console.log('nik ', resp)
+    // if (val.nik !== '') {
+    //   const form = { nik: val.nik, tglsep: regis.form.tglsep }
+    //   store.cekPesertaByNik(form).then(resp => {
+    //     console.log('nik ', resp)
+    //     store.alert = true
+    //     store.alertMsg = resp
+    //     if (resp.peserta.provUmum) {
+    //       const rujukan = {
+    //         kode: resp.peserta.provUmum.kdProvider,
+    //         nama: resp.peserta.provUmum.nmProvider
+    //       }
+    //       regis.ppkRujukans.push(rujukan)
+    //       regis.display.kode = rujukan.kode
+    //       regis.setForm('ppkRujukan', rujukan.kode)
+    //     }
+    //   })
+    // } else
+    if (val.noka !== '') {
+      console.log('noka', val.noka === undefined)
+      const form = { noka: val.noka, tglsep: regis.form.tglsep }
+      store.cekPesertaByNoka(form).then(resp => {
+        console.log('noka ', resp)
         store.alert = true
         store.alertMsg = resp
         if (resp.peserta.provUmum) {
@@ -231,21 +249,8 @@ function pilihPasienIni(val) {
           regis.setForm('ppkRujukan', rujukan.kode)
         }
       })
-    } else if (val.noka !== '') {
-      console.log('noka', val.noka === undefined)
-      const form = { noka: val.noka, tglsep: regis.form.tglsep }
-      store.cekPesertaByNoka(form).then(resp => {
-        console.log('noka ', resp)
-        if (resp.peserta.provUmum) {
-          const rujukan = {
-            kode: resp.peserta.provUmum.kdProvider,
-            nama: resp.peserta.provUmum.nmProvider
-          }
-          regis.ppkRujukans.push(rujukan)
-          regis.display.kode = rujukan.kode
-          regis.setForm('ppkRujukan', rujukan.kode)
-        }
-      })
+    } else {
+      notifErrVue('Noka Pasien kosong, tidak bisa dilakukan cek pasien')
     }
   }
   const tglLahir = val.tgllahir.split('-')
