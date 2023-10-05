@@ -27,7 +27,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       ruang_tujuan: null,
       jumlah: 0,
       kode_rs: null,
-      kode_satuan: null
+      kode_satuan: null,
+      status: 2
     },
     barangKerings: [],
     barangBasahes: [],
@@ -73,10 +74,9 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         'kode',
         'nama',
         'tanggal',
-        'no_penerimaan_stok',
-        'sisa_stok',
+        'total_stok',
         'satuan',
-        'toDistribute'
+        'jumlah'
       ]
     },
     // end of table
@@ -119,10 +119,12 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
         if (data === 'ada') {
           this.loading = false
           this.setForm('reff', oldSlug)
+          this.setParam('reff', oldSlug)
           routerInstance.replace({ name: 'sigarang.transaksi.distribusilangsung', params: { slug: oldSlug } })
         } else {
           this.loading = false
           this.setForm('reff', slug)
+          this.setParam('reff', oldSlug)
           routerInstance.replace({ name: 'sigarang.transaksi.distribusilangsung', params: { slug } })
         }
       })
@@ -130,6 +132,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     getDataTable() {
       this.loading = true
       const params = { params: this.params }
+      console.log('params', params)
       return new Promise(resolve => {
         // api.get('v1/transaksi/distribusilangsung/index', params)
         // api.get('v1/transaksi/distribusilangsung/get-barang-with-transaksi', params)
@@ -154,8 +157,8 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
             if (this.items.length) {
               this.items.forEach(anu => {
                 anu.loading = false
-                if (!anu.detail_distribusi_langsung.length) { anu.toDistribute = 0 } else {
-                  anu.toDistribute = anu.detail_distribusi_langsung.map(m => m.jumlah).reduce((a, b) => a + b, 0)
+                if (!anu.detail_distribusi_langsung.length) { anu.jumlah = 0 } else {
+                  anu.jumlah = anu.detail_distribusi_langsung.map(m => m.jumlah).reduce((a, b) => a + b, 0)
                 }
               })
             }
@@ -208,11 +211,16 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
       return new Promise(resolve => {
         api.post('v1/transaksi/distribusilangsung/store', this.form)
           .then(resp => {
-            // console.log('save', resp)
             this.items[i].loading = false
             this.formIsValid = false
             this.detailIsValid = false
-            this.setForm('id', resp.data.distribusi.id)
+            this.setForm('id', resp.data.distribusi?.id)
+            console.log('save', resp)
+            this.items[i].tanggal = resp.data.distribusi?.tanggal
+            this.items[i].jumlah = this.form.jumlah
+            this.items[i].toDistribute = 0
+            this.items[i].total_stok = resp.data.stok_update > 0 ? resp.data.stok_update : (this.items[i].total_stok - this.form.jumlah)
+            // this.getDataTable()
             notifSuccess(resp)
             resolve(resp)
           })
@@ -244,6 +252,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
           .then(resp => {
             this.loading = false
             routerInstance.currentRoute.value.params.slug = 'DSTL-' + uniqueId()
+            this.setParam('tipe', 'basah')
             this.getNewTable()
             resolve(resp)
           })
