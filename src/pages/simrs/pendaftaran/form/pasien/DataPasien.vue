@@ -1445,6 +1445,7 @@ function resetValidation() {
   refKecamatan.value.$refs.refAuto.resetValidation()
   refKelurahan.value.$refs.refAuto.resetValidation()
   refPekerjaan.value.$refs.refAuto.resetValidation()
+  refHambatan.value.$refs.refAuto.resetValidation()
   refStatusPernikahan.value.$refs.refAuto.resetValidation()
   if (refTulisAgama.value !== null) { refTulisAgama.value.$refs.refInput.resetValidation() }
   if (refInputPekerjaan.value !== null) { refInputPekerjaan.value.$refs.refInput.resetValidation() }
@@ -1817,6 +1818,7 @@ function validasi() {
   const RT = refRT.value.$refs.refInput.validate()
   const RW = refRW.value.$refs.refInput.validate()
   const Bahasa = refBahasa.value.$refs.refAuto.validate()
+  const Hambatan = refHambatan.value.$refs.refAuto.validate()
   const Negara = refNegara.value.$refs.refAuto.validate()
   const Propinsi = refPropinsi.value.$refs.refAuto.validate()
   const Kabupaten = refKabupaten.value.$refs.refAuto.validate()
@@ -1831,6 +1833,10 @@ function validasi() {
   const KecamatanDomisili = store.alamataDomisiliSama ? true : refKecamatanDomisili.value.$refs.refAuto.validate()
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
   const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
+  const bacatulis = !!store.form.bacatulis
+  if (!bacatulis) {
+    notifErrVue('Bisa / Tidak bisa baca tulis belum dipilih')
+  }
 
   if (
     JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
@@ -1840,7 +1846,7 @@ function validasi() {
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
-  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas
+  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas && Hambatan && bacatulis
   ) {
     valid = true
   } else { valid = false }
