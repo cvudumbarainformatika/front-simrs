@@ -503,9 +503,12 @@
             </div>
             <!-- Baca Tulis -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="">
+              <div>
                 <q-radio
                   v-model="store.form.bacatulis"
+                  :class="!!store.form.bacatulis?'dark':'merah'"
+                  :color="!!store.form.bacatulis?'primary':'negative'"
+                  :keep-color="!store.form.bacatulis"
                   dense
                   checked-icon="icon-mat-task_alt"
                   unchecked-icon="icon-mat-panorama_fish_eye"
@@ -513,9 +516,12 @@
                   label="Bisa Baca & Tulis"
                 />
               </div>
-              <div class="">
+              <div>
                 <q-radio
                   v-model="store.form.bacatulis"
+                  :class="!!store.form.bacatulis?'dark':'merah'"
+                  :color="!!store.form.bacatulis?'primary':'negative'"
+                  :keep-color="!store.form.bacatulis"
                   dense
                   checked-icon="icon-mat-task_alt"
                   unchecked-icon="icon-mat-panorama_fish_eye"
@@ -1907,5 +1913,8 @@ onBeforeUpdate(() => {
 }
 .satu{
   width:100%;
+}
+.merah{
+  color: $negative;
 }
 </style>
