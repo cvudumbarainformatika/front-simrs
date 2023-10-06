@@ -1388,6 +1388,7 @@ const refPropinsi = ref(null)
 const refKabupaten = ref(null)
 const refKecamatan = ref(null)
 const refKelurahan = ref(null)
+const refHambatan = ref(null)
 // validasi ktp dan kitas
 function cekKtpKitas() {
   refKtp.value.$refs.refInput.validate()
@@ -1807,7 +1808,6 @@ function validasi() {
   const Suku = refSuku.value.$refs.refInput.validate()
 
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
-  const Bahasa = refBahasa.value.$refs.refInput.validate()
   const KodePos = refKodePos.value.$refs.refInput.validate()
   const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
   const Ktp = refKtp.value.$refs.refInput.validate()
@@ -1816,6 +1816,7 @@ function validasi() {
   const Alamat = refAlamat.value.$refs.refInput.validate()
   const RT = refRT.value.$refs.refInput.validate()
   const RW = refRW.value.$refs.refInput.validate()
+  const Bahasa = refBahasa.value.$refs.refAuto.validate()
   const Negara = refNegara.value.$refs.refAuto.validate()
   const Propinsi = refPropinsi.value.$refs.refAuto.validate()
   const Kabupaten = refKabupaten.value.$refs.refAuto.validate()
@@ -1839,7 +1840,8 @@ function validasi() {
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
-  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas) {
+  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas
+  ) {
     valid = true
   } else { valid = false }
 }

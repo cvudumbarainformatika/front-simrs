@@ -409,11 +409,14 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     },
     propinsiDomisiliSelected(val) {
       const index = findWithAttr(this.domisiliPropinsies, 'propinsi', val)
-      const propinsi = this.domisiliPropinsies[index]
-      this.wilayahDomisili.propinsi = val
-      this.paramWilayahDomisili.kd_propinsi = val
-      this.setForm('kodepropinsidomisili', val)
-      this.setForm('propinsidomisili', propinsi.wilayah)
+      console.log('index domisili', index)
+      if (index >= 0) {
+        const propinsi = this.domisiliPropinsies[index]
+        this.wilayahDomisili.propinsi = val
+        this.paramWilayahDomisili.kd_propinsi = val
+        this.setForm('kodepropinsidomisili', val)
+        this.setForm('propinsidomisili', propinsi.wilayah)
+      }
 
       // this.getKota()
     },
