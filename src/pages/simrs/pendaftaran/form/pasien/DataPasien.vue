@@ -155,18 +155,6 @@
                 />
               </div>
             </div>
-            <!-- Nama ibu kandung -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refIbu"
-                  v-model="store.form.namaibukandung"
-                  label="Nama Ibu Kandung"
-                  outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                />
-              </div>
-            </div>
             <!-- KA BPJS -->
             <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
               <div :class="bpjs?'bagi-tiga':'satu'">
@@ -243,6 +231,18 @@
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+            <!-- Nama ibu kandung -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refIbu"
+                  v-model="store.form.namaibukandung"
+                  label="Nama Ibu Kandung"
+                  outlined
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                />
               </div>
             </div>
             <!-- Gelar -->
@@ -478,12 +478,49 @@
               </div>
               <div class="col-8"> -->
               <div class="col-12">
-                <app-input
+                <app-autocomplete
+                  ref="refBahasa"
+                  v-model="store.form.bahasa"
+                  label="Bahasa"
+                  autocomplete="bahasa"
+                  option-value="bahasa"
+                  option-label="bahasa"
+                  outlined
+                  :source="store.bahasas"
+                  :loading="store.loading"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+                <!-- @selected="kelaminSelected" -->
+                <!-- <app-input
                   ref="refBahasa"
                   v-model="store.form.bahasa"
                   label="Bahasa"
                   outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                /> -->
+              </div>
+            </div>
+            <!-- Baca Tulis -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="">
+                <q-radio
+                  v-model="store.form.bacatulis"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  val="YA"
+                  label="Bisa Baca & Tulis"
+                />
+              </div>
+              <div class="">
+                <q-radio
+                  v-model="store.form.bacatulis"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  val="TIDAK"
+                  label="Tidak Bisa Baca & Tulis"
                 />
               </div>
             </div>
@@ -605,9 +642,43 @@
                 <!-- type="number" -->
               </div>
             </div>
+            <!-- hambatan -->
+            <!-- <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div
+                v-for="(ham,i) in store.hambatans"
+                :key="i"
+              >
+                <q-radio
+                  v-model="store.form.kdhambatan"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  :val="ham.id"
+                  :label="ham.hambatan"
+                />
+              </div>
+            </div> -->
           </div>
           <!-- kanan -->
           <div class="col-4">
+            <!-- hambatan -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refHambatan"
+                  v-model="store.form.kdhambatan"
+                  label="Hambatan"
+                  autocomplete="hambatan"
+                  option-value="id"
+                  option-label="hambatan"
+                  outlined
+                  :source="store.hambatans"
+                  :loading="store.loading"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+              </div>
+            </div>
             <!-- alamat -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <!-- <div class="col-4">
@@ -1039,110 +1110,6 @@
           v-if="store.alertMsg.peserta"
           class="q-pa-md"
         >
-          <!-- <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Nama
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.nama }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Hak Kelas
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.hakKelas.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              No. Kartu
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.noKartu }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Telepon
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.mr.noTelepon?store.alertMsg.peserta.mr.noTelepon:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Jenis Kelamin
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.sex }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Asal Faskes
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.provUmum.nmProvider }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Status Peserta
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.statusPeserta.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Jenis Peserta
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.jenisPeserta.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              NIK
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.nik }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Dinsos
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.dinsos?store.alertMsg.peserta.informasi.dinsos:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              No SKTM
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.noSKTM?store.alertMsg.peserta.informasi.noSKTM:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Prolanis PRB
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.proranisPRB?store.alertMsg.peserta.informasi.proranisPRB:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              e SEP
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
-            </div>
-          </div> -->
           <q-card
             flat
             class="full-width"
