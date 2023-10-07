@@ -31,6 +31,8 @@
             <div class="col-6">
               <ListNakes
                 :lists="store.listsnakes"
+                :terselect="store?.objNakes"
+                :termapings="store.ygsudahdimappings"
                 @select="(val)=> store.setObjnakes(val)"
               />
             </div>
@@ -42,7 +44,7 @@
                 <q-card-section>
                   <!-- {{ store.objNakes }} -->
                   <div class="row items-center justify-between">
-                    <div class="col row">
+                    <div class="col row items-center">
                       <q-avatar>
                         <img src="https://cdn.quasar.dev/img/avatar.png">
                       </q-avatar>
@@ -53,6 +55,14 @@
                           color="primary"
                           :label="labelNake(store?.objNakes?.kdgroupnakes)"
                         />
+                        <div class="flex items-center q-gutter-sm q-pt-xs">
+                          <div>Kode </div>
+                          <q-badge
+                            outline
+                            color="orange"
+                            :label="store?.objNakes?.kode"
+                          />
+                        </div>
                       </div>
                       <div class="col text-h6 q-mb-sm text-right">
                         Data Nakes
@@ -67,7 +77,7 @@
                     dense
                     outlined
                     standout="bg-yellow-3"
-                    label="Cari Data"
+                    label="Cari Data Kepegawaian"
                     use-input
                     clearable
                     option-value="id"
@@ -112,15 +122,18 @@
                   <div class="row items-center justify-between">
                     <div class="col row">
                       <q-avatar>
-                        <img src="https://cdn.quasar.dev/img/avatar.png">
+                        <img :src="getImage(store?.searchResultKepeg)">
                       </q-avatar>
                       <div class="q-ml-md">
                         <div>{{ store?.searchResultKepeg?.nama }}</div>
-                      <!-- <q-badge
-                        outline
-                        color="primary"
-                        :label="labelNake(store?.objNakes?.kdgroupnakes)"
-                      /> -->
+                        <div class="flex items-center q-gutter-sm q-pt-xs">
+                          <div>Kode </div>
+                          <q-badge
+                            outline
+                            color="orange"
+                            :label="store?.searchResultKepeg?.kdpegsimrs"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -128,6 +141,16 @@
                       Data Kepegawaian
                     </div>
                   </div>
+                </q-card-section>
+                <q-separator />
+                <q-card-section align="right">
+                  <q-btn
+                    label="Simpan Mapping"
+                    color="primary"
+                    :loading="store?.loadingSave"
+                    :disable="store?.loadingSave"
+                    @click="store.saveMapping"
+                  />
                 </q-card-section>
               </q-card>
             </div>
@@ -148,6 +171,7 @@ const store = useMappingNakesStore()
 
 onMounted(() => {
   store.getNakes()
+  store.getDataTermapping()
 })
 const options = ref(null)
 

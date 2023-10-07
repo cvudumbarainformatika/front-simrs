@@ -4,7 +4,14 @@
     bordered
   >
     <q-card-section class="q-pa-none">
-      Headernya
+      <div class="bg-yellow-3">
+        <q-option-group
+          v-model="group"
+          :options="options"
+          color="primary"
+          inline
+        />
+      </div>
       <q-separator />
       <q-list
         v-if="props?.lists?.length"
@@ -12,15 +19,17 @@
         separator
       >
         <q-item
-          v-for="(item, i) in lists"
+          v-for="(item, i) in filterred"
           :key="i"
           v-ripple
           clickable
+          :active="item === terselect"
+          active-class="bg-primary text-white"
           @click="kirimKeForm(item)"
         >
           <q-item-section avatar>
             <q-icon
-              color="primary"
+              :color="item === terselect?'white':'primary'"
               name="icon-mat-person"
             />
           </q-item-section>
@@ -44,11 +53,20 @@
 </template>
 
 <script setup>
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   lists: {
     type: Array,
     default: () => []
+  },
+  termapings: {
+    type: Array,
+    default: () => []
+  },
+  terselect: {
+    type: Object,
+    default: null
   }
 })
 
@@ -58,4 +76,33 @@ function kirimKeForm(val) {
   // console.log(val)
   emits('select', val)
 }
+
+const group = ref(1)
+const options = ref(
+  [
+    {
+      label: 'Belum ter mapping',
+      value: 1
+    },
+    {
+      label: 'Sudah ter mapping',
+      value: 2
+    },
+    {
+      label: 'Semua',
+      value: 3
+    }
+  ]
+)
+
+const filterred = computed(() => {
+  const termapings = props?.termapings
+  if (group.value === 1) {
+    return props?.lists.filter(x => !termapings.includes(x.kode))
+  } else if (group.value === 2) {
+    return props?.lists.filter(x => termapings.includes(x.kode))
+  } else {
+    return props?.lists
+  }
+})
 </script>
