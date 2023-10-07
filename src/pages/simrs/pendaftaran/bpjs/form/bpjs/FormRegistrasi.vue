@@ -718,6 +718,7 @@ function cekSuratKontrolIni(evt) {
     })
   }
 }
+setSistembayar1('1')
 // assign surat kontrol ke form
 function assignSuratKontrol(val) {
   console.log('assign surat kontrol ', val)
@@ -755,7 +756,6 @@ function assignSuratKontrol(val) {
   setJenisKunjungan(val.namaJnsKontrol)
   store.display.jeniskunjungan = val.namaJnsKontrol
 
-  setSistembayar1('1')
   store.display.bayar.kode = '1'
 
   const diag = val.sep.diagnosa.split('-')

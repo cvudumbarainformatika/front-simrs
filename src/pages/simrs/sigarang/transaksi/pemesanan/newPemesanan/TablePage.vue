@@ -325,7 +325,6 @@
                           valid
                           label="Keterangan / Merk"
                           outlined
-                          counter
                           type="text"
                           :rules="[ val => val.length <= 255 || 'maximal 255 karakter']"
                           :disable="store.loadingTambah"

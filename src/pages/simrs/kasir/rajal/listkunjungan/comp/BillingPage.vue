@@ -367,11 +367,11 @@
             </div>
             <div class="col-3">
               <div class="row no-wrap">
-                <div class="col-6">
-                  Total
+                <div class="col-6 text-right">
+                  Jumlah
                 </div>
-                <div class="col-6">
-                  Total Batal
+                <div class="col-6 text-right">
+                  Batal
                 </div>
               </div>
             </div>
@@ -379,101 +379,125 @@
               #
             </div>
           </div>
-          <!-- child -->
-          <div class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs">
-            <div class="col-3">
-              <div class="row no-wrap">
-                <div class="col-2">
-                  1
+          <div v-if="store.notas.Pelayanan">
+            <!-- child -->
+            <!-- {{ store.notas }} -->
+            <div
+              v-for="(pel,i) in store.notas.Pelayanan"
+              :key="i"
+              class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs"
+            >
+              <div class="col-3">
+                <div class="row no-wrap">
+                  <div class="col-2">
+                    {{ i + 1 }}
+                  </div>
+                  <div class="col-10">
+                    {{ pel.namatindakan }}
+                  </div>
                 </div>
-                <div class="col-10">
-                  No Kwitansi
+              </div>
+              <div class="col-2">
+                Pembayaran : Tunai / Va/ Qris
+              </div>
+              <div class="col-2">
+                Tanggal trx
+              </div>
+              <div class="col-3">
+                <div class="row no-wrap">
+                  <div class="col-6 text-right">
+                    Rp {{ formatRp(pel.subtotal) }}
+                  </div>
+                  <div class="col-6 text-right">
+                    0
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 text-right">
+                <div class="q-mr-xs">
+                  <app-btn
+                    label="Buat Qris"
+                    color="blue"
+                    push
+                    dense
+                  />
+                </div>
+                <div class="q-mr-xs">
+                  <app-btn
+                    label="Bayar Tunai"
+                    color="green"
+                    push
+                    dense
+                  />
+                </div>
+                <div class="q-mr-xs">
+                  <app-btn
+                    label="Buat VA"
+                    color="lime-7"
+                    push
+                    dense
+                  />
+                </div>
+                <div class="q-mr-xs">
+                  <app-btn
+                    label="Batal"
+                    color="grey-7"
+                    push
+                    dense
+                  />
+                </div>
+                <div class="q-mr-xs">
+                  <app-btn
+                    label="Cetak"
+                    color="blue-grey-7"
+                    push
+                    dense
+                  />
                 </div>
               </div>
             </div>
-            <div class="col-2">
-              Pembayaran : Tunai / Va/ Qris
-            </div>
-            <div class="col-2">
-              Tanggal trx
-            </div>
-            <div class="col-3">
-              <div class="row no-wrap">
-                <div class="col-6 text-right">
-                  Total : Rp ....
+            <!-- Bottom -->
+            <div class="q-ml-xs row no-wrap q-col-gutter-xs">
+              <div class="col-3">
+                <!--  -->
+              </div>
+              <div class="col-2">
+                <!--  -->
+              </div>
+              <div class="col-2 text-weight-bold">
+                Total
+              </div>
+              <div class="col-3">
+                <div class="row no-wrap">
+                  <div class="col-6 text-right">
+                    {{ formatRp(store.notas.Subtotal) }}
+                  </div>
+                  <div class="col-6 text-right">
+                    0
+                  </div>
                 </div>
-                <div class="col-6 text-right">
-                  Total Batal (jika ada)
-                </div>
               </div>
-            </div>
-            <div class="col-2 text-right">
-              <div class="q-mr-xs">
-                <app-btn
-                  label="Buat Qris"
-                  color="blue"
-                  push
-                  dense
-                />
-              </div>
-              <div class="q-mr-xs">
-                <app-btn
-                  label="Bayar Tunai"
-                  color="green"
-                  push
-                  dense
-                />
-              </div>
-              <div class="q-mr-xs">
-                <app-btn
-                  label="Buat VA"
-                  color="lime-7"
-                  push
-                  dense
-                />
-              </div>
-              <div class="q-mr-xs">
-                <app-btn
-                  label="Batal"
-                  color="grey-7"
-                  push
-                  dense
-                />
-              </div>
-              <div class="q-mr-xs">
-                <app-btn
-                  label="Cetak"
-                  color="blue-grey-7"
-                  push
-                  dense
-                />
+              <div class="col-2">
+                <!-- # -->
               </div>
             </div>
           </div>
-          <!-- Bottom -->
-          <div class="q-ml-xs row no-wrap q-col-gutter-xs">
-            <div class="col-3">
-            <!--  -->
+          <div
+            v-if="!store.notas.Pelayanan && store.loading"
+            class="q-mt-lg"
+          >
+            <div
+              class="flex column flex-center"
+            >
+              <q-spinner-cube
+                color="primary"
+                size="3em"
+              />
+              <div>Harap Tunggu ...</div>
             </div>
-            <div class="col-2">
-            <!--  -->
-            </div>
-            <div class="col-2 text-weight-bold">
-              Total
-            </div>
-            <div class="col-3">
-              <div class="row no-wrap">
-                <div class="col-6 text-right">
-                  Total
-                </div>
-                <div class="col-6 text-right">
-                  Total Batal
-                </div>
-              </div>
-            </div>
-            <div class="col-2">
-            <!-- # -->
-            </div>
+          </div>
+          <div v-if="!store.notas.Pelayanan && !store.loading">
+            <app-no-data />
           </div>
         </div>
         <!-- Sudah dibayar -->
@@ -562,12 +586,15 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
 import { ref } from 'vue'
 defineProps({
   pasien: { type: Object, default: () => {} }
 })
 const emits = defineEmits(['print', 'rekap', 'nota'])
+
+const store = useKasirRajalListKunjunganStore()
 // const nota = ref('')
 // const options = ref([
 //   { nota: '-' },

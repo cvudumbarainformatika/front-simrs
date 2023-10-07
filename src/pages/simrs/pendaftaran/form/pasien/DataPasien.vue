@@ -155,18 +155,6 @@
                 />
               </div>
             </div>
-            <!-- Nama ibu kandung -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refIbu"
-                  v-model="store.form.namaibukandung"
-                  label="Nama Ibu Kandung"
-                  outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
-                />
-              </div>
-            </div>
             <!-- KA BPJS -->
             <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
               <div :class="bpjs?'bagi-tiga':'satu'">
@@ -243,6 +231,18 @@
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+            <!-- Nama ibu kandung -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refIbu"
+                  v-model="store.form.namaibukandung"
+                  label="Nama Ibu Kandung"
+                  outlined
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                />
               </div>
             </div>
             <!-- Gelar -->
@@ -478,12 +478,55 @@
               </div>
               <div class="col-8"> -->
               <div class="col-12">
-                <app-input
+                <app-autocomplete
+                  ref="refBahasa"
+                  v-model="store.form.bahasa"
+                  label="Bahasa"
+                  autocomplete="bahasa"
+                  option-value="bahasa"
+                  option-label="bahasa"
+                  outlined
+                  :source="store.bahasas"
+                  :loading="store.loading"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+                <!-- @selected="kelaminSelected" -->
+                <!-- <app-input
                   ref="refBahasa"
                   v-model="store.form.bahasa"
                   label="Bahasa"
                   outlined
                   :disable="store.form.barulama!=='baru'&&!store.edit"
+                /> -->
+              </div>
+            </div>
+            <!-- Baca Tulis -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div>
+                <q-radio
+                  v-model="store.form.bacatulis"
+                  :class="!!store.form.bacatulis?'dark':'merah'"
+                  :color="!!store.form.bacatulis?'primary':'negative'"
+                  :keep-color="!store.form.bacatulis"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  val="YA"
+                  label="Bisa Baca & Tulis"
+                />
+              </div>
+              <div>
+                <q-radio
+                  v-model="store.form.bacatulis"
+                  :class="!!store.form.bacatulis?'dark':'merah'"
+                  :color="!!store.form.bacatulis?'primary':'negative'"
+                  :keep-color="!store.form.bacatulis"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  val="TIDAK"
+                  label="Tidak Bisa Baca & Tulis"
                 />
               </div>
             </div>
@@ -605,9 +648,43 @@
                 <!-- type="number" -->
               </div>
             </div>
+            <!-- hambatan -->
+            <!-- <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div
+                v-for="(ham,i) in store.hambatans"
+                :key="i"
+              >
+                <q-radio
+                  v-model="store.form.kdhambatan"
+                  dense
+                  checked-icon="icon-mat-task_alt"
+                  unchecked-icon="icon-mat-panorama_fish_eye"
+                  :val="ham.id"
+                  :label="ham.hambatan"
+                />
+              </div>
+            </div> -->
           </div>
           <!-- kanan -->
           <div class="col-4">
+            <!-- hambatan -->
+            <div class="row q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-12">
+                <app-autocomplete
+                  ref="refHambatan"
+                  v-model="store.form.kdhambatan"
+                  label="Hambatan"
+                  autocomplete="hambatan"
+                  option-value="id"
+                  option-label="hambatan"
+                  outlined
+                  :source="store.hambatans"
+                  :loading="store.loading"
+                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :rules="[val => (!!val) || 'Harap diisi',]"
+                />
+              </div>
+            </div>
             <!-- alamat -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <!-- <div class="col-4">
@@ -1039,110 +1116,6 @@
           v-if="store.alertMsg.peserta"
           class="q-pa-md"
         >
-          <!-- <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Nama
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.nama }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Hak Kelas
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.hakKelas.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              No. Kartu
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.noKartu }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Telepon
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.mr.noTelepon?store.alertMsg.peserta.mr.noTelepon:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Jenis Kelamin
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.sex }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Asal Faskes
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.provUmum.nmProvider }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Status Peserta
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.statusPeserta.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Jenis Peserta
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.jenisPeserta.keterangan }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              NIK
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.nik }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Dinsos
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.dinsos?store.alertMsg.peserta.informasi.dinsos:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              No SKTM
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.noSKTM?store.alertMsg.peserta.informasi.noSKTM:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              Prolanis PRB
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.proranisPRB?store.alertMsg.peserta.informasi.proranisPRB:'-' }}
-            </div>
-          </div>
-          <div class="row items-center q-my-sm">
-            <div class="col-4">
-              e SEP
-            </div>
-            <div class="col-8">
-              {{ store.alertMsg.peserta.informasi.eSEP?store.alertMsg.peserta.informasi.eSEP:'-' }}
-            </div>
-          </div> -->
           <q-card
             flat
             class="full-width"
@@ -1421,6 +1394,7 @@ const refPropinsi = ref(null)
 const refKabupaten = ref(null)
 const refKecamatan = ref(null)
 const refKelurahan = ref(null)
+const refHambatan = ref(null)
 // validasi ktp dan kitas
 function cekKtpKitas() {
   refKtp.value.$refs.refInput.validate()
@@ -1462,7 +1436,6 @@ function resetValidation() {
   refAgama.value.$refs.refAuto.resetValidation()
   refSuku.value.$refs.refInput.resetValidation()
   refNoTlp.value.$refs.refInput.resetValidation()
-  refBahasa.value.$refs.refInput.resetValidation()
   refKodePos.value.$refs.refInput.resetValidation()
   refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
@@ -1471,12 +1444,14 @@ function resetValidation() {
   refAlamat.value.$refs.refInput.resetValidation()
   refRT.value.$refs.refInput.resetValidation()
   refRW.value.$refs.refInput.resetValidation()
+  refBahasa.value.$refs.refAuto.resetValidation()
   refNegara.value.$refs.refAuto.resetValidation()
   refPropinsi.value.$refs.refAuto.resetValidation()
   refKabupaten.value.$refs.refAuto.resetValidation()
   refKecamatan.value.$refs.refAuto.resetValidation()
   refKelurahan.value.$refs.refAuto.resetValidation()
   refPekerjaan.value.$refs.refAuto.resetValidation()
+  refHambatan.value.$refs.refAuto.resetValidation()
   refStatusPernikahan.value.$refs.refAuto.resetValidation()
   if (refTulisAgama.value !== null) { refTulisAgama.value.$refs.refInput.resetValidation() }
   if (refInputPekerjaan.value !== null) { refInputPekerjaan.value.$refs.refInput.resetValidation() }
@@ -1840,7 +1815,6 @@ function validasi() {
   const Suku = refSuku.value.$refs.refInput.validate()
 
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
-  const Bahasa = refBahasa.value.$refs.refInput.validate()
   const KodePos = refKodePos.value.$refs.refInput.validate()
   const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
   const Ktp = refKtp.value.$refs.refInput.validate()
@@ -1849,6 +1823,8 @@ function validasi() {
   const Alamat = refAlamat.value.$refs.refInput.validate()
   const RT = refRT.value.$refs.refInput.validate()
   const RW = refRW.value.$refs.refInput.validate()
+  const Bahasa = refBahasa.value.$refs.refAuto.validate()
+  const Hambatan = refHambatan.value.$refs.refAuto.validate()
   const Negara = refNegara.value.$refs.refAuto.validate()
   const Propinsi = refPropinsi.value.$refs.refAuto.validate()
   const Kabupaten = refKabupaten.value.$refs.refAuto.validate()
@@ -1863,6 +1839,10 @@ function validasi() {
   const KecamatanDomisili = store.alamataDomisiliSama ? true : refKecamatanDomisili.value.$refs.refAuto.validate()
   const KelurahanDomisili = store.alamataDomisiliSama ? true : refKelurahanDomisili.value.$refs.refAuto.validate()
   const KodePosDom = store.alamataDomisiliSama ? true : refKodePosDom.value.$refs.refInput.validate()
+  const bacatulis = !!store.form.bacatulis
+  if (!bacatulis) {
+    notifErrVue('Bisa / Tidak bisa baca tulis belum dipilih')
+  }
 
   if (
     JenisPasien && NoRM && Nama && Sapaan && Kelamin &&
@@ -1872,7 +1852,8 @@ function validasi() {
   Ktp && NoKaBpjs && Alamat && RT && RW && Negara && Propinsi &&
   Kabupaten && Kecamatan && Kelurahan && RTDomisili && RWDomisili &&
   NegaraDomisili && PropinsiDomisili && KabupatenDomisili &&
-  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas) {
+  KecamatanDomisili && KodePosDom && KelurahanDomisili && Kitas && Hambatan && bacatulis
+  ) {
     valid = true
   } else { valid = false }
 }
@@ -1932,5 +1913,8 @@ onBeforeUpdate(() => {
 }
 .satu{
   width:100%;
+}
+.merah{
+  color: $negative;
 }
 </style>

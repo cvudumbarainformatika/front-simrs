@@ -16,7 +16,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
     },
     loading: false,
     rekapBill: {},
-    notas: []
+    notas: {}
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -72,7 +72,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       this.loading = false
     },
     async getNotas(val) {
-      this.notas = []
+      this.notas = {}
       this.loading = true
       const params = { params: val }
       // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)

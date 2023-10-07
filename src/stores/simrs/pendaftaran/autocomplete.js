@@ -12,6 +12,10 @@ export const usePendaftaranAutocompleteStore = defineStore('pendaftaranAutocompl
     agamas: [],
     negaras: [],
     domisiliNegaras: [],
+    propinsies: [],
+    domisiliPropinsies: [],
+    bahasas: [],
+    hambatans: [],
     // bpjs
     asalrujukans: [],
     sistembayars1: [],
@@ -50,11 +54,23 @@ export const usePendaftaranAutocompleteStore = defineStore('pendaftaranAutocompl
       this.penunjangs = val
     },
     // pasien
+    setBahasa(val) {
+      this.bahasas = val
+    },
+    setHamabatan(val) {
+      this.hambatans = val
+    },
     setNegara(val) {
       this.negaras = val
     },
     setNegaraDomisili(val) {
       this.domisiliNegaras = val
+    },
+    setPropinsi(val) {
+      this.propinsies = val
+    },
+    setPropinsiDomisili(val) {
+      this.domisiliPropinsies = val
     },
     setStatusPenikahan(val) {
       this.statuspernikahans = val

@@ -107,6 +107,7 @@
     <!-- Billing -->
     <app-fullscreen
       v-model="billOpen"
+      @close="store.notas={}"
     >
       <template #default>
         <BillingPage
@@ -708,8 +709,11 @@ function actPrintRekap() {
   printRekap.value = false
 }
 function getNota(val) {
-  const param = { golongan: val }
-  console.log('golongan nota', param)
+  const param = {
+    golongan: val,
+    noreg: pasien.value.noreg
+  }
+  console.log('golongan nota', param, pasien.value)
   store.getNotas(param)
 }
 

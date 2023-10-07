@@ -11,7 +11,7 @@
           Distribusi Langsung {{ ruang }}
         </div>
         <div class="title-desc">
-          Halaman Distribusi Langsung dari {{ ruang }}
+          Halaman Distribusi Langsung {{ ruang }}
         </div>
       </q-card-section>
       <q-separator />
@@ -110,12 +110,12 @@
             :disable="store.loading"
             @click="distribusikanBasah"
           />
-          <app-btn
+          <!-- <app-btn
             label="Distribusikan"
             :loading="store.loading"
             :disable="store.loading"
             @click="selesai"
-          />
+          /> -->
         </div>
       </q-card-section>
     </q-card>
@@ -146,7 +146,7 @@ const ruang = computed(() => {
   if (depo) {
     return depo
   } else {
-    return '-'
+    return ''
   }
 })
 const tipeSelected = val => {
@@ -179,7 +179,8 @@ const refDist = ref(null)
 const refRuangan = ref(null)
 // const valid=ref(false)
 const simpanList = val => {
-  // console.log('simpan list', val)
+  console.log('simpan list', val)
+  console.log('form', store.form)
   refRuangan.value.$refs.refAuto.validate()
   refDist.value.$refs.refInput.validate()
   if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
@@ -190,6 +191,7 @@ const simpanList = val => {
   }
 }
 function distribusikanBasah() {
+  console.log('form', store.form)
   refRuangan.value.$refs.refAuto.validate()
   refDist.value.$refs.refInput.validate()
   if (refRuangan.value.$refs.refAuto.validate() && refDist.value.$refs.refInput.validate()) {
@@ -219,12 +221,12 @@ function distribusikanBasah() {
     notifErrVue('perhatikan nomor distribusi dan ruangan tujuan')
   }
 }
-function selesai() {
-  store.selesai().then(() => {
-    refRuangan.value.$refs.refAuto.resetValidation()
-    refDist.value.$refs.refInput.resetValidation()
-  })
-}
+// function selesai() {
+//   store.selesai().then(() => {
+//     refRuangan.value.$refs.refAuto.resetValidation()
+//     refDist.value.$refs.refInput.resetValidation()
+//   })
+// }
 // watch(() => auth.user, (data) => {
 // console.log('watch', data)
 //   store.setForm('pegawai_id', data.pegawai_id)
