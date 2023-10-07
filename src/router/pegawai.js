@@ -108,6 +108,19 @@ const pegawai =
           }
         ]
       },
+      {
+        path: '/pegawai/mapping',
+        name: 'pegawai.mapping',
+        component: () => import('pages/simrs/pegawai/mapping/IndexPage.vue'),
+        children: [
+          {
+            path: '/pegawai/mapping/dokter',
+            name: 'pegawai.mapping.dokter',
+            component: () =>
+              import('pages/simrs/pegawai/mapping/dokter/IndexPage.vue')
+          }
+        ]
+      },
 
       {
         path: '/pegawai/notfound',

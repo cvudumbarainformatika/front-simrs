@@ -6,7 +6,10 @@
     transition-show="slide-left"
     transition-hide="slide-right"
   >
-    <q-card flat>
+    <q-card
+      v-if="pasien?.dokter !== '' || pasien?.dokter !== null"
+      flat
+    >
       <q-layout
         view="lHr Lpr lFf"
         container

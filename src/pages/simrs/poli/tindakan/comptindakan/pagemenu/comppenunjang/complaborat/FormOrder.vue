@@ -6,281 +6,281 @@
       </div>
     </q-bar>
     <div class="col full-height">
-      <q-scroll-area style="height: calc(100% - 1px);">
-        <q-form
-          ref="formRef"
-          class="row q-pa-md q-col-gutter-xs"
-          @submit="saveOrderLaborat"
-        >
-          <div class="col-12">
-            <q-select
-              ref="cariRef"
-              v-model="store.caripemeriksaanlab"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              use-input
-              hide-selected
-              fill-input
-              emit-value
-              map-options
-              :option-value="obj => obj"
-              option-label="name"
-              label="Cari Pemeriksaan"
-              :options="options"
-              hide-dropdown-icon
-              style="width:100%"
-              :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
-              hide-bottom-space
-              @filter="filterFn"
-              @update:model-value="val => insertList(val)"
-            >
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Data tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-              <template #option="scope">
-                <q-item v-bind="scope.itemProps">
-                  <q-item-section>
-                    <q-item-label>
-                      {{ scope.opt.name }}
-                    </q-item-label>
-                    <q-item-label :class="scope.opt.value[0].jenis === 'NON-PAKET' ? 'text-orange' : 'text-primary'">
-                      <strong>  {{ scope.opt.value[0].jenis }} </strong>
-                      - <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.value[0].biayapolispesialis) }}</span>
-                      <!-- <span
+      <!-- <q-scroll-area style="height: calc(100% - 1px);"> -->
+      <q-form
+        ref="formRef"
+        class="row q-pa-md q-col-gutter-xs"
+        @submit="saveOrderLaborat"
+      >
+        <div class="col-12">
+          <q-select
+            ref="cariRef"
+            v-model="store.caripemeriksaanlab"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            use-input
+            hide-selected
+            fill-input
+            emit-value
+            map-options
+            :option-value="obj => obj"
+            option-label="name"
+            label="Cari Pemeriksaan"
+            :options="options"
+            hide-dropdown-icon
+            style="width:100%"
+            :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+            hide-bottom-space
+            @filter="filterFn"
+            @update:model-value="val => insertList(val)"
+          >
+            <template #no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  Data tidak ditemukan
+                </q-item-section>
+              </q-item>
+            </template>
+            <template #option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section>
+                  <q-item-label>
+                    {{ scope.opt.name }}
+                  </q-item-label>
+                  <q-item-label :class="scope.opt.value[0].jenis === 'NON-PAKET' ? 'text-orange' : 'text-primary'">
+                    <strong>  {{ scope.opt.value[0].jenis }} </strong>
+                    - <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.value[0].biayapolispesialis) }}</span>
+                    <!-- <span
                       v-if="scope.opt.value[0].jenis === 'NON-PAKET'"
                       class="text-primary"
                     >  - {{ scope.opt.value[0].kode }} </span> -->
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <div class="col-6">
-            <q-input
-              ref="diagnosaRef"
-              v-model="store.form.diagnosa_masalah"
-              label="Diagnosa Masalah"
-              dense
-              outlined
-              standout="bg-yellow-3"
-            />
-          </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.form.catatan_permintaan"
-              label="Catatan"
-              dense
-              outlined
-              standout="bg-yellow-3"
-            />
-          </div>
-          <div class="col-12 q-my-xs">
-            spesimen
-            <q-separator />
-          </div>
-          <div class="col-6">
-            <q-select
-              v-model="store.form.asal_sumber_spesimen"
-              label="Asal Sumber Spesimen"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              use-input
-              input-debounce="0"
-              :options="asalSumberSpesimenOptions"
-              @new-value="createValueAsalSumberSpesimen"
-              @filter="filterAs"
-            />
-          </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.form.lokasi_pengambilan_spesimen"
-              label="Lokasi Pengambilan Spesimen"
-              dense
-              outlined
-              standout="bg-yellow-3"
-            />
-          </div>
-          <div class="col-3">
-            <q-input
-              v-model="store.form.jumlah_spesimen_klinis"
-              label="Jumlah Spesimen"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-3">
-            <q-input
-              v-model="store.form.volume_spesimen_klinis"
-              label="Volume Spesimen / ml"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-6">
-            <q-select
-              v-model="store.form.metode_pengambilan_spesimen"
-              label="Metode Pengambilan Spesimen"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              use-input
-              input-debounce="0"
-              :options="metodePengambilanSpesimenOptions"
-              @new-value="createValueMetodePengambilanSpesimen"
-              @filter="filterMs"
-            />
-          </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.form.kondisi_spesimen"
-              label="Kondisi Spesimen : Warna, Bau, Dst"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-3">
-            <app-input-date
-              :model="store.form.tanggalpengambilanspesimen"
-              label="Tgl Spesimen diambil"
-              outlined
-              @set-model="(val) => store.setForm('tanggalpengambilanspesimen', val)"
-            />
-          </div>
-          <div class="col-3">
-            <app-input-date
-              :model="store.form.jampengambilanspesimen"
-              label="Jam Spesimen diambil"
-              outlined
-              :type-date="false"
-              @set-model="(val) => store.setForm('jampengambilanspesimen', val)"
-            />
-          </div>
-          <div class="col-12 q-my-xs">
-            Fiksasi
-            <q-separator />
-          </div>
-          <div class="col-3">
-            <app-input-date
-              :model="store.form.tanggalfiksasi"
-              label="Tgl Fiksasi"
-              outlined
-              @set-model="(val) => store.setForm('tanggalfiksasi', val)"
-            />
-          </div>
-          <div class="col-3">
-            <app-input-date
-              :model="store.form.jamfiksasi"
-              label="Jam Fiksasi"
-              outlined
-              :type-date="false"
-              @set-model="(val) => store.setForm('jamfiksasi', val)"
-            />
-          </div>
-          <div class="col-3">
-            <q-input
-              v-model="store.form.cairan_fiksasi"
-              label="Cairan Fiksasi / ml"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-3">
-            <q-input
-              v-model="store.form.volume_cairan_fiksasi"
-              label="Volume Cairan Fiks / ml"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-12">
-            <q-separator class="q-my-sm" />
-          </div>
-          <div class="col-6">
-            <div class="flex items-center">
-              <div class="q-mr-md">
-                Pasien Puasa ?
-              </div>
-              <div class="q-gutter-sm">
-                <q-radio
-                  v-model="store.form.puasa_pasien"
-                  val="Tidak"
-                  label="Tidak"
-                  size="sm"
-                  dense
-                />
-                <q-radio
-                  v-model="store.form.puasa_pasien"
-                  val="Iya"
-                  label="Iya"
-                  size="sm"
-                  dense
-                />
-              </div>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </div>
+        <div class="col-6">
+          <q-input
+            ref="diagnosaRef"
+            v-model="store.form.diagnosa_masalah"
+            label="Diagnosa Masalah"
+            dense
+            outlined
+            standout="bg-yellow-3"
+          />
+        </div>
+        <div class="col-6">
+          <q-input
+            v-model="store.form.catatan_permintaan"
+            label="Catatan"
+            dense
+            outlined
+            standout="bg-yellow-3"
+          />
+        </div>
+        <div class="col-12 q-my-xs">
+          spesimen
+          <q-separator />
+        </div>
+        <div class="col-6">
+          <q-select
+            v-model="store.form.asal_sumber_spesimen"
+            label="Asal Sumber Spesimen"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            use-input
+            input-debounce="0"
+            :options="asalSumberSpesimenOptions"
+            @new-value="createValueAsalSumberSpesimen"
+            @filter="filterAs"
+          />
+        </div>
+        <div class="col-6">
+          <q-input
+            v-model="store.form.lokasi_pengambilan_spesimen"
+            label="Bag. Tbh Pengambilan Spesimen"
+            dense
+            outlined
+            standout="bg-yellow-3"
+          />
+        </div>
+        <div class="col-3">
+          <q-input
+            v-model="store.form.jumlah_spesimen_klinis"
+            label="Jumlah Spesimen"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
+            hide-bottom-space
+          />
+        </div>
+        <div class="col-3">
+          <q-input
+            v-model="store.form.volume_spesimen_klinis"
+            label="Volume Spesimen / ml"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
+            hide-bottom-space
+          />
+        </div>
+        <div class="col-6">
+          <q-select
+            v-model="store.form.metode_pengambilan_spesimen"
+            label="Metode Pengambilan Spesimen"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            use-input
+            input-debounce="0"
+            :options="metodePengambilanSpesimenOptions"
+            @new-value="createValueMetodePengambilanSpesimen"
+            @filter="filterMs"
+          />
+        </div>
+        <div class="col-6">
+          <q-input
+            v-model="store.form.kondisi_spesimen"
+            label="Kondisi Spesimen : Warna, Bau, Dst"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            hide-bottom-space
+          />
+        </div>
+        <div class="col-3">
+          <app-input-date
+            :model="store.form.tanggalpengambilanspesimen"
+            label="Tgl Spesimen diambil"
+            outlined
+            @set-model="(val) => store.setForm('tanggalpengambilanspesimen', val)"
+          />
+        </div>
+        <div class="col-3">
+          <app-input-date
+            :model="store.form.jampengambilanspesimen"
+            label="Jam Spesimen diambil"
+            outlined
+            :type-date="false"
+            @set-model="(val) => store.setForm('jampengambilanspesimen', val)"
+          />
+        </div>
+        <div class="col-12 q-my-xs">
+          Fiksasi
+          <q-separator />
+        </div>
+        <div class="col-3">
+          <app-input-date
+            :model="store.form.tanggalfiksasi"
+            label="Tgl Fiksasi"
+            outlined
+            @set-model="(val) => store.setForm('tanggalfiksasi', val)"
+          />
+        </div>
+        <div class="col-3">
+          <app-input-date
+            :model="store.form.jamfiksasi"
+            label="Jam Fiksasi"
+            outlined
+            :type-date="false"
+            @set-model="(val) => store.setForm('jamfiksasi', val)"
+          />
+        </div>
+        <div class="col-3">
+          <q-input
+            v-model="store.form.cairan_fiksasi"
+            label="Cairan Fiksasi / ml"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
+            hide-bottom-space
+          />
+        </div>
+        <div class="col-3">
+          <q-input
+            v-model="store.form.volume_cairan_fiksasi"
+            label="Volume Cairan Fiks / ml"
+            dense
+            outlined
+            standout="bg-yellow-3"
+            :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
+            hide-bottom-space
+          />
+        </div>
+        <div class="col-12">
+          <q-separator class="q-my-sm" />
+        </div>
+        <div class="col-6">
+          <div class="flex items-center">
+            <div class="q-mr-md">
+              Pasien Puasa ?
+            </div>
+            <div class="q-gutter-sm">
+              <q-radio
+                v-model="store.form.puasa_pasien"
+                val="Tidak"
+                label="Tidak"
+                size="sm"
+                dense
+              />
+              <q-radio
+                v-model="store.form.puasa_pasien"
+                val="Iya"
+                label="Iya"
+                size="sm"
+                dense
+              />
             </div>
           </div>
-          <div class="col-6">
-            <div class="flex items-center">
-              <div class="q-mr-md">
-                Cito ?
-              </div>
-              <div class="q-gutter-sm">
-                <q-radio
-                  v-model="store.form.prioritas_pemeriksaan"
-                  val="Tidak"
-                  label="Tidak"
-                  size="sm"
-                  dense
-                />
-                <q-radio
-                  v-model="store.form.prioritas_pemeriksaan"
-                  val="Iya"
-                  label="Iya"
-                  size="sm"
-                  dense
-                />
-              </div>
+        </div>
+        <div class="col-6">
+          <div class="flex items-center">
+            <div class="q-mr-md">
+              Cito ?
+            </div>
+            <div class="q-gutter-sm">
+              <q-radio
+                v-model="store.form.prioritas_pemeriksaan"
+                val="Tidak"
+                label="Tidak"
+                size="sm"
+                dense
+              />
+              <q-radio
+                v-model="store.form.prioritas_pemeriksaan"
+                val="Iya"
+                label="Iya"
+                size="sm"
+                dense
+              />
             </div>
           </div>
-          <div class="col-12">
-            <q-separator class=" q-my-md" />
-            <div class="text-right q-gutter-sm">
-              <!-- <q-btn
+        </div>
+        <div class="col-12">
+          <q-separator class=" q-my-md" />
+          <div class="text-right q-gutter-sm">
+            <!-- <q-btn
                 label="Reset Form"
                 color="dark"
                 type="reset"
               /> -->
-              <q-btn
-                label="Simpan & Kirim Order"
-                color="primary"
-                type="submit"
-                :loading="store.loadingSaveLab"
-                :disable="store.loadingSaveLab"
-              />
-            </div>
+            <q-btn
+              label="Simpan & Kirim Order"
+              color="primary"
+              type="submit"
+              :loading="store.loadingSaveLab"
+              :disable="store.loadingSaveLab"
+            />
           </div>
-        </q-form>
-      </q-scroll-area>
+        </div>
+      </q-form>
+      <!-- </q-scroll-area> -->
     </div>
   </div>
 </template>
