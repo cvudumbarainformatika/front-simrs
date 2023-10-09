@@ -911,6 +911,11 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
           this.loadingHambatan = false
           console.log('hambatan', resp.data)
           this.hambatans = resp.data
+          if (this.hambatans.length) {
+            this.hambatans.forEach(a => {
+              a.kdhambatan = String(a.id)
+            })
+          }
           this.autocompleteStore.setHamabatan(resp.data)
           return new Promise(resolve => { resolve(resp) })
         }).catch(() => {
