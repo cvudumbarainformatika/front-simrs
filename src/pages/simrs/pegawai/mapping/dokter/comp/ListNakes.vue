@@ -4,13 +4,18 @@
     bordered
   >
     <q-card-section class="q-pa-none">
-      <div class="bg-yellow-3">
+      <div class="row items-center justify-between bg-yellow-3">
         <q-option-group
           v-model="group"
           :options="options"
           color="primary"
           inline
         />
+        <div class="q-px-md q-py-sm">
+          <div class="text-subtitle1 text-weight-bold">
+            {{ filterred.length }}
+          </div>
+        </div>
       </div>
       <q-separator />
       <q-list
@@ -36,7 +41,11 @@
 
           <q-item-section>{{ item?.nama }}</q-item-section>
           <q-item-section side>
-            aa
+            <q-icon
+              name="icon-mat-arrow_forward"
+              size="xs"
+              :color="item === terselect?'white':'primary'"
+            />
           </q-item-section>
         </q-item>
       </q-list>

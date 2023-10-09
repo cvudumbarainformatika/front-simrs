@@ -28,7 +28,7 @@
         <q-separator />
         <q-card-section>
           <div class="row q-col-gutter-lg">
-            <div class="col-6">
+            <div class="col-6 full-height" >
               <ListNakes
                 :lists="store.listsnakes"
                 :terselect="store?.objNakes"
@@ -64,7 +64,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col text-h6 q-mb-sm text-right">
+                      <div class="col text-f12 text-weight-bold q-mb-sm text-right">
                         Data Nakes
                       </div>
                     </div>
@@ -137,7 +137,7 @@
                       </div>
                     </div>
 
-                    <div class="col text-h6 q-mb-sm text-right">
+                    <div class="col f-12 text-weight-bold q-mb-sm text-right">
                       Data Kepegawaian
                     </div>
                   </div>
@@ -165,12 +165,13 @@
 import { onMounted, ref } from 'vue'
 import ListNakes from './comp/ListNakes.vue'
 import { useMappingNakesStore } from 'src/stores/simrs/pegawai/mapping/index'
-import { api } from 'src/boot/axios'
+// import { api } from 'src/boot/axios'
 
 const store = useMappingNakesStore()
 
 onMounted(() => {
   store.getNakes()
+  store.getSimpeg()
   store.getDataTermapping()
 })
 const options = ref(null)
@@ -193,23 +194,37 @@ async function filterOptions (val, update) {
     })
     return
   }
-  const params = {
-    params: {
-      q: val
-    }
-  }
-  console.log('q :', val)
-  const resp = await api.get('/v1/settings/appmenu/cari_pegawai', params)
-  console.log('cari', resp)
-  update(
-    () => (options.value = resp.data),
-    ref => {
-      if (val !== '' && ref.options.length) {
-        ref.setOptionIndex(-1)
-        ref.moveOptionSelection(1, true)
-      }
-    }
-  )
+  // const params = {
+  //   params: {
+  //     q: val
+  //   }
+  // }
+  // console.log('q :', val)
+  // const resp = await api.get('/v1/settings/appmenu/cari_pegawai', params)
+  // console.log('cari', resp)
+  // update(
+  //   () => (options.value = resp.data),
+  //   ref => {
+  //     if (val !== '' && ref.options.length) {
+  //       ref.setOptionIndex(-1)
+  //       ref.moveOptionSelection(1, true)
+  //     }
+  //   }
+  // )
+  update(() => {
+    const needle = val.toLowerCase()
+    const arr = store.pegawais
+    const filter = ['nama']
+    const multiFilter = (data = [], filterKeys = [], value = '') =>
+      data.filter((item) => filterKeys.some(
+        (key) =>
+          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+          item[key]
+      )
+      )
+    const filteredData = multiFilter(arr, filter, needle)
+    options.value = filteredData
+  })
 }
 
 function getImage(row) {
