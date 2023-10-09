@@ -17,7 +17,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatpengobatan: ''
     },
 
-    alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain'],
+    alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
     selection: [],
     historys: []
   }),
@@ -78,6 +78,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const payload = { id }
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusanamnesis', payload)
+        console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataAnamnesis(pasien, id)
@@ -130,6 +131,7 @@ export const useAnamnesis = defineStore('anamnesis', {
           keteranganalergi: '',
           riwayatpengobatan: ''
         }
+        this.selection = []
 
         resolve()
       })
