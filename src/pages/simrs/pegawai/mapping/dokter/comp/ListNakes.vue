@@ -18,37 +18,42 @@
         </div>
       </div>
       <q-separator />
-      <q-list
+      <q-scroll-area
         v-if="props?.lists?.length"
-        dense
-        separator
+        style="height:600px"
       >
-        <q-item
-          v-for="(item, i) in filterred"
-          :key="i"
-          v-ripple
-          clickable
-          :active="item === terselect"
-          active-class="bg-primary text-white"
-          @click="kirimKeForm(item)"
-        >
-          <q-item-section avatar>
-            <q-icon
-              :color="item === terselect?'white':'primary'"
-              name="icon-mat-person"
-            />
-          </q-item-section>
+        <q-list
 
-          <q-item-section>{{ item?.nama }}</q-item-section>
-          <q-item-section side>
-            <q-icon
-              name="icon-mat-arrow_forward"
-              size="xs"
-              :color="item === terselect?'white':'primary'"
-            />
-          </q-item-section>
-        </q-item>
-      </q-list>
+          dense
+          separator
+        >
+          <q-item
+            v-for="(item, i) in filterred"
+            :key="i"
+            v-ripple
+            clickable
+            :active="item === terselect"
+            active-class="bg-primary text-white"
+            @click="kirimKeForm(item)"
+          >
+            <q-item-section avatar>
+              <q-icon
+                :color="item === terselect?'white':'primary'"
+                name="icon-mat-person"
+              />
+            </q-item-section>
+
+            <q-item-section>{{ item?.nama }}</q-item-section>
+            <q-item-section side>
+              <q-icon
+                name="icon-mat-arrow_forward"
+                size="xs"
+                :color="item === terselect?'white':'primary'"
+              />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
 
       <div
         v-else
