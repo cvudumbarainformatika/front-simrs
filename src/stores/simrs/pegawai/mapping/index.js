@@ -16,7 +16,8 @@ export const useMappingNakesStore = defineStore('mapping-nakes', {
       kdgroupnakes: '',
       kdruangansim: ''
     },
-    ygsudahdimappings: []
+    ygsudahdimappings: [],
+    pegawais: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -36,9 +37,22 @@ export const useMappingNakesStore = defineStore('mapping-nakes', {
         this.loadingListNakes = false
       }
     },
+    async getSimpeg() {
+      try {
+        const resp = await api.get('v1/simrs/maping/simpegsimrs/pegawaisimpeg')
+        console.log('pegawai', resp)
+        if (resp.status === 200) {
+          this.pegawais = resp?.data
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     setObjnakes(val) {
       this.objNakes = val
       // this.searchResultKepeg = val?.nama
+      const peg = this.pegawais?.filter(x => x.kdpegsimrs === val?.kode)
+      this.searchResultKepeg = peg.length ? peg[0] : null
     },
     async saveMapping() {
       const notValidNakes = this.objNakes === null || this.objNakes === ''
