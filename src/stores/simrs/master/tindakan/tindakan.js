@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
   state: () => ({
@@ -90,6 +91,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
       this.edit = false
       this.resetForm()
       this.setOpen()
+      this.setForm('flag', 'baru')
       console.log('new data', payload)
     },
     editData(payload) {
@@ -100,6 +102,8 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
         this.setForm(a, payload[a])
         // console.log('edit data', payload[a])
       })
+
+      this.setForm('flag', 'edit')
       // console.log('edit data', key)
     },
     deletesData(payload) {
@@ -121,6 +125,17 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
         })
         .catch(() => { this.loading = false })
     },
-    saveForm() {}
+    async saveForm() {
+      this.loading = true
+      await api.post('v1/simrs/master/simpanmastertindakan', this.form)
+        .then(resp => {
+          this.loading = false
+          console.log('resp tindakan', resp.data)
+          this.setOpen()
+          this.getDataTable()
+          notifSuccess(resp)
+        })
+        .catch(() => { this.loading = false })
+    }
   }
 })

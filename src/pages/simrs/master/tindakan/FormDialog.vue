@@ -21,7 +21,6 @@
             <div class="col-md-6 col-xs-12">
               <app-input
                 v-model="store.form.kodetindakan"
-                valid
                 label="Kode Tindakan"
                 outlined
                 :loading="store.loading"
@@ -32,7 +31,6 @@
             <div class="col-md-6 col-xs-12">
               <app-input
                 v-model="store.form.nmtindkan"
-                valid
                 label="Nama Tindakan"
                 outlined
                 :loading="store.loading"
@@ -123,9 +121,9 @@
             </div>
             <div class="col-md-3 col-xs-12">
               <app-input
-                v-model="store.form.tarif3"
+                v-model="store.form.tarif2"
                 valid
-                label="Tarif Kelas 3"
+                label="Tarif Kelas 2"
                 outlined
                 :loading="store.loading"
                 readonly
@@ -169,9 +167,9 @@
             </div>
             <div class="col-md-3 col-xs-12">
               <app-input
-                v-model="store.form.tarif3"
+                v-model="store.form.tarif1"
                 valid
-                label="Tarif Kelas 3"
+                label="Tarif Kelas 1"
                 outlined
                 :loading="store.loading"
                 readonly
@@ -215,9 +213,9 @@
             </div>
             <div class="col-md-3 col-xs-12">
               <app-input
-                v-model="store.form.tarif3"
+                v-model="store.form.tarifutama"
                 valid
-                label="Tarif Kelas 3"
+                label="Tarif Kelas utama"
                 outlined
                 :loading="store.loading"
                 readonly
@@ -261,9 +259,9 @@
             </div>
             <div class="col-md-3 col-xs-12">
               <app-input
-                v-model="store.form.tarif3"
+                v-model="store.form.tarifvip"
                 valid
-                label="Tarif Kelas 3"
+                label="Tarif Kelas vip"
                 outlined
                 :loading="store.loading"
                 readonly
@@ -307,9 +305,9 @@
             </div>
             <div class="col-md-3 col-xs-12">
               <app-input
-                v-model="store.form.tarif3"
+                v-model="store.form.tarifvvip"
                 valid
-                label="Tarif Kelas 3"
+                label="Tarif Kelas vvip"
                 outlined
                 :loading="store.loading"
                 readonly
@@ -384,7 +382,7 @@ function setHabispake2(evt) {
   const js = !isNaN(store.form.js2) && store.form.js2 !== '' ? parseInt(store.form.js2) : 0
   const jp = !isNaN(store.form.jp2) && store.form.jp2 !== '' ? parseInt(store.form.jp2) : 0
   store.setForm('habispake2', val)
-  store.setForm('tarif3', val + js + jp)
+  store.setForm('tarif2', val + js + jp)
 }
 //
 function setJs1(evt) {
