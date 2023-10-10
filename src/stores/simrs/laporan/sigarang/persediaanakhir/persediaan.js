@@ -32,16 +32,45 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       { nama: 'Desember', value: '12' }
     ],
     gudangs: [
-      { nama: 'Semua Depo dan Gudang', value: '' },
+      { nama: 'Semua Depo', value: '' },
       { nama: 'Gudang Habis Pakai', value: 'Gd-02010100' },
       { nama: 'Depo PNM', value: 'Gd-02010101' },
       { nama: 'Depo Gizi', value: 'Gd-02010102' },
       { nama: 'Depo Habis Pakai', value: 'Gd-02010103' }
+    ],
+    columns: [
+      'kode',
+      'nama',
+      'satuan',
+      'qty',
+      'harga',
+      'nilai'
     ]
   }),
   actions: {
     setParams(key, val) {
       this.params[key] = val
+    },
+    setSearch(payload) {
+      this.setParams('q', payload)
+      this.setParams('page', 1)
+      this.getDataTable()
+    },
+    setPage(payload) {
+      this.setParams('page', payload)
+      this.getDataTable()
+    },
+    setPerPage(payload) {
+      this.setParams('per_page', payload)
+      this.setParams('page', 1)
+      this.getDataTable()
+    },
+    refreshTable() {
+      this.setParams('page', 1)
+      this.getDataTable()
+    },
+    mapingItem(val) {
+
     },
     getInitialData() {
       this.getDataTable()
@@ -52,7 +81,9 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       await api.get('v1/simrs/laporan/sigarang/lappersediaan', param)
         .then(resp => {
           this.loading = false
-          console.log('data tabel', resp.data)
+          console.log('data tabel', resp.data.data)
+          this.meta = resp.data
+          this.mapingItem(resp.data.data)
         })
         .catch(() => { this.loading = false })
     }

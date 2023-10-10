@@ -52,10 +52,47 @@
         />
       </div>
     </div>
+    <app-table-extend
+      :columns="store.columns"
+      :items="store.items"
+      :meta="store.meta"
+      :per-page="store.params.per_page"
+      :loading="store.loading"
+      :to-search="store.params.q"
+      :default-btn="false"
+      :ada-tambah="false"
+      :ada-filter="false"
+      text-cari="Cari Nama / Kode ..."
+      row-no
+      @find="store.setSearch"
+      @goto="store.setPage"
+      @set-row="store.setPerPage"
+      @refresh="store.refreshTable"
+    >
+      <template #col-kode>
+        <div>Kode</div>
+      </template>
+      <template #col-nama>
+        <div>Nama</div>
+      </template>
+      <template #col-satuan>
+        <div>Satuan</div>
+      </template>
+      <template #col-qty>
+        <div>Qty</div>
+      </template>
+      <template #col-harga>
+        <div>Harga</div>
+      </template>
+      <template #col-nilai>
+        <div>Nilai</div>
+      </template>
+    </app-table-extend>
   </div>
 </template>
 <script setup>
 import { useLaporanSigarangPersediaanFifoStore } from 'src/stores/simrs/laporan/sigarang/persediaanakhir/persediaan'
 
 const store = useLaporanSigarangPersediaanFifoStore()
+store.getInitialData()
 </script>

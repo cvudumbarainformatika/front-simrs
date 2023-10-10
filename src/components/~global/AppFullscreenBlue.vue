@@ -6,7 +6,7 @@
     transition-hide="fade"
   >
     <q-card flat>
-      <q-bar>
+      <q-bar class="bg-primary text-white">
         <q-space />
 
         <q-btn
