@@ -5,7 +5,10 @@
     dark
   >
     <div class="column flex-center relative-position q-pa-md">
-      <div class="text-h3 q-pa-sm relative-position">
+      <div
+        class="text-h3 q-pa-sm relative-position"
+        :class="ciri?.color?? ''"
+      >
         {{ props?.nilai }}
         <div
           v-if="celcius"
@@ -28,6 +31,11 @@
           color="grey"
           size="sm"
         />
+      </div>
+      <div
+        class="absolute-bottom f-10 q-ma-xs"
+      >
+        {{ ciri?.res ?? '-' }}
       </div>
     </div>
   </q-card>

@@ -230,7 +230,8 @@ onMounted(() => {
 })
 
 function simpan() {
-  console.log('ok')
+  store.saveRsLain(props?.pasien)
+  // console.log('ok')
   // $q.notify({
   //   type: 'negative',
   //   message: 'Maaf, Anda tidak terhubung ke BPJS',

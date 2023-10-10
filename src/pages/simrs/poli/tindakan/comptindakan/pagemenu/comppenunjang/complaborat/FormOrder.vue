@@ -31,6 +31,7 @@
             hide-dropdown-icon
             style="width:100%"
             :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+            lazy-rules="ondemand"
             hide-bottom-space
             @filter="filterFn"
             @update:model-value="val => insertList(val)"

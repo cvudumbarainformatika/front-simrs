@@ -21,6 +21,7 @@
               standout="bg-yellow-3"
               icon="icon-mat-search"
               :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+              lazy-rules="ondemand"
               hide-bottom-space
               @click="modalOpen = true"
             />
