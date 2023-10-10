@@ -678,9 +678,9 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-finger-svgrepo-com:before {
     content: "\f1dd";
 }
-.icon-my-foot-bones-svgrepo-com-(1):before {
+/* .icon-my-foot-bones-svgrepo-com-(1):before {
     content: "\f1de";
-}
+} */
 .icon-my-foot-bones-svgrepo-com:before {
     content: "\f1df";
 }
@@ -696,9 +696,9 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-how_to_reg:before {
     content: "\f1e3";
 }
-.icon-my-human-back-svgrepo-com-(1):before {
+/* .icon-my-human-back-svgrepo-com-(1):before {
     content: "\f1e4";
-}
+} */
 .icon-my-human-back-svgrepo-com:before {
     content: "\f1e5";
 }
