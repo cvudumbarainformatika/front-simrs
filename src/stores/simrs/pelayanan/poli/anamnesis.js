@@ -62,12 +62,15 @@ export const useAnamnesis = defineStore('anamnesis', {
         id: val.id,
         keluhanutama: val.rs4,
         riwayatpenyakit: val.riwayatpenyakit,
+        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
         riwayatalergi: val.riwayatalergi,
         keteranganalergi: val.keteranganalergi,
         riwayatpengobatan: val.riwayatpengobatan
       }
-      console.log('form', this.form)
-      console.log('xxx', val)
+      const kommatext = val?.riwayatalergi?.split(', ')
+      this.selection = kommatext
+      // console.log('form', this.form)
+      // console.log('xxx', val)
     },
 
     setForm(key, val) {
@@ -114,10 +117,13 @@ export const useAnamnesis = defineStore('anamnesis', {
       this.form = {
         keluhanutama: val.keluhanutama,
         riwayatpenyakit: val.riwayatpenyakit,
+        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
         riwayatalergi: val.riwayatalergi,
         keteranganalergi: val.keteranganalergi,
         riwayatpengobatan: val.riwayatpengobatan
       }
+      const kommatext = val?.riwayatalergi?.split(', ')
+      this.selection = kommatext
     },
 
     initReset() {
