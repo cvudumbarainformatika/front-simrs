@@ -146,7 +146,7 @@
                   label="Jumlah Minta"
                   :rules="[
                     val=> val <= store.barang.alokasi || 'tidak boleh melebihi alokasi',
-                    val=> val < (store.minMaxPenggunas.flag_minta === null ? (store.minMaxPenggunas.max_stok - store.barang.stokRuangan):(store.minMaxPenggunas.minta - store.barang.stokRuangan)) ||'Sudah Melebihi Maksimal stok ruangan'
+                    val=> val <= (store.minMaxPenggunas.flag_minta === null ? (store.minMaxPenggunas.max_stok - store.barang.stokRuangan):(store.minMaxPenggunas.minta - store.barang.stokRuangan)) ||'Sudah Melebihi Maksimal stok ruangan'
                   ]"
                 />
               </div>

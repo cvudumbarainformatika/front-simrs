@@ -25,8 +25,8 @@
       @refresh="store.refreshTable"
       @on-click="onClick"
     >
-      <template #col-no_kwitansi>
-        <div>Nomor kwitansi</div>
+      <template #col-no_bast>
+        <div>Nomor Bast</div>
       </template>
       <template #col-tanggal>
         <div>Tanggal BAST</div>

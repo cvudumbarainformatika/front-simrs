@@ -12,7 +12,7 @@ export const useListBastPenerimaanStore = defineStore('list_bast_penerimaan', {
       per_page: 10
     },
     columns: [
-      'no_kwitansi',
+      'no_bast',
       'tanggal',
       'total',
       'oleh'
