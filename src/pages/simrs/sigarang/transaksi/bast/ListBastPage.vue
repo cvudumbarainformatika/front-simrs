@@ -25,17 +25,14 @@
       @refresh="store.refreshTable"
       @on-click="onClick"
     >
-      <template #col-nomor>
-        <div>Nomor</div>
+      <template #col-no_kwitansi>
+        <div>Nomor kwitansi</div>
       </template>
       <template #col-tanggal>
-        <div>Tanggal</div>
+        <div>Tanggal BAST</div>
       </template>
-      <template #col-info>
-        <div>Info</div>
-      </template>
-      <template #col-nilai>
-        <div>Nilai</div>
+      <template #col-total>
+        <div>Total</div>
       </template>
       <template #col-oleh>
         <div>Oleh</div>
@@ -113,12 +110,12 @@
           v-if="row.tanggal"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
-          <div class="q-mr-xs">
+          {{ dateFullFormat(row.tanggal) }}
+          <!-- <div class="q-mr-xs">
             Penerimaan
           </div>
           <div class="text-weight-bold">
-            {{ dateFullFormat(row.tanggal) }}
-          </div>
+          </div> -->
         </div>
         <div
           v-if="row.tanggal_faktur"
@@ -222,7 +219,10 @@
           </div>
         </div>
       </template>
-      <template #cell-nilai="{ row }">
+      <template #cell-total="{ row }">
+        <div class="text-right">
+          {{ formatRp( row.totalSemua) }}
+        </div>
         <div
           v-if="row.total"
           class="row no-wrap justify-between items-center q-mb-xs"
@@ -293,157 +293,196 @@
         </div>
       </template>
       <template #expand="{ row }">
-        <div v-if="row.details.length">
+        <div v-if="row.penerimaan.length">
           <div
-            v-for="(det,i) in row.details"
-            :key="i"
-            class="row no-wrap q-mb-xs anu"
+            v-for="(trm,n) in row.penerimaan"
+            :key="n"
+            class=" "
           >
-            <div class="">
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Kode RS
+            <div
+              class="row no-wrap terima q-mb-xs cursor-pointer"
+              @click="trm.disp = !trm.disp"
+            >
+              <div class="col-12">
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    No Penerimaan
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ trm.no_penerimaan }}
+                  </div>
                 </div>
-                <div class="text-weight-bold">
-                  {{ det.kode_rs }}
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    Tanggal Penerimaan
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ dateFullFormat(trm.tanggal) }}
+                  </div>
                 </div>
-              </div>
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Kode 108
-                </div>
-                <div class="text-weight-bold">
-                  {{ det.kode_108 }}
-                </div>
-              </div>
-              <div class="row no-wrap justify-between q-mt-xs anudua ">
-                <div class="q-mr-xs">
-                  Kode 50
-                </div>
-                <div class="text-weight-bold">
-                  {{ det.kode_50 }}
-                </div>
-              </div>
-            </div>
-            <div class="q-ml-md">
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Nama
-                </div>
-                <div class="text-weight-bold box text-right">
-                  {{ det.nama_barang }}
-                </div>
-              </div>
-              <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  uraian 108
-                </div>
-                <div class="text-weight-bold box text-right">
-                  {{ det.uraian_108 }}
-                </div>
-              </div>
-              <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  uraian 50
-                </div>
-                <div class="text-weight-bold box text-right">
-                  {{ det.uraian_50 }}
-                </div>
-              </div>
-              <div
-                v-if="det.merk"
-                class="row no-wrap justify-between items-center q-mt-xs anudua"
-              >
-                <div class="q-mr-xs">
-                  Merk
-                </div>
-                <div class="text-weight-bold box text-right">
-                  {{ det.merk }}
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    Subtotal
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ formatRp(trm.total) }}
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="q-ml-md">
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Jumlah
-                </div>
-                <div class="text-weight-bold">
-                  {{ det.qty }}
-                </div>
-              </div>
-              <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Satuan
-                </div>
-                <div class="text-weight-bold text-right">
-                  {{ det.satuan?det.satuan.nama:'-' }}
-                </div>
-              </div>
+            <div v-if="trm.details.length && trm.disp">
               <div
-                v-if="det.satuan_kecil"
-                class="row no-wrap justify-between items-center q-mt-xs anudua"
+                v-for="(det,i) in trm.details"
+                :key="i"
+                class="row no-wrap q-mb-xs anu"
               >
-                <div class="q-mr-xs">
-                  satuan kecil
+                <div class="">
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Kode RS
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ det.kode_rs }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Kode 108
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ det.kode_108 }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between q-mt-xs anudua ">
+                    <div class="q-mr-xs">
+                      Kode 50
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ det.kode_50 }}
+                    </div>
+                  </div>
                 </div>
-                <div class="text-weight-bold text-right">
-                  {{ det.satuan_kecil }}
+                <div class="q-ml-md">
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Nama
+                    </div>
+                    <div class="text-weight-bold box text-right">
+                      {{ det.nama_barang }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      uraian 108
+                    </div>
+                    <div class="text-weight-bold box text-right">
+                      {{ det.uraian_108 }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      uraian 50
+                    </div>
+                    <div class="text-weight-bold box text-right">
+                      {{ det.uraian_50 }}
+                    </div>
+                  </div>
+                  <div
+                    v-if="det.merk"
+                    class="row no-wrap justify-between items-center q-mt-xs anudua"
+                  >
+                    <div class="q-mr-xs">
+                      Merk
+                    </div>
+                    <div class="text-weight-bold box text-right">
+                      {{ det.merk }}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="q-ml-md">
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Harga
+                <div class="q-ml-md">
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Jumlah
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ det.qty }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Satuan
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ det.satuan?det.satuan.nama:'-' }}
+                    </div>
+                  </div>
+                  <div
+                    v-if="det.satuan_kecil"
+                    class="row no-wrap justify-between items-center q-mt-xs anudua"
+                  >
+                    <div class="q-mr-xs">
+                      satuan kecil
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ det.satuan_kecil }}
+                    </div>
+                  </div>
                 </div>
-                <div class="text-weight-bold">
-                  {{ formatRp(det.harga) }}
+                <div class="q-ml-md">
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Harga
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ formatRp(det.harga) }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      diskon
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ det.diskon }}
+                    </div>
+                  </div>
+                  <div
+                    class="row no-wrap justify-between items-center q-mt-xs anudua"
+                  >
+                    <div class="q-mr-xs">
+                      PPN
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ det.ppn }}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  diskon
-                </div>
-                <div class="text-weight-bold text-right">
-                  {{ det.diskon }}
-                </div>
-              </div>
-              <div
-                class="row no-wrap justify-between items-center q-mt-xs anudua"
-              >
-                <div class="q-mr-xs">
-                  PPN
-                </div>
-                <div class="text-weight-bold text-right">
-                  {{ det.ppn }}
-                </div>
-              </div>
-            </div>
-            <div class="q-ml-md">
-              <div class="row no-wrap justify-between q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Harga Kontrak
-                </div>
-                <div class="text-weight-bold">
-                  {{ formatRp(det.harga_kontrak) }}
-                </div>
-              </div>
-              <div class="row no-wrap justify-between items-center q-mt-xs anudua">
-                <div class="q-mr-xs">
-                  Harga Jadi
-                </div>
-                <div class="text-weight-bold text-right">
-                  {{ formatRp(det.harga_jadi) }}
-                </div>
-              </div>
-              <div
-                class="row no-wrap justify-between items-center q-mt-xs anudua"
-              >
-                <div class="q-mr-xs">
-                  Subtotal
-                </div>
-                <div class="text-weight-bold text-right">
-                  {{ formatRp(det.sub_total) }}
+                <div class="q-ml-md">
+                  <div class="row no-wrap justify-between q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Harga Kontrak
+                    </div>
+                    <div class="text-weight-bold">
+                      {{ formatRp(det.harga_kontrak) }}
+                    </div>
+                  </div>
+                  <div class="row no-wrap justify-between items-center q-mt-xs anudua">
+                    <div class="q-mr-xs">
+                      Harga Jadi
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ formatRp(det.harga_jadi) }}
+                    </div>
+                  </div>
+                  <div
+                    class="row no-wrap justify-between items-center q-mt-xs anudua"
+                  >
+                    <div class="q-mr-xs">
+                      Subtotal
+                    </div>
+                    <div class="text-weight-bold text-right">
+                      {{ formatRp(det.sub_total) }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -472,6 +511,9 @@ store.getInitialData()
   white-space: normal !important;
     inline-size: 170px;
     overflow-wrap: break-word;
+}
+.terima{
+  background-color: rgba(120, 231, 51, 0.549);
 }
 .anu:hover{
   background-color: rgba(166, 173, 144, 0.548);

@@ -20,21 +20,22 @@
           <div class="row q-col-gutter-md q-mb-sm">
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.kodetindakan"
+                v-model="store.form.kdtindakan"
                 label="Kode Tindakan"
                 outlined
+                valid
                 :loading="store.loading"
-                :disable="store.loading || store.edit"
-                :autofocus="!store.edit"
+                readonly
               />
             </div>
             <div class="col-md-6 col-xs-12">
               <app-input
-                v-model="store.form.nmtindkan"
+                v-model="store.form.nmtindakan"
                 label="Nama Tindakan"
                 outlined
                 :loading="store.loading"
                 :disable="store.loading || store.edit"
+                :autofocus="!store.edit"
               />
             </div>
           </div>

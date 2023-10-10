@@ -153,10 +153,10 @@
               </th>
             </template>
             <template #cell-kode="{row}">
-              {{ row.kodetindakan }}
+              {{ row.kdtindakan }}
             </template>
             <template #cell-nama="{row}">
-              {{ row.nmtindkan }}
+              {{ row.nmtindakan }}
             </template>
             <template #cell-kelas3="{row}">
               <div class="row no-wrap q-col-gutter-md">

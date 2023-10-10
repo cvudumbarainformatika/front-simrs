@@ -29,7 +29,7 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
   actions: {
     resetForm() {
       this.setForm('kdtindakan', '')
-      this.setForm('nmtidakan', '')
+      this.setForm('nmtindakan', '')
       const col = [
         'js3',
         'jp3',
@@ -108,6 +108,10 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
     },
     deletesData(payload) {
       console.log('delete data', payload)
+      const data = {
+        kdtindakan: payload.kdtindakan
+      }
+      this.deleteData(data)
     },
     getInitialData() {
       this.getDataTable()
@@ -132,6 +136,17 @@ export const useMasterTindakanJsJpStore = defineStore('master_tindakan_js_jp', {
           this.loading = false
           console.log('resp tindakan', resp.data)
           this.setOpen()
+          this.getDataTable()
+          notifSuccess(resp)
+        })
+        .catch(() => { this.loading = false })
+    },
+    async deleteData(val) {
+      this.loading = true
+      await api.post('v1/simrs/master/hapusmastertindakan', val)
+        .then(resp => {
+          this.loading = false
+          console.log('hapus tindakan', resp.data)
           this.getDataTable()
           notifSuccess(resp)
         })
