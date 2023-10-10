@@ -119,6 +119,23 @@ const masters = {
       ]
     },
     {
+      path: '/master/tindakan',
+      component: () => import('src/pages/simrs/master/tindakan/IndexPage.vue')
+      // children: [
+      //   { path: '', redirect: '/master/tindakan/irja' },
+      //   {
+      //     path: '/master/tindakan/irja',
+      //     name: 'master.generalconsent.irja',
+      //     component: () => import('pages/simrs/master/generalconsent/irja/IndexPage.vue')
+      //   },
+      //   {
+      //     path: '/master/tindakan/ranap',
+      //     name: 'master.generalconsent.ranap',
+      //     component: () => import('pages/simrs/master/generalconsent/ranap/IndexPage.vue')
+      //   }
+      // ]
+    },
+    {
       path: '/master/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
     }

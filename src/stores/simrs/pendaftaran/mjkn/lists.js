@@ -78,7 +78,7 @@ export const useListBpjsAntrianStore = defineStore('list_mjkn_antrian', {
         }
       }
       return new Promise((resolve, reject) => {
-        api.get('/v1/simrs/pendaftaran/caripasien', params)
+        api.get('/v1/simrs/pendaftaran/caripasienbyrm', params)
           .then(resp => {
             this.loadingSend = false
             resolve(resp.data)

@@ -246,7 +246,7 @@
                       Harga Kontrak
                     </div>
                     <div class="deta text-weight-bold">
-                      Diskon (Rp)
+                      Diskon (%)
                     </div>
                     <div class="deta text-weight-bold">
                       PPN (%)
@@ -290,7 +290,7 @@
                         type="number"
                         :rules="[val=> val > 0 ||'Harus lebih besar dari 0']"
                         @focus="assign(n,i,j)"
-                        @update:model-value="updateHarga"
+                        @update:model-value="updateHargaKo($event,det)"
                       />
                     </div>
                     <div class="deta">
@@ -301,7 +301,7 @@
                         dense
                         type="number"
                         @focus="assign(n,i,j)"
-                        @update:model-value="updateHarga"
+                        @update:model-value="updateHargaDis($event,det)"
                       />
                     </div>
                     <div class="deta">
@@ -312,14 +312,14 @@
                         dense
                         type="number"
                         @focus="assign(n,i,j)"
-                        @update:model-value="updateHarga"
+                        @update:model-value="updateHargaPpn($event,det)"
                       />
                     </div>
                     <div class="deta">
                       <app-input
-                        v-model="det.harga_jadi"
+                        v-model="det.sub_total"
                         outlined
-                        label="jumlah"
+                        label="Sub Total"
                         dense
                         type="number"
                         @focus="assign(n,i,j)"
@@ -380,25 +380,49 @@ function pesanClicked(val, i) {
 }
 let indPem = 0
 let indPene = 0
-let indDet = 0
+// let indDet = 0
 function assign(n, i, j) {
   indPem = n
   indPene = i
-  indDet = j
+  // indDet = j
+}
+function updateHargaKo(evt, val) {
+  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
+  val.harga_kontrak = value
+  updateHarga(val)
+}
+function updateHargaDis(evt, val) {
+  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
+  val.diskon = value
+  updateHarga(val)
+}
+function updateHargaPpn(evt, val) {
+  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
+  val.ppn = value
+  updateHarga(val)
 }
 function updateHarga(val) {
-  // console.log(val)
-  store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_jadi =
-  (store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty *
-  parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak)) -
-  parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].diskon) +
-  ((parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak * store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty) *
-  parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].ppn) / 100))
-  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.harga_jadi).reduce((a, b) => a + b, 0)
+  const hargaKontrak = !isNaN(val.harga_kontrak) && val.harga_kontrak !== '' ? parseFloat(val.harga_kontrak) : 0
+
+  const diskon = (val.diskon / 100) * hargaKontrak
+  const hargaDiskon = hargaKontrak - diskon
+  const ppn = (val.ppn / 100) * hargaDiskon
+  const ppnRp = ppn
+  val.harga_jadi = hargaKontrak - diskon + ppnRp
+  val.sub_total = (hargaKontrak - diskon + ppnRp) * val.qty
+  console.log(val)
+  // (store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty *
+  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak) -
+  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].diskon) +
+  // ((parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak *
+  // store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty) *
+  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].ppn) / 100))
+
+  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
 }
 function updateHargaJadi(val) {
   // console.log(val)
-  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.harga_jadi).reduce((a, b) => a + b, 0)
+  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
 }
 
 function checkBox(val) {
