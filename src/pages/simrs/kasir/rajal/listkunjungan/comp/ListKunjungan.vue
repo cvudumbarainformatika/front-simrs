@@ -105,7 +105,7 @@
       </q-list>
     </div>
     <!-- Billing -->
-    <app-fullscreen
+    <app-fullscreen-blue
       v-model="billOpen"
       @close="store.notas={}"
     >
@@ -117,7 +117,7 @@
           @nota="getNota"
         />
       </template>
-    </app-fullscreen>
+    </app-fullscreen-blue>
     <!-- print nota -->
     <app-dialog-not-full
       v-model="printOpen"

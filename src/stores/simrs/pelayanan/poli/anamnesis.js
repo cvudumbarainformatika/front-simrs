@@ -17,7 +17,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatpengobatan: ''
     },
 
-    alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain'],
+    alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
     selection: [],
     historys: []
   }),
@@ -62,12 +62,15 @@ export const useAnamnesis = defineStore('anamnesis', {
         id: val.id,
         keluhanutama: val.rs4,
         riwayatpenyakit: val.riwayatpenyakit,
+        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
         riwayatalergi: val.riwayatalergi,
         keteranganalergi: val.keteranganalergi,
         riwayatpengobatan: val.riwayatpengobatan
       }
-      console.log('form', this.form)
-      console.log('xxx', val)
+      const kommatext = val?.riwayatalergi?.split(', ')
+      this.selection = kommatext
+      // console.log('form', this.form)
+      // console.log('xxx', val)
     },
 
     setForm(key, val) {
@@ -78,6 +81,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const payload = { id }
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusanamnesis', payload)
+        console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataAnamnesis(pasien, id)
@@ -113,10 +117,13 @@ export const useAnamnesis = defineStore('anamnesis', {
       this.form = {
         keluhanutama: val.keluhanutama,
         riwayatpenyakit: val.riwayatpenyakit,
+        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
         riwayatalergi: val.riwayatalergi,
         keteranganalergi: val.keteranganalergi,
         riwayatpengobatan: val.riwayatpengobatan
       }
+      const kommatext = val?.riwayatalergi?.split(', ')
+      this.selection = kommatext
     },
 
     initReset() {
@@ -130,6 +137,7 @@ export const useAnamnesis = defineStore('anamnesis', {
           keteranganalergi: '',
           riwayatpengobatan: ''
         }
+        this.selection = []
 
         resolve()
       })

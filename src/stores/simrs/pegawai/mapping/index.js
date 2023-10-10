@@ -75,8 +75,19 @@ export const useMappingNakesStore = defineStore('mapping-nakes', {
             notifSuccess(resp)
             this.loadingSave = false
             console.log(this.ygsudahdimappings)
+            const target = this.pegawais?.filter(x => x.nip === this.searchResultKepeg?.nip)
+            if (target.length) {
+              target[0].kdpegsimrs = this.objNakes?.kode
+            }
             this.objNakes = null
             this.searchResultKepeg = null
+            this.form = {
+              nip: '',
+              kdpegsimrs: '',
+              statusspesialis: '',
+              kdgroupnakes: '',
+              kdruangansim: ''
+            }
           }
           this.loadingSave = false
         } catch (error) {

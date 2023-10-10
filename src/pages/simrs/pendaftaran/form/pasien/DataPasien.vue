@@ -672,10 +672,11 @@
               <div class="col-12">
                 <app-autocomplete
                   ref="refHambatan"
+                  :key="store.form.kdhambatan"
                   v-model="store.form.kdhambatan"
                   label="Hambatan"
                   autocomplete="hambatan"
-                  option-value="id"
+                  option-value="kdhambatan"
                   option-label="hambatan"
                   outlined
                   :source="store.hambatans"

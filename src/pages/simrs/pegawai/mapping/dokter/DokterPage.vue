@@ -1,13 +1,21 @@
 <template>
-  <q-page class="column full-height">
+  <div
+    class=""
+    :style="`height:${height}px`"
+  >
     <!-- <div class="col full-height bg-accent">
       <div class="full-height bg-red">
         sdfds
       </div>
     </div> -->
-    <div class="col full-height q-pa-sm">
-      <q-card class="full-height ">
-        <q-card-section>
+    <div
+      class="col full-height q-pa-sm"
+    >
+      <q-card
+        class="column full-height "
+        style="overflow: hidden;"
+      >
+        <q-card-section class="col-auto">
           <div class="full-width row justify-between items-center content-between">
             <div class="bg-white col-grow">
               <div
@@ -26,9 +34,16 @@
           </div>
         </q-card-section>
         <q-separator />
-        <q-card-section>
-          <div class="row q-col-gutter-lg">
-            <div class="col-6 full-height" >
+        <q-card-section
+          class="col full-height"
+          style="overflow: hidden;"
+        >
+          <div class="row q-col-gutter-lg full-height">
+            <div
+              id="listRef"
+              ref="listRef"
+              class="col-6 full-height"
+            >
               <ListNakes
                 :lists="store.listsnakes"
                 :terselect="store?.objNakes"
@@ -158,7 +173,7 @@
         </q-card-section>
       </q-card>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup>
@@ -168,13 +183,21 @@ import { useMappingNakesStore } from 'src/stores/simrs/pegawai/mapping/index'
 // import { api } from 'src/boot/axios'
 
 const store = useMappingNakesStore()
-
+const height = ref(0)
+const listRef = ref()
 onMounted(() => {
+  height.value = window.screen.height - 168
   store.getNakes()
   store.getSimpeg()
   store.getDataTermapping()
+  window.addEventListener('resize', resizeCanvas)
+  console.log(document.getElementById('listRef').clientHeight)
 })
 const options = ref(null)
+
+const resizeCanvas = () => {
+  console.log(document.getElementById('listRef').clientHeight)
+}
 
 function labelNake(val) {
   if (!val) return ''

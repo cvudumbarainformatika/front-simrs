@@ -19,7 +19,72 @@
           <!-- <div class="col-12 f-12 text-weight-bold">
                     Pemeriksaan Fisik
                   </div> -->
-          <div class="col-12">
+
+          <div class="col-3">
+            <q-input
+              v-model="store.formVital.denyutjantung"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="N"
+              :rules="[val => !!val || 'Harap diisi']"
+              hide-bottom-space
+            />
+          </div>
+          <div class="col-3">
+            <q-input
+              v-model="store.formVital.pernapasan"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="RR"
+              :rules="[val => !!val || 'Harap diisi']"
+              hide-bottom-space
+            />
+          </div>
+          <div class="col-3">
+            <q-input
+              v-model="store.formVital.sistole"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Sys"
+              :rules="[
+                val => !!val || 'Harap diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+            />
+          </div>
+          <div class="col-3">
+            <q-input
+              v-model="store.formVital.diastole"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Dia"
+              :rules="[
+                val => !!val || 'Hrp diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+            />
+          </div>
+          <div class="col-3">
+            <q-input
+              v-model="store.formVital.suhutubuh"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Suhu"
+              :rules="[
+                val => !!val || 'Hrp diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+            />
+          </div>
+          <div class="col-9">
             <q-select
               v-model="store.formVital.tingkatkesadaran"
               dense
@@ -31,72 +96,8 @@
               emit-value
               map-options
               input-class="ellipsis"
-              use-input
               fill-input
-            />
-          </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.formVital.denyutjantung"
-              dense
-              standout="bg-yellow-3 text-black"
-              outlined
-              label="Denyut Jantung"
-              :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.formVital.pernapasan"
-              dense
-              standout="bg-yellow-3 text-black"
-              outlined
-              label="Pernapasan"
-              :rules="[val => !!val || 'Harap diisi Terlebih dahulu']"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="store.formVital.sistole"
-              dense
-              standout="bg-yellow-3 text-black"
-              outlined
-              label="Sistole per mmHg"
-              :rules="[
-                val => !!val || 'Harap diisi Terlebih dahulu',
-                val => !isNaN(val) || 'Harus pakai Nomor',
-              ]"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="store.formVital.diastole"
-              dense
-              standout="bg-yellow-3 text-black"
-              outlined
-              label="Diastole per mmHg"
-              :rules="[
-                val => !!val || 'Harap diisi Terlebih dahulu',
-                val => !isNaN(val) || 'Harus pakai Nomor',
-              ]"
-              hide-bottom-space
-            />
-          </div>
-          <div class="col-4">
-            <q-input
-              v-model="store.formVital.suhutubuh"
-              dense
-              standout="bg-yellow-3 text-black"
-              outlined
-              label="Suhu Tubuh"
-              :rules="[
-                val => !!val || 'Harap diisi Terlebih dahulu',
-                val => !isNaN(val) || 'Harus pakai Nomor',
-              ]"
-              hide-bottom-space
+              hide-dropdown-icon
             />
           </div>
 
