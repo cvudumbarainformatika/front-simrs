@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?32ebd0bcbd22cb4f7e801ab2585b74de") format("woff"),
-url("./icons.woff2?32ebd0bcbd22cb4f7e801ab2585b74de") format("woff2");
+    src: url("./icons.woff?6f44fedc38f9ed179cf5abe88c59ab40") format("woff"),
+url("./icons.woff2?6f44fedc38f9ed179cf5abe88c59ab40") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -357,7 +357,7 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-mat-insert_photo:before {
     content: "\f172";
 }
-.icon-mat-insights:before {
+.icon-mat-integration_instructions:before {
     content: "\f173";
 }
 .icon-mat-inventory_2:before {
@@ -501,348 +501,345 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-mat-receipt:before {
     content: "\f1a2";
 }
-.icon-mat-recycling:before {
+.icon-mat-redo:before {
     content: "\f1a3";
 }
-.icon-mat-redo:before {
+.icon-mat-refresh:before {
     content: "\f1a4";
 }
-.icon-mat-refresh:before {
+.icon-mat-remove:before {
     content: "\f1a5";
 }
-.icon-mat-remove:before {
+.icon-mat-report:before {
     content: "\f1a6";
 }
-.icon-mat-report:before {
+.icon-mat-save_alt:before {
     content: "\f1a7";
 }
-.icon-mat-save_alt:before {
+.icon-mat-save:before {
     content: "\f1a8";
 }
-.icon-mat-save:before {
+.icon-mat-search:before {
     content: "\f1a9";
 }
-.icon-mat-search:before {
+.icon-mat-segment:before {
     content: "\f1aa";
 }
-.icon-mat-segment:before {
+.icon-mat-send_time_extension:before {
     content: "\f1ab";
 }
-.icon-mat-send_time_extension:before {
+.icon-mat-send:before {
     content: "\f1ac";
 }
-.icon-mat-send:before {
+.icon-mat-settings:before {
     content: "\f1ad";
 }
-.icon-mat-settings:before {
+.icon-mat-shopping_cart_checkout:before {
     content: "\f1ae";
 }
-.icon-mat-shopping_cart_checkout:before {
+.icon-mat-shopping_cart:before {
     content: "\f1af";
 }
-.icon-mat-shopping_cart:before {
+.icon-mat-skip_next:before {
     content: "\f1b0";
 }
-.icon-mat-skip_next:before {
+.icon-mat-skip_previous:before {
     content: "\f1b1";
 }
-.icon-mat-skip_previous:before {
+.icon-mat-sms_black:before {
     content: "\f1b2";
 }
-.icon-mat-sms_black:before {
+.icon-mat-sms_failed:before {
     content: "\f1b3";
 }
-.icon-mat-sms_failed:before {
+.icon-mat-sort:before {
     content: "\f1b4";
 }
-.icon-mat-sort:before {
+.icon-mat-sound_detection_loud:before {
     content: "\f1b5";
 }
-.icon-mat-sound_detection_loud:before {
+.icon-mat-spatial_audio:before {
     content: "\f1b6";
 }
-.icon-mat-spatial_audio:before {
+.icon-mat-strikethrough_s:before {
     content: "\f1b7";
 }
-.icon-mat-strikethrough_s:before {
+.icon-mat-style:before {
     content: "\f1b8";
 }
-.icon-mat-style:before {
+.icon-mat-subscript:before {
     content: "\f1b9";
 }
-.icon-mat-subscript:before {
+.icon-mat-summarize:before {
     content: "\f1ba";
 }
-.icon-mat-summarize:before {
+.icon-mat-superscript:before {
     content: "\f1bb";
 }
-.icon-mat-superscript:before {
+.icon-mat-supervisor_account:before {
     content: "\f1bc";
 }
-.icon-mat-supervisor_account:before {
+.icon-mat-swap_horiz:before {
     content: "\f1bd";
 }
-.icon-mat-swap_horiz:before {
+.icon-mat-sync_alt:before {
     content: "\f1be";
 }
-.icon-mat-sync_alt:before {
+.icon-mat-table_view:before {
     content: "\f1bf";
 }
-.icon-mat-table_view:before {
+.icon-mat-task_alt:before {
     content: "\f1c0";
 }
-.icon-mat-task_alt:before {
+.icon-mat-text_format:before {
     content: "\f1c1";
 }
-.icon-mat-text_format:before {
+.icon-mat-textsms:before {
     content: "\f1c2";
 }
-.icon-mat-textsms:before {
+.icon-mat-thumb_up_off_alt:before {
     content: "\f1c3";
 }
-.icon-mat-thumb_up_off_alt:before {
+.icon-mat-today:before {
     content: "\f1c4";
 }
-.icon-mat-today:before {
+.icon-mat-transfer_within_a_station:before {
     content: "\f1c5";
 }
-.icon-mat-transfer_within_a_station:before {
+.icon-mat-tune:before {
     content: "\f1c6";
 }
-.icon-mat-tune:before {
+.icon-mat-tungsten:before {
     content: "\f1c7";
 }
-.icon-mat-tungsten:before {
+.icon-mat-undo:before {
     content: "\f1c8";
 }
-.icon-mat-undo:before {
+.icon-mat-verified_user:before {
     content: "\f1c9";
 }
-.icon-mat-verified_user:before {
+.icon-mat-vertical_align_bottom:before {
     content: "\f1ca";
 }
-.icon-mat-vertical_align_bottom:before {
+.icon-mat-vertical_align_top:before {
     content: "\f1cb";
 }
-.icon-mat-vertical_align_top:before {
+.icon-mat-visibility_off:before {
     content: "\f1cc";
 }
-.icon-mat-visibility_off:before {
+.icon-mat-visibility:before {
     content: "\f1cd";
 }
-.icon-mat-visibility:before {
+.icon-mat-volume_up:before {
     content: "\f1ce";
 }
-.icon-mat-volume_up:before {
+.icon-mat-vpn_key:before {
     content: "\f1cf";
 }
-.icon-mat-vpn_key:before {
+.icon-mat-warning:before {
     content: "\f1d0";
 }
-.icon-mat-warning:before {
+.icon-my-arm-svgrepo-com:before {
     content: "\f1d1";
 }
-.icon-my-arm-svgrepo-com:before {
+.icon-my-articulation-bones-svgrepo-com:before {
     content: "\f1d2";
 }
-.icon-my-articulation-bones-svgrepo-com:before {
+.icon-my-big-nose-svgrepo-com:before {
     content: "\f1d3";
 }
-.icon-my-big-nose-svgrepo-com:before {
+.icon-my-bones-joint-svgrepo-com:before {
     content: "\f1d4";
 }
-.icon-my-bones-joint-svgrepo-com:before {
+.icon-my-brain-upper-view-outline-svgrepo-com:before {
     content: "\f1d5";
 }
-.icon-my-brain-upper-view-outline-svgrepo-com:before {
+.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
     content: "\f1d6";
 }
-.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
+.icon-my-ear-outline-svgrepo-com:before {
     content: "\f1d7";
 }
-.icon-my-ear-outline-svgrepo-com:before {
+.icon-my-eyebrow-svgrepo-com:before {
     content: "\f1d8";
 }
-.icon-my-eyebrow-svgrepo-com:before {
+.icon-my-facebook:before {
     content: "\f1d9";
 }
-.icon-my-facebook:before {
+.icon-my-female-torso-svgrepo-com:before {
     content: "\f1da";
 }
-.icon-my-female-torso-svgrepo-com:before {
+.icon-my-file_sign:before {
     content: "\f1db";
 }
-.icon-my-file_sign:before {
+.icon-my-finger-svgrepo-com:before {
     content: "\f1dc";
 }
-.icon-my-finger-svgrepo-com:before {
+/* .icon-my-foot-bones-svgrepo-com-(1):before {
     content: "\f1dd";
-}
-.icon-my-foot-bones-svgrepo-com-(1):before {
+} */
+.icon-my-foot-bones-svgrepo-com:before {
     content: "\f1de";
 }
-.icon-my-foot-bones-svgrepo-com:before {
+.icon-my-foot-side-view-outline-svgrepo-com:before {
     content: "\f1df";
 }
-.icon-my-foot-side-view-outline-svgrepo-com:before {
+.icon-my-footprints-outline-variant-svgrepo-com:before {
     content: "\f1e0";
 }
-.icon-my-footprints-outline-variant-svgrepo-com:before {
+.icon-my-google:before {
     content: "\f1e1";
 }
-.icon-my-google:before {
+.icon-my-how_to_reg:before {
     content: "\f1e2";
 }
-.icon-my-how_to_reg:before {
+/* .icon-my-human-back-svgrepo-com-(1):before {
     content: "\f1e3";
-}
-.icon-my-human-back-svgrepo-com-(1):before {
+} */
+.icon-my-human-back-svgrepo-com:before {
     content: "\f1e4";
 }
-.icon-my-human-back-svgrepo-com:before {
+.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
     content: "\f1e5";
 }
-.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
+.icon-my-human-ear-svgrepo-com:before {
     content: "\f1e6";
 }
-.icon-my-human-ear-svgrepo-com:before {
+.icon-my-human-fetus-svgrepo-com:before {
     content: "\f1e7";
 }
-.icon-my-human-fetus-svgrepo-com:before {
+.icon-my-human-finger-svgrepo-com:before {
     content: "\f1e8";
 }
-.icon-my-human-finger-svgrepo-com:before {
+.icon-my-human-footprints-svgrepo-com:before {
     content: "\f1e9";
 }
-.icon-my-human-footprints-svgrepo-com:before {
+.icon-my-human-hand-bones-svgrepo-com:before {
     content: "\f1ea";
 }
-.icon-my-human-hand-bones-svgrepo-com:before {
+.icon-my-human-neck-svgrepo-com:before {
     content: "\f1eb";
 }
-.icon-my-human-neck-svgrepo-com:before {
+.icon-my-human-ribs-svgrepo-com:before {
     content: "\f1ec";
 }
-.icon-my-human-ribs-svgrepo-com:before {
+.icon-my-human-skull-side-view-svgrepo-com:before {
     content: "\f1ed";
 }
-.icon-my-human-skull-side-view-svgrepo-com:before {
+.icon-my-human-teeth-svgrepo-com:before {
     content: "\f1ee";
 }
-.icon-my-human-teeth-svgrepo-com:before {
+.icon-my-human-trachea-svgrepo-com:before {
     content: "\f1ef";
 }
-.icon-my-human-trachea-svgrepo-com:before {
+.icon-my-key:before {
     content: "\f1f0";
 }
-.icon-my-key:before {
+.icon-my-local_hospital:before {
     content: "\f1f1";
 }
-.icon-my-local_hospital:before {
+.icon-my-local_pharmacy:before {
     content: "\f1f2";
 }
-.icon-my-local_pharmacy:before {
+.icon-my-lungs-svgrepo-com:before {
     content: "\f1f3";
 }
-.icon-my-lungs-svgrepo-com:before {
+.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
     content: "\f1f4";
 }
-.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
+.icon-my-male-hair-variant-svgrepo-com:before {
     content: "\f1f5";
 }
-.icon-my-male-hair-variant-svgrepo-com:before {
+.icon-my-medical_information:before {
     content: "\f1f6";
 }
-.icon-my-medical_information:before {
+.icon-my-medical_services:before {
     content: "\f1f7";
 }
-.icon-my-medical_services:before {
+.icon-my-medication_liquid:before {
     content: "\f1f8";
 }
-.icon-my-medication_liquid:before {
+.icon-my-medication:before {
     content: "\f1f9";
 }
-.icon-my-medication:before {
+.icon-my-men-elbow-svgrepo-com:before {
     content: "\f1fa";
 }
-.icon-my-men-elbow-svgrepo-com:before {
+.icon-my-men-leg-svgrepo-com:before {
     content: "\f1fb";
 }
-.icon-my-men-leg-svgrepo-com:before {
+.icon-my-men-shoulder-svgrepo-com:before {
     content: "\f1fc";
 }
-.icon-my-men-shoulder-svgrepo-com:before {
+.icon-my-monitor_heart:before {
     content: "\f1fd";
 }
-.icon-my-monitor_heart:before {
+.icon-my-nose-outline-svgrepo-com:before {
     content: "\f1fe";
 }
-.icon-my-nose-outline-svgrepo-com:before {
+.icon-my-nose-svgrepo-com:before {
     content: "\f1ff";
 }
-.icon-my-nose-svgrepo-com:before {
+.icon-my-pelvis-svgrepo-com:before {
     content: "\f200";
 }
-.icon-my-pelvis-svgrepo-com:before {
+.icon-my-penis-svgrepo-com:before {
     content: "\f201";
 }
-.icon-my-penis-svgrepo-com:before {
+.icon-my-personal_injury:before {
     content: "\f202";
 }
-.icon-my-personal_injury:before {
+.icon-my-pill:before {
     content: "\f203";
 }
-.icon-my-pill:before {
+.icon-my-point_of_sale:before {
     content: "\f204";
 }
-.icon-my-point_of_sale:before {
+.icon-my-print_setting:before {
     content: "\f205";
 }
-.icon-my-print_setting:before {
+.icon-my-ribs-svgrepo-com:before {
     content: "\f206";
 }
-.icon-my-ribs-svgrepo-com:before {
+.icon-my-small-intestine-svgrepo-com:before {
     content: "\f207";
 }
-.icon-my-small-intestine-svgrepo-com:before {
+.icon-my-spine-svgrepo-com:before {
     content: "\f208";
 }
-.icon-my-spine-svgrepo-com:before {
+.icon-my-standing-human-body-silhouette-svgrepo-com:before {
     content: "\f209";
 }
-.icon-my-standing-human-body-silhouette-svgrepo-com:before {
+.icon-my-stethoscope:before {
     content: "\f20a";
 }
-.icon-my-stethoscope:before {
+.icon-my-stomach-svgrepo-com:before {
     content: "\f20b";
 }
-.icon-my-stomach-svgrepo-com:before {
+.icon-my-thin-lips-outline-svgrepo-com:before {
     content: "\f20c";
 }
-.icon-my-thin-lips-outline-svgrepo-com:before {
+.icon-my-tongue-and-mouth-svgrepo-com:before {
     content: "\f20d";
 }
-.icon-my-tongue-and-mouth-svgrepo-com:before {
+.icon-my-tongue-svgrepo-com:before {
     content: "\f20e";
 }
-.icon-my-tongue-svgrepo-com:before {
+.icon-my-tonsil-svgrepo-com:before {
     content: "\f20f";
 }
-.icon-my-tonsil-svgrepo-com:before {
+.icon-my-tooth-outline-svgrepo-com:before {
     content: "\f210";
 }
-.icon-my-tooth-outline-svgrepo-com:before {
+.icon-my-tooth-shape-outline-svgrepo-com:before {
     content: "\f211";
 }
-.icon-my-tooth-shape-outline-svgrepo-com:before {
+.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
     content: "\f212";
 }
-.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
+.icon-my-women-eyelashes-svgrepo-com:before {
     content: "\f213";
 }
-.icon-my-women-eyelashes-svgrepo-com:before {
-    content: "\f214";
-}
 .icon-my-word:before {
-    content: "\f215";
+    content: "\f214";
 }
