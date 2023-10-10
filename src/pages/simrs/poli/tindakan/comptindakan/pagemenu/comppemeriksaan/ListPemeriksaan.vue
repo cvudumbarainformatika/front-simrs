@@ -174,10 +174,9 @@
             >
               <div class="row q-pa-xs q-col-gutter-xs">
                 <div class="col-4">
-                  <!-- NADI -->
                   <comp-monitor
                     :nilai="item?.rs4"
-                    icon="icon-mat-heart_broken"
+                    :ciri="nadi(item?.rs4)"
                   />
                 </div>
                 <div class="col-4">
@@ -185,15 +184,17 @@
                   <comp-monitor
                     :nilai="item?.pernapasan"
                     label="RR"
+                    icon="icon-my-local_hospital"
                   />
                 </div>
                 <div class="col-4">
                   <!-- SUHU -->
                   <comp-monitor
                     :nilai="item?.suhutubuh"
-                    label="Suhu Tubuh"
+                    label="Suhu"
                     icon="icon-my-standing-human-body-silhouette-svgrepo-com"
                     celcius
+                    :ciri="suhu(item?.suhutubuh)"
                   />
                 </div>
                 <div class="col-12">
@@ -205,6 +206,14 @@
                     icon="icon-mat-recycling"
                     :sys-obj="tekananDarah(item?.sistole)"
                     :dias-obj="tekananDarahDias(item?.diastole)"
+                  />
+                </div>
+                <div class="col-12">
+                  <!-- STATUS PSIKOLOGIS -->
+                  <comp-psiko
+                    :psiko="item?.statuspsikologis"
+                    :sosek="item?.sosialekonomi"
+                    :spirit="item?.spiritual"
                   />
                 </div>
               </div>
@@ -246,6 +255,12 @@
                   </q-item>
                 </q-list>
               </div>
+              <div
+                v-else
+                class="text-center"
+              >
+                <div>Tidak Ada Kelainan Pada Bagian Tubuh</div>
+              </div>
             </q-card>
             <q-separator />
             <div class="q-pa-xs flex items-center bg-grey-2">
@@ -282,6 +297,7 @@
 <script setup>
 import CompMonitor from './CompMonitor.vue'
 import CompTd from './CompTd.vue'
+import CompPsiko from './CompPsiko.vue'
 // import { ref } from 'vue'
 
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
@@ -302,9 +318,9 @@ const props = defineProps({
 })
 
 function tekananDarah(val) {
-  const normal = val >= 100 || val <= 120
-  const prahipertensi = val >= 121 || val <= 139
-  const hipertensiderajat1 = val >= 140 || val <= 159
+  const normal = val >= 100 && val <= 120
+  const prahipertensi = val >= 121 && val <= 139
+  const hipertensiderajat1 = val >= 140 && val <= 159
   const hipertensiderajat2 = val >= 160
 
   let obj = {
@@ -326,9 +342,9 @@ function tekananDarah(val) {
   return obj
 }
 function tekananDarahDias(val) {
-  const normal = val >= 60 || val <= 79
-  const prahipertensi = val >= 80 || val <= 89
-  const hipertensiderajat1 = val >= 90 || val <= 99
+  const normal = val >= 60 && val <= 79
+  const prahipertensi = val >= 80 && val <= 89
+  const hipertensiderajat1 = val >= 90 && val <= 99
   const hipertensiderajat2 = val >= 100
 
   let obj = {
@@ -344,7 +360,48 @@ function tekananDarahDias(val) {
   } else if (hipertensiderajat2) {
     obj = { color: 'text-negative', res: 'Hipertensi Derajat 2' }
   } else {
-    obj = { color: 'text-red', res: 'Not Valid' }
+    obj = { color: 'text-red', res: 'LOW' }
+  }
+
+  return obj
+}
+function suhu(val) {
+  const hipotermia = val < 35
+  const normal = val >= 35 && val < 37
+  const pireksia = val >= 37 && val <= 41.1
+  const hipertermia = val > 41.1
+
+  let obj = {
+    color: 'text-teal',
+    res: 'normal'
+  }
+  if (hipotermia) {
+    obj = { color: 'text-red', res: 'Hipotermia' }
+  } else if (normal) {
+    obj = { color: 'text-teal', res: 'Normal' }
+  } else if (pireksia) {
+    obj = { color: 'text-orange', res: 'Pireksia/febris' }
+  } else if (hipertermia) {
+    obj = { color: 'text-negative', res: 'Hipertermia' }
+  }
+
+  return obj
+}
+function nadi(val) {
+  const bradikardi = val < 60
+  const normal = val >= 61 && val <= 100
+  const takikardi = val > 100
+
+  let obj = {
+    color: 'text-teal',
+    res: 'Normal'
+  }
+  if (bradikardi) {
+    obj = { color: 'text-negative', res: 'Brakikardi' }
+  } else if (normal) {
+    obj = { color: 'text-teal', res: 'Normal' }
+  } else if (takikardi) {
+    obj = { color: 'text-orange', res: 'Takikardi' }
   }
 
   return obj

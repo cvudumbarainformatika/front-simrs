@@ -79,7 +79,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
     initReset() {
       this.form = {
         noreg: '', // rs1
-        // nota: '', // rs2
+        nota: this.notas?.length ? this.notas[0] : '', // rs2
         kodepoli: '', // rs10
         permintaan: '', // rs4
         kodesistembayar: ''

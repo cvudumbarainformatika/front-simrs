@@ -115,9 +115,26 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
 
     // ====================================================================================================================================================RUmah sakit lain
     async saveRsLain(pasien) {
-      this.formKonsul.norm = pasien?.norm
-      this.formKonsul.noreg = pasien?.noreg
-      this.formKonsul.planing = 'Rumah Sakit Lain'
+      this.formRsLain.norm = pasien?.norm
+      this.formRsLain.noreg = pasien?.noreg
+      this.formRsLain.planing = 'Rumah Sakit Lain'
+      this.formRsLain.kodesistembayar = pasien?.kodesistembayar
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRsLain)
+        console.log('save rs lain', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result
+          storePasien.injectDataPasien(pasien, isi, 'planning')
+          notifSuccess(resp)
+          this.loadingSaveKonsul = false
+        }
+        this.loadingSaveKonsul = false
+      } catch (error) {
+        console.log(error)
+        this.loadingSaveKonsul = false
+      }
     },
     initPasien(pasien) {
       this.formRsLain.norm = pasien?.norm
