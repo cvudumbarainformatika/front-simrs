@@ -123,6 +123,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PerencanaanPage.vue')))
   },
   {
+    name: 'edukasi-page',
+    label: 'Edukasi',
+    icon: 'icon-mat-tungsten',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/EdukasiPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',

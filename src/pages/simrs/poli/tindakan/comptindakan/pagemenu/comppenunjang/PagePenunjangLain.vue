@@ -19,7 +19,6 @@
         class="col-6 full-height"
       >
         <ListOrder :pasien="props.pasien" />
-        sadas
       </q-card>
     </div>
   </div>

@@ -8,13 +8,28 @@
     />
     <q-toolbar-title class="f-14">
       <div class="row items-center q-gutter-md">
-        <q-btn
+        <!-- <q-btn
           color="yellow"
           :label="`DPJP || ${pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter}`"
           dense
           class="q-px-sm"
           outline
+        > -->
+        <q-btn
+          color="yellow"
+          outline
+          class="q-pl-xs"
         >
+          <div class="row items-center no-wrap q-gutter-sm">
+            <q-avatar size="30px">
+              <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+            </q-avatar>
+            <div class="column f-12">
+              <div>
+                DPJP | {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
+              </div>
+            </div>
+          </div>
           <q-menu>
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">

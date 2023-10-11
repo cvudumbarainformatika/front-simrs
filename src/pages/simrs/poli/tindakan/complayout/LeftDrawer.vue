@@ -30,19 +30,32 @@
         />
       </div>
     </div>
+    <div class="absolute-top">
+      <div class="q-pa-sm">
+        <q-badge
+          outline
+          color="orange"
+          :label="`${pasien?.kodesistembayar?? '-'}`"
+        />
+      </div>
+    </div>
     <div class="absolute-bottom">
       <div class="q-pa-md">
         <app-avatar-pasien
           :key="pasien"
           :pasien="pasien"
+          width="50px"
         />
         <div class="text-weight-bold f-12 q-mt-sm">
           {{ pasien ? pasien.nama : '-' }}
         </div>
-        <div class="text-weight-bold">
+        <!-- <div class="text-weight-bold">
           {{ pasien ? pasien.norm : '-' }}
+        </div> -->
+        <div class="text-teal">
+          {{ pasien ? pasien.noreg : '-' }} || {{ pasien?.norm??'-' }}
         </div>
-        <div>REG : {{ pasien ? pasien.noreg : '-' }}</div>
+        <!-- <div> {{ pasien?.kodesistembayar?? '-' }}</div> -->
       </div>
       <q-bar>
         <q-space />
