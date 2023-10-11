@@ -43,7 +43,8 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       'nama',
       'satuan',
       'qty'
-    ]
+    ],
+    total: 0
   }),
   actions: {
     setParams(key, val) {
@@ -69,21 +70,21 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
     },
     mapingItem(val) {
       if (val.length) {
+        const total = []
         val.forEach(item => {
           if (item.monthly.length) {
-            item.monthly.forEach(a => { a.total = a.sisa_stok * a.harga })
+            item.monthly.forEach(a => { a.total = a.totalStok * a.harga })
             item.subtotal = item.monthly.map(a => a.total).reduce((a, b) => a + b, 0)
+            total.push(item.subtotal)
           } else if (item.recent.length) {
-            item.recent.forEach(a => { a.total = a.sisa_stok * a.harga })
+            item.recent.forEach(a => { a.total = a.totalStok * a.harga })
             item.subtotal = item.recent.map(a => a.total).reduce((a, b) => a + b, 0)
-          } else {
-            item.subtotal = 0
-          }
-          if (item.stok_awal.length) {
-            item.stok_awal.forEach(a => { a.total = a.sisa_stok * a.harga })
+            total.push(item.subtotal)
           }
         })
         this.items = val
+        // console.log('total', total)
+        this.total = total.reduce((a, b) => a + b, 0)
       }
     },
     getInitialData() {
