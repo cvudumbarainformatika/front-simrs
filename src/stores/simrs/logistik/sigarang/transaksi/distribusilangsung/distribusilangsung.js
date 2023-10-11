@@ -32,7 +32,10 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     },
     barangKerings: [],
     barangBasahes: [],
-    ruangs: [],
+    ruangs: [
+      { kode: 'R-0101070', uraian: 'Dapur' },
+      { kode: 'R-0101073', uraian: 'Instalasi Gizi' }
+    ],
     options: [
       { nama: 'KERING', value: 'kering' },
       { nama: 'BASAH', value: 'basah' }
@@ -105,7 +108,7 @@ export const useTransaksiDistribusiLangsung = defineStore('transaksi_distribusi_
     getInitialData() {
       this.setPegawai()
       // this.getStokDepo()
-      this.getRuangs()
+      // this.getRuangs()
       this.getNewTable()
     },
     getNewTable() {

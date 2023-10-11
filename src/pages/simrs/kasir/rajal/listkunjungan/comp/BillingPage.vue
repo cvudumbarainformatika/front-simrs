@@ -1,5 +1,143 @@
 <template>
-  <div class="q-pa-xs q-mb-xl bg-white">
+  <div class="q-mb-xl bg-white">
+    <div class="row">
+      <div class="col-2 ">
+        <div class="row">
+          <div class="q-pa-md ">
+            <app-avatar-pasien
+              :key="pasien"
+              :pasien="pasien"
+              width="50px"
+            />
+            <div class="text-weight-bold f-12 q-mt-sm">
+              {{ pasien ? pasien.nama : '-' }}
+            </div>
+            <!-- <div class="text-weight-bold">
+          {{ pasien ? pasien.norm : '-' }}
+        </div> -->
+            <div class="text-teal">
+              {{ pasien ? pasien.noreg : '-' }} || {{ pasien?.norm??'-' }}
+            </div>
+            <!-- <div> {{ pasien?.kodesistembayar?? '-' }}</div> -->
+          </div>
+        </div>
+        <div class="row no-wrap bg-grey q-pa-xs items-center">
+          <div class="f-12 text-weight-bold q-mr-sm">
+            Pilih
+          </div>
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="karcis"
+            label="Karcis"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="tindakan"
+            label="Tindakan"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="laboratorium"
+            label="Laboratorium"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="radiologi"
+            label="Radiologi"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="farmasi"
+            label="Farmasi"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="operasi besar"
+            label="Operasi (Tindakan Besar)"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="operasi kecil"
+            label="Operasi (Tindakan Kecil)"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="dataNotas"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="sharing bpjs"
+            label="Sharing BPJS"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs q-mt-md">
+          <q-btn
+            class="col-12"
+            dense
+            size="12px"
+            label="Cetak Rekap Billing"
+            color="primary"
+            no-caps
+            push
+            @click="cetakFakturRekap(pasien)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Faktur Rekap
+            </q-tooltip>
+          </q-btn>
+        </div>
+      </div>
+      <div class="col-10 ">
+        a
+      </div>
+    </div>
     <div
       class="row bg-grey q-pa-xs"
     >
@@ -123,12 +261,6 @@
         <div class="row no-wrap q-pt-sm">
           <div class="col-2">
             <div class="row no-wrap bg-grey q-pa-xs items-center">
-              <!-- <div class="q-mr-sm">
-            <q-icon
-              name="icon-mat-print"
-              size="16px"
-            />
-          </div> -->
               <div class="f-12 text-weight-bold q-mr-sm">
                 Pilih
               </div>
@@ -165,23 +297,6 @@
                 label="Tindakan"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Tindakan"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakTindakan()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Tindakan
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -193,23 +308,6 @@
                 label="Laboratorium"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Laboratorium"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakLaboratorium()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Laboratorium
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -221,23 +319,6 @@
                 label="Radiologi"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Radiologi"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakRadiologi()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Radiologi
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -249,23 +330,6 @@
                 label="Farmasi"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Farmasi"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakFarmasi()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Farmasi
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -277,23 +341,6 @@
                 label="Operasi (Tindakan Besar)"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Operasi (Tindakan Besar)"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakOperasiBesar()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Operasi (Tindakan Besar)
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -305,23 +352,6 @@
                 label="Operasi (Tindakan Kecil)"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Operasi (Tindakan Kecil)"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakOperasiKecil()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Operasi (Tindakan Kecil)
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs">
               <q-radio
@@ -333,23 +363,6 @@
                 label="Sharing BPJS"
                 @update:model-value="gantiDataNota"
               />
-              <!-- <q-btn
-            class="col-12"
-            dense
-            size="12px"
-            label="Sharing BPJS"
-            color="primary"
-            no-caps
-            flat
-            @click="cetakSharingBPJS()"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Cetak Sharing BPJS
-            </q-tooltip>
-          </q-btn> -->
             </div>
             <div class="row no-wrap q-ma-xs q-mt-md">
               <q-btn

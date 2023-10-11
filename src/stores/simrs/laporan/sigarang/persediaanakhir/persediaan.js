@@ -96,7 +96,7 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       await api.get('v1/simrs/laporan/sigarang/lappersediaan', param)
         .then(resp => {
           this.loading = false
-          console.log('data tabel', resp.data)
+          // console.log('data tabel', resp.data)
           this.meta = resp.data
           this.mapingItem(resp.data)
         })
