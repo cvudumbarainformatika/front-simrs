@@ -63,6 +63,8 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      :ada-paginasi="false"
+      :ada-per-page="false"
       text-cari="Cari Nama / Kode ..."
       row-no
       bottom-row

@@ -440,7 +440,7 @@
     </div>
     <!-- Pagination -->
     <AppPaginationTable
-      v-if="items.length > 0"
+      v-if="items.length > 0 && adaPaginasi"
       class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
@@ -695,6 +695,7 @@ const props = defineProps({
   tandaTangan: { type: Boolean, default: false },
   rowNo: { type: Boolean, default: false },
   topRow: { type: Boolean, default: false },
+  adaPaginasi: { type: Boolean, default: true },
   bottomRow: { type: Boolean, default: false },
   perPage: { type: Number, default: 12 },
   orderBy: { type: String, default: 'id' },
