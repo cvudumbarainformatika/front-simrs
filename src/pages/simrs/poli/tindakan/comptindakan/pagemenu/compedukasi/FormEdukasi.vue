@@ -114,7 +114,17 @@
                   :label="al?.kebutuhanedukasi"
                   size="sm"
                   color="primary"
+                  @update:model-value="(val) => store.setForm('kebutuhanedukasi', val.join(', '))"
                 />
+
+                <div>
+                  <q-input
+                    v-model="store.form.kebutuhanedukasi"
+                    autogrow
+                    label="Kebutuhan Edukasi"
+                    readonly
+                  />
+                </div>
               </div>
             </div>
           </q-card-section>

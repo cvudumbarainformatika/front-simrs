@@ -14,8 +14,8 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
       kepada: '',
       perlupenerjemah: 'Tidak',
       bahasaisyarat: 'Tidak',
-      caraedukasi: '',
-      kesediaan: '',
+      caraedukasi: 'Lisan',
+      kesediaan: 'Iya',
       kebutuhanedukasi: ''
     },
     loadingSave: false
@@ -37,6 +37,9 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
       if (resp?.status === 200) {
         this.mkebutuhanedukasi = resp?.data
       }
+    },
+    setForm(key, val) {
+      this.form[key] = val
     }
   }
 })
