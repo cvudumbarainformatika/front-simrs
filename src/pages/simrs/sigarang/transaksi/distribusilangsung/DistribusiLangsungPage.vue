@@ -65,10 +65,10 @@
               debounce="500"
               :source="store.ruangs"
               :loading="store.loadingRuang"
-              @buang="store.getRuangs"
               @on-select="ruangSelected"
               @clear="ruangCleared"
             />
+            <!-- @buang="store.getRuangs" -->
           </div>
         </div>
         <div class="row items-center q-my-sm">
