@@ -53,6 +53,7 @@
       </div>
     </div>
     <app-table-extend
+      id="printMe"
       :columns="store.columns"
       :items="store.items"
       :meta="store.meta"
@@ -65,11 +66,75 @@
       text-cari="Cari Nama / Kode ..."
       row-no
       bottom-row
+      tanda-tangan
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
     >
+      <template #header-for-print>
+        <div class="row items-center garis-bawah">
+          <div class="col-2">
+            <q-img
+              src="~assets/images/logo-kota-grey.png"
+              spinner-color="white"
+              style="height: 3.56cm; max-width: 2.86cm"
+            />
+          </div>
+          <div class="col-8">
+            <div class="row justify-center f-18">
+              PEMERINTAH KOTA PROBOLINGGO
+            </div>
+            <div class="row justify-center f-12 text-weight-bold">
+              DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+            </div>
+            <div class="row justify-center f-20 text-weight-bold">
+              UOBK RSUD DOKTER MOHAMAD SALEH
+            </div>
+            <div class="row justify-center f-14">
+              Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+            </div>
+            <div class="row justify-center f-14">
+              E-mail : rsudprob@probolinggokota.go.id
+            </div>
+            <div class="row justify-center f-14 text-weight-bold">
+              PROBOLINGGO  67219
+            </div>
+          </div>
+          <div class="col-2">
+            <q-img
+              src="~assets/logos/logo-rsud.png"
+              spinner-color="white"
+              style="height: 3cm; max-width: 3cm"
+            />
+          </div>
+        </div>
+
+        <div class="row justify-center f-18 text-weight-bold q-my-sm">
+          Laporan Persediaan FiFo {{ date.formatDate(store.params.bulan+'-'+store.params.tahus,'MMMM YYYY') }}
+        </div>
+        <!-- <div class="row ">
+              <div>  REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}</div>
+            </div> -->
+      </template>
+      <template #header-right-before>
+        <q-btn
+          ref="refPrint"
+          v-print="printObj"
+          unelevated
+          color="dark"
+          round
+          size="sm"
+          icon="icon-mat-print"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print
+          </q-tooltip>
+        </q-btn>
+      </template>
       <template #col-kode>
         <div>Kode</div>
       </template>
@@ -80,14 +145,14 @@
         <div>Satuan</div>
       </template>
       <template #col-qty>
-        <div class="row no-wrap justify-between">
-          <div class="q-mr-md">
+        <div class="row no-wrap q-col-gutter-md">
+          <div class="col-4">
             Qty
           </div>
-          <div class="q-mr-md">
+          <div class="col-4 q-mx-md">
             Harga
           </div>
-          <div class="q-mr-md">
+          <div class="col-4">
             Nilai
           </div>
         </div>
@@ -100,32 +165,32 @@
           <div
             v-for="(item,i) in row.monthly"
             :key="i"
-            class="row no-wrap justify-between q-mt-xs"
+            class="row no-wrap q-col-gutter-md"
           >
-            <div class="q-mr-md">
-              {{ item.sisa_stok }}
+            <div class="col-4">
+              {{ item.totalStok }}
             </div>
-            <div class="q-mr-md">
+            <div class="col-4 text-right">
               {{ formatRp( item.harga) }}
             </div>
-            <div class="q-mr-md">
+            <div class="col-4 text-right">
               {{ formatRp(item.total) }}
             </div>
           </div>
         </div>
-        <div v-if="row.recent.length">
+        <div v-else-if="row.recent.length">
           <div
             v-for="(item,i) in row.recent"
             :key="i"
-            class="row no-wrap justify-between q-mt-xs"
+            class="row no-wrap q-col-gutter-md"
           >
-            <div class="q-mr-sm">
-              {{ item.sisa_stok }}
+            <div class="col-4">
+              {{ item.totalStok }}
             </div>
-            <div class="q-mr-sm">
+            <div class="col-4 text-right">
               {{ formatRp(item.harga) }}
             </div>
-            <div class="q-mr-sm">
+            <div class="col-4 text-right">
               {{ formatRp(item.total) }}
             </div>
           </div>
@@ -138,7 +203,7 @@
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="3">
+        <td colspan="4">
           <div class="text-right">
             Jumlah
           </div>
@@ -148,7 +213,7 @@
             v-if="store.items.length"
             class="text-right"
           >
-            {{ formatRp(store.items.map(a=>{a.subtotal}).reduce((a,b)=>a+b,0)) }}
+            {{ formatRp(store.total) }}
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
         </td>
@@ -159,7 +224,26 @@
 <script setup>
 import { formatRp } from 'src/modules/formatter'
 import { useLaporanSigarangPersediaanFifoStore } from 'src/stores/simrs/laporan/sigarang/persediaanakhir/persediaan'
+import { date } from 'quasar'
 
 const store = useLaporanSigarangPersediaanFifoStore()
 store.getInitialData()
+
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Laporan Persediaan FiFo'
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+
+}
 </script>
+<style scoped>
+.q-table td box {
+  white-space: normal !important;
+    inline-size: 100px;
+    overflow-wrap: break-word;
+}
+.q-table--no-wrap th, .q-table--no-wrap td {
+  white-space: normal !important;
+}
+</style>
