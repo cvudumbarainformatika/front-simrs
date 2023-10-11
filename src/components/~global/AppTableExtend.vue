@@ -407,6 +407,9 @@
             </td>
           </tr>
         </template>
+        <tr v-if="bottomRow">
+          <slot name="bottom-row" />
+        </tr>
       </tbody>
       <tbody v-else>
         <tr>
@@ -465,6 +468,7 @@ const props = defineProps({
   rowImage: { type: String, default: null },
   rowNo: { type: Boolean, default: false },
   topRow: { type: Boolean, default: false },
+  bottomRow: { type: Boolean, default: false },
   perPage: { type: Number, default: 12 },
   orderBy: { type: String, default: 'id' },
   sort: { type: String, default: 'desc' },

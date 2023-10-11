@@ -64,6 +64,7 @@
       :ada-filter="false"
       text-cari="Cari Nama / Kode ..."
       row-no
+      bottom-row
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -79,18 +80,84 @@
         <div>Satuan</div>
       </template>
       <template #col-qty>
-        <div>Qty</div>
+        <div class="row no-wrap justify-between">
+          <div class="q-mr-md">
+            Qty
+          </div>
+          <div class="q-mr-md">
+            Harga
+          </div>
+          <div class="q-mr-md">
+            Nilai
+          </div>
+        </div>
       </template>
-      <template #col-harga>
-        <div>Harga</div>
+      <template #cell-satuan="{row}">
+        <div>{{ row.satuan?.nama }}</div>
       </template>
-      <template #col-nilai>
-        <div>Nilai</div>
+      <template #cell-qty="{row}">
+        <div v-if="row.monthly.length">
+          <div
+            v-for="(item,i) in row.monthly"
+            :key="i"
+            class="row no-wrap justify-between q-mt-xs"
+          >
+            <div class="q-mr-md">
+              {{ item.sisa_stok }}
+            </div>
+            <div class="q-mr-md">
+              {{ formatRp( item.harga) }}
+            </div>
+            <div class="q-mr-md">
+              {{ formatRp(item.total) }}
+            </div>
+          </div>
+        </div>
+        <div v-if="row.recent.length">
+          <div
+            v-for="(item,i) in row.recent"
+            :key="i"
+            class="row no-wrap justify-between q-mt-xs"
+          >
+            <div class="q-mr-sm">
+              {{ item.sisa_stok }}
+            </div>
+            <div class="q-mr-sm">
+              {{ formatRp(item.harga) }}
+            </div>
+            <div class="q-mr-sm">
+              {{ formatRp(item.total) }}
+            </div>
+          </div>
+        </div>
+        <div
+          v-else
+          class=" row jutify-center"
+        >
+          -
+        </div>
+      </template>
+      <template #bottom-row>
+        <td colspan="3">
+          <div class="text-right">
+            Jumlah
+          </div>
+        </td>
+        <td>
+          <div
+            v-if="store.items.length"
+            class="text-right"
+          >
+            {{ formatRp(store.items.map(a=>{a.subtotal}).reduce((a,b)=>a+b,0)) }}
+            <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
+          </div>
+        </td>
       </template>
     </app-table-extend>
   </div>
 </template>
 <script setup>
+import { formatRp } from 'src/modules/formatter'
 import { useLaporanSigarangPersediaanFifoStore } from 'src/stores/simrs/laporan/sigarang/persediaanakhir/persediaan'
 
 const store = useLaporanSigarangPersediaanFifoStore()

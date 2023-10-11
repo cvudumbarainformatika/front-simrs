@@ -42,9 +42,7 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       'kode',
       'nama',
       'satuan',
-      'qty',
-      'harga',
-      'nilai'
+      'qty'
     ]
   }),
   actions: {
@@ -70,7 +68,23 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       this.getDataTable()
     },
     mapingItem(val) {
-
+      if (val.length) {
+        val.forEach(item => {
+          if (item.monthly.length) {
+            item.monthly.forEach(a => { a.total = a.sisa_stok * a.harga })
+            item.subtotal = item.monthly.map(a => a.total).reduce((a, b) => a + b, 0)
+          } else if (item.recent.length) {
+            item.recent.forEach(a => { a.total = a.sisa_stok * a.harga })
+            item.subtotal = item.recent.map(a => a.total).reduce((a, b) => a + b, 0)
+          } else {
+            item.subtotal = 0
+          }
+          if (item.stok_awal.length) {
+            item.stok_awal.forEach(a => { a.total = a.sisa_stok * a.harga })
+          }
+        })
+        this.items = val
+      }
     },
     getInitialData() {
       this.getDataTable()
@@ -81,9 +95,9 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       await api.get('v1/simrs/laporan/sigarang/lappersediaan', param)
         .then(resp => {
           this.loading = false
-          console.log('data tabel', resp.data.data)
+          console.log('data tabel', resp.data)
           this.meta = resp.data
-          this.mapingItem(resp.data.data)
+          this.mapingItem(resp.data)
         })
         .catch(() => { this.loading = false })
     }
