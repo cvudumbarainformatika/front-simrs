@@ -255,6 +255,7 @@
       v-model="printRekap"
       label="Cetak Rekap Billing"
       label-btn-ok="Print"
+      :btn-ok="false"
       @on-ok="actPrintRekap"
     >
       <template #default>
@@ -671,6 +672,25 @@
           </div>
         </div>
       </template>
+      <template #right-btn>
+        <q-btn
+          ref="refPrint"
+          v-print="printObj"
+          unelevated
+          color="primary"
+          label="Print"
+          size="md"
+          no-caps
+          @click="actPrintRekap"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print
+          </q-tooltip>
+        </q-btn>
+      </template>
     </app-dialog-mm>
   </div>
 </template>
@@ -705,8 +725,14 @@ function openFaktur(val) {
   store.getBill(par)
 }
 function actPrintRekap() {
-  console.log('act print rekap')
   printRekap.value = false
+}
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Laporan Persediaan FiFo'
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+
 }
 function getNota(val) {
   const param = {

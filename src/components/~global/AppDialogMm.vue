@@ -27,14 +27,17 @@
 
       <q-card-actions align="right">
         <app-btn
+          v-if="btnClose"
           v-close-popup
           color="dark"
           :label="labelBtnClose"
         />
         <app-btn
+          v-if="btnOk"
           :label="labelBtnOk"
           @click="emits('onOk')"
         />
+        <slot name="right-btn" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -57,6 +60,14 @@ defineProps({
   size: {
     type: String,
     default: 'xl'
+  },
+  btnOk: {
+    type: Boolean,
+    default: true
+  },
+  btnClose: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
