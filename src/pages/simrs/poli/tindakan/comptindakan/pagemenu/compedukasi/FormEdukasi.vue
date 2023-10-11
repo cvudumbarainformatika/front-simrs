@@ -64,7 +64,7 @@
                   Cara Edukasi
                 </div>
                 <div class="text-grey-8 f-10">
-                  Pasien Menggunakan Bahasa Isyarat ?
+                  Pakai Lisan Atau Tulisan ?
                 </div>
               </div>
               <div class="col-8">
@@ -114,7 +114,7 @@
                   :label="al?.kebutuhanedukasi"
                   size="sm"
                   color="primary"
-                  @update:model-value="(val) => store.setForm('kebutuhanedukasi', val.join(', '))"
+                  @update:model-value="updateSelection"
                 />
 
                 <div>
@@ -123,8 +123,28 @@
                     autogrow
                     label="Kebutuhan Edukasi"
                     readonly
+                    :rules="[val => !!val || 'Harap dipilih Kebutuhan Edukasi di atas terlebih dahulu']"
                   />
                 </div>
+              </div>
+            </div>
+            <div class="row q-col-gutter-md q-mb-sm items-center">
+              <div class="col-4">
+                <div class="text-weight-bold">
+                  Penerima Edukasi
+                </div>
+                <div class="text-grey-8 f-10">
+                  Edukasi diberikan kepada
+                </div>
+              </div>
+              <div class="col-8">
+                <q-option-group
+                  v-model="store.form.kepada"
+                  :options="opt"
+                  color="primary"
+                  inline
+                  dense
+                />
               </div>
             </div>
           </q-card-section>
@@ -134,6 +154,8 @@
               label="Simpan"
               type="submit"
               color="primary"
+              :loading="store.loadingSave"
+              :disable="store.loadingSave"
             />
           </q-card-section>
         </q-form>
@@ -144,19 +166,41 @@
 
 <script setup>
 import { useEdukasiPoliStore } from 'src/stores/simrs/pelayanan/poli/edukasi'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 
 const store = useEdukasiPoliStore()
 const optionsPerluPenerjemah = ref([{ label: 'Ya', value: 'Iya' }, { label: 'Tidak', value: 'Tidak' }])
 const optionsBahasaIsyarat = ref([{ label: 'Ya', value: 'Iya' }, { label: 'Tidak', value: 'Tidak' }])
 const optionsCaraEdukasi = ref([{ label: 'Lisan', value: 'Lisan' }, { label: 'Tulisan', value: 'Tulisan' }])
 const optionsKesediaan = ref([{ label: 'Ya', value: 'Iya' }, { label: 'Tidak', value: 'Tidak' }])
+
+const opt = computed(() => {
+  return store.mpenerimaedukasi?.map(x => {
+    const obj = {
+      label: x?.penerimaedukasi,
+      value: x?.penerimaedukasi
+    }
+    return obj
+  })
+})
+
 onMounted(() => {
   store.getMasterPenerimaEdukasi()
   store.getMasterKebutuhanEdukasi()
 })
 
+const updateSelection = (val) => {
+  store.setForm('kebutuhanedukasi', val.join(', '))
+}
+
 const onSubmit = () => {
-  console.log('okkk')
+  store.simpanEdukasi(props?.pasien)
 }
 </script>

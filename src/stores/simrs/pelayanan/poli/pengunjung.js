@@ -265,6 +265,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
+    },
+    hapusDataEdukasi(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.edukasi
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
     }
   }
 })
