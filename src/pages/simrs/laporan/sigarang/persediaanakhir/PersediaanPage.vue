@@ -110,8 +110,8 @@
           </div>
         </div>
 
-        <div class="row justify-center f-18 text-weight-bold q-my-sm">
-          Laporan Persediaan FiFo {{ date.formatDate(store.params.bulan+'-'+store.params.tahus,'MMMM YYYY') }}
+        <div class="row justify-center f-16 text-weight-bold q-my-sm">
+          Laporan Persediaan FiFo periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
         </div>
         <!-- <div class="row ">
               <div>  REKAP DATA PASIEN DI RR TAHUN {{ date.formatDate(store.params.to,'YYYY') }}</div>
