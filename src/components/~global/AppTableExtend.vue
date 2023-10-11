@@ -2,6 +2,7 @@
   <div class="app-table f-12">
     <!-- title option table -->
     <div class="print-only">
+      <!-- <div class=""> -->
       <slot
         name="header-for-print"
       />
