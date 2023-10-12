@@ -178,7 +178,7 @@
         </div>
       </template>
       <template #cell-satuan="{row}">
-        <div>{{ row.satuan?.nama }}</div>
+        <div>{{ row.satuan }}</div>
       </template>
       <template #cell-tanggal="{row}">
         <div>{{ dateFullFormat(row.tanggal) }}</div>
