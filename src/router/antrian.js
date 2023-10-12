@@ -5,7 +5,7 @@ const antrian =
     component: () => import('layouts/V2/IndexLayout.vue'),
     meta: { requireAuth: true },
     children: [
-      // { path: '', redirect: '/pegawai/dashboard' },
+      { path: '', redirect: '/antrian/master' },
       { path: '', name: 'antrian', redirect: '/antrian/dashboard' },
       {
         path: '/antrian/dashboard',

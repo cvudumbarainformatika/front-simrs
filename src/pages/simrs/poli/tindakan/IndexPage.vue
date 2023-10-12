@@ -62,7 +62,18 @@
 
         <!-- CONTAINER ============================================================================================-->
         <q-page-container>
-          <q-page class="contain bg-grey-3">
+          <q-page
+            class="contain bg-grey-3"
+          >
+            <div
+              v-if="pasien?.dokter===''"
+              class="column full-height flex-center absolute-center z-top full-width"
+              style="background-color: black; opacity: .9;"
+            >
+              <div class="text-white">
+                Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
+              </div>
+            </div>
             <component
               :is="menu.comp"
               :key="pasien"
@@ -70,6 +81,15 @@
             />
           </q-page>
         </q-page-container>
+        <!-- <q-page-container
+          v-else
+        >
+          <q-page
+            class="contain bg-grey-3"
+          >
+            {{ pasien }}
+          </q-page>
+        </q-page-container> -->
       </q-layout>
     </q-card>
   </q-dialog>

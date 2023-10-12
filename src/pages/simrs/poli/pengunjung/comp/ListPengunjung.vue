@@ -59,11 +59,19 @@
             <q-item-label>
               Tanggal : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
             </q-item-label>
-            <!-- <q-item-label
+            <q-item-label
               caption
             >
-              status : <span :class="getStatus(item.status)?'text-accent':'text-negative'">{{ getStatus(item.status)?'SUDAH DILAYANI':'BELUM DILAYANI' }}</span>
-            </q-item-label> -->
+              <q-badge
+                v-if="item?.sep"
+                :label="item?.sep"
+              />
+              <q-badge
+                v-else
+                label="SEP BELUM TERBIT"
+                color="negative"
+              />
+            </q-item-label>
           </q-item-section>
           <q-item-section
             side

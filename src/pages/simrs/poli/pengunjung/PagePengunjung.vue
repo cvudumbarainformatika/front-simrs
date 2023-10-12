@@ -70,6 +70,7 @@ import BottomComp from './comp/BottomComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
 // import PageTindakan from './comp/PageTindakan.vue'
 import PageTindakan from '../tindakan/IndexPage.vue'
+import { useQuasar } from 'quasar'
 
 const style = useStyledStore()
 const store = usePengunjungPoliStore()
@@ -78,6 +79,8 @@ const pasien = ref(null)
 
 // const txt = ref('SEMUA')
 // const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
+
+const $q = useQuasar()
 onMounted(() => {
   store.getData()
   diagnosa.getDiagnosaDropdown()
@@ -85,6 +88,38 @@ onMounted(() => {
 })
 
 function bukaTindakan(val) {
+  console.log('buka tindakan', val)
+  if (!val?.sep) {
+    $q.notify({
+      type: 'negative',
+      title: 'Peringatan',
+      message: 'INFO WARNING <b/> MAAF, <em><b>Pasien Ini Belum terbit SEP</b></em>',
+      // color: 'primary',
+      html: true,
+      // multiLine: true,
+      avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+      // position: 'center',
+      timeout: 1000
+      // actions: [
+      //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
+      // ]
+    })
+
+    // $q.dialog({
+    //   title: 'Peringatan',
+    //   message: 'Apakah Data ini akan dihapus?',
+    //   color: 'negative'
+    // }).onOk(() => {
+    // // console.log('OK')
+    // // store.deleteData(props.pasien, id)
+    // }).onCancel(() => {
+    // // console.log('Cancel')
+    // }).onDismiss(() => {
+    // // console.log('I am triggered on both OK and Cancel')
+    // })
+
+    return
+  }
   pasien.value = val
   store.togglePageTindakan()
   console.log('pasien', pasien.value)
