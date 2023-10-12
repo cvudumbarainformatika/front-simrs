@@ -31,6 +31,7 @@
           v-close-popup
           color="dark"
           :label="labelBtnClose"
+          @click="emits('onClose')"
         />
         <app-btn
           v-if="btnOk"
@@ -43,7 +44,7 @@
   </q-dialog>
 </template>
 <script setup>
-const emits = defineEmits(['onOk'])
+const emits = defineEmits(['onOk', 'onClose'])
 defineProps({
   label: {
     type: String,

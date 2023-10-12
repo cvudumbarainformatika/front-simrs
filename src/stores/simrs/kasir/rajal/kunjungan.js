@@ -14,6 +14,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       order_by: 'id',
       tgl: dateDbFormat(new Date())
     },
+    golongan: '',
     loading: false,
     rekapBill: {},
     notas: {}
@@ -83,6 +84,20 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
         this.loading = false
       }
       this.loading = false
+    },
+    savePembayaran(payload) {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('/v1/simrs/kasir/rajal/pembayaran', payload)
+          .then(resp => {
+            this.loading = false
+            console.log('resp', resp.data)
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     }
   }
 })

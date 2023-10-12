@@ -37,7 +37,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -48,7 +48,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -59,7 +59,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -70,7 +70,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -81,7 +81,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -92,7 +92,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -103,7 +103,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -114,7 +114,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -188,8 +188,11 @@
                 <div class="col-12">
                   <!-- belum dibayar -->
                   <div class="">
-                    <!-- header -->
-                    <div class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
+                    <!-- header default-->
+                    <div
+                      v-if="store.golongan===''"
+                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
+                    >
                       <div class="col-3">
                         <div class="row no-wrap">
                           <div class="col-2">
@@ -220,6 +223,31 @@
                         #
                       </div>
                     </div>
+                    <!-- header karcis -->
+                    <div
+                      v-if="store.golongan==='karcis'"
+                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
+                    >
+                      <div class="col-1">
+                        No
+                      </div>
+                      <div class="col-3">
+                        Nama Layanan
+                      </div>
+                      <div class="col-6">
+                        <div class="row no-wrap">
+                          <div class="col-6 text-right">
+                            Jumlah
+                          </div>
+                          <div class="col-6 text-right">
+                            Batal
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="col-2 text-center">
+                        #
+                      </div> -->
+                    </div>
                     <div v-if="store.notas.Pelayanan">
                       <!-- child -->
                       <!-- {{ store.notas }} -->
@@ -228,23 +256,13 @@
                         :key="i"
                         class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs"
                       >
-                        <div class="col-3">
-                          <div class="row no-wrap">
-                            <div class="col-2">
-                              {{ i + 1 }}
-                            </div>
-                            <div class="col-10">
-                              {{ pel.namatindakan }}
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-2">
-                          Pembayaran : Tunai / Va/ Qris
-                        </div>
-                        <div class="col-2">
-                          Tanggal trx
+                        <div class="col-1">
+                          {{ i + 1 }}
                         </div>
                         <div class="col-3">
+                          {{ pel.namatindakan }}
+                        </div>
+                        <div class="col-6">
                           <div class="row no-wrap">
                             <div class="col-6 text-right">
                               Rp {{ formatRp(pel.subtotal) }}
@@ -270,10 +288,10 @@
                         <div class="col-3">
                           <div class="row no-wrap">
                             <div class="col-6 text-right">
-                              {{ formatRp(store.notas.Subtotal) }}
+                              Rp  {{ formatRp(store.notas.Subtotal) }}
                             </div>
                             <div class="col-6 text-right">
-                              0
+                              Rp 0
                             </div>
                           </div>
                         </div>
@@ -281,13 +299,17 @@
                           <!-- # -->
                         </div>
                       </div>
-                      <div class="row no-wrap">
+                      <!-- button -->
+                      <div class="q-ml-sm row no-wrap items-center q-my-md">
                         <div class="q-mr-xs">
                           <app-btn
                             label="Buat Qris"
                             color="blue"
                             push
                             dense
+                            :loading="store.loading && carabayar==='qris'"
+                            :disable="store.loading"
+                            @click="buatQris"
                           />
                         </div>
                         <div class="q-mr-xs">
@@ -296,6 +318,9 @@
                             color="green"
                             push
                             dense
+                            :loading="store.loading && carabayar==='tunai'"
+                            :disable="store.loading"
+                            @click="bayarTunai"
                           />
                         </div>
                         <div class="q-mr-xs">
@@ -304,6 +329,9 @@
                             color="lime-7"
                             push
                             dense
+                            :loading="store.loading && carabayar==='va'"
+                            :disable="store.loading"
+                            @click="buatVA"
                           />
                         </div>
                         <div class="q-mr-xs">
@@ -312,6 +340,9 @@
                             color="grey-7"
                             push
                             dense
+                            :loading="store.loading && carabayar==='batal'"
+                            :disable="store.loading"
+                            @click="batal"
                           />
                         </div>
                         <div class="q-mr-xs">
@@ -320,6 +351,9 @@
                             color="blue-grey-7"
                             push
                             dense
+                            :loading="store.loading && carabayar==='cetak'"
+                            :disable="store.loading"
+                            @click="cetak"
                           />
                         </div>
                       </div>
@@ -442,23 +476,19 @@
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
 import { ref } from 'vue'
-defineProps({
+const prop = defineProps({
   pasien: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['print', 'rekap', 'nota'])
+const emits = defineEmits([
+  'print',
+  'rekap',
+  'nota'
+])
 const tab = ref('trans')
 function goTo(val) {
   tab.value = val
 }
 const store = useKasirRajalListKunjunganStore()
-// const nota = ref('')
-// const options = ref([
-//   { nota: '-' },
-//   { nota: 'kldksjal' },
-//   { nota: 'sdasda' },
-//   { nota: 'sdasdawwwa' }
-// ])
-// const choice = ref('-')
 
 function cetakFakturRekap(val) {
   // nota.value = ' Tindakan'
@@ -466,44 +496,56 @@ function cetakFakturRekap(val) {
   console.log('cetak faktur', val)
 }
 
-const dataNotas = ref('')
+// const dataNotas = ref('')
 function gantiDataNota(val) {
   // console.log('radio', val)
   emits('nota', val)
 }
-// function cetakTindakan() {
-//   nota.value = ' Tindakan'
-//   emits('print', { value: 'Tindakan' })
-//   console.log('cetak Tindakan')
-// }
-// function cetakLaboratorium() {
-//   nota.value = ' Laboratorium'
-//   emits('print')
-//   console.log('cetak Laboratorium')
-// }
-// function cetakRadiologi() {
-//   nota.value = ' Radiologi'
-//   emits('print')
-//   console.log('cetak Radiologi')
-// }
-// function cetakFarmasi() {
-//   nota.value = ' Farmasi'
-//   emits('print')
-//   console.log('cetak Farmasi')
-// }
-// function cetakOperasiBesar() {
-//   nota.value = ' Tindakan'
-//   emits('print')
-//   console.log('cetak Operasi Tindakan Besar')
-// }
-// function cetakOperasiKecil() {
-//   nota.value = ' Tindakan Operasi'
-//   emits('print')
-//   console.log('cetak Operasi Tindakan Kecil')
-// }
-// function cetakSharingBPJS() {
-//   nota.value = ' Sharing'
-//   emits('print')
-//   console.log('cetak Sharing BPJS')
-// }
+const carabayar = ref('')
+function buatQris() {
+  console.log('buat qris')
+}
+function bayarTunai() {
+  carabayar.value = 'tunai'
+  console.log('bayar tunai')
+  let rinci = ''
+  if (store.notas?.Pelayanan.length) {
+    console.log('nota pelayanan')
+    store.notas.Pelayanan.forEach(a => {
+      const b = a.namatindakan + ':' + a.subtotal
+      rinci += ',' + b
+    })
+    console.log(rinci)
+    const form = {
+      noreg: prop.pasien.noreg,
+      norm: prop.pasien.norm,
+      tgl_kunjungan: prop.pasien.tgl_kunjungan,
+      nama: prop.pasien.nama,
+      sapaan: prop.pasien.sapaan,
+      kelamin: prop.pasien.kelamin,
+      poli: prop.pasien.poli,
+      sistembayar: prop.pasien.sistembayar,
+      total: store.notas.Subtotal,
+      rinci,
+      kodepoli: prop.pasien.kodepoli,
+      groupssistembayar: prop.pasien.groupssistembayar,
+      jenispembayaran: store.golongan
+    }
+    console.log('form', form)
+    store.savePembayaran(form).then(() => {
+      emits('print', 'Kwitansi Tunai')
+    })
+  }
+}
+function buatVA() {
+  emits('print', 'Cetak VA')
+  console.log('buat VA')
+}
+function batal() {
+  console.log('buat VA')
+}
+function cetak() {
+  console.log('buat VA')
+}
+
 </script>
