@@ -4,7 +4,7 @@
       class="row bg-primary text-white q-pa-sm q-mb-sm"
     >
       <div class="f-14 text-weight-bold">
-        Laporan Persediaan (FIFO)
+        Laporan Penerimaan Gudang
       </div>
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
@@ -113,7 +113,10 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Persediaan FiFo periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+          Laporan Penerimaan Gudang
+        </div>
+        <div class="row justify-center f-12 text-weight-bold q-my-sm">
+          Periode {{ date.formatDate((store.params.from ),'DD MMMM YYYY') }} - {{ date.formatDate((store.params.to ),'DD MMMM YYYY') }}
         </div>
       </template>
       <template #header-right-before>
@@ -222,10 +225,10 @@
 </template>
 <script setup>
 import { formatRp } from 'src/modules/formatter'
-import { useLaporanSigarangPersediaanFifoStore } from 'src/stores/simrs/laporan/sigarang/persediaanakhir/persediaan'
+import { useLaporanSigarangPenerimaanGudangStore } from 'src/stores/simrs/laporan/sigarang/penerimaangudang/penerimaangudang'
 import { date } from 'quasar'
 
-const store = useLaporanSigarangPersediaanFifoStore()
+const store = useLaporanSigarangPenerimaanGudangStore()
 store.getInitialData()
 
 const printObj = {
