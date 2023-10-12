@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
-    <div class="row bg-grey-4 q-pa-sm q-mb-sm">
-      <div class="f-14 text-weight-bold">
+    <div class="row bg-primary q-pa-sm q-mb-sm">
+      <div class="f-14 text-white text-weight-bold">
         Laporan Penerimaan Simperda 108
       </div>
     </div>

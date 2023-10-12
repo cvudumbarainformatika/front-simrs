@@ -7,6 +7,49 @@
         Laporan Penerimaan Gudang
       </div>
     </div>
+    <div class="row items-center garis-bawah">
+      <div class="col-2">
+        <q-img
+          src="~assets/images/logo-kota-grey.png"
+          spinner-color="white"
+          style="height: 3.56cm; max-width: 2.86cm"
+        />
+      </div>
+      <div class="col-8">
+        <div class="row justify-center text-center f-18">
+          PEMERINTAH KOTA PROBOLINGGO
+        </div>
+        <div class="row justify-center text-center f-12 text-weight-bold">
+          DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
+        </div>
+        <div class="row justify-center text-center f-20 text-weight-bold">
+          UOBK RSUD DOKTER MOHAMAD SALEH
+        </div>
+        <div class="row justify-center text-center f-12">
+          Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
+        </div>
+        <div class="row justify-center text-center f-14">
+          E-mail : rsudprob@probolinggokota.go.id
+        </div>
+        <div class="row justify-center text-center f-14 text-weight-bold">
+          PROBOLINGGO  67219
+        </div>
+      </div>
+      <div class="col-2">
+        <q-img
+          src="~assets/logos/logo-rsud.png"
+          spinner-color="white"
+          style="height: 3cm; max-width: 3cm"
+        />
+      </div>
+    </div>
+
+    <div class="row justify-center f-16 text-weight-bold q-my-sm">
+      Laporan Penerimaan Gudang
+    </div>
+    <div class="row justify-center f-12 text-weight-bold q-my-sm">
+      Periode {{ store.display.from + ' - ' + store.display.to }}
+    </div>
     <div class="row q-col-gutter-sm q-my-sm">
       <div class="col-2">
         <app-input-date-human
@@ -81,22 +124,22 @@
             />
           </div>
           <div class="col-8">
-            <div class="row justify-center f-18">
+            <div class="row justify-center text-center f-18">
               PEMERINTAH KOTA PROBOLINGGO
             </div>
-            <div class="row justify-center f-12 text-weight-bold">
+            <div class="row justify-center text-center f-12 text-weight-bold">
               DINAS KESEHATAN, PENGENDALIAN PENDUDUK, DAN KELUARGA BERENCANA
             </div>
-            <div class="row justify-center f-20 text-weight-bold">
+            <div class="row justify-center text-center f-20 text-weight-bold">
               UOBK RSUD DOKTER MOHAMAD SALEH
             </div>
-            <div class="row justify-center f-14">
+            <div class="row justify-center text-center f-12">
               Jl. Mayjen Panjaitan No.65 Telp.(0335) 433119, 42118 Fax (0335) 432702
             </div>
-            <div class="row justify-center f-14">
+            <div class="row justify-center text-center f-14">
               E-mail : rsudprob@probolinggokota.go.id
             </div>
-            <div class="row justify-center f-14 text-weight-bold">
+            <div class="row justify-center text-center f-14 text-weight-bold">
               PROBOLINGGO  67219
             </div>
           </div>
@@ -217,15 +260,15 @@
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="12">
-          <div class="text-right">
+        <td colspan="11">
+          <div class="text-right f-12">
             Jumlah
           </div>
         </td>
         <td>
           <div
             v-if="store.items.length"
-            class="text-right"
+            class="text-right f-12"
           >
             {{ formatRp(store.total) }}
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->

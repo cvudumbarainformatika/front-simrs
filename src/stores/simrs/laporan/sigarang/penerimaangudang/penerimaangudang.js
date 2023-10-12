@@ -23,7 +23,7 @@ export const useLaporanSigarangPenerimaanGudangStore = defineStore('laporan_siga
     gudangs: [{ nama: 'Gudang Habis Pakai', value: 'Gd-02010100' }],
     columns: [
       'tanggal',
-      'no_penerimaan',
+      // 'no_penerimaan',
       'surat_jalan',
       'faktur',
       'perusahaan',

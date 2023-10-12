@@ -1,9 +1,9 @@
 <template>
-  <div class="q-pa-sm">
+  <div class="q-pa-sm bg-white">
     <div
-      class="row bg-grey-4 q-pa-sm q-mb-sm"
+      class="row bg-primary q-pa-sm q-mb-sm"
     >
-      <div class="f-14 text-weight-bold">
+      <div class="f-14 text-white text-weight-bold">
         Laporan Penerimaan Simperda Rinci
       </div>
     </div>
