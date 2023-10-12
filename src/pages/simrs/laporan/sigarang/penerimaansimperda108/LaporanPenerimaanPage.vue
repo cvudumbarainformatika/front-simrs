@@ -323,4 +323,48 @@ store.getInitialData()
 .garis-kanan-tipis {
   border-right: 1px solid black;
 }
+$fs : 9px;
+.app-table {
+  width: 100%; /* print width */
+  font-size:$fs;
+
+  .q-table td {
+    padding-left: 10px;
+    font-size: $fs;
+  }
+  .q-table th {
+    padding-left: 10px;
+    font-size: $fs;
+  }
+}
+
+@media print {
+  .app-table {
+    width: 100%; /* print width */
+    font-size:$fs;
+
+    .q-table {
+        max-width: 100% !important;
+      }
+    .q-table td {
+      padding: 2px;
+      font-size: $fs;
+        white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+    .q-table th {
+      padding:2px;
+      font-size:$fs;
+      white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+
+    .screenwide{
+      max-width: 100% !important;
+    }
+  }
+}
+
 </style>

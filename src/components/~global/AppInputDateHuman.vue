@@ -146,7 +146,7 @@ const modelProp = computed({
     emits('setModel', newTgl)
     emits('setDisplay', val)
     emits('dbModel', date.formatDate(newTgl, 'YYYY-MM-DD'))
-    console.log('app input date', date.formatDate(newTgl, 'YYYY-MM-DD'))
+    // console.log('app input date', date.formatDate(newTgl, 'YYYY-MM-DD'))
   }
 })
 // const modelProp = toRef(props, 'model')// react to ref

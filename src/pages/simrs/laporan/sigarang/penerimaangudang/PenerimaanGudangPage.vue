@@ -9,23 +9,21 @@
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
       <div class="col-2">
-        <app-autocomplete
-          v-model="store.params.bulan"
-          label="Pilih Bulan"
-          autocomplete="nama"
-          option-label="nama"
-          option-value="value"
+        <app-input-date-human
+          :model="store.display.from"
+          label="Dari tanggal"
           outlined
-          :source="store.bulans"
-          :loading="store.loading"
+          @db-model="setDari"
+          @set-display="setDispDari"
         />
       </div>
       <div class="col-2">
-        <app-input
-          v-model="store.params.tahun"
-          label="Tahun"
+        <app-input-date-human
+          :model="store.display.to"
+          label="Sampai tanggal"
           outlined
-          :loading="store.loading"
+          @db-model="setKe"
+          @set-display="setDispKe"
         />
       </div>
     </div>
@@ -33,7 +31,8 @@
       <div class="col-4">
         <app-autocomplete
           v-model="store.params.kode_ruang"
-          label="Pilih Gudang / Depo"
+          label="Gudang "
+          readonly
           autocomplete="nama"
           option-label="nama"
           option-value="value"
@@ -63,9 +62,7 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
-      :ada-paginasi="false"
-      :ada-per-page="false"
-      text-cari="Cari Nama / Kode ..."
+      text-cari="Cari Nama barang..."
       row-no
       bottom-row
       tanda-tangan
@@ -116,7 +113,7 @@
           Laporan Penerimaan Gudang
         </div>
         <div class="row justify-center f-12 text-weight-bold q-my-sm">
-          Periode {{ date.formatDate((store.params.from ),'DD MMMM YYYY') }} - {{ date.formatDate((store.params.to ),'DD MMMM YYYY') }}
+          Periode {{ store.display.from + ' - ' + store.display.to }}
         </div>
       </template>
       <template #header-right-before>
@@ -137,75 +134,90 @@
           </q-tooltip>
         </q-btn>
       </template>
-      <template #col-kode>
+      <template #col-tanggal>
+        <div>Tanggal</div>
+      </template>
+      <template #col-no_penerimaan>
+        <div>Nomor Penerimaan</div>
+      </template>
+      <template #col-satuan>
+        <div>Satuan</div>
+      </template>
+      <template #col-surat_jalan>
+        <div>Surat Jalan</div>
+      </template>
+      <template #col-faktur>
+        <div>Faktur</div>
+      </template>
+      <template #col-perusahaan>
+        <div>Penyedia</div>
+      </template>
+      <template #col-kode_rs>
         <div>Kode</div>
       </template>
       <template #col-nama>
         <div>Nama</div>
       </template>
-      <template #col-satuan>
-        <div>Satuan</div>
+      <template #col-harga>
+        <div class="row">
+          Harga
+        </div>
+        <div class="row no-wrap f-6 text-italic">
+          (+) diskon dan ppn
+        </div>
+      </template>
+      <template #col-sub_total>
+        <div>Nilai</div>
+      </template>
+      <template #col-status>
+        <div>Status</div>
       </template>
       <template #col-qty>
-        <div class="row no-wrap q-col-gutter-md">
-          <div class="col-4">
-            Qty
-          </div>
-          <div class="col-4 q-mx-md">
-            Harga
-          </div>
-          <div class="col-4">
-            Nilai
-          </div>
+        <div>
+          Qty
         </div>
       </template>
       <template #cell-satuan="{row}">
         <div>{{ row.satuan?.nama }}</div>
       </template>
-      <template #cell-qty="{row}">
-        <div v-if="row.monthly.length">
-          <div
-            v-for="(item,i) in row.monthly"
-            :key="i"
-            class="row no-wrap q-col-gutter-md"
-          >
-            <div class="col-4">
-              {{ item.totalStok }}
-            </div>
-            <div class="col-4 text-right">
-              {{ formatRp( item.harga) }}
-            </div>
-            <div class="col-4 text-right">
-              {{ formatRp(item.total) }}
-            </div>
-          </div>
+      <template #cell-tanggal="{row}">
+        <div>{{ dateFullFormat(row.tanggal) }}</div>
+      </template>
+      <template #cell-sub_total="{row}">
+        <div v-if="row.harga>0">
+          {{ formatRp(row.sub_total) }}
         </div>
-        <div v-else-if="row.recent.length">
-          <div
-            v-for="(item,i) in row.recent"
-            :key="i"
-            class="row no-wrap q-col-gutter-md"
-          >
-            <div class="col-4">
-              {{ item.totalStok }}
-            </div>
-            <div class="col-4 text-right">
-              {{ formatRp(item.harga) }}
-            </div>
-            <div class="col-4 text-right">
-              {{ formatRp(item.total) }}
-            </div>
-          </div>
+        <div v-else>
+          belum bast
+        </div>
+      </template>
+      <template #cell-perusahaan="{row}">
+        <div>
+          {{ row.perusahaan?.nama ?? '-' }}
+        </div>
+      </template>
+      <template #cell-status="{row}">
+        <div
+          v-if="row.status<=1"
+          class="text-negative text-weight-bold"
+        >
+          Belum Diterima gudang
         </div>
         <div
-          v-else
-          class=" row jutify-center"
+          v-if="row.status>=2 && row.sisa_stok > 0"
+          class="text-deep-orange text-weight-bold"
         >
-          -
+          Sudah di Gudang
+        </div>
+        <div
+          v-if="row.status>=2 && row.sisa_stok <= 0"
+          class="text-green"
+        >
+          Sudah di distribusikan
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="4">
+        <td colspan="12">
           <div class="text-right">
             Jumlah
           </div>
@@ -224,13 +236,24 @@
   </div>
 </template>
 <script setup>
-import { formatRp } from 'src/modules/formatter'
+import { formatRp, dateFullFormat } from 'src/modules/formatter'
 import { useLaporanSigarangPenerimaanGudangStore } from 'src/stores/simrs/laporan/sigarang/penerimaangudang/penerimaangudang'
-import { date } from 'quasar'
 
 const store = useLaporanSigarangPenerimaanGudangStore()
 store.getInitialData()
 
+function setDari(val) {
+  store.setParams('from', val)
+}
+function setDispDari(val) {
+  store.display.from = val
+}
+function setKe(val) {
+  store.setParams('to', val)
+}
+function setDispKe(val) {
+  store.display.to = val
+}
 const printObj = {
   id: 'printMe',
   popTitle: 'Laporan Persediaan FiFo'
@@ -239,13 +262,49 @@ const printObj = {
 
 }
 </script>
-<style scoped>
-.q-table td box {
-  white-space: normal !important;
-    inline-size: 100px;
-    overflow-wrap: break-word;
+<style lang="scss" scoped>
+$fs : 9px;
+.app-table {
+  width: 100%; /* print width */
+  font-size:$fs;
+
+  .q-table td {
+    padding-left: 10px;
+    font-size: $fs;
+  }
+  .q-table th {
+    padding-left: 10px;
+    font-size: $fs;
+  }
 }
-.q-table--no-wrap th, .q-table--no-wrap td {
-  white-space: normal !important;
+
+@media print {
+  .app-table {
+    width: 100%; /* print width */
+    font-size:$fs;
+
+    .q-table {
+        max-width: 100% !important;
+      }
+    .q-table td {
+      padding: 2px;
+      font-size: $fs;
+       white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+    .q-table th {
+      padding:2px;
+      font-size:$fs;
+      white-space: normal !important;
+        word-wrap: normal !important;
+        hyphens: manual;
+    }
+
+    .screenwide{
+      max-width: 100% !important;
+    }
+  }
 }
+
 </style>
