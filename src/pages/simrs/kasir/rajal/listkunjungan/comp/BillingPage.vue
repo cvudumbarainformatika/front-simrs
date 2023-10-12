@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-2 ">
         <div class="row">
-          <div class="q-pa-md ">
+          <div class="col-12 q-pa-xs bg-grey-4">
             <app-avatar-pasien
               :key="pasien"
               :pasien="pasien"
@@ -12,23 +12,32 @@
             <div class="text-weight-bold f-12 q-mt-sm">
               {{ pasien ? pasien.nama : '-' }}
             </div>
-            <!-- <div class="text-weight-bold">
-          {{ pasien ? pasien.norm : '-' }}
-        </div> -->
             <div class="text-teal">
-              {{ pasien ? pasien.noreg : '-' }} || {{ pasien?.norm??'-' }}
+              {{ pasien?.norm??'-' }}
+            </div>
+            <div class="text-teal">
+              {{ pasien ? pasien.noreg : '-' }}
+            </div>
+            <div class="text-purple text-weight-bold">
+              {{ pasien?.poli??'-' }}
+            </div>
+            <div class="text-green ">
+              {{ dateFullFormat(pasien?.tgl_kunjungan)??'-' }}
+            </div>
+            <div class="text-orange text-weight-bold">
+              {{ pasien?.dokter??'-' }}
             </div>
             <!-- <div> {{ pasien?.kodesistembayar?? '-' }}</div> -->
           </div>
         </div>
-        <div class="row no-wrap bg-grey q-pa-xs items-center">
-          <div class="f-12 text-weight-bold q-mr-sm">
+        <div class="row no-wrap bg-primary text-white q-pa-xs items-center">
+          <div class="f-12 text-weight-bold">
             Pilih
           </div>
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -39,7 +48,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -50,7 +59,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -61,7 +70,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -72,7 +81,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -83,7 +92,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -94,7 +103,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -105,7 +114,7 @@
         </div>
         <div class="row no-wrap q-ma-xs">
           <q-radio
-            v-model="dataNotas"
+            v-model="store.golongan"
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
@@ -134,414 +143,241 @@
           </q-btn>
         </div>
       </div>
-      <div class="col-10 ">
-        a
-      </div>
-    </div>
-    <div
-      class="row bg-grey q-pa-xs"
-    >
-      <div class="f-16 text-weight-bold">
-        Informasi pasien
-      </div>
-    </div>
-    <div class="row no-wrap q-py-xs">
-      <div class="col-6">
-        <div class="row no-wrap ">
-          <div class="col-3">
-            No Rm
-          </div>
-          <div class="col-9">
-            {{ pasien.norm }}
-          </div>
+      <div class="col-10">
+        <div class="row items-center justify-end bg-primary ">
+          <q-btn-group outline>
+            <q-btn
+              :outline="tab !== 'trans'"
+              glossy
+              push
+              color="cyan"
+              label="Billing"
+              size="md"
+              @click="goTo('trans')"
+            />
+            <q-btn
+              :outline="tab !== 'list'"
+              glossy
+              push
+              color="green"
+              label="List Dibayar"
+              size="md"
+              @click="goTo('list')"
+            />
+          </q-btn-group>
         </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Nama
-          </div>
-          <div class="col-9">
-            {{ pasien.nama }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Kelamin
-          </div>
-          <div class="col-9">
-            {{ pasien.kelamin }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Alamat
-          </div>
-          <div class="col-9">
-            {{ pasien.alamat }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Tgl Masuk
-          </div>
-          <div class="col-9">
-            {{ dateFullFormat( pasien.tgl_kunjungan) }}
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="row no-wrap ">
-          <div class="col-3">
-            No Reg
-          </div>
-          <div class="col-9">
-            {{ pasien.rs1 }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Tgl Lahir
-          </div>
-          <div class="col-9">
-            {{ dateFullFormat( pasien.tgllahir) }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Ruang
-          </div>
-          <div class="col-9">
-            {{ pasien.poli }}
-          </div>
-        </div>
-        <div class="row no-wrap ">
-          <div class="col-3">
-            Sistem Bayar
-          </div>
-          <div class="col-9">
-            {{ pasien.sistembayar }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <q-separator />
-    <!-- <div
-      class="row bg-cyan q-pa-xs"
-    >
-      <div class="f-14 text-weight-bold">
-        Billing
-      </div>
-    </div> -->
-    <div class="row items-center justify-end q-mt-sm">
-      <q-btn-group outline>
-        <q-btn
-          :outline="tab !== 'trans'"
-          glossy
-          push
-          color="cyan"
-          label="Billing"
-          size="md"
-          @click="goTo('trans')"
-        />
-        <q-btn
-          :outline="tab !== 'list'"
-          glossy
-          push
-          color="green"
-          label="List Dibayar"
-          size="md"
-          @click="goTo('list')"
-        />
-      </q-btn-group>
-    </div>
-    <q-tab-panels
-      v-model="tab"
-      animated
-    >
-      <q-tab-panel name="trans">
-        <div class="row no-wrap q-pt-sm">
-          <div class="col-2">
-            <div class="row no-wrap bg-grey q-pa-xs items-center">
-              <div class="f-12 text-weight-bold q-mr-sm">
-                Pilih
-              </div>
-            </div>
-          </div>
-          <div class="col-10">
-            <div class="q-ml-xs row no-wrap bg-grey q-pa-xs q-pt-sm">
-              <div class="f-12 text-weight-bold">
-                Pembayaran
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row no-wrap q-pt-sm">
-          <div class="col-2">
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="karcis"
-                label="Karcis"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="tindakan"
-                label="Tindakan"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="laboratorium"
-                label="Laboratorium"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="radiologi"
-                label="Radiologi"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="farmasi"
-                label="Farmasi"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="operasi besar"
-                label="Operasi (Tindakan Besar)"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="operasi kecil"
-                label="Operasi (Tindakan Kecil)"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs">
-              <q-radio
-                v-model="dataNotas"
-                dense
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="sharing bpjs"
-                label="Sharing BPJS"
-                @update:model-value="gantiDataNota"
-              />
-            </div>
-            <div class="row no-wrap q-ma-xs q-mt-md">
-              <q-btn
-                class="col-12"
-                dense
-                size="12px"
-                label="Cetak Rekap Billing"
-                color="primary"
-                no-caps
-                push
-                @click="cetakFakturRekap(pasien)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Cetak Faktur Rekap
-                </q-tooltip>
-              </q-btn>
-            </div>
-          </div>
-          <div class="col-10">
-            <!-- belum dibayar -->
-            <div class="q-py-md">
-              <!-- header -->
-              <div class="q-ml-xs row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
-                <div class="col-3">
-                  <div class="row no-wrap">
-                    <div class="col-2">
-                      No
-                    </div>
-                    <div class="col-10">
-                      No Kwitansi
+        <div>
+          <q-tab-panels
+            v-model="tab"
+            animated
+          >
+            <q-tab-panel
+              style="padding:0px;"
+              name="trans"
+            >
+              <div class="row no-wrap q-pt-sm">
+                <div class="col-12">
+                  <div class="row no-wrap bg-primary text-white q-py-sm">
+                    <div class="f-12 text-weight-bold q-px-sm">
+                      Pembayaran
                     </div>
                   </div>
                 </div>
-                <div class="col-2">
-                  Pembayaran
-                </div>
-                <div class="col-2">
-                  Tanggal
-                </div>
-                <div class="col-3">
-                  <div class="row no-wrap">
-                    <div class="col-6 text-right">
-                      Jumlah
-                    </div>
-                    <div class="col-6 text-right">
-                      Batal
-                    </div>
-                  </div>
-                </div>
-                <div class="col-2 text-center">
-                  #
-                </div>
               </div>
-              <div v-if="store.notas.Pelayanan">
-                <!-- child -->
-                <!-- {{ store.notas }} -->
-                <div
-                  v-for="(pel,i) in store.notas.Pelayanan"
-                  :key="i"
-                  class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs"
-                >
-                  <div class="col-3">
-                    <div class="row no-wrap">
+              <div class="row no-wrap q-pt-sm">
+                <div class="col-12">
+                  <!-- belum dibayar -->
+                  <div class="">
+                    <!-- header default-->
+                    <div
+                      v-if="store.golongan===''"
+                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
+                    >
+                      <div class="col-3">
+                        <div class="row no-wrap">
+                          <div class="col-2">
+                            No
+                          </div>
+                          <div class="col-10">
+                            No Kwitansi
+                          </div>
+                        </div>
+                      </div>
                       <div class="col-2">
-                        {{ i + 1 }}
+                        Pembayaran
                       </div>
-                      <div class="col-10">
-                        {{ pel.namatindakan }}
+                      <div class="col-2">
+                        Tanggal
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    Pembayaran : Tunai / Va/ Qris
-                  </div>
-                  <div class="col-2">
-                    Tanggal trx
-                  </div>
-                  <div class="col-3">
-                    <div class="row no-wrap">
-                      <div class="col-6 text-right">
-                        Rp {{ formatRp(pel.subtotal) }}
+                      <div class="col-3">
+                        <div class="row no-wrap">
+                          <div class="col-6 text-right">
+                            Jumlah
+                          </div>
+                          <div class="col-6 text-right">
+                            Batal
+                          </div>
+                        </div>
                       </div>
-                      <div class="col-6 text-right">
-                        0
+                      <div class="col-2 text-center">
+                        #
                       </div>
                     </div>
-                  </div>
-                  <div class="col-2 text-right">
-                    <div class="q-mr-xs">
-                      <app-btn
-                        label="Buat Qris"
-                        color="blue"
-                        push
-                        dense
-                      />
-                    </div>
-                    <div class="q-mr-xs">
-                      <app-btn
-                        label="Bayar Tunai"
-                        color="green"
-                        push
-                        dense
-                      />
-                    </div>
-                    <div class="q-mr-xs">
-                      <app-btn
-                        label="Buat VA"
-                        color="lime-7"
-                        push
-                        dense
-                      />
-                    </div>
-                    <div class="q-mr-xs">
-                      <app-btn
-                        label="Batal"
-                        color="grey-7"
-                        push
-                        dense
-                      />
-                    </div>
-                    <div class="q-mr-xs">
-                      <app-btn
-                        label="Cetak"
-                        color="blue-grey-7"
-                        push
-                        dense
-                      />
-                    </div>
-                  </div>
-                </div>
-                <!-- Bottom -->
-                <div class="q-ml-xs row no-wrap q-col-gutter-xs">
-                  <div class="col-3">
-                    <!--  -->
-                  </div>
-                  <div class="col-2">
-                    <!--  -->
-                  </div>
-                  <div class="col-2 text-weight-bold">
-                    Total
-                  </div>
-                  <div class="col-3">
-                    <div class="row no-wrap">
-                      <div class="col-6 text-right">
-                        {{ formatRp(store.notas.Subtotal) }}
+                    <!-- header karcis -->
+                    <div
+                      v-if="store.golongan==='karcis'"
+                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
+                    >
+                      <div class="col-1">
+                        No
                       </div>
-                      <div class="col-6 text-right">
-                        0
+                      <div class="col-3">
+                        Nama Layanan
+                      </div>
+                      <div class="col-6">
+                        <div class="row no-wrap">
+                          <div class="col-6 text-right">
+                            Jumlah
+                          </div>
+                          <div class="col-6 text-right">
+                            Batal
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="col-2 text-center">
+                        #
+                      </div> -->
+                    </div>
+                    <div v-if="store.notas.Pelayanan">
+                      <!-- child -->
+                      <!-- {{ store.notas }} -->
+                      <div
+                        v-for="(pel,i) in store.notas.Pelayanan"
+                        :key="i"
+                        class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs"
+                      >
+                        <div class="col-1">
+                          {{ i + 1 }}
+                        </div>
+                        <div class="col-3">
+                          {{ pel.namatindakan }}
+                        </div>
+                        <div class="col-6">
+                          <div class="row no-wrap">
+                            <div class="col-6 text-right">
+                              Rp {{ formatRp(pel.subtotal) }}
+                            </div>
+                            <div class="col-6 text-right">
+                              0
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Bottom -->
+                      <div class="q-ml-xs row no-wrap q-col-gutter-xs">
+                        <div class="col-3">
+                          <!--  -->
+                        </div>
+                        <div class="col-2">
+                          <!--  -->
+                        </div>
+                        <div class="col-2 text-weight-bold">
+                          Total
+                        </div>
+                        <div class="col-3">
+                          <div class="row no-wrap">
+                            <div class="col-6 text-right">
+                              Rp  {{ formatRp(store.notas.Subtotal) }}
+                            </div>
+                            <div class="col-6 text-right">
+                              Rp 0
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <!-- # -->
+                        </div>
+                      </div>
+                      <!-- button -->
+                      <div class="q-ml-sm row no-wrap items-center q-my-md">
+                        <div class="q-mr-xs">
+                          <app-btn
+                            label="Buat Qris"
+                            color="blue"
+                            push
+                            dense
+                            :loading="store.loading && carabayar==='qris'"
+                            :disable="store.loading"
+                            @click="buatQris"
+                          />
+                        </div>
+                        <div class="q-mr-xs">
+                          <app-btn
+                            label="Bayar Tunai"
+                            color="green"
+                            push
+                            dense
+                            :loading="store.loading && carabayar==='tunai'"
+                            :disable="store.loading"
+                            @click="bayarTunai"
+                          />
+                        </div>
+                        <div class="q-mr-xs">
+                          <app-btn
+                            label="Buat VA"
+                            color="lime-7"
+                            push
+                            dense
+                            :loading="store.loading && carabayar==='va'"
+                            :disable="store.loading"
+                            @click="buatVA"
+                          />
+                        </div>
+                        <div class="q-mr-xs">
+                          <app-btn
+                            label="Batal"
+                            color="grey-7"
+                            push
+                            dense
+                            :loading="store.loading && carabayar==='batal'"
+                            :disable="store.loading"
+                            @click="batal"
+                          />
+                        </div>
+                        <div class="q-mr-xs">
+                          <app-btn
+                            label="Cetak"
+                            color="blue-grey-7"
+                            push
+                            dense
+                            :loading="store.loading && carabayar==='cetak'"
+                            :disable="store.loading"
+                            @click="cetak"
+                          />
+                        </div>
                       </div>
                     </div>
+                    <div
+                      v-if="!store.notas.Pelayanan && store.loading"
+                      class="q-mt-lg"
+                    >
+                      <div
+                        class="flex column flex-center"
+                      >
+                        <q-spinner-cube
+                          color="primary"
+                          size="3em"
+                        />
+                        <div>Harap Tunggu ...</div>
+                      </div>
+                    </div>
+                    <div v-if="!store.notas.Pelayanan && !store.loading">
+                      <app-no-data />
+                    </div>
                   </div>
-                  <div class="col-2">
-                    <!-- # -->
-                  </div>
-                </div>
-              </div>
-              <div
-                v-if="!store.notas.Pelayanan && store.loading"
-                class="q-mt-lg"
-              >
-                <div
-                  class="flex column flex-center"
-                >
-                  <q-spinner-cube
-                    color="primary"
-                    size="3em"
-                  />
-                  <div>Harap Tunggu ...</div>
-                </div>
-              </div>
-              <div v-if="!store.notas.Pelayanan && !store.loading">
-                <app-no-data />
-              </div>
-            </div>
-            <!-- Sudah dibayar -->
-            <!-- <div class="q-py-md">
+                  <!-- Sudah dibayar -->
+                  <!-- <div class="q-py-md">
           <div class="q-ml-xs row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
             <div class="col-3">
               <div class="row no-wrap">
@@ -581,8 +417,8 @@
             </div>
           </div>
         </div> -->
-            <!-- pembayaran -->
-            <!-- <div class="q-py-sm">
+                  <!-- pembayaran -->
+                  <!-- <div class="q-py-sm">
           <div class="row no-wrap items-center">
             <div class="q-mr-xs">
               Nota {{ nota }}
@@ -621,36 +457,38 @@
             </div>
           </div>
         </div> -->
-          </div>
+                </div>
+              </div>
+            </q-tab-panel>
+            <q-tab-panel
+              style="padding:0px;"
+              name="list"
+            >
+              list
+            </q-tab-panel>
+          </q-tab-panels>
         </div>
-      </q-tab-panel>
-      <q-tab-panel name="list">
-        list
-      </q-tab-panel>
-    </q-tab-panels>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
 import { ref } from 'vue'
-defineProps({
+const prop = defineProps({
   pasien: { type: Object, default: () => {} }
 })
-const emits = defineEmits(['print', 'rekap', 'nota'])
+const emits = defineEmits([
+  'print',
+  'rekap',
+  'nota'
+])
 const tab = ref('trans')
 function goTo(val) {
   tab.value = val
 }
 const store = useKasirRajalListKunjunganStore()
-// const nota = ref('')
-// const options = ref([
-//   { nota: '-' },
-//   { nota: 'kldksjal' },
-//   { nota: 'sdasda' },
-//   { nota: 'sdasdawwwa' }
-// ])
-// const choice = ref('-')
 
 function cetakFakturRekap(val) {
   // nota.value = ' Tindakan'
@@ -658,44 +496,56 @@ function cetakFakturRekap(val) {
   console.log('cetak faktur', val)
 }
 
-const dataNotas = ref('')
+// const dataNotas = ref('')
 function gantiDataNota(val) {
   // console.log('radio', val)
   emits('nota', val)
 }
-// function cetakTindakan() {
-//   nota.value = ' Tindakan'
-//   emits('print', { value: 'Tindakan' })
-//   console.log('cetak Tindakan')
-// }
-// function cetakLaboratorium() {
-//   nota.value = ' Laboratorium'
-//   emits('print')
-//   console.log('cetak Laboratorium')
-// }
-// function cetakRadiologi() {
-//   nota.value = ' Radiologi'
-//   emits('print')
-//   console.log('cetak Radiologi')
-// }
-// function cetakFarmasi() {
-//   nota.value = ' Farmasi'
-//   emits('print')
-//   console.log('cetak Farmasi')
-// }
-// function cetakOperasiBesar() {
-//   nota.value = ' Tindakan'
-//   emits('print')
-//   console.log('cetak Operasi Tindakan Besar')
-// }
-// function cetakOperasiKecil() {
-//   nota.value = ' Tindakan Operasi'
-//   emits('print')
-//   console.log('cetak Operasi Tindakan Kecil')
-// }
-// function cetakSharingBPJS() {
-//   nota.value = ' Sharing'
-//   emits('print')
-//   console.log('cetak Sharing BPJS')
-// }
+const carabayar = ref('')
+function buatQris() {
+  console.log('buat qris')
+}
+function bayarTunai() {
+  carabayar.value = 'tunai'
+  console.log('bayar tunai')
+  let rinci = ''
+  if (store.notas?.Pelayanan.length) {
+    console.log('nota pelayanan')
+    store.notas.Pelayanan.forEach(a => {
+      const b = a.namatindakan + ':' + a.subtotal
+      rinci += ',' + b
+    })
+    console.log(rinci)
+    const form = {
+      noreg: prop.pasien.noreg,
+      norm: prop.pasien.norm,
+      tgl_kunjungan: prop.pasien.tgl_kunjungan,
+      nama: prop.pasien.nama,
+      sapaan: prop.pasien.sapaan,
+      kelamin: prop.pasien.kelamin,
+      poli: prop.pasien.poli,
+      sistembayar: prop.pasien.sistembayar,
+      total: store.notas.Subtotal,
+      rinci,
+      kodepoli: prop.pasien.kodepoli,
+      groupssistembayar: prop.pasien.groupssistembayar,
+      jenispembayaran: store.golongan
+    }
+    console.log('form', form)
+    store.savePembayaran(form).then(() => {
+      emits('print', 'Kwitansi Tunai')
+    })
+  }
+}
+function buatVA() {
+  emits('print', 'Cetak VA')
+  console.log('buat VA')
+}
+function batal() {
+  console.log('buat VA')
+}
+function cetak() {
+  console.log('buat VA')
+}
+
 </script>

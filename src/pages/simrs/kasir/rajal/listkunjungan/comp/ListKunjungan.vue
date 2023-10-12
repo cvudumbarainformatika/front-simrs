@@ -112,15 +112,18 @@
       <template #default>
         <BillingPage
           :pasien="pasien"
-          @print="openPrint"
+          @print="openPrint($event)"
           @rekap="openFaktur"
           @nota="getNota"
         />
       </template>
     </app-fullscreen-blue>
     <!-- print nota -->
-    <app-dialog-not-full
+    <app-dialog-mm
       v-model="printOpen"
+      label-btn-ok="Print"
+      :btn-ok="false"
+      @on-close="resetForm"
     >
       <template #default>
         <div
@@ -156,6 +159,14 @@
               </div>
               <div class="row no-wrap">
                 <div class="col-3">
+                  Tgl Lahir
+                </div>
+                <div class="col-9">
+                  {{ dateFullFormat( pasien.tgllahir) }}
+                </div>
+              </div>
+              <div class="row no-wrap">
+                <div class="col-3">
                   Kelamin
                 </div>
                 <div class="col-9">
@@ -170,14 +181,6 @@
                   {{ pasien.alamat }}
                 </div>
               </div>
-              <div class="row no-wrap">
-                <div class="col-3">
-                  Tgl Masuk
-                </div>
-                <div class="col-9">
-                  {{ dateFullFormat( pasien.tgl_kunjungan) }}
-                </div>
-              </div>
             </div>
             <div class="col-6">
               <div class="row no-wrap">
@@ -190,10 +193,10 @@
               </div>
               <div class="row no-wrap">
                 <div class="col-3">
-                  Tgl Lahir
+                  Tgl Masuk
                 </div>
                 <div class="col-9">
-                  {{ dateFullFormat( pasien.tgllahir) }}
+                  {{ dateFullFormat( pasien.tgl_kunjungan) }}
                 </div>
               </div>
               <div class="row no-wrap">
@@ -227,34 +230,62 @@
             </div>
           </div>
           <!-- List -->
-          <div class="row items-center no-wrap ">
-            <div class="col-1">
-              1
+          <!-- karcis -->
+          <div v-if="store.notas.Pelayanan">
+            <div
+              v-for="(pel,i) in store.notas.Pelayanan"
+              :key="i"
+              class="row items-center no-wrap "
+            >
+              <div class="col-1">
+                {{ i+1 }}
+              </div>
+              <div class="col-9">
+                {{ pel.namatindakan }}
+              </div>
+              <div class="col-2 garis-bawah-double text-right">
+                Rp {{ formatRp(pel.subtotal) }}
+              </div>
             </div>
-            <div class="col-9">
-              Tindakan nya
+            <!-- total -->
+            <div class="row items-center no-wrap ">
+              <div class="col-10 text-right">
+                Rp.
+              </div>
+              <div class="col-2 text-right">
+                {{ formatRp(store.notas.Subtotal) }}
+              </div>
             </div>
-            <div class="col-2 garis-bawah-double text-right">
-              Harga nya
-            </div>
-          </div>
-          <!-- total -->
-          <div class="row items-center no-wrap ">
-            <div class="col-10 text-right">
-              Rp.
-            </div>
-            <div class="col-2 text-right">
-              Harga
-            </div>
+          <!-- karcis end-->
           </div>
         </div>
       </template>
-    </app-dialog-not-full>
+      <template #right-btn>
+        <q-btn
+          ref="refPrint"
+          v-print="printObj"
+          unelevated
+          color="primary"
+          label="Print"
+          size="md"
+          no-caps
+          @click="actPrintRekap"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print
+          </q-tooltip>
+        </q-btn>
+      </template>
+    </app-dialog-mm>
     <!-- print Rekap -->
     <app-dialog-mm
       v-model="printRekap"
       label="Cetak Rekap Billing"
       label-btn-ok="Print"
+      :btn-ok="false"
       @on-ok="actPrintRekap"
     >
       <template #default>
@@ -671,6 +702,25 @@
           </div>
         </div>
       </template>
+      <template #right-btn>
+        <q-btn
+          ref="refPrint"
+          v-print="printObj"
+          unelevated
+          color="primary"
+          label="Print"
+          size="md"
+          no-caps
+          @click="actPrintRekap"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print
+          </q-tooltip>
+        </q-btn>
+      </template>
     </app-dialog-mm>
   </div>
 </template>
@@ -691,6 +741,7 @@ const store = useKasirRajalListKunjunganStore()
 
 function openBill(row) {
   pasien.value = row
+  console.log('pasien', row)
   billOpen.value = !billOpen.value
 }
 function openPrint(val) {
@@ -705,8 +756,19 @@ function openFaktur(val) {
   store.getBill(par)
 }
 function actPrintRekap() {
-  console.log('act print rekap')
   printRekap.value = false
+}
+
+function resetForm() {
+  store.notas = {}
+  store.golongan = ''
+}
+const printObj = {
+  id: 'printMe',
+  popTitle: ' '
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+
 }
 function getNota(val) {
   const param = {
@@ -714,6 +776,7 @@ function getNota(val) {
     noreg: pasien.value.noreg
   }
   console.log('golongan nota', param, pasien.value)
+
   store.getNotas(param)
 }
 

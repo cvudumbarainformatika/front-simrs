@@ -27,20 +27,24 @@
 
       <q-card-actions align="right">
         <app-btn
+          v-if="btnClose"
           v-close-popup
           color="dark"
           :label="labelBtnClose"
+          @click="emits('onClose')"
         />
         <app-btn
+          v-if="btnOk"
           :label="labelBtnOk"
           @click="emits('onOk')"
         />
+        <slot name="right-btn" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 <script setup>
-const emits = defineEmits(['onOk'])
+const emits = defineEmits(['onOk', 'onClose'])
 defineProps({
   label: {
     type: String,
@@ -57,6 +61,14 @@ defineProps({
   size: {
     type: String,
     default: 'xl'
+  },
+  btnOk: {
+    type: Boolean,
+    default: true
+  },
+  btnClose: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
