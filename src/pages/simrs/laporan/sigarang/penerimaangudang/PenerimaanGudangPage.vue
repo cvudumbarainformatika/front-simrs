@@ -227,11 +227,19 @@
         <div>{{ dateFullFormat(row.tanggal) }}</div>
       </template>
       <template #cell-sub_total="{row}">
-        <div v-if="row.harga>0">
+        <div
+          v-if="row.harga>0"
+          class="text-right"
+        >
           {{ formatRp(row.sub_total) }}
         </div>
         <div v-else>
           belum bast
+        </div>
+      </template>
+      <template #cell-harga="{row}">
+        <div class="text-right">
+          {{ formatRp(row.harga) }}
         </div>
       </template>
       <template #cell-perusahaan="{row}">
