@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <q-menu>
+          <q-menu style="width: 360px;">
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">
                 <q-avatar size="72px">
@@ -66,8 +66,8 @@
                     behavior="menu"
                     hide-dropdown-icon
                     @filter="filterOptions"
-                    @update:model-value="(val)=>$emit('updated', val)"
                   >
+                    <!-- @update:model-value="(val)=>$emit('updated', val)" -->
                     <template #prepend>
                       <q-icon name="icon-mat-search" />
                     </template>
@@ -82,7 +82,7 @@
                       <q-item v-bind="scope.itemProps">
                         <q-item-section avatar>
                           <q-avatar size="60px">
-                            <img :src="getImage(scope.opt)">
+                            <img :src="getImage(scope?.opt?.kelamin,scope.opt)">
                           </q-avatar>
                         </q-item-section>
                         <q-item-section>
@@ -97,14 +97,15 @@
                       </q-item>
                     </template>
                   </q-select>
-                  <q-input
+                  <!-- <q-input
                     label="cari dpjp"
                     outlined
                     standout="bg-yellow-3"
                     dense
                     class="q-my-sm"
                     :rules="[val => !!val || 'Harus diisi']"
-                  />
+                    readonly
+                  /> -->
                   <q-separator class="q-my-md" />
                   <q-btn
                     v-close-popup
@@ -150,6 +151,7 @@
 </template>
 
 <script setup>
+import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 
 const emits = defineEmits(['toggleLeftDrawer'])
