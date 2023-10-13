@@ -55,6 +55,31 @@ const laporan = {
       name: 'laporan.sigarang.penerimaandepo',
       component: () => import('pages/simrs/laporan/sigarang/penerimaandepo/IndexPage.vue')
     },
+    {
+      path: '/laporan/sigarang/pengeluaran',
+      name: 'laporan.sigarang.pengeluaran',
+      component: () => import('pages/simrs/laporan/sigarang/pengeluaran/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/pemakaian',
+      name: 'laporan.sigarang.pemakaian',
+      component: () => import('pages/simrs/laporan/sigarang/pemakaian/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/mutasi',
+      name: 'laporan.sigarang.mutasi',
+      component: () => import('pages/simrs/laporan/sigarang/mutasi/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/rekap-mutasi',
+      name: 'laporan.sigarang.rekap-mutasi',
+      component: () => import('pages/simrs/laporan/sigarang/rekapmutasi/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/hutang',
+      name: 'laporan.sigarang.hutang',
+      component: () => import('pages/simrs/laporan/sigarang/hutang/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',
