@@ -722,6 +722,41 @@
         </q-btn>
       </template>
     </app-dialog-mm>
+    <!-- q-ris -->
+    <app-dialog-mm
+      v-model="qrisOpen"
+      label="Scan Qris"
+      label-btn-ok="Print"
+      :btn-ok="false"
+      @on-ok="closeQris"
+    >
+      <template #default>
+        <div
+          class="full-height column flex-center items-center text-white"
+          style="width:30vw;"
+        >
+          <figure class="qrcode full-width q-pa-xl">
+            <vue-qrcode
+              :value="store.qris"
+              tag="svg"
+              :options="{
+                errorCorrectionLevel: 'Q',
+                color: {
+                  dark: '#000000',
+                  light: '#ffffff',
+                },
+                margin:2
+              }"
+            />
+            <img
+              class="qrcode__image"
+              src="~assets/logos/logo-rsud.png"
+              alt="Chen Fengyuan"
+            >
+          </figure>
+        </div>
+      </template>
+    </app-dialog-mm>
   </div>
 </template>
 
@@ -733,6 +768,7 @@ import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/ku
 import { date } from 'quasar'
 
 const pasien = ref(null)
+const qrisOpen = ref(false)
 const billOpen = ref(false)
 const printOpen = ref(false)
 const printRekap = ref(false)
@@ -746,7 +782,11 @@ function openBill(row) {
 }
 function openPrint(val) {
   console.log('print', val)
-  printOpen.value = true
+  if (val === 'tunai') {
+    printOpen.value = true
+  } else if (val === 'qris') {
+    qrisOpen.value = true
+  }
 }
 function openFaktur(val) {
   console.log('faktur', val)
@@ -758,7 +798,9 @@ function openFaktur(val) {
 function actPrintRekap() {
   printRekap.value = false
 }
-
+function closeQris() {
+  qrisOpen.value = false
+}
 function resetForm() {
   store.notas = {}
   store.golongan = ''
@@ -829,6 +871,27 @@ defineProps({
 // }
 </script>
 <style lang="scss" scoped>
+.qrcode {
+  display: inline-block;
+  font-size: 0;
+  margin: 0;
+  position: relative;
+}
+
+.qrcode__image {
+  background-color: #fff;
+  border: 0.15rem solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.25);
+  height: 7%;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 7%;
+}
+
 .garis-bawah-double{
   border-bottom: 4px solid rgba(0, 0, 0, 0.572);
   border-bottom-style: double;

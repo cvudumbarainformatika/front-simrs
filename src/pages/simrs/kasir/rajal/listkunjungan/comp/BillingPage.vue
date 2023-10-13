@@ -513,12 +513,7 @@ function gantiDataNota(val) {
   emits('nota', val)
 }
 const carabayar = ref('')
-function buatQris() {
-  console.log('buat qris')
-}
-function bayarTunai() {
-  carabayar.value = 'tunai'
-  console.log('bayar tunai')
+function kirimBayar() {
   let rinci = ''
   if (store.notas?.Pelayanan.length) {
     console.log('nota pelayanan')
@@ -540,16 +535,27 @@ function bayarTunai() {
       rinci,
       kodepoli: prop.pasien.kodepoli,
       groupssistembayar: prop.pasien.groupssistembayar,
-      jenispembayaran: store.golongan
+      jenispembayaran: store.golongan,
+      carabayar: carabayar.value
     }
     console.log('form', form)
     store.savePembayaran(form).then(() => {
-      emits('print', 'Kwitansi Tunai')
+      emits('print', carabayar.value)
     })
   }
 }
+function buatQris() {
+  console.log('buat qris')
+  carabayar.value = 'qris'
+  kirimBayar()
+}
+function bayarTunai() {
+  carabayar.value = 'tunai'
+  kirimBayar()
+  console.log('bayar tunai')
+}
 function buatVA() {
-  emits('print', 'Cetak VA')
+  emits('print', 'qris')
   console.log('buat VA')
 }
 function batal() {
