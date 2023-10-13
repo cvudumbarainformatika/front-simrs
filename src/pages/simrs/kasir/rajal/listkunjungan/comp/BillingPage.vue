@@ -52,6 +52,17 @@
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
+            val="konsulantarpoli"
+            label="Konsul Antar Poli"
+            @update:model-value="gantiDataNota"
+          />
+        </div>
+        <div class="row no-wrap q-ma-xs">
+          <q-radio
+            v-model="store.golongan"
+            dense
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
             val="tindakan"
             label="Tindakan"
             @update:model-value="gantiDataNota"

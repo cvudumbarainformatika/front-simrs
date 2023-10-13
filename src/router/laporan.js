@@ -40,6 +40,11 @@ const laporan = {
       name: 'laporan.sigarang.persediaanakhir',
       component: () => import('pages/simrs/laporan/sigarang/persediaanakhir/IndexPage.vue')
     },
+    {
+      path: '/laporan/sigarang/penerimaangudang',
+      name: 'laporan.sigarang.penerimaangudang',
+      component: () => import('pages/simrs/laporan/sigarang/penerimaangudang/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',
