@@ -35,6 +35,7 @@ import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pas
 import { useRegistrasiPasienUmumStore } from 'src/stores/simrs/pendaftaran/form/umum/registrasi'
 // import { Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
+import { useRouter } from 'vue-router'
 const pasien = usePendaftaranPasienStore()
 const register = useRegistrasiPasienUmumStore()
 
@@ -68,6 +69,7 @@ const style = useStyledStore()
 //   // console.log('simpan regis key', key)
 //   // console.log('form registrasi dua', register.form)
 // }
+const router = useRouter()
 function simpanData(val) {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
@@ -84,6 +86,15 @@ function simpanData(val) {
     console.log('form registrasi ', register.form)
     register.simpanRegistrasi().then(resp => {
       console.log(resp)
+      const antrian = resp.antrian.data
+      const nomor = antrian ? antrian.nomor : '-'
+      const poli = antrian ? antrian.nama_layanan : '-'
+      const norm = antrian ? antrian.id_member : '-'
+      console.log('Antrian ', antrian)
+      const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+      window.open(routeData.href, '_blank')
+      pasien.clearForm()
+      register.clearForm()
       // dialogCetak()
     })
   }

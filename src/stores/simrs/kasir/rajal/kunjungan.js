@@ -17,7 +17,8 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
     golongan: '',
     loading: false,
     rekapBill: {},
-    notas: {}
+    notas: {},
+    qris: 'asd'
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -92,6 +93,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
           .then(resp => {
             this.loading = false
             console.log('resp', resp.data)
+            this.qris = resp.data.qrValue
             resolve(resp.data)
           })
           .catch(() => {

@@ -129,6 +129,7 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
     //   })
     // },
     // ambil data pemesanan dan penerimaan
+
     getDataPemesanan() {
       const param = { params: this.params }
       this.loading = true
@@ -144,8 +145,11 @@ export const useTransaksiBastStore = defineStore('transaksi_bast', {
                 anu.penerimaan.forEach(trm => {
                   trm.checked = false
                   trm.details.forEach(det => {
+                    det.diskon = 0
+                    det.ppn = 0
                     if (det.harga_kontrak === 0) det.harga_kontrak = det.harga
-                    if (det.harga_jadi === 0) det.harga_jadi = det.harga * det.qty
+                    if (det.harga_jadi === 0) det.harga_jadi = det.harga
+                    if (det.harga_kontrak !== 0 && det.harga_kontrak > 0) det.harga_jadi = det.harga_kontrak
                   })
                   trm.nilai_tagihan = trm.details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
                 })
