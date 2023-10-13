@@ -26,6 +26,11 @@ const laporan = {
       component: () => import('pages/simrs/laporan/keuangan/billpoli/IndexPage.vue')
     },
     {
+      path: '/laporan/keuangan/inacbg',
+      name: 'laporan.keuangan.inacbg',
+      component: () => import('pages/simrs/laporan/keuangan/inacbg/IndexPage.vue')
+    },
+    {
       path: '/laporan/sigarang/penerimaansimperda108',
       name: 'laporan.sigarang.penerimaansimperda108',
       component: () => import('pages/simrs/laporan/sigarang/penerimaansimperda108/IndexPage.vue')
@@ -44,6 +49,11 @@ const laporan = {
       path: '/laporan/sigarang/penerimaangudang',
       name: 'laporan.sigarang.penerimaangudang',
       component: () => import('pages/simrs/laporan/sigarang/penerimaangudang/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/penerimaandepo',
+      name: 'laporan.sigarang.penerimaandepo',
+      component: () => import('pages/simrs/laporan/sigarang/penerimaandepo/IndexPage.vue')
     },
 
     {
