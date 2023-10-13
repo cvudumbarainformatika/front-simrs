@@ -11,7 +11,7 @@
 const { configure } = require('quasar/wrappers')
 
 module.exports = configure(function (ctx) {
-  console.log('module', ctx)
+  // console.log('module', ctx)
   // console.log('process', process.env)
   return {
     eslint: {

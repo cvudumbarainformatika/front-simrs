@@ -16,13 +16,13 @@
           outline
         > -->
         <q-btn
-          color="yellow"
-          outline
+          color="primary"
           class="q-pl-xs"
+          flat
         >
-          <div class="row items-center no-wrap q-gutter-sm">
+          <div class="row items-center no-wrap q-gutter-sm text-white">
             <q-avatar size="30px">
-              <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+              <img :src="getImage()">
             </q-avatar>
             <div class="column f-12">
               <div>
@@ -34,7 +34,7 @@
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">
                 <q-avatar size="72px">
-                  <img src="https://cdn.quasar.dev/img/avatar4.jpg">
+                  <img :src="getImage()">
                 </q-avatar>
 
                 <div class="f12 q-mt-md q-mb-xs">
@@ -52,12 +52,57 @@
                 </div>
                 <q-separator class="q-my-sm" />
                 <q-form @submit="gantiDpjp">
+                  <q-select
+                    v-model="search"
+                    dense
+                    outlined
+                    standout="bg-yellow-3"
+                    label="Cari Dpjp"
+                    use-input
+                    clearable
+                    option-value="id"
+                    option-label="nama"
+                    :options="options"
+                    behavior="menu"
+                    hide-dropdown-icon
+                    @filter="filterOptions"
+                    @update:model-value="(val)=>$emit('updated', val)"
+                  >
+                    <template #prepend>
+                      <q-icon name="icon-mat-search" />
+                    </template>
+                    <template #no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                    <template #option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section avatar>
+                          <q-avatar size="60px">
+                            <img :src="getImage(scope.opt)">
+                          </q-avatar>
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>{{ scope.opt.nama }}</q-item-label>
+                          <q-item-label caption>
+                            <strong>Nip : </strong> {{ scope.opt.nip }}
+                          </q-item-label>
+                          <q-item-label caption>
+                            <strong>Ruangan : </strong> {{ scope.opt.ruangan? scope.opt.ruangan.namaruang : '-' }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
                   <q-input
                     label="cari dpjp"
                     outlined
                     standout="bg-yellow-3"
                     dense
-                    class="q-mb-sm"
+                    class="q-my-sm"
                     :rules="[val => !!val || 'Harus diisi']"
                   />
                   <q-separator class="q-my-md" />
@@ -105,7 +150,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 const emits = defineEmits(['toggleLeftDrawer'])
+
+const search = ref('')
+const options = ref([])
 defineProps({
   pasien: {
     type: Object,
@@ -115,5 +165,41 @@ defineProps({
 
 function gantiDpjp() {
   console.log('ok')
+}
+
+function getImage(kelamin, row) {
+  if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || !row) {
+    return kelamin === 'Perempuan'
+      ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
+      : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
+  } else {
+    return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+  }
+}
+
+async function filterOptions (val, update) {
+  if (!val) {
+    update(() => {
+      options.value = []
+    })
+    return
+  }
+  const params = {
+    params: {
+      q: val
+    }
+  }
+  // console.log('q :', val)
+  const resp = await api.get('/v1/settings/appmenu/cari_pegawai', params)
+  console.log('cari', resp)
+  update(
+    () => (options.value = resp.data),
+    ref => {
+      if (val !== '' && ref.options.length) {
+        ref.setOptionIndex(-1)
+        ref.moveOptionSelection(1, true)
+      }
+    }
+  )
 }
 </script>
