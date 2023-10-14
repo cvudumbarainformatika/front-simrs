@@ -297,7 +297,7 @@ function setDispKe(val) {
 }
 const printObj = {
   id: 'printMe',
-  popTitle: 'Laporan Persediaan FiFo'
+  popTitle: 'Laporan Penerimaan Depo'
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 

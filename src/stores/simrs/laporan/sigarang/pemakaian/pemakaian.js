@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
-export const useLaporanSigarangPengeluaranStore = defineStore('laporan_sigarang_pengeluaran', {
+export const useLaporanSigarangPemakaianStore = defineStore('laporan_sigarang_pemakaian', {
   state: () => ({
     loading: false,
     items: [],
@@ -27,14 +27,11 @@ export const useLaporanSigarangPengeluaranStore = defineStore('laporan_sigarang_
       { nama: 'Depo Habis Pakai', value: 'Gd-02010103' }
     ],
     columns: [
-      'tanggal',
-      'tujuan',
+      'ruang',
       'kode_rs',
       'nama',
       'satuan',
-      'jumlah',
-      'jumlah_disetujui',
-      'jumlah_distribusi'
+      'jumlah'
     ],
     total: 0
   }),
@@ -67,19 +64,13 @@ export const useLaporanSigarangPengeluaranStore = defineStore('laporan_sigarang_
     async getDataTable() {
       this.loading = true
       const param = { params: this.params }
-      await api.get('v1/simrs/laporan/sigarang/pengeluaran-depo', param)
+      await api.get('v1/simrs/laporan/sigarang/pemakaian-ruangan', param)
         .then(resp => {
           this.loading = false
           console.log('data tabel', resp.data)
           this.meta = resp.data
           this.items = resp.data.data
-          this.total = this.items.map(a => {
-            if (a.jumlah_distribusi > 0) {
-              return a.jumlah_distribusi
-            } else if (a.jumlah_distribusi_l > 0) {
-              return a.jumlah_distribusi_l
-            } else { return 0 }
-          }).reduce((a, b) => a + b, 0)
+          this.total = this.items.map(a => a.jumlah).reduce((a, b) => a + b, 0)
           console.log('total', this.total)
         })
         .catch(() => { this.loading = false })
