@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
-export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigarang_persediaan_fifo', {
+export const useLaporanSigarangMutasiStore = defineStore('laporan_sigarang_mutasi', {
   state: () => ({
     loading: false,
     items: [],
@@ -38,10 +38,15 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       { nama: 'Depo Habis Pakai', value: 'Gd-02010103' }
     ],
     columns: [
+      'kode_108',
+      'uraian_108',
       'kode',
       'nama',
       'satuan',
-      'qty'
+      'awal',
+      'masuk',
+      'keluar',
+      'akhir'
     ],
     total: 0
   }),
@@ -69,21 +74,23 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
     },
     mapingItem(val) {
       if (val.length) {
-        const total = []
         val.forEach(item => {
-          if (item.monthly.length) {
-            item.monthly.forEach(a => { a.total = a.totalStok * a.harga })
-            item.subtotal = item.monthly.map(a => a.total).reduce((a, b) => a + b, 0)
-            total.push(item.subtotal)
-          } else if (item.recent.length) {
-            item.recent.forEach(a => { a.total = a.totalStok * a.harga })
-            item.subtotal = item.recent.map(a => a.total).reduce((a, b) => a + b, 0)
-            total.push(item.subtotal)
-          }
+          const month = item.monthly.length ? item.monthly.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
+          const recen = item.recent.length ? item.recent.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
+          item.tAkhir = month ?? recen ?? 0
+
+          const lang = item.detail_distribusi_langsung.length ? item.detail_distribusi_langsung.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : null
+          const pakai = item.detail_pemakaianruangan.length ? item.detail_pemakaianruangan.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : null
+          item.keluar = lang ?? pakai ?? 0
+
+          item.awal = item.stok_awal.length ? item.stok_awal.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : 0
+
+          item.masuk = item.detail_penerimaan.length ? item.detail_penerimaan.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : 0
+
+          item.akhir = parseFloat(item.awal) + parseFloat(item.masuk) - parseFloat(item.keluar)
         })
         this.items = val
-        // console.log('total', total)
-        this.total = total.reduce((a, b) => a + b, 0)
+        console.log('items', val)
       }
     },
     getInitialData() {
@@ -92,7 +99,7 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
     async getDataTable() {
       this.loading = true
       const param = { params: this.params }
-      await api.get('v1/simrs/laporan/sigarang/lappersediaan', param)
+      await api.get('v1/simrs/laporan/sigarang/lap-mutasi', param)
         .then(resp => {
           this.loading = false
           // console.log('data tabel', resp.data)
