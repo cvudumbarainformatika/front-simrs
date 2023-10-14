@@ -248,16 +248,16 @@
       </template>
       <template #bottom-row>
         <td colspan="7">
-          <div class="text-right f-12">
+          <div class="text-right f-12 text-weight-bold">
             Jumlah Distribusi
           </div>
         </td>
-        <td>
+        <td colspan="2">
           <div
             v-if="store.items.length"
-            class="text-right f-12"
+            class="text-right f-12  text-weight-bold"
           >
-            {{ store.total }}
+            {{ parseFloat(store.total.toFixed(3)) }}
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
         </td>

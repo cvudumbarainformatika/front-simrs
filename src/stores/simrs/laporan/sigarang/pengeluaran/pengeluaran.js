@@ -81,6 +81,7 @@ export const useLaporanSigarangPengeluaranStore = defineStore('laporan_sigarang_
               return a.jumlah_distribusi_l
             } else { return 0 }
           }).reduce((a, b) => a + b, 0)
+          console.log('total', this.total)
         })
         .catch(() => { this.loading = false })
     },
