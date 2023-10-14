@@ -247,9 +247,9 @@
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="8">
+        <td colspan="7">
           <div class="text-right f-12">
-            Jumlah
+            Jumlah Distribusi
           </div>
         </td>
         <td>
