@@ -92,6 +92,7 @@
       text-cari="Cari Nama / Kode ..."
       row-no
       tanda-tangan
+      bottom-row
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -266,7 +267,7 @@
       </template>
 
       <template #bottom-row>
-        <td colspan="4">
+        <td colspan="8">
           <div class="text-right">
             Jumlah
           </div>
@@ -276,7 +277,12 @@
             v-if="store.items.length"
             class="text-right"
           >
-            {{ formatRp(store.total) }}
+            <div class="row no-wrap  items-center">
+              {{ formatRp( store.total?? 0) }}
+            </div>
+            <div class="row no-wrap f-8 text-italic print-hide">
+              tabel :{{ formatRp( store.tTotal?? 0) }}
+            </div>
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
         </td>
