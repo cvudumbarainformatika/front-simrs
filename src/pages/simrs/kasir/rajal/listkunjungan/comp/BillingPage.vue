@@ -46,7 +46,7 @@
             @update:model-value="gantiDataNota"
           />
         </div>
-        <div class="row no-wrap q-ma-xs">
+        <!-- <div class="row no-wrap q-ma-xs">
           <q-radio
             v-model="store.golongan"
             dense
@@ -56,7 +56,7 @@
             label="Konsul Antar Poli"
             @update:model-value="gantiDataNota"
           />
-        </div>
+        </div> -->
         <div class="row no-wrap q-ma-xs">
           <q-radio
             v-model="store.golongan"
