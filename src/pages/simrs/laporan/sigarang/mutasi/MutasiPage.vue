@@ -171,16 +171,44 @@
         <div>Nama RS</div>
       </template>
       <template #col-awal>
-        <div>Stok Awal</div>
+        <div class="row no-wrap justify-between">
+          <div class="">
+            Stok Awal
+          </div>
+          <div class="q-ml-sm">
+            subtotal
+          </div>
+        </div>
       </template>
       <template #col-masuk>
-        <div>Masuk</div>
+        <div class="row no-wrap justify-between">
+          <div class=" text-center">
+            Masuk
+          </div>
+          <div class="q-ml-sm">
+            subtotal
+          </div>
+        </div>
       </template>
       <template #col-keluar>
-        <div>Keluar</div>
+        <div class="row no-wrap justify-between">
+          <div class="text-center">
+            Keluar
+          </div>
+          <div class="q-ml-sm">
+            subtotal
+          </div>
+        </div>
       </template>
       <template #col-akhir>
-        <div>Stok Akhir</div>
+        <div class="row no-wrap justify-between">
+          <div class="text-center">
+            Stok Akhir
+          </div>
+          <div class="q-ml-sm">
+            subtotal
+          </div>
+        </div>
       </template>
       <template #col-satuan>
         <div>Satuan</div>
@@ -198,11 +226,41 @@
           {{ row.uraian_108 }}
         </div>
       </template>
+      <template #cell-awal="{row}">
+        <div class="row justify-between items-center">
+          <div>{{ row.awal }}</div>
+          <div>{{ formatRp( row.hAwal?? 0) }}</div>
+        </div>
+      </template>
+      <template #cell-masuk="{row}">
+        <div class="row justify-between items-center">
+          <div>{{ row.masuk }}</div>
+          <div>{{ formatRp( row.hMasuk?? 0) }}</div>
+        </div>
+      </template>
+      <template #cell-keluar="{row}">
+        <div class="row justify-between items-center">
+          <div>{{ row.keluar }}</div>
+          <div>{{ formatRp( row.hKeluar?? 0) }}</div>
+        </div>
+      </template>
       <template #cell-akhir="{row}">
-        <div class="row items-center">
-          <div>{{ row.akhir }}</div>
-          <div class="q-ml-sm f-8 text-italic print-hide">
-            tabel stok : {{ row.tAkhir }}
+        <div class="row no-wrap justify-between items-center">
+          <div>
+            <div class="row no-wrap  items-center">
+              {{ row.akhir }}
+            </div>
+            <div class="row no-wrap f-8 text-italic print-hide">
+              tabel : {{ row.tAkhir }}
+            </div>
+          </div>
+          <div>
+            <div class="row no-wrap  items-center">
+              {{ formatRp( row.hAkhir?? 0) }}
+            </div>
+            <div class="row no-wrap f-8 text-italic print-hide">
+              tabel :{{ formatRp( row.htAkhir?? 0) }}
+            </div>
           </div>
         </div>
       </template>

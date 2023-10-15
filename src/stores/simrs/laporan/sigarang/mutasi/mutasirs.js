@@ -77,17 +77,53 @@ export const useLaporanSigarangMutasiStore = defineStore('laporan_sigarang_mutas
         val.forEach(item => {
           const month = item.monthly.length ? item.monthly.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
           const recen = item.recent.length ? item.recent.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
+          const hmonth = item.monthly.length ? item.monthly.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
+          const hrecen = item.recent.length ? item.recent.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
           item.tAkhir = month ?? recen ?? 0
+          item.htAkhir = hmonth ?? hrecen ?? 0
 
           const lang = item.detail_distribusi_langsung.length ? item.detail_distribusi_langsung.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : null
           const pakai = item.detail_pemakaianruangan.length ? item.detail_pemakaianruangan.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : null
           item.keluar = lang ?? pakai ?? 0
 
+          if (item.detail_distribusi_langsung.length) {
+            item.detail_distribusi_langsung.forEach(pak => {
+              if (item.recent.length) {
+                const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+                if (har.length) {
+                  pak.totalRp = har[0].harga * parseFloat(pak.total.toFixed(2))
+                } else {
+                  pak.totalRp = 0
+                }
+              }
+            })
+          }
+
+          if (item.detail_pemakaianruangan.length) {
+            item.detail_pemakaianruangan.forEach(pak => {
+              if (item.recent.length) {
+                const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+                if (har.length) {
+                  pak.totalRp = har[0].harga * pak.total
+                } else {
+                  pak.totalRp = 0
+                }
+              }
+            })
+          }
+
+          const hlang = item.detail_distribusi_langsung.length ? item.detail_distribusi_langsung.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
+          const hpakai = item.detail_pemakaianruangan.length ? item.detail_pemakaianruangan.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
+          item.hKeluar = hlang ?? hpakai ?? 0
+
           item.awal = item.stok_awal.length ? item.stok_awal.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : 0
+          item.hAwal = item.stok_awal.length ? item.stok_awal.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
 
           item.masuk = item.detail_penerimaan.length ? item.detail_penerimaan.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : 0
+          item.hMasuk = item.detail_penerimaan.length ? item.detail_penerimaan.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
 
           item.akhir = parseFloat(item.awal) + parseFloat(item.masuk) - parseFloat(item.keluar)
+          item.hAkhir = parseFloat(item.hAwal) + parseFloat(item.hMasuk) - parseFloat(item.hKeluar)
         })
         this.items = val
         console.log('items', val)
