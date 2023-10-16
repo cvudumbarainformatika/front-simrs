@@ -4,7 +4,7 @@
       class="row bg-primary text-white q-pa-sm q-mb-sm"
     >
       <div class="f-14 text-weight-bold">
-        Laporan Penerimaan Gudang
+        Laporan Penerimaan Depo
       </div>
     </div>
     <div class="row items-center garis-bawah">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="row justify-center f-16 text-weight-bold q-my-sm">
-      Laporan Penerimaan Gudang
+      Laporan Penerimaan Depo
     </div>
     <div class="row justify-center f-12 text-weight-bold q-my-sm">
       Periode {{ store.display.from + ' - ' + store.display.to }}
@@ -74,8 +74,7 @@
       <div class="col-4">
         <app-autocomplete
           v-model="store.params.kode_ruang"
-          label="Gudang "
-          readonly
+          label="pilih Depo"
           autocomplete="nama"
           option-label="nama"
           option-value="value"
@@ -153,7 +152,7 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Penerimaan Gudang
+          Laporan Penerimaan Depo
         </div>
         <div class="row justify-center f-12 text-weight-bold q-my-sm">
           Periode {{ store.display.from + ' - ' + store.display.to }}
@@ -180,8 +179,8 @@
       <template #col-tanggal>
         <div>Tanggal</div>
       </template>
-      <template #col-no_penerimaan>
-        <div>Nomor Penerimaan</div>
+      <template #col-no_distribusi>
+        <div>Nomor Distribusi</div>
       </template>
       <template #col-satuan>
         <div>Satuan</div>
@@ -205,9 +204,6 @@
         <div class="row">
           Harga
         </div>
-        <div class="row no-wrap f-6 text-italic">
-          (+) diskon dan ppn
-        </div>
       </template>
       <template #col-sub_total>
         <div>Nilai</div>
@@ -227,14 +223,8 @@
         <div>{{ dateFullFormat(row.tanggal) }}</div>
       </template>
       <template #cell-sub_total="{row}">
-        <div
-          v-if="row.harga>0"
-          class="text-right"
-        >
+        <div class="text-right">
           {{ formatRp(row.sub_total) }}
-        </div>
-        <div v-else>
-          belum bast
         </div>
       </template>
       <template #cell-harga="{row}">
@@ -268,12 +258,12 @@
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="11">
+        <td colspan="7">
           <div class="text-right f-12">
             Jumlah
           </div>
         </td>
-        <td>
+        <td colspan="2">
           <div
             v-if="store.items.length"
             class="text-right f-12"
@@ -288,9 +278,9 @@
 </template>
 <script setup>
 import { formatRp, dateFullFormat } from 'src/modules/formatter'
-import { useLaporanSigarangPenerimaanGudangStore } from 'src/stores/simrs/laporan/sigarang/penerimaangudang/penerimaangudang'
+import { useLaporanSigarangPenerimaanDepoStore } from 'src/stores/simrs/laporan/sigarang/penerimaandepo/depo'
 
-const store = useLaporanSigarangPenerimaanGudangStore()
+const store = useLaporanSigarangPenerimaanDepoStore()
 store.getInitialData()
 
 function setDari(val) {
@@ -307,7 +297,7 @@ function setDispKe(val) {
 }
 const printObj = {
   id: 'printMe',
-  popTitle: 'Laporan Penerimaan Gudang'
+  popTitle: 'Laporan Penerimaan Depo'
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 

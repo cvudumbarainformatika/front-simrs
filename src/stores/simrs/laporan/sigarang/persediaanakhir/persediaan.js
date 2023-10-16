@@ -22,7 +22,6 @@ export const useLaporanSigarangPersediaanFifoStore = defineStore('laporan_sigara
       { nama: 'Maret', value: '03' },
       { nama: 'April', value: '04' },
       { nama: 'Mei', value: '05' },
-      { nama: 'February', value: '06' },
       { nama: 'Juni', value: '06' },
       { nama: 'Juli', value: '07' },
       { nama: 'Agustus', value: '08' },

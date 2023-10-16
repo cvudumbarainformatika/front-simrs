@@ -46,7 +46,7 @@
             @update:model-value="gantiDataNota"
           />
         </div>
-        <div class="row no-wrap q-ma-xs">
+        <!-- <div class="row no-wrap q-ma-xs">
           <q-radio
             v-model="store.golongan"
             dense
@@ -56,7 +56,7 @@
             label="Konsul Antar Poli"
             @update:model-value="gantiDataNota"
           />
-        </div>
+        </div> -->
         <div class="row no-wrap q-ma-xs">
           <q-radio
             v-model="store.golongan"
@@ -74,7 +74,7 @@
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
-            val="laboratorium"
+            val="laborat"
             label="Laboratorium"
             @update:model-value="gantiDataNota"
           />
@@ -107,7 +107,7 @@
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
-            val="operasi besar"
+            val="operasibesar"
             label="Operasi (Tindakan Besar)"
             @update:model-value="gantiDataNota"
           />
@@ -118,7 +118,7 @@
             dense
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
-            val="operasi kecil"
+            val="operasikecil"
             label="Operasi (Tindakan Kecil)"
             @update:model-value="gantiDataNota"
           />
@@ -259,6 +259,46 @@
                         #
                       </div> -->
                     </div>
+                    <!-- bukan karcis -->
+                    <div
+                      v-if="store.golongan!=='karcis'"
+                      class=""
+                    >
+                      <div class="row no-wrap q-my-sm">
+                        <div class="col-6">
+                          <app-autocomplete
+                            v-model="nota"
+                            label="pilih Nota"
+                            autocomplete="nota"
+                            option-label="nota"
+                            option-value="nota"
+                            outlined
+                            valid
+                            autofocus
+                            :source="dataNotas"
+                            @selected="notaDipilih"
+                          />
+                        </div>
+                      </div>
+                      <div class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
+                        <div class="col-1">
+                          No
+                        </div>
+                        <div class="col-3">
+                          Nama Layanan
+                        </div>
+                        <div class="col-6">
+                          <div class="row no-wrap">
+                            <div class="col-6 text-right">
+                              Jumlah
+                            </div>
+                            <div class="col-6 text-right">
+                              Batal
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div v-if="store.notas.Pelayanan">
                       <!-- child -->
                       <!-- {{ store.notas }} -->
@@ -271,12 +311,16 @@
                           {{ i + 1 }}
                         </div>
                         <div class="col-3">
-                          {{ pel.namatindakan }}
+                          {{
+                            pel.namatindakan ??
+                              pel.keterangan ??
+                              pel.tindakan
+                          }}
                         </div>
                         <div class="col-6">
                           <div class="row no-wrap">
                             <div class="col-6 text-right">
-                              Rp {{ formatRp(pel.subtotal) }}
+                              Rp {{ pel.subtotal>0?formatRp(pel.subtotal):formatRp(pel.subtotalx) }}
                             </div>
                             <div class="col-6 text-right">
                               0
@@ -287,16 +331,13 @@
 
                       <!-- Bottom -->
                       <div class="q-ml-xs row no-wrap q-col-gutter-xs">
-                        <div class="col-3">
+                        <div class="col-1">
                           <!--  -->
                         </div>
-                        <div class="col-2">
-                          <!--  -->
-                        </div>
-                        <div class="col-2 text-weight-bold">
+                        <div class="col-3 text-right text-weight-bold">
                           Total
                         </div>
-                        <div class="col-3">
+                        <div class="col-6">
                           <div class="row no-wrap">
                             <div class="col-6 text-right">
                               Rp  {{ formatRp(store.notas.Subtotal) }}
@@ -503,14 +544,125 @@ const store = useKasirRajalListKunjunganStore()
 
 function cetakFakturRekap(val) {
   // nota.value = ' Tindakan'
+
   emits('rekap', val)
   console.log('cetak faktur', val)
 }
-
-// const dataNotas = ref('')
+const dataNotas = ref([])
+const nota = ref('')
 function gantiDataNota(val) {
-  // console.log('radio', val)
-  emits('nota', val)
+  if (val === 'karcis') {
+    console.log('karcis', prop.pasien)
+    const param = {
+      golongan: val,
+      noreg: prop.pasien.noreg
+    }
+    emits('nota', param)
+  } else {
+    console.log('pilihan lain', prop.pasien)
+    store.notas = {}
+    nota.value = ''
+    if (val === 'tindakan') {
+      if (prop.pasien.tindakan.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.tindakan[0].nota
+        }
+        nota.value = prop.pasien.tindakan[0].nota
+        dataNotas.value = prop.pasien.tindakan
+        emits('nota', param)
+      }
+    }
+    if (val === 'laborat') {
+      if (prop.pasien.laborat.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.laborat[0].nota
+        }
+        nota.value = prop.pasien.laborat[0].nota
+        dataNotas.value = prop.pasien.laborat
+        emits('nota', param)
+      }
+    }
+    if (val === 'radiologi') {
+      if (prop.pasien.transradiologi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.transradiologi[0].nota
+        }
+        nota.value = prop.pasien.transradiologi[0].nota
+        dataNotas.value = prop.pasien.transradiologi
+        emits('nota', param)
+      }
+    }
+    if (val === 'operasibesar') {
+      if (prop.pasien.kamaroperasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.kamaroperasi[0].nota
+        }
+        nota.value = prop.pasien.kamaroperasi[0].nota
+        dataNotas.value = prop.pasien.kamaroperasi
+        emits('nota', param)
+      }
+    }
+    if (val === 'operasikecil') {
+      if (prop.pasien.tindakanoperasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.tindakanoperasi[0].nota
+        }
+        nota.value = prop.pasien.tindakanoperasi[0].nota
+        dataNotas.value = prop.pasien.tindakanoperasi
+        emits('nota', param)
+      }
+    }
+    if (val === 'farmasi') {
+      const farmasi = []
+      if (prop.pasien.apotekrajal.length) {
+        prop.pasien.apotekrajal.forEach(a => farmasi.push(a))
+      }
+      if (prop.pasien.apotekrajalpolilalu.length) {
+        prop.pasien.apotekrajalpolilalu.forEach(a => farmasi.push(a))
+      }
+      if (prop.pasien.apotekracikanrajal.length) {
+        prop.pasien.apotekracikanrajal.forEach(a => farmasi.push(a))
+      }
+      if (prop.pasien.apotekracikanrajallalu.length) {
+        prop.pasien.apotekracikanrajallalu.forEach(a => farmasi.push(a))
+      }
+      if (farmasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: farmasi[0].nota
+        }
+        nota.value = farmasi[0].nota
+        dataNotas.value = farmasi
+        emits('nota', param)
+      }
+    }
+    if (val === 'sharingbpjs') {
+      // dataNotas.value = prop.pasien.tindakan
+    }
+  }
+}
+function notaDipilih(val) {
+  // console.log('dipilih val', val)
+  nota.value = val
+  const param = {
+    golongan: store.golongan,
+    noreg: prop.pasien.noreg,
+    nota: val
+  }
+  // console.log('param', param)
+
+  emits('nota', param)
 }
 const carabayar = ref('')
 function kirimBayar() {
@@ -544,18 +696,45 @@ function kirimBayar() {
     })
   }
 }
+function bayar() {
+  if (store.notas?.Pelayanan.length) {
+    console.log('nota pelayanan')
+    const form = {
+      noreg: prop.pasien.noreg,
+      norm: prop.pasien.norm,
+      nama: prop.pasien.nama,
+      poli: prop.pasien.poli,
+      sistembayar: prop.pasien.sistembayar,
+      total: 1,
+      // total: store.notas.Subtotal,
+      kodepoli: prop.pasien.kodepoli,
+      groupssistembayar: prop.pasien.groupssistembayar,
+      jenispembayaran: store.golongan,
+      carabayar: carabayar.value,
+      nota: nota.value
+    }
+    console.log('form', form)
+    store.savePembayaran(form).then(() => {
+      emits('print', carabayar.value)
+    })
+  }
+}
 function buatQris() {
   console.log('buat qris')
   carabayar.value = 'qris'
-  kirimBayar()
+  if (store.golongan === 'karcis') {
+    kirimBayar()
+  } else { bayar() }
 }
 function bayarTunai() {
   carabayar.value = 'tunai'
-  kirimBayar()
+  if (store.golongan === 'karcis') {
+    kirimBayar()
+  } else { bayar() }
   console.log('bayar tunai')
 }
 function buatVA() {
-  emits('print', 'qris')
+  // emits('print', 'qris')
   console.log('buat VA')
 }
 function batal() {

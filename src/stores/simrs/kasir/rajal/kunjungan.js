@@ -93,7 +93,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
           .then(resp => {
             this.loading = false
             console.log('resp', resp.data)
-            this.qris = resp.data.qrValue
+            this.qris = resp.data.result.qrValue
             resolve(resp.data)
           })
           .catch(() => {

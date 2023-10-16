@@ -212,8 +212,10 @@
             width="5%"
             class="text-left"
           >
-            <div class="">
-              No
+            <div class="row items-center text-weight-bold">
+              <div class="col-grow text-left">
+                No
+              </div>
             </div>
           </th>
           <th
