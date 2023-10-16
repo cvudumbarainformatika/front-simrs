@@ -600,6 +600,7 @@ function gantiDataNota(val) {
 }
 function notaDipilih(val) {
   // console.log('dipilih val', val)
+  nota.value = val
   const param = {
     golongan: store.golongan,
     noreg: prop.pasien.noreg,
@@ -641,18 +642,40 @@ function kirimBayar() {
     })
   }
 }
+function bayar() {
+  if (store.notas?.Pelayanan.length) {
+    console.log('nota pelayanan')
+    const form = {
+      noreg: prop.pasien.noreg,
+      norm: prop.pasien.norm,
+      nama: prop.pasien.nama,
+      poli: prop.pasien.poli,
+      sistembayar: prop.pasien.sistembayar,
+      total: store.notas.Subtotal,
+      kodepoli: prop.pasien.kodepoli,
+      groupssistembayar: prop.pasien.groupssistembayar,
+      jenispembayaran: store.golongan,
+      carabayar: carabayar.value,
+      nota: nota.value
+    }
+    console.log('form', form)
+    store.savePembayaran(form).then(() => {
+      emits('print', carabayar.value)
+    })
+  }
+}
 function buatQris() {
   console.log('buat qris')
   carabayar.value = 'qris'
   if (store.golongan === 'karcis') {
     kirimBayar()
-  }
+  } else { bayar() }
 }
 function bayarTunai() {
   carabayar.value = 'tunai'
   if (store.golongan === 'karcis') {
     kirimBayar()
-  }
+  } else { bayar() }
   console.log('bayar tunai')
 }
 function buatVA() {
