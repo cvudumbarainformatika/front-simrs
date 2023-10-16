@@ -813,10 +813,7 @@ const printObj = {
 
 }
 function getNota(val) {
-  const param = {
-    golongan: val,
-    noreg: pasien.value.noreg
-  }
+  const param = val
   console.log('golongan nota', param, pasien.value)
 
   store.getNotas(param)
