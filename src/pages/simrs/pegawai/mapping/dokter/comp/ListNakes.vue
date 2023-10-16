@@ -4,12 +4,38 @@
     bordered
   >
     <q-card-section class="q-pa-none">
-      <div class="row items-center justify-between bg-yellow-3">
+      <q-input
+        v-model="search"
+        label="Cari Nakes"
+        dense
+        outlined
+        standout="bg-yellow-3"
+      />
+      <div class="column  bg-yellow-3">
+        <!-- <div class="q-pa-sm">
+          Data Mapping Nakes
+        </div> -->
+        <div class="row items-center justify-between">
+          <q-option-group
+            v-model="group"
+            :options="options"
+            color="primary"
+            inline
+          />
+          <div class="q-px-md q-py-sm">
+            <div class="text-subtitle1 text-weight-bold">
+              {{ filterred.length }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row items-center justify-between bg-primary text-white">
         <q-option-group
-          v-model="group"
-          :options="options"
-          color="primary"
+          v-model="group2"
+          :options="options2"
+          color="white"
           inline
+          dark
         />
         <div class="q-px-md q-py-sm">
           <div class="text-subtitle1 text-weight-bold">
@@ -91,7 +117,9 @@ function kirimKeForm(val) {
   emits('select', val)
 }
 
+const search = ref('')
 const group = ref(1)
+const group2 = ref('1')
 const options = ref(
   [
     {
@@ -108,15 +136,49 @@ const options = ref(
     }
   ]
 )
+const options2 = ref(
+  [
+    {
+      label: 'Dokter',
+      value: '1'
+    },
+    {
+      label: 'Perawat',
+      value: '2'
+    },
+    {
+      label: 'Bidan',
+      value: '3'
+    }
+  ]
+)
 
 const filterred = computed(() => {
   const termapings = props?.termapings
+  let arr = []
   if (group.value === 1) {
-    return props?.lists.filter(x => !termapings.includes(x.kode))
+    arr = props?.lists.filter(x => !termapings.includes(x.kode))
   } else if (group.value === 2) {
-    return props?.lists.filter(x => termapings.includes(x.kode))
+    arr = props?.lists.filter(x => termapings.includes(x.kode))
   } else {
-    return props?.lists
+    arr = props?.lists
   }
+
+  const needle = search.value.toLowerCase()
+  // const splits = ['kdgroupnakes', 'nama']
+  // const multiFilter = (data = [], filterKeys = [], value = '') =>
+  //   data.filter((item) =>
+  //     filterKeys.some(
+  //       (key) =>
+  //         item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+  //               item[key]
+  //     )
+  //   )
+  // const filteredData = multiFilter(arr, splits, needle)
+
+  return arr?.filter(a => a.kdgroupnakes === group2.value && a.nama.toString().toLowerCase().includes(needle))
+  // return filteredData
 })
+
+console.log('filter', filterred.value)
 </script>
