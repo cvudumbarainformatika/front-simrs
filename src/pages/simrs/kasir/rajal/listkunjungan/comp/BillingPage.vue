@@ -563,19 +563,64 @@ function gantiDataNota(val) {
     store.notas = {}
     nota.value = ''
     if (val === 'tindakan') {
-      dataNotas.value = prop.pasien.tindakan
+      if (prop.pasien.tindakan.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.tindakan[0].nota
+        }
+        nota.value = prop.pasien.tindakan[0].nota
+        dataNotas.value = prop.pasien.tindakan
+        emits('nota', param)
+      }
     }
     if (val === 'laborat') {
-      dataNotas.value = prop.pasien.laborat
+      if (prop.pasien.laborat.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.laborat[0].nota
+        }
+        nota.value = prop.pasien.laborat[0].nota
+        dataNotas.value = prop.pasien.laborat
+        emits('nota', param)
+      }
     }
     if (val === 'radiologi') {
-      dataNotas.value = prop.pasien.transradiologi
+      if (prop.pasien.transradiologi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.transradiologi[0].nota
+        }
+        nota.value = prop.pasien.transradiologi[0].nota
+        dataNotas.value = prop.pasien.transradiologi
+        emits('nota', param)
+      }
     }
     if (val === 'operasibesar') {
-      dataNotas.value = prop.pasien.kamaroperasi
+      if (prop.pasien.kamaroperasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.kamaroperasi[0].nota
+        }
+        nota.value = prop.pasien.kamaroperasi[0].nota
+        dataNotas.value = prop.pasien.kamaroperasi
+        emits('nota', param)
+      }
     }
     if (val === 'operasikecil') {
-      dataNotas.value = prop.pasien.tindakanoperasi
+      if (prop.pasien.tindakanoperasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: prop.pasien.tindakanoperasi[0].nota
+        }
+        nota.value = prop.pasien.tindakanoperasi[0].nota
+        dataNotas.value = prop.pasien.tindakanoperasi
+        emits('nota', param)
+      }
     }
     if (val === 'farmasi') {
       const farmasi = []
@@ -591,7 +636,16 @@ function gantiDataNota(val) {
       if (prop.pasien.apotekracikanrajallalu.length) {
         prop.pasien.apotekracikanrajallalu.forEach(a => farmasi.push(a))
       }
-      dataNotas.value = farmasi
+      if (farmasi.length) {
+        const param = {
+          golongan: val,
+          noreg: prop.pasien.noreg,
+          nota: farmasi[0].nota
+        }
+        nota.value = farmasi[0].nota
+        dataNotas.value = farmasi
+        emits('nota', param)
+      }
     }
     if (val === 'sharingbpjs') {
       // dataNotas.value = prop.pasien.tindakan
