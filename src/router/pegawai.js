@@ -118,6 +118,12 @@ const pegawai =
             name: 'pegawai.mapping.dokter',
             component: () =>
               import('pages/simrs/pegawai/mapping/dokter/IndexPage.vue')
+          },
+          {
+            path: '/pegawai/mapping/bpjs',
+            name: 'pegawai.mapping.bpjs',
+            component: () =>
+              import('pages/simrs/pegawai/mapping/bpjs/IndexPage.vue')
           }
         ]
       },
