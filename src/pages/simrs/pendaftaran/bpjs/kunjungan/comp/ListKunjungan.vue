@@ -229,7 +229,9 @@ function bukaSep(val) {
   //   norm: val.norm,
   //   noka: val.noka
   // }
-  sepStore.getSep(val)
+  if (!val.sep) {
+    sepStore.getSep(val)
+  }
 }
 function simpanPengajuan() {
   const data = {
