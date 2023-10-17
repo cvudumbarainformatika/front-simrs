@@ -8,13 +8,6 @@
     />
     <q-toolbar-title class="f-14">
       <div class="row items-center q-gutter-md">
-        <!-- <q-btn
-          color="yellow"
-          :label="`DPJP || ${pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter}`"
-          dense
-          class="q-px-sm"
-          outline
-        > -->
         <q-btn
           color="primary"
           class="q-pl-xs"
@@ -30,7 +23,7 @@
               </div>
             </div>
           </div>
-          <q-menu style="width: 360px;">
+          <q-menu style="max-width: 460px;">
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">
                 <q-avatar size="72px">
@@ -60,12 +53,13 @@
                     label="Cari Dpjp"
                     use-input
                     clearable
-                    option-value="id"
+                    option-value="kddpjp"
                     option-label="nama"
                     :options="options"
                     behavior="menu"
                     hide-dropdown-icon
                     @filter="filterOptions"
+                    @update:model-value="(val)=> updateKodeDpjp(val)"
                   >
                     <!-- @update:model-value="(val)=>$emit('updated', val)" -->
                     <template #prepend>
@@ -91,30 +85,34 @@
                             <strong>Nip : </strong> {{ scope.opt.nip }}
                           </q-item-label>
                           <q-item-label caption>
-                            <strong>Ruangan : </strong> {{ scope.opt.ruangan? scope.opt.ruangan.namaruang : '-' }}
+                            <strong>KODE DPJP : </strong> {{ scope?.opt?.kddpjp??'-' }}
                           </q-item-label>
                         </q-item-section>
                       </q-item>
                     </template>
                   </q-select>
-                  <!-- <q-input
-                    label="cari dpjp"
+                  <q-input
+                    v-model="kodedpjp"
+                    label="KODE DPJP (Automatis)"
                     outlined
                     standout="bg-yellow-3"
                     dense
                     class="q-my-sm"
-                    :rules="[val => !!val || 'Harus diisi']"
+                    :rules="[val => !!val || 'HARAP Hubungi Kepegawaian ... Kode DPJP Pegawai ini Blm UP TO DATE']"
                     readonly
-                  /> -->
-                  <q-separator class="q-my-md" />
-                  <q-btn
-                    v-close-popup
-                    color="primary"
-                    label="Simpan"
-                    push
-                    size="sm"
-                    type="submit"
                   />
+                  <q-separator class="q-my-sm" />
+                  <div class="text-right">
+                    <q-btn
+                      color="primary"
+                      label="Simpan"
+                      push
+                      size="sm"
+                      type="submit"
+                      :loading="loadingSaveDpjp"
+                      :disable="loadingSaveDpjp"
+                    />
+                  </div>
                 </q-form>
               </div>
             </div>
@@ -154,19 +152,38 @@
 import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 
-const emits = defineEmits(['toggleLeftDrawer'])
+const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp'])
 
 const search = ref('')
+const kodedpjp = ref(null)
+const kdpegsimrs = ref(null)
 const options = ref([])
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loadingSaveDpjp: {
+    type: Boolean,
+    default: false
   }
 })
 
+function updateKodeDpjp(val) {
+  // console.log(val)
+  kodedpjp.value = val?.kddpjp
+  kdpegsimrs.value = val?.kdpegsimrs
+}
+
 function gantiDpjp() {
-  console.log('ok')
+  // console.log('ok')
+  const form = {
+    kodedpjp: kodedpjp.value,
+    kdpegsimrs: kdpegsimrs.value,
+    noreg: props?.pasien?.noreg
+  }
+
+  emits('gantidpjp', form)
 }
 
 function getImage(kelamin, row) {
@@ -192,7 +209,7 @@ async function filterOptions (val, update) {
     }
   }
   // console.log('q :', val)
-  const resp = await api.get('/v1/settings/appmenu/cari_pegawai', params)
+  const resp = await api.get('/v1/settings/appmenu/cari_dokter', params)
   console.log('cari', resp)
   update(
     () => (options.value = resp.data),
