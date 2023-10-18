@@ -46,14 +46,6 @@
             <q-item-label caption>
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
             </q-item-label>
-            <!-- <q-item-label>
-              Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
-            </q-item-label> -->
-            <!-- <q-item-label
-              caption
-            >
-              Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span>
-            </q-item-label> -->
           </q-item-section>
 
           <q-item-section
@@ -61,27 +53,6 @@
             top
           >
             <q-item-label caption>
-              <!-- <div class="row justify-end">
-                <div class="q-ml-sm">
-                  <q-badge
-                    outline
-                    :color="item.seprajal?'teal':'negative'"
-                    :label="item.seprajal?'SEP terbit':'SEP Belum terbit'"
-                  />
-                </div>
-              </div> -->
-              <!-- <div class="row q-mt-sm text-end">
-                <div class="q-ml-sm">
-                  <q-btn
-                    outline
-                    size="sm"
-                    padding="xs"
-                    :color="item.generalconsent?'teal':'negative'"
-                    :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
-                    @click="genCon(item)"
-                  />
-                </div>
-              </div> -->
               <div class="row q-mt-sm justify-end">
                 <div class="q-ml-sm">
                   <q-btn
