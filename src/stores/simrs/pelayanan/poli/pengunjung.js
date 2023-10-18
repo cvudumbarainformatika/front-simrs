@@ -21,7 +21,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
     pageTindakan: false,
     filters: false,
-    custom: false
+    custom: false,
+    loadingSaveGantiDpjp: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -32,7 +33,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const params = { params: this.params }
       await api.get('/v1/simrs/rajal/poli/kunjunganpoli', params)
         .then((resp) => {
-          // console.log('kunjungan poli', resp)
+          console.log('kunjungan poli', resp)
           this.loading = false
           if (resp.status === 200) {
             this.meta = resp.data
@@ -94,6 +95,31 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     setCustom() {
       this.custom = !this.custom
     },
+
+    async gantiDpjp(form, pasien) {
+      // console.log(form)
+      this.loadingSaveGantiDpjp = true
+      try {
+        const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
+        console.log(resp)
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x === pasien)
+          if (findPasien.length) {
+            const data = findPasien[0]
+            data.datasimpeg = resp?.data?.result?.datasimpeg
+            data.dokter = resp?.data?.result?.datasimpeg?.nama
+            this.loadingSaveGantiDpjp = false
+          }
+
+          this.loadingSaveGantiDpjp = false
+        }
+        this.loadingSaveGantiDpjp = false
+      } catch (error) {
+        console.log(error)
+        this.loadingSaveGantiDpjp = false
+      }
+    },
+
     // inject pasien
 
     injectDataPasien(pasien, val, kode) {

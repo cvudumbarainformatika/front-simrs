@@ -5,7 +5,16 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useBpjsMappingDokter = defineStore('mapping-dokter-bpjs', {
   state: () => ({
     listdokter: [],
-    loadingListDikter: false
+    pegawais: [],
+    loadingListDikter: false,
+    objDokter: null,
+    searchResultKepeg: null,
+    loadingSave: false,
+    form: {
+      nip: '',
+      kddpjp: ''
+    },
+    ygsudahdimappings: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -16,10 +25,11 @@ export const useBpjsMappingDokter = defineStore('mapping-dokter-bpjs', {
       try {
         const resp = await api.get('v1/simrs/maping/simpegsimrs/listdokterbpjs')
         console.log('get dokter bpjs', resp)
-        // if (resp.status === 200) {
-        //   this.listsnakes = resp?.data
-        //   this.loadingListDikter = false
-        // }
+        if (resp.status === 200) {
+          this.listdokter = resp?.data?.result
+          this.loadingListDikter = false
+        }
+        this.loadingListDikter = false
       } catch (error) {
         console.log(error)
         this.loadingListDikter = false
@@ -36,28 +46,22 @@ export const useBpjsMappingDokter = defineStore('mapping-dokter-bpjs', {
         console.log(error)
       }
     },
-    setObjnakes(val) {
-      this.objNakes = val
-      // this.searchResultKepeg = val?.nama
-      const peg = this.pegawais?.filter(x => x.kdpegsimrs === val?.kode)
-      this.searchResultKepeg = peg.length ? peg[0] : null
+    setObjDokter(val) {
+      this.objDokter = val
     },
     async saveMapping() {
-      const notValidNakes = this.objNakes === null || this.objNakes === ''
+      const notValidNakes = this.objDokter === null || this.objDokter === ''
       const notValidNKepeg = this.searchResultKepeg === null || this.searchResultKepeg === ''
       if (notValidNakes) {
-        notifErrVue('Maaf.... Pilih NAKES Terlebih dahulu!')
+        notifErrVue('Maaf.... Pilih DOKTER Terlebih dahulu!')
       } else if (notValidNKepeg) {
         notifErrVue('Maaf.... Cari Data KEPEGAWAIAN Terlebih dahulu!')
       } else {
         this.loadingSave = true
         this.form.nip = this.searchResultKepeg?.nip
-        this.form.kdpegsimrs = this.objNakes?.kode
-        this.form.kdgroupnakes = this.objNakes?.kdgroupnakes
-        this.form.kdruangansim = this.objNakes?.kdruangan
-        this.form.statusspesialis = this.objNakes?.Spesialis
+        this.form.kddpjp = this.objDokter?.kodedokter
         try {
-          const resp = await api.post('v1/simrs/maping/simpegsimrs/simpanmaping', this.form)
+          const resp = await api.post('v1/simrs/maping/simpegsimrs/simpanmapingbpjs', this.form)
           if (resp?.status === 200) {
             this.setDataTermapping(resp?.data?.result)
             notifSuccess(resp)
@@ -65,16 +69,13 @@ export const useBpjsMappingDokter = defineStore('mapping-dokter-bpjs', {
             console.log(this.ygsudahdimappings)
             const target = this.pegawais?.filter(x => x.nip === this.searchResultKepeg?.nip)
             if (target.length) {
-              target[0].kdpegsimrs = this.objNakes?.kode
+              target[0].kddpjp = this.objDokter?.kodedokter
             }
-            this.objNakes = null
+            this.objDokter = null
             this.searchResultKepeg = null
             this.form = {
               nip: '',
-              kdpegsimrs: '',
-              statusspesialis: '',
-              kdgroupnakes: '',
-              kdruangansim: ''
+              kddpjp: ''
             }
           }
           this.loadingSave = false
@@ -86,13 +87,13 @@ export const useBpjsMappingDokter = defineStore('mapping-dokter-bpjs', {
       }
     },
     async getDataTermapping(arr) {
-      const resp = await api.get('v1/simrs/maping/simpegsimrs/datatermaping')
+      const resp = await api.get('v1/simrs/maping/simpegsimrs/datatermapingbpjs')
       if (resp.status === 200) {
         this.setDataTermapping(resp?.data)
       }
     },
     setDataTermapping(arr) {
-      this.ygsudahdimappings = arr.length ? arr?.map(x => x.kdpegsimrs) : []
+      this.ygsudahdimappings = arr.length ? arr?.map(x => x.kddpjp) : []
     }
   }
 })

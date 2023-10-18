@@ -21,7 +21,9 @@
         >
           <HeaderLayout
             :pasien="pasien"
+            :loading-save-dpjp="store.loadingSaveGantiDpjp"
             @toggle-left-drawer="drawer = !drawer"
+            @gantidpjp="(val)=>store.gantiDpjp(val, pasien)"
           />
         </q-header>
         <!-- LEFT DRAWER ======================================================================================-->
@@ -101,7 +103,9 @@ import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
+import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 
+const store = usePengunjungPoliStore()
 const drawer = ref(false)
 const drawerRight = ref(false)
 const props = defineProps({
