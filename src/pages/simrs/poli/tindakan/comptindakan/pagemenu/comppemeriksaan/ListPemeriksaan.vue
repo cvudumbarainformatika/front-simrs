@@ -330,11 +330,11 @@ function tekananDarah(val) {
   if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
   } else if (prahipertensi) {
-    obj = { color: 'text-yellow', res: 'Prahipertensi' }
+    obj = { color: 'text-red', res: 'Prahipertensi' }
   } else if (hipertensiderajat1) {
-    obj = { color: 'text-orange', res: 'Hipertensi Derajat 1' }
+    obj = { color: 'text-red', res: 'Hipertensi Derajat 1' }
   } else if (hipertensiderajat2) {
-    obj = { color: 'text-negative', res: 'Hipertensi Derajat 2' }
+    obj = { color: 'text-red', res: 'Hipertensi Derajat 2' }
   } else {
     obj = { color: 'text-red', res: 'Not Valid' }
   }
@@ -354,11 +354,11 @@ function tekananDarahDias(val) {
   if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
   } else if (prahipertensi) {
-    obj = { color: 'text-yellow', res: 'Prahipertensi' }
+    obj = { color: 'text-red', res: 'Prahipertensi' }
   } else if (hipertensiderajat1) {
-    obj = { color: 'text-orange', res: 'Hipertensi Derajat 1' }
+    obj = { color: 'text-red', res: 'Hipertensi Derajat 1' }
   } else if (hipertensiderajat2) {
-    obj = { color: 'text-negative', res: 'Hipertensi Derajat 2' }
+    obj = { color: 'text-red', res: 'Hipertensi Derajat 2' }
   } else {
     obj = { color: 'text-red', res: 'LOW' }
   }
@@ -380,9 +380,9 @@ function suhu(val) {
   } else if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
   } else if (pireksia) {
-    obj = { color: 'text-orange', res: 'Pireksia/febris' }
+    obj = { color: 'text-red', res: 'Pireksia/febris' }
   } else if (hipertermia) {
-    obj = { color: 'text-negative', res: 'Hipertermia' }
+    obj = { color: 'text-red', res: 'Hipertermia' }
   }
 
   return obj
@@ -397,11 +397,11 @@ function nadi(val) {
     res: 'Normal'
   }
   if (bradikardi) {
-    obj = { color: 'text-negative', res: 'Brakikardi' }
+    obj = { color: 'text-red', res: 'Brakikardi' }
   } else if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
   } else if (takikardi) {
-    obj = { color: 'text-orange', res: 'Takikardi' }
+    obj = { color: 'text-red', res: 'Takikardi' }
   }
 
   return obj

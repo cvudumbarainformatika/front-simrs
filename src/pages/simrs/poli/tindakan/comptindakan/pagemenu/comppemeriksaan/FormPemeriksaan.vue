@@ -173,6 +173,15 @@
               />
             </div>
           </div>
+          <div class="col-12">
+            <q-rating
+              v-model="store.formVital.skornyeri"
+              :max="4"
+              size="3.5em"
+              color="green-5"
+              :icon="icons"
+            />
+          </div>
         </q-form>
       </q-scroll-area>
     </div>
@@ -283,6 +292,8 @@ const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 const formRef = ref()
 
+// const
+
 const props = defineProps({
   pasien: {
     type: Object,
@@ -311,4 +322,5 @@ async function onSubmit() {
     })
   }
 }
+
 </script>

@@ -35,7 +35,7 @@
             <q-item-label
               caption
             >
-              status : <span :class="getStatus(item.status)?'text-accent':'text-negative'">{{ getStatus(item.status)?'SUDAH DILAYANI':'BELUM DILAYANI' }}</span>
+              status : <span :class="item.status !== ''?'text-primary':'text-negative'">{{ getStatus(item.status) }}</span>
             </q-item-label>
           </q-item-section>
           <q-separator
@@ -83,21 +83,23 @@
               size="sm"
               no-caps
               color="primary"
-              label="Layanan"
+              :label="labelLayanan(item?.status)"
               class="q-mb-sm"
-              icon-right="icon-mat-description"
-              style="min-width: 100px;"
+              icon-right="icon-mat-edit"
+              style="min-width: 120px;"
+              :loading="loadingTerima"
+              :disable="loadingTerima"
               @click="emits('tindakan', item)"
             />
             <q-btn
               dense
               size="sm"
-              outline
               no-caps
-              color="orange"
-              label="Panggil"
+              color="orange-7"
+              label="PANGGIL"
               icon-right="icon-mat-volume_up"
-              style="min-width: 100px;"
+              style="min-width: 120px;"
+              @click="emits('panggilan', item)"
             />
           </q-item-section>
         </q-item>
@@ -112,7 +114,7 @@
 import LoadingList from './LoadingList.vue'
 import EmptyData from './EmptyData.vue'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
-const emits = defineEmits(['tindakan'])
+const emits = defineEmits(['tindakan', 'panggil'])
 defineProps({
   items: {
     type: Array,
@@ -121,14 +123,39 @@ defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  loadingTerima: {
+    type: Boolean,
+    default: false
   }
 })
 
 function getStatus(val) {
-  if (val === 1 || val === '1') {
-    return true
+  // '' : 'Belum Terlayanani'
+  // '1': 'Terlayani'
+  // '2': 'Sudah diterima'
+  // '3': Batal
+  if (val === '') {
+    return 'BELUM TERLAYANI'
+  } else if (val === '1') {
+    return 'TERLAYANI'
+  } else if (val === '2') {
+    return 'SUDAH DITERIMA'
+  } else {
+    return 'BATAL'
   }
-  return false
+}
+
+function labelLayanan(val) {
+  if (val === '') {
+    return 'TERIMA'
+  } else if (val === '1') {
+    return 'LIHAT LAYANAN'
+  } else if (val === '2') {
+    return 'SUDAH DITERIMA'
+  } else if (val === '3') {
+    return 'BATAL'
+  }
 }
 
 // function getTask(arr) {

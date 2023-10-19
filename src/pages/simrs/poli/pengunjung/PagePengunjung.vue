@@ -39,13 +39,14 @@
         :key="store.items"
         :items="store.items"
         :loading="store.loading"
+        :loading-terima="store.loadingTerima"
         @tindakan="bukaTindakan"
+        @panggilan="panggil"
       />
     </q-card>
 
     <FilterPage
       v-model="store.filters"
-
       @close="store.setFilters"
       @filter-data="store.filterData"
     />
@@ -71,8 +72,10 @@ import ListPengunjung from './comp/ListPengunjung.vue'
 // import PageTindakan from './comp/PageTindakan.vue'
 import PageTindakan from '../tindakan/IndexPage.vue'
 import { useQuasar } from 'quasar'
+import { useSpeechStore } from 'src/stores/antrian/speech'
 
 const style = useStyledStore()
+const speech = useSpeechStore()
 const store = usePengunjungPoliStore()
 const diagnosa = useLayananPoli()
 const pasien = ref(null)
@@ -82,10 +85,45 @@ const pasien = ref(null)
 
 const $q = useQuasar()
 onMounted(() => {
+  const voices = speech.synth.getVoices()
+  if (voices.length) {
+    speech.setLoading(false)
+    console.log('onMounted :', voices)
+  }
+
+  speech.synth.onvoiceschanged = () => {
+    speech.setVoiceList(speech.synth.getVoices())
+    // give a bit of delay to show loading screen
+    // just for the sake of it, I suppose. Not the best reason
+    setTimeout(() => {
+      speech.setLoading(false)
+    }, 500)
+  }
   store.getData()
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
 })
+
+function setSpeech(txt) {
+  console.log(speech.voiceList[11])
+  const voice = speech.utterance
+  voice.text = txt
+  voice.voice = speech.voiceList[11]
+
+  voice.volume = 1
+  voice.pitch = 1
+  voice.rate = 1
+
+  return voice
+}
+
+function panggil(row) {
+  console.log(row)
+  const txt1 = 'paasieen ... ' + (row?.nama_panggil).toLowerCase() + ' ...Harap menujuu... ' + row?.panggil_antrian
+  // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
+  // const txt = jns === 'nama' ? txt1 : txt2
+  speech.synth.speak(setSpeech(txt1))
+}
 
 function bukaTindakan(val) {
   console.log('buka tindakan', val)
@@ -105,23 +143,11 @@ function bukaTindakan(val) {
       // ]
     })
 
-    // $q.dialog({
-    //   title: 'Peringatan',
-    //   message: 'Apakah Data ini akan dihapus?',
-    //   color: 'negative'
-    // }).onOk(() => {
-    // // console.log('OK')
-    // // store.deleteData(props.pasien, id)
-    // }).onCancel(() => {
-    // // console.log('Cancel')
-    // }).onDismiss(() => {
-    // // console.log('I am triggered on both OK and Cancel')
-    // })
-
     return
   }
   pasien.value = val
-  store.togglePageTindakan()
-  console.log('pasien', pasien.value)
+  // store.togglePageTindakan()
+  // console.log('pasien', pasien.value)
+  store.setTerima(val)
 }
 </script>
