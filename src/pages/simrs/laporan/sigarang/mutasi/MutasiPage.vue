@@ -89,6 +89,7 @@
       :ada-tambah="false"
       :ada-filter="false"
       :ada-paginasi="false"
+      :ada-per-page="false"
       :click-able="true"
       text-cari="Cari Nama / Kode ..."
       row-no
