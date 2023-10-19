@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Notify } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 
@@ -7,6 +8,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     items: [],
     meta: null,
     loading: false,
+    loadingTerima: false,
 
     statuses: ['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'],
     params: {
@@ -17,7 +19,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       status: '',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      per_page: 100
+      per_page: 100,
+      kdpoli: 'POL017'
     },
     pageTindakan: false,
     filters: false,
@@ -121,6 +124,70 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
 
     // inject pasien
+    async setLayananSelesai(pasien) {
+      this.loadingTerima = true
+      // '' : 'Belum Terlayanani'
+      // '1': 'Terlayani'
+      // '2': 'Sudah diterima'
+      // '3': Batal
+      if (!pasien?.anamnesis.length) {
+        return this.notifikasiError('Maaf, Anamnesis Harap Diisi Dahulu...')
+      }
+      if (!pasien?.diagnosa?.length) {
+        return this.notifikasiError('Maaf, Diagnosa Harap Diisi Dahulu...')
+      }
+      // if (!pasien?.planning?.length) {
+      //   return this.notifikasiError('Maaf, Planing Harap Diisi Dahulu...')
+      // }
+
+      try {
+        const resp = await api.post('v1/simrs/rajal/poli/flagfinish')
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x === pasien)
+          if (findPasien.length) {
+            findPasien[0].status = '1'
+          }
+          this.loadingTerima = false
+        }
+      } catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+
+    async setTerima(pasien) {
+      this.loadingTerima = true
+      const form = { noreg: pasien?.noreg }
+      try {
+        const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x === pasien)
+          if (findPasien.length) {
+            findPasien[0].status = '2'
+          }
+          this.loadingTerima = false
+          this.togglePageTindakan()
+        }
+      } catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+
+    notifikasiError(msg) {
+      Notify.create({
+        message: msg,
+        // icon: 'icon-eva-message-circle-outline',
+        position: 'top',
+        // color: 'negative',
+        type: 'negative'
+        // actions: [
+        //   { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+        // ]
+      })
+    },
 
     injectDataPasien(pasien, val, kode) {
       const findPasien = this.items.filter(x => x === pasien)

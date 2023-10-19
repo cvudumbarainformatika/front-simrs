@@ -35,7 +35,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // status
       statuspsikologis: 'Tidak ada kelainan',
       sosialekonomi: '',
-      spiritual: ''
+      spiritual: '',
+      skornyeri: 0,
+      keteranganskornyeri: 'tidak ada nyeri'
     },
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' },
@@ -242,7 +244,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           // status
           statuspsikologis: 'Tidak ada kelainan',
           sosialekonomi: '',
-          spiritual: ''
+          spiritual: '',
+          skornyeri: 0,
+          keteranganskornyeri: 'tidak ada nyeri'
         }
 
         resolve()

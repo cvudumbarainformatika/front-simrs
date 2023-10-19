@@ -15,7 +15,7 @@
         >
           <div class="row items-center no-wrap q-gutter-sm text-white">
             <q-avatar size="30px">
-              <img :src="getImage()">
+              <img :src="getImage(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
             </q-avatar>
             <div class="column f-12">
               <div>
@@ -27,7 +27,7 @@
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">
                 <q-avatar size="72px">
-                  <img :src="getImage()">
+                  <img :src="getImage(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
                 </q-avatar>
 
                 <div class="f12 q-mt-md q-mb-xs">
@@ -98,7 +98,7 @@
                     standout="bg-yellow-3"
                     dense
                     class="q-my-sm"
-                    :rules="[val => !!val || 'HARAP Hubungi Kepegawaian ... Kode DPJP Pegawai ini Blm UP TO DATE']"
+                    :rules="[val => !!val || 'HARAP Hubungi bidang YANMED ...']"
                     readonly
                   />
                   <q-separator class="q-my-sm" />
@@ -129,10 +129,21 @@
 
     <div>
       <q-btn
+        v-if="pasien?.status===''"
         label="selesaikan layanan"
         color="negative"
         class="q-mr-lg q-px-lg"
         dense
+        @click="selesaikanLayanan"
+      />
+      <q-btn
+        v-else
+        label="SUDAH DILAYANI"
+        color="white"
+        class="q-mr-lg q-px-lg"
+        dense
+        outline
+        disable
       />
       <q-btn
         v-close-popup
@@ -152,7 +163,7 @@
 import { api } from 'src/boot/axios'
 import { ref } from 'vue'
 
-const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp'])
+const emits = defineEmits(['toggleLeftDrawer', 'gantidpjp', 'layananSelesai'])
 
 const search = ref('')
 const kodedpjp = ref(null)
@@ -220,5 +231,10 @@ async function filterOptions (val, update) {
       }
     }
   )
+}
+
+function selesaikanLayanan() {
+  // console.log('ok')
+  emits('layananSelesai')
 }
 </script>
