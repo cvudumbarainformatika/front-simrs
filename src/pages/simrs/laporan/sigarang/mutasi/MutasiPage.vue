@@ -89,6 +89,8 @@
       :ada-tambah="false"
       :ada-filter="false"
       :ada-paginasi="false"
+      :ada-per-page="false"
+      :click-able="true"
       text-cari="Cari Nama / Kode ..."
       row-no
       tanda-tangan
@@ -97,6 +99,7 @@
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
+      @on-click="onClick"
     >
       <template #header-for-print>
         <div class="row items-center garis-bawah">
@@ -298,6 +301,10 @@ import { date } from 'quasar'
 const store = useLaporanSigarangMutasiStore()
 store.getInitialData()
 
+// click
+function onClick (val) {
+  console.log('click', val)
+}
 const printObj = {
   id: 'printMe',
   popTitle: 'Laporan Mutasi RS'
