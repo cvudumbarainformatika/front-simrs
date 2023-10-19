@@ -174,11 +174,15 @@
             </div>
           </div>
           <div class="col-12">
+            <div class="q-mb-sm">
+              Status Nyeri
+            </div>
+            <q-separator />
             <q-rating
               v-model="store.formVital.skornyeri"
-              :max="4"
+              :max="6"
               size="3.5em"
-              color="green-5"
+              color="primary"
               :icon="icons"
             />
           </div>
@@ -292,7 +296,14 @@ const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 const formRef = ref()
 
-// const
+const icons = ref([
+  'icon-my-emoticon-excited-outline',
+  'icon-my-emoticon-outline',
+  'icon-my-emoticon-neutral-outline',
+  'icon-my-emoticon-sad-outline',
+  'icon-my-emoticon-confused-outline',
+  'icon-my-emoticon-cry-outline'
+])
 
 const props = defineProps({
   pasien: {
