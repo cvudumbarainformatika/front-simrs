@@ -20,7 +20,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
       per_page: 100,
-      kdpoli: 'POL017'
+      kdpoli: ''
     },
     pageTindakan: false,
     filters: false,

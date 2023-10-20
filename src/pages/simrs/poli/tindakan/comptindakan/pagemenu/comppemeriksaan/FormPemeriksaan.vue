@@ -175,16 +175,75 @@
           </div>
           <div class="col-12">
             <div class="q-mb-sm">
-              Status Nyeri
+              Status Nyeri <em class="text-primary">{{ keteranganSkorNyeri(store?.formVital?.skornyeri) }}</em>
             </div>
             <q-separator />
-            <q-rating
-              v-model="store.formVital.skornyeri"
-              :max="6"
-              size="3.5em"
-              color="primary"
-              :icon="icons"
-            />
+            <div>
+              <q-slider
+                v-model="store.formVital.skornyeri"
+                color="primary"
+                thumb-color="primary"
+                label-color="primary"
+                label-text-color="yellow"
+                markers
+                marker-labels
+                marker-labels-class="text-primary"
+                switch-marker-labels-side
+                label-always
+                switch-label-side
+                label
+                :label-value="store?.form?.skornyeri"
+                :min="0"
+                :max="10"
+              >
+                <template #marker-label-group="{ markerMap }">
+                  <!-- {{ markerMap[store?.formVital?.skornyeri]?.classes }} -->
+                  <div
+                    class="row items-center no-wrap"
+                    :class="markerMap[store?.formVital?.skornyeri]?.classes"
+                    :style="markerMap[store?.formVital?.skornyeri]?.style"
+                  >
+                    <!-- {{ markerMap[store?.formVital?.skornyeri]?.classes }} -->
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri < 2"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-excited-outline"
+                    />
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri >= 2 && store?.formVital?.skornyeri < 4"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-outline"
+                    />
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri >= 4 && store?.formVital?.skornyeri < 6"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-neutral-outline"
+                    />
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri >= 6 && store?.formVital?.skornyeri < 8"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-confused-outline"
+                    />
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri >= 8 && store?.formVital?.skornyeri < 10"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-angry-outline"
+                    />
+                    <q-icon
+                      v-if="store?.formVital?.skornyeri === 10"
+                      size="lg"
+                      color="teal"
+                      name="icon-my-emoticon-cry-outline"
+                    />
+                  </div>
+                </template>
+              </q-slider>
+            </div>
           </div>
         </q-form>
       </q-scroll-area>
@@ -264,12 +323,7 @@
               >
                 Data Belum Ada
               </div>
-              <div
-                class="
-                        text-right
-                        bg-yellow-3
-                        q-pa-sm"
-              >
+              <div class="text-right bg-yellow-3 q-pa-sm">
                 <q-btn
                   label="Simpan Pemeriksaan"
                   color="primary"
@@ -296,14 +350,14 @@ const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 const formRef = ref()
 
-const icons = ref([
-  'icon-my-emoticon-excited-outline',
-  'icon-my-emoticon-outline',
-  'icon-my-emoticon-neutral-outline',
-  'icon-my-emoticon-sad-outline',
-  'icon-my-emoticon-confused-outline',
-  'icon-my-emoticon-cry-outline'
-])
+// const icons = ref([
+//   'icon-my-emoticon-excited-outline',
+//   'icon-my-emoticon-outline',
+//   'icon-my-emoticon-neutral-outline',
+//   'icon-my-emoticon-sad-outline',
+//   'icon-my-emoticon-confused-outline',
+//   'icon-my-emoticon-cry-outline'
+// ])
 
 const props = defineProps({
   pasien: {
@@ -331,6 +385,18 @@ async function onSubmit() {
     store.savePemeriksaan(props.pasien, menus.value).then(() => {
       formRef.value.resetValidation()
     })
+  }
+}
+
+function keteranganSkorNyeri(val) {
+  if (val === 0) {
+    return 'tidak ada nyeri'
+  } else if (val > 0 && val <= 3) {
+    return 'nyeri ringan'
+  } else if (val > 3 && val <= 6) {
+    return 'nyeri sedang'
+  } else if (val > 6 && val <= 10) {
+    return 'nyeri berat'
   }
 }
 

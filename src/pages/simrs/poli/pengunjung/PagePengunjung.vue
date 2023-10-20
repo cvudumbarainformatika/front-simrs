@@ -126,25 +126,28 @@ function panggil(row) {
 }
 
 function bukaTindakan(val) {
-  console.log('buka tindakan', val)
-  if (!val?.sep) {
-    $q.notify({
-      type: 'negative',
-      title: 'Peringatan',
-      message: 'INFO WARNING <b/> MAAF, <em><b>Pasien Ini Belum terbit SEP</b></em>',
-      // color: 'primary',
-      html: true,
-      // multiLine: true,
-      avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-      // position: 'center',
-      timeout: 1000
+  // console.log('buka tindakan', val)
+  if (val?.groups === '1') {
+    if (!val?.sep) {
+      $q.notify({
+        type: 'negative',
+        title: 'Peringatan',
+        message: 'INFO WARNING <b/> MAAF, <em><b>Pasien Ini Belum terbit SEP</b></em>',
+        // color: 'primary',
+        html: true,
+        // multiLine: true,
+        // avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+        // position: 'center',
+        timeout: 1000
       // actions: [
       //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
       // ]
-    })
+      })
 
-    return
+      return
+    }
   }
+
   pasien.value = val
   // store.togglePageTindakan()
   // console.log('pasien', pasien.value)
