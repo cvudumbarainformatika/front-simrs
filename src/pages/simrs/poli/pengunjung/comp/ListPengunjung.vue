@@ -30,7 +30,7 @@
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
             </q-item-label>
             <!-- <q-item-label>
-              Tanggal Kunjungan : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
+              penjamin : <span class="text-weight-bold text-negative">{{ item?.sistembayar }}</span>
             </q-item-label> -->
             <q-item-label
               caption
