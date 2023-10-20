@@ -49,7 +49,8 @@
 
         <!-- ===============================================================================ROW FORM -->
         <div
-          class="col-4 scroll"
+          class="scroll"
+          :class="pasien?.pemeriksaanfisik?.length? 'col-5':'col-8'"
           style="border-left: 1px solid gray; border-right: 1px solid gray;"
         >
           <FormPemeriksaan
@@ -59,7 +60,8 @@
           />
         </div>
         <div
-          class="col-4 scroll"
+          v-if="pasien?.pemeriksaanfisik?.length"
+          class="col-3 scroll"
         >
           <ListPemeriksaan
             :key="pasien"

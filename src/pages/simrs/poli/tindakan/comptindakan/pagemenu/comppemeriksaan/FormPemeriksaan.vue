@@ -20,7 +20,7 @@
                     Pemeriksaan Fisik
                   </div> -->
 
-          <div class="col-3">
+          <div class="col-2">
             <q-input
               v-model="store.formVital.denyutjantung"
               dense
@@ -31,7 +31,7 @@
               hide-bottom-space
             />
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <q-input
               v-model="store.formVital.pernapasan"
               dense
@@ -42,7 +42,7 @@
               hide-bottom-space
             />
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <q-input
               v-model="store.formVital.sistole"
               dense
@@ -56,7 +56,7 @@
               hide-bottom-space
             />
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <q-input
               v-model="store.formVital.diastole"
               dense
@@ -70,7 +70,7 @@
               hide-bottom-space
             />
           </div>
-          <div class="col-3">
+          <div class="col-4">
             <q-input
               v-model="store.formVital.suhutubuh"
               dense
@@ -84,7 +84,7 @@
               hide-bottom-space
             />
           </div>
-          <div class="col-9">
+          <div class="col-6">
             <q-select
               v-model="store.formVital.tingkatkesadaran"
               dense
@@ -99,21 +99,36 @@
               fill-input
               hide-dropdown-icon
             />
+            <div class="q-mt-sm">
+              <q-input
+                v-model="store.formVital.sosialekonomi"
+                standout="bg-yellow-3 text-black"
+                outlined
+                label="Sosial Ekonomi"
+                autogrow
+              />
+            </div>
+            <div class="q-mt-sm">
+              <q-input
+                v-model="store.formVital.spiritual"
+                standout="bg-yellow-3 text-black"
+                outlined
+                label="Spiritual"
+                autogrow
+              />
+            </div>
           </div>
 
-          <div
-            class="col-12 f-12 text-weight-bold"
+          <!-- <div
+            class="col-6 f-12 text-weight-bold"
           >
-            <!-- Pemeriksaan Psikologis, Sosial Ekonomi, Spiritual -->
             <q-separator class="q-my-xs" />
-          </div>
-          <!-- <div class="col-4">
-            Status Psikologis
           </div> -->
-          <div class="col-12">
+          <div class="col-6">
             <div class="q-mb-sm">
               Status Psikologis
             </div>
+            <q-separator class="q-my-xs" />
             <div class="q-gutter-sm">
               <q-radio
                 v-model="store.formVital.statuspsikologis"
@@ -152,97 +167,81 @@
                 label="Lain-lain"
               />
             </div>
-          </div>
-          <div class="col-12 row q-col-gutter-sm q-mt-sm">
-            <div class="col-6">
-              <q-input
-                v-model="store.formVital.sosialekonomi"
-                standout="bg-yellow-3 text-black"
-                outlined
-                label="Sosial Ekonomi"
-                autogrow
-              />
-            </div>
-            <div class="col-6">
-              <q-input
-                v-model="store.formVital.spiritual"
-                standout="bg-yellow-3 text-black"
-                outlined
-                label="Spiritual"
-                autogrow
-              />
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="q-mb-sm">
-              Status Nyeri <em class="text-primary">{{ keteranganSkorNyeri(store?.formVital?.skornyeri) }}</em>
-            </div>
-            <q-separator />
-            <div>
-              <q-slider
-                v-model="store.formVital.skornyeri"
-                color="primary"
-                thumb-color="primary"
-                label-color="primary"
-                label-text-color="yellow"
-                markers
-                marker-labels
-                marker-labels-class="text-primary"
-                switch-marker-labels-side
-                label-always
-                switch-label-side
-                label
-                :label-value="store?.form?.skornyeri"
-                :min="0"
-                :max="10"
-              >
-                <template #marker-label-group="{ markerMap }">
-                  <!-- {{ markerMap[store?.formVital?.skornyeri]?.classes }} -->
-                  <div
-                    class="row items-center no-wrap"
-                    :class="markerMap[store?.formVital?.skornyeri]?.classes"
-                    :style="markerMap[store?.formVital?.skornyeri]?.style"
-                  >
-                    <!-- {{ markerMap[store?.formVital?.skornyeri]?.classes }} -->
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri < 2"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-excited-outline"
-                    />
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri >= 2 && store?.formVital?.skornyeri < 4"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-outline"
-                    />
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri >= 4 && store?.formVital?.skornyeri < 6"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-neutral-outline"
-                    />
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri >= 6 && store?.formVital?.skornyeri < 8"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-confused-outline"
-                    />
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri >= 8 && store?.formVital?.skornyeri < 10"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-angry-outline"
-                    />
-                    <q-icon
-                      v-if="store?.formVital?.skornyeri === 10"
-                      size="lg"
-                      color="teal"
-                      name="icon-my-emoticon-cry-outline"
-                    />
-                  </div>
-                </template>
-              </q-slider>
+
+            <div class="q-mt-sm">
+              <q-separator class="q-my-sm" />
+              <div class="q-mb-sm">
+                Nyeri ? <em class="text-primary">{{ keteranganSkorNyeri(store?.formVital?.skornyeri) }}</em>
+                <span class="q-ml-sm">
+                  <q-icon
+                    size="lg"
+                    color="teal"
+                    :name="iconNyeri"
+                  />
+                </span>
+              </div>
+              <q-separator class="q-mt-sm" />
+              <div>
+                <q-slider
+                  v-model="store.formVital.skornyeri"
+                  color="primary"
+                  thumb-color="primary"
+                  label-color="primary"
+                  label-text-color="yellow"
+                  markers
+                  :marker-labels="(val)=> fnMarkerLabel"
+                  marker-labels-class="text-primary"
+                  label-always
+                  switch-label-side
+                  :min="0"
+                  :max="10"
+                >
+                  <!-- <template #marker-label-group="{ markerMap }">
+                    <div
+                      class="row items-center no-wrap"
+                      :class="markerMap[store?.formVital?.skornyeri]?.classes"
+                      :style="markerMap[store?.formVital?.skornyeri]?.style"
+                    >
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri < 2"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-excited-outline"
+                      />
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri >= 2 && store?.formVital?.skornyeri < 4"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-outline"
+                      />
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri >= 4 && store?.formVital?.skornyeri < 6"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-neutral-outline"
+                      />
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri >= 6 && store?.formVital?.skornyeri < 8"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-confused-outline"
+                      />
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri >= 8 && store?.formVital?.skornyeri < 10"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-angry-outline"
+                      />
+                      <q-icon
+                        v-if="store?.formVital?.skornyeri === 10"
+                        size="lg"
+                        color="teal"
+                        name="icon-my-emoticon-cry-outline"
+                      />
+                    </div>
+                  </template> -->
+                </q-slider>
+              </div>
             </div>
           </div>
         </q-form>
@@ -342,7 +341,7 @@
 
 <script setup>
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
 const store = usePemeriksaanFisik()
@@ -399,5 +398,45 @@ function keteranganSkorNyeri(val) {
     return 'nyeri berat'
   }
 }
+
+function fnMarkerLabel(val) {
+  return `${10 * val}%`
+}
+
+// function iconNyeri(val) {
+//   if (val < 2) {
+//     return 'icon-my-emoticon-excited-outline'
+//   } else if (val >= 2 && val < 4) {
+//     return 'icon-my-emoticon-outline'
+//   } else if (val >= 4 && val < 6) {
+//     return 'icon-my-emoticon-neutral-outline'
+//   } else if (val >= 6 && val < 8) {
+//     return 'icon-my-emoticon-confused-outline'
+//   } else if (val >= 8 && val < 10) {
+//     return 'icon-my-emoticon-angry-outline'
+//   } else if (val === 10) {
+//     return 'icon-my-emoticon-cry-outline'
+//   }
+// }
+
+const iconNyeri = computed(() => {
+  const val = store?.formVital.skornyeri
+  let icon = 'icon-my-emoticon-excited-outline'
+  if (val < 2) {
+    icon = 'icon-my-emoticon-excited-outline'
+  } else if (val >= 2 && val < 4) {
+    icon = 'icon-my-emoticon-outline'
+  } else if (val >= 4 && val < 6) {
+    icon = 'icon-my-emoticon-neutral-outline'
+  } else if (val >= 6 && val < 8) {
+    icon = 'icon-my-emoticon-confused-outline'
+  } else if (val >= 8 && val < 10) {
+    icon = 'icon-my-emoticon-angry-outline'
+  } else if (val === 10) {
+    icon = 'icon-my-emoticon-cry-outline'
+  }
+
+  return icon
+})
 
 </script>
