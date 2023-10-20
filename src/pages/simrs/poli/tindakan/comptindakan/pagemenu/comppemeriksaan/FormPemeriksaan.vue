@@ -175,7 +175,7 @@
           </div>
           <div class="col-12">
             <div class="q-mb-sm">
-              Status Nyeri
+              Status Nyeri <em class="text-primary">{{ keteranganSkorNyeri(store?.formVital?.skornyeri) }}</em>
             </div>
             <q-separator />
             <div>
@@ -192,7 +192,7 @@
                 label-always
                 switch-label-side
                 label
-                :label-value="store?.form?.skornyeri === 0? '0':'1'"
+                :label-value="store?.form?.skornyeri"
                 :min="0"
                 :max="10"
               >
@@ -323,12 +323,7 @@
               >
                 Data Belum Ada
               </div>
-              <div
-                class="
-                        text-right
-                        bg-yellow-3
-                        q-pa-sm"
-              >
+              <div class="text-right bg-yellow-3 q-pa-sm">
                 <q-btn
                   label="Simpan Pemeriksaan"
                   color="primary"
@@ -390,6 +385,18 @@ async function onSubmit() {
     store.savePemeriksaan(props.pasien, menus.value).then(() => {
       formRef.value.resetValidation()
     })
+  }
+}
+
+function keteranganSkorNyeri(val) {
+  if (val === 0) {
+    return 'tidak ada nyeri'
+  } else if (val > 0 && val <= 3) {
+    return 'nyeri ringan'
+  } else if (val > 3 && val <= 6) {
+    return 'nyeri sedang'
+  } else if (val > 6 && val <= 10) {
+    return 'nyeri berat'
   }
 }
 
