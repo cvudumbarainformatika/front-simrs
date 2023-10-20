@@ -935,6 +935,16 @@
                 {{ formatDouble(row.selisih) }}
               </div>
             </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                DPJP
+              </div>
+              <div
+                class="text-weight-bold"
+              >
+                {{ row.dokterdpjp }}
+              </div>
+            </div>
           </template>
         </CustomTable>
         <!--
@@ -995,7 +1005,8 @@ const jsonFields = store.params.layanan !== '3' ? {
   Apotek: 'apotek', // semua apotek di jumlah
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
-  Selisih: 'selisih'
+  Selisih: 'selisih',
+  dpjp: 'dokterdpjp'
 } : {
   No: 'no',
   Tanggal: 'tanggal',
@@ -1034,7 +1045,8 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Penunjang Keluar': 'penkel',
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
-  Selisih: 'selisih'
+  Selisih: 'selisih',
+  dpjp: 'dokterdpjp'
 }
 function fetchData() {
   loading.value = true
