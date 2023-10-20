@@ -68,7 +68,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       kontakpasien: '',
       nama: '',
       kelamin: '',
-      tgllahir: ''
+      tgllahir: '',
+      status: 'Tidak'
 
     },
     loadingSave: false
@@ -200,8 +201,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.nama = pasien?.nama_panggil
       this.formRanap.kelamin = pasien?.kelamin
       this.formRanap.tgllahir = pasien?.tgllahir
+      this.formRanap.kdruang = pasien?.kodepoli
       // this.formRanap.kdruangtujuan= pasien?.
-      // this.formRanap.kdruang= pasien?.
       // this.formRanap.keterangan= pasien?.
       // this.formRanap.jenistindakan= pasien?.
       // this.formRanap.icd9= pasien?.

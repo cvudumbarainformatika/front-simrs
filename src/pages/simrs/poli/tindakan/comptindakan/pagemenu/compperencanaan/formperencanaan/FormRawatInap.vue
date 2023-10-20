@@ -27,6 +27,18 @@
         />
       </div>
       <div class="col-6">
+        <q-select
+          v-model="store.formRanap.status"
+          label="Operasi"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionTipe"
+          map-options
+          emit-value
+        />
         <!-- <q-input
           v-model="store.formRanap.nosep"
           label="SEP (Automatis)"
@@ -61,82 +73,52 @@
         />
       </div>
 
-      <!-- <div class="col-3">
+      <div class="col-4">
         <q-select
-          v-model="store.formRanap.tiperujukan"
-          label="Tipe Faskes"
-          dense
-          outlined
-          standout="bg-yellow-3"
-          use-input
-          input-debounce="0"
-          :options="optionTipe"
-          map-options
-          emit-value
-        />
-      </div> -->
-      <div class="col-6">
-        <q-select
-          v-model="store.formRanap.ppkdirujuk"
+          v-model="store.formRanap.jenistindakan"
           label="Jenis Tindakan"
           dense
           outlined
           standout="bg-yellow-3"
           use-input
           input-debounce="0"
-          :options="optionsRs"
-          option-value="kode"
-          option-label="nama"
+          :options="optionsJenisTindakan"
+          option-value="kdtindakan"
+          option-label="tindakan"
           hide-bottom-space
-          @filter="onFilterTest"
+          @filter="onFilterJenisTindakan"
         />
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <q-select
-          v-model="store.formRanap.polirujukan"
+          v-model="store.formRanap.icd9"
           label="Icd 9"
           dense
           outlined
           standout="bg-yellow-3"
           use-input
           input-debounce="0"
-          :options="optionsPoli"
+          :options="optionsIcd9"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
-          @filter="filterPoli"
+          @filter="filterIcd9"
         />
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <q-select
-          v-model="store.formRanap.ppkdirujuk"
-          label="Dari Ruangan"
-          dense
-          outlined
-          standout="bg-yellow-3"
-          use-input
-          input-debounce="0"
-          :options="optionsRs"
-          option-value="kode"
-          option-label="nama"
-          hide-bottom-space
-          @filter="onFilterTest"
-        />
-      </div>
-      <div class="col-6">
-        <q-select
-          v-model="store.formRanap.polirujukan"
+          v-model="store.formRanap.kdruangtujuan"
           label="Ruangan Tujuan"
           dense
           outlined
           standout="bg-yellow-3"
           use-input
           input-debounce="0"
-          :options="optionsPoli"
+          :options="optionsRtujuan"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
-          @filter="filterPoli"
+          @filter="filterRtujuan"
         />
       </div>
       <div class="col-12">
@@ -183,32 +165,34 @@ const store = usePerencanaanPoliStore()
 //   { value: '1', label: 'Rawat Inap' },
 //   { value: '2', label: 'Rawat Jalan' }
 // ])
-// const optionTipe = ref([
-//   { value: '1', label: 'Faskes 1' }
-// ])
-const optionsRs = ref([])
-const optionsPoli = ref([])
+const optionTipe = ref([
+  { value: 'Operasi', label: 'YA' },
+  { value: 'Tidak', label: 'TIDAK' }
+])
+const optionsJenisTindakan = ref([{ kdtindakan: '', tindakan: 'ketik minimal 3 huruf untu cari' }])
+const optionsIcd9 = ref([])
+const optionsRtujuan = ref([])
 
-const onFilterTest = async (val, update, abort) => {
+const onFilterJenisTindakan = async (val, update, abort) => {
   if (val.length < 3) {
     abort()
     return
   }
   const params = {
     params: {
-      namafaskes: val,
-      jnsfaskes: store?.formPrb?.tiperujukan
+      tindakan: val
     }
   }
-  const response = await api.get('v1/simrs/pelayanan/faskes', params)
-  const code = response?.data?.metadata?.code
-  if (code === '200') {
+  const response = await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params)
+  console.log('rsp', response)
+  const code = response?.status
+  if (code === 200) {
     update(() => {
-      optionsRs.value = response?.data?.result?.faskes
+      optionsJenisTindakan.value = response?.data
     })
   }
 }
-const filterPoli = async (val, update, abort) => {
+const filterIcd9 = async (val, update, abort) => {
   if (val.length < 3) {
     abort()
     return
@@ -223,7 +207,26 @@ const filterPoli = async (val, update, abort) => {
   const code = response?.data?.metadata?.code
   if (code === '200') {
     update(() => {
-      optionsPoli.value = response?.data?.result?.poli
+      optionsIcd9.value = response?.data?.result?.poli
+    })
+  }
+}
+const filterRtujuan = async (val, update, abort) => {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+  const params = {
+    params: {
+      namapoli: val
+    }
+  }
+  const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
+  console.log(response)
+  const code = response?.data?.metadata?.code
+  if (code === '200') {
+    update(() => {
+      optionsIcd9.value = response?.data?.result?.poli
     })
   }
 }
