@@ -4,15 +4,16 @@
     bordered
     square
     class="full-height"
+    style="overflow: hidden;"
   >
     <q-form
       ref="refForm"
-      class="q-pa-sm"
+      class="full-height"
       @submit="onSubmit"
     >
-      <q-card-section class="q-pa-sm">
+      <q-card-section class="q-px-md q-py-xs bg-primary text-white">
         <div class="row items-center justify-between">
-          <div class="f-14 text-weight-bold">
+          <div class="f-12 text-weight-bold">
             Form Anamnesis
           </div>
           <div>
@@ -32,7 +33,7 @@
       </q-card-section>
       <q-separator />
       <q-card-section
-        class="scroll"
+        class="full-height scroll"
       >
         <div class="">
           <div class="row q-col-gutter-md q-mb-md">
@@ -157,21 +158,26 @@
             </div>
           </div>
         </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-actions
+        <!-- </q-card-section> -->
+        <q-separator />
+        <!-- <q-card-actions
         align="right"
         class="q-mt-lg"
-      >
-        <app-btn
-          color="primary"
-          label="Simpan Anamnesis"
-          tooltip="Simpan Data"
-          type="submit"
-          tip
-          :loading="store.loadingForm"
-        />
-      </q-card-actions>
+      > -->
+        <div
+          class="text-right q-mt-md"
+          style="margin-bottom: 50px;"
+        >
+          <app-btn
+            color="primary"
+            label="Simpan Anamnesis"
+            tooltip="Simpan Data"
+            type="submit"
+            tip
+            :loading="store.loadingForm"
+          />
+        </div>
+      </q-card-section>
     </q-form>
   </q-card>
 </template>

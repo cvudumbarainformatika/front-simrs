@@ -14,11 +14,11 @@
       <div class="col full-height">
         <q-form
           ref="refForm"
-          class="q-pa-sm"
+          class="q-pa-sm full-height"
           @submit="onSubmit"
         >
           <q-card-section
-            class="scroll"
+            class="full-height scroll"
           >
             <div class="row q-col-gutter-md q-mb-sm items-center">
               <div class="col-4">
@@ -147,16 +147,16 @@
                 />
               </div>
             </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section align="right">
-            <q-btn
-              label="Simpan"
-              type="submit"
-              color="primary"
-              :loading="store.loadingSave"
-              :disable="store.loadingSave"
-            />
+            <q-separator class="q-my-md" />
+            <div class="text-right">
+              <q-btn
+                label="Simpan"
+                type="submit"
+                color="primary"
+                :loading="store.loadingSave"
+                :disable="store.loadingSave"
+              />
+            </div>
           </q-card-section>
         </q-form>
       </div>
