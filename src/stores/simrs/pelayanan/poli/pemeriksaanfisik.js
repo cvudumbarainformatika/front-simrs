@@ -9,6 +9,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     tab: 'Fisik',
     tabs: ['Fisik', 'Anatomy'],
     dialogTemplate: false,
+    fullCanvas: false,
     templateActive: 'Body',
     gambarActive: 0,
     fileGambar: '/src/assets/human/anatomys/body-human.jpg',
@@ -61,6 +62,13 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.gambarActive = val
       this.fileGambar = file
       this.setDialogTemplate()
+    },
+    setFullCanvas() {
+      this.fullCanvas = !this.fullCanvas
+      console.log(this.fullCanvas)
+    },
+    setFullCanvasFalse() {
+      this.fullCanvas = false
     },
     pushShapes(val) {
       return new Promise((resolve, reject) => {

@@ -6,98 +6,112 @@
     <div
       class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-sm tmp-t"
     >
-      <div class="row items-center">
-        <div class="q-gutter-xs">
+      <div class="row items-center justify-between">
+        <div class="row items-center">
+          <div class="q-gutter-xs">
+            <q-btn
+              v-for="(btnx, i) in btns"
+              :key="i"
+              :flat="btnx.name !== store.dialogForm.penanda"
+              :glossy="btnx.name === store.dialogForm.penanda"
+              padding="xs"
+              size="sm"
+              :icon="btnx.icon"
+              color="dark"
+              @click="store.setDialogForm('penanda',btnx.name)"
+            >
+              <q-tooltip>
+                {{ btnx.name }}
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <q-separator
+            vertical
+            class="q-mx-sm"
+          />
+          <div
+            class="flex"
+            style="width: 75px;"
+          >
+            <div class="f-10">
+              Ketebalan {{ store.dialogForm.ketebalan }}
+            </div>
+            <q-slider
+              v-model="store.dialogForm.ketebalan"
+              :min="1"
+              :max="10"
+              label
+              switch-label-side
+              color="dark"
+              dense
+            />
+          </div>
+          <q-separator
+            vertical
+            class="q-mx-sm"
+          />
+          <div
+            class="flex"
+            style="width: 75px;"
+          >
+            <div class="f-10">
+              Luas {{ store.dialogForm.panjang }} px
+            </div>
+            <q-slider
+              v-model="store.dialogForm.panjang"
+              :min="1"
+              :max="20"
+              label
+              switch-label-side
+              color="primary"
+              dense
+            />
+          </div>
+          <q-separator
+            vertical
+            class="q-mx-sm"
+          />
           <q-btn
-            v-for="(btnx, i) in btns"
-            :key="i"
-            :flat="btnx.name !== store.dialogForm.penanda"
-            :glossy="btnx.name === store.dialogForm.penanda"
+            flat
             padding="xs"
-            size="sm"
-            :icon="btnx.icon"
-            color="dark"
-            @click="store.setDialogForm('penanda',btnx.name)"
+            size="xs"
+            label="CR"
+            :style="`background-color: ${store.dialogForm.warna};`"
           >
             <q-tooltip>
-              {{ btnx.name }}
+              Ganti Warna
             </q-tooltip>
+            <q-menu>
+              <q-item
+                v-close-popup
+                clickable
+                style="padding:0"
+              >
+                <q-color
+                  v-model="store.dialogForm.warna"
+                  no-header
+                  no-footer
+                  default-view="palette"
+                  class="my-picker"
+                />
+              </q-item>
+            </q-menu>
           </q-btn>
         </div>
-        <q-separator
-          vertical
-          class="q-mx-sm"
-        />
-        <div
-          class="flex"
-          style="width: 75px;"
-        >
-          <div class="f-10">
-            Ketebalan {{ store.dialogForm.ketebalan }}
-          </div>
-          <q-slider
-            v-model="store.dialogForm.ketebalan"
-            :min="1"
-            :max="10"
-            label
-            switch-label-side
-            color="dark"
-            dense
-          />
-        </div>
-        <q-separator
-          vertical
-          class="q-mx-sm"
-        />
-        <div
-          class="flex"
-          style="width: 75px;"
-        >
-          <div class="f-10">
-            Luas {{ store.dialogForm.panjang }} px
-          </div>
-          <q-slider
-            v-model="store.dialogForm.panjang"
-            :min="1"
-            :max="20"
-            label
-            switch-label-side
-            color="primary"
-            dense
-          />
-        </div>
-        <q-separator
-          vertical
-          class="q-mx-sm"
-        />
+      </div>
+      <div>
         <q-btn
           flat
           padding="xs"
-          size="xs"
-          label="CR"
-          :style="`background-color: ${store.dialogForm.warna};`"
+          size="sm"
+          :icon="store.fullCanvas?'icon-mat-open_in_full' :'icon-mat-fullscreen'"
+          @click="setFull"
         >
           <q-tooltip>
-            Ganti Warna
+            {{ store.fullCanvas?'kembali': 'Halaman Full' }}
           </q-tooltip>
-          <q-menu>
-            <q-item
-              v-close-popup
-              clickable
-              style="padding:0"
-            >
-              <q-color
-                v-model="store.dialogForm.warna"
-                no-header
-                no-footer
-                default-view="palette"
-                class="my-picker"
-              />
-            </q-item>
-          </q-menu>
         </q-btn>
       </div>
-      <div />
     </div>
     <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
@@ -233,6 +247,7 @@
       >
         <div class="q-gutter-xs">
           <q-btn
+            v-if="!store.fullCanvas"
             color="teal"
             size="sm"
             padding="sm"
@@ -305,7 +320,7 @@ import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 import { pathImg } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 
-const emits = defineEmits(['saveImage'])
+const emits = defineEmits(['saveImage', 'setFull'])
 
 const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
@@ -327,6 +342,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  screenFull: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -349,6 +368,11 @@ onMounted(() => {
 // function resizeCanvas() {
 //   const cnv = canvasRef.value
 // }
+
+function setFull() {
+  // console.log('full')
+  store.setFullCanvas()
+}
 
 const filterFn = (val, update) => {
   if (val === '') {

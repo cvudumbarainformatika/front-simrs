@@ -1,5 +1,8 @@
 <template>
-  <div class="full-height q-pa-sm">
+  <div
+    class="full-height q-pa-sm"
+    style="overflow: hidden;"
+  >
     <div class="row q-col-gutter-x-xs full-height">
       <div class="col-6 full-height">
         <FormAnamnesis

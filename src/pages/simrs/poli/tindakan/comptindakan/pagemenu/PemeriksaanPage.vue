@@ -8,34 +8,47 @@
       bordered
       class="full-height"
     >
-      <transition
-        appear
-        @enter="enter"
-        @leave="leave"
-      >
-        <div
-          v-if="store.dialogTemplate"
-          class="absolute left-menu"
-        >
-          <template-gambar
-            style="border-right:2px solid gray;"
-            :active="store.templateActive"
-            :gambar-active="store.gambarActive"
-          />
-        </div>
-      </transition>
-
       <div class="row full-height">
         <!-- ===============================================================================ROW CANVAS GAMBAR -->
         <!-- <div class="col-auto"> -->
         <div
           ref="canvasEl"
-          class="col-4"
+          :class="store.fullCanvas? '':'col-4'"
         >
           <div class="row full-height">
             <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
               Template Gambar
             </div> -->
+
+            <transition
+              v-if="!store.fullCanvas"
+              appear
+              @enter="enter"
+              @leave="leave"
+            >
+              <div
+                v-if="store.dialogTemplate"
+                class="absolute left-menu"
+              >
+                <template-gambar
+                  style="border-right:2px solid gray;"
+                  :active="store.templateActive"
+                  :gambar-active="store.gambarActive"
+                />
+              </div>
+            </transition>
+
+            <div
+              v-if="store.fullCanvas"
+              class="col-4"
+            >
+              <template-gambar
+                style="border-right:2px solid gray;"
+                :active="store.templateActive"
+                :gambar-active="store.gambarActive"
+                class="bg-dark"
+              />
+            </div>
             <div class="column full-height">
               <canvas-page
                 :key="pasien"
@@ -44,12 +57,26 @@
                 @save-image="saveImage"
               />
             </div>
+            <div
+              v-if="store.fullCanvas"
+              class="col-4 scroll"
+              style="border-left: 1px solid gray; border-right: 1px solid gray;"
+            >
+              <FormPemeriksaan
+                :key="pasien"
+                :pasien="pasien"
+                :filter-shapes="filterShapes"
+                :canvas-full="store.fullCanvas"
+              />
+            </div>
           </div>
         </div>
 
         <!-- ===============================================================================ROW FORM -->
         <div
-          class="col-4 scroll"
+          v-if="!store.fullCanvas"
+          class="scroll"
+          :class="pasien?.pemeriksaanfisik?.length? 'col-5':'col-8'"
           style="border-left: 1px solid gray; border-right: 1px solid gray;"
         >
           <FormPemeriksaan
@@ -58,8 +85,10 @@
             :filter-shapes="filterShapes"
           />
         </div>
+
         <div
-          class="col-4 scroll"
+          v-if="pasien?.pemeriksaanfisik?.length && !store.fullCanvas "
+          class="col-3 scroll"
         >
           <ListPemeriksaan
             :key="pasien"
@@ -77,7 +106,7 @@ import CanvasPage from './comppemeriksaan/CanvasPage.vue'
 import TemplateGambar from './comppemeriksaan/TemplateGambar.vue'
 import FormPemeriksaan from './comppemeriksaan/FormPemeriksaan.vue'
 import ListPemeriksaan from './comppemeriksaan/ListPemeriksaan.vue'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
@@ -104,9 +133,14 @@ const filterShapes = computed(() => {
 
 onMounted(() => {
   // console.log('canvas', canvasEl.value?.clientWidth)
-  getImage()
+
   window.addEventListener('resize', resizeCanvas)
   resizeCanvas()
+})
+
+onBeforeMount(() => {
+  store.setFullCanvasFalse()
+  getImage()
 })
 
 onUnmounted(() => {
