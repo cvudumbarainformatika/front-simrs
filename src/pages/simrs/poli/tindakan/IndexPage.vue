@@ -102,11 +102,13 @@
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
-import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 
 const store = usePengunjungPoliStore()
+const fisik = usePemeriksaanFisik()
 const drawer = ref(false)
 const drawerRight = ref(false)
 const props = defineProps({
@@ -170,9 +172,20 @@ onMounted(() => {
   inacbg.setTotalLaborat(props.pasien)
 })
 
+onBeforeMount(() => {
+  menu.value = menus.value[0]
+  fisik.setFullCanvasFalse()
+})
+
 onBeforeUnmount(() => {
   console.log('beforeunmount')
   menu.value = menus.value[0]
+  fisik.setFullCanvasFalse()
+})
+
+onUnmounted(() => {
+  menu.value = menus.value[0]
+  fisik.setFullCanvasFalse()
 })
 
 function historyPasien() {

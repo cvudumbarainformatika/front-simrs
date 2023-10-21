@@ -13,7 +13,7 @@
         <!-- <div class="col-auto"> -->
         <div
           ref="canvasEl"
-          :class="store.fullCanvas? 'col-12':'col-4'"
+          :class="store.fullCanvas? '':'col-4'"
         >
           <div class="row full-height">
             <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
@@ -66,6 +66,7 @@
                 :key="pasien"
                 :pasien="pasien"
                 :filter-shapes="filterShapes"
+                :canvas-full="store.fullCanvas"
               />
             </div>
           </div>

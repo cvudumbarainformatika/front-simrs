@@ -2,13 +2,13 @@
   <div class="column full-height">
     <!-- ===============================================================================KOLOM ISIAN PEMERIKSAAN -->
     <div
-      v-if="!store.fullCanvas"
+      v-if="!canvasFull"
       class="col-8"
     >
       <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
           Pemeriksaan (Vital Sign) <div class="text-white">
-            {{ store.fullCanvas }}
+            <!-- {{ store.fullCanvas }} -->
           </div>
         </div>
       </div>
@@ -253,7 +253,7 @@
       </q-scroll-area>
     </div>
     <!-- =================================================================================KOLOM TABEL PENANDAAN -->
-    <div :class="store.fullCanvas? 'col-12':'col-4'">
+    <div :class="canvasFull? 'col-12':'col-4'">
       <div class="full-height">
         <div class="column full-height">
           <div class="col-auto">
@@ -328,7 +328,7 @@
                 Data Belum Ada
               </div>
               <div
-                v-if="!store.fullCanvas"
+                v-if="!canvasFull"
                 class="text-right bg-yellow-3 q-pa-sm"
               >
                 <q-btn
@@ -370,6 +370,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  canvasFull: {
+    type: Boolean,
+    default: false
   },
   filterShapes: {
     type: Array,
