@@ -8,23 +8,6 @@
       bordered
       class="full-height"
     >
-      <transition
-        appear
-        @enter="enter"
-        @leave="leave"
-      >
-        <div
-          v-if="store.dialogTemplate"
-          class="absolute left-menu"
-        >
-          <template-gambar
-            style="border-right:2px solid gray;"
-            :active="store.templateActive"
-            :gambar-active="store.gambarActive"
-          />
-        </div>
-      </transition>
-
       <div class="row full-height">
         <!-- ===============================================================================ROW CANVAS GAMBAR -->
         <!-- <div class="col-auto"> -->
@@ -32,15 +15,29 @@
           ref="canvasEl"
           class="col-4"
         >
+          <transition
+            appear
+            @enter="enter"
+            @leave="leave"
+          >
+            <div
+              v-if="store.dialogTemplate"
+              class="absolute left-menu"
+            >
+              <template-gambar
+                style="border-right:2px solid gray;"
+                :active="store.templateActive"
+                :gambar-active="store.gambarActive"
+              />
+            </div>
+          </transition>
           <div class="row full-height">
-            <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
-              Template Gambar
-            </div> -->
             <div class="column full-height">
               <canvas-page
                 :key="pasien"
                 :width="canvasWidth"
                 :pasien="pasien"
+                :screen-full="store?.fullCanvas"
                 @save-image="saveImage"
               />
             </div>
@@ -121,6 +118,11 @@ const resizeCanvas = () => {
 function saveImage(img) {
   store.saveImage(img, props.pasien, filterShapes.value)
 }
+
+// function changeCanvasScreen() {
+//   console.log('ok')
+//   store.setFullCanvas()
+// }
 
 watch(() => canvasWidth.value, (obj) => {
   console.log('watch canvasWidth', obj)

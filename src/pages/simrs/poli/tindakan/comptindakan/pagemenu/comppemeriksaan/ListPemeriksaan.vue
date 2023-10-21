@@ -401,14 +401,15 @@
 
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 
 const store = usePemeriksaanFisik()
 const $q = useQuasar()
 
-// const expanded = ref(0)
-// function expand(i) {
-//   expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
-// }
+const expanded = ref(0)
+function expand(i) {
+  expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
+}
 const props = defineProps({
   pasien: {
     type: Object,

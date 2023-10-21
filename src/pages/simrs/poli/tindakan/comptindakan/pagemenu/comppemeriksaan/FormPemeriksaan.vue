@@ -1,10 +1,15 @@
 <template>
   <div class="column full-height">
     <!-- ===============================================================================KOLOM ISIAN PEMERIKSAAN -->
-    <div class="col-8">
+    <div
+      v-if="!store.fullCanvas"
+      class="col-8"
+    >
       <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
-          Pemeriksaan (Vital Sign)
+          Pemeriksaan (Vital Sign) <div class="text-white">
+            {{ store.fullCanvas }}
+          </div>
         </div>
       </div>
       <q-separator />
@@ -248,7 +253,7 @@
       </q-scroll-area>
     </div>
     <!-- =================================================================================KOLOM TABEL PENANDAAN -->
-    <div class="col-4">
+    <div :class="store.fullCanvas? 'col-12':'col-4'">
       <div class="full-height">
         <div class="column full-height">
           <div class="col-auto">
@@ -322,7 +327,10 @@
               >
                 Data Belum Ada
               </div>
-              <div class="text-right bg-yellow-3 q-pa-sm">
+              <div
+                v-if="!store.fullCanvas"
+                class="text-right bg-yellow-3 q-pa-sm"
+              >
                 <q-btn
                   label="Simpan Pemeriksaan"
                   color="primary"
