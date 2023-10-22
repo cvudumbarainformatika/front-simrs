@@ -368,6 +368,9 @@
           <template #cell-pasien="{row}">
             <div v-if="row.masterpasien">
               <div class="row no-wrap q-mb-xs text-weight-bold">
+                {{ row.sep }}
+              </div>
+              <div class="row no-wrap q-mb-xs text-weight-bold">
                 {{ row.rs1 }}
               </div>
               <div class="row no-wrap q-mb-xs text-weight-bold text-primary">
@@ -1006,7 +1009,8 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
-  dpjp: 'dokterdpjp'
+  dpjp: 'dokterdpjp',
+  sep: 'sep'
 } : {
   No: 'no',
   Tanggal: 'tanggal',
@@ -1046,7 +1050,8 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
-  dpjp: 'dokterdpjp'
+  dpjp: 'dokterdpjp',
+  sep: 'sep'
 }
 function fetchData() {
   loading.value = true
@@ -1056,6 +1061,8 @@ function fetchData() {
     if (store.params.layanan === '3') {
       temp.no = i + 1
       temp.subtotal = item.subtotal
+      temp.sep = item.sep
+      temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
       temp.jnzi = item.kmrJnzhI
@@ -1097,6 +1104,8 @@ function fetchData() {
     } else {
       temp.no = i + 1
       temp.subtotal = item.subtotal
+      temp.sep = item.sep
+      temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
       temp.jnzi = item.kmrJnzhI

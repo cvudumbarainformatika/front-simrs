@@ -57,8 +57,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       tanggaloperasi: '',
       tglrencanakunjungan: '',
       tglupdate: '',
-      jenistindakan: '',
-      icd9: '',
+      jenistindakan: null,
+      icd9: null,
       kodepolibpjs: '',
       polibpjs: '',
       keterangan: '',
@@ -69,7 +69,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       nama: '',
       kelamin: '',
       tgllahir: '',
-      status: 'Tidak'
+      status: 'Tidak',
+      planing: 'Rawat Inap'
 
     },
     loadingSave: false
@@ -202,6 +203,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.kelamin = pasien?.kelamin
       this.formRanap.tgllahir = pasien?.tgllahir
       this.formRanap.kdruang = pasien?.kodepoli
+      this.formRanap.kodesistembayar = pasien?.kodesistembayar
       // this.formRanap.kdruangtujuan= pasien?.
       // this.formRanap.keterangan= pasien?.
       // this.formRanap.jenistindakan= pasien?.
@@ -222,8 +224,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     async saveRanap(pasien) {
       this.loadingSave = true
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRsLain)
-        console.log('save rs lain', resp)
+        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRanap)
+        console.log('ranap', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result ?? false
@@ -231,7 +233,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Rujukan ke Rs lain Gagal')
+            notifErrVue('Simpan Rawat Inap gagal')
           }
           this.loadingSave = false
         }

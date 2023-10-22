@@ -26,7 +26,7 @@
           readonly
         />
       </div>
-      <div class="col-6">
+      <div class="col-3">
         <q-select
           v-model="store.formRanap.status"
           label="Operasi"
@@ -47,6 +47,21 @@
           standout="bg-yellow-3"
           readonly
         /> -->
+      </div>
+
+      <div class="col-3">
+        <app-autocomplete
+          v-model="store.formRanap.kdruangtujuan"
+          label="Ruangan Tujuan"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          :source="optionsRtujuan"
+          option-value="groups"
+          option-label="groups_nama"
+          autocomplete="groups_nama"
+        />
       </div>
       <div class="col-4">
         <app-input-date
@@ -73,52 +88,37 @@
         />
       </div>
 
-      <div class="col-4">
-        <q-select
-          v-model="store.formRanap.jenistindakan"
+      <div class="col-6">
+        <app-autocomplete-debounce-input
+          :model="store.formRanap.jenistindakan"
           label="Jenis Tindakan"
           dense
           outlined
           standout="bg-yellow-3"
-          use-input
-          input-debounce="0"
-          :options="optionsJenisTindakan"
+          :source="optionsJenisTindakan"
           option-value="kdtindakan"
           option-label="tindakan"
-          hide-bottom-space
-          @filter="onFilterJenisTindakan"
+          autocomplete="tindakan"
+          :loading="loadingTind"
+          @buang="onFilterJenisTindakan"
+          @clear="store.setFormRanap('jenistindakan', null)"
+          @on-select="store.setFormRanap('jenistindakan', $event)"
         />
       </div>
-      <div class="col-4">
-        <q-select
+      <div class="col-6">
+        <app-autocomplete-debounce-input
           v-model="store.formRanap.icd9"
           label="Icd 9"
-          dense
           outlined
           standout="bg-yellow-3"
-          use-input
-          input-debounce="0"
-          :options="optionsIcd9"
-          option-value="kode"
-          option-label="nama"
-          hide-bottom-space
-          @filter="filterIcd9"
-        />
-      </div>
-      <div class="col-4">
-        <q-select
-          v-model="store.formRanap.kdruangtujuan"
-          label="Ruangan Tujuan"
-          dense
-          outlined
-          standout="bg-yellow-3"
-          use-input
-          input-debounce="0"
-          :options="optionsRtujuan"
-          option-value="kode"
-          option-label="nama"
-          hide-bottom-space
-          @filter="filterRtujuan"
+          :source="optionsIcd9"
+          option-value="kd_prosedur"
+          option-label="prosedur"
+          autocomplete="prosedur"
+          :loading="loadingIcd"
+          @buang="filterIcd9"
+          @clear="store.setFormRanap('icd9', null)"
+          @on-select="store.setFormRanap('icd9', $event)"
         />
       </div>
       <div class="col-12">
@@ -169,74 +169,69 @@ const optionTipe = ref([
   { value: 'Operasi', label: 'YA' },
   { value: 'Tidak', label: 'TIDAK' }
 ])
-const optionsJenisTindakan = ref([{ kdtindakan: '', tindakan: 'ketik minimal 3 huruf untu cari' }])
+const optionsJenisTindakan = ref([])
 const optionsIcd9 = ref([])
 const optionsRtujuan = ref([])
 
-const onFilterJenisTindakan = async (val, update, abort) => {
+const loadingTind = ref(false)
+async function onFilterJenisTindakan(val) {
   if (val.length < 3) {
-    abort()
     return
   }
+  loadingTind.value = true
   const params = {
     params: {
       tindakan: val
     }
   }
-  const response = await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params)
-  console.log('rsp', response)
-  const code = response?.status
-  if (code === 200) {
-    update(() => {
+  await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params).then(response => {
+    loadingTind.value = false
+    const code = response?.status
+    if (code === 200) {
       optionsJenisTindakan.value = response?.data
-    })
-  }
+    }
+    console.log('resp jenisT', optionsJenisTindakan.value)
+  }).catch(() => {
+    loadingTind.value = false
+  })
 }
-const filterIcd9 = async (val, update, abort) => {
+// function jnsClear() {
+//   store.setFormRanap('jenistindakan', null)
+// }
+const loadingIcd = ref(false)
+async function filterIcd9(val) {
   if (val.length < 3) {
-    abort()
     return
   }
+  loadingIcd.value = true
   const params = {
     params: {
-      namapoli: val
+      q: val
     }
   }
-  const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
+  const response = await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
+  loadingIcd.value = false
   console.log(response)
-  const code = response?.data?.metadata?.code
-  if (code === '200') {
-    update(() => {
-      optionsIcd9.value = response?.data?.result?.poli
-    })
-  }
-}
-const filterRtujuan = async (val, update, abort) => {
-  if (val.length < 3) {
-    abort()
-    return
-  }
-  const params = {
-    params: {
-      namapoli: val
-    }
-  }
-  const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
-  console.log(response)
-  const code = response?.data?.metadata?.code
-  if (code === '200') {
-    update(() => {
-      optionsIcd9.value = response?.data?.result?.poli
-    })
+  if (response?.data.length) {
+    optionsIcd9.value = response?.data
+  } else {
+    optionsIcd9.value = []
   }
 }
 
+async function getRuang() {
+  const response = await api.get('v1/simrs/ranap/ruangan/listruanganranap')
+  optionsRtujuan.value = response?.data
+}
 onMounted(() => {
   store.initPasienRanap(props.pasien)
+  getRuang()
 })
 
 function simpan() {
-  console.log('ok', props.pasien)
+  console.log('ok', store.formRanap)
+  store.saveRanap(props.pasien)
+  // console.log('opt', optionsIcd9.value, optionsJenisTindakan.value)
   // $q.notify({
   //   type: 'negative',
   //   message: 'Maaf, Anda tidak terhubung ke BPJS',
