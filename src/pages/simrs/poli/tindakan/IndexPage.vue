@@ -106,8 +106,10 @@ import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmo
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
 
 const store = usePengunjungPoliStore()
+const master = useMasterPemeriksaanFisik()
 const fisik = usePemeriksaanFisik()
 const drawer = ref(false)
 const drawerRight = ref(false)
@@ -170,6 +172,7 @@ onMounted(() => {
   inacbg.getDataIna(props.pasien)
   inacbg.setTotalTindakan(props.pasien)
   inacbg.setTotalLaborat(props.pasien)
+  master.getData()
 })
 
 onBeforeMount(() => {
@@ -181,6 +184,7 @@ onBeforeUnmount(() => {
   console.log('beforeunmount')
   menu.value = menus.value[0]
   fisik.setFullCanvasFalse()
+  fisik.initReset(true)
 })
 
 onUnmounted(() => {

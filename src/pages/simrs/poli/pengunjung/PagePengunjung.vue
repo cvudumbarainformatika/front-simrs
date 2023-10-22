@@ -149,8 +149,6 @@ function bukaTindakan(val) {
   }
 
   pasien.value = val
-  // store.togglePageTindakan()
-  // console.log('pasien', pasien.value)
   store.setTerima(val)
 }
 </script>

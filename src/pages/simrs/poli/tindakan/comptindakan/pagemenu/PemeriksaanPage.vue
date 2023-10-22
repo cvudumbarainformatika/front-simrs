@@ -106,7 +106,7 @@ import CanvasPage from './comppemeriksaan/CanvasPage.vue'
 import TemplateGambar from './comppemeriksaan/TemplateGambar.vue'
 import FormPemeriksaan from './comppemeriksaan/FormPemeriksaan.vue'
 import ListPemeriksaan from './comppemeriksaan/ListPemeriksaan.vue'
-import { computed, onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
@@ -114,7 +114,7 @@ import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 
 const store = usePemeriksaanFisik()
 // const storageApps = useAplikasiStore()
-const { getImage } = useMenuPemeriksaan()
+const { getImage, menus } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)
 
@@ -132,13 +132,14 @@ const filterShapes = computed(() => {
 })
 
 onMounted(() => {
-  // console.log('canvas', canvasEl.value?.clientWidth)
+  console.log('canvas')
 
   window.addEventListener('resize', resizeCanvas)
   resizeCanvas()
 })
 
 onBeforeMount(() => {
+  console.log(menus.value)
   store.setFullCanvasFalse()
   getImage()
 })
@@ -156,9 +157,9 @@ function saveImage(img) {
   store.saveImage(img, props.pasien, filterShapes.value)
 }
 
-watch(() => canvasWidth.value, (obj) => {
-  console.log('watch canvasWidth', obj)
-}, { deep: true })
+// watch(() => canvasWidth.value, (obj) => {
+//   console.log('watch canvasWidth', obj)
+// }, { deep: true })
 </script>
 <style lang="scss" scoped>
 .bingkai{

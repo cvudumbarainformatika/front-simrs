@@ -136,6 +136,23 @@ const masters = {
       // ]
     },
     {
+      path: '/master/poliklinik',
+      component: () => import('src/pages/simrs/master/poliklinik/IndexPage.vue'),
+      children: [
+        { path: '', redirect: '/master/poliklinik/pemeriksaanfisik' },
+        {
+          path: '/master/poliklinik/pemeriksaanfisik',
+          name: 'master.poliklinik.pemeriksaanfisik',
+          component: () => import('pages/simrs/master/poliklinik/pemeriksaanfisik/IndexPage.vue')
+        }
+        // {
+        //   path: '/master/tindakan/ranap',
+        //   name: 'master.generalconsent.ranap',
+        //   component: () => import('pages/simrs/master/generalconsent/ranap/IndexPage.vue')
+        // }
+      ]
+    },
+    {
       path: '/master/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
     }
