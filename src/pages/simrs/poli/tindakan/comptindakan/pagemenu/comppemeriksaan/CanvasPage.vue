@@ -115,7 +115,7 @@
     </div>
     <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
-      <!-- {{ store.fileGambar }} -->
+      <!-- {{ options }} -->
       <canvas
         v-show="tab === null"
         id="canvas"
@@ -362,10 +362,10 @@ onMounted(() => {
   ctx.value = canvasRef.value.getContext('2d')
   // tab.value = null
 
-  const opt = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
+  const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   options.value = opt
   // resizeCanvas()
-  console.log('menus', menus.value)
+  console.log('menus', options.value)
   func()
   // const active = menus.value[0]?.gambars[0]?.url
   // store.setGambarActive(0, active)
@@ -452,7 +452,8 @@ const handlePointerDown = (event) => {
   const [x, y] = getTargetPosition(event)
   store.setDialogForm('x', x)
   store.setDialogForm('y', y)
-  console.log(store.dialogForm)
+  store.setTemplateActive(store.templateActive)
+  // console.log(store.templateActive)
 }
 const handlePointerUp = (event) => {
   console.log('pointer up')
