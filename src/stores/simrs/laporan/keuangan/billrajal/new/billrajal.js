@@ -419,10 +419,11 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         //   item.bPelPoli, item.bRM, item.jPsikolog, item.adminInap, item.jGizi, item.jKamaroperasiIBS, item.jKeperawatan,
         //   item.jOksigen, item.jTindakanperawat, item.jTindakandokter, item.JIrdtindakan, item.jPenunjangkeluar)
 
-        item.dokterdpjp = item.klaimrajal?.nama_dokter ?? item.klaimrajal?.nama_dokter ?? '-'
         item.pendapatanBPJS = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.groupingRanap = item.groupingranap ? (item.groupingranap.length ? item.groupingranap.map(p => p.subtotal).reduce((a, b) => a + b, 0) : 0) : 0
         item.selisih = (item.pendapatanBPJS + item.groupingRanap) - item.subtotal
+        item.dokterdpjp = item.klaimrajal?.nama_dokter ?? item.klaimranap?.nama_dokter ?? '-'
+        item.sep = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs[0].nosep : '-') : (item.groupingranap ? (item.groupingranap.length ? item.groupingranap[0].nosep : '-') : '-')
       })
       console.log('selesai')
     },
