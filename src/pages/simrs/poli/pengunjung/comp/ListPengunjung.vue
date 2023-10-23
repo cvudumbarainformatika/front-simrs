@@ -74,7 +74,7 @@
                   loading
                 />
                 <q-badge
-                  v-if="reg!==item.noreg"
+                  v-if="reg!==item.noreg && item.groups==='1'"
                   label="SEP BELUM TERBIT"
                   color="negative"
                   class="cursor-pointer"
@@ -176,10 +176,7 @@ const reg = ref(null)
 function getSep(val) {
   reg.value = val.noreg
   console.log('pasien', val)
-  if (val.groups === '2') {
-    notifErrVue('Pasien Umum tidak perlu nomor SEP')
-    reg.value = null
-  } else {
+  if (val.groups === '1') {
     if (!val.noka) {
       notifErrVue('Nomor Kartu BPJS paien tidak ada, tidak bisa mengambil data Sep')
       reg.value = null
@@ -188,6 +185,12 @@ function getSep(val) {
         reg.value = null
       })
     }
+  } else if (val.groups === '2') {
+    notifErrVue('Pasien Umum tidak perlu nomor SEP')
+    reg.value = null
+  } else {
+    notifErrVue('SEP hanya untuk pasien BPJS')
+    reg.value = null
   }
 }
 // function getTask(arr) {
