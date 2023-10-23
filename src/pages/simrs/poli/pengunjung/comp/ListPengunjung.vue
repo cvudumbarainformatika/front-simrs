@@ -66,11 +66,21 @@
                 v-if="item?.sep"
                 :label="item?.sep"
               />
-              <q-badge
-                v-else
-                label="SEP BELUM TERBIT"
-                color="negative"
-              />
+              <div v-if="!item?.sep">
+                <q-btn
+                  v-if="storeSep.loading && reg===item.noreg"
+                  size="8px"
+                  flat
+                  loading
+                />
+                <q-badge
+                  v-if="reg!==item.noreg"
+                  label="SEP BELUM TERBIT"
+                  color="negative"
+                  class="cursor-pointer"
+                  @click="getSep(item)"
+                />
+              </div>
             </q-item-label>
           </q-item-section>
           <q-item-section
@@ -114,6 +124,9 @@
 import LoadingList from './LoadingList.vue'
 import EmptyData from './EmptyData.vue'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
+import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
+import { ref } from 'vue'
 const emits = defineEmits(['tindakan', 'panggil'])
 defineProps({
   items: {
@@ -158,6 +171,25 @@ function labelLayanan(val) {
   }
 }
 
+const storeSep = useSepBpjsStore()
+const reg = ref(null)
+function getSep(val) {
+  reg.value = val.noreg
+  console.log('pasien', val)
+  if (val.groups === '2') {
+    notifErrVue('Pasien Umum tidak perlu nomor SEP')
+    reg.value = null
+  } else {
+    if (!val.noka) {
+      notifErrVue('Nomor Kartu BPJS paien tidak ada, tidak bisa mengambil data Sep')
+      reg.value = null
+    } else {
+      storeSep.getSep(val).then(() => {
+        reg.value = null
+      })
+    }
+  }
+}
 // function getTask(arr) {
 //   if (arr.length === 0) {
 //     return '-'

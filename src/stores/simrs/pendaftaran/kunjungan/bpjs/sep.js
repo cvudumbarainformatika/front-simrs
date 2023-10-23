@@ -20,8 +20,10 @@ export const useSepBpjsStore = defineStore('sep_bpjs', {
           const list = useListKunjunganBpjsStore()
           list.getLists()
           this.loading = false
-          console.log('sep', resp)
+          console.log('sep', resp.data.data)
+          val.sep = resp.data?.data?.ins?.rs8
           notifSuccess(resp)
+          Promise(resolve => { resolve(resp) })
         })
         .catch(() => {
           this.loading = false

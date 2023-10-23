@@ -158,7 +158,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Rujukan ke Rs lain Gagal')
+            notifErrVue('Update Info Rujukan ke Rs lain Gagal')
           }
           this.loadingSave = false
         }
@@ -233,7 +233,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Simpan Rawat Inap gagal')
+            notifErrVue('Update Rawat Inap gagal')
           }
           this.loadingSave = false
         }
