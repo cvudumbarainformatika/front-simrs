@@ -61,6 +61,7 @@
           option-value="groups"
           option-label="groups_nama"
           autocomplete="groups_nama"
+          @selected="ruangRanapSelected"
         />
       </div>
       <div class="col-4">
@@ -222,6 +223,9 @@ async function filterIcd9(val) {
 async function getRuang() {
   const response = await api.get('v1/simrs/ranap/ruangan/listruanganranap')
   optionsRtujuan.value = response?.data
+}
+function ruangRanapSelected(val) {
+  console.log(val)
 }
 onMounted(() => {
   store.initPasienRanap(props.pasien)

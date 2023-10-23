@@ -633,9 +633,9 @@
             </div>
             <div v-if="row.bId>0">
               <div
-                class="row justify-between no-wrap"
+                class="row justify-between items-center no-wrap"
               >
-                <div class="q-mr-xs">
+                <div class="q-mr-xs kecilin">
                   Kartu identitas
                 </div>
                 <div>{{ formatDouble(row.bId) }}</div>
@@ -653,10 +653,10 @@
             </div>
             <div v-if="row.bPelPoli>0">
               <div
-                class="row justify-between no-wrap"
+                class="row justify-between items-center no-wrap"
               >
-                <div class="q-mr-xs">
-                  Poli spesialis/anastesi
+                <div class="q-mr-xs kecilin">
+                  Poli spesialis / anastesi
                 </div>
                 <div>{{ formatDouble(row.bPelPoli) }}</div>
               </div>
@@ -708,7 +708,7 @@
               v-if="row.tDokPer>0"
               class="row justify-between no-wrap"
             >
-              <div class="q-mr-xs">
+              <div class="q-mr-xs kecilin">
                 dokter / perawat
               </div>
               <div>{{ formatDouble(row.tDokPer) }}</div>
@@ -765,7 +765,7 @@
               v-if="row.transRad"
               class="row justify-between no-wrap"
             >
-              <div class="q-mr-xs">
+              <div class="q-mr-xs kecilin">
                 Trans Rodiologi
               </div>
               <div>
@@ -788,7 +788,7 @@
               <div
                 class="row justify-between no-wrap"
               >
-                <div class="q-mr-xs">
+                <div class="q-mr-xs kecilin">
                   Anastesi di luar OK dan ICU
                 </div>
                 <div>{{ formatDouble(row.tAnasLuar) }}</div>
@@ -858,7 +858,7 @@
               <div
                 class="row justify-between no-wrap"
               >
-                <div class="q-mr-xs">
+                <div class="q-mr-xs kecilin">
                   Penunjang keluar
                 </div>
                 <div>{{ formatDouble(row.jPenunjangkeluar) }}</div>
@@ -938,14 +938,34 @@
                 {{ formatDouble(row.selisih) }}
               </div>
             </div>
-            <div class="row justify-between no-wrap">
+            <div class="row justify-between items-center no-wrap q-mt-xs">
               <div class="q-mr-xs">
                 DPJP
               </div>
               <div
-                class="text-weight-bold"
+                class="text-weight-bold kecilin2 text-right"
               >
                 {{ row.dokterdpjp }}
+              </div>
+            </div>
+            <div class="row justify-between items-center no-wrap q-my-xs">
+              <div class="q-mr-xs kecilin">
+                Kode Inacbg
+              </div>
+              <div
+                class="text-weight-bold"
+              >
+                {{ row.inaCode }}
+              </div>
+            </div>
+            <div class="row justify-between items-center no-wrap">
+              <div class="q-mr-xs kecilin">
+                Desc Inacbg
+              </div>
+              <div
+                class="kecilin2 text-right"
+              >
+                {{ row.inaDesc }}
               </div>
             </div>
           </template>
@@ -1010,7 +1030,9 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
   dpjp: 'dokterdpjp',
-  sep: 'sep'
+  sep: 'sep',
+  'kode inacbg': 'inaCode',
+  'desc inacbg': 'inaDesc'
 } : {
   No: 'no',
   Tanggal: 'tanggal',
@@ -1051,7 +1073,9 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
   dpjp: 'dokterdpjp',
-  sep: 'sep'
+  sep: 'sep',
+  'kode inacbg': 'inaCode',
+  'desc inacbg': 'inaDesc'
 }
 function fetchData() {
   loading.value = true
@@ -1062,6 +1086,8 @@ function fetchData() {
       temp.no = i + 1
       temp.subtotal = item.subtotal
       temp.sep = item.sep
+      temp.inaCode = item.inaCode
+      temp.inaDesc = item.inaDesc
       temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
@@ -1105,6 +1131,8 @@ function fetchData() {
       temp.no = i + 1
       temp.subtotal = item.subtotal
       temp.sep = item.sep
+      temp.inaCode = item.inaCode
+      temp.inaDesc = item.inaDesc
       temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
@@ -1206,6 +1234,14 @@ store.getInitialData()
 .kecilin{
   min-width: 55px;
   max-width: 100px;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  word-break: break-word;
+}
+.kecilin2{
+  min-width: 100px;
+  max-width: 200px;
   white-space: normal !important;
   overflow-wrap: normal !important;
   word-wrap: normal !important;
