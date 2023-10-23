@@ -26,7 +26,27 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       warna: '#000000',
       penanda: 'circle'
     },
+    formMata: {
+      vodawal: '',
+      vodrefraksi: '',
+      vodakhir: '',
+      vosawal: '',
+      vosrefraksi: '',
+      vosakhir: '',
+      tod: '',
+      tos: '',
+      fondosod: '',
+      fondosos: ''
+    },
+    formParu: {
+      inspeksi: '',
+      palpasi: '',
+      perkusi: '',
+      auskultasi: ''
+    },
     shapes: [],
+    mata: [],
+    paru: [],
     formVital: {
       tingkatkesadaran: 0,
       denyutjantung: '', // string
@@ -84,6 +104,19 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         this.shapes = newArr
         this.setDialogForm('anatomy', '')
         this.setDialogForm('ket', '')
+
+        if (val.anatomy === 'Mata') {
+          const newMata = [...this.mata]
+          newMata.push(this.formMata)
+          this.mata = newMata
+        }
+        if (val.anatomy === 'Dada dan Paru') {
+          const newParu = [...this.paru]
+          newParu.push(this.formParu)
+          this.paru = newParu
+        }
+
+        this.resetFormMataDanParu()
         resolve()
       })
     },
@@ -97,6 +130,29 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     resetShapes() {
       this.shapes = []
+      this.mata = []
+      this.paru = []
+    },
+
+    resetFormMataDanParu() {
+      this.formMata = {
+        vodawal: '',
+        vodrefraksi: '',
+        vodakhir: '',
+        vosawal: '',
+        vosrefraksi: '',
+        vosakhir: '',
+        tod: '',
+        tos: '',
+        fondosod: '',
+        fondosos: ''
+      }
+      this.formParu = {
+        inspeksi: '',
+        palpasi: '',
+        perkusi: '',
+        auskultasi: ''
+      }
     },
 
     setDialogForm(key, val) {
@@ -119,17 +175,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       }
     },
     async savePemeriksaan(pasien, menus) {
-      // console.log(storage.$state?.user?.id)
       this.loadingform = true
-      const arr = menus.length > 0 ? menus.filter(x => x.name !== 'Body').map(y => y.name) : []
+      const arr = menus.length > 0 ? menus.filter(x => x.nama !== 'Body').map(y => y.nama) : []
+
       const arr2 = this.shapes
       const anatomys = []
       for (let i = 0; i < arr.length; i++) {
-        const ada = arr2.filter(x => x.anatomy === arr[i])
         let obj = { nama: arr[i], ket: 'Tidak Ada Kelainan / TAK' }
+        const ada = arr2.filter(x => x.anatomy === arr[i])
         if (ada.length > 0) {
-          obj = { nama: ada[0].anatomy, ket: ada.map(x => x.ket).join() }
+          obj = { nama: ada[0].anatomy, ket: ada.map(x => x.ket).join() ?? 'Tidak Ada Kelainan / TAK' }
         }
+
         anatomys.push(obj)
       }
       const form = this.formVital
@@ -139,7 +196,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       form.details = arr2
       form.anatomys = anatomys
 
-      // console.log('simpan pemeriksaan', form)
+      // FORm LOKALIS MATA
+
+      if (this.mata.length) {
+        form.mata = this.mata
+      }
+
+      // form lokalis Paru
+
+      if (this.paru.length) {
+        form.paru = this.paru
+      }
+      // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
         console.log('save', resp)

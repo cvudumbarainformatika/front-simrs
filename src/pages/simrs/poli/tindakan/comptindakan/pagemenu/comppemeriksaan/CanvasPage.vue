@@ -137,10 +137,10 @@
             style="width:350px"
             dark
           >
-            <q-card-section>
+            <q-card-section class="q-py-sm">
               Keterangan
             </q-card-section>
-            <q-separator dark />
+            <q-separator class="bg-white" />
             <q-card-section>
               <q-select
                 v-model="store.dialogForm.anatomy"
@@ -153,7 +153,7 @@
                 label="Nama Anatomy"
                 :options="options"
                 dense
-                class="q-mb-md"
+                class="q-mb-sm"
                 :rules="[val => !!val || 'Pilih Data Terlebih dahulu']"
                 :disable="store.templateActive !== 'Body'"
                 @filter="filterFn"
@@ -166,6 +166,172 @@
                   </q-item>
                 </template>
               </q-select>
+              <!-- MATA ========================================================================================================================= MATA-->
+              <div
+                v-if="store.templateActive==='Mata' || store.dialogForm.anatomy === 'Mata'"
+                class="row q-col-gutter-sm q-mb-sm"
+              >
+                <q-input
+                  v-model="store.formMata.vodawal"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="VOD AWAL"
+                  dense
+                  bg-color="white"
+                  :rules="[val => !!val || 'Harap diisi']"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.vodakhir"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="VOD AKHIR"
+                  bg-color="white"
+                  color="orange"
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.vodrefraksi"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="VOD REFRAKSI"
+                  bg-color="white"
+                  color="orange"
+                  style="width:100%"
+                />
+
+                <q-input
+                  v-model="store.formMata.vosawal"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="VOS AWAL"
+                  dense
+                  bg-color="white"
+                  :rules="[val => !!val || 'Harap diisi']"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.vosakhir"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="VOS AKHIR"
+                  bg-color="white"
+                  color="orange"
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.vosrefraksi"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="VOS REFRAKSI"
+                  bg-color="white"
+                  color="orange"
+                  style="width:100%"
+                />
+                <q-input
+                  v-model="store.formMata.tod"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="TOD"
+                  dense
+                  bg-color="white"
+                  :rules="[val => !!val || 'Harap diisi']"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.tos"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="TOS"
+                  bg-color="white"
+                  color="orange"
+                  style="width:50%"
+                />
+                <q-input
+                  v-model="store.formMata.fondosod"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="FONDOS OD"
+                  bg-color="white"
+                  color="orange"
+                  style="width:100%"
+                />
+                <q-input
+                  v-model="store.formMata.fondosos"
+                  standout="bg-yellow-2"
+                  outlined
+                  dense
+                  label="FONDOS OS"
+                  bg-color="white"
+                  color="orange"
+                  style="width:100%"
+                />
+
+              </div>
+
+              <!-- PARU ========================================================================================================================= PARU-->
+              <div
+                v-if="store.templateActive==='Dada dan Paru' || store.dialogForm.anatomy === 'Dada dan Paru'"
+                class="row q-col-gutter-sm q-mb-sm"
+              >
+                <q-input
+                  v-model="store.formParu.inspeksi"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="INSPEKSI"
+                  dense
+                  bg-color="white"
+                  :rules="[val => !!val || 'Harap diisi']"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:100%"
+                />
+                <q-input
+                  v-model="store.formParu.palpasi"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="PALPASI"
+                  dense
+                  bg-color="white"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:100%"
+                />
+                <q-input
+                  v-model="store.formParu.perkusi"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="PERKUSI"
+                  dense
+                  bg-color="white"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:100%"
+                />
+                <q-input
+                  v-model="store.formParu.auskultasi"
+                  standout="bg-yellow-2"
+                  outlined
+                  label="AUSKULTASI"
+                  dense
+                  bg-color="white"
+                  color="orange"
+                  hide-bottom-space
+                  style="width:100%"
+                />
+              </div>
               <q-input
                 v-model="store.dialogForm.ket"
                 standout="bg-yellow-2"

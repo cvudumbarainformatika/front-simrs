@@ -201,52 +201,7 @@
                   :min="0"
                   :max="10"
                   @update:model-value="store.setKeteranganSkornyeri"
-                >
-                  <!-- <template #marker-label-group="{ markerMap }">
-                    <div
-                      class="row items-center no-wrap"
-                      :class="markerMap[store?.formVital?.skornyeri]?.classes"
-                      :style="markerMap[store?.formVital?.skornyeri]?.style"
-                    >
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri < 2"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-excited-outline"
-                      />
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri >= 2 && store?.formVital?.skornyeri < 4"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-outline"
-                      />
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri >= 4 && store?.formVital?.skornyeri < 6"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-neutral-outline"
-                      />
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri >= 6 && store?.formVital?.skornyeri < 8"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-confused-outline"
-                      />
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri >= 8 && store?.formVital?.skornyeri < 10"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-angry-outline"
-                      />
-                      <q-icon
-                        v-if="store?.formVital?.skornyeri === 10"
-                        size="lg"
-                        color="teal"
-                        name="icon-my-emoticon-cry-outline"
-                      />
-                    </div>
-                  </template> -->
-                </q-slider>
+                />
               </div>
             </div>
           </div>
