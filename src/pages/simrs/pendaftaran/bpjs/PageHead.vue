@@ -56,6 +56,15 @@
           @click="goTo('/pendaftaran/bpjs/listmjkn')"
         />
         <q-btn
+          :outline="path!=='/pendaftaran/bpjs/konsulan'"
+          glossy
+          push
+          color="cyan"
+          label="List konsulan"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/konsulan')"
+        />
+        <q-btn
           :outline="path !== '/pendaftaran/bpjs/form'"
           glossy
           size="md"

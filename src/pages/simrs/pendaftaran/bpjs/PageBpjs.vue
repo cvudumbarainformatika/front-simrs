@@ -213,6 +213,8 @@ const title = computed(() => {
     return 'LIST KUNJUNGAN'
   } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
     return 'LIST MOBILE JKN'
+  } else if (page.path === '/pendaftaran/bpjs/konsulan') {
+    return 'LIST PASIEN KONSULAN'
   } else {
     return 'MASTER PASIEN'
   }
@@ -224,6 +226,8 @@ const subtitle = computed(() => {
     return 'List Kunjungan Pasien BPJS || JKN'
   } else if (page.path === '/pendaftaran/bpjs/listmjkn') {
     return 'List Kunjungan dari m-JKN'
+  } else if (page.path === '/pendaftaran/bpjs/konsulan') {
+    return 'List Pasien Konsulan Antar Poli'
   } else {
     return 'Daftar Pasien'
   }
