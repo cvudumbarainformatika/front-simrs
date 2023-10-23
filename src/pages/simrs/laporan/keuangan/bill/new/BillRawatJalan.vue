@@ -943,9 +943,29 @@
                 DPJP
               </div>
               <div
-                class="text-weight-bold"
+                class="text-weight-bold anu"
               >
                 {{ row.dokterdpjp }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Kode Inacbg
+              </div>
+              <div
+                class="text-weight-bold"
+              >
+                {{ row.inaCode }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap">
+              <div class="q-mr-xs">
+                Desc Inacbg
+              </div>
+              <div
+                class="anu"
+              >
+                {{ row.inaDesc }}
               </div>
             </div>
           </template>
@@ -1010,7 +1030,9 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
   dpjp: 'dokterdpjp',
-  sep: 'sep'
+  sep: 'sep',
+  'kode inacbg': 'inaCode',
+  'desc inacbg': 'inaDesc'
 } : {
   No: 'no',
   Tanggal: 'tanggal',
@@ -1051,7 +1073,9 @@ const jsonFields = store.params.layanan !== '3' ? {
   'Sub Total': 'subtotal',
   Selisih: 'selisih',
   dpjp: 'dokterdpjp',
-  sep: 'sep'
+  sep: 'sep',
+  'kode inacbg': 'inaCode',
+  'desc inacbg': 'inaDesc'
 }
 function fetchData() {
   loading.value = true
@@ -1062,6 +1086,8 @@ function fetchData() {
       temp.no = i + 1
       temp.subtotal = item.subtotal
       temp.sep = item.sep
+      temp.inaCode = item.inaCode
+      temp.inaDesc = item.inaDesc
       temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
@@ -1105,6 +1131,8 @@ function fetchData() {
       temp.no = i + 1
       temp.subtotal = item.subtotal
       temp.sep = item.sep
+      temp.inaCode = item.inaCode
+      temp.inaDesc = item.inaDesc
       temp.dokterdpjp = item.dokterdpjp
       temp.mtri = item.mtri
       temp.jnz = item.kmrJnzh
