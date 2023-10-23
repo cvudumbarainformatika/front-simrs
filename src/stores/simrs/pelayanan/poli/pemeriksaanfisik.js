@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
+import { useMasterPemeriksaanFisik } from '../../master/poliklinik/pemeriksaanfisik'
 // import { api } from 'src/boot/axios'
 
 export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
@@ -12,7 +13,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     fullCanvas: false,
     templateActive: 'Body',
     gambarActive: 0,
-    fileGambar: '/src/assets/human/anatomys/body-human.jpg',
+    // fileGambar: '/src/assets/human/anatomys/body-human.jpg',
+    fileGambar: null,
     writingMode: false,
     dialogForm: {
       anatomy: '',
@@ -65,7 +67,12 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     },
     setFullCanvas() {
       this.fullCanvas = !this.fullCanvas
-      console.log(this.fullCanvas)
+      // console.log(this.fullCanvas)
+      // const master = useMasterPemeriksaanFisik()
+      // const file = master?.items[0]?.gambars[0]?.url
+      // this.templateActive = this
+      // this.gambarActive = 0
+      // this.fileGambar = file ?? null
     },
     setFullCanvasFalse() {
       this.fullCanvas = false
@@ -98,6 +105,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     setDialogTemplate() {
       // console.log('oooi')
       this.dialogTemplate = !this.dialogTemplate
+    },
+
+    setKeteranganSkornyeri(val) {
+      if (val === 0) {
+        this.formVital.keteranganskornyeri = 'tidak ada nyeri'
+      } else if (val > 0 && val <= 3) {
+        this.formVital.keteranganskornyeri = 'nyeri ringan'
+      } else if (val > 3 && val <= 6) {
+        this.formVital.keteranganskornyeri = 'nyeri sedang'
+      } else if (val > 6 && val <= 10) {
+        this.formVital.keteranganskornyeri = 'nyeri berat'
+      }
     },
     async savePemeriksaan(pasien, menus) {
       // console.log(storage.$state?.user?.id)
@@ -223,12 +242,17 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     //   console.log('xxx', val)
     // },
 
-    initReset() {
+    initReset(val) {
+      const master = useMasterPemeriksaanFisik()
+      const file = master?.items[0]?.gambars[0]?.url
       return new Promise((resolve, reject) => {
         this.dialogTemplate = false
-        this.templateActive = 'Body'
-        this.gambarActive = 0
-        this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
+        // this.templateActive = 'Body'
+        // this.gambarActive = 0
+        // this.fileGambar = file ?? null
+        this.templateActive = val ? 'Body' : this.templateActive
+        this.gambarActive = val ? 0 : this.gambarActive
+        this.fileGambar = val ? file ?? null : this.fileGambar
         this.writingMode = false
         this.dialogForm = {
           anatomy: '',
@@ -240,7 +264,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           warna: '#000000',
           penanda: 'circle'
         }
-        this.shapes = []
+        // this.shapes = []
+        this.shapes = val ? [] : this.shapes
         this.formVital = {
           tingkatkesadaran: 0,
           denyutjantung: '', // string

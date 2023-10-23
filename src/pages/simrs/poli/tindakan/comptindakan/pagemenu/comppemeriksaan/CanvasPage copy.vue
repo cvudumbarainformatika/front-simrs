@@ -115,7 +115,6 @@
     </div>
     <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
-      <!-- {{ options }} -->
       <canvas
         v-show="tab === null"
         id="canvas"
@@ -360,15 +359,13 @@ const btns = ref([
 onMounted(() => {
   // console.log('document', window.innerWidth / 2)
   ctx.value = canvasRef.value.getContext('2d')
-  // tab.value = null
+  tab.value = null
 
-  const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
+  const opt = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
   options.value = opt
   // resizeCanvas()
-  console.log('menus', options.value)
+  console.log('menus', menus.value)
   func()
-  // const active = menus.value[0]?.gambars[0]?.url
-  // store.setGambarActive(0, active)
 })
 
 // function resizeCanvas() {
@@ -381,28 +378,16 @@ function setFull() {
 }
 
 const filterFn = (val, update) => {
-  // if (val === '') {
-  //   update(() => {
-  //     options.value = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
-  //   })
-  //   return
-  // }
-
-  // update(() => {
-  //   const needle = val.toLowerCase()
-  //   const arr = menus.value.map(x => x.name)
-  //   options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1 && v !== 'Body')
-  // })
   if (val === '') {
     update(() => {
-      options.value = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
+      options.value = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
     })
     return
   }
 
   update(() => {
     const needle = val.toLowerCase()
-    const arr = menus.value.map(x => x.nama)
+    const arr = menus.value.map(x => x.name)
     options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1 && v !== 'Body')
   })
 }
@@ -452,8 +437,7 @@ const handlePointerDown = (event) => {
   const [x, y] = getTargetPosition(event)
   store.setDialogForm('x', x)
   store.setDialogForm('y', y)
-  store.setTemplateActive(store.templateActive)
-  // console.log(store.templateActive)
+  console.log(store.dialogForm)
 }
 const handlePointerUp = (event) => {
   console.log('pointer up')
@@ -522,17 +506,15 @@ function hapusGambar() {
 const arr = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
-
 async function func(filename) {
   const cvn = canvasRef.value
   // const context = ctx.value
   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
   cvn.height = cvn.width
   const bg = new Image()
-  // bg.src = '..' + store.fileGambar
-  store.fileGambar === null ? bg.src = '..' + '/src/assets/human/anatomys/body-human.jpg' : bg.src = pathImg + store.fileGambar
+  bg.src = '..' + store.fileGambar
   bg.onload = function () {
-    console.log('bg func', bg.height)
+    console.log('bg', bg.height)
     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
     const width = bg.width * scale
     const height = bg.height * scale
@@ -560,18 +542,18 @@ watch(() => arr, (obj) => {
   func()
 }, { deep: true })
 watch(() => store.fileGambar, (obj) => {
-  // console.log('watch file gambar', obj)
+  console.log('watch file gambar', obj)
   writingMode.value = true
   func()
 }, { deep: true })
 watch(() => tab.value, (obj) => {
-  // console.log('watch tab gambar', obj)
+  console.log('watch tab gambar', obj)
   writingMode.value = false
   func()
 }, { deep: true })
-// watch(() => props.width, (obj) => {
-//   console.log('watch width', obj)
-// }, { deep: true })
+watch(() => props.width, (obj) => {
+  console.log('watch width', obj)
+}, { deep: true })
 
 </script>
 

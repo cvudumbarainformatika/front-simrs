@@ -35,12 +35,13 @@
                   <q-card
                     class="text-dark cursor-pointer"
                     :class="gambarActive===i?'gambar-active':''"
-                    @click="store.setGambarActive(i, item)"
+                    @click="store.setGambarActive(i, item.url)"
                   >
                     <q-img
-                      :src="item"
+                      :src="`${pathImg + item.url}`"
                     />
                   </q-card>
+                  <!-- {{ item }} -->
                 </div>
               </div>
             </q-scroll-area>
@@ -75,18 +76,18 @@
                   <q-btn
                     :icon="item.icon"
                     dense
-                    :text-color="active === item.name ? 'black' : 'white'"
-                    :glossy="active === item.name"
-                    :color="active === item.name ? 'amber' : 'dark'"
+                    :text-color="active === item.nama ? 'black' : 'white'"
+                    :glossy="active === item.nama"
+                    :color="active === item.nama ? 'amber' : 'dark'"
                     size="xl"
-                    @click="store.setTemplateActive(item.name)"
+                    @click="store.setTemplateActive(item.nama)"
                   >
                     <q-tooltip
                       anchor="top middle"
                       self="top middle"
                       class="bg-orange text-dark"
                     >
-                      <strong>{{ item.name }}</strong>
+                      <strong>{{ item.nama }}</strong>
                     </q-tooltip>
                   </q-btn>
                 </div>
@@ -103,6 +104,7 @@
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 import { computed, onMounted } from 'vue'
+import { pathImg } from 'src/boot/axios'
 
 const store = usePemeriksaanFisik()
 const { search, filterredMenu } = useMenuPemeriksaan()
@@ -118,19 +120,24 @@ const props = defineProps({
 })
 // const lorem = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
 const fileGambars = computed(() => {
-  // const menu = filterredMenu()[active.value].url
-
+  // const arr = filterredMenu()
+  // const men = arr.filter(x => x.nama.indexOf(props.active) > -1)
+  // const menu = men.length ? men[0].url : ''
+  // const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
+  // const arr2 = Object.keys(modules)
+  // const res = arr2.filter(x => x.indexOf(menu) > -1)
+  // return res
   const arr = filterredMenu()
-  const men = arr.filter(x => x.name.indexOf(props.active) > -1)
-  const menu = men.length ? men[0].url : ''
-  const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
-  const arr2 = Object.keys(modules)
-  const res = arr2.filter(x => x.indexOf(menu) > -1)
-  return res
+  const men = arr.filter(x => x.nama.indexOf(props.active) > -1)
+  const menu = men.length ? men[0] : ''
+  // const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
+  const arr2 = menu?.gambars
+  // const res = arr2.filter(x => x.indexOf(menu) > -1)
+  return arr2
 })
 
 onMounted(() => {
-  console.log('file', fileGambars.value)
+  console.log('fileGambars', fileGambars.value)
 })
 </script>
 

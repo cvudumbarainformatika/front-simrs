@@ -176,7 +176,7 @@
             <div class="q-mt-sm">
               <q-separator class="q-my-sm" />
               <div class="q-mb-sm">
-                Nyeri ? <em class="text-primary">{{ keteranganSkorNyeri(store?.formVital?.skornyeri) }}</em>
+                Nyeri ? <em class="text-primary">{{ store.formVital.keteranganskornyeri }}</em>
                 <span class="q-ml-sm">
                   <q-icon
                     size="lg"
@@ -200,6 +200,7 @@
                   switch-label-side
                   :min="0"
                   :max="10"
+                  @update:model-value="store.setKeteranganSkornyeri"
                 >
                   <!-- <template #marker-label-group="{ markerMap }">
                     <div
@@ -385,7 +386,7 @@ onMounted(() => {
   // console.log('canvas', canvasEl.value?.clientWidth)
   // getImage()
   // canvasWidth.value = canvasEl.value?.clientWidth
-  store.initReset().then(() => {
+  store.initReset(false).then(() => {
     formRef.value.resetValidation()
   })
 })
@@ -399,17 +400,17 @@ async function onSubmit() {
   }
 }
 
-function keteranganSkorNyeri(val) {
-  if (val === 0) {
-    return 'tidak ada nyeri'
-  } else if (val > 0 && val <= 3) {
-    return 'nyeri ringan'
-  } else if (val > 3 && val <= 6) {
-    return 'nyeri sedang'
-  } else if (val > 6 && val <= 10) {
-    return 'nyeri berat'
-  }
-}
+// function keteranganSkorNyeri(val) {
+//   if (val === 0) {
+//     return 'tidak ada nyeri'
+//   } else if (val > 0 && val <= 3) {
+//     return 'nyeri ringan'
+//   } else if (val > 3 && val <= 6) {
+//     return 'nyeri sedang'
+//   } else if (val > 6 && val <= 10) {
+//     return 'nyeri berat'
+//   }
+// }
 
 function fnMarkerLabel(val) {
   return `${10 * val}%`
