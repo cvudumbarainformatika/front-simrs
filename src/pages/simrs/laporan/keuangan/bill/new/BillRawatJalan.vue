@@ -187,10 +187,8 @@
               <div v-if="store.items.length">
                 <download-excel
                   class="btn"
-                  :fetch="fetchData"
-                  :fields="jsonFields"
-                  :before-generate="startDownload"
-                  :before-finish="finishDownload"
+                  :fetch="store.params.layanan === '3'?fetchRanap:fetchRajal"
+                  :fields="store.params.layanan === '3'?ranap:rajal"
                   :name="namaFile"
                 >
                   <!-- :name="'Tagihan ' + store.params.layanan === '1' ? store.layanans[0].nama : store.params.layanan === '2' ? store.layanans[1].nama : store.layanans[2].nama + ' periode ' + store.tanggal.from + ' - '+ store.tanggal.to +'.xls'" -->
@@ -1013,50 +1011,7 @@ const namaFile = computed(() => {
 })
 // data for print --start--
 const loading = ref(false)
-function startDownload() {
-  loading.value = true
-}
-function finishDownload() {
-  loading.value = false
-}
-const jsonFields = store.params.layanan !== '3' ? {
-  No: 'no',
-  Tanggal: 'tanggal',
-  'Tanggal Pulang': 'krs',
-  Rm: 'rm',
-  Pasien: 'pasien',
-  Noreg: 'noreg',
-  Poli: 'poli',
-  Admin: 'admin',
-  Materai: 'mtri',
-  'Kamar Jenazah': 'jnz',
-  'Kamar Jenazah Inap': 'jnzi',
-  'Sistem Bayar': 'bayar',
-  'Pelayanan Rekam Medik': 'rekammedik',
-  'Biaya Kartu Identitas Paseian': 'idPasien',
-  'Poliklinik Spesialis / Anastesi': 'bPoli',
-  'Konsultasi Antar Poli': 'bKonsul',
-  Tindakan: 'tDokPer',
-  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
-  Laboratorium: 'laborat',
-  Radiologi: 'radiologi',
-  'Operasi One Day Care': 'operasi', // kamar operasi + tindakan operasi
-  Fisioterapi: 'fisio',
-  Hemodialisa: 'hd',
-  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
-  'Klinik Psikologi': 'psikologi',
-  Cardio: 'cardio',
-  EEG: 'eeg',
-  Endoscope: 'endos',
-  Apotek: 'apotek', // semua apotek di jumlah
-  'Klaim BPJS': 'pendapatan',
-  'Sub Total': 'subtotal',
-  Selisih: 'selisih',
-  dpjp: 'dokterdpjp',
-  sep: 'sep',
-  'kode inacbg': 'inaCode',
-  'desc inacbg': 'inaDesc'
-} : {
+const ranap = {
   No: 'no',
   Tanggal: 'tanggal',
   'Tanggal Pulang': 'krs',
@@ -1101,104 +1056,245 @@ const jsonFields = store.params.layanan !== '3' ? {
   'kode inacbg': 'inaCode',
   'desc inacbg': 'inaDesc'
 }
-function fetchData() {
-  loading.value = true
-  console.log('par', typeof store.params.layanan, store.params.layanan)
+const rajal = {
+  No: 'no',
+  Tanggal: 'tanggal',
+  'Tanggal Pulang': 'krs',
+  Rm: 'rm',
+  Pasien: 'pasien',
+  Noreg: 'noreg',
+  Poli: 'poli',
+  Admin: 'admin',
+  Materai: 'mtri',
+  'Kamar Jenazah': 'jnz',
+  'Kamar Jenazah Inap': 'jnzi',
+  'Sistem Bayar': 'bayar',
+  'Pelayanan Rekam Medik': 'rekammedik',
+  'Biaya Kartu Identitas Paseian': 'idPasien',
+  'Poliklinik Spesialis / Anastesi': 'bPoli',
+  'Konsultasi Antar Poli': 'bKonsul',
+  Tindakan: 'tDokPer',
+  'Visite / Konsultasi / Oncall Dokter': 'visitDok',
+  Laboratorium: 'laborat',
+  Radiologi: 'radiologi',
+  'Operasi One Day Care': 'operasi', // kamar operasi + tindakan operasi
+  Fisioterapi: 'fisio',
+  Hemodialisa: 'hd',
+  'Anastesi diluar Ok dan ICU': 'tAnasLuar',
+  'Klinik Psikologi': 'psikologi',
+  Cardio: 'cardio',
+  EEG: 'eeg',
+  Endoscope: 'endos',
+  Apotek: 'apotek', // semua apotek di jumlah
+  'Klaim BPJS': 'pendapatan',
+  'Sub Total': 'subtotal',
+  Selisih: 'selisih',
+  dpjp: 'dokterdpjp',
+  sep: 'sep',
+  'kode inacbg': 'inaCode',
+  'desc inacbg': 'inaDesc'
+}
+
+function fetchRajal() {
   const data = []
   store.items.forEach((item, i) => {
     const temp = {}
-    if (store.params.layanan !== '3') {
-      temp.no = i + 1
-      temp.subtotal = item.subtotal
-      temp.sep = item.sep
-      temp.inaCode = item.inaCode
-      temp.inaDesc = item.inaDesc
-      temp.dokterdpjp = item.dokterdpjp
-      temp.mtri = item.mtri
-      temp.jnz = item.kmrJnzh
-      temp.jnzi = item.kmrJnzhI
-      temp.pendapatan = item.pendapatanBPJS
-      temp.admin = item.adminIgd
-      temp.selisih = item.selisih
-      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
-      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'DD MMMM YYYY') : '-'
-      temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
-      temp.pasien = item.masterpasien ? item.masterpasien[0].rs2 : '-'
-      temp.rm = item.masterpasien ? item.masterpasien[0].rs1 : '-'
-      temp.noreg = item.rs1
-      temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
-      temp.rekammedik = item.bRM
-      temp.idPasien = item.bId
-      temp.bPoli = item.bPelPoli
-      temp.bKonsul = item.bKonsul
-      temp.tDokPer = item.tDokPer
-      temp.visitDok = item.visitDok
-      temp.laborat = item.jLaborat
-      temp.radiologi = item.jRadiologi
-      temp.operasi = item.kOperasi + item.tOperasi
-      temp.fisio = item.tFisio
-      temp.hd = item.tHd
-      temp.tAnasLuar = item.tAnasLuar
-      temp.psikologi = item.jPsikolog
-      temp.cardio = item.tCardio
-      temp.eeg = item.tEeg
-      temp.endos = item.tEndo
-      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+    temp.no = i + 1
+    temp.subtotal = item.subtotal
+    temp.sep = item.sep
+    temp.inaCode = item.inaCode
+    temp.inaDesc = item.inaDesc
+    temp.dokterdpjp = item.dokterdpjp
+    temp.mtri = item.mtri
+    temp.jnz = item.kmrJnzh
+    temp.jnzi = item.kmrJnzhI
+    temp.pendapatan = item.pendapatanBPJS
+    temp.admin = item.adminIgd
+    temp.selisih = item.selisih
+    temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+    temp.krs = item.rs4 ? date.formatDate(item.rs4, 'DD MMMM YYYY') : '-'
+    temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+    temp.pasien = item.masterpasien ? item.masterpasien[0].rs2 : '-'
+    temp.rm = item.masterpasien ? item.masterpasien[0].rs1 : '-'
+    temp.noreg = item.rs1
+    temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+    temp.rekammedik = item.bRM
+    temp.idPasien = item.bId
+    temp.bPoli = item.bPelPoli
+    temp.bKonsul = item.bKonsul
+    temp.tDokPer = item?.tDokPer ?? { 'Tindakan IRD': item?.JIrdtindakan, 'Tindakan Perawat': item?.jTindakanperawat, 'Tindakan Dokter': item?.jTindakandokter }
+    temp.visitDok = item.visitDok
+    temp.laborat = item.jLaborat
+    temp.radiologi = item.jRadiologi
+    temp.operasi = item.kOperasi + item.tOperasi
+    temp.fisio = item.tFisio
+    temp.hd = item.tHd
+    temp.tAnasLuar = item.tAnasLuar
+    temp.psikologi = item.jPsikolog
+    temp.cardio = item.tCardio
+    temp.eeg = item.tEeg
+    temp.endos = item.tEndo
+    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
 
-      data.push(temp)
-    } else {
-      temp.no = i + 1
-      temp.subtotal = item.subtotal
-      temp.sep = item.sep
-      temp.inaCode = item.inaCode
-      temp.inaDesc = item.inaDesc
-      temp.dokterdpjp = item.dokterdpjp
-      temp.mtri = item.mtri
-      temp.jnz = item.kmrJnzh
-      temp.jnzi = item.kmrJnzhI
-      temp.pendapatan = item.groupingRanap
-      temp.selisih = item.selisih
-      temp.admin = item.adminInap
-      temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
-      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
-      temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
-      temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
-      temp.noreg = item.rs1
-      temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
-      temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
-      temp.rekammedik = item.bRM
-      temp.keperawatan = item.jKeperawatan
-      temp.gizi = item.jGizi
-      temp.oksigen = item.jOksigen
-      temp.penkel = item.jPenunjangkeluar
-      temp.idPasien = item.bId
-      temp.bPoli = item.bPelPoli
-      temp.bKonsul = item.bKonsul
-      temp.tIrd = item.JIrdtindakan
-      temp.tPerawat = item.jTindakanperawat
-      temp.tDok = item.jTindakandokter
-      temp.visitDok = item.visitDok
-      temp.laborat = item.jLaborat
-      temp.radiologi = item.jRadiologi
-      temp.operasi = item.jKamaroperasiIBS + item.OpIgd
-      temp.fisio = item.tFisio
-      temp.hd = item.tHd
-      temp.kamar = item.jAkomodasikamar
-      temp.tAnasLuar = item.tAnasLuar
-      temp.psikologi = item.jPsikolog
-      temp.cardio = item.tCardio
-      temp.eeg = item.tEeg
-      temp.endos = item.tEndo
-      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
-
-      data.push(temp)
-    }
-
-    // console.log('in', i, 'item', item)
+    data.push(temp)
   })
-  loading.value = false
   return data
 }
+function fetchRanap() {
+  const data = []
+  store.items.forEach((item, i) => {
+    const temp = {}
+    temp.no = i + 1
+    temp.subtotal = item.subtotal
+    temp.sep = item.sep
+    temp.inaCode = item.inaCode
+    temp.inaDesc = item.inaDesc
+    temp.dokterdpjp = item.dokterdpjp
+    temp.mtri = item.mtri
+    temp.jnz = item.kmrJnzh
+    temp.jnzi = item.kmrJnzhI
+    temp.pendapatan = item.groupingRanap
+    temp.selisih = item.selisih
+    temp.admin = item.adminInap
+    temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
+    temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
+    temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
+    temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
+    temp.noreg = item.rs1
+    temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
+    temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
+    temp.rekammedik = item.bRM
+    temp.keperawatan = item.jKeperawatan
+    temp.gizi = item.jGizi
+    temp.oksigen = item.jOksigen
+    temp.penkel = item.jPenunjangkeluar
+    temp.idPasien = item.bId
+    temp.bPoli = item.bPelPoli
+    temp.bKonsul = item.bKonsul
+    temp.tIrd = item.JIrdtindakan
+    temp.tPerawat = item.jTindakanperawat
+    temp.tDok = item.jTindakandokter
+    temp.visitDok = item.visitDok
+    temp.laborat = item.jLaborat
+    temp.radiologi = item.jRadiologi
+    temp.operasi = item.jKamaroperasiIBS + item.OpIgd
+    temp.fisio = item.tFisio
+    temp.hd = item.tHd
+    temp.kamar = item.jAkomodasikamar
+    temp.tAnasLuar = item.tAnasLuar
+    temp.psikologi = item.jPsikolog
+    temp.cardio = item.tCardio
+    temp.eeg = item.tEeg
+    temp.endos = item.tEndo
+    temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+    data.push(temp)
+  })
+  return data
+}
+// const jsonFields = store.params.layanan !== '3' ? {
+
+// } : {
+
+// }
+// function fetchData() {
+//   loading.value = true
+//   console.log('par', typeof store.params.layanan, store.params.layanan)
+//   const data = []
+//   store.items.forEach((item, i) => {
+//     const temp = {}
+//     if (store.params.layanan !== '3') {
+//       temp.no = i + 1
+//       temp.subtotal = item.subtotal
+//       temp.sep = item.sep
+//       temp.inaCode = item.inaCode
+//       temp.inaDesc = item.inaDesc
+//       temp.dokterdpjp = item.dokterdpjp
+//       temp.mtri = item.mtri
+//       temp.jnz = item.kmrJnzh
+//       temp.jnzi = item.kmrJnzhI
+//       temp.pendapatan = item.pendapatanBPJS
+//       temp.admin = item.adminIgd
+//       temp.selisih = item.selisih
+//       temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+//       temp.krs = item.rs4 ? date.formatDate(item.rs4, 'DD MMMM YYYY') : '-'
+//       temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
+//       temp.pasien = item.masterpasien ? item.masterpasien[0].rs2 : '-'
+//       temp.rm = item.masterpasien ? item.masterpasien[0].rs1 : '-'
+//       temp.noreg = item.rs1
+//       temp.poli = item.relmpoli ? item.relmpoli.rs2 : '-'
+//       temp.rekammedik = item.bRM
+//       temp.idPasien = item.bId
+//       temp.bPoli = item.bPelPoli
+//       temp.bKonsul = item.bKonsul
+//       temp.tDokPer = item?.tDokPer ?? { 'Tindakan IRD': item?.JIrdtindakan, 'Tindakan Perawat': item?.jTindakanperawat, 'Tindakan Dokter': item?.jTindakandokter }
+//       temp.visitDok = item.visitDok
+//       temp.laborat = item.jLaborat
+//       temp.radiologi = item.jRadiologi
+//       temp.operasi = item.kOperasi + item.tOperasi
+//       temp.fisio = item.tFisio
+//       temp.hd = item.tHd
+//       temp.tAnasLuar = item.tAnasLuar
+//       temp.psikologi = item.jPsikolog
+//       temp.cardio = item.tCardio
+//       temp.eeg = item.tEeg
+//       temp.endos = item.tEndo
+//       temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+//       data.push(temp)
+//     } else {
+//       temp.no = i + 1
+//       temp.subtotal = item.subtotal
+//       temp.sep = item.sep
+//       temp.inaCode = item.inaCode
+//       temp.inaDesc = item.inaDesc
+//       temp.dokterdpjp = item.dokterdpjp
+//       temp.mtri = item.mtri
+//       temp.jnz = item.kmrJnzh
+//       temp.jnzi = item.kmrJnzhI
+//       temp.pendapatan = item.groupingRanap
+//       temp.selisih = item.selisih
+//       temp.admin = item.adminInap
+//       temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
+//       temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
+//       temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
+//       temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
+//       temp.noreg = item.rs1
+//       temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
+//       temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
+//       temp.rekammedik = item.bRM
+//       temp.keperawatan = item.jKeperawatan
+//       temp.gizi = item.jGizi
+//       temp.oksigen = item.jOksigen
+//       temp.penkel = item.jPenunjangkeluar
+//       temp.idPasien = item.bId
+//       temp.bPoli = item.bPelPoli
+//       temp.bKonsul = item.bKonsul
+//       temp.tIrd = item.JIrdtindakan
+//       temp.tPerawat = item.jTindakanperawat
+//       temp.tDok = item.jTindakandokter
+//       temp.visitDok = item.visitDok
+//       temp.laborat = item.jLaborat
+//       temp.radiologi = item.jRadiologi
+//       temp.operasi = item.jKamaroperasiIBS + item.OpIgd
+//       temp.fisio = item.tFisio
+//       temp.hd = item.tHd
+//       temp.kamar = item.jAkomodasikamar
+//       temp.tAnasLuar = item.tAnasLuar
+//       temp.psikologi = item.jPsikolog
+//       temp.cardio = item.tCardio
+//       temp.eeg = item.tEeg
+//       temp.endos = item.tEndo
+//       temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+//       data.push(temp)
+//     }
+
+//     // console.log('in', i, 'item', item)
+//   })
+//   loading.value = false
+//   return data
+// }
 // data for print --end--
 
 function ambilData() {
