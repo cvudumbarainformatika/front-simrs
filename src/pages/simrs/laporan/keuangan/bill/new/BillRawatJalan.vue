@@ -360,7 +360,25 @@
             Klaim dan Tagihan
           </template>
           <template #cell-tanggal="{row}">
-            {{ dateFullFormat(row.rs3) }}
+            <div
+              v-if="row.rs4"
+              class=""
+            >
+              <div class="row no-wrap q-mb-sm justify-between">
+                <div>MRS</div>
+                <div>{{ dateFullFormat(row.rs3) }}</div>
+              </div>
+              <div class="row no-wrap justify-between">
+                <div>KRS</div>
+                <div>{{ dateFullFormat(row.rs4) }}</div>
+              </div>
+            </div>
+            <div
+              v-if="!row.rs4"
+              class="row no-wrap"
+            >
+              {{ dateFullFormat(row.rs3) }}
+            </div>
           </template>
           <template #cell-keperawaatan="{row}">
             {{ row.jKeperawatan>0?formatDouble(row.jKeperawatan):'-' }}
@@ -1000,6 +1018,7 @@ function finishDownload() {
 const jsonFields = store.params.layanan !== '3' ? {
   No: 'no',
   Tanggal: 'tanggal',
+  'Tanggal Pulang': 'krs',
   Rm: 'rm',
   Pasien: 'pasien',
   Noreg: 'noreg',
@@ -1036,6 +1055,7 @@ const jsonFields = store.params.layanan !== '3' ? {
 } : {
   No: 'no',
   Tanggal: 'tanggal',
+  'Tanggal Pulang': 'krs',
   RM: 'rm',
   Pasien: 'pasien',
   Noreg: 'noreg',
@@ -1095,7 +1115,8 @@ function fetchData() {
       temp.pendapatan = item.groupingRanap
       temp.selisih = item.selisih
       temp.admin = item.adminInap
-      temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
+      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
       temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
       temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
       temp.noreg = item.rs1
@@ -1141,6 +1162,7 @@ function fetchData() {
       temp.admin = item.adminIgd
       temp.selisih = item.selisih
       temp.tanggal = date.formatDate(item.rs3, 'DD MMMM YYYY')
+      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'DD MMMM YYYY') : '-'
       temp.bayar = item.msistembayar ? item.msistembayar.rs2 : '-'
       temp.pasien = item.masterpasien ? item.masterpasien[0].rs2 : '-'
       temp.rm = item.masterpasien ? item.masterpasien[0].rs1 : '-'
