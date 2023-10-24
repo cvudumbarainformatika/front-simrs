@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
-export const useDispenStore = defineStore('dispen', {
+export const useTroubleStore = defineStore('trouble', {
   state: () => ({
     loading: false,
     isOpen: false,
@@ -15,6 +15,8 @@ export const useDispenStore = defineStore('dispen', {
     },
     pegawais: [],
     form: {
+      dispen_masuk: true,
+      dispen_pulang: false,
       alasan: null,
       user_id: null,
       tanggal: new Date(),
@@ -97,9 +99,15 @@ export const useDispenStore = defineStore('dispen', {
     },
     async getPegawai() {
       this.loading = true
+      this.params.dispen_masuk = this.form.dispen_masuk
+      this.params.dispen_pulang = this.form.dispen_pulang
+      if (!this.params.dispen_pulang && !this.params.dispen_masuk) {
+        notifErrVue('Dispen Masuk Atau dispen pulang harus terpilih salah satu')
+        return
+      }
       const params = { params: this.params }
       try {
-        const resp = await api.get('v1/dispen/pegawai', params)
+        const resp = await api.get('v1/troble/pegawai', params)
         console.log('pegawai', resp)
         if (resp.status === 200) {
           this.pegawais = resp.data.data
@@ -110,6 +118,9 @@ export const useDispenStore = defineStore('dispen', {
         console.log('dispen', error)
         this.loading = false
       }
+    },
+    allList() {
+      this.list = this.pegawais
     },
     toList(val) {
       console.log('toList', val)
@@ -132,7 +143,7 @@ export const useDispenStore = defineStore('dispen', {
       formdata.append('user_ids', ids)
 
       try {
-        await api.post('/v1/dispen/store', formdata).then((resp) => {
+        await api.post('/v1/troble/store', formdata).then((resp) => {
           console.log('post dispen', resp)
           notifSuccess(resp)
           this.loading = false

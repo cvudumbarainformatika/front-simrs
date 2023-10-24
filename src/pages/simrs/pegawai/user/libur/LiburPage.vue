@@ -37,7 +37,7 @@
               <app-btn
                 label="Trouble"
                 color="red"
-                @click="dispen.setIsOpen()"
+                @click="trouble.setIsOpen()"
               />
             </div>
             <div class="q-ml-sm">
@@ -175,10 +175,12 @@
     <FormDialog v-model="store.isOpen" />
     <ImageDialog v-model="store.expand" />
     <FormDispen v-model="dispen.isOpen" />
+    <FormTrouble v-model="trouble.isOpen" />
   </div>
 </template>
 <script setup>
 import FormDialog from './FormDialog.vue'
+import FormTrouble from './FormTrouble.vue'
 import FormDispen from './FormDispen.vue'
 import ImageDialog from './ImageDialog.vue'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
@@ -187,9 +189,11 @@ import { pathImg } from 'src/boot/axios'
 import { dateFullFormat } from 'src/modules/formatter'
 import { date, openURL } from 'quasar'
 import { onMounted, ref } from 'vue'
+import { useTroubleStore } from 'src/stores/simrs/pegawai/user/libur/trouble'
 
 const store = useLiburAbsenStore()
 const dispen = useDispenStore()
+const trouble = useTroubleStore()
 
 function openPdf(val) {
   openURL(val)

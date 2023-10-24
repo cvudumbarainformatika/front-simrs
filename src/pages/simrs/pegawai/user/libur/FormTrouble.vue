@@ -6,10 +6,10 @@
     <q-card style="width:70vw !important;">
       <q-card-section>
         <div class="f-14 text-weight-bold">
-          Form Dispen
+          Form Troble
         </div>
         <div class="title-desc">
-          Input Dispenssi Pegawai
+          Input Dispenssi Pegawai Ketika ada Trouble
         </div>
       </q-card-section>
       <q-separator />
@@ -49,6 +49,15 @@
                 />
               </div>
             </div>
+            <div class="row q-col-gutter-sm q-mt-xs items-center">
+              <div class="col-6" />
+              <div class="col-6 text-right">
+                <app-btn
+                  label="Pilih Semua"
+                  @click="store.allList()"
+                />
+              </div>
+            </div>
             <!-- list -->
             <div class="q-my-md">
               <ListPegawai :key="store.pegawais" />
@@ -62,14 +71,50 @@
                 @reset="onReset"
               >
                 <div class="q-mb-md">
-                  <app-input-date
-                    class="q-mb-md"
-                    :model="store.form.tanggal"
-                    label="Tanggal"
-                    style="width:40%"
-                    outlined
-                    @set-model="(val)=> store.setForm('tanggal', val)"
-                  />
+                  <div class="row no-wrap q-col-gutter-sm">
+                    <app-input-date
+                      class="q-mb-md"
+                      :model="store.form.tanggal"
+                      label="Tanggal"
+                      style="width:30%"
+                      outlined
+                      @set-model="(val)=> store.setForm('tanggal', val)"
+                    />
+                    <app-input-date
+                      class="q-mb-md"
+                      :model="store.form.mulai"
+                      label="Jam Mulai"
+                      style="width:30%"
+                      :type-date="false"
+                      outlined
+                      @set-model="(val)=> store.setForm('mulai', val)"
+                    />
+                    <app-input-date
+                      class="q-mb-md"
+                      :model="store.form.selesai"
+                      label="Jam Selesai"
+                      style="width:30%"
+                      :type-date="false"
+                      outlined
+                      @set-model="(val)=> store.setForm('selesai', val)"
+                    />
+                  </div>
+                  <div class="row no-wrap q-col-gutter-sm">
+                    <q-checkbox
+                      v-model="store.form.dispen_masuk"
+                      left-label
+                      label="Dispen Jam Masuk"
+                      checked-icon="icon-mat-task_alt"
+                      unchecked-icon="icon-mat-panorama_fish_eye"
+                    />
+                    <q-checkbox
+                      v-model="store.form.dispen_pulang"
+                      left-label
+                      label="Dispen Jam Pulang"
+                      checked-icon="icon-mat-task_alt"
+                      unchecked-icon="icon-mat-panorama_fish_eye"
+                    />
+                  </div>
                   <app-input
                     v-model="store.form.alasan"
                     label="alasan"
@@ -104,16 +149,16 @@
 </template>
 
 <script setup>
-import ListPegawai from './dispen/ListPegawai.vue'
-import ListSelectPegawai from './dispen/ListSelectPegawai.vue'
-import { useDispenStore } from 'src/stores/simrs/pegawai/user/libur/dispen'
+import ListPegawai from './trouble/ListPegawai.vue'
+import ListSelectPegawai from './trouble/ListSelectPegawai.vue'
 import { onMounted, ref } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 import { useQuasar } from 'quasar'
 import { useLiburAbsenStore } from 'src/stores/simrs/pegawai/user/libur/libur'
+import { useTroubleStore } from 'src/stores/simrs/pegawai/user/libur/trouble'
 
 const $q = useQuasar()
-const store = useDispenStore()
+const store = useTroubleStore()
 const table = useLiburAbsenStore()
 
 const ruang = ref('all')
