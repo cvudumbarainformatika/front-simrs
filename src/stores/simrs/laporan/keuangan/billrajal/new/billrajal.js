@@ -426,6 +426,8 @@ export const useSimrsLaporanKeuanganNewBillRajalStore = defineStore('simrs_lapor
         item.sep = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs[0].nosep : '-') : (item.groupingranap ? (item.groupingranap.length ? item.groupingranap[0].nosep : '-') : '-')
         item.inaCode = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs[0].cbg_code : '-') : (item.groupingranap ? (item.groupingranap.length ? item.groupingranap[0].cbg_code : '-') : '-')
         item.inaDesc = item.pendapatanallbpjs ? (item.pendapatanallbpjs.length ? item.pendapatanallbpjs[0].cbg_desc : '-') : (item.groupingranap ? (item.groupingranap.length ? item.groupingranap[0].cbg_desc : '-') : '-')
+        item.mrs = item?.rs3
+        item.krs = item?.rs4
       })
       console.log('selesai')
     },

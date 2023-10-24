@@ -60,7 +60,7 @@
             top
           >
             <q-item-label caption>
-              <div
+              <!-- <div
                 class="row justify-end"
                 @click="bukaSep(item)"
               >
@@ -92,7 +92,7 @@
                     @click="genCon(item)"
                   />
                 </div>
-              </div>
+              </div> -->
               <div class="row q-mt-sm justify-end">
                 <div class="q-ml-sm">
                   <q-btn
@@ -101,8 +101,8 @@
                     padding="xs"
                     color="teal"
                     :loading="loadingP && temp===item?.noka"
-                    label="Pengajuan SEP"
-                    @click="PengajuanSep(item)"
+                    label="Simpan Kunjungan"
+                    @click="kirimKunjungan(item)"
                   />
                 </div>
               </div>
@@ -116,49 +116,6 @@
         />
       </q-list>
     </div>
-
-    <!-- General COnsent -->
-    <app-general-consent
-      :key="pasien"
-      v-model="openGen"
-      :pasien="pasien"
-      @close="openGen = !openGen"
-      @open-preview-gc="openPreviewGc()"
-    />
-    <app-preview-general-consent
-      v-model="openPrevGc"
-      @close="openPrevGc = !openPrevGc"
-    />
-    <app-dialog-form
-      v-model="dialog"
-      title="Alasan Pengajuan SEP"
-      @save-form="simpanPengajuan()"
-    >
-      <template #default>
-        <div>
-          <div class="row q-mb-sm">
-            <div class="col-12">
-              <app-autocomplete
-                v-model="jenisPengajuan"
-                label="Jenis Pengajuan"
-                option-value="value"
-                option-label="nama"
-                :source="jenisPengajuans"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <app-input
-                v-model="keterangan"
-                label="keterangan"
-              />
-            </div>
-          </div>
-        </div>
-      </template>
-    </app-dialog-form>
-    <!-- <DialogSep /> -->
   </div>
 </template>
 
@@ -167,7 +124,7 @@
 import { api } from 'src/boot/axios'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
-import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
+// import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
 
 defineProps({
@@ -175,47 +132,24 @@ defineProps({
   items: { type: Array, default: () => [] }
 })
 
-const pasien = ref(null)
-const openGen = ref(false)
-const openPrevGc = ref(false)
-
-function openPreviewGc() {
-  openPrevGc.value = !openPrevGc.value
-}
-
-const dialog = ref(false)
 const temp = ref(null)
 const loadingP = ref(false)
-const jenisPengajuans = ref([
-  { nama: 'pengajuan backdate', value: '1' },
-  { nama: 'pengajuan finger print', value: '2' }
-])
 const keterangan = ref('')
 const jenisPengajuan = ref('2')
-function PengajuanSep(val) {
-  dialog.value = true
+function kirimKunjungan(val) {
   temp.value = val.noka
+  simpanKunjungan()
 }
-const sepStore = useSepBpjsStore()
-const loadingReSep = ref(null)
-function bukaSep(val) {
-  console.log('buka sep', val)
-  loadingReSep.value = val.noreg
-  if (!val.sep) {
-    sepStore.getSep(val)
-  }
-}
-function simpanPengajuan() {
+function simpanKunjungan() {
   const data = {
     noka: temp.value,
     jenispengajuan: jenisPengajuan.value,
     keterangan: keterangan.value
   }
   console.log(data)
-  dialog.value = false
   return new Promise(resolve => {
     loadingP.value = true
-    api.post('v1/simrs/bridgingbpjs/pendaftaran/pengajuansep', data)
+    api.post('v1/simrs/bridgingbpjs/pendaftaran/anu', data)
       .then(resp => {
         loadingP.value = false
         if (resp.metadata.code === '200' || resp.status === 200) {
@@ -276,11 +210,11 @@ function getStatus(arr) {
   return text
 }
 
-function genCon(row) {
-  // console.log(row)
-  pasien.value = row
-  openGen.value = !openGen.value
-}
+// function genCon(row) {
+//   // console.log(row)
+//   pasien.value = row
+//   openGen.value = !openGen.value
+// }
 </script>
 <style scoped>
 .qrcode {
