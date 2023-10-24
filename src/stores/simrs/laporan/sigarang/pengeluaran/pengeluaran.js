@@ -70,16 +70,19 @@ export const useLaporanSigarangPengeluaranStore = defineStore('laporan_sigarang_
       await api.get('v1/simrs/laporan/sigarang/pengeluaran-depo', param)
         .then(resp => {
           this.loading = false
-          console.log('data tabel', resp.data)
+          console.log('data tabel', resp)
           this.meta = resp.data
-          this.items = resp.data.data
-          this.total = this.items.map(a => {
-            if (a.jumlah_distribusi > 0) {
-              return a.jumlah_distribusi
-            } else if (a.jumlah_distribusi_l > 0) {
-              return a.jumlah_distribusi_l
-            } else { return 0 }
-          }).reduce((a, b) => a + b, 0)
+          this.items = resp.data.data ?? []
+          console.log('type', typeof this.items)
+          if (this.items.length) {
+            this.total = this.items.map(a => {
+              if (a.jumlah_distribusi > 0) {
+                return a.jumlah_distribusi
+              } else if (a.jumlah_distribusi_l > 0) {
+                return a.jumlah_distribusi_l
+              } else { return 0 }
+            }).reduce((a, b) => a + b, 0)
+          }
           console.log('total', this.total)
         })
         .catch(() => { this.loading = false })

@@ -34,6 +34,13 @@
               />
             </div>
             <div class="q-ml-sm">
+              <app-btn
+                label="Trouble"
+                color="red"
+                @click="dispen.setIsOpen()"
+              />
+            </div>
+            <div class="q-ml-sm">
               <app-input-date-human
                 ref="tgl"
                 :model="store.tanggal"
