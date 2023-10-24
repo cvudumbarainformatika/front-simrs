@@ -11,7 +11,9 @@ export const useTroubleStore = defineStore('trouble', {
       per_page: 50,
       page: 1,
       flag: null,
-      ruang: null
+      ruang: null,
+      mulai: '00:00:00',
+      selesai: '00:00:00'
     },
     pegawais: [],
     form: {
@@ -68,6 +70,13 @@ export const useTroubleStore = defineStore('trouble', {
       // this.form.sampel_diambil = formatDb
       // this.uniqueId(formatUniq)
     },
+    setParamsGet(key, payload) {
+      this.params[key] = payload
+      this.getPegawai()
+    },
+    setParams(key, payload) {
+      this.params[key] = payload
+    },
     setForm(key, payload) {
       this.form[key] = payload
     },
@@ -101,6 +110,7 @@ export const useTroubleStore = defineStore('trouble', {
       this.loading = true
       this.params.dispen_masuk = this.form.dispen_masuk
       this.params.dispen_pulang = this.form.dispen_pulang
+      this.params.tanggal = this.form.tanggal
       if (!this.params.dispen_pulang && !this.params.dispen_masuk) {
         notifErrVue('Dispen Masuk Atau dispen pulang harus terpilih salah satu')
         return

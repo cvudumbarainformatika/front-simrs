@@ -50,10 +50,18 @@
               </div>
             </div>
             <div class="row q-col-gutter-sm q-mt-xs items-center">
-              <div class="col-6" />
-              <div class="col-6 text-right">
+              <div class="col-12 text-right">
+                <app-btn
+                  class="q-mr-sm"
+                  label="Ambil data pegawai shift"
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @click="store.getPegawai()"
+                />
                 <app-btn
                   label="Pilih Semua"
+                  :loading="store.loading"
+                  :disable="store.loading"
                   @click="store.allList()"
                 />
               </div>
@@ -82,21 +90,21 @@
                     />
                     <app-input-date
                       class="q-mb-md"
-                      :model="store.form.mulai"
+                      :model="store.params.mulai"
                       label="Jam Mulai"
                       style="width:30%"
                       :type-date="false"
                       outlined
-                      @set-model="(val)=> store.setForm('mulai', val)"
+                      @set-model="(val)=> store.setParamsGet('mulai', val)"
                     />
                     <app-input-date
                       class="q-mb-md"
-                      :model="store.form.selesai"
+                      :model="store.params.selesai"
                       label="Jam Selesai"
                       style="width:30%"
                       :type-date="false"
                       outlined
-                      @set-model="(val)=> store.setForm('selesai', val)"
+                      @set-model="(val)=> store.setParamsGet('selesai', val)"
                     />
                   </div>
                   <div class="row no-wrap q-col-gutter-sm">
