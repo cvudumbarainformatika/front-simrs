@@ -365,11 +365,15 @@
               class=""
             >
               <div class="row no-wrap q-mb-sm justify-between">
-                <div>MRS</div>
+                <div class="q-mr-sm">
+                  MRS
+                </div>
                 <div>{{ dateFullFormat(row.rs3) }}</div>
               </div>
               <div class="row no-wrap justify-between">
-                <div>KRS</div>
+                <div class="q-mr-sm">
+                  KRS
+                </div>
                 <div>{{ dateFullFormat(row.rs4) }}</div>
               </div>
             </div>
