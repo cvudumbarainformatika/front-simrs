@@ -73,6 +73,13 @@
           </div>
           <!-- list select -->
           <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xl-6">
+            <app-btn
+              label="Dispen semua karyawan nonShift"
+              class="q-ml-md q-mb-sm"
+              :loading="store.loading"
+              :disable="store.loading"
+              @click="saveNonShift"
+            />
             <div class="q-ml-md">
               <q-form
                 @submit.prevent="onSubmit"
@@ -178,8 +185,23 @@ onMounted(() => {
   store.getPegawai()
   store.autocomplete()
 })
-
+// let nonShift = false
+function saveNonShift() {
+  // nonShift = true
+  if (!store.form.alasan) {
+    return notifErrVue('Maaf, Alasan Belum di isi!')
+  }
+  if (store.form.alasan) {
+    console.log('save non shift')
+    store.saveNonShift().then(() => {
+      table.getDataTablePage()
+      store.setIsOpen()
+      store.resetList()
+    })
+  }
+}
 const onSubmit = () => {
+  // if (nonShift) return
   console.log('onSubmit')
   if (!store.list.length) {
     return notifErrVue('Maaf, Belum Ada Pegawai yang dipilih!')

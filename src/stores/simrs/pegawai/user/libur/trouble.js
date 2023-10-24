@@ -12,8 +12,8 @@ export const useTroubleStore = defineStore('trouble', {
       page: 1,
       flag: null,
       ruang: null,
-      mulai: '00:00:00',
-      selesai: '00:00:00'
+      mulai: '00:00',
+      selesai: '00:00'
     },
     pegawais: [],
     form: {
@@ -155,6 +155,31 @@ export const useTroubleStore = defineStore('trouble', {
       try {
         await api.post('/v1/troble/store', formdata).then((resp) => {
           console.log('post dispen', resp)
+          notifSuccess(resp)
+          this.loading = false
+          return new Promise((resolve, reject) => {
+            resolve()
+          })
+        })
+      } catch (error) {
+        console.log('error')
+        this.loading = false
+      }
+    },
+    async saveNonShift() {
+      this.loading = true
+      const formdata = new FormData()
+      formdata.append('alasan', this.form.alasan)
+      formdata.append('tanggal', this.form.tanggal)
+      formdata.append('flag', this.form.flag)
+      formdata.append('dispen_masuk', this.form.dispen_masuk)
+      formdata.append('dispen_pulang', this.form.dispen_pulang)
+      formdata.append('mulai', this.params.mulai)
+      formdata.append('selesai', this.params.selesai)
+
+      try {
+        await api.post('/v1/troble/non-shift', formdata).then((resp) => {
+          console.log('post dispen non shift', resp)
           notifSuccess(resp)
           this.loading = false
           return new Promise((resolve, reject) => {
