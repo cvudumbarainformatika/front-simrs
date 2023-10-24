@@ -1103,56 +1103,11 @@ const jsonFields = store.params.layanan !== '3' ? {
 }
 function fetchData() {
   loading.value = true
+  console.log('par', typeof store.params.layanan, store.params.layanan)
   const data = []
   store.items.forEach((item, i) => {
     const temp = {}
-    if (store.params.layanan === '3') {
-      temp.no = i + 1
-      temp.subtotal = item.subtotal
-      temp.sep = item.sep
-      temp.inaCode = item.inaCode
-      temp.inaDesc = item.inaDesc
-      temp.dokterdpjp = item.dokterdpjp
-      temp.mtri = item.mtri
-      temp.jnz = item.kmrJnzh
-      temp.jnzi = item.kmrJnzhI
-      temp.pendapatan = item.groupingRanap
-      temp.selisih = item.selisih
-      temp.admin = item.adminInap
-      temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
-      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
-      temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
-      temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
-      temp.noreg = item.rs1
-      temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
-      temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
-      temp.rekammedik = item.bRM
-      temp.keperawatan = item.jKeperawatan
-      temp.gizi = item.jGizi
-      temp.oksigen = item.jOksigen
-      temp.tIrd = item.JIrdtindakan
-      temp.penkel = item.jPenunjangkeluar
-      temp.idPasien = item.bId
-      temp.bPoli = item.bPelPoli
-      temp.bKonsul = item.bKonsul
-      temp.tPerawat = item.jTindakanperawat
-      temp.tDok = item.jTindakandokter
-      temp.visitDok = item.visitDok
-      temp.laborat = item.jLaborat
-      temp.radiologi = item.jRadiologi
-      temp.operasi = item.jKamaroperasiIBS + item.OpIgd
-      temp.fisio = item.tFisio
-      temp.hd = item.tHd
-      temp.kamar = item.jAkomodasikamar
-      temp.tAnasLuar = item.tAnasLuar
-      temp.psikologi = item.jPsikolog
-      temp.cardio = item.tCardio
-      temp.eeg = item.tEeg
-      temp.endos = item.tEndo
-      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
-
-      data.push(temp)
-    } else {
+    if (store.params.layanan !== '3') {
       temp.no = i + 1
       temp.subtotal = item.subtotal
       temp.sep = item.sep
@@ -1183,6 +1138,52 @@ function fetchData() {
       temp.operasi = item.kOperasi + item.tOperasi
       temp.fisio = item.tFisio
       temp.hd = item.tHd
+      temp.tAnasLuar = item.tAnasLuar
+      temp.psikologi = item.jPsikolog
+      temp.cardio = item.tCardio
+      temp.eeg = item.tEeg
+      temp.endos = item.tEndo
+      temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
+
+      data.push(temp)
+    } else {
+      temp.no = i + 1
+      temp.subtotal = item.subtotal
+      temp.sep = item.sep
+      temp.inaCode = item.inaCode
+      temp.inaDesc = item.inaDesc
+      temp.dokterdpjp = item.dokterdpjp
+      temp.mtri = item.mtri
+      temp.jnz = item.kmrJnzh
+      temp.jnzi = item.kmrJnzhI
+      temp.pendapatan = item.groupingRanap
+      temp.selisih = item.selisih
+      temp.admin = item.adminInap
+      temp.tanggal = date.formatDate(item.rs3, 'YYYY/MM/DD')
+      temp.krs = item.rs4 ? date.formatDate(item.rs4, 'YYYY/MM/DD') : '-'
+      temp.bayar = item.relsistembayar ? item.relsistembayar.rs2 : '-'
+      temp.pasien = item.masterpasien ? item.masterpasien.rs2 : '-'
+      temp.noreg = item.rs1
+      temp.rm = item.masterpasien ? item.masterpasien.rs1 : '-'
+      temp.ruangan = item.relmasterruangranap ? item.relmasterruangranap.rs2 : '-'
+      temp.rekammedik = item.bRM
+      temp.keperawatan = item.jKeperawatan
+      temp.gizi = item.jGizi
+      temp.oksigen = item.jOksigen
+      temp.penkel = item.jPenunjangkeluar
+      temp.idPasien = item.bId
+      temp.bPoli = item.bPelPoli
+      temp.bKonsul = item.bKonsul
+      temp.tIrd = item.JIrdtindakan
+      temp.tPerawat = item.jTindakanperawat
+      temp.tDok = item.jTindakandokter
+      temp.visitDok = item.visitDok
+      temp.laborat = item.jLaborat
+      temp.radiologi = item.jRadiologi
+      temp.operasi = item.jKamaroperasiIBS + item.OpIgd
+      temp.fisio = item.tFisio
+      temp.hd = item.tHd
+      temp.kamar = item.jAkomodasikamar
       temp.tAnasLuar = item.tAnasLuar
       temp.psikologi = item.jPsikolog
       temp.cardio = item.tCardio
