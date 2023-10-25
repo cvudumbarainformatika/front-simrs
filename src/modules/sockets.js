@@ -1,15 +1,20 @@
 import Echo from 'laravel-echo'
 import Pusher from 'pusher-js'
+// import axios from 'axios'
 // import { api } from 'src/boot/axios'
 
 const host = 'xenter.my.id'
+// const ser = 'https://xenter.my.id'
 // const host2 = 'localhost' // '127.0.0.1' || '192.168.101.80'
 // const host = '36.89.103.117'
 // const host = '192.168.101.79'
 // const host2 = '192.168.150.103'
-
+// const getLocalToken = () => JSON.parse(localStorage.getItem('token'))
 window.Pusher = Pusher
+// const api = axios.create({ baseURL: host })
+// api.defaults.headers.get.Accepts = 'application/json'
 
+// api.defaults.headers.common.Authorization = `Bearer ${getLocalToken()}`
 // window.Echo = new Echo({
 //   broadcaster: 'pusher',
 //   key: 'simrs_key_harry141312',
@@ -26,7 +31,12 @@ window.Pusher = Pusher
 //   authorizer: (channel) => {
 //     return {
 //       authorize: (socketId, callback) => {
-//         api.post('/broadcasting/auth', {
+//         // api.post('/broadcasting/auth', {
+//         // axios.create({ baseURL: ser })
+//         axios.defaults.headers.get.Accepts = 'application/json'
+
+//         axios.defaults.headers.common.Authorization = `Bearer ${getLocalToken()}`
+//         axios.post(ser + '/api/broadcasting/auth', {
 //           socket_id: socketId,
 //           channel_name: channel.name
 //         })
