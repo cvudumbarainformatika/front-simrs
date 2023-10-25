@@ -17,7 +17,7 @@
             Cari Nama Pegawai
           </div>
           <div class="col-sm-8 col-xs-12">
-            <app-autocomplete-new
+            <app-autocomplete-debounce-input
               v-model="store.form.user_id"
               label="cari pegawai terdaftar"
               autocomplete="nama"
@@ -25,8 +25,7 @@
               option-value="id"
               :source="store.users"
               :loading="store.loading"
-              :debounce="500"
-              @input-value="store.searchUser"
+              @buang="store.searchUser"
             />
           </div>
         </div>

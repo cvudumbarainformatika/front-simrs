@@ -250,12 +250,43 @@ export const useLiburAbsenStore = defineStore('libur_absen', {
           this.setOpen()
         })
       } else {
-        this.form.tanggals.forEach(tanggal => {
-          this.setForm('tanggal', tanggal)
-          this.saveForm()
+        // this.form.tanggals.forEach(tanggal => {
+        //   this.setForm('tanggal', tanggal)
+        // })
+        // this.setOpen()
+        this.saveFormRange().then(() => {
+          this.setOpen()
         })
-        this.setOpen()
       }
+    },
+    saveFormRange() {
+      this.loading = true
+      const data = new FormData()
+      data.append('user_id', this.form.user_id)
+      data.append('tanggal', this.form.tanggals)
+      data.append('flag', this.form.flag)
+      if (this.form.alasan) data.append('alasan', this.form.alasan)
+      if (this.form.image) data.append('gambar', this.form.image)
+      // console.log('image', this.form)
+      return new Promise((resolve, reject) => {
+        api
+          .post('v1/libur/store-mul', data, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then((resp) => {
+            // console.log('save libur', resp)
+            notifSuccess(resp)
+            this.loading = false
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch((err) => {
+            this.loading = false
+            reject(err)
+          })
+      })
     },
     saveForm() {
       this.loading = true

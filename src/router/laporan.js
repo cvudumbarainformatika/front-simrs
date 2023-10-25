@@ -71,6 +71,11 @@ const laporan = {
       component: () => import('pages/simrs/laporan/sigarang/mutasi/IndexPage.vue')
     },
     {
+      path: '/laporan/sigarang/mutasi-depo',
+      name: 'laporan.sigarang.mutasi-depo',
+      component: () => import('pages/simrs/laporan/sigarang/mutasidepo/IndexPage.vue')
+    },
+    {
       path: '/laporan/sigarang/rekap-mutasi',
       name: 'laporan.sigarang.rekap-mutasi',
       component: () => import('pages/simrs/laporan/sigarang/rekapmutasi/IndexPage.vue')
