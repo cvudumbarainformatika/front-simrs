@@ -52,7 +52,7 @@
               </div>
               <div class="col-md-9 col-xs-12">
                 <!-- v-model="store.tanggal" -->
-                <app-input-date
+                <app-input-date-limited
                   :model="store.tanggal"
                   label="Tanggal Permintaan"
                   outlined

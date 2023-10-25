@@ -91,7 +91,7 @@
               <div class="col-8">
                 <div class="row items-center">
                   :
-                  <app-input-date
+                  <app-input-date-limited
                     class="q-ml-sm"
                     :model="store.tanggal"
                     label="Tanggal verifikasi"

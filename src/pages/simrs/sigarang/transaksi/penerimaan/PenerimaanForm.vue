@@ -54,6 +54,7 @@
                           ref="refDate"
                           v-model="store.form.tanggal"
                           mask="YYYY-MM-DD"
+                          :options="dateOption"
                           @update:model-value="store.setTanggal"
                         >
                           <div class="row items-center justify-end">
@@ -406,6 +407,14 @@ const store = useTransaksiPenerimaanForm()
 store.setNomorPenerimaan()
 store.setToday()
 
+// date options start ----
+const today = new Date()
+const lastDay = date.formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0), 'YYYY/MM/DD')
+const firstDay = date.formatDate(Date.now(), 'YYYY/MM/01')
+function dateOption(val) {
+  return val >= firstDay && val <= lastDay
+}
+// date options end ----
 const proxyDate = ref(null)
 const refDate = ref(null)
 const refqty = ref(null)

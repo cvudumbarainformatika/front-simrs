@@ -24,9 +24,10 @@
             Tanggal
           </div>
           <div class="col">
-            <app-input-date-human
+            <app-input-date-human-limited
               :model="store.display.tanggal"
               label="dari tanggal"
+              outlined
               :loading="store.loading"
               @db-model="setTanggal"
               @set-display="setTanggalDisp"
