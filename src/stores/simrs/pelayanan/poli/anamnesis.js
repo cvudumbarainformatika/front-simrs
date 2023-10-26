@@ -14,7 +14,13 @@ export const useAnamnesis = defineStore('anamnesis', {
       riwayatpenyakitsekarang: '',
       riwayatalergi: '',
       keteranganalergi: '',
-      riwayatpengobatan: ''
+      riwayatpengobatan: '',
+      // baru
+      riwayatpenyakitkeluarga: '',
+      skreeninggizi: 0,
+      asupanmakan: 0,
+      kondisikhusus: '',
+      skor: 0
     },
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
@@ -65,7 +71,13 @@ export const useAnamnesis = defineStore('anamnesis', {
         riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
         riwayatalergi: val.riwayatalergi,
         keteranganalergi: val.keteranganalergi,
-        riwayatpengobatan: val.riwayatpengobatan
+        riwayatpengobatan: val.riwayatpengobatan,
+        // baru
+        riwayatpenyakitkeluarga: val.riwayatpenyakitkeluarga,
+        skreeninggizi: val.skreeninggizi,
+        asupanmakan: val.asupanmakan,
+        kondisikhusus: val.kondisikhusus,
+        skor: val.skor
       }
       const kommatext = val?.riwayatalergi?.split(', ')
       this.selection = kommatext
@@ -135,7 +147,13 @@ export const useAnamnesis = defineStore('anamnesis', {
           riwayatpenyakitsekarang: '',
           riwayatalergi: '',
           keteranganalergi: '',
-          riwayatpengobatan: ''
+          riwayatpengobatan: '',
+          // baru
+          riwayatpenyakitkeluarga: '',
+          skreeninggizi: 0,
+          asupanmakan: 0,
+          kondisikhusus: '',
+          skor: 0
         }
         this.selection = []
 

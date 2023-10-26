@@ -46,27 +46,47 @@
                   lines="2"
                   class="f-12"
                 >
-                  <span class="">Keluhan Utama</span> : <span class="text-weight-bold">{{ item?.rs4 }}</span>
+                  <span class="">Keluhan Utama </span> : <span class="text-weight-bold">{{ item?.rs4 }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
                 >
-                  <span class="">Riwayat Penyakit (Sekarang)</span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
+                  <span class="">Riwayat Penyakit (Sekarang) </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
                 >
-                  <span class="">Riwayat Penyakit</span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
+                  <span class="">Riwayat Penyakit </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
                 >
-                  <span class="">Riwayat Alergi</span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}, {{ item?.keteranganalergi }}</span>
+                  <span class="">Riwayat Alergi </span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}</span>
+                </q-item-label>
+                <q-item-label
+                  lines="2"
+                >
+                  <span class="">Reaksi berupa </span> : <span class="text-weight-bold">{{ item?.keteranganalergi }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"
                 >
                   <span class="">Riwayat Pengobatan</span> : <span class="text-weight-bold">{{ item?.riwayatpengobatan }}</span>
+                </q-item-label>
+                <q-separator class="q-my-md" />
+                <q-item-label
+                  lines="1"
+                >
+                  <span class="text-weight-bold">Skreening Gizi</span>
+                </q-item-label>
+                <q-item-label
+                  lines="3"
+                >
+                  <span class="">- Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? {{ item?.skreeninggizi }}</span>
+                  <div class="q-my-xs">
+                    - Apakah Asupan Makan berkurang karena tidak nafsu makan ? {{ item?.asupanmakan }}
+                  </div>
+                  <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
                 </q-item-label>
               </q-item-section>
 
