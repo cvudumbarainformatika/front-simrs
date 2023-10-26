@@ -184,12 +184,12 @@
                       <q-item-label
                         lines="2"
                       >
-                        Spiritual : <em>{{ item?.sosialekonomi??'-' }}</em>
+                        Spiritual : <em>{{ item?.spiritual??'-' }}</em>
                       </q-item-label>
                       <q-item-label
                         lines="2"
                       >
-                        Skor Nyeri : <em>{{ item?.skornyeri??'-' }}</em>
+                        Skor Nyeri : <em>{{ item?.scorenyeri??'-' }}</em>
                       </q-item-label>
                     </q-item-section>
                   </q-item>
