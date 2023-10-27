@@ -41,11 +41,16 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
       'uraian_108',
       'kode',
       'nama',
-      'satuan',
       'awal',
       'masuk',
       'keluar',
-      'akhir'
+      'sisa',
+      'satuan',
+      'hawal',
+      'hmasuk',
+      'hkeluar',
+      'hsisa'
+
     ],
     total: 0,
     tTotal: 0

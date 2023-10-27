@@ -4,7 +4,7 @@
       class="row bg-primary text-white q-pa-sm q-mb-sm"
     >
       <div class="f-14 text-weight-bold">
-        Laporan Mutasi Persediaan Non Medis Depo Rumah Sakit
+        Laporan Persediaan Non Medis Depo Rumah Sakit
       </div>
     </div>
     <div class="row items-center garis-bawah">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="row justify-center f-16 text-weight-bold q-my-sm">
-      Laporan Mutasi Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+      Laporan Stok Opname Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
       <div class="col-2">
@@ -95,6 +95,9 @@
       row-no
       tanda-tangan
       bottom-row
+      top-row
+      separator="cell"
+      :enable-head="false"
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -140,7 +143,7 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Mutasi Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+          Laporan Stok Opname Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
         </div>
       </template>
       <template #header-right-before>
@@ -176,60 +179,72 @@
         </div>
       </template>
 
-      <template #col-kode_108>
-        <div>Kode 108</div>
-      </template>
-      <template #col-uraian_108>
-        <div>Nama 108</div>
-      </template>
-      <template #col-kode>
-        <div>Kode RS</div>
-      </template>
-      <template #col-nama>
-        <div>Nama RS</div>
-      </template>
-      <template #col-awal>
-        <div class="row no-wrap justify-between">
-          <div class="">
-            Stok Awal
+      <template #top-row>
+        <th>
+          <div>No</div>
+        </th>
+        <th>
+          <div>Kode 108</div>
+        </th>
+        <th>
+          <div>Nama 108</div>
+        </th>
+        <th>
+          <div>Kode Rs</div>
+        </th>
+        <th>
+          <div>Nama Barang</div>
+        </th>
+        <th colspan="4">
+          <div class="row no-wrap">
+            <div class="col-12 text-center">
+              Stok Barang
+            </div>
           </div>
-          <div class="q-ml-sm">
-            subtotal
+
+          <q-separator />
+          <div class="row no-wrap">
+            <div class="col-3">
+              Awal
+            </div>
+            <div class="col-3">
+              Masuk
+            </div>
+            <div class="col-3">
+              Keluar
+            </div>
+            <div class="col-3">
+              Sisa
+            </div>
           </div>
-        </div>
-      </template>
-      <template #col-masuk>
-        <div class="row no-wrap justify-between">
-          <div class=" text-center">
-            Masuk
+        </th>
+        <th>
+          <div>
+            Satuan
           </div>
-          <div class="q-ml-sm">
-            subtotal
+        </th>
+        <th colspan="4">
+          <div class="row no-wrap">
+            <div class="col-12 text-center">
+              Harga Barang
+            </div>
           </div>
-        </div>
-      </template>
-      <template #col-keluar>
-        <div class="row no-wrap justify-between">
-          <div class="text-center">
-            Keluar
+          <q-separator />
+          <div class="row no-wrap">
+            <div class="col-3">
+              Awal (Rp)
+            </div>
+            <div class="col-3">
+              Masuk (Rp)
+            </div>
+            <div class="col-3">
+              Keluar (Rp)
+            </div>
+            <div class="col-3">
+              Sisa (Rp)
+            </div>
           </div>
-          <div class="q-ml-sm">
-            subtotal
-          </div>
-        </div>
-      </template>
-      <template #col-akhir>
-        <div class="row no-wrap justify-between">
-          <div class="text-center">
-            Stok Akhir
-          </div>
-          <div class="q-ml-sm">
-            subtotal
-          </div>
-        </div>
-      </template>
-      <template #col-satuan>
-        <div>Satuan</div>
+        </th>
       </template>
       <template #cell-satuan="{row}">
         <div>{{ row.satuan?.nama }}</div>
@@ -245,41 +260,43 @@
         </div>
       </template>
       <template #cell-awal="{row}">
-        <div class="row justify-between items-center">
-          <div>{{ row.awal }}</div>
-          <div>{{ formatRp( row.hAwal?? 0) }}</div>
-        </div>
+        {{ parseFloat(row.awal) }}
       </template>
       <template #cell-masuk="{row}">
-        <div class="row justify-between items-center">
-          <div>{{ row.masuk }}</div>
-          <div>{{ formatRp( row.hMasuk?? 0) }}</div>
-        </div>
+        {{ row.masuk }}
       </template>
       <template #cell-keluar="{row}">
-        <div class="row justify-between items-center">
-          <div>{{ row.keluar }}</div>
-          <div>{{ formatRp( row.hKeluar?? 0) }}</div>
+        {{ row.keluar }}
+      </template>
+      <template #cell-sisa="{row}">
+        <div class="row no-wrap  items-center">
+          {{ row.akhir }}
+        </div>
+        <div class="row no-wrap f-8 text-italic print-hide">
+          tabel : {{ row.tAkhir }}
         </div>
       </template>
-      <template #cell-akhir="{row}">
-        <div class="row no-wrap justify-between items-center">
-          <div>
-            <div class="row no-wrap  items-center">
-              {{ row.akhir }}
-            </div>
-            <div class="row no-wrap f-8 text-italic print-hide">
-              tabel : {{ row.tAkhir }}
-            </div>
-          </div>
-          <div>
-            <div class="row no-wrap  items-center">
-              {{ formatRp( row.hAkhir?? 0) }}
-            </div>
-            <div class="row no-wrap f-8 text-italic print-hide">
-              tabel :{{ formatRp( row.htAkhir?? 0) }}
-            </div>
-          </div>
+      <template #cell-hawal="{row}">
+        <div class="row justify-end no-wrap">
+          {{ formatRp( row.hAwal?? 0) }}
+        </div>
+      </template>
+      <template #cell-hmasuk="{row}">
+        <div class="row justify-end no-wrap">
+          {{ formatRp( row.hMasuk?? 0) }}
+        </div>
+      </template>
+      <template #cell-hkeluar="{row}">
+        <div class="row justify-end no-wrap">
+          {{ formatRp( row.hKeluar?? 0) }}
+        </div>
+      </template>
+      <template #cell-hsisa="{row}">
+        <div class="row no-wrap justify-end items-center">
+          {{ formatRp( row.hAkhir?? 0) }}
+        </div>
+        <div class="row justify-end no-wrap f-8 text-italic print-hide">
+          tabel :{{ formatRp( row.htAkhir?? 0) }}
         </div>
       </template>
 
