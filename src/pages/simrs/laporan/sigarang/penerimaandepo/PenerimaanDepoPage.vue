@@ -104,14 +104,17 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      :click-able="true"
       text-cari="Cari Nama barang..."
       row-no
       bottom-row
       tanda-tangan
+      separator="cell"
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
+      @on-click="onClick"
     >
       <template #header-for-print>
         <div class="row items-center garis-bawah">
@@ -194,7 +197,7 @@
       <template #col-perusahaan>
         <div>Penyedia</div>
       </template>
-      <template #col-kode_rs>
+      <template #col-kode>
         <div>Kode</div>
       </template>
       <template #col-nama>
@@ -207,9 +210,6 @@
       </template>
       <template #col-sub_total>
         <div>Nilai</div>
-      </template>
-      <template #col-status>
-        <div>Status</div>
       </template>
       <template #col-qty>
         <div>
@@ -232,33 +232,59 @@
           {{ formatRp(row.harga) }}
         </div>
       </template>
-      <template #cell-perusahaan="{row}">
-        <div>
-          {{ row.perusahaan?.nama ?? '-' }}
+      <template #expand="{ row }">
+        <div v-if="row.detail_distribusi_depo.length">
+          <div class="row">
+            <div class="no">
+              No
+            </div>
+            <div class="tgl">
+              Tanggal
+            </div>
+            <div class="no-dis">
+              No Distribusi
+            </div>
+            <div class="jum">
+              Jumlah
+            </div>
+            <div class="har">
+              Harga
+            </div>
+            <div class="sub">
+              Sub Total
+            </div>
+          </div>
+          <div
+            v-for="(dist,i) in row.detail_distribusi_depo"
+            :key="i"
+            class="row"
+          >
+            <div class="no">
+              {{ i+1 }}
+            </div>
+            <div class="tgl">
+              {{ dateFullFormat(dist.tanggal) }}
+            </div>
+            <div class="no-dis">
+              {{ dist?.distribusi?.no_distribusi }}
+            </div>
+            <div class="jum">
+              {{ dist.jumlah }}
+            </div>
+            <div class="har text-right">
+              {{ formatRp(dist.harga) }}
+            </div>
+            <div class="sub text-right">
+              {{ formatRp(dist.sub) }}
+            </div>
+          </div>
         </div>
-      </template>
-      <template #cell-status="{row}">
-        <div
-          v-if="row.status<=1"
-          class="text-negative text-weight-bold"
-        >
-          Belum Diterima gudang
-        </div>
-        <div
-          v-if="row.status>=2 && row.sisa_stok > 0"
-          class="text-deep-orange text-weight-bold"
-        >
-          Sudah di Gudang
-        </div>
-        <div
-          v-if="row.status>=2 && row.sisa_stok <= 0"
-          class="text-green"
-        >
-          Sudah di distribusikan
+        <div v-if="!row.detail_distribusi_depo.length">
+          Tidak ada detail
         </div>
       </template>
       <template #bottom-row>
-        <td colspan="7">
+        <td colspan="5">
           <div class="text-right f-12">
             Jumlah
           </div>
@@ -295,6 +321,12 @@ function setKe(val) {
 function setDispKe(val) {
   store.display.to = val
 }
+// click
+function onClick (val) {
+  console.log('click', val)
+  val.item.expand = !val.item.expand
+  val.item.highlight = !val.item.highlight
+}
 const printObj = {
   id: 'printMe',
   popTitle: 'Laporan Penerimaan Depo'
@@ -305,6 +337,68 @@ const printObj = {
 </script>
 <style lang="scss" scoped>
 $fs : 9px;
+
+.no{
+  width: 4%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
+.tgl{
+  width: 25%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
+.no-dis{
+  width: 20%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
+.jum{
+  width: 15%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
+.har{
+  width: 13%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
+.sub{
+  width: 10%;
+  border-top: 1px solid $grey;
+  border-left: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  border-right: 1px solid $grey;
+  padding-top :4px;
+  padding-bottom :4px;
+  padding-left:3px;
+  padding-right:3px;
+}
 .app-table {
   width: 100%; /* print width */
   font-size:$fs;
