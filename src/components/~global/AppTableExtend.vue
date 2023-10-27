@@ -188,7 +188,7 @@
       dense
       flat
       bordered
-      separator="horizontal"
+      :separator="separator"
       class="screenwide"
     >
       <thead>
@@ -686,6 +686,7 @@ const $q = useQuasar()
 const props = defineProps({
   addData: { type: Boolean, default: true },
   title: { type: String, default: '' },
+  separator: { type: String, default: 'horizontal' },
   debounce: { type: String, default: '700' },
   textCari: { type: String, default: 'Cari ...' },
   loading: { type: Boolean, default: false },
