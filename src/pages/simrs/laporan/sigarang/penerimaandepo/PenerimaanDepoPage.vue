@@ -234,7 +234,7 @@
       </template>
       <template #expand="{ row }">
         <div v-if="row.detail_distribusi_depo.length">
-          <div class="row">
+          <div class="row text-weight-bold">
             <div class="no">
               No
             </div>
@@ -263,7 +263,7 @@
               {{ i+1 }}
             </div>
             <div class="tgl">
-              {{ dateFullFormat(dist.tanggal) }}
+              {{ dateFullFormat(dist.distribusi?.tanggal) }}
             </div>
             <div class="no-dis">
               {{ dist?.distribusi?.no_distribusi }}
