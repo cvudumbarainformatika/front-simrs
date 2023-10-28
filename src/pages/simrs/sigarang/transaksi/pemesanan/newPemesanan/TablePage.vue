@@ -291,19 +291,21 @@
                         Rekening 50
                       </div>
                       <div class="col-6">
-                        <app-autocomplete-new
+                        {{ store.barangrs.length ? store.barangrs[0].uraian_50 : '-' }}
+                        <!-- <app-autocomplete-new
                           :model="store.form.kode_50"
                           outlined
                           label="Rekening 50"
                           autocomplete="uraian"
                           option-value="kode"
                           option-label="uraian"
+                          readony
                           :source="store.rekening50s"
                           :disable="store.loadingTambah"
                           @on-select="store.rekening50Selected"
                           @clear="clearRekening50"
                           @set-model="rekeningSet"
-                        />
+                        /> -->
                       </div>
                     </div>
                     <div class="row q-mb-sm">
@@ -755,12 +757,12 @@ const modelSet = val => {
 //   store.params.q = val
 //   store.getMapingBarang()
 // }
-const rekeningSet = val => {
-  // console.log('rekening', val)
-}
-const clearRekening50 = () => {
-  store.setForm('kode_50', null)
-}
+// const rekeningSet = val => {
+//   // console.log('rekening', val)
+// }
+// const clearRekening50 = () => {
+//   store.setForm('kode_50', null)
+// }
 const clearBarangRs = () => {
   store.setForm('kode_rs', null)
   store.setClose()

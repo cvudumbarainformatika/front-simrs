@@ -119,6 +119,7 @@
                 :source="store.barang108s"
                 :loading="store.loading108"
                 @buang="get108"
+                @on-select="selected108"
               />
             </div>
             <div class="col-md-6 col-xs-12">
@@ -136,9 +137,13 @@
             </div>
           </div>
           <div class="row q-col-gutter-md q-mt-sm">
-            <div class="col-md-12 col-xs-12">
+            <div class="col-md-2 col-xs-12">
+              Uraian 50 :
+            </div>
+            <div class="col-md-10 col-xs-12">
               <!-- Maping rekening 50 -->
-              <app-autocomplete-debounce-input
+              {{ store.form.uraian_50 }}
+              <!-- <app-autocomplete-debounce-input
                 ref="ref50"
                 v-model="store.form.kode_50"
                 outlined
@@ -149,7 +154,7 @@
                 :source="store.rekening50s"
                 :loading="store.loading50"
                 @buang="get50"
-              />
+              /> -->
             </div>
           </div>
           <q-separator class="q-my-md" />
@@ -194,27 +199,37 @@ function get108(val) {
   store.loading108 = true
   store.getData108s()
 }
-function get50(val) {
-  console.log('50', val)
-  store.autocompleteParam50s.q = val
-  store.getRekening50()
+// function get50(val) {
+//   console.log('50', val)
+//   store.autocompleteParam50s.q = val
+//   store.getRekening50()
+// }
+function selected108(val) {
+  console.log(val)
+  const temp = store.barang108s.filter(a => a.kode === val)
+  if (temp.length) {
+    console.log(temp[0])
+    store.setForm('uraian_108', temp[0].uraian)
+    store.setForm('kode_50', temp[0]?.maping?.kode50)
+    store.setForm('uraian_50', temp[0]?.maping?.uraian50)
+  }
 }
 const onSubmit = () => {
   // let nama=false
 // isi uraian 108
-  const ur108 = store.barang108s.filter(data => {
-    return data.kode === store.form.kode_108
-  })
-  if (ur108.length) {
-    store.setForm('uraian_108', ur108[0].uraian)
-  }
+  // const ur108 = store.barang108s.filter(data => {
+  //   return data.kode === store.form.kode_108
+  // })
+  // if (ur108.length) {
+  //   store.setForm('uraian_108', ur108[0].uraian)
+  // }
   // isi uraian 50
-  const ur50 = store.rekening50s.filter(data => {
-    return data.kode === store.form.kode_50
-  })
-  if (ur50.length) {
-    store.setForm('uraian_50', ur50[0].uraian)
-  }
+  // const ur50 = store.rekening50s.filter(data => {
+  //   return data.kode === store.form.kode_50
+  // })
+  // if (ur50.length) {
+  //   store.setForm('uraian_50', ur50[0].uraian)
+  // }
 
   const ada = mapingbarang.barangrses.filter(val => { return val.kode === store.form.kode })
   if (ada.length && !store.edited) {
@@ -246,7 +261,7 @@ const simpan = () => {
   // .then(apem => {
   //   console.log('depo', apem)
   // })
-  // console.log('sebelum simpan')
+  console.log('sebelum simpan', store.form)
   store.saveForm().then(() => {
     // console.log('form', formReff)
     if (formReff.value != null) { formReff.value.resetValidation() }

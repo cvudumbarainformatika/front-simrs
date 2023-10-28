@@ -61,10 +61,10 @@ export const useMasterMapingBarangForm = defineStore('master_maping_barang_form'
     // get options value
     getDataBarang108 () {
       return new Promise(resolve => {
-        api.get('v1/barang108/barang108')
+        api.get('v1/barang108/maping-50')
           .then(resp => {
             this.barang108s = resp.data
-            // console.log('barang 108', resp.data.data)
+            console.log('barang 108', resp.data)
             resolve(resp)
           })
       })
