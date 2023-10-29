@@ -49,6 +49,7 @@
 </template>
 
 <script setup>
+import { findWithAttr } from 'src/modules/utils'
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { computed, defineAsyncComponent } from 'vue'
 
@@ -73,14 +74,26 @@ const masterPlann = computed(() => {
     }) : []
   return plans
 })
-
+const comp = [
+  { nama: 'Konsultasi', page: defineAsyncComponent(() => import('./formperencanaan/FormKonsultasi.vue')) },
+  { nama: 'Kontrol', page: defineAsyncComponent(() => import('./formperencanaan/FormKontrol.vue')) },
+  { nama: 'Puskesmas', page: defineAsyncComponent(() => import('./formperencanaan/FormPuskesmas.vue')) },
+  { nama: 'RawatInap', page: defineAsyncComponent(() => import('./formperencanaan/FormRawatInap.vue')) },
+  { nama: 'RumahSakitLain', page: defineAsyncComponent(() => import('./formperencanaan/FormRumahSakitLain.vue')) },
+  { nama: 'TidakDatang', page: defineAsyncComponent(() => import('./formperencanaan/FormTidakDatang.vue')) }
+]
 const cekPanel = () => {
   const val = store.plann
   const ganti = val.replace(/ /g, '')
-  const modules = import.meta.glob('./formperencanaan/*.vue', { eager: true })
-  const arr2 = Object.keys(modules)
-  const filterred = arr2.find(key => key.includes(ganti))
-  return defineAsyncComponent(() => import(filterred))
+  // const modules = import.meta.glob('./formperencanaan/*.vue', { eager: true })
+  // const arr2 = Object.keys(modules)
+  const arr = findWithAttr(comp, 'nama', ganti)
+  // const filterred = arr2.find(key => key.includes(ganti))
+
+  console.log('ganti', ganti)
+  console.log('arr', arr)
+  // return defineAsyncComponent(() => import(filterred))
+  return arr >= 0 ? comp[arr].page : ''
   // console.log(filterred)
   // return filterred
 }

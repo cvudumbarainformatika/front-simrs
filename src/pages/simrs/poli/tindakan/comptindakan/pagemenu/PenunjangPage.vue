@@ -36,6 +36,10 @@
             :name="panel.page"
             class="full-height q-pa-none"
           >
+            <!-- <q-tab-panel
+            name="Laborat"
+            class="full-height q-pa-none"
+          > -->
             <component
               :is="cekPanel()"
               :key="props.pasien"
@@ -49,8 +53,10 @@
 </template>
 
 <script setup>
+import { findWithAttr } from 'src/modules/utils'
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 // import PageLaborat from './comppenunjang/PageLaborat.vue'
+
 import { defineAsyncComponent, onMounted } from 'vue'
 
 const props = defineProps({
@@ -62,13 +68,27 @@ const props = defineProps({
 
 const store = usePenunjangPoli()
 
+// const modules = import.meta.glob('./comppenunjang/*.vue', { eager: true })
+const comp = [
+  { nama: 'Laborat', page: defineAsyncComponent(() => import('./comppenunjang/PageLaborat.vue')) },
+  { nama: 'Radiologi', page: defineAsyncComponent(() => import('./comppenunjang/PageRadiologi.vue')) },
+  { nama: 'Operasi', page: defineAsyncComponent(() => import('./comppenunjang/PageOperasi.vue')) },
+  { nama: 'PenunjangLain', page: defineAsyncComponent(() => import('./comppenunjang/PagePenunjangLain.vue')) }
+]
+
+console.log('comp', comp)
 const cekPanel = () => {
   const val = store.tab
   const ganti = val.replace(/ /g, '')
-  const modules = import.meta.glob('./comppenunjang/*.vue', { eager: true })
-  const arr2 = Object.keys(modules)
-  const filterred = arr2.find(key => key.includes(ganti))
-  return defineAsyncComponent(() => import(filterred))
+  // const arr2 = Object.keys(modules)
+  const arr = findWithAttr(comp, 'nama', ganti)
+  // const filterred = arr2.find(key => key.includes(ganti))
+  // const filterred2 = arr
+  // console.log('fil', filterred)
+  // console.log('fil2', filterred2)
+  console.log('ganti', ganti)
+  // return defineAsyncComponent(() => import(filterred))
+  return arr >= 0 ? comp[arr].page : ''
 }
 
 onMounted(() => {
