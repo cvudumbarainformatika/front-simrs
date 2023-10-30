@@ -10,11 +10,21 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     poli: [],
     plann: '',
     loadingSaveKonsul: false,
+    loadingSaveKontrol: false,
     formKonsul: {
       noreg_lama: '',
       norm: '',
       tgl_kunjungan: '',
       tgl_rencana_konsul: dateDbFormat(new Date()),
+      kdpoli_asal: '',
+      kdpoli_tujuan: '',
+      kddokter_asal: ''
+    },
+    formKontrol: {
+      noreg_lama: '',
+      norm: '',
+      tgl_kunjungan: '',
+      tgl_rencana_kontrol: dateDbFormat(new Date()),
       kdpoli_asal: '',
       kdpoli_tujuan: '',
       kddokter_asal: ''
@@ -97,6 +107,9 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     setFormKonsul(key, val) {
       this.formKonsul[key] = val
     },
+    setFormKontrol(key, val) {
+      this.formKontrol[key] = val
+    },
     async saveKonsul(pasien) {
       this.loadingSaveKonsul = true
       console.log(pasien)
@@ -123,6 +136,34 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       } catch (error) {
         console.log(error)
         this.loadingSaveKonsul = false
+      }
+    },
+    async saveKontrol(pasien) {
+      this.loadingSaveKontrol = true
+      console.log(pasien)
+      this.formKontrol.norm = pasien?.norm
+      this.formKontrol.noreg_lama = pasien?.noreg
+      this.formKontrol.noreg = pasien?.noreg
+      this.formKontrol.tgl_kunjungan = pasien?.tgl_kunjungan
+      this.formKontrol.kdpoli_asal = pasien?.kodepoli
+      this.formKontrol.kddokter_asal = pasien?.kodedokter
+      this.formKontrol.kodesistembayar = pasien?.kodesistembayar
+      this.formKontrol.planing = 'Kontrol'
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
+        console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result
+          storePasien.injectDataPasien(pasien, isi, 'planning')
+          notifSuccess(resp)
+          this.loadingSaveKontrol = false
+        }
+        this.loadingSaveKontrol = false
+      } catch (error) {
+        console.log(error)
+        this.loadingSaveKontrol = false
       }
     },
 
