@@ -101,18 +101,21 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
               if (item.recent.length) {
                 const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
               if (item.stok_awal.length) {
                 const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.atotalRp = har[0].harga * pak.total
                 }
               }
               if (item.monthly.length) {
                 const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.mtotalRp = har[0].harga * pak.total
                 }
               }
@@ -128,18 +131,21 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
               if (item.recent.length) {
                 const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
               if (item.stok_awal.length) {
                 const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.atotalRp = har[0].harga * pak.total
                 }
               }
               if (item.monthly.length) {
                 const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.mtotalRp = har[0].harga * pak.total
                 }
               }
@@ -154,18 +160,21 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
               if (item.recent.length) {
                 const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
               if (item.stok_awal.length) {
                 const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.atotalRp = har[0].harga * pak.total
                 }
               }
               if (item.monthly.length) {
                 const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
+                  pak.harga = har[0].harga
                   pak.mtotalRp = har[0].harga * pak.total
                 }
               }

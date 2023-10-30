@@ -226,7 +226,7 @@
         <th colspan="4">
           <div class="row">
             <div class="col-12 text-center">
-              Harga Barang
+              Nilai Persediaan
             </div>
           </div>
           <q-separator />
@@ -327,8 +327,8 @@
         <div class="text-right">
           {{ parseFloat(row.akhir) }}
           <div
-            class="f-8 text-italic text-right print-hide"
-            :class="parseFloat(row.akhir)!== parseFloat(row.tAkhir)? 'text-negative':''"
+            class="text-italic text-right print-hide"
+            :class="parseFloat(row.akhir)!== parseFloat(row.tAkhir)? 'text-negative text-weight-bold f-14':'f-8 '"
           >
             (tabel: {{ parseFloat(row.tAkhir) }})
           </div>
@@ -363,7 +363,10 @@
         <div class="row no-wrap justify-end items-center">
           {{ formatRp( row.hAkhir?? 0) }}
         </div>
-        <div class="row justify-end no-wrap f-8 text-italic print-hide">
+        <div
+          class="row justify-end no-wrap text-italic print-hide"
+          :class="parseFloat(row.hAkhir)!== parseFloat(row.htAkhir)? 'text-negative text-weight-bold f-12':'f-8 '"
+        >
           tabel :{{ formatRp( row.htAkhir?? 0) }}
         </div>
       </template>
@@ -380,10 +383,10 @@
             class="text-right"
           >
             <div class="row no-wrap justify-end items-center">
-              {{ parseFloat( store.total?? 0) }}
+              {{ parseFloat( store.total ?? 0) }}
             </div>
             <div class="row no-wrap justify-end f-8 text-italic print-hide">
-              tabel :{{ parseFloat( store.tTotal?? 0) }}
+              tabel :  {{ parseFloat( store.tTotal.toFixed(2) ?? 0) }}
             </div>
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
@@ -403,7 +406,7 @@
               {{ formatRp( store.htotal?? 0) }}
             </div>
             <div class="row no-wrap f-8 justify-end text-italic print-hide">
-              tabel :{{ formatRp( store.htTotal?? 0) }}
+              tabel :  {{ formatRp( store.htTotal?? 0) }}
             </div>
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
