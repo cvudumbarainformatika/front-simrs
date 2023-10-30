@@ -4,14 +4,14 @@
     style="overflow: hidden;"
   >
     <div class="row q-col-gutter-x-xs full-height">
-      <div class="col-6 full-height">
+      <div class="col-7 full-height">
         <FormAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"
           @open-history="seamless = !seamless"
         />
       </div>
-      <div class="col-6 full-height">
+      <div class="col-5 full-height">
         <ListAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"

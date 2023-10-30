@@ -130,7 +130,7 @@
             <q-separator class="q-my-xs" />
           </div> -->
           <div class="col-6">
-            <div class="q-mb-sm">
+            <div class="q-mb-sm text-weight-bold">
               Status Psikologis
             </div>
             <q-separator class="q-my-xs" />
@@ -173,7 +173,7 @@
               />
             </div>
 
-            <div class="q-mt-sm">
+            <!-- <div class="q-mt-sm">
               <q-separator class="q-my-sm" />
               <div class="q-mb-sm">
                 Nyeri ? <em class="text-primary">{{ store.formVital.keteranganskornyeri }}</em>
@@ -201,6 +201,60 @@
                   :min="0"
                   :max="10"
                   @update:model-value="store.setKeteranganSkornyeri"
+                />
+              </div>
+            </div> -->
+            <div class="q-mt-sm">
+              <q-separator class="q-my-sm" />
+              <div class="text-weight-bold">
+                Kesadaran <span class="text-primary"> {{ store.formVital.kesadaran }}</span>
+              </div>
+              <q-separator class="q-my-sm" />
+              <div class="col-12 row q-col-gutter-xs">
+                <q-input
+                  v-model="store.formVital.kesadarane"
+                  dense
+                  standout="bg-yellow-3 text-black"
+                  outlined
+                  label="E"
+                  :rules="[
+                    val => !!val || 'Hrp diisi',
+                    val => !isNaN(val) || 'Hrs Nomor',
+                    val => val < 5 || 'Max 4',
+                  ]"
+                  hide-bottom-space
+                  style="width:33%"
+                  @update:model-value="sumKesadaran"
+                />
+                <q-input
+                  v-model="store.formVital.kesadaranv"
+                  dense
+                  standout="bg-yellow-3 text-black"
+                  outlined
+                  label="V"
+                  :rules="[
+                    val => !!val || 'Hrp diisi',
+                    val => !isNaN(val) || 'Hrs Nomor',
+                    val => val < 6 || 'Max 5',
+                  ]"
+                  hide-bottom-space
+                  style="width:33%"
+                  @update:model-value="sumKesadaran"
+                />
+                <q-input
+                  v-model="store.formVital.kesadaranm"
+                  dense
+                  standout="bg-yellow-3 text-black"
+                  outlined
+                  label="M"
+                  :rules="[
+                    val => !!val || 'Hrp diisi',
+                    val => !isNaN(val) || 'Hrs Nomor',
+                    val => val < 7 || 'Max 6',
+                  ]"
+                  hide-bottom-space
+                  style="width:33%"
+                  @update:model-value="sumKesadaran"
                 />
               </div>
             </div>
@@ -305,7 +359,7 @@
 
 <script setup>
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
 const store = usePemeriksaanFisik()
@@ -337,6 +391,11 @@ const props = defineProps({
   }
 })
 
+function sumKesadaran() {
+  const jml = parseInt(store.formVital.kesadarane) + parseInt(store.formVital.kesadaranm) + parseInt(store.formVital.kesadaranv)
+  store.setTingkatKesadaran(jml)
+}
+
 onMounted(() => {
   // console.log('canvas', canvasEl.value?.clientWidth)
   // getImage()
@@ -367,9 +426,9 @@ async function onSubmit() {
 //   }
 // }
 
-function fnMarkerLabel(val) {
-  return `${10 * val}%`
-}
+// function fnMarkerLabel(val) {
+//   return `${10 * val}%`
+// }
 
 // function iconNyeri(val) {
 //   if (val < 2) {
@@ -387,24 +446,24 @@ function fnMarkerLabel(val) {
 //   }
 // }
 
-const iconNyeri = computed(() => {
-  const val = store?.formVital.skornyeri
-  let icon = 'icon-my-emoticon-excited-outline'
-  if (val < 2) {
-    icon = 'icon-my-emoticon-excited-outline'
-  } else if (val >= 2 && val < 4) {
-    icon = 'icon-my-emoticon-outline'
-  } else if (val >= 4 && val < 6) {
-    icon = 'icon-my-emoticon-neutral-outline'
-  } else if (val >= 6 && val < 8) {
-    icon = 'icon-my-emoticon-confused-outline'
-  } else if (val >= 8 && val < 10) {
-    icon = 'icon-my-emoticon-angry-outline'
-  } else if (val === 10) {
-    icon = 'icon-my-emoticon-cry-outline'
-  }
+// const iconNyeri = computed(() => {
+//   const val = store?.formVital.skornyeri
+//   let icon = 'icon-my-emoticon-excited-outline'
+//   if (val < 2) {
+//     icon = 'icon-my-emoticon-excited-outline'
+//   } else if (val >= 2 && val < 4) {
+//     icon = 'icon-my-emoticon-outline'
+//   } else if (val >= 4 && val < 6) {
+//     icon = 'icon-my-emoticon-neutral-outline'
+//   } else if (val >= 6 && val < 8) {
+//     icon = 'icon-my-emoticon-confused-outline'
+//   } else if (val >= 8 && val < 10) {
+//     icon = 'icon-my-emoticon-angry-outline'
+//   } else if (val === 10) {
+//     icon = 'icon-my-emoticon-cry-outline'
+//   }
 
-  return icon
-})
+//   return icon
+// })
 
 </script>
