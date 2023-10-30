@@ -5,13 +5,8 @@
       @submit="simpan"
     >
       <div class="row q-col-gutter-sm">
-        <div class="col-5">
-          <app-input-date
-            :model="store.formKontrol.tglrencanakunjungan"
-            label="Tgl Rencana Kontrol"
-            outlined
-            @set-model="(val) => store.setFormKontrol('tglrencanakunjungan', val)"
-          />
+        <div class="col-12">
+          Pasien dinyatakan sudah tidak memerlukan kontrol ke poli ini
         </div>
         <div class="col-12">
           <q-separator class=" q-my-md" />
@@ -20,8 +15,8 @@
               label="Simpan"
               color="primary"
               type="submit"
-              :loading="store.loadingSaveKontrol"
-              :disable="store.loadingSaveKontrol"
+              :loading="store.loadingSaveSelesai"
+              :disable="store.loadingSaveSelesai"
             />
           </div>
         </div>
@@ -44,6 +39,6 @@ const props = defineProps({
 
 const formRef = ref()
 function simpan() {
-  store.saveKontrol(props.pasien)
+  store.saveSelesai(props.pasien)
 }
 </script>

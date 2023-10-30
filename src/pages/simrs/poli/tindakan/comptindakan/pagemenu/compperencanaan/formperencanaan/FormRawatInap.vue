@@ -66,10 +66,10 @@
       </div>
       <div class="col-4">
         <app-input-date
-          :model="store.formRanap.tglrencanakontrol"
+          :model="store.formRanap.tglrencanakunjungan"
           label="Tgl Rencana Kontrol"
           outlined
-          @set-model="(val) => store.setFormRanap('tglrencanakontrol', val)"
+          @set-model="(val) => store.setFormRanap('tglrencanakunjungan', val)"
         />
       </div>
       <div class="col-4">

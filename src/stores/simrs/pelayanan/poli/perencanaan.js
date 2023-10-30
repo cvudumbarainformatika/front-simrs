@@ -11,6 +11,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     plann: '',
     loadingSaveKonsul: false,
     loadingSaveKontrol: false,
+    loadingSaveSelesai: false,
     formKonsul: {
       noreg_lama: '',
       norm: '',
@@ -24,7 +25,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       noreg_lama: '',
       norm: '',
       tgl_kunjungan: '',
-      tgl_rencana_kontrol: dateDbFormat(new Date()),
+      tglrencanakunjungan: dateDbFormat(new Date()),
       kdpoli_asal: '',
       kdpoli_tujuan: '',
       kddokter_asal: ''
@@ -141,12 +142,16 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     async saveKontrol(pasien) {
       this.loadingSaveKontrol = true
       console.log(pasien)
+      this.formKontrol.tgllahir = pasien?.tgllahir
+      this.formKontrol.kelamin = pasien?.kelamin
+      this.formKontrol.nama = pasien?.nama
       this.formKontrol.norm = pasien?.norm
-      this.formKontrol.noreg_lama = pasien?.noreg
+      this.formKontrol.noka = pasien?.noka
       this.formKontrol.noreg = pasien?.noreg
       this.formKontrol.tgl_kunjungan = pasien?.tgl_kunjungan
-      this.formKontrol.kdpoli_asal = pasien?.kodepoli
-      this.formKontrol.kddokter_asal = pasien?.kodedokter
+      this.formKontrol.kdpoli_tujuan = pasien?.kodepoli
+      this.formKontrol.kodepolibpjs = pasien?.kodepolibpjs
+      this.formKontrol.dokter = pasien?.datasimpeg?.nama
       this.formKontrol.kodesistembayar = pasien?.kodesistembayar
       this.formKontrol.planing = 'Kontrol'
 
@@ -164,6 +169,35 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       } catch (error) {
         console.log(error)
         this.loadingSaveKontrol = false
+      }
+    },
+    async saveSelesai(pasien) {
+      this.loadingSaveSelesai = true
+      console.log(pasien)
+      const form = {}
+      form.norm = pasien?.norm
+      form.noreg_lama = pasien?.noreg
+      form.noreg = pasien?.noreg
+      form.tgl_kunjungan = pasien?.tgl_kunjungan
+      form.kdpoli_asal = pasien?.kodepoli
+      form.kddokter_asal = pasien?.kodedokter
+      form.kodesistembayar = pasien?.kodesistembayar
+      form.planing = 'Selesai'
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', form)
+        console.log(resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result
+          storePasien.injectDataPasien(pasien, isi, 'planning')
+          notifSuccess(resp)
+          this.loadingSaveSelesai = false
+        }
+        this.loadingSaveSelesai = false
+      } catch (error) {
+        console.log(error)
+        this.loadingSaveSelesai = false
       }
     },
 
@@ -232,7 +266,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.kodedokterdpjp = pasien?.datasimpeg?.kddpjp
       this.formRanap.kddokter = pasien?.datasimpeg?.kdpegsimrs
       this.formRanap.dokter = pasien?.datasimpeg?.nama
-      this.formRanap.tglrencanakunjungan = pasien?.tgl_kunjungan
+      this.formRanap.tglrencanakunjungan = dateDbFormat(new Date())
       this.formRanap.tglrencanakontrol = dateDbFormat(new Date())
       this.formRanap.tanggaloperasi = dateDbFormat(new Date())
       this.formRanap.tglupdate = dateDbFormat(new Date())

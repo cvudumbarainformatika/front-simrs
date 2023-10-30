@@ -80,7 +80,8 @@ const comp = [
   { nama: 'Puskesmas', page: defineAsyncComponent(() => import('./formperencanaan/FormPuskesmas.vue')) },
   { nama: 'RawatInap', page: defineAsyncComponent(() => import('./formperencanaan/FormRawatInap.vue')) },
   { nama: 'RumahSakitLain', page: defineAsyncComponent(() => import('./formperencanaan/FormRumahSakitLain.vue')) },
-  { nama: 'TidakDatang', page: defineAsyncComponent(() => import('./formperencanaan/FormTidakDatang.vue')) }
+  { nama: 'TidakDatang', page: defineAsyncComponent(() => import('./formperencanaan/FormTidakDatang.vue')) },
+  { nama: 'Selesai', page: defineAsyncComponent(() => import('./formperencanaan/FormSelesai.vue')) }
 ]
 const cekPanel = () => {
   const val = store.plann
