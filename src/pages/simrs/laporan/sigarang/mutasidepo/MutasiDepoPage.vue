@@ -93,9 +93,9 @@
       :click-able="true"
       text-cari="Cari Nama / Kode ..."
       row-no
+      top-row
       tanda-tangan
       bottom-row
-      top-row
       separator="cell"
       :enable-head="false"
       @find="store.setSearch"
@@ -196,14 +196,14 @@
           <div>Nama Barang</div>
         </th>
         <th colspan="4">
-          <div class="row no-wrap">
+          <div class="row">
             <div class="col-12 text-center">
               Stok Barang
             </div>
           </div>
 
           <q-separator />
-          <div class="row no-wrap">
+          <div class="row">
             <div class="col-3">
               Awal
             </div>
@@ -224,13 +224,13 @@
           </div>
         </th>
         <th colspan="4">
-          <div class="row no-wrap">
+          <div class="row">
             <div class="col-12 text-center">
               Harga Barang
             </div>
           </div>
           <q-separator />
-          <div class="row no-wrap">
+          <div class="row">
             <div class="col-3">
               Awal (Rp)
             </div>
@@ -246,8 +246,57 @@
           </div>
         </th>
       </template>
+      <template #col-kode_108>
+        Kode 108
+      </template>
+      <template #col-uraian_108>
+        Uraian 108
+      </template>
+      <template #col-kode>
+        Kode Rs
+      </template>
+      <template #col-nama>
+        Nama Barang
+      </template>
+      <template #col-awal>
+        Awal
+      </template>
+      <template #col-masuk>
+        Masuk
+      </template>
+      <template #col-keluar>
+        Keluar
+      </template>
+      <template #col-sisa>
+        Sisa
+      </template>
+      <template #col-satuan>
+        Satuan
+      </template>
+      <template #col-hawal>
+        <div class="wrap">
+          (Harga) Awal (Rp)
+        </div>
+      </template>
+      <template #col-hmasuk>
+        <div class="wrap">
+          (Harga) Masuk (Rp)
+        </div>
+      </template>
+      <template #col-hkeluar>
+        <div class="wrap">
+          (Harga) Keluar (Rp)
+        </div>
+      </template>
+      <template #col-hsisa>
+        <div class="wrap">
+          (Harga) Sisa (Rp)
+        </div>
+      </template>
       <template #cell-satuan="{row}">
-        <div>{{ row.satuan?.nama }}</div>
+        <div class="box-mini">
+          {{ row.satuan?.nama }}
+        </div>
       </template>
       <template #cell-nama="{row}">
         <div class="box">
@@ -260,21 +309,40 @@
         </div>
       </template>
       <template #cell-awal="{row}">
-        {{ parseFloat(row.awal) }}
+        <div class="text-right">
+          {{ parseFloat(row.awal) }}
+        </div>
       </template>
       <template #cell-masuk="{row}">
-        {{ row.masuk }}
+        <div class="text-right">
+          {{ parseFloat(row.masuk) }}
+        </div>
       </template>
       <template #cell-keluar="{row}">
-        {{ row.keluar }}
+        <div class="text-right">
+          {{ parseFloat(row.keluar) }}
+        </div>
       </template>
       <template #cell-sisa="{row}">
-        <div class="row no-wrap  items-center">
-          {{ row.akhir }}
+        <div class="text-right">
+          {{ parseFloat(row.akhir) }}
+          <div
+            class="f-8 text-italic text-right print-hide"
+            :class="parseFloat(row.akhir)!== parseFloat(row.tAkhir)? 'text-negative':''"
+          >
+            (tabel: {{ parseFloat(row.tAkhir) }})
+          </div>
         </div>
-        <div class="row no-wrap f-8 text-italic print-hide">
-          tabel : {{ row.tAkhir }}
-        </div>
+        <!-- <div class="row items-center box-mini ">
+          <div class="col-12">
+            <div class="row justify-end">
+              {{ parseFloat(row.akhir) }}
+            </div>
+            <div class="row f-8 text-italic justify-end print-hide">
+              {{ parseFloat(row.tAkhir) }}
+            </div>
+          </div>
+        </div> -->
       </template>
       <template #cell-hawal="{row}">
         <div class="row justify-end no-wrap">
@@ -301,21 +369,41 @@
       </template>
 
       <template #bottom-row>
-        <td colspan="8">
+        <td colspan="5">
           <div class="text-right">
             Jumlah
+          </div>
+        </td>
+        <td colspan="4">
+          <div
+            v-if="store.items.length"
+            class="text-right"
+          >
+            <div class="row no-wrap justify-end items-center">
+              {{ parseFloat( store.total?? 0) }}
+            </div>
+            <div class="row no-wrap justify-end f-8 text-italic print-hide">
+              tabel :{{ parseFloat( store.tTotal?? 0) }}
+            </div>
+            <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
         </td>
         <td>
           <div
             v-if="store.items.length"
             class="text-right"
+          />
+        </td>
+        <td colspan="4">
+          <div
+            v-if="store.items.length"
+            class="text-right"
           >
-            <div class="row no-wrap  items-center">
-              {{ formatRp( store.total?? 0) }}
+            <div class="row no-wrap justify-end items-center">
+              {{ formatRp( store.htotal?? 0) }}
             </div>
-            <div class="row no-wrap f-8 text-italic print-hide">
-              tabel :{{ formatRp( store.tTotal?? 0) }}
+            <div class="row no-wrap f-8 justify-end text-italic print-hide">
+              tabel :{{ formatRp( store.htTotal?? 0) }}
             </div>
             <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
           </div>
@@ -338,13 +426,18 @@ function onClick (val) {
 }
 const printObj = {
   id: 'printMe',
-  popTitle: 'Laporan Mutasi Depo'
+  popTitle: 'Laporan Mutasi Depo (Stok Opname)'
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 
 }
 </script>
 <style scoped>
+.box-mini {
+  white-space: normal !important;
+    inline-size: 50px;
+    overflow-wrap: break-word;
+}
 .box {
   white-space: normal !important;
     inline-size: 150px;

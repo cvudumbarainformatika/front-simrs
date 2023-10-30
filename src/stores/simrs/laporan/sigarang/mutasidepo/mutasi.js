@@ -53,7 +53,9 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
 
     ],
     total: 0,
-    tTotal: 0
+    tTotal: 0,
+    htotal: 0,
+    htTotal: 0
   }),
   actions: {
     setParams(key, val) {
@@ -185,8 +187,10 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
           item.hAkhir = parseFloat(item.hAwal) + parseFloat(item.hMasuk) - parseFloat(item.hKeluar)
         })
         this.items = val
-        this.total = val.map(a => a.hAkhir).reduce((a, b) => a + b, 0)
-        this.tTotal = val.map(a => parseFloat(a.htAkhir)).reduce((a, b) => a + b, 0)
+        this.total = val.map(a => a.akhir).reduce((a, b) => a + b, 0)
+        this.tTotal = val.map(a => parseFloat(a.tAkhir)).reduce((a, b) => a + b, 0)
+        this.htotal = val.map(a => a.hAkhir).reduce((a, b) => a + b, 0)
+        this.htTotal = val.map(a => parseFloat(a.htAkhir)).reduce((a, b) => a + b, 0)
         console.log('items', val)
       }
     },
