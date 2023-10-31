@@ -33,7 +33,7 @@
           elevated
           bordered
           show-if-above
-          :width="220"
+          :width="230"
           :breakpoint="400"
         >
           <LeftDrawer
@@ -124,19 +124,19 @@ const emits = defineEmits(['printRekapBill'])
 const menus = ref([
   {
     name: 'AnamnesisPage',
-    label: 'Anamnesis',
+    label: 'Anamnesis & Riwayat',
     icon: 'icon-mat-medical_information',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/AnamnesisPage.vue')))
   },
   {
     name: 'PemeriksaanPage',
-    label: 'Pemeriksaan Fisik',
+    label: 'Pemeriksaan Umum & Fisik',
     icon: 'icon-my-stethoscope',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPage.vue')))
   },
   {
     name: 'LayananPage',
-    label: 'Layanan',
+    label: 'Assesment',
     icon: 'icon-mat-analytics',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))
   },
@@ -163,6 +163,12 @@ const menus = ref([
     label: 'EResep',
     icon: 'icon-mat-receipt',
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/EResepPage.vue')))
+  },
+  {
+    name: 'penerbitan-surat-page',
+    label: 'Penerbitan Surat',
+    icon: 'icon-mat-email',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PenerbitanSuratPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])

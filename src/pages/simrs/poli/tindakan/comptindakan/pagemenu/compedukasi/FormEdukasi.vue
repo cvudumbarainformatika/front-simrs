@@ -139,11 +139,13 @@
               </div>
               <div class="col-8">
                 <q-option-group
-                  v-model="store.form.kepada"
+                  v-model="store.selectPenerimaEdukasi"
                   :options="opt"
                   color="primary"
                   inline
                   dense
+                  type="checkbox"
+                  @update:model-value="updateSelectionPenerima"
                 />
               </div>
             </div>
@@ -198,6 +200,9 @@ onMounted(() => {
 
 const updateSelection = (val) => {
   store.setForm('kebutuhanedukasi', val.join(', '))
+}
+const updateSelectionPenerima = (val) => {
+  store.setForm('kepada', val.join(', '))
 }
 
 const onSubmit = () => {
