@@ -45,7 +45,7 @@
     </div>
 
     <div class="row justify-center f-16 text-weight-bold q-my-sm">
-      Laporan Stok Opname Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+      Laporan Stok Opname Depo {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
       <div class="col-2">
@@ -143,7 +143,7 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Stok Opname Depo RS periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+          Laporan Stok Opname Depo {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
         </div>
       </template>
       <template #header-right-before>
@@ -419,10 +419,14 @@
 import { formatRp } from 'src/modules/formatter'
 import { useLaporanSigarangMutasiDepoStore } from 'src/stores/simrs/laporan/sigarang/mutasidepo/mutasi'
 import { date } from 'quasar'
-
+import { computed } from 'vue'
 const store = useLaporanSigarangMutasiDepoStore()
 store.getInitialData()
 
+const ruang = computed(() => {
+  const tem = store.gudangs.filter(v => v.value === store.params.kode_ruang)
+  return tem.length > 0 ? tem[0].nama : '-'
+})
 // click
 function onClick (val) {
   console.log('click', val)
