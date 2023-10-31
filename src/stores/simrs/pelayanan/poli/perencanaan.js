@@ -13,6 +13,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     loadingSaveKontrol: false,
     loadingSaveSelesai: false,
     formKonsul: {
+      jenisKonsul: 'konsul antar poli',
       noreg_lama: '',
       norm: '',
       tgl_kunjungan: '',

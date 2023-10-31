@@ -5,12 +5,30 @@
       @submit="simpan"
     >
       <div class="row q-col-gutter-sm">
+        <div class="col-6">
+          <q-radio
+            v-model="store.formKonsul.jenisKonsul"
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="konsul antar poli"
+            label="Konsul Antar Poli"
+          />
+        </div>
+        <div class="col-6">
+          <q-radio
+            v-model="store.formKonsul.jenisKonsul"
+            checked-icon="icon-mat-task_alt"
+            unchecked-icon="icon-mat-panorama_fish_eye"
+            val="rujukan internal"
+            label="Rujukan Internal"
+          />
+        </div>
         <div class="col-5">
           <app-input-date
             :model="store.formKonsul.tgl_rencana_konsul"
             label="Tgl Rencana Konsul"
             outlined
-            @set-model="(val) => store.setFormKonsul('tgl_rencana_konsul', val)"
+            @set-model="setTanggalKonsul"
           />
         </div>
         <div class="col-7">
@@ -47,6 +65,8 @@
 </template>
 
 <script setup>
+import { date } from 'quasar'
+import { notifErrVue } from 'src/modules/utils'
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { ref } from 'vue'
 
@@ -57,6 +77,22 @@ const props = defineProps({
     default: null
   }
 })
+
+function setTanggalKonsul(val) {
+  const date1 = Date.now()
+  const date2 = new Date(val)
+  const diff = date.getDateDiff(date2, date1, 'days')
+  console.log('date1', date1)
+  console.log('date2', date2)
+  console.log('diff', diff)
+  if (diff < 0) return notifErrVue('tidak boleh ada rujukan mundur')
+  if (diff > 0) {
+    store.setFormKonsul('jenisKonsul', 'rujukan internal')
+  } else if (diff === 0) {
+    store.setFormKonsul('jenisKonsul', 'konsul antar poli')
+  }
+  store.setFormKonsul('tgl_rencana_konsul', val)
+}
 
 const formRef = ref()
 function simpan() {
