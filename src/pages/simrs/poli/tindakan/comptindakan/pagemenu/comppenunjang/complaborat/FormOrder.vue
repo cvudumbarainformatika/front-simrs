@@ -13,6 +13,18 @@
         @submit="saveOrderLaborat"
       >
         <div class="col-12">
+          <q-input
+            v-model="store.form.permintaan"
+            label="Permintaan"
+            autogrow
+            outlined
+            standout="bg-yellow-3"
+            icon="icon-mat-search"
+            :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
+            lazy-rules="ondemand"
+            hide-bottom-space
+            @click="modalOpen = true"
+          />
           <q-select
             ref="cariRef"
             v-model="store.caripemeriksaanlab"
@@ -33,6 +45,7 @@
             :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
             lazy-rules="ondemand"
             hide-bottom-space
+            disable
             @filter="filterFn"
             @update:model-value="val => insertList(val)"
           >
@@ -66,7 +79,7 @@
           <q-input
             ref="diagnosaRef"
             v-model="store.form.diagnosa_masalah"
-            label="Diagnosa Masalah"
+            label="Diagnosa / Masalah"
             dense
             outlined
             standout="bg-yellow-3"
@@ -81,7 +94,7 @@
             standout="bg-yellow-3"
           />
         </div>
-        <div class="col-12 q-my-xs">
+        <!-- <div class="col-12 q-my-xs">
           spesimen
           <q-separator />
         </div>
@@ -213,7 +226,7 @@
             :rules="[val => !isNaN(val) || 'Harus pakai Nomor']"
             hide-bottom-space
           />
-        </div>
+        </div> -->
         <div class="col-12">
           <q-separator class="q-my-sm" />
         </div>
@@ -283,15 +296,22 @@
       </q-form>
       <!-- </q-scroll-area> -->
     </div>
+
+    <!-- MODAL -->
+    <ModalPermintaan
+      v-model="modalOpen"
+    />
   </div>
 </template>
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 import { onMounted, ref } from 'vue'
 import { formatRp } from 'src/modules/formatter'
+import ModalPermintaan from '../complaborat/ModalPermintaan.vue'
 
 const store = usePenunjangPoli()
 
+const modalOpen = ref(false)
 const cariRef = ref(null)
 const formRef = ref(null)
 const diagnosaRef = ref(null)
@@ -346,48 +366,48 @@ function insertList(val) {
   diagnosaRef.value.focus()
 }
 
-function filterAs(val, update) {
-  update(() => {
-    if (val === '') {
-      asalSumberSpesimenOptions.value = asalOptions
-    } else {
-      const needle = val.toLowerCase()
-      asalSumberSpesimenOptions.value = asalOptions.filter(
-        v => v.toLowerCase().indexOf(needle) > -1
-      )
-    }
-  })
-}
+// function filterAs(val, update) {
+//   update(() => {
+//     if (val === '') {
+//       asalSumberSpesimenOptions.value = asalOptions
+//     } else {
+//       const needle = val.toLowerCase()
+//       asalSumberSpesimenOptions.value = asalOptions.filter(
+//         v => v.toLowerCase().indexOf(needle) > -1
+//       )
+//     }
+//   })
+// }
 
-function createValueAsalSumberSpesimen(val, done) {
-  if (val.length > 0) {
-    if (!asalOptions.includes(val)) {
-      asalOptions.push(val)
-    }
-    done(val, 'add-unique')
-  }
-}
-function filterMs(val, update) {
-  update(() => {
-    if (val === '') {
-      metodePengambilanSpesimenOptions.value = metodeOptions
-    } else {
-      const needle = val.toLowerCase()
-      metodePengambilanSpesimenOptions.value = metodeOptions.filter(
-        v => v.toLowerCase().indexOf(needle) > -1
-      )
-    }
-  })
-}
+// function createValueAsalSumberSpesimen(val, done) {
+//   if (val.length > 0) {
+//     if (!asalOptions.includes(val)) {
+//       asalOptions.push(val)
+//     }
+//     done(val, 'add-unique')
+//   }
+// }
+// function filterMs(val, update) {
+//   update(() => {
+//     if (val === '') {
+//       metodePengambilanSpesimenOptions.value = metodeOptions
+//     } else {
+//       const needle = val.toLowerCase()
+//       metodePengambilanSpesimenOptions.value = metodeOptions.filter(
+//         v => v.toLowerCase().indexOf(needle) > -1
+//       )
+//     }
+//   })
+// }
 
-function createValueMetodePengambilanSpesimen(val, done) {
-  if (val.length > 0) {
-    if (!metodeOptions.includes(val)) {
-      metodeOptions.push(val)
-    }
-    done(val, 'add-unique')
-  }
-}
+// function createValueMetodePengambilanSpesimen(val, done) {
+//   if (val.length > 0) {
+//     if (!metodeOptions.includes(val)) {
+//       metodeOptions.push(val)
+//     }
+//     done(val, 'add-unique')
+//   }
+// }
 
 function saveOrderLaborat() {
   store.saveOrderLaborat(props.pasien).then(() => {
