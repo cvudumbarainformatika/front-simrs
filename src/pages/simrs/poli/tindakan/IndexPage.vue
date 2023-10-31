@@ -43,6 +43,7 @@
             :menu="menu"
             @click-menu="(val)=> menu = val"
             @history-pasien="historyPasien"
+            @print-rekap="emits('printRekapBill')"
           />
         </q-drawer>
 
@@ -119,7 +120,7 @@ const props = defineProps({
     default: null
   }
 })
-
+const emits = defineEmits(['printRekapBill'])
 const menus = ref([
   {
     name: 'AnamnesisPage',
