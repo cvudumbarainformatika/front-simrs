@@ -56,6 +56,11 @@
       v-model="store.pageTindakan"
       :pasien="pasien"
     />
+    <!-- <CetakRekapBilling
+      v-model="printRekap"
+      :pasien="pasien"
+      @tutup="actPrintRekap"
+    /> -->
   </q-page>
 </template>
 
@@ -71,6 +76,8 @@ import BottomComp from './comp/BottomComp.vue'
 import ListPengunjung from './comp/ListPengunjung.vue'
 // import PageTindakan from './comp/PageTindakan.vue'
 import PageTindakan from '../tindakan/IndexPage.vue'
+
+// import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
 
@@ -79,6 +86,8 @@ const speech = useSpeechStore()
 const store = usePengunjungPoliStore()
 const diagnosa = useLayananPoli()
 const pasien = ref(null)
+
+// const printRekap = ref(false)
 
 // const txt = ref('SEMUA')
 // const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
@@ -151,4 +160,8 @@ function bukaTindakan(val) {
   pasien.value = val
   store.setTerima(val)
 }
+
+// function actPrintRekap() {
+//   printRekap.value = false
+// }
 </script>

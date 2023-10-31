@@ -252,7 +252,12 @@
       </template>
     </app-dialog-mm>
     <!-- print Rekap -->
-    <app-dialog-mm
+    <CetakRekapBilling
+      v-model="printRekap"
+      :pasien="pasien"
+      @tutup="actPrintRekap"
+    />
+    <!-- <app-dialog-mm
       v-model="printRekap"
       label="Cetak Rekap Billing"
       label-btn-ok="Print"
@@ -265,7 +270,6 @@
           style="width: 17cm;"
           class="q-pa-xs"
         >
-          <!-- header print -->
           <div class="row q-col-gutter-xs garis-bawah-double">
             <div class="col-2">
               <q-img
@@ -295,14 +299,6 @@
                 Telp. (0335) 433478,433119,421118 Fax. (0335) 432702
               </div>
             </div>
-            <!-- <div class="col-1">
-              <div class="row text-italic f-10">
-                {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
-              </div>
-              <div class="row text-italic f-10">
-                {{ date.formatDate(Date.now(),'HH:mm:ss') }}
-              </div>
-            </div> -->
           </div>
 
           <div class="row no-wrap q-mt-md bg-grey-3">
@@ -383,7 +379,7 @@
               {{ pasien.alamat }}
             </div>
           </div>
-          <!-- header -->
+
           <div class="row items-center no-wrap garis-bawah-dblue garis-atas-dblue">
             <div class="col-1">
               No
@@ -395,9 +391,8 @@
               Harga
             </div>
           </div>
-          <!-- List -->
+
           <div v-if="store.rekapBill && !store.loading">
-            <!-- {{ store.rekapBill }} -->
             <div class="row items-center no-wrap ">
               <div class="col-1">
                 1
@@ -449,9 +444,6 @@
               <div class="col-9">
                 Tindakan :
               </div>
-              <!-- <div class="col-2 garis-bawah-dablue text-right">
-                {{ formatRp(store.rekapBill.konsulantarpoli) }}
-              </div> -->
             </div>
             <div v-if="store.rekapBill.tindakan.length">
               <div
@@ -468,17 +460,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="row items-center no-wrap ">
-              <div class="col-1">
-                6
-              </div>
-              <div class="col-9">
-                Visite / Konsultasi / Oncall Dokter
-              </div>
-              <div class="col-2 garis-bawah-dablue text-right">
-                {{ formatRp(store.rekapBill.konsulantarpoli) }}
-              </div>
-            </div> -->
             <div class="row items-center no-wrap ">
               <div class="col-1">
                 6
@@ -486,9 +467,6 @@
               <div class="col-9">
                 Biaya Pelayanan Penunjang
               </div>
-              <!-- <div class="col-2 garis-bawah-dablue text-right">
-                {{ formatRp(store.rekapBill.konsulantarpoli) }}
-              </div> -->
             </div>
             <div class="row items-center no-wrap ">
               <div class="col-1" />
@@ -591,7 +569,7 @@
                 {{ formatRp(store.rekapBill.obat) }}
               </div>
             </div>
-            <!-- total -->
+
             <div class="row items-center no-wrap ">
               <div class="col-10 text-right">
                 Sub Total Rp.
@@ -605,7 +583,6 @@
                 Sharing BPJS Rp.
               </div>
               <div class="col-2 text-right ">
-                <!-- {{ formatRp(store.rekapBill.totalall) }} -->
                 0
               </div>
             </div>
@@ -617,7 +594,7 @@
                 {{ formatRp(store.rekapBill.totalall) }}
               </div>
             </div>
-            <!-- TT -->
+
             <div class="row items-center no-wrap q-mt-xl">
               <div class="col-6 text-right" />
               <div class="col-6 text-weight-bold text-center">
@@ -636,34 +613,6 @@
                 {{ pasien.dokter }}
               </div>
             </div>
-            <!--
-            1  Pelayanan Rekam Medik  Rp.
-            2  Biaya Kartu Identitas Pasien  Rp.
-            3  Poliklinik Konsultasi (Gizi, Jiwa)  Rp.  10.000
-            4  Konsultasi Antar Poli  Rp.
-            5  Tindakan :
-            (MMPI + Wawancara) Brief Psikoterapi (4x Brief)  Rp.  280.000
-            6  Visite / Konsultasi / Oncall Dokter  Rp.
-            7  Biaya Pelayanan Penunjang :
-            Laboratorium  Rp.
-            Radiologi  Rp.
-            Operasi One Day Care Rp.
-            Fisioterapi  Rp.
-            Hemodialisa  Rp.
-            Anestesi Di Luar OK & ICU  Rp.
-            Klinik Psikologi  Rp.  110.000
-            Cardio  Rp.
-            EEG  Rp.
-            Endoscope  Rp.
-            8  Biaya Farmasi / Obat  Rp.
-            SUB TOTAL    Rp.  120.000
-            Sharing BPJS   Rp.
-            TOTAL    Rp.  120.000
-
-            Probolinggo, 02 Oktober 2023
-            Dokter
-            ( Saiful Alam, Sp.KJ )
-            -->
           </div>
           <div v-if="!store.rekapBill && !store.loading">
             <app-no-data />
@@ -692,7 +641,7 @@
           </q-tooltip>
         </q-btn>
       </template>
-    </app-dialog-mm>
+    </app-dialog-mm> -->
     <!-- q-ris -->
     <app-dialog-mm
       v-model="qrisOpen"
@@ -734,9 +683,10 @@
 <script setup>
 import { ref } from 'vue'
 import BillingPage from './BillingPage.vue'
+import CetakRekapBilling from './CetakRekapBilling.vue'
+
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
-import { date } from 'quasar'
 
 const pasien = ref(null)
 const qrisOpen = ref(false)
@@ -762,9 +712,6 @@ function openPrint(val) {
 function openFaktur(val) {
   console.log('faktur', val)
   printRekap.value = true
-  const par = { noreg: val.noreg }
-  console.log('par', par)
-  store.getBill(par)
 }
 function actPrintRekap() {
   printRekap.value = false

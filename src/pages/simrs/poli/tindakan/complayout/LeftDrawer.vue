@@ -62,6 +62,17 @@
         <q-btn
           dense
           flat
+          icon="icon-mat-attach_money"
+          class="gt-xs"
+          @click="printRekap=true"
+        >
+          <q-tooltip class="bg-dark text-white">
+            Billing Pasien
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          dense
+          flat
           icon="icon-mat-menu_book"
           class="gt-xs"
         >
@@ -83,15 +94,24 @@
       </q-bar>
     </div>
   </div>
+  <CetakRekapBilling
+    v-model="printRekap"
+    :pasien="pasien"
+    style="z-index: 19000;"
+    @tutup="actPrintRekap"
+  />
 </template>
 
 <script setup>
 import SimulasiPageTwo from '../comptindakan/pagemenu/complayanan/SimulasiPageTwo.vue'
 import ListMenu from './ListMenu.vue'
+
+import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
+const printRekap = ref(false)
 // const tinggiBot = ref(180)
-const emits = defineEmits(['clickMenu', 'historyPasien'])
+const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap'])
 defineProps({
   pasien: {
     type: Object,
@@ -106,4 +126,7 @@ defineProps({
     default: null
   }
 })
+function actPrintRekap() {
+  printRekap.value = false
+}
 </script>
