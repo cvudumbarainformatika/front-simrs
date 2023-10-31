@@ -33,6 +33,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
       this.loadingOrder = true
       this.form.noreg = pasien?.noreg
       this.form.kodepoli = pasien?.kodepoli
+      this.form.kodedokter = pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       try {
@@ -90,6 +91,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
         noreg: '', // rs1
         nota: this.notas?.length ? this.notas[0] : '', // rs2
         kodepoli: '', // rs10
+        kodedokter: '', // rs8
         kodepenunjang: '', // rs13
         keterangan: '', // rs7
         kodesistembayar: ''
