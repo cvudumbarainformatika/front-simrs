@@ -8,6 +8,7 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
     mpenerimaedukasi: [],
     mkebutuhanedukasi: [],
     selectKebutuhanEdukasi: [],
+    selectPenerimaEdukasi: [],
     form: {
       noreg: '',
       norm: '',
