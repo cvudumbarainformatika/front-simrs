@@ -129,12 +129,19 @@
 
     <div>
       <q-btn
-        v-if="pasien?.status===''"
+        v-if="pasien?.status==='' || pasien?.status==='2'"
         label="selesaikan layanan"
         color="negative"
         class="q-mr-lg q-px-lg"
         dense
         @click="selesaikanLayanan"
+      />
+      <q-btn
+        v-else-if="pasien?.status==='3'"
+        label="LAYANAN TELAH BATAL"
+        color="negative"
+        class="q-mr-lg q-px-lg"
+        dense
       />
       <q-btn
         v-else
