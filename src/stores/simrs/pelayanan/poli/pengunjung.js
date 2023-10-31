@@ -9,6 +9,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     meta: null,
     loading: false,
     loadingTerima: false,
+    noreg: null,
 
     statuses: ['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'],
     params: {
@@ -159,19 +160,22 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     async setTerima(pasien) {
       this.loadingTerima = true
       const form = { noreg: pasien?.noreg }
+      this.noreg = pasien?.noreg
       try {
         const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
-            findPasien[0].status = '2'
+            findPasien[0].status = findPasien[0].status === '' ? '2' : findPasien[0].status
           }
           this.loadingTerima = false
+          this.noreg = null
           this.togglePageTindakan()
         }
       } catch (error) {
         console.log(error)
         this.loadingTerima = false
+        this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },

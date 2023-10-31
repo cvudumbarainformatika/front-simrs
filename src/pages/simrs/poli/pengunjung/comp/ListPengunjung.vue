@@ -97,7 +97,7 @@
               class="q-mb-sm"
               icon-right="icon-mat-edit"
               style="min-width: 120px;"
-              :loading="loadingTerima"
+              :loading="loadingTerima && store.noreg === item?.noreg"
               :disable="loadingTerima"
               @click="emits('tindakan', item)"
             />
@@ -127,6 +127,7 @@ import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
+import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 const emits = defineEmits(['tindakan', 'panggil'])
 defineProps({
   items: {
@@ -171,6 +172,7 @@ function labelLayanan(val) {
   }
 }
 
+const store = usePengunjungPoliStore()
 const storeSep = useSepBpjsStore()
 const reg = ref(null)
 function getSep(val) {

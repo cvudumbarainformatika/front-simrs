@@ -133,7 +133,6 @@ function panggil(row) {
   // const txt = jns === 'nama' ? txt1 : txt2
   speech.synth.speak(setSpeech(txt1))
 }
-
 function bukaTindakan(val) {
   // console.log('buka tindakan', val)
   if (val?.groups === '1') {
@@ -156,7 +155,6 @@ function bukaTindakan(val) {
       return
     }
   }
-
   pasien.value = val
   store.setTerima(val)
 }
