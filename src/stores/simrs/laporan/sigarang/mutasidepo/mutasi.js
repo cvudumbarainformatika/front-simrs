@@ -95,90 +95,84 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
 
           if (item.detail_distribusi_langsung.length) {
             item.detail_distribusi_langsung.forEach(pak => {
-              pak.atotalRp = 0
               pak.rtotalRp = 0
-              pak.mtotalRp = 0
-              if (item.recent.length) {
-                const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              if (pak.stokruangan.length) {
+                const har = pak.stokruangan.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
                   pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
-              if (item.stok_awal.length) {
-                const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.atotalRp = har[0].harga * pak.total
-                }
-              }
-              if (item.monthly.length) {
-                const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.mtotalRp = har[0].harga * pak.total
-                }
-              }
-              pak.totalRp = pak.rtotalRp > 0 ? pak.rtotalRp : (pak.atotalRp > 0 ? pak.atotalRp : pak.mtotalRp)
+              // if (item.stok_awal.length) {
+              //   const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.atotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              // if (item.monthly.length) {
+              //   const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.mtotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              pak.totalRp = pak.rtotalRp
             })
           }
 
           if (item.detail_permintaanruangan.length) {
             item.detail_permintaanruangan.forEach(pak => {
-              pak.atotalRp = 0
               pak.rtotalRp = 0
-              pak.mtotalRp = 0
-              if (item.recent.length) {
-                const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              if (pak.stokruangan.length) {
+                const har = pak.stokruangan.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
                   pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
-              if (item.stok_awal.length) {
-                const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.atotalRp = har[0].harga * pak.total
-                }
-              }
-              if (item.monthly.length) {
-                const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.mtotalRp = har[0].harga * pak.total
-                }
-              }
-              pak.totalRp = pak.rtotalRp > 0 ? pak.rtotalRp : (pak.atotalRp > 0 ? pak.atotalRp : pak.mtotalRp)
+              // if (item.stok_awal.length) {
+              //   const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.atotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              // if (item.monthly.length) {
+              //   const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.mtotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              pak.totalRp = pak.rtotalRp
             })
           }
           if (item.detail_distribusi_depo.length) {
             item.detail_distribusi_depo.forEach(pak => {
-              pak.atotalRp = 0
               pak.rtotalRp = 0
-              pak.mtotalRp = 0
-              if (item.recent.length) {
-                const har = item.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              if (pak.recent.length) {
+                const har = pak.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
                 if (har.length) {
                   pak.harga = har[0].harga
                   pak.rtotalRp = har[0].harga * pak.total
                 }
               }
-              if (item.stok_awal.length) {
-                const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.atotalRp = har[0].harga * pak.total
-                }
-              }
-              if (item.monthly.length) {
-                const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.mtotalRp = har[0].harga * pak.total
-                }
-              }
-              pak.totalRp = pak.rtotalRp > 0 ? pak.rtotalRp : (pak.atotalRp > 0 ? pak.atotalRp : pak.mtotalRp)
+              // if (item.stok_awal.length) {
+              //   const har = item.stok_awal.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.atotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              // if (item.monthly.length) {
+              //   const har = item.monthly.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
+              //   if (har.length) {
+              //     pak.harga = har[0].harga
+              //     pak.mtotalRp = har[0].harga * pak.total
+              //   }
+              // }
+              pak.totalRp = pak.rtotalRp
             })
           }
 

@@ -7,19 +7,19 @@
       <div class="row q-col-gutter-sm">
         <div class="col-6">
           <q-radio
-            v-model="store.formKonsul.jenisKonsul"
+            v-model="store.formKonsul.kdSaran"
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
-            val="konsul antar poli"
+            val="3"
             label="Konsul Antar Poli"
           />
         </div>
         <div class="col-6">
           <q-radio
-            v-model="store.formKonsul.jenisKonsul"
+            v-model="store.formKonsul.kdSaran"
             checked-icon="icon-mat-task_alt"
             unchecked-icon="icon-mat-panorama_fish_eye"
-            val="rujukan internal"
+            val="6"
             label="Rujukan Internal"
           />
         </div>
@@ -87,9 +87,9 @@ function setTanggalKonsul(val) {
   console.log('diff', diff)
   if (diff < 0) return notifErrVue('tidak boleh ada rujukan mundur')
   if (diff > 0) {
-    store.setFormKonsul('jenisKonsul', 'rujukan internal')
+    store.setFormKonsul('jenisKonsul', '6')
   } else if (diff === 0) {
-    store.setFormKonsul('jenisKonsul', 'konsul antar poli')
+    store.setFormKonsul('jenisKonsul', '3')
   }
   store.setFormKonsul('tgl_rencana_konsul', val)
 }
