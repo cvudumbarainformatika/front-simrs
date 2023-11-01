@@ -26,6 +26,18 @@
 
             <q-card-section>
               <q-btn
+
+                v-print="printObj"
+                fab
+                color="dark"
+                icon="icon-mat-print"
+                class="absolute"
+                flat
+                dense
+                size="sm"
+                style="top: 0; right: 50px; transform: translateY(-100%);"
+              />
+              <q-btn
                 fab
                 color="negative"
                 icon="icon-mat-delete"
@@ -53,6 +65,19 @@
             </q-card-section>
 
             <q-separator />
+            <div id="printMe">
+              <div class="row items-center">
+                <div>
+                  <q-img
+                    src="~assets/logos/logobpjs.svg"
+                    spinner-color="white"
+                    style="height: 3.56cm; max-width: 2.86cm"
+                  />
+                </div>
+                <div>nama</div>
+                <div>nomor</div>
+              </div>
+            </div>
           </q-card>
         </div>
         <div
@@ -101,5 +126,12 @@ function hapusItem(id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+const printObj = {
+  id: 'printMe',
+  popTitle: 'Rencana Pasien'
+  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+
 }
 </script>
