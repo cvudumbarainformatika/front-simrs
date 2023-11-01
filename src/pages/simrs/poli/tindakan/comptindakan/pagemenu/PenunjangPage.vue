@@ -76,7 +76,7 @@ const comp = [
   { nama: 'PenunjangLain', page: defineAsyncComponent(() => import('./comppenunjang/PagePenunjangLain.vue')) }
 ]
 
-console.log('comp', comp)
+// console.log('comp', comp)
 const cekPanel = () => {
   const val = store.tab
   const ganti = val.replace(/ /g, '')

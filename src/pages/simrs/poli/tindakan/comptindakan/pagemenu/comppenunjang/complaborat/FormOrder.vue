@@ -15,7 +15,7 @@
         <div class="col-12">
           <q-input
             v-model="store.form.permintaan"
-            label="Permintaan"
+            label="Permintaan (Klik Untuk Cari Pemeriksaan)"
             autogrow
             outlined
             standout="bg-yellow-3"
@@ -45,7 +45,6 @@
             :rules="[val => !!val || 'Harap cari pemeriksaan dahulu']"
             lazy-rules="ondemand"
             hide-bottom-space
-            disable
             @filter="filterFn"
             @update:model-value="val => insertList(val)"
           >
@@ -300,6 +299,8 @@
     <!-- MODAL -->
     <ModalPermintaan
       v-model="modalOpen"
+      :masters="store.masterlaborat"
+      @ok="pilihPemeriksaans"
     />
   </div>
 </template>
@@ -362,6 +363,7 @@ function insertList(val) {
   //   // store.setForm('details', [])
   //   diagnosaRef.value.focus()
   // })
+  console.log(val)
   store.setDetails(val)
   diagnosaRef.value.focus()
 }
@@ -415,6 +417,15 @@ function saveOrderLaborat() {
     formRef.value.resetValidation()
     cariRef.value.focus()
   })
+}
+
+function pilihPemeriksaans(val) {
+  console.log(val)
+  modalOpen.value = false
+  const arr = val.length ? val.map(x => x.name) : []
+  const implode = arr.length ? arr.join('||') : ''
+  console.log(implode)
+  // insertList(val)
 }
 
 </script>

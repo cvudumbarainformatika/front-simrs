@@ -81,7 +81,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           const groupped = this.groupBy(arr2, gruper => gruper.gruper)
           this.masterlaborat = groupped
           this.loadingMasterLab = false
-          // console.log('group pemeriksaan', groupped)
+          console.log('group pemeriksaan', groupped)
         }
         this.loadingMasterLab = false
       } catch (error) {
@@ -173,6 +173,22 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         console.log('save laborat', error)
         this.loadingSaveLab = false
       }
+    },
+
+    async saveOrderLaboratBaru(pasien, data) {
+      this.loadingSave = true
+      this.form.norm = pasien?.norm
+      this.form.noreg = pasien?.noreg
+      this.form.waktu_pengambilan_spesimen = this.form.tanggalpengambilanspesimen + ' ' + this.form.jampengambilanspesimen
+      this.form.waktu_fiksasi_spesimen = this.form.tanggalfiksasi + ' ' + this.form.jamfiksasi
+      // this.form.nota = this.notalaborat === 'LIHAT SEMUA' || this.notalaborat === 'BARU' ? '' : this.notalaborat
+      this.form.nota = ''
+      if (this.form.prioritas_pemeriksaan === 'Iya' || this.form.prioritas_pemeriksaan === 'iya') {
+        this.form.biaya_layanan = this.percentage(this.form.biaya_layanan)
+        this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
+      }
+      this.form.kdsistembayar = pasien?.kodesistembayar
+      this.form.permintaans = data
     },
 
     percentage(val) {
