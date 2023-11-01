@@ -11,7 +11,7 @@
         style="width: 17cm;"
         class="q-pa-xs full-width"
       >
-        <div class="row q-col-gutter-xs garis-bawah-double">
+        <div class="row q-col-gutter-xs items-center garis-bawah-double q-mb-md">
           <div class="col-2">
             <q-img
               src="~assets/images/logo-kota-grey.png"
@@ -19,26 +19,27 @@
               style="height: 2cm; max-width: 1.6cm"
             />
           </div>
-          <div class="col-10">
-            <div class="row justify-between">
+          <div class="col-8 ">
+            <div class="row justify-center">
               <div class="text-weight-bold">
                 UOBK RSUD dr. MOHAMAD SALEH
               </div>
-              <div class="text-italic f-10">
-                {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
-              </div>
             </div>
-            <div class="row  justify-between">
+            <div class="row  justify-center">
               <div>
                 Jl. Mayjend Panjaitan No. 65 Probolinggo Jawa Timur
               </div>
-              <div class="text-italic f-10">
-                {{ date.formatDate(Date.now(),'HH:mm:ss') }}
-              </div>
             </div>
-            <div class="row">
+            <div class="row justify-center">
               Telp. (0335) 433478,433119,421118 Fax. (0335) 432702
             </div>
+          </div>
+          <div class="col-2 text-right">
+            <q-img
+              src="~assets/logos/logo-rsud.png"
+              spinner-color="white"
+              style="height: 2cm; max-width: 2cm"
+            />
           </div>
         </div>
 
@@ -396,7 +397,7 @@ const props = defineProps({
 const emits = defineEmits(['tutup'])
 
 function openFaktur() {
-  const par = { noreg: props.pasien.noreg }
+  const par = { noreg: props.pasien?.noreg }
   store.getBill(par)
   console.log('par', par)
 }
@@ -408,6 +409,7 @@ const printObj = {
 
 }
 openFaktur()
+defineExpose({ openFaktur })
 
 </script>
 

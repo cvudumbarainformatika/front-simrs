@@ -252,11 +252,11 @@
       </template>
     </app-dialog-mm>
     <!-- print Rekap -->
-    <CetakRekapBilling
+    <!-- <CetakRekapBilling
       v-model="printRekap"
       :pasien="pasien"
       @tutup="actPrintRekap"
-    />
+    /> -->
     <!-- <app-dialog-mm
       v-model="printRekap"
       label="Cetak Rekap Billing"
@@ -683,7 +683,7 @@
 <script setup>
 import { ref } from 'vue'
 import BillingPage from './BillingPage.vue'
-import CetakRekapBilling from './CetakRekapBilling.vue'
+// import CetakRekapBilling from './CetakRekapBilling.vue'
 
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'

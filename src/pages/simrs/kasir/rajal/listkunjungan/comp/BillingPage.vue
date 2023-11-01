@@ -673,10 +673,16 @@
       </div>
     </div>
   </div>
+  <CetakRekapBilling
+    v-model="printRekap"
+    :pasien="pasien"
+    @tutup="actPrintRekap"
+  />
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
+import CetakRekapBilling from './CetakRekapBilling.vue'
 import { ref } from 'vue'
 const prop = defineProps({
   pasien: { type: Object, default: () => {} }
@@ -686,6 +692,8 @@ const emits = defineEmits([
   'rekap',
   'nota'
 ])
+
+const printRekap = ref(false)
 // const tab = ref('trans')
 // function goTo(val) {
 //   tab.value = val
@@ -695,8 +703,13 @@ const store = useKasirRajalListKunjunganStore()
 function cetakFakturRekap(val) {
   // nota.value = ' Tindakan'
 
-  emits('rekap', val)
-  console.log('cetak faktur', val)
+  // emits('rekap', val)
+  printRekap.value = true
+  // console.log('cetak faktur', val)
+}
+
+function actPrintRekap() {
+  printRekap.value = false
 }
 const dataNotas = ref([])
 const nota = ref('')
