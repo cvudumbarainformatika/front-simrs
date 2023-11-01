@@ -45,7 +45,7 @@
     </div>
 
     <div class="row justify-center f-16 text-weight-bold q-my-sm">
-      Laporan Stok Opname Depo {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+      Laporan Stok Opname {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
       <div class="col-2">
@@ -143,7 +143,7 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Stok Opname Depo {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
+          Laporan Stok Opname {{ ruang }} periode {{ date.formatDate((store.params.tahun+'-'+store.params.bulan+'-02' ),'MMMM YYYY') }}
         </div>
       </template>
       <template #header-right-before>

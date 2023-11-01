@@ -211,7 +211,7 @@
 
       <template #bottom-row>
         <td colspan="2">
-          <div class="text-right">
+          <div class="text-right text-weight-bold ">
             Jumlah
           </div>
         </td>
@@ -220,7 +220,7 @@
             v-if="store.items.length"
             class="text-right"
           >
-            <div class="row no-wrap  items-center">
+            <div class="text-weight-bold text-right">
               {{ formatRp( store.total?? 0) }}
             </div>
           </div>
