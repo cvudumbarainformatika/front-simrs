@@ -38,6 +38,7 @@
           :options="optionTipe"
           map-options
           emit-value
+          @update:model-value="setOperasi"
         />
         <!-- <q-input
           v-model="store.formRanap.nosep"
@@ -77,17 +78,18 @@
           :model="store.formRanap.tanggaloperasi"
           label="Tgl Operasi"
           outlined
+          :disable="store.formRanap.status==='Tidak'"
           @set-model="(val) => store.setFormRanap('tanggaloperasi', val)"
         />
       </div>
-      <div class="col-4">
+      <!-- <div class="col-4">
         <app-input-date
           :model="store.formRanap.tglupdate"
           label="Tgl Update"
           outlined
           @set-model="(val) => store.setFormRanap('tglupdate', val)"
         />
-      </div>
+      </div> -->
 
       <div class="col-6">
         <app-autocomplete-debounce-input
@@ -151,6 +153,7 @@
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { onMounted, ref } from 'vue'
 import { api } from 'src/boot/axios'
+import { date } from 'quasar'
 // import { useQuasar } from 'quasar'
 const props = defineProps({
   pasien: {
@@ -174,6 +177,14 @@ const optionsJenisTindakan = ref([])
 const optionsIcd9 = ref([])
 const optionsRtujuan = ref([])
 
+function setOperasi(val) {
+  if (val === 'Tidak') {
+    console.log('operasi', val)
+    store.setFormRanap('tanggaloperasi', null)
+  } else {
+    store.setFormRanap('tanggaloperasi', date.formatDate(Date.now(), 'YYYY-MM-DD'))
+  }
+}
 const loadingTind = ref(false)
 async function onFilterJenisTindakan(val) {
   if (val.length < 3) {

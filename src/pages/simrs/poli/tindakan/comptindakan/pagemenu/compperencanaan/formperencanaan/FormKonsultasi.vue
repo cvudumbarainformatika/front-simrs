@@ -12,6 +12,7 @@
             unchecked-icon="icon-mat-panorama_fish_eye"
             val="3"
             label="Konsul Antar Poli"
+            @update:model-value="seKonsul"
           />
         </div>
         <div class="col-6">
@@ -21,6 +22,7 @@
             unchecked-icon="icon-mat-panorama_fish_eye"
             val="6"
             label="Rujukan Internal"
+            @update:model-value="seRujuk"
           />
         </div>
         <div class="col-5">
@@ -45,6 +47,15 @@
             use-input
             input-debounce="0"
             :options="store.poli"
+          />
+        </div>
+        <div class="col-12">
+          <q-input
+            v-model="store.formKonsul.ket"
+            label="Keterangan"
+            dense
+            outlined
+            standout="bg-yellow-3"
           />
         </div>
         <div class="col-12">
@@ -77,7 +88,16 @@ const props = defineProps({
     default: null
   }
 })
-
+function seKonsul(val) {
+  console.log('set konsul', val)
+  store.setFormKonsul('tgl_rencana_konsul', date.formatDate(Date.now(), 'YYYY-MM-DD'))
+}
+function seRujuk(val) {
+  const tgl = Date.now()
+  const tgl1 = date.addToDate(tgl, { days: 1 })
+  store.setFormKonsul('tgl_rencana_konsul', date.formatDate(tgl1, 'YYYY-MM-DD'))
+  console.log('set rujuk', val)
+}
 function setTanggalKonsul(val) {
   const date1 = Date.now()
   const date2 = new Date(val)

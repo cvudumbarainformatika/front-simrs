@@ -156,7 +156,7 @@
             outlined
             autogrow
             standout="bg-yellow-3"
-            label="Riwaya Penyakit Sekarang"
+            label="Riwayat Penyakit Sekarang"
             stack-label
             style="width:50%"
           />
