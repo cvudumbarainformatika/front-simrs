@@ -14,7 +14,7 @@
       >
         <div class="col-12">
           <q-input
-            v-model="store.form.permintaan"
+            v-model="store.permintaanLaborats"
             label="Permintaan (Klik Untuk Cari Pemeriksaan)"
             autogrow
             outlined
@@ -425,6 +425,7 @@ function pilihPemeriksaans(val) {
   const arr = val.length ? val.map(x => x.name) : []
   const implode = arr.length ? arr.join('||') : ''
   console.log(implode)
+  store.setPermintaanLaborats = implode
   // insertList(val)
 }
 

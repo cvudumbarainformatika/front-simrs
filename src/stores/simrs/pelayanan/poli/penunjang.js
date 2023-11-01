@@ -22,6 +22,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     masterradiologi: [],
     notalaborats: [],
     notalaborat: null,
+    permintaanLaborats: '',
     form: {
       // norm: '',
       // noreg: '',
@@ -121,6 +122,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setForm(key, value) {
       this.form[key] = value
     },
+    setPermintaanLaborats(val) {
+      this.permintaanLaborats = val
+    },
     setDetails(pemeriksaan) {
       // this.form.details = []
       const thumb = []
@@ -188,7 +192,6 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
-      this.form.permintaans = data
     },
 
     percentage(val) {
@@ -225,6 +228,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
 
     initReset() {
       this.caripemeriksaanlab = null
+      this.permintaanLaborats = ''
       // this.form.prioritas_pemeriksaan = 'Tidak'
       this.form.details = []
       return new Promise((resolve, reject) => {
