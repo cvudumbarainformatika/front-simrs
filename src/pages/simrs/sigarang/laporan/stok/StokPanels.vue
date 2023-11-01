@@ -17,7 +17,7 @@
           label="Stoks Sekarang"
         />
         <q-tab
-          v-if="role?(role==='root' || role==='depo' || role==='gudang' || role==='gizi'):role"
+          v-if="role?(role==='root' || role==='depo' || role==='gudang' || role==='gizi'||role==='PPTK'):role"
           name="kartu"
           no-caps
           label="Kartu Stok"
