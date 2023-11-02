@@ -130,7 +130,11 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
-          storePasien.injectDataPasien(pasien, isi, 'planning')
+          if (isi.length) {
+            isi.ForEach(anu => {
+              storePasien.injectDataPasien(pasien, anu, 'planning')
+            })
+          }
           notifSuccess(resp)
           this.loadingSaveKonsul = false
         }
@@ -162,7 +166,11 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
-          storePasien.injectDataPasien(pasien, isi, 'planning')
+          if (isi.length) {
+            isi.ForEach(anu => {
+              storePasien.injectDataPasien(pasien, anu, 'planning')
+            })
+          }
           notifSuccess(resp)
           this.loadingSaveKontrol = false
         }

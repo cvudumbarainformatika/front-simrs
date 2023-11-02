@@ -65,19 +65,102 @@
             </q-card-section>
 
             <q-separator />
-            <div id="printMe">
-              <div class="row items-center">
-                <div>
-                  <q-img
-                    src="~assets/logos/logobpjs.svg"
-                    spinner-color="white"
-                    style="height: 3.56cm; max-width: 2.86cm"
-                  />
+            <q-card-section class=" full-width print-only">
+              <div
+                id="printMe"
+                class=""
+                style="min-width:17cm;"
+              >
+                <div class="row items-center justify-between q-mb-sm">
+                  <div>
+                    <img
+                      src="~assets/logos/logobpjs.svg"
+                      spinner-color="white"
+                    >
+                  <!-- style="height: 3.56cm; max-width: 2.86cm" -->
+                  </div>
+                  <div>
+                    <div
+                      :key="i"
+                      class="row"
+                    >
+                      Surat Rencana {{ item?.rs4 }}
+                    </div>
+                    <div class="row">
+                      UOBK RSUD dr. MOH SALEH
+                    </div>
+                  </div>
+                  <div>Nomor</div>
                 </div>
-                <div>nama</div>
-                <div>nomor</div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    Kepada Yth
+                  </div>
+                  <div class="col-9">
+                    : {{ setKepada(item) }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div>
+                    Mohon Pemeriksaan dan Penanganan lebih lanjut :
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    No Kartu
+                  </div>
+                  <div class="col-9">
+                    : {{ pasien?.noka }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    No RM
+                  </div>
+                  <div class="col-9">
+                    : {{ pasien?.norm }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    Nama Peserta
+                  </div>
+                  <div class="col-9">
+                    : {{ pasien?.nama }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    Tgl Lahir
+                  </div>
+                  <div class="col-9">
+                    : {{ pasien?.tgllahir }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-sm">
+                  <div class="col-3">
+                    Diagnosa
+                  </div>
+                  <div class="col-9">
+                    : {{ pasien?.diagnosa.length?pasien?.diagnosa[0].masterdiagnosa?.rs1 + ' - ' + pasien?.diagnosa[0].masterdiagnosa?.rs4 :'-' }}
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mb-lg">
+                  <div class="col-7" />
+                  <div class="col-4 text-center">
+                    Mengetahui DPJP
+                  </div>
+                </div>
+                <div class="row items-center justify-between q-mt-lg">
+                  <div class="col-7 f-10">
+                    Tgl Entri {{ date.formatDate(pasien.tgl_kunjungan,'DD/MM/YYYY') }} | Tgl Cetak {{ date.formatDate(Date.now(),'DD/MM/YYYY') }}
+                  </div>
+                  <div class="col-4 text-center">
+                    {{ pasien?.dokter }}
+                  </div>
+                </div>
               </div>
-            </div>
+            </q-card-section>
           </q-card>
         </div>
         <div
@@ -95,7 +178,7 @@
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import PlanningPage from './compperencanaan/PlanningPage.vue'
 import { onMounted } from 'vue'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 
 const $q = useQuasar()
 const store = usePerencanaanPoliStore()
@@ -105,7 +188,17 @@ const props = defineProps({
     default: null
   }
 })
-
+function setKepada(val) {
+  if (val.rs4 === 'Kontrol') {
+    if (val.kontrol) {
+      return val?.kontrol?.namaDokter
+    } else { return '-' }
+  } else if (val.rs4 === 'Konsultasi') {
+    if (val.masterpoli) {
+      return val?.masterpoli?.rs2
+    } else { return '-' }
+  }
+}
 onMounted(() => {
   store.getMasterPlanning()
   store.getMasterPoli()

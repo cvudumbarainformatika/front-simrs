@@ -268,7 +268,45 @@
                   </div>
                 </div>
               </div>
-              <div v-if="store.notas.Pelayanan">
+              <div v-if="store.notas?.Pelayanan?.length && store?.notas?.flag===1">
+                {{ store.notas }}
+
+                <div class="q-ml-xs row no-wrap q-col-gutter-xs">
+                  <div class="col-1 text-weight-bold" />
+                  <div class="col-3 text-weight-bold">
+                    {{ store.notas?.Pelayanan }}
+                  </div>
+                  <div class="col-6 text-right text-weight-bold">
+                    Rp  {{ formatRp(store.notas.Subtotal) }}
+                  </div>
+                </div>
+                <!-- button -->
+                <div class="q-ml-sm row no-wrap items-center q-my-md">
+                  <div class="q-mr-xs">
+                    <app-btn
+                      label="Batal"
+                      color="grey-7"
+                      push
+                      dense
+                      :loading="store.loading && carabayar==='batal'"
+                      :disable="store.loading"
+                      @click="batal"
+                    />
+                  </div>
+                  <div class="q-mr-xs">
+                    <app-btn
+                      label="Cetak"
+                      color="blue-grey-7"
+                      push
+                      dense
+                      :loading="store.loading && carabayar==='cetak'"
+                      :disable="store.loading"
+                      @click="cetak"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div v-if="store.notas?.Pelayanan?.length && store?.notas?.flag===0">
                 <!-- child -->
                 <!-- {{ store.notas }} -->
                 <div
@@ -355,28 +393,6 @@
                       @click="buatVA"
                     />
                   </div>
-                  <div class="q-mr-xs">
-                    <app-btn
-                      label="Batal"
-                      color="grey-7"
-                      push
-                      dense
-                      :loading="store.loading && carabayar==='batal'"
-                      :disable="store.loading"
-                      @click="batal"
-                    />
-                  </div>
-                  <div class="q-mr-xs">
-                    <app-btn
-                      label="Cetak"
-                      color="blue-grey-7"
-                      push
-                      dense
-                      :loading="store.loading && carabayar==='cetak'"
-                      :disable="store.loading"
-                      @click="cetak"
-                    />
-                  </div>
                 </div>
               </div>
               <div
@@ -399,277 +415,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row items-center justify-end bg-primary q-pb-sm">
-          <q-btn-group outline>
-            <q-btn
-              :outline="tab !== 'trans'"
-              glossy
-              push
-              color="cyan"
-              label="Billing"
-              size="md"
-              @click="goTo('trans')"
-            />
-            <q-btn
-              :outline="tab !== 'list'"
-              glossy
-              push
-              color="green"
-              label="List Dibayar"
-              size="md"
-              @click="goTo('list')"
-            />
-          </q-btn-group>
-        </div> -->
-        <!-- <div>
-          <q-tab-panels
-            v-model="tab"
-            animated
-          >
-            <q-tab-panel
-              style="padding:0px;"
-              name="trans"
-            >
-              <div class="row no-wrap">
-                <div class="col-12">
-                  <div class="row no-wrap bg-primary text-white q-py-sm">
-                    <div class="f-12 text-weight-bold q-px-sm">
-                      Pembayaran
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row no-wrap q-pt-sm">
-                <div class="col-12">
-                  <div class="">
-                    <div
-                      v-if="store.golongan===''"
-                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
-                    >
-                      <div class="col-3">
-                        <div class="row no-wrap">
-                          <div class="col-2">
-                            No
-                          </div>
-                          <div class="col-10">
-                            No Kwitansi
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        Pembayaran
-                      </div>
-                      <div class="col-2">
-                        Tanggal
-                      </div>
-                      <div class="col-3">
-                        <div class="row no-wrap">
-                          <div class="col-6 text-right">
-                            Jumlah
-                          </div>
-                          <div class="col-6 text-right">
-                            Batal
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-2 text-center">
-                        #
-                      </div>
-                    </div>
-                    <div
-                      v-if="store.golongan==='karcis'"
-                      class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white"
-                    >
-                      <div class="col-1">
-                        No
-                      </div>
-                      <div class="col-3">
-                        Nama Layanan
-                      </div>
-                      <div class="col-6">
-                        <div class="row no-wrap">
-                          <div class="col-6 text-right">
-                            Jumlah
-                          </div>
-                          <div class="col-6 text-right">
-                            Batal
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      v-if="store.golongan!=='karcis'"
-                      class=""
-                    >
-                      <div class="row no-wrap q-my-sm">
-                        <div class="col-6">
-                          <app-autocomplete
-                            v-model="nota"
-                            label="pilih Nota"
-                            autocomplete="nota"
-                            option-label="nota"
-                            option-value="nota"
-                            outlined
-                            valid
-                            autofocus
-                            :source="dataNotas"
-                            @selected="notaDipilih"
-                          />
-                        </div>
-                      </div>
-                      <div class="row no-wrap q-col-gutter-xs bg-grey-10 q-pa-xs f-12 text-weight-bold text-white">
-                        <div class="col-1">
-                          No
-                        </div>
-                        <div class="col-3">
-                          Nama Layanan
-                        </div>
-                        <div class="col-6">
-                          <div class="row no-wrap">
-                            <div class="col-6 text-right">
-                              Jumlah
-                            </div>
-                            <div class="col-6 text-right">
-                              Batal
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div v-if="store.notas.Pelayanan">
-                      <div
-                        v-for="(pel,i) in store.notas.Pelayanan"
-                        :key="i"
-                        class="q-ml-xs q-mt-xs items-center row no-wrap q-col-gutter-xs"
-                      >
-                        <div class="col-1">
-                          {{ i + 1 }}
-                        </div>
-                        <div class="col-3">
-                          {{
-                            pel.namatindakan ??
-                              pel.keterangan ??
-                              pel.tindakan
-                          }}
-                        </div>
-                        <div class="col-6">
-                          <div class="row no-wrap">
-                            <div class="col-6 text-right">
-                              Rp {{ pel.subtotal>0?formatRp(pel.subtotal):formatRp(pel.subtotalx) }}
-                            </div>
-                            <div class="col-6 text-right">
-                              0
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="q-ml-xs row no-wrap q-col-gutter-xs">
-                        <div class="col-1">
-                        </div>
-                        <div class="col-3 text-right text-weight-bold">
-                          Total
-                        </div>
-                        <div class="col-6">
-                          <div class="row no-wrap">
-                            <div class="col-6 text-right">
-                              Rp  {{ formatRp(store.notas.Subtotal) }}
-                            </div>
-                            <div class="col-6 text-right">
-                              Rp 0
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-2">
-                        </div>
-                      </div>
-                      <div class="q-ml-sm row no-wrap items-center q-my-md">
-                        <div class="q-mr-xs">
-                          <app-btn
-                            label="Buat Qris"
-                            color="blue"
-                            push
-                            dense
-                            :loading="store.loading && carabayar==='qris'"
-                            :disable="store.loading"
-                            @click="buatQris"
-                          />
-                        </div>
-                        <div class="q-mr-xs">
-                          <app-btn
-                            label="Bayar Tunai"
-                            color="green"
-                            push
-                            dense
-                            :loading="store.loading && carabayar==='tunai'"
-                            :disable="store.loading"
-                            @click="bayarTunai"
-                          />
-                        </div>
-                        <div class="q-mr-xs">
-                          <app-btn
-                            label="Buat VA"
-                            color="lime-7"
-                            push
-                            dense
-                            :loading="store.loading && carabayar==='va'"
-                            :disable="store.loading"
-                            @click="buatVA"
-                          />
-                        </div>
-                        <div class="q-mr-xs">
-                          <app-btn
-                            label="Batal"
-                            color="grey-7"
-                            push
-                            dense
-                            :loading="store.loading && carabayar==='batal'"
-                            :disable="store.loading"
-                            @click="batal"
-                          />
-                        </div>
-                        <div class="q-mr-xs">
-                          <app-btn
-                            label="Cetak"
-                            color="blue-grey-7"
-                            push
-                            dense
-                            :loading="store.loading && carabayar==='cetak'"
-                            :disable="store.loading"
-                            @click="cetak"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      v-if="!store.notas.Pelayanan && store.loading"
-                      class="q-mt-lg"
-                    >
-                      <div
-                        class="flex column flex-center"
-                      >
-                        <q-spinner-cube
-                          color="primary"
-                          size="3em"
-                        />
-                        <div>Harap Tunggu ...</div>
-                      </div>
-                    </div>
-                    <div v-if="!store.notas.Pelayanan && !store.loading">
-                      <app-no-data />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-tab-panel>
-            <q-tab-panel
-              style="padding:0px;"
-              name="list"
-            >
-              list
-            </q-tab-panel>
-          </q-tab-panels>
-        </div> -->
       </div>
     </div>
   </div>
@@ -904,7 +649,9 @@ function batal() {
   console.log('buat VA')
 }
 function cetak() {
-  console.log('buat VA')
+  carabayar.value = 'tunai'
+  emits('print', carabayar.value)
+  console.log('cetak aja')
 }
 
 </script>

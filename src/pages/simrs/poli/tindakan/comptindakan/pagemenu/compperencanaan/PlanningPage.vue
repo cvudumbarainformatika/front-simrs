@@ -91,6 +91,7 @@ const cekPanel = () => {
   const arr = findWithAttr(comp, 'nama', ganti)
   // const filterred = arr2.find(key => key.includes(ganti))
 
+  console.log('pasien', props.pasien)
   console.log('ganti', ganti)
   console.log('arr', arr)
   // return defineAsyncComponent(() => import(filterred))
