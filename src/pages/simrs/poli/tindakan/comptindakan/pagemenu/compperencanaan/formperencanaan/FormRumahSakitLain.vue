@@ -106,7 +106,7 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          input-debounce="800"
           :options="optionsRs"
           option-value="kode"
           option-label="nama"
@@ -137,12 +137,13 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          input-debounce="800"
           :options="optionsPoli"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
           @filter="filterPoli"
+          @update:model-value="updateModelPoli"
         />
       </div>
       <div class="col-12">
@@ -185,12 +186,14 @@ const optionTipe = ref([
 ])
 const optionsRs = ref([])
 const optionsPoli = ref([])
-
+function updateModelPoli(val) {
+  console.log('poli ', val)
+}
 const onFilterTest = async (val, update, abort) => {
-  if (val.length < 3) {
-    abort()
-    return
-  }
+  // if (val.length < 3) {
+  //   abort()
+  //   return
+  // }
   const params = {
     params: {
       namafaskes: val,
@@ -206,10 +209,10 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  if (val.length < 3) {
-    abort()
-    return
-  }
+  // if (val.length < 3) {
+  //   abort()
+  //   return
+  // }
   const params = {
     params: {
       namapoli: val

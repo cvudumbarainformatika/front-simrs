@@ -210,14 +210,14 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
 
-    async hapusItem(pasien, id) {
-      const payload = { noreg: pasien?.noreg, id }
+    async hapusItem(pasien, item) {
+      const payload = { noreg: pasien?.noreg, id: item?.id, plan: item.rs4 }
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusplaningpasien', payload)
         console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
-          storePasien.hapusDataPlanning(pasien, id)
+          storePasien.hapusDataPlanning(pasien, item?.id)
           notifSuccess(resp)
         }
       } catch (error) {
