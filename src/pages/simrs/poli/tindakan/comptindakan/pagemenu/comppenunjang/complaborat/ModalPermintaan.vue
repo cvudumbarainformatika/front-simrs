@@ -1,5 +1,5 @@
 <template>
-  <q-dialog>
+  <q-dialog @before-show="clearCheck">
     <q-card
       style="min-width: 50vw; height: 100vh;"
       class="full-height"
@@ -158,6 +158,10 @@ const filterred = computed(() => {
 function submitPemeriksaans() {
   // console.log(pemeriksaans.value)
   emits('ok', pemeriksaans.value)
+}
+
+function clearCheck() {
+  pemeriksaans.value = []
 }
 
 </script>

@@ -23,6 +23,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     notalaborats: [],
     notalaborat: null,
     permintaanLaborats: '',
+    permintaans: [],
     form: {
       // norm: '',
       // noreg: '',
@@ -122,8 +123,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setForm(key, value) {
       this.form[key] = value
     },
-    setPermintaanLaborats(val) {
+    setPermintaanLaborats(val, arr) {
       this.permintaanLaborats = val
+      this.permintaans = arr
     },
     setDetails(pemeriksaan) {
       // this.form.details = []
@@ -179,7 +181,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       }
     },
 
-    async saveOrderLaboratBaru(pasien, data) {
+    async saveOrderLaboratBaru(pasien) {
       this.loadingSave = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
@@ -192,6 +194,46 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
+      const arr = []
+
+      for (let i = 0; i < this.permintaans.length; i++) {
+        const element = this.permintaans[i]
+        const obj = {
+          form: this.form,
+          details: []
+        }
+        // console.log('pemeriksaan', pemeriksaan)
+        for (let i = 0; i < element?.value.length; i++) {
+          const el = element?.value[i]
+          this.form.biaya_layanan = el?.aslix?.hargapelayananpolispesialis // ini bisa el?.aslix?.hargapelayananpoliumum
+          this.form.biaya_sarana = el?.aslix?.hargasaranapolispesialis // ini bisa el?.aslix?.hargasaranapoliumum
+          const objec = {
+            kode: el?.aslix?.kode,
+            gruper: el?.aslix.gruper
+          }
+          obj.details.push(objec)
+        }
+
+        arr.push(obj)
+      }
+
+      try {
+        const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', arr)
+        console.log('save resp', resp)
+        // if (resp.status === 200) {
+        //   const storePasien = usePengunjungPoliStore()
+        //   const isi = resp?.data?.result
+        //   storePasien.injectDataPasien(pasien, isi, 'laborats')
+        //   this.setNotas(resp?.data?.nota)
+        //   notifSuccess(resp)
+        //   this.loadingSaveLab = false
+        //   this.initReset()
+        // }
+        this.loadingSaveLab = false
+      } catch (error) {
+        console.log('save laborat', error)
+        this.loadingSaveLab = false
+      }
     },
 
     percentage(val) {
@@ -228,7 +270,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
 
     initReset() {
       this.caripemeriksaanlab = null
-      this.permintaanLaborats = ''
+      // this.permintaanLaborats = ''
       // this.form.prioritas_pemeriksaan = 'Tidak'
       this.form.details = []
       return new Promise((resolve, reject) => {

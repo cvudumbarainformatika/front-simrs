@@ -25,7 +25,7 @@
             hide-bottom-space
             @click="modalOpen = true"
           />
-          <q-select
+          <!-- <q-select
             ref="cariRef"
             v-model="store.caripemeriksaanlab"
             dense
@@ -64,15 +64,11 @@
                   <q-item-label :class="scope.opt.value[0].jenis === 'NON-PAKET' ? 'text-orange' : 'text-primary'">
                     <strong>  {{ scope.opt.value[0].jenis }} </strong>
                     - <span class="text-italic text-negative">Biaya: Rp. {{ formatRp(scope.opt.value[0].biayapolispesialis) }}</span>
-                    <!-- <span
-                      v-if="scope.opt.value[0].jenis === 'NON-PAKET'"
-                      class="text-primary"
-                    >  - {{ scope.opt.value[0].kode }} </span> -->
                   </q-item-label>
                 </q-item-section>
               </q-item>
             </template>
-          </q-select>
+          </q-select> -->
         </div>
         <div class="col-6">
           <q-input
@@ -307,13 +303,13 @@
 <script setup>
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 import { onMounted, ref } from 'vue'
-import { formatRp } from 'src/modules/formatter'
+// import { formatRp } from 'src/modules/formatter'
 import ModalPermintaan from '../complaborat/ModalPermintaan.vue'
 
 const store = usePenunjangPoli()
 
 const modalOpen = ref(false)
-const cariRef = ref(null)
+// const cariRef = ref(null)
 const formRef = ref(null)
 const diagnosaRef = ref(null)
 
@@ -332,41 +328,37 @@ onMounted(() => {
   asalSumberSpesimenOptions.value = asalOptions
   metodePengambilanSpesimenOptions.value = metodeOptions
 
-  cariRef.value.focus()
+  // cariRef.value.focus()
 })
 
-async function filterFn(val, update, abort) {
-  if (val.length < 1) {
-    abort()
-    return
-  }
-  update(
-    () => {
-      const needle = val.toLowerCase()
-      // const arr = 'kdpemeriksaan'
-      const splits = ['name']
-      const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
-      const filteredData = multiFilter(store.masterlaborat, splits, needle)
-      options.value = filteredData
-    },
-    ref => {
-      if (val !== '' && ref.options.length) {
-        ref.setOptionIndex(-1)
-        ref.moveOptionSelection(1, true)
-      }
-    }
-  )
-}
+// async function filterFn(val, update, abort) {
+//   if (val.length < 1) {
+//     abort()
+//     return
+//   }
+//   update(
+//     () => {
+//       const needle = val.toLowerCase()
+//       // const arr = 'kdpemeriksaan'
+//       const splits = ['name']
+//       const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
+//       const filteredData = multiFilter(store.masterlaborat, splits, needle)
+//       options.value = filteredData
+//     },
+//     ref => {
+//       if (val !== '' && ref.options.length) {
+//         ref.setOptionIndex(-1)
+//         ref.moveOptionSelection(1, true)
+//       }
+//     }
+//   )
+// }
 
-function insertList(val) {
-  // store.setDetails(val).then(() => {
-  //   // store.setForm('details', [])
-  //   diagnosaRef.value.focus()
-  // })
-  console.log(val)
-  store.setDetails(val)
-  diagnosaRef.value.focus()
-}
+// function insertList(val) {
+//   console.log(val)
+//   store.setDetails(val)
+//   diagnosaRef.value.focus()
+// }
 
 // function filterAs(val, update) {
 //   update(() => {
@@ -412,20 +404,21 @@ function insertList(val) {
 // }
 
 function saveOrderLaborat() {
-  store.saveOrderLaborat(props.pasien).then(() => {
-    console.log(formRef.value)
+  // INI diganti function baru
+  store.saveOrderLaboratBaru(props.pasien).then(() => {
+    // console.log(formRef.value)
     formRef.value.resetValidation()
-    cariRef.value.focus()
+    // cariRef.value.focus()
   })
 }
 
 function pilihPemeriksaans(val) {
-  console.log(val)
+  // console.log(val)
   modalOpen.value = false
   const arr = val.length ? val.map(x => x.name) : []
   const implode = arr.length ? arr.join('||') : ''
-  console.log(implode)
-  store.setPermintaanLaborats = implode
+  // console.log(implode)
+  store.setPermintaanLaborats(implode, val)
   // insertList(val)
 }
 
