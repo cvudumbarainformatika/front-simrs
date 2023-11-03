@@ -131,7 +131,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
           if (isi.length) {
-            isi.ForEach(anu => {
+            isi.forEach(anu => {
               storePasien.injectDataPasien(pasien, anu, 'planning')
             })
           }
@@ -167,7 +167,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
           if (isi.length) {
-            isi.ForEach(anu => {
+            isi.forEach(anu => {
               storePasien.injectDataPasien(pasien, anu, 'planning')
             })
           }

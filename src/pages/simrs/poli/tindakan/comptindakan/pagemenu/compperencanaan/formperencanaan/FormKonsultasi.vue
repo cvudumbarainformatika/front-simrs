@@ -107,9 +107,9 @@ function setTanggalKonsul(val) {
   console.log('diff', diff)
   if (diff < 0) return notifErrVue('tidak boleh ada rujukan mundur')
   if (diff > 0) {
-    store.setFormKonsul('jenisKonsul', '6')
+    store.setFormKonsul('kdSaran', '6')
   } else if (diff === 0) {
-    store.setFormKonsul('jenisKonsul', '3')
+    store.setFormKonsul('kdSaran', '3')
   }
   store.setFormKonsul('tgl_rencana_konsul', val)
 }
