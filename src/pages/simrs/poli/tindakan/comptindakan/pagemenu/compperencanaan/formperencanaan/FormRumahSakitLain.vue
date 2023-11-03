@@ -107,11 +107,13 @@
           standout="bg-yellow-3"
           use-input
           input-debounce="800"
+          map-options
           :options="optionsRs"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
           @filter="onFilterTest"
+          @update:model-value="updateModelPpk"
         />
       </div>
       <div class="col-7">
@@ -141,6 +143,7 @@
           :options="optionsPoli"
           option-value="kode"
           option-label="nama"
+          map-options
           hide-bottom-space
           @filter="filterPoli"
           @update:model-value="updateModelPoli"
@@ -187,13 +190,18 @@ const optionTipe = ref([
 const optionsRs = ref([])
 const optionsPoli = ref([])
 function updateModelPoli(val) {
+  store.formRsLain.polirujukan = val.kode
+  console.log('poli ', val)
+}
+function updateModelPpk(val) {
+  store.formRsLain.ppkdirujuk = val.kode
   console.log('poli ', val)
 }
 const onFilterTest = async (val, update, abort) => {
-  // if (val.length < 3) {
-  //   abort()
-  //   return
-  // }
+  if (val.length < 2) {
+    abort()
+    return
+  }
   const params = {
     params: {
       namafaskes: val,
@@ -209,10 +217,10 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  // if (val.length < 3) {
-  //   abort()
-  //   return
-  // }
+  if (val.length < 2) {
+    abort()
+    return
+  }
   const params = {
     params: {
       namapoli: val
