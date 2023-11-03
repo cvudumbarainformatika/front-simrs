@@ -257,8 +257,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
       this.formRsLain.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
       this.formPrb.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
-      this.formRsLain.poli = pasien?.poli
-      this.formPrb.poli = pasien?.poli
+
       this.formRsLain.kodepoli = pasien?.kodepoli
       this.formPrb.kodepoli = pasien?.kodepoli
       this.formRsLain.kelamin = pasien?.kelamin

@@ -157,13 +157,13 @@
             : {{ pasien?.diagnosa.length?pasien?.diagnosa[0].masterdiagnosa?.rs1 + ' - ' + pasien?.diagnosa[0].masterdiagnosa?.rs4 :'-' }}
           </div>
         </div>
-        <div class="row items-center justify-between q-mb-lg">
+        <div class="row items-center justify-between q-mb-xl">
           <div class="col-7" />
           <div class="col-4 text-center">
             Mengetahui DPJP
           </div>
         </div>
-        <div class="row items-center justify-between q-mt-lg">
+        <div class="row items-center justify-between ">
           <div class="col-7 f-10">
             Tgl Entri {{ date.formatDate(pasien.tgl_kunjungan,'DD/MM/YYYY') }}  |  Tgl Cetak {{ date.formatDate(Date.now(),'DD/MM/YYYY') }} <span class="text-italic">dari RS</span>
           </div>
@@ -204,6 +204,10 @@ function setKepada(val) {
     if (props.pasien) {
       return props.pasien.dokter
     } else { return '-' }
+  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    if (val?.transrujukan) {
+      return 'Poli ' + val?.transrujukan?.poli + ', ' + val?.transrujukan?.rs7
+    } else { return '-' }
   }
 }
 function setNomor(val) {
@@ -218,6 +222,10 @@ function setNomor(val) {
   } else if (val?.rs4 === 'Rawat Inap') {
     if (val?.spri) {
       return val?.spri?.noSuratKontrol
+    } else { return '-' }
+  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    if (val?.transrujukan) {
+      return val?.transrujukan?.rs3
     } else { return '-' }
   }
 }
