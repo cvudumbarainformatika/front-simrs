@@ -488,7 +488,7 @@ import { pathImg } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 // import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
 
-const emits = defineEmits(['saveImage', 'setFull'])
+// const emits = defineEmits(['saveImage', 'setFull'])
 
 const store = usePemeriksaanFisik()
 // const master = useMasterPemeriksaanFisik()
@@ -660,9 +660,10 @@ const resetTanda = () => {
 }
 
 const saveImage = () => {
-  const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
+  // const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
   // console.log('gambar', imageURL)
-  emits('saveImage', imageURL)
+  // emits('saveImage', imageURL)
+  console.log('asdas', canvasRef?.value?.toDataURL('image/jpeg', 1))
 }
 
 function hapusGambar() {
@@ -696,7 +697,18 @@ async function func(filename) {
   cvn.height = cvn.width
   const bg = new Image()
   // bg.src = '..' + store.fileGambar
-  store.fileGambar === null ? bg.src = '..' + '/src/assets/human/anatomys/body-human.jpg' : bg.src = pathImg + store.fileGambar
+  // bg.setAttribute('crossOrigin', 'Anonymous')
+  // store.fileGambar === null
+  //   ? bg.src = '..' + '/src/assets/human/anatomys/body-human.jpg'
+  //   : bg.src = pathImg + store.fileGambar
+  // bg.crossOrigin = 'anonymous'
+  if (store.fileGambar === null) {
+    bg.src = '..' + store.fileGambar
+  } else {
+    bg.src = pathImg + store.fileGambar
+    bg.setAttribute('crossorigin', 'anonymous') // works for me
+  }
+  //
   bg.onload = function () {
     console.log('bg func', bg.height)
     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
