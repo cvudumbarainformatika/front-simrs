@@ -253,6 +253,18 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
     initPasien(pasien) {
+      this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      this.formRsLain.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+      this.formPrb.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+      this.formRsLain.poli = pasien?.poli
+      this.formPrb.poli = pasien?.poli
+      this.formRsLain.kodepoli = pasien?.kodepoli
+      this.formPrb.kodepoli = pasien?.kodepoli
+      this.formRsLain.kelamin = pasien?.kelamin
+      this.formPrb.kelamin = pasien?.kelamin
+      this.formRsLain.nama = pasien?.nama
+      this.formPrb.nama = pasien?.nama
       this.formRsLain.norm = pasien?.norm
       this.formPrb.norm = pasien?.norm
       this.formRsLain.noka = pasien?.noka

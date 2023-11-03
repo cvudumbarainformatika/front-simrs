@@ -150,6 +150,15 @@
         />
       </div>
       <div class="col-12">
+        <q-input
+          v-model="store.formRsLain.catatan"
+          label="Catatan"
+          dense
+          outlined
+          standout="bg-yellow-3"
+        />
+      </div>
+      <div class="col-12">
         <q-separator class=" q-my-md" />
         <div class="text-right q-gutter-sm">
           <q-btn
@@ -191,10 +200,12 @@ const optionsRs = ref([])
 const optionsPoli = ref([])
 function updateModelPoli(val) {
   store.formRsLain.polirujukan = val.kode
+  store.formRsLain.namapolirujukan = val.nama
   console.log('poli ', val)
 }
 function updateModelPpk(val) {
   store.formRsLain.ppkdirujuk = val.kode
+  store.formRsLain.namappkdirujuk = val.nama
   console.log('poli ', val)
 }
 const onFilterTest = async (val, update, abort) => {
