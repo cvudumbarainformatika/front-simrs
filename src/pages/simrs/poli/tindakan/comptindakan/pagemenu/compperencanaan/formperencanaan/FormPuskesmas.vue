@@ -106,12 +106,14 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          map-options
+          input-debounce="800"
           :options="optionsRs"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
           @filter="onFilterTest"
+          @update:model-value="updateModelPpk"
         />
       </div>
       <div class="col-7">
@@ -137,12 +139,14 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          map-options
+          input-debounce="800"
           :options="optionsPoli"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
           @filter="filterPoli"
+          @update:model-value="updateModelPoli"
         />
       </div>
       <div class="col-12">
@@ -186,8 +190,16 @@ const optionTipe = ref([
 const optionsRs = ref([])
 const optionsPoli = ref([])
 
+function updateModelPpk(val) {
+  store.setFormPrb('ppkdirujuk', val.kode)
+  console.log(val)
+}
+function updateModelPoli(val) {
+  store.setFormPrb('polirujukan', val.kode)
+  console.log(val)
+}
 const onFilterTest = async (val, update, abort) => {
-  if (val.length < 3) {
+  if (val.length < 2) {
     abort()
     return
   }
@@ -206,7 +218,7 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  if (val.length < 3) {
+  if (val.length < 2) {
     abort()
     return
   }
@@ -230,7 +242,7 @@ onMounted(() => {
 })
 
 function simpan() {
-  console.log('ok')
+  console.log('ok', store.formPrb)
   $q.notify({
     type: 'negative',
     message: 'Maaf, Anda tidak terhubung ke BPJS',

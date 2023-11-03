@@ -106,12 +106,14 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          input-debounce="800"
+          map-options
           :options="optionsRs"
           option-value="kode"
           option-label="nama"
           hide-bottom-space
           @filter="onFilterTest"
+          @update:model-value="updateModelPpk"
         />
       </div>
       <div class="col-7">
@@ -137,12 +139,23 @@
           outlined
           standout="bg-yellow-3"
           use-input
-          input-debounce="0"
+          input-debounce="800"
           :options="optionsPoli"
           option-value="kode"
           option-label="nama"
+          map-options
           hide-bottom-space
           @filter="filterPoli"
+          @update:model-value="updateModelPoli"
+        />
+      </div>
+      <div class="col-12">
+        <q-input
+          v-model="store.formRsLain.catatan"
+          label="Catatan"
+          dense
+          outlined
+          standout="bg-yellow-3"
         />
       </div>
       <div class="col-12">
@@ -185,9 +198,18 @@ const optionTipe = ref([
 ])
 const optionsRs = ref([])
 const optionsPoli = ref([])
-
+function updateModelPoli(val) {
+  store.formRsLain.polirujukan = val.kode
+  store.formRsLain.namapolirujukan = val.nama
+  console.log('poli ', val)
+}
+function updateModelPpk(val) {
+  store.formRsLain.ppkdirujuk = val.kode
+  store.formRsLain.namappkdirujuk = val.nama
+  console.log('poli ', val)
+}
 const onFilterTest = async (val, update, abort) => {
-  if (val.length < 3) {
+  if (val.length < 2) {
     abort()
     return
   }
@@ -206,7 +228,7 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  if (val.length < 3) {
+  if (val.length < 2) {
     abort()
     return
   }

@@ -131,7 +131,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
           if (isi.length) {
-            isi.ForEach(anu => {
+            isi.forEach(anu => {
               storePasien.injectDataPasien(pasien, anu, 'planning')
             })
           }
@@ -167,7 +167,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
           if (isi.length) {
-            isi.ForEach(anu => {
+            isi.forEach(anu => {
               storePasien.injectDataPasien(pasien, anu, 'planning')
             })
           }
@@ -210,14 +210,14 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
 
-    async hapusItem(pasien, id) {
-      const payload = { noreg: pasien?.noreg, id }
+    async hapusItem(pasien, item) {
+      const payload = { noreg: pasien?.noreg, id: item?.id, plan: item.rs4 }
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusplaningpasien', payload)
         console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
-          storePasien.hapusDataPlanning(pasien, id)
+          storePasien.hapusDataPlanning(pasien, item?.id)
           notifSuccess(resp)
         }
       } catch (error) {
@@ -253,6 +253,17 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
     initPasien(pasien) {
+      this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
+      this.formRsLain.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+      this.formPrb.diagnosa = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 + ' ' + pasien.diagnosa[0].masterdiagnosa?.rs4 : '-'
+
+      this.formRsLain.kodepoli = pasien?.kodepoli
+      this.formPrb.kodepoli = pasien?.kodepoli
+      this.formRsLain.kelamin = pasien?.kelamin
+      this.formPrb.kelamin = pasien?.kelamin
+      this.formRsLain.nama = pasien?.nama
+      this.formPrb.nama = pasien?.nama
       this.formRsLain.norm = pasien?.norm
       this.formPrb.norm = pasien?.norm
       this.formRsLain.noka = pasien?.noka
