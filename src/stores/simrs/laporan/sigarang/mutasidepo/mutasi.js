@@ -124,11 +124,24 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
           if (item.detail_permintaanruangan.length) {
             item.detail_permintaanruangan.forEach(pak => {
               pak.rtotalRp = 0
-              if (pak.stokruangan.length) {
-                const har = pak.stokruangan.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
-                if (har.length) {
-                  pak.harga = har[0].harga
-                  pak.rtotalRp = har[0].harga * pak.total
+              pak.trmQty = 0
+              pak.harga = []
+              const trm = pak?.permintaanruangan?.penerimaan
+              if (trm.length) {
+                const temp = trm.filter(anu => anu.kode_rs === pak.kode_rs)
+                const terHar = []
+                if (temp.length) {
+                  temp.forEach(ter => {
+                    if (ter.stokruangan.length) {
+                      const har = ter.stokruangan.filter(a => a.no_penerimaan === ter.no_penerimaan && a.kode_rs === ter.kode_rs)
+                      if (har.length) {
+                        pak.harga.push(har[0].harga)
+                        terHar.push(har[0].harga * ter.jumlah)
+                      }
+                    }
+                  })
+                  pak.rtotalRp = terHar.length ? terHar.reduce((a, b) => a + b, 0) : 0
+                  pak.trmQty = temp.map(c => c.jumlah).reduce((a, b) => a + b, 0)
                 }
               }
               // if (item.stok_awal.length) {
@@ -180,6 +193,8 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
           const hpakai = item.detail_permintaanruangan.length ? item.detail_permintaanruangan.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
           item.hKeluar = hlang ?? hpakai ?? 0
 
+          item.trmru = item.detail_permintaanruangan.length ? item.detail_permintaanruangan.map(a => a.trmQty).reduce((a, b) => a + b, 0).toFixed(2) : null
+
           item.awal = item.stok_awal.length ? item.stok_awal.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : 0
           item.hAwal = item.stok_awal.length ? item.stok_awal.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
 
@@ -201,6 +216,8 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
       this.getDataTable()
     },
     async getDataTable() {
+      this.meta = {}
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/laporan/sigarang/lap-mutasi-depo', param)

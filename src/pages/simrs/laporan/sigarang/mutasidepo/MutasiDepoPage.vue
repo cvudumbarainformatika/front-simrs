@@ -321,6 +321,13 @@
       <template #cell-keluar="{row}">
         <div class="text-right">
           {{ parseFloat(row.keluar) }}
+          <div
+            v-if="row.trmru"
+            class="text-italic text-right print-hide"
+            :class="parseFloat(row.keluar)!== parseFloat(row.trmru)? 'text-negative text-weight-bold f-12':'f-8 '"
+          >
+            (trm: {{ parseFloat(row.trmru) }})
+          </div>
         </div>
       </template>
       <template #cell-sisa="{row}">
