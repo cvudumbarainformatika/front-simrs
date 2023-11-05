@@ -192,11 +192,9 @@ const optionsPoli = ref([])
 
 function updateModelPpk(val) {
   store.setFormPrb('ppkdirujuk', val.kode)
-  console.log(val)
 }
 function updateModelPoli(val) {
   store.setFormPrb('polirujukan', val.kode)
-  console.log(val)
 }
 const onFilterTest = async (val, update, abort) => {
   if (val.length < 2) {
@@ -228,7 +226,6 @@ const filterPoli = async (val, update, abort) => {
     }
   }
   const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
-  console.log(response)
   const code = response?.data?.metadata?.code
   if (code === '200') {
     update(() => {

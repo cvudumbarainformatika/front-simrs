@@ -201,12 +201,12 @@ const optionsPoli = ref([])
 function updateModelPoli(val) {
   store.formRsLain.polirujukan = val.kode
   store.formRsLain.namapolirujukan = val.nama
-  console.log('poli ', val)
+  // console.log('poli ', val)
 }
 function updateModelPpk(val) {
   store.formRsLain.ppkdirujuk = val.kode
   store.formRsLain.namappkdirujuk = val.nama
-  console.log('poli ', val)
+  // console.log('poli ', val)
 }
 const onFilterTest = async (val, update, abort) => {
   if (val.length < 2) {
@@ -238,7 +238,7 @@ const filterPoli = async (val, update, abort) => {
     }
   }
   const response = await api.get('v1/simrs/pelayanan/polibpjs', params)
-  console.log(response)
+  // console.log(response)
   const code = response?.data?.metadata?.code
   if (code === '200') {
     update(() => {

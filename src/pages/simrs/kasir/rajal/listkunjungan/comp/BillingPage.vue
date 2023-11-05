@@ -460,14 +460,14 @@ const dataNotas = ref([])
 const nota = ref('')
 function gantiDataNota(val) {
   if (val === 'karcis') {
-    console.log('karcis', prop.pasien)
+    // console.log('karcis', prop.pasien)
     const param = {
       golongan: val,
       noreg: prop.pasien.noreg
     }
     emits('nota', param)
   } else {
-    console.log('pilihan lain', prop.pasien)
+    // console.log('pilihan lain', prop.pasien)
     store.notas = {}
     nota.value = ''
     if (val === 'tindakan') {
@@ -576,12 +576,12 @@ const carabayar = ref('')
 function kirimBayar() {
   let rinci = ''
   if (store.notas?.Pelayanan.length) {
-    console.log('nota pelayanan')
+    // console.log('nota pelayanan')
     store.notas.Pelayanan.forEach(a => {
       const b = a.namatindakan + ':' + a.subtotal
       rinci += ',' + b
     })
-    console.log(rinci)
+    // console.log(rinci)
     const form = {
       noreg: prop.pasien.noreg,
       norm: prop.pasien.norm,
@@ -598,7 +598,7 @@ function kirimBayar() {
       jenispembayaran: store.golongan,
       carabayar: carabayar.value
     }
-    console.log('form', form)
+    // console.log('form', form)
     store.savePembayaran(form).then(() => {
       emits('print', carabayar.value)
     })
@@ -606,7 +606,7 @@ function kirimBayar() {
 }
 function bayar() {
   if (store.notas?.Pelayanan.length) {
-    console.log('nota pelayanan')
+    // console.log('nota pelayanan')
     const form = {
       noreg: prop.pasien.noreg,
       norm: prop.pasien.norm,
@@ -621,14 +621,14 @@ function bayar() {
       carabayar: carabayar.value,
       nota: nota.value
     }
-    console.log('form', form)
+    // console.log('form', form)
     store.savePembayaran(form).then(() => {
       emits('print', carabayar.value)
     })
   }
 }
 function buatQris() {
-  console.log('buat qris')
+  // console.log('buat qris')
   carabayar.value = 'qris'
   if (store.golongan === 'karcis') {
     kirimBayar()
@@ -651,7 +651,7 @@ function batal() {
 function cetak() {
   carabayar.value = 'tunai'
   emits('print', carabayar.value)
-  console.log('cetak aja')
+  // console.log('cetak aja')
 }
 
 </script>

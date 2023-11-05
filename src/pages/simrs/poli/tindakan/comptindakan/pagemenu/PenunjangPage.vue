@@ -68,7 +68,6 @@ const props = defineProps({
 
 const store = usePenunjangPoli()
 
-// const modules = import.meta.glob('./comppenunjang/*.vue', { eager: true })
 const comp = [
   { nama: 'Laborat', page: defineAsyncComponent(() => import('./comppenunjang/PageLaborat.vue')) },
   { nama: 'Radiologi', page: defineAsyncComponent(() => import('./comppenunjang/PageRadiologi.vue')) },
@@ -76,18 +75,10 @@ const comp = [
   { nama: 'PenunjangLain', page: defineAsyncComponent(() => import('./comppenunjang/PagePenunjangLain.vue')) }
 ]
 
-console.log('comp', comp)
 const cekPanel = () => {
   const val = store.tab
   const ganti = val.replace(/ /g, '')
-  // const arr2 = Object.keys(modules)
   const arr = findWithAttr(comp, 'nama', ganti)
-  // const filterred = arr2.find(key => key.includes(ganti))
-  // const filterred2 = arr
-  // console.log('fil', filterred)
-  // console.log('fil2', filterred2)
-  console.log('ganti', ganti)
-  // return defineAsyncComponent(() => import(filterred))
   return arr >= 0 ? comp[arr].page : ''
 }
 
