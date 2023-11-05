@@ -179,7 +179,6 @@ const optionsRtujuan = ref([])
 
 function setOperasi(val) {
   if (val === 'Tidak') {
-    console.log('operasi', val)
     store.setFormRanap('tanggaloperasi', null)
   } else {
     store.setFormRanap('tanggaloperasi', date.formatDate(Date.now(), 'YYYY-MM-DD'))
@@ -223,7 +222,6 @@ async function filterIcd9(val) {
   }
   const response = await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
   loadingIcd.value = false
-  console.log(response)
   if (response?.data.length) {
     optionsIcd9.value = response?.data
   } else {
@@ -244,7 +242,7 @@ onMounted(() => {
 })
 
 function simpan() {
-  console.log('ok', store.formRanap)
+  // console.log('ok', store.formRanap)
   store.saveRanap(props.pasien)
   // console.log('opt', optionsIcd9.value, optionsJenisTindakan.value)
   // $q.notify({

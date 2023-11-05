@@ -89,22 +89,17 @@ const props = defineProps({
   }
 })
 function seKonsul(val) {
-  console.log('set konsul', val)
   store.setFormKonsul('tgl_rencana_konsul', date.formatDate(Date.now(), 'YYYY-MM-DD'))
 }
 function seRujuk(val) {
   const tgl = Date.now()
   const tgl1 = date.addToDate(tgl, { days: 1 })
   store.setFormKonsul('tgl_rencana_konsul', date.formatDate(tgl1, 'YYYY-MM-DD'))
-  console.log('set rujuk', val)
 }
 function setTanggalKonsul(val) {
   const date1 = Date.now()
   const date2 = new Date(val)
   const diff = date.getDateDiff(date2, date1, 'days')
-  console.log('date1', date1)
-  console.log('date2', date2)
-  console.log('diff', diff)
   if (diff < 0) return notifErrVue('tidak boleh ada rujukan mundur')
   if (diff > 0) {
     store.setFormKonsul('kdSaran', '6')

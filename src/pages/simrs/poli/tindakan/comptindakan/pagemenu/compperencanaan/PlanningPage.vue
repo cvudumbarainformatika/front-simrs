@@ -86,17 +86,8 @@ const comp = [
 const cekPanel = () => {
   const val = store.plann
   const ganti = val.replace(/ /g, '')
-  // const modules = import.meta.glob('./formperencanaan/*.vue', { eager: true })
-  // const arr2 = Object.keys(modules)
   const arr = findWithAttr(comp, 'nama', ganti)
-  // const filterred = arr2.find(key => key.includes(ganti))
 
-  console.log('pasien', props.pasien)
-  console.log('ganti', ganti)
-  console.log('arr', arr)
-  // return defineAsyncComponent(() => import(filterred))
   return arr >= 0 ? comp[arr].page : ''
-  // console.log(filterred)
-  // return filterred
 }
 </script>
