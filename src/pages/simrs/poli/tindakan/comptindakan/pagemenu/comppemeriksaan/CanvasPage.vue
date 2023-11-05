@@ -492,7 +492,7 @@ import { pathImg } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
 // import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
 
-// const emits = defineEmits(['saveImage', 'setFull'])
+const emits = defineEmits(['saveImage', 'setFull'])
 
 const store = usePemeriksaanFisik()
 // const master = useMasterPemeriksaanFisik()
@@ -664,18 +664,18 @@ const resetTanda = () => {
 }
 
 const saveImage = () => {
-  // const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
-  // console.log('gambar', imageURL)
-  // emits('saveImage', imageURL)
-  setTimeout(() => {
-    const cvn = canvasRef.value
-    // const img = new Image()
-    // const imageURL = pathImg + store?.fileGambar
-    // img.crossOrigin = 'Anonymous'
-    // img.src = imageURL
-    // cvn.setAttribute('crossOrigin', 'Anonymous')
-    console.log('asdas', cvn.toDataURL())
-  }, 100)
+  const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
+  console.log('gambar', imageURL)
+  emits('saveImage', imageURL)
+  // setTimeout(() => {
+  //   const cvn = canvasRef.value
+  //   // const img = new Image()
+  //   // const imageURL = pathImg + store?.fileGambar
+  //   // img.crossOrigin = 'Anonymous'
+  //   // img.src = imageURL
+  //   // cvn.setAttribute('crossOrigin', 'Anonymous')
+  //   // console.log('asdas', cvn.toDataURL())
+  // }, 100)
 }
 
 function hapusGambar() {
