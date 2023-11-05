@@ -125,7 +125,11 @@
         :height="props.width"
         @mousedown="handlePointerDown"
         @mouseup="handlePointerUp"
+        @change="changeCanvas"
       >
+        <!-- <img
+          :src="pathImg + store.fileGambar"
+        > -->
         <q-menu
           ref="refMenu"
           touch-position
@@ -531,7 +535,7 @@ onMounted(() => {
   const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   options.value = opt
   // resizeCanvas()
-  console.log('menus', options.value)
+  // console.log('menus', options.value)
   func()
   // const active = menus.value[0]?.gambars[0]?.url
   // store.setGambarActive(0, active)
@@ -663,7 +667,15 @@ const saveImage = () => {
   // const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
   // console.log('gambar', imageURL)
   // emits('saveImage', imageURL)
-  console.log('asdas', canvasRef?.value?.toDataURL('image/jpeg', 1))
+  setTimeout(() => {
+    const cvn = canvasRef.value
+    // const img = new Image()
+    // const imageURL = pathImg + store?.fileGambar
+    // img.crossOrigin = 'Anonymous'
+    // img.src = imageURL
+    // cvn.setAttribute('crossOrigin', 'Anonymous')
+    console.log('asdas', cvn.toDataURL())
+  }, 100)
 }
 
 function hapusGambar() {
@@ -690,27 +702,22 @@ const arr = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
 
-async function func(filename) {
-  const cvn = canvasRef.value
-  // const context = ctx.value
-  ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-  cvn.height = cvn.width
+function func(filename) {
+  // fetchingImg(store.fileGambar)
+  // console.log(store?.fileGambar)
   const bg = new Image()
-  // bg.src = '..' + store.fileGambar
-  // bg.setAttribute('crossOrigin', 'Anonymous')
-  // store.fileGambar === null
-  //   ? bg.src = '..' + '/src/assets/human/anatomys/body-human.jpg'
-  //   : bg.src = pathImg + store.fileGambar
-  // bg.crossOrigin = 'anonymous'
+  let imageURL = null
   if (store.fileGambar === null) {
-    bg.src = '..' + store.fileGambar
+    imageURL = '..' + store?.fileGambar
   } else {
-    bg.src = pathImg + store.fileGambar
-    bg.setAttribute('crossorigin', 'anonymous') // works for me
+    imageURL = store?.fileGambar
   }
-  //
+
   bg.onload = function () {
-    console.log('bg func', bg.height)
+    // console.log('bg func', bg.height)
+    const cvn = canvasRef.value
+    ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
+    cvn.height = cvn.width
     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
     const width = bg.width * scale
     const height = bg.height * scale
@@ -718,19 +725,44 @@ async function func(filename) {
     const y = cvn.height / 2 - height / 2
     ctx.value.fillStyle = '#FFFFFF'
     ctx.value.fillRect(0, 0, cvn.width, cvn.height)
-    ctx.value.drawImage(bg, x, y, width, height)
-    // console.log('func', arr)
-    if (arr.value.length > 0) {
-      for (let i = 0; i < arr.value.length; i++) {
-        drawShapes(arr.value[i].penanda,
-          arr.value[i].x, arr.value[i].y,
-          arr.value[i].ketebalan,
-          arr.value[i].warna,
-          arr.value[i].panjang, i + 1)
+    try {
+      ctx.value.drawImage(bg, x, y, width, height)
+
+      if (arr.value.length > 0) {
+        for (let i = 0; i < arr.value.length; i++) {
+          drawShapes(arr.value[i].penanda,
+            arr.value[i].x, arr.value[i].y,
+            arr.value[i].ketebalan,
+            arr.value[i].warna,
+            arr.value[i].panjang, i + 1)
+        }
       }
+    } catch (error) {
+      console.log('**NO** CORS permission for:', imageURL)
     }
   }
+
+  bg.onerror = function() {
+    console.log('could not load image:', imageURL)
+  }
+  // bg.crossOrigin = 'anonymous'
+  bg.src = imageURL
 }
+
+// function fetchingImg(url) {
+//   // console.log(url)
+//   fetch(url)
+//     .then(res => res.blob())
+//     .then(blob => {
+//       readFile(blob)
+//       const file = new File([blob], 'image', { type: blob.type })
+//       console.log(file)
+//     })
+// }
+
+// function readFile(input) {
+//   // const fr = new FileReader()
+// }
 
 watch(() => arr, (obj) => {
   console.log('watch', obj)

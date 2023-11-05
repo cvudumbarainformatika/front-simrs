@@ -134,6 +134,8 @@ const filterShapes = computed(() => {
 onMounted(() => {
   console.log('canvas')
 
+  // getImage()
+
   window.addEventListener('resize', resizeCanvas)
   resizeCanvas()
 })

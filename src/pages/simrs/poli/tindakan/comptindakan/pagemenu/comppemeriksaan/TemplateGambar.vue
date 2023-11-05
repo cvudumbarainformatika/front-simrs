@@ -35,7 +35,7 @@
                   <q-card
                     class="text-dark cursor-pointer"
                     :class="gambarActive===i?'gambar-active':''"
-                    @click="store.setGambarActive(i, item.url)"
+                    @click="store.setGambarActive(i, item.image)"
                   >
                     <q-img
                       :src="`${pathImg + item.url}`"
@@ -137,7 +137,7 @@ const fileGambars = computed(() => {
 })
 
 onMounted(() => {
-  console.log('fileGambars', fileGambars.value)
+  // console.log('fileGambars', fileGambars.value)
 })
 </script>
 

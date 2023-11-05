@@ -311,8 +311,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     // },
 
     initReset(val) {
+      // ini load template gambar pertama
       const master = useMasterPemeriksaanFisik()
-      const file = master?.items[0]?.gambars[0]?.url
+      const file = master?.items[0]?.gambars[0]?.image
+
       return new Promise((resolve, reject) => {
         this.dialogTemplate = false
         // this.templateActive = 'Body'
