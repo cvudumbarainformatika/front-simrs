@@ -128,7 +128,7 @@ function setSpeech(txt) {
 
 function panggil(row) {
   console.log(row)
-  const txt1 = 'paasieen ... ' + (row?.nama_panggil).toLowerCase() + ' ...Harap menujuu... ' + row?.panggil_antrian
+  const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2
   speech.synth.speak(setSpeech(txt1))
