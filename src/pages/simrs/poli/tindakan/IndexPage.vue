@@ -78,11 +78,19 @@
                 Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
               </div>
             </div>
-            <component
-              :is="menu.comp"
-              :key="pasien"
-              :pasien="pasien"
-            />
+            <Suspense>
+              <component
+                :is="menu.comp"
+                :key="pasien"
+                :pasien="pasien"
+              />
+              <!-- loading state -->
+              <template #fallback>
+                <div class="full-height column  flex-center bg-dark">
+                  loading
+                </div>
+              </template>
+            </Suspense>
           </q-page>
         </q-page-container>
         <!-- <q-page-container
