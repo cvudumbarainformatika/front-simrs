@@ -23,7 +23,7 @@
         v-if="filterredTable.length === 0"
         class="column full-height flex-center text-white"
       >
-        Belum Ada Permintaan Order ke Laborat
+        Belum Ada Permintaan Operasi
       </div>
       <q-scroll-area
         v-else
