@@ -80,11 +80,11 @@
                   <span class="text-weight-bold">Skreening Gizi</span>
                 </q-item-label>
                 <q-item-label
-                  lines="3"
+                  lines="7"
                 >
-                  <span class="">- Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? {{ item?.skreeninggizi }}</span>
+                  <span class="">- Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? <b>{{ getYT(item?.skreeninggizi) }}</b></span>
                   <div class="q-my-xs">
-                    - Apakah Asupan Makan berkurang karena tidak nafsu makan ? {{ item?.asupanmakan }}
+                    - Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.asupanmakan) }}</b>
                   </div>
                   <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
                 </q-item-label>
@@ -137,6 +137,16 @@ const lists = computed(() => {
   const arr = props.pasien?.anamnesis
   return arr?.sort((a, b) => { return b.id - a.id })
 })
+
+function getYT(val) {
+  if (val === 1 || val === '1') {
+    return 'Ya'
+  } else if (val === 0 || val === '0') {
+    return 'Tidak'
+  } else {
+    return '-'
+  }
+}
 
 function hapusItem(id) {
   $q.dialog({

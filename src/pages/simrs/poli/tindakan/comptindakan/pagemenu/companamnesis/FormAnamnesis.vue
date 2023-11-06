@@ -251,7 +251,7 @@
               </div>
               <div class="col-4">
                 <q-option-group
-                  v-model="store.form.skreeninggizi"
+                  v-model="store.form.asupanmakan"
                   :options="optionAsupanMakan"
                   color="primary"
                   inline
