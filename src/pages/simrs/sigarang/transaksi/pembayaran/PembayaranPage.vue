@@ -154,6 +154,7 @@
               type="number"
               :rules="[val => val > 0 || 'Input tidak valid' ]"
               outlined
+              @update:model-value="setNilaiBelanja($event,trm)"
             />
           </div>
         </div>
@@ -209,6 +210,11 @@ const refKwitansi = ref(null)
 const refNoBayar = ref(null)
 const tglByr = ref(null)
 const refBayar = ref(null)
+
+function setNilaiBelanja(evt, trm) {
+  trm.nilai_pembayaran = parseFloat(evt)
+  // console.log('evt', evt, 'trm', trm)
+}
 function simpan() {
   console.log('kwitansi', refKwitansi.value.$refs.refInput)
   const dbyr = store.penerimaans.filter(trm => trm.nilai_pembayaran > 0)
