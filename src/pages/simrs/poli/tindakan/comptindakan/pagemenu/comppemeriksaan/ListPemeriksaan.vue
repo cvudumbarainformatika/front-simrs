@@ -169,7 +169,7 @@
                       <q-item-label
                         lines="2"
                       >
-                        T Kesadaran : <em>{{ item?.tingkatkesadaran??'-' }}</em>
+                        T Kesadaran : <em>{{ getKesadaran(item?.tingkatkesadaran)??'-' }}</em>
                       </q-item-label>
                       <q-item-label
                         lines="2"
@@ -417,6 +417,14 @@ const props = defineProps({
   }
 })
 
+function getKesadaran(val) {
+  const temp = store.optionsTingkatkesadaran.filter(a => a.value === val)
+  if (temp.length) {
+    return temp[0].label
+  } else {
+    return '-'
+  }
+}
 // eslint-disable-next-line no-unused-vars
 function tekananDarah(val) {
   const normal = val >= 100 && val <= 120

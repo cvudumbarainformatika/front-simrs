@@ -76,6 +76,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    setFormVital(key, val) {
+      this.formVital[key] = val
+    },
     setTemplateActive(val) {
       this.templateActive = val
       this.dialogForm.anatomy = val === 'Body' ? '' : val

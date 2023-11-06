@@ -34,6 +34,7 @@
               label="N"
               :rules="[val => !!val || 'Harap diisi']"
               hide-bottom-space
+              @update:model-value="setNumber($event,'denyutjantung')"
             />
           </div>
           <div class="col-2">
@@ -45,6 +46,7 @@
               label="RR"
               :rules="[val => !!val || 'Harap diisi']"
               hide-bottom-space
+              @update:model-value="setNumber($event,'pernapasan')"
             />
           </div>
           <div class="col-2">
@@ -59,6 +61,7 @@
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
+              @update:model-value="setNumber($event,'sistole')"
             />
           </div>
           <div class="col-2">
@@ -73,6 +76,7 @@
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
+              @update:model-value="setNumber($event,'diastole')"
             />
           </div>
           <div class="col-4">
@@ -87,6 +91,7 @@
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
+              @update:model-value="setNumber($event,'suhutubuh')"
             />
           </div>
           <div class="col-6">
@@ -337,6 +342,11 @@ const props = defineProps({
   }
 })
 
+function setNumber(evt, key) {
+  const nilai = isNaN(parseFloat(evt)) ? 0 : parseFloat(evt)
+  console.log('evt', evt, 'key', key)
+  store.setFormVital(key, nilai)
+}
 onMounted(() => {
   // console.log('canvas', canvasEl.value?.clientWidth)
   // getImage()
