@@ -307,10 +307,10 @@ function setPegawai(val) {
     } else {
       val.menus = menus
     }
+    modalSearch.value = false
   }
   console.log('menu', val)
   store.setPegawai(val)
-  modalSearch.value = false
 }
 
 function onSimpanUserMenu(val) {
