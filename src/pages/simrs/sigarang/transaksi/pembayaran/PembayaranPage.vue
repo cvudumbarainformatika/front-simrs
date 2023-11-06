@@ -212,7 +212,9 @@ const tglByr = ref(null)
 const refBayar = ref(null)
 
 function setNilaiBelanja(evt, trm) {
-  trm.nilai_pembayaran = parseFloat(evt)
+  const value = isNaN(parseFloat(evt)) ? 0 : parseFloat(evt)
+  trm.nilai_pembayaran = value
+  console.log('evt', parseFloat(evt), value)
   // console.log('evt', evt, 'trm', trm)
 }
 function simpan() {
