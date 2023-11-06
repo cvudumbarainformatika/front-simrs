@@ -64,12 +64,12 @@
                   top
                 >
                   <div class="row q-my-xs">
-                    <q-btn
+                    <!-- <q-btn
                       flat
                       round
                       size="sm"
                       icon="icon-mat-edit"
-                    />
+                    /> -->
                     <q-btn
                       flat
                       round
@@ -104,6 +104,7 @@ const props = defineProps({
 })
 
 const filterredTable = computed(() => {
+  // console.log('pasien', props?.pasien)
   const val = store?.form?.nota
   const arr = props?.pasien?.penunjanglain
   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []

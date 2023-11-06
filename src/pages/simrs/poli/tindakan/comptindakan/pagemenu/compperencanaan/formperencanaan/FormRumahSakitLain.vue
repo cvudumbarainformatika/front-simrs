@@ -71,7 +71,7 @@
 
       <div class="col-3">
         <q-select
-          v-model="store.formRsLain.tiperujukan"
+          v-model="store.formRsLain.tipefaskes"
           label="Tipe Faskes"
           dense
           outlined
@@ -79,6 +79,20 @@
           use-input
           input-debounce="0"
           :options="optionTipe"
+          map-options
+          emit-value
+        />
+      </div>
+      <div class="col-3">
+        <q-select
+          v-model="store.formRsLain.tiperujukan"
+          label="Tipe Faskes"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          input-debounce="0"
+          :options="optionTipeRujukan"
           map-options
           emit-value
         />
@@ -195,6 +209,10 @@ const optionsJnsKunjungan = ref([
 ])
 const optionTipe = ref([
   { value: '2', label: 'Faskes 2' }
+])
+const optionTipeRujukan = ref([
+  { value: '0', label: 'Penuh' },
+  { value: '1', label: 'Partial' }
 ])
 const optionsRs = ref([])
 const optionsPoli = ref([])

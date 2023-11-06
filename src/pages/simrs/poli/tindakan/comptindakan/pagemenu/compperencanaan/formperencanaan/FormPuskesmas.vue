@@ -71,7 +71,7 @@
 
       <div class="col-3">
         <q-select
-          v-model="store.formPrb.tiperujukan"
+          v-model="store.formPrb.tipefaskes"
           label="Tipe Faskes"
           dense
           outlined

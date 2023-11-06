@@ -53,7 +53,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
       const resp = await api.get('/v1/simrs/kasir/rajal/kunjunganpoli', params)
       if (resp.status === 200) {
-        console.log('kunjungan', resp)
+        // console.log('kunjungan', resp)
         this.items = resp.data.data
         this.meta = resp.data
         this.loading = false
@@ -67,7 +67,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
       // const resp = await api.get('/v1/simrs/pendaftaran/umum/kunjunganpasienumum', params)
       const resp = await api.get('/v1/simrs/kasir/rajal/billbynoreg', params)
       if (resp.status === 200) {
-        console.log('bill', resp.data)
+        // console.log('bill', resp.data)
         this.rekapBill = resp.data
         this.loading = false
       }
@@ -92,7 +92,7 @@ export const useKasirRajalListKunjunganStore = defineStore('kasir_rajal_list_kun
         api.post('/v1/simrs/kasir/rajal/pembayaran', payload)
           .then(resp => {
             this.loading = false
-            console.log('resp', resp.data)
+            // console.log('resp', resp.data)
             this.qris = resp.data.result.qrValue
             resolve(resp.data)
           })

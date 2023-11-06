@@ -276,8 +276,10 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formPrb.tglrujukan = dateDbFormat(new Date())
       this.formRsLain.tglrencanakunjungan = dateDbFormat(new Date())
       this.formPrb.tglrencanakunjungan = dateDbFormat(new Date())
-      this.formRsLain.tiperujukan = '2'
-      this.formPrb.tiperujukan = '1'
+      this.formRsLain.tiperujukan = '0'
+      this.formRsLain.tipefaskes = '2'
+      this.formPrb.tiperujukan = '2'
+      this.formPrb.tipefaskes = '1'
     },
     initPasienRanap(pasien) {
       this.formRanap.norm = pasien?.norm

@@ -195,9 +195,13 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
 
     injectDataPasien(pasien, val, kode) {
       const findPasien = this.items.filter(x => x === pasien)
+      // console.log('inject pasien', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
         const target = data[kode]?.find(x => x.id === val.id)
+        // console.log('inject target pasien', target)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
         if (target) {
           Object.assign(target, val)
         } else {
