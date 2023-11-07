@@ -343,8 +343,12 @@ const props = defineProps({
 })
 
 function setNumber(evt, key) {
-  const nilai = isNaN(parseFloat(evt)) ? 0 : parseFloat(evt)
-  console.log('evt', evt, 'key', key)
+  console.log(evt, 'includes', evt.includes('.'), 'indexOf', evt.indexOf('.'), 'length', evt.length)
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  // console.log('evt', evt, 'key', key)
   store.setFormVital(key, nilai)
 }
 onMounted(() => {
