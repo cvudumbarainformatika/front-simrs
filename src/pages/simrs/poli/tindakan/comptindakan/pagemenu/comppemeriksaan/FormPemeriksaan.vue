@@ -343,7 +343,7 @@ const props = defineProps({
 })
 
 function setNumber(evt, key) {
-  console.log(evt, 'includes', evt.includes('.'), 'indexOf', evt.indexOf('.'), 'length', evt.length)
+  // console.log(evt, 'includes', evt.includes('.'), 'indexOf', evt.indexOf('.'), 'length', evt.length)
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
