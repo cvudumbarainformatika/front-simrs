@@ -352,7 +352,7 @@ onMounted(() => {
   // getImage()
   // canvasWidth.value = canvasEl.value?.clientWidth
   store.initReset(false).then(() => {
-    formRef.value.resetValidation()
+    if (formRef.value) formRef.value.resetValidation()
   })
 })
 
@@ -360,7 +360,7 @@ async function onSubmit() {
   const valid = await formRef.value?.validate()
   if (valid) {
     store.savePemeriksaan(props.pasien, menus.value).then(() => {
-      formRef.value.resetValidation()
+      if (formRef.value) formRef.value.resetValidation()
     })
   }
 }

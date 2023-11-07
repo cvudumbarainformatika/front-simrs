@@ -195,7 +195,8 @@ async function onFilterJenisTindakan(val) {
       tindakan: val
     }
   }
-  await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params).then(response => {
+  // await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params).then(response => {
+  await api.get('v1/simrs/pelayanan/dialogoperasi', params).then(response => {
     loadingTind.value = false
     const code = response?.status
     if (code === 200) {
