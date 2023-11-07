@@ -198,7 +198,7 @@ function gantiDpjp() {
 }
 
 function getImage(kelamin, row) {
-  if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || !row) {
+  if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href

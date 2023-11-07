@@ -185,6 +185,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       this.loadingSave = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
+      this.form.kodedokter = pasien?.kodedokter
       this.form.waktu_pengambilan_spesimen = this.form.tanggalpengambilanspesimen + ' ' + this.form.jampengambilanspesimen
       this.form.waktu_fiksasi_spesimen = this.form.tanggalfiksasi + ' ' + this.form.jamfiksasi
       // this.form.nota = this.notalaborat === 'LIHAT SEMUA' || this.notalaborat === 'BARU' ? '' : this.notalaborat
@@ -217,18 +218,25 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         arr.push(obj)
       }
 
+      const formbaru = { form: arr }
+
       try {
-        const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', arr)
+        const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
         console.log('save resp', resp)
-        // if (resp.status === 200) {
-        //   const storePasien = usePengunjungPoliStore()
-        //   const isi = resp?.data?.result
-        //   storePasien.injectDataPasien(pasien, isi, 'laborats')
-        //   this.setNotas(resp?.data?.nota)
-        //   notifSuccess(resp)
-        //   this.loadingSaveLab = false
-        //   this.initReset()
-        // }
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const arr = resp?.data?.result
+          if (arr.length) {
+            for (let i = 0; i < arr.length; i++) {
+              const isi = arr[i]
+              storePasien.injectDataPasien(pasien, isi, 'laborats')
+            }
+          }
+          this.setNotas(resp?.data?.nota)
+          notifSuccess(resp)
+          this.loadingSaveLab = false
+          this.initReset()
+        }
         this.loadingSaveLab = false
       } catch (error) {
         console.log('save laborat', error)
