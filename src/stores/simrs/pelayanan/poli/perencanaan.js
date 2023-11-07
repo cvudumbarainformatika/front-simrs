@@ -158,6 +158,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.kodepolibpjs = pasien?.kodepolibpjs
       this.formKontrol.dokter = pasien?.datasimpeg?.nama
       this.formKontrol.kodesistembayar = pasien?.kodesistembayar
+      this.formKontrol.kodedokterdpjp = pasien?.kodedokterdpjp
+      this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
 
       try {

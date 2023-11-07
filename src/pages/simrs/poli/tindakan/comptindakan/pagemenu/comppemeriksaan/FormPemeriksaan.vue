@@ -140,7 +140,16 @@
             </div>
             <q-separator class="q-my-xs" />
             <div class="q-gutter-sm">
-              <q-radio
+              <q-option-group
+                v-model="store.selectStatusPsikologi"
+                :options="opt"
+                color="primary"
+                inline
+                dense
+                type="checkbox"
+                @update:model-value="updateSelectionPsikologis"
+              />
+              <!-- <q-radio
                 v-model="store.formVital.statuspsikologis"
                 dense
                 val="Tidak ada kelainan"
@@ -175,7 +184,7 @@
                 dense
                 val="Lain-lain"
                 label="Lain-lain"
-              />
+              /> -->
             </div>
 
             <div class="q-mt-sm">
@@ -318,6 +327,20 @@ const store = usePemeriksaanFisik()
 const { menus } = useMenuPemeriksaan()
 const formRef = ref()
 
+const opt = ref([
+  { value: 'Tidak ada kelainan', label: 'Tidak ada kelainan' },
+  { value: 'Cemas', label: 'Cemas' },
+  { value: 'Takut', label: 'Takut' },
+  { value: 'Marah', label: 'Marah' },
+  { value: 'Sedih', label: 'Sedih' },
+  { value: 'Lain-lain', label: 'Lain-lain' }
+])
+
+const updateSelectionPsikologis = (val) => {
+  console.log(val)
+  store.setFormVital('statuspsikologis', val.join(', '))
+  console.log(store.formVital.statuspsikologis)
+}
 // const icons = ref([
 //   'icon-my-emoticon-excited-outline',
 //   'icon-my-emoticon-outline',

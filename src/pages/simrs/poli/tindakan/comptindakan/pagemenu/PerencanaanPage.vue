@@ -50,6 +50,7 @@
                 @click="hapusItem(item)"
               />
               <div
+                v-if="item?.rs4!=='Rumah Sakit Lain'"
                 class="row no-wrap items-center"
                 style="margin-top: -20px;"
               >
@@ -62,6 +63,23 @@
                 >
                   {{ item?.rs4==='Rawat Inap'?'ke ' + item?.ranap?.groups_nama : 'ke ' + item?.masterpoli?.rs2 }}
                 </q-badge>
+              </div>
+              <div
+                v-if="item?.rs4==='Rumah Sakit Lain'"
+                class="no-wrap items-center"
+                style="margin-top: -20px;"
+              >
+                <div class="row text-h6 ellipsis">
+                  {{ item?.rs4 }}
+                </div>
+                <div class="row justify-end">
+                  <q-badge
+                    outline
+                    color="accent"
+                  >
+                    ke {{ item?.transrujukan?.rs7 }}
+                  </q-badge>
+                </div>
               </div>
             </q-card-section>
 
@@ -102,7 +120,7 @@
               UOBK RSUD dr. MOH SALEH
             </div>
           </div>
-          <div>{{ setNomor(toItem) }}</div>
+          <div>No. {{ setNomor(toItem) }}</div>
         </div>
         <div class="row items-center justify-between q-mb-sm">
           <div class="col-3">

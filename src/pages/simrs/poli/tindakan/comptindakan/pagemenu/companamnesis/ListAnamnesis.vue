@@ -51,7 +51,7 @@
                 <q-item-label
                   lines="2"
                 >
-                  <span class="">Riwayat Penyakit (Sekarang) </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
+                  <span class="">Riwayat Penyakit (Sekarang) </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakitsekarang }}</span>
                 </q-item-label>
                 <q-item-label
                   lines="2"

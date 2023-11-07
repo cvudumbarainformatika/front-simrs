@@ -202,6 +202,7 @@ const updateSelection = (val) => {
   store.setForm('kebutuhanedukasi', val.join(', '))
 }
 const updateSelectionPenerima = (val) => {
+  console.log(val)
   store.setForm('kepada', val.join(', '))
 }
 

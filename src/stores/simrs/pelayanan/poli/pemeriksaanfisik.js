@@ -47,6 +47,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     shapes: [],
     mata: [],
     paru: [],
+    selectStatusPsikologi: [],
     formVital: {
       tingkatkesadaran: 0,
       denyutjantung: '', // string
@@ -339,6 +340,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         // this.shapes = []
         this.shapes = val ? [] : this.shapes
+        this.selectStatusPsikologi = []
         this.formVital = {
           tingkatkesadaran: 0,
           denyutjantung: '', // string
