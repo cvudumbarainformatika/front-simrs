@@ -52,7 +52,11 @@
               <FormInput />
             </div>
             <div class="col-8 full-height bg-grey scroll q-pa-sm">
-              <ListDiagnosa />
+              <ListDiagnosa
+                :lists="store.items"
+                @edit="(val)=> store.editForm(val)"
+                @delete="(val) =>store.deleteItem(val)"
+              />
             </div>
           </div>
         </div>
@@ -62,7 +66,15 @@
 </template>
 
 <script setup>
+import { useMasterDiagnosaKeperawatan } from 'src/stores/simrs/master/poliklinik/diagnosakeperawatan'
 import FormInput from './FormInput.vue'
 import ListDiagnosa from './ListDiagnosa.vue'
+import { onMounted } from 'vue'
+
+const store = useMasterDiagnosaKeperawatan()
+
+onMounted(() => {
+  store.getData()
+})
 
 </script>

@@ -10,8 +10,11 @@
       outlined
       standout="bg-yellow-3"
       label="Kode Diagnosa"
-      :rules="[val => !!val || 'Harap diisi']"
+      :error="getErrorField('kode')"
+      :error-message="store?.errorsForm?.kode ? store.errorsForm.kode[0] : ''"
       hide-bottom-space
+      :disable="store.editedForm"
+      @update:model-value="store.errorsForm=null"
     />
     <q-input
       v-model="store.form.nama"
@@ -27,20 +30,32 @@
         label="Simpan"
         type="submit"
         color="primary"
-        :disable="store.loadingSave"
-        :loading="store.loadingSave"
+        :disable="store.loadingsave"
+        :loading="store.loadingsave"
       />
     </div>
+
+    <!-- {{ store.errorsForm }} -->
   </q-form>
 </template>
 
 <script setup>
 
 import { useMasterDiagnosaKeperawatan } from 'src/stores/simrs/master/poliklinik/diagnosakeperawatan.js'
+import { ref } from 'vue'
 
 const store = useMasterDiagnosaKeperawatan()
+const formRef = ref()
+function getErrorField(val) {
+  if (store.errorsForm !== null) {
+    return !!store.errorsForm[val].length
+  }
+  return false
+}
 
 function simpan() {
-  store.saveData()
+  store.saveData().then(() => {
+    formRef.value.resetValidation()
+  })
 }
 </script>
