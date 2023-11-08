@@ -9,6 +9,11 @@ const poli = {
       name: 'poli.pengunjung',
       component: () => import('pages/simrs/poli/pengunjung/IndexPage.vue')
     },
+    {
+      path: '/poli/suratkontrol',
+      name: 'poli.suratkontrol',
+      component: () => import('pages/simrs/poli/suratkontrol/IndexPage.vue')
+    },
 
     {
       path: '/poli/notfound',

@@ -227,18 +227,19 @@ function updateModelPpk(val) {
   // console.log('poli ', val)
 }
 const onFilterTest = async (val, update, abort) => {
-  if (val.length < 2) {
+  if (val.length < 3) {
     abort()
     return
   }
   const params = {
     params: {
       namafaskes: val,
-      jnsfaskes: store?.formRsLain?.tiperujukan
+      jnsfaskes: store?.formRsLain?.tipefaskes
     }
   }
   const response = await api.get('v1/simrs/pelayanan/faskes', params)
   const code = response?.data?.metadata?.code
+  console.log('faskes')
   if (code === '200') {
     update(() => {
       optionsRs.value = response?.data?.result?.faskes
@@ -246,7 +247,7 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  if (val.length < 2) {
+  if (val.length < 3) {
     abort()
     return
   }

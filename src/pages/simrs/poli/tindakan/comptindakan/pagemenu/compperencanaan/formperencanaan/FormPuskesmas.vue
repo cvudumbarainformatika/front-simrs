@@ -197,14 +197,14 @@ function updateModelPoli(val) {
   store.setFormPrb('polirujukan', val.kode)
 }
 const onFilterTest = async (val, update, abort) => {
-  if (val.length < 2) {
+  if (val.length < 3) {
     abort()
     return
   }
   const params = {
     params: {
       namafaskes: val,
-      jnsfaskes: store?.formPrb?.tiperujukan
+      jnsfaskes: store?.formPrb?.tipefaskes
     }
   }
   const response = await api.get('v1/simrs/pelayanan/faskes', params)
@@ -216,7 +216,7 @@ const onFilterTest = async (val, update, abort) => {
   }
 }
 const filterPoli = async (val, update, abort) => {
-  if (val.length < 2) {
+  if (val.length < 3) {
     abort()
     return
   }
