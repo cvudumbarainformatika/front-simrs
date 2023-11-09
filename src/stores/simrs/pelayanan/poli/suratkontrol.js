@@ -22,7 +22,9 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     ],
     form: {
       tglrencanakontrol: date.formatDate(Date.now(), 'YYYY-MM-DD')
-    }
+    },
+    jadwalDpjps: [],
+    loadingJadwalDokter: false
   }),
   actions: {
     setParam(key, val) {
@@ -56,6 +58,31 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
           })
           .catch(() => {
             this.loading = false
+          })
+      })
+    },
+    getjadwalDokterDpjp() {
+      this.jadwalDpjps = []
+      this.loadingJadwalDokter = true
+      // console.log('get jadwal dokter')
+
+      return new Promise(resolve => {
+        api.post('v1/simrs/rajal/poli/jadwal', this.form)
+          .then(resp => {
+            this.loadingJadwalDokter = false
+            console.log(resp.data)
+            if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
+              this.jadwalDpjps = resp?.data?.result
+              if (this.jadwalDpjps.length) {
+                this.setForm('kodeDokter', this.jadwalDpjps[0].kodedokter)
+              }
+            } else {
+              this.setForm('kodeDokter', null)
+            }
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingJadwalDokter = false
           })
       })
     },

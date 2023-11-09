@@ -28,18 +28,39 @@
     <app-dialog-form
       v-model="store.isOpen"
       title="Edit Surat Kontrol"
+      :loading="store.loading || store.loadingJadwalDokter"
       @save-form="save"
     >
       <template #default>
         <div class="full-width">
-          <app-input-date
-            :model="store.form.tglrencanakontrol"
-            outlined
-            label="Tanggal Rencana Kontrol"
-            :loading="store.loading"
-            :disable="store.loading"
-            @set-model="store.setForm('tglrencanakontrol', $event)"
-          />
+          <div class="row q-mb-sm">
+            <div class="col-12">
+              <app-input-date
+                :model="store.form.tglrencanakontrol"
+                outlined
+                label="Tanggal Rencana Kontrol"
+                :loading="store.loading"
+                :disable="store.loading"
+                @set-model="setTanggal"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-autocomplete
+                :key="store.form.kodeDokter"
+                v-model="store.form.kodeDokter"
+                outlined
+                label="Pilih Dokter"
+                autocomplete="namadokter"
+                option-label="namadokter"
+                option-value="kodedokter"
+                :loading="store.loadingJadwalDokter"
+                :disable="store.loadingJadwalDokter"
+                :source="store.jadwalDpjps"
+              />
+            </div>
+          </div>
         </div>
       </template>
     </app-dialog-form>
@@ -56,6 +77,10 @@ const style = useStyledStore()
 const store = useSuratKontrolPoliStore()
 
 store.getData()
+function setTanggal(val) {
+  store.setForm('tglrencanakontrol', val)
+  store.getjadwalDokterDpjp()
+}
 function save() {
   console.log(store.form)
   store.simpanEdit()

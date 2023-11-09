@@ -43,9 +43,10 @@ function openForm(val) {
   console.log(val)
   if (val.namaJnsKontrol !== 'Surat Kontrol') return notifCenterVue('Mohon Maaf, Untuk sementara yang bisa di edit hanya surat Kontrol')
   store.setForm('noSuratKontrol', val.noSuratKontrol)
-  store.setForm('noSEP', val.noSepAsalKontrol)
-  store.setForm('kodeDokter', val.kodeDokter)
-  store.setForm('poliKontrol', val.poliTujuan)
+  store.setForm('noSepAsalKontrol', val.noSepAsalKontrol)
+  store.setForm('kodeDokter', parseInt(val.kodeDokter))
+  store.setForm('poliTujuan', val.poliTujuan)
   store.setOpen()
+  store.getjadwalDokterDpjp()
 }
 </script>

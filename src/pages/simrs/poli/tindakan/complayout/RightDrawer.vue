@@ -25,7 +25,7 @@
             v-for="(item, i) in store?.items"
             :key="i"
             expand-separator
-            :label="item?.ruangan"
+            :label="item?.ruangan + ' | '+ item?.rs1 "
             :caption="tanggal(item?.tanggal)"
           >
             <q-card dark>
@@ -121,8 +121,11 @@
                       >
                         {{ lab?.pemeriksaanlab?.rs2 }}
                       </td>
-                      <td class="text-right">
-                        ....
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ lab?.rs21 }}
                       </td>
                     </tr>
                   </tbody>
