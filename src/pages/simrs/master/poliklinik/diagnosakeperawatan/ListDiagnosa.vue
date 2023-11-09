@@ -29,6 +29,8 @@
         v-ripple
         clickable
         class="q-py-xs"
+        :class="activated === row.id? 'bg-yellow-3': ''"
+        @click="activated = row.id"
       >
         <q-item-section style="max-width: 100px;">
           {{ row.kode }}
@@ -36,6 +38,13 @@
         <q-item-section>{{ row.nama }}</q-item-section>
         <q-item-section side>
           <div class="row q-gutter-xs">
+            <q-btn
+              flat
+              size="sm"
+              color="primary"
+              label="Add Interv"
+              @click="emits('setIntervensi', row)"
+            />
             <q-btn
               flat
               icon="icon-mat-edit"
@@ -60,6 +69,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 const props = defineProps({
   lists: {
     type: Array,
@@ -67,5 +78,7 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['edit', 'delete'])
+const activated = ref(0)
+
+const emits = defineEmits(['edit', 'delete', 'setIntervensi'])
 </script>

@@ -48,14 +48,28 @@
       >
         <div class="absolute full-width full-height">
           <div class="row full-height">
-            <div class="col-4 full-height scroll q-pa-sm">
+            <div
+              v-if="!store.isIntervensi"
+              class="col-5 full-height scroll q-pa-sm"
+            >
+              <div class="q-px-sm text-weight-bold">
+                Form Master Diagnosa Keperawatan
+                <q-separator class="q-my-sm" />
+              </div>
               <FormInput />
             </div>
-            <div class="col-8 full-height bg-grey scroll q-pa-sm">
+            <div
+              v-else
+              class="col-5 full-height scroll q-pa-sm"
+            >
+              <FormIntevensi :diagnosa="store?.diagnosa" />
+            </div>
+            <div class="col-7 full-height bg-grey scroll q-pa-sm">
               <ListDiagnosa
                 :lists="store.items"
                 @edit="(val)=> store.editForm(val)"
-                @delete="(val) =>store.deleteItem(val)"
+                @delete="(val) =>hapusDiagnosa(val)"
+                @set-intervensi="store.setIntervensi"
               />
             </div>
           </div>
@@ -68,13 +82,33 @@
 <script setup>
 import { useMasterDiagnosaKeperawatan } from 'src/stores/simrs/master/poliklinik/diagnosakeperawatan'
 import FormInput from './FormInput.vue'
+import FormIntevensi from './FormIntevensi.vue'
 import ListDiagnosa from './ListDiagnosa.vue'
+import { useQuasar } from 'quasar'
 import { onMounted } from 'vue'
 
 const store = useMasterDiagnosaKeperawatan()
+const $q = useQuasar()
 
 onMounted(() => {
   store.getData()
 })
+
+function hapusDiagnosa(id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('HAPUS', id)
+    store.deleteItem(id)
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 
 </script>

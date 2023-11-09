@@ -12,7 +12,11 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
       nama: ''
     },
     errorsForm: null,
-    editedForm: false
+    editedForm: false,
+    isIntervensi: false,
+    diagnosa: null,
+
+    intervensi: ''
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -44,7 +48,7 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
     async getData() {
       this.loadingList = true
       const resp = await api.get('v1/simrs/master/diagnosakeperawatan/getall')
-      // console.log(resp)
+      console.log('master diagnosa', resp)
       if (resp.status === 200) {
         this.items = resp?.data?.result
       }
@@ -52,6 +56,7 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
     },
 
     editForm(val) {
+      this.isIntervensi = false
       this.editedForm = true
       this.form = val
     },
@@ -83,6 +88,58 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
 
         resolve()
       })
+    },
+
+    setIntervensi(row) {
+      this.diagnosa = row
+      this.isIntervensi = true
+    },
+
+    async saveIntervensi(group, row) {
+      const form = {
+        group,
+        nama: row?.nama ?? this.intervensi,
+        kode: this.diagnosa?.kode
+      }
+      if (row?.id) {
+        form.id = row?.id
+      }
+
+      console.log(form)
+      try {
+        const resp = await api.post('v1/simrs/master/diagnosakeperawatan/storeintervensi', form)
+        console.log('intervensi', resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+
+          const ada = this.diagnosa?.intervensis?.filter(x => x.id === row?.id)
+          console.log('ada', this.diagnosa)
+          if (!ada.length) {
+            this.diagnosa?.intervensis?.push(resp?.data?.result)
+          }
+          this.intervensi = ''
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async deleteIntervensi(id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/master/diagnosakeperawatan/deleteintervensi', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          const findItem = this.diagnosa?.intervensis?.filter(x => x.id === id)
+          if (findItem.length) {
+            const pos = this.diagnosa?.intervensis?.findIndex(el => el.id === id)
+            if (pos >= 0) { this.diagnosa?.intervensis.splice(pos, 1) }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 })
