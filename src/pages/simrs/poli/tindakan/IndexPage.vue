@@ -44,6 +44,7 @@
             @click-menu="(val)=> menu = val"
             @history-pasien="historyPasien"
             @print-rekap="emits('printRekapBill')"
+            @icare="getIcare"
           />
         </q-drawer>
 
@@ -209,6 +210,14 @@ onUnmounted(() => {
 
 function historyPasien() {
   drawerRight.value = !drawerRight.value
+}
+function getIcare() {
+  store.getDataIcare(props.pasien).then(resp => {
+    if (resp) {
+      console.log('anu', resp?.response?.url)
+      window.open(resp?.response?.url, '_blank')
+    }
+  })
 }
 </script>
 

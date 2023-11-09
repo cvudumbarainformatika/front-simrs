@@ -75,9 +75,10 @@
           flat
           icon="icon-mat-menu_book"
           class="gt-xs"
+          @click="emits('icare')"
         >
           <q-tooltip class="bg-dark text-white">
-            Rekam Medis Pasien
+            i-care
           </q-tooltip>
         </q-btn>
         <q-btn
@@ -111,7 +112,7 @@ import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
 const printRekap = ref(false)
 // const tinggiBot = ref(180)
-const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap'])
+const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare'])
 defineProps({
   pasien: {
     type: Object,

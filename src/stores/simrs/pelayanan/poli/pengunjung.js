@@ -2,12 +2,14 @@ import { defineStore } from 'pinia'
 import { Notify } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 
 export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
   state: () => ({
     items: [],
     meta: null,
     loading: false,
+    loadingIcare: false,
     loadingTerima: false,
     noreg: null,
 
@@ -374,6 +376,30 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
+    },
+    getDataIcare(pasien) {
+      this.loadingIcare = true
+      console.log('get data icare', pasien)
+      const param = {
+        params: {
+          noka: pasien.noka,
+          dpjp: pasien.kodedokterdpjp
+        }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/icare', param)
+          .then(resp => {
+            this.loadingIcare = false
+            console.log('resp icare', resp)
+            if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
+              resolve(resp.data)
+            } else {
+              notifErrVue(resp?.data?.metadata?.message)
+              resolve(false)
+            }
+          })
+          .catch(() => { this.loadingIcare = false })
+      })
     }
   }
 })
