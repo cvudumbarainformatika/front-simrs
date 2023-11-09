@@ -16,11 +16,16 @@ export const useAnamnesis = defineStore('anamnesis', {
       keteranganalergi: '',
       riwayatpengobatan: '',
       // baru
+      riwayatpekerjaan: '',
       riwayatpenyakitkeluarga: '',
       skreeninggizi: 0,
       asupanmakan: 0,
       kondisikhusus: '',
-      skor: 0
+      skor: 0,
+
+      // baru skornyeri
+      skornyeri: 0,
+      keteranganskornyeri: 'tidak ada nyeri'
     },
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
@@ -89,6 +94,18 @@ export const useAnamnesis = defineStore('anamnesis', {
       this.form[key] = val
     },
 
+    setKeteranganSkornyeri(val) {
+      if (val === 0) {
+        this.form.keteranganskornyeri = 'tidak ada nyeri'
+      } else if (val > 0 && val <= 3) {
+        this.form.keteranganskornyeri = 'nyeri ringan'
+      } else if (val > 3 && val <= 6) {
+        this.form.keteranganskornyeri = 'nyeri sedang'
+      } else if (val > 6 && val <= 10) {
+        this.form.keteranganskornyeri = 'nyeri berat'
+      }
+    },
+
     async deleteData(pasien, id) {
       const payload = { id }
       try {
@@ -149,11 +166,16 @@ export const useAnamnesis = defineStore('anamnesis', {
           keteranganalergi: '',
           riwayatpengobatan: '',
           // baru
+          riwayatpekerjaan: '',
           riwayatpenyakitkeluarga: '',
           skreeninggizi: 0,
           asupanmakan: 0,
           kondisikhusus: '',
-          skor: 0
+          skor: 0,
+
+          // baru skornyeri
+          skornyeri: 0,
+          keteranganskornyeri: 'tidak ada nyeri'
         }
         this.selection = []
 

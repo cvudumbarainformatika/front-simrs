@@ -61,7 +61,13 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       sosialekonomi: '',
       spiritual: '',
       skornyeri: 0,
-      keteranganskornyeri: 'tidak ada nyeri'
+      keteranganskornyeri: 'tidak ada nyeri',
+
+      // baru
+      kesadaran: '',
+      kesadarane: 0,
+      kesadaranm: 0,
+      kesadaranv: 0
     },
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' },
@@ -177,6 +183,25 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       } else if (val > 6 && val <= 10) {
         this.formVital.keteranganskornyeri = 'nyeri berat'
       }
+    },
+
+    setTingkatKesadaran(val) {
+      let result = ''
+      if (val === 3) {
+        result = 'Coma'
+      } else if (val > 3 && val <= 6) {
+        result = 'Stupor'
+      } else if (val > 6 && val <= 9) {
+        result = 'Somnolen'
+      } else if (val > 9 && val <= 11) {
+        result = 'Delirium'
+      } else if (val > 11 && val <= 13) {
+        result = 'Apatis'
+      } else if (val > 13 && val <= 15) {
+        result = 'Compos Mentis'
+      }
+
+      this.formVital.kesadaran = result
     },
     async savePemeriksaan(pasien, menus) {
       this.loadingform = true
@@ -354,7 +379,13 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           sosialekonomi: '',
           spiritual: '',
           skornyeri: 0,
-          keteranganskornyeri: 'tidak ada nyeri'
+          keteranganskornyeri: 'tidak ada nyeri',
+
+          // baru
+          kesadaran: '',
+          kesadarane: 0,
+          kesadaranm: 0,
+          kesadaranv: 0
         }
 
         resolve()

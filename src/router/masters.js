@@ -144,6 +144,11 @@ const masters = {
           path: '/master/poliklinik/pemeriksaanfisik',
           name: 'master.poliklinik.pemeriksaanfisik',
           component: () => import('pages/simrs/master/poliklinik/pemeriksaanfisik/IndexPage.vue')
+        },
+        {
+          path: '/master/poliklinik/diagnosakeperawatan',
+          name: 'master.poliklinik.diagnosakeperawatan',
+          component: () => import('pages/simrs/master/poliklinik/diagnosakeperawatan/IndexPage.vue')
         }
         // {
         //   path: '/master/tindakan/ranap',

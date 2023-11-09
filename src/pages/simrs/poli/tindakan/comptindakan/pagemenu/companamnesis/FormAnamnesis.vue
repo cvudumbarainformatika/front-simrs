@@ -149,7 +149,7 @@
             label="Keluhan Utama"
             :rules="[val => !!val || 'Harap Diisi terlebih dahulu']"
             hide-bottom-space
-            style="width:100%"
+            style="width:50%"
           />
           <q-input
             v-model="store.form.riwayatpenyakitsekarang"
@@ -185,6 +185,15 @@
             standout="bg-yellow-3"
             style="width:50%"
             label="Riwayat Penyakit Keluarga"
+            stack-label
+          />
+          <q-input
+            v-model="store.form.riwayatpekerjaan"
+            outlined
+            autogrow
+            standout="bg-yellow-3"
+            style="width:50%"
+            label="Riwayat Pekerjaan yg berhubungan dgn zat berbahaya"
             stack-label
           />
           <div class="col-12">
@@ -287,6 +296,27 @@
                 />
               </div>
             </div>
+          </div>
+          <div class="col-6">
+            <div class="text-weight-bold">
+              Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganskornyeri }}</em>
+            </div>
+            <q-separator class="q-my-xs" />
+            <q-slider
+              v-model="store.form.skornyeri"
+              color="primary"
+              thumb-color="primary"
+              label-color="primary"
+              label-text-color="yellow"
+              markers
+              :marker-labels="(val)=> fnMarkerLabel"
+              marker-labels-class="text-primary"
+              label-always
+              switch-label-side
+              :min="0"
+              :max="10"
+              @update:model-value="store.setKeteranganSkornyeri"
+            />
           </div>
         </div>
         <q-separator class="q-my-md" />

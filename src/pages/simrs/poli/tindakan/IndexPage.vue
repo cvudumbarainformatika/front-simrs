@@ -184,6 +184,7 @@ const menu = ref(menus.value[0])
 
 const inacbg = useInacbgPoli()
 onMounted(() => {
+  console.log('pasien', props?.pasien)
   menu.value = menus.value[0]
   inacbg.getDataIna(props.pasien)
   inacbg.setTotalTindakan(props.pasien)
@@ -204,6 +205,7 @@ onBeforeUnmount(() => {
 })
 
 onUnmounted(() => {
+  console.log('pasien', props.pasien)
   menu.value = menus.value[0]
   fisik.setFullCanvasFalse()
 })
