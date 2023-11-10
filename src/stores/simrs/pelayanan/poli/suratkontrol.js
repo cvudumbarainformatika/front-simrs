@@ -16,10 +16,9 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       tglakhir: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       filter: '2'
     },
-    filters: [
-      { nama: 'Tanggal Entri', value: '1' },
-      { nama: 'Tanggal Rencana Kontrol', value: '2' }
-    ],
+    tgl: {},
+    filters: false,
+    custom: false,
     form: {
       tglrencanakontrol: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
@@ -33,8 +32,46 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     setForm(key, val) {
       this.form[key] = val
     },
+    setDate(val) {
+      console.log('val tgl ', val)
+      this.tgl = val
+      const { to, from, status } = val
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+    },
+    setPeriodik(val) {
+      console.log('val tgl per', val)
+      // this.params.page = 1
+      const { to, from, status } = val
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+      console.log('periodik', this.params)
+      this.getData()
+    },
     setOpen() {
       this.isOpen = !this.isOpen
+    },
+    setFilters() {
+      this.filters = !this.filters
+    },
+    setCustom() {
+      this.custom = !this.custom
+    },
+    setQ(val) {
+      this.fNama = val
+      this.filterItem(val)
+    },
+    filterData(val) {
+      const { to, from, q, status } = val // status
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+      this.fNama = q
+      this.setCustom()
+      this.getData()
+      // console.log(val)
     },
     filterItem(val) {
       this.filteredItems = this.items.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))

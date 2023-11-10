@@ -6,8 +6,15 @@
     <div class="header bg-primary text-white">
       <HeaderComp
         :full="style.componentfull"
+        :search="store.fNama"
+        :custom="store.custom"
         @fullscreen="style.setComponentFull"
         @refresh="store.getData"
+        @set-periode="(val)=>store.setPeriodik(val)"
+        @set-tanggal="(val)=>store.setDate(val)"
+        @set-search="store.setQ"
+        @filter="store.setFilters"
+        @normal="store.setCustom"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">
@@ -25,6 +32,13 @@
     >
       <ListSuratKontrol />
     </q-card>
+    <FilterPage
+      v-model="store.filters"
+      :search="store.fNama"
+      @close="store.setFilters"
+      @filter-data="store.filterData"
+      @set-search="store.setQ"
+    />
     <app-dialog-form
       v-model="store.isOpen"
       title="Edit Surat Kontrol"
@@ -72,6 +86,7 @@ import { useSuratKontrolPoliStore } from 'src/stores/simrs/pelayanan/poli/suratk
 import HeaderComp from './comp/HeaderComp.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListSuratKontrol from './comp/ListSuratKontrol.vue'
+import FilterPage from './comp/FilterPage.vue'
 
 const style = useStyledStore()
 const store = useSuratKontrolPoliStore()
