@@ -190,6 +190,7 @@ onMounted(() => {
   inacbg.setTotalTindakan(props.pasien)
   inacbg.setTotalLaborat(props.pasien)
   master.getData()
+  fisik.initReset(false, props?.pasien)
 })
 
 onBeforeMount(() => {

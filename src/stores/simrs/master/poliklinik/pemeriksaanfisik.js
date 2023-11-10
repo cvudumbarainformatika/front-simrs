@@ -61,12 +61,13 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
     },
 
     selectedItem(item) {
+      this.multiLokalis = []
       this.isFromImg = false
       this.form = item
       const arr = item?.lokalis?.split('||')
-      const found = this.masterpoli?.some(r => arr.includes(r.kodepoli))
-      // this.multiLokalis = this.masterpoli?.filter(x=>x.kodepoli === )
-      console.log(found)
+      const found = this.masterpoli?.filter(item => arr.includes(item?.kodepoli))
+      console.log('founds', found)
+      this.multiLokalis = found
     },
 
     addImg(item) {

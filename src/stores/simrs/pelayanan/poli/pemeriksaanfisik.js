@@ -339,10 +339,27 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     //   console.log('xxx', val)
     // },
 
-    initReset(val) {
+    initReset(val, pasien) {
       // ini load template gambar pertama
       const master = useMasterPemeriksaanFisik()
-      const file = master?.items[0]?.gambars[0]?.image
+      let file = null
+      let template = null
+      let imgActive = 0
+      if (val) {
+        file = master?.items[0]?.gambars[0]?.image
+        template = master?.items[0]?.gambars[0]?.nama
+        imgActive = 0
+      } else {
+        file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image
+        template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.nama
+        imgActive = this.gambarActive
+      }
+      this.fileGambar = file
+      this.templateActive = template
+      // console.log('init', file)
+      console.log('init template', this.templateActive)
+      console.log('init gambar', this.gambarActive)
+      console.log('init master', master?.items)
 
       return new Promise((resolve, reject) => {
         this.dialogTemplate = false
@@ -350,7 +367,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         // this.gambarActive = 0
         // this.fileGambar = file ?? null
         this.templateActive = val ? 'Body' : this.templateActive
-        this.gambarActive = val ? 0 : this.gambarActive
+        this.gambarActive = imgActive
         this.fileGambar = val ? file ?? null : this.fileGambar
         this.writingMode = false
         this.dialogForm = {

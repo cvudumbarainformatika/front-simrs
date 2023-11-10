@@ -114,7 +114,7 @@ import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 
 const store = usePemeriksaanFisik()
 // const storageApps = useAplikasiStore()
-const { getImage, menus } = useMenuPemeriksaan()
+const { menus } = useMenuPemeriksaan()
 const { enter, leave } = useSlideFromLeft()
 // const active = ref(0)
 
@@ -143,7 +143,7 @@ onMounted(() => {
 onBeforeMount(() => {
   console.log(menus.value)
   store.setFullCanvasFalse()
-  getImage()
+  // getImage()
 })
 
 onUnmounted(() => {
