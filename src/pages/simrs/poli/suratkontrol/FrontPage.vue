@@ -83,6 +83,7 @@
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
 import { useSuratKontrolPoliStore } from 'src/stores/simrs/pelayanan/poli/suratkontrol'
+import { onUnmounted } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListSuratKontrol from './comp/ListSuratKontrol.vue'
@@ -100,4 +101,8 @@ function save() {
   console.log(store.form)
   store.simpanEdit()
 }
+onUnmounted(() => {
+  console.log('unmounted')
+  store.resetParam()
+})
 </script>

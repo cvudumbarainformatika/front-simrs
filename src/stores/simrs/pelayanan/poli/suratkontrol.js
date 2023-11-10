@@ -26,6 +26,16 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     loadingJadwalDokter: false
   }),
   actions: {
+    resetParam() {
+      this.fNama = ''
+      this.params = {
+        tglawal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglakhir: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        filter: '2'
+      }
+      this.filters = false
+      this.custom = false
+    },
     setParam(key, val) {
       this.params[key] = val
     },
@@ -33,7 +43,6 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.form[key] = val
     },
     setDate(val) {
-      console.log('val tgl ', val)
       this.tgl = val
       const { to, from, status } = val
       this.params.tglakhir = to
@@ -41,13 +50,10 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.params.filter = status
     },
     setPeriodik(val) {
-      console.log('val tgl per', val)
-      // this.params.page = 1
       const { to, from, status } = val
       this.params.tglakhir = to
       this.params.tglawal = from
       this.params.filter = status
-      console.log('periodik', this.params)
       this.getData()
     },
     setOpen() {
