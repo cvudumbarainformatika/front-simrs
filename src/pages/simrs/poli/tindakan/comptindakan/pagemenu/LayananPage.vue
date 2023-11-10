@@ -33,16 +33,22 @@
           class="full-height"
         >
           <q-tab-panel
-            name="Diagnosa"
+            name="Diagnosa Medik"
             class="full-height q-pa-none"
           >
             <DiagnosaPage :pasien="props.pasien" />
           </q-tab-panel>
           <q-tab-panel
-            name="Tindakan"
+            name="Tindakan Medik"
             class="full-height q-pa-none"
           >
             <TindakanPage :pasien="props.pasien" />
+          </q-tab-panel>
+          <q-tab-panel
+            name="Diagnosa Keperawatan"
+            class="full-height q-pa-none"
+          >
+            <DiagnosaKeperawatanPage :pasien="props.pasien" />
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -55,6 +61,7 @@ import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 // import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
+import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
 import { onMounted } from 'vue'
 
 const props = defineProps({
@@ -68,9 +75,6 @@ const store = useLayananPoli()
 
 // const inacbg = useInacbgPoli()
 onMounted(() => {
-  // console.log('layananPage')
-  // inacbg.getDataIna(props.pasien)
-  // inacbg.setTotalTindakan(props.pasien)
   store.getNota(props.pasien)
 })
 </script>

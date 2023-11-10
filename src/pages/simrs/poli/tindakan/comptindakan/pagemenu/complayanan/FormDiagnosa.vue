@@ -203,7 +203,7 @@ function onSubmit() {
 }
 
 function resetValidation() {
-  formRef.value.resetValidation()
+  // formRef.value.resetValidation()
 }
 defineExpose({ resetValidation })
 const options = ref([])

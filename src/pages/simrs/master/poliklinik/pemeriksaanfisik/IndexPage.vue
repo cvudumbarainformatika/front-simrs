@@ -78,6 +78,8 @@ const store = useMasterPemeriksaanFisik()
 
 onMounted(() => {
   store.getData()
+  store.getMasterPoli()
+  store.initReset()
 })
 
 function reset() {

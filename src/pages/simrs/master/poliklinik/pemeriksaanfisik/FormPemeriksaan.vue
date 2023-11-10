@@ -26,6 +26,21 @@
       outlined
       standout="bg-yellow-3"
       label="Lokalis poli"
+      class="hidden"
+    />
+    <q-select
+      v-model="store.multiLokalis"
+      multiple
+      :options="store.masterpoli"
+      use-chips
+      stack-label
+      option-label="polirs"
+      option-value="kodepoli"
+      label="Lokalis Poli"
+      use-input
+      outlined
+      standout="bg-yellow-3"
+      @update:model-value="(val)=> settingLokalis(val)"
     />
     <q-separator class="q-my-lg" />
     <div class="text-right">
@@ -50,5 +65,9 @@ function simpan() {
   store.simpanMaster().then(() => {
     formRef.value.resetValidation()
   })
+}
+
+function settingLokalis(val) {
+  store.setForm('lokalis', val?.map(x => x.kodepoli)?.join('||'))
 }
 </script>

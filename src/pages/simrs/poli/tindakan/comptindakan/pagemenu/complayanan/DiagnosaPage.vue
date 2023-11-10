@@ -46,7 +46,7 @@ const refForm = ref()
 function savePemeriksaan() {
   store.simpanDiagnosa(props.pasien).then(() => {
     // console.log(refForm.value)
-    refForm.value.resetValidation()
+    // refForm.value.resetValidation()
   })
 }
 

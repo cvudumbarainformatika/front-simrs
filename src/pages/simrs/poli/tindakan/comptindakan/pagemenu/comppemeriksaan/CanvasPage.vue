@@ -665,7 +665,7 @@ const resetTanda = () => {
 
 const saveImage = () => {
   const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
-  console.log('gambar', imageURL)
+  // console.log('gambar', imageURL)
   emits('saveImage', imageURL)
   // setTimeout(() => {
   //   const cvn = canvasRef.value
