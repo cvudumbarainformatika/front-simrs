@@ -273,6 +273,12 @@
               </div>
             </div>
           </div>
+          <div
+            v-if="pasien?.kodepoli==='POL018'"
+            class="col-12"
+          >
+            <dada-paru-form-vue />
+          </div>
         </q-form>
       </q-scroll-area>
     </div>
@@ -372,6 +378,7 @@
 </template>
 
 <script setup>
+import DadaParuFormVue from './khusus/DadaParuForm.vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { onMounted, ref } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
