@@ -189,7 +189,7 @@
                       <q-item-label
                         lines="2"
                       >
-                        Skor Nyeri : <em>{{ item?.scorenyeri??'-' }}</em>
+                        kesadaran : <em>{{ item?.kesadaran??'-' }}</em>
                       </q-item-label>
                     </q-item-section>
                   </q-item>

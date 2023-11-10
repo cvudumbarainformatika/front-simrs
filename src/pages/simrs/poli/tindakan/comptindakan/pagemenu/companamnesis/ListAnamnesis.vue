@@ -87,6 +87,20 @@
                     - Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.asupanmakan) }}</b>
                   </div>
                   <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
+                  <div>
+                    - Skor Nyeri : <b>{{ item?.scorenyeri??'-' }}</b>
+                    <span
+                      v-if="!isNaN(parseInt(item?.scorenyeri))"
+                      class="q-mx-sm"
+                    >
+                      <q-icon
+                        size="xs"
+                        color="teal"
+                        :name="iconNyeri(item?.scorenyeri)"
+                      />
+                    </span>
+                    <em class="text-primary"> {{ item?.keteranganscorenyeri ?? '-' }}</em>
+                  </div>
                 </q-item-label>
               </q-item-section>
 
@@ -163,5 +177,27 @@ function hapusItem(id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function iconNyeri (anu) {
+  const val = typeof anu === 'string' ? (isNaN(parseInt(anu)) ? 0 : parseInt(anu)) : 0
+  // console.log('val nyeri', val)
+  // console.log('anu nyeri', anu)
+  let icon = 'icon-my-emoticon-excited-outline'
+  if (val < 2) {
+    icon = 'icon-my-emoticon-excited-outline'
+  } else if (val >= 2 && val < 4) {
+    icon = 'icon-my-emoticon-outline'
+  } else if (val >= 4 && val < 6) {
+    icon = 'icon-my-emoticon-neutral-outline'
+  } else if (val >= 6 && val < 8) {
+    icon = 'icon-my-emoticon-confused-outline'
+  } else if (val >= 8 && val < 10) {
+    icon = 'icon-my-emoticon-angry-outline'
+  } else if (val === 10) {
+    icon = 'icon-my-emoticon-cry-outline'
+  }
+
+  return icon
 }
 </script>

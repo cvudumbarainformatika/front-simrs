@@ -25,7 +25,7 @@ export const useAnamnesis = defineStore('anamnesis', {
 
       // baru skornyeri
       skornyeri: 0,
-      keteranganskornyeri: 'tidak ada nyeri'
+      keteranganscorenyeri: 'tidak ada nyeri'
     },
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
@@ -82,7 +82,9 @@ export const useAnamnesis = defineStore('anamnesis', {
         skreeninggizi: val.skreeninggizi,
         asupanmakan: val.asupanmakan,
         kondisikhusus: val.kondisikhusus,
-        skor: val.skor
+        skor: val.skor,
+        skornyeri: isNaN(parseInt(val?.scorenyeri)) ? 0 : parseInt(val?.scorenyeri),
+        keteranganscorenyeri: val?.keteranganscorenyeri
       }
       const kommatext = val?.riwayatalergi?.split(', ')
       this.selection = kommatext
@@ -96,13 +98,13 @@ export const useAnamnesis = defineStore('anamnesis', {
 
     setKeteranganSkornyeri(val) {
       if (val === 0) {
-        this.form.keteranganskornyeri = 'tidak ada nyeri'
+        this.form.keteranganscorenyeri = 'tidak ada nyeri'
       } else if (val > 0 && val <= 3) {
-        this.form.keteranganskornyeri = 'nyeri ringan'
+        this.form.keteranganscorenyeri = 'nyeri ringan'
       } else if (val > 3 && val <= 6) {
-        this.form.keteranganskornyeri = 'nyeri sedang'
+        this.form.keteranganscorenyeri = 'nyeri sedang'
       } else if (val > 6 && val <= 10) {
-        this.form.keteranganskornyeri = 'nyeri berat'
+        this.form.keteranganscorenyeri = 'nyeri berat'
       }
     },
 

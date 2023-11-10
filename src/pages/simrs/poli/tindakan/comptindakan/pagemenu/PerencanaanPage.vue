@@ -104,8 +104,16 @@
         <div class="row items-center justify-between q-mb-sm">
           <div>
             <img
+              v-if="pasien?.groups==='1'"
               src="~assets/logos/logobpjs.svg"
               spinner-color="white"
+              class="q-mb-sm"
+            >
+            <img
+              v-else
+              src="~assets/logos/logo-rsud.png"
+              spinner-color="white"
+              style="height: 2cm; max-width: 2cm"
             >
           <!-- style="height: 3.56cm; max-width: 2.86cm" -->
           </div>
