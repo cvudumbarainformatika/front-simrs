@@ -299,7 +299,7 @@
           </div>
           <div class="col-6">
             <div class="text-weight-bold">
-              Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganskornyeri }}</em>
+              Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganscorenyeri }}</em>
               <span class="q-ml-sm">
                 <q-icon
                   size="lg"

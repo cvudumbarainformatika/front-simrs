@@ -51,6 +51,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
             console.log('list surat kontrol ', resp.data)
             this.items = resp?.data?.result?.list
             this.filteredItems = this.items.length ? this.items.filter(a => a.nama.toLowerCase().includes(this.fNama.toLowerCase())) : []
+            // this.filteredItems = this.items.length ? this.items.filter(a => a.namaJnsKontrol === 'Surat Kontrol' && a.jnsPelayanan === 'Rawat Inap') : []
             if (resp?.data?.original?.code) {
               notifErrVue(resp?.data?.original?.message)
             }

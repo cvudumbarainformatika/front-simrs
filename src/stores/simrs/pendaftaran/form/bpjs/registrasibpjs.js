@@ -717,7 +717,7 @@ export const useRegistrasiPasienBPJSStore = defineStore('registrasi_pasien_BPJS'
             if (resp.data.metadata.code !== '200') {
               notifErrVue('Cari Surat Kontrol : ' + resp.data.metadata.message)
             }
-            const rujukan = resp.data.result.sep.provPerujuk.noRujukan
+            const rujukan = resp.data.result.flagKontrol === 'False' ? resp.data.result.sep.noSep : resp.data.result.sep.provPerujuk.noRujukan
             console.log('surat kontrol rujukan', rujukan)
             if (!this.form.norujukan) {
               console.log('tidak ada nomor rujukan')
