@@ -7,6 +7,8 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
     items: [],
     selected: null,
     loadingSave: false,
+    multiLokalis: [],
+    masterpoli: [],
     form: {
       nama: '',
       icon: '',
@@ -21,7 +23,15 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
 
   }),
   actions: {
+    async getMasterPoli() {
+      const resp = await api.get('v1/simrs/master/listmasterpoli')
+      console.log('poli', resp)
+      if (resp.status === 200) {
+        this.masterpoli = resp.data
+      }
+    },
     async simpanMaster() {
+      // console.log(this.form)
       history.loadingSave = true
       try {
         const resp = await api.post('v1/simrs/master/pemeriksaanfisik/simpanmasterpemeriksaan', this.form)
@@ -36,6 +46,10 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
         console.log(error)
         this.loadingSave = false
       }
+    },
+
+    setForm(key, val) {
+      this.form[key] = val
     },
 
     async getData() {
@@ -106,6 +120,8 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
           icon: '',
           lokalis: ''
         }
+
+        this.multiLokalis = []
 
         resolve()
       })
