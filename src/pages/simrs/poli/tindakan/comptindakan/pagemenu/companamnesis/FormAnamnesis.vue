@@ -300,6 +300,13 @@
           <div class="col-6">
             <div class="text-weight-bold">
               Keluhan Nyeri ? <em class="text-primary">{{ store.form.keteranganskornyeri }}</em>
+              <span class="q-ml-sm">
+                <q-icon
+                  size="lg"
+                  color="teal"
+                  :name="iconNyeri"
+                />
+              </span>
             </div>
             <q-separator class="q-my-xs" />
             <q-slider
@@ -340,7 +347,7 @@
 
 <script setup>
 import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 const store = useAnamnesis()
 const emits = defineEmits(['openHistory'])
 
@@ -377,4 +384,23 @@ function updateSelection(val) {
   // console.log(val.join(','))
   store.setForm('riwayatalergi', val.join(', '))
 }
+const iconNyeri = computed(() => {
+  const val = store?.form.skornyeri
+  let icon = 'icon-my-emoticon-excited-outline'
+  if (val < 2) {
+    icon = 'icon-my-emoticon-excited-outline'
+  } else if (val >= 2 && val < 4) {
+    icon = 'icon-my-emoticon-outline'
+  } else if (val >= 4 && val < 6) {
+    icon = 'icon-my-emoticon-neutral-outline'
+  } else if (val >= 6 && val < 8) {
+    icon = 'icon-my-emoticon-confused-outline'
+  } else if (val >= 8 && val < 10) {
+    icon = 'icon-my-emoticon-angry-outline'
+  } else if (val === 10) {
+    icon = 'icon-my-emoticon-cry-outline'
+  }
+
+  return icon
+})
 </script>
