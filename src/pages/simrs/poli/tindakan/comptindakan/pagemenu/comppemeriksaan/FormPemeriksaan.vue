@@ -8,7 +8,7 @@
       <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
           Pemeriksaan (Vital Sign) <div class="text-white">
-            {{ store.templateActive }}
+            <!-- {{ store.templateActive }} -->
           </div>
         </div>
       </div>
