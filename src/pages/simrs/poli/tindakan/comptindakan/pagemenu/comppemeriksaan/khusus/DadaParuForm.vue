@@ -14,7 +14,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="simetris"
+          v-model="store.inspeksis"
           :options="inspeksiOptions"
           color="primary"
           size="sm"
@@ -32,7 +32,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="palpasi"
+          v-model="store.palpasis"
           :options="palpasiOptions"
           color="primary"
           size="sm"
@@ -61,7 +61,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="dadakanan"
+          v-model="store.perkusidadakanans"
           :options="kananOptions"
           color="primary"
           size="sm"
@@ -79,7 +79,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="dadakiri"
+          v-model="store.perkusidadakiris"
           :options="kananOptions"
           color="primary"
           size="sm"
@@ -101,7 +101,7 @@
       </div>
       <div class="q-py-sm">
         <q-option-group
-          v-model="auskultasi"
+          v-model="store.auskultasisuaradasars"
           :options="auskultasiOptions"
           color="primary"
           size="sm"
@@ -130,7 +130,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="suaraTambahanKanan"
+          v-model="store.auskultasisuaratambahankanans"
           :options="suaraTambahanOptions"
           color="primary"
           size="sm"
@@ -148,7 +148,7 @@
       </div>
       <div>
         <q-option-group
-          v-model="suaraTambahanKiri"
+          v-model="store.auskultasisuaratambahankiris"
           :options="suaraTambahanOptions"
           color="primary"
           size="sm"
@@ -168,33 +168,33 @@ import { ref } from 'vue'
 
 const store = usePemeriksaanFisik()
 
-const simetris = ref([])
+// const simetris = ref([])
 const inspeksiOptions = ref([
   { label: 'Simetris', value: 'Simetris' },
   { label: 'Tidak Simetris', value: 'Tidak Simetris' }
 ])
-const palpasi = ref([])
+// const palpasi = ref([])
 const palpasiOptions = ref([
   { label: 'Fremitus Raba Normal', value: 'Fremitus Raba Normal' },
   { label: 'Fremitus Raba Meningkat', value: 'Fremitus Raba Meningkat' },
   { label: 'Fremitus Raba Menurun', value: 'Fremitus Raba Menurun' }
 ])
-const dadakanan = ref([])
-const dadakiri = ref([])
+// const dadakanan = ref([])
+// const dadakiri = ref([])
 const kananOptions = ref([
   { label: 'Sonor', value: 'Sonor' },
   { label: 'Redup', value: 'Redup' },
   { label: 'Hipersonor', value: 'Hipersonor' }
 ])
-const auskultasi = ref([])
+// const auskultasi = ref([])
 const auskultasiOptions = ref([
   { label: 'Vesikuler', value: 'Vesikuler' },
   { label: 'Bronkovesikuler', value: 'Bronkovesikuler' },
   { label: 'Bronkual', value: 'Bronkual' },
   { label: 'Trakeal', value: 'Trakeal' }
 ])
-const suaraTambahanKanan = ref([])
-const suaraTambahanKiri = ref([])
+// const suaraTambahanKanan = ref([])
+// const suaraTambahanKiri = ref([])
 const suaraTambahanOptions = ref([
   { label: 'Pleural Friction Rub', value: 'Pleural Friction Rub' },
   { label: 'Whooping', value: 'Whooping' },
@@ -205,31 +205,31 @@ const suaraTambahanOptions = ref([
 ])
 
 function setInspeksi() {
-  const txt = simetris.value?.join('||')
+  const txt = store.inspeksis?.join('||')
   store.setFormVital('inspeksi', txt)
 }
 function setPalpasi() {
-  const txt = palpasi.value?.join('||')
+  const txt = store.palpasis?.join('||')
   store.setFormVital('palpasi', txt)
 }
 function setPerkusiDadaKanan() {
-  const txt = dadakanan.value?.join('||')
+  const txt = store.perkusidadakanans.join('||')
   store.setFormVital('perkusidadakanan', txt)
 }
 function setPerkusiDadaKiri() {
-  const txt = dadakiri.value?.join('||')
+  const txt = store.perkusidadakiris.join('||')
   store.setFormVital('perkusidadakiri', txt)
 }
 function setAuskultasiDasar() {
-  const txt = auskultasi.value?.join('||')
+  const txt = store.auskultasisuaradasars.join('||')
   store.setFormVital('auskultasisuaradasar', txt)
 }
 function setAuskultasiTambahanKanan() {
-  const txt = suaraTambahanKanan.value?.join('||')
+  const txt = store.auskultasisuaratambahankanans.join('||')
   store.setFormVital('auskultasisuaratambahankanan', txt)
 }
 function setAuskultasiTambahanKiri() {
-  const txt = suaraTambahanKiri.value?.join('||')
+  const txt = store.auskultasisuaratambahankiris.join('||')
   store.setFormVital('auskultasisuaratambahankiri', txt)
 }
 

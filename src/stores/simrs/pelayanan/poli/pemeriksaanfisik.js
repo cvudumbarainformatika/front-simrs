@@ -78,6 +78,13 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       auskultasisuaratambahankanan: '',
       auskultasisuaratambahankiri: ''
     },
+    inspeksis: [],
+    palpasis: [],
+    perkusidadakanans: [],
+    perkusidadakiris: [],
+    auskultasisuaradasars: [],
+    auskultasisuaratambahankanans: [],
+    auskultasisuaratambahankiris: [],
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' },
       { value: 1, label: 'Berespon denga kata-kata / Voice' },
@@ -422,6 +429,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           auskultasisuaratambahankanan: '',
           auskultasisuaratambahankiri: ''
         }
+
+        this.inspeksis = []
+        this.palpasis = []
+        this.perkusidadakanans = []
+        this.perkusidadakiris = []
+        this.auskultasisuaradasars = []
+        this.auskultasisuaratambahankanans = []
+        this.auskultasisuaratambahankiris = []
 
         resolve()
       })
