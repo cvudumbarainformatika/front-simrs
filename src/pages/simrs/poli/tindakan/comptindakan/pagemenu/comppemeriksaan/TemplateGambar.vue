@@ -7,7 +7,7 @@
       <div class="col-auto bg-teal">
         <q-bar>
           <div class="f-12">
-            Template Gambar
+            Template Gambar {{ store?.templateActive }}
           </div>
           <q-space />
           <q-btn
@@ -120,16 +120,9 @@ const props = defineProps({
 })
 // const lorem = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
 const fileGambars = computed(() => {
-  // const arr = filterredMenu()
-  // const men = arr.filter(x => x.nama.indexOf(props.active) > -1)
-  // const menu = men.length ? men[0].url : ''
-  // const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
-  // const arr2 = Object.keys(modules)
-  // const res = arr2.filter(x => x.indexOf(menu) > -1)
-  // return res
   const arr = filterredMenu()
-  const men = arr.filter(x => x.nama.indexOf(props.active) > -1)
-  const menu = men.length ? men[0] : ''
+  const men = arr.filter(x => x?.nama.indexOf(props.active) > -1)
+  const menu = men.length ? men[0] : null
   // const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
   const arr2 = menu?.gambars
   // const res = arr2.filter(x => x.indexOf(menu) > -1)

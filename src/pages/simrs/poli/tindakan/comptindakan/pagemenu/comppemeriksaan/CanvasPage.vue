@@ -529,6 +529,7 @@ const btns = ref([
 
 onMounted(() => {
   // console.log('document', window.innerWidth / 2)
+  store.initReset(false, props?.pasien)
   ctx.value = canvasRef.value.getContext('2d')
   // tab.value = null
 
@@ -667,15 +668,6 @@ const saveImage = () => {
   const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
   // console.log('gambar', imageURL)
   emits('saveImage', imageURL)
-  // setTimeout(() => {
-  //   const cvn = canvasRef.value
-  //   // const img = new Image()
-  //   // const imageURL = pathImg + store?.fileGambar
-  //   // img.crossOrigin = 'Anonymous'
-  //   // img.src = imageURL
-  //   // cvn.setAttribute('crossOrigin', 'Anonymous')
-  //   // console.log('asdas', cvn.toDataURL())
-  // }, 100)
 }
 
 function hapusGambar() {

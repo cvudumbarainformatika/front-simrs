@@ -53,15 +53,9 @@ export function useMenuPemeriksaan() {
     return newMenus
   }
 
-  function getImage() {
-    // const modules = import.meta.glob('/src/assets/human/anatomys/*.{png,svg,jpg,jpeg}', { eager: true })
-    // const moduleKeys = Object.keys(modules)
-    // console.log('getImage', moduleKeys)
-  }
-
   onMounted(() => {
     menus.value = master.items
   })
 
-  return { menus, search, filterredMenu, getImage }
+  return { menus, search, filterredMenu }
 }

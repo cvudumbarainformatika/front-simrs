@@ -38,12 +38,12 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       fondosod: '',
       fondosos: ''
     },
-    formParu: {
-      inspeksi: '',
-      palpasi: '',
-      perkusi: '',
-      auskultasi: ''
-    },
+    // formParu: {
+    //   inspeksi: '',
+    //   palpasi: '',
+    //   perkusi: '',
+    //   auskultasi: ''
+    // },
     shapes: [],
     mata: [],
     paru: [],
@@ -67,8 +67,24 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       kesadaran: '',
       kesadarane: 0,
       kesadaranm: 0,
-      kesadaranv: 0
+      kesadaranv: 0,
+
+      // khususparu baru
+      inspeksi: '',
+      palpasi: '',
+      perkusidadakanan: '',
+      perkusidadakiri: '',
+      auskultasisuaradasar: '',
+      auskultasisuaratambahankanan: '',
+      auskultasisuaratambahankiri: ''
     },
+    inspeksis: [],
+    palpasis: [],
+    perkusidadakanans: [],
+    perkusidadakiris: [],
+    auskultasisuaradasars: [],
+    auskultasisuaratambahankanans: [],
+    auskultasisuaratambahankiris: [],
     optionsTingkatkesadaran: [
       { value: 0, label: 'Sadar Baik/Alert' },
       { value: 1, label: 'Berespon denga kata-kata / Voice' },
@@ -157,12 +173,12 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         fondosod: '',
         fondosos: ''
       }
-      this.formParu = {
-        inspeksi: '',
-        palpasi: '',
-        perkusi: '',
-        auskultasi: ''
-      }
+      // this.formParu = {
+      //   inspeksi: '',
+      //   palpasi: '',
+      //   perkusi: '',
+      //   auskultasi: ''
+      // }
     },
 
     setDialogForm(key, val) {
@@ -233,9 +249,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
       // form lokalis Paru
 
-      if (this.paru.length) {
-        form.paru = this.paru
-      }
+      // if (this.paru.length) {
+      //   form.paru = this.paru
+      // }
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
@@ -347,26 +363,26 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       let imgActive = 0
       if (val) {
         file = master?.items[0]?.gambars[0]?.image
-        template = master?.items[0]?.gambars[0]?.nama
+        template = master?.items[0]?.nama ?? 'Body'
         imgActive = 0
       } else {
         file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image
-        template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.nama
+        template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.nama ?? 'Body'
         imgActive = this.gambarActive
       }
       this.fileGambar = file
-      this.templateActive = template
+      // this.templateActive = template
       // console.log('init', file)
       console.log('init template', this.templateActive)
-      console.log('init gambar', this.gambarActive)
-      console.log('init master', master?.items)
+      // console.log('init gambar', this.gambarActive)
+      // console.log('init master', master?.items)
 
       return new Promise((resolve, reject) => {
         this.dialogTemplate = false
         // this.templateActive = 'Body'
         // this.gambarActive = 0
         // this.fileGambar = file ?? null
-        this.templateActive = val ? 'Body' : this.templateActive
+        this.templateActive = template
         this.gambarActive = imgActive
         this.fileGambar = val ? file ?? null : this.fileGambar
         this.writingMode = false
@@ -402,8 +418,25 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           kesadaran: '',
           kesadarane: 0,
           kesadaranm: 0,
-          kesadaranv: 0
+          kesadaranv: 0,
+
+          // khusu paru baru
+          inspeksi: '',
+          palpasi: '',
+          perkusidadakanan: '',
+          perkusidadakiri: '',
+          auskultasisuaradasar: '',
+          auskultasisuaratambahankanan: '',
+          auskultasisuaratambahankiri: ''
         }
+
+        this.inspeksis = []
+        this.palpasis = []
+        this.perkusidadakanans = []
+        this.perkusidadakiris = []
+        this.auskultasisuaradasars = []
+        this.auskultasisuaratambahankanans = []
+        this.auskultasisuaratambahankiris = []
 
         resolve()
       })
