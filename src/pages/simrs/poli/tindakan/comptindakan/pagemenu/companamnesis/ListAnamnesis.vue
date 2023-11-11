@@ -87,6 +87,15 @@
                     - Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.asupanmakan) }}</b>
                   </div>
                   <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
+                </q-item-label>
+                <q-item-label
+                  lines="1"
+                >
+                  <span class="text-weight-bold">Keluhan Nyeri</span>
+                </q-item-label>
+                <q-item-label
+                  lines="7"
+                >
                   <div>
                     - Skor Nyeri : <b>{{ item?.scorenyeri??'-' }}</b>
                     <span
