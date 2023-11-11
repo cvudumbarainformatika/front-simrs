@@ -193,6 +193,54 @@
                       </q-item-label>
                     </q-item-section>
                   </q-item>
+                  <!-- KHUSUS PARU POL018-->
+                  <q-separator
+                    dark
+                    inset
+                  />
+                  <q-item
+                    v-if="pasien?.kodepoli==='POL018'"
+                    class="q-pa-xs list-move"
+                    dark
+                  >
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label
+                        lines="2"
+                      >
+                        Inspeksi : <em>{{ item?.inspeksi?? '-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Palpasi : <em>{{ item?.palpasi??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Perkusi Dada Kanan : <em>{{ item?.perkusidadakanan??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Perkusi Dada Kiri : <em>{{ item?.perkusidadakiri??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Suara Nafas Dasar : <em>{{ item?.auskultasisuaradasar??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Suara Nafas Tambahan (Kanan) : <em>{{ item?.auskultasisuaratambahankanan??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Suara Nafas Tambahan (Kiri) : <em>{{ item?.auskultasisuaratambahankiri??'-' }}</em>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
                   <!-- DETAIL -->
                   <div class="q-pa-sm flex items-center">
                     <q-btn
