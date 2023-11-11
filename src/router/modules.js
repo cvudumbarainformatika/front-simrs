@@ -11,9 +11,10 @@ import farmasi from './farmasi'
 import poli from './poli'
 import monitoring from './monitoring'
 import kasir from './kasir'
+import dokumen from './dokumen'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
-  kasir
+  kasir, dokumen
 }
