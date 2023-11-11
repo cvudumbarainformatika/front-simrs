@@ -21,6 +21,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setInspeksi"
         />
       </div>
     </div>
@@ -38,6 +39,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setPalpasi"
         />
       </div>
     </div>
@@ -66,6 +68,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setPerkusiDadaKanan"
         />
       </div>
     </div>
@@ -83,6 +86,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setPerkusiDadaKiri"
         />
       </div>
     </div>
@@ -104,6 +108,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setAuskultasiDasar"
         />
       </div>
     </div>
@@ -132,6 +137,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setAuskultasiTambahanKanan"
         />
       </div>
     </div>
@@ -149,6 +155,7 @@
           inline
           dense
           type="checkbox"
+          @update:model-value="setAuskultasiTambahanKiri"
         />
       </div>
     </div>
@@ -156,7 +163,10 @@
 </template>
 
 <script setup>
+import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { ref } from 'vue'
+
+const store = usePemeriksaanFisik()
 
 const simetris = ref([])
 const inspeksiOptions = ref([
@@ -193,5 +203,34 @@ const suaraTambahanOptions = ref([
   { label: 'Stridor', value: 'Stridor' },
   { label: 'Rhonchi', value: 'Rhonchi' }
 ])
+
+function setInspeksi() {
+  const txt = simetris.value?.join('||')
+  store.setFormVital('inspeksi', txt)
+}
+function setPalpasi() {
+  const txt = palpasi.value?.join('||')
+  store.setFormVital('palpasi', txt)
+}
+function setPerkusiDadaKanan() {
+  const txt = dadakanan.value?.join('||')
+  store.setFormVital('perkusidadakanan', txt)
+}
+function setPerkusiDadaKiri() {
+  const txt = dadakiri.value?.join('||')
+  store.setFormVital('perkusidadakiri', txt)
+}
+function setAuskultasiDasar() {
+  const txt = auskultasi.value?.join('||')
+  store.setFormVital('auskultasisuaradasar', txt)
+}
+function setAuskultasiTambahanKanan() {
+  const txt = suaraTambahanKanan.value?.join('||')
+  store.setFormVital('auskultasisuaratambahankanan', txt)
+}
+function setAuskultasiTambahanKiri() {
+  const txt = suaraTambahanKiri.value?.join('||')
+  store.setFormVital('auskultasisuaratambahankiri', txt)
+}
 
 </script>

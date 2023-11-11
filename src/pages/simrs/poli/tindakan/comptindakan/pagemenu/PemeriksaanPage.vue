@@ -1,6 +1,6 @@
 <template>
   <div
-    class="full-height q-pa-sm"
+    class="full-height q-pa-xs"
     style="overflow: hidden;"
   >
     <q-card
@@ -135,6 +135,7 @@ onMounted(() => {
   console.log('canvas')
 
   // getImage()
+  store.initReset(false, props?.pasien)
 
   window.addEventListener('resize', resizeCanvas)
   resizeCanvas()
@@ -142,7 +143,7 @@ onMounted(() => {
 
 onBeforeMount(() => {
   console.log(menus.value)
-  store.setFullCanvasFalse()
+  // store.setFullCanvasFalse()
   // getImage()
 })
 

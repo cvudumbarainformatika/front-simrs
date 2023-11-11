@@ -8,7 +8,7 @@
       <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
           Pemeriksaan (Vital Sign) <div class="text-white">
-            <!-- {{ store.fullCanvas }} -->
+            {{ store.templateActive }}
           </div>
         </div>
       </div>
@@ -21,10 +21,6 @@
           class="row q-col-gutter-sm q-pa-md"
           @submit.prevent.stop="onSubmit"
         >
-          <!-- <div class="col-12 f-12 text-weight-bold">
-                    Pemeriksaan Fisik
-                  </div> -->
-
           <div class="col-2">
             <q-input
               v-model="store.formVital.denyutjantung"
@@ -94,7 +90,7 @@
               @update:model-value="setNumber($event,'suhutubuh')"
             />
           </div>
-          <div class="col-6">
+          <div class="col-12">
             <q-select
               v-model="store.formVital.tingkatkesadaran"
               dense
@@ -109,6 +105,8 @@
               fill-input
               hide-dropdown-icon
             />
+          </div>
+          <div class="col-6">
             <div class="q-mt-sm">
               <q-input
                 v-model="store.formVital.sosialekonomi"
@@ -135,10 +133,10 @@
             <q-separator class="q-my-xs" />
           </div> -->
           <div class="col-6">
-            <div class="q-mb-sm text-weight-bold">
+            <div class="text-weight-bold">
               Status Psikologis
+              <q-separator class="q-mb-md q-mt-xs" />
             </div>
-            <q-separator class="q-my-xs" />
             <div class="q-gutter-sm">
               <q-option-group
                 v-model="store.selectStatusPsikologi"
@@ -149,42 +147,6 @@
                 type="checkbox"
                 @update:model-value="updateSelectionPsikologis"
               />
-              <!-- <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Tidak ada kelainan"
-                label="Tidak ada kelainan"
-              />
-              <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Cemas"
-                label="Cemas"
-              />
-              <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Takut"
-                label="Takut"
-              />
-              <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Marah"
-                label="Marah"
-              />
-              <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Sedih"
-                label="Sedih"
-              />
-              <q-radio
-                v-model="store.formVital.statuspsikologis"
-                dense
-                val="Lain-lain"
-                label="Lain-lain"
-              /> -->
             </div>
 
             <!-- <div class="q-mt-sm">
@@ -218,60 +180,98 @@
                 />
               </div>
             </div> -->
-            <div class="q-mt-sm">
-              <q-separator class="q-my-sm" />
-              <div class="text-weight-bold">
-                Kesadaran <span class="text-primary"> {{ store.formVital.kesadaran }}</span>
-              </div>
-              <q-separator class="q-my-sm" />
-              <div class="col-12 row q-col-gutter-xs">
-                <q-input
-                  v-model="store.formVital.kesadarane"
-                  dense
-                  standout="bg-yellow-3 text-black"
-                  outlined
-                  label="E"
-                  :rules="[
-                    val => !!val || 'Hrp diisi',
-                    val => !isNaN(val) || 'Hrs Nomor',
-                    val => val < 5 || 'Max 4',
-                  ]"
-                  hide-bottom-space
-                  style="width:33%"
-                  @update:model-value="sumKesadaran"
-                />
-                <q-input
-                  v-model="store.formVital.kesadaranv"
-                  dense
-                  standout="bg-yellow-3 text-black"
-                  outlined
-                  label="V"
-                  :rules="[
-                    val => !!val || 'Hrp diisi',
-                    val => !isNaN(val) || 'Hrs Nomor',
-                    val => val < 6 || 'Max 5',
-                  ]"
-                  hide-bottom-space
-                  style="width:33%"
-                  @update:model-value="sumKesadaran"
-                />
-                <q-input
-                  v-model="store.formVital.kesadaranm"
-                  dense
-                  standout="bg-yellow-3 text-black"
-                  outlined
-                  label="M"
-                  :rules="[
-                    val => !!val || 'Hrp diisi',
-                    val => !isNaN(val) || 'Hrs Nomor',
-                    val => val < 7 || 'Max 6',
-                  ]"
-                  hide-bottom-space
-                  style="width:33%"
-                  @update:model-value="sumKesadaran"
-                />
-              </div>
+          </div>
+          <div class="col-12">
+            <q-separator class="q-my-sm" />
+            <div class="text-weight-bold">
+              Kesadaran <span class="text-primary"> {{ store.formVital.kesadaran }}</span>
             </div>
+            <q-separator class="q-my-sm" />
+            <div class="col-12 row q-col-gutter-lg">
+              <q-slider
+                v-model="store.formVital.kesadarane"
+                marker-labels
+                label-always
+                switch-label-side
+                :label-value="'E ' + store.formVital.kesadarane"
+                :min="0"
+                :max="4"
+                class="col-4"
+                @update:model-value="sumKesadaran"
+              />
+              <q-slider
+                v-model="store.formVital.kesadaranv"
+                marker-labels
+                :label-value="'V ' + store.formVital.kesadaranv"
+                label-always
+                switch-label-side
+                :min="0"
+                :max="5"
+                class="col-4"
+                color="green"
+                @update:model-value="sumKesadaran"
+              />
+              <q-slider
+                v-model="store.formVital.kesadaranm"
+                marker-labels
+                label-always
+                :label-value="'M ' + store.formVital.kesadaranm"
+                switch-label-side
+                :min="0"
+                :max="6"
+                class="col-4"
+                color="orange"
+                @update:model-value="sumKesadaran"
+              />
+              <!-- <q-input
+                v-model="store.formVital.kesadarane"
+                dense
+                standout="bg-yellow-3 text-black"
+                outlined
+                label="E"
+                :rules="[
+                  val => !!val || 'Hrp diisi',
+                  val => !isNaN(val) || 'Hrs Nomor',
+                  val => val < 5 || 'Max 4',
+                ]"
+                hide-bottom-space
+                style="width:33%"
+                @update:model-value="sumKesadaran"
+              />
+              <q-input
+                v-model="store.formVital.kesadaranv"
+                dense
+                standout="bg-yellow-3 text-black"
+                outlined
+                label="V"
+                :rules="[
+                  val => !!val || 'Hrp diisi',
+                  val => !isNaN(val) || 'Hrs Nomor',
+                  val => val < 6 || 'Max 5',
+                ]"
+                hide-bottom-space
+                style="width:33%"
+                @update:model-value="sumKesadaran"
+              />
+              <q-input
+                v-model="store.formVital.kesadaranm"
+                dense
+                standout="bg-yellow-3 text-black"
+                outlined
+                label="M"
+                :rules="[
+                  val => !!val || 'Hrp diisi',
+                  val => !isNaN(val) || 'Hrs Nomor',
+                  val => val < 7 || 'Max 6',
+                ]"
+                hide-bottom-space
+                style="width:33%"
+                @update:model-value="sumKesadaran"
+              /> -->
+            </div>
+          </div>
+          <div class="col-12">
+            <q-separator class="q-my-sm" />
           </div>
           <div
             v-if="pasien?.kodepoli==='POL018'"
@@ -393,8 +393,8 @@ const opt = ref([
   { value: 'Cemas', label: 'Cemas' },
   { value: 'Takut', label: 'Takut' },
   { value: 'Marah', label: 'Marah' },
-  { value: 'Sedih', label: 'Sedih' },
-  { value: 'Lain-lain', label: 'Lain-lain' }
+  { value: 'Sedih', label: 'Sedih' }
+  // { value: 'Lain-lain', label: 'Lain-lain' }
 ])
 
 const updateSelectionPsikologis = (val) => {

@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
   console.log('beforeunmount')
   menu.value = menus.value[0]
   fisik.setFullCanvasFalse()
-  fisik.initReset(true)
+  // fisik.initReset(true)
 })
 
 onUnmounted(() => {
