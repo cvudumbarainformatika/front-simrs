@@ -12,9 +12,18 @@
       >
         <div
           style="height:70px"
-          class="q-px-lg q-py-md"
+          class="q-px-lg q-py-md row justify-between"
         >
+          <div @click="()=>router.push({path:'/admin/sso', replace:true})">
+            <q-avatar
+              size="35px"
+              class="cursor-pointer bg-white"
+            >
+              <img src="~assets/logos/logo-rsud.png">
+            </q-avatar>
+          </div>
           <app-input
+            class="col-10"
             dense
             valid
             label="search"
@@ -53,6 +62,7 @@
               color="dark"
               text-color="white"
               icon="icon-mat-person"
+              @click="modalSearch = true"
             />
             <q-space />
             <q-btn
@@ -143,7 +153,9 @@ import CardPegawai from './aplikasi/CardPegawai.vue'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
 
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+import { useRouter } from 'vue-router'
 const store = useSettingsAplikasi()
+const router = useRouter()
 
 const main = ref(null)
 const h = ref()

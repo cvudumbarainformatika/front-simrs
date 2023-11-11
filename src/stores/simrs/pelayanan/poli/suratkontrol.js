@@ -16,10 +16,9 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       tglakhir: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       filter: '2'
     },
-    filters: [
-      { nama: 'Tanggal Entri', value: '1' },
-      { nama: 'Tanggal Rencana Kontrol', value: '2' }
-    ],
+    tgl: {},
+    filters: false,
+    custom: false,
     form: {
       tglrencanakontrol: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
@@ -27,14 +26,58 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     loadingJadwalDokter: false
   }),
   actions: {
+    resetParam() {
+      this.fNama = ''
+      this.params = {
+        tglawal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        tglakhir: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        filter: '2'
+      }
+      this.filters = false
+      this.custom = false
+    },
     setParam(key, val) {
       this.params[key] = val
     },
     setForm(key, val) {
       this.form[key] = val
     },
+    setDate(val) {
+      this.tgl = val
+      const { to, from, status } = val
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+    },
+    setPeriodik(val) {
+      const { to, from, status } = val
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+      this.getData()
+    },
     setOpen() {
       this.isOpen = !this.isOpen
+    },
+    setFilters() {
+      this.filters = !this.filters
+    },
+    setCustom() {
+      this.custom = !this.custom
+    },
+    setQ(val) {
+      this.fNama = val
+      this.filterItem(val)
+    },
+    filterData(val) {
+      const { to, from, q, status } = val // status
+      this.params.tglakhir = to
+      this.params.tglawal = from
+      this.params.filter = status
+      this.fNama = q
+      this.setCustom()
+      this.getData()
+      // console.log(val)
     },
     filterItem(val) {
       this.filteredItems = this.items.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))
