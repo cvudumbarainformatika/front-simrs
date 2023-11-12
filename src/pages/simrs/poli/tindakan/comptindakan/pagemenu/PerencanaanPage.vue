@@ -25,7 +25,7 @@
             </div>
 
             <q-card-section>
-              <q-btn
+              <!-- <q-btn
 
                 v-print="printObj"
                 fab
@@ -37,7 +37,7 @@
                 size="sm"
                 style="top: 0; right: 50px; transform: translateY(-100%);"
                 @click="toItem=item"
-              />
+              /> -->
               <q-btn
                 fab
                 color="negative"
@@ -276,11 +276,11 @@ function hapusItem(item) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
-const printObj = {
-  id: 'printMe',
-  popTitle: 'Rencana Pasien'
-  // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
-  // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+// const printObj = {
+//   id: 'printMe',
+//   popTitle: 'Rencana Pasien'
+//   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
+//   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 
-}
+// }
 </script>

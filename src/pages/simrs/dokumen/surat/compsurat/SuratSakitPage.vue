@@ -56,7 +56,10 @@
         />
       </div>
     </div>
-    <div id="printMe">
+    <div
+      id="printMe"
+      class="full-width"
+    >
       <KopSuratPage />
       <!-- isi -->
       <div>

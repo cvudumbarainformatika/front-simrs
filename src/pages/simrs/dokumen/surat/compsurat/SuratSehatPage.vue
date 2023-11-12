@@ -22,7 +22,10 @@
         </q-tooltip>
       </q-btn>
     </q-bar>
-    <div id="printMe">
+    <div
+      id="printMe"
+      class="full-width"
+    >
       <KopSuratPage />
       <!-- isi -->
       <div>

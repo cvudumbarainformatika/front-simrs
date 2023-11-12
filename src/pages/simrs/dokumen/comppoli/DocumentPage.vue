@@ -22,6 +22,7 @@
       </div>
       <div class="col">
         <div
+          v-if="doc !== ''"
           class="q-pa-md"
         >
           Dokumen {{ getLabel(doc) }}
@@ -33,6 +34,13 @@
               :pasien="props.pasien"
             />
           </div>
+        </div>
+        <div
+          v-else
+          class="column full-height flex-center q-pa-md"
+          style="min-height: 400px;"
+        >
+          Belum Ada Pemilihan Surat
         </div>
       </div>
     </div>
@@ -48,7 +56,7 @@ const props = defineProps({
   }
 })
 
-const doc = ref('Resume')
+const doc = ref('')
 
 const documents = ref([
   {
@@ -66,6 +74,10 @@ const documents = ref([
   {
     label: 'Surat Keterangan Sehat',
     value: 'Sehat'
+  },
+  {
+    label: 'Rencana Pasien',
+    value: 'Rencana'
   }
 ])
 function getLabel(val) {
@@ -77,7 +89,8 @@ const comp = [
   { nama: 'Resume', page: defineAsyncComponent(() => import('../resume/ResumePage.vue')) },
   { nama: 'Billing', page: defineAsyncComponent(() => import('./BillingPage.vue')) },
   { nama: 'Sakit', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSakitPage.vue')) },
-  { nama: 'Sehat', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSehatPage.vue')) }
+  { nama: 'Sehat', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSehatPage.vue')) },
+  { nama: 'Rencana', page: defineAsyncComponent(() => import('../surat/compsurat/SuratRencanaPage.vue')) }
 ]
 const cekPanel = () => {
   const val = doc.value
