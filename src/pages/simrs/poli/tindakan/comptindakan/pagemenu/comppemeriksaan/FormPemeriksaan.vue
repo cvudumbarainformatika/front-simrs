@@ -393,8 +393,8 @@ const opt = ref([
   { value: 'Cemas', label: 'Cemas' },
   { value: 'Takut', label: 'Takut' },
   { value: 'Marah', label: 'Marah' },
-  { value: 'Sedih', label: 'Sedih' }
-  // { value: 'Lain-lain', label: 'Lain-lain' }
+  { value: 'Sedih', label: 'Sedih' },
+  { value: 'Lain-lain', label: 'Lain-lain' }
 ])
 
 const updateSelectionPsikologis = (val) => {
