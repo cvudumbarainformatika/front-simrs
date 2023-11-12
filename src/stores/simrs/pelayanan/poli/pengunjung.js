@@ -361,6 +361,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataFisio(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.fisio
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
     hapusDataPlanning(pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
