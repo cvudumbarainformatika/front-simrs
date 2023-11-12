@@ -22,7 +22,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       x: 0,
       y: 0,
       ketebalan: 2,
-      panjang: 15,
+      panjang: 7,
+      width: 7,
+      height: 7,
       warna: '#000000',
       penanda: 'circle'
     },
@@ -38,12 +40,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       fondosod: '',
       fondosos: ''
     },
-    // formParu: {
-    //   inspeksi: '',
-    //   palpasi: '',
-    //   perkusi: '',
-    //   auskultasi: ''
-    // },
+    formParu: {
+      statuslokalis: ''
+    },
     shapes: [],
     mata: [],
     paru: [],
@@ -173,12 +172,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         fondosod: '',
         fondosos: ''
       }
-      // this.formParu = {
-      //   inspeksi: '',
-      //   palpasi: '',
-      //   perkusi: '',
-      //   auskultasi: ''
-      // }
+      this.formParu = {
+        statuslokalis: ''
+      }
     },
 
     setDialogForm(key, val) {
@@ -249,9 +245,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
       // form lokalis Paru
 
-      // if (this.paru.length) {
-      //   form.paru = this.paru
-      // }
+      if (this.paru.length) {
+        form.paru = this.paru
+      }
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
@@ -392,7 +388,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           x: 0,
           y: 0,
           ketebalan: 2,
-          panjang: 15,
+          panjang: 7,
+          width: 7,
+          height: 7,
           warna: '#000000',
           penanda: 'circle'
         }

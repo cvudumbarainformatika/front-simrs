@@ -3,119 +3,33 @@
     class="ttd-pad-form full-height"
   >
     <!-- tombol-atas -->
-    <div
-      class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-sm tmp-t"
-    >
-      <div class="row items-center justify-between">
-        <div class="row items-center">
-          <div class="q-gutter-xs">
-            <q-btn
-              v-for="(btnx, i) in btns"
-              :key="i"
-              :flat="btnx.name !== store.dialogForm.penanda"
-              :glossy="btnx.name === store.dialogForm.penanda"
-              padding="xs"
-              size="sm"
-              :icon="btnx.icon"
-              color="dark"
-              @click="store.setDialogForm('penanda',btnx.name)"
-            >
-              <q-tooltip>
-                {{ btnx.name }}
-              </q-tooltip>
-            </q-btn>
-          </div>
-          <q-separator
-            vertical
-            class="q-mx-sm"
-          />
-          <div
-            class="flex"
-            style="width: 75px;"
-          >
-            <div class="f-10">
-              Ketebalan {{ store.dialogForm.ketebalan }}
-            </div>
-            <q-slider
-              v-model="store.dialogForm.ketebalan"
-              :min="1"
-              :max="10"
-              label
-              switch-label-side
-              color="dark"
-              dense
-            />
-          </div>
-          <q-separator
-            vertical
-            class="q-mx-sm"
-          />
-          <div
-            class="flex"
-            style="width: 75px;"
-          >
-            <div class="f-10">
-              Luas {{ store.dialogForm.panjang }} px
-            </div>
-            <q-slider
-              v-model="store.dialogForm.panjang"
-              :min="1"
-              :max="20"
-              label
-              switch-label-side
-              color="primary"
-              dense
-            />
-          </div>
-          <q-separator
-            vertical
-            class="q-mx-sm"
-          />
-          <q-btn
-            flat
-            padding="xs"
-            size="xs"
-            label="CR"
-            :style="`background-color: ${store.dialogForm.warna};`"
-          >
-            <q-tooltip>
-              Ganti Warna
-            </q-tooltip>
-            <q-menu>
-              <q-item
-                v-close-popup
-                clickable
-                style="padding:0"
-              >
-                <q-color
-                  v-model="store.dialogForm.warna"
-                  no-header
-                  no-footer
-                  default-view="palette"
-                  class="my-picker"
-                />
-              </q-item>
-            </q-menu>
-          </q-btn>
-        </div>
-      </div>
-      <div>
-        <q-btn
-          flat
-          padding="xs"
-          size="sm"
-          :icon="store.fullCanvas?'icon-mat-open_in_full' :'icon-mat-fullscreen'"
-          @click="setFull"
-        >
-          <q-tooltip>
-            {{ store.fullCanvas?'kembali': 'Halaman Full' }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-    </div>
+    <HeaderCanvas />
     <!-- ===========================================================================================================canvas -->
     <div class="t-canvas">
       <!-- {{ options }} -->
+      <canvas
+        v-show="tab === null"
+        id="canvas-1"
+        ref="canvasRef1"
+        class="absolute "
+        :width="props.width"
+        :height="props.width"
+        style="z-index:2;
+        background-color: transparent;
+        cursor: crosshair;"
+        @mousedown="handlePointerDown"
+        @mouseup="handlePointerUp"
+        @mousemove="handleMouseMove"
+        @mouseout="handleMouseOut"
+      >
+        <MenuCanvas
+          ref="refMenu"
+          @show-menu="onShowInp"
+          @hide-menu="onHideInp"
+          @save-shape="saveShape"
+          @cancel-shape="cancelShape"
+        />
+      </canvas>
       <canvas
         v-show="tab === null"
         id="canvas"
@@ -123,251 +37,9 @@
         class="bg-template"
         :width="props.width"
         :height="props.width"
-        @mousedown="handlePointerDown"
-        @mouseup="handlePointerUp"
+
         @change="changeCanvas"
-      >
-        <!-- <img
-          :src="pathImg + store.fileGambar"
-        > -->
-        <q-menu
-          ref="refMenu"
-          touch-position
-          @show="onShowInp"
-          @hide="onHideInp"
-        >
-          <q-card
-            flat
-            style="width:350px"
-            dark
-          >
-            <q-card-section class="q-py-sm">
-              Keterangan
-            </q-card-section>
-            <q-separator class="bg-white" />
-            <q-card-section>
-              <q-select
-                v-model="store.dialogForm.anatomy"
-                outlined
-                standout="bg-yellow-2 text-black"
-                bg-color="white"
-                color="orange"
-                use-input
-                input-debounce="0"
-                label="Nama Anatomy"
-                :options="options"
-                dense
-                class="q-mb-sm"
-                :rules="[val => !!val || 'Pilih Data Terlebih dahulu']"
-                :disable="store.templateActive !== 'Body'"
-                @filter="filterFn"
-              >
-                <template #no-option>
-                  <q-item>
-                    <q-item-section class="text-grey">
-                      Tidak ditemukan
-                    </q-item-section>
-                  </q-item>
-                </template>
-              </q-select>
-              <!-- MATA ========================================================================================================================= MATA-->
-              <div
-                v-if="store.templateActive==='Mata' || store.dialogForm.anatomy === 'Mata'"
-                class="row q-col-gutter-sm q-mb-sm"
-              >
-                <q-input
-                  v-model="store.formMata.vodawal"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="VOD AWAL"
-                  dense
-                  bg-color="white"
-                  :rules="[val => !!val || 'Harap diisi']"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.vodakhir"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="VOD AKHIR"
-                  bg-color="white"
-                  color="orange"
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.vodrefraksi"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="VOD REFRAKSI"
-                  bg-color="white"
-                  color="orange"
-                  style="width:100%"
-                />
-
-                <q-input
-                  v-model="store.formMata.vosawal"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="VOS AWAL"
-                  dense
-                  bg-color="white"
-                  :rules="[val => !!val || 'Harap diisi']"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.vosakhir"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="VOS AKHIR"
-                  bg-color="white"
-                  color="orange"
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.vosrefraksi"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="VOS REFRAKSI"
-                  bg-color="white"
-                  color="orange"
-                  style="width:100%"
-                />
-                <q-input
-                  v-model="store.formMata.tod"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="TOD"
-                  dense
-                  bg-color="white"
-                  :rules="[val => !!val || 'Harap diisi']"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.tos"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="TOS"
-                  bg-color="white"
-                  color="orange"
-                  style="width:50%"
-                />
-                <q-input
-                  v-model="store.formMata.fondosod"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="FONDOS OD"
-                  bg-color="white"
-                  color="orange"
-                  style="width:100%"
-                />
-                <q-input
-                  v-model="store.formMata.fondosos"
-                  standout="bg-yellow-2"
-                  outlined
-                  dense
-                  label="FONDOS OS"
-                  bg-color="white"
-                  color="orange"
-                  style="width:100%"
-                />
-
-              </div>
-
-              <!-- PARU ========================================================================================================================= PARU-->
-              <div
-                v-if="store.templateActive==='Dada dan Paru' || store.dialogForm.anatomy === 'Dada dan Paru'"
-                class="row q-col-gutter-sm q-mb-sm"
-              >
-                <q-input
-                  v-model="store.formParu.inspeksi"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="INSPEKSI"
-                  dense
-                  bg-color="white"
-                  :rules="[val => !!val || 'Harap diisi']"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:100%"
-                />
-                <q-input
-                  v-model="store.formParu.palpasi"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="PALPASI"
-                  dense
-                  bg-color="white"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:100%"
-                />
-                <q-input
-                  v-model="store.formParu.perkusi"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="PERKUSI"
-                  dense
-                  bg-color="white"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:100%"
-                />
-                <q-input
-                  v-model="store.formParu.auskultasi"
-                  standout="bg-yellow-2"
-                  outlined
-                  label="AUSKULTASI"
-                  dense
-                  bg-color="white"
-                  color="orange"
-                  hide-bottom-space
-                  style="width:100%"
-                />
-              </div>
-              <q-input
-                v-model="store.dialogForm.ket"
-                standout="bg-yellow-2"
-                outlined
-                autogrow
-                label="keterangan"
-                bg-color="white"
-                color="orange"
-              />
-            </q-card-section>
-            <q-separator dark />
-            <div class="row">
-              <q-btn
-                class="col q-pa-md"
-                color="primary"
-                square
-                size="md"
-                icon="icon-mat-check"
-                @click="saveShape"
-              />
-              <q-btn
-                class="col"
-                color="negative"
-                icon="icon-mat-close"
-                square
-                size="md"
-                @click="cancelShape"
-              />
-            </div>
-          </q-card>
-        </q-menu>
-      </canvas>
+      />
       <div v-show="tab !==null">
         <q-img
           :src="`${pathImg + tab}`"
@@ -485,6 +157,8 @@
 
 <script setup>
 // import MyImg from 'src/assets/human/human-body.jpg'
+import HeaderCanvas from './HeaderCanvas.vue'
+import MenuCanvas from './MenuCanvas.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
@@ -503,9 +177,15 @@ const options = ref([])
 const tab = ref(null)
 
 const canvasRef = ref()
+const canvasRef1 = ref()
 const refMenu = ref()
 const ctx = ref()
+const ctx1 = ref()
+const start = ref({})
+// const rects = ref([])
 const writingMode = ref(false)
+
+// const lokalisparus = ref(['Infiltrat', 'Cavitas', 'Cairan', 'Massa', 'Nodul', 'Konsolidasi', 'Air Bronchogram', 'Clear Zone (Memo Thorax)', 'Normal'])
 
 const props = defineProps({
   width: {
@@ -522,72 +202,26 @@ const props = defineProps({
   }
 })
 
-const btns = ref([
-  { name: 'circle', icon: 'icon-mat-circle' },
-  { name: 'kotak', icon: 'icon-mat-check_box_outline' }
-])
-
 onMounted(() => {
   // console.log('document', window.innerWidth / 2)
+  // console.log('canvas', canvasRef.value?.getBoundingClientRect())
   store.initReset(false, props?.pasien)
   ctx.value = canvasRef.value.getContext('2d')
-  // tab.value = null
+  ctx1.value = canvasRef1.value.getContext('2d')
 
   const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   options.value = opt
-  // resizeCanvas()
-  // console.log('menus', options.value)
   func()
-  // const active = menus.value[0]?.gambars[0]?.url
-  // store.setGambarActive(0, active)
 })
 
-// function resizeCanvas() {
-//   const cnv = canvasRef.value
-// }
-
-function setFull() {
-  // console.log('full')
-  store.setFullCanvas()
-}
-
-const filterFn = (val, update) => {
-  // if (val === '') {
-  //   update(() => {
-  //     options.value = menus.value.filter(x => x.name !== 'Body').map(x => x.name)
-  //   })
-  //   return
-  // }
-
-  // update(() => {
-  //   const needle = val.toLowerCase()
-  //   const arr = menus.value.map(x => x.name)
-  //   options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1 && v !== 'Body')
-  // })
-  if (val === '') {
-    update(() => {
-      options.value = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
-    })
-    return
-  }
-
-  update(() => {
-    const needle = val.toLowerCase()
-    const arr = menus.value.map(x => x.nama)
-    options.value = arr.filter(v => v.toLowerCase().indexOf(needle) > -1 && v !== 'Body')
-  })
-}
-
 function onShowInp() {
-  console.log('show')
-  writingMode.value = true
-  drawShapes(store.dialogForm.penanda, store.dialogForm.x, store.dialogForm.y, store.dialogForm.ketebalan, store.dialogForm.warna, store.dialogForm.panjang, '')
-
-  // saveShape()
+  // console.log('show')
+  writingMode.value = false
 }
 
 function onHideInp() {
-  // writingMode.value = false
+  // writingMode.value = true
+  // return refMenu.value ? refMenu.value.hide() : false
 }
 
 function saveShape() {
@@ -599,6 +233,8 @@ function saveShape() {
     ket: store.dialogForm.ket,
     ketebalan: store.dialogForm.ketebalan,
     panjang: store.dialogForm.panjang,
+    width: store.dialogForm.width,
+    height: store.dialogForm.height,
     warna: store.dialogForm.warna,
     templatemenu: store.templateActive,
     templategambar: store.fileGambar,
@@ -607,27 +243,123 @@ function saveShape() {
     norm: props.pasien ? props.pasien.norm : ''
   }
   store.pushShapes(obj).then((x) => {
-    // console.log('shapes')
+    console.log('shapes', writingMode.value)
     setTimeout(() => {
-      refMenu.value.hide()
+      // refMenu.value.hide()
+      refMenu.value?.refMenu?.hide()
     }, 300)
   })
 }
 
 function cancelShape() {
   clearPad()
-  refMenu.value.hide()
+  // console.log('cancel', refMenu.value?.refMenu.hide())
+  refMenu.value?.refMenu?.hide()
 }
 
-const handlePointerDown = (event) => {
-  const [x, y] = getTargetPosition(event)
+const handlePointerDown = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  writingMode.value = true
+  const [x, y] = getTargetPosition(e)
   store.setDialogForm('x', x)
   store.setDialogForm('y', y)
   store.setTemplateActive(store.templateActive)
+  startRect(e)
   // console.log(store.templateActive)
 }
 const handlePointerUp = (event) => {
   console.log('pointer up')
+  clearTemp()
+  endRect(event)
+  writingMode.value = false
+}
+
+const handleMouseMove = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  console.log('mouseMove', writingMode.value)
+  if (writingMode.value === true && store.dialogForm.penanda === 'drag-segi-empat') {
+    const canvas = canvasRef1.value
+    const context = ctx1.value
+    if (start.value.x) {
+      const { x, y } = getMousePos1(canvas, e)
+      context.beginPath()
+      context.rect(start.value.x, start.value.y, x - start.value.x, y - start.value.y)
+      context.fillRect(0, 0, canvas.width, canvas.height)
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      context.closePath()
+      context.strokeStyle = 'red'
+      context.stroke()
+      context.beginPath()
+      context.arc(start.value.x, start.value.y, 5, 0, 2 * Math.PI)
+      context.fill()
+      context.beginPath()
+      context.arc(x, y, 5, 0, 2 * Math.PI)
+      context.fill()
+    }
+  }
+}
+
+const handleMouseOut = (e) => {
+  clearTemp()
+  writingMode.value = false
+}
+
+function clearTemp() {
+  const canvas = canvasRef1.value
+  const context = ctx1.value
+  context.clearRect(0, 0, canvas.width, canvas.height)
+}
+
+function startRect(e) {
+  start.value = getMousePos(e)
+}
+
+function endRect(e) {
+  const { x, y } = getMousePos(e)
+  // rects.value.push({ x: start.value.x, y: start.value.y, width: x - start.value.x, height: y - start.value.y })
+  store.setDialogForm('x', start.value.x)
+  store.setDialogForm('y', start.value.y)
+  store.setDialogForm('width', x - start.value.x)
+  store.setDialogForm('height', y - start.value.y)
+  store.setTemplateActive(store.templateActive)
+  drawShapes(store.dialogForm.penanda,
+    store.dialogForm.x,
+    store.dialogForm.y,
+    store.dialogForm.ketebalan,
+    store.dialogForm.warna,
+    store.dialogForm.panjang,
+    store.dialogForm.width,
+    store.dialogForm.height,
+    '')
+
+  console.log('end rect', store.dialogForm)
+  // start.value = {}
+  // draw()
+  // rects.value = []
+}
+
+function getMousePos(evt) {
+  const canvas = canvasRef.value
+  const rect = canvas.getBoundingClientRect(),
+    scaleX = canvas.width / rect.width,
+    scaleY = canvas.height / rect.height
+
+  return {
+    x: (evt.clientX - rect.left) * scaleX,
+    y: (evt.clientY - rect.top) * scaleY
+  }
+}
+function getMousePos1(canvas, evt) {
+  const rect = canvas.getBoundingClientRect(),
+    scaleX = canvas.width / rect.width,
+    scaleY = canvas.height / rect.height
+
+  return {
+    x: (evt.clientX - rect.left) * scaleX,
+    y: (evt.clientY - rect.top) * scaleY
+  }
 }
 
 function getTargetPosition(event) {
@@ -636,7 +368,7 @@ function getTargetPosition(event) {
   return [x, y]
 }
 
-function drawShapes(name, x, y, tebal, warna, p, no) {
+function drawShapes(name, x, y, tebal, warna, p, w, h, no) {
   const cx = ctx.value
   cx.beginPath()
   if (writingMode.value) {
@@ -644,6 +376,8 @@ function drawShapes(name, x, y, tebal, warna, p, no) {
       cx.arc(x, y, p, 0, 2 * Math.PI)
     } else if (name === 'kotak') {
       cx.rect(x - p, y - p, p * 2, p * 2)
+    } else if (name === 'drag-segi-empat') {
+      cx.rect(x, y, w, h)
     }
     cx.lineWidth = tebal
     cx.strokeStyle = warna
@@ -678,11 +412,9 @@ function hapusGambar() {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    // console.log('hapus gambar', tab.value)
     store.deleteGambar(props.pasien, tab.value).then(() => {
       clearPad()
     })
-    // console.log('OK')
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {
@@ -695,8 +427,6 @@ const arr = computed(() => {
 })
 
 function func(filename) {
-  // fetchingImg(store.fileGambar)
-  // console.log(store?.fileGambar)
   const bg = new Image()
   let imageURL = null
   if (store.fileGambar === null) {
@@ -719,14 +449,19 @@ function func(filename) {
     ctx.value.fillRect(0, 0, cvn.width, cvn.height)
     try {
       ctx.value.drawImage(bg, x, y, width, height)
+      console.log('arr', arr.value)
 
       if (arr.value.length > 0) {
         for (let i = 0; i < arr.value.length; i++) {
           drawShapes(arr.value[i].penanda,
-            arr.value[i].x, arr.value[i].y,
+            arr.value[i].x,
+            arr.value[i].y,
             arr.value[i].ketebalan,
             arr.value[i].warna,
-            arr.value[i].panjang, i + 1)
+            arr.value[i].panjang,
+            arr.value[i].width,
+            arr.value[i].height,
+            i + 1)
         }
       }
     } catch (error) {
@@ -757,7 +492,7 @@ function func(filename) {
 // }
 
 watch(() => arr, (obj) => {
-  console.log('watch', obj)
+  // console.log('watch', obj)
   writingMode.value = true
   func()
 }, { deep: true })
