@@ -85,7 +85,7 @@
       </div>
     </div>
     <div>
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -109,7 +109,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -200,7 +200,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -410,17 +410,17 @@
                     </div>
                   </q-slide-transition>
                 </q-card> -->
-                <q-separator
+                <!-- <q-separator
                   color="grey"
                   size="5px"
-                />
+                /> -->
               </template>
             </transition-group>
           </q-list>
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -451,7 +451,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -467,7 +467,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -506,13 +506,13 @@
                     :key="l"
                   >
                     <td
-                      class="text-left ellipsis"
+                      class="text-left f-12 ellipsis"
                       style="max-width: 250px;"
                     >
                       {{ lab?.pemeriksaanlab?.rs2 }}
                     </td>
                     <td
-                      class="text-right"
+                      class="text-right f-12"
                       style="max-width: 150px;"
                     >
                       {{ lab?.rs21 }}
@@ -525,7 +525,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -541,7 +541,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -565,7 +565,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -589,7 +589,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -613,7 +613,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
@@ -672,7 +672,7 @@
         </div>
       </div>
       <q-separator />
-      <div class="row">
+      <div class="row q-my-sm">
         <div class="col-5">
           <div class="row">
             <div class="col-1">
