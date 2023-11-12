@@ -58,14 +58,14 @@
         <q-separator class="q-my-md" />
         <div>
           <div class="text-weight-bold f-12 q-mb-sm text-right">
-            Status Pasien
+            Filter Tanggal
           </div>
           <q-select
             v-model="txt"
             dense
             outlined
             :options="txts"
-            label="status pasien"
+            label="Pilih filter"
             class="q-ml-sm"
             emit-value
             map-options
