@@ -26,7 +26,7 @@
       <div class="print-hide row">
         <app-input
           v-model="pekerjaan"
-          label="Tulis pekerjaan sekolah"
+          label="Tulis pekerjaan / sekolah"
           outlined
         />
       </div>
@@ -186,8 +186,8 @@ const props = defineProps({
 })
 const mulai = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const selesai = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
-const pekerjaan = ref('belum di tulis')
-const doc = ref('Dinas')
+const pekerjaan = ref('')
+const doc = ref('')
 const documents = ref([
   {
     label: 'Dinas',
