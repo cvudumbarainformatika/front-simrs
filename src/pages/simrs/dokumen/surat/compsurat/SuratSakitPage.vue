@@ -22,6 +22,40 @@
         </q-tooltip>
       </q-btn>
     </q-bar>
+    <div>
+      <div class="print-hide row">
+        <app-input
+          v-model="pekerjaan"
+          label="Tulis pekerjaan sekolah"
+          outlined
+        />
+      </div>
+      <div class="row items-center">
+        <div>tidak dapat : </div>
+        <q-option-group
+          v-model="doc"
+          class="print-hide"
+          :options="documents"
+          inline
+        />
+      </div>
+      <div class="row q-col-gutter-sm">
+        <app-input-date
+          :model="mulai"
+          class="small print-hide"
+          label="Dari"
+          outlined
+          @set-model="setMulai"
+        />
+        <app-input-date
+          :model="selesai"
+          class="small  print-hide"
+          label="Sampai"
+          outlined
+          @set-model="setSelesai"
+        />
+      </div>
+    </div>
     <div id="printMe">
       <KopSuratPage />
       <!-- isi -->
@@ -72,16 +106,7 @@
               Pekerjaan / Sekolah
             </div>
             <div class="col-8">
-              <div class="print-hide">
-                <app-input
-                  v-model="pekerjaan"
-                  label="Tulis pekerjaan"
-                  outlined
-                />
-              </div>
-              <div class="print-only">
-                {{ pekerjaan }}
-              </div>
+              {{ pekerjaan }}
             </div>
           </div>
           <div
@@ -100,35 +125,18 @@
 
           <div class="indent">
             Dari hasil pemerikasaan, kami dapatkan yang bersangkutan dalam keadaan sakit sehingga tidak dapat
-            <q-option-group
-              v-model="doc"
-              class="print-hide"
-              :options="documents"
-              inline
-            />
-            <span class="print-only text-weight-bold">
+
+            <span class="text-weight-bold">
               {{ doc }}.
             </span>
             Karena itu memerlukan waktu beristirahat mulai tanggal
-            <app-input-date
-              :model="mulai"
-              class="small print-hide"
-              label="Dari"
-              outlined
-              @set-model="setMulai"
-            />
-            <span class="print-only text-weight-bold">
+
+            <span class="text-weight-bold">
               {{ date.formatDate(mulai,'DD MMMM YYYY') }}
             </span>
             s/d
-            <app-input-date
-              :model="selesai"
-              class="small  print-hide"
-              label="Sampai"
-              outlined
-              @set-model="setSelesai"
-            />
-            <span class="print-only text-weight-bold">
+
+            <span class="text-weight-bold">
               {{ date.formatDate(selesai,'DD MMMM YYYY') }}
             </span>
           </div>
@@ -175,7 +183,7 @@ const props = defineProps({
 })
 const mulai = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const selesai = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
-const pekerjaan = ref('')
+const pekerjaan = ref('belum di tulis')
 const doc = ref('Dinas')
 const documents = ref([
   {
