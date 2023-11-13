@@ -175,8 +175,10 @@ function setNomor(val) {
       return val?.kontrol?.noSuratKontrol
     } else { return '-' }
   } else if (val?.rs4 === 'Konsultasi') {
-    if (val?.masterpoli) {
-      return val?.masterpoli?.rs2
+    if (val?.listkonsul) {
+      return val?.listkonsul?.noreg_lama
+    } else if (val?.rekomdpjp) {
+      return val?.rekomdpjp?.noreg
     } else { return '-' }
   } else if (val?.rs4 === 'Rawat Inap') {
     if (val?.spri) {

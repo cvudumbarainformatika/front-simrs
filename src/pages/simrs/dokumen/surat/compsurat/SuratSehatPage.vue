@@ -31,7 +31,7 @@
       <div>
         <div class="row justify-center ">
           <div class="endas">
-            Surat Keterangan Sehat
+            Surat Keterangan Dokter
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@ const props = defineProps({
 
 const printObj = {
   id: 'printMe',
-  popTitle: 'Surat Keterangan Sehat'
+  popTitle: 'Surat Keterangan Dokter'
 
 }
 </script>

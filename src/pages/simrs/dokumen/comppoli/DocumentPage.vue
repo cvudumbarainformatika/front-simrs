@@ -72,7 +72,7 @@ const documents = ref([
     value: 'Sakit'
   },
   {
-    label: 'Surat Keterangan Sehat',
+    label: 'Surat Keterangan Dokter',
     value: 'Sehat'
   },
   {
