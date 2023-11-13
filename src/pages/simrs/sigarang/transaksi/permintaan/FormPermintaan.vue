@@ -581,8 +581,8 @@ const simpanList = () => {
 }
 const setTanggal = val => {
   store.tanggal = date.formatDate(val, 'DD MMMM YYYY')
-  store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD HH:mm:ss'))
-  // console.log(store.form)
+  store.setForm('tanggal', date.formatDate(val, 'YYYY-MM-DD') + date.formatDate(Date.now(), ' HH:mm:ss'))
+  console.log(store.form)
 }
 const clearPengguna = () => {
   store.setForm('kode_ruang', null)
