@@ -1,8 +1,44 @@
 <template>
   <div>
+    <div class="row">
+      <div class="col-6">
+        <app-input
+          v-model="nomor"
+          label="Nomor"
+          outlined
+          dense
+        />
+      </div>
+      <div class="col-6">
+        <app-input
+          v-model="pekerjaan"
+          label="Pekerjaan"
+          outlined
+          dense
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <app-input
+          v-model="minta"
+          label="Atas Permintaan"
+          outlined
+          dense
+        />
+      </div>
+      <div class="col-6">
+        <app-input-date
+          v-model="tgl"
+          label="Tanggal"
+          outlined
+          dense
+        />
+      </div>
+    </div>
     <q-bar
       dense
-      class="bg-white"
+      class="bg-white q-mt-sm"
     >
       <q-space />
       <q-btn
@@ -62,6 +98,7 @@
 </template>
 <script setup>
 import { date } from 'quasar'
+import { ref } from 'vue'
 import KopSuratPage from './KopSuratPage.vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -70,7 +107,10 @@ const props = defineProps({
     default: null
   }
 })
-
+const nomor = ref('')
+const pekerjaan = ref('')
+const minta = ref('')
+const tgl = ref('')
 const printObj = {
   id: 'printMe',
   popTitle: 'Surat Keterangan Dokter'

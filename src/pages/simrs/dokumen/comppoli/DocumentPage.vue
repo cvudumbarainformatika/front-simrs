@@ -76,6 +76,14 @@ const documents = ref([
     value: 'Sehat'
   },
   {
+    label: 'Pengantar Rujuk Balik',
+    value: 'prb'
+  },
+  {
+    label: 'Pengantar Rujuk RS Lain',
+    value: 'rslain'
+  },
+  {
     label: 'Rencana Pasien',
     value: 'Rencana'
   }
@@ -90,7 +98,9 @@ const comp = [
   { nama: 'Billing', page: defineAsyncComponent(() => import('./BillingPage.vue')) },
   { nama: 'Sakit', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSakitPage.vue')) },
   { nama: 'Sehat', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSehatPage.vue')) },
-  { nama: 'Rencana', page: defineAsyncComponent(() => import('../surat/compsurat/SuratRencanaPage.vue')) }
+  { nama: 'Rencana', page: defineAsyncComponent(() => import('../surat/compsurat/SuratRencanaPage.vue')) },
+  { nama: 'prb', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRujukBalik.vue')) },
+  { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) }
 ]
 const cekPanel = () => {
   const val = doc.value
