@@ -57,7 +57,6 @@ const props = defineProps({
 })
 
 const doc = ref('')
-
 const documents = ref([
   {
     label: 'Resume',
