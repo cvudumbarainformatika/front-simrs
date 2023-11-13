@@ -5,6 +5,9 @@
   >
     <!-- <div class="t-canvas"> -->
     <div class="absolute-left full-height">
+      <DrawerKiri />
+    </div>
+    <div class="absolute-left full-height">
       <MenuSamping />
     </div>
     <canvas
@@ -20,6 +23,7 @@
 
 <script setup>
 import MenuSamping from './MenuSamping.vue'
+import DrawerKiri from './DrawerKiri.vue'
 import { ref, onMounted } from 'vue'
 const el = ref(null)
 

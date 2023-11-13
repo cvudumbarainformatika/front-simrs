@@ -49,7 +49,7 @@
                 class="bg-dark"
               />
             </div>
-            <div class="column full-height">
+            <div class="column full-height bg-yellow">
               <canvas-page
                 :key="pasien"
                 :width="canvasWidth"
@@ -103,6 +103,7 @@
 <script setup>
 // import BodyPage from './comppemeriksaan/Bodypage.vue'
 import CanvasPage from './comppemeriksaan/CanvasPage.vue'
+// import CanvasPage from './comppemeriksaan/canvas/CanvasPageBaru.vue'
 import TemplateGambar from './comppemeriksaan/TemplateGambar.vue'
 import FormPemeriksaan from './comppemeriksaan/FormPemeriksaan.vue'
 import ListPemeriksaan from './comppemeriksaan/ListPemeriksaan.vue'
