@@ -5,6 +5,18 @@
       :key="i"
       class="q-mb-lg"
     >
+      <div
+        v-if="toItem?.rs4==='Rawat Inap'"
+        class="row no-wrap"
+      >
+        <app-input
+          v-model="ket"
+          class="col-11"
+          valid
+          outlined
+          label="Keterangan"
+        />
+      </div>
       <q-bar
         dense
         class="bg-white"
@@ -69,12 +81,12 @@
               : {{ setKepada(toItem) }}
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-my-md">
             <div>
               Mohon Pemeriksaan dan Penanganan lebih lanjut :
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-mb-xs">
             <div class="col-3">
               No Kartu
             </div>
@@ -82,7 +94,7 @@
               : {{ pasien?.noka }}
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-mb-xs">
             <div class="col-3">
               No RM
             </div>
@@ -90,7 +102,7 @@
               : {{ pasien?.norm }}
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-mb-xs">
             <div class="col-3">
               Nama Peserta
             </div>
@@ -98,20 +110,52 @@
               : {{ pasien?.nama }}
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-mb-xs">
             <div class="col-3">
               Tgl Lahir
             </div>
             <div class="col-9">
-              : {{ pasien?.tgllahir }}
+              : {{ date.formatDate(pasien?.tgllahir,'DD MMMM YYYY') }}
             </div>
           </div>
-          <div class="row items-center justify-between q-mb-sm">
+          <div class="row items-center justify-between q-mb-xs">
+            <div class="col-3">
+              Jenis Kelamin
+            </div>
+            <div class="col-9">
+              : {{ pasien?.kelamin }}
+            </div>
+          </div>
+          <div class="row items-center justify-between q-mb-xs">
             <div class="col-3">
               Diagnosa
             </div>
             <div class="col-9">
               : {{ pasien?.diagnosa.length?pasien?.diagnosa[0].masterdiagnosa?.rs1 + ' - ' + pasien?.diagnosa[0].masterdiagnosa?.rs4 :'-' }}
+            </div>
+          </div>
+          <div class="row items-center justify-between q-mb-xs">
+            <div class="col-3">
+              Tanggal Rencana {{ toItem?.rs4 }}
+            </div>
+            <div class="col-9">
+              : {{ setTgl(toItem) }}
+            </div>
+          </div>
+          <div
+            v-if="toItem?.rs4==='Rawat Inap'"
+            class="row items-center justify-between q-mb-xs"
+          >
+            <div class="col-3">
+              Keterangan
+            </div>
+            <div class="col-9">
+              : {{ ket }}
+            </div>
+          </div>
+          <div class="row items-center justify-between q-my-md">
+            <div class="col-12">
+              Demikian atas bantuaannya, diucapkan banyak terimakasih.
             </div>
           </div>
           <div class="row items-center justify-between q-mb-xl">
@@ -139,7 +183,7 @@
 </template>
 <script setup>
 import { date } from 'quasar'
-// import { ref } from 'vue'
+import { ref } from 'vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
@@ -147,7 +191,7 @@ const props = defineProps({
     default: null
   }
 })
-
+const ket = ref('')
 // const toItem = ref(null)
 
 function setKepada(val) {
@@ -187,6 +231,27 @@ function setNomor(val) {
   } else if (val?.rs4 === 'Rumah Sakit Lain') {
     if (val?.transrujukan) {
       return val?.transrujukan?.rs3
+    } else { return '-' }
+  }
+}
+function setTgl(val) {
+  if (val?.rs4 === 'Kontrol') {
+    if (val?.kontrol) {
+      return date.formatDate(val?.kontrol?.tglRencanaKontrol, 'DD MMMM YYYY')
+    } else { return '-' }
+  } else if (val?.rs4 === 'Konsultasi') {
+    if (val?.listkonsul) {
+      return date.formatDate(val?.listkonsul?.tgl_rencana_konsul, 'DD MMMM YYYY')
+    } else if (val?.rekomdpjp) {
+      return date.formatDate(val?.rekomdpjp?.tglKontrol, 'DD MMMM YYYY')
+    } else { return '-' }
+  } else if (val?.rs4 === 'Rawat Inap') {
+    if (val?.spri) {
+      return date.formatDate(val?.spri?.tglRencanaKontrol, 'DD MMMM YYYY')
+    } else { return '-' }
+  } else if (val?.rs4 === 'Rumah Sakit Lain') {
+    if (val?.transrujukan) {
+      return date.formatDate(val?.transrujukan?.tglRencanaKunjungan, 'DD MMMM YYYY')
     } else { return '-' }
   }
 }
