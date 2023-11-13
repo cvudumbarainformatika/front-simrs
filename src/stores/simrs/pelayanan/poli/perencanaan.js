@@ -12,6 +12,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     loadingSaveKonsul: false,
     loadingSaveKontrol: false,
     loadingSaveSelesai: false,
+    loadingNoka: false,
     formKonsul: {
       kdSaran: '3',
       noreg_lama: '',
@@ -85,6 +86,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       planing: 'Rawat Inap'
 
     },
+    perujuk: null,
     loadingSave: false
   }),
   // getters: {
@@ -226,7 +228,23 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         // console.log(error)
       }
     },
+    // ===================================================================================================
+    cekPesertaByNoka (val) {
+      this.loadingNoka = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/bridgingbpjs/pendaftaran/cekpsertabpjsbynoka', val)
+          .then((resp) => {
+            this.loadingNoka = false
+            console.log('Noka', resp.data.result)
 
+            this.perujuk = resp?.data?.result
+
+            resolve(resp?.data?.result)
+          }).catch(() => {
+            this.loadingNoka = false
+          })
+      })
+    },
     // ====================================================================================================================================================RUmah sakit lain
     async saveRsLain(pasien) {
       this.formRsLain.norm = pasien?.norm

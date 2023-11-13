@@ -112,6 +112,7 @@
           option-value="kode"
           option-label="nama"
           hide-bottom-space
+          :loading="store.loadingNoka"
           @filter="onFilterTest"
           @update:model-value="updateModelPpk"
         />
@@ -169,7 +170,7 @@
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import { onMounted, ref } from 'vue'
 import { api } from 'src/boot/axios'
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 const props = defineProps({
   pasien: {
     type: Object,
@@ -212,6 +213,7 @@ const onFilterTest = async (val, update, abort) => {
   if (code === '200') {
     update(() => {
       optionsRs.value = response?.data?.result?.faskes
+      console.log(optionsRs.value)
     })
   }
 }
@@ -236,6 +238,17 @@ const filterPoli = async (val, update, abort) => {
 
 onMounted(() => {
   store.initPasien(props.pasien)
+  const form = { noka: props?.pasien?.noka, tglsep: date.formatDate(Date.now(), 'YYYY-MM-DD') }
+  store.cekPesertaByNoka(form).then(resp => {
+    const opt = {
+      kode: resp?.peserta?.provUmum?.kdProvider,
+      nama: resp?.peserta?.provUmum?.nmProvider
+    }
+    optionsRs.value.push(opt)
+    store.formPrb.ppkdirujuk = resp?.peserta?.provUmum?.kdProvider
+
+    console.log('um', opt)
+  })
 })
 
 function simpan() {
