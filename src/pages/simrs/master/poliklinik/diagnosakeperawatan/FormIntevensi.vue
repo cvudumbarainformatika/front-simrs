@@ -1,7 +1,17 @@
 <template>
   <div>
-    <div class="q-pa-sm text-weight-bold">
-      {{ diagnosa?.kode }} - {{ diagnosa?.nama }}
+    <div class="row q-pa-sm text-weight-bold justify-between">
+      <div>{{ diagnosa?.kode }} - {{ diagnosa?.nama }}</div>
+      <div>
+        <q-btn
+          label="back"
+          dense
+          flat
+          size="sm"
+          color="primary"
+          @click="emits('back')"
+        />
+      </div>
     </div>
     <q-separator />
     <ObservasiInput />
@@ -23,5 +33,7 @@ defineProps({
     default: null
   }
 })
+
+const emits = defineEmits(['back'])
 
 </script>

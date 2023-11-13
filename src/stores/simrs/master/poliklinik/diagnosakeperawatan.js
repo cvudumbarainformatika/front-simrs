@@ -94,6 +94,10 @@ export const useMasterDiagnosaKeperawatan = defineStore('master-diagnosa-keperaw
       this.diagnosa = row
       this.isIntervensi = true
     },
+    setDiagnosa() {
+      this.editedForm = false
+      this.isIntervensi = false
+    },
 
     async saveIntervensi(group, row) {
       const form = {
