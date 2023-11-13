@@ -362,14 +362,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         template = master?.items[0]?.nama ?? 'Body'
         imgActive = 0
       } else {
-        file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image
+        file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
         template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.nama ?? 'Body'
         imgActive = this.gambarActive
       }
       this.fileGambar = file
-      // this.templateActive = template
+      this.templateActive = template
       // console.log('init', file)
-      console.log('init template', this.templateActive)
+      // console.log('init template', this.templateActive)
       // console.log('init gambar', this.gambarActive)
       // console.log('init master', master?.items)
 

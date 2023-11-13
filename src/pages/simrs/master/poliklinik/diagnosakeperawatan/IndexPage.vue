@@ -62,7 +62,10 @@
               v-else
               class="col-5 full-height scroll q-pa-sm"
             >
-              <FormIntevensi :diagnosa="store?.diagnosa" />
+              <FormIntevensi
+                :diagnosa="store?.diagnosa"
+                @back="store.setDiagnosa"
+              />
             </div>
             <div class="col-7 full-height bg-grey scroll q-pa-sm">
               <ListDiagnosa

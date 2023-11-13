@@ -279,6 +279,9 @@ const handleMouseMove = (e) => {
   e.preventDefault()
   e.stopPropagation()
   console.log('mouseMove', writingMode.value)
+  if (!writingMode.value) {
+    return
+  }
   if (writingMode.value === true && store.dialogForm.penanda === 'drag-segi-empat') {
     const canvas = canvasRef1.value
     const context = ctx1.value
@@ -474,6 +477,7 @@ function func(filename) {
   }
   // bg.crossOrigin = 'anonymous'
   bg.src = imageURL
+  // writingMode.value = false
 }
 
 // function fetchingImg(url) {
