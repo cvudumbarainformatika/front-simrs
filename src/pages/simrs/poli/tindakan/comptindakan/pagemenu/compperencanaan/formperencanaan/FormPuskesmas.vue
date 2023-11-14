@@ -246,8 +246,13 @@ onMounted(() => {
     }
     optionsRs.value.push(opt)
     store.formPrb.ppkdirujuk = resp?.peserta?.provUmum?.kdProvider
-
-    console.log('um', opt)
+    const poli = {
+      nama: props?.pasien?.polibpjs,
+      kode: props?.pasien?.kodepolibpjs
+    }
+    optionsPoli.value.push(poli)
+    store.formPrb.polirujukan = props?.pasien?.kodepolibpjs
+    // console.log('um', poli)
   })
 })
 

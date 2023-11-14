@@ -61,7 +61,7 @@
                   outline
                   color="accent"
                 >
-                  {{ item?.rs4==='Rawat Inap'?'ke ' + item?.ranap?.groups_nama : 'ke ' + item?.masterpoli?.rs2 }}
+                  {{ item?.rs4==='Rawat Inap'?'ke ' + (item?.ranap?.groups_nama ?? item?.rs5): 'ke ' + item?.masterpoli?.rs2 }}
                 </q-badge>
               </div>
               <div
