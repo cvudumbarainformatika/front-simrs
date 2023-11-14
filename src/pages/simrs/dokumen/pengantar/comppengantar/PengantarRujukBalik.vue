@@ -82,8 +82,13 @@
         <div class="row q-my-sm">
           Tindak Lanjut yang dianjurkan:
         </div>
-        <div class="row q-my-sm">
-          Tindak Lanjut yang dianjurkan:
+        <div class="row q-my-sm items-center">
+          <div class="col-1">
+            <q-checkbox v-model="val" />
+          </div>
+          <div class="col-11">
+            Perlu Rawat Inap
+          </div>
         </div>
       </div>
       <!-- bottom -->
