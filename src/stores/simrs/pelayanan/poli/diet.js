@@ -72,7 +72,7 @@ export const useDietPoli = defineStore('diet-poli', {
       this.loadingHapus = true
       const payload = { noreg: pasien?.noreg, id }
       try {
-        const resp = await api.post('v1/simrs/penunjang/fisioterapi/hapuspermintaan', payload)
+        const resp = await api.post('v1/simrs/pelayanan/hapusdiet', payload)
         this.loadingHapus = false
         console.log(resp)
         if (resp.status === 200) {

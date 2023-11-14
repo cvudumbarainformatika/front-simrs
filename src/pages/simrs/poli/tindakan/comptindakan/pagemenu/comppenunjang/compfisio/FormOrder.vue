@@ -2,7 +2,7 @@
   <div class="column full-height">
     <q-bar class="col-auto bg-dark text-white">
       <div class="q-py-sm f-14 ">
-        Form Permintaan Fisio Terapi
+        Form Permintaan Rehab Medik
       </div>
     </q-bar>
     <div class="col full-height">
@@ -57,7 +57,7 @@ const props = defineProps({
     default: null
   }
 })
-console.log(props?.peasien)
+console.log(props?.pasien)
 
 function saveOrder() {
   store.saveOrder(props.pasien).then(() => {

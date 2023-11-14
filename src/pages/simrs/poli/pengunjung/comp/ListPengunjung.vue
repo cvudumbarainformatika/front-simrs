@@ -41,9 +41,19 @@
               v-if="item?.planning?.length"
               caption
             >
-              rencana : <span class="text-primary">{{ item?.planning[0].rs4 }}</span> <span
+              rencana : <span class="text-primary">{{ item?.planning[0].rs4 }}</span>
+              <span
+                v-if="item?.planning[0].rs4==='Konsultasi'"
+                class="text-primary"
+              > ( {{ item?.planning[0].masterpoli?.rs2 }} )</span>
+              <span
                 v-if="item?.planning[1]"
-              >| <span class="text-secondary">{{ item?.planning[1].rs4 }}</span></span>
+              > | <span class="text-secondary">{{ item?.planning[1].rs4 }}</span>
+                <span
+                  v-if="item?.planning[1].rs4==='Konsultasi'"
+                  class="text-secondary"
+                > ( {{ item?.planning[1].masterpoli?.rs2 }} )</span>
+              </span>
             </q-item-label>
           </q-item-section>
           <q-separator

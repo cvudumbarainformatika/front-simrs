@@ -12,7 +12,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       { name: 'Laborat', page: 'Laborat' },
       { name: 'Radiologi', page: 'Radiologi' },
       { name: 'ODC', page: 'Operasi' },
-      { name: 'Fisio Terapi', page: 'Fisio' },
+      { name: 'Rehab Medik', page: 'Fisio' },
       { name: 'Diet', page: 'Diet' },
       { name: 'Penunjang Lain', page: 'PenunjangLain' }
     ],
