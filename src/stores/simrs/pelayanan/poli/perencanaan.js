@@ -40,11 +40,13 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       tglrujukan: '',
       tglrencanakunjungan: '',
       ppkdirujuk: '',
+      ppkdirujukx: '',
       jenispelayanan: '2',
       catatan: '',
       diagnosarujukan: '',
       tiperujukan: '',
-      polirujukan: ''
+      polirujukan: '',
+      namapolirujukan: ''
     },
     formPrb: {
       norm: '',
@@ -53,6 +55,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       tglrujukan: '',
       tglrencanakunjungan: '',
       ppkdirujuk: '',
+      ppkdirujukx: '',
+      namapolirujukan: '',
       jenispelayanan: '2',
       catatan: '',
       diagnosarujukan: '',

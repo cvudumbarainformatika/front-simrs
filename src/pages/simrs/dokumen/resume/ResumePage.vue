@@ -565,7 +565,24 @@
           </div>
         </div>
         <div class="col-7">
-          kanan
+          <div v-if="store.item?.pembacaanradiologi?.length">
+            <div
+              v-for="(item,i) in store.item?.pembacaanradiologi"
+              :key="i"
+              class="row"
+            >
+              <div class="col-12">
+                <div class="row no-wrap">
+                  <div class="col-shrink q-mr-xs">
+                    -
+                  </div>
+                  <div class="col">
+                    {{ item?.rs3 }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <q-separator />

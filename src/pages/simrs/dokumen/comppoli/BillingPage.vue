@@ -120,7 +120,7 @@
         No
       </div>
       <div class="col-9">
-        Tindakan
+        Jenis Layanan
       </div>
       <div class="col-2">
         Harga
@@ -130,7 +130,7 @@
     <div v-if="store.rekapBill && !store.loading">
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          1
+          1.
         </div>
         <div class="col-9">
           Pelayanan Rekam Medik
@@ -141,7 +141,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          2
+          2.
         </div>
         <div class="col-9">
           Biaya Kartu Identitas Pasien
@@ -152,7 +152,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          3
+          3.
         </div>
         <div class="col-9">
           Poliklinik
@@ -163,7 +163,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          4
+          4.
         </div>
         <div class="col-9">
           Konsultasi Antar Poli
@@ -174,7 +174,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          5
+          5.
         </div>
         <div class="col-9">
           Tindakan :
@@ -197,7 +197,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          6
+          6.
         </div>
         <div class="col-9">
           Biaya Pelayanan Penunjang
@@ -295,7 +295,7 @@
       </div>
       <div class="row items-center no-wrap ">
         <div class="col-1">
-          7
+          7.
         </div>
         <div class="col-9">
           Biaya Farmasi / Obat

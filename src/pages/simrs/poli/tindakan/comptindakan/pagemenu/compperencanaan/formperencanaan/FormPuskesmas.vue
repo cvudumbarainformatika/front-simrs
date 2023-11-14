@@ -246,23 +246,29 @@ onMounted(() => {
     }
     optionsRs.value.push(opt)
     store.formPrb.ppkdirujuk = resp?.peserta?.provUmum?.kdProvider
+    store.formPrb.ppkdirujukx = resp?.peserta?.provUmum?.nmProvider
     const poli = {
       nama: props?.pasien?.polibpjs,
       kode: props?.pasien?.kodepolibpjs
     }
     optionsPoli.value.push(poli)
     store.formPrb.polirujukan = props?.pasien?.kodepolibpjs
+    store.formPrb.namapolirujukan = props?.pasien?.polibpjs
     // console.log('um', poli)
   })
 })
 
 function simpan() {
   console.log('ok', store.formPrb)
-  $q.notify({
-    type: 'negative',
-    message: 'Maaf, Anda tidak terhubung ke BPJS',
-    position: 'top-right',
-    color: 'negative'
-  })
+  if (props?.pasien?.groups === '1') {
+    store.saveRujukBalik(props?.pasien)
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Maaf, Anda tidak terhubung ke BPJS',
+      position: 'top-right',
+      color: 'negative'
+    })
+  }
 }
 </script>
