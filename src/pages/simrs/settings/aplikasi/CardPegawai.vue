@@ -79,6 +79,30 @@
               </q-menu>
             </q-btn>
           </div>
+          <div class="ellipsis">
+            <strong>Poli : </strong>
+            <q-btn
+              :label="item.poli? item.poli.rs2: 'tidak ada akses role'"
+              no-caps
+              flat
+              size="12px"
+              :loading="store.loadingPoli"
+            >
+              <q-menu>
+                <q-list style="min-width: 100px">
+                  <q-item
+                    v-for="(poli,i) in store.polis"
+                    :key="i"
+                    v-close-popup
+                    clickable
+                    @click="store.setPoli(poli)"
+                  >
+                    <q-item-section>{{ poli?.polirs }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
         </div>
       </div>
     </q-card-section>

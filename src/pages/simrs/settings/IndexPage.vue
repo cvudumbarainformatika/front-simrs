@@ -187,6 +187,7 @@ onMounted(() => {
   store.getData()
   store.getRuang()
   store.getRole()
+  store.getPoli()
 })
 
 function newData() {
@@ -309,7 +310,7 @@ function setPegawai(val) {
         const appInd = findWithAttr(menu, 'id', dat.aplikasi_id)
         const menuInd = findWithAttr(menu[appInd].menus, 'id', dat.menu_id)
         const subInd = menu[appInd].menus[menuInd] ? findWithAttr(menu[appInd].menus[menuInd].submenus, 'id', dat.submenu_id) : -1
-        console.log('index nya', appInd, menuInd, subInd)
+        // console.log('index nya', appInd, menuInd, subInd)
         if (appInd >= 0) menu[appInd].checked = true
         if (menuInd >= 0) menu[appInd].menus[menuInd].checked = true
         if (subInd >= 0) menu[appInd].menus[menuInd].submenus[subInd].checked = true

@@ -9,9 +9,11 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     pegawai: null,
     loading: false,
     loadingRole: false,
+    loadingPoli: false,
     loadingRuang: false,
     currentApp: '',
     roles: [],
+    polis: [],
     ruangs: [],
     par: {
       q: ''
@@ -66,7 +68,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           }
 
           menus.menus.length > 0 ? menus.menus.unshift(menu) : menus.menus.push(menu)
-          console.log('addMenu', menus)
+          // console.log('addMenu', menus)
         }
       } else {
         const menu = {
@@ -80,16 +82,16 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         }
 
         menus.menus.length > 0 ? menus.menus.unshift(menu) : menus.menus.push(menu)
-        console.log('addMenu', menus)
+        // console.log('addMenu', menus)
       }
     },
     addSubMenu(idx) {
       const menus = this.items[idx.i].menus[idx.n]
-      console.log(menus)
+      // console.log(menus)
       if (menus.submenus.length) {
         const key0 = Object.keys(menus.submenus[0])
         const temp = key0.filter(a => a === 'submenuId')
-        console.log('temp', temp)
+        // console.log('temp', temp)
         if (temp.length) {
           notifErrVue('isi dulu baru tambah baru')
         } else {
@@ -116,7 +118,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
 
         menus.submenus.length > 0 ? menus.submenus.unshift(menu) : menus.submenus.push(menu)
       }
-      console.log('addSubMenu', menus)
+      // console.log('addSubMenu', menus)
     },
 
     setPegawai(val) {
@@ -126,10 +128,10 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     async getData() {
       this.loading = true
       await api.get('/v1/settings/appmenu/aplikasi').then(resp => {
-        console.log('settings aplikasi :', resp)
+        // console.log('settings aplikasi :', resp)
         if (resp.status === 200) {
           this.items = resp.data
-          console.log('setting ', this.items)
+          // console.log('setting ', this.items)
           this.loading = false
         }
         this.loading = false
@@ -141,8 +143,15 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     async getRole() {
       await api.get('v1/settings/appakses/role')
         .then(resp => {
-          console.log('role', resp.data)
+          // console.log('role', resp.data)
           this.roles = resp.data
+        })
+    },
+    async getPoli() {
+      await api.get('v1/settings/appakses/poli')
+        .then(resp => {
+          // console.log('Poli', resp.data)
+          this.polis = resp.data
         })
     },
     setRole(val) {
@@ -150,18 +159,37 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         id: this.pegawai.id,
         role_id: val.id
       }
-      console.log('val', val, 'form', form)
+      // console.log('val', val, 'form', form)
       this.simpanRole(form)
     },
     async simpanRole(val) {
       this.loadingRole = true
       await api.post('v1/settings/appakses/store-role', val)
         .then(resp => {
-          console.log('simpan role', resp.data)
+          // console.log('simpan role', resp.data)
           this.loadingRole = false
           this.pegawai.role = resp.data
         })
         .catch(() => { this.loadingRole = false })
+    },
+    setPoli(val) {
+      // console.log('val', val)
+      const form = {
+        id: this.pegawai.id,
+        kodepoli: val?.kodepoli
+      }
+      // console.log('val', val, 'form', form)
+      this.simpanPoli(form)
+    },
+    async simpanPoli(val) {
+      this.loadingPoli = true
+      await api.post('v1/settings/appakses/store-poli', val)
+        .then(resp => {
+          console.log('simpan poli', resp.data)
+          this.loadingPoli = false
+          this.pegawai.poli = resp.data
+        })
+        .catch(() => { this.loadingPoli = false })
     },
     async getRuang() {
       this.loadingRuang = true
@@ -169,7 +197,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       await api.get('v1/ruang/cari-ruang', param)
         .then(resp => {
           this.loadingRuang = false
-          console.log('ruang', resp.data)
+          // console.log('ruang', resp.data)
           this.ruangs = resp.data
         })
         .catch(() => { this.loadingRuang = false })
@@ -179,14 +207,14 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         id: this.pegawai.id,
         kode_ruang: val.kode
       }
-      console.log('val', val, 'form', form)
+      // console.log('val', val, 'form', form)
       this.simpanRuang(form)
     },
     async simpanRuang(val) {
       this.loadingRuang = true
       await api.post('v1/settings/appakses/store-ruang', val)
         .then(resp => {
-          console.log('simpan role', resp.data)
+          // console.log('simpan role', resp.data)
           this.loadingRuang = false
           this.pegawai.ruang = resp.data
         })
@@ -201,7 +229,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       }
       await api.post('/v1/settings/appmenu/aplikasi_store', params)
         .then((resp) => {
-          console.log('post aplikasi store:', resp)
+          // console.log('post aplikasi store:', resp)
           this.getData()
           return new Promise((resolve, reject) => {
             resolve(resp)
@@ -210,7 +238,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     },
     editApp(val) {
       const form = val.item
-      console.log('form', form)
+      // console.log('form', form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/settings/appmenu/aplikasi_store', form)
@@ -223,11 +251,11 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       })
     },
     saveNewMenu(val) {
-      console.log('new menu', val)
+      // console.log('new menu', val)
       const menu = val.menu
       const key = Object.keys(menu)
       const kosong = key.filter(a => menu[a] === 'kosong')
-      console.log('key', key, 'kosong', kosong)
+      // console.log('key', key, 'kosong', kosong)
       if (menu.aplikasi_id && menu.icon && !kosong.length) {
         this.loading = true
         return new Promise(resolve => {
@@ -246,7 +274,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       }
     },
     saveEditMenu(val) {
-      console.log('edit menu', val)
+      // console.log('edit menu', val)
       const menu = val.menu
       this.loading = true
       return new Promise(resolve => {
@@ -259,11 +287,11 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       })
     },
     saveNewSubMenu(val) {
-      console.log('new sub menu', val)
+      // console.log('new sub menu', val)
       const sub = val.sub
       const key = Object.keys(sub)
       const kosong = key.filter(a => sub[a] === 'kosong')
-      // console.log('key', key, 'kosong', kosong)
+      console.log('key', key, 'kosong', kosong)
       if (sub.menu_id && !kosong.length) {
         this.loading = true
         return new Promise(resolve => {
@@ -281,7 +309,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       }
     },
     saveEditSubMenu(val) {
-      console.log('edit sub menu', val)
+      // console.log('edit sub menu', val)
       const sub = val.sub
       this.loading = true
       return new Promise(resolve => {
@@ -305,7 +333,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         api.post('v1/settings/appakses/store-akses', form)
           .then(resp => {
             this.loading = false
-            console.log('simpan akses', resp.data)
+            // console.log('simpan akses', resp.data)
             resolve(resp.data)
           })
           .catch(() => { this.loading = false })
@@ -323,7 +351,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     //     api.post('v1/settings/appakses/store-akses-menu-only', form)
     //       .then(resp => {
     //         this.loading = false
-    //         console.log('simpan akses', resp.data)
+    // console.log('simpan akses', resp.data)
     //         resolve(resp.data)
     //       })
     //       .catch(() => { this.loading = false })
