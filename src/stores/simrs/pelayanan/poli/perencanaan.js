@@ -272,6 +272,32 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         this.loadingSave = false
       }
     },
+    async saveRujukBalik(pasien) {
+      this.formPrb.norm = pasien?.norm
+      this.formPrb.noreg = pasien?.noreg
+      this.formPrb.planing = 'Rumah Sakit Lain'
+      this.formPrb.kodesistembayar = pasien?.kodesistembayar
+      this.loadingSave = true
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formPrb)
+        // console.log('save rs lain', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp?.data?.result ?? false
+          if (isi) {
+            storePasien.injectDataPasien(pasien, isi, 'planning')
+            notifSuccess(resp)
+          } else {
+            notifErrVue('Update Info Rujuk Balik Gagal')
+          }
+          this.loadingSave = false
+        }
+        this.loadingSave = false
+      } catch (error) {
+        // console.log(error)
+        this.loadingSave = false
+      }
+    },
     initPasien(pasien) {
       this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
       this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'

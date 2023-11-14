@@ -1,8 +1,18 @@
 <template>
   <div>
+    <div>
+      <div class="row">
+        <app-input
+          v-model="obat"
+          class="full-width"
+          label="Obat"
+          outlined
+        />
+      </div>
+    </div>
     <q-bar
       dense
-      class="bg-white"
+      class="bg-white q-mt-md"
     >
       <q-space />
       <q-btn
@@ -34,6 +44,47 @@
             Surat Rujukan Balik
           </div>
         </div>
+        <div class="row q-my-sm">
+          Teman sejawat Yth.
+        </div>
+        <div class="row q-my-sm">
+          Mohon Kontrol selanjutnya kepada:
+        </div>
+        <div class="row q-my-sm q-ml-md">
+          <div class="col-4">
+            Nama
+          </div>
+          <div class="col-8">
+            {{ pasien?.nama }}
+          </div>
+        </div>
+        <div class="row q-my-sm q-ml-md">
+          <div class="col-4">
+            Diagnosa
+          </div>
+          <div class="col-8">
+            <div
+              v-for="(diag,i) in pasien?.diagnosa"
+              :key="i"
+            >
+              {{ diag?.masterdiagnosa.rs1 }} - {{ diag?.masterdiagnosa.rs4 }}
+            </div>
+          </div>
+        </div>
+        <div class="row q-my-sm q-ml-md">
+          <div class="col-4">
+            No. Kartu BPJS
+          </div>
+          <div class="col-8">
+            {{ pasien?.noka }}
+          </div>
+        </div>
+        <div class="row q-my-sm">
+          Tindak Lanjut yang dianjurkan:
+        </div>
+        <div class="row q-my-sm">
+          Tindak Lanjut yang dianjurkan:
+        </div>
       </div>
       <!-- bottom -->
       <div class="q-mt-lg">
@@ -62,6 +113,7 @@
 </template>
 <script setup>
 import { date } from 'quasar'
+import { ref } from 'vue'
 import KopSuratPage from '../../surat/compsurat/KopSuratPage.vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -70,7 +122,7 @@ const props = defineProps({
     default: null
   }
 })
-
+const obat = ref('')
 const printObj = {
   id: 'printMe',
   popTitle: 'Surat Pengantar Rujuk Balik'
@@ -81,5 +133,9 @@ const printObj = {
 .endas{
   border-bottom: 1px black solid;
   font-size: 24px;
+}
+
+.indent{
+  text-indent: 50px;
 }
 </style>

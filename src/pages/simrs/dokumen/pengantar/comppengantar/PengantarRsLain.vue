@@ -82,4 +82,7 @@ const printObj = {
   border-bottom: 1px black solid;
   font-size: 24px;
 }
+.indent{
+  text-indent: 50px;
+}
 </style>

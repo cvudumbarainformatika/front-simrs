@@ -502,22 +502,6 @@
               5
             </div>
             <div class="col-11">
-              Alergi Obat
-            </div>
-          </div>
-        </div>
-        <div class="col-7">
-          kanan
-        </div>
-      </div>
-      <q-separator />
-      <div class="row q-my-sm">
-        <div class="col-5">
-          <div class="row">
-            <div class="col-1">
-              6
-            </div>
-            <div class="col-11">
               Laborat
             </div>
           </div>
@@ -573,7 +557,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              7
+              6
             </div>
             <div class="col-11">
               Radiologi
@@ -589,7 +573,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              8
+              7
             </div>
             <div class="col-11">
               USG
@@ -613,7 +597,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              9
+              8
             </div>
             <div class="col-11">
               ECG
@@ -637,7 +621,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              10
+              9
             </div>
             <div class="col-11">
               EEG
@@ -661,7 +645,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              11
+              10
             </div>
             <div class="col-11">
               Obat
@@ -720,7 +704,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              12
+              11
             </div>
             <div class="col-11">
               Tindakan
@@ -744,7 +728,7 @@
         <div class="col-5">
           <div class="row">
             <div class="col-1">
-              13
+              12
             </div>
             <div class="col-11">
               Rencana Tindak Lanjut
