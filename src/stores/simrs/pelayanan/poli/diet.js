@@ -77,8 +77,8 @@ export const useDietPoli = defineStore('diet-poli', {
         console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
-          storePasien.hapusDataFisio(pasien, id)
-          this.setNotas(resp?.data?.nota)
+          storePasien.hapusDataDiet(pasien, id)
+          // this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
       } catch (error) {
@@ -94,8 +94,11 @@ export const useDietPoli = defineStore('diet-poli', {
         kodepoli: '', // rs10
         permintaan: '', // rs4
         kodesistembayar: '',
-        kodedokter: ''
+        kodedokter: '',
+        diet: '',
+        asessmen: ''
       }
+      this.diets = []
 
       return new Promise((resolve, reject) => {
         resolve()

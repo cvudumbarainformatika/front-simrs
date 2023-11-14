@@ -20,7 +20,7 @@
     </q-bar>
     <div class="col-grow bg-grey">
       <div
-        v-if="filterredTable.length === 0"
+        v-if="props?.pasien?.diet.length === 0"
         class="column full-height flex-center text-white"
       >
         Belum Ada List Diet
@@ -34,7 +34,7 @@
         >
           <transition-group>
             <template
-              v-for="(item, i) in filterredTable"
+              v-for="(item, i) in props?.pasien?.diet"
               :key="i"
             >
               <q-item class="bg-white list-move">
@@ -43,7 +43,7 @@
                     lines="2"
                     class="f-12"
                   >
-                    <span class="">NOMOR</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
+                    <span class="">Diet</span> : <span class="text-weight-bold text-accent">{{ item?.diet }} </span>
                   </q-item-label>
                   <!-- <q-item-label
                     lines="2"
@@ -55,7 +55,7 @@
                     lines="2"
                     class="f-12"
                   >
-                    <span>Keterangan : </span> <em class="text-accent">{{ item?.rs4 }} </em>
+                    <span>Asessment : </span> <em class="text-accent">{{ item?.assessmen }} </em>
                   </q-item-label>
                 </q-item-section>
 
@@ -94,7 +94,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useDietPoli } from 'src/stores/simrs/pelayanan/poli/diet'
-import { computed } from 'vue'
+// import { computed } from 'vue'
 
 const $q = useQuasar()
 const store = useDietPoli()
@@ -105,13 +105,13 @@ const props = defineProps({
   }
 })
 
-const filterredTable = computed(() => {
-  const val = store?.form?.nota
-  const arr = props?.pasien?.fisio
-  console.log('pasien ', props?.pasien)
-  console.log('pasien fisio', arr)
-  return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
-})
+// const filterredTable = computed(() => {
+//   const val = store?.form?.nota
+//   const arr = props?.pasien?.fisio
+//   console.log('pasien ', props?.pasien)
+//   console.log('pasien fisio', arr)
+//   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
+// })
 
 function hapusItem(id) {
   $q.dialog({

@@ -71,10 +71,11 @@ const props = defineProps({
 console.log(props?.pasien)
 // eslint-disable-next-line no-unused-vars
 function updateSelection(val) {
-  // console.log(val.join(','))
-  store.setForm('diet', val.join(', '))
+  console.log(val)
+  console.log(store.diets)
 }
 function saveOrder() {
+  store.setForm('diet', store.diets.join('. '))
   store.saveOrder(props.pasien).then(() => {
     if (formRef.value) formRef.value.resetValidation()
   })
