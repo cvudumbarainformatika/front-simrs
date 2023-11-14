@@ -16,12 +16,20 @@
       >
         dsfs
       </div>
-      <CanvasComp />
       <div
         class="absolute-right full-height bg-white"
         style="width:33%;"
       >
         dsfs
+      </div>
+      <div
+        style="width: 33%;"
+        class="absolute-center full-height"
+      >
+        <CanvasComp
+          :key="props?.pasien"
+          :pasien="props?.pasien"
+        />
       </div>
     </div>
   </q-card>
@@ -30,4 +38,11 @@
 <script setup>
 // import HeaderComp from './comppemeriksaanbaru/HeaderComp.vue'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 </script>

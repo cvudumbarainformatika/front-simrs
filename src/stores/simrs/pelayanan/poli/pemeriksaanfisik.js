@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api } from 'src/boot/axios'
+import { api, pathImg } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
 import { useMasterPemeriksaanFisik } from '../../master/poliklinik/pemeriksaanfisik'
@@ -15,6 +15,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     gambarActive: 0,
     // fileGambar: '/src/assets/human/anatomys/body-human.jpg',
     fileGambar: null,
+    urlGambar: null,
     writingMode: false,
     dialogForm: {
       anatomy: '',
@@ -251,7 +252,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-        console.log('save', resp)
+        // console.log('save', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp.data.result
@@ -356,18 +357,23 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       const master = useMasterPemeriksaanFisik()
       let file = null
       let template = null
+      let imgUrl = null
       let imgActive = 0
       if (val) {
         file = master?.items[0]?.gambars[0]?.image
+        imgUrl = master?.items[0]?.gambars[0]?.url
         template = master?.items[0]?.nama ?? 'Body'
         imgActive = 0
       } else {
         file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
+        imgUrl = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.url ?? master?.items[0]?.gambars[0]?.url
         template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.nama ?? 'Body'
         imgActive = this.gambarActive
       }
       this.fileGambar = file
       this.templateActive = template
+      this.urlGambar = pathImg + imgUrl
+      // console.log('init url', pathImg + imgUrl)
       // console.log('init', file)
       // console.log('init template', this.templateActive)
       // console.log('init gambar', this.gambarActive)
@@ -380,7 +386,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         // this.fileGambar = file ?? null
         this.templateActive = template
         this.gambarActive = imgActive
-        this.fileGambar = val ? file ?? null : this.fileGambar
+        // this.fileGambar = val ? file ?? null : this.fileGambar
+        // this.urlGambar = val ? imgUrl ?? null : this.urlGambar
         this.writingMode = false
         this.dialogForm = {
           anatomy: '',
