@@ -203,7 +203,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
           this.loadingFormTindakan = false
-          this.initReset('Tindakan')
+          this.initReset('Tindakan Medik')
         }
         this.loadingFormTindakan = false
       } catch (error) {
