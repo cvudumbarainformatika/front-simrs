@@ -89,9 +89,16 @@
               :loading="store.loadingPoli"
             >
               <q-menu>
+                <app-input
+                  v-model="filt"
+                  outlined
+                  label="cari poli"
+                  autofocus
+                  @update:model-value="filter"
+                />
                 <q-list style="min-width: 100px">
                   <q-item
-                    v-for="(poli,i) in store.polis"
+                    v-for="(poli,i) in filtered"
                     :key="i"
                     v-close-popup
                     clickable
@@ -278,7 +285,13 @@
 import { ref } from 'vue'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 const store = useSettingsAplikasi()
-
+const filtered = ref(store.polis)
+const filt = ref('')
+function filter(val) {
+  if (val) {
+    filtered.value = store.polis.filter(a => a.polirs.toLowerCase().includes(val.toLowerCase()))
+  }
+}
 defineProps({
   item: {
     type: Object,
