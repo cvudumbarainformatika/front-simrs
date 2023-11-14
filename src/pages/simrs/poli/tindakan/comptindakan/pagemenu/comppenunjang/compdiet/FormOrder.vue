@@ -20,8 +20,8 @@
               :val="al.rs2"
               :label="al.rs2"
               color="primary"
-              @update:model-value="updateSelection"
             />
+            <!-- @update:model-value="updateSelection" -->
           </div>
           <div class="col-12">
             <q-input
@@ -70,10 +70,11 @@ const props = defineProps({
 })
 console.log(props?.pasien)
 // eslint-disable-next-line no-unused-vars
-function updateSelection(val) {
-  console.log(val)
-  console.log(store.diets)
-}
+// function updateSelection(val) {
+//   console.log(val)
+//   console.log(store.diets)
+//   store.setForm('diet', store.diets.join('. '))
+// }
 function saveOrder() {
   store.setForm('diet', store.diets.join('. '))
   store.saveOrder(props.pasien).then(() => {
