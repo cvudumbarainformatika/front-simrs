@@ -14,7 +14,7 @@
   </div>
 </template>
 <script setup>
-import DocumentPage from 'src/pages/simrs/dokumen/comppoli/DocumentPage.vue'
+import DocumentPage from 'src/pages/simrs/dokumen/comppoli/DocumentPageNew.vue'
 const props = defineProps({
   pasien: {
     type: Object,
