@@ -244,6 +244,8 @@ const lokalisparus = ref(['Infiltrat', 'Cavitas', 'Cairan', 'Massa', 'Nodul', 'K
 onMounted(() => {
   const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   options.value = opt
+  // console.log('mounted', opt)
+  // store.setDialogForm('anatomy', store.templateActive ?? '')
 })
 
 const filterFn = (val, update) => {

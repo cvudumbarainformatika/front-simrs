@@ -390,7 +390,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         // this.urlGambar = val ? imgUrl ?? null : this.urlGambar
         this.writingMode = false
         this.dialogForm = {
-          anatomy: '',
+          anatomy: template,
           ket: '',
           x: 0,
           y: 0,

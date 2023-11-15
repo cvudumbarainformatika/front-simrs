@@ -69,6 +69,8 @@ import BottomCanvas from './BottomCanvas.vue'
 import { fabric } from 'fabric'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { ref, onMounted, markRaw, computed, watch } from 'vue'
+import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
+
 const el = ref(null)
 
 const heightEl = ref(400)
@@ -82,6 +84,10 @@ const cvn = ref(null)
 const writingMode = ref(false)
 const showMenu = ref(true)
 const target = ref(null)
+const start = ref(null)
+const objectSelected = ref(null)
+const options = ref([])
+const { menus } = useMenuPemeriksaan()
 
 // const tempObjects = ref([])
 
@@ -106,6 +112,7 @@ onMounted(() => {
     init()
   }, 100)
 
+  options.value = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   // console.log('gambar height', imgRef.value.height)
 })
 
@@ -138,7 +145,8 @@ function init() {
     cornerSize: 12,
     transparentCorners: true,
     // cursor
-    defaultCursor: 'crosshair'
+    defaultCursor: 'crosshair',
+    hoverCursor: 'pointer'
   }))
 
   const canvas = cvn.value
@@ -177,24 +185,45 @@ function coba() {
 
   canvas.on('mouse:down', (obj) => {
     console.log('mousedown', obj)
-    writingMode.value = true
-    store.setDialogForm('x', obj?.pointer?.x)
-    store.setDialogForm('y', obj?.pointer?.y)
+    if (objectSelected.value !== null) {
+      writingMode.value = false
+      console.log(objectSelected.value)
+    } else {
+      writingMode.value = true
+      store.setDialogForm('x', obj?.pointer?.x)
+      store.setDialogForm('y', obj?.pointer?.y)
 
-    showMenu.value = true
+      start.value = { x: obj.pointer.x, y: obj.pointer.y }
+      showMenu.value = true
+    }
   })
 
   canvas.on('mouse:move', (obj) => {
-    if (writingMode.value === false) {
-      return
+    // const point = canvas.getPointer(obj)
+    // console.log('point', point)
+    if (obj.target) {
+      console.log('object', obj.target)
+      objectSelected.value = obj.target
+    } else {
+      objectSelected.value = null
     }
-    // salah
-    canvas.backgroundImage.opacity = 0.5
+
+    // if (writingMode.value === false) {
+
+    // }
+    // if (store.dialogForm?.penanda === 'drag-segi-empat') {
+    //   console.log('iyo', start.value)
+    //   // const context = ctx.value
+    // }
   })
 
   canvas.on('mouse:up', (obj) => {
     writingMode.value = false
     console.log('mouseup', obj)
+    const x = obj.pointer.x
+    const y = obj.pointer.y
+    store.setDialogForm('width', x - start.value.x)
+    store.setDialogForm('height', y - start.value.y)
     draw(
       store.dialogForm.penanda,
       store.dialogForm.x,
@@ -205,8 +234,6 @@ function coba() {
       store.dialogForm.warna,
       store.dialogForm.ketebalan
     )
-
-    canvas.backroundImage.opacity = 1
 
     console.log('canvas', canvas)
   })
@@ -278,6 +305,36 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
     }))
 
     canvas.add(rect)
+  } else if (penanda === 'drag-segi-empat') {
+    const rect = markRaw(new fabric.Rect({
+      left: x,
+      top: y,
+      originX: 'left',
+      originY: 'top',
+      width: w,
+      height: h,
+      fill: 'transparent',
+      stroke: clr,
+      strokeWidth: tbl
+      // transparentCorners: false
+      // cornerSize: 6
+    }))
+
+    canvas.add(rect)
+  } else if (penanda === 'Segitiga') {
+    const triangle = markRaw(new fabric.Triangle({
+      left: x,
+      top: y,
+      width: p * 2,
+      height: p * 2,
+      fill: 'transparent',
+      stroke: clr,
+      strokeWidth: tbl,
+      originX: 'center',
+      originY: 'center'
+    }))
+
+    canvas.add(triangle)
   }
 }
 

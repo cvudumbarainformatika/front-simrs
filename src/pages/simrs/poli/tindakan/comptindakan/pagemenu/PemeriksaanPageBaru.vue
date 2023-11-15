@@ -14,7 +14,7 @@
         class="absolute-left full-height bg-white"
         style="width:33%;"
       >
-        dsfs
+        {{ store.templateActive }}
       </div>
       <div
         class="absolute-right full-height bg-white"
@@ -37,7 +37,10 @@
 
 <script setup>
 // import HeaderComp from './comppemeriksaanbaru/HeaderComp.vue'
+import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
+
+const store = usePemeriksaanFisik()
 
 const props = defineProps({
   pasien: {

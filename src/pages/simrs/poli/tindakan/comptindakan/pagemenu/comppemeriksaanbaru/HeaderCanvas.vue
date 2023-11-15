@@ -124,7 +124,8 @@ const store = usePemeriksaanFisik()
 const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
   { name: 'kotak', icon: 'icon-mat-check_box_outline' },
-  { name: 'drag-segi-empat', icon: 'icon-mat-backup_table' }
+  { name: 'drag-segi-empat', icon: 'icon-mat-backup_table' },
+  { name: 'Segitiga', icon: 'icon-mat-backup_table' }
 ])
 
 function setFull() {
