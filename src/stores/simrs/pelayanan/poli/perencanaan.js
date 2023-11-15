@@ -167,7 +167,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.kodedokterdpjp = pasien?.kodedokterdpjp
       this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
-
+      console.log('form kontrol', this.formKontrol)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
         // console.log(resp)

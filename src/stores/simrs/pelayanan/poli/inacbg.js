@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
 
 export const useInacbgPoli = defineStore('inacbg-poli', {
   state: () => ({
@@ -51,9 +52,15 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
     },
 
     setTotalTindakan(pasien) {
-      const arr = pasien?.tindakan
-      this.totalTindakan = arr?.length ? arr?.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
-      this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
+      const kasir = useKasirRajalListKunjunganStore()
+      const par = { noreg: pasien?.noreg }
+      kasir.getBill(par).then(() => {
+        // console.log('bill', kasir.rekapBill)
+        this.tarifRs = kasir.rekapBill.totalall
+      })
+      // const arr = pasien?.tindakan
+      // this.totalTindakan = arr?.length ? arr?.reduce((acc, cur) => acc + cur.subtotal, 0) : 0
+      // this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
     },
     setTotalLaborat(pasien) {
       const arr = pasien?.laborats

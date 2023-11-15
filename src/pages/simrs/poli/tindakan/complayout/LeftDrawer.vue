@@ -64,7 +64,7 @@
           flat
           icon="icon-mat-attach_money"
           class="gt-xs"
-          @click="printRekap=true"
+          @click="bukaBill"
         >
           <q-tooltip class="bg-dark text-white">
             Billing Pasien
@@ -96,6 +96,7 @@
     </div>
   </div>
   <CetakRekapBilling
+    ref="refBilling"
     v-model="printRekap"
     :pasien="pasien"
     style="z-index: 19000;"
@@ -127,6 +128,12 @@ defineProps({
     default: null
   }
 })
+const refBilling = ref(null)
+function bukaBill() {
+  refBilling.value.openFaktur()
+  // console.log('ref bill', refBilling.value)
+  printRekap.value = true
+}
 function actPrintRekap() {
   printRekap.value = false
 }
