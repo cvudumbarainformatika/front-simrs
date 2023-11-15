@@ -1,11 +1,28 @@
 <template>
   <div>
     <div>
-      <div class="row">
+      <div class="row q-mb-sm">
         <app-input
           v-model="obat"
           class="full-width"
           label="Obat"
+          outlined
+        />
+      </div>
+      <div class="row q-mb-sm">
+        <app-input-date
+          v-model="tglKembali"
+          class="full-width"
+          label="Tanggal kembali"
+          outlined
+          @set-model="(val)=>tglKembali=val"
+        />
+      </div>
+      <div class="row q-mb-sm">
+        <app-input
+          v-model="lain"
+          class="full-width"
+          label="Lain-lain"
           outlined
         />
       </div>
@@ -84,10 +101,42 @@
         </div>
         <div class="row q-my-sm items-center">
           <div class="col-1">
-            <q-checkbox v-model="val" />
+            <q-checkbox v-model="perluRanap" />
           </div>
           <div class="col-11">
             Perlu Rawat Inap
+          </div>
+        </div>
+        <div class="row q-my-sm items-center">
+          <div class="col-1">
+            <q-checkbox v-model="noKonsul" />
+          </div>
+          <div class="col-11">
+            Konsultasi Selesai
+          </div>
+        </div>
+        <div class="row q-my-sm items-center">
+          <div class="col-1">
+            <q-checkbox v-model="adaObat" />
+          </div>
+          <div class="col-11">
+            Pengobatan dengan obat-obatan : <span v-if="adaObat">{{ obat }}</span>
+          </div>
+        </div>
+        <div class="row q-my-sm items-center">
+          <div class="col-1">
+            <q-checkbox v-model="kembali" />
+          </div>
+          <div class="col-11">
+            Kontrol kembali ke RS tanggal : <span v-if="kembali"> <b>{{ date.formatDate(tglKembali,'DD MMMM YYYY') }}</b></span>
+          </div>
+        </div>
+        <div class="row q-my-sm items-center">
+          <div class="col-1">
+            <q-checkbox v-model="adaLain" />
+          </div>
+          <div class="col-11">
+            Lain-lain : <span v-if="adaLain"> {{ lain }}</span>
           </div>
         </div>
       </div>
@@ -127,7 +176,14 @@ const props = defineProps({
     default: null
   }
 })
+const tglKembali = ref('')
 const obat = ref('')
+const lain = ref('')
+const kembali = ref(false)
+const adaObat = ref(false)
+const adaLain = ref(false)
+const perluRanap = ref(false)
+const noKonsul = ref(false)
 const printObj = {
   id: 'printMe',
   popTitle: 'Surat Pengantar Rujuk Balik'
