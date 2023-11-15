@@ -141,7 +141,7 @@ const menus = ref([
     name: 'PemeriksaanPage',
     label: 'Pemeriksaan Umum & Fisik',
     icon: 'icon-my-stethoscope',
-    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPageBaru.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPage.vue')))
   },
   {
     name: 'LayananPage',

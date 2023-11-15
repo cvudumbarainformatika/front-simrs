@@ -15,61 +15,61 @@
           ref="canvasEl"
           :class="store.fullCanvas? '':'col-4'"
         >
-          <div class="row full-height">
-            <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
+          <!-- <div class="row full-height"> -->
+          <!-- <div class="bg-teal text-white text-center q-pa-xs bingkai">
               Template Gambar
             </div> -->
 
-            <transition
-              v-if="!store.fullCanvas"
-              appear
-              @enter="enter"
-              @leave="leave"
-            >
-              <div
-                v-if="store.dialogTemplate"
-                class="absolute left-menu"
-              >
-                <template-gambar
-                  style="border-right:2px solid gray;"
-                  :active="store.templateActive"
-                  :gambar-active="store.gambarActive"
-                />
-              </div>
-            </transition>
-
+          <transition
+            v-if="!store.fullCanvas"
+            appear
+            @enter="enter"
+            @leave="leave"
+          >
             <div
-              v-if="store.fullCanvas"
-              class="col-4"
+              v-if="store.dialogTemplate"
+              class="absolute left-menu"
             >
               <template-gambar
                 style="border-right:2px solid gray;"
                 :active="store.templateActive"
                 :gambar-active="store.gambarActive"
-                class="bg-dark"
               />
             </div>
-            <div class="column full-height bg-yellow">
-              <canvas-page
-                :key="pasien"
-                :width="canvasWidth"
-                :pasien="pasien"
-                @save-image="saveImage"
-              />
-            </div>
-            <div
-              v-if="store.fullCanvas"
-              class="col-4 scroll"
-              style="border-left: 1px solid gray; border-right: 1px solid gray;"
-            >
-              <FormPemeriksaan
-                :key="pasien"
-                :pasien="pasien"
-                :filter-shapes="filterShapes"
-                :canvas-full="store.fullCanvas"
-              />
-            </div>
+          </transition>
+
+          <div
+            v-if="store.fullCanvas"
+            class="col-4"
+          >
+            <template-gambar
+              style="border-right:2px solid gray;"
+              :active="store.templateActive"
+              :gambar-active="store.gambarActive"
+              class="bg-dark"
+            />
           </div>
+          <div class="column full-height">
+            <canvas-page
+              :key="pasien"
+              :width="canvasWidth"
+              :pasien="pasien"
+              @save-image="saveImage"
+            />
+          </div>
+          <div
+            v-if="store.fullCanvas"
+            class="col-4 scroll"
+            style="border-left: 1px solid gray; border-right: 1px solid gray;"
+          >
+            <FormPemeriksaan
+              :key="pasien"
+              :pasien="pasien"
+              :filter-shapes="filterShapes"
+              :canvas-full="store.fullCanvas"
+            />
+          </div>
+          <!-- </div> -->
         </div>
 
         <!-- ===============================================================================ROW FORM -->
