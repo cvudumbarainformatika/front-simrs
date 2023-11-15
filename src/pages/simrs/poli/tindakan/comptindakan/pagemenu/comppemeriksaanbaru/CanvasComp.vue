@@ -82,10 +82,10 @@ const ctx = ref()
 const cvn = ref(null)
 
 const writingMode = ref(false)
-const showMenu = ref(true)
+const showMenu = ref(false)
 const target = ref(null)
 const start = ref(null)
-const objectSelected = ref(null)
+// const objectSelected = ref(null)
 const options = ref([])
 const { menus } = useMenuPemeriksaan()
 
@@ -142,8 +142,8 @@ function init() {
     selectionLineWidth: 2,
     borderColor: 'gray',
     cornerColor: 'black',
-    cornerSize: 12,
-    transparentCorners: true,
+    cornerSize: 3,
+    transparentCorners: false,
     // cursor
     defaultCursor: 'crosshair',
     hoverCursor: 'pointer'
@@ -185,10 +185,12 @@ function coba() {
 
   canvas.on('mouse:down', (obj) => {
     console.log('mousedown', obj)
-    if (objectSelected.value !== null) {
-      writingMode.value = false
-      console.log(objectSelected.value)
+    if (obj.target !== null) {
+      // writingMode.value = false
+      // console.log(objectSelected.value)
+      target.value = null
     } else {
+      target.value = '.upper-canvas'
       writingMode.value = true
       store.setDialogForm('x', obj?.pointer?.x)
       store.setDialogForm('y', obj?.pointer?.y)
@@ -201,12 +203,12 @@ function coba() {
   canvas.on('mouse:move', (obj) => {
     // const point = canvas.getPointer(obj)
     // console.log('point', point)
-    if (obj.target) {
-      console.log('object', obj.target)
-      objectSelected.value = obj.target
-    } else {
-      objectSelected.value = null
-    }
+    // if (obj.target !== null) {
+    //   // console.log('object', obj)
+    //   objectSelected.value = obj.target
+    // } else {
+    //   objectSelected.value = null
+    // }
 
     // if (writingMode.value === false) {
 
@@ -340,17 +342,19 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
 
 function drawall() {
   resetCanvas()
-  if (arr.value.length > 0) {
-    for (let i = 0; i < arr.value.length; i++) {
-      draw(arr.value[i].penanda,
-        arr.value[i].x,
-        arr.value[i].y,
-        arr.value[i].panjang,
-        arr.value[i].width,
-        arr.value[i].height,
-        arr.value[i].warna,
-        arr.value[i].ketebalan
-      )
+  if (writingMode.value) {
+    if (arr.value.length > 0) {
+      for (let i = 0; i < arr.value.length; i++) {
+        draw(arr.value[i].penanda,
+          arr.value[i].x,
+          arr.value[i].y,
+          arr.value[i].panjang,
+          arr.value[i].width,
+          arr.value[i].height,
+          arr.value[i].warna,
+          arr.value[i].ketebalan
+        )
+      }
     }
   }
 }
