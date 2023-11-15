@@ -22,6 +22,7 @@
           <HeaderLayout
             :pasien="pasien"
             :loading-save-dpjp="store.loadingSaveGantiDpjp"
+            :loading-finish="store.loadingTerima"
             @toggle-left-drawer="drawer = !drawer"
             @gantidpjp="(val)=>store.gantiDpjp(val, pasien)"
             @layanan-selesai="store.setLayananSelesai(pasien)"

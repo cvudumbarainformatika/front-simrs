@@ -134,6 +134,8 @@
         color="negative"
         class="q-mr-lg q-px-lg"
         dense
+        :loading="loadingFinish"
+        :disable="loadingFinish"
         @click="selesaikanLayanan"
       />
       <q-btn
@@ -182,6 +184,10 @@ const props = defineProps({
     default: null
   },
   loadingSaveDpjp: {
+    type: Boolean,
+    default: false
+  },
+  loadingFinish: {
     type: Boolean,
     default: false
   }

@@ -142,9 +142,12 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       // if (!pasien?.planning?.length) {
       //   return this.notifikasiError('Maaf, Planing Harap Diisi Dahulu...')
       // }
-
+      const form = {
+        noreg: pasien?.noreg
+      }
       try {
-        const resp = await api.post('v1/simrs/rajal/poli/flagfinish')
+        const resp = await api.post('v1/simrs/rajal/poli/flagfinish', form)
+        console.log('rsp ', form, resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
@@ -155,7 +158,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       } catch (error) {
         console.log(error)
         this.loadingTerima = false
-        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+        // this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },
 
