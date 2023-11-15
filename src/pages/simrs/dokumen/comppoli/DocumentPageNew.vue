@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <div class="container full-height">
+  <div
+    ref="main"
+    class="column flex-center full-height"
+  >
+    <div class="container full-height bg-white">
       <div class="column full-height ">
         <div class="col-grow">
           <KumpulanSurat
@@ -12,7 +15,16 @@
       </div>
     </div>
   </div>
-  <q-card
+  <app-fullscreen-blue v-model="open">
+    <template #default>
+      <component
+        :is="cekPanel()"
+        :key="props.pasien"
+        :pasien="props.pasien"
+      />
+    </template>
+  </app-fullscreen-blue>
+  <!-- <q-card
     flat
     bordered
     square
@@ -57,12 +69,13 @@
         </div>
       </div>
     </div>
-  </q-card>
+  </q-card> -->
 </template>
 <script setup>
 import KumpulanSurat from './KumpulanSurat.vue'
 import { findWithAttr } from 'src/modules/utils'
 import { ref, defineAsyncComponent } from 'vue'
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
@@ -70,51 +83,60 @@ const props = defineProps({
   }
 })
 
+const open = ref(false)
 const doc = ref('')
 const documents = ref([
   {
+    icon: 'icon-fa-file-regular',
     color: 'primary',
-    jenis: 'Resume',
+    jenis: 'Res',
     label: 'Resume',
     value: 'Resume'
   },
   {
+    icon: 'icon-fa-file-regular',
     color: 'primary',
-    jenis: 'Billing',
+    jenis: 'Bill',
     label: 'Billing',
     value: 'Billing'
   },
   {
+    icon: 'icon-fa-file-regular',
     color: 'primary',
-    jenis: 'Surat Keterangan Sakit',
-    label: 'Surat Keterangan Sakit',
+    jenis: 'SKS',
+    label: 'Surat Ket. Sakit',
     value: 'Sakit'
   },
   {
+    icon: 'icon-fa-file-regular',
     color: 'primary',
-    jenis: 'Surat Keterangan Dokter',
-    label: 'Surat Keterangan Dokter',
+    jenis: 'SKD',
+    label: 'Surat Ket. Dokter',
     value: 'Sehat'
   },
   {
+    icon: 'icon-mat-email',
     color: 'primary',
-    jenis: 'Pengantar Rujuk Balik',
+    jenis: 'PRB',
     label: 'Pengantar Rujuk Balik',
     value: 'prb'
   },
   {
+    icon: 'icon-mat-email',
     color: 'primary',
-    jenis: 'Pengantar Rujuk RS Lain',
+    jenis: 'PR RS L',
     label: 'Pengantar Rujuk RS Lain',
     value: 'rslain'
   },
   {
+    icon: 'icon-mat-email',
     color: 'primary',
-    jenis: 'Rencana Pasien',
+    jenis: 'R P',
     label: 'Rencana Pasien',
     value: 'Rencana'
   }
 ])
+// eslint-disable-next-line no-unused-vars
 function getLabel(val) {
   const anu = documents.value.filter(a => a.value === val)
   // console.log('anu ', anu)
@@ -129,12 +151,18 @@ const comp = [
   { nama: 'prb', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRujukBalik.vue')) },
   { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) }
 ]
+// eslint-disable-next-line no-unused-vars
 const cekPanel = () => {
   const val = doc.value
   const ganti = val.replace(/ /g, '')
   const arr = findWithAttr(comp, 'nama', ganti)
 
   return arr >= 0 ? comp[arr].page : ''
+}
+function goTo(val) {
+  console.log('got', val)
+  doc.value = val.value
+  open.value = true
 }
 </script>
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
     class="full-height full-width column flex-center items-center"
     :class="isMobile? 'q-px-sm q-py-md': 'q-px-xl q-py-md'"
   >
-    <div class="self-end q-mb-md">
+    <!-- <div class="self-end q-mb-md">
       <q-input
         v-model="search"
         standout="bg-white text-dark"
@@ -16,81 +16,81 @@
           <q-icon name="icon-mat-search" />
         </template>
       </q-input>
-    </div>
-    <q-scroll-area
+    </div> -->
+    <!-- <q-scroll-area
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
-      :style="`height:${h}px;
-      width:100%;`"
+      :style=" `height:${h}px; width:100%;`
+      "
       class="flex-center items-center"
+    > -->
+    <div
+      class="container flex-center"
+      :style="`height:${h}px;  width:100%;`"
     >
       <div
-        class="container flex-center"
-        :style="`height:${h}px;`"
+        v-if="items.length"
+        class="wrapper"
+        :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
       >
         <div
-          v-if="items.length"
-          class="wrapper"
-          :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
+          v-for="(item, i) in items"
+          :key="i"
+          class="col-auto"
         >
           <div
-            v-for="(item, i) in items"
-            :key="i"
-            class="col-auto"
+            v-if="!isMobile"
+            class="card bg-white cursor-pointer"
+            @click="goTo(item)"
           >
-            <div
-              v-if="!isMobile"
-              class="card bg-white cursor-pointer"
-              @click="goTo(item)"
-            >
-              <div class="imgBx column flex-center items-center">
-                <!-- <q-icon
+            <!-- <div class="imgBx column flex-center items-center">
+              <q-icon
+                :name="item.icon"
+                :color="item.color"
+                class="imgg"
+              />
+              <div class="txt text-subtitle2">
+                {{ item.label }}
+              </div>
+            </div> -->
+            <div class="content text-right">
+              <div class="text-h6 text-negative text-weight-bold">
+                {{ item.jenis }}
+              </div>
+              <div class="text-subtitle">
+                {{ item.label }}
+              </div>
+              <q-btn
+                :label="item.jenis"
+                :color="item.color"
+                dense
+                padding="sm"
+                class="absolute-bottom"
+              />
+            </div>
+          </div>
+          <div
+            v-else
+            class="card-mobile bg-white cursor-pointer justify-center"
+            @click="goTo(item)"
+          >
+            <div class="img-mob column flex-center items-center">
+              <div>
+                <q-icon
                   :name="item.icon"
                   :color="item.color"
-                  class="imgg"
-                /> -->
-                <div class="txt text-subtitle2">
-                  {{ item.label }}
-                </div>
-              </div>
-              <div class="content text-right">
-                <div class="text-h6 text-negative text-weight-bold">
-                  {{ item.jenis }}
-                </div>
-                <div class="text-subtitle">
-                  {{ item.label }}
-                </div>
-                <q-btn
-                  :label="item.jenis"
-                  :color="item.color"
-                  dense
-                  padding="sm"
-                  class="absolute-bottom"
+                  size="30px"
                 />
               </div>
-            </div>
-            <div
-              v-else
-              class="card-mobile bg-white cursor-pointer justify-center"
-              @click="goTo(item)"
-            >
-              <div class="img-mob column flex-center items-center">
-                <div>
-                  <q-icon
-                    :name="item.icon"
-                    :color="item.color"
-                    size="30px"
-                  />
-                </div>
-                <div class="txt f-10">
-                  {{ item.julukan }}
-                </div>
+              <div class="txt f-10">
+                {{ item.julukan }}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </q-scroll-area>
+    </div>
+    <!-- </q-scroll-area> -->
   </div>
 </template>
 
@@ -100,21 +100,21 @@ import { onMounted, ref } from 'vue'
 
 const h = ref()
 const main = ref()
-const search = ref()
-const thumbStyle = ref({
-  right: '0px',
-  borderRadius: '5px',
-  backgroundColor: '#027be3',
-  width: '5px',
-  opacity: 0.75
-})
-const barStyle = ref({
-  right: '0px',
-  borderRadius: '9px',
-  backgroundColor: '#027be3',
-  width: '9px',
-  opacity: 0.2
-})
+// const search = ref()
+// const thumbStyle = ref({
+//   right: '0px',
+//   borderRadius: '5px',
+//   backgroundColor: '#027be3',
+//   width: '5px',
+//   opacity: 0.75
+// })
+// const barStyle = ref({
+//   right: '0px',
+//   borderRadius: '9px',
+//   backgroundColor: '#027be3',
+//   width: '9px',
+//   opacity: 0.2
+// })
 
 defineProps({
   items: {
@@ -148,8 +148,8 @@ const isMobile = ref($q.platform.is.mobile)
 // })
 
 onMounted(() => {
-  console.log(main.value.offsetHeight)
-  h.value = main.value.offsetHeight - (80 + 10)
+  console.log('main ', main.value.offsetHeight)
+  h.value = main.value.offsetHeight
   // console.log('kumpulan apps', filterApps.value)
   // console.log('kumpulan akses', props.akses)
 })
@@ -199,7 +199,7 @@ function goTo(item) {
   .card {
     position: relative;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     width:130px;
     height:120px;
     padding:10px;
