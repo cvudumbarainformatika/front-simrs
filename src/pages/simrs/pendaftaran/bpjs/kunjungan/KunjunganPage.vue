@@ -25,6 +25,8 @@
         :key="store.items"
         :items="store.items"
         :loading="store.loading"
+        :loading-h="store.loadingH"
+        @hapus="store.hapusPasien"
       />
     </div>
     <div class="fixed-bottom">

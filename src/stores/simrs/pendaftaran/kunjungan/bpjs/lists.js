@@ -17,6 +17,7 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       from: dateDbFormat(new Date())
     },
     loading: false,
+    loadingH: false,
     filters: false
   }),
   // getters: {
@@ -35,7 +36,25 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       }
       this.loading = false
     },
-
+    hapusPasien(pasien) {
+      console.log('hapus', pasien)
+      this.loadingH = true
+      const form = {
+        noreg: pasien.noreg,
+        nosep: pasien.sep
+      }
+      return new Promise(resolve => {
+        api.post('/v1/simrs/pendaftaran/hapuspasien', form)
+          .then(resp => {
+            this.loadingH = false
+            this.getLists()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingH = false
+          })
+      })
+    },
     setDate(payload) {
       this.params.page = 1
       // this.params.tgl = payload

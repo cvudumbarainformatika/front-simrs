@@ -128,6 +128,18 @@
                   />
                 </div>
               </div>
+              <div class="row q-mt-sm justify-end">
+                <div class="q-ml-sm">
+                  <q-btn
+                    size="sm"
+                    padding="xs"
+                    color="negative"
+                    :loading="loadingH && temp===item.noka"
+                    label="Hapus Pasien"
+                    @click="hapus(item)"
+                  />
+                </div>
+              </div>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -181,6 +193,41 @@
       </template>
     </app-dialog-form>
     <DialogSep />
+    <!-- dialog hapus -->
+    <q-dialog
+      v-model="confirm"
+      persistent
+    >
+      <q-card class="q-pa-md">
+        <q-card-section class="row items-center text-weight-bold f-18 q-pa-xl">
+          <span class="q-ml-sm">Nomor SEP Belum Tercatat di data Rumah Sakit !</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            push
+            no-caps
+            label="Batal"
+            color="dark"
+            @click="batal"
+          />
+          <q-btn
+            push
+            no-caps
+            label="Ambil Data SEP"
+            color="primary"
+            @click="ambil"
+          />
+          <q-btn
+            push
+            no-caps
+            label="Tidak Dibuatkan SEP"
+            color="primary"
+            @click="tidak"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -194,8 +241,73 @@ import { ref } from 'vue'
 
 defineProps({
   loading: { type: Boolean, default: false },
+  loadingH: { type: Boolean, default: false },
   items: { type: Array, default: () => [] }
 })
+// eslint-disable-next-line no-unused-vars
+const emits = defineEmits(['hapus'])
+
+const temp = ref(null)
+const confirm = ref(false)
+const tempData = ref(null)
+function batal() {
+  temp.value = ''
+  tempData.value = ''
+  confirm.value = false
+}
+function ambil() {
+  loadingReSep.value = tempData.value.noreg
+  sepStore.getSep(tempData.value).then(resp => {
+    console.log('resp sep', resp)
+    loadingReSep.value = ''
+    tempData.value = null
+    // emits('hapus', item)
+    console.log('Cancel dalem', loadingReSep.value)
+  })
+  confirm.value = false
+}
+function tidak() {
+  emits('hapus', tempData.value)
+  confirm.value = false
+}
+function hapus(item) {
+  temp.value = item.noka
+  if (item.sep) {
+    emits('hapus', item)
+  } else {
+    console.log('anu')
+    confirm.value = true
+    tempData.value = item
+    // Dialog.create({
+    //   title: 'Tidak Ada SEP',
+    //   message: 'Nomor SEP Belum Tercatat di data Rumah Sakit',
+    //   ok: {
+    //     label: 'Tidak Dibuatkan SEP',
+    //     'no-caps': true,
+    //     color: 'primary'
+    //   },
+    //   cancel: {
+    //     label: 'Ambil Data SEP',
+    //     'no-caps': true,
+    //     color: 'primary'
+    //   }
+    // })
+    //   .onOk(() => {
+    //     console.log('OK')
+    //     emits('hapus', item)
+    //   })
+    //   .onCancel(() => {
+    //     loadingReSep.value = item.noreg
+    //     sepStore.getSep(item).then(resp => {
+    //       console.log('resp sep', resp)
+    //       loadingReSep.value = ''
+    //       // emits('hapus', item)
+    //       console.log('Cancel dalem', loadingReSep.value)
+    //     })
+    //     console.log('Cancel', loadingReSep.value)
+    //   })
+  }
+}
 
 const pasien = ref(null)
 const openGen = ref(false)
@@ -206,7 +318,6 @@ function openPreviewGc() {
 }
 
 const dialog = ref(false)
-const temp = ref(null)
 const loadingP = ref(false)
 const jenisPengajuans = ref([
   { nama: 'pengajuan backdate', value: '1' },
