@@ -24,8 +24,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       y: 0,
       ketebalan: 2,
       panjang: 7,
-      width: 150,
-      height: 150,
+      width: 15,
+      height: 15,
       warna: '#000000',
       penanda: 'circle',
       // baru
@@ -404,8 +404,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           y: 0,
           ketebalan: 2,
           panjang: 15,
-          width: 150,
-          height: 150,
+          width: 15,
+          height: 15,
           warna: '#000000',
           penanda: 'circle',
           // baru
