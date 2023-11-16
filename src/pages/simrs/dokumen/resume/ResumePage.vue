@@ -674,11 +674,11 @@
           <div class="col-7">
             <div v-if="store.item?.eeg">
               <div class="row">
-                <b> {{ date.formatDate( store.item?.eeg?.tanggal,"DD MMMM YYYY") }}</b> -
-                {{ store.item?.eeg?.klasifikasi }}
+                <!-- <b> {{ date.formatDate( store.item?.eeg?.tanggal,"DD MMMM YYYY") }}</b> - -->
+                ( k ) - {{ store.item?.eeg?.klasifikasi }}
               </div>
               <div class="row">
-                {{ store.item?.eeg?.impresi }}
+                ( i ) - {{ store.item?.eeg?.impresi }}
               </div>
             </div>
           </div>
@@ -696,14 +696,28 @@
             </div>
           </div>
           <div class="col-7">
+            <div
+              v-if="store.item?.apotekracikanrajal?.length || store.item?.apotekracikanrajallalu?.length || store.item?.apotekrajal?.length || store.item?.apotekrajal?.length"
+              class="row items-center text-weight-bold"
+            >
+              <div class="col-9">
+                Obat
+              </div>
+              <div class="col-3">
+                Jumlah
+              </div>
+            </div>
             <div v-if="store.item?.apotekracikanrajal?.length">
               <div
                 v-for="(item,i) in store.item?.apotekracikanrajal"
                 :key="i"
-                class="row"
+                class="row items-center"
               >
-                <div class="col-12">
-                  {{ item?.obat??'-' }} || {{ item?.jumlah??'0' }}
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
                 </div>
               </div>
             </div>
@@ -711,10 +725,13 @@
               <div
                 v-for="(item,i) in store.item?.apotekracikanrajallalu"
                 :key="i"
-                class="row"
+                class="row items-center"
               >
-                <div class="col-12">
-                  {{ item?.obat??'-' }} || {{ item?.jumlah??'0' }}
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
                 </div>
               </div>
             </div>
@@ -722,10 +739,13 @@
               <div
                 v-for="(item,i) in store.item?.apotekrajal"
                 :key="i"
-                class="row"
+                class="row items-center"
               >
-                <div class="col-12">
-                  {{ item?.obat??'-' }} || {{ item?.jumlah??'0' }}
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
                 </div>
               </div>
             </div>
@@ -733,10 +753,13 @@
               <div
                 v-for="(item,i) in store.item?.apotekrajal"
                 :key="i"
-                class="row"
+                class="row items-center"
               >
-                <div class="col-12">
-                  {{ item?.obat??'-' }} || {{ item?.jumlah??'0' }}
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
                 </div>
               </div>
             </div>
