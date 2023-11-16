@@ -184,18 +184,24 @@ function coba() {
   const canvas = cvn.value
 
   canvas.on('mouse:down', (obj) => {
-    console.log('mousedown', obj)
-    if (obj.target !== null) {
-      // writingMode.value = false
-      // console.log(objectSelected.value)
-      target.value = null
-    } else {
-      target.value = '.upper-canvas'
-      writingMode.value = true
-      store.setDialogForm('x', obj?.pointer?.x)
-      store.setDialogForm('y', obj?.pointer?.y)
+    store.setDialogForm('x', obj?.pointer?.x)
+    store.setDialogForm('y', obj?.pointer?.y)
 
-      start.value = { x: obj.pointer.x, y: obj.pointer.y }
+    start.value = { x: obj.pointer.x, y: obj.pointer.y }
+    if (store?.dialogForm?.penanda === 'drag-segi-empat') {
+      target.value = null
+    }
+    if (obj.target !== null) {
+      target.value = null
+      // writingMode.value = false
+      // SELEKSI OBJECT
+      console.log('mousedown select', obj)
+    } else {
+      // JIKA MENU MUNCUL
+      canvas.discardActiveObject()
+      writingMode.value = true
+      target.value = '.upper-canvas'
+
       showMenu.value = true
     }
   })
@@ -220,25 +226,46 @@ function coba() {
   })
 
   canvas.on('mouse:up', (obj) => {
+    // if (store?.dialogForm?.penanda === 'drag-segi-empat') {
+    //   target.value = '.upper-canvas'
+    // }
     writingMode.value = false
     console.log('mouseup', obj)
     const x = obj.pointer.x
     const y = obj.pointer.y
     store.setDialogForm('width', x - start.value.x)
     store.setDialogForm('height', y - start.value.y)
-    draw(
-      store.dialogForm.penanda,
-      store.dialogForm.x,
-      store.dialogForm.y,
-      store.dialogForm.panjang,
-      store.dialogForm.width,
-      store.dialogForm.height,
-      store.dialogForm.warna,
-      store.dialogForm.ketebalan
-    )
+    if (obj.target === null) {
+      draw(
+        store.dialogForm.penanda,
+        store.dialogForm.x,
+        store.dialogForm.y,
+        store.dialogForm.panjang,
+        store.dialogForm.width,
+        store.dialogForm.height,
+        store.dialogForm.warna,
+        store.dialogForm.ketebalan
+      )
+    }
 
     console.log('canvas', canvas)
   })
+
+  canvas.on({
+    'object:moving': onChange,
+    'object:scaling': onChange,
+    'object:rotating': onChange
+  })
+}
+
+const onChange = (obj) => {
+  // const target = store.shapes[obj?.target?.ids]
+  // // console.log('onchange-target', target)
+  // // console.log('onchange-object', obj?.target)
+  // target.x = obj.target.left
+  // target.y = obj.target.top
+  // target.height = obj.target.height
+  // target.width = obj.target.width
 }
 
 function onMenuShow() {
@@ -246,8 +273,8 @@ function onMenuShow() {
 }
 
 function cancelShape() {
-  resetCanvas()
   refMenu.value?.refMenu?.hide()
+  drawall()
 }
 
 function saveShapes() {
@@ -277,10 +304,11 @@ function saveShapes() {
   })
 }
 
-function draw(penanda, x, y, p, w, h, clr, tbl) {
+function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
   const canvas = cvn.value
   if (penanda === 'circle') {
     const circle = markRaw(new fabric.Circle({
+      ids,
       left: x,
       top: y,
       radius: p,
@@ -293,6 +321,7 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
     canvas.add(circle)
   } else if (penanda === 'kotak') {
     const rect = markRaw(new fabric.Rect({
+      ids,
       left: x,
       top: y,
       originX: 'center',
@@ -309,6 +338,7 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
     canvas.add(rect)
   } else if (penanda === 'drag-segi-empat') {
     const rect = markRaw(new fabric.Rect({
+      ids,
       left: x,
       top: y,
       originX: 'left',
@@ -325,6 +355,7 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
     canvas.add(rect)
   } else if (penanda === 'Segitiga') {
     const triangle = markRaw(new fabric.Triangle({
+      ids,
       left: x,
       top: y,
       width: p * 2,
@@ -337,26 +368,58 @@ function draw(penanda, x, y, p, w, h, clr, tbl) {
     }))
 
     canvas.add(triangle)
+  } else if (penanda === 'Polyline') {
+    // const svgUrl = new URL('../../../../../../../assets/images/actor.svg', import.meta.url).href
+
+    // // eslint-disable-next-line new-cap
+    // markRaw(new fabric.loadSVGFromURL(svgUrl, (objects, options) => {
+    //   const loadedObject = fabric.util.groupSVGElements(objects, options)
+    //   loadedObject.set({
+    //     left: x,
+    //     top: y,
+    //     width: w,
+    //     height: h
+    //   }).setCoords()
+    //   canvas.add(loadedObject)
+    //   console.log(loadedObject)
+    // }))
+
+    const poly = markRaw(new fabric.Rect({
+      ids,
+      left: x,
+      top: y,
+      originX: 'center',
+      originY: 'center',
+      width: p * 3,
+      height: p * 2,
+      fill: 'transparent',
+      stroke: clr,
+      strokeWidth: tbl
+      // transparentCorners: false
+      // cornerSize: 6
+    }))
+    canvas.add(poly)
   }
 }
 
 function drawall() {
   resetCanvas()
-  if (writingMode.value) {
-    if (arr.value.length > 0) {
-      for (let i = 0; i < arr.value.length; i++) {
-        draw(arr.value[i].penanda,
-          arr.value[i].x,
-          arr.value[i].y,
-          arr.value[i].panjang,
-          arr.value[i].width,
-          arr.value[i].height,
-          arr.value[i].warna,
-          arr.value[i].ketebalan
-        )
-      }
+  // if (writingMode.value) {
+  if (arr.value.length > 0) {
+    for (let i = 0; i < arr.value.length; i++) {
+      draw(arr.value[i].penanda,
+        arr.value[i].x,
+        arr.value[i].y,
+        arr.value[i].panjang,
+        arr.value[i].width,
+        arr.value[i].height,
+        arr.value[i].warna,
+        arr.value[i].ketebalan,
+        i
+      )
     }
   }
+  // }
 }
 
 function resetCanvas() {
@@ -364,36 +427,6 @@ function resetCanvas() {
   // console.log(canvas.getObjects())
   canvas.remove(...canvas.getObjects())
 }
-
-// async function func() {
-//   const cvn = canvasRef.value
-//   // const context = ctx.value
-//   ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-//   cvn.height = cvn.width
-//   const bg = new Image()
-//   bg.src = '..' + '/src/assets/human/anatomys/body-human.jpg'
-//   bg.onload = function () {
-//     console.log('bg', bg.height)
-//     const scale = Math.min(cvn.width / bg.width, cvn.height / bg.height)
-//     const width = bg.width * scale
-//     const height = bg.height * scale
-//     const x = cvn.width / 2 - width / 2
-//     const y = cvn.height / 2 - height / 2
-//     ctx.value.fillStyle = '#FFFFFF'
-//     ctx.value.fillRect(0, 0, cvn.width, cvn.height)
-//     ctx.value.drawImage(bg, x, y, width, height)
-//     // console.log('func', arr)
-//     // if (arr.value.length > 0) {
-//     //   for (let i = 0; i < arr.value.length; i++) {
-//     //     drawShapes(arr.value[i].penanda,
-//     //       arr.value[i].x, arr.value[i].y,
-//     //       arr.value[i].ketebalan,
-//     //       arr.value[i].warna,
-//     //       arr.value[i].panjang, i + 1)
-//     //   }
-//     // }
-//   }
-// }
 
 watch(() => arr, (obj) => {
   // console.log('watch', obj)
