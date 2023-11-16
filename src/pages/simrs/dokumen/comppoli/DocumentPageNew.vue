@@ -1,9 +1,9 @@
 <template>
   <div
     ref="main"
-    class="column flex-center full-height"
+    class="column flex-center full-height  bg-white"
   >
-    <div class="container full-height bg-white">
+    <div class="container full-height">
       <div class="column full-height ">
         <div class="col-grow">
           <KumpulanSurat
@@ -168,7 +168,7 @@ function goTo(val) {
 <style lang="scss" scoped>
   .container {
     position: relative;
-    width: 90vw;
+    width: calc(100vw - 250px);
     min-height: 90vh;
     border-radius: 10px;
     backdrop-filter: blur(5px);
