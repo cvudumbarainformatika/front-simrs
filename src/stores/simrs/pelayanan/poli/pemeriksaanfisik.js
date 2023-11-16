@@ -24,10 +24,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       y: 0,
       ketebalan: 2,
       panjang: 7,
-      width: 7,
-      height: 7,
+      width: 150,
+      height: 150,
       warna: '#000000',
-      penanda: 'circle'
+      penanda: 'circle',
+      // baru
+      angle: 0,
+      tinggi: 0,
+      fill: 'transparent'
     },
     formMata: {
       vodawal: '',
@@ -158,6 +162,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.shapes = []
       this.mata = []
       this.paru = []
+    },
+
+    setShapeObject(index, key, value) {
+      this.shapes[index][key] = value
     },
 
     resetFormMataDanParu() {
@@ -396,10 +404,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           y: 0,
           ketebalan: 2,
           panjang: 15,
-          width: 15,
-          height: 15,
+          width: 150,
+          height: 150,
           warna: '#000000',
-          penanda: 'circle'
+          penanda: 'circle',
+          // baru
+          angle: 0,
+          tinggi: 15,
+          fill: 'transparent'
         }
         // this.shapes = []
         this.shapes = val ? [] : this.shapes

@@ -37,7 +37,7 @@
     </div>
     <div class="absolute-bottom">
       <BottomCanvas
-        @reset="store.resetShapes"
+        @reset="resetShapes"
       />
     </div>
 
@@ -68,7 +68,8 @@ import HeaderCanvas from './HeaderCanvas.vue'
 import BottomCanvas from './BottomCanvas.vue'
 import { fabric } from 'fabric'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
-import { ref, onMounted, markRaw, computed, watch } from 'vue'
+// import { ref, onMounted, markRaw, computed, watch } from 'vue'
+import { ref, onMounted, markRaw, computed } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
 const el = ref(null)
@@ -137,12 +138,12 @@ function init() {
     // isDrawingMode: true,
     centeredScaling: true,
     backgroundColor: '#fff',
-    selectionBorderColor: 'rgba(255, 255, 255, 0.8)',
-    selectionColor: 'rgba(255, 255, 255, 0.8)',
-    selectionLineWidth: 2,
-    borderColor: 'gray',
+    selectionBorderColor: 'red',
+    selectionColor: 'black',
+    selectionLineWidth: 4,
+    borderColor: 'grey',
     cornerColor: 'black',
-    cornerSize: 3,
+    cornerSize: 8,
     transparentCorners: false,
     // cursor
     defaultCursor: 'crosshair',
@@ -159,10 +160,7 @@ function init() {
       originY: 'center'
     })
   }))
-  // const circle = markRaw(new fabric.Circle({ top: 140, left: 30, radius: 75, fill: 'green' }))
-  // const rect = markRaw(new fabric.Rect({ width: 120, height: 120, fill: 'blue', left: 250, top: 50 }))
 
-  // canvas.add(img)
   const scale = Math.min(canvasRef.value.width / img.width, canvasRef.value.height / img.height)
   const center = canvas.getCenter()
   canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
@@ -176,11 +174,11 @@ function init() {
   })
   canvas.add()
   // canvas.renderAll()
-  coba()
+  onCanvas()
   drawall()
 }
 
-function coba() {
+function onCanvas() {
   const canvas = cvn.value
 
   canvas.on('mouse:down', (obj) => {
@@ -195,7 +193,22 @@ function coba() {
       target.value = null
       // writingMode.value = false
       // SELEKSI OBJECT
+      const object = canvas.item(obj?.target?.ids)
       console.log('mousedown select', obj)
+      console.log('mousedown bject', object)
+      object.set({
+        transparentCorners: false,
+        cornerColor: 'aqua',
+        cornerStrokeColor: 'red',
+        borderColor: 'red',
+        cornerSize: 6,
+        padding: 5,
+        cornerStyle: 'circle',
+        borderDashArray: [3, 3]
+      })
+      // canvas.setActiveObject(object)
+      // canvas.item(obj?.target?.ids).hasControls = true
+      // canvas.renderAll()
     } else {
       // JIKA MENU MUNCUL
       canvas.discardActiveObject()
@@ -207,28 +220,12 @@ function coba() {
   })
 
   canvas.on('mouse:move', (obj) => {
-    // const point = canvas.getPointer(obj)
-    // console.log('point', point)
-    // if (obj.target !== null) {
-    //   // console.log('object', obj)
-    //   objectSelected.value = obj.target
-    // } else {
-    //   objectSelected.value = null
-    // }
-
-    // if (writingMode.value === false) {
-
-    // }
-    // if (store.dialogForm?.penanda === 'drag-segi-empat') {
-    //   console.log('iyo', start.value)
-    //   // const context = ctx.value
-    // }
   })
 
   canvas.on('mouse:up', (obj) => {
-    // if (store?.dialogForm?.penanda === 'drag-segi-empat') {
-    //   target.value = '.upper-canvas'
-    // }
+    if (store?.dialogForm?.penanda === 'drag-segi-empat' && !obj.target === null) {
+      target.value = '.upper-canvas'
+    }
     writingMode.value = false
     console.log('mouseup', obj)
     const x = obj.pointer.x
@@ -244,11 +241,15 @@ function coba() {
         store.dialogForm.width,
         store.dialogForm.height,
         store.dialogForm.warna,
-        store.dialogForm.ketebalan
+        store.dialogForm.ketebalan,
+        null,
+        store.dialogForm.angle,
+        store.dialogForm.fill,
+        store.dialogForm.tinggi
       )
     }
 
-    console.log('canvas', canvas)
+    console.log('canvas mouse up', canvas)
   })
 
   canvas.on({
@@ -258,14 +259,30 @@ function coba() {
   })
 }
 
+// const onMoving = (obj) => {
+//   console.log('object moving', obj)
+//   store.setShapeObject(obj?.target?.ids, 'x', obj?.target?.left)
+//   store.setShapeObject(obj?.target?.ids, 'y', obj?.target?.top)
+// }
+
 const onChange = (obj) => {
-  // const target = store.shapes[obj?.target?.ids]
-  // // console.log('onchange-target', target)
-  // // console.log('onchange-object', obj?.target)
-  // target.x = obj.target.left
-  // target.y = obj.target.top
-  // target.height = obj.target.height
-  // target.width = obj.target.width
+  const action = obj?.transform?.action
+  const ids = obj?.target?.ids
+  if (action === 'drag') {
+    // move
+    store.setShapeObject(ids, 'x', obj?.target?.left)
+    store.setShapeObject(ids, 'y', obj?.target?.top)
+  } else if (action === 'scale') {
+    // scaling
+    console.log('scale', obj)
+    store.setShapeObject(ids, 'width', obj?.target?.width)
+    store.setShapeObject(ids, 'height', obj?.target?.height)
+    store.setShapeObject(ids, 'panjang', parseInt(obj?.target?.width * obj?.target.scaleX) / 2)
+  } else if (action === 'rotate') {
+    store.setShapeObject(ids, 'x', obj?.target?.left)
+    store.setShapeObject(ids, 'y', obj?.target?.top)
+    store.setShapeObject(ids, 'angle', obj?.target?.angle)
+  }
 }
 
 function onMenuShow() {
@@ -289,6 +306,9 @@ function saveShapes() {
     width: store.dialogForm.width,
     height: store.dialogForm.height,
     warna: store.dialogForm.warna,
+    fill: store.dialogForm.fill,
+    angle: store.dialogForm.angle,
+    tinggi: store.dialogForm.tinggi,
     templatemenu: store.templateActive,
     templategambar: store.fileGambar,
     templateindex: store.gambarActive,
@@ -297,6 +317,7 @@ function saveShapes() {
   }
   store.pushShapes(obj).then((x) => {
     console.log('shapes', writingMode.value)
+    drawall()
     setTimeout(() => {
       // refMenu.value.hide()
       refMenu.value?.refMenu?.hide()
@@ -304,7 +325,7 @@ function saveShapes() {
   })
 }
 
-function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
+function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
   const canvas = cvn.value
   if (penanda === 'circle') {
     const circle = markRaw(new fabric.Circle({
@@ -312,11 +333,12 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
       left: x,
       top: y,
       radius: p,
-      fill: '',
       stroke: clr,
       strokeWidth: tbl,
       originX: 'center',
-      originY: 'center'
+      originY: 'center',
+      fill,
+      angle
     }))
     canvas.add(circle)
   } else if (penanda === 'kotak') {
@@ -328,9 +350,10 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
       originY: 'center',
       width: p * 2,
       height: p * 2,
-      fill: 'transparent',
       stroke: clr,
-      strokeWidth: tbl
+      strokeWidth: tbl,
+      fill,
+      angle
       // transparentCorners: false
       // cornerSize: 6
     }))
@@ -345,9 +368,10 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
       originY: 'top',
       width: w,
       height: h,
-      fill: 'transparent',
       stroke: clr,
-      strokeWidth: tbl
+      strokeWidth: tbl,
+      fill,
+      angle
       // transparentCorners: false
       // cornerSize: 6
     }))
@@ -360,11 +384,12 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
       top: y,
       width: p * 2,
       height: p * 2,
-      fill: 'transparent',
       stroke: clr,
       strokeWidth: tbl,
       originX: 'center',
-      originY: 'center'
+      originY: 'center',
+      fill,
+      angle
     }))
 
     canvas.add(triangle)
@@ -392,9 +417,10 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids) {
       originY: 'center',
       width: p * 3,
       height: p * 2,
-      fill: 'transparent',
       stroke: clr,
-      strokeWidth: tbl
+      strokeWidth: tbl,
+      fill,
+      angle
       // transparentCorners: false
       // cornerSize: 6
     }))
@@ -415,7 +441,7 @@ function drawall() {
         arr.value[i].height,
         arr.value[i].warna,
         arr.value[i].ketebalan,
-        i
+        i, arr.value[i].angle, arr.value[i].fill, arr.value[i].tinggi
       )
     }
   }
@@ -424,15 +450,21 @@ function drawall() {
 
 function resetCanvas() {
   const canvas = cvn.value
-  // console.log(canvas.getObjects())
   canvas.remove(...canvas.getObjects())
 }
 
-watch(() => arr, (obj) => {
-  // console.log('watch', obj)
-  writingMode.value = true
-  drawall()
-}, { deep: true })
+function resetShapes() {
+  store.resetShapes()
+  setTimeout(() => {
+    drawall()
+  }, 300)
+}
+
+// watch(() => arr, (obj) => {
+//   // console.log('watch', obj)
+//   writingMode.value = true
+//   drawall()
+// }, { deep: true })
 </script>
 
 <style lang="scss">
