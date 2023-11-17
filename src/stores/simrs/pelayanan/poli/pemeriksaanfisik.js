@@ -159,13 +159,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     },
 
     resetShapes() {
-      this.shapes = []
+      const a = this.shapes
+      const b = a.filter(x => x.templategambar === this.fileGambar)
+      b.forEach(f => a.splice(a.findIndex(e => e.templategambar === f.templategambar), 1))
+      // this.shapes = []
       this.mata = []
       this.paru = []
     },
 
     setShapeObject(index, key, value) {
-      this.shapes[index][key] = value
+      const a = this.shapes
+      const b = a.filter(x => x.templategambar === this.fileGambar)
+      b[index][key] = value
     },
 
     resetFormMataDanParu() {

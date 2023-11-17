@@ -139,8 +139,8 @@ function init() {
     centeredScaling: true,
     backgroundColor: '#fff',
     selectionBorderColor: 'red',
-    selectionColor: 'black',
-    selectionLineWidth: 4,
+    selectionColor: '#9494948f',
+    selectionLineWidth: 3,
     borderColor: 'grey',
     cornerColor: 'black',
     cornerSize: 8,
@@ -204,10 +204,14 @@ function onCanvas() {
         cornerSize: 6,
         padding: 5,
         cornerStyle: 'circle',
-        borderDashArray: [3, 3]
+        borderDashArray: [3, 3],
+        rotatingPointOffset: 4
       })
       // canvas.setActiveObject(object)
-      // canvas.item(obj?.target?.ids).hasControls = true
+      canvas.item(obj?.target?.ids).hasControls = true
+      canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
+
+      addBtns(canvas, object)
       // canvas.renderAll()
     } else {
       // JIKA MENU MUNCUL
@@ -259,12 +263,6 @@ function onCanvas() {
   })
 }
 
-// const onMoving = (obj) => {
-//   console.log('object moving', obj)
-//   store.setShapeObject(obj?.target?.ids, 'x', obj?.target?.left)
-//   store.setShapeObject(obj?.target?.ids, 'y', obj?.target?.top)
-// }
-
 const onChange = (obj) => {
   const action = obj?.transform?.action
   const ids = obj?.target?.ids
@@ -283,6 +281,10 @@ const onChange = (obj) => {
     store.setShapeObject(ids, 'y', obj?.target?.top)
     store.setShapeObject(ids, 'angle', obj?.target?.angle)
   }
+}
+
+function addBtns(canvas, object) {
+  console.log(object)
 }
 
 function onMenuShow() {
