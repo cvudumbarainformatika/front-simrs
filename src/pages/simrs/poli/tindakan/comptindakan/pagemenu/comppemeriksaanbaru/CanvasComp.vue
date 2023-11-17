@@ -32,13 +32,31 @@
       alt="gambar medis"
       class="hidden"
     >
+
     <div
-      class="absolute"
-      style="z-index:9999999"
+      v-if="objectSelected"
+      :style="`
+        position: absolute;
+        left:${ objectSelected.originX==='center'?
+        objectSelected?.left - objectSelected?.width / 2.5
+        :objectSelected?.left + objectSelected?.width / 2.5
+      }px;
+        top:${
+        objectSelected?.originY==='center'?
+          objectSelected?.canvas?._offset?.top + objectSelected?.top - objectSelected?.height +5:
+          objectSelected?.canvas?._offset?.top + objectSelected?.height * 2 + objectSelected?.height /2
+      }px;
+      `"
     >
-      <q-card>
-        dasdas
-      </q-card>
+      <div>
+        <q-btn
+          icon="icon-mat-delete"
+          color="negative"
+          flat
+          size="xs"
+          round
+        />
+      </div>
     </div>
     <!-- </div> -->
     <div class="absolute-top">
@@ -95,7 +113,7 @@ const writingMode = ref(false)
 const showMenu = ref(false)
 const target = ref(null)
 const start = ref(null)
-// const objectSelected = ref(null)
+const objectSelected = ref(null)
 const options = ref([])
 const { menus } = useMenuPemeriksaan()
 
@@ -203,8 +221,9 @@ function onCanvas() {
       // writingMode.value = false
       // SELEKSI OBJECT
       const object = canvas.item(obj?.target?.ids)
-      console.log('mousedown select', obj)
-      console.log('mousedown bject', object)
+      objectSelected.value = object
+      // console.log('mousedown select', obj)
+      console.log('mousedown object', object)
       object.set({
         transparentCorners: false,
         cornerColor: 'aqua',
@@ -220,11 +239,12 @@ function onCanvas() {
       canvas.item(obj?.target?.ids).hasControls = true
       canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
 
-      addBtns(canvas, object)
+      // addBtns(canvas, object)
       // canvas.renderAll()
     } else {
       // JIKA MENU MUNCUL
       canvas.discardActiveObject()
+      objectSelected.value = null
       writingMode.value = true
       target.value = '.upper-canvas'
 
@@ -292,18 +312,18 @@ const onChange = (obj) => {
   }
 }
 
-function addBtns(canvas, object) {
-  // const deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E"
-  addDeleteBtn(object.oCoords.tr.x, object.oCoords.tr.y)
-}
+// function addBtns(canvas, object) {
+//   // const deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E"
+//   addDeleteBtn(object.oCoords.tr.x, object.oCoords.tr.y)
+// }
 
-function addDeleteBtn(x, y) {
-  const btnLeft = x - 10
-  const btnTop = y - 10
-  const deleteBtn = '<img src="https://www.funagain.com/images/old/common/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;"/>'
-  document.getElementsByClassName('upper-canvas')[0].append(deleteBtn)
-  console.log(document.getElementsByClassName('upper-canvas')[0])
-}
+// function addDeleteBtn(x, y) {
+//   const btnLeft = x - 10
+//   const btnTop = y - 10
+//   const deleteBtn = '<img src="https://www.funagain.com/images/old/common/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;"/>'
+//   document.getElementsByClassName('upper-canvas')[0].append(deleteBtn)
+//   console.log(document.getElementsByClassName('upper-canvas')[0])
+// }
 
 function onMenuShow() {
   writingMode.value = false
