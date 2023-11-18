@@ -224,6 +224,7 @@ function updateModelPoli(val) {
 function updateModelPpk(val) {
   store.formRsLain.ppkdirujuk = val.kode
   store.formRsLain.ppkdirujukx = val.nama
+  store.formRsLain.namappkdirujuk = val.nama
   // console.log('poli ', val)
 }
 const onFilterTest = async (val, update, abort) => {
