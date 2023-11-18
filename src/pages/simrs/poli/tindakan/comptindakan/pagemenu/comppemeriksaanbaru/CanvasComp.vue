@@ -25,6 +25,23 @@
         @save-shape="saveShapes"
       />
 
+      <!-- <q-menu
+        touch-position
+        context-menu
+        :target="target?target:false"
+      >
+        <q-list>
+          <q-item
+            v-for="n in 5"
+            :key="n"
+            v-close-popup
+            clickable
+          >
+            <q-item-section>Label</q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu> -->
+
     </canvas>
     <img
       ref="imgRef"
@@ -33,31 +50,34 @@
       class="hidden"
     >
 
-    <div
+    <!-- <div
       v-if="objectSelected"
       :style="`
         position: absolute;
-        left:${ objectSelected.originX==='center'?
-        objectSelected?.left - objectSelected?.width / 2.5
-        :objectSelected?.left + objectSelected?.width / 2.5
-      }px;
-        top:${
-        objectSelected?.originY==='center'?
-          objectSelected?.canvas?._offset?.top + objectSelected?.top - objectSelected?.height +5:
-          objectSelected?.canvas?._offset?.top + objectSelected?.height * 2 + objectSelected?.height /2
-      }px;
+        left:${leftX}px;
+        top:${topY}px;
       `"
     >
-      <div>
+      <div class="flex">
         <q-btn
           icon="icon-mat-delete"
           color="negative"
           flat
           size="xs"
           round
+          @click="deleteObject"
+        />
+        <q-btn
+          icon="icon-mat-delete"
+          color="primary"
+          flat
+          size="xs"
+          round
+          @click="deleteObject"
         />
       </div>
-    </div>
+    </div> -->
+
     <!-- </div> -->
     <div class="absolute-top">
       <HeaderCanvas />
@@ -69,21 +89,6 @@
     </div>
 
     <!-- modal -->
-    <!-- <q-menu
-      touch-position
-      :target="target?target:false"
-    >
-      <q-list>
-        <q-item
-          v-for="n in 5"
-          :key="n"
-          v-close-popup
-          clickable
-        >
-          <q-item-section>Label</q-item-section>
-        </q-item>
-      </q-list>
-    </q-menu> -->
   </div>
 </template>
 
@@ -112,12 +117,11 @@ const cvn = ref(null)
 const writingMode = ref(false)
 const showMenu = ref(false)
 const target = ref(null)
+// const isRightClick = ref(false)
 const start = ref(null)
 const objectSelected = ref(null)
 const options = ref([])
 const { menus } = useMenuPemeriksaan()
-
-// const tempObjects = ref([])
 
 const arr = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
@@ -201,6 +205,91 @@ function init() {
   })
   canvas.add()
   // canvas.renderAll()
+
+  // icons
+  const deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E"
+  const deleteImg = document.createElement('img')
+  deleteImg.src = deleteIcon
+
+  const cloneIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 55.699 55.699' width='100px' height='100px' xml:space='preserve'%3E%3Cpath style='fill:%23010002;' d='M51.51,18.001c-0.006-0.085-0.022-0.167-0.05-0.248c-0.012-0.034-0.02-0.067-0.035-0.1 c-0.049-0.106-0.109-0.206-0.194-0.291v-0.001l0,0c0,0-0.001-0.001-0.001-0.002L34.161,0.293c-0.086-0.087-0.188-0.148-0.295-0.197 c-0.027-0.013-0.057-0.02-0.086-0.03c-0.086-0.029-0.174-0.048-0.265-0.053C33.494,0.011,33.475,0,33.453,0H22.177 c-3.678,0-6.669,2.992-6.669,6.67v1.674h-4.663c-3.678,0-6.67,2.992-6.67,6.67V49.03c0,3.678,2.992,6.669,6.67,6.669h22.677 c3.677,0,6.669-2.991,6.669-6.669v-1.675h4.664c3.678,0,6.669-2.991,6.669-6.669V18.069C51.524,18.045,51.512,18.025,51.51,18.001z M34.454,3.414l13.655,13.655h-8.985c-2.575,0-4.67-2.095-4.67-4.67V3.414z M38.191,49.029c0,2.574-2.095,4.669-4.669,4.669H10.845 c-2.575,0-4.67-2.095-4.67-4.669V15.014c0-2.575,2.095-4.67,4.67-4.67h5.663h4.614v10.399c0,3.678,2.991,6.669,6.668,6.669h10.4 v18.942L38.191,49.029L38.191,49.029z M36.777,25.412h-8.986c-2.574,0-4.668-2.094-4.668-4.669v-8.985L36.777,25.412z M44.855,45.355h-4.664V26.412c0-0.023-0.012-0.044-0.014-0.067c-0.006-0.085-0.021-0.167-0.049-0.249 c-0.012-0.033-0.021-0.066-0.036-0.1c-0.048-0.105-0.109-0.205-0.194-0.29l0,0l0,0c0-0.001-0.001-0.002-0.001-0.002L22.829,8.637 c-0.087-0.086-0.188-0.147-0.295-0.196c-0.029-0.013-0.058-0.021-0.088-0.031c-0.086-0.03-0.172-0.048-0.263-0.053 c-0.021-0.002-0.04-0.013-0.062-0.013h-4.614V6.67c0-2.575,2.095-4.67,4.669-4.67h10.277v10.4c0,3.678,2.992,6.67,6.67,6.67h10.399 v21.616C49.524,43.26,47.429,45.355,44.855,45.355z'/%3E%3C/svg%3E%0A"
+  const cloneImg = document.createElement('img')
+  cloneImg.src = cloneIcon
+
+  function renderIcon(icon) {
+    return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
+      const size = this.cornerSize
+      ctx.save()
+      ctx.translate(left, top)
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle))
+      ctx.drawImage(icon, -size / 2, -size / 2, size, size)
+      // ctx.drawImage(icon, -size, -size, size, size)
+      ctx.restore()
+    }
+  }
+
+  fabric.Object.prototype.controls.deleteControl = markRaw(new fabric.Control({
+    x: 0.5,
+    y: -0.5,
+    offsetY: -10,
+    offsetX: 10,
+    cursorStyle: 'pointer',
+    mouseUpHandler: deleteObject,
+    render: renderIcon(deleteImg),
+    cornerSize: 16
+  }))
+
+  fabric.Object.prototype.controls.clone = markRaw(new fabric.Control({
+    x: -0.5,
+    y: -0.5,
+    offsetY: -10,
+    offsetX: -10,
+    cursorStyle: 'pointer',
+    mouseUpHandler: cloneObject,
+    render: renderIcon(cloneImg),
+    cornerSize: 16
+  }))
+
+  function deleteObject() {
+    console.log('delete Object', objectSelected.value)
+    const x = objectSelected.value?.left
+    const y = objectSelected.value?.top
+    store.deleteObjectOnShapes(x, y).then(() => {
+      drawall()
+    })
+  }
+
+  function cloneObject(eventData, transform) {
+    const target = transform.target
+    const obj = arr.value[target.ids]
+    console.log('clone', target)
+    const clone = {
+      penanda: obj?.penanda,
+      x: obj?.x + 10,
+      y: obj?.y + 10,
+      anatomy: obj?.anatomy,
+      ket: obj?.ket,
+      ketebalan: obj?.ketebalan,
+      panjang: obj?.panjang,
+      width: obj?.width,
+      height: obj?.height,
+      warna: obj?.warna,
+      fill: obj?.fill,
+      angle: obj?.angle,
+      tinggi: obj?.tinggi,
+      templatemenu: store.templateActive,
+      templategambar: store.fileGambar,
+      templateindex: store.gambarActive,
+      noreg: props.pasien ? props.pasien.noreg : '',
+      norm: props.pasien ? props.pasien.norm : ''
+    }
+    store.pushShapes(clone).then((x) => {
+    // console.log('shapes', writingMode.value)
+      drawall()
+      // setTimeout(() => {
+      // }, 100)
+    })
+  }
+
   onCanvas()
   drawall()
 }
@@ -220,24 +309,7 @@ function onCanvas() {
       target.value = null
       // writingMode.value = false
       // SELEKSI OBJECT
-      const object = canvas.item(obj?.target?.ids)
-      objectSelected.value = object
-      // console.log('mousedown select', obj)
-      console.log('mousedown object', object)
-      object.set({
-        transparentCorners: false,
-        cornerColor: 'aqua',
-        cornerStrokeColor: 'red',
-        borderColor: 'red',
-        cornerSize: 6,
-        padding: 5,
-        cornerStyle: 'circle',
-        borderDashArray: [3, 3],
-        rotatingPointOffset: 4
-      })
-      // canvas.setActiveObject(object)
-      canvas.item(obj?.target?.ids).hasControls = true
-      canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
+      setBtns(canvas, obj)
 
       // addBtns(canvas, object)
       // canvas.renderAll()
@@ -253,18 +325,26 @@ function onCanvas() {
   })
 
   canvas.on('mouse:move', (obj) => {
+    // objectSelected.value = null
   })
 
   canvas.on('mouse:up', (obj) => {
-    if (store?.dialogForm?.penanda === 'drag-segi-empat' && !obj.target === null) {
+    if (store?.dialogForm?.penanda === 'drag-segi-empat') {
       target.value = '.upper-canvas'
     }
     writingMode.value = false
     console.log('mouseup', obj)
-    const x = obj.pointer.x
-    const y = obj.pointer.y
-    store.setDialogForm('width', x - start.value.x)
-    store.setDialogForm('height', y - start.value.y)
+    if (store?.dialogForm?.penanda === 'drag-segi-empat') {
+      const x = obj.pointer.x
+      const y = obj.pointer.y
+      store.setDialogForm('width', x - start.value.x)
+      store.setDialogForm('height', y - start.value.y)
+    }
+    // } else if (store?.dialogForm?.penanda === 'kotak') {
+    //   store.setDialogForm('width', store.dialogForm.width)
+    //   store.setDialogForm('height', store.dialogForm.width)
+    // }
+
     if (obj.target === null) {
       draw(
         store.dialogForm.penanda,
@@ -282,7 +362,13 @@ function onCanvas() {
       )
     }
 
-    console.log('canvas mouse up', canvas)
+    if (target.value === null) {
+      setBtns(canvas, obj)
+      // objectSelected.value = null
+      // setBtns(canvas, obj)
+    }
+
+    // console.log('canvas mouse up', canvas)
   })
 
   canvas.on({
@@ -290,46 +376,88 @@ function onCanvas() {
     'object:scaling': onChange,
     'object:rotating': onChange
   })
+
+  canvas.on('mouse:over', function (e) {
+    // const obj = arr.value[e?.target?.ids]
+    if (objectSelected.value === null || objectSelected.value?.ids !== e?.target?.ids) {
+      e?.target?.set('fill', '#9494948f')
+      canvas.renderAll()
+    }
+  })
+  canvas.on('mouse:out', function(e) {
+    const obj = arr.value[e?.target?.ids]
+    console.log('mouseout', obj)
+    e?.target?.set('fill', obj?.fill)
+    canvas.renderAll()
+  })
+}
+
+function setBtns(canvas, obj) {
+  const object = canvas.item(obj?.target?.ids)
+  objectSelected.value = object
+  // console.log('mousedown select', obj)
+  // console.log('mouseevent object', object)
+  object.set({
+    transparentCorners: false,
+    cornerColor: 'aqua',
+    cornerStrokeColor: 'red',
+    borderColor: 'red',
+    cornerSize: 6,
+    padding: 5,
+    cornerStyle: 'circle',
+    borderDashArray: [3, 3],
+    rotatingPointOffset: 4
+  })
+  // canvas.setActiveObject(object)
+  canvas.item(obj?.target?.ids).hasControls = true
+  canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
 }
 
 const onChange = (obj) => {
+  objectSelected.value = null
   const action = obj?.transform?.action
   const ids = obj?.target?.ids
+  const object = obj?.target
+  objectSelected.value = object
+  // console.log('onChange', objectSelected.value)
   if (action === 'drag') {
     // move
+    console.log('drag', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
   } else if (action === 'scale') {
     // scaling
     console.log('scale', obj)
-    store.setShapeObject(ids, 'width', obj?.target?.width)
-    store.setShapeObject(ids, 'height', obj?.target?.height)
-    store.setShapeObject(ids, 'panjang', parseInt(obj?.target?.width * obj?.target.scaleX) / 2)
+    // console.log('onChange-arr', store.shapes[ids])
+    store.setShapeObject(ids, 'width', object?.width * object?.scaleX)
+    store.setShapeObject(ids, 'height', object?.height * object?.scaleY)
+    store.setShapeObject(ids, 'panjang', parseInt(object?.width * object?.scaleX) / 2)
+    store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY) / 2)
+    // console.log('onChange-arr', store.shapes[ids])
+  } else if (action === 'scaleX') {
+    // scaling
+    console.log('scaleX', obj)
+    store.setShapeObject(ids, 'width', object?.width * object?.scaleX)
+    store.setShapeObject(ids, 'panjang', parseInt(object?.width * object?.scaleX) / 2)
+  } else if (action === 'scaleY') {
+    // scaling
+    console.log('scaleY', obj)
+    store.setShapeObject(ids, 'height', object?.height * object?.scaleY)
+    store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY) / 2)
   } else if (action === 'rotate') {
+    console.log('rotate', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
     store.setShapeObject(ids, 'angle', obj?.target?.angle)
   }
 }
 
-// function addBtns(canvas, object) {
-//   // const deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E"
-//   addDeleteBtn(object.oCoords.tr.x, object.oCoords.tr.y)
-// }
-
-// function addDeleteBtn(x, y) {
-//   const btnLeft = x - 10
-//   const btnTop = y - 10
-//   const deleteBtn = '<img src="https://www.funagain.com/images/old/common/delete-icon.png" class="deleteBtn" style="position:absolute;top:' + btnTop + 'px;left:' + btnLeft + 'px;cursor:pointer;width:20px;height:20px;"/>'
-//   document.getElementsByClassName('upper-canvas')[0].append(deleteBtn)
-//   console.log(document.getElementsByClassName('upper-canvas')[0])
-// }
-
 function onMenuShow() {
   writingMode.value = false
 }
 
 function cancelShape() {
+  store.resetDialogForm(store.templateActive)
   refMenu.value?.refMenu?.hide()
   drawall()
 }
@@ -356,10 +484,9 @@ function saveShapes() {
     norm: props.pasien ? props.pasien.norm : ''
   }
   store.pushShapes(obj).then((x) => {
-    console.log('shapes', writingMode.value)
+    // console.log('shapes', writingMode.value)
     drawall()
     setTimeout(() => {
-      // refMenu.value.hide()
       refMenu.value?.refMenu?.hide()
     }, 300)
   })
@@ -388,8 +515,10 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
       top: y,
       originX: 'center',
       originY: 'center',
-      width: p * 2,
-      height: p * 2,
+      // width: p * 2,
+      // height: p * 2,
+      width: w,
+      height: h,
       stroke: clr,
       strokeWidth: tbl,
       fill,
@@ -436,7 +565,7 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
   } else if (penanda === 'Polyline') {
     // const svgUrl = new URL('../../../../../../../assets/images/actor.svg', import.meta.url).href
 
-    // // eslint-disable-next-line new-cap
+    // eslint-disable-next-line new-cap
     // markRaw(new fabric.loadSVGFromURL(svgUrl, (objects, options) => {
     //   const loadedObject = fabric.util.groupSVGElements(objects, options)
     //   loadedObject.set({
@@ -449,27 +578,37 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
     //   console.log(loadedObject)
     // }))
 
-    const poly = markRaw(new fabric.Rect({
-      ids,
-      left: x,
-      top: y,
-      originX: 'center',
-      originY: 'center',
-      width: p * 3,
-      height: p * 2,
-      stroke: clr,
-      strokeWidth: tbl,
-      fill,
-      angle
-      // transparentCorners: false
-      // cornerSize: 6
-    }))
+    const poly = markRaw(new fabric.Polygon(
+      [
+        { x: p, y: p / 3 },
+        { x: p * 3, y: p / 3 },
+        { x: p * 3 + (p / 3), y: (p / 3) * 4 },
+        { x: p - (p / 3), y: (p / 3) * 4 }],
+      {
+        ids,
+        // left: x,
+        // top: y,
+        originX: 'center',
+        originY: 'center',
+        // width: p * 3,
+        // height: p * 2,
+        // stroke: clr,
+        // strokeWidth: tbl,
+        fill,
+        angle,
+        stroke: clr,
+        left: x,
+        top: y,
+        strokeWidth: tbl,
+        strokeLineJoin: 'bevil'
+      }))
     canvas.add(poly)
   }
 }
 
 function drawall() {
   resetCanvas()
+  objectSelected.value = null
   // if (writingMode.value) {
   if (arr.value.length > 0) {
     for (let i = 0; i < arr.value.length; i++) {
@@ -481,7 +620,10 @@ function drawall() {
         arr.value[i].height,
         arr.value[i].warna,
         arr.value[i].ketebalan,
-        i, arr.value[i].angle, arr.value[i].fill, arr.value[i].tinggi
+        i,
+        arr.value[i].angle,
+        arr.value[i].fill,
+        arr.value[i].tinggi
       )
     }
   }
@@ -500,11 +642,6 @@ function resetShapes() {
   }, 300)
 }
 
-// watch(() => arr, (obj) => {
-//   // console.log('watch', obj)
-//   writingMode.value = true
-//   drawall()
-// }, { deep: true })
 </script>
 
 <style lang="scss">

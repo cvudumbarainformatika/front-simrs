@@ -132,7 +132,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         const newArr = [...this.shapes]
         newArr.push(val)
         this.shapes = newArr
-        this.setDialogForm('anatomy', '')
+        // this.setDialogForm('anatomy', '')
         this.setDialogForm('ket', '')
 
         if (val.anatomy === 'Mata') {
@@ -147,6 +147,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
 
         this.resetFormMataDanParu()
+        this.resetDialogForm(this.templateActive)
         resolve()
       })
     },
@@ -165,6 +166,15 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // this.shapes = []
       this.mata = []
       this.paru = []
+    },
+    deleteObjectOnShapes(x, y) {
+      return new Promise((resolve, reject) => {
+        const a = this.shapes
+        // b.forEach(f => a.splice(a.findIndex(e => e.templategambar === f.templategambar), 1))
+        a.splice(a.findIndex(e => e.x === x && e.y === y), 1)
+        console.log('store delete object', a)
+        resolve()
+      })
     },
 
     setShapeObject(index, key, value) {
@@ -418,6 +428,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           tinggi: 15,
           fill: 'transparent'
         }
+        // this.dialogForm.anatomy = template
         // this.shapes = []
         this.shapes = val ? [] : this.shapes
         this.selectStatusPsikologi = []
@@ -462,6 +473,25 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
         resolve()
       })
+    },
+
+    resetDialogForm(template) {
+      this.dialogForm = {
+        anatomy: template === 'Body' ? '' : template,
+        ket: '',
+        x: 0,
+        y: 0,
+        ketebalan: 2,
+        panjang: 15,
+        width: 30,
+        height: 30,
+        warna: '#000000',
+        penanda: 'circle',
+        // baru
+        angle: 0,
+        tinggi: 15,
+        fill: 'transparent'
+      }
     }
 
   }
