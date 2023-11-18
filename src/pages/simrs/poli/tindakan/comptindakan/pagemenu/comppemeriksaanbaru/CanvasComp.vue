@@ -80,7 +80,7 @@
 
     <!-- </div> -->
     <div class="absolute-top">
-      <HeaderCanvas />
+      <HeaderCanvas :is-btn="objectSelected" />
     </div>
     <div class="absolute-bottom">
       <BottomCanvas
@@ -329,7 +329,8 @@ function onCanvas() {
   })
 
   canvas.on('mouse:up', (obj) => {
-    if (store?.dialogForm?.penanda === 'drag-segi-empat') {
+    // if (obj.target === null) { target.value = null }
+    if (store?.dialogForm?.penanda === 'drag-segi-empat' && obj.target === null) {
       target.value = '.upper-canvas'
     }
     writingMode.value = false
@@ -457,7 +458,7 @@ function onMenuShow() {
 }
 
 function cancelShape() {
-  store.resetDialogForm(store.templateActive)
+  store.resetDialogForm(store.templateActive, store.dialogForm.penanda)
   refMenu.value?.refMenu?.hide()
   drawall()
 }

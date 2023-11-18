@@ -147,7 +147,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
 
         this.resetFormMataDanParu()
-        this.resetDialogForm(this.templateActive)
+        this.resetDialogForm(this.templateActive, this.dialogForm.penanda)
         resolve()
       })
     },
@@ -475,7 +475,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       })
     },
 
-    resetDialogForm(template) {
+    resetDialogForm(template, penanda) {
       this.dialogForm = {
         anatomy: template === 'Body' ? '' : template,
         ket: '',
@@ -486,7 +486,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         width: 30,
         height: 30,
         warna: '#000000',
-        penanda: 'circle',
+        penanda: penanda ?? 'circle',
         // baru
         angle: 0,
         tinggi: 15,
