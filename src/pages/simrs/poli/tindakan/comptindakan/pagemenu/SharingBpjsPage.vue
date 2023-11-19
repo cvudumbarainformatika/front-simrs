@@ -6,6 +6,8 @@
       <div class="col-8 full-height">
         <component
           :is="form"
+          :key="props.pasien"
+          :pasien="props.pasien"
         />
       </div>
       <div class="col-4 full-height">
@@ -19,8 +21,10 @@
   </div>
 </template>
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
+import { usePoliSharingStore } from 'src/stores/simrs/pelayanan/poli/sharing'
 
+const store = usePoliSharingStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -29,4 +33,8 @@ const props = defineProps({
 })
 const form = defineAsyncComponent(() => import('./compsharing/FormPage.vue'))
 const list = defineAsyncComponent(() => import('./compsharing/ListPage.vue'))
+onMounted(() => {
+  store.getMasterSharing()
+  store.initForm(props?.pasien)
+})
 </script>

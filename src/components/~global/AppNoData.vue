@@ -11,7 +11,16 @@
       />
     </div>
     <div class="text-primary q-mt-sm">
-      Tidak Ada Data
+      {{ text }}
     </div>
   </div>
 </template>
+<script setup>
+
+defineProps({
+  text: {
+    type: String,
+    default: 'Tidak Ada Data'
+  }
+})
+</script>
