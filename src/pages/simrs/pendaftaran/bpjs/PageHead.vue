@@ -65,6 +65,15 @@
           @click="goTo('/pendaftaran/bpjs/konsulan')"
         />
         <q-btn
+          :outline="path!=='/pendaftaran/bpjs/listsharing'"
+          glossy
+          push
+          color="indigo"
+          label="List Sharing"
+          size="md"
+          @click="goTo('/pendaftaran/bpjs/listsharing')"
+        />
+        <q-btn
           :outline="path !== '/pendaftaran/bpjs/form'"
           glossy
           size="md"

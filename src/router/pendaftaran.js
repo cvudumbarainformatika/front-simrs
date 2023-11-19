@@ -64,6 +64,13 @@ const pendaftaran = {
             import('pages/simrs/pendaftaran/bpjs/mjkn/IndexPage.vue')
         },
         {
+          path: '/pendaftaran/bpjs/listsharing',
+          name: 'pendaftaran.bpjs.listsharing',
+          meta: { transition: 'slide-up' },
+          component: () =>
+            import('pages/simrs/pendaftaran/bpjs/sharing/IndexPage.vue')
+        },
+        {
           path: '/pendaftaran/bpjs/konsulan',
           name: 'pendaftaran.bpjs.konsulan',
           meta: { transition: 'slide-up' },

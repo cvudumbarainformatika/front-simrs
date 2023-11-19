@@ -34,7 +34,7 @@
             v-close-popup
             label="Close"
             flat
-            color="primary"
+            color="dark"
           />
           <q-btn
             label="Simpan"

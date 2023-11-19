@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifSuccess } from 'src/modules/utils'
 
-export const usePasienKonsulanStore = defineStore('pasien_konsulan', {
+export const usePasienSharingStore = defineStore('pasien_sharing', {
   state: () => ({
     loading: false,
+    loadingSave: false,
     isOpen: false,
     meta: null,
     items: [],
@@ -17,9 +19,13 @@ export const usePasienKonsulanStore = defineStore('pasien_konsulan', {
       // tgl: dateDbFormat(new Date()),
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
-    }
+    },
+    form: {}
   }),
   actions: {
+    setForm(key, val) {
+      this.form[key] = val
+    },
     setOpen() {
       this.isOpen = !this.isOpen
     },
@@ -44,6 +50,7 @@ export const usePasienKonsulanStore = defineStore('pasien_konsulan', {
     setQ(payload) {
       this.params.page = 1
       this.params.q = payload
+      this.params.cari = payload
       this.getData()
     },
     setTglAwal() {
@@ -65,7 +72,7 @@ export const usePasienKonsulanStore = defineStore('pasien_konsulan', {
       const { to, from, q } = val // status
       this.params.to = to
       this.params.from = from
-      this.params.q = q
+      this.params.cari = q
       this.getData()
     },
     getInitialData() {
@@ -73,17 +80,32 @@ export const usePasienKonsulanStore = defineStore('pasien_konsulan', {
     },
     async getData(val) {
       this.loading = true
-      console.log('form', val)
-      // const params = { params: this.params }
-      await api.get('v1/simrs/pendaftaran/listkonsulantarpoli', val)
+      const params = { params: this.params }
+      await api.get('v1/simrs/pelayanan/listpermintaansharing', params)
         .then(resp => {
           this.loading = false
-          console.log('List konsulan', resp)
-          this.items = resp.data
+          console.log('List sharing', resp.data)
+          this.items = resp?.data?.data ?? resp?.data
+          this.meta = resp?.data
         })
         .catch(() => {
           this.loading = false
         })
+    },
+    simpan() {
+      this.loadingSave = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/pelayanan/updatesimpansharing', this.form)
+          .then(resp => {
+            this.loadingSave = false
+            notifSuccess(resp)
+            this.getData()
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingSave = false
+          })
+      })
     }
   }
 })
