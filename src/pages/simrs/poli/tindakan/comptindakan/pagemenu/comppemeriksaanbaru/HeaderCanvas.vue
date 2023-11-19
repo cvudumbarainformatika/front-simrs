@@ -1,110 +1,9 @@
 <template>
   <div class="column">
-    <!-- <div
-      class="cursor-pointer non-selectable flex items-center justify-between bg-yellow-2 q-pa-sm tmp-t"
-    >
-      <div class="row items-center justify-between">
-        <div class="row items-center">
-          <div
-            class="flex"
-            style="width: 75px;"
-          >
-            <div class="f-10" />
-            <q-slider
-              v-model="store.dialogForm.ketebalan"
-              :min="1"
-              :max="10"
-              label
-              switch-label-side
-              color="dark"
-              dense
-              size="xs"
-            />
-          </div>
-          <q-separator
-            vertical
-            class="q-mx-md"
-          />
-          <div
-            class="flex"
-            style="width: 75px;"
-          >
-            <div class="f-10" />
-            <q-slider
-              v-model="store.dialogForm.panjang"
-              :min="1"
-              :max="20"
-              label
-              switch-label-side
-              color="primary"
-              dense
-            />
-          </div>
-          <q-separator
-            vertical
-            class="q-mx-sm"
-          />
-          <q-btn
-
-            padding="sm"
-            size="sm"
-            :style="`background-color: ${store.dialogForm.warna};`"
-          >
-            <q-tooltip>
-              Ganti Warna
-            </q-tooltip>
-            <q-menu>
-              <q-item
-                v-close-popup
-                clickable
-                style="padding:0"
-              >
-                <q-color
-                  v-model="store.dialogForm.warna"
-                  no-header
-                  no-footer
-                  default-view="palette"
-                  class="my-picker"
-                />
-              </q-item>
-            </q-menu>
-          </q-btn>
-        </div>
-      </div>
-      <div>
-        <q-btn
-          flat
-          padding="xs"
-          size="sm"
-          :icon="store.fullCanvas?'icon-mat-open_in_full' :'icon-mat-fullscreen'"
-          @click="setFull"
-        >
-          <q-tooltip>
-            {{ store.fullCanvas?'kembali': 'Halaman Full' }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-    </div> -->
-    <!-- <div class="row items-center bg-yellow-3 q-pa-xs">
-      <div class="q-gutter-xs">
-        <q-btn
-          v-for="(btnx, i) in btns"
-          :key="i"
-          :flat="btnx.name !== store.dialogForm.penanda"
-          :glossy="btnx.name === store.dialogForm.penanda"
-          padding="xs"
-          size="xs"
-          :icon="btnx.icon"
-          color="dark"
-          @click="store.setDialogForm('penanda',btnx.name)"
-        >
-          <q-tooltip>
-            {{ btnx.name }}
-          </q-tooltip>
-        </q-btn>
-      </div>
-    </div> -->
-    <div class="q-px-sm q-py-md flex flex-center full-width">
+    <div class="flex flex-center full-width q-pt-sm q-pb-xs">
+      Status Lokalis
+    </div>
+    <div class="q-px-sm q-pb-md flex flex-center full-width">
       <div
         class="bg-dark q-pa-xs shadow-2"
         style="border-radius: 20px ;"
@@ -181,6 +80,7 @@
                 size="xs"
                 dark
                 label-color="black"
+                @update:model-value="gantiStroke"
               />
             </div>
           </div>
@@ -196,7 +96,7 @@
             <q-btn
               padding="sm"
               size="sm"
-              :style="`background-color: ${store.dialogForm.warna};`"
+              :style="`background-color: ${store.dialogForm.warna}; border:1px solid white;`"
               class="q-mr-md"
             >
               <q-tooltip>
@@ -214,6 +114,7 @@
                     no-footer
                     default-view="palette"
                     class="my-picker"
+                    @update:model-value="gantiStroke"
                   />
                 </q-item>
               </q-menu>
@@ -224,8 +125,8 @@
             <q-btn
               padding="sm"
               size="sm"
-              :style="`background-color: ${store.dialogForm.fill};`"
-              class="q-mr-md"
+              :style="`background-color: ${store.dialogForm.fill}; border:1px solid white;`"
+              class="q-mr-xs"
             >
               <q-tooltip>
                 Ganti Warna Fill
@@ -239,12 +140,52 @@
                   <q-color
                     v-model="store.dialogForm.fill"
                     no-header
-                    no-footer
-                    default-view="palette"
                     class="my-picker"
+                    @update:model-value="gantiFill"
                   />
                 </q-item>
               </q-menu>
+            </q-btn>
+            <!-- transparent -->
+            <q-btn
+              padding="sm"
+              size="sm"
+              :style="`background-color: white; border:1px solid white;`"
+              class="q-mr-xs"
+              @click="gantiFill(false)"
+            >
+              <q-tooltip>
+                No Color
+              </q-tooltip>
+            </q-btn>
+            <!-- pattern -->
+            <!-- <q-btn
+              padding="sm"
+              size="sm"
+              :style="`background-color: grey; border:1px solid white;`"
+              class="q-mr-xs"
+              @click="arsir()"
+            >
+              <q-tooltip>
+                Tambah Arsiran
+              </q-tooltip>
+            </q-btn> -->
+
+            <q-btn
+              v-for="set in sets"
+              :key="set.name"
+              :color="set.name === 'ok'? 'primary':'negative'"
+              text-color="white"
+              rounded
+              :icon="set.icon"
+              push
+              size="sm"
+              dense
+              @click="emits('ok')"
+            >
+              <q-tooltip>
+                {{ set.name }}
+              </q-tooltip>
             </q-btn>
           </div>
         </div>
@@ -255,16 +196,23 @@
 
 <script setup>
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+// import { ref, markRaw } from 'vue'
 import { ref } from 'vue'
 
 const store = usePemeriksaanFisik()
 
-defineProps({
+const props = defineProps({
   isBtn: {
     type: Boolean,
     default: true
+  },
+  canvas: {
+    type: Object,
+    default: null
   }
 })
+
+const emits = defineEmits(['ok'])
 
 const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
@@ -276,7 +224,92 @@ const dragers = ref([
   { name: 'drag-segi-empat', icon: 'icon-my-shape-rectangle-plus' }
 ])
 
+const sets = ref([
+  { name: 'ok', icon: 'icon-mat-check' }
+])
+
 // function setFull() {
 //   store.setFullCanvas()
+// }
+
+function gantiStroke() {
+  const canvas = props?.canvas
+  const activeObject = canvas.getActiveObject()
+  if (activeObject === undefined || activeObject === null) {
+    return false
+  } else {
+    activeObject?.set({
+      strokeWidth: store.dialogForm.ketebalan,
+      stroke: store.dialogForm.warna
+    })
+    store.setShapeObject(activeObject.ids, 'ketebalan', store.dialogForm.ketebalan)
+    store.setShapeObject(activeObject.ids, 'warna', store.dialogForm.warna)
+    canvas.renderAll()
+  }
+}
+
+function gantiFill(color) {
+  const canvas = props?.canvas
+  const activeObject = canvas.getActiveObject()
+  if (activeObject === undefined || activeObject === null) {
+    return false
+  } else {
+    activeObject?.set({
+      fill: color ? store.dialogForm.fill : 'transparent'
+    })
+    store.setShapeObject(activeObject.ids, 'fill', color ? store.dialogForm.fill : 'transparent')
+    canvas.renderAll()
+  }
+}
+
+// function arsir() {
+//   const canvas = props?.canvas
+//   const activeObject = canvas.getActiveObject()
+//   // const width = activeObject?.width
+//   // const height = activeObject?.height
+
+//   const myShape = myShapes()
+//   const patternSourceCanvas = new fabric.StaticCanvas()
+//   patternSourceCanvas.add(myShape)
+
+//   patternSourceCanvas.renderAll()
+
+//   const pattern = new fabric.Pattern({
+//     source: patternSourceCanvas.getElement(),
+//     repeat: 'repeat'
+//   })
+
+//   if (activeObject === undefined || activeObject === null) {
+//     return false
+//   } else {
+//     activeObject?.set({
+//       fill: pattern
+//     })
+//     // store.setShapeObject(activeObject.ids, 'ketebalan', store.dialogForm.ketebalan)
+//     // store.setShapeObject(activeObject.ids, 'warna', store.dialogForm.warna)
+//     canvas.renderAll()
+//   }
+
+//   // console.log('width', width)
+//   // console.log('height', height)
+//   // console.log('shape', myShape)
+// }
+
+// function myShapes() {
+//   const canvas = props?.canvas
+//   const activeObject = canvas.getActiveObject()
+//   const width = activeObject?.width
+//   const height = activeObject?.height
+
+//   const ctx = canvas.getContext('2d')
+//   ctx.strokeStyle = 'black'
+//   ctx.lineWidth = 2
+//   ctx.beginPath()
+//   ctx.moveTo(0, width)
+//   ctx.lineTo(height, 0)
+//   ctx.closePath()
+//   ctx.stroke()
+
+//   return true
 // }
 </script>

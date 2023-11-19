@@ -12,23 +12,42 @@
     <div class="col full-height full-width relative-position">
       <div
         class="absolute-left full-height bg-white"
-        style="width:33%;"
+        style="width:35%;"
       >
-        {{ store.templateActive }}
+        <transition
+          v-if="!store.fullCanvas"
+          appear
+          @enter="enter"
+          @leave="leave"
+        >
+          <TemplateGambar
+            v-show="store.dialogTemplate"
+            style="border-right:2px solid gray;"
+            :active="store.templateActive"
+            :gambar-active="store.gambarActive"
+          />
+        </transition>
+        <!-- INI FORM -->
+        <FormPemeriksaan
+          :key="pasien"
+          :pasien="pasien"
+          :filter-shapes="filterShapes"
+        />
       </div>
       <div
         class="absolute-right full-height bg-white"
-        style="width:33%;"
+        style="width:30%;"
       >
         dsfs
       </div>
       <div
-        style="width: 33%;"
-        class="absolute-center full-height"
+        style="width:35%; margin-left: 35%;"
+        class="absolute full-height"
       >
         <CanvasComp
           :key="props?.pasien"
           :pasien="props?.pasien"
+          @open-template="store.setDialogTemplate"
         />
       </div>
     </div>
@@ -37,9 +56,15 @@
 
 <script setup>
 // import HeaderComp from './comppemeriksaanbaru/HeaderComp.vue'
+import TemplateGambar from './comppemeriksaanbaru/TemplateGambar.vue'
+import FormPemeriksaan from './comppemeriksaan/FormPemeriksaan.vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
+import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
+import { computed } from 'vue'
+// import { ref } from 'vue'
 
+const { enter, leave } = useSlideFromLeft()
 const store = usePemeriksaanFisik()
 
 const props = defineProps({
@@ -47,5 +72,9 @@ const props = defineProps({
     type: Object,
     default: null
   }
+})
+
+const filterShapes = computed(() => {
+  return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
 </script>

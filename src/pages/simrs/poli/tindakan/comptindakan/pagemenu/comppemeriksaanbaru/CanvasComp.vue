@@ -80,11 +80,17 @@
 
     <!-- </div> -->
     <div class="absolute-top">
-      <HeaderCanvas :is-btn="objectSelected" />
+      <HeaderCanvas
+        :is-btn="objectSelected===null? false:true"
+        :canvas="cvn"
+        @ok="deselectObject"
+      />
     </div>
     <div class="absolute-bottom">
       <BottomCanvas
         @reset="resetShapes"
+        @save-image="saveImage"
+        @is-template="emits('openTemplate')"
       />
     </div>
 
@@ -101,7 +107,7 @@ import BottomCanvas from './BottomCanvas.vue'
 import { fabric } from 'fabric'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 // import { ref, onMounted, markRaw, computed, watch } from 'vue'
-import { ref, onMounted, markRaw, computed } from 'vue'
+import { ref, onMounted, markRaw, computed, watch } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
 const el = ref(null)
@@ -134,6 +140,7 @@ const props = defineProps({
     default: null
   }
 })
+const emits = defineEmits(['openTemplate'])
 onMounted(() => {
   // console.log(el.value.offsetHeight)
   store.initReset(false, props.pasien)
@@ -153,7 +160,7 @@ const resizeCanvas = () => {
   const width = el.value.offsetWidth
   const scale = Math.min(width / imgRef.value.width, width / imgRef.value.height)
   // const imgRatio = imgRef.value.width / imgRef.value.height
-  widthEl.value = width
+  widthEl.value = width - 20
   // heightEl.value = el.value.clientHeight
   heightEl.value = imgRef.value.height * scale
   imgRef.value.width = widthEl.value
@@ -176,6 +183,7 @@ function init() {
     cornerColor: 'black',
     cornerSize: 8,
     transparentCorners: false,
+    preserveObjectStacking: true,
     // cursor
     defaultCursor: 'crosshair',
     hoverCursor: 'pointer'
@@ -326,14 +334,19 @@ function onCanvas() {
 
   canvas.on('mouse:move', (obj) => {
     // objectSelected.value = null
+    // target.value = null
   })
 
   canvas.on('mouse:up', (obj) => {
     // if (obj.target === null) { target.value = null }
-    if (store?.dialogForm?.penanda === 'drag-segi-empat' && obj.target === null) {
+    // target.value = null
+    if (objectSelected.value !== null) {
+      target.value = null
+      return false
+    }
+    if (store?.dialogForm?.penanda === 'drag-segi-empat' && obj.target !== null) {
       target.value = '.upper-canvas'
     }
-    writingMode.value = false
     console.log('mouseup', obj)
     if (store?.dialogForm?.penanda === 'drag-segi-empat') {
       const x = obj.pointer.x
@@ -365,8 +378,14 @@ function onCanvas() {
 
     if (target.value === null) {
       setBtns(canvas, obj)
-      // objectSelected.value = null
-      // setBtns(canvas, obj)
+    }
+
+    const active = canvas.getActiveObject()
+    console.log('active', active)
+    if ((active !== undefined || active !== 'undefined' || active === null) && objectSelected.value !== null) {
+      store.setDialogForm('ketebalan', active?.strokeWidth)
+      store.setDialogForm('warna', active?.stroke)
+      store.setDialogForm('fill', active?.fill)
     }
 
     // console.log('canvas mouse up', canvas)
@@ -378,19 +397,19 @@ function onCanvas() {
     'object:rotating': onChange
   })
 
-  canvas.on('mouse:over', function (e) {
-    // const obj = arr.value[e?.target?.ids]
-    if (objectSelected.value === null || objectSelected.value?.ids !== e?.target?.ids) {
-      e?.target?.set('fill', '#9494948f')
-      canvas.renderAll()
-    }
-  })
-  canvas.on('mouse:out', function(e) {
-    const obj = arr.value[e?.target?.ids]
-    console.log('mouseout', obj)
-    e?.target?.set('fill', obj?.fill)
-    canvas.renderAll()
-  })
+  // canvas.on('mouse:over', function (e) {
+  //   // const obj = arr.value[e?.target?.ids]
+  //   if (objectSelected.value === null || objectSelected.value?.ids !== e?.target?.ids) {
+  //     e?.target?.set('fill', '#9494948f')
+  //     canvas.renderAll()
+  //   }
+  // })
+  // canvas.on('mouse:out', function(e) {
+  //   const obj = arr.value[e?.target?.ids]
+  //   console.log('mouseout', obj)
+  //   e?.target?.set('fill', obj?.fill)
+  //   canvas.renderAll()
+  // })
 }
 
 function setBtns(canvas, obj) {
@@ -398,7 +417,7 @@ function setBtns(canvas, obj) {
   objectSelected.value = object
   // console.log('mousedown select', obj)
   // console.log('mouseevent object', object)
-  object.set({
+  object?.set({
     transparentCorners: false,
     cornerColor: 'aqua',
     cornerStrokeColor: 'red',
@@ -414,6 +433,13 @@ function setBtns(canvas, obj) {
   canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
 }
 
+function deselectObject() {
+  const canvas = cvn.value
+  canvas.discardActiveObject()
+  canvas.renderAll()
+  objectSelected.value = null
+}
+
 const onChange = (obj) => {
   objectSelected.value = null
   const action = obj?.transform?.action
@@ -421,14 +447,21 @@ const onChange = (obj) => {
   const object = obj?.target
   objectSelected.value = object
   // console.log('onChange', objectSelected.value)
+  const o = obj?.target
+  if (!o?.strokeWidthUnscaled && o?.strokeWidth) {
+    o.strokeWidthUnscaled = o?.strokeWidth
+  }
+  if (o?.strokeWidthUnscaled) {
+    o.strokeWidth = o?.strokeWidthUnscaled / o?.scaleX
+  }
   if (action === 'drag') {
     // move
-    console.log('drag', obj)
+    // console.log('drag', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
   } else if (action === 'scale') {
     // scaling
-    console.log('scale', obj)
+    // console.log('scale', obj)
     // console.log('onChange-arr', store.shapes[ids])
     store.setShapeObject(ids, 'width', object?.width * object?.scaleX)
     store.setShapeObject(ids, 'height', object?.height * object?.scaleY)
@@ -437,16 +470,16 @@ const onChange = (obj) => {
     // console.log('onChange-arr', store.shapes[ids])
   } else if (action === 'scaleX') {
     // scaling
-    console.log('scaleX', obj)
+    // console.log('scaleX', obj)
     store.setShapeObject(ids, 'width', object?.width * object?.scaleX)
     store.setShapeObject(ids, 'panjang', parseInt(object?.width * object?.scaleX) / 2)
   } else if (action === 'scaleY') {
     // scaling
-    console.log('scaleY', obj)
+    // console.log('scaleY', obj)
     store.setShapeObject(ids, 'height', object?.height * object?.scaleY)
-    store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY) / 2)
+    store.setShapeObject(ids, 'tinggi', parseInt(object?.height * object?.scaleY))
   } else if (action === 'rotate') {
-    console.log('rotate', obj)
+    // console.log('rotate', obj)
     store.setShapeObject(ids, 'x', obj?.target?.left)
     store.setShapeObject(ids, 'y', obj?.target?.top)
     store.setShapeObject(ids, 'angle', obj?.target?.angle)
@@ -581,10 +614,10 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
 
     const poly = markRaw(new fabric.Polygon(
       [
-        { x: p, y: p / 3 },
-        { x: p * 3, y: p / 3 },
-        { x: p * 3 + (p / 3), y: (p / 3) * 4 },
-        { x: p - (p / 3), y: (p / 3) * 4 }],
+        { x: p, y: tinggi / 3 },
+        { x: p * 3, y: tinggi / 3 },
+        { x: p * 3 + (p / 3), y: (tinggi / 3) * 4 },
+        { x: p - (p / 3), y: (tinggi / 3) * 4 }],
       {
         ids,
         // left: x,
@@ -642,6 +675,21 @@ function resetShapes() {
     drawall()
   }, 300)
 }
+
+const saveImage = () => {
+  const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
+  // console.log('gambar', imageURL)
+  // emits('saveImage', imageURL)
+  store.saveImage(imageURL, props.pasien, arr?.value)
+}
+
+watch(() => arr.value, (newVal, oldVal) => {
+  console.log('watch new', newVal.length)
+  console.log('watch old', oldVal.length)
+  if (newVal.length !== oldVal.length) {
+    drawall()
+  }
+}, { deep: true })
 
 </script>
 
