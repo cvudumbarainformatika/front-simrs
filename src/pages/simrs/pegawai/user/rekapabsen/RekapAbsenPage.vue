@@ -1,4 +1,3 @@
-
 <template>
   <div class="q-px-lg q-pt-md">
     <q-card>

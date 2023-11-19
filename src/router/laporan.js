@@ -85,6 +85,16 @@ const laporan = {
       name: 'laporan.sigarang.hutang',
       component: () => import('pages/simrs/laporan/sigarang/hutang/IndexPage.vue')
     },
+    {
+      path: '/laporan/sigarang/rekapkeluardepo',
+      name: 'laporan.sigarang.rekapkeluardepo',
+      component: () => import('pages/simrs/laporan/sigarang/rekapkeluardepo/IndexPage.vue')
+    },
+    {
+      path: '/laporan/sigarang/penerimaanptk',
+      name: 'laporan.sigarang.penerimaanptk',
+      component: () => import('pages/simrs/laporan/sigarang/penerimaanptk/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',
