@@ -27,7 +27,7 @@
     >
       <MenuCanvas
         ref="refMenu"
-        :target="target"
+        :target="target || null"
         @show-menu="onMenuShow"
         @cancel-shape="cancelShape"
         @save-shape="saveShapes"
@@ -145,7 +145,6 @@ const props = defineProps({
 })
 const emits = defineEmits(['openTemplate'])
 onMounted(() => {
-  // console.log(el.value.offsetHeight)
   store.initReset(false, props.pasien)
   setTimeout(() => {
     window.addEventListener('resize', resizeCanvas)
@@ -157,6 +156,7 @@ onMounted(() => {
   options.value = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)
   // console.log('gambar height', imgRef.value.height)
 })
+// console.log(target.value)
 
 const resizeCanvas = () => {
   // heightEl.value = el.value.clientHeight - 4
@@ -169,7 +169,7 @@ const resizeCanvas = () => {
   imgRef.value.width = widthEl.value
   imgRef.value.height = heightEl.value
   console.log('gambar height', scale)
-  target.value = '.upper-canvas'
+  target.value = '.upper-canvas '
   // func()
 }
 
@@ -186,7 +186,7 @@ function init() {
     cornerColor: 'black',
     cornerSize: 8,
     transparentCorners: false,
-    preserveObjectStacking: true,
+    // preserveObjectStacking: true,
     // cursor
     defaultCursor: 'crosshair',
     hoverCursor: 'pointer'
@@ -341,6 +341,7 @@ function onCanvas() {
   canvas.on('mouse:move', (obj) => {
     // objectSelected.value = null
     // target.value = null
+    // console.log('move', obj)
   })
 
   canvas.on('mouse:up', (obj) => {
@@ -389,12 +390,13 @@ function onCanvas() {
       store.setDialogForm('ketebalan', active?.strokeWidth)
       store.setDialogForm('warna', active?.stroke)
       store.setDialogForm('fill', active?.fill)
+      return false
     }
 
     if (objectSelected.value !== null) {
       console.log('canvas mouse up', canvas)
       target.value = null
-      return false
+      return true
     }
 
     // console.log('draw', widthEl.value / canvas.width)
@@ -922,6 +924,16 @@ watch(() => arr.value, (newVal, oldVal) => {
   if (newVal.length !== oldVal.length) {
     drawall()
   }
+}, { deep: true })
+
+watch(() => store.fileGambar, (obj) => {
+  console.log('watch file gambar', obj)
+  // writingMode.value = true
+  // store.initReset(false, props.pasien)
+  resizeCanvas()
+  setTimeout(() => {
+    init()
+  }, 1000)
 }, { deep: true })
 
 </script>

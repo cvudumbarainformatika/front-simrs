@@ -114,6 +114,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.gambarActive = val
       this.fileGambar = file
       this.setDialogTemplate()
+      // console.log('store file', file)
     },
     setFullCanvas() {
       this.fullCanvas = !this.fullCanvas
