@@ -312,6 +312,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     async saveImage(img, pasien, details) {
       // console.log(details)
+      this.loadingform = true
       let keterangan = ''
       if (details.length) {
         keterangan = details.map(x => x.ket).join()
@@ -322,13 +323,19 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         image: img,
         keterangan
       }
-      const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
-      if (resp.status === 200) {
-        console.log('simpan gambar', resp)
-        const storePasien = usePengunjungPoliStore()
-        const isi = resp.data.result
-        storePasien.injectDataPasien(pasien, isi, 'gambars')
-        notifSuccess(resp)
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
+        if (resp.status === 200) {
+          console.log('simpan gambar', resp)
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp.data.result
+          storePasien.injectDataPasien(pasien, isi, 'gambars')
+          notifSuccess(resp)
+          this.loadingform = false
+        }
+        this.loadingform = false
+      } catch (error) {
+        this.loadingform = false
       }
     },
 
@@ -343,7 +350,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           storePasien.hapusGambars(pasien, nama)
           notifSuccess(resp)
           this.loadingform = false
-          this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
+          // this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
           return new Promise((resolve, reject) => {
             resolve()
           })

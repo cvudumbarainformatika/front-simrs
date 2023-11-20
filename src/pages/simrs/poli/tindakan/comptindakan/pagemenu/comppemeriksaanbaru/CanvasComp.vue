@@ -11,11 +11,19 @@
     <!-- <div class="absolute-left full-height">
       <MenuSamping />
     </div> -->
+    <!-- {{ openTab }} -->
+    <img
+      ref="imgRef"
+      :src="`${tab !==null? pathImg + tab : store.fileGambar}`"
+      alt="gambar medis"
+      :class="tab?'visible q-ml-sm':'hidden'"
+    >
     <canvas
       id="canvas-target"
       ref="canvasRef"
       :width="widthEl"
       :height="heightEl"
+      :class="tab?'hidden':'visible'"
     >
       <MenuCanvas
         ref="refMenu"
@@ -25,62 +33,12 @@
         @save-shape="saveShapes"
       />
 
-      <!-- <q-menu
-        touch-position
-        context-menu
-        :target="target?target:false"
-      >
-        <q-list>
-          <q-item
-            v-for="n in 5"
-            :key="n"
-            v-close-popup
-            clickable
-          >
-            <q-item-section>Label</q-item-section>
-          </q-item>
-        </q-list>
-      </q-menu> -->
-
     </canvas>
-    <img
-      ref="imgRef"
-      :src="store.fileGambar"
-      alt="gambar medis"
-      class="hidden"
-    >
-
-    <!-- <div
-      v-if="objectSelected"
-      :style="`
-        position: absolute;
-        left:${leftX}px;
-        top:${topY}px;
-      `"
-    >
-      <div class="flex">
-        <q-btn
-          icon="icon-mat-delete"
-          color="negative"
-          flat
-          size="xs"
-          round
-          @click="deleteObject"
-        />
-        <q-btn
-          icon="icon-mat-delete"
-          color="primary"
-          flat
-          size="xs"
-          round
-          @click="deleteObject"
-        />
-      </div>
-    </div> -->
 
     <!-- </div> -->
     <div class="absolute-top">
       <HeaderCanvas
+        v-if="tab===null"
         :is-btn="objectSelected===null? false:true"
         :canvas="cvn"
         @ok="deselectObject"
@@ -88,10 +46,46 @@
     </div>
     <div class="absolute-bottom">
       <BottomCanvas
+        :tab="tab?true:false"
         @reset="resetShapes"
         @save-image="saveImage"
         @is-template="emits('openTemplate')"
+        @new-editor="tabDiNullkan"
+        @list-images="tabOpenned"
+        @delete-image="hapusGambar"
       />
+      <div v-if="pasien?.gambars?.length && openTab">
+        <div class="flex">
+          <div class="q-py-xs q-px-sm f-10 bg-dark text-white">
+            Gambar Tersimpan
+          </div>
+        </div>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="bg-dark text-white q-pa-none"
+          align="center"
+          :breakpoint="0"
+          indicator-color="transparent"
+          mobile-arrows
+          outside-arrows
+          @update:model-value="lihatTab"
+        >
+          <q-tab
+            v-for="(src , i) in pasien?.gambars"
+            :key="i"
+            :name="src.gambar"
+            class="q-pa-xs"
+          >
+            <q-img
+              :src="`${pathImg + src.gambar}`"
+              loading="lazy"
+              spinner-color="white"
+              width="100px"
+            />
+          </q-tab>
+        </q-tabs>
+      </div>
     </div>
 
     <!-- modal -->
@@ -107,10 +101,16 @@ import BottomCanvas from './BottomCanvas.vue'
 import { fabric } from 'fabric'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 // import { ref, onMounted, markRaw, computed, watch } from 'vue'
+import { pathImg } from 'src/boot/axios'
 import { ref, onMounted, markRaw, computed, watch } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 const el = ref(null)
+const tab = ref(null)
+const openTab = ref(true)
 
 const heightEl = ref(400)
 const widthEl = ref(400)
@@ -215,6 +215,7 @@ function init() {
     originY: 'center'
   })
   canvas.add()
+  // canvas.set('selectable', false)
   // canvas.renderAll()
 
   // icons
@@ -296,6 +297,8 @@ function init() {
     store.pushShapes(clone).then((x) => {
     // console.log('shapes', writingMode.value)
       drawall()
+      // objectSelected.value = obj
+      // canvas.setActiveObject(obj)
       // setTimeout(() => {
       // }, 100)
     })
@@ -343,11 +346,7 @@ function onCanvas() {
   canvas.on('mouse:up', (obj) => {
     // if (obj.target === null) { target.value = null }
     // target.value = null
-    if (objectSelected.value !== null) {
-      console.log('canvas mouse up', canvas)
-      target.value = null
-      return false
-    }
+
     if (store?.dialogForm?.penanda === 'drag-segi-empat' && obj.target !== null) {
       target.value = '.upper-canvas'
     }
@@ -390,6 +389,12 @@ function onCanvas() {
       store.setDialogForm('ketebalan', active?.strokeWidth)
       store.setDialogForm('warna', active?.stroke)
       store.setDialogForm('fill', active?.fill)
+    }
+
+    if (objectSelected.value !== null) {
+      console.log('canvas mouse up', canvas)
+      target.value = null
+      return false
     }
 
     // console.log('draw', widthEl.value / canvas.width)
@@ -643,19 +648,128 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
         strokeLineJoin: 'bevil'
       }))
     canvas.add(poly)
-  } else if (penanda === 'akar') {
-    const svgUrl = new URL('../../../../../../../assets/svg/akar.svg', import.meta.url).href
-
-    // eslint-disable-next-line new-cap
-    markRaw(new fabric.loadSVGFromURL(svgUrl, (objects, options) => {
-      const svg = fabric.util.groupSVGElements(objects, options)
-      svg.ids = ids
-      svg.left = x
-      svg.top = y
-      svg.scaleToWidth(w)
-      svg.scaleToHeight(h)
-      canvas.add(svg)
+  } else if (penanda === 'Radix dention') {
+    const akar = markRaw(new fabric.Text('√', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      stroke: clr,
+      strokeWidth: tbl,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
     }))
+
+    canvas.add(akar)
+  } else if (penanda === 'Non Vital') {
+    const integral = markRaw(new fabric.Text('∫', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(integral)
+  } else if (penanda === 'Partial Denture, etc') {
+    const PD = markRaw(new fabric.Text('PD', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(PD)
+  } else if (penanda === 'Unerupted teeth') {
+    const UE = markRaw(new fabric.Text('UE', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(UE)
+  } else if (penanda === 'Partial Erupted teeth') {
+    const PE = markRaw(new fabric.Text('PE', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(PE)
+  } else if (penanda === 'Anomali') {
+    const A = markRaw(new fabric.Text('A', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(A)
+  } else if (penanda === 'Gigi Hilang / tidak ada') {
+    const X = markRaw(new fabric.Text('✖', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(X)
+  } else if (penanda === 'Carries/temporary filling') {
+    const X = markRaw(new fabric.Text('〇', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(X)
+  } else if (penanda === 'Tumpatan lain / inlay') {
+    const X = markRaw(new fabric.Text('⊠', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(X)
+  } else if (penanda === 'Amalgam Filling') {
+    const X = markRaw(new fabric.Text('10', {
+      left: x, // Take the block's position
+      top: y,
+      fill: fill === 'transparent' ? 'black' : fill,
+      originX: 'center',
+      originY: 'center',
+      fontSize: w,
+      ids
+    }))
+
+    canvas.add(X)
   }
 }
 
@@ -712,9 +826,8 @@ function resetShapes() {
 
 const saveImage = () => {
   const imageURL = canvasRef.value.toDataURL('image/jpeg', 1)
-  // console.log('gambar', imageURL)
-  // emits('saveImage', imageURL)
   store.saveImage(imageURL, props.pasien, arr?.value)
+  openTab.value = true
 }
 
 // function zoomIn(canvas, opt) {
@@ -765,9 +878,47 @@ const saveImage = () => {
 //   canvas.renderAll()
 // }
 
+function lihatTab(val) {
+  console.log('tab', val)
+  setTimeout(() => {
+    resizeCanvas()
+    init()
+  }, 300)
+}
+function tabDiNullkan() {
+  tab.value = null
+  openTab.value = false
+  store.resetShapes()
+  setTimeout(() => {
+    resizeCanvas()
+    init()
+  }, 300)
+}
+function tabOpenned() {
+  openTab.value = !openTab.value
+}
+
+function hapusGambar() {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Gambar ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    store.deleteGambar(props.pasien, tab.value).then(() => {
+      tabDiNullkan()
+    })
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+
 watch(() => arr.value, (newVal, oldVal) => {
-  console.log('watch new', newVal.length)
-  console.log('watch old', oldVal.length)
+  // console.log('watch new', newVal.length)
+  // console.log('watch old', oldVal.length)
   if (newVal.length !== oldVal.length) {
     drawall()
   }

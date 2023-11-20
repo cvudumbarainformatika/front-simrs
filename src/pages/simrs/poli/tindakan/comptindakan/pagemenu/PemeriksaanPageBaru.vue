@@ -38,7 +38,10 @@
         class="absolute-right full-height bg-white"
         style="width:30%;"
       >
-        dsfs
+        <ListPemeriksaan
+          :key="pasien"
+          :pasien="pasien"
+        />
       </div>
       <div
         style="width:35%; margin-left: 35%;"
@@ -57,10 +60,11 @@
 <script setup>
 // import HeaderComp from './comppemeriksaanbaru/HeaderComp.vue'
 import TemplateGambar from './comppemeriksaanbaru/TemplateGambar.vue'
-import FormPemeriksaan from './comppemeriksaan/FormPemeriksaan.vue'
-import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
+import FormPemeriksaan from './comppemeriksaanbaru/FormPemeriksaan.vue'
+import ListPemeriksaan from './comppemeriksaanbaru/ListPemeriksaan.vue'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
+import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { computed } from 'vue'
 // import { ref } from 'vue'
 

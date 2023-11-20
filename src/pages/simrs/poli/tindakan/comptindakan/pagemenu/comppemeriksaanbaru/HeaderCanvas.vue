@@ -1,12 +1,12 @@
 <template>
   <div class="column">
     <div class="flex flex-center full-width q-pt-sm q-pb-xs">
-      Status Lokalis
+      Status Lokalis {{ store.templateActive }}
     </div>
     <div class="q-px-sm q-pb-md flex flex-center full-width">
       <div
         class="bg-dark q-pa-xs shadow-2"
-        style="border-radius: 20px ;"
+        style="border-radius: 20px;"
       >
         <div
           v-if="!isBtn"
@@ -36,7 +36,34 @@
           <q-separator
             vertical
             dark
-            class="q-mx-md"
+            class="q-mx-sm"
+          />
+          <q-btn-group
+            rounded
+          >
+            <q-btn
+              v-for="sym in symbols"
+              :key="sym.name"
+              :color="sym.name !== store.dialogForm.penanda? 'dark':'white'"
+              :text-color="sym.name !== store.dialogForm.penanda? 'white':'black'"
+              rounded
+              :glossy="sym.name === store.dialogForm.penanda"
+              :label="sym.label"
+              push
+              size="sm"
+              style="padding-left: 5px; padding-right: 5px; font-size: 10px; font-weight: bold; line-height: 1px;"
+              dense
+              @click="store.setDialogForm('penanda',sym.name)"
+            >
+              <q-tooltip>
+                {{ sym.name }}
+              </q-tooltip>
+            </q-btn>
+          </q-btn-group>
+          <q-separator
+            vertical
+            dark
+            class="q-mx-sm"
           />
           <q-btn-group
             rounded
@@ -140,6 +167,8 @@
                   <q-color
                     v-model="store.dialogForm.fill"
                     no-header
+                    no-footer
+                    default-view="palette"
                     class="my-picker"
                     @update:model-value="gantiFill"
                   />
@@ -218,8 +247,21 @@ const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
   { name: 'kotak', icon: 'icon-mat-check_box_outline' },
   { name: 'Segitiga', icon: 'icon-my-triangle-outline' },
-  { name: 'Polyline', icon: 'icon-my-trapezoid' },
-  { name: 'akar', icon: 'icon-my-trapezoid' }
+  { name: 'Polyline', icon: 'icon-my-trapezoid' }
+])
+
+const symbols = ref([
+  { name: 'Radix dention', label: '√' },
+  { name: 'Non Vital', label: '∫' },
+  { name: 'Gigi Hilang / tidak ada', label: 'X' },
+  { name: 'Tumpatan lain / inlay', label: '⊠' },
+  { name: 'Anomali', label: 'A' },
+  { name: 'Carries/temporary filling', label: '〇' },
+  { name: 'Partial Denture, etc', label: 'PD' },
+  { name: 'Unerupted teeth', label: 'UE' },
+  { name: 'Partial Erupted teeth', label: 'PE' },
+  { name: 'Amalgam Filling', label: '10' }
+
 ])
 const dragers = ref([
   { name: 'drag-segi-empat', icon: 'icon-my-shape-rectangle-plus' }
