@@ -218,7 +218,8 @@ const btns = ref([
   { name: 'circle', icon: 'icon-mat-circle' },
   { name: 'kotak', icon: 'icon-mat-check_box_outline' },
   { name: 'Segitiga', icon: 'icon-my-triangle-outline' },
-  { name: 'Polyline', icon: 'icon-my-trapezoid' }
+  { name: 'Polyline', icon: 'icon-my-trapezoid' },
+  { name: 'akar', icon: 'icon-my-trapezoid' }
 ])
 const dragers = ref([
   { name: 'drag-segi-empat', icon: 'icon-my-shape-rectangle-plus' }

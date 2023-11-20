@@ -129,6 +129,9 @@ const objectSelected = ref(null)
 const options = ref([])
 const { menus } = useMenuPemeriksaan()
 
+const canvasScale = ref(1)
+const SCALE_FACTOR = ref(1)
+
 const arr = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
 })
@@ -341,6 +344,7 @@ function onCanvas() {
     // if (obj.target === null) { target.value = null }
     // target.value = null
     if (objectSelected.value !== null) {
+      console.log('canvas mouse up', canvas)
       target.value = null
       return false
     }
@@ -388,13 +392,28 @@ function onCanvas() {
       store.setDialogForm('fill', active?.fill)
     }
 
-    // console.log('canvas mouse up', canvas)
+    // console.log('draw', widthEl.value / canvas.width)
   })
 
   canvas.on({
     'object:moving': onChange,
     'object:scaling': onChange,
     'object:rotating': onChange
+  })
+
+  canvas.on('mouse:wheel', function (opt) {
+    const delta = opt.e.deltaY
+    canvasScale.value = canvasScale.value * SCALE_FACTOR.value
+    let zoom = canvas.getZoom()
+    zoom = zoom + delta / 200
+    if (zoom > 20) zoom = 20
+    if (zoom < 0.01) zoom = 0.01
+    SCALE_FACTOR.value = zoom
+
+    // zoomIn(canvas, opt)
+
+    opt.e.preventDefault()
+    opt.e.stopPropagation()
   })
 
   // canvas.on('mouse:over', function (e) {
@@ -429,6 +448,8 @@ function setBtns(canvas, obj) {
     rotatingPointOffset: 4
   })
   // canvas.setActiveObject(object)
+
+  // console.log('setBtns', obj)
   canvas.item(obj?.target?.ids).hasControls = true
   canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
 }
@@ -597,21 +618,6 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
 
     canvas.add(triangle)
   } else if (penanda === 'Polyline') {
-    // const svgUrl = new URL('../../../../../../../assets/images/actor.svg', import.meta.url).href
-
-    // eslint-disable-next-line new-cap
-    // markRaw(new fabric.loadSVGFromURL(svgUrl, (objects, options) => {
-    //   const loadedObject = fabric.util.groupSVGElements(objects, options)
-    //   loadedObject.set({
-    //     left: x,
-    //     top: y,
-    //     width: w,
-    //     height: h
-    //   }).setCoords()
-    //   canvas.add(loadedObject)
-    //   console.log(loadedObject)
-    // }))
-
     const poly = markRaw(new fabric.Polygon(
       [
         { x: p, y: tinggi / 3 },
@@ -637,6 +643,19 @@ function draw(penanda, x, y, p, w, h, clr, tbl, ids, angle, fill, tinggi) {
         strokeLineJoin: 'bevil'
       }))
     canvas.add(poly)
+  } else if (penanda === 'akar') {
+    const svgUrl = new URL('../../../../../../../assets/svg/akar.svg', import.meta.url).href
+
+    // eslint-disable-next-line new-cap
+    markRaw(new fabric.loadSVGFromURL(svgUrl, (objects, options) => {
+      const svg = fabric.util.groupSVGElements(objects, options)
+      svg.ids = ids
+      svg.left = x
+      svg.top = y
+      svg.scaleToWidth(w)
+      svg.scaleToHeight(h)
+      canvas.add(svg)
+    }))
   }
 }
 
@@ -644,11 +663,16 @@ function drawall() {
   resetCanvas()
   objectSelected.value = null
   // if (writingMode.value) {
+  const canvas = cvn.value
+  const scalling = widthEl.value / canvas.width
   if (arr.value.length > 0) {
     for (let i = 0; i < arr.value.length; i++) {
+      const { x, y } = scaleCoordinates(canvas.width, canvas.height, arr.value[i].x, arr.value[i].y, scalling)
       draw(arr.value[i].penanda,
-        arr.value[i].x,
-        arr.value[i].y,
+        // arr.value[i].x,
+        // arr.value[i].y,
+        x,
+        y,
         arr.value[i].panjang,
         arr.value[i].width,
         arr.value[i].height,
@@ -662,6 +686,16 @@ function drawall() {
     }
   }
   // }
+}
+
+const scaleCoordinates = (width, height, x, y, scale) => {
+  const centerX = width / 2
+  const centerY = height / 2
+  const relX = x - centerX
+  const relY = y - centerY
+  const scaledX = relX * scale
+  const scaledY = relY * scale
+  return { x: scaledX + centerX, y: scaledY + centerY }
 }
 
 function resetCanvas() {
@@ -682,6 +716,54 @@ const saveImage = () => {
   // emits('saveImage', imageURL)
   store.saveImage(imageURL, props.pasien, arr?.value)
 }
+
+// function zoomIn(canvas, opt) {
+//   canvasScale.value = canvasScale.value * SCALE_FACTOR.value
+//   canvas.setHeight(canvas.getHeight() * SCALE_FACTOR.value)
+//   canvas.setWidth(canvas.getWidth() * SCALE_FACTOR.value)
+
+//   const objects = canvas.getObjects()
+//   for (const i in objects) {
+//     const scaleX = objects[i].scaleX
+//     const scaleY = objects[i].scaleY
+//     const left = objects[i].left
+//     const top = objects[i].top
+
+//     const tempScaleX = scaleX * SCALE_FACTOR.value
+//     const tempScaleY = scaleY * SCALE_FACTOR.value
+//     const tempLeft = left * SCALE_FACTOR.value
+//     const tempTop = top * SCALE_FACTOR.value
+
+//     objects[i].scaleX = tempScaleX
+//     objects[i].scaleY = tempScaleY
+//     objects[i].left = tempLeft
+//     objects[i].top = tempTop
+
+//     objects[i].setCoords()
+//   }
+
+//   const backImg = canvas?.backgroundImage
+//   const scaleX = backImg?.scaleX
+//   const scaleY = backImg?.scaleY
+
+//   const left = backImg?.left
+//   const top = backImg?.top
+
+//   const tempScaleX = scaleX * SCALE_FACTOR.value
+//   const tempScaleY = scaleY * SCALE_FACTOR.value
+//   const tempLeft = left * SCALE_FACTOR.value
+//   const tempTop = top * SCALE_FACTOR.value
+
+//   backImg.scaleX = tempScaleX
+//   backImg.scaleY = tempScaleY
+//   backImg.left = tempLeft
+//   backImg.top = tempTop
+
+//   // canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, SCALE_FACTOR.value)
+//   console.log('zoom', canvas)
+
+//   canvas.renderAll()
+// }
 
 watch(() => arr.value, (newVal, oldVal) => {
   console.log('watch new', newVal.length)
