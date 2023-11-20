@@ -49,7 +49,7 @@
                   :color="item.color"
                   class="imgg"
                 />
-                <div class="txt text-subtitle2">
+                <div class="txt  text-center text-subtitle2">
                   {{ item.julukan }}
                 </div>
               </div>
@@ -82,7 +82,7 @@
                     size="30px"
                   />
                 </div>
-                <div class="txt f-10">
+                <div class="txt text-center f-10">
                   {{ item.julukan }}
                 </div>
               </div>
