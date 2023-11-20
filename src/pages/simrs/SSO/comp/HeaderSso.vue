@@ -62,6 +62,7 @@
               <q-item
                 v-close-popup
                 clickable
+                @click="emits('setting')"
               >
                 <q-item-section avatar>
                   <q-icon
@@ -99,7 +100,7 @@
 import { useQuasar } from 'quasar'
 import { ref, watch } from 'vue'
 
-const emits = defineEmits(['signOut'])
+const emits = defineEmits(['signOut', 'setting'])
 const props = defineProps({
   userLocal: {
     type: Object,

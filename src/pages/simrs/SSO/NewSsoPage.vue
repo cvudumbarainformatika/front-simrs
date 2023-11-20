@@ -45,6 +45,7 @@
               :loading="store.loading"
               :user-local="apps.user"
               @sign-out="signOut"
+              @setting="setting"
             />
           </div>
         </div>
@@ -88,6 +89,14 @@ const goTo = (item) => {
 
 const signOut = () => {
   store.logout()
+}
+
+function setting() {
+  if (apps?.user?.pegawai?.role_id === 1) {
+    router.push({ path: '/settings/aplikasi', replace: true })
+    // console.log('root')
+  }
+  // console.log('apps', apps?.user?.pegawai)
 }
 
 </script>
