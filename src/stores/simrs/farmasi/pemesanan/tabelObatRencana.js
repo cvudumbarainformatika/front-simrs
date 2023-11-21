@@ -5,8 +5,13 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
   state: () => ({
     loading: false,
     items: [],
-    meta: {},
-    params: {},
+    meta: null,
+    params: {
+      per_page: 10,
+      namaobat: '',
+      q: '',
+      page: 1
+    },
     columns: [
       // 'kd_obat',
       'obat',
@@ -48,7 +53,8 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
               item.bisaBeli = (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) > 0 ? (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) : 0
               item.jumlahBeli = item.bisaBeli
             })
-            this.items = resp.data
+            this.items = resp?.data?.data ?? resp?.data
+            this.meta = resp?.data?.current_page ? resp?.data : null
             resolve(resp)
           })
           .catch(() => {

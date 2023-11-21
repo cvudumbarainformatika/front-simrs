@@ -35,7 +35,7 @@
         <q-badge
           outline
           color="orange"
-          :label="`${pasien?.kodesistembayar?? '-'}`"
+          :label="`${pasien?.sistembayar?? '-'}`"
         />
       </div>
     </div>
