@@ -312,6 +312,10 @@ function onCanvas() {
   const canvas = cvn.value
 
   canvas.on('mouse:down', (obj) => {
+    if (tab.value !== null) {
+      target.value = null
+      return false
+    }
     store.setDialogForm('x', obj?.pointer?.x)
     store.setDialogForm('y', obj?.pointer?.y)
 
@@ -342,11 +346,18 @@ function onCanvas() {
     // objectSelected.value = null
     // target.value = null
     // console.log('move', obj)
+    if (tab.value !== null) {
+      return false
+    }
   })
 
   canvas.on('mouse:up', (obj) => {
     // if (obj.target === null) { target.value = null }
     // target.value = null
+    if (tab.value !== null) {
+      target.value = null
+      return false
+    }
 
     if (store?.dialogForm?.penanda === 'drag-segi-empat' && obj.target !== null) {
       target.value = '.upper-canvas'
@@ -881,22 +892,31 @@ const saveImage = () => {
 // }
 
 function lihatTab(val) {
-  console.log('tab', val)
   const canvas = cvn.value
+  console.log('tab', canvas)
   canvas.discardActiveObject()
-  // canvas.renderAll()
-  fabric.Object.prototype.selectable = false
-  fabric.Object.prototype.hoverCursor = 'default'
-  onChangeImg()
+  canvas.defaultCursor = 'default'
+  canvas.selectionBorderColor = 'white'
+  canvas.selectionLineWidth = 1
+  canvas.eventBound = false
+  canvas.selectable = false
+  canvas.remove(...canvas.getObjects())
+  setTimeout(() => onChangeImg(), 500)
 }
 function tabDiNullkan() {
-  // const canvas = cvn.value
+  const canvas = cvn.value
   console.log('baruuuuuuuuuuuuuuuuu')
-  fabric.Object.prototype.selectable = true
-  fabric.Object.prototype.hoverCursor = 'all-scroll'
+  canvas.defaultCursor = 'crosshair'
+  canvas.selectionBorderColor = 'red'
+  canvas.selectionLineWidth = 3
+  canvas.eventBound = true
+  canvas.selectable = true
   tab.value = null
   openTab.value = false
-  onChangeImg()
+
+  // onChangeImg()
+  // drawall()
+  setTimeout(() => init(), 500)
 }
 function tabOpenned() {
   openTab.value = !openTab.value
@@ -924,6 +944,7 @@ function onChangeImg() {
   const canvas = cvn.value
   console.log('oooi')
   // canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
+  resizeCanvas()
   const img = markRaw(new fabric.Image(imgRef.value, (image, isError) => {
     image.set({
       width: widthEl.value,
@@ -954,7 +975,8 @@ watch(() => arr.value, (newVal, oldVal) => {
 
 watch(() => store.fileGambar, (newVal, oldVal) => {
   if (newVal !== oldVal) {
-    setTimeout(() => onChangeImg(), 300)
+    // setTimeout(() => onChangeImg(), 300)
+    tabDiNullkan()
   }
 }, { deep: true })
 // watch(() => tab.value, (newVal, oldVal) => {
