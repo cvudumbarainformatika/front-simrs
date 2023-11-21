@@ -390,15 +390,18 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       let template = null
       let imgUrl = null
       let imgActive = 0
+      // let lokalis = []
       if (val) {
         file = master?.items[0]?.gambars[0]?.image
         imgUrl = master?.items[0]?.gambars[0]?.url
         template = master?.items[0]?.nama ?? 'Body'
         imgActive = 0
       } else {
-        file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
-        imgUrl = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.url ?? master?.items[0]?.gambars[0]?.url
-        template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.nama ?? 'Body'
+        // const arr = master?.items?.map(x => x.lokalis)
+        // lokalis = arr.filter(v => v?.indexOf(pasien?.kodepoli) > -1)
+        file = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
+        imgUrl = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.gambars[0]?.url ?? master?.items[0]?.gambars[0]?.url
+        template = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.nama ?? 'Body'
         imgActive = this.gambarActive
       }
       this.fileGambar = file

@@ -17,7 +17,7 @@
       :key="store.fileGambar"
       :src="`${tab !==null? pathImg + tab : store.fileGambar}`"
       alt="gambar medis"
-      :class="tab===null?'hidden q-ml-sm':'visible'"
+      class="hidden"
     >
     <canvas
       id="canvas-target"
@@ -882,14 +882,21 @@ const saveImage = () => {
 
 function lihatTab(val) {
   console.log('tab', val)
+  const canvas = cvn.value
+  canvas.discardActiveObject()
+  // canvas.renderAll()
+  fabric.Object.prototype.selectable = false
+  fabric.Object.prototype.hoverCursor = 'default'
   onChangeImg()
 }
 function tabDiNullkan() {
+  // const canvas = cvn.value
   console.log('baruuuuuuuuuuuuuuuuu')
+  fabric.Object.prototype.selectable = true
+  fabric.Object.prototype.hoverCursor = 'all-scroll'
   tab.value = null
   openTab.value = false
   onChangeImg()
-  // resetShapes()
 }
 function tabOpenned() {
   openTab.value = !openTab.value
@@ -927,7 +934,7 @@ function onChangeImg() {
   }))
   const scale = Math.min(canvasRef.value.width / img.width, canvasRef.value.height / img.height)
   const center = canvas?.getCenter()
-  canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+  canvas?.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
     left: center.left,
     top: center.top,
     // right: 0,
