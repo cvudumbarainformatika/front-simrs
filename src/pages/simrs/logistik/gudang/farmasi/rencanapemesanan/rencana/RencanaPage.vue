@@ -181,6 +181,28 @@
             </div>
             <div
               class="row justify-between no-wrap "
+              :class="row.stokGudangFs > 0 ? 'text-brown' : ''"
+            >
+              <div class="q-mr-xs">
+                Gudang FS
+              </div>
+              <div class="">
+                {{ row.stokGudangFs }}
+              </div>
+            </div>
+            <div
+              class="row justify-between no-wrap "
+              :class="row.stokGudangKo > 0 ? 'text-brown' : ''"
+            >
+              <div class="q-mr-xs">
+                Gudang KO
+              </div>
+              <div class="">
+                {{ row.stokGudangKo }}
+              </div>
+            </div>
+            <div
+              class="row justify-between no-wrap "
               :class="row.stokRS > 0 ? 'text-orange' : ''"
             >
               <div class="q-mr-xs">
