@@ -404,6 +404,9 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       if (!this.form.kelasterapis.length) {
         delete this.form.kelasterapis
       }
+      if (this.form.gudang === '') {
+        delete this.form.gudang
+      }
       return new Promise((resolve, reject) => {
         api
           .post('v1/simrs/farmasi/master/simpanobat', this.form)
