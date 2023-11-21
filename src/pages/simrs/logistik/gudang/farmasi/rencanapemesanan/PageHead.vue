@@ -1,5 +1,5 @@
 <template>
-  <div class="row items-center justify-between title-page q-mb-md">
+  <div class="row items-center justify-between title-page q-mb-md ">
     <div class="flex items-center">
       <div class="icon q-mr-md">
         <q-icon
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="row items-center">
+    <div class="row items-center bg-grey-3">
       <q-btn-group outline>
         <q-btn
           :outline="path!=='/gudang/farmasi/rencanapemesanan/rencana'"

@@ -1,7 +1,7 @@
 <template>
-  <div class="q-pa-md bg-white">
+  <div class="q-pa-xs bg-white">
     <div
-      class="row bg-grey q-pa-xs q-my-md"
+      class="row bg-primary text-white q-pa-xs q-mb-md"
     >
       <div class="f-16 text-weight-bold">
         Halaman Verifikasi Permintaan Depo

@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="row items-center">
+    <div class="row items-center bg-grey-3">
       <q-btn-group outline>
         <q-btn
           :outline="path !== '/depo/farmasi/permintaandepo/permintaan'"

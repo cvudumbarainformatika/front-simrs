@@ -2,9 +2,9 @@
   <q-page
     ref="pageRef"
     class="column full-height full-width"
-    :class="!style.componentfull ? 'q-pa-md' : 'q-pa-xs'"
+    :class="!style.componentfull ? 'q-pa-xs' : 'q-pa-xs'"
   >
-    <div class="col-auto ">
+    <div class="col-auto bg-primary text-white">
       <PageHead
         v-if="!style.componentfull"
         :title="title"

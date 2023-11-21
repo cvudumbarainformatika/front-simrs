@@ -146,28 +146,6 @@
                 {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
               </div>
             </div>
-            <!-- <div class="row justify-between no-wrap ">
-              <div class="q-mr-xs">
-                Forkit
-              </div>
-              <div
-                class="text-weight-bold"
-                :class="row.status_forkid === '1'?'text-green':'text-negative'"
-              >
-                {{ row.status_forkid==='1' ?'YA':'TIDAK' }}
-              </div>
-            </div>
-            <div class="row justify-between no-wrap ">
-              <div class="q-mr-xs">
-                Generik
-              </div>
-              <div
-                class="text-weight-bold"
-                :class="row.status_generik === '1'?'text-green':'text-negative'"
-              >
-                {{ row.status_generik==='1' ?'YA':'TIDAK' }}
-              </div>
-            </div> -->
             <div class="row justify-between no-wrap text-italic f-10">
               <div class="q-mr-xs">
                 Satuan
@@ -178,7 +156,7 @@
                 {{ row.satuan_k ? row.satuan_k :'-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap text-italic f-10">
+            <!-- <div class="row justify-between no-wrap text-italic f-10">
               <div class="q-mr-xs">
                 Sistem Bayar
               </div>
@@ -187,7 +165,7 @@
               >
                 {{ row.sistembayar ? row.sistembayar :'-' }}
               </div>
-            </div>
+            </div> -->
           </template>
           <template #cell-stok="{row}">
             <div
