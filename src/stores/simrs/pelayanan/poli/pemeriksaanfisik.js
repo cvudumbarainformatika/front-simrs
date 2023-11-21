@@ -283,7 +283,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
 
           notifSuccess(resp)
-          this.initReset()
+          this.initReset(false, pasien)
+          // this.resetShapes()
           this.loadingform = false
           return new Promise((resolve, reject) => {
             resolve()
@@ -440,8 +441,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           fill: 'transparent'
         }
         // this.dialogForm.anatomy = template
-        // this.shapes = []
-        this.shapes = val ? [] : this.shapes
+        this.shapes = []
+        // this.shapes = val ? [] : this.shapes
         this.selectStatusPsikologi = []
         this.formVital = {
           tingkatkesadaran: 0,

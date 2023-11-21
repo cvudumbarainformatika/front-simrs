@@ -916,7 +916,10 @@ function tabDiNullkan() {
 
   // onChangeImg()
   // drawall()
-  setTimeout(() => init(), 500)
+  setTimeout(() => {
+    onChangeImg()
+    drawall()
+  }, 500)
 }
 function tabOpenned() {
   openTab.value = !openTab.value
@@ -941,10 +944,10 @@ function hapusGambar() {
 }
 
 function onChangeImg() {
+  // resizeCanvas()
   const canvas = cvn.value
   console.log('oooi')
-  // canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
-  resizeCanvas()
+  canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
   const img = markRaw(new fabric.Image(imgRef.value, (image, isError) => {
     image.set({
       width: widthEl.value,
