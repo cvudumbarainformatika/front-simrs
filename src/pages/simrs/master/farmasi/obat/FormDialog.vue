@@ -36,6 +36,7 @@
                   autocomplete="jenisperbekalan"
                   option-label="jenisperbekalan"
                   option-value="jenisperbekalan"
+                  outlined
                   valid
                   label="Jenis Perbekalan"
                   autofocus
@@ -89,6 +90,7 @@
                   autocomplete="merk"
                   option-label="merk"
                   option-value="merk"
+                  outlined
                   valid
                   label="Merk"
                   autofocus
@@ -129,6 +131,7 @@
                   autocomplete="kekuatandosis"
                   option-label="kekuatandosis"
                   option-value="kekuatandosis"
+                  outlined
                   valid
                   label="Kekuatan Dosis"
                   autofocus
@@ -169,6 +172,7 @@
                   autocomplete="volumesediaan"
                   option-label="volumesediaan"
                   option-value="volumesediaan"
+                  outlined
                   valid
                   label="Volume Sediaan"
                   autofocus
@@ -209,6 +213,7 @@
                   autocomplete="bentuksediaan"
                   option-label="bentuksediaan"
                   option-value="bentuksediaan"
+                  outlined
                   valid
                   label="Bentuk Sediaan"
                   autofocus
@@ -249,6 +254,7 @@
                   autocomplete="kelompokpenyimpanan"
                   option-label="kelompokpenyimpanan"
                   option-value="kelompokpenyimpanan"
+                  outlined
                   valid
                   label="Kelompok Penyimpanan"
                   autofocus
@@ -285,6 +291,7 @@
                     option-label="rs2"
                     option-value="rs2"
                     valid
+                    outlined
                     label="Kelompok RKO"
                     autofocus
                     :source="store.kelompokRKOs"
@@ -304,6 +311,7 @@
                   autocomplete="jenisproduk"
                   option-label="jenisproduk"
                   option-value="jenisproduk"
+                  outlined
                   valid
                   label="Jenis Produk"
                   autofocus
@@ -342,6 +350,7 @@
                   autocomplete="nama"
                   option-label="nama"
                   option-value="nama"
+                  outlined
                   valid
                   label="Kandungan / Nama Generik"
                   autofocus
@@ -377,34 +386,28 @@
                 {{ store.form.nama_obat ? store.form.nama_obat:'belum terbetuk nama obat' }}
               </div>
               <!-- kelompok Napza -->
-              <div class="row q-mb-xs">
-                <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.kelompok_psikotropika"
-                    autocomplete="nama"
-                    option-label="nama"
-                    option-value="value"
-                    valid
-                    label="Kelompok Nppza / Psikotropika"
-                    autofocus
-                    :source="store.optionNapzas"
-                  />
-                </div>
+              <div class="row q-mb-xs items-center">
+                Kelompok Nppza / Psikotropika:
+                <q-option-group
+                  v-model="store.form.kelompok_psikotropika"
+                  :options="store.optionNapzas"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
               </div>
               <!-- sistem bayar -->
-              <div class="row q-mb-xs">
-                <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.sistembayar"
-                    autocomplete="nama"
-                    option-label="nama"
-                    option-value="nama"
-                    valid
-                    label="Sistem Bayar"
-                    autofocus
-                    :source="store.optionSistemBayars"
-                  />
-                </div>
+              <div class="row q-mb-xs items-center">
+                Sistem bayar:
+                <q-option-group
+                  v-model="store.form.sistembayar"
+                  :options="store.optionSistemBayars"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
               </div>
               <!-- Kode 108 -->
               <div class="row q-mb-xs">
@@ -415,6 +418,7 @@
                     option-label="uraian"
                     option-value="kode"
                     valid
+                    outlined
                     label="Kode 108"
                     autofocus
                     :source="store.kodeBelanjas"
@@ -435,6 +439,7 @@
                   autocomplete="nama"
                   option-label="nama"
                   option-value="nama"
+                  outlined
                   valid
                   label="Satuan Besar"
                   autofocus
@@ -473,6 +478,7 @@
                   autocomplete="nama"
                   option-label="nama"
                   option-value="nama"
+                  outlined
                   valid
                   label="Satuan Kecil"
                   autofocus
@@ -501,49 +507,103 @@
                 </q-icon>
               </div>
               <!-- Status Generik -->
-              <div class="row q-mb-xs">
-                <div class="col-12">
+              <div class="row q-mb-xs items-center">
+                Status Generik:
+                <q-option-group
+                  v-model="store.form.status_generik"
+                  :options="store.optionStatusGeneriks"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+                <!-- <div class="col-12">
                   <app-autocomplete-debounce-input
                     v-model="store.form.status_generik"
-                    autocomplete="nama"
-                    option-label="nama"
+                    autocomplete="label"
+                    option-label="label"
                     option-value="value"
                     valid
+                    outlined
                     label="Status Generik"
                     autofocus
                     :source="store.optionStatusGeneriks"
                   />
-                </div>
+                </div> -->
               </div>
               <!-- Status Fornas -->
-              <div class="row q-mb-xs">
-                <div class="col-12">
+              <div class="row q-mb-xs items-center">
+                Status Fornas:
+                <q-option-group
+                  v-model="store.form.status_fornas"
+                  :options="store.optionStatusFornases"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+                <!-- <div class="col-12">
                   <app-autocomplete-debounce-input
                     v-model="store.form.status_fornas"
-                    autocomplete="nama"
-                    option-label="nama"
+                    autocomplete="label"
+                    option-label="label"
                     option-value="value"
                     valid
+                    outlined
                     label="Status Fornas"
                     autofocus
                     :source="store.optionStatusFornases"
                   />
-                </div>
+                </div> -->
               </div>
               <!-- Status forkit -->
-              <div class="row q-mb-xs">
-                <div class="col-12">
+              <div class="row q-mb-xs items-center">
+                Status Forkit:
+                <q-option-group
+                  v-model="store.form.status_forkid"
+                  :options="store.optionStatusForkits"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+                <!-- <div class="col-12">
                   <app-autocomplete-debounce-input
                     v-model="store.form.status_forkid"
-                    autocomplete="nama"
-                    option-label="nama"
+                    autocomplete="label"
+                    option-label="label"
                     option-value="value"
                     valid
+                    outlined
                     label="Status Forkit"
                     autofocus
                     :source="store.optionStatusForkits"
                   />
-                </div>
+                </div> -->
+              </div>
+              <!-- Gudang -->
+              <div class="row q-mb-xs items-center justify-between">
+                di Gudang:
+                <q-option-group
+                  v-model="store.form.gudang"
+                  :options="store.optionGudangs"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                />
+                <!-- <div class="col-12">
+                  <app-autocomplete-debounce-input
+                    v-model="store.form.gudang"
+                    autocomplete="label"
+                    option-label="label"
+                    option-value="value"
+                    valid
+                    outlined
+                    label="Pilih Gudang"
+                    autofocus
+                    :source="store.optionGudangs"
+                  />
+                </div> -->
               </div>
               <!-- Nilai TKDN -->
               <div class="row q-mb-xs">
@@ -584,6 +644,7 @@
                   autocomplete="kelasterapi"
                   option-label="kelasterapi"
                   option-value="kelasterapi"
+                  outlined
                   valid
                   label="Pilih kelas terapi"
                   autofocus
@@ -709,7 +770,7 @@ function scJenisProduk(val) {
   myDialog(store.simpanCepatJenisProduk, val, 'Jenis Produk')
 }
 // simpan cepat end --
-// set nama obat start---
+// set label obat start---
 function setNama(val) {
   if (!val.length) {
     store.deleteNamaObat('nama')

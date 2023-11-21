@@ -8,6 +8,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     isOpen: false,
     form: {
       kd_obat: 'sdadasdasdasd',
+      gudang: '',
       jenis_perbekalan: null,
       kelasterapis: []
     },
@@ -36,25 +37,30 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     loadingMerk: false,
 
     optionNapzas: [
-      { nama: 'YA', value: '1' },
-      { nama: 'TIDAK', value: '0' }
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
     ],
     optionStatusGeneriks: [
-      { nama: 'YA', value: '1' },
-      { nama: 'TIDAK', value: '0' }
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
     ],
     optionStatusForkits: [
-      { nama: 'YA', value: '1' },
-      { nama: 'TIDAK', value: '0' }
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
     ],
     optionStatusFornases: [
-      { nama: 'YA', value: '1' },
-      { nama: 'TIDAK', value: '0' }
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
     ],
     optionSistemBayars: [
-      { nama: 'SEMUA', value: 'semua' },
-      { nama: 'UMUM', value: 'umum' },
-      { nama: 'BPJS', value: 'bpjs' }
+      { label: 'SEMUA', value: 'semua' },
+      { label: 'UMUM', value: 'umum' },
+      { label: 'BPJS', value: 'bpjs' }
+    ],
+    optionGudangs: [
+      { label: 'Semua Gudang', value: '' },
+      { label: 'Gudang Farmasi ( Floor Stok )', value: 'Gd-03010100' },
+      { label: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' }
     ],
 
     kelasTerapis: [],

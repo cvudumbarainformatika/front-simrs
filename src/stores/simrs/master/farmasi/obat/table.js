@@ -75,8 +75,8 @@ export const useMasterObatTable = defineStore('master_Obat_table', {
               // this.items = resp.data.data
               // this.meta = resp.data.meta
               // this.setColumns(resp.data.data)
-              this.items = resp.data
-              // this.meta = resp.data.meta
+              this.items = resp?.data?.data ?? resp?.data
+              this.meta = resp?.data
               this.setColumns(resp.data)
               resolve(resp.data)
             }

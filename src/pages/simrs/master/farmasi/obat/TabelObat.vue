@@ -15,7 +15,6 @@
             :sort="table.params.sort"
             :loading="table.loading"
             :to-search="table.params.q"
-            :ada-paginasi="false"
             @goto="table.setPage"
             @set-row="table.setPerPage"
             @refresh="table.refreshTable"
@@ -328,6 +327,15 @@
                   {{ row.sistembayar }}
                 </div>
               </div>
+              <div
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
+              >
+                <div
+                  class="text-weight-bold"
+                >
+                  {{ gudang(row?.gudang) }}
+                </div>
+              </div>
             </template>
           </app-table>
         </template>
@@ -356,6 +364,11 @@ function sisBay(val) {
     default:
       return ''
   }
+}
+function gudang(val) {
+  const gud = store.optionGudangs.find(x => x.value === val)
+
+  return gud?.label ?? '-'
 }
 </script>
 <style lang="scss" scoped>
