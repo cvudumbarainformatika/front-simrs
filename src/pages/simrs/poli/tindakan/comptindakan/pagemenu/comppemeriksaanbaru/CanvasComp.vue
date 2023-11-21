@@ -14,16 +14,16 @@
     <!-- {{ openTab }} -->
     <img
       ref="imgRef"
+      :key="store.fileGambar"
       :src="`${tab !==null? pathImg + tab : store.fileGambar}`"
       alt="gambar medis"
-      :class="tab?'visible q-ml-sm':'hidden'"
+      :class="tab===null?'hidden q-ml-sm':'visible'"
     >
     <canvas
       id="canvas-target"
       ref="canvasRef"
       :width="widthEl"
       :height="heightEl"
-      :class="tab?'hidden':'visible'"
     >
       <MenuCanvas
         ref="refMenu"
@@ -396,7 +396,7 @@ function onCanvas() {
     if (objectSelected.value !== null) {
       console.log('canvas mouse up', canvas)
       target.value = null
-      return true
+      return false
     }
 
     // console.log('draw', widthEl.value / canvas.width)
@@ -882,19 +882,14 @@ const saveImage = () => {
 
 function lihatTab(val) {
   console.log('tab', val)
-  setTimeout(() => {
-    resizeCanvas()
-    init()
-  }, 300)
+  onChangeImg()
 }
 function tabDiNullkan() {
+  console.log('baruuuuuuuuuuuuuuuuu')
   tab.value = null
   openTab.value = false
-  store.resetShapes()
-  setTimeout(() => {
-    resizeCanvas()
-    init()
-  }, 300)
+  onChangeImg()
+  // resetShapes()
 }
 function tabOpenned() {
   openTab.value = !openTab.value
@@ -918,23 +913,51 @@ function hapusGambar() {
   })
 }
 
+function onChangeImg() {
+  const canvas = cvn.value
+  console.log('oooi')
+  // canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
+  const img = markRaw(new fabric.Image(imgRef.value, (image, isError) => {
+    image.set({
+      width: widthEl.value,
+      heigh: heightEl.value,
+      originX: 'center',
+      originY: 'center'
+    })
+  }))
+  const scale = Math.min(canvasRef.value.width / img.width, canvasRef.value.height / img.height)
+  const center = canvas?.getCenter()
+  canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+    left: center.left,
+    top: center.top,
+    // right: 0,
+    scaleX: scale,
+    scaleY: scale,
+    originX: 'center',
+    originY: 'center'
+  })
+  canvas.add()
+}
+
 watch(() => arr.value, (newVal, oldVal) => {
-  // console.log('watch new', newVal.length)
-  // console.log('watch old', oldVal.length)
   if (newVal.length !== oldVal.length) {
     drawall()
   }
 }, { deep: true })
 
-watch(() => store.fileGambar, (obj) => {
-  console.log('watch file gambar', obj)
-  // writingMode.value = true
-  // store.initReset(false, props.pasien)
-  resizeCanvas()
-  setTimeout(() => {
-    init()
-  }, 1000)
+watch(() => store.fileGambar, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    setTimeout(() => onChangeImg(), 300)
+  }
 }, { deep: true })
+// watch(() => tab.value, (newVal, oldVal) => {
+//   if (newVal !== oldVal) {
+//     if (tab.value !== null) {
+//       setTimeout(() => onChangeImg(), 300)
+//       target.value = '.upper-canvas'
+//     }
+//   }
+// }, { deep: true })
 
 </script>
 
