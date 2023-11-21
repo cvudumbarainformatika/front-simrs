@@ -10,12 +10,13 @@
         dark
         color="white"
         dense
-        placeholder="Cari Kunjungan ..."
+        placeholder="Cari Nama Obat ..."
         debounce="500"
       />
     </div>
     <div>
       <q-btn
+        v-if="adaTanggal"
         flat
         :color="textColor"
         icon-right="icon-mat-event"
@@ -35,6 +36,7 @@
         </q-popup-proxy>
       </q-btn>
       <q-btn
+        v-if="adaFilter"
         flat
         :color="textColor"
         icon-right="icon-mat-dataset"
@@ -63,7 +65,22 @@
           </q-list>
         </q-menu>
       </q-btn>
-
+      <!-- refresh -->
+      <q-btn
+        flat
+        :color="textColor"
+        icon="icon-mat-refresh"
+        size="xs"
+        padding="xs"
+        @click="emits('refresh')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Refresh
+        </q-tooltip>
+      </q-btn>
       <!-- per_page -->
       <q-btn
         class="q-ml-sm"
@@ -132,9 +149,17 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh'])
 const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
+  adaTanggal: {
+    type: Boolean,
+    default: false
+  },
+  adaFilter: {
+    type: Boolean,
+    default: false
+  },
   color: {
     type: String,
     default: 'bg-primary'

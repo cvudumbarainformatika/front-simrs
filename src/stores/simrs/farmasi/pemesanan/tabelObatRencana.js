@@ -31,17 +31,42 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
   }),
   actions: {
 
+    setQ(payload) {
+      this.params.page = 1
+      this.params.q = payload
+      this.getLists()
+    },
+    setPerPage(payload) {
+      this.params.page = 1
+      this.params.per_page = payload
+      this.getLists()
+    },
+    setPeriodik(val) {
+      const { to, from } = val
+      this.params.to = to
+      this.params.from = from
+      console.log('periodik', to)
+      this.getLists()
+    },
+    setPage(payload) {
+      this.params.page = payload
+      this.getLists()
+    },
+    getLists() {
+      this.getObatMauBeli()
+    },
     getInitialData() {
       this.getObatMauBeli()
     },
     getObatMauBeli() {
       this.loading = true
+      const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/dialogperencanaanobat')
+        api.get('v1/simrs/farmasinew/dialogperencanaanobat', param)
           .then(resp => {
             this.loading = false
-            console.log('obat mau dibeli', resp)
-            const temp = resp.data
+            console.log('obat mau dibeli', resp?.data)
+            const temp = resp?.data?.data ?? resp?.data
             temp.forEach(item => {
               item.checked = false
               item.stokGudang = item.stokrealgudang.length ? item.stokrealgudang.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
@@ -53,7 +78,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
               item.bisaBeli = (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) > 0 ? (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) : 0
               item.jumlahBeli = item.bisaBeli
             })
-            this.items = resp?.data?.data ?? resp?.data
+            this.items = temp
             this.meta = resp?.data?.current_page ? resp?.data : null
             resolve(resp)
           })

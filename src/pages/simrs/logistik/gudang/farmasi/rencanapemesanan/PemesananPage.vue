@@ -4,7 +4,7 @@
     class="column full-height full-width"
     :class="!style.componentfull?'q-pa-xs':'q-pa-xs'"
   >
-    <div class="col-auto bg-primary text-white">
+    <div class="col-auto">
       <PageHead
         v-if="!style.componentfull"
         :title="title"
@@ -15,7 +15,7 @@
     <q-card
       flat
       class="col full-width full-height"
-      :style="`max-height: ${!style.componentfull? h-60:h+40}px; overflow:hidden`"
+      :style="`max-height: ${!style.componentfull? h-60:h+40}px;`"
     >
       <q-scroll-area
         :style="`height: ${!style.componentfull? h-95:h+40}px; max-width: 100%;`"
@@ -57,6 +57,7 @@ const barStyle = ref({
   opacity: 0.2
 })
 const page = useRoute()
+// eslint-disable-next-line no-unused-vars
 const title = computed(() => {
   if (page.path === '/gudang/farmasi/rencanapemesanan/rencana') {
     return 'RENCANA'
@@ -66,6 +67,7 @@ const title = computed(() => {
     return 'Rencana'
   }
 })
+// eslint-disable-next-line no-unused-vars
 const subtitle = computed(() => {
   if (page.path === '/gudang/farmasi/rencanapemesanan/rencana') {
     return 'Rencana Pemesanan Obat'
