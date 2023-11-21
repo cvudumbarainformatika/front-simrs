@@ -58,18 +58,18 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/pemakaianruangan/pemakaian') {
+  if (page.path === '/ruangan/farmasi/pemakaianruangan/pemakaian') {
     return 'PEMAKAIAN RUANGAN'
-  } else if (page.path === '/farmasi/pemakaianruangan/listpemakaian') {
+  } else if (page.path === '/ruangan/farmasi/pemakaianruangan/listpemakaian') {
     return 'LIST PEMAKAIAN RUANGAN'
   } else {
     return 'Pemakain'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/pemakaianruangan/pemakaian') {
+  if (page.path === '/ruangan/farmasi/pemakaianruangan/pemakaian') {
     return 'Pemakain Obat Oleh Ruangan'
-  } else if (page.path === '/farmasi/pemakaianruangan/listpemakaian') {
+  } else if (page.path === '/ruangan/farmasi/pemakaianruangan/listpemakaian') {
     return 'List Pemakain Obat Oleh Ruangan'
   } else {
     return 'Halaman Pemakaian Obat'

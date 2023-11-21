@@ -20,22 +20,22 @@
     <div class="row items-center">
       <q-btn-group outline>
         <q-btn
-          :outline="path !== '/farmasi/pemakaianruangan/pemakaian'"
+          :outline="path !== '/ruangan/farmasi/pemakaianruangan/pemakaian'"
           glossy
           push
           color="cyan"
           label="Rencana Pemesanan"
           size="md"
-          @click="goTo('/farmasi/pemakaianruangan/pemakaian')"
+          @click="goTo('/ruangan/farmasi/pemakaianruangan/pemakaian')"
         />
         <q-btn
-          :outline="path !== '/farmasi/pemakaianruangan/listpemakaian'"
+          :outline="path !== '/ruangan/farmasi/pemakaianruangan/listpemakaian'"
           glossy
           push
           color="blue"
           label="List Rencana Pemesanan"
           size="md"
-          @click="goTo('/farmasi/pemakaianruangan/listpemakaian')"
+          @click="goTo('/ruangan/farmasi/pemakaianruangan/listpemakaian')"
         />
       </q-btn-group>
     </div>

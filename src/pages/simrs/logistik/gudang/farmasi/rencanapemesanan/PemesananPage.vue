@@ -58,18 +58,18 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/rencanapemesanan/rencana') {
+  if (page.path === '/gudang/farmasi/rencanapemesanan/rencana') {
     return 'RENCANA'
-  } else if (page.path === '/farmasi/rencanapemesanan/listrencanapesanan') {
+  } else if (page.path === '/gudang/farmasi/rencanapemesanan/listrencanapesanan') {
     return 'LIST RENCANA PEMESANAN'
   } else {
     return 'Rencana'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/rencanapemesanan/rencana') {
+  if (page.path === '/gudang/farmasi/rencanapemesanan/rencana') {
     return 'Rencana Pemesanan Obat'
-  } else if (page.path === '/farmasi/rencanapemesanan/listrencanapesanan') {
+  } else if (page.path === '/gudang/farmasi/rencanapemesanan/listrencanapesanan') {
     return 'Pemesanan Obat'
   } else {
     return 'Halaman Pemesanan Obat'

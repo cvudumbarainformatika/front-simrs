@@ -58,18 +58,18 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/permintaandepo/permintaan') {
+  if (page.path === '/depo/farmasi/permintaandepo/permintaan') {
     return 'PERMINTAAN DEPO'
-  } else if (page.path === '/farmasi/permintaandepo/listpermintaan') {
+  } else if (page.path === '/depo/farmasi/permintaandepo/listpermintaan') {
     return 'LIST PERMINTAAN DEPO'
   } else {
     return 'Permintaan Depo'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/permintaandepo/permintaan') {
+  if (page.path === '/depo/farmasi/permintaandepo/permintaan') {
     return 'Halaman Permintaan Obat Oleh Depo'
-  } else if (page.path === '/farmasi/permintaandepo/listpermintaan') {
+  } else if (page.path === '/depo/farmasi/permintaandepo/listpermintaan') {
     return 'Halaman List Permintaan Obat Oleh Depo'
   } else {
     return 'Halaman Permintaan Obat Oleh Depo'

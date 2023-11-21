@@ -92,27 +92,6 @@ const gudang = {
           ]
         },
         {
-          path: '/gudang/farmasi/verifpermintaandepo',
-          component: () => import('src/pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/IndexPage.vue'),
-          children: [
-            { path: '', redirect: '/gudang/farmasi/verifpermintaandepo/verifpermintaan' },
-            {
-              path: '/gudang/farmasi/verifpermintaandepo/verifpermintaan',
-              name: 'gudang.farmasi.verifpermintaandepo.verifpermintaan',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/verif/IndexPage.vue')
-            },
-            {
-              path: '/gudang/farmasi/verifpermintaandepo/listverif',
-              name: 'gudang.farmasi.verifpermintaandepo.listverif',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/listverif/IndexPage.vue')
-            }
-          ]
-        },
-        {
           path: '/gudang/farmasi/distribusipermintaandepo',
           component: () => import('src/pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/IndexPage.vue'),
           children: [

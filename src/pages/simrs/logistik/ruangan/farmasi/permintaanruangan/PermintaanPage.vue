@@ -58,18 +58,18 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/permintaanruangan/permintaanruangan') {
+  if (page.path === '/ruangan/farmasi/permintaanruangan/permintaanruangan') {
     return 'PERMINTAAN RUANGAN'
-  } else if (page.path === '/farmasi/permintaanruangan/listpermintaanruangan') {
+  } else if (page.path === '/ruangan/farmasi/permintaanruangan/listpermintaanruangan') {
     return 'LIST PERMINTAAN RUANGAN'
   } else {
     return 'Permintaan Ruangan'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/permintaanruangan/permintaanruangan') {
+  if (page.path === '/ruangan/farmasi/permintaanruangan/permintaanruangan') {
     return 'Halaman Permintaan Obat Oleh Ruangan'
-  } else if (page.path === '/farmasi/permintaanruangan/listpermintaanruangan') {
+  } else if (page.path === '/ruangan/farmasi/permintaanruangan/listpermintaanruangan') {
     return 'Halaman List Permintaan Obat Oleh Ruangan'
   } else {
     return 'Halaman Permintaan Obat Oleh Ruangan'

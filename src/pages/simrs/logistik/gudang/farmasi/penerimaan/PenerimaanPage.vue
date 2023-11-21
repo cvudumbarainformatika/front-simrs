@@ -58,22 +58,22 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/penerimaan/penerimaan') {
+  if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
     return 'PENERIMAAN'
-  } else if (page.path === '/farmasi/penerimaan/penerimaanlangsung') {
+  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
     return 'PENERIMAAN LANGSUNG'
-  } else if (page.path === '/farmasi/penerimaan/listpenerimaan') {
+  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'LIST PENERIMAAN'
   } else {
     return 'Penerimaan'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/penerimaan/penerimaan') {
+  if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
     return 'Penerimaan Obat'
-  } else if (page.path === '/farmasi/penerimaan/penerimaanlangsung') {
+  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
     return 'Penerimaan Langsung Obat'
-  } else if (page.path === '/farmasi/penerimaan/listpenerimaan') {
+  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'List Penerimaan Obat'
   } else {
     return 'Penerimaan Obat'

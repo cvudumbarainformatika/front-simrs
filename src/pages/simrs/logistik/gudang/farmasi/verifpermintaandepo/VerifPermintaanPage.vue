@@ -58,18 +58,18 @@ const barStyle = ref({
 })
 const page = useRoute()
 const title = computed(() => {
-  if (page.path === '/farmasi/verifpermintaandepo/verifpermintaan') {
+  if (page.path === '/gudang/farmasi/verifpermintaandepo/verifpermintaan') {
     return 'VERIF PERMINTAAN DEPO'
-  } else if (page.path === '/farmasi/verifpermintaandepo/listverif') {
+  } else if (page.path === '/gudang/farmasi/verifpermintaandepo/listverif') {
     return 'LIST VERIF PERMINTAAN DEPO'
   } else {
     return 'VERIF PERMINTAAN DEPO'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/farmasi/verifpermintaandepo/verifpermintaan') {
+  if (page.path === '/gudang/farmasi/verifpermintaandepo/verifpermintaan') {
     return 'Verif Permntaan Depo'
-  } else if (page.path === '/farmasi/verifpermintaandepo/listverif') {
+  } else if (page.path === '/gudang/farmasi/verifpermintaandepo/listverif') {
     return 'List Verif Permntaan Depo'
   } else {
     return 'Halaman Verif Permntaan Depo'

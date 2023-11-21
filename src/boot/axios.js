@@ -30,7 +30,7 @@ const interceptResErrors = (err) => {
     // console.log('1. interceptResErrors', err.response)
     // if (!err.response) {
     //   removeToken()
-    // }
+    // }icon-fa-kit-medical-solid
     console.log('axios', err)
     notifErr(err.response)
     // notifErr(err)

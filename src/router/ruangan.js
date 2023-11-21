@@ -22,7 +22,7 @@ const ruangan = {
         },
         {
           path: '/ruangan/farmasi/permintaanruangan',
-          component: () => import('src/pages/simrs/farmasi/permintaanruangan/IndexPage.vue'),
+          component: () => import('src/pages/simrs/logistik/ruangan/farmasi/permintaanruangan/IndexPage.vue'),
           children: [
             { path: '', redirect: '/ruangan/farmasi/permintaanruangan/permintaanruangan' },
             {
@@ -64,17 +64,17 @@ const ruangan = {
         },
         {
           path: '/ruangan/farmasi/retur',
-          component: () => import('src/pages/simrs/logistik/ruangan/farmasi/retur/IndexPage.vue'),
-          children: [
-            { path: '', redirect: '/farmasi/retur/ruangan' },
-            {
-              path: '/ruangan/farmasi/retur/ruangan',
-              name: 'ruangan.farmasi.retur.ruangan',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/ruangan/farmasi/retur/IndexPage.vue')
-            }
-          ]
+          name: 'ruangan.farmasi.retur',
+          component: () => import('src/pages/simrs/logistik/ruangan/farmasi/retur/IndexPage.vue')
+          // children: [
+          //   { path: '', redirect: '/ruangan/farmasi/retur' },
+          //   {
+          //     path: '/ruangan/farmasi/retur',
+          //     meta: { transition: 'slide-up' },
+          //     component: () =>
+          //       import('pages/simrs/logistik/ruangan/farmasi/retur/IndexPage.vue')
+          //   }
+          // ]
         }
       ]
     },
