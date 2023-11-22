@@ -86,7 +86,7 @@
               :options="item.intervensis?.filter(x=>x.group === 'edukasi').map(x=>{
                 return {
                   label:x?.nama,
-                  value:x?.id
+                  value:x?.id + '||' + item.kode
                 }
               })"
               color="primary"
@@ -115,7 +115,7 @@
               :options="item.intervensis?.filter(x=>x.group === 'observasi').map(x=>{
                 return {
                   label:x?.nama,
-                  value:x?.id
+                  value:x?.id + '||' + item.kode
                 }
               })"
               color="primary"
@@ -147,7 +147,7 @@
               :options="item.intervensis?.filter(x=>x.group === 'kolaborasi').map(x=>{
                 return {
                   label:x?.nama,
-                  value:x?.id
+                  value:x?.id + '||' + item.kode
                 }
               })"
               color="primary"

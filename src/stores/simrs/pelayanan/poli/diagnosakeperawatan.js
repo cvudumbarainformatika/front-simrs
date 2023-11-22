@@ -42,7 +42,22 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
           }
         })
       }
-      console.log('saved', thumb)
+
+      let intv = []
+      if (this.selectIntervensis.length) {
+        intv = this.selectIntervensis.map(x => {
+          return {
+            intervensi_id: x?.split('||')[0],
+            diagnosakeperawatan_kode: x?.split('||')[1]
+          }
+        })
+      }
+
+      const form = {
+        diagnosa: thumb,
+        intervensi: intv
+      }
+      console.log('saved', form)
     },
 
     initReset() {
