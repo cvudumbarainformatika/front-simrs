@@ -86,6 +86,7 @@ const speech = useSpeechStore()
 const store = usePengunjungPoliStore()
 const diagnosa = useLayananPoli()
 const pasien = ref(null)
+const indexVoices = ref(11)
 
 // const printRekap = ref(false)
 
@@ -95,15 +96,19 @@ const pasien = ref(null)
 const $q = useQuasar()
 onMounted(() => {
   const voices = speech.synth.getVoices()
+  console.log(voices)
   if (voices.length) {
     speech.setLoading(false)
-    console.log('onMounted :', voices)
+    const ada = voices?.map(x => x.lang)
+    const ind = ada.findIndex(x => x === 'id-ID') ?? 0
+    indexVoices.value = ind
+    console.log('onMounted :', ada.findIndex(x => x === 'id-ID'))
   }
 
   speech.synth.onvoiceschanged = () => {
     speech.setVoiceList(speech.synth.getVoices())
     // give a bit of delay to show loading screen
-    // just for the sake of it, I suppose. Not the best reason
+    // just for the sake of it, I suppose. Not the best reason dsfa
     setTimeout(() => {
       speech.setLoading(false)
     }, 500)
@@ -114,10 +119,10 @@ onMounted(() => {
 })
 
 function setSpeech(txt) {
-  console.log(speech.voiceList[11])
+  // console.log(speech.voiceList[11])
   const voice = speech.utterance
   voice.text = txt
-  voice.voice = speech.voiceList[11]
+  voice.voice = speech.voiceList[indexVoices.value]
 
   voice.volume = 1
   voice.pitch = 1
@@ -127,7 +132,7 @@ function setSpeech(txt) {
 }
 
 function panggil(row) {
-  console.log(row)
+  console.log('voiceIndex', indexVoices.value)
   const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2
@@ -147,8 +152,9 @@ function bukaTindakan(val) {
         // avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
         // position: 'center',
         timeout: 1000
-      // actions: [
-      //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
+        // actions: [
+        //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
+
       // ]
       })
 

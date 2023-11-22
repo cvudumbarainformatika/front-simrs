@@ -136,7 +136,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
-const emits = defineEmits(['tindakan', 'panggil'])
+const emits = defineEmits(['tindakan', 'panggilan'])
 defineProps({
   items: {
     type: Array,

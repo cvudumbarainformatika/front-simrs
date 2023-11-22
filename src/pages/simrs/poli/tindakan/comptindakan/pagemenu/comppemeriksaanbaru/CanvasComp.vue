@@ -165,9 +165,9 @@ const resizeCanvas = () => {
   // const imgRatio = imgRef.value.width / imgRef.value.height
   widthEl.value = width - 20
   // heightEl.value = el.value.clientHeight
-  heightEl.value = imgRef.value.height * scale
+  heightEl.value = (imgRef.value.height * scale)
   imgRef.value.width = widthEl.value
-  imgRef.value.height = heightEl.value
+  imgRef.value.height = imgRef.value.height * scale
   console.log('gambar height', scale)
   target.value = '.upper-canvas '
   // func()
@@ -950,8 +950,7 @@ function onChangeImg() {
   canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
   const img = markRaw(new fabric.Image(imgRef.value, (image, isError) => {
     image.set({
-      width: widthEl.value,
-      heigh: heightEl.value,
+
       originX: 'center',
       originY: 'center'
     })
@@ -966,6 +965,8 @@ function onChangeImg() {
     scaleY: scale,
     originX: 'center',
     originY: 'center'
+    // width: widthEl.value - 50,
+    // heigh: heightEl.value - 50
   })
   canvas.add()
 }
