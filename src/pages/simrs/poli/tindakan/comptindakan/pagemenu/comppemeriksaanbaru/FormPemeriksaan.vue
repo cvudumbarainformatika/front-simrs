@@ -18,7 +18,7 @@
       >
         <q-form
           ref="formRef"
-          class="row q-col-gutter-sm q-pa-md"
+          class="row q-col-gutter-sm q-pa-lg"
           @submit.prevent.stop="onSubmit"
         >
           <div class="col-2">
@@ -181,6 +181,24 @@
               </div>
             </div> -->
           </div>
+          <div class="col-6">
+            <q-input
+              v-model="store.formVital.statusneurologis"
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Status Neurologis"
+              autogrow
+            />
+          </div>
+          <div class="col-6">
+            <q-input
+              v-model="store.formVital.muakuloskeletal"
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Muakuloskeletal"
+              autogrow
+            />
+          </div>
           <div class="col-12">
             <q-separator class="q-my-sm" />
             <div class="text-weight-bold">
@@ -223,53 +241,9 @@
                 color="orange"
                 @update:model-value="sumKesadaran"
               />
-              <!-- <q-input
-                v-model="store.formVital.kesadarane"
-                dense
-                standout="bg-yellow-3 text-black"
-                outlined
-                label="E"
-                :rules="[
-                  val => !!val || 'Hrp diisi',
-                  val => !isNaN(val) || 'Hrs Nomor',
-                  val => val < 5 || 'Max 4',
-                ]"
-                hide-bottom-space
-                style="width:33%"
-                @update:model-value="sumKesadaran"
-              />
-              <q-input
-                v-model="store.formVital.kesadaranv"
-                dense
-                standout="bg-yellow-3 text-black"
-                outlined
-                label="V"
-                :rules="[
-                  val => !!val || 'Hrp diisi',
-                  val => !isNaN(val) || 'Hrs Nomor',
-                  val => val < 6 || 'Max 5',
-                ]"
-                hide-bottom-space
-                style="width:33%"
-                @update:model-value="sumKesadaran"
-              />
-              <q-input
-                v-model="store.formVital.kesadaranm"
-                dense
-                standout="bg-yellow-3 text-black"
-                outlined
-                label="M"
-                :rules="[
-                  val => !!val || 'Hrp diisi',
-                  val => !isNaN(val) || 'Hrs Nomor',
-                  val => val < 7 || 'Max 6',
-                ]"
-                hide-bottom-space
-                style="width:33%"
-                @update:model-value="sumKesadaran"
-              /> -->
             </div>
           </div>
+
           <div class="col-12">
             <q-separator class="q-my-sm" />
           </div>

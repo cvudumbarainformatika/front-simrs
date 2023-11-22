@@ -80,7 +80,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       perkusidadakiri: '',
       auskultasisuaradasar: '',
       auskultasisuaratambahankanan: '',
-      auskultasisuaratambahankiri: ''
+      auskultasisuaratambahankiri: '',
+
+      // barulagi
+      statusneurologis: '',
+      muakuloskeletal: ''
     },
     inspeksis: [],
     palpasis: [],
@@ -472,7 +476,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           perkusidadakiri: '',
           auskultasisuaradasar: '',
           auskultasisuaratambahankanan: '',
-          auskultasisuaratambahankiri: ''
+          auskultasisuaratambahankiri: '',
+          // barulagi
+          statusneurologis: '',
+          muakuloskeletal: ''
         }
 
         this.inspeksis = []
