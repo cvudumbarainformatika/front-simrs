@@ -791,7 +791,7 @@ function drawall() {
   objectSelected.value = null
   // if (writingMode.value) {
   const canvas = cvn.value
-  const scalling = widthEl.value / canvas.width
+  const scalling = widthEl.value / canvas?.width
   if (arr.value.length > 0) {
     for (let i = 0; i < arr.value.length; i++) {
       const { x, y } = scaleCoordinates(canvas.width, canvas.height, arr.value[i].x, arr.value[i].y, scalling)
@@ -827,7 +827,7 @@ const scaleCoordinates = (width, height, x, y, scale) => {
 
 function resetCanvas() {
   const canvas = cvn.value
-  canvas.remove(...canvas.getObjects())
+  canvas?.remove(...canvas?.getObjects())
 }
 
 function resetShapes() {
