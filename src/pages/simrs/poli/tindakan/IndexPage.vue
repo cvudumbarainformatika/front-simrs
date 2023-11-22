@@ -113,11 +113,11 @@
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
-import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
+import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 
 const store = usePengunjungPoliStore()
 const master = useMasterPemeriksaanFisik()
@@ -142,7 +142,7 @@ const menus = ref([
     name: 'PemeriksaanPage',
     label: 'Pemeriksaan Umum & Fisik',
     icon: 'icon-my-stethoscope',
-    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPage.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPageBaru.vue')))
   },
   {
     name: 'LayananPage',

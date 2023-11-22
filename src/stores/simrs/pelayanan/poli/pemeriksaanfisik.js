@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api } from 'src/boot/axios'
+import { api, pathImg } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
 import { useMasterPemeriksaanFisik } from '../../master/poliklinik/pemeriksaanfisik'
@@ -15,6 +15,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     gambarActive: 0,
     // fileGambar: '/src/assets/human/anatomys/body-human.jpg',
     fileGambar: null,
+    urlGambar: null,
     writingMode: false,
     dialogForm: {
       anatomy: '',
@@ -23,10 +24,14 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       y: 0,
       ketebalan: 2,
       panjang: 7,
-      width: 7,
-      height: 7,
+      width: 15,
+      height: 15,
       warna: '#000000',
-      penanda: 'circle'
+      penanda: 'circle',
+      // baru
+      angle: 0,
+      tinggi: 0,
+      fill: 'transparent'
     },
     formMata: {
       vodawal: '',
@@ -109,6 +114,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.gambarActive = val
       this.fileGambar = file
       this.setDialogTemplate()
+      // console.log('store file', file)
     },
     setFullCanvas() {
       this.fullCanvas = !this.fullCanvas
@@ -127,7 +133,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         const newArr = [...this.shapes]
         newArr.push(val)
         this.shapes = newArr
-        this.setDialogForm('anatomy', '')
+        // this.setDialogForm('anatomy', '')
         this.setDialogForm('ket', '')
 
         if (val.anatomy === 'Mata') {
@@ -142,6 +148,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
 
         this.resetFormMataDanParu()
+        this.resetDialogForm(this.templateActive, this.dialogForm.penanda)
         resolve()
       })
     },
@@ -154,9 +161,27 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     },
 
     resetShapes() {
-      this.shapes = []
+      const a = this.shapes
+      const b = a.filter(x => x.templategambar === this.fileGambar)
+      b.forEach(f => a.splice(a.findIndex(e => e.templategambar === f.templategambar), 1))
+      // this.shapes = []
       this.mata = []
       this.paru = []
+    },
+    deleteObjectOnShapes(x, y) {
+      return new Promise((resolve, reject) => {
+        const a = this.shapes
+        // b.forEach(f => a.splice(a.findIndex(e => e.templategambar === f.templategambar), 1))
+        a.splice(a.findIndex(e => e.x === x && e.y === y), 1)
+        console.log('store delete object', a)
+        resolve()
+      })
+    },
+
+    setShapeObject(index, key, value) {
+      const a = this.shapes
+      const b = a.filter(x => x.templategambar === this.fileGambar)
+      b[index][key] = value
     },
 
     resetFormMataDanParu() {
@@ -251,14 +276,15 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-        console.log('save', resp)
+        // console.log('save', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp.data.result
           storePasien.injectDataPasien(pasien, isi, 'pemeriksaanfisik')
 
           notifSuccess(resp)
-          this.initReset()
+          this.initReset(false, pasien)
+          // this.resetShapes()
           this.loadingform = false
           return new Promise((resolve, reject) => {
             resolve()
@@ -288,6 +314,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     async saveImage(img, pasien, details) {
       // console.log(details)
+      this.loadingform = true
       let keterangan = ''
       if (details.length) {
         keterangan = details.map(x => x.ket).join()
@@ -298,13 +325,19 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         image: img,
         keterangan
       }
-      const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
-      if (resp.status === 200) {
-        console.log('simpan gambar', resp)
-        const storePasien = usePengunjungPoliStore()
-        const isi = resp.data.result
-        storePasien.injectDataPasien(pasien, isi, 'gambars')
-        notifSuccess(resp)
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
+        if (resp.status === 200) {
+          console.log('simpan gambar', resp)
+          const storePasien = usePengunjungPoliStore()
+          const isi = resp.data.result
+          storePasien.injectDataPasien(pasien, isi, 'gambars')
+          notifSuccess(resp)
+          this.loadingform = false
+        }
+        this.loadingform = false
+      } catch (error) {
+        this.loadingform = false
       }
     },
 
@@ -319,7 +352,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           storePasien.hapusGambars(pasien, nama)
           notifSuccess(resp)
           this.loadingform = false
-          this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
+          // this.fileGambar = '/src/assets/human/anatomys/body-human.jpg'
           return new Promise((resolve, reject) => {
             resolve()
           })
@@ -356,18 +389,26 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       const master = useMasterPemeriksaanFisik()
       let file = null
       let template = null
+      let imgUrl = null
       let imgActive = 0
+      // let lokalis = []
       if (val) {
         file = master?.items[0]?.gambars[0]?.image
+        imgUrl = master?.items[0]?.gambars[0]?.url
         template = master?.items[0]?.nama ?? 'Body'
         imgActive = 0
       } else {
-        file = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
-        template = master?.items?.filter(x => x.lokalis === pasien?.kodepoli)[0]?.nama ?? 'Body'
+        // const arr = master?.items?.map(x => x.lokalis)
+        // lokalis = arr.filter(v => v?.indexOf(pasien?.kodepoli) > -1)
+        file = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.gambars[0]?.image ?? master?.items[0]?.gambars[0]?.image
+        imgUrl = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.gambars[0]?.url ?? master?.items[0]?.gambars[0]?.url
+        template = master?.items?.filter(x => x?.lokalis?.indexOf(pasien?.kodepoli) > -1)[0]?.nama ?? 'Body'
         imgActive = this.gambarActive
       }
       this.fileGambar = file
       this.templateActive = template
+      this.urlGambar = pathImg + imgUrl
+      // console.log('init url', pathImg + imgUrl)
       // console.log('init', file)
       // console.log('init template', this.templateActive)
       // console.log('init gambar', this.gambarActive)
@@ -380,22 +421,28 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         // this.fileGambar = file ?? null
         this.templateActive = template
         this.gambarActive = imgActive
-        this.fileGambar = val ? file ?? null : this.fileGambar
+        // this.fileGambar = val ? file ?? null : this.fileGambar
+        // this.urlGambar = val ? imgUrl ?? null : this.urlGambar
         this.writingMode = false
         this.dialogForm = {
-          anatomy: '',
+          anatomy: template === 'Body' ? '' : template,
           ket: '',
           x: 0,
           y: 0,
           ketebalan: 2,
-          panjang: 7,
-          width: 7,
-          height: 7,
+          panjang: 15,
+          width: 30,
+          height: 30,
           warna: '#000000',
-          penanda: 'circle'
+          penanda: 'circle',
+          // baru
+          angle: 0,
+          tinggi: 15,
+          fill: 'transparent'
         }
-        // this.shapes = []
-        this.shapes = val ? [] : this.shapes
+        // this.dialogForm.anatomy = template
+        this.shapes = []
+        // this.shapes = val ? [] : this.shapes
         this.selectStatusPsikologi = []
         this.formVital = {
           tingkatkesadaran: 0,
@@ -438,6 +485,25 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
         resolve()
       })
+    },
+
+    resetDialogForm(template, penanda) {
+      this.dialogForm = {
+        anatomy: template === 'Body' ? '' : template,
+        ket: '',
+        x: 0,
+        y: 0,
+        ketebalan: 2,
+        panjang: 15,
+        width: 30,
+        height: 30,
+        warna: '#000000',
+        penanda: penanda ?? 'circle',
+        // baru
+        angle: 0,
+        tinggi: 15,
+        fill: 'transparent'
+      }
     }
 
   }
