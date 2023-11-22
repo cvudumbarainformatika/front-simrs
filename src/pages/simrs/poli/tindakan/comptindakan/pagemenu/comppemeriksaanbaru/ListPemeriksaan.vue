@@ -191,6 +191,16 @@
                       >
                         kesadaran : <em>{{ item?.kesadaran??'-' }}</em>
                       </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Status Neurologis : <em>{{ item?.statusneurologis??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        Muakuloskeletal : <em>{{ item?.muakuloskeletal??'-' }}</em>
+                      </q-item-label>
                     </q-item-section>
                   </q-item>
                   <!-- KHUSUS PARU POL018-->
