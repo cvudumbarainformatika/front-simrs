@@ -6,7 +6,8 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
     diagnosas: [],
     selectDiagnosa: [],
     selectIntervensis: [],
-    diagnosa: ''
+    diagnosa: '',
+    loadingSave: false
     // form: {
     //   norm: '',
     //   noreg: '',
@@ -30,7 +31,8 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
       this.diagnosa = val
     },
 
-    simpanDiagnosadanIntervensi(pasien) {
+    async simpanDiagnosadanIntervensi(pasien) {
+      this.loadingSave = true
       let thumb = []
       if (this.selectDiagnosa.length) {
         thumb = this.selectDiagnosa.map(x => {
@@ -57,7 +59,13 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
         diagnosa: thumb,
         intervensi: intv
       }
-      console.log('saved', form)
+
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
+        console.log('simpan', resp)
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     initReset() {
