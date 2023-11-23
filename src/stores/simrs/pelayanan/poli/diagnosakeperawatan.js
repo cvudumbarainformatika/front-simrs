@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { usePengunjungPoliStore } from './pengunjung'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
   state: () => ({
@@ -63,8 +65,36 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
         console.log('simpan', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const arr = resp.data.result
+          // if (resp.data.result === 1) {
+          //   this.form.rs4 = this.form.keluhanutama
+          //   isi = this.form
+          // }
+          for (let i = 0; i < arr.length; i++) {
+            const isi = arr[i]
+            storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
+          }
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingSave = false
+        }
+        this.loadingSave = false
       } catch (error) {
         console.log(error)
+        notifErr(error)
+      }
+    },
+
+    async deleteDiagnosa(pasien, id) {
+      const payload = { id }
+      const resp = await api.post('v1/simrs/pelayanan/deletediagnosakeperawatan', payload)
+      console.log('delete', resp)
+      if (resp.status === 200) {
+        const storePasien = usePengunjungPoliStore()
+        storePasien.hapusDataDiagnosaKeperawatan(pasien, id)
+        notifSuccess(resp)
       }
     },
 

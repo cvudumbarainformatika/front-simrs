@@ -24,7 +24,7 @@
         </q-tabs>
       </div>
       <div
-        class="col-grow"
+        class="col full-height"
         style="overflow: hidden;"
       >
         <q-tab-panels
