@@ -24,6 +24,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
       this.loadingOrder = true
       this.form.noreg = pasien?.noreg
       this.form.kodepoli = pasien?.kodepoli
+      this.form.kodedokter = pasien?.kodedokter
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       try {
