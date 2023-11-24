@@ -35,6 +35,7 @@
         </div>
         <div class="col-7">
           <q-select
+            ref="refPoli"
             v-model="store.formKonsul.kdpoli_tujuan"
             label="Poli Tujuan"
             dense
@@ -46,6 +47,7 @@
             map-options
             use-input
             input-debounce="0"
+            :rules="[val=> (val !== null && val !== '') || 'Harap diisi']"
             :options="store.poli"
           />
         </div>
@@ -82,12 +84,14 @@ import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perenca
 import { ref } from 'vue'
 
 const store = usePerencanaanPoliStore()
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
 })
+const refPoli = ref(null)
 function seKonsul(val) {
   store.setFormKonsul('tgl_rencana_konsul', date.formatDate(Date.now(), 'YYYY-MM-DD'))
 }
@@ -111,6 +115,9 @@ function setTanggalKonsul(val) {
 
 const formRef = ref()
 function simpan() {
-  store.saveKonsul(props.pasien)
+  console.log('ref ', refPoli.value.validate())
+  if (refPoli.value.validate()) {
+    store.saveKonsul(props.pasien)
+  }
 }
 </script>

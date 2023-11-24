@@ -168,25 +168,28 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
       console.log('form kontrol', this.formKontrol)
-      try {
-        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
-        // console.log(resp)
-        if (resp.status === 200) {
-          const storePasien = usePengunjungPoliStore()
-          const isi = resp?.data?.result
-          if (isi.length) {
-            isi.forEach(anu => {
-              storePasien.injectDataPasien(pasien, anu, 'planning')
-            })
+
+      await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
+        .then(resp => {
+          if (resp?.data?.metadata?.code !== '200' || resp?.data?.metadata?.code !== 200) {
+            notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
           }
-          notifSuccess(resp)
+          console.log(resp.data)
           this.loadingSaveKontrol = false
-        }
-        this.loadingSaveKontrol = false
-      } catch (error) {
-        // console.log(error)
-        this.loadingSaveKontrol = false
-      }
+          if (resp?.status === 200) {
+            const storePasien = usePengunjungPoliStore()
+            const isi = resp?.data?.result
+            if (isi.length) {
+              isi.forEach(anu => {
+                storePasien.injectDataPasien(pasien, anu, 'planning')
+              })
+            }
+            notifSuccess(resp)
+          }
+        })
+        .catch(() => {
+          this.loadingSaveKontrol = false
+        })
     },
     async saveSelesai(pasien) {
       this.loadingSaveSelesai = true
