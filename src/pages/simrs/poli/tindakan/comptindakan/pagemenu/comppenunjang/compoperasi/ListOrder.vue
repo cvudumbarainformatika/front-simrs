@@ -64,12 +64,12 @@
                   top
                 >
                   <div class="row q-my-xs">
-                    <q-btn
+                    <!-- <q-btn
                       flat
                       round
                       size="sm"
                       icon="icon-mat-edit"
-                    />
+                    /> -->
                     <q-btn
                       flat
                       round
