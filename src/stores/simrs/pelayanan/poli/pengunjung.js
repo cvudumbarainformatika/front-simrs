@@ -168,6 +168,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.noreg = pasien?.noreg
       try {
         const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
+        console.log('terima', resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
