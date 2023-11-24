@@ -43,7 +43,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
             noreg: pasien?.noreg,
             kode: x?.kode,
             nama: x?.nama
-            details: 
+            // details:
           }
         })
       }
