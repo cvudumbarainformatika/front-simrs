@@ -5,7 +5,7 @@
   >
     <div
       v-if="!custom"
-      class="row"
+      class="row items-center"
     >
       <q-input
         v-model="q"
@@ -63,15 +63,25 @@
         style="min-width: 150px;"
         @update:model-value="gantiTxt"
       />
+
+      <div class="q-ml-sm">
+        {{ poli?.rs7 }}
+      </div>
     </div>
     <div v-else>
-      <q-btn
-        label="Kembali Ke Normal Filter"
-        icon="icon-mat-keyboard_arrow_left"
-        color="white"
-        flat
-        @click="kembaliNormal"
-      />
+      <div class="row items-center">
+        <q-btn
+          label="Kembali Ke Normal Filter"
+          icon="icon-mat-keyboard_arrow_left"
+          color="white"
+          flat
+          @click="kembaliNormal"
+        />
+
+        <div class="q-ml-sm">
+          {{ poli?.rs7 }}
+        </div>
+      </div>
     </div>
     <div>
       <q-btn
@@ -136,15 +146,19 @@ const txt = ref('Tanggal Rencana Kontrol')
 const txts = ref(['Tanggal Entri', 'Tanggal Rencana Kontrol'])
 const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal'])
 const periods = ref([
-  { value: 1, label: 'Hari ini' },
-  { value: 2, label: 'Minggu Ini' },
-  { value: 3, label: 'Bulan Ini' }
+  { value: 1, label: 'Hari ini' }
+  // { value: 2, label: 'Minggu Ini' },
+  // { value: 3, label: 'Bulan Ini' }
   // { value: 4, label: 'Tahun Ini' }
 ])
 
 const periode = ref(1)
 // const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
+  poli: {
+    type: Object,
+    default: null
+  },
   color: {
     type: String,
     default: 'bg-primary'

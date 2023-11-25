@@ -171,11 +171,13 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
 
       await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
         .then(resp => {
-          if (resp?.data?.metadata?.code !== '200' || resp?.data?.metadata?.code !== 200) {
-            notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
+          this.loadingSaveKontrol = false
+          if (resp?.data?.metadata?.code) {
+            if (resp?.data?.metadata?.code !== '200' || resp?.data?.metadata?.code !== 200) {
+              notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
+            }
           }
           console.log(resp.data)
-          this.loadingSaveKontrol = false
           if (resp?.status === 200) {
             const storePasien = usePengunjungPoliStore()
             const isi = resp?.data?.result

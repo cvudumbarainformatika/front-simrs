@@ -52,6 +52,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       this.loadingSave = true
       this.form.keterangan = this.form.diagnosakerja + ' ' + this.form.catatanpermintaan
       this.form.noreg = pasien?.noreg
+      this.form.kodedokter = pasien?.kodedokter
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       // console.log('form rad', this.form)
       try {
@@ -115,6 +116,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
         cito: 'Tidak',
         diagnosakerja: '',
         catatanpermintaan: '',
+        kodedokter: '',
         metodepenyampaianhasil: 'Penyerahan langsung (digital/cetak foto)',
         statusalergipasien: 'Tidak',
         statuskehamilan: 'Tidak'

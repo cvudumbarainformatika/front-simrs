@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
   state: () => ({
@@ -80,8 +81,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       // console.log(val)
     },
     filterItem(val) {
-      this.filteredItems = this.items.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))
-      // console.log(this.filteredItems)
+      this.filteredItems = this.items.filter(a => a?.nama?.toLowerCase().includes(val.toLowerCase()))
     },
     getData() {
       this.loading = true
@@ -92,8 +92,35 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
           .then(resp => {
             this.loading = false
             console.log('list surat kontrol ', resp.data)
-            this.items = resp?.data?.result?.list
-            this.filteredItems = this.items.length ? this.items.filter(a => a.nama.toLowerCase().includes(this.fNama.toLowerCase())) : []
+            // eslint-disable-next-line no-unused-vars
+            const apps = useAplikasiStore()
+            // eslint-disable-next-line no-unused-vars
+            const gigis = ['BDM', 'GND', 'GOR']
+            const res = resp?.data?.result?.list
+            const pol = apps?.user?.pegawai?.poli?.rs6 ?? false
+            // const pol = 'BDM'
+            if (pol) {
+              const gig = gigis.filter(a => a.toLowerCase().includes(pol.toLowerCase()))
+              if (gig.length) {
+                gigis.forEach(anu => {
+                  const anunya = res.filter(a => a.poliTujuan.toLowerCase().includes(anu.toLowerCase()))
+                  if (anunya.length) {
+                    anunya.forEach(b => {
+                      this.items.push(b)
+                    })
+                  }
+                })
+                if (this.items.length) {
+                  this.items.sort((a, b) => new Date(a.tglRencanaKontrol).getTime() - new Date(b.tglRencanaKontrol).getTime())
+                }
+              } else {
+                this.items = res.filter(a => a.poliTujuan.toLowerCase().includes(pol.toLowerCase()))
+              }
+            } else {
+              this.items = res
+            }
+
+            this.filteredItems = this.items.length ? this.items.filter(a => a?.nama?.toLowerCase().includes(this.fNama.toLowerCase())) : []
             // this.filteredItems = this.items.length ? this.items.filter(a => a.namaJnsKontrol === 'Surat Kontrol' && a.jnsPelayanan === 'Rawat Inap') : []
             if (resp?.data?.original?.code) {
               notifErrVue(resp?.data?.original?.message)
