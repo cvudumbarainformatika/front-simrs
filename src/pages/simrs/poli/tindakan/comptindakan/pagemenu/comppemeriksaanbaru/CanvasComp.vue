@@ -133,7 +133,7 @@ const canvasScale = ref(1)
 const SCALE_FACTOR = ref(1)
 
 const arr = computed(() => {
-  return store.shapes.filter(x => x.templategambar === store.fileGambar)
+  return store?.shapes?.filter(x => x.templategambar === store.fileGambar)
 })
 
 const store = usePemeriksaanFisik()
@@ -396,7 +396,7 @@ function onCanvas() {
     }
 
     const active = canvas.getActiveObject()
-    console.log('active', active)
+    // console.log('active', active)
     if ((active !== undefined || active !== 'undefined' || active === null) && objectSelected.value !== null) {
       store.setDialogForm('ketebalan', active?.strokeWidth)
       store.setDialogForm('warna', active?.stroke)
@@ -405,7 +405,7 @@ function onCanvas() {
     }
 
     if (objectSelected.value !== null) {
-      console.log('canvas mouse up', canvas)
+      // console.log('canvas mouse up', canvas)
       target.value = null
       return false
     }
@@ -470,6 +470,8 @@ function setBtns(canvas, obj) {
   // console.log('setBtns', obj)
   canvas.item(obj?.target?.ids).hasControls = true
   canvas.item(obj?.target?.ids).controls.mtr.offsetY = -20
+
+  canvas.renderAll()
 }
 
 function deselectObject() {
@@ -811,6 +813,8 @@ function drawall() {
         arr.value[i].tinggi
       )
     }
+
+    canvas.renderAll()
   }
   // }
 }
@@ -972,6 +976,8 @@ function onChangeImg() {
 }
 
 watch(() => arr.value, (newVal, oldVal) => {
+  // console.log('watch on shapes', newVal)
+  // console.log('watch on shapes-old', oldVal)
   if (newVal.length !== oldVal.length) {
     drawall()
   }

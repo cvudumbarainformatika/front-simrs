@@ -3,8 +3,8 @@
     ref="refDialog"
     persistent
     :maximized="true"
-    transition-show="slide-left"
     transition-hide="slide-right"
+    @before-hide="lihatSebelumTertutup"
   >
     <q-card
       v-if="pasien?.dokter !== '' || pasien?.dokter !== null"
@@ -42,7 +42,7 @@
             :pasien="pasien"
             :menus="menus"
             :menu="menu"
-            @click-menu="(val)=> menu = val"
+            @click-menu="(val)=> menuDiganti(val)"
             @history-pasien="historyPasien"
             @print-rekap="emits('printRekapBill')"
             @icare="getIcare"
@@ -80,30 +80,23 @@
                 Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
               </div>
             </div>
-            <Suspense>
-              <component
-                :is="menu.comp"
-                :key="pasien"
-                :pasien="pasien"
-              />
-              <!-- loading state -->
+            <Suspense
+              :key="menu.comp"
+              timeout="0"
+            >
+              <template #default>
+                <component
+                  :is="menu.comp"
+                  :key="pasien"
+                  :pasien="pasien"
+                />
+              </template>
               <template #fallback>
-                <div class="full-height column  flex-center bg-dark">
-                  loading
-                </div>
+                <AppLoader />
               </template>
             </Suspense>
           </q-page>
         </q-page-container>
-        <!-- <q-page-container
-          v-else
-        >
-          <q-page
-            class="contain bg-grey-3"
-          >
-            {{ pasien }}
-          </q-page>
-        </q-page-container> -->
       </q-layout>
     </q-card>
   </q-dialog>
@@ -113,14 +106,20 @@
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
+// import LoaderPage from './LoaderPage.vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
 import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef } from 'vue'
+import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 const store = usePengunjungPoliStore()
 const master = useMasterPemeriksaanFisik()
+const anamnesis = useAnamnesis()
 const fisik = usePemeriksaanFisik()
 const drawer = ref(false)
 const drawerRight = ref(false)
@@ -131,6 +130,7 @@ const props = defineProps({
   }
 })
 const emits = defineEmits(['printRekapBill'])
+
 const menus = ref([
   {
     name: 'AnamnesisPage',
@@ -227,6 +227,41 @@ function getIcare() {
       console.log('anu', resp?.response?.url)
       window.open(resp?.response?.url, '_blank')
     }
+  })
+}
+
+function lihatSebelumTertutup() {
+  console.log('ini sebelum halama di close')
+  anamnesis.initReset()
+}
+
+function menuDiganti(val) {
+  if (menu.value.name === 'PemeriksaanPage') {
+    if (fisik.edited) {
+      // console.log('ada yg blm diupdate')
+      harapSimpanPerubahanPemeriksaanFisik()
+    } else {
+      menu.value = val
+    }
+  } else {
+    menu.value = val
+  }
+}
+
+function harapSimpanPerubahanPemeriksaanFisik() {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Perubahan Belum disimpan , Harap disimpan terlebih dahulu',
+    // cancel: true,
+    persistent: true
+  }).onOk(() => {
+    console.log('OK')
+    menu.value = menus.value[1]
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
   })
 }
 </script>

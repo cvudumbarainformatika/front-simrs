@@ -267,10 +267,26 @@
                         flat
                         round
                         size="sm"
+                        icon="icon-mat-edit"
+                        color="yellow"
+                        @click="editForm(item)"
+                      >
+                        <q-tooltip>
+                          Edit Pemeriksaan ?
+                        </q-tooltip>
+                      </q-btn>
+                      <q-btn
+                        flat
+                        round
+                        size="sm"
                         icon="icon-mat-delete"
                         color="negative"
                         @click="hapusItem(item.id)"
-                      />
+                      >
+                        <q-tooltip>
+                          Hapus Pemeriksaan ?
+                        </q-tooltip>
+                      </q-btn>
                     </div>
                   </div>
                   <q-card
@@ -323,122 +339,6 @@
               </transition-group>
             </q-list>
           </q-card>
-
-          <!-- <template
-            v-for="(item, i) in pasien?.pemeriksaanfisik"
-            :key="i"
-          >
-            <q-card
-              flat
-              bordered
-              square
-            >
-              <div class="row q-pa-xs q-col-gutter-xs">
-                <div class="col-4">
-                  <comp-monitor
-                    :nilai="item?.rs4"
-                    :ciri="nadi(item?.rs4)"
-                  />
-                </div>
-                <div class="col-4">
-                  <comp-monitor
-                    :nilai="item?.pernapasan"
-                    label="RR"
-                    icon="icon-my-local_hospital"
-                  />
-                </div>
-                <div class="col-4">
-                  <comp-monitor
-                    :nilai="item?.suhutubuh"
-                    label="Suhu"
-                    icon="icon-my-standing-human-body-silhouette-svgrepo-com"
-                    celcius
-                    :ciri="suhu(item?.suhutubuh)"
-                  />
-                </div>
-                <div class="col-12">
-                  <comp-td
-                    :sistole="item?.sistole"
-                    :diastole="item?.diastole"
-                    label="TD sys/dia per mmHg"
-                    icon="icon-mat-recycling"
-                    :sys-obj="tekananDarah(item?.sistole)"
-                    :dias-obj="tekananDarahDias(item?.diastole)"
-                  />
-                </div>
-                <div class="col-12">
-                  <comp-psiko
-                    :psiko="item?.statuspsikologis"
-                    :sosek="item?.sosialekonomi"
-                    :spirit="item?.spiritual"
-                  />
-                </div>
-              </div>
-              <q-separator />
-              <div v-if="item.detailgambars.length">
-                <div class="text-weight-bold q-pa-xs text-right">
-                  Penandaan Anatomy
-                </div>
-                <q-separator />
-                <q-list
-                  dense
-                  separator
-                >
-                  <q-item
-                    v-for="(row, n) in item.detailgambars"
-                    :key="n"
-                  >
-                    <q-item-section
-                      avatar
-                      thumbnail
-                      class="q-pa-xs"
-                    >
-                      <q-avatar
-                        size="18px"
-                        color="orange"
-                      >
-                        {{ n + 1 }}
-                      </q-avatar>
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>{{ row.anatomy }}</q-item-label>
-                      <q-item-label
-                        caption
-                        style="margin-top:-3px"
-                      >
-                        Ket : {{ row.ket }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </div>
-              <div
-                v-else
-                class="text-center"
-              >
-                <div>Tidak Ada Kelainan Pada Bagian Tubuh</div>
-              </div>
-            </q-card>
-            <q-separator />
-            <div class="q-pa-xs flex items-center bg-grey-2">
-              <div />
-              <q-space />
-              <div class="q-gutter-sm">
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-delete"
-                  color="negative"
-                  @click="hapusItem(item.id)"
-                />
-              </div>
-            </div>
-            <q-separator
-              color="grey-10"
-              size="2px"
-            />
-          </template> -->
         </q-scroll-area>
         <div
           v-else
@@ -592,5 +492,9 @@ function hapusItem(id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function editForm(item) {
+  store.editForm(item, props?.pasien)
 }
 </script>

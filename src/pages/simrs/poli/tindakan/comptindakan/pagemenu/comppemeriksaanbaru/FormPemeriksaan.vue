@@ -18,7 +18,7 @@
       >
         <q-form
           ref="formRef"
-          class="row q-col-gutter-sm q-pa-lg"
+          class="row q-col-gutter-xs q-pa-lg"
           @submit.prevent.stop="onSubmit"
         >
           <div class="col-2">
@@ -336,8 +336,8 @@
                 class="text-right bg-yellow-3 q-pa-sm"
               >
                 <q-btn
-                  label="Simpan Pemeriksaan"
-                  color="primary"
+                  :label="store.edited? 'Simpan Perubahan':'Simpan Pemeriksaan'"
+                  :color="store.edited? 'dark':'primary'"
                   :loading="store.loadingform"
                   :disable="store.loadingform"
                   @click="onSubmit"
@@ -374,7 +374,7 @@ const opt = ref([
 const updateSelectionPsikologis = (val) => {
   console.log(val)
   store.setFormVital('statuspsikologis', val.join(', '))
-  console.log(store.formVital.statuspsikologis)
+  // console.log(store.formVital.statuspsikologis)
 }
 // const icons = ref([
 //   'icon-my-emoticon-excited-outline',

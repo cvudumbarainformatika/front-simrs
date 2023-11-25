@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
 import { notifErr, notifSuccess } from 'src/modules/utils'
+// import { notifSuccess } from 'src/modules/utils'
 
 export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
   state: () => ({
@@ -35,18 +36,6 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
 
     async simpanDiagnosadanIntervensi(pasien) {
       this.loadingSave = true
-      let thumb = []
-      if (this.selectDiagnosa.length) {
-        thumb = this.selectDiagnosa.map(x => {
-          return {
-            norm: pasien?.norm,
-            noreg: pasien?.noreg,
-            kode: x?.kode,
-            nama: x?.nama
-            // details:
-          }
-        })
-      }
 
       let intv = []
       if (this.selectIntervensis.length) {
@@ -57,29 +46,41 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
           }
         })
       }
+      const thumb = []
+      if (this.selectDiagnosa.length) {
+        for (let i = 0; i < this.selectDiagnosa.length; i++) {
+          const el = this.selectDiagnosa[i]
+          const frm = {
+            norm: pasien?.norm,
+            noreg: pasien?.noreg,
+            kode: el?.kode,
+            nama: el?.nama,
+            details: intv.filter(x => x.diagnosakeperawatan_kode === el?.kode) ?? []
+          }
+
+          thumb.push(frm)
+        }
+      }
 
       const form = {
-        diagnosa: thumb,
-        intervensi: intv
+        diagnosa: thumb
       }
+
+      console.log('diagnosa saved ', form)
 
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
         console.log('simpan', resp)
         if (resp.status === 200) {
-          // const storePasien = usePengunjungPoliStore()
-          // const arr = resp.data.result
-          // if (resp.data.result === 1) {
-          //   this.form.rs4 = this.form.keluhanutama
-          //   isi = this.form
-          // }
-          // for (let i = 0; i < arr.length; i++) {
-          //   const isi = arr[i]
-          //   storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
-          // }
-          // notifSuccess(resp)
-          // this.initReset()
-          // this.loadingSave = false
+          const storePasien = usePengunjungPoliStore()
+          const arr = resp.data.result
+          for (let i = 0; i < arr.length; i++) {
+            const isi = arr[i]
+            storePasien.injectDataPasien(pasien, isi, 'diagnosakeperawatan')
+          }
+          notifSuccess(resp)
+          this.initReset()
+          this.loadingSave = false
         }
         this.loadingSave = false
       } catch (error) {
