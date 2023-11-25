@@ -8,6 +8,7 @@
         :full="style.componentfull"
         :search="store.fNama"
         :custom="store.custom"
+        :poli="apps?.user?.pegawai?.poli"
         @fullscreen="style.setComponentFull"
         @refresh="store.getData"
         @set-periode="(val)=>store.setPeriodik(val)"
@@ -88,9 +89,13 @@ import HeaderComp from './comp/HeaderComp.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListSuratKontrol from './comp/ListSuratKontrol.vue'
 import FilterPage from './comp/FilterPage.vue'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const style = useStyledStore()
 const store = useSuratKontrolPoliStore()
+const apps = useAplikasiStore()
+
+console.log('app', apps?.user?.pegawai?.poli)
 
 store.getData()
 function setTanggal(val) {

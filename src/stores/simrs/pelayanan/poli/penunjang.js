@@ -163,6 +163,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       }
 
       this.form.kdsistembayar = pasien?.kodesistembayar
+      this.form.kodedokter = pasien?.kodedokter
       console.log('save', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaborat', this.form)
@@ -197,6 +198,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
+      this.form.kodedokter = pasien?.kodedokter
       const arr = []
 
       for (let i = 0; i < this.permintaans.length; i++) {

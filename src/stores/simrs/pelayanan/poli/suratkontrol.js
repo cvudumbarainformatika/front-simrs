@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
   state: () => ({
@@ -92,7 +93,15 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
           .then(resp => {
             this.loading = false
             console.log('list surat kontrol ', resp.data)
-            this.items = resp?.data?.result?.list
+            const apps = useAplikasiStore()
+            const res = resp?.data?.result?.list
+            const pol = apps?.user?.pegawai?.poli?.rs6 ?? false
+            if (pol) {
+              this.items = res.filter(a => a.poliTujuan.toLowerCase().includes(pol.toLowerCase()))
+            } else {
+              this.items = res
+            }
+
             this.filteredItems = this.items.length ? this.items.filter(a => a.nama.toLowerCase().includes(this.fNama.toLowerCase())) : []
             // this.filteredItems = this.items.length ? this.items.filter(a => a.namaJnsKontrol === 'Surat Kontrol' && a.jnsPelayanan === 'Rawat Inap') : []
             if (resp?.data?.original?.code) {

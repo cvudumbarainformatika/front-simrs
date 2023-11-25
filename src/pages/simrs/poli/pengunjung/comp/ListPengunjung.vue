@@ -18,7 +18,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              <span class="text-weight-bold">{{ item.nama }}</span> | <span class="text-primary text-weight-bold">{{ item.norm }}</span>
+              <span class="text-weight-bold">{{ item.nama }}</span> | <span class="text-primary text-weight-bold">{{ item.norm }}</span> <span v-if="item?.noka"> | </span> <span class="text-cyan text-weight-bold">{{ item?.noka ?? '-' }}</span>
             </q-item-label>
             <q-item-label>
               <span class="text-weight-bold">{{ item.noreg }} </span> | Penjamin : <span class="text-weight-bold"> {{ item.sistembayar }}</span>
@@ -29,9 +29,9 @@
             <q-item-label caption>
               USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
             </q-item-label>
-            <!-- <q-item-label>
-              penjamin : <span class="text-weight-bold text-negative">{{ item?.sistembayar }}</span>
-            </q-item-label> -->
+            <q-item-label>
+              <span class="text-grey">alamat :</span> {{ item?.alamat }}
+            </q-item-label>
             <q-item-label
               caption
             >
