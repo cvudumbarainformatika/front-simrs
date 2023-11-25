@@ -401,6 +401,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('init master', master?.items)
 
       return new Promise((resolve, reject) => {
+        this.edited = false
         this.dialogTemplate = false
         // this.templateActive = 'Body'
         // this.gambarActive = 0
@@ -497,8 +498,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     editForm(item, pasien) {
       console.log('edit form', item)
-      this.edited = true
       this.initReset(false, pasien)
+      this.edited = true
       this.formVital = {
         id: item?.id,
         tingkatkesadaran: item?.tingkatkesadaran,
@@ -527,7 +528,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         muakuloskeletal: item?.muakuloskeletal
       }
 
-      const master = useMasterPemeriksaanFisik()
+      // const master = useMasterPemeriksaanFisik()
       this.selectStatusPsikologi = item?.statuspsikologis?.split(', ')
       this.shapes = []
       const arr = item?.detailgambars.filter(x => x.templategambar === this.fileGambar)
@@ -536,11 +537,15 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         el.ids = [i]
       }
       this.shapes = arr
-      this.fileGambar = item?.detailgambars[0]?.templategambar ?? master?.items[0]?.gambars[0]?.image
-      this.templateActive = item?.detailgambars[0]?.templatemenu ?? master?.items[0]?.nama
-      this.gambarActive = parseInt(item?.detailgambars[0]?.templateindex) ?? 0
+      this.fileGambar = item?.detailgambars[0]?.templategambar ?? this.fileGambar
+      this.templateActive = item?.detailgambars[0]?.templatemenu ?? this.templateActive
+      this.gambarActive = parseInt(item?.detailgambars[0]?.templateindex) ?? this.gambarActive
 
       this.mata = item?.pemeriksaankhususmata
+    },
+
+    setNotEdit() {
+      this.edited = false
     }
 
   }
