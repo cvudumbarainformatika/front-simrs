@@ -101,7 +101,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       { value: 4, label: 'Gelisah atau bingung' },
       { value: 5, label: 'Acute Confusional States' }
     ],
-    loadingform: false
+    loadingform: false,
+    edited: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -280,7 +281,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-        // console.log('save', resp)
+        console.log('save', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp.data.result
@@ -288,8 +289,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
           notifSuccess(resp)
           this.initReset(false, pasien)
-          // this.resetShapes()
           this.loadingform = false
+          this.edited = false
           return new Promise((resolve, reject) => {
             resolve()
           })
@@ -309,6 +310,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataPemeriksaanfisik(pasien, id)
+          this.initReset(false, pasien)
           notifSuccess(resp)
         }
       } catch (error) {
@@ -367,26 +369,6 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         this.loadingform = false
       }
     },
-
-    // editForm(val) {
-    //   this.formVital = {
-    //     tingkatkesadaran: val.tingkatkesadaran,
-    //     denyutjantung: val.rs4, // string
-    //     pernapasan: val.pernapasan, // string
-    //     // Tekanan darah
-    //     sistole: val.sistole, // numerik per mmHg
-    //     diastole: val.diastole, // numerik per mmHg
-    //     suhutubuh: val.suhutubuh, // numerik derajat celcius
-    //     // status
-    //     statuspsikologis: val.statuspsikologis,
-    //     sosialekonomi: val.sosialekonomi,
-    //     spiritual: val.spiritual
-    //   }
-    //   this.shapes = val.detailgambars
-    //   this.fileGambar = this.shapes[0]?.templategambar
-    //   console.log('form', this.form)
-    //   console.log('xxx', val)
-    // },
 
     initReset(val, pasien) {
       // ini load template gambar pertama
@@ -511,6 +493,54 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         tinggi: 15,
         fill: 'transparent'
       }
+    },
+
+    editForm(item, pasien) {
+      console.log('edit form', item)
+      this.edited = true
+      this.initReset(false, pasien)
+      this.formVital = {
+        id: item?.id,
+        tingkatkesadaran: item?.tingkatkesadaran,
+        denyutjantung: item?.rs4, // string
+        pernapasan: item?.pernapasan, // string
+        sistole: item?.sistole, // numerik per mmHg
+        diastole: item?.diastole, // numerik per mmHg
+        suhutubuh: item?.suhutubuh, // numerik derajat celcius
+        statuspsikologis: item?.statuspsikologis,
+        sosialekonomi: item?.sosialekonomi,
+        spiritual: item?.spiritual,
+        skornyeri: item?.skornyeri,
+        keteranganskornyeri: item?.keteranganskornyeri,
+        kesadaran: item?.kesadaran,
+        kesadarane: item?.kesadarane,
+        kesadaranm: item?.kesadaranm,
+        kesadaranv: item?.kesadaranv,
+        inspeksi: item?.inspeksi,
+        palpasi: item?.palpasi,
+        perkusidadakanan: item?.perkusidadakanan,
+        perkusidadakiri: item?.perkusidadakiri,
+        auskultasisuaradasar: item?.auskultasisuaradasar,
+        auskultasisuaratambahankanan: item?.auskultasisuaratambahankanan,
+        auskultasisuaratambahankiri: item?.auskultasisuaratambahankiri,
+        statusneurologis: item?.statusneurologis,
+        muakuloskeletal: item?.muakuloskeletal
+      }
+
+      const master = useMasterPemeriksaanFisik()
+      this.selectStatusPsikologi = item?.statuspsikologis?.split(', ')
+      this.shapes = []
+      const arr = item?.detailgambars.filter(x => x.templategambar === this.fileGambar)
+      for (let i = 0; i < arr.length; i++) {
+        const el = arr[i]
+        el.ids = [i]
+      }
+      this.shapes = arr
+      this.fileGambar = item?.detailgambars[0]?.templategambar ?? master?.items[0]?.gambars[0]?.image
+      this.templateActive = item?.detailgambars[0]?.templatemenu ?? master?.items[0]?.nama
+      this.gambarActive = parseInt(item?.detailgambars[0]?.templateindex) ?? 0
+
+      this.mata = item?.pemeriksaankhususmata
     }
 
   }

@@ -65,7 +65,7 @@ import ListPemeriksaan from './comppemeriksaanbaru/ListPemeriksaan.vue'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
-import { computed } from 'vue'
+import { computed, onBeforeUnmount } from 'vue'
 // import { ref } from 'vue'
 
 const { enter, leave } = useSlideFromLeft()
@@ -80,5 +80,9 @@ const props = defineProps({
 
 const filterShapes = computed(() => {
   return store.shapes.filter(x => x.templategambar === store.fileGambar)
+})
+
+onBeforeUnmount(() => {
+  console.log('pemeriksaan fisik ditutup')
 })
 </script>

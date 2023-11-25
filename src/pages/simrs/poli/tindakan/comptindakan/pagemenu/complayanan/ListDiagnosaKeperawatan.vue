@@ -4,7 +4,10 @@
       List Diagnosa Keperawatan Tersimpan
     </div>
     <div class="col full-height">
-      <q-scroll-area style="height:calc(100% - 1px)">
+      <q-scroll-area
+        v-if="props?.pasien?.diagnosakeperawatan?.length"
+        style="height:calc(100% - 1px)"
+      >
         <q-list
           bordered
           separator
@@ -42,6 +45,13 @@
           </q-item>
         </q-list>
       </q-scroll-area>
+
+      <div
+        v-else
+        class="column full-height flex-center"
+      >
+        DATA TERSIMPAN BELUM ADA
+      </div>
     </div>
   </div>
 </template>
