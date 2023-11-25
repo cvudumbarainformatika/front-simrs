@@ -239,7 +239,7 @@ function menuDiganti(val) {
   if (menu.value.name === 'PemeriksaanPage') {
     if (fisik.edited) {
       // console.log('ada yg blm diupdate')
-      harapSimpanPerubahanPemeriksaanFisik()
+      harapSimpanPerubahanPemeriksaanFisik(val)
     } else {
       menu.value = val
     }
@@ -248,18 +248,21 @@ function menuDiganti(val) {
   }
 }
 
-function harapSimpanPerubahanPemeriksaanFisik() {
+function harapSimpanPerubahanPemeriksaanFisik(val) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
     message: 'Perubahan Belum disimpan , Harap disimpan terlebih dahulu',
-    // cancel: true,
+    cancel: true,
     persistent: true
   }).onOk(() => {
     console.log('OK')
     menu.value = menus.value[1]
   }).onCancel(() => {
     // console.log('Cancel')
+    fisik.initReset(false, props?.pasien)
+    // fisik.setNotEdit()
+    menu.value = val
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
