@@ -15,18 +15,18 @@
       >
         <q-item-section>
           <q-item-label>
-            <span class="text-weight-bold">{{ item.nama }}</span> | <span class="text-primary ">{{ item.noKartu }}</span>
+            <span class="text-weight-bold">{{ item?.nama }}</span> | <span class="text-primary ">{{ item?.noKartu }}</span>
           </q-item-label>
           <q-item-label>
-            <span class="">{{ item.noSuratKontrol }}</span> | <span class="text-secondary ">{{ item.namaJnsKontrol }}</span>
+            <span class="">{{ item?.noSuratKontrol }}</span> | <span class="text-secondary ">{{ item?.namaJnsKontrol }}</span>
           </q-item-label>
         </q-item-section>
         <q-item-section>
           <q-item-label>
-            <span class="text-grey">{{ item.jnsPelayanan }}</span> | <span class="text-primary ">{{ item.namaPoliTujuan }}</span>
+            <span class="text-grey">{{ item?.jnsPelayanan }}</span> | <span class="text-primary ">{{ item?.namaPoliTujuan }}</span>
           </q-item-label>
           <q-item-label>
-            <span class="">{{ dateFullFormat( item.tglRencanaKontrol) }}</span> | <span class="text-cyan ">{{ item.namaDokter }}</span>
+            <span class="">{{ dateFullFormat( item?.tglRencanaKontrol) }}</span> | <span class="text-cyan ">{{ item?.namaDokter }}</span>
           </q-item-label>
         </q-item-section>
       </q-item>
