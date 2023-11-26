@@ -575,9 +575,9 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.templateActive = item?.detailgambars[0]?.templatemenu ?? this.templateActive
       this.gambarActive = parseInt(item?.detailgambars[0]?.templateindex) ?? this.gambarActive
 
-      this.mata = item?.pemeriksaankhususmata
+      // this.mata = item?.pemeriksaankhususmata
       const matasx = item?.pemeriksaankhususmata
-      if (matasx.length) {
+      if (matasx.length && arr.length) {
         matasx.map(x => {
           const obj = {
             rs1: x?.rs1,
@@ -598,6 +598,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         })
 
         this.mata = matasx
+      } else {
+        this.mata = []
       }
     },
 
