@@ -171,6 +171,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
       if (idx > -1) { // only splice array when item is found
         this.shapes.splice(idx, 1) // 2nd parameter means remove one item only
+        this.mata.splice(idx, 1)
       }
     },
 
@@ -191,6 +192,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           this.deleteShapes.push(this.shapes[idx]?.id)
         }
         a.splice(a.findIndex(e => e.x === x && e.y === y), 1)
+        this.mata?.splice(a.findIndex(e => e.x === x && e.y === y), 1)
         console.log('store delete object', a)
         resolve()
       })
@@ -601,6 +603,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       } else {
         this.mata = []
       }
+
+      console.log('edit mata', this.mata)
     },
 
     setNotEdit() {
