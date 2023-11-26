@@ -91,6 +91,12 @@
       <div class="col-12">
         <q-separator class="q-my-md" />
       </div>
+      <!-- <div
+        v-if="store.searchtindakan==='T00204'"
+        class="col-12"
+      >
+        {{ store.searchtindakan }}
+      </div> -->
       <div class="col-12 text-right">
         <q-btn
           label="Simpan Tindakan"
@@ -121,6 +127,10 @@ const props = defineProps({
     default: null
   }
 })
+
+// const jikaEcg = computed(() => {
+//   return store.searchtindakan
+// })
 
 // function resetValidasi() {
 //   formmRef.value?.resetValidation()

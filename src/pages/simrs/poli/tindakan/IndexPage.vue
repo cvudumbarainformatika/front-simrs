@@ -232,7 +232,7 @@ function getIcare() {
 }
 
 function lihatSebelumTertutup() {
-  console.log('ini sebelum halama di close')
+  // console.log('ini sebelum halama di close')
   anamnesis.initReset()
 }
 

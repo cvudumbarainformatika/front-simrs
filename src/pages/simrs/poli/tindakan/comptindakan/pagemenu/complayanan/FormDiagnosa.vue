@@ -5,8 +5,32 @@
       <div class="f-10 text-weight-light">
         <em>form Diagnosa sekaligus pensimulasian INACBG </em>
       </div>
+      <q-btn
+        color="primary"
+        class="q-pa-none"
+        flat
+        dense
+      >
+        {{ pasien?.memodiagnosa ?? 'MEMO DOKTER' }}
+        <q-menu
+          style="width: 400px;"
+        >
+          <div class="q-pa-sm">
+            <q-form @submit="gantiMemo">
+              <q-input
+                v-model="memoDokter"
+                label="Masukkan Memo Dokter untuk diagnosa"
+                outlined
+                standout="bg-yellow-3"
+                dense
+                :rules="[val => !!val || 'Harap diisi']"
+              />
+            </q-form>
+          </div>
+        </q-menu>
+      </q-btn>
     </div>
-    <q-separator />
+    <q-separator style="margin-top:-10px" />
     <q-form
       ref="formRef"
       class="row q-pa-md q-col-gutter-xs"
@@ -165,6 +189,7 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -176,7 +201,10 @@ const props = defineProps({
 
 const formRef = ref(null)
 const store = useLayananPoli()
+const pengunjung = usePengunjungPoliStore()
 const emits = defineEmits(['savePemeriksaan'])
+
+const memoDokter = ref('')
 
 const $q = useQuasar()
 
@@ -283,6 +311,16 @@ function diagnosaUtamaDiubah(val) {
 
     // store.setFormDianosa('tipediagnosa', '')
   }
+}
+
+function gantiMemo() {
+  // console.log('okkk')
+  const form = {
+    memo: memoDokter.value,
+    noreg: props.pasien?.noreg
+  }
+
+  pengunjung.gantiMemo(form, props.pasien)
 }
 
 watch(() => props.pasien?.diagnosa, (obj) => {

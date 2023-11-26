@@ -125,6 +125,25 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         this.loadingSaveGantiDpjp = false
       }
     },
+    gantiMemo(form, pasien) {
+      // console.log(form)
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/pelayanan/gantimemo', form)
+          .then(resp => {
+            console.log(resp)
+            if (resp.status === 200) {
+              const findPasien = this.items.filter(x => x === pasien)
+              if (findPasien.length) {
+                const data = findPasien[0]
+                data.memodiagnosa = resp?.data?.result?.diagnosa
+              }
+            }
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+          })
+      })
+    },
 
     // inject pasien
     async setLayananSelesai(pasien) {
