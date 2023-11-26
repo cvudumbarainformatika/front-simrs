@@ -446,6 +446,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         // this.dialogForm.anatomy = template
         this.shapes = []
+        this.mata = []
+        this.paru = []
         // this.shapes = val ? [] : this.shapes
         this.selectStatusPsikologi = []
         this.formVital = {
@@ -574,6 +576,29 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.gambarActive = parseInt(item?.detailgambars[0]?.templateindex) ?? this.gambarActive
 
       this.mata = item?.pemeriksaankhususmata
+      const matasx = item?.pemeriksaankhususmata
+      if (matasx.length) {
+        matasx.map(x => {
+          const obj = {
+            rs1: x?.rs1,
+            rs2: x?.rs2,
+            vodawal: x.rs4,
+            vodrefraksi: x?.rs5,
+            vodakhir: x?.rs6,
+            vosawal: x?.rs7,
+            vosrefraksi: x?.rs8,
+            vosakhir: x?.rs9,
+            tod: x?.rs10,
+            tos: x?.rs11,
+            fondosod: x?.rs12,
+            fondosos: x?.rs13
+          }
+
+          return obj
+        })
+
+        this.mata = matasx
+      }
     },
 
     setNotEdit() {
