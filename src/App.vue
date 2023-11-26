@@ -19,7 +19,7 @@ const $q = useQuasar()
 $q.dark.set(false)
 $q.iconSet.set(customIcons)
 document.body.setAttribute(['data-theme'], 'custom')
-
+// console.log('document', document)
 // websocket
 // lab
 const labLuar = usePermintaanLuarLaboratTable()
