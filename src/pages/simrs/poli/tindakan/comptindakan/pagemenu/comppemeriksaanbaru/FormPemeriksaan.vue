@@ -90,6 +90,52 @@
               @update:model-value="setNumber($event,'suhutubuh')"
             />
           </div>
+          <div class="col-4">
+            <q-input
+              v-model="store.formVital.tinggibadan"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Tinggi Badan /cm"
+              :rules="[
+                val => !!val || 'Hrp diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+              @update:model-value="setNumber($event,'tinggibadan')"
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="store.formVital.beratbadan"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="Berat Badan /kg"
+              :rules="[
+                val => !!val || 'Hrp diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+              @update:model-value="setNumber($event,'beratbadan')"
+            />
+          </div>
+          <div class="col-4">
+            <q-input
+              v-model="store.formVital.vas"
+              dense
+              standout="bg-yellow-3 text-black"
+              outlined
+              label="VAS (Max 10)"
+              :rules="[
+                val => val <= 10 || 'Max 10',
+                val => !!val || 'Hrp diisi',
+                val => !isNaN(val) || 'Hrs Nomor',
+              ]"
+              hide-bottom-space
+              @update:model-value="setNumber($event,'vas')"
+            />
+          </div>
           <div class="col-12">
             <q-select
               v-model="store.formVital.tingkatkesadaran"
@@ -327,21 +373,37 @@
               <div
                 v-else
                 class="column flex-center items-center"
-                style="height: calc(100% - 52px);"
+                style="height: calc(100% - 48px);"
               >
                 Data Belum Ada
               </div>
               <div
                 v-if="!canvasFull"
-                class="text-right bg-yellow-3 q-pa-sm"
+                class="row justify-between bg-yellow-3 q-pa-sm"
               >
-                <q-btn
-                  :label="store.edited? 'Simpan Perubahan':'Simpan Pemeriksaan'"
-                  :color="store.edited? 'dark':'primary'"
-                  :loading="store.loadingform"
-                  :disable="store.loadingform"
-                  @click="onSubmit"
-                />
+                <div>
+                  <q-btn
+                    v-if="store.edited"
+                    :label="store.edited? 'Batal':'Simpan Pemeriksaan'"
+                    :color="store.edited? 'negative':'primary'"
+                    :loading="store.loadingform"
+                    :disable="store.loadingform"
+                    dense
+                    class="q-px-md"
+                    @click="store.setNotEdit"
+                  />
+                </div>
+                <div>
+                  <q-btn
+                    :label="store.edited? 'Simpan Perubahan':'Simpan Pemeriksaan'"
+                    :color="store.edited? 'dark':'primary'"
+                    :loading="store.loadingform"
+                    :disable="store.loadingform"
+                    dense
+                    class="q-px-md"
+                    @click="onSubmit"
+                  />
+                </div>
               </div>
             </q-card>
           </div>

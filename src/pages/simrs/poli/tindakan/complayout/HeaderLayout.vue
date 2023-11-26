@@ -15,7 +15,7 @@
         >
           <div class="row items-center no-wrap q-gutter-sm text-white">
             <q-avatar size="30px">
-              <img :src="getImage(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
+              <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
             </q-avatar>
             <div class="column f-12">
               <div>
@@ -27,7 +27,7 @@
             <div class="row no-wrap q-pa-md">
               <div class="column items-center">
                 <q-avatar size="72px">
-                  <img :src="getImage(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
+                  <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
                 </q-avatar>
 
                 <div class="f12 q-mt-md q-mb-xs">
@@ -127,7 +127,7 @@
       </div>
     </q-toolbar-title>
 
-    <div>
+    <div v-if="pasien?.dokter !== '' ">
       <q-btn
         v-if="pasien?.status==='' || pasien?.status==='2'"
         label="selesaikan layanan"
@@ -154,17 +154,17 @@
         outline
         disable
       />
-      <q-btn
-        v-close-popup
-        dense
-        flat
-        icon="icon-mat-close"
-      >
-        <q-tooltip class="bg-white text-primary">
-          Close
-        </q-tooltip>
-      </q-btn>
     </div>
+    <q-btn
+      v-close-popup
+      dense
+      flat
+      icon="icon-mat-close"
+    >
+      <q-tooltip class="bg-white text-primary">
+        Close
+      </q-tooltip>
+    </q-btn>
   </q-toolbar>
 </template>
 
@@ -212,6 +212,15 @@ function gantiDpjp() {
 
 function getImage(kelamin, row) {
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined) {
+    return kelamin === 'Perempuan'
+      ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
+      : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
+  } else {
+    return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+  }
+}
+function getImageDokter(kelamin, row) {
+  if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href

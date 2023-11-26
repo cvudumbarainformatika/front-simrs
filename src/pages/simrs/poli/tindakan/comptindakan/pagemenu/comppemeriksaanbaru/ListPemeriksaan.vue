@@ -161,6 +161,68 @@
                     dark
                     inset
                   />
+
+                  <q-item>
+                    <q-item-section>
+                      <div class="row full-width flex-center">
+                        <q-btn
+                          outline
+                          style="color: goldenrod;"
+                          no-caps
+                          dense
+                          size="sm"
+                          class="q-px-sm"
+                        >
+                          <div class="column">
+                            <div class="f-14">
+                              {{ item?.tinggibadan }} cm
+                            </div>
+                            <div class="f-10">
+                              Tinggi Badan
+                            </div>
+                          </div>
+                        </q-btn>
+                        <q-btn
+                          outline
+                          style="color: goldenrod;"
+                          no-caps
+                          dense
+                          size="sm"
+                          class="q-px-sm"
+                        >
+                          <div class="column">
+                            <div class="f-14">
+                              {{ item?.beratbadan }} kg
+                            </div>
+                            <div class="f-10">
+                              Berat Badan
+                            </div>
+                          </div>
+                        </q-btn>
+                        <q-btn
+                          outline
+                          style="color: goldenrod;"
+                          no-caps
+                          dense
+                          size="sm"
+                          class="q-px-sm"
+                        >
+                          <div class="column">
+                            <div class="f-14">
+                              {{ item?.vas }}
+                            </div>
+                            <div class="f-10">
+                              VAS
+                            </div>
+                          </div>
+                        </q-btn>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                  <q-separator
+                    dark
+                    inset
+                  />
                   <q-item
                     class="q-pa-xs list-move"
                     dark
@@ -498,3 +560,14 @@ function editForm(item) {
   store.editForm(item, props?.pasien)
 }
 </script>
+
+<style lang="scss" scoped>
+.q-item {
+  .q-item__section {
+      .q-item__label {
+      // font-size: 10px;
+    }
+  }
+}
+
+</style>

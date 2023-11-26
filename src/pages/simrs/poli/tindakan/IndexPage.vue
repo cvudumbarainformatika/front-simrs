@@ -71,22 +71,23 @@
           <q-page
             class="contain bg-grey-3"
           >
-            <div
-              v-if="pasien?.dokter===''"
-              class="column full-height flex-center absolute-center z-top full-width"
-              style="background-color: black; opacity: .9;"
-            >
-              <div class="text-white">
-                Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
-              </div>
-            </div>
             <Suspense
               :key="menu.comp"
               timeout="0"
             >
               <template #default>
+                <div
+                  v-if="pasien?.dokter==='' || pasien?.dokter === null"
+                  class="column full-height flex-center absolute-center z-top full-width"
+                  style="background-color: black; opacity: .9;"
+                >
+                  <div class="text-white">
+                    Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
+                  </div>
+                </div>
                 <component
                   :is="menu.comp"
+                  v-else
                   :key="pasien"
                   :pasien="pasien"
                 />

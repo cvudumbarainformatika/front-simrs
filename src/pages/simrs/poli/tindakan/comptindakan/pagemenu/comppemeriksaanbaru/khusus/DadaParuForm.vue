@@ -233,4 +233,10 @@ function setAuskultasiTambahanKiri() {
   store.setFormVital('auskultasisuaratambahankiri', txt)
 }
 
+// const updateSelectionPsikologis = (val) => {
+//   console.log(val)
+//   store.setFormVital('statuspsikologis', val.join(', '))
+//   // console.log(store.formVital.statuspsikologis)
+// }
+
 </script>

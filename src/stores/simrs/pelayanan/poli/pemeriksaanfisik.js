@@ -84,7 +84,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
       // barulagi
       statusneurologis: '',
-      muakuloskeletal: ''
+      muakuloskeletal: '',
+      // barulagi
+      tinggibadan: 0.0,
+      beratbadan: 0.0,
+      vas: 0
     },
     inspeksis: [],
     palpasis: [],
@@ -102,7 +106,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       { value: 5, label: 'Acute Confusional States' }
     ],
     loadingform: false,
-    edited: false
+    edited: false,
+    deleteShapes: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -160,6 +165,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     deleteObjShapes(idx) {
       // const index = this.shapes.indexOf(idx);
+      if (this.shapes[idx]?.id) {
+        this.deleteShapes.push(this.shapes[idx]?.id)
+      }
+
       if (idx > -1) { // only splice array when item is found
         this.shapes.splice(idx, 1) // 2nd parameter means remove one item only
       }
@@ -176,7 +185,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     deleteObjectOnShapes(x, y) {
       return new Promise((resolve, reject) => {
         const a = this.shapes
+        const idx = a.findIndex(e => e.x === x && e.y === y)
         // b.forEach(f => a.splice(a.findIndex(e => e.templategambar === f.templategambar), 1))
+        if (this.shapes[idx]?.id) {
+          this.deleteShapes.push(this.shapes[idx]?.id)
+        }
         a.splice(a.findIndex(e => e.x === x && e.y === y), 1)
         console.log('store delete object', a)
         resolve()
@@ -278,6 +291,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       if (this.paru.length) {
         form.paru = this.paru
       }
+
+      form.deleteDetails = this.deleteShapes
       // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
@@ -400,6 +415,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       // console.log('init gambar', this.gambarActive)
       // console.log('init master', master?.items)
 
+      this.deleteShapes = []
+
       return new Promise((resolve, reject) => {
         this.edited = false
         this.dialogTemplate = false
@@ -462,7 +479,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           auskultasisuaratambahankiri: '',
           // barulagi
           statusneurologis: '',
-          muakuloskeletal: ''
+          muakuloskeletal: '',
+          // barulagi
+          tinggibadan: 0.0,
+          beratbadan: 0.0,
+          vas: 0
         }
 
         this.inspeksis = []
@@ -525,11 +546,22 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         auskultasisuaratambahankanan: item?.auskultasisuaratambahankanan,
         auskultasisuaratambahankiri: item?.auskultasisuaratambahankiri,
         statusneurologis: item?.statusneurologis,
-        muakuloskeletal: item?.muakuloskeletal
+        muakuloskeletal: item?.muakuloskeletal,
+        // barulagi
+        tinggibadan: item?.tinggibadan,
+        beratbadan: item?.beratbadan,
+        vas: item?.vas
       }
 
       // const master = useMasterPemeriksaanFisik()
-      this.selectStatusPsikologi = item?.statuspsikologis?.split(', ')
+      this.selectStatusPsikologi = item?.statuspsikologis ? item?.statuspsikologis?.split(', ') : []
+      this.inspeksis = item?.inspeksi ? item?.inspeksi?.split('||') : []
+      this.palpasis = item?.palpasis ? item?.palpasi?.split('||') : []
+      this.perkusidadakanans = item?.perkusidadakanan ? item?.perkusidadakanan?.split('||') : []
+      this.perkusidadakiris = item?.perkusidadakiri ? item?.perkusidadakiri?.split('||') : []
+      this.auskultasisuaradasars = item?.auskultasisuaradasar ? item?.auskultasisuaradasar?.split('||') : []
+      this.auskultasisuaratambahankanans = item?.auskultasisuaratambahankanan ? item?.auskultasisuaratambahankanan?.split('||') : []
+      this.auskultasisuaratambahankiris = item?.auskultasisuaratambahankiri ? item?.auskultasisuaratambahankiri?.split('||') : []
       this.shapes = []
       const arr = item?.detailgambars.filter(x => x.templategambar === this.fileGambar)
       for (let i = 0; i < arr.length; i++) {
