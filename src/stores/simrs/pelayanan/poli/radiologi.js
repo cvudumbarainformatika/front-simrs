@@ -53,6 +53,8 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       this.form.keterangan = this.form.diagnosakerja + ' ' + this.form.catatanpermintaan
       this.form.noreg = pasien?.noreg
       this.form.kodedokter = pasien?.kodedokter
+      this.form.kodesistembayar = pasien?.kodesistembayar
+      this.form.kodepoli = pasien?.kodepoli
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       // console.log('form rad', this.form)
       try {

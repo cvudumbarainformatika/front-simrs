@@ -113,6 +113,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const form = this.formdiagnosa
       form.noreg = pasien?.noreg
       form.norm = pasien?.norm
+      form.kodedokter = pasien?.kodedokter
       form.ruangan = pasien?.kodepoli
       console.log('sdiag', form)
 
@@ -190,6 +191,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       form.noreg = pasien.noreg
       form.norm = pasien.norm
       form.kdpoli = pasien?.kodepoli
+      form.kodedokter = pasien?.kodedokter
       form.kdsistembayar = pasien?.kodesistembayar
       form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
       try {
