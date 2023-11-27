@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
   state: () => ({
@@ -47,6 +48,7 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
         api.post('/v1/simrs/pendaftaran/hapuspasien', form)
           .then(resp => {
             this.loadingH = false
+            notifSuccess(resp)
             this.getLists()
             resolve(resp)
           })
