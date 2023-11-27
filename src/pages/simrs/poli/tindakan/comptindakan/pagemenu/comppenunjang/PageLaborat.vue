@@ -24,9 +24,9 @@
   </div>
 </template>
 <script setup>
-import FormOrder from './complaborat/FormOrder.vue'
+import FormOrder from './complaboratbaru/FormOrder.vue'
 // import DaftarPemeriksaan from './complaborat/DaftarPemeriksaan.vue'
-import ListPemeriksaans from './complaborat/ListPemeriksaans.vue'
+import ListPemeriksaans from './complaboratbaru/ListPemeriksaans.vue'
 // import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 
 // const store = usePenunjangPoli()
