@@ -47,6 +47,7 @@
                 dense
                 size="sm"
                 style="top: 0; right: 12px; transform: translateY(-100%);"
+                :loading="store.loadingHapus"
                 @click="hapusItem(item)"
               />
               <div
