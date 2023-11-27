@@ -271,7 +271,11 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Update Info Rujukan ke Rs lain Gagal')
+            if (resp?.data?.metadata?.code) {
+              notifErrVue(resp?.data?.metadata?.message)
+            } else {
+              notifErrVue('Rujukan ke Rs lain Gagal')
+            }
           }
           this.loadingSave = false
         }

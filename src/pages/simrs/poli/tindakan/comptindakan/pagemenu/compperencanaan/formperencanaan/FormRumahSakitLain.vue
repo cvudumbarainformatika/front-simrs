@@ -165,10 +165,12 @@
       </div>
       <div class="col-12">
         <q-input
+          ref="refCatat"
           v-model="store.formRsLain.catatan"
           label="Catatan"
           dense
           outlined
+          :rules="[val => val.length > 5 || 'Minimal 5 karakter']"
           standout="bg-yellow-3"
         />
       </div>
@@ -214,6 +216,7 @@ const optionTipeRujukan = ref([
   { value: '0', label: 'Penuh' },
   { value: '1', label: 'Partial' }
 ])
+const refCatat = ref(null)
 const optionsRs = ref([])
 const optionsPoli = ref([])
 function updateModelPoli(val) {
@@ -273,7 +276,10 @@ onMounted(() => {
 
 function simpan() {
   console.log('ok', store.formRsLain)
-  store.saveRsLain(props?.pasien)
+  console.log('cat', refCatat.value.validate())
+  if (refCatat.value.validate()) {
+    store.saveRsLain(props?.pasien)
+  }
   // $q.notify({
   //   type: 'negative',
   //   message: 'Maaf, Anda tidak terhubung ke BPJS',
