@@ -10,7 +10,21 @@
             :model="store.formKontrol.tglrencanakunjungan"
             label="Tgl Rencana Kontrol"
             outlined
-            @set-model="(val) => store.setFormKontrol('tglrencanakunjungan', val)"
+            @set-model="gantiTanggal"
+          />
+        </div>
+        <div class="col-5">
+          <app-autocomplete
+            :key="store.formKontrol.kodedokterdpjp"
+            v-model="store.formKontrol.kodedokterdpjp"
+            outlined
+            label="Pilih Dokter"
+            autocomplete="namadokter"
+            option-label="namadokter"
+            option-value="kodedokter"
+            :loading="store.loadingJadwalDokter"
+            :disable="store.loadingJadwalDokter"
+            :source="store.jadwalDpjps"
           />
         </div>
         <div class="col-12">
@@ -32,7 +46,7 @@
 
 <script setup>
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const store = usePerencanaanPoliStore()
 const props = defineProps({
@@ -46,4 +60,11 @@ const formRef = ref()
 function simpan() {
   store.saveKontrol(props.pasien)
 }
+function gantiTanggal(val) {
+  store.setFormKontrol('tglrencanakunjungan', val)
+  store.getjadwalDokterDpjp(props.pasien, val)
+}
+onMounted(() => {
+  store.getjadwalDokterDpjp(props.pasien, false)
+})
 </script>

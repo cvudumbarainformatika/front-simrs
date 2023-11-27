@@ -92,7 +92,9 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
 
     },
     perujuk: null,
-    loadingSave: false
+    loadingSave: false,
+    jadwalDpjps: [],
+    loadingJadwalDokter: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -157,6 +159,40 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           this.loadingSaveKonsul = false
         })
     },
+    getjadwalDokterDpjp(pasien, tgl) {
+      this.jadwalDpjps = []
+      this.loadingJadwalDokter = true
+      // this.formKontrol.kodedokterdpjp = pasien?.kodedokterdpjp
+      // console.log('get jadwal dokter')
+      const form = {
+        poliTujuan: pasien?.kodepolibpjs,
+        tglrencanakontrol: tgl || this.formKontrol.tglrencanakunjungan
+      }
+      this.setFormKontrol('kodedokterdpjp', null)
+      return new Promise(resolve => {
+        api.post('v1/simrs/rajal/poli/jadwal', form)
+          .then(resp => {
+            this.loadingJadwalDokter = false
+            console.log(resp.data)
+            if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
+              this.jadwalDpjps = resp?.data?.result
+              if (this.jadwalDpjps.length) {
+                const ada = this.jadwalDpjps.filter(a => a.kodedokter === parseInt(pasien?.kodedokterdpjp))
+                console.log('ada', ada)
+                if (ada.length) {
+                  this.setFormKontrol('kodedokterdpjp', ada[0].kodedokter)
+                }
+              }
+            } else {
+              this.setFormKontrol('kodedokterdpjp', null)
+            }
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingJadwalDokter = false
+          })
+      })
+    },
     async saveKontrol(pasien) {
       this.loadingSaveKontrol = true
       // console.log(pasien)
@@ -171,7 +207,6 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.kodepolibpjs = pasien?.kodepolibpjs
       this.formKontrol.dokter = pasien?.datasimpeg?.nama
       this.formKontrol.kodesistembayar = pasien?.kodesistembayar
-      this.formKontrol.kodedokterdpjp = pasien?.kodedokterdpjp
       this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
       console.log('form kontrol', this.formKontrol)
