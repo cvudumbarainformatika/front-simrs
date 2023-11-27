@@ -98,7 +98,6 @@
               outlined
               label="Tinggi Badan /cm"
               :rules="[
-                val => !!val || 'Hrp diisi',
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
@@ -113,7 +112,6 @@
               outlined
               label="Berat Badan /kg"
               :rules="[
-                val => !!val || 'Hrp diisi',
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
@@ -129,7 +127,6 @@
               label="VAS (Max 10)"
               :rules="[
                 val => val <= 10 || 'Max 10',
-                val => !!val || 'Hrp diisi',
                 val => !isNaN(val) || 'Hrs Nomor',
               ]"
               hide-bottom-space
