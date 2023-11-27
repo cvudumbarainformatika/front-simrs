@@ -127,7 +127,7 @@
 import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
 import { onMounted, ref } from 'vue'
 // import { formatRp } from 'src/modules/formatter'
-import ModalPermintaan from '../complaboratbaru/ModalPermintaan.vue'
+import ModalPermintaan from './ModalPermintaan.vue'
 
 const store = useLaboratPoli()
 
@@ -137,10 +137,6 @@ const formRef = ref(null)
 const diagnosaRef = ref(null)
 
 const options = ref()
-// const asalOptions = ['Darah', 'Urine', 'Feses', 'Jaringan Tubuh']
-// const metodeOptions = ['Eksisi', 'Kerokan', 'Operasi', 'Aspirasi / Biopsi']
-// const asalSumberSpesimenOptions = ref([])
-// const metodePengambilanSpesimenOptions = ref([])
 
 const props = defineProps({
   pasien: { type: Object, default: null }
@@ -148,8 +144,6 @@ const props = defineProps({
 
 onMounted(() => {
   options.value = store.masterlaborat
-  // asalSumberSpesimenOptions.value = asalOptions
-  // metodePengambilanSpesimenOptions.value = metodeOptions
 
   // cariRef.value.focus()
 })

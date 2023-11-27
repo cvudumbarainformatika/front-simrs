@@ -58,28 +58,37 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         // console.log('masterlaborat', resp)
         if (resp.status === 200) {
           const arr = resp.data
-          const arr2 = arr.length > 0 ? arr.map(x =>
-            ({
-              gruper: x.gruper !== '' ? x.gruper : x.pemeriksaan,
-              pemeriksaan: x.pemeriksaan,
-              jenis: x.gruper !== '' ? 'PAKET' : 'NON-PAKET',
-              biayapoliumum: parseInt(x.hargapelayananpoliumum) + parseInt(x.hargasaranapoliumum),
-              biayapolispesialis: parseInt(x.hargapelayananpolispesialis) + parseInt(x.hargasaranapolispesialis),
-              kode: x.kode,
-              aslix: x
-            })
-          ) : []
-          const groupped = this.groupBy(arr2, gruper => gruper.gruper)
-          this.masterlaborat = groupped
+          // const arr2 = arr.length > 0 ? arr.map(x =>
+          //   ({
+          //     gruper: x.gruper !== '' ? x.gruper : x.pemeriksaan,
+          //     pemeriksaan: x.pemeriksaan,
+          //     jenis: x.gruper !== '' ? 'PAKET' : 'NON-PAKET',
+          //     biayapoliumum: parseInt(x.hargapelayananpoliumum) + parseInt(x.hargasaranapoliumum),
+          //     biayapolispesialis: parseInt(x.hargapelayananpolispesialis) + parseInt(x.hargasaranapolispesialis),
+          //     kode: x.kode,
+          //     aslix: x
+          //   })
+          // ) : []
+          // const groupped = this.groupByx(arr2, gruper => gruper.gruper)
+          // this.masterlaborat = groupped
+          // this.loadingMasterLab = false
+          // console.log('group pemeriksaan', grouped)
+          // const result = Object.groupBy(arr2, ({ gruper }) => gruper)
+          // console.log('arr pemeriksaan', result)
+
+          const grouped = arr.length ? Object.groupBy(arr, ({ gruper }) => gruper) : {}
+          // this.masterlaborat = Object.entries(grouped)
+          const res = Object.keys(grouped).map((key) => ({ name: key, ...grouped[key] }))
+          this.masterlaborat = res
+          console.log(this.masterlaborat)
           this.loadingMasterLab = false
-          console.log('group pemeriksaan', groupped)
         }
         this.loadingMasterLab = false
       } catch (error) {
         this.loadingMasterLab = false
       }
     },
-    groupBy(list, keyGetter) {
+    groupByx(list, keyGetter) {
       const map = new Map()
       list.forEach((item) => {
         const key = keyGetter(item)

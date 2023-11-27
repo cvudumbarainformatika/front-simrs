@@ -1,7 +1,7 @@
 <template>
   <q-dialog @before-show="clearCheck">
     <q-card
-      style="min-width: 50vw; height: 100vh;"
+      style="min-width: 90vw; height: 100vh;"
       class="full-height"
     >
       <div class="column full-height">
@@ -50,33 +50,52 @@
               dark
             >
               <q-item
-                v-for="item in filterred"
-                :key="item"
+                v-for="(item, i) in props.masters"
+                :key="i"
                 v-ripple
                 tag="label"
+                dense
+                class="bg-primary"
               >
-                <q-item-section avatar>
+                <q-item-section
+                  avatar
+                  thumbnail
+                >
                   <q-checkbox
+                    v-if="item.name !== ''"
                     v-model="pemeriksaans"
                     :val="item"
-                    color="teal"
+                    color="black"
                     dark
+                    size="xs"
                   />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>{{ item?.name }}</q-item-label>
-                  <q-item-label caption>
-                    <span :class="item?.value?.length > 1?'text-yellow':'text-red'">
-                      {{ item?.value?.length > 1? 'PAKET' : 'NON PAKET' }}
-                    </span>
+                  <q-item-label v-if="item.name !== ''">
+                    {{ item.name }}
+                  </q-item-label>
+                  <q-item-label
+                    v-else
+                    style="padding-left:20px;"
+                  >
+                    NAMA PEMERIKSAAN
                   </q-item-label>
                 </q-item-section>
-                <q-item-section
-                  side
-                >
-                  <q-item-label caption>
-                    Rp. {{ formatRp(item?.value[0].biayapolispesialis) }}
-                  </q-item-label>
+                <q-item-section side>
+                  <div class="flex q-gutter-sm">
+                    <div
+                      style="width:100px"
+                      class="text-right"
+                    >
+                      {{ item.name===''? 'NILAI NORMAL' : item[0].nilainormal }}
+                    </div>
+                    <div
+                      style="width:100px"
+                      class="text-right"
+                    >
+                      {{ item.name===''? 'SARANA' : item[0].hargasaranapolispesialis }}
+                    </div>
+                  </div>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -104,8 +123,9 @@
 </template>
 
 <script setup>
-import { formatRp } from 'src/modules/formatter'
-import { computed, ref } from 'vue'
+// import { formatRp } from 'src/modules/formatter'
+// import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   masters: {
@@ -134,26 +154,26 @@ const groups = ref([
   }
 ])
 
-const filterred = computed(() => {
-  let arr = props?.masters
-  if (group.value === 'paket') {
-    arr = arr?.filter(x => x.value?.length > 1)
-  } else if (group.value === 'non-paket') {
-    arr = arr?.filter(x => x.value?.length < 2)
-  } else {
-    arr = props?.masters
-  }
+// const filterred = computed(() => {
+//   let arr = props?.masters
+//   if (group.value === 'paket') {
+//     arr = arr?.filter(x => x.value?.length > 1)
+//   } else if (group.value === 'non-paket') {
+//     arr = arr?.filter(x => x.value?.length < 2)
+//   } else {
+//     arr = props?.masters
+//   }
 
-  const val = search.value
-  let target = arr
-  if (val !== '' || val !== null) {
-    target = arr?.filter(x => {
-      return x.name.toString().toLowerCase().includes(val.toLowerCase())
-    })
-  }
+//   const val = search.value
+//   let target = arr
+//   if (val !== '' || val !== null) {
+//     target = arr?.filter(x => {
+//       return x.name.toString().toLowerCase().includes(val.toLowerCase())
+//     })
+//   }
 
-  return target
-})
+//   return target
+// })
 
 function submitPemeriksaans() {
   // console.log(pemeriksaans.value)
