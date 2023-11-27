@@ -81,6 +81,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
           const res = Object.keys(grouped).map((key) => ({ name: key, ...grouped[key] }))
           this.masterlaborat = res
           console.log(this.masterlaborat)
+          console.log('sort', arr.sort((a, b) => (a.gruper > b.gruper) ? 1 : ((b.gruper > a.gruper) ? -1 : 0)))
           this.loadingMasterLab = false
         }
         this.loadingMasterLab = false

@@ -1,7 +1,7 @@
 <template>
   <q-dialog @before-show="clearCheck">
     <q-card
-      style="min-width: 90vw; height: 100vh;"
+      style="min-width: 70vw; height: 100vh;"
       class="full-height"
     >
       <div class="column full-height">
@@ -45,63 +45,53 @@
         <div class="col full-height bg-dark text-white">
           <q-scroll-area style="height:calc(100% - 1px);">
             <q-list
-              bordered
-              separator
               dark
+              dense
             >
-              <q-item
-                v-for="(item, i) in props.masters"
-                :key="i"
-                v-ripple
-                tag="label"
-                dense
-                class="bg-primary"
+              <template
+                v-for="item in props.masters"
+                :key="item"
               >
-                <q-item-section
-                  avatar
-                  thumbnail
+                <q-item
+                  class="bg-primary"
                 >
-                  <q-checkbox
-                    v-if="item.name !== ''"
-                    v-model="pemeriksaans"
-                    :val="item"
-                    color="black"
-                    dark
-                    size="xs"
-                  />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label v-if="item.name !== ''">
-                    {{ item.name }}
-                  </q-item-label>
-                  <q-item-label
-                    v-else
-                    style="padding-left:20px;"
-                  >
-                    NAMA PEMERIKSAAN
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <div class="flex q-gutter-sm">
-                    <div
-                      style="width:100px"
-                      class="text-right"
-                    >
-                      {{ item.name===''? 'NILAI NORMAL' : item[0].nilainormal }}
+                  <q-item-section>
+                    <div class="q-py-sm  text-weight-bold">
+                      <span
+                        v-if="item.name !== ''"
+                        class="text-yellow"
+                      >PAKET </span> <span>{{ item.name === '' ? 'NON PAKET': item.name }}</span>
                     </div>
-                    <div
-                      style="width:100px"
-                      class="text-right"
+                    <template
+                      v-for="row in item"
+                      :key="row"
                     >
-                      {{ item.name===''? 'SARANA' : item[0].hargasaranapolispesialis }}
-                    </div>
-                  </div>
-                </q-item-section>
-              </q-item>
+                      <q-item
+                        dense
+                        clickable
+                        class="bg-dark"
+                      >
+                        <q-item-section>
+                          {{ row.pemeriksaan }}
+                        </q-item-section>
+                        <q-item-section
+                          v-if="item.name === ''"
+                          side
+                        >
+                          {{ row.hargasaranapolispesialis }}
+                        </q-item-section>
+                      </q-item>
+                      <q-separator dark />
+                    </template>
+                  </q-item-section>
+                </q-item>
+              </template>
             </q-list>
           </q-scroll-area>
         </div>
-        <div class="col-auto">
+        <div
+          class="col-auto"
+        >
           <div class="row items-center justify-end q-pa-sm q-gutter-sm">
             <q-btn
               v-close-popup
