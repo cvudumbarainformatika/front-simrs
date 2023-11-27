@@ -173,12 +173,12 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         api.post('v1/simrs/rajal/poli/jadwal', form)
           .then(resp => {
             this.loadingJadwalDokter = false
-            console.log(resp.data)
+            // console.log(resp.data)
             if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
               this.jadwalDpjps = resp?.data?.result
               if (this.jadwalDpjps.length) {
                 const ada = this.jadwalDpjps.filter(a => a.kodedokter === parseInt(pasien?.kodedokterdpjp))
-                console.log('ada', ada)
+                // console.log('ada', ada)
                 if (ada.length) {
                   this.setFormKontrol('kodedokterdpjp', ada[0].kodedokter)
                 }
