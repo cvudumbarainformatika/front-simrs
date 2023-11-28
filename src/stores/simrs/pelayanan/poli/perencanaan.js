@@ -150,7 +150,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             }
             notifSuccess(resp)
             this.loadingSaveKonsul = false
-            return new Promise(resolve => { resolve(resp) })
+            Promise.resolve(resp?.data)
           }
           this.loadingSaveKonsul = false
         })
