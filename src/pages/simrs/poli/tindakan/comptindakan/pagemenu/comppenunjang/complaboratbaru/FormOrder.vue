@@ -119,6 +119,7 @@
     <ModalPermintaan
       v-model="modalOpen"
       :masters="store.masterlaborat"
+      :headers="store.headerlaborats"
       @ok="pilihPemeriksaans"
     />
   </div>

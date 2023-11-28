@@ -87,6 +87,7 @@ const store = usePengunjungPoliStore()
 const diagnosa = useLayananPoli()
 const pasien = ref(null)
 const indexVoices = ref(11)
+const listVoices = ref([])
 
 // const printRekap = ref(false)
 
@@ -96,6 +97,7 @@ const indexVoices = ref(11)
 const $q = useQuasar()
 onMounted(() => {
   const voices = speech.synth.getVoices()
+  listVoices.value = voices
   console.log(voices)
   if (voices.length) {
     speech.setLoading(false)
@@ -133,6 +135,7 @@ function setSpeech(txt) {
 
 function panggil(row) {
   console.log('voiceIndex', speech.voiceList[indexVoices.value])
+  console.log('voiceList', listVoices.value)
   const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2

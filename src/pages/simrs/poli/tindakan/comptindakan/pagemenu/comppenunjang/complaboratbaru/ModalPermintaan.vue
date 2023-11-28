@@ -45,47 +45,42 @@
         <div class="col full-height bg-dark text-white">
           <q-scroll-area style="height:calc(100% - 1px);">
             <q-list
+              bordered
+              separator
               dark
               dense
             >
-              <template
-                v-for="item in props.masters"
+              <q-item
+                v-for="item in filterred"
                 :key="item"
+                v-ripple
+                tag="label"
               >
-                <q-item
-                  class="bg-primary"
+                <q-item-section avatar>
+                  <q-checkbox
+                    v-model="pemeriksaans"
+                    :val="item"
+                    color="teal"
+                    dark
+                    size="xs"
+                  />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ item?.name }}</q-item-label>
+                  <q-item-label caption>
+                    <span :class="item?.value?.length > 1?'text-yellow':'text-red'">
+                      {{ item?.value?.length > 1? 'PAKET' : 'NON PAKET' }}
+                    </span>
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section
+                  side
                 >
-                  <q-item-section>
-                    <div class="q-py-sm  text-weight-bold">
-                      <span
-                        v-if="item.name !== ''"
-                        class="text-yellow"
-                      >PAKET </span> <span>{{ item.name === '' ? 'NON PAKET': item.name }}</span>
-                    </div>
-                    <template
-                      v-for="row in item"
-                      :key="row"
-                    >
-                      <q-item
-                        dense
-                        clickable
-                        class="bg-dark"
-                      >
-                        <q-item-section>
-                          {{ row.pemeriksaan }}
-                        </q-item-section>
-                        <q-item-section
-                          v-if="item.name === ''"
-                          side
-                        >
-                          {{ row.hargasaranapolispesialis }}
-                        </q-item-section>
-                      </q-item>
-                      <q-separator dark />
-                    </template>
-                  </q-item-section>
-                </q-item>
-              </template>
+                  <q-item-label caption>
+                    Rp. {{ formatRp(item?.value[0].biayapolispesialis) }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
             </q-list>
           </q-scroll-area>
         </div>
@@ -113,12 +108,16 @@
 </template>
 
 <script setup>
-// import { formatRp } from 'src/modules/formatter'
-// import { computed, ref } from 'vue'
-import { ref } from 'vue'
+import { formatRp } from 'src/modules/formatter'
+import { computed, ref } from 'vue'
+// import { ref } from 'vue'
 
 const props = defineProps({
   masters: {
+    type: Array,
+    default: () => []
+  },
+  headers: {
     type: Array,
     default: () => []
   }
@@ -144,26 +143,26 @@ const groups = ref([
   }
 ])
 
-// const filterred = computed(() => {
-//   let arr = props?.masters
-//   if (group.value === 'paket') {
-//     arr = arr?.filter(x => x.value?.length > 1)
-//   } else if (group.value === 'non-paket') {
-//     arr = arr?.filter(x => x.value?.length < 2)
-//   } else {
-//     arr = props?.masters
-//   }
+const filterred = computed(() => {
+  let arr = props?.masters
+  if (group.value === 'paket') {
+    arr = arr?.filter(x => x.value?.length > 1)
+  } else if (group.value === 'non-paket') {
+    arr = arr?.filter(x => x.value?.length < 2)
+  } else {
+    arr = props?.masters
+  }
 
-//   const val = search.value
-//   let target = arr
-//   if (val !== '' || val !== null) {
-//     target = arr?.filter(x => {
-//       return x.name.toString().toLowerCase().includes(val.toLowerCase())
-//     })
-//   }
+  const val = search.value
+  let target = arr
+  if (val !== '' || val !== null) {
+    target = arr?.filter(x => {
+      return x.name.toString().toLowerCase().includes(val.toLowerCase())
+    })
+  }
 
-//   return target
-// })
+  return target
+})
 
 function submitPemeriksaans() {
   // console.log(pemeriksaans.value)
