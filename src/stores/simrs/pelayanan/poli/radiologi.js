@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 // import { dateDbFormat } from 'src/modules/formatter'
 
 export const useRadiologiPoli = defineStore('poli-radiologi', {
@@ -49,6 +49,9 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       this.form[key] = value
     },
     async saveRadiologi(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingSave = true
       this.form.keterangan = this.form.diagnosakerja + ' ' + this.form.catatanpermintaan
       this.form.noreg = pasien?.noreg

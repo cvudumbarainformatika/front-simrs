@@ -114,6 +114,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             const data = findPasien[0]
             data.datasimpeg = resp?.data?.result?.datasimpeg
             data.dokter = resp?.data?.result?.datasimpeg?.nama
+            data.kodedokter = resp?.data?.result?.datasimpeg?.kdpegsimrs
             this.loadingSaveGantiDpjp = false
           }
 

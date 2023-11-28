@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 // import { dateDbFormat, dateFullFormat, formatJam } from 'src/modules/formatter'
 import { usePengunjungPoliStore } from './pengunjung'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useLaboratPoli = defineStore('laborat-poli', {
   state: () => ({
@@ -149,6 +149,9 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       // })
     },
     async saveOrderLaborat(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingSaveLab = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
 
 export const useOperasiPoli = defineStore('operasi-poli', {
@@ -21,6 +21,9 @@ export const useOperasiPoli = defineStore('operasi-poli', {
   actions: {
 
     async saveOrder(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingOrder = true
       this.form.noreg = pasien?.noreg
       this.form.kodepoli = pasien?.kodepoli

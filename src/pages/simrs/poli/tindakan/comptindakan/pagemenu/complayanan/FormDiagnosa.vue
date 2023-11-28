@@ -225,6 +225,13 @@ function onSubmit() {
       icon: 'icon-mat-warning',
       message: 'Maaf Kasus Baru Atau Lama harus dipilih'
     })
+  } else if (!store.formdiagnosa.kasus) {
+    $q.notify({
+      color: 'red-5',
+      textColor: 'white',
+      icon: 'icon-mat-warning',
+      message: 'Maaf Kasus Baru Atau Lama harus dipilih'
+    })
   } else {
     emits('savePemeriksaan')
   }
