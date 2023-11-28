@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat, dateFullFormat, formatJam } from 'src/modules/formatter'
 import { usePengunjungPoliStore } from './pengunjung'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePenunjangPoli = defineStore('penunjang-poli', {
   state: () => ({
@@ -150,6 +150,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       // })
     },
     async saveOrderLaborat(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingSaveLab = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
@@ -185,6 +188,9 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     },
 
     async saveOrderLaboratBaru(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingSave = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg

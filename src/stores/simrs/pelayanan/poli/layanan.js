@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePengunjungPoliStore } from './pengunjung'
 import { useInacbgPoli } from './inacbg'
-import { notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 // import { api } from 'src/boot/axios'
 
 export const useLayananPoli = defineStore('layanan-poli', {
@@ -110,6 +110,9 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
 
     async simpanDiagnosa(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       const form = this.formdiagnosa
       form.noreg = pasien?.noreg
       form.norm = pasien?.norm
@@ -185,6 +188,9 @@ export const useLayananPoli = defineStore('layanan-poli', {
     // ==================================================================================== TINDAKAN =========================================================================
 
     async saveTindakan(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingFormTindakan = true
 
       const form = this.formtindakan
