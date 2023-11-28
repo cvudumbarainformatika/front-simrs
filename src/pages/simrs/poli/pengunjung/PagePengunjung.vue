@@ -100,24 +100,27 @@ onMounted(() => {
   setTimeout(() => {
     voices = speech.synth.getVoices()
     listVoices.value = voices
+
+    if (listVoices.value.length) {
+      speech.setLoading(false)
+      const ada = listVoices.value?.map(x => x.lang)
+      const ind = ada.findIndex(x => x === 'id-ID') ?? 0
+      indexVoices.value = ind
+      console.log('onMounted :', ada.findIndex(x => x === 'id-ID'))
+    }
+
+    speech.synth.onvoiceschanged = () => {
+      speech.setVoiceList(speech.synth.getVoices())
+      // give a bit of delay to show loading screen
+      // just for the sake of it, I suppose. Not the best reason dsfa
+      speech.setLoading(false)
+      // setTimeout(() => {
+      //   speech.setLoading(false)
+      // }, 500)
+    }
   }, 500)
   // console.log(voices)
-  if (listVoices.value.length) {
-    speech.setLoading(false)
-    const ada = listVoices.value?.map(x => x.lang)
-    const ind = ada.findIndex(x => x === 'id-ID') ?? 0
-    indexVoices.value = ind
-    console.log('onMounted :', ada.findIndex(x => x === 'id-ID'))
-  }
 
-  speech.synth.onvoiceschanged = () => {
-    speech.setVoiceList(speech.synth.getVoices())
-    // give a bit of delay to show loading screen
-    // just for the sake of it, I suppose. Not the best reason dsfa
-    setTimeout(() => {
-      speech.setLoading(false)
-    }, 500)
-  }
   store.getData()
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
