@@ -106,7 +106,7 @@ onMounted(() => {
       const ada = listVoices.value?.map(x => x.lang)
       const ind = ada.findIndex(x => x === 'id-ID') ?? 0
       indexVoices.value = ind
-      console.log('onMounted :', ada.findIndex(x => x === 'id-ID'))
+      console.log('onMounted :', ind)
     }
 
     speech.synth.onvoiceschanged = () => {
@@ -141,7 +141,7 @@ function setSpeech(txt) {
 
 function panggil(row) {
   console.log('voiceIndex', speech.voiceList[indexVoices.value])
-  console.log('voiceList', listVoices.value)
+  // console.log('voiceList', listVoices.value)
   const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2
