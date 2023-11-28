@@ -131,6 +131,230 @@
                   </tbody>
                 </q-markup-table>
               </q-card-section>
+
+              <q-separator />
+              <q-card-section
+                v-if="item?.apotekrajal?.length
+                  || item?.apotekrajalpolilalu?.length
+                  || item?.apotekracikanrajal?.length
+                  || item?.apotekracikanrajallalu?.length
+                  || item?.apotekranap?.length
+                  || item?.apotekranaplalu?.length
+                  || item?.apotekranapracikanheder?.length
+                  || item?.apotekranapracikanhederlalu?.length"
+                class="q-pa-none"
+              >
+                <q-bar class="bg-teal">
+                  PEMBERIAN OBAT
+                </q-bar>
+                <q-markup-table
+                  separator="vertical"
+                  flat
+                  bordered
+                  dense
+                  dark
+                >
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Tanggal
+                      </th>
+                      <th class="text-right">
+                        Obat
+                      </th>
+                      <th class="text-right">
+                        Jumlah
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(apotekrajal, wew) in item?.apotekrajal"
+                      :key="wew"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekrajal?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekrajal.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekrajal?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekrajalpolilalu, lll) in item?.apotekrajalpolilalu"
+                      :key="lll"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekrajalpolilalu?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekrajalpolilalu.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekrajalpolilalu?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekracikanrajal, llll) in item?.apotekracikanrajal"
+                      :key="llll"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekracikanrajal?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekracikanrajal.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekracikanrajal?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekracikanrajallalu, llll) in item?.apotekracikanrajallalu"
+                      :key="llll"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekracikanrajallalu?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekracikanrajallalu.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekracikanrajallalu?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekranap, lxx) in item?.apotekranap"
+                      :key="lxx"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekranap?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranap.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranap?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekranaplalu, lx) in item?.apotekranaplalu"
+                      :key="lx"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekranaplalu?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranaplalu.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranaplalu?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekranapracikanheder, lxx) in item?.apotekranapracikanheder"
+                      :key="lxx"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekranapracikanheder?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs8 }}
+                      </td>
+                    </tr>
+                    <tr
+                      v-for="(apotekranapracikanhederlalu, lxxx) in item?.apotekranapracikanhederlalu"
+                      :key="lxxx"
+                    >
+                      <td
+                        class="text-left ellipsis"
+                        style="max-width: 250px;"
+                      >
+                        {{ apotekranapracikanhederlalu?.rs3 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs2 }}
+                      </td>
+                      <td
+                        class="text-right"
+                        style="max-width: 150px;"
+                      >
+                        {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs8 }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </q-markup-table>
+              </q-card-section>
             </q-card>
           </q-expansion-item>
         </q-list>
