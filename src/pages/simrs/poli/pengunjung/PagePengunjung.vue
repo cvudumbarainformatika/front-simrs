@@ -100,11 +100,11 @@ onMounted(() => {
   setTimeout(() => {
     voices = speech.synth.getVoices()
     listVoices.value = voices
-  }, 100)
+  }, 500)
   // console.log(voices)
   if (listVoices.value.length) {
     speech.setLoading(false)
-    const ada = voices?.map(x => x.lang)
+    const ada = listVoices.value?.map(x => x.lang)
     const ind = ada.findIndex(x => x === 'id-ID') ?? 0
     indexVoices.value = ind
     console.log('onMounted :', ada.findIndex(x => x === 'id-ID'))
