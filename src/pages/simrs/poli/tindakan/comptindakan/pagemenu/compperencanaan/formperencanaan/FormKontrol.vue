@@ -58,7 +58,9 @@ const props = defineProps({
 
 const formRef = ref()
 function simpan() {
-  store.saveKontrol(props.pasien)
+  store.saveKontrol(props.pasien).then(resp => {
+    console.log('fr', resp?.data)
+  })
 }
 function gantiTanggal(val) {
   store.setFormKontrol('tglrencanakunjungan', val)

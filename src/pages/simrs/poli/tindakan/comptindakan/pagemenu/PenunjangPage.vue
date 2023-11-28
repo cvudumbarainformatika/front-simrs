@@ -54,6 +54,7 @@
 
 <script setup>
 import { findWithAttr } from 'src/modules/utils'
+import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
 import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
 // import PageLaborat from './comppenunjang/PageLaborat.vue'
 
@@ -67,6 +68,7 @@ const props = defineProps({
 })
 
 const store = usePenunjangPoli()
+const lab = useLaboratPoli()
 
 const comp = [
   { nama: 'Laborat', page: defineAsyncComponent(() => import('./comppenunjang/PageLaborat.vue')) },
@@ -86,7 +88,7 @@ const cekPanel = () => {
 }
 
 onMounted(() => {
-  store.getMasterLaborat()
-  store.getNota(props.pasien)
+  lab.getMasterLaborat()
+  lab.getNota(props.pasien)
 })
 </script>
