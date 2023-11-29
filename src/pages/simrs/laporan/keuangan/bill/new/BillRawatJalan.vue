@@ -786,7 +786,7 @@
               class="row justify-between no-wrap"
             >
               <div class="q-mr-xs kecilin">
-                Trans Rodiologi
+                Trans Radiologi
               </div>
               <div>
                 <div>
@@ -1019,12 +1019,13 @@ const ranap = {
   Pasien: 'pasien',
   Noreg: 'noreg',
   Ruangan: 'ruangan',
+  'Sistem Bayar': 'bayar',
   Admin: 'admin',
   Materai: 'mtri',
+  Ambulance: 'amb',
   Kamar: 'kamar',
   'Kamar Jenazah': 'jnz',
   'Kamar Jenazah Inap': 'jnzi',
-  'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
   'Biaya Kartu Identitas Paseian': 'idPasien',
   'Poliklinik Spesialis / Anastesi': 'bPoli',
@@ -1046,6 +1047,7 @@ const ranap = {
   Cardio: 'cardio',
   EEG: 'eeg',
   Endoscope: 'endos',
+  BDRS: 'bdrs',
   Apotek: 'apotek', // semua apotek di jumlah
   'Penunjang Keluar': 'penkel',
   'Klaim BPJS': 'pendapatan',
@@ -1064,11 +1066,12 @@ const rajal = {
   Pasien: 'pasien',
   Noreg: 'noreg',
   Poli: 'poli',
+  'Sistem Bayar': 'bayar',
   Admin: 'admin',
   Materai: 'mtri',
+  Ambulance: 'amb',
   'Kamar Jenazah': 'jnz',
   'Kamar Jenazah Inap': 'jnzi',
-  'Sistem Bayar': 'bayar',
   'Pelayanan Rekam Medik': 'rekammedik',
   'Biaya Kartu Identitas Paseian': 'idPasien',
   'Poliklinik Spesialis / Anastesi': 'bPoli',
@@ -1085,6 +1088,7 @@ const rajal = {
   Cardio: 'cardio',
   EEG: 'eeg',
   Endoscope: 'endos',
+  BDRS: 'bdrs',
   Apotek: 'apotek', // semua apotek di jumlah
   'Klaim BPJS': 'pendapatan',
   'Sub Total': 'subtotal',
@@ -1106,6 +1110,7 @@ function fetchRajal() {
     temp.inaDesc = item.inaDesc
     temp.dokterdpjp = item.dokterdpjp
     temp.mtri = item.mtri
+    temp.amb = item.ambRJ
     temp.jnz = item.kmrJnzh
     temp.jnzi = item.kmrJnzhI
     temp.pendapatan = item.pendapatanBPJS
@@ -1125,7 +1130,7 @@ function fetchRajal() {
     temp.tDokPer = item?.tDokPer ?? { 'Tindakan IRD': item?.JIrdtindakan, 'Tindakan Perawat': item?.jTindakanperawat, 'Tindakan Dokter': item?.jTindakandokter }
     temp.visitDok = item.visitDok
     temp.laborat = item.jLaborat
-    temp.radiologi = item.jRadiologi
+    temp.radiologi = item.jRadiologi + item.transRad
     temp.operasi = item.kOperasi + item.tOperasi
     temp.fisio = item.tFisio
     temp.hd = item.tHd
@@ -1134,6 +1139,7 @@ function fetchRajal() {
     temp.cardio = item.tCardio
     temp.eeg = item.tEeg
     temp.endos = item.tEndo
+    temp.bdrs = item.bankDarah
     temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
 
     data.push(temp)
@@ -1151,6 +1157,7 @@ function fetchRanap() {
     temp.inaDesc = item.inaDesc
     temp.dokterdpjp = item.dokterdpjp
     temp.mtri = item.mtri
+    temp.amb = item.ambRJ
     temp.jnz = item.kmrJnzh
     temp.jnzi = item.kmrJnzhI
     temp.pendapatan = item.groupingRanap
@@ -1176,7 +1183,7 @@ function fetchRanap() {
     temp.tDok = item.jTindakandokter
     temp.visitDok = item.visitDok
     temp.laborat = item.jLaborat
-    temp.radiologi = item.jRadiologi
+    temp.radiologi = item.jRadiologi + item.transRad
     temp.operasi = item.jKamaroperasiIBS + item.OpIgd
     temp.fisio = item.tFisio
     temp.hd = item.tHd
@@ -1186,6 +1193,7 @@ function fetchRanap() {
     temp.cardio = item.tCardio
     temp.eeg = item.tEeg
     temp.endos = item.tEndo
+    temp.bdrs = item.bankDarah
     temp.apotek = item.obat + item.obatRacik + item.racikrajal + item.nonRacikRajal
 
     data.push(temp)

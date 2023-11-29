@@ -44,21 +44,14 @@
             <div>Beli</div>
           </template>
           <template #cell-obat="{row}">
-            <div class="row justify-between no-wrap ">
-              <div class="q-mr-xs">
-                Kode Obat
-              </div>
-              <div class="text-weight-bold text-green">
-                {{ row.kd_obat }}
-              </div>
+            <div class="row no-wrap text-weight-bold text-green">
+              {{ row.kd_obat }}
             </div>
-            <div class="row justify-between no-wrap items-center">
-              <div class="q-mr-xs">
-                Nama Obat
-              </div>
-              <div class="text-weight-bold text-amber-10 box text-right">
-                {{ row.nama_obat }}
-              </div>
+            <div class="row text-weight-bold text-amber-10 box text-right no-wrap items-center">
+              {{ row.nama_obat }}
+            </div>
+            <div class="row text-weight-bold no-wrap text-italic f-10">
+              ( {{ row.satuan_k ? row.satuan_k :'-' }} )
             </div>
             <div class="row justify-start no-wrap q-my-xs">
               <div
@@ -80,26 +73,6 @@
                 {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap text-italic f-10">
-              <div class="q-mr-xs">
-                Satuan
-              </div>
-              <div
-                class="text-weight-bold"
-              >
-                {{ row.satuan_k ? row.satuan_k :'-' }}
-              </div>
-            </div>
-            <!-- <div class="row justify-between no-wrap text-italic f-10">
-              <div class="q-mr-xs">
-                Sistem Bayar
-              </div>
-              <div
-                class="text-weight-bold"
-              >
-                {{ row.sistembayar ? row.sistembayar :'-' }}
-              </div>
-            </div> -->
           </template>
           <template #cell-stok="{row}">
             <div
