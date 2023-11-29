@@ -289,6 +289,12 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
+    hapusDataLaboratBaru(pasien, id, databaru) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        findPasien[0].laborats = databaru
+      }
+    },
     hapusDataRadiologi(pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {

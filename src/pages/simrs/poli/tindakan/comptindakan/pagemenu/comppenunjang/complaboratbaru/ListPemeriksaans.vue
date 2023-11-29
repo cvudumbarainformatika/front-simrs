@@ -5,7 +5,7 @@
         List Permintaan Laborat
       </div>
       <q-space />
-      <!-- <div class="q-py-xs">
+      <div class="q-py-xs">
         <q-select
           v-model="store.notalaborat"
           outlined
@@ -16,12 +16,14 @@
           :display-value="`NOTA: ${store.notalaborat === null || store.notalaborat === '' || store.notalaborat === 'BARU' ? 'BARU' : store.notalaborat}`"
           style="min-width: 200px;"
         />
-      </div> -->
+      </div>
     </q-bar>
     <div class="col-grow bg-grey">
+      <!-- {{ filterredTable }}
+      {{ pasien?.laborats }} -->
       <!-- jika belum ada pemeriksaan -->
       <div
-        v-if="filterredTable.length === 0"
+        v-if="fillterTable(pasien?.laborats) === 0"
         class="column full-height flex-center text-white"
       >
         Belum Ada Permintaan Order ke Laborat
@@ -30,12 +32,13 @@
         v-else
         style="height:calc(100% - 1px)"
       >
+        <!-- {{ fillterTable(pasien?.laborats) }} -->
         <q-list
           separator
         >
           <transition-group>
             <template
-              v-for="(item, i) in filterredTable"
+              v-for="(item, i) in fillterTable(pasien?.laborats)"
               :key="i"
             >
               <q-expansion-item
@@ -43,16 +46,13 @@
                 style="margin-bottom:.2em"
                 hide-expand-icon
               >
-                <!-- <template #header>
-                  {{ item }}
-                </template> -->
                 <template #header>
                   <q-item-section>
                     <q-item-label
                       lines="2"
                       class="f-12"
                     >
-                      <span class="">Nomor </span> : <span class="text-weight-bold text-accent">{{ item?.nota }} </span>
+                      <span class="text-weight-bold text-accent">{{ item?.name }} </span>
                     </q-item-label>
                     <q-item-label
                       lines="2"
@@ -60,32 +60,32 @@
                     >
                       <span
                         class="text-weight-bold"
-                        :class="item?.details.length === 1 ? 'text-orange' : 'text-primary'"
-                      >{{ item?.details.length === 1 ? 'NON-PAKET' : 'PAKET' }}</span>
+                        :class="item?.value.length === 1 ? 'text-orange' : 'text-primary'"
+                      >{{ item?.value.length === 1 ? 'NON-PAKET' : 'PAKET' }}</span>
                     </q-item-label>
-                    <q-item-label
+                    <!-- <q-item-label
                       lines="2"
                       class="f-12"
                     >
                       <span class=""> {{ item?.details[0]?.pemeriksaanlab?.rs21 !== ''? item?.details[0]?.pemeriksaanlab?.rs21: item?.details[0]?.pemeriksaanlab?.rs2 }} </span>
-                    </q-item-label>
+                    </q-item-label> -->
                   </q-item-section>
                   <q-item-section
                     side
                     top
                   >
-                    <q-item-label
+                    <!-- <q-item-label
                       lines="2"
                       class="f-10"
                     >
                       <span class="text-primary">{{ dateFullFormat(item?.tgl_order) }} </span>
-                    </q-item-label>
+                    </q-item-label> -->
 
                     <q-item-label>
                       <q-badge
                         outline
                         color="primary"
-                        :label="`Rp. ${formatRp(parseInt(item?.details[0]?.rs6) + parseInt(item?.details[0]?.rs13))}`"
+                        :label="`Rp. ${formatRp(parseInt(item?.value[0]?.aslix.rs6) + parseInt(item?.value[0]?.aslix.rs13))}`"
                       />
                     </q-item-label>
                     <q-item-label>
@@ -97,7 +97,7 @@
                           icon="icon-mat-delete"
                           color="negative"
                           class="z-top"
-                          @click="hapusItem(item?.id)"
+                          @click="hapusItem(item)"
                         />
                       </div>
                     </q-item-label>
@@ -132,20 +132,20 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="(row, n) in item?.details"
+                          v-for="(row, n) in item?.value"
                           :key="n"
                         >
                           <td
                             class="text-left ellipsis"
                             style="max-width: 150px;"
                           >
-                            {{ row?.pemeriksaanlab?.rs2 }}
+                            {{ row?.aslix?.pemeriksaanlab?.rs2 }}
                           </td>
                           <td class="text-left f-10">
-                            {{ row?.pemeriksaanlab?.satuan }}
+                            {{ row?.aslix?.pemeriksaanlab?.satuan }}
                           </td>
                           <td class="text-left f-10">
-                            {{ row?.pemeriksaanlab?.nilainormal }}
+                            {{ row?.aslix?.pemeriksaanlab?.nilainormal }}
                           </td>
                           <td class="text-right">
                             ---
@@ -156,7 +156,6 @@
                   </q-card-section>
                 </q-card>
               </q-expansion-item>
-              <!-- <q-separator /> -->
             </template>
           </transition-group>
         </q-list>
@@ -166,11 +165,12 @@
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
-import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
-import { computed } from 'vue'
+import { formatRp } from 'src/modules/formatter'
+import { useLaboratPoli } from 'src/stores/simrs/pelayanan/poli/laborat'
+// import { usePenunjangPoli } from 'src/stores/simrs/pelayanan/poli/penunjang'
+// import { computed } from 'vue'
 
-const store = usePenunjangPoli()
+const store = useLaboratPoli()
 const $q = useQuasar()
 
 const props = defineProps({
@@ -180,16 +180,27 @@ const props = defineProps({
   }
 })
 
-const filterredTable = computed(() => {
-  // const val = store.notalaborat
-  const arr = props.pasien?.laborats
-  // if (val === 'LIHAT SEMUA') {
-  //   return mapping(arr)
-  // }
-  // const filtered = arr.filter(x => x.rs2 === val)
-  return arr
-  // return arr
-})
+// const filterredTable = computed(() => {
+//   const val = store.notalaborat
+//   const arr = props.pasien?.laborats
+//   // if (val === 'LIHAT SEMUA') {
+//   //   return mapping(arr)
+//   // }
+//   const filtered = arr.filter(x => x.rs2 === val)
+//   return filtered
+//   // return arr
+// })
+
+function fillterTable(val) {
+  if (val) {
+    const s = store.notalaborat
+    const res = val?.filter(x => x.nota === s)
+    const hasil = res?.length ? mapping(res[0].details) : []
+    // console.log('filterre ', hasil)
+    return hasil
+  }
+  return []
+}
 
 // eslint-disable-next-line no-unused-vars
 function mapping(item) {
@@ -201,14 +212,14 @@ function mapping(item) {
       aslix: x
     })
   ) : []
-  console.log('aslix', arr)
+  // console.log('aslix', arr)
   const groupped = groupBy(arr2, gruper => gruper.gruper)
-  console.log('group', groupped)
+  // console.log('group', groupped)
   return groupped
 }
 
 // eslint-disable-next-line no-unused-vars
-function hapusItem(id) {
+function hapusItem(item) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -216,8 +227,9 @@ function hapusItem(id) {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    // console.log('HAPUS', id)
-    store.hapusLaborat(props.pasien, id)
+    // console.log('HAPUS', item?.value?.map(x => x.aslix.id))
+    // console.log('HAPUS', props.pasien)
+    store.hapusLaboratBaru(props.pasien, item?.value?.map(x => x.aslix.id))
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {
