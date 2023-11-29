@@ -67,7 +67,7 @@ const props = defineProps({
   }
 })
 
-const store = usePenunjangPoli()
+const store = usePenunjangPoli() // untuk tab
 const lab = useLaboratPoli()
 
 const comp = [

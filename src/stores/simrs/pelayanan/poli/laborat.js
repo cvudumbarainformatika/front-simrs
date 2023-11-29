@@ -12,7 +12,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
     headerlaborats: [],
     loadingMasterLab: false,
     notalaborats: [],
-    notalaborat: null,
+    notalaborat: '',
     permintaanLaborats: '',
     permintaans: [],
     form: {
@@ -20,9 +20,9 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       // noreg: '',
       // kdpoli: '',
       // kdpemeriksaan: '',
-      gruper: '',
-      biaya_sarana: 0,
-      biaya_layanan: 0,
+      // gruper: '',
+      // biaya_sarana: 0,
+      // biaya_layanan: 0,
       jumlah: 1,
       puasa_pasien: 'Tidak',
       prioritas_pemeriksaan: 'Tidak',
@@ -187,44 +187,45 @@ export const useLaboratPoli = defineStore('laborat-poli', {
     },
 
     async saveOrderLaboratBaru(pasien) {
+      if (!pasien?.kodedokter) {
+        return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
+      }
       this.loadingSave = true
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
       this.form.kodedokter = pasien?.kodedokter
-      this.form.waktu_pengambilan_spesimen = this.form.tanggalpengambilanspesimen + ' ' + this.form.jampengambilanspesimen
-      this.form.waktu_fiksasi_spesimen = this.form.tanggalfiksasi + ' ' + this.form.jamfiksasi
-      // this.form.nota = this.notalaborat === 'LIHAT SEMUA' || this.notalaborat === 'BARU' ? '' : this.notalaborat
-      this.form.nota = ''
+      // this.form.waktu_pengambilan_spesimen = this.form.tanggalpengambilanspesimen + ' ' + this.form.jampengambilanspesimen
+      // this.form.waktu_fiksasi_spesimen = this.form.tanggalfiksasi + ' ' + this.form.jamfiksasi
+      this.form.nota = this.notalaborat === 'BARU' ? '' : this.notalaborat
+      // this.form.nota = ''
       if (this.form.prioritas_pemeriksaan === 'Iya' || this.form.prioritas_pemeriksaan === 'iya') {
         this.form.biaya_layanan = this.percentage(this.form.biaya_layanan)
         this.form.biaya_sarana = this.percentage(this.form.biaya_sarana)
       }
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
-      const arr = []
+      // const arr = []
 
+      this.form.details = []
       for (let i = 0; i < this.permintaans.length; i++) {
         const element = this.permintaans[i]
-        const obj = {
-          form: this.form,
-          details: []
-        }
-        // console.log('pemeriksaan', pemeriksaan)
         for (let i = 0; i < element?.value.length; i++) {
           const el = element?.value[i]
-          this.form.biaya_layanan = el?.aslix?.hargapelayananpolispesialis // ini bisa el?.aslix?.hargapelayananpoliumum
-          this.form.biaya_sarana = el?.aslix?.hargasaranapolispesialis // ini bisa el?.aslix?.hargasaranapoliumum
+          const biayalayanan = el?.aslix?.hargapelayananpolispesialis // ini bisa el?.aslix?.hargapelayananpoliumum
+          const biayasarana = el?.aslix?.hargasaranapolispesialis // ini bisa el?.aslix?.hargasaranapoliumum
           const objec = {
             kode: el?.aslix?.kode,
-            gruper: el?.aslix.gruper
+            gruper: el?.aslix.gruper,
+            biaya_layanan: biayalayanan,
+            biaya_sarana: biayasarana
           }
-          obj.details.push(objec)
+          this.form.details.push(objec)
         }
-
-        arr.push(obj)
       }
 
-      const formbaru = { form: arr }
+      // const formbaru = { form: arr }
+      const formbaru = this.form
+      console.log('payload', formbaru)
 
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
@@ -273,10 +274,32 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         console.log('hapus laborat', error)
       }
     },
+    async hapusLaboratBaru(pasien, id) {
+      const payload = { id, noreg: pasien?.noreg }
+      try {
+        const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaru', payload)
+        console.log('hapus laborat', resp)
+        if (resp.status === 200) {
+          const storePasien = usePengunjungPoliStore()
+          const databaru = resp?.data?.result
+          storePasien.hapusDataLaboratBaru(pasien, id, databaru)
+          this.setNotasx(resp?.data?.nota)
+          notifSuccess(resp)
+        }
+      } catch (error) {
+        console.log('hapus laborat', error)
+      }
+    },
     setNotas(array) {
       const arr = array.map(x => x.nota)
       this.notalaborats = arr.length ? arr : []
-      this.notalaborats.push('LIHAT SEMUA')
+      // this.notalaborats.push('LIHAT SEMUA')
+      this.notalaborats.push('BARU')
+      this.notalaborat = this.notalaborats[0]
+    },
+    setNotasx(arr) {
+      this.notalaborats = arr.length ? arr : []
+      // this.notalaborats.push('LIHAT SEMUA')
       this.notalaborats.push('BARU')
       this.notalaborat = this.notalaborats[0]
     },
