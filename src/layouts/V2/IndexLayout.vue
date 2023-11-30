@@ -9,6 +9,7 @@
       v-if="!style.componentfull"
       :dark="dark"
       :mobile="mobile"
+      :user="apps.user"
       @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
     />
     <LeftDrawer
@@ -83,7 +84,7 @@
 
 <script setup>
 import { date, useQuasar } from 'quasar'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import LeftDrawer from './comp/LeftDrawer.vue'
 // import AdmHeader from './AdmHeader.vue'
@@ -91,7 +92,7 @@ import LeftDrawer from './comp/LeftDrawer.vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useTransitionStore } from 'src/stores/app/transition'
-// import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
 
@@ -100,7 +101,7 @@ const router = useRouter()
 const transition = useTransitionStore()
 const store = useAuthStore()
 const style = useStyledStore()
-// const apps = useAplikasiStore()
+const apps = useAplikasiStore()
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)
 const $q = useQuasar()
@@ -114,7 +115,6 @@ function setDark(val) {
   const x = !val
   $q.dark.set(x)
 }
-
 // function toggleLeftDrawer() {
 //   leftDrawerOpen.value = !leftDrawerOpen.value
 // }
@@ -122,8 +122,29 @@ function setDark(val) {
 // function toggleRightDrawer() {
 //   rightDrawerOpen.value = !rightDrawerOpen.value
 // }
+// ----- timer start -----
+let angka = 0
+document.addEventListener('keypress', intrupt)
+document.addEventListener('mouseover', intrupt)
+function intrupt() {
+  angka = 0
+}
+function timer() {
+  angka += 1
+  // if (angka === 100) {
+  if (angka === 3600) {
+    store.logout()
+  }
+  // console.log('time ', angka)
+}
+const setTimer = setInterval(timer, 1000)
+onBeforeUnmount(() => {
+  clearInterval(setTimer)
+})
+// ----- timer end -----
 onMounted(() => {
   console.log('layout user', store.currentUser)
+  // setTimer
 })
 
 // timer

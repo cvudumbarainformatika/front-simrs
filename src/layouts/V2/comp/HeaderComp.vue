@@ -38,18 +38,47 @@
       </div> -->
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
-        <q-btn
-          flat
-          round
-          icon="icon-eva-bell-outline"
-        />
-        <q-avatar
-          size="40px"
-          class="q-ml-sm cursor-pointer bg-grey"
-        >
-          <img src="~assets/images/actor.svg">
-          <adm-header-menu-profile />
-        </q-avatar>
+        <div class="row items-center">
+          <div class="q-mr-sm">
+            {{ user?.nama }},
+          </div>
+          <div
+            v-if="user?.pegawai?.ruang"
+            class="q-mr-sm"
+          >
+            {{ user?.pegawai?.ruang?.uraian }}
+          </div>
+          <div
+            v-else-if="user?.pegawai?.depo"
+            class="q-mr-sm"
+          >
+            {{ user?.pegawai?.depo?.nama }}
+          </div>
+          <div
+            v-else-if="user?.pegawai?.poli"
+            class="q-mr-sm"
+          >
+            {{ user?.pegawai?.poli?.rs2 }}
+          </div>
+          <div
+            v-else
+            class="q-mr-sm"
+          >
+            Tidak ada ruangan
+          </div>
+          <q-btn
+            flat
+            round
+            icon="icon-eva-bell-outline"
+          />
+          <q-avatar
+            size="40px"
+            class="q-ml-sm cursor-pointer bg-grey"
+          >
+            <img src="~assets/images/actor.svg">
+            <adm-header-menu-profile />
+          </q-avatar>
+        </div>
       </div>
     </div>
   </q-header>
@@ -66,6 +95,10 @@ defineProps({
   mobile: {
     type: Boolean,
     default: false
+  },
+  user: {
+    type: Object,
+    default: null
   }
 })
 

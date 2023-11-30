@@ -21,7 +21,8 @@
 </template>
 <script setup>
 import { useQuasar } from 'quasar'
-import { computed } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
+import { computed, onBeforeUnmount } from 'vue'
 
 import BgAnimation from './comp/BgAnimation.vue'
 import BoxAnimation from './comp/BoxAnimation.vue'
@@ -30,6 +31,27 @@ const dark = computed(() => {
   return $q.dark.isActive
 })
 
+const store = useAuthStore()
+// ----- timer start -----
+let angka = 0
+document.addEventListener('keypress', intrupt)
+document.addEventListener('mouseover', intrupt)
+function intrupt() {
+  angka = 0
+}
+function timer() {
+  angka += 1
+  // if (angka === 100) {
+  if (angka === 3600) {
+    store.logout()
+  }
+  // console.log('time ', angka)
+}
+const setTimer = setInterval(timer, 1000)
+onBeforeUnmount(() => {
+  clearInterval(setTimer)
+})
+// ----- timer end -----
 </script>
 
 <style lang="scss" scoped>
