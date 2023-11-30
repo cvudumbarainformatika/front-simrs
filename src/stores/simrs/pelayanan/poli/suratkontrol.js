@@ -8,6 +8,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingSuKe: false,
     meta: null,
     items: [],
     filteredItems: [],
@@ -140,17 +141,17 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       })
     },
     getSuratKeluar() {
-      this.loading = true
+      this.loadingSuKe = true
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/rajal/poli/listrujukankeluarrs', param)
           .then(resp => {
-            this.loading = false
+            this.loadingSuKe = false
             console.log('surat keluar', resp?.data)
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingSuKe = false
           })
       })
     },

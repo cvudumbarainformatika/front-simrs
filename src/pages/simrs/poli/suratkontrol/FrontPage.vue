@@ -97,8 +97,7 @@ const apps = useAplikasiStore()
 
 console.log('app', apps?.user?.pegawai?.poli)
 
-store.getData()
-store.getSuratKeluar()
+store.getAllSurat()
 function setTanggal(val) {
   store.setForm('tglrencanakontrol', val)
   store.getjadwalDokterDpjp()
