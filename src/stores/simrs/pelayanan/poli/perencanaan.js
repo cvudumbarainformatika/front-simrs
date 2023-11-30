@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
-import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifInfVue, notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
 
 export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
@@ -434,7 +434,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Update Rawat Inap gagal')
+            notifInfVue('Update Grid Rawat Inap gagal, tutup dulu pasien, refresh data dan buka lagi')
           }
           this.loadingSave = false
         }
