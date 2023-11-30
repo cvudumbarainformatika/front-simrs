@@ -55,7 +55,9 @@
         <div class="text-teal">
           {{ pasien ? pasien.noreg : '-' }} || {{ pasien?.norm??'-' }}
         </div>
-        <!-- <div> {{ pasien?.kodesistembayar?? '-' }}</div> -->
+        <div class="text-yellow text-italic f-10">
+          {{ pasien?.usia?? '-' }}
+        </div>
       </div>
       <q-bar>
         <q-space />
