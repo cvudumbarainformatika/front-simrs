@@ -45,19 +45,19 @@
             </div>
             <div
               v-if="user?.pegawai?.ruang"
-              class="q-mr-sm "
+              class="q-mr-sm  text-primary"
             >
               {{ user?.pegawai?.ruang?.uraian }}
             </div>
             <div
               v-else-if="user?.pegawai?.depo"
-              class="q-mr-sm"
+              class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
             <div
               v-else-if="user?.pegawai?.poli"
-              class="q-mr-sm"
+              class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.poli?.rs2 }}
             </div>

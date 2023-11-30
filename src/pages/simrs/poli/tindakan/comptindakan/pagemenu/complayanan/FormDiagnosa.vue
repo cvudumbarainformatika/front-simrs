@@ -294,9 +294,11 @@ function ganti(val) {
   const arr = store.listDiagnosa
   const arr2 = props.pasien?.diagnosa
   if (val === 'Baru' && arr2.length === 0) {
-    listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+    // listDiagnosa.value = arr.length ? arr.filter(x => !x.kode.toString().toLowerCase().includes('z')) : []
+    listDiagnosa.value = arr.length ? arr : []
   } else if (val === 'Baru' && arr2.length > 0) {
-    listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+    // listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
+    listDiagnosa.value = arr.length ? arr : []
   } else if (val === 'Lama' && arr2.length === 0) {
     listDiagnosa.value = arr.length ? arr.filter(x => x.kode.toString().toLowerCase().includes('z')) : []
   } else if (val === 'Lama' && arr2.length > 0) {
