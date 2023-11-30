@@ -93,6 +93,7 @@
 
       <div class="col-6">
         <app-autocomplete-debounce-input
+          :key="store.formRanap.status"
           :model="store.formRanap.jenistindakan"
           label="Jenis Tindakan"
           dense
@@ -102,6 +103,7 @@
           option-value="kdtindakan"
           option-label="tindakan"
           autocomplete="tindakan"
+          :valid="store.formRanap.status === 'Tidak' "
           :loading="loadingTind"
           @buang="onFilterJenisTindakan"
           @clear="store.setFormRanap('jenistindakan', null)"
@@ -110,6 +112,7 @@
       </div>
       <div class="col-6">
         <app-autocomplete-debounce-input
+          :key="store.formRanap.status"
           v-model="store.formRanap.icd9"
           label="Icd 9"
           outlined
@@ -118,6 +121,7 @@
           option-value="kd_prosedur"
           option-label="prosedur"
           autocomplete="prosedur"
+          :valid="store.formRanap.status === 'Tidak'"
           :loading="loadingIcd"
           @buang="filterIcd9"
           @clear="store.setFormRanap('icd9', null)"
