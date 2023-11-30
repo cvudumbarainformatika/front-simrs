@@ -64,7 +64,10 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.filters = !this.filters
     },
     setCustom() {
-      this.custom = !this.custom
+      this.custom = true
+    },
+    notCustom() {
+      this.custom = false
     },
     setQ(val) {
       this.fNama = val
@@ -82,6 +85,10 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     },
     filterItem(val) {
       this.filteredItems = this.items.filter(a => a?.nama?.toLowerCase().includes(val.toLowerCase()))
+    },
+    getAllSurat() {
+      this.getData()
+      this.getSuratKeluar()
     },
     getData() {
       this.loading = true
@@ -125,6 +132,21 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
             if (resp?.data?.original?.code) {
               notifErrVue(resp?.data?.original?.message)
             }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getSuratKeluar() {
+      this.loading = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/simrs/rajal/poli/listrujukankeluarrs', param)
+          .then(resp => {
+            this.loading = false
+            console.log('surat keluar', resp?.data)
             resolve(resp)
           })
           .catch(() => {

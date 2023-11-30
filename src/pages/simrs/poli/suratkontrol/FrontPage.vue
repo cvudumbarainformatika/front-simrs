@@ -10,12 +10,12 @@
         :custom="store.custom"
         :poli="apps?.user?.pegawai?.poli"
         @fullscreen="style.setComponentFull"
-        @refresh="store.getData"
+        @refresh="store.getAllSurat"
         @set-periode="(val)=>store.setPeriodik(val)"
         @set-tanggal="(val)=>store.setDate(val)"
         @set-search="store.setQ"
         @filter="store.setFilters"
-        @normal="store.setCustom"
+        @normal="store.notCustom"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">
@@ -98,6 +98,7 @@ const apps = useAplikasiStore()
 console.log('app', apps?.user?.pegawai?.poli)
 
 store.getData()
+store.getSuratKeluar()
 function setTanggal(val) {
   store.setForm('tglrencanakontrol', val)
   store.getjadwalDokterDpjp()
