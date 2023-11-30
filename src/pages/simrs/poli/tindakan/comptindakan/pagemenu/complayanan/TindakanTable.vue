@@ -68,6 +68,12 @@
                       lines="2"
                       class="f-10 text-italic"
                     >
+                      <span class="">Keterangan</span> : <span class="">{{ item?.rs20 }} </span>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                      class="f-10 text-italic"
+                    >
                       <span class="">oleh</span> : <span class="">{{ item?.pegawai?.nama }} </span>
                     </q-item-label>
                   </q-item-section>
