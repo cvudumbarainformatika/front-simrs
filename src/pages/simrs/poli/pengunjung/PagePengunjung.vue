@@ -18,7 +18,7 @@
         @refresh="store.getData"
         @set-periode="(val)=>store.setPeriodik(val)"
         @filter="store.setFilters"
-        @normal="store.setCustom"
+        @normal="store.notCustom"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">

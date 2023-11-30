@@ -99,7 +99,10 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.filters = !this.filters
     },
     setCustom() {
-      this.custom = !this.custom
+      this.custom = true
+    },
+    notCustom() {
+      this.custom = false
     },
 
     async gantiDpjp(form, pasien) {
