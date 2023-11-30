@@ -39,32 +39,34 @@
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
-          <div class="q-mr-sm">
-            {{ user?.nama }},
-          </div>
-          <div
-            v-if="user?.pegawai?.ruang"
-            class="q-mr-sm"
-          >
-            {{ user?.pegawai?.ruang?.uraian }}
-          </div>
-          <div
-            v-else-if="user?.pegawai?.depo"
-            class="q-mr-sm"
-          >
-            {{ user?.pegawai?.depo?.nama }}
-          </div>
-          <div
-            v-else-if="user?.pegawai?.poli"
-            class="q-mr-sm"
-          >
-            {{ user?.pegawai?.poli?.rs2 }}
-          </div>
-          <div
-            v-else
-            class="q-mr-sm"
-          >
-            Tidak ada ruangan
+          <div class="text-right">
+            <div class="q-mr-sm text-weight-bold">
+              {{ user?.nama }}
+            </div>
+            <div
+              v-if="user?.pegawai?.ruang"
+              class="q-mr-sm "
+            >
+              {{ user?.pegawai?.ruang?.uraian }}
+            </div>
+            <div
+              v-else-if="user?.pegawai?.depo"
+              class="q-mr-sm"
+            >
+              {{ user?.pegawai?.depo?.nama }}
+            </div>
+            <div
+              v-else-if="user?.pegawai?.poli"
+              class="q-mr-sm"
+            >
+              {{ user?.pegawai?.poli?.rs2 }}
+            </div>
+            <div
+              v-else
+              class="q-mr-sm text-primary"
+            >
+              Tidak ada ruangan
+            </div>
           </div>
           <q-btn
             flat
