@@ -57,11 +57,18 @@
                     >
                       <span class="">Tindakan x Jml</span> : <span class="text-weight-bold">{{ item.mastertindakan?.rs2 }} </span> x <span class="text-weight-bold text-negative">{{ item.rs5?item.rs5:0 }}</span>
                     </q-item-label>
+
                     <q-item-label
                       lines="2"
                       class="f-12"
                     >
                       <em class="text-accent">{{ dateFullFormat(item.rs3) }} </em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                      class="f-10 text-italic"
+                    >
+                      <span class="">oleh</span> : <span class="">{{ item?.pegawai?.nama }} </span>
                     </q-item-label>
                   </q-item-section>
 
