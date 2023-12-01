@@ -249,7 +249,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           this.loadingSaveKontrol = false
           if (resp?.data?.metadata?.code) {
             if (parseInt(resp?.data?.metadata?.code) !== 200) {
-              notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
+              notifErrVue('Balasan bpjs : ' + resp?.data?.metadata?.message)
             }
           }
           console.log(resp.data)
@@ -350,7 +350,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             notifSuccess(resp)
           } else {
             if (resp?.data?.metadata?.code) {
-              notifErrVue(resp?.data?.metadata?.message)
+              notifErrVue('Balasan bpjs : ' + resp?.data?.metadata?.message)
             } else {
               notifErrVue('Rujukan ke Rs lain Gagal')
             }
