@@ -94,7 +94,15 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     perujuk: null,
     loadingSave: false,
     jadwalDpjps: [],
-    loadingJadwalDokter: false
+    listSeps: [],
+    loadingJadwalDokter: false,
+    loadingListSep: false,
+    openDialogSep: false,
+    paramListSep: {
+      noka: '',
+      tglawal: dateDbFormat(new Date()),
+      tglakhir: dateDbFormat(new Date())
+    }
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -193,9 +201,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           })
       })
     },
-    async saveKontrol(pasien) {
-      this.loadingSaveKontrol = true
-      // console.log(pasien)
+    initFormKontrol(pasien) {
+      this.formKontrol.nosep = pasien?.sep
       this.formKontrol.tgllahir = pasien?.tgllahir
       this.formKontrol.kelamin = pasien?.kelamin
       this.formKontrol.nama = pasien?.nama
@@ -207,8 +214,33 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.kodepolibpjs = pasien?.kodepolibpjs
       this.formKontrol.dokter = pasien?.datasimpeg?.nama
       this.formKontrol.kodesistembayar = pasien?.kodesistembayar
-      this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
+      // this.listSeps.push(pasien?.sep)
+      console.log('form kontrol', this.formKontrol)
+    },
+    getListSep(pasien) {
+      this.loadingListSep = true
+      this.paramListSep.noka = pasien?.noka
+      const param = { params: this.paramListSep }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/cari-sep', param)
+          .then(resp => {
+            this.loadingListSep = false
+            console.log('resp his', resp?.data)
+            this.listSeps = resp?.data?.result?.histori ?? []
+            if (resp?.data?.metadata?.code !== 200 || resp?.data?.metadata?.code !== '200') {
+              notifInfVue(resp?.data?.metadata?.message)
+            }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingListSep = false
+          })
+      })
+    },
+    async saveKontrol(pasien) {
+      this.loadingSaveKontrol = true
+      // console.log(pasien)
       console.log('form kontrol', this.formKontrol)
 
       await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)

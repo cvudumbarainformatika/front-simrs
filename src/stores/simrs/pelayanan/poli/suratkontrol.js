@@ -159,7 +159,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.jadwalDpjps = []
       this.loadingJadwalDokter = true
       // console.log('get jadwal dokter')
-
+      this.setForm('kodeDokter', null)
       return new Promise(resolve => {
         api.post('v1/simrs/rajal/poli/jadwal', this.form)
           .then(resp => {
