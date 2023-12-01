@@ -227,8 +227,9 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           .then(resp => {
             this.loadingListSep = false
             console.log('resp his', resp?.data)
+            console.log('resp meta', resp?.data?.metadata?.code)
             this.listSeps = resp?.data?.result?.histori ?? []
-            if (resp?.data?.metadata?.code !== 200 || resp?.data?.metadata?.code !== '200') {
+            if (parseInt(resp?.data?.metadata?.code) !== 200) {
               notifInfVue(resp?.data?.metadata?.message)
             }
             resolve(resp)
@@ -247,7 +248,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         .then(resp => {
           this.loadingSaveKontrol = false
           if (resp?.data?.metadata?.code) {
-            if (resp?.data?.metadata?.code !== '200' || resp?.data?.metadata?.code !== 200) {
+            if (parseInt(resp?.data?.metadata?.code) !== 200) {
               notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
             }
           }
