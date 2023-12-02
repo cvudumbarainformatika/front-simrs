@@ -40,7 +40,7 @@
               /> -->
               <div>
                 <q-btn
-                  v-if="item?.rs4==='Rawat Inap'"
+                  v-if="item?.rs4==='Rawat Inap' || item?.rs4==='Rumah Sakit Lain'"
                   fab
                   color="primary"
                   icon="icon-mat-edit"
@@ -224,6 +224,7 @@ import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perenca
 import PlanningPage from './compperencanaan/PlanningPage.vue'
 import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
+import { notifInfVue } from 'src/modules/utils'
 
 const $q = useQuasar()
 const store = usePerencanaanPoliStore()
@@ -235,14 +236,31 @@ const props = defineProps({
   }
 })
 function editItem(val) {
-  store.editRanap = true
   console.log('edit', val)
-  store.setFormRanap('id', val.id)
   const renc = val.rs4
   if (store.plann !== renc) {
     store.plann = renc
   }
+  if (renc === 'Rumah Sakit Lain') {
+    if (!val?.transrujukan) {
+      notifInfVue('tidak ada data rujukan di Rumah sakit, silahkan isi kembali dari awal')
+    }
+    store.editRsLain = true
+    store.setFormRsLain('id', val.id)
+    store.setFormRsLain('norujukan', val?.transrujukan?.rs3)
+    store.setFormRsLain('tglrencanakunjungan', val?.transrujukan?.tglRencanaKunjungan)
+    store.setFormRsLain('namappkdirujuk', val?.transrujukan?.rs7)
+    store.setFormRsLain('ppkdirujukx', val?.transrujukan?.rs7)
+    store.setFormRsLain('ppkdirujuk', val?.transrujukan?.rs6)
+    store.setFormRsLain('namapolirujukan', val?.transrujukan?.poli)
+    store.setFormRsLain('polirujukan', val?.transrujukan?.polix)
+    store.setFormRsLain('tiperujukan', val?.transrujukan?.rs11)
+    store.setFormRsLain('catatan', val?.transrujukan?.rs9)
+    store.setFormRsLain('tglrujukan', val?.transrujukan?.rs5)
+  }
   if (renc === 'Rawat Inap') {
+    store.editRanap = true
+    store.setFormRanap('id', val.id)
     store.setFormRanap('kdruangtujuan', val.rs5)
     if (val.spri) {
       store.setFormRanap('nospri', val.spri?.noSuratKontrol)

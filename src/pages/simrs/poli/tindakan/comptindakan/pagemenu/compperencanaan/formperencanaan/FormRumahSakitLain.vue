@@ -114,6 +114,7 @@
           @filter="onFilterTest"
         /> -->
         <q-select
+          ref="refRs"
           v-model="store.formRsLain.ppkdirujuk"
           label="di rujuk Ke"
           dense
@@ -147,6 +148,7 @@
           @filter="filterPoli"
         /> -->
         <q-select
+          ref="refPoli"
           v-model="store.formRsLain.polirujukan"
           label="Poli Rujukan"
           dense
@@ -202,7 +204,7 @@
 
 <script setup>
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { api } from 'src/boot/axios'
 // import { useQuasar } from 'quasar'
 const props = defineProps({
@@ -283,7 +285,30 @@ const filterPoli = async (val, update, abort) => {
 onMounted(() => {
   store.initPasien(props.pasien)
 })
-
+const refRs = ref(null)
+const refPoli = ref(null)
+watch(() => store.formRsLain, (obj) => {
+  console.log('watch', obj)
+  console.log('edit', store.editRsLain)
+  // console.log('ref rs', refRs.value)
+  // console.log('ref poli', refPoli.value)
+  if (obj.namappkdirujuk !== '') {
+    optionsRs.value.push({
+      nama: obj?.namappkdirujuk,
+      kode: obj?.ppkdirujuk
+    })
+    // refRs.value.filter(obj?.namappkdirujuk)
+    // onFilterTest(obj?.namappkdirujuk)
+  }
+  if (obj.namapolirujukan !== '') {
+    optionsPoli.value.push({
+      nama: obj?.namapolirujukan,
+      kode: obj?.polirujukan
+    })
+    // refPoli.value.filter(obj?.namapolirujukan)
+    // filterPoli(obj?.namapolirujukan)
+  }
+}, { deep: true })
 function simpan() {
   console.log('ok', store.formRsLain)
   console.log('cat', refCatat.value.validate())

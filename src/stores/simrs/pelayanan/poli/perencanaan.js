@@ -116,6 +116,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
   // },
   actions: {
     resetForm() {
+      this.editRanap = false
+      this.editRsLain = false
       this.formKonsul = {
         kdSaran: '3',
         noreg_lama: '',
@@ -429,8 +431,9 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRsLain.planing = 'Rumah Sakit Lain'
       this.formRsLain.kodesistembayar = pasien?.kodesistembayar
       this.loadingSave = true
+      const url = this.editRsLain ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRsLain)
+        const resp = await api.post(url, this.formRsLain)
         // console.log('save rs lain', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
@@ -442,10 +445,11 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             if (resp?.data?.metadata?.code) {
               notifErrVue('Balasan bpjs : ' + resp?.data?.metadata?.message)
             } else {
-              notifErrVue('Rujukan ke Rs lain Gagal')
+              notifErrVue('Tidak ada Respon dari server')
             }
           }
           this.loadingSave = false
+          this.editRsLain = false
         }
         this.loadingSave = false
       } catch (error) {
@@ -554,6 +558,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.tglrencanakontrol = this.formRanap.tglrencanakunjungan
       this.loadingSave = true
       const url = this.editRanap ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
+
       try {
         const resp = await api.post(url, this.formRanap)
         // console.log('ranap', resp)
@@ -567,6 +572,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             notifInfVue('Update Grid Rawat Inap gagal, gagal mendapatkan data respon dari server')
           }
           this.loadingSave = false
+          this.editRanap = false
         }
         this.loadingSave = false
       } catch (error) {
