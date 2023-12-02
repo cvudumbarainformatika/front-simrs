@@ -20,9 +20,10 @@
   </q-layout>
 </template>
 <script setup>
-import { useQuasar } from 'quasar'
+import { useQuasar, date } from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
-import { computed, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
+import * as storage from 'src/modules/storage'
 
 import BgAnimation from './comp/BgAnimation.vue'
 import BoxAnimation from './comp/BoxAnimation.vue'
@@ -33,20 +34,21 @@ const dark = computed(() => {
 
 const store = useAuthStore()
 // ----- timer start -----
-let angka = 0
+const angka = ref(0)
 document.addEventListener('keypress', intrupt)
 document.addEventListener('mouseover', intrupt)
 function intrupt() {
-  angka = 0
+  localStorage.setItem('activeTime', new Date())
 }
 function timer() {
-  angka += 1
-  // if (angka === 100) {
-  if (angka === 3600) {
+  const lgTime = storage.getActiveTime()
+  const skr = new Date()
+  angka.value = date.getDateDiff(skr, lgTime, 'minutes')
+  if (angka.value >= 60) {
     store.logout()
   }
-  // console.log('time ', angka)
 }
+
 const setTimer = setInterval(timer, 1000)
 onBeforeUnmount(() => {
   clearInterval(setTimer)

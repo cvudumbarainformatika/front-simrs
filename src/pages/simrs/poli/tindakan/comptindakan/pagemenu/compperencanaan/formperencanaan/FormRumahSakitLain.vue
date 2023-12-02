@@ -163,6 +163,16 @@
           @update:model-value="updateModelPoli"
         />
       </div>
+      <div class="col-4">
+        <q-input
+          v-model="store.formRsLain.diagnosarujukan"
+          label="Diagnosa rujukan (Primer)"
+          dense
+          outlined
+          readonly
+          standout="bg-yellow-3"
+        />
+      </div>
       <div class="col-12">
         <q-input
           ref="refCatat"

@@ -260,6 +260,7 @@ export const useAuthStore = defineStore('auth', {
         await api.post('/v1/login-qr', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
+          localStorage.setItem('activeTime', new Date())
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()
           if (hdd && hddUser) {
@@ -281,6 +282,7 @@ export const useAuthStore = defineStore('auth', {
         await api.post('/v1/login', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
+          localStorage.setItem('activeTime', new Date())
           // console.log('login', resp)
           const hdd = storage.getLocalToken()
           const hddUser = storage.getUser()

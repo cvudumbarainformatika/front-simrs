@@ -38,18 +38,34 @@
                 style="top: 0; right: 50px; transform: translateY(-100%);"
                 @click="toItem=item"
               /> -->
-              <q-btn
-                fab
-                color="negative"
-                icon="icon-mat-delete"
-                class="absolute"
-                flat
-                dense
-                size="sm"
-                style="top: 0; right: 12px; transform: translateY(-100%);"
-                :loading="store.loadingHapus"
-                @click="hapusItem(item)"
-              />
+              <div>
+                <q-btn
+                  v-if="item?.rs4==='Rawat Inap'"
+                  fab
+                  color="primary"
+                  icon="icon-mat-edit"
+                  class="absolute"
+                  flat
+                  dense
+                  size="sm"
+                  style="top: 0; right: 12px; transform: translateY(-100%);"
+                  :loading="store.loadingHapus"
+                  @click="editItem(item)"
+                />
+                <q-btn
+                  v-else
+                  fab
+                  color="negative"
+                  icon="icon-mat-delete"
+                  class="absolute"
+                  flat
+                  dense
+                  size="sm"
+                  style="top: 0; right: 12px; transform: translateY(-100%);"
+                  :loading="store.loadingHapus"
+                  @click="hapusItem(item)"
+                />
+              </div>
               <div
                 v-if="item?.rs4!=='Rumah Sakit Lain'"
                 class="row no-wrap items-center"
@@ -206,7 +222,7 @@
 <script setup>
 import { usePerencanaanPoliStore } from 'src/stores/simrs/pelayanan/poli/perencanaan'
 import PlanningPage from './compperencanaan/PlanningPage.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onBeforeUnmount } from 'vue'
 import { useQuasar, date } from 'quasar'
 
 const $q = useQuasar()
@@ -218,6 +234,37 @@ const props = defineProps({
     default: null
   }
 })
+function editItem(val) {
+  store.editRanap = true
+  console.log('edit', val)
+  store.setFormRanap('id', val.id)
+  const renc = val.rs4
+  if (store.plann !== renc) {
+    store.plann = renc
+  }
+  if (renc === 'Rawat Inap') {
+    store.setFormRanap('kdruangtujuan', val.rs5)
+    if (val.spri) {
+      store.setFormRanap('nospri', val.spri?.noSuratKontrol)
+      store.setFormRanap('tglrencanakunjungan', val.spri?.tglRencanaKontrol)
+      store.setFormRanap('tglrencanakontrol', val.spri?.tglRencanaKontrol)
+    }
+    if (val.operasi) {
+      store.setFormRanap('status', 'Operasi')
+      store.setFormRanap('jenistindakan', val.operasi?.jenistindakan)
+      store.setFormRanap('icd9', val.operasi?.icd9)
+      const opTi = store.optionsJenisTindakan.filter(a => a.kdtindakan === val.operasi?.jenistindakan)
+      if (!opTi.length) {
+        store.cariTindakan(val.operasi?.jenistindakan)
+      }
+      const opIc = store.optionsIcd9.filter(a => a.kd_prosedur === val.operasi?.icd9)
+      if (!opIc.length) {
+        store.cariIcd9(val.operasi?.icd9)
+      }
+      store.setFormRanap('tanggaloperasi', val.operasi?.tanggaloperasi)
+    }
+  }
+}
 function setKepada(val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
@@ -284,4 +331,7 @@ function hapusItem(item) {
 //   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 
 // }
+onBeforeUnmount(() => {
+  store.resetForm()
+})
 </script>

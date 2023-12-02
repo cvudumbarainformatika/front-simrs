@@ -47,6 +47,12 @@
       }"
     >
       <q-page-container>
+        <!-- <div
+          v-if="apps?.user?.nama==='Programer'"
+          :key="angka"
+        >
+          {{ angka }}
+        </div> -->
         <router-view
           v-slot="{ Component }"
           class="transition"
@@ -95,6 +101,7 @@ import { useTransitionStore } from 'src/stores/app/transition'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
+import * as storage from 'src/modules/storage'
 
 const tanggal = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const router = useRouter()
@@ -102,6 +109,7 @@ const transition = useTransitionStore()
 const store = useAuthStore()
 const style = useStyledStore()
 const apps = useAplikasiStore()
+
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)
 const $q = useQuasar()
@@ -123,19 +131,20 @@ function setDark(val) {
 //   rightDrawerOpen.value = !rightDrawerOpen.value
 // }
 // ----- timer start -----
-let angka = 0
+const angka = ref(0)
 document.addEventListener('keypress', intrupt)
 document.addEventListener('mouseover', intrupt)
 function intrupt() {
-  angka = 0
+  localStorage.setItem('activeTime', new Date())
+  // console.log('interup')
 }
 function timer() {
-  angka += 1
-  // if (angka === 100) {
-  if (angka === 3600) {
+  const lgTime = storage.getActiveTime()
+  const skr = new Date()
+  angka.value = date.getDateDiff(skr, lgTime, 'minutes')
+  if (angka.value >= 60) {
     store.logout()
   }
-  // console.log('time ', angka)
 }
 const setTimer = setInterval(timer, 1000)
 onBeforeUnmount(() => {

@@ -50,8 +50,11 @@
         /> -->
       </div>
 
-      <div class="col-3">
+      <div
+        class="col-3"
+      >
         <app-autocomplete
+          :key="store.formRanap.kdruangtujuan"
           v-model="store.formRanap.kdruangtujuan"
           label="Ruangan Tujuan"
           dense
@@ -99,13 +102,13 @@
           dense
           outlined
           standout="bg-yellow-3"
-          :source="optionsJenisTindakan"
+          :source="store.optionsJenisTindakan"
           option-value="kdtindakan"
           option-label="tindakan"
           autocomplete="tindakan"
           :valid="store.formRanap.status === 'Tidak' "
-          :loading="loadingTind"
-          @buang="onFilterJenisTindakan"
+          :loading="store.loadingTind"
+          @buang="store.cariTindakan"
           @clear="store.setFormRanap('jenistindakan', null)"
           @on-select="store.setFormRanap('jenistindakan', $event)"
         />
@@ -117,18 +120,18 @@
           label="Icd 9"
           outlined
           standout="bg-yellow-3"
-          :source="optionsIcd9"
+          :source="store.optionsIcd9"
           option-value="kd_prosedur"
           option-label="prosedur"
           autocomplete="prosedur"
           :valid="store.formRanap.status === 'Tidak'"
-          :loading="loadingIcd"
-          @buang="filterIcd9"
+          :loading="store.loadingIcd"
+          @buang="store.cariIcd9"
           @clear="store.setFormRanap('icd9', null)"
           @on-select="store.setFormRanap('icd9', $event)"
         />
       </div>
-      <div class="col-12">
+      <!-- <div class="col-12">
         <q-input
           v-model="store.formRanap.keterangan"
           label="Keterangan"
@@ -136,7 +139,7 @@
           outlined
           standout="bg-yellow-3"
         />
-      </div>
+      </div> -->
       <div class="col-12">
         <q-separator class=" q-my-md" />
         <div class="text-right q-gutter-sm">
@@ -147,6 +150,13 @@
             :loading="store.loadingSave"
             :disable="store.loadingSave"
           />
+          <!-- <q-btn
+            label="simpan Edit"
+            color="primary"
+            type="reset"
+            :loading="store.loadingSave"
+            :disable="store.loadingSave"
+          /> -->
         </div>
       </div>
     </div>
@@ -177,8 +187,8 @@ const optionTipe = ref([
   { value: 'Operasi', label: 'YA' },
   { value: 'Tidak', label: 'TIDAK' }
 ])
-const optionsJenisTindakan = ref([])
-const optionsIcd9 = ref([])
+// const optionsJenisTindakan = ref([])
+// const optionsIcd9 = ref([])
 const optionsRtujuan = ref([])
 
 function setOperasi(val) {
@@ -186,51 +196,6 @@ function setOperasi(val) {
     store.setFormRanap('tanggaloperasi', null)
   } else {
     store.setFormRanap('tanggaloperasi', date.formatDate(Date.now(), 'YYYY-MM-DD'))
-  }
-}
-const loadingTind = ref(false)
-async function onFilterJenisTindakan(val) {
-  if (val.length < 3) {
-    return
-  }
-  loadingTind.value = true
-  const params = {
-    params: {
-      tindakan: val
-    }
-  }
-  // await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params).then(response => {
-  await api.get('v1/simrs/pelayanan/dialogoperasi', params).then(response => {
-    loadingTind.value = false
-    const code = response?.status
-    if (code === 200) {
-      optionsJenisTindakan.value = response?.data
-    }
-    console.log('resp jenisT', optionsJenisTindakan.value)
-  }).catch(() => {
-    loadingTind.value = false
-  })
-}
-// function jnsClear() {
-//   store.setFormRanap('jenistindakan', null)
-// }
-const loadingIcd = ref(false)
-async function filterIcd9(val) {
-  if (val.length < 3) {
-    return
-  }
-  loadingIcd.value = true
-  const params = {
-    params: {
-      q: val
-    }
-  }
-  const response = await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
-  loadingIcd.value = false
-  if (response?.data.length) {
-    optionsIcd9.value = response?.data
-  } else {
-    optionsIcd9.value = []
   }
 }
 
@@ -247,7 +212,7 @@ onMounted(() => {
 })
 
 function simpan() {
-  // console.log('ok', store.formRanap)
+  console.log('simpan', store.formRanap)
   store.saveRanap(props.pasien)
   // console.log('opt', optionsIcd9.value, optionsJenisTindakan.value)
   // $q.notify({
@@ -256,5 +221,10 @@ function simpan() {
   //   position: 'top-right',
   //   color: 'negative'
   // })
+  // console.log('simpan')
 }
+// function edit() {
+//   console.log('edit', store.formRanap)
+// }
+
 </script>
