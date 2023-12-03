@@ -59,21 +59,46 @@
       <div class="col-6">
         <div class="row">
           <div class="col-12 q-mb-sm">
-            <app-autocomplete-debounce-input
+            <q-select
+              ref="refIcd"
               v-model="store.formtindakan.icd9"
-              label="Icd 9"
+              label="Cari Icd 9"
               outlined
+              use-input
               standout="bg-yellow-3"
-              :source="store.optionsIcd9"
+              dense
+              emit-value
+              map-options
               option-value="kd_prosedur"
-              option-label="prosedur"
+              :option-label="opt => Object(opt) === opt && 'prosedur' in opt ? opt.kd_prosedur + ' ~ ' + opt.prosedur : ' Cari Icd 9 '"
               autocomplete="prosedur"
+              input-debounce="500"
               valid
+              :options="optionIcds"
               :loading="store.loadingIcd"
-              @buang="store.cariIcd9"
+              @filter="filterIcd"
               @clear="store.setFormTindakan('icd9', null)"
-              @on-select="store.setFormTindakan('icd9', $event)"
-            />
+              @update:model-value="store.setFormTindakan('icd9', $event)"
+            >
+              <!-- @input-value="store.cariIcd9" -->
+              <template
+                v-if="store.formtindakan.icd9"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-cancel"
+                  class="cursor-pointer"
+                  @click.stop.prevent="store.setFormTindakan('icd9', null)"
+                />
+              </template>
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
           </div>
         </div>
       </div>
@@ -202,6 +227,51 @@ function filterFn(val, update, abort) {
       )
     const filteredData = multiFilter(arr, filter, needle)
     options.value = filteredData
+  })
+}
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const inputValue = myDebounce((val) => {
+  if (val !== '') store.cariIcd9(val)
+})
+const refIcd = ref(null)
+const optionIcds = ref([])
+
+function filterIcd(val, update) {
+  if (val === '') {
+    update(() => {
+      optionIcds.value = store.optionsIcd9
+    })
+    return
+  }
+  if (val === null) {
+    update(() => {
+      optionIcds.value = store.optionsIcd9
+    })
+    return
+  }
+
+  update(() => {
+    const filter = ['kd_prosedur', 'prosedur']
+    const needle = val.toLowerCase()
+    const arr = store.optionsIcd9
+    // const splits = arr.split('-')
+    const multiFilter = (data = [], filterKeys = [], value = '') =>
+      data.filter((item) =>
+        filterKeys.some(
+          (key) =>
+            item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+                item[key]
+        )
+      )
+    const filteredData = multiFilter(arr, filter, needle)
+    if (!filteredData.length) inputValue(val)
+    optionIcds.value = filteredData
   })
 }
 </script>

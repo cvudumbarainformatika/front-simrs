@@ -206,7 +206,6 @@ function myDebounce(func, timeout = 800) {
   }
 }
 const inputValue = myDebounce((val) => {
-  // console.log('proses val', val)
   if (val !== '') emits('buang', val)
 })
 // const inputValue = (value) => {
