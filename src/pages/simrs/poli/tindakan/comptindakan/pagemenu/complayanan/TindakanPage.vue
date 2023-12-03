@@ -5,7 +5,7 @@
         flat
         bordered
         square
-        class="col-6 full-height"
+        class="col-7 full-height"
       >
         <div class="column full-height">
           <div class="col-12">
@@ -16,7 +16,7 @@
           </div>
         </div>
       </q-card>
-      <div class="col-6 full-height ">
+      <div class="col-5 full-height ">
         <div class="column full-height">
           <div class="col">
             <TindakanTable

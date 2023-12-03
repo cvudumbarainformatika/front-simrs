@@ -12,45 +12,70 @@
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
     >
-      <div class="col-12 q-mb-sm">
-        <q-select
-          v-model="store.searchtindakan"
-          use-input
-          hide-selected
-          fill-input
-          outlined
-          standout="bg-yellow-3"
-          dense
-          emit-value
-          map-options
-          option-value="kdtindakan"
-          :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
-          input-debounce="0"
-          :options="options"
-          label="Cari Tindakan"
-          @filter="filterFn"
-          @update:model-value="(val)=> updateSearchTindakan(val)"
-        >
-          <template #no-option>
-            <q-item>
-              <q-item-section class="text-grey">
-                Tidak ditemukan
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12 q-mb-sm">
+            <q-select
+              v-model="store.searchtindakan"
+              use-input
+              hide-selected
+              fill-input
+              outlined
+              standout="bg-yellow-3"
+              dense
+              emit-value
+              map-options
+              option-value="kdtindakan"
+              :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
+              input-debounce="0"
+              :options="options"
+              label="Cari Tindakan"
+              @filter="filterFn"
+              @update:model-value="(val)=> updateSearchTindakan(val)"
+            >
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <div class="col-12">
+            <q-input
+              v-model="store.formtindakan.tindakan"
+              label="Tindakan (Otomatis)"
+              dense
+              outlined
+              standout="bg-yellow-3"
+              :rules="[val => !!val || 'Harus diisi']"
+              hide-bottom-space
+              readonly
+            />
+          </div>
+        </div>
       </div>
-      <div class="col-12">
-        <q-input
-          v-model="store.formtindakan.tindakan"
-          label="Tindakan (Otomatis)"
-          dense
-          outlined
-          standout="bg-yellow-3"
-          :rules="[val => !!val || 'Harus diisi']"
-          hide-bottom-space
-          readonly
-        />
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12 q-mb-sm">
+            <app-autocomplete-debounce-input
+              v-model="store.formtindakan.icd9"
+              label="Icd 9"
+              outlined
+              standout="bg-yellow-3"
+              :source="store.optionsIcd9"
+              option-value="kd_prosedur"
+              option-label="prosedur"
+              autocomplete="prosedur"
+              valid
+              :loading="store.loadingIcd"
+              @buang="store.cariIcd9"
+              @clear="store.setFormTindakan('icd9', null)"
+              @on-select="store.setFormTindakan('icd9', $event)"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="col-9">

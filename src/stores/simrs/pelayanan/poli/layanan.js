@@ -38,7 +38,10 @@ export const useLayananPoli = defineStore('layanan-poli', {
       // pelaksana: '',
       keterangan: ''
     },
-    loadingFormTindakan: false
+    loadingFormTindakan: false,
+    //= === icd 9 ===
+    optionsIcd9: [],
+    loadingIcd: false
 
   }),
   // getters: {
@@ -60,6 +63,32 @@ export const useLayananPoli = defineStore('layanan-poli', {
       }
     },
 
+    //= ===
+    async cariIcd9(val) {
+      if (val.length < 3) {
+        return
+      }
+      this.loadingIcd = true
+      const params = {
+        params: {
+          q: val
+        }
+      }
+      await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
+        .then(response => {
+          this.loadingIcd = false
+          if (response?.data.length) {
+            this.optionsIcd9 = response?.data
+          }
+        })
+        .catch(() => {
+          this.loadingIcd = false
+        })
+    },
+    setFormTindakan(key, val) {
+      this.formtindakan[key] = val
+    },
+    //= ===
     setKode(val) {
       this.formdiagnosa.kddiagnosa = val
       const ada = this.listDiagnosa.length > 0
