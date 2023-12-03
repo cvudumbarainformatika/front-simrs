@@ -52,6 +52,7 @@
           readonly
         />
       </div>
+
       <div class="col-9">
         <q-input
           v-model="store.formtindakan.tarif"

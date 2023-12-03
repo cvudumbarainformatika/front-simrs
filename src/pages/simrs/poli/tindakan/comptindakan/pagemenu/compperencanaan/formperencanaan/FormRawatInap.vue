@@ -200,8 +200,12 @@ function setOperasi(val) {
 }
 
 async function getRuang() {
-  const response = await api.get('v1/simrs/ranap/ruangan/listruanganranap')
-  optionsRtujuan.value = response?.data
+  const temp = store.formRanap.kdruangtujuan
+  store.formRanap.kdruangtujuan = null
+  await api.get('v1/simrs/ranap/ruangan/listruanganranap').then(response => {
+    optionsRtujuan.value = response?.data
+    store.formRanap.kdruangtujuan = temp
+  })
 }
 function ruangRanapSelected(val) {
   console.log(val)
