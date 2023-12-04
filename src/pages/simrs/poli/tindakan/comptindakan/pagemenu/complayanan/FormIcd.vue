@@ -16,7 +16,7 @@
       <div class="col-12 q-mb-sm">
         <q-select
           ref="refIcd"
-          v-model="store.formtindakan.icd9"
+          v-model="store.formicd.kdprocedure"
           label="Cari Icd 9"
           outlined
           use-input
@@ -25,25 +25,25 @@
           emit-value
           map-options
           option-value="kd_prosedur"
-          :option-label="opt => Object(opt) === opt && 'prosedur' in opt ? opt.kd_prosedur + ' ~ ' + opt.prosedur : ' Cari Icd 9 '"
+          :option-label="opt => Object(opt) === opt && 'prosedur' in opt ? opt.kd_prosedur + ' ~ ' + opt.prosedur : ''"
           autocomplete="prosedur"
           input-debounce="500"
           valid
           :options="optionIcds"
           :loading="store.loadingIcd"
           @filter="filterIcd"
-          @clear="store.setFormTindakan('icd9', null)"
-          @update:model-value="store.setFormTindakan('icd9', $event)"
+          @clear="store.setFormIcd('kdprocedure', null)"
+          @update:model-value="setIcd"
         >
           <!-- @input-value="store.cariIcd9" -->
           <template
-            v-if="store.formtindakan.icd9"
+            v-if="store.formicd.kdprocedure"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormTindakan('icd9', null)"
+              @click.stop.prevent="store.setFormIcd('kdprocedure', null)"
             />
           </template>
           <template #no-option>
@@ -61,7 +61,7 @@
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formtindakan.procedure_code"
+          v-model="store.formicd.procedure_code"
           label="Special Procedure"
           outlined
           use-input
@@ -75,18 +75,18 @@
           input-debounce="500"
           valid
           :options="store.specialProcedureOpts"
-          @clear="store.setFormTindakan('procedure_code', null)"
-          @update:model-value="store.setFormTindakan('procedure_code', $event)"
+          @clear="store.setFormIcd('procedure_code', null)"
+          @update:model-value="store.setFormIcd('procedure_code', $event)"
         >
           <!-- @input-value="store.cariIcd9" -->
           <template
-            v-if="store.formtindakan.procedure_code"
+            v-if="store.formicd.procedure_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormTindakan('procedure_code', null)"
+              @click.stop.prevent="store.setFormIcd('procedure_code', null)"
             />
           </template>
           <template #no-option>
@@ -104,7 +104,7 @@
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formtindakan.prosthesis_code"
+          v-model="store.formicd.prosthesis_code"
           label="Special Prosthesis"
           outlined
           use-input
@@ -118,18 +118,18 @@
           input-debounce="500"
           valid
           :options="store.specialProsthesisOpts"
-          @clear="store.setFormTindakan('prosthesis_code', null)"
-          @update:model-value="store.setFormTindakan('prosthesis_code', $event)"
+          @clear="store.setFormIcd('prosthesis_code', null)"
+          @update:model-value="store.setFormIcd('prosthesis_code', $event)"
         >
           <!-- @input-value="store.cariIcd9" -->
           <template
-            v-if="store.formtindakan.prosthesis_code"
+            v-if="store.formicd.prosthesis_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormTindakan('prosthesis_code', null)"
+              @click.stop.prevent="store.setFormIcd('prosthesis_code', null)"
             />
           </template>
           <template #no-option>
@@ -147,7 +147,7 @@
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formtindakan.investigation_code"
+          v-model="store.formicd.investigation_code"
           label="Special Investigation"
           outlined
           use-input
@@ -161,18 +161,18 @@
           input-debounce="500"
           valid
           :options="store.specialInvestigationOpts"
-          @clear="store.setFormTindakan('investigation_code', null)"
-          @update:model-value="store.setFormTindakan('investigation_code', $event)"
+          @clear="store.setFormIcd('investigation_code', null)"
+          @update:model-value="store.setFormIcd('investigation_code', $event)"
         >
           <!-- @input-value="store.cariIcd9" -->
           <template
-            v-if="store.formtindakan.investigation_code"
+            v-if="store.formicd.investigation_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormTindakan('investigation_code', null)"
+              @click.stop.prevent="store.setFormIcd('investigation_code', null)"
             />
           </template>
           <template #no-option>
@@ -190,7 +190,7 @@
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formtindakan.drug_code"
+          v-model="store.formicd.drug_code"
           label="Special Drug"
           outlined
           use-input
@@ -204,18 +204,18 @@
           input-debounce="500"
           valid
           :options="store.specialDrugOpts"
-          @clear="store.setFormTindakan('drug_code', null)"
-          @update:model-value="store.setFormTindakan('drug_code', $event)"
+          @clear="store.setFormIcd('drug_code', null)"
+          @update:model-value="store.setFormIcd('drug_code', $event)"
         >
           <!-- @input-value="store.cariIcd9" -->
           <template
-            v-if="store.formtindakan.drug_code"
+            v-if="store.formicd.drug_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormTindakan('drug_code', null)"
+              @click.stop.prevent="store.setFormIcd('drug_code', null)"
             />
           </template>
           <template #no-option>
@@ -233,8 +233,8 @@
           label="Simpan Icd"
           color="primary"
           type="submit"
-          :loading="store.loadingFormTindakan"
-          :disable="store.loadingFormTindakan"
+          :loading="store.loadingSaveIcd"
+          :disable="store.loadingSaveIcd"
         />
       </div>
     </q-form>
@@ -276,14 +276,16 @@ onMounted(() => {
   // formmRef.value?.resetValidation()
 })
 
-// function updateSearchTindakan(val) {
-//   store.setKdTindakan(val).then(() => {
-//     inpQtyRef.value.focus()
-//   })
-// }
+function setIcd(val) {
+  store.setFormIcd('kdprocedure', val)
+  const icd = store.optionsIcd9.filter(a => a.kd_prosedur === val)
+  if (icd.length) {
+    store.setFormIcd('procedure', icd[0].prosedur)
+  }
+}
 
 function onSubmit() {
-  store.saveTindakan(props.pasien).then(() => {
+  store.saveIcd(props.pasien).then(() => {
     formmRef.value.resetValidation()
   })
 }

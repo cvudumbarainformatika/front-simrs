@@ -42,6 +42,10 @@ export const useLayananPoli = defineStore('layanan-poli', {
     //= === icd 9 ===
     optionsIcd9: [],
     loadingIcd: false,
+    loadingSaveIcd: false,
+    formicd: {
+      kdprocedure: ''
+    },
     //= == special ina ===
     specialProcedureOpts: [],
     specialProsthesisOpts: [],
@@ -326,6 +330,29 @@ export const useLayananPoli = defineStore('layanan-poli', {
         }
 
         resolve()
+      })
+    },
+    // =====
+    setFormIcd(key, val) {
+      this.formicd[key] = val
+    },
+    saveIcd(pasien) {
+      this.loadingSaveIcd = true
+      this.setFormIcd('noreg', pasien?.noreg)
+      console.log('form icd', this.formicd)
+      return new Promise(resolve => {
+        api.post('v1/simrs/pelayanan/simpanprocedure', this.formicd)
+          .then(resp => {
+            this.loadingSaveIcd = false
+            if (resp.status === 200) {
+              const storeIna = useInacbgPoli()
+              storeIna.getDataIna(pasien)
+            }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSaveIcd = false
+          })
       })
     }
 
