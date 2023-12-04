@@ -41,7 +41,12 @@ export const useLayananPoli = defineStore('layanan-poli', {
     loadingFormTindakan: false,
     //= === icd 9 ===
     optionsIcd9: [],
-    loadingIcd: false
+    loadingIcd: false,
+    //= == special ina ===
+    specialProcedureOpts: [],
+    specialProsthesisOpts: [],
+    specialInvestigationOpts: [],
+    specialDrugOpts: []
 
   }),
   // getters: {

@@ -58,6 +58,7 @@
       </div>
       <div class="col-6">
         <div class="row">
+          <!-- icd 9 -->
           <div class="col-12 q-mb-sm">
             <q-select
               ref="refIcd"
@@ -89,6 +90,178 @@
                   name="icon-mat-cancel"
                   class="cursor-pointer"
                   @click.stop.prevent="store.setFormTindakan('icd9', null)"
+                />
+              </template>
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <!-- Special Procedure -->
+          <div
+            v-if="store.specialProcedureOpts.length"
+            class="col-12 q-mb-sm"
+          >
+            <q-select
+              v-model="store.formtindakan.procedure_code"
+              label="Special Procedure"
+              outlined
+              use-input
+              standout="bg-yellow-3"
+              dense
+              emit-value
+              map-options
+              option-value="code"
+              option-label="description"
+              autocomplete="description"
+              input-debounce="500"
+              valid
+              :options="store.specialProcedureOpts"
+              @clear="store.setFormTindakan('procedure_code', null)"
+              @update:model-value="store.setFormTindakan('procedure_code', $event)"
+            >
+              <!-- @input-value="store.cariIcd9" -->
+              <template
+                v-if="store.formtindakan.procedure_code"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-cancel"
+                  class="cursor-pointer"
+                  @click.stop.prevent="store.setFormTindakan('procedure_code', null)"
+                />
+              </template>
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <!-- Special Prosthesis -->
+          <div
+            v-if="store.specialProsthesisOpts.length"
+            class="col-12 q-mb-sm"
+          >
+            <q-select
+              v-model="store.formtindakan.prosthesis_code"
+              label="Special Prosthesis"
+              outlined
+              use-input
+              standout="bg-yellow-3"
+              dense
+              emit-value
+              map-options
+              option-value="code"
+              option-label="description"
+              autocomplete="description"
+              input-debounce="500"
+              valid
+              :options="store.specialProsthesisOpts"
+              @clear="store.setFormTindakan('prosthesis_code', null)"
+              @update:model-value="store.setFormTindakan('prosthesis_code', $event)"
+            >
+              <!-- @input-value="store.cariIcd9" -->
+              <template
+                v-if="store.formtindakan.prosthesis_code"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-cancel"
+                  class="cursor-pointer"
+                  @click.stop.prevent="store.setFormTindakan('prosthesis_code', null)"
+                />
+              </template>
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <!-- Special Investigation -->
+          <div
+            v-if="store.specialInvestigationOpts.length"
+            class="col-12 q-mb-sm"
+          >
+            <q-select
+              v-model="store.formtindakan.investigation_code"
+              label="Special Investigation"
+              outlined
+              use-input
+              standout="bg-yellow-3"
+              dense
+              emit-value
+              map-options
+              option-value="code"
+              option-label="description"
+              autocomplete="description"
+              input-debounce="500"
+              valid
+              :options="store.specialInvestigationOpts"
+              @clear="store.setFormTindakan('investigation_code', null)"
+              @update:model-value="store.setFormTindakan('investigation_code', $event)"
+            >
+              <!-- @input-value="store.cariIcd9" -->
+              <template
+                v-if="store.formtindakan.investigation_code"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-cancel"
+                  class="cursor-pointer"
+                  @click.stop.prevent="store.setFormTindakan('investigation_code', null)"
+                />
+              </template>
+              <template #no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    Tidak ditemukan
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <!-- Special Drug  -->
+          <div
+            v-if="store.specialDrugOpts.length"
+            class="col-12 q-mb-sm"
+          >
+            <q-select
+              v-model="store.formtindakan.drug_code"
+              label="Special Drug"
+              outlined
+              use-input
+              standout="bg-yellow-3"
+              dense
+              emit-value
+              map-options
+              option-value="code"
+              option-label="description"
+              autocomplete="description"
+              input-debounce="500"
+              valid
+              :options="store.specialDrugOpts"
+              @clear="store.setFormTindakan('drug_code', null)"
+              @update:model-value="store.setFormTindakan('drug_code', $event)"
+            >
+              <!-- @input-value="store.cariIcd9" -->
+              <template
+                v-if="store.formtindakan.drug_code"
+                #append
+              >
+                <q-icon
+                  name="icon-mat-cancel"
+                  class="cursor-pointer"
+                  @click.stop.prevent="store.setFormTindakan('drug_code', null)"
                 />
               </template>
               <template #no-option>
