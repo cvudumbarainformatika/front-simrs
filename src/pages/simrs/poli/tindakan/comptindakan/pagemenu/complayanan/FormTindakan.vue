@@ -229,16 +229,7 @@ function filterFn(val, update, abort) {
     options.value = filteredData
   })
 }
-function myDebounce(func, timeout = 800) {
-  let timer
-  return (...arg) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
-  }
-}
-const inputValue = myDebounce((val) => {
-  if (val !== '') store.cariIcd9(val)
-})
+
 const refIcd = ref(null)
 const optionIcds = ref([])
 
@@ -259,7 +250,6 @@ function filterIcd(val, update) {
   update(() => {
     const filter = ['kd_prosedur', 'prosedur']
     const needle = val.toLowerCase()
-    const arr = store.optionsIcd9
     // const splits = arr.split('-')
     const multiFilter = (data = [], filterKeys = [], value = '') =>
       data.filter((item) =>
@@ -269,9 +259,17 @@ function filterIcd(val, update) {
                 item[key]
         )
       )
-    const filteredData = multiFilter(arr, filter, needle)
-    if (!filteredData.length) inputValue(val)
-    optionIcds.value = filteredData
+    let filteredData = multiFilter(store.optionsIcd9, filter, needle)
+    if (!filteredData.length) {
+      if (val !== '') {
+        store.cariIcd9(val).then(() => {
+          filteredData = multiFilter(store.optionsIcd9, filter, needle)
+          optionIcds.value = filteredData
+        })
+      }
+    } else {
+      optionIcds.value = filteredData
+    }
   })
 }
 </script>

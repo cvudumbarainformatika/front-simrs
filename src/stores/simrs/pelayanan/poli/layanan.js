@@ -79,6 +79,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           this.loadingIcd = false
           if (response?.data.length) {
             this.optionsIcd9 = response?.data
+            return Promise.resolve(response)
           }
         })
         .catch(() => {
