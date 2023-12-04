@@ -9,7 +9,7 @@
       >
         <div class="column full-height">
           <div class="col-12">
-            <FormTindakan
+            <FormIcd
               ref="reffForm"
               :pasien="props.pasien"
             />
@@ -19,7 +19,7 @@
       <div class="col-6 full-height ">
         <div class="column full-height">
           <div class="col">
-            <TindakanTable
+            <IcdTable
               :key="pasien"
               :pasien="props.pasien"
             />
@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import FormTindakan from './FormTindakan.vue'
-import TindakanTable from './TindakanTable.vue'
+import FormIcd from './FormIcd.vue'
+import IcdTable from './IcdTable.vue'
 import SimulasiPage from './SimulasiPage.vue'
 import { ref } from 'vue'
 // import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'

@@ -12,268 +12,45 @@
       class="row q-pa-md q-col-gutter-sm"
       @submit="onSubmit"
     >
-      <div class="col-6">
-        <div class="row">
-          <div class="col-12 q-mb-sm">
-            <q-select
-              v-model="store.searchtindakan"
-              use-input
-              hide-selected
-              fill-input
-              outlined
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="kdtindakan"
-              :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
-              input-debounce="0"
-              :options="options"
-              label="Cari Tindakan"
-              @filter="filterFn"
-              @update:model-value="(val)=> updateSearchTindakan(val)"
-            >
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <div class="col-12">
-            <q-input
-              v-model="store.formtindakan.tindakan"
-              label="Tindakan (Otomatis)"
-              dense
-              outlined
-              standout="bg-yellow-3"
-              :rules="[val => !!val || 'Harus diisi']"
-              hide-bottom-space
-              readonly
-            />
-          </div>
-        </div>
+      <div class="col-12 q-mb-sm">
+        <q-select
+          v-model="store.searchtindakan"
+          use-input
+          hide-selected
+          fill-input
+          outlined
+          standout="bg-yellow-3"
+          dense
+          emit-value
+          map-options
+          option-value="kdtindakan"
+          :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
+          input-debounce="0"
+          :options="options"
+          label="Cari Tindakan"
+          @filter="filterFn"
+          @update:model-value="(val)=> updateSearchTindakan(val)"
+        >
+          <template #no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                Tidak ditemukan
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
       </div>
-      <div class="col-6">
-        <div class="row">
-          <!-- icd 9 -->
-          <div class="col-12 q-mb-sm">
-            <q-select
-              ref="refIcd"
-              v-model="store.formtindakan.icd9"
-              label="Cari Icd 9"
-              outlined
-              use-input
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="kd_prosedur"
-              :option-label="opt => Object(opt) === opt && 'prosedur' in opt ? opt.kd_prosedur + ' ~ ' + opt.prosedur : ' Cari Icd 9 '"
-              autocomplete="prosedur"
-              input-debounce="500"
-              valid
-              :options="optionIcds"
-              :loading="store.loadingIcd"
-              @filter="filterIcd"
-              @clear="store.setFormTindakan('icd9', null)"
-              @update:model-value="store.setFormTindakan('icd9', $event)"
-            >
-              <!-- @input-value="store.cariIcd9" -->
-              <template
-                v-if="store.formtindakan.icd9"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setFormTindakan('icd9', null)"
-                />
-              </template>
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <!-- Special Procedure -->
-          <div
-            v-if="store.specialProcedureOpts.length"
-            class="col-12 q-mb-sm"
-          >
-            <q-select
-              v-model="store.formtindakan.procedure_code"
-              label="Special Procedure"
-              outlined
-              use-input
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="code"
-              option-label="description"
-              autocomplete="description"
-              input-debounce="500"
-              valid
-              :options="store.specialProcedureOpts"
-              @clear="store.setFormTindakan('procedure_code', null)"
-              @update:model-value="store.setFormTindakan('procedure_code', $event)"
-            >
-              <!-- @input-value="store.cariIcd9" -->
-              <template
-                v-if="store.formtindakan.procedure_code"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setFormTindakan('procedure_code', null)"
-                />
-              </template>
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <!-- Special Prosthesis -->
-          <div
-            v-if="store.specialProsthesisOpts.length"
-            class="col-12 q-mb-sm"
-          >
-            <q-select
-              v-model="store.formtindakan.prosthesis_code"
-              label="Special Prosthesis"
-              outlined
-              use-input
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="code"
-              option-label="description"
-              autocomplete="description"
-              input-debounce="500"
-              valid
-              :options="store.specialProsthesisOpts"
-              @clear="store.setFormTindakan('prosthesis_code', null)"
-              @update:model-value="store.setFormTindakan('prosthesis_code', $event)"
-            >
-              <!-- @input-value="store.cariIcd9" -->
-              <template
-                v-if="store.formtindakan.prosthesis_code"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setFormTindakan('prosthesis_code', null)"
-                />
-              </template>
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <!-- Special Investigation -->
-          <div
-            v-if="store.specialInvestigationOpts.length"
-            class="col-12 q-mb-sm"
-          >
-            <q-select
-              v-model="store.formtindakan.investigation_code"
-              label="Special Investigation"
-              outlined
-              use-input
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="code"
-              option-label="description"
-              autocomplete="description"
-              input-debounce="500"
-              valid
-              :options="store.specialInvestigationOpts"
-              @clear="store.setFormTindakan('investigation_code', null)"
-              @update:model-value="store.setFormTindakan('investigation_code', $event)"
-            >
-              <!-- @input-value="store.cariIcd9" -->
-              <template
-                v-if="store.formtindakan.investigation_code"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setFormTindakan('investigation_code', null)"
-                />
-              </template>
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-          <!-- Special Drug  -->
-          <div
-            v-if="store.specialDrugOpts.length"
-            class="col-12 q-mb-sm"
-          >
-            <q-select
-              v-model="store.formtindakan.drug_code"
-              label="Special Drug"
-              outlined
-              use-input
-              standout="bg-yellow-3"
-              dense
-              emit-value
-              map-options
-              option-value="code"
-              option-label="description"
-              autocomplete="description"
-              input-debounce="500"
-              valid
-              :options="store.specialDrugOpts"
-              @clear="store.setFormTindakan('drug_code', null)"
-              @update:model-value="store.setFormTindakan('drug_code', $event)"
-            >
-              <!-- @input-value="store.cariIcd9" -->
-              <template
-                v-if="store.formtindakan.drug_code"
-                #append
-              >
-                <q-icon
-                  name="icon-mat-cancel"
-                  class="cursor-pointer"
-                  @click.stop.prevent="store.setFormTindakan('drug_code', null)"
-                />
-              </template>
-              <template #no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    Tidak ditemukan
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div>
-        </div>
+      <div class="col-12">
+        <q-input
+          v-model="store.formtindakan.tindakan"
+          label="Tindakan (Otomatis)"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          :rules="[val => !!val || 'Harus diisi']"
+          hide-bottom-space
+          readonly
+        />
       </div>
 
       <div class="col-9">
@@ -403,46 +180,4 @@ function filterFn(val, update, abort) {
   })
 }
 
-const refIcd = ref(null)
-const optionIcds = ref([])
-
-function filterIcd(val, update) {
-  if (val === '') {
-    update(() => {
-      optionIcds.value = store.optionsIcd9
-    })
-    return
-  }
-  if (val === null) {
-    update(() => {
-      optionIcds.value = store.optionsIcd9
-    })
-    return
-  }
-
-  update(() => {
-    const filter = ['kd_prosedur', 'prosedur']
-    const needle = val.toLowerCase()
-    // const splits = arr.split('-')
-    const multiFilter = (data = [], filterKeys = [], value = '') =>
-      data.filter((item) =>
-        filterKeys.some(
-          (key) =>
-            item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
-                item[key]
-        )
-      )
-    let filteredData = multiFilter(store.optionsIcd9, filter, needle)
-    if (!filteredData.length) {
-      if (val !== '') {
-        store.cariIcd9(val).then(() => {
-          filteredData = multiFilter(store.optionsIcd9, filter, needle)
-          optionIcds.value = filteredData
-        })
-      }
-    } else {
-      optionIcds.value = filteredData
-    }
-  })
-}
 </script>

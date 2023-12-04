@@ -40,18 +40,27 @@
           emit-value
           @update:model-value="setOperasi"
         />
-        <!-- <q-input
-          v-model="store.formRanap.nosep"
-          label="SEP (Automatis)"
-          dense
-          outlined
-          standout="bg-yellow-3"
-          readonly
-        /> -->
       </div>
 
       <div
         class="col-3"
+      >
+        <app-autocomplete
+          v-model="store.formRanap.jenisoperasi"
+          label="Jenis Operasi"
+          dense
+          outlined
+          standout="bg-yellow-3"
+          use-input
+          :source="optionsJenisOperasi"
+          option-value="nama"
+          option-label="nama"
+          autocomplete="nama"
+        />
+      </div>
+
+      <div
+        class="col-4"
       >
         <app-autocomplete
           :key="store.formRanap.kdruangtujuan"
@@ -68,6 +77,7 @@
           @selected="ruangRanapSelected"
         />
       </div>
+
       <div class="col-4">
         <app-input-date
           :model="store.formRanap.tglrencanakunjungan"
@@ -94,11 +104,12 @@
         />
       </div> -->
 
+      <!--
       <div class="col-6">
-        <app-autocomplete-debounce-input
+          <app-autocomplete-debounce-input
           :key="store.formRanap.status"
           :model="store.formRanap.jenistindakan"
-          label="Jenis Tindakan"
+          label="Jenis Tindakan (keterangan icd)"
           dense
           outlined
           standout="bg-yellow-3"
@@ -113,6 +124,7 @@
           @on-select="store.setFormRanap('jenistindakan', $event)"
         />
       </div>
+        -->
       <div class="col-6">
         <app-autocomplete-debounce-input
           :key="store.formRanap.status"
@@ -128,7 +140,7 @@
           :loading="store.loadingIcd"
           @buang="store.cariIcd9"
           @clear="store.setFormRanap('icd9', null)"
-          @on-select="store.setFormRanap('icd9', $event)"
+          @on-select="setIcd"
         />
       </div>
       <!-- <div class="col-12">
@@ -190,7 +202,18 @@ const optionTipe = ref([
 // const optionsJenisTindakan = ref([])
 // const optionsIcd9 = ref([])
 const optionsRtujuan = ref([])
+const optionsJenisOperasi = ref([
+  { nama: 'Elektif' },
+  { nama: 'Cito' }
+])
 
+function setIcd(val) {
+  store.setFormRanap('icd9', val)
+  const icd = store.optionsIcd9.filter(a => a.kd_prosedur === val)
+  if (icd.length) {
+    store.setFormRanap('jenistindakan', icd[0].prosedur)
+  }
+}
 function setOperasi(val) {
   if (val === 'Tidak') {
     store.setFormRanap('tanggaloperasi', null)

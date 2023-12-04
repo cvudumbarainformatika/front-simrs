@@ -45,6 +45,12 @@
             <TindakanPage :pasien="props.pasien" />
           </q-tab-panel>
           <q-tab-panel
+            name="Icd 9"
+            class="full-height q-pa-none"
+          >
+            <IcdPage :pasien="props.pasien" />
+          </q-tab-panel>
+          <q-tab-panel
             name="Diagnosa Keperawatan"
             class="full-height q-pa-none"
           >
@@ -61,6 +67,7 @@ import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 // import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
+import IcdPage from './complayanan/IcdPage.vue'
 import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
 import { onMounted } from 'vue'
 
@@ -75,6 +82,7 @@ const store = useLayananPoli()
 
 // const inacbg = useInacbgPoli()
 onMounted(() => {
+  console.log('tabs', store.tabs)
   store.getNota(props.pasien)
 })
 </script>

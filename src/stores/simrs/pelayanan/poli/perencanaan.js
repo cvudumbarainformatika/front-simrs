@@ -537,6 +537,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.tgllahir = pasien?.tgllahir
       this.formRanap.kdruang = pasien?.kodepoli
       this.formRanap.kodesistembayar = pasien?.kodesistembayar
+      this.formRanap.jenisoperasi = 'Elektif'
       // this.formRanap.kdruangtujuan= pasien?.
       // this.formRanap.keterangan= pasien?.
       // this.formRanap.jenistindakan= pasien?.

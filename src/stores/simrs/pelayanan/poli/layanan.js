@@ -8,7 +8,7 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useLayananPoli = defineStore('layanan-poli', {
   state: () => ({
     tab: 'Diagnosa Medik',
-    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan'],
+    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Icd 9', 'Diagnosa Keperawatan'],
     // diagnosa
     searchdiagnosa: '',
     listDiagnosa: [],
@@ -299,7 +299,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const tabbed = x ?? 'Diagnosa Medik'
       return new Promise((resolve, reject) => {
         this.tab = tabbed
-        this.tabs = ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan']
+        this.tabs = ['Diagnosa Medik', 'Tindakan Medik', 'Icd 9', 'Diagnosa Keperawatan']
 
         this.searchdiagnosa = ''
         this.formdiagnosa = {
