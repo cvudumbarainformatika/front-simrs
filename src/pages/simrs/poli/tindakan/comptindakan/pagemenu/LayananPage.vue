@@ -45,7 +45,7 @@
             <TindakanPage :pasien="props.pasien" />
           </q-tab-panel>
           <q-tab-panel
-            name="Icd 9"
+            name="Prosedur (Icd 9)"
             class="full-height q-pa-none"
           >
             <IcdPage :pasien="props.pasien" />

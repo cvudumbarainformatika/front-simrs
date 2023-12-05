@@ -57,11 +57,11 @@
       </div>
       <!-- Special Procedure -->
       <div
-        v-if="store.specialProcedureOpts.length"
+        v-if="ina.specialProcedureOpts.length"
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formicd.procedure_code"
+          v-model="ina.formSpecial.procedure_code"
           label="Special Procedure"
           outlined
           use-input
@@ -74,19 +74,19 @@
           autocomplete="description"
           input-debounce="500"
           valid
-          :options="store.specialProcedureOpts"
-          @clear="store.setFormIcd('procedure_code', null)"
-          @update:model-value="store.setFormIcd('procedure_code', $event)"
+          :options="ina.specialProcedureOpts"
+          @clear="ina.setFormSpecial('procedure_code', null)"
+          @update:model-value="ina.setFormSpecial('procedure_code', $event)"
         >
-          <!-- @input-value="store.cariIcd9" -->
+          <!-- @input-value="ina.cariIcd9" -->
           <template
-            v-if="store.formicd.procedure_code"
+            v-if="ina.formSpecial.procedure_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormIcd('procedure_code', null)"
+              @click.stop.prevent="ina.setFormSpecial('procedure_code', null)"
             />
           </template>
           <template #no-option>
@@ -100,11 +100,11 @@
       </div>
       <!-- Special Prosthesis -->
       <div
-        v-if="store.specialProsthesisOpts.length"
+        v-if="ina.specialProsthesisOpts.length"
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formicd.prosthesis_code"
+          v-model="ina.formSpecial.prosthesis_code"
           label="Special Prosthesis"
           outlined
           use-input
@@ -117,19 +117,19 @@
           autocomplete="description"
           input-debounce="500"
           valid
-          :options="store.specialProsthesisOpts"
-          @clear="store.setFormIcd('prosthesis_code', null)"
-          @update:model-value="store.setFormIcd('prosthesis_code', $event)"
+          :options="ina.specialProsthesisOpts"
+          @clear="ina.setFormSpecial('prosthesis_code', null)"
+          @update:model-value="ina.setFormSpecial('prosthesis_code', $event)"
         >
-          <!-- @input-value="store.cariIcd9" -->
+          <!-- @input-value="ina.cariIcd9" -->
           <template
-            v-if="store.formicd.prosthesis_code"
+            v-if="ina.formSpecial.prosthesis_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormIcd('prosthesis_code', null)"
+              @click.stop.prevent="ina.setFormSpecial('prosthesis_code', null)"
             />
           </template>
           <template #no-option>
@@ -143,11 +143,11 @@
       </div>
       <!-- Special Investigation -->
       <div
-        v-if="store.specialInvestigationOpts.length"
+        v-if="ina.specialInvestigationOpts.length"
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formicd.investigation_code"
+          v-model="ina.formSpecial.investigation_code"
           label="Special Investigation"
           outlined
           use-input
@@ -160,19 +160,19 @@
           autocomplete="description"
           input-debounce="500"
           valid
-          :options="store.specialInvestigationOpts"
-          @clear="store.setFormIcd('investigation_code', null)"
-          @update:model-value="store.setFormIcd('investigation_code', $event)"
+          :options="ina.specialInvestigationOpts"
+          @clear="ina.setFormSpecial('investigation_code', null)"
+          @update:model-value="ina.setFormSpecial('investigation_code', $event)"
         >
-          <!-- @input-value="store.cariIcd9" -->
+          <!-- @input-value="ina.cariIcd9" -->
           <template
-            v-if="store.formicd.investigation_code"
+            v-if="ina.formSpecial.investigation_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormIcd('investigation_code', null)"
+              @click.stop.prevent="ina.setFormSpecial('investigation_code', null)"
             />
           </template>
           <template #no-option>
@@ -186,11 +186,11 @@
       </div>
       <!-- Special Drug  -->
       <div
-        v-if="store.specialDrugOpts.length"
+        v-if="ina.specialDrugOpts.length"
         class="col-12 q-mb-sm"
       >
         <q-select
-          v-model="store.formicd.drug_code"
+          v-model="ina.formSpecial.drug_code"
           label="Special Drug"
           outlined
           use-input
@@ -203,19 +203,19 @@
           autocomplete="description"
           input-debounce="500"
           valid
-          :options="store.specialDrugOpts"
-          @clear="store.setFormIcd('drug_code', null)"
-          @update:model-value="store.setFormIcd('drug_code', $event)"
+          :options="ina.specialDrugOpts"
+          @clear="ina.setFormSpecial('drug_code', null)"
+          @update:model-value="ina.setFormSpecial('drug_code', $event)"
         >
-          <!-- @input-value="store.cariIcd9" -->
+          <!-- @input-value="ina.cariIcd9" -->
           <template
-            v-if="store.formicd.drug_code"
+            v-if="ina.formSpecial.drug_code"
             #append
           >
             <q-icon
               name="icon-mat-cancel"
               class="cursor-pointer"
-              @click.stop.prevent="store.setFormIcd('drug_code', null)"
+              @click.stop.prevent="ina.setFormSpecial('drug_code', null)"
             />
           </template>
           <template #no-option>
@@ -243,10 +243,12 @@
 </template>
 
 <script setup>
+import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { onMounted, ref } from 'vue'
 
 const store = useLayananPoli()
+const ina = useInacbgPoli()
 
 const options = ref([])
 const formmRef = ref(null)

@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
@@ -11,7 +12,13 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
     totalLaborat: 0,
     desc: '',
 
-    loading: false
+    loading: false,
+    formSpecial: {},
+    //= == special ina ===
+    specialProcedureOpts: [],
+    specialProsthesisOpts: [],
+    specialInvestigationOpts: [],
+    specialDrugOpts: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -21,7 +28,11 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       const adaIcd = pasien?.diagnosa?.length
       const noreg = pasien?.noreg
       // console.log(adaIcd)
-      this.loading = true
+
+      this.kodeIna = 'maintenance'
+      return
+
+      // this.loading = true
       if (adaIcd) {
         const params = {
           params: { noreg }
@@ -33,6 +44,7 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
             const ok = resp.data?.metadata?.code === 200
             if (ok) {
               this.setIna(resp.data?.response)
+              this.setSpecialOption(resp.data)
             }
             this.loading = false
           }
@@ -49,6 +61,57 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       this.kodeIna = obj?.cbg?.code ?? '---'
       this.tarifIna = obj?.cbg?.tariff ?? '0'
       this.desc = obj?.cbg?.description ?? ''
+    },
+
+    setSpecialOption(obj) {
+      this.specialProcedureOpts = obj?.special_cmg_option?.filter(a => a.type === 'Special Procedure') ?? []
+      this.specialProsthesisOpts = obj?.special_cmg_option?.filter(a => a.type === 'Special Prosthesis') ?? []
+      this.specialInvestigationOpts = obj?.special_cmg_option?.filter(a => a.type === 'Special Investigation') ?? []
+      this.specialDrugOpts = obj?.special_cmg_option?.filter(a => a.type === 'Special Drug') ?? []
+
+      const specCmg = obj?.response?.special_cmg ?? []
+      if (specCmg.length) {
+        specCmg.forEach(cmg => {
+          if (cmg.type === 'Special Procedure') {
+            const posProce = this.specialProcedureOpts.findIndex(el => el.description === cmg.description)
+            if (posProce >= 0) {
+              this.specialProcedureOpts[posProce].code = cmg.code
+              this.specialProcedureOpts[posProce].description = cmg.description
+            }
+          }
+          if (cmg.type === 'Special Prosthesis') {
+            const posPros = this.specialProsthesisOpts.findIndex(el => el.description === cmg.description)
+            if (posPros >= 0) {
+              this.specialProsthesisOpts[posPros].code = cmg.code
+              this.specialProsthesisOpts[posPros].description = cmg.description
+            }
+          }
+          if (cmg.type === 'Special Investigation') {
+            const posInves = this.specialInvestigationOpts.findIndex(el => el.description === cmg.description)
+            if (posInves >= 0) {
+              this.specialInvestigationOpts[posInves].code = cmg.code
+              this.specialInvestigationOpts[posInves].description = cmg.description
+            }
+          }
+          if (cmg.type === 'Special Drug') {
+            const posDrug = this.specialDrugOpts.findIndex(el => el.description === cmg.description)
+            if (posDrug >= 0) {
+              this.specialDrugOpts[posDrug].code = cmg.code
+              this.specialDrugOpts[posDrug].description = cmg.description
+            }
+          }
+        })
+
+        if (this.specialProcedureOpts.length) this.formSpecial.procedure_code = this.specialProcedureOpts[0].code
+        if (this.specialProsthesisOpts.length) this.formSpecial.prosthesis_code = this.specialProsthesisOpts[0].code
+        if (this.specialInvestigationOpts.length) this.formSpecial.investigation_code = this.specialInvestigationOpts[0].code
+        if (this.specialDrugOpts.length) this.formSpecial.drug_code = this.specialDrugOpts[0].code
+      }
+      console.log('obj da', obj)
+      console.log('procedure ', this.specialProcedureOpts)
+      console.log('Prosthesis ', this.specialProsthesisOpts)
+      console.log('Investigation ', this.specialInvestigationOpts)
+      console.log('Drug ', this.specialDrugOpts)
     },
 
     setTotalTindakan(pasien) {
@@ -76,6 +139,9 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       this.totalLaborat = lab?.length ? lab?.reduce((acc, cur) => acc + cur, 0) : 0
       console.log('total lab', this.totalLaborat)
       this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
+    },
+    setFormSpecial(key, val) {
+      this.formSpecial[key] = val
     }
   }
 })

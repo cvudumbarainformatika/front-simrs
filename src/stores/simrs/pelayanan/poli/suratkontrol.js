@@ -103,7 +103,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
             // eslint-disable-next-line no-unused-vars
             const apps = useAplikasiStore()
             // eslint-disable-next-line no-unused-vars
-            const gigis = ['BDM', 'GND', 'GOR']
+            const gigis = ['BDM', 'GND', 'GOR', 'GIG']
             const res = resp?.data?.result?.list
             const pol = apps?.user?.pegawai?.poli?.rs6 ?? false
             // const pol = 'BDM'

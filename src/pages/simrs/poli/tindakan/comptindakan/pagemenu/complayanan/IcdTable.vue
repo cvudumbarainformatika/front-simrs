@@ -31,7 +31,7 @@
     <div class="col-grow">
       <div class="full-height bg-grey">
         <q-scroll-area
-          v-if="filterredTable.length"
+          v-if="pasien?.prosedur.length"
           style="height:calc(100% - 1px)"
         >
           <q-list
@@ -40,7 +40,7 @@
           >
             <transition-group name="list">
               <template
-                v-for="(item, i) in filterredTable"
+                v-for="(item, i) in pasien?.prosedur"
                 :key="i"
               >
                 <q-item class="list-move">
@@ -49,32 +49,14 @@
                       lines="2"
                       class="f-12"
                     >
-                      <span class="">Nota</span> : <span class="text-weight-bold text-accent">{{ item?.rs2 }} </span>
-                    </q-item-label>
-                    <q-item-label
-                      lines="2"
-                      class="f-12"
-                    >
-                      <span class="">Tindakan x Jml</span> : <span class="text-weight-bold">{{ item.mastertindakan?.rs2 }} </span> x <span class="text-weight-bold text-negative">{{ item.rs5?item.rs5:0 }}</span>
+                      <span class="">Prosedur</span> : <span class="text-weight-bold">{{ item?.kd_prosedur }} </span> ~ <span class="text-weight-bold text-promary">{{ item?.prosedur }}</span>
                     </q-item-label>
 
                     <q-item-label
                       lines="2"
                       class="f-12"
                     >
-                      <em class="text-accent">{{ dateFullFormat(item.rs3) }} </em>
-                    </q-item-label>
-                    <q-item-label
-                      lines="2"
-                      class="f-10 text-italic"
-                    >
-                      <span class="">Keterangan</span> : <span class="">{{ item?.rs20 }} </span>
-                    </q-item-label>
-                    <q-item-label
-                      lines="2"
-                      class="f-10 text-italic"
-                    >
-                      <span class="">oleh</span> : <span class="">{{ item?.pegawai?.nama }} </span>
+                      <em class="text-accent">{{ dateFullFormat(item.tgl_input) }} </em>
                     </q-item-label>
                   </q-item-section>
 
@@ -87,30 +69,11 @@
                         flat
                         round
                         size="sm"
-                        icon="icon-mat-edit"
-                      />
-                      <q-btn
-                        flat
-                        round
-                        size="sm"
                         icon="icon-mat-delete"
                         color="negative"
                         @click="hapusItem(item.id)"
                       />
                     </div>
-                    <q-item-label>
-                      <!-- <span
-                    class="text-primary f-14 text-weight-bold"
-                    style="border:1px solid blue;
-                      margin-bottom:10px; padding: 5px;
-                    "
-                  >{{ item.subtotal }}</span> -->
-                      <q-badge
-                        outline
-                        color="primary"
-                        :label="`Rp. ${formatRp(item.subtotal)}`"
-                      />
-                    </q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-separator size="2px" />
@@ -133,9 +96,8 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat } from 'src/modules/formatter'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { computed } from 'vue'
 
 const store = useLayananPoli()
 const $q = useQuasar()
@@ -144,12 +106,6 @@ const props = defineProps({
     type: Object,
     default: null
   }
-})
-
-const filterredTable = computed(() => {
-  const val = store.notaTindakan
-  const arr = props?.pasien?.tindakan
-  return arr.filter(x => x.rs2 === val)
 })
 
 function hapusItem(id) {
@@ -161,7 +117,7 @@ function hapusItem(id) {
     persistent: true
   }).onOk(() => {
     // console.log('HAPUS', id)
-    store.hapusTindakan(props.pasien, id)
+    store.hapusProsedur(props.pasien, id)
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {
