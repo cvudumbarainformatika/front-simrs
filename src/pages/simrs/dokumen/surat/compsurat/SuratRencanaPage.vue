@@ -1,8 +1,20 @@
 <template>
   <div v-if="props?.pasien?.planning?.length">
+    <div class="row q-mb-md">
+      <div class="col-12">
+        <app-autocomplete
+          v-model="plan"
+          label="Pilih Surat"
+          autocomplete="rs4"
+          option-label="rs4"
+          option-value="rs4"
+          outlined
+          :source="props?.pasien?.planning"
+          @selected="terpilih"
+        />
+      </div>
+    </div>
     <div
-      v-for="(toItem,i) in props?.pasien?.planning"
-      :key="i"
       class="q-mb-lg"
     >
       <div
@@ -40,7 +52,7 @@
         </q-btn>
       </q-bar>
       <div
-        id="printMe"
+        :id="'printMe'"
         class="full-width"
       >
         <div>
@@ -183,7 +195,7 @@
 </template>
 <script setup>
 import { date } from 'quasar'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
@@ -192,8 +204,19 @@ const props = defineProps({
   }
 })
 const ket = ref('')
-// const toItem = ref(null)
-
+const plan = ref('')
+const toItem = ref(null)
+function terpilih(val) {
+  const temp = props?.pasien?.planning?.filter(a => a.rs4 === val)
+  if (temp.length) {
+    toItem.value = temp[0]
+  }
+  console.log('val', toItem.value)
+}
+onMounted(() => {
+  toItem.value = props?.pasien?.planning[0]
+  plan.value = props?.pasien?.planning[0].rs4
+})
 function setKepada(val) {
   if (val?.rs4 === 'Kontrol') {
     if (val?.kontrol) {
@@ -255,9 +278,10 @@ function setTgl(val) {
     } else { return '-' }
   }
 }
+// eslint-disable-next-line no-unused-vars
 const printObj = {
   id: 'printMe',
-  popTitle: 'Surat Keterangan Sehat'
+  popTitle: 'Surat Rencana Pasien'
 
 }
 </script>

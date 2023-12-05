@@ -31,4 +31,8 @@ export const getAutoPend = () => JSON.parse(localStorage.getItem('autoPend'))
 export const delAutoPend = () => localStorage.removeItem('autoPend')
 export const delAPend = () => localStorage.removeItem('pendaftaranAutocomplete')
 
+// time
+export const setActiveTime = localStorage.setItem('activeTime', new Date())
+export const getActiveTime = () => localStorage.getItem('activeTime')
+
 export const clearStore = () => localStorage.clear()

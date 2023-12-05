@@ -99,7 +99,10 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.filters = !this.filters
     },
     setCustom() {
-      this.custom = !this.custom
+      this.custom = true
+    },
+    notCustom() {
+      this.custom = false
     },
 
     async gantiDpjp(form, pasien) {
@@ -277,6 +280,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].tindakan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataProsedur(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].prosedur
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

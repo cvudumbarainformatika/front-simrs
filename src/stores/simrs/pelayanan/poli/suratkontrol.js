@@ -8,6 +8,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingSuKe: false,
     meta: null,
     items: [],
     filteredItems: [],
@@ -64,7 +65,10 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.filters = !this.filters
     },
     setCustom() {
-      this.custom = !this.custom
+      this.custom = true
+    },
+    notCustom() {
+      this.custom = false
     },
     setQ(val) {
       this.fNama = val
@@ -83,6 +87,10 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     filterItem(val) {
       this.filteredItems = this.items.filter(a => a?.nama?.toLowerCase().includes(val.toLowerCase()))
     },
+    getAllSurat() {
+      this.getData()
+      this.getSuratKeluar()
+    },
     getData() {
       this.loading = true
       const param = { params: this.params }
@@ -95,7 +103,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
             // eslint-disable-next-line no-unused-vars
             const apps = useAplikasiStore()
             // eslint-disable-next-line no-unused-vars
-            const gigis = ['BDM', 'GND', 'GOR']
+            const gigis = ['BDM', 'GND', 'GOR', 'GIG']
             const res = resp?.data?.result?.list
             const pol = apps?.user?.pegawai?.poli?.rs6 ?? false
             // const pol = 'BDM'
@@ -132,11 +140,26 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
           })
       })
     },
+    getSuratKeluar() {
+      this.loadingSuKe = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/simrs/rajal/poli/listrujukankeluarrs', param)
+          .then(resp => {
+            this.loadingSuKe = false
+            console.log('surat keluar', resp?.data)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSuKe = false
+          })
+      })
+    },
     getjadwalDokterDpjp() {
       this.jadwalDpjps = []
       this.loadingJadwalDokter = true
       // console.log('get jadwal dokter')
-
+      this.setForm('kodeDokter', null)
       return new Promise(resolve => {
         api.post('v1/simrs/rajal/poli/jadwal', this.form)
           .then(resp => {

@@ -52,6 +52,7 @@
           readonly
         />
       </div>
+
       <div class="col-9">
         <q-input
           v-model="store.formtindakan.tarif"
@@ -178,4 +179,5 @@ function filterFn(val, update, abort) {
     options.value = filteredData
   })
 }
+
 </script>

@@ -8,7 +8,7 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useLayananPoli = defineStore('layanan-poli', {
   state: () => ({
     tab: 'Diagnosa Medik',
-    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan'],
+    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)', 'Diagnosa Keperawatan'],
     // diagnosa
     searchdiagnosa: '',
     listDiagnosa: [],
@@ -38,7 +38,14 @@ export const useLayananPoli = defineStore('layanan-poli', {
       // pelaksana: '',
       keterangan: ''
     },
-    loadingFormTindakan: false
+    loadingFormTindakan: false,
+    //= === Prosedur (icd 9) ===
+    optionsIcd9: [],
+    loadingIcd: false,
+    loadingSaveIcd: false,
+    formicd: {
+      kdprocedure: ''
+    }
 
   }),
   // getters: {
@@ -60,6 +67,33 @@ export const useLayananPoli = defineStore('layanan-poli', {
       }
     },
 
+    //= ===
+    async cariIcd9(val) {
+      if (val.length < 3) {
+        return
+      }
+      this.loadingIcd = true
+      const params = {
+        params: {
+          q: val
+        }
+      }
+      await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
+        .then(response => {
+          this.loadingIcd = false
+          if (response?.data.length) {
+            this.optionsIcd9 = response?.data
+            return Promise.resolve(response)
+          }
+        })
+        .catch(() => {
+          this.loadingIcd = false
+        })
+    },
+    setFormTindakan(key, val) {
+      this.formtindakan[key] = val
+    },
+    //= ===
     setKode(val) {
       this.formdiagnosa.kddiagnosa = val
       const ada = this.listDiagnosa.length > 0
@@ -264,7 +298,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       const tabbed = x ?? 'Diagnosa Medik'
       return new Promise((resolve, reject) => {
         this.tab = tabbed
-        this.tabs = ['Diagnosa Medik', 'Tindakan Medik', 'Diagnosa Keperawatan']
+        this.tabs = ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)', 'Diagnosa Keperawatan']
 
         this.searchdiagnosa = ''
         this.formdiagnosa = {
@@ -289,8 +323,58 @@ export const useLayananPoli = defineStore('layanan-poli', {
           // pelaksana: '',
           keterangan: ''
         }
+        // icd
+        this.formicd = {
+          kdprocedure: ''
+        }
 
         resolve()
+      })
+    },
+    // =====
+    setFormIcd(key, val) {
+      this.formicd[key] = val
+    },
+    saveIcd(pasien) {
+      this.loadingSaveIcd = true
+      this.setFormIcd('noreg', pasien?.noreg)
+      console.log('form icd', this.formicd)
+      return new Promise(resolve => {
+        api.post('v1/simrs/pelayanan/simpanprocedure', this.formicd)
+          .then(resp => {
+            this.loadingSaveIcd = false
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const isi = resp?.data?.result
+              storePasien.injectDataPasien(pasien, isi, 'prosedur')
+              const storeIna = useInacbgPoli()
+              storeIna.getDataIna(pasien)
+              this.initReset('Prosedur (Icd 9)')
+            }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSaveIcd = false
+          })
+      })
+    },
+    hapusProsedur(pasien, id) {
+      this.loadingSaveIcd = true
+      const payload = { id, noreg: pasien?.noreg }
+      return new Promise(resolve => {
+        api.post('v1/simrs/pelayanan/hapusprocedure', payload)
+          .then(resp => {
+            this.loadingSaveIcd = false
+            const storePasien = usePengunjungPoliStore()
+            storePasien.hapusDataProsedur(pasien, id)
+            const storeIna = useInacbgPoli()
+            storeIna.getDataIna(pasien)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSaveIcd = false
+          })
       })
     }
 

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
-import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifInfVue, notifSuccess } from 'src/modules/utils'
 import { usePengunjungPoliStore } from './pengunjung'
 
 export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
@@ -33,7 +33,6 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       kdpoli_tujuan: '',
       kddokter_asal: ''
     },
-
     formRsLain: {
       norm: '',
       noka: '',
@@ -91,15 +90,111 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       planing: 'Rawat Inap'
 
     },
+    editRanap: false,
+    editRsLain: false,
     perujuk: null,
     loadingSave: false,
     jadwalDpjps: [],
-    loadingJadwalDokter: false
+    listSeps: [],
+    loadingJadwalDokter: false,
+    loadingListSep: false,
+    openDialogSep: false,
+    paramListSep: {
+      noka: '',
+      tglawal: dateDbFormat(new Date()),
+      tglakhir: dateDbFormat(new Date())
+    },
+    // icd 9
+    optionsIcd9: [],
+    loadingIcd: false,
+    // tindakans
+    loadingTind: false,
+    optionsJenisTindakan: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    resetForm() {
+      this.editRanap = false
+      this.editRsLain = false
+      this.formKonsul = {
+        kdSaran: '3',
+        noreg_lama: '',
+        norm: '',
+        tgl_kunjungan: '',
+        tgl_rencana_konsul: dateDbFormat(new Date()),
+        kdpoli_asal: '',
+        kdpoli_tujuan: '',
+        kddokter_asal: ''
+      }
+      this.formKontrol = {
+        noreg_lama: '',
+        norm: '',
+        tgl_kunjungan: '',
+        tglrencanakunjungan: dateDbFormat(new Date()),
+        kdpoli_asal: '',
+        kdpoli_tujuan: '',
+        kddokter_asal: ''
+      }
+      this.formRsLain = {
+        norm: '',
+        noka: '',
+        nosep: '',
+        tglrujukan: '',
+        tglrencanakunjungan: '',
+        ppkdirujuk: '',
+        ppkdirujukx: '',
+        jenispelayanan: '2',
+        catatan: '',
+        diagnosarujukan: '',
+        tiperujukan: '',
+        polirujukan: '',
+        namapolirujukan: ''
+      }
+      this.formPrb = {
+        norm: '',
+        noka: '',
+        nosep: '',
+        tglrujukan: '',
+        tglrencanakunjungan: '',
+        ppkdirujuk: '',
+        ppkdirujukx: '',
+        namapolirujukan: '',
+        jenispelayanan: '2',
+        catatan: '',
+        diagnosarujukan: '',
+        tiperujukan: '',
+        polirujukan: ''
+      }
+      this.formRanap = {
+        noka: '',
+        noreg: '',
+        norm: '',
+        kodedokterdpjp: '',
+        kddokter: '',
+        dokter: '',
+        tglrencanakontrol: '',
+        tanggaloperasi: '',
+        tglrencanakunjungan: '',
+        tglupdate: '',
+        jenistindakan: null,
+        icd9: null,
+        kodepolibpjs: '',
+        polibpjs: '',
+        keterangan: '',
+        kdunit: '',
+        kdruang: '',
+        kdruangtujuan: '',
+        kontakpasien: '',
+        nama: '',
+        kelamin: '',
+        tgllahir: '',
+        status: 'Tidak',
+        planing: 'Rawat Inap'
+
+      }
+    },
     async getMasterPlanning() {
       const resp = await api.get('v1/simrs/pelayanan/mpalningrajal')
       if (resp.status === 200) {
@@ -193,9 +288,8 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
           })
       })
     },
-    async saveKontrol(pasien) {
-      this.loadingSaveKontrol = true
-      // console.log(pasien)
+    initFormKontrol(pasien) {
+      this.formKontrol.nosep = pasien?.sep
       this.formKontrol.tgllahir = pasien?.tgllahir
       this.formKontrol.kelamin = pasien?.kelamin
       this.formKontrol.nama = pasien?.nama
@@ -207,16 +301,42 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formKontrol.kodepolibpjs = pasien?.kodepolibpjs
       this.formKontrol.dokter = pasien?.datasimpeg?.nama
       this.formKontrol.kodesistembayar = pasien?.kodesistembayar
-      this.formKontrol.nosep = pasien?.sep
       this.formKontrol.planing = 'Kontrol'
+      // this.listSeps.push(pasien?.sep)
+      console.log('form kontrol', this.formKontrol)
+    },
+    getListSep(pasien) {
+      this.loadingListSep = true
+      this.paramListSep.noka = pasien?.noka
+      const param = { params: this.paramListSep }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/cari-sep', param)
+          .then(resp => {
+            this.loadingListSep = false
+            console.log('resp his', resp?.data)
+            console.log('resp meta', resp?.data?.metadata?.code)
+            this.listSeps = resp?.data?.result?.histori ?? []
+            if (parseInt(resp?.data?.metadata?.code) !== 200) {
+              notifInfVue(resp?.data?.metadata?.message)
+            }
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingListSep = false
+          })
+      })
+    },
+    async saveKontrol(pasien) {
+      this.loadingSaveKontrol = true
+      // console.log(pasien)
       console.log('form kontrol', this.formKontrol)
 
       await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formKontrol)
         .then(resp => {
           this.loadingSaveKontrol = false
           if (resp?.data?.metadata?.code) {
-            if (resp?.data?.metadata?.code !== '200' || resp?.data?.metadata?.code !== 200) {
-              notifErrVue('Respon bpjs : ' + resp?.data?.metadata?.message)
+            if (parseInt(resp?.data?.metadata?.code) !== 200) {
+              notifErrVue('Balasan bpjs : ' + resp?.data?.metadata?.message)
             }
           }
           console.log(resp.data)
@@ -301,13 +421,19 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
     },
     // ====================================================================================================================================================RUmah sakit lain
     async saveRsLain(pasien) {
+      const diag = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : false
+      if (!diag) {
+        return notifErrVue('Pasien tidak bisa di rujuk karena belum ada Diagnosa')
+      }
+      this.formRsLain.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
       this.formRsLain.norm = pasien?.norm
       this.formRsLain.noreg = pasien?.noreg
       this.formRsLain.planing = 'Rumah Sakit Lain'
       this.formRsLain.kodesistembayar = pasien?.kodesistembayar
       this.loadingSave = true
+      const url = this.editRsLain ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRsLain)
+        const resp = await api.post(url, this.formRsLain)
         // console.log('save rs lain', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
@@ -317,12 +443,13 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             notifSuccess(resp)
           } else {
             if (resp?.data?.metadata?.code) {
-              notifErrVue(resp?.data?.metadata?.message)
+              notifErrVue('Balasan bpjs : ' + resp?.data?.metadata?.message)
             } else {
-              notifErrVue('Rujukan ke Rs lain Gagal')
+              notifErrVue('Tidak ada Respon dari server')
             }
           }
           this.loadingSave = false
+          this.editRsLain = false
         }
         this.loadingSave = false
       } catch (error) {
@@ -331,6 +458,11 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       }
     },
     async saveRujukBalik(pasien) {
+      const diag = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : false
+      if (!diag) {
+        return notifErrVue('Pasien tidak bisa di rujuk karena belum ada Diagnosa')
+      }
+      this.formPrb.diagnosarujukan = pasien?.diagnosa?.length ? pasien.diagnosa[0].masterdiagnosa?.rs1 : '-'
       this.formPrb.norm = pasien?.norm
       this.formPrb.noreg = pasien?.noreg
       this.formPrb.planing = 'Rumah Sakit Lain'
@@ -405,6 +537,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap.tgllahir = pasien?.tgllahir
       this.formRanap.kdruang = pasien?.kodepoli
       this.formRanap.kodesistembayar = pasien?.kodesistembayar
+      this.formRanap.jenisoperasi = 'Elektif'
       // this.formRanap.kdruangtujuan= pasien?.
       // this.formRanap.keterangan= pasien?.
       // this.formRanap.jenistindakan= pasien?.
@@ -423,9 +556,12 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formRanap[key] = val
     },
     async saveRanap(pasien) {
+      this.formRanap.tglrencanakontrol = this.formRanap.tglrencanakunjungan
       this.loadingSave = true
+      const url = this.editRanap ? 'v1/simrs/pelayanan/update-planning-pasien' : 'v1/simrs/pelayanan/simpanplaningpasien'
+
       try {
-        const resp = await api.post('v1/simrs/pelayanan/simpanplaningpasien', this.formRanap)
+        const resp = await api.post(url, this.formRanap)
         // console.log('ranap', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
@@ -434,15 +570,59 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
             storePasien.injectDataPasien(pasien, isi, 'planning')
             notifSuccess(resp)
           } else {
-            notifErrVue('Update Rawat Inap gagal')
+            notifInfVue('Update Grid Rawat Inap gagal, gagal mendapatkan data respon dari server')
           }
           this.loadingSave = false
+          this.editRanap = false
         }
         this.loadingSave = false
       } catch (error) {
         // console.log(error)
         this.loadingSave = false
       }
+    },
+    async cariTindakan(val) {
+      if (val.length < 3) {
+        return
+      }
+      this.loadingTind = true
+      const params = {
+        params: {
+          tindakan: val
+        }
+      }
+      // await api.get('v1/simrs/pelayanan/dialogtindakanpoli', params).then(response => {
+      await api.get('v1/simrs/pelayanan/dialogoperasi', params).then(response => {
+        this.loadingTind = false
+        const code = response?.status
+        if (code === 200) {
+          this.optionsJenisTindakan = response?.data
+        }
+        console.log('resp jenisT', this.optionsJenisTindakan)
+      }).catch(() => {
+        this.loadingTind = false
+      })
+    },
+    async cariIcd9(val) {
+      if (val.length < 3) {
+        return
+      }
+      this.loadingIcd = true
+      const params = {
+        params: {
+          q: val
+        }
+      }
+      await api.get('v1/simrs/ranap/ruangan/mastericd9', params)
+        .then(response => {
+          this.loadingIcd = false
+          if (response?.data.length) {
+            this.optionsIcd9 = response?.data
+          }
+        })
+        .catch(() => {
+          this.loadingIcd = false
+        })
     }
   }
 })

@@ -16,7 +16,68 @@
           />
         </div>
       </q-card-section>
-
+      <q-card-section>
+        <div class="row items-center no-wrap">
+          <div class="q-mr-sm">
+            Pemerikasaan teripilih :
+          </div>
+          <div
+            v-if="pemeriksaans.length"
+            class="row"
+          >
+            <div
+              v-for="(item,i) in pemeriksaans"
+              :key="i"
+            >
+              <div
+                v-if="i===0"
+                class="cursor-pointer"
+                @click="removeOne(i)"
+              >
+                {{ item?.nama }}
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  klik untuk hapus
+                </q-tooltip>
+              </div>
+              <div
+                v-else
+                class="cursor-pointer"
+                @click="removeOne(i)"
+              >
+                , {{ item?.nama }}
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  klik untuk hapus
+                </q-tooltip>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="pemeriksaans.length"
+            class="row"
+          >
+            <q-btn
+              icon="icon-mat-cancel"
+              flat
+              round
+              dense
+              @click="pemeriksaans=[]"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Hapus Permintaan
+              </q-tooltip>
+            </q-btn>
+          </div>
+        </div>
+      </q-card-section>
       <q-separator />
 
       <q-card-section
@@ -115,6 +176,7 @@
                         v-model="pemeriksaans"
                         :val="item"
                         color="teal"
+                        @update:model-value="checked"
                       />
                     </q-item-section>
                     <q-item-section>
@@ -183,6 +245,16 @@ const checkAll = ref(false)
 
 const filterredLists = ref([])
 
+function checked(val) {
+  console.log('list', filterredLists.value)
+  console.log('pem', pemeriksaans.value)
+  console.log('val', val)
+}
+function removeOne(i) {
+  // console.log('remove one ', pemeriksaans.value[i])
+  pemeriksaans.value.splice(i, 1)
+}
+
 function lihatList() {
   const arr = props.lists
   const mapping = mapper(arr)
@@ -197,7 +269,7 @@ function lihatList() {
     }
     return 0
   })
-  // console.log(sorting)
+
   filterredLists.value = mapping
   gruping.value = sorting?.map(x => x.name)
   gruping.value.splice(0, 0, 'SEMUA PEMERIKSAAN')
@@ -220,16 +292,16 @@ function mapper(arr) {
 }
 
 function clearPemeriksaan() {
-  checkAll.value = false
-  pemeriksaans.value = []
+  // checkAll.value = false
+  // pemeriksaans.value = []
   search.value = ''
-  pilihPemeriksaan(shape.value)
+  // pilihPemeriksaan(shape.value)
 }
 
 function cariPemeriksaan(val) {
   console.log(val.toLowerCase())
-  checkAll.value = false
-  pemeriksaans.value = []
+  // checkAll.value = false
+  // pemeriksaans.value = []
   if (val === '' || val === null) {
     pilihPemeriksaan(shape.value)
   } else {
@@ -243,6 +315,7 @@ function cariPemeriksaan(val) {
     })
     filterredLists.value = target
   }
+  setPem()
 }
 
 function checkingAll() {
@@ -252,10 +325,20 @@ function checkingAll() {
     pemeriksaans.value = []
   }
 }
-
+function setPem() {
+  if (pemeriksaans.value.length) {
+    pemeriksaans.value.forEach((item, i) => {
+      const temp = filterredLists.value.filter(a => a.val === item.val)
+      if (temp.length) {
+        pemeriksaans.value[i] = temp[0]
+      }
+    })
+  }
+}
 function pilihPemeriksaan(val) {
-  checkAll.value = false
-  pemeriksaans.value = []
+  console.log('pilih pemeriksaan')
+  // checkAll.value = false
+  // pemeriksaans.value = []
   if (val === '' || val === null || val === 'SEMUA PEMERIKSAAN') {
     filterredLists.value = mapper(props.lists)
   } else {
@@ -263,6 +346,7 @@ function pilihPemeriksaan(val) {
     const target = arr?.filter(x => x.group.toString().toLowerCase().includes(val.toLowerCase()))
     filterredLists.value = target
   }
+  setPem()
 }
 
 function submitPemeriksaans() {
