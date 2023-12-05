@@ -588,14 +588,15 @@ import { calcDate, dateDbFormat, formatJam, jamTnpDetik } from 'src/modules/form
 import { daysInMonth, bulans } from 'src/modules/datesme'
 import { useReportAbsensiStore } from 'src/stores/simrs/pegawai/absensi/report/report.js'
 import { computed, onMounted, ref, watch } from 'vue'
+import { date } from 'quasar'
 
 import PrintDialog from './PrintDialog.vue'
 import DetaiRinci from './DetailRinci.vue'
 // import IsiCellRinci from './IsiCellRinci.vue'
 
-const date = new Date()
-const bulan = date.getMonth() + 1
-// const year = date.getFullYear()
+const d = new Date()
+const bulan = d.getMonth() + 1
+// const year = d.getFullYear()
 
 const store = useReportAbsensiStore()
 const flag = ref('all')
@@ -603,8 +604,8 @@ const ruang = ref('all')
 const openDialog = ref(false)
 const refPrint = ref(null)
 
-const currentMonth = ref(date.getMonth() + 1)
-const tahun = ref(date.getFullYear())
+const currentMonth = ref(d.getMonth() + 1)
+const tahun = ref(d.getFullYear())
 const perwali = ref(38)
 const printed = ref(false)
 
@@ -651,7 +652,12 @@ onMounted(() => {
 
   // store.getAlpa()
 
-  // console.log('onMounted', parseInt(cb))
+  // const coba = new Date(store?.items[0]?.transaksi_absen[0]?.created_at)
+  // const coba2 = new Date(store?.items[0]?.transaksi_absen[0]?.created_at)
+
+  // coba2.setMinutes(coba.getMinutes() + 15)
+
+  // console.log('onMounted', date.subtractFromDate(coba, { minutes: 15 }))
 })
 
 // console.log('prota', lhb.value)
@@ -941,7 +947,12 @@ function getRekapTerlambatMinute(x) {
 
 function hitungTelat(x) {
   const kategoryMasuk = x.kategory ? x.kategory.masuk : '00:00:00'
-  const jamMasukServer = formatJam(x.created_at)
+
+  let created = new Date(x?.created_at)
+  created = date.subtractFromDate(created, { minutes: 15 })
+
+  // const jamMasukServer = formatJam(created.setMinutes() + 15)
+  const jamMasukServer = formatJam(created)
   const tglMasukServer = dateDbFormat(x.created_at)
 
   const terlambat = new Date(tglMasukServer + ' ' + jamMasukServer) > new Date(tglMasukServer + ' ' + kategoryMasuk)
