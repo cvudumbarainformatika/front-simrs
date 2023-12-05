@@ -31,7 +31,7 @@
     <div class="col-grow">
       <div class="full-height bg-grey">
         <q-scroll-area
-          v-if="pasien?.prosedur.length"
+          v-if="pasien?.prosedur?.length"
           style="height:calc(100% - 1px)"
         >
           <q-list
