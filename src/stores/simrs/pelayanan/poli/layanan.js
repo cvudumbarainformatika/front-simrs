@@ -359,6 +359,18 @@ export const useLayananPoli = defineStore('layanan-poli', {
           })
       })
     },
+    getListProsedur(pasien) {
+      const payload = {
+        params: { noreg: pasien?.noreg }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/simpanprocedure', payload)
+          .then(resp => {
+            console.log('list', resp.data)
+            resolve(resp)
+          })
+      })
+    },
     hapusProsedur(pasien, id) {
       this.loadingSaveIcd = true
       const payload = { id, noreg: pasien?.noreg }
