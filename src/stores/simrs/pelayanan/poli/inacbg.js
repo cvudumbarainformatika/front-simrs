@@ -29,10 +29,10 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       const noreg = pasien?.noreg
       // console.log(adaIcd)
 
-      this.kodeIna = 'maintenance'
-      return
+      // this.kodeIna = 'maintenance'
+      // return
 
-      // this.loading = true
+      this.loading = true
       if (adaIcd) {
         const params = {
           params: { noreg }
