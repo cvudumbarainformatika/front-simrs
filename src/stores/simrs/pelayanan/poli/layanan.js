@@ -180,6 +180,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           if (resp.data.inacbg?.metadata?.code === 200) {
             const storeIna = useInacbgPoli()
             storeIna.setIna(resp.data.inacbg?.response)
+            storeIna.setSpecialOption(resp.data.inacbg)
           }
 
           return new Promise((resolve, reject) => {
