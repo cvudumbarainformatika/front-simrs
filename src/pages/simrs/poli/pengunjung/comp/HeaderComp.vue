@@ -66,7 +66,7 @@
       <q-btn-dropdown
         class="glossy q-ml-sm"
         color="orange"
-        :label="poli.polirs"
+        :label="poli?.polirs"
       >
         <q-list>
           <q-item
@@ -85,7 +85,7 @@
               />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ row.polirs }}</q-item-label>
+              <q-item-label>{{ row?.polirs }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -191,7 +191,7 @@ onMounted(() => {
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
       per_page: 100,
-      kodepoli: poli.value.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x.kodepoli) : [poli.value.kodepoli]
+      kodepoli: poli.value?.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
     }
     console.log('init poli', poli.value)
     console.log('init pengunjung', params)
@@ -242,7 +242,7 @@ const polis = computed(() => {
       res.push(setting.polis.filter(x => x.kodepoli === kd)[0])
     }
 
-    arr = res
+    arr = res ?? []
     // console.log('asdas', arr)
   }
 
@@ -321,7 +321,7 @@ function gantiPeriode(val) {
 
 function gantiPoli(val) {
   poli.value = val
-  const sendt = poli.value.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x.kodepoli) : [poli.value.kodepoli]
+  const sendt = poli.value?.kodepoli === 'SEMUA POLI' ? polis.value?.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
   console.log(sendt)
   emits('setPoli', sendt)
 }
