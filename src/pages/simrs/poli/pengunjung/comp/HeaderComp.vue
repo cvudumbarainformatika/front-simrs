@@ -184,6 +184,10 @@ const periode = ref(1)
 
 onMounted(() => {
   setting.getHeaderPoli().then(() => {
+    poli.value = polis.value[0] ?? [{
+      kodepoli: 'SEMUA POLI',
+      polirs: 'SEMUA POLI'
+    }]
     const params = {
       page: 1,
       q: '',
