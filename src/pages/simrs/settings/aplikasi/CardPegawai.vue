@@ -82,28 +82,52 @@
           <div class="ellipsis">
             <strong>Poli : </strong>
             <q-btn
-              :label="item.poli? item.poli.rs2: 'tidak ada akses role'"
+              :label="ruangan(item)"
               no-caps
               flat
               size="12px"
               :loading="store.loadingPoli"
+              @click="setpoli(item)"
             >
-              <q-menu>
-                <app-input
-                  v-model="filt"
-                  outlined
-                  label="cari poli"
-                  autofocus
-                  @update:model-value="filter"
-                />
-                <q-list style="min-width: 100px">
+              <q-menu
+                ref="refMenu"
+                @hide="hideMenu"
+              >
+                <div class="fixed-top pos bg-white">
+                  <app-btn
+                    class="full-width q-mb-sm"
+                    label="simpan"
+                    color="green"
+                    :loading="store.loadingPoli"
+                    @click="simpan"
+                  />
+                  <app-input
+                    v-model="filt"
+                    outlined
+                    label="cari poli"
+                    autofocus
+                    valid
+                    @update:model-value="filter"
+                  />
+                </div>
+                <q-list
+                  class="q-mt-xl q-mt-xl"
+                  style="min-width: 100px;"
+                >
                   <q-item
                     v-for="(poli,i) in filtered"
                     :key="i"
                     v-close-popup
                     clickable
-                    @click="store.setPoli(poli)"
                   >
+                    <!-- @click="store.setPoli(poli)" -->
+                    <q-item-section avatar>
+                      <q-checkbox
+                        v-model="kodepolis"
+                        :val="poli?.kodepoli"
+                        color="teal"
+                      />
+                    </q-item-section>
                     <q-item-section>{{ poli?.polirs }}</q-item-section>
                   </q-item>
                 </q-list>
@@ -286,6 +310,7 @@ import { ref } from 'vue'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 const store = useSettingsAplikasi()
 const filtered = ref(store.polis)
+const kodepolis = ref([])
 const filt = ref('')
 function filter(val) {
   if (val) {
@@ -307,7 +332,40 @@ defineProps({
   }
 })
 
+const refMenu = ref(null)
+function hideMenu() {
+  kodepolis.value = []
+}
+function setpoli(val) {
+  kodepolis.value = val.kdruangansim.split('|')
+}
+function simpan() {
+  const arr = kodepolis.value?.length ? kodepolis.value.join('|') : []
+  console.log(arr)
+  store.simpanPoli(arr).then(() => {
+    refMenu.value.hide()
+  })
+}
+function ruangan(val) {
+  const temp = val.kdruangansim.split('|')
+  const anu = []
+  let fin = null
+  if (temp.length) {
+    temp.forEach(a => {
+      const pol = store.polis.filter(b => b.kodepoli === a)
+      if (pol.length) anu.push(pol[0])
+    })
+    if (anu.length) {
+      fin = anu.map(x => x.polirs).join(', ')
+    }
+  }
+  const ruang = fin ?? 'Tidak ada Akses Poli'
+  console.log(ruang)
+
+  return ruang
+}
 defineEmits(['simpan', 'allCheck', 'appCheck', 'menuCheck', 'submenuCheck'])
+
 const check = ref(false)
 
 function getImage(row) {
@@ -322,3 +380,11 @@ function getImage(row) {
 }
 
 </script>
+<style lang="scss" scoped>
+.pos{
+
+  width:280px;
+  margin-top:130px;
+  margin-left:138px;
+}
+</style>
