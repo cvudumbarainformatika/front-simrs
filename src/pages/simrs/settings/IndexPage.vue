@@ -282,13 +282,13 @@ function changeIconMenu(val) {
 }
 
 function setPegawai(val) {
-  console.log('items', store.items)
+  console.log('items', store?.items)
   console.log('set', val)
   if (val !== null) {
-    const menus = store.items.map(item => {
+    const menus = store?.items?.map(item => {
       const it = item
       it.checked = false
-      it.menus.map(menu => {
+      it?.menus?.map(menu => {
         const men = menu
         // console.log('men length', men)
         men.checked = false
@@ -302,7 +302,7 @@ function setPegawai(val) {
       })
       return it
     })
-    const userMenu = val.user.akses
+    const userMenu = val?.user?.akses
     if (userMenu.length) {
     // const anu = []
       const menu = menus
