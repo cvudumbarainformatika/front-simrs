@@ -310,7 +310,7 @@ import { ref } from 'vue'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 const store = useSettingsAplikasi()
 const filtered = ref(store.polis)
-const kodepolis = ref([])
+const kodepolis = ref(null)
 const filt = ref('')
 function filter(val) {
   if (val) {
@@ -334,33 +334,37 @@ defineProps({
 
 const refMenu = ref(null)
 function hideMenu() {
-  kodepolis.value = []
+  kodepolis.value = null
 }
 function setpoli(val) {
   kodepolis.value = val.kdruangansim.split('|')
 }
 function simpan() {
-  const arr = kodepolis.value?.length ? kodepolis.value.join('|') : []
+  const anu = kodepolis.value?.length ? kodepolis.value.filter(a => a.length > 4) : null
+  const arr = anu?.join('|') ?? null
+  console.log('kode', anu)
   console.log(arr)
   store.simpanPoli(arr).then(() => {
     refMenu.value.hide()
   })
 }
 function ruangan(val) {
-  const temp = val.kdruangansim.split('|')
-  const anu = []
   let fin = null
-  if (temp.length) {
-    temp.forEach(a => {
-      const pol = store.polis.filter(b => b.kodepoli === a)
-      if (pol.length) anu.push(pol[0])
-    })
-    if (anu.length) {
-      fin = anu.map(x => x.polirs).join(', ')
+  if (val.kdruangansim) {
+    const temp = val.kdruangansim.split('|')
+    const anu = []
+    if (temp.length) {
+      temp.forEach(a => {
+        const pol = store.polis.filter(b => b.kodepoli === a)
+        if (pol.length) anu.push(pol[0])
+      })
+      if (anu.length) {
+        fin = anu.map(x => x.polirs).join(', ')
+      }
     }
   }
   const ruang = fin ?? 'Tidak ada Akses Poli'
-  console.log(ruang)
+  // console.log(ruang)
 
   return ruang
 }
