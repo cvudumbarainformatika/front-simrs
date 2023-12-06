@@ -150,6 +150,18 @@
           @update:model-value="updateModelPoli"
         />
       </div>
+
+      <!-- <div class="col-12">
+        <q-input
+          ref="refCatat"
+          v-model="store.formPrb.catatan"
+          label="Catatan"
+          dense
+          outlined
+          :rules="[val => val.length > 5 || 'Minimal 5 karakter']"
+          standout="bg-yellow-3"
+        />
+      </div> -->
       <div class="col-12">
         <q-separator class=" q-my-md" />
         <div class="text-right q-gutter-sm">
