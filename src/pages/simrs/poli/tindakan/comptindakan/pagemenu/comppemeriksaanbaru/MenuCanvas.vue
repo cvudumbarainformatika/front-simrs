@@ -59,6 +59,16 @@
             style="width:50%"
           />
           <q-input
+            v-model="store.formMata.vodrefraksi"
+            standout="bg-yellow-2"
+            outlined
+            dense
+            label="VOD REFRAKSI"
+            bg-color="white"
+            color="orange"
+            style="width:50%"
+          />
+          <q-input
             v-model="store.formMata.vodakhir"
             standout="bg-yellow-2"
             outlined
@@ -69,11 +79,24 @@
             style="width:50%"
           />
           <q-input
-            v-model="store.formMata.vodrefraksi"
+            v-model="store.formMata.tod"
+            standout="bg-yellow-2"
+            outlined
+            label="TOD"
+            dense
+            bg-color="white"
+            :rules="[val => !!val || 'Harap diisi']"
+            color="orange"
+            hide-bottom-space
+            style="width:50%"
+          />
+
+          <q-input
+            v-model="store.formMata.fondosod"
             standout="bg-yellow-2"
             outlined
             dense
-            label="VOD REFRAKSI"
+            label="FONDOS OD"
             bg-color="white"
             color="orange"
             style="width:100%"
@@ -92,6 +115,16 @@
             style="width:50%"
           />
           <q-input
+            v-model="store.formMata.vosrefraksi"
+            standout="bg-yellow-2"
+            outlined
+            dense
+            label="VOS REFRAKSI"
+            bg-color="white"
+            color="orange"
+            style="width:50%"
+          />
+          <q-input
             v-model="store.formMata.vosakhir"
             standout="bg-yellow-2"
             outlined
@@ -101,28 +134,7 @@
             color="orange"
             style="width:50%"
           />
-          <q-input
-            v-model="store.formMata.vosrefraksi"
-            standout="bg-yellow-2"
-            outlined
-            dense
-            label="VOS REFRAKSI"
-            bg-color="white"
-            color="orange"
-            style="width:100%"
-          />
-          <q-input
-            v-model="store.formMata.tod"
-            standout="bg-yellow-2"
-            outlined
-            label="TOD"
-            dense
-            bg-color="white"
-            :rules="[val => !!val || 'Harap diisi']"
-            color="orange"
-            hide-bottom-space
-            style="width:50%"
-          />
+
           <q-input
             v-model="store.formMata.tos"
             standout="bg-yellow-2"
@@ -133,16 +145,7 @@
             color="orange"
             style="width:50%"
           />
-          <q-input
-            v-model="store.formMata.fondosod"
-            standout="bg-yellow-2"
-            outlined
-            dense
-            label="FONDOS OD"
-            bg-color="white"
-            color="orange"
-            style="width:100%"
-          />
+
           <q-input
             v-model="store.formMata.fondosos"
             standout="bg-yellow-2"
