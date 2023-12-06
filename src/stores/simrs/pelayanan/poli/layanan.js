@@ -180,6 +180,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           if (resp.data.inacbg?.metadata?.code === 200) {
             const storeIna = useInacbgPoli()
             storeIna.setIna(resp.data.inacbg?.response)
+            storeIna.setSpecialOption(resp.data.inacbg)
           }
 
           return new Promise((resolve, reject) => {
@@ -355,6 +356,18 @@ export const useLayananPoli = defineStore('layanan-poli', {
           })
           .catch(() => {
             this.loadingSaveIcd = false
+          })
+      })
+    },
+    getListProsedur(pasien) {
+      const payload = {
+        params: { noreg: pasien?.noreg }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/simpanprocedure', payload)
+          .then(resp => {
+            console.log('list', resp.data)
+            resolve(resp)
           })
       })
     },
