@@ -63,22 +63,33 @@
         style="min-width: 150px;"
         @update:model-value="gantiTxt"
       />
-      <q-select
-        v-model="poli"
-        dense
-        outlined
-        dark
-        color="white"
-        :options="polis"
-        label="Pilih Poli"
-        class="q-ml-sm"
-        emit-value
-        map-options
-        option-value="kodepoli"
-        option-label="polirs"
-        style="min-width: 250px;"
-        @update:model-value="gantiPoli"
-      />
+      <q-btn-dropdown
+        class="glossy q-ml-sm"
+        color="orange"
+        :label="poli.polirs"
+      >
+        <q-list>
+          <q-item
+            v-for="row in polis"
+            :key="row"
+            v-close-popup
+            clickable
+            @click="gantiPoli(row)"
+          >
+            <q-item-section avatar>
+              <q-avatar
+                icon="icon-mat-medical_information"
+                color="primary"
+                text-color="white"
+                size="sm"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ row.polirs }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
     </div>
     <div v-else>
       <q-btn
@@ -147,11 +158,17 @@
 <script setup>
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { computed, onMounted, ref } from 'vue'
+
 const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const poli = ref(['SEMUA'])
+const poli = ref({
+  kodepoli: 'SEMUA POLI',
+  polirs: 'SEMUA POLI'
+})
 const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal', 'setPoli'])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
@@ -161,8 +178,26 @@ const periods = ref([
 ])
 
 const setting = useSettingsAplikasi()
-
+const store = usePengunjungPoliStore()
+const app = useAplikasiStore()
 const periode = ref(1)
+
+onMounted(() => {
+  setting.getHeaderPoli().then(() => {
+    const params = {
+      page: 1,
+      q: '',
+      status: '',
+      to: dateDbFormat(new Date()),
+      from: dateDbFormat(new Date()),
+      per_page: 100,
+      kodepoli: poli.value.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x.kodepoli) : [poli.value.kodepoli]
+    }
+    console.log('init poli', poli.value)
+    console.log('init pengunjung', params)
+    store.init(params)
+  })
+})
 // const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   color: {
@@ -195,12 +230,27 @@ const q = computed({
 })
 
 const polis = computed(() => {
-  const arr = setting.polis
-  arr.unshift({
-    kodepoli: 'SEMUA',
-    polirs: 'SEMUA'
+  const aksesruangan = app.user?.pegawai?.kdruangansim
+  let arr = []
+  if (aksesruangan === '' || aksesruangan === null) {
+    arr = setting.polis
+  } else {
+    const split = aksesruangan.split('|')
+    const res = []
+    for (let i = 0; i < split.length; i++) {
+      const kd = split[i]
+      res.push(setting.polis.filter(x => x.kodepoli === kd)[0])
+    }
+
+    arr = res
+    // console.log('asdas', arr)
+  }
+
+  arr?.push({
+    kodepoli: 'SEMUA POLI',
+    polirs: 'SEMUA POLI'
   })
-  return setting.polis
+  return arr
 })
 
 const to = ref(dateDbFormat(new Date()))
@@ -270,14 +320,10 @@ function gantiPeriode(val) {
 }
 
 function gantiPoli(val) {
-  let kirim = poli.value
-  if (val === 'SEMUA') {
-    kirim = setting.polis.map(x => x.kodepoli) ?? []
-  } else {
-    kirim = val
-  }
-
-  emits('setPoli', kirim)
+  poli.value = val
+  const sendt = poli.value.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x.kodepoli) : [poli.value.kodepoli]
+  console.log(sendt)
+  emits('setPoli', sendt)
 }
 
 function kembaliNormal() {

@@ -35,8 +35,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
   // },
   actions: {
 
+    init(val) {
+      console.log('')
+      this.params = val
+      this.getData()
+    },
+
     setPolis(val) {
-      this.params.kodepoli = val ?? []
+      this.params.kodepoli = val
       this.getData()
     },
     async getData() {

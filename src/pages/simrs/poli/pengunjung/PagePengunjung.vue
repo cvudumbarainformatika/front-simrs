@@ -81,7 +81,7 @@ import PageTindakan from '../tindakan/IndexPage.vue'
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
-import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+// import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
 const speech = useSpeechStore()
@@ -91,7 +91,7 @@ const pasien = ref(null)
 const indexVoices = ref(11)
 const listVoices = ref([])
 
-const settings = useSettingsAplikasi()
+// const settings = useSettingsAplikasi()
 
 // const printRekap = ref(false)
 
@@ -125,10 +125,9 @@ onMounted(() => {
   }, 500)
   // console.log(voices)
 
-  store.getData()
+  // store.init()
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
-  settings.getPoli()
 })
 
 function setSpeech(txt) {
