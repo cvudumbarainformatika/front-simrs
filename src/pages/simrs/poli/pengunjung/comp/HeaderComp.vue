@@ -63,35 +63,22 @@
         style="min-width: 150px;"
         @update:model-value="gantiTxt"
       />
-
-      <!-- <q-btn
-        flat
-        :color="textColor"
-        icon="icon-mat-dataset"
-        :label="txt"
-        size="sm"
+      <q-select
+        v-model="poli"
+        dense
+        outlined
+        dark
+        color="white"
+        :options="polis"
+        label="Pilih Poli"
         class="q-ml-sm"
-      >
-        <q-menu
-          transition-show="flip-left"
-          transition-hide="flip-right"
-          :offset="[0,10]"
-        >
-          <q-list style="min-width: 150px">
-            <q-item
-              v-for="(item, i) in txts"
-              :key="i"
-              v-close-popup
-              clickable
-              :class="item===txt?'bg-secondary text-white':''"
-              @click="txt=item"
-            >
-              <q-item-section>{{ item }}</q-item-section>
-            </q-item>
-            <q-separator />
-          </q-list>
-        </q-menu>
-      </q-btn> -->
+        emit-value
+        map-options
+        option-value="kodepoli"
+        option-label="polirs"
+        style="min-width: 250px;"
+        @update:model-value="gantiPoli"
+      />
     </div>
     <div v-else>
       <q-btn
@@ -160,16 +147,20 @@
 <script setup>
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { computed, onMounted, ref } from 'vue'
 const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal'])
+const poli = ref(['SEMUA'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal', 'setPoli'])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
   { value: 2, label: 'Minggu Ini' },
   { value: 3, label: 'Bulan Ini' }
   // { value: 4, label: 'Tahun Ini' }
 ])
+
+const setting = useSettingsAplikasi()
 
 const periode = ref(1)
 // const options = ref([5, 10, 20, 50, 100])
@@ -201,6 +192,15 @@ const q = computed({
   set(newVal) {
     emits('setSearch', newVal)
   }
+})
+
+const polis = computed(() => {
+  const arr = setting.polis
+  arr.unshift({
+    kodepoli: 'SEMUA',
+    polirs: 'SEMUA'
+  })
+  return setting.polis
 })
 
 const to = ref(dateDbFormat(new Date()))
@@ -267,6 +267,17 @@ function gantiPeriode(val) {
     status: gantiStatus(txt.value)
   }
   emits('setPeriode', per)
+}
+
+function gantiPoli(val) {
+  let kirim = poli.value
+  if (val === 'SEMUA') {
+    kirim = setting.polis.map(x => x.kodepoli) ?? []
+  } else {
+    kirim = val
+  }
+
+  emits('setPoli', kirim)
 }
 
 function kembaliNormal() {

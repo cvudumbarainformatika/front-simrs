@@ -23,7 +23,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
       per_page: 100,
-      kdpoli: ''
+      kodepoli: []
     },
     pageTindakan: false,
     filters: false,
@@ -34,6 +34,11 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+
+    setPolis(val) {
+      this.params.kodepoli = val ?? []
+      this.getData()
+    },
     async getData() {
       this.loading = true
       const params = { params: this.params }

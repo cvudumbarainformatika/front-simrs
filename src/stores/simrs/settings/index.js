@@ -150,7 +150,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     async getPoli() {
       await api.get('v1/settings/appakses/poli')
         .then(resp => {
-          // console.log('Poli', resp.data)
+          console.log('Poli', resp.data)
           this.polis = resp.data
         })
     },

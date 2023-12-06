@@ -19,6 +19,7 @@
         @set-periode="(val)=>store.setPeriodik(val)"
         @filter="store.setFilters"
         @normal="store.notCustom"
+        @set-poli="(val)=> store.setPolis(val)"
       />
     </div>
     <div class="footer absolute-bottom bg-primary text-white z-top">
@@ -80,6 +81,7 @@ import PageTindakan from '../tindakan/IndexPage.vue'
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
 const speech = useSpeechStore()
@@ -88,6 +90,8 @@ const diagnosa = useLayananPoli()
 const pasien = ref(null)
 const indexVoices = ref(11)
 const listVoices = ref([])
+
+const settings = useSettingsAplikasi()
 
 // const printRekap = ref(false)
 
@@ -124,6 +128,7 @@ onMounted(() => {
   store.getData()
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
+  settings.getPoli()
 })
 
 function setSpeech(txt) {
