@@ -189,18 +189,24 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       // console.log('val', val)
       const form = {
         id: this.pegawai.id,
-        kodepoli: val?.kodepoli
+        kodepoli: val
       }
       // console.log('val', val, 'form', form)
       this.simpanPoli(form)
     },
     async simpanPoli(val) {
+      const form = {
+        id: this.pegawai.id,
+        kodepoli: val
+      }
       this.loadingPoli = true
-      await api.post('v1/settings/appakses/store-poli', val)
+      await api.post('v1/settings/appakses/store-poli', form)
         .then(resp => {
           console.log('simpan poli', resp.data)
           this.loadingPoli = false
-          this.pegawai.poli = resp.data
+          // this.pegawai.poli = resp.data
+          this.pegawai.kdruangansim = resp.data?.kdruangansim
+          return Promise.resolve(resp)
         })
         .catch(() => { this.loadingPoli = false })
     },

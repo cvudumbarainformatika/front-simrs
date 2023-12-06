@@ -56,10 +56,10 @@
               {{ user?.pegawai?.depo?.nama }}
             </div>
             <div
-              v-else-if="user?.pegawai?.poli"
+              v-else-if="user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
             >
-              {{ user?.pegawai?.poli?.rs2 }}
+              {{ poli(user?.pegawai) }}
             </div>
             <div
               v-else
@@ -87,6 +87,7 @@
 </template>
 
 <script setup>
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import AdmHeaderMenuProfile from './AdmHeaderMenuProfile.vue'
 const emit = defineEmits(['goToSso'])
 defineProps({
@@ -103,6 +104,28 @@ defineProps({
     default: null
   }
 })
+const setting = useSettingsAplikasi()
+function poli(val) {
+  console.log(val)
+  if (setting.polis?.length) {
+    const temp = val.kdruangansim.split('|')
+    const anu = []
+    let fin = null
+    if (temp.length) {
+      temp.forEach(a => {
+        const pol = setting?.polis?.filter(b => b.kodepoli === a)
+        if (pol.length) anu.push(pol[0])
+      })
+      if (anu.length) {
+        fin = anu.map(x => x.polirs).join(', ')
+      }
+    }
+    const ruang = fin ?? 'Tidak ada Akses Poli'
+    return ruang
+  } else {
+    return 'menunggu data poli'
+  }
+}
 
 </script>
 

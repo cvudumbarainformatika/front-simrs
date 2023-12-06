@@ -59,7 +59,8 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
     },
     setIna(obj) {
       this.kodeIna = obj?.cbg?.code ?? '---'
-      this.tarifIna = obj?.cbg?.tariff ?? '0'
+      // this.tarifIna = obj?.cbg?.tariff ?? '0'
+      this.tarifIna = obj?.cbg?.base_tariff ?? '0'
       this.desc = obj?.cbg?.description ?? ''
     },
 
