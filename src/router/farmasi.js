@@ -112,7 +112,7 @@ const farmasi = {
           name: 'farmasi.verifpermintaandepo.verifpermintaan',
           meta: { transition: 'slide-up' },
           component: () =>
-            import('pages/simrs/farmasi/verifpermintaandepo/verif/IndexPage.vue')
+            import('pages/simrs/farmasi/verifpermintaandepo/IndexPage.vue')
         },
         {
           path: '/farmasi/verifpermintaandepo/listverif',

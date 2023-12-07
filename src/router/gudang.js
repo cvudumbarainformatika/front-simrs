@@ -11,7 +11,7 @@ const gudang = {
     },
     {
       path: '/gudang/farmasi',
-      name: 'gudang.farmasi',
+      // name: 'gudang.farmasi',
       component: () => import('pages/simrs/logistik/gudang/farmasi/IndexPage.vue'),
       children: [
         { path: '', name: 'gudang.farmasi', redirect: '/gudang/farmasi/dashboard' },
@@ -74,13 +74,13 @@ const gudang = {
           path: '/gudang/farmasi/verifpermintaandepo',
           component: () => import('src/pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/IndexPage.vue'),
           children: [
-            { path: '', redirect: '/gudang/farmasi/verifpermintaandepo/verifpermintaan' },
+            // { path: '', redirect: '/gudang/farmasi/verifpermintaandepo/verifpermintaan' },
             {
               path: '/gudang/farmasi/verifpermintaandepo/verifpermintaan',
               name: 'gudang.farmasi.verifpermintaandepo.verifpermintaan',
               meta: { transition: 'slide-up' },
               component: () =>
-                import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/verif/IndexPage.vue')
+                import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/verifpermintaandepo/listverif',
@@ -88,6 +88,9 @@ const gudang = {
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/listverif/IndexPage.vue')
+            },
+            {
+              path: '/gudang/farmasi/notfound'
             }
           ]
         },
@@ -111,15 +114,24 @@ const gudang = {
                 import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/listdistribusi/IndexPage.vue')
             }
           ]
+        },
+        {
+          path: '/gudang/farmasi/notfound',
+          component: () => import('pages/MidlewareNotFound.vue')
         }
       ]
     },
     {
       path: '/gudang/nonfarmasi',
-      name: 'gudang.nonfarmasi',
+      // name: 'gudang.nonfarmasi',
       component: () => import('pages/simrs/logistik/gudang/nonfarmasi/IndexPage.vue'),
       children: [
-        { path: '', name: 'gudang', redirect: '/gudang/dashboard' }
+        { path: '', name: 'gudang', redirect: '/gudang/dashboard' },
+
+        {
+          path: '/gudang/nonfarmasi/notfound',
+          component: () => import('pages/MidlewareNotFound.vue')
+        }
       ]
     }
   ]

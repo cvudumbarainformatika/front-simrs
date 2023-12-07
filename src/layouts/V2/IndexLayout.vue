@@ -90,7 +90,7 @@
 
 <script setup>
 import { date, useQuasar } from 'quasar'
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import LeftDrawer from './comp/LeftDrawer.vue'
 // import AdmHeader from './AdmHeader.vue'
@@ -123,6 +123,7 @@ function setDark(val) {
   const x = !val
   $q.dark.set(x)
 }
+// http://localhost:9000/gudang/farmasi/verifpermintaandepo/verifpermintaan
 // function toggleLeftDrawer() {
 //   leftDrawerOpen.value = !leftDrawerOpen.value
 // }
@@ -153,6 +154,12 @@ onBeforeUnmount(() => {
 // ----- timer end -----
 onMounted(() => {
   console.log('layout user', store.currentUser)
+  console.log('router', router?.currentRoute.value)
+  // setTimer
+})
+onBeforeMount(() => {
+  // console.log('layout user', store.currentUser)
+  console.log('router before', router?.currentRoute.value)
   // setTimer
 })
 
