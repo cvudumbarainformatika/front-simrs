@@ -53,6 +53,18 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
     }
   }),
   actions: {
+    setQ(payload) {
+      this.params.page = 1
+      this.params.q = payload
+      this.getPermintaanDepo()
+    },
+    setPeriodik(val) {
+      const { to, from } = val
+      this.params.to = to
+      this.params.from = from
+      console.log('periodik', to)
+      this.getPermintaanDepo()
+    },
     setForm(key, val) {
       this.form[key] = val
     },
@@ -134,7 +146,7 @@ export const useVerifPermintaanDepoStore = defineStore('verif_permintaan_depo', 
         api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
           .then(resp => {
             this.loading = false
-            console.log('list PErmintaan depo', resp.data)
+            console.log('list Permintaan depo', resp.data)
             this.items = resp.data.data
             this.meta = resp.data
             resolve(resp)
