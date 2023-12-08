@@ -17,9 +17,10 @@ import depo from './depo'
 import ptk from './ptk'
 import ruangan from './ruangan'
 import igd from './igd'
+import ranap from './ranap'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
-  kasir, dokumen, gudang, ptk, depo, ruangan, igd
+  kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap
 }
