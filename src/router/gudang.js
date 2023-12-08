@@ -116,6 +116,27 @@ const gudang = {
           ]
         },
         {
+          path: '/gudang/farmasi/retur',
+          component: () => import('src/pages/simrs/logistik/gudang/farmasi/retur/IndexPage.vue')
+          // children: [
+          //   { path: '', redirect: '/gudang/farmasi/retur/distribusipermintaan' },
+          //   {
+          //     path: '/gudang/farmasi/retur/distribusipermintaan',
+          //     name: 'gudang.farmasi.retur.distribusipermintaan',
+          //     meta: { transition: 'slide-up' },
+          //     component: () =>
+          //       import('pages/simrs/logistik/gudang/farmasi/retur/distribusi/IndexPage.vue')
+          //   },
+          //   {
+          //     path: '/gudang/farmasi/retur/listdistribusi',
+          //     name: 'gudang.farmasi.retur.listdistribusi',
+          //     meta: { transition: 'slide-up' },
+          //     component: () =>
+          //       import('pages/simrs/logistik/gudang/farmasi/retur/listdistribusi/IndexPage.vue')
+          //   }
+          // ]
+        },
+        {
           path: '/gudang/farmasi/notfound',
           component: () => import('pages/MidlewareNotFound.vue')
         }
