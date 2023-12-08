@@ -4,30 +4,32 @@
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs'"
   >
     <div class="header bg-primary text-white">
-      <header-page />
+      Header
     </div>
 
     <q-card
       flat
       no-shadow
       square
-      class="my-flex-1"
+      class="my-flex-1 bg-red"
       style="overflow: hidden;"
     >
       <q-scroll-area style="height: calc(100% - 1px);">
-        <list-pengunjung />
+        <div
+          v-for=" n in 100"
+          :key="n"
+        >
+          sdasdas
+        </div>
       </q-scroll-area>
       <div class=" absolute-bottom bg-primary text-white z-top">
-        <footer-page />
+        Bottom
       </div>
     </q-card>
   </q-page>
 </template>
 
 <script setup>
-import ListPengunjung from './ListPengunjung.vue'
-import HeaderPage from './HeaderPage.vue'
-import FooterPage from './FooterPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 const style = useStyledStore()
 </script>
