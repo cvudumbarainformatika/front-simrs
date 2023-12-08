@@ -13,13 +13,24 @@
       style="height:50px"
     >
       <!-- LEFT -->
-      <div @click="emit('goToSso')">
+      <div
+        class="row items-center"
+        @click="emit('goToSso')"
+      >
         <q-avatar
           size="35px"
           class="cursor-pointer bg-white"
         >
           <img src="~assets/logos/logo-rsud.png">
         </q-avatar>
+        <div class="text q-ml-sm">
+          <div class="f-12 text-weight-bold">
+            {{ namaPath(route?.matched[0]?.path) }}
+          </div>
+          <div>
+            {{ route?.matched[1]?.path }}
+          </div>
+        </div>
       </div>
       <!-- <div>
         <q-btn
@@ -89,7 +100,16 @@
 <script setup>
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import AdmHeaderMenuProfile from './AdmHeaderMenuProfile.vue'
+import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
 const emit = defineEmits(['goToSso'])
+
+const route = useRoute()
+
+onMounted(() => {
+  console.log('route', route)
+})
+
 defineProps({
   dark: {
     type: Boolean,
@@ -125,6 +145,16 @@ function poli(val) {
   } else {
     return 'menunggu data poli'
   }
+}
+
+function namaPath(val) {
+  const stringdepan = val[0]
+  let res = val
+  if (stringdepan === '/') {
+    res = val.substring(0, val.length)
+  }
+  console.log('nama path', stringdepan)
+  return res.toUpperCase()
 }
 
 </script>
