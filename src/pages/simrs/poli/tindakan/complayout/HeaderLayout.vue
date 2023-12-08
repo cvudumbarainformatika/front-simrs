@@ -98,9 +98,13 @@
                     standout="bg-yellow-3"
                     dense
                     class="q-my-sm"
-                    :rules="[val => !!val || 'HARAP Hubungi bidang YANMED ...']"
+                    :rules="[
+                      val => ((!!val && pasien?.groups!=='2') || ( pasien?.groups==='2' && !!kdpegsimrs && !val ))|| 'HARAP Hubungi bidang YANMED ...',
+
+                    ]"
                     readonly
                   />
+                  <!-- val => ( pasien?.groups==='2' && !!kdpegsimrs && !val ) || 'Tidak Boleh kosong', -->
                   <q-separator class="q-my-sm" />
                   <div class="text-right">
                     <q-btn
@@ -194,15 +198,15 @@ const props = defineProps({
 })
 
 function updateKodeDpjp(val) {
-  // console.log(val)
-  kodedpjp.value = val?.kddpjp
+  // console.log(props?.pasien?.groups)
+  kodedpjp.value = val?.kddpjp ?? ''
   kdpegsimrs.value = val?.kdpegsimrs
 }
 
 function gantiDpjp() {
   // console.log('ok')
   const form = {
-    kodedpjp: kodedpjp.value,
+    kodedpjp: kodedpjp.value ?? '',
     kdpegsimrs: kdpegsimrs.value,
     noreg: props?.pasien?.noreg
   }

@@ -11,13 +11,6 @@
         <div class="q-mr-sm">
           {{ store.form.nopenerimaan? store.form.nopenerimaan :'-' }}
         </div>
-        <!-- <app-input
-          v-model="store.form.nopenerimaan"
-          label="Nomor Penerimaan"
-          readonly
-          valid
-          :loading="store.loading"
-        /> -->
         <div class="q-ml-md">
           <q-btn
             v-if="store.form.nopenerimaan"
@@ -54,7 +47,7 @@
     <!-- header -->
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
-        <div class="row q-col-gutter-md no-wrap">
+        <div class="row q-col-gutter-md no-wrap q-mb-xs">
           <div class="col-12">
             <app-autocomplete-debounce-input
               ref="refPbf"
@@ -63,6 +56,7 @@
               autocomplete="nama"
               option-label="nama"
               option-value="kode"
+              outlined
               :loading="store.loadingPihakTiga"
               :source="store.pihakTigas"
               :rules="[
@@ -194,14 +188,62 @@
     </div>
     <q-separator />
     <!-- detail -->
+    <div class="row q-col-gutter-sm">
+      <div class="col-4">
+        <app-autocomplete-new
+          :model="store.form.kdobat"
+          autocomplete="nama"
+          option-label="nama"
+          option-value="value"
+          label="Pilih Obat"
+          outlined
+          :source="store.obats"
+          @on-select="store.obatSelected"
+          @clear="store.clearObat"
+        />
+      </div>
+      <div class="col-2">
+        satuan
+      </div>
+      <div class="col-2">
+        harga
+      </div>
+      <div class="col-2">
+        harga pembelian
+      </div>
+      <div class="col-2">
+        diskon
+      </div>
+      <div class="col-2">
+        ppn
+      </div>
+      <div class="col-2">
+        Jumlah di terima total
+      </div>
+      <div class="col-2">
+        subtotal
+      </div>
+      <div class="col-2">
+        no batch
+      </div>
+      <div class="col-2">
+        tgl kadalwarsa
+      </div>
+      <div class="col-2">
+        no retur rs
+      </div>
+      <div class="col-2">
+        pengirim
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
+import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
 
 const style = useStyledStore()
-const store = usePenerimaanFarmasiStore()
+const store = usePenerimaanLangsungFarmasiStore()
 
 function setTanggal (val) {
   store.setForm('tanggal', val)
