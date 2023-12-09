@@ -24,11 +24,8 @@
           <img src="~assets/logos/logo-rsud.png">
         </q-avatar>
         <div class="text q-ml-sm">
-          <div class="f-12 text-weight-bold">
+          <div class="f-18 text-weight-bold">
             {{ namaPath(route?.matched[0]?.path) }}
-          </div>
-          <div>
-            {{ route?.matched[1]?.path }}
           </div>
         </div>
       </div>
@@ -151,7 +148,7 @@ function namaPath(val) {
   const stringdepan = val[0]
   let res = val
   if (stringdepan === '/') {
-    res = val.substring(0, val.length)
+    res = val.substring(val.length, 1)
   }
   console.log('nama path', stringdepan)
   return res.toUpperCase()
