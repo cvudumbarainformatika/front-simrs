@@ -73,6 +73,14 @@
                 {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
               </div>
             </div>
+            <div class="row justify-start no-wrap q-my-xs">
+              <div
+                class="text-weight-bold"
+                :class="row.gudang === 'Gd-03010100'?'text-blue':(row.gudang === 'Gd-05010100'?'text-primary':'text-green')"
+              >
+                {{ row.gudang==='Gd-03010100' ?'Gudang Floor Stok':(row.gudang === 'Gd-05010100'?'Gudang Kamar Obat':'Semua gudang') }}
+              </div>
+            </div>
           </template>
           <template #cell-stok="{row}">
             <div
@@ -87,6 +95,7 @@
               </div>
             </div>
             <div
+              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100'"
               class="row justify-between no-wrap "
               :class="row.stokGudangFs > 0 ? 'text-brown' : ''"
             >
@@ -98,6 +107,7 @@
               </div>
             </div>
             <div
+              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
               class="row justify-between no-wrap "
               :class="row.stokGudangKo > 0 ? 'text-brown' : ''"
             >
@@ -212,4 +222,5 @@ function setJumlah(evt, val) {
   const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   val.jumlahBeli = beli
 }
+
 </script>

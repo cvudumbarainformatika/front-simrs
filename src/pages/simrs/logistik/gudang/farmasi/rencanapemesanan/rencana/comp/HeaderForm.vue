@@ -53,25 +53,35 @@
         />
       </div>
     </div>
-    <div>
-      <!-- <q-btn
-        flat
-        :icon="!style.componentfull?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
-        round
-        :color="style.componentfull?'green':'primary'"
-        size="12px"
-        class="q-ml-md"
-        @click="style.setComponentFull"
-      /> -->
+    <div
+      v-if="apps?.user?.pegawai?.depo"
+      class="text-weight-bold text-primary"
+    >
+      {{ apps?.user?.pegawai?.depo?.nama }}
+    </div>
+    <div
+      v-if="!apps?.user?.pegawai?.depo"
+      class="text-weight-bold text-primary"
+    >
+      <app-autocomplete
+        v-model="store.form.kd_ruang"
+        outlined
+        label="pilih gudang"
+        autocomplete="nama"
+        option-label="nama"
+        option-value="value"
+        :source="store.gudangs"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
-// import { useStyledStore } from 'src/stores/app/styled'
+import { onMounted } from 'vue'
 
-// const style = useStyledStore()
+const apps = useAplikasiStore()
 const store = useRencanaPemesananObatStore()
 
 function setDispTanggal(val) {
@@ -81,5 +91,9 @@ function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
 }
-
+onMounted(() => {
+  if (apps?.user?.pegawai?.depo) {
+    store.setForm('kd_ruang', apps?.user?.pegawai?.depo?.kode)
+  }
+})
 </script>

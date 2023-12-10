@@ -19,6 +19,10 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ],
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at', 'deleted_at']
 
