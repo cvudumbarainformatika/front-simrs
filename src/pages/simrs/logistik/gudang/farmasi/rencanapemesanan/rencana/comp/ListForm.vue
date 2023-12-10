@@ -119,14 +119,27 @@
               </div>
             </div>
             <div
+              v-if="row.stokMaxGudangFs > 0 && (!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100')"
               class="row justify-between no-wrap "
-              :class="row.stokMaxGudang > 0 ? 'text-purple' : ''"
+              :class="row.stokMaxGudangFs > 0 ? 'text-purple' : ''"
             >
               <div class="q-mr-xs">
-                Maksimal gudang {{ row.gudang===''? (!store.form?.kd_ruang?' ' : (store.form?.kd_ruang==="Gd-05010100"?' KO': ' FS')):(row.gudang==='Gd-05010100'?' KO' :' FS') }}
+                Maksimal Gudang FS
               </div>
               <div>
-                {{ row.stokMaxGudang }}
+                {{ row.stokMaxGudangFs }}
+              </div>
+            </div>
+            <div
+              v-if="row.stokMaxGudangKo > 0 && (!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100')"
+              class="row justify-between no-wrap "
+              :class="row.stokMaxGudangKo > 0 ? 'text-purple' : ''"
+            >
+              <div class="q-mr-xs">
+                Maksimal Gudang KO
+              </div>
+              <div>
+                {{ row.stokMaxGudangKo }}
               </div>
             </div>
             <div
