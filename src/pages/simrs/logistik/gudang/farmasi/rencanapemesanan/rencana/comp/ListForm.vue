@@ -120,6 +120,17 @@
             </div>
             <div
               class="row justify-between no-wrap "
+              :class="row.stokMaxGudang > 0 ? 'text-purple' : ''"
+            >
+              <div class="q-mr-xs">
+                Maksimal gudang {{ row.gudang===''? (!store.form?.kd_ruang?' ' : (store.form?.kd_ruang==="Gd-05010100"?' KO': ' FS')):(row.gudang==='Gd-05010100'?' KO' :' FS') }}
+              </div>
+              <div>
+                {{ row.stokMaxGudang }}
+              </div>
+            </div>
+            <div
+              class="row justify-between no-wrap "
               :class="row.stokRS > 0 ? 'text-orange' : ''"
             >
               <div class="q-mr-xs">

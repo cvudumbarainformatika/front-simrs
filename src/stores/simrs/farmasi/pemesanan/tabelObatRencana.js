@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { useRencanaPemesananObatStore } from './rencana'
 
 export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan', {
   state: () => ({
@@ -58,6 +59,21 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
         const all = this.itemsNotFiltered.filter(z => z.gudang === '')
         const gud = this.itemsNotFiltered.filter(z => z.gudang === val)
         this.items = [...all, ...gud]
+
+        // sort
+        this.items.sort((a, b) => {
+          const nameA = a.kd_obat.toUpperCase() // ignore upper and lowercase
+          const nameB = b.kd_obat.toUpperCase() // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1
+          }
+          if (nameA > nameB) {
+            return 1
+          }
+
+          // names must be equal
+          return 0
+        })
       } else {
         this.items = this.itemsNotFiltered
       }
@@ -84,6 +100,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
               item.stokGudangKo = item.stokrealgudangko.length ? item.stokrealgudangko.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
               item.stokRS = item.stokrealallrs.length ? item.stokrealallrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
               item.stokMaxRS = item.stokmaxrs.length ? item.stokmaxrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+              item.stokMaxGudang = item.stokmaxpergudang.length ? item.stokmaxpergudang.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
               item.sudahDirencanakan = item.perencanaanrinci.length ? item.perencanaanrinci.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
               item.bisaBeli = (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) > 0 ? (item.stokMaxRS - item.stokRS - item.sudahDirencanakan) : 0
               item.jumlahBeli = item.bisaBeli
@@ -91,6 +108,10 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
             this.items = temp
             this.itemsNotFiltered = temp
             this.meta = resp?.data?.current_page ? resp?.data : null
+            const renc = useRencanaPemesananObatStore()
+            if (renc.form?.kd_ruang) {
+              this.filterItem(renc.form?.kd_ruang)
+            }
             resolve(resp)
           })
           .catch(() => {

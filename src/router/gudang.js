@@ -154,6 +154,10 @@ const gudang = {
           component: () => import('pages/MidlewareNotFound.vue')
         }
       ]
+    },
+    {
+      path: '/gudang/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }
