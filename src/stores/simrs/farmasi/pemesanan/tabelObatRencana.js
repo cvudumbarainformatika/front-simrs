@@ -5,6 +5,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
   state: () => ({
     loading: false,
     items: [],
+    itemsNotFiltered: [],
     meta: null,
     params: {
       per_page: 10,
@@ -52,6 +53,15 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
       this.params.page = payload
       this.getLists()
     },
+    filterItem(val) {
+      if (val !== '') {
+        const all = this.itemsNotFiltered.filter(z => z.gudang === '')
+        const gud = this.itemsNotFiltered.filter(z => z.gudang === val)
+        this.items = [...all, ...gud]
+      } else {
+        this.items = this.itemsNotFiltered
+      }
+    },
     getLists() {
       this.getObatMauBeli()
     },
@@ -79,6 +89,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
               item.jumlahBeli = item.bisaBeli
             })
             this.items = temp
+            this.itemsNotFiltered = temp
             this.meta = resp?.data?.current_page ? resp?.data : null
             resolve(resp)
           })

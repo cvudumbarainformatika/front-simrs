@@ -61,16 +61,18 @@
     </div>
     <div
       v-if="!apps?.user?.pegawai?.depo"
-      class="text-weight-bold text-primary"
+      class="text-weight-bold text-primary col-3"
     >
-      <app-autocomplete
-        v-model="store.form.kd_ruang"
+      <app-autocomplete-new
+        :model="store.form.kd_ruang"
         outlined
         label="pilih gudang"
         autocomplete="nama"
         option-label="nama"
         option-value="value"
         :source="store.gudangs"
+        @on-select="store.gudangSelected"
+        @clear="store.gudangDeleted"
       />
     </div>
   </div>

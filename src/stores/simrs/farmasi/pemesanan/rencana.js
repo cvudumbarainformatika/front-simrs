@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelObatDirencanakaStore } from './tabelObatRencana'
+import { notifErrVue } from 'src/modules/utils'
 
 export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan_obat', {
   state: () => ({
@@ -42,6 +43,18 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       this.getInitialData()
       const tabel = useTabelObatDirencanakaStore()
       tabel.getInitialData()
+    },
+    gudangSelected(val) {
+      this.setForm('kd_ruang', val)
+      const tabel = useTabelObatDirencanakaStore()
+      tabel.filterItem(val)
+      console.log('gudang selected', val)
+    },
+    gudangDeleted() {
+      this.setForm('kd_ruang', null)
+      const tabel = useTabelObatDirencanakaStore()
+      tabel.filterItem(null)
+      console.log('gudang deleteed', null)
     },
     getInitialData() {
       this.cariRencanaBeli()
@@ -107,6 +120,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       console.log('form ', this.form)
       console.log('kirim ', val)
       this.setForm('kd_obat', val.kd_obat)
+      if (!this.form.kd_ruang) return notifErrVue('Gudang tidak boleh kosong')
       const data = {
         norencanabeliobat: this.form.no_rencbeliobat,
         kdobat: val.kd_obat,

@@ -29,7 +29,7 @@ const gudang = {
             {
               path: '/gudang/farmasi/rencanapemesanan/rencana',
               name: 'gudang.farmasi.rencanapemesanan.rencana',
-              meta: { transition: 'slide-up' },
+              // meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/rencanapemesanan/rencana/IndexPage.vue')
             },
