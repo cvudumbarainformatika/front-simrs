@@ -268,7 +268,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       }
       this.loadingKunci = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan----', data)
+        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan', data)
           .then(resp => {
             this.loadingKunci = false
             console.log('kunci penerimaan ', resp)
@@ -283,7 +283,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     simpanPenerimaan() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/simpan----', this.form)
+        api.post('v1/simrs/farmasinew/penerimaan/simpanpenerimaanlangsung', this.form)
           .then(resp => {
             this.loading = false
             console.log('sudah simpan', resp.data)
@@ -295,23 +295,11 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             }
             if (resp.data.rinci) {
               const rin = resp.data.rinci
-              const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
-              if (index >= 0) {
-                this.details[index].jml_terima_lalu = rin.jml_terima_lalu
-                this.details[index].jml_all_penerimaan = rin.jml_all_penerimaan
-                this.details[index].jumlah = 0
-                this.details[index].inpJumlah = 0
-                this.details[index].isi = 1
-                this.details[index].harga = 0
-                this.details[index].harga_kcl = 0
-                this.details[index].no_batch = ''
-                this.details[index].tgl_exp = ''
-                this.details[index].diskon = 0
-                this.details[index].ppn = 0
-                this.details[index].diskon_rp = 0
-                this.details[index].ppn_rp = 0
-                this.details[index].harga_netto = 0
-                this.details[index].subtotal = 0
+              const index = findWithAttr(this.rincis, 'kdobat', rin.kdobat)
+              if (index > 0) {
+                this.rincis[index] = rin
+              } else {
+                this.rincis.push(rin)
               }
             }
 

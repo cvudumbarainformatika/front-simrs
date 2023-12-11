@@ -104,7 +104,7 @@ const emit = defineEmits(['goToSso'])
 const route = useRoute()
 
 onMounted(() => {
-  console.log('route', route)
+  // console.log('route', route)
 })
 
 defineProps({
@@ -150,7 +150,7 @@ function namaPath(val) {
   if (stringdepan === '/') {
     res = val.substring(val.length, 1)
   }
-  console.log('nama path', stringdepan)
+  // console.log('nama path', stringdepan)
   return res.toUpperCase()
 }
 

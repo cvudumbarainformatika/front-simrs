@@ -154,12 +154,12 @@ onBeforeUnmount(() => {
 // ----- timer end -----
 onMounted(() => {
   console.log('layout user', store.currentUser)
-  console.log('router', router?.currentRoute.value)
+  // console.log('router', router?.currentRoute.value)
   // setTimer
 })
 onBeforeMount(() => {
   // console.log('layout user', store.currentUser)
-  console.log('router before', router?.currentRoute.value)
+  // console.log('router before', router?.currentRoute.value)
   // setTimer
 })
 
