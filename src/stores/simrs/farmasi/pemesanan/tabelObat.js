@@ -11,7 +11,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     meta: {},
     params: {
       per_page: 50,
-      namaobat: '',
+      no_rencbeliobat: '',
       page: 1
     },
     columns: [
@@ -22,6 +22,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     ],
     columnHide: [],
     rencanas: [],
+    rencanaAlls: [],
     norencanas: [],
     pesan: usePemesananObatStore(),
     tglRencana: null
@@ -71,6 +72,15 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     clearRencana(val) {
       this.pesan.setForm('no_rencbeliobat', null)
     },
+    cariRencana(val) {
+      const ren = this.rencanaAlls.filter(a => a.noperencanaan.includes(val))
+      if (ren.length) {
+        this.rencanas = ren
+      } else {
+        this.setParam('no_rencbeliobat', val)
+        this.getObatMauBeli()
+      }
+    },
     getInitialData() {
       this.getObatMauBeli()
     },
@@ -86,6 +96,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             const rencana = resp?.data?.data ?? resp?.data
             if (rencana.length) {
               this.rencanas = rencana
+              this.rencanaAlls = rencana
               const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
               if (noren.length) {
                 noren.forEach(a => {

@@ -82,6 +82,7 @@
               :source="table.norencanas"
               @on-select="table.rencanaSelected"
               @clear="table.clearRencana"
+              @buang="table.cariRencana"
             />
           </div>
         </div>
@@ -127,7 +128,7 @@
           :per-page="table.params.per_page"
           :order-by="table.params.order_by"
           :sort="table.params.sort"
-          :loading="table.loading"
+          :loading="table.loadingList"
           :default-btn="false"
           :ada-refresh="false"
           :ada-filter="false"
