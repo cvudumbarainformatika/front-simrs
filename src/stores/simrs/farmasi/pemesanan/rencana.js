@@ -53,7 +53,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
     gudangDeleted() {
       this.setForm('kd_ruang', null)
       const tabel = useTabelObatDirencanakaStore()
-      tabel.filterItem(null)
+      tabel.filterItem('')
       console.log('gudang deleteed', null)
     },
     getInitialData() {
@@ -123,6 +123,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       if (!this.form.kd_ruang) return notifErrVue('Gudang tidak boleh kosong')
       const data = {
         norencanabeliobat: this.form.no_rencbeliobat,
+        kd_ruang: this.form.kd_ruang,
         kdobat: val.kd_obat,
         stok_real_gudang: val.stokGudang,
         stok_real_rs: val.stokRS,

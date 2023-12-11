@@ -443,6 +443,12 @@ const loadingRes = (cond) => {
   }
 }
 
+const inputMustNumber = (value) => {
+  const temp = !isNaN(parseFloat(value)) ? parseFloat(value) : 0
+  // console.log('inputMustNumber', value, temp)
+  return temp
+}
+
 export {
   daysInMonth,
   notifCenterVue,
@@ -460,5 +466,6 @@ export {
   filterDuplicateArraysInArrays,
   loadingBlock,
   loadingRes,
-  notifInfVue
+  notifInfVue,
+  inputMustNumber
 }

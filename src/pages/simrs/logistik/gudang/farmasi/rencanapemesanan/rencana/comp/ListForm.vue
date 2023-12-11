@@ -84,17 +84,6 @@
           </template>
           <template #cell-stok="{row}">
             <div
-              class="row justify-between no-wrap "
-              :class="row.stokGudang > 0 ? 'text-brown' : ''"
-            >
-              <div class="q-mr-xs">
-                Gudang
-              </div>
-              <div class="">
-                {{ row.stokGudang }}
-              </div>
-            </div>
-            <div
               v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100'"
               class="row justify-between no-wrap "
               :class="row.stokGudangFs > 0 ? 'text-brown' : ''"
@@ -104,18 +93,6 @@
               </div>
               <div class="">
                 {{ row.stokGudangFs }}
-              </div>
-            </div>
-            <div
-              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
-              class="row justify-between no-wrap "
-              :class="row.stokGudangKo > 0 ? 'text-brown' : ''"
-            >
-              <div class="q-mr-xs">
-                Gudang KO
-              </div>
-              <div class="">
-                {{ row.stokGudangKo }}
               </div>
             </div>
             <div
@@ -130,6 +107,23 @@
                 {{ row.stokMaxGudangFs }}
               </div>
             </div>
+            <q-separator
+              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100'"
+              class="q-my-xs"
+            />
+            <div
+              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
+              class="row justify-between no-wrap "
+              :class="row.stokGudangKo > 0 ? 'text-brown' : ''"
+            >
+              <div class="q-mr-xs">
+                Gudang KO
+              </div>
+              <div class="">
+                {{ row.stokGudangKo }}
+              </div>
+            </div>
+
             <div
               v-if="row.stokMaxGudangKo > 0 && (!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100')"
               class="row justify-between no-wrap "
@@ -140,6 +134,21 @@
               </div>
               <div>
                 {{ row.stokMaxGudangKo }}
+              </div>
+            </div>
+            <q-separator
+              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
+              class="q-my-xs"
+            />
+            <div
+              class="row justify-between no-wrap "
+              :class="row.stokGudang > 0 ? 'text-brown' : ''"
+            >
+              <div class="q-mr-xs">
+                Gudang
+              </div>
+              <div class="">
+                {{ row.stokGudang }}
               </div>
             </div>
             <div

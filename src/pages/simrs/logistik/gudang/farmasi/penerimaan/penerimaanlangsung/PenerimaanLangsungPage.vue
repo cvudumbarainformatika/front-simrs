@@ -186,65 +186,177 @@
         </div>
       </div>
     </div>
-    <q-separator />
+    <q-separator class="q-mb-xs" />
     <!-- detail -->
-    <div class="row q-col-gutter-sm">
+    <div class="row items-center q-col-gutter-sm">
       <div class="col-4">
         <app-autocomplete-new
           :model="store.form.kdobat"
-          autocomplete="nama"
-          option-label="nama"
-          option-value="value"
+          autocomplete="namaobat"
+          option-label="namaobat"
+          option-value="kodeobat"
           label="Pilih Obat"
           outlined
           :source="store.obats"
+          :loading="store.loadingCari"
           @on-select="store.obatSelected"
           @clear="store.clearObat"
+          @buang="cariObat"
         />
       </div>
       <div class="col-2">
-        satuan
+        <app-input
+          v-model="store.form.isi"
+          label="konversi satuan besar ke kecil"
+          outlined
+          @update:model-value="setIsi($event)"
+        />
       </div>
       <div class="col-2">
-        harga
+        <div class="row text-italic f-10">
+          satuan :
+        </div>
+        <div class="row">
+          <div
+            v-if="store.form.satuan_bsr"
+          >
+            <div class="text-weight-bold">
+              1 {{ store.form.satuan_bsr }}
+            </div>
+          </div>
+          <div
+            v-if="store.form.satuan_kcl"
+            class="q-ml-sm"
+          >
+            <div class="text-weight-bold">
+              = {{ store.form.isi }} {{ store.form.satuan_kcl }}
+            </div>
+          </div>
+          <div v-else>
+            obat belum dipilih
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3">
+        <app-input
+          v-model="store.form.jml_pesan"
+          label="Jumlah"
+          outlined
+          @update:model-value="setJumlah($event)"
+        />
       </div>
       <div class="col-2">
-        harga pembelian
+        <app-input
+          v-model="store.form.harga"
+          label="Harga (satuan besar)"
+          outlined
+          @update:model-value="setHarga($event)"
+        />
       </div>
       <div class="col-2">
-        diskon
+        <app-input
+          v-model="store.form.diskon"
+          label="Diskon"
+          outlined
+          @update:model-value="setDiskon($event)"
+        />
       </div>
       <div class="col-2">
-        ppn
+        <app-input
+          v-model="store.form.ppn"
+          label="ppn"
+          outlined
+          @update:model-value="setPpn($event)"
+        />
       </div>
       <div class="col-2">
-        Jumlah di terima total
+        harga netto : {{ formatRp(store.form.harga_netto) }}
+      </div>
+      <div class="col-3">
+        subtotal : {{ formatRp(store.form.subtotal) }}
       </div>
       <div class="col-2">
-        subtotal
+        <app-input
+          v-model="store.form.no_batch"
+          label="No Batch"
+          outlined
+        />
       </div>
       <div class="col-2">
-        no batch
+        <app-input-date-human
+          :model="store.disp.tgl_exp"
+          label="Tanggal Kadaluarsa"
+          outlined
+          @set-display="store.setDisp('tgl_exp', $event)"
+          @db-model="store.setForm('tgl_exp', $event)"
+        />
       </div>
       <div class="col-2">
-        tgl kadalwarsa
+        <app-input
+          v-model="store.form.no_retur_rs"
+          label="No Retur Rs"
+          outlined
+        />
       </div>
-      <div class="col-2">
-        no retur rs
-      </div>
-      <div class="col-2">
-        pengirim
+      <!-- <div class="col-3">
+        <app-input
+          v-model="store.form.pengirim"
+          label="Pengirim"
+          outlined
+        />
+      </div> -->
+    </div>
+    <div class="row items-center justify-end q-mr-sm q-mt-md">
+      <div>
+        <q-btn
+          label="Simpan obat"
+          no-caps
+          icon="icon-mat-save"
+          color="primary"
+          push
+          :loading="store.loading"
+          :disable="store.loading"
+          @click="simpan()"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Simpan Rincian Penerimaan
+          </q-tooltip>
+        </q-btn>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+import { formatRp } from 'src/modules/formatter'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
 
 const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
-
+function setIsi(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('isi', temp)
+}
+function setJumlah(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('jml_pesan', temp)
+}
+function setHarga(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('harga', temp)
+}
+function setDiskon(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('diskon', temp)
+}
+function setPpn(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('ppn', temp)
+}
 function setTanggal (val) {
   store.setForm('tanggal', val)
 }
@@ -260,7 +372,7 @@ function dispSurat (val) {
 }
 
 function setTempo (val) {
-  store.setForm('tempo', val)
+  store.setForm('batasbayar', val)
 }
 function dispTempo (val) {
   store.setDisp('tempo', val)
@@ -271,5 +383,18 @@ function cariPihakTiga (val) {
   store.namaPihakKetiga = val
   store.getPihakKetiga()
 }
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const cariObat = myDebounce((val) => {
+  store.getDataObat(val)
+})
 
+function simpan() {
+  console.log('from ', store.form)
+}
 </script>
