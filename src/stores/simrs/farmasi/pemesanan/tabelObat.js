@@ -5,11 +5,12 @@ import { filterDuplicateArrays } from 'src/modules/utils'
 
 export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
+    loadingList: false,
     loading: false,
     items: [],
     meta: {},
     params: {
-      per_page: 10,
+      per_page: 50,
       namaobat: '',
       page: 1
     },
@@ -75,14 +76,14 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     },
     getObatMauBeli() {
       this.norencanas = []
-      this.loading = true
+      this.loadingList = true
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli', param)
           .then(resp => {
-            this.loading = false
+            this.loadingList = false
             console.log('obat direncakan', resp.data)
-            const rencana = resp.data
+            const rencana = resp?.data?.data ?? resp?.data
             if (rencana.length) {
               this.rencanas = rencana
               const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
@@ -112,7 +113,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingList = false
           })
       })
     }

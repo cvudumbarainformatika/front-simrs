@@ -78,6 +78,7 @@
               option-value="no_rencbeliobat"
               label="Pilih Nomor Rencana Pemesanan"
               outlined
+              :loading="table.loadingList"
               :source="table.norencanas"
               @on-select="table.rencanaSelected"
               @clear="table.clearRencana"
