@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelObatDirencanakaStore } from './tabelObatRencana'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan_obat', {
   state: () => ({
@@ -147,6 +147,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
                 this.setForm('no_rencbeliobat', resp.data.notrans)
               }
             }
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => {

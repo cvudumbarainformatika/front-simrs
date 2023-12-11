@@ -99,7 +99,7 @@
                     dense
                     class="q-my-sm"
                     :rules="[
-                      val => ((!!val && pasien?.groups!=='2') || ( pasien?.groups==='2' && !!kdpegsimrs && !val ))|| 'HARAP Hubungi bidang YANMED ...',
+                      val => ((!!val && pasien?.groups!=='2') || ( pasien?.groups==='2' && !!kdpegsimrs && (!val||!!val) ))|| 'HARAP Hubungi bidang YANMED ...',
 
                     ]"
                     readonly

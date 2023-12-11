@@ -226,10 +226,10 @@
           </div>
           <div
             v-if="store.form.satuan_kcl"
-            class="q-ml-sm"
+            class="q-ml-xs"
           >
             <div class="text-weight-bold">
-              = {{ store.form.isi }} {{ store.form.satuan_kcl }}
+              =  {{ store.form.isi }}  {{ store.form.satuan_kcl }}
             </div>
           </div>
           <div v-else>
@@ -337,6 +337,27 @@ import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/pene
 
 const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
+function setHargaNetto() {
+  const isi = store.form.isi ?? 0
+  const harga = store.form.harga ?? 0
+  const diskon = store.form.diskon ?? 0
+  const ppn = store.form.ppn ?? 0
+  const jumlah = store.form.jml_pesan ?? 0
+  const diskonRp = harga * (diskon / 100)
+  const hargaSetelahDiskon = harga - diskonRp
+  const ppnRp = hargaSetelahDiskon * (ppn / 100)
+  const hargaPembelian = hargaSetelahDiskon + ppnRp
+  const subtotal = hargaPembelian * jumlah
+
+  store.setForm('diskon_rp', diskonRp)
+  store.setForm('ppn_rp', ppnRp)
+  store.setForm('harga_netto', hargaPembelian)
+  store.setForm('subtotal', subtotal)
+  store.setForm('harga_kcl', harga / isi)
+  store.setForm('jml_terima_lalu', 0)
+  store.setForm('jml_all_penerimaan', jumlah)
+  store.setForm('jumlah', jumlah)
+}
 function setIsi(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('isi', temp)
@@ -344,18 +365,36 @@ function setIsi(val) {
 function setJumlah(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('jml_pesan', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
 }
 function setHarga(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('harga', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
 }
 function setDiskon(val) {
-  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  const inc = val.includes('.')
+  const ind = val.indexOf('.')
+  const panj = val.length
+  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
   store.setForm('diskon', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
 }
 function setPpn(val) {
-  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  const inc = val.includes('.')
+  const ind = val.indexOf('.')
+  const panj = val.length
+  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
   store.setForm('ppn', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
 }
 function setTanggal (val) {
   store.setForm('tanggal', val)
