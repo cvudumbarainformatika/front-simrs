@@ -621,6 +621,7 @@ function simpan(index) {
     store.simpanPenerimaan()
   }
 }
+let isiPrev = 0
 function setHargaNetNew(evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
@@ -639,16 +640,47 @@ function setHargaNetNew(evt, det, key) {
   const ppnRp = hargaSetelahDiskon * (ppn / 100)
   const hargaPembelian = hargaSetelahDiskon + ppnRp
   const subtotal = hargaPembelian * jmlTerimaB
+  if (key === 'isi') {
+    if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
+      console.log('isi if', parseFloat(evt), isiPrev)
+      if (isiPrev > det.isi) {
+        if (parseFloat(jmlTerimaK) < 1) {
+          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+          det.jumlah = jml
+          jmlTerimaK = jml
+          jmlTerimaB = jml / det.isi
+        }
+        if (parseFloat(det.isi) <= 1) {
+          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+          det.jumlah = jml
+          jmlTerimaK = jml
+          jmlTerimaB = jml / det.isi
+        }
+      } else {
+        det.jumlah = parseFloat(jmlTerimaK)
+        jmlTerimaB = det.jumlah / det.isi
+      }
+
+      // const jmlAll = jmlTerimaK + det.jml_terima_lalu
+      // if (jmlAll > det.jumlahdpesan) {
+      //   console.log('lebih')
+      //   jmlTerimaK = ((det.jumlahdpesan / det.isi) - det.jml_terima_lalu)
+      //   det.jumlah = jmlTerimaK
+      //   jmlTerimaB = det.jumlah * det.isi
+    }
+    isiPrev = det.isi
+  }
+
   if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
   if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
   if (key === 'harga' || key === 'isi') hargaKcl = harga * isi
   if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl / isi
-  // console.log('key', key, key === 'jml_terima_b')
   const jmlAll = jmlTerimaK + det.jml_terima_lalu
-  if (jmlAll > jmlTerimaK) {
+  console.log('terima ', jmlAll, jmlTerimaK)
+  if (jmlAll > parseFloat(det.jumlahdpesan)) {
     console.log('lebih')
-    jmlTerimaK = (det.jumlahdpesan - det.jml_terima_lalu)
-    jmlTerimaB = jmlTerimaK * isi
+    jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu)
+    jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu) / isi
   }
   det.isi = isi
   det.harga = harga
@@ -766,7 +798,7 @@ function setDiterimaKcl(evt, val) {
     val.jml_terima_k = val.inpJumlahKcl
   }
 }
-let isiPrev = 0
+
 // eslint-disable-next-line no-unused-vars
 function setIsi(evt, val) {
   console.log('val', val)
