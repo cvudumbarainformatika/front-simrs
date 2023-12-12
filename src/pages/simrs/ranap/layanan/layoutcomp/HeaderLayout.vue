@@ -123,7 +123,12 @@
           </q-menu>
         </q-btn>
         <div>
-          afasd
+          <div class="f-12">
+            {{ pasien?.ruangan }}
+          </div>
+          <div class="f-10">
+            {{ pasien?.ketruangan }} <span class="text-orange">BED : {{ pasien?.nomorbed }}</span>
+          </div>
         </div>
       </div>
     </q-toolbar-title>

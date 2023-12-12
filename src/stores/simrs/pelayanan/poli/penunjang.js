@@ -228,6 +228,8 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         arr.push(obj)
       }
 
+      this.form.kodepoli = pasien?.kodepoli
+
       const formbaru = { form: arr }
 
       try {
