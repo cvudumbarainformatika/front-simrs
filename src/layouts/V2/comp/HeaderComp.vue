@@ -64,6 +64,12 @@
               {{ user?.pegawai?.depo?.nama }}
             </div>
             <div
+              v-else-if="user?.pegawai?.depo_sim"
+              class="q-mr-sm text-primary"
+            >
+              {{ user?.pegawai?.depo_sim?.nama }}
+            </div>
+            <div
               v-else-if="user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
             >
@@ -128,28 +134,32 @@ function poli(val) {
     { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
   ]
   console.log(val)
-  if (setting.polis?.length) {
-    const temp = val.kdruangansim.split('|')
-    const anu = []
-    let fin = null
-    if (temp.length) {
-      temp.forEach(a => {
-        const pol = setting?.polis?.filter(b => b.kodepoli === a)
-        if (pol.length) anu.push(pol[0])
-      })
-      if (anu.length) {
-        fin = anu.map(x => x.polirs).join(', ')
+  const temp = val.kdruangansim.split('|')
+  const anu = []
+  let fin = null
+  if (temp.length) {
+    temp.forEach(a => {
+      if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
+        if (setting.polis?.length) {
+          const pol = setting?.polis?.filter(b => b.kodepoli === a)
+          if (pol.length) anu.push(pol[0])
+
+          if (anu.length) {
+            fin = anu.map(x => x.polirs).join(', ')
+          }
+          const ruang = fin ?? 'Tidak ada Akses Poli'
+          return ruang
+        } else {
+          return 'Menunggu data poli'
+        }
       }
-    }
-    const ruang = fin ?? 'Tidak ada Akses Poli'
-    return ruang
+      if (a.toLowerCase().includes('gd')) {
+        const gud = gudangs.filter(c => c.value === a)
+        if (gud.length) return gud[0].nama
+      }
+    })
   } else {
-    const temp = val?.kdruangansim
-    if (temp.toLowerCase().includes('gd')) {
-      const gud = gudangs.filter(c => c.value === temp)
-      if (gud.length) return gud[0].nama
-    }
-    return 'menunggu data poli'
+    return 'data ruangan tidak ditemukan'
   }
 }
 

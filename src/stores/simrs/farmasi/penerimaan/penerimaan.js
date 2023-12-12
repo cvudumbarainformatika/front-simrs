@@ -143,6 +143,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         this.details.forEach(a => {
           // console.log('det', a)
           a.diskon = 0
+          a.isi = 1
           a.ppn = 0
           a.diskon_rp = 0
           a.ppn_rp = 0
@@ -155,7 +156,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           if (ter.length) {
             const temp = ter.filter(b => b.kode === a.kdobat)
             if (temp.length) {
-              a.jml_terima_lalu = temp[0].jml
+              a.jml_terima_lalu = temp[0].jml_terima_b
             } else {
               a.jml_terima_lalu = 0
             }

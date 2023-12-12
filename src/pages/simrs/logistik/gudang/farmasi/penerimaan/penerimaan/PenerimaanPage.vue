@@ -311,8 +311,11 @@
               <div class=" text-weight-bold">
                 {{ det.jumlahdpesan ? det.jumlahdpesan : '-' }}
               </div>
+              <div class="q-ml-sm text-weight-bold">
+                {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
+              </div>
             </div>
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
@@ -328,7 +331,7 @@
                   @update:model-value="setDiterima($event, det)"
                 />
               </div>
-            </div>
+            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs text-primary">
               <div class="q-mr-sm">
                 Diterima Sekarang
@@ -361,14 +364,14 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Besar
               </div>
               <div class="text-weight-bold">
                 {{ det.satuan_bsr }}
               </div>
-            </div>
+            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -382,13 +385,42 @@
               </div>
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refJmlDiterima"
+                  v-model="det.inpJumlah"
+                  :label="'Diterima ('+ det.satuan_bsr+')'"
+                  outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor',
+                    val => !!val || 'Harap di isi',
+                    val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
+                  ]"
+                  @update:model-value="setDiterima($event, det)"
+                />
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refJmlDiterima"
+                  v-model="det.inpJumlahKcl"
+                  :label="'Diterima ('+ det.satuan_kcl+')'"
+                  outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  @update:model-value="setDiterimaKcl($event, det, i)"
+                />
+              </div>
+            </div>
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Kecil
               </div>
               <div class="text-weight-bold">
                 {{ det.satuan_kcl }}
               </div>
-            </div>
+            </div> -->
             <div class="row no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -660,12 +692,27 @@ function setPpn(evt, val) {
 function setDiterima(evt, val) {
   val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
-  val.jumlah = val.inpJumlah * val.isi
+  val.jumlah = val.inpJumlah
+  const jmlAll = val.jumlah + val.jml_terima_lalu
+  if (jmlAll > val.jumlahdpesan / val.isi) {
+    console.log('lebih')
+    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu)
+    val.jumlah = val.inpJumlah
+    val.jml_terima_b = val.jumlah
+    val.jml_terima_k = val.jumlah / val.isi
+  }
+}
+function setDiterimaKcl(evt, val) {
+  val.inpJumlahKcl = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  if (!val.isi) val.isi = 1
+  val.jumlah = val.inpJumlahKcl * val.isi
   const jmlAll = val.jumlah + val.jml_terima_lalu
   if (jmlAll > val.jumlahdpesan) {
     console.log('lebih')
-    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
-    val.jumlah = val.inpJumlah * val.isi
+    val.inpJumlahKcl = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
+    val.jumlah = val.inpJumlahKcl * val.isi
+    val.jml_terima_b = val.jumlah
+    val.jml_terima_k = val.inpJumlahKcl
   }
 }
 let isiPrev = 0
@@ -680,22 +727,26 @@ function setIsi(evt, val) {
       if (parseFloat(val.inpJumlah) < 1) {
         const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
         val.jumlah = jml
-        val.inpJumlah = jml / val.isi
+        val.inpJumlah = jml
+        val.inpJumlahKcl = jml / val.isi
       }
       if (parseFloat(val.isi) <= 1) {
         const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
         val.jumlah = jml
-        val.inpJumlah = jml / val.isi
+        val.inpJumlah = jml
+        val.inpJumlahKcl = jml / val.isi
       }
     } else {
-      val.jumlah = val.isi * parseFloat(val.inpJumlah)
+      val.jumlah = parseFloat(val.inpJumlah)
+      val.inpJumlahKcl = val.jumlah / val.isi
     }
 
     const jmlAll = val.jumlah + val.jml_terima_lalu
     if (jmlAll > val.jumlahdpesan) {
       console.log('lebih')
-      val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
-      val.jumlah = val.inpJumlah * val.isi
+      val.inpJumlah = ((val.jumlahdpesan / val.isi) - val.jml_terima_lalu)
+      val.jumlah = val.inpJumlah
+      val.inpJumlahKcl = val.jumlah * val.isi
     }
     isiPrev = val.isi
   }
