@@ -337,7 +337,7 @@
                 Diterima Sekarang
               </div>
               <div class="text-weight-bold q-mr-sm">
-                {{ det.jumlah ? det.jumlah : 0 }}
+                {{ det.jml_terima_k ? det.jml_terima_k : 0 }}
               </div>
               <div class="">
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
@@ -380,7 +380,7 @@
                   label="Isi"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  @update:model-value="setIsi($event, det, i)"
+                  @update:model-value="setHargaNetNew($event, det,'isi')"
                 />
               </div>
             </div>
@@ -388,7 +388,7 @@
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
-                  v-model="det.inpJumlah"
+                  v-model="det.jml_terima_b"
                   :label="'Diterima ('+ det.satuan_bsr+')'"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
@@ -397,7 +397,7 @@
                     val => !!val || 'Harap di isi',
                     val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
                   ]"
-                  @update:model-value="setHargaNetNew($event, det,'inpJumlah')"
+                  @update:model-value="setHargaNetNew($event, det,'jml_terima_b')"
                 />
               </div>
             </div>
@@ -405,11 +405,11 @@
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
-                  v-model="det.inpJumlahKcl"
+                  v-model="det.jml_terima_k"
                   :label="'Diterima ('+ det.satuan_kcl+')'"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  @update:model-value="setDiterimaKcl($event, det, i)"
+                  @update:model-value="setHargaNetNew($event, det,'jml_terima_k')"
                 />
               </div>
             </div>
@@ -457,7 +457,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setHarga($event,det,i)"
+                  @update:model-value="setHargaNetNew($event, det,'harga')"
                 />
               </div>
             </div>
@@ -472,7 +472,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setHargaKcl($event,det,i)"
+                  @update:model-value="setHargaNetNew($event, det,'harga_kcl')"
                 />
               </div>
             </div>
@@ -486,7 +486,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setDiskon($event, det)"
+                  @update:model-value="setHargaNetNew($event, det,'diskon')"
                 />
               </div>
             </div>
@@ -501,7 +501,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setPpn($event, det)"
+                  @update:model-value="setHargaNetNew($event, det,'ppn')"
                 />
               </div>
             </div>
@@ -622,9 +622,49 @@ function simpan(index) {
   }
 }
 function setHargaNetNew(evt, det, key) {
-  console.log('evt', evt)
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  const isi = det.isi ?? 1
+  let harga = det.harga ?? 0
+  let hargaKcl = det.harga_kcl ?? 0
+  const diskon = det.diskon ?? 0
+  const ppn = det.ppn ?? 0
+  let jmlTerimaB = det.jml_terima_b ?? 0
+  let jmlTerimaK = det.jml_terima_k ?? 0
+  const diskonRp = harga * (diskon / 100)
+  const hargaSetelahDiskon = harga - diskonRp
+  const ppnRp = hargaSetelahDiskon * (ppn / 100)
+  const hargaPembelian = hargaSetelahDiskon + ppnRp
+  const subtotal = hargaPembelian * jmlTerimaB
+  if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
+  if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
+  if (key === 'harga' || key === 'isi') hargaKcl = harga * isi
+  if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl / isi
+  // console.log('key', key, key === 'jml_terima_b')
+  const jmlAll = jmlTerimaK + det.jml_terima_lalu
+  if (jmlAll > jmlTerimaK) {
+    console.log('lebih')
+    jmlTerimaK = (det.jumlahdpesan - det.jml_terima_lalu)
+    jmlTerimaB = jmlTerimaK * isi
+  }
+  det.isi = isi
+  det.harga = harga
+  det.harga_kcl = hargaKcl
+  det.diskon = diskon
+  det.ppn = ppn
+  det.jml_terima_b = jmlTerimaB
+  det.jml_terima_k = jmlTerimaK
+  det.diskon_rp = diskonRp
+  det.ppn_rp = ppnRp
+  det.harga_netto = hargaPembelian
+  det.subtotal = subtotal
+  // console.log('evt', evt)
+  // console.log('nilai', nilai)
   console.log('det', det)
-  console.log('key', key)
+  // console.log('key', key)
 }
 function setHargaNet(val) {
   val.harga_netto = 0
@@ -659,6 +699,7 @@ function setHargaNet(val) {
   }
   console.log(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setHarga(evt, val, index) {
   val.harga = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
@@ -673,6 +714,7 @@ function setHarga(evt, val, index) {
   }
   // console.log('harga', val)
 }
+// eslint-disable-next-line no-unused-vars
 function setHargaKcl (evt, val, index) {
   val.harga_kcl = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
@@ -686,10 +728,12 @@ function setHargaKcl (evt, val, index) {
     val.harga_kcl = 0
   }
 }
+// eslint-disable-next-line no-unused-vars
 function setDiskon(evt, val) {
   val.diskon = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setPpn(evt, val) {
   val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
@@ -708,6 +752,7 @@ function setDiterima(evt, val) {
     val.jml_terima_k = val.jumlah / val.isi
   }
 }
+// eslint-disable-next-line no-unused-vars
 function setDiterimaKcl(evt, val) {
   val.inpJumlahKcl = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
@@ -722,6 +767,7 @@ function setDiterimaKcl(evt, val) {
   }
 }
 let isiPrev = 0
+// eslint-disable-next-line no-unused-vars
 function setIsi(evt, val) {
   console.log('val', val)
   console.log('isi', parseFloat(evt))

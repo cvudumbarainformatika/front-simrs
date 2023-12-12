@@ -156,7 +156,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           if (ter.length) {
             const temp = ter.filter(b => b.kode === a.kdobat)
             if (temp.length) {
-              a.jml_terima_lalu = temp[0].jml_terima_b
+              a.jml_terima_lalu = temp[0].jml
             } else {
               a.jml_terima_lalu = 0
             }
