@@ -102,8 +102,9 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
         item.stokMaxGudangKo = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-05010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
         item.stokMaxGudangFs = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-03010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
         item.sudahDirencanakan = item.perencanaanrinci.length ? item.perencanaanrinci.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        const maxBeli = !kdRuang ? item.stokMaxRS : (kdRuang === 'Gd-05010100' ? (item.stokMaxGudangKo) : (item.stokMaxGudangFs))
-        item.bisaBeli = (maxBeli - item.stokRS - item.sudahDirencanakan) > 0 ? (maxBeli - item.stokRS - item.sudahDirencanakan) : 0
+        item.stokMaxs = !kdRuang ? item.stokMaxRS : (kdRuang === 'Gd-05010100' ? (item.stokMaxGudangKo) : (item.stokMaxGudangFs))
+        item.stokReals = !kdRuang ? item.stokGudang : (kdRuang === 'Gd-05010100' ? (item.stokGudangKo) : (item.stokGudangFs))
+        item.bisaBeli = (item.stokMaxs - item.stokRS - item.sudahDirencanakan) > 0 ? (item.stokMaxs - item.stokRS - item.sudahDirencanakan) : 0
 
         item.jumlahBeli = item.bisaBeli
       })

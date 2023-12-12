@@ -123,6 +123,10 @@ defineProps({
 })
 const setting = useSettingsAplikasi()
 function poli(val) {
+  const gudangs = [
+    { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+    { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+  ]
   console.log(val)
   if (setting.polis?.length) {
     const temp = val.kdruangansim.split('|')
@@ -140,6 +144,11 @@ function poli(val) {
     const ruang = fin ?? 'Tidak ada Akses Poli'
     return ruang
   } else {
+    const temp = val?.kdruangansim
+    if (temp.toLowerCase().includes('gd')) {
+      const gud = gudangs.filter(c => c.value === temp)
+      if (gud.length) return gud[0].nama
+    }
     return 'menunggu data poli'
   }
 }
