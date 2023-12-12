@@ -397,7 +397,7 @@
                     val => !!val || 'Harap di isi',
                     val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
                   ]"
-                  @update:model-value="setDiterima($event, det)"
+                  @update:model-value="setHargaNetNew($event, det,'inpJumlah')"
                 />
               </div>
             </div>
@@ -621,6 +621,11 @@ function simpan(index) {
     store.simpanPenerimaan()
   }
 }
+function setHargaNetNew(evt, det, key) {
+  console.log('evt', evt)
+  console.log('det', det)
+  console.log('key', key)
+}
 function setHargaNet(val) {
   val.harga_netto = 0
   if (val.harga > 0 && val.diskon > 0) {
@@ -689,6 +694,7 @@ function setPpn(evt, val) {
   val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setDiterima(evt, val) {
   val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
