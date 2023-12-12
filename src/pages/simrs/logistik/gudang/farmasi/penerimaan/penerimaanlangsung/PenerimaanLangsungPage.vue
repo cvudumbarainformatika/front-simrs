@@ -70,6 +70,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-autocomplete-new
+              ref="refJnsPenerimaan"
               :model="store.form.jenispenerimaan"
               autocomplete="nama"
               option-label="nama"
@@ -131,6 +132,7 @@
               option-value="value"
               label="Pilih Gudang"
               outlined
+              :disable="apps?.user?.pegawai?.kdruangansim!==''"
               :source="store.gudangs"
               @on-select="store.gudangSelected"
               @clear="store.clearGudang"
@@ -141,6 +143,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
+              ref="refTglTran"
               :model="store.disp.tanggal"
               label="Tanggal Transaksi"
               outlined
@@ -152,6 +155,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
+              ref="refTglSurat"
               :model="store.disp.surat"
               label="Tanggal Surat"
               outlined
@@ -163,6 +167,7 @@
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
+              ref="refTglTempo"
               :model="store.disp.tempo"
               label="Batas Akhir Pembayaran"
               outlined
@@ -186,65 +191,242 @@
         </div>
       </div>
     </div>
-    <q-separator />
+    <q-separator class="q-mb-xs" />
     <!-- detail -->
-    <div class="row q-col-gutter-sm">
+    <div class="row items-center q-col-gutter-sm">
       <div class="col-4">
         <app-autocomplete-new
+          ref="refObat"
           :model="store.form.kdobat"
-          autocomplete="nama"
-          option-label="nama"
-          option-value="value"
+          autocomplete="namaobat"
+          option-label="namaobat"
+          option-value="kodeobat"
           label="Pilih Obat"
           outlined
           :source="store.obats"
+          :loading="store.loadingCari"
           @on-select="store.obatSelected"
           @clear="store.clearObat"
+          @buang="cariObat"
         />
       </div>
       <div class="col-2">
-        satuan
+        <app-input
+          ref="refIsi"
+          v-model="store.form.isi"
+          label="konversi satuan besar ke kecil"
+          outlined
+          @update:model-value="setIsi($event)"
+        />
       </div>
       <div class="col-2">
-        harga
+        <div class="row text-italic f-10">
+          satuan :
+        </div>
+        <div class="row">
+          <div
+            v-if="store.form.satuan_bsr"
+          >
+            <div class="text-weight-bold">
+              1 {{ store.form.satuan_bsr }}
+            </div>
+          </div>
+          <div
+            v-if="store.form.satuan_kcl"
+            class="q-ml-xs"
+          >
+            <div class="text-weight-bold">
+              =  {{ store.form.isi }}  {{ store.form.satuan_kcl }}
+            </div>
+          </div>
+          <div v-else>
+            obat belum dipilih
+          </div>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <app-input
+          ref="refJumlah"
+          v-model="store.form.jml_terima_b"
+          label="Jumlah"
+          outlined
+          @update:model-value="setJumlah($event)"
+        />
       </div>
       <div class="col-2">
-        harga pembelian
+        <div class="row">
+          <div class="text-weight-bold">
+            {{ store.form.satuan_bsr }}
+          </div>
+          <div class="text-weight-bold">
+            {{ store.form.jml_terima_k }}  {{ store.form.satuan_kcl }}
+          </div>
+        </div>
       </div>
       <div class="col-2">
-        diskon
+        <app-input
+          ref="refHarga"
+          v-model="store.form.harga"
+          label="Harga (satuan besar)"
+          outlined
+          @update:model-value="setHarga($event)"
+        />
       </div>
       <div class="col-2">
-        ppn
+        <app-input
+          v-model="store.form.diskon"
+          label="Diskon (%)"
+          outlined
+          valid
+          @update:model-value="setDiskon($event)"
+        />
       </div>
       <div class="col-2">
-        Jumlah di terima total
+        <app-input
+          v-model="store.form.ppn"
+          label="PPN (%)"
+          outlined
+          valid
+          @update:model-value="setPpn($event)"
+        />
       </div>
       <div class="col-2">
-        subtotal
+        harga netto : <strong> {{ formatRp(store.form.harga_netto) }} </strong>
+      </div>
+      <div class="col-3">
+        subtotal : <strong>{{ formatRp(store.form.subtotal) }}</strong>
       </div>
       <div class="col-2">
-        no batch
+        <app-input
+          v-model="store.form.no_batch"
+          label="No Batch"
+          outlined
+        />
       </div>
       <div class="col-2">
-        tgl kadalwarsa
+        <app-input-date-human
+          ref="refExp"
+          :model="store.disp.tgl_exp"
+          label="Tanggal Kadaluarsa"
+          outlined
+          @set-display="store.setDisp('tgl_exp', $event)"
+          @db-model="store.setForm('tgl_exp', $event)"
+        />
       </div>
       <div class="col-2">
-        no retur rs
+        <app-input
+          v-model="store.form.no_retur_rs"
+          valid
+          label="No Retur Rs"
+          outlined
+        />
       </div>
-      <div class="col-2">
-        pengirim
+      <!-- <div class="col-3">
+        <app-input
+          v-model="store.form.pengirim"
+          label="Pengirim"
+          outlined
+        />
+      </div> -->
+    </div>
+    <div class="row items-center justify-end q-mr-sm q-mt-md">
+      <div>
+        <q-btn
+          label="Simpan obat"
+          no-caps
+          icon="icon-mat-save"
+          color="primary"
+          push
+          :loading="store.loading"
+          :disable="store.loading"
+          @click="simpan()"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Simpan Rincian Penerimaan
+          </q-tooltip>
+        </q-btn>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+import { formatRp } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
+import { onMounted, ref } from 'vue'
 
 const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
+const apps = useAplikasiStore()
+onMounted(() => {
+  store.setForm('gudang', apps?.user?.pegawai?.kdruangansim)
+})
+function setHargaNetto() {
+  const isi = store.form.isi ?? 1
+  const harga = store.form.harga ?? 0
+  const diskon = store.form.diskon ?? 0
+  const ppn = store.form.ppn ?? 0
+  const jmlTerimaB = store.form.jml_terima_b ?? 0
+  const diskonRp = harga * (diskon / 100)
+  const hargaSetelahDiskon = harga - diskonRp
+  const ppnRp = hargaSetelahDiskon * (ppn / 100)
+  const hargaPembelian = hargaSetelahDiskon + ppnRp
+  const subtotal = hargaPembelian * jmlTerimaB
 
+  store.setForm('diskon_rp', diskonRp)
+  store.setForm('ppn_rp', ppnRp)
+  store.setForm('harga_netto', hargaPembelian)
+  store.setForm('subtotal', subtotal)
+  store.setForm('harga_kcl', harga / isi)
+  store.setForm('jml_terima_lalu', 0)
+  store.setForm('jml_all_penerimaan', jmlTerimaB)
+  store.setForm('jml_pesan', 0)
+  store.setForm('jml_terima_k', jmlTerimaB / isi)
+}
+function setIsi(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('isi', temp)
+}
+function setJumlah(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('jml_terima_b', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
+}
+function setHarga(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  store.setForm('harga', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
+}
+function setDiskon(val) {
+  const inc = val.includes('.')
+  const ind = val.indexOf('.')
+  const panj = val.length
+  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
+  store.setForm('diskon', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
+}
+function setPpn(val) {
+  const inc = val.includes('.')
+  const ind = val.indexOf('.')
+  const panj = val.length
+  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
+  store.setForm('ppn', temp)
+  setTimeout(() => {
+    setHargaNetto()
+  }, 100)
+}
 function setTanggal (val) {
   store.setForm('tanggal', val)
 }
@@ -260,7 +442,7 @@ function dispSurat (val) {
 }
 
 function setTempo (val) {
-  store.setForm('tempo', val)
+  store.setForm('batasbayar', val)
 }
 function dispTempo (val) {
   store.setDisp('tempo', val)
@@ -271,5 +453,74 @@ function cariPihakTiga (val) {
   store.namaPihakKetiga = val
   store.getPihakKetiga()
 }
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const cariObat = myDebounce((val) => {
+  store.getDataObat(val)
+})
 
+function simpan() {
+  console.log('from ', store.form)
+  console.log('validasi ', validasi())
+  if (validasi()) {
+    store.simpanPenerimaan()
+  }
+}
+
+// head
+const refPbf = ref(null) // auto
+const refJnsPenerimaan = ref(null) // auto
+const refJenisSurat = ref(null) // auto
+const refNoSurat = ref(null) // inp
+const refPengirim = ref(null) // inp
+const refGudang = ref(null) // auto
+const refTglTran = ref(null) // inp date
+const refTglSurat = ref(null) // inp date
+const refTglTempo = ref(null) // inp date
+const refTotalFaktur = ref(null) // inp
+
+// det
+const refObat = ref(null) // auto
+const refIsi = ref(null)
+const refJumlah = ref(null)
+const refExp = ref(null)
+const refHarga = ref(null)
+// const refHargaKcl = ref(null)
+function validasi() {
+  // console.log('index', index)
+  // console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
+  // console.log('ref diterima', refJmlDiterima.value[index].refInput.validate())
+  // console.log('ref tgltran', refTglTran.value.$refs.refInputDate.validate())
+  // console.log('ref harga', refHarga.value[index].refInput.validate())
+
+  const pbf = refPbf.value ? refPbf.value.$refs.refAuto.validate() : false
+  const jnsPenerimaan = refJnsPenerimaan.value ? refJnsPenerimaan.value.$refs.refAuto.validate() : false
+
+  const gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : false
+  const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
+  const noSurat = refNoSurat.value.$refs.refInput.validate()
+  const pengirim = refPengirim.value.$refs.refInput.validate()
+  const tglTran = refTglTran.value.$refs.refInputDate.validate()
+  const tglSurat = refTglSurat.value.$refs.refInputDate.validate()
+  const tglTempo = refTglTempo.value.$refs.refInputDate.validate()
+  const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
+
+  const obat = refObat.value ? refObat.value.$refs.refAuto.validate() : false
+  const jmlTerimaB = refJumlah.value.refInput.validate()
+  const isi = refIsi.value.refInput.validate()
+  const exp = refExp.value.$refs.refInputDate.validate()
+  const harga = refHarga.value.refInput.validate()
+  // const hargaKcl = refHargaKcl.value.refInput.validate()
+  if (!gudang && !store.form.kdruang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
+  if (
+    pbf && jnsPenerimaan && gudang && jenisSurat && noSurat && pengirim && totalFaktur && tglTran && tglSurat && tglTempo &&
+    jmlTerimaB && isi && exp && harga && obat // && hargaKcl
+  ) return true
+  else return false
+}
 </script>

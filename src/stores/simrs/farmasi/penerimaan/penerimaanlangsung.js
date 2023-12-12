@@ -7,15 +7,20 @@ import { useListPenerimaanStore } from './listpenerimaan'
 export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan_langsung', {
   state: () => ({
     loading: false,
+    loadingCari: false,
     loadingPihakTiga: false,
     loadingKunci: false,
     items: [],
     form: {
       nopenerimaan: '',
+      isi: 1,
+      harga_netto: 0,
+      subtotal: 0,
       tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       batasbayar: null,
       tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      kdobat: ''
+      kdobat: '',
+      jenispenerimaan: ''
     },
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -56,7 +61,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     ],
     rincis: [],
     filterObat: '',
-    obats: []
+    obats: [],
+    obatTerpilih: null
   }),
   actions: {
     setForm(key, val) {
@@ -171,12 +177,17 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       }
     },
     obatSelected(val) {
-      this.setForm('gudang', val)
-      this.setForm('kdruang', val)
+      this.setForm('kdobat', val)
+      const obat = this.obats.filter(a => a.kodeobat === val)
+      if (obat.length) {
+        // this.obatTerpilih = obat[0]
+        this.setForm('satuan_bsr', obat[0].satuan_b)
+        this.setForm('satuan_kcl', obat[0].satuan_k)
+      }
     },
     clearObat() {
-      this.setForm('gudang', null)
-      this.setForm('kdruang', null)
+      this.setForm('kdobat', null)
+      this.obatTerpilih = null
     },
     gudangSelected(val) {
       this.setForm('gudang', val)
@@ -206,18 +217,18 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       this.getPihakKetiga()
     },
     // cari obat
-    getDataObat() {
-      this.loading = true
-      const params = { params: { q: this.filterObat } }
+    getDataObat(val) {
+      this.loadingCari = true
+      const params = { params: { q: val } }
       return new Promise(resolve => {
         api.get('v1/simrs/master/cariObat', params)
           .then(resp => {
-            this.loading = false
+            this.loadingCari = false
             this.obats = resp.data
             console.log(resp)
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          .catch(() => { this.loadingCari = false })
       })
     },
     getPihakKetiga() {
@@ -257,7 +268,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       }
       this.loadingKunci = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan----', data)
+        api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan', data)
           .then(resp => {
             this.loadingKunci = false
             console.log('kunci penerimaan ', resp)
@@ -272,7 +283,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     simpanPenerimaan() {
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/simpan----', this.form)
+        api.post('v1/simrs/farmasinew/penerimaan/simpanpenerimaanlangsung', this.form)
           .then(resp => {
             this.loading = false
             console.log('sudah simpan', resp.data)
@@ -284,23 +295,11 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             }
             if (resp.data.rinci) {
               const rin = resp.data.rinci
-              const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
-              if (index >= 0) {
-                this.details[index].jml_terima_lalu = rin.jml_terima_lalu
-                this.details[index].jml_all_penerimaan = rin.jml_all_penerimaan
-                this.details[index].jumlah = 0
-                this.details[index].inpJumlah = 0
-                this.details[index].isi = 1
-                this.details[index].harga = 0
-                this.details[index].harga_kcl = 0
-                this.details[index].no_batch = ''
-                this.details[index].tgl_exp = ''
-                this.details[index].diskon = 0
-                this.details[index].ppn = 0
-                this.details[index].diskon_rp = 0
-                this.details[index].ppn_rp = 0
-                this.details[index].harga_netto = 0
-                this.details[index].subtotal = 0
+              const index = findWithAttr(this.rincis, 'kdobat', rin.kdobat)
+              if (index > 0) {
+                this.rincis[index] = rin
+              } else {
+                this.rincis.push(rin)
               }
             }
 

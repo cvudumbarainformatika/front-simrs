@@ -724,10 +724,11 @@ function dispTempo(val) {
   store.setDisp('batasbayar', val)
 }
 const apps = useAplikasiStore()
+
 const gudang = computed(() => {
   let gud = null
-  if (apps.user.pegawai.kode_ruang !== '') {
-    const anu = store.gudangs.filter(a => a.value === apps.user.pegawai.kode_ruang)
+  if (apps.user.pegawai.kdruangansim !== '') {
+    const anu = store.gudangs.filter(a => a.value === apps.user.pegawai.kdruangansim)
     if (anu.length) {
       gud = anu[0]
       store.setForm('kdruang', gud.value)

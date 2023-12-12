@@ -15,10 +15,10 @@
     <q-card
       flat
       class="col full-width full-height"
-      :style="`max-height: ${!style.componentfull? h-60:h+40}px;`"
+      :style="`max-height: ${!style.componentfull? h:h+40}px;`"
     >
       <q-scroll-area
-        :style="`height: ${!style.componentfull? h-95:h+40}px; max-width: 100%;`"
+        :style="`height: ${!style.componentfull? h-70:h+40}px; max-width: 100%;`"
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >

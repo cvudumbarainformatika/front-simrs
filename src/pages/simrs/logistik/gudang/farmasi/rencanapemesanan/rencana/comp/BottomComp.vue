@@ -51,7 +51,9 @@
         />
       </div>
     </div>
-    <div>{{ meta.total }} DATA DITEMUKAN</div>
+    <div class="q-mr-xl">
+      {{ meta.total }} DATA DITEMUKAN
+    </div>
   </div>
 </template>
 

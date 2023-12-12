@@ -1,9 +1,9 @@
 <template>
   <div
-    class="fixed-top row no-wrap items-center justify-between q-mx-sm bg-white"
+    class="fixed-top row no-wrap items-center justify-between bg-primary text-white q-pb-sm"
     style="z-index: 10;"
   >
-    <div>
+    <div class="q-ml-sm">
       <div class="row items-center">
         <div class="q-mr-md">
           No Perencanaan:
@@ -26,11 +26,11 @@
             flat
             icon="icon-mat-done"
             dense
-            color="primary"
+            color="green"
             @click="store.selesaiDanKunci()"
           >
             <q-tooltip
-              class="primary"
+              class="green"
               :offset="[10, 10]"
             >
               Selesai dan Kunci Rencana Pemesanan
@@ -48,30 +48,44 @@
           :model="store.disp.tanggal"
           label="Tanggal"
           outlined
+          dark
           @set-display="setDispTanggal"
           @db-model="setTanggal"
         />
       </div>
     </div>
-    <div>
-      <!-- <q-btn
-        flat
-        :icon="!style.componentfull?'icon-mat-open_in_full':'icon-mat-close_fullscreen'"
-        round
-        :color="style.componentfull?'green':'primary'"
-        size="12px"
-        class="q-ml-md"
-        @click="style.setComponentFull"
-      /> -->
+    <div
+      v-if="apps?.user?.pegawai?.depo_sim"
+      class="text-weight-bold text-white q-mr-sm"
+    >
+      {{ apps?.user?.pegawai?.depo_sim?.nama }}
+    </div>
+    <div
+      v-if="!apps?.user?.pegawai?.depo_sim"
+      class="text-weight-bold text-primary col-3 q-mr-sm"
+    >
+      <app-autocomplete-new
+        :model="store.form.kd_ruang"
+        outlined
+        label="direncanakan untuk gudang : "
+        autocomplete="nama"
+        option-label="nama"
+        option-value="value"
+        dark
+        :source="store.gudangs"
+        @on-select="store.gudangSelected"
+        @clear="store.gudangDeleted"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
-// import { useStyledStore } from 'src/stores/app/styled'
+import { onMounted } from 'vue'
 
-// const style = useStyledStore()
+const apps = useAplikasiStore()
 const store = useRencanaPemesananObatStore()
 
 function setDispTanggal(val) {
@@ -81,5 +95,9 @@ function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
 }
-
+onMounted(() => {
+  if (apps?.user?.pegawai?.depo) {
+    store.setForm('kd_ruang', apps?.user?.pegawai?.depo?.kode)
+  }
+})
 </script>

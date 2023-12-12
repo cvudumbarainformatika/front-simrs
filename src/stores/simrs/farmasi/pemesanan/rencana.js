@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelObatDirencanakaStore } from './tabelObatRencana'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan_obat', {
   state: () => ({
@@ -19,6 +20,10 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ],
     columns: [],
     columnHide: ['id', 'created_at', 'updated_at', 'deleted_at']
 
@@ -38,6 +43,18 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       this.getInitialData()
       const tabel = useTabelObatDirencanakaStore()
       tabel.getInitialData()
+    },
+    gudangSelected(val) {
+      this.setForm('kd_ruang', val)
+      const tabel = useTabelObatDirencanakaStore()
+      tabel.filterItem(val)
+      console.log('gudang selected', val)
+    },
+    gudangDeleted() {
+      this.setForm('kd_ruang', null)
+      const tabel = useTabelObatDirencanakaStore()
+      tabel.filterItem('')
+      console.log('gudang deleteed', null)
     },
     getInitialData() {
       this.cariRencanaBeli()
@@ -103,12 +120,14 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       console.log('form ', this.form)
       console.log('kirim ', val)
       this.setForm('kd_obat', val.kd_obat)
+      if (!this.form.kd_ruang) return notifErrVue('Gudang tidak boleh kosong')
       const data = {
         norencanabeliobat: this.form.no_rencbeliobat,
+        kd_ruang: this.form.kd_ruang,
         kdobat: val.kd_obat,
         stok_real_gudang: val.stokGudang,
-        stok_real_rs: val.stokRS,
-        stok_max_rs: val.stokMaxRS,
+        stok_real_rs: val.stokReals,
+        stok_max_rs: val.stokMaxs,
         jumlah_bisa_dibeli: val.bisaBeli,
         tgl_stok: this.form.tanggal,
         pabrikan: 'belum ada',
@@ -128,6 +147,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
                 this.setForm('no_rencbeliobat', resp.data.notrans)
               }
             }
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => {

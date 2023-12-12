@@ -5,12 +5,13 @@ import { filterDuplicateArrays } from 'src/modules/utils'
 
 export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
+    loadingList: false,
     loading: false,
     items: [],
     meta: {},
     params: {
-      per_page: 10,
-      namaobat: '',
+      per_page: 50,
+      no_rencbeliobat: '',
       page: 1
     },
     columns: [
@@ -21,6 +22,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     ],
     columnHide: [],
     rencanas: [],
+    rencanaAlls: [],
     norencanas: [],
     pesan: usePemesananObatStore(),
     tglRencana: null
@@ -70,21 +72,31 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     clearRencana(val) {
       this.pesan.setForm('no_rencbeliobat', null)
     },
+    cariRencana(val) {
+      const ren = this.rencanaAlls.filter(a => a.noperencanaan.includes(val))
+      if (ren.length) {
+        this.rencanas = ren
+      } else {
+        this.setParam('no_rencbeliobat', val)
+        this.getObatMauBeli()
+      }
+    },
     getInitialData() {
       this.getObatMauBeli()
     },
     getObatMauBeli() {
       this.norencanas = []
-      this.loading = true
+      this.loadingList = true
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli', param)
           .then(resp => {
-            this.loading = false
+            this.loadingList = false
             console.log('obat direncakan', resp.data)
-            const rencana = resp.data
+            const rencana = resp?.data?.data ?? resp?.data
             if (rencana.length) {
               this.rencanas = rencana
+              this.rencanaAlls = rencana
               const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
               if (noren.length) {
                 noren.forEach(a => {
@@ -112,7 +124,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingList = false
           })
       })
     }

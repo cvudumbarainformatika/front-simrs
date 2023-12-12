@@ -11,7 +11,7 @@ const ptk = {
     },
     {
       path: '/ptk/farmasi',
-      name: 'ptk.farmasi',
+      // name: 'ptk.farmasi',
       component: () => import('pages/simrs/logistik/ptk/farmasi/IndexPage.vue'),
       children: [
         { path: '', name: 'ptk.farmasi', redirect: '/ptk/farmasi/dashboard' },
@@ -46,11 +46,15 @@ const ptk = {
     },
     {
       path: '/ptk/nonfarmasi',
-      name: 'ptk.nonfarmasi',
+      // name: 'ptk.nonfarmasi',
       component: () => import('pages/simrs/logistik/ptk/nonfarmasi/IndexPage.vue'),
       children: [
         { path: '', name: 'ptk', redirect: '/ptk/dashboard' }
       ]
+    },
+    {
+      path: '/ptk/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }
