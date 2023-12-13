@@ -56,14 +56,24 @@
     <!-- header -->
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
-        <div class="row q-col-gutter-md no-wrap">
+        <!-- <div class="row q-col-gutter-md no-wrap">
           <div class="row q-mb-xs">
             Penyedia :
           </div>
-        </div>
-        <div class="q-ml-xl q-pl-lg">
+        </div> -->
+        <div class="q-mb-xs">
           <div v-if="store.namaPenyedia">
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <div class="row">
+              <div class="col-12">
+                <app-input
+                  v-model="store.namaPenyedia.nama "
+                  label="Penyedia"
+                  outlined
+                  readonly
+                />
+              </div>
+            </div>
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div>
                 Nama
               </div>
@@ -78,7 +88,7 @@
               <div class=" text-deep-orange text-weight-bold">
                 {{ store.namaPenyedia ? store.namaPenyedia.alamat : '-' }}
               </div>
-            </div>
+            </div> -->
           </div>
           <div v-else>
             -
@@ -146,7 +156,7 @@
           >
             <app-autocomplete-new
               ref="refGudang"
-              :model="store.form.kdruang"
+              :model="store.form.gudang"
               autocomplete="nama"
               option-label="nama"
               option-value="value"
@@ -162,12 +172,18 @@
             class="col-12"
           >
             <div class="row justify-between no-wrap">
-              <div>Gudang tujuan </div>
+              <!-- <div>Gudang tujuan </div> -->
               <div
                 v-if="gudang"
-                class="text-weight-bold q-mr-lg"
+                class="col-12"
               >
-                {{ gudang.nama }}
+                <app-input
+                  v-model="gudang.nama "
+                  label="Penyedia"
+                  outlined
+                  readonly
+                />
+                <!-- {{ gudang.nama }} -->
               </div>
               <div
                 v-if="!gudang"
@@ -219,6 +235,7 @@
               v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
               outlined
+              valid
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"
@@ -529,6 +546,7 @@
               color="primary"
               round
               :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
+              :loading="store.loading && i===ind"
               @click="simpan(i)"
             >
               <q-tooltip
@@ -589,7 +607,7 @@ function validasi(index) {
   // console.log('ref harga', refHarga.value[index].refInput.validate())
 
   const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
-  const gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : false
+  const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
   const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
@@ -600,16 +618,18 @@ function validasi(index) {
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  if (!gudang && !store.form.kdruang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
+  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, totalFaktur, ppn, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
+  if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
+  if (jenisSurat && Gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }
-
+const ind = ref(null)
 function simpan(index) {
   // store.details[index].forEach(a => {
   //   console.log('each', a)
   // })
   if (validasi(index)) {
+    ind.value = index
     const deta = store.details[index]
     deta.jml_all_penerimaan += deta.jumlah
     const key = Object.keys(deta)
@@ -618,7 +638,7 @@ function simpan(index) {
     })
     console.log('aa', store.form)
     console.log('simpan valid', store.details[index])
-    store.simpanPenerimaan()
+    store.simpanPenerimaan().then(() => { ind.value = null })
   }
 }
 let isiPrev = 0
@@ -867,6 +887,7 @@ const gudang = computed(() => {
     if (anu.length) {
       gud = anu[0]
       store.setForm('kdruang', gud.value)
+      store.setForm('gudang', gud.value)
     }
   }
   return gud
