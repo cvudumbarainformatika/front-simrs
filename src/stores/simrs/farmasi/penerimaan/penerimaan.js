@@ -125,7 +125,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           filtKod.forEach(a => {
             let temp = 0
             pen.forEach(apem => {
-              const tam = apem.filter(anu => anu.kdobat === a).map(b => b.jml_terima).reduce((c, d) => c + d, 0)
+              const tam = apem.filter(anu => anu.kdobat === a).map(b => b.jml_terima_b).reduce((c, d) => c + d, 0)
               temp += tam
             })
             console.log('temp', temp)
