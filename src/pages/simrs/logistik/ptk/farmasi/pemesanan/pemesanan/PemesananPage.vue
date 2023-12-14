@@ -115,6 +115,14 @@
             />
           </div>
         </div>
+        <div class="row q-my-md q-ml-xs">
+          <div class="col-6">
+            Direncanakan Oleh
+          </div>
+          <div class="col-6">
+            {{ table.gudang ?? '-' }}
+          </div>
+        </div>
       </div>
     </div>
     <q-card>

@@ -171,6 +171,7 @@
               :model="store.disp.tempo"
               label="Batas Akhir Pembayaran"
               outlined
+              valid
               @set-display="dispTempo"
               @db-model="setTempo"
             />
@@ -214,7 +215,7 @@
         <app-input
           ref="refIsi"
           v-model="store.form.isi"
-          label="konversi satuan besar ke kecil"
+          label="konversi satuan besar ke kecil ( Isi )"
           outlined
           @update:model-value="setIsi($event)"
         />
@@ -256,11 +257,11 @@
       </div>
       <div class="col-2">
         <div class="row">
-          <div class="text-weight-bold">
+          <div class="text-weight-bold q-mr-sm">
             {{ store.form.satuan_bsr }}
           </div>
           <div class="text-weight-bold">
-            {{ store.form.jml_terima_k }}  {{ store.form.satuan_kcl }}
+            ({{ store.form.jml_terima_k }}  {{ store.form.satuan_kcl }})
           </div>
         </div>
       </div>
@@ -387,7 +388,7 @@ function setHargaNetto() {
   store.setForm('jml_terima_lalu', 0)
   store.setForm('jml_all_penerimaan', jmlTerimaB)
   store.setForm('jml_pesan', 0)
-  store.setForm('jml_terima_k', jmlTerimaB / isi)
+  store.setForm('jml_terima_k', jmlTerimaB * isi)
 }
 function setIsi(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0

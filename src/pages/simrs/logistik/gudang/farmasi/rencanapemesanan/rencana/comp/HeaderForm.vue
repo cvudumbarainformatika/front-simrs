@@ -61,7 +61,13 @@
       {{ apps?.user?.pegawai?.depo_sim?.nama }}
     </div>
     <div
-      v-if="!apps?.user?.pegawai?.depo_sim"
+      v-else-if="apps?.user?.pegawai?.kdruangansim!==''"
+      class="text-weight-bold text-white q-mr-sm"
+    >
+      {{ gudang(store.form.kd_ruang) }}
+    </div>
+    <div
+      v-else
       class="text-weight-bold text-primary col-3 q-mr-sm"
     >
       <app-autocomplete-new
@@ -95,9 +101,14 @@ function setTanggal(val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
 }
+function gudang(val) {
+  const gud = store.gudangs.filter(a => a.value === val)
+  if (gud.length) return gud[0].nama
+  else return 'form gudang tidak terisi'
+}
 onMounted(() => {
-  if (apps?.user?.pegawai?.depo) {
-    store.setForm('kd_ruang', apps?.user?.pegawai?.depo?.kode)
+  if (apps?.user?.pegawai?.kdruangansim !== '') {
+    store.setForm('kd_ruang', apps?.user?.pegawai?.kdruangansim)
   }
 })
 </script>

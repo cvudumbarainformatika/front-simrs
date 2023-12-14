@@ -25,7 +25,8 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     rencanaAlls: [],
     norencanas: [],
     pesan: usePemesananObatStore(),
-    tglRencana: null
+    tglRencana: null,
+    gudang: null
   }),
   actions: {
     setParam(key, val) {
@@ -51,9 +52,15 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       // console.log('columns', this.columns)
     },
     rencanaSelected(val) {
+      const gudangs = [
+        { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+        { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+      ]
       this.pesan.setForm('no_rencbeliobat', val)
       const item = this.rencanas.filter(a => a.noperencanaan === val)
       if (item.length) {
+        const gud = gudangs.filter(a => a.value === item[0].gudang)
+        if (gud.length) this.gudang = gud[0].nama
         this.tglRencana = item[0].tglperencanaan
         this.items = item
 

@@ -56,14 +56,24 @@
     <!-- header -->
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
-        <div class="row q-col-gutter-md no-wrap">
+        <!-- <div class="row q-col-gutter-md no-wrap">
           <div class="row q-mb-xs">
             Penyedia :
           </div>
-        </div>
-        <div class="q-ml-xl q-pl-lg">
+        </div> -->
+        <div class="q-mb-xs">
           <div v-if="store.namaPenyedia">
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <div class="row">
+              <div class="col-12">
+                <app-input
+                  v-model="store.namaPenyedia.nama "
+                  label="Penyedia"
+                  outlined
+                  readonly
+                />
+              </div>
+            </div>
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div>
                 Nama
               </div>
@@ -78,7 +88,7 @@
               <div class=" text-deep-orange text-weight-bold">
                 {{ store.namaPenyedia ? store.namaPenyedia.alamat : '-' }}
               </div>
-            </div>
+            </div> -->
           </div>
           <div v-else>
             -
@@ -146,7 +156,7 @@
           >
             <app-autocomplete-new
               ref="refGudang"
-              :model="store.form.kdruang"
+              :model="store.form.gudang"
               autocomplete="nama"
               option-label="nama"
               option-value="value"
@@ -162,12 +172,18 @@
             class="col-12"
           >
             <div class="row justify-between no-wrap">
-              <div>Gudang tujuan </div>
+              <!-- <div>Gudang tujuan </div> -->
               <div
                 v-if="gudang"
-                class="text-weight-bold q-mr-lg"
+                class="col-12"
               >
-                {{ gudang.nama }}
+                <app-input
+                  v-model="gudang.nama "
+                  label="Penyedia"
+                  outlined
+                  readonly
+                />
+                <!-- {{ gudang.nama }} -->
               </div>
               <div
                 v-if="!gudang"
@@ -219,6 +235,7 @@
               v-model="store.form.total_faktur_pbf"
               label="Total Faktur PBF"
               outlined
+              valid
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"
@@ -311,8 +328,11 @@
               <div class=" text-weight-bold">
                 {{ det.jumlahdpesan ? det.jumlahdpesan : '-' }}
               </div>
+              <div class="q-ml-sm text-weight-bold">
+                {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
+              </div>
             </div>
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
                   ref="refJmlDiterima"
@@ -328,13 +348,13 @@
                   @update:model-value="setDiterima($event, det)"
                 />
               </div>
-            </div>
+            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs text-primary">
               <div class="q-mr-sm">
                 Diterima Sekarang
               </div>
               <div class="text-weight-bold q-mr-sm">
-                {{ det.jumlah ? det.jumlah : 0 }}
+                {{ det.jml_terima_k ? det.jml_terima_k : 0 }}
               </div>
               <div class="">
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
@@ -361,14 +381,14 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center q-mb-xs">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Besar
               </div>
               <div class="text-weight-bold">
                 {{ det.satuan_bsr }}
               </div>
-            </div>
+            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -377,18 +397,47 @@
                   label="Isi"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  @update:model-value="setIsi($event, det, i)"
+                  @update:model-value="setHargaNetNew($event, det,'isi')"
                 />
               </div>
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refJmlDiterima"
+                  v-model="det.jml_terima_b"
+                  :label="'Diterima ('+ det.satuan_bsr+')'"
+                  outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor',
+                    val => !!val || 'Harap di isi',
+                    val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
+                  ]"
+                  @update:model-value="setHargaNetNew($event, det,'jml_terima_b')"
+                />
+              </div>
+            </div>
+            <div class="row justify-between no-wrap items-center q-mb-xs">
+              <div class="col-12">
+                <app-input
+                  ref="refJmlDiterima"
+                  v-model="det.jml_terima_k"
+                  :label="'Diterima ('+ det.satuan_kcl+')'"
+                  outlined
+                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  @update:model-value="setHargaNetNew($event, det,'jml_terima_k')"
+                />
+              </div>
+            </div>
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="q-mr-sm">
                 Satuan Kecil
               </div>
               <div class="text-weight-bold">
                 {{ det.satuan_kcl }}
               </div>
-            </div>
+            </div> -->
             <div class="row no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -425,7 +474,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setHarga($event,det,i)"
+                  @update:model-value="setHargaNetNew($event, det,'harga')"
                 />
               </div>
             </div>
@@ -440,7 +489,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setHargaKcl($event,det,i)"
+                  @update:model-value="setHargaNetNew($event, det,'harga_kcl')"
                 />
               </div>
             </div>
@@ -454,7 +503,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setDiskon($event, det)"
+                  @update:model-value="setHargaNetNew($event, det,'diskon')"
                 />
               </div>
             </div>
@@ -469,7 +518,7 @@
                   :rules="[
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
-                  @update:model-value="setPpn($event, det)"
+                  @update:model-value="setHargaNetNew($event, det,'ppn')"
                 />
               </div>
             </div>
@@ -497,6 +546,7 @@
               color="primary"
               round
               :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
+              :loading="store.loading && i===ind"
               @click="simpan(i)"
             >
               <q-tooltip
@@ -557,7 +607,7 @@ function validasi(index) {
   // console.log('ref harga', refHarga.value[index].refInput.validate())
 
   const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
-  const gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : false
+  const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
   const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
@@ -568,16 +618,18 @@ function validasi(index) {
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  if (!gudang && !store.form.kdruang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
+  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, totalFaktur, ppn, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
+  if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
+  if (jenisSurat && Gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }
-
+const ind = ref(null)
 function simpan(index) {
   // store.details[index].forEach(a => {
   //   console.log('each', a)
   // })
   if (validasi(index)) {
+    ind.value = index
     const deta = store.details[index]
     deta.jml_all_penerimaan += deta.jumlah
     const key = Object.keys(deta)
@@ -586,8 +638,85 @@ function simpan(index) {
     })
     console.log('aa', store.form)
     console.log('simpan valid', store.details[index])
-    store.simpanPenerimaan()
+    store.simpanPenerimaan().then(() => { ind.value = null })
   }
+}
+let isiPrev = 0
+function setHargaNetNew(evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  const isi = det.isi ?? 1
+  let harga = det.harga ?? 0
+  let hargaKcl = det.harga_kcl ?? 0
+  const diskon = det.diskon ?? 0
+  const ppn = det.ppn ?? 0
+  let jmlTerimaB = det.jml_terima_b ?? 0
+  let jmlTerimaK = det.jml_terima_k ?? 0
+  const diskonRp = harga * (diskon / 100)
+  const hargaSetelahDiskon = harga - diskonRp
+  const ppnRp = hargaSetelahDiskon * (ppn / 100)
+  const hargaPembelian = hargaSetelahDiskon + ppnRp
+  const subtotal = hargaPembelian * jmlTerimaB
+  if (key === 'isi') {
+    if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
+      console.log('isi if', parseFloat(evt), isiPrev)
+      if (isiPrev > det.isi) {
+        if (parseFloat(jmlTerimaK) < 1) {
+          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+          det.jumlah = jml
+          jmlTerimaK = jml
+          jmlTerimaB = jml / det.isi
+        }
+        if (parseFloat(det.isi) <= 1) {
+          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+          det.jumlah = jml
+          jmlTerimaK = jml
+          jmlTerimaB = jml / det.isi
+        }
+      } else {
+        det.jumlah = parseFloat(jmlTerimaK)
+        jmlTerimaB = det.jumlah / det.isi
+      }
+
+      // const jmlAll = jmlTerimaK + det.jml_terima_lalu
+      // if (jmlAll > det.jumlahdpesan) {
+      //   console.log('lebih')
+      //   jmlTerimaK = ((det.jumlahdpesan / det.isi) - det.jml_terima_lalu)
+      //   det.jumlah = jmlTerimaK
+      //   jmlTerimaB = det.jumlah * det.isi
+    }
+    isiPrev = det.isi
+  }
+
+  if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
+  if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
+  if (key === 'harga' || key === 'isi') hargaKcl = harga * isi
+  if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl / isi
+  const jmlAll = jmlTerimaK + det.jml_terima_lalu
+  console.log('terima ', jmlAll, jmlTerimaK)
+  if (jmlAll > parseFloat(det.jumlahdpesan)) {
+    console.log('lebih')
+    jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu)
+    jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu) / isi
+  }
+  det.isi = isi
+  det.harga = harga
+  det.harga_kcl = hargaKcl
+  det.diskon = diskon
+  det.ppn = ppn
+  det.jml_terima_b = jmlTerimaB
+  det.jml_terima_k = jmlTerimaK
+  det.diskon_rp = diskonRp
+  det.ppn_rp = ppnRp
+  det.harga_netto = hargaPembelian
+  det.subtotal = subtotal
+  // console.log('evt', evt)
+  // console.log('nilai', nilai)
+  console.log('det', det)
+  // console.log('key', key)
 }
 function setHargaNet(val) {
   val.harga_netto = 0
@@ -622,6 +751,7 @@ function setHargaNet(val) {
   }
   console.log(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setHarga(evt, val, index) {
   val.harga = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
@@ -636,6 +766,7 @@ function setHarga(evt, val, index) {
   }
   // console.log('harga', val)
 }
+// eslint-disable-next-line no-unused-vars
 function setHargaKcl (evt, val, index) {
   val.harga_kcl = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
@@ -649,26 +780,46 @@ function setHargaKcl (evt, val, index) {
     val.harga_kcl = 0
   }
 }
+// eslint-disable-next-line no-unused-vars
 function setDiskon(evt, val) {
   val.diskon = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setPpn(evt, val) {
   val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
+// eslint-disable-next-line no-unused-vars
 function setDiterima(evt, val) {
   val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
-  val.jumlah = val.inpJumlah * val.isi
+  val.jumlah = val.inpJumlah
+  const jmlAll = val.jumlah + val.jml_terima_lalu
+  if (jmlAll > val.jumlahdpesan / val.isi) {
+    console.log('lebih')
+    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu)
+    val.jumlah = val.inpJumlah
+    val.jml_terima_b = val.jumlah
+    val.jml_terima_k = val.jumlah / val.isi
+  }
+}
+// eslint-disable-next-line no-unused-vars
+function setDiterimaKcl(evt, val) {
+  val.inpJumlahKcl = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  if (!val.isi) val.isi = 1
+  val.jumlah = val.inpJumlahKcl * val.isi
   const jmlAll = val.jumlah + val.jml_terima_lalu
   if (jmlAll > val.jumlahdpesan) {
     console.log('lebih')
-    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
-    val.jumlah = val.inpJumlah * val.isi
+    val.inpJumlahKcl = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
+    val.jumlah = val.inpJumlahKcl * val.isi
+    val.jml_terima_b = val.jumlah
+    val.jml_terima_k = val.inpJumlahKcl
   }
 }
-let isiPrev = 0
+
+// eslint-disable-next-line no-unused-vars
 function setIsi(evt, val) {
   console.log('val', val)
   console.log('isi', parseFloat(evt))
@@ -680,22 +831,26 @@ function setIsi(evt, val) {
       if (parseFloat(val.inpJumlah) < 1) {
         const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
         val.jumlah = jml
-        val.inpJumlah = jml / val.isi
+        val.inpJumlah = jml
+        val.inpJumlahKcl = jml / val.isi
       }
       if (parseFloat(val.isi) <= 1) {
         const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
         val.jumlah = jml
-        val.inpJumlah = jml / val.isi
+        val.inpJumlah = jml
+        val.inpJumlahKcl = jml / val.isi
       }
     } else {
-      val.jumlah = val.isi * parseFloat(val.inpJumlah)
+      val.jumlah = parseFloat(val.inpJumlah)
+      val.inpJumlahKcl = val.jumlah / val.isi
     }
 
     const jmlAll = val.jumlah + val.jml_terima_lalu
     if (jmlAll > val.jumlahdpesan) {
       console.log('lebih')
-      val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
-      val.jumlah = val.inpJumlah * val.isi
+      val.inpJumlah = ((val.jumlahdpesan / val.isi) - val.jml_terima_lalu)
+      val.jumlah = val.inpJumlah
+      val.inpJumlahKcl = val.jumlah * val.isi
     }
     isiPrev = val.isi
   }
@@ -732,6 +887,7 @@ const gudang = computed(() => {
     if (anu.length) {
       gud = anu[0]
       store.setForm('kdruang', gud.value)
+      store.setForm('gudang', gud.value)
     }
   }
   return gud
