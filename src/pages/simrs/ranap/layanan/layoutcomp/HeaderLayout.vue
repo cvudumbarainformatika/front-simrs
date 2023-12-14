@@ -133,7 +133,7 @@
       </div>
     </q-toolbar-title>
 
-    <div v-if="pasien?.dokter !== '' ">
+    <!-- <div v-if="pasien?.dokter !== '' ">
       <q-btn
         v-if="pasien?.status==='' || pasien?.status==='2'"
         label="selesaikan layanan"
@@ -160,7 +160,7 @@
         outline
         disable
       />
-    </div>
+    </div> -->
     <q-btn
       v-close-popup
       dense
@@ -261,8 +261,8 @@ async function filterOptions (val, update) {
   )
 }
 
-function selesaikanLayanan() {
-  // console.log('ok')
-  emits('layananSelesai')
-}
+// function selesaikanLayanan() {
+//   // console.log('ok')
+//   emits('layananSelesai')
+// }
 </script>
