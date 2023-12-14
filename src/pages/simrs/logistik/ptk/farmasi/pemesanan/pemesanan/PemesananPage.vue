@@ -363,8 +363,9 @@ function setJumlah(evt, val) {
   console.log('direncanaka ', val.jumlahdirencanakan)
   console.log('all dipesan', val.jumlahallpesan)
   console.log('boleh dipesan', val.bolehdipesan)
+  console.log('jumlah dipesan', val.jumlahdipesan)
   console.log('dipesan', dipesan)
-  if (dipesan > val.bolehdipesan || dipesan > val.jumlahallpesan) {
+  if (dipesan > val.bolehdipesan) {
     if (val.bolehdipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan
       notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.jumlahdirencanakan)
