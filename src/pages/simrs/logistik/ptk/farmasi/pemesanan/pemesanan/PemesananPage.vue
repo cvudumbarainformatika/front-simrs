@@ -9,7 +9,7 @@
           No Pemesanan:
         </div>
         <div class="q-mr-sm">
-          {{ store.form.nopenerimaan ? store.form.nopenerimaan :'-' }}
+          {{ store.form.nopemesanan ? store.form.nopemesanan :'-' }}
         </div>
         <!-- <app-input
           v-model="store.form.nopemesanan"
@@ -360,11 +360,11 @@ function setTanggal(val) {
 
 function setJumlah(evt, val) {
   const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
-  console.log('direncanaka ', val.jumlahdirencanakan)
-  console.log('all dipesan', val.jumlahallpesan)
-  console.log('boleh dipesan', val.bolehdipesan)
-  console.log('jumlah dipesan', val.jumlahdipesan)
-  console.log('dipesan', dipesan)
+  // console.log('direncanaka ', val.jumlahdirencanakan)
+  // console.log('all dipesan', val.jumlahallpesan)
+  // console.log('boleh dipesan', val.bolehdipesan)
+  // console.log('jumlah dipesan', val.jumlahdipesan)
+  // console.log('dipesan', dipesan)
   if (dipesan > val.bolehdipesan) {
     if (val.bolehdipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan

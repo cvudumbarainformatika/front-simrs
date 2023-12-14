@@ -67,7 +67,8 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         this.items.forEach(a => {
           const dipesan = !isNaN(parseFloat(a.jumlahdipesandiperencanaan)) ? parseFloat(a.jumlahdipesandiperencanaan) : 0
           const dpesan = !isNaN(parseFloat(a.jumlahallpesan)) ? parseFloat(a.jumlahallpesan) : 0
-          const bolehDipesan = ((parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan) > 0 ? (parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan : 0
+          // const bolehDipesan = ((parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan) > 0 ? (parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan : 0
+          const bolehDipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
           console.log('boleh dipesan', bolehDipesan)
           a.jumlahdipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
           a.jumlahdirencanakan = dipesan
