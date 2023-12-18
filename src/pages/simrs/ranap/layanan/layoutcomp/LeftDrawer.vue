@@ -8,12 +8,12 @@
     />
   </q-scroll-area>
 
-  <div
+  <!-- <div
     class="absolute-bottom"
     :style="`height: ${tinggiDetailPas}px`"
   >
     <SimulasiPageTwo :pasien="pasien" />
-  </div>
+  </div> -->
 
   <div
     class="absolute-top bg-dark text-white"
@@ -96,13 +96,13 @@
       </q-bar>
     </div>
   </div>
-  <CetakRekapBilling
+  <!-- <CetakRekapBilling
     ref="refBilling"
     v-model="printRekap"
     :pasien="pasien"
     style="z-index: 19000;"
     @tutup="actPrintRekap"
-  />
+  /> -->
 </template>
 
 <script setup>
@@ -112,7 +112,7 @@ import ListMenu from './ListMenu.vue'
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
-const printRekap = ref(false)
+// const printRekap = ref(false)
 // const tinggiBot = ref(180)
 const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare'])
 defineProps({
@@ -129,12 +129,12 @@ defineProps({
     default: null
   }
 })
-const refBilling = ref(null)
+// const refBilling = ref(null)
 // function bukaBill() {
 //   refBilling.value.openFaktur()
 //   printRekap.value = true
 // }
-function actPrintRekap() {
-  printRekap.value = false
-}
+// function actPrintRekap() {
+//   printRekap.value = false
+// }
 </script>

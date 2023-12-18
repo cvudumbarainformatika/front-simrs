@@ -39,8 +39,6 @@
             :pasien="pasien"
             :menus="menus"
             :menu="menu"
-            @history-pasien="historyPasien"
-            @icare="getIcare"
             @click-menu="(val)=> menuDiganti(val)"
           />
         </q-drawer>
