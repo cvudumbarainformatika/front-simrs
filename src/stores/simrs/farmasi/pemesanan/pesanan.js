@@ -5,6 +5,7 @@ import { useTabelPemesananObatStore } from './tabelObat'
 
 export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingPihakTiga: false,
     items: [],
@@ -38,6 +39,9 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       this.getInitialData()
       const tabel = useTabelPemesananObatStore()
       tabel.getInitialData()
+    },
+    setClose() {
+      this.isOpen = false
     },
     getInitialData() {
       this.getPihakKetiga()

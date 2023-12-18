@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { usePemesananObatStore } from './pesanan'
 import { filterDuplicateArrays } from 'src/modules/utils'
+import { date } from 'quasar'
 
 export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
@@ -26,7 +27,11 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     norencanas: [],
     pesan: usePemesananObatStore(),
     tglRencana: null,
-    gudang: null
+    gudang: null,
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ]
   }),
   actions: {
     setParam(key, val) {
@@ -52,16 +57,17 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       // console.log('columns', this.columns)
     },
     rencanaSelected(val) {
-      const gudangs = [
-        { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-        { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-      ]
+      // const gudangs = [
+      //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      //   { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+      // ]
+      this.pesan.isOpen = true
       this.pesan.setForm('no_rencbeliobat', val)
-      const item = this.rencanas.filter(a => a.noperencanaan === val)
+      const item = this.rencanaAlls.filter(a => a.noperencanaan === val)
       if (item.length) {
-        const gud = gudangs.filter(a => a.value === item[0].gudang)
+        const gud = this.gudangs.filter(a => a.value === item[0].gudang)
         if (gud.length) this.gudang = gud[0].nama
-        this.tglRencana = item[0].tglperencanaan
+        this.tglRencana = date.formatDate(item[0].tglperencanaan, 'DD MMMM YYYY')
         this.items = item
 
         this.items.forEach(a => {
@@ -81,9 +87,28 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.pesan.setForm('no_rencbeliobat', null)
     },
     cariRencana(val) {
+      this.rencanas = []
       const ren = this.rencanaAlls.filter(a => a.noperencanaan.includes(val))
       if (ren.length) {
-        this.rencanas = ren
+        const noren = filterDuplicateArrays(ren.map(a => a.noperencanaan))
+        if (noren.length) {
+          noren.forEach(a => {
+            const head = this.rencanaAlls.filter(kep => kep.noperencanaan === a)
+            if (head.length) {
+              const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
+              const gud = gudA[0] ?? {}
+              console.log('gu', gud)
+              const temp = {
+                no_rencbeliobat: a,
+                gudang: gud,
+                tglperencanaan: head[0]?.tglperencanaan,
+                detail: head
+              }
+              this.rencanas.push(temp)
+            }
+          })
+        }
+        // this.rencanas = ren
       } else {
         this.setParam('no_rencbeliobat', val)
         this.getObatMauBeli()
@@ -94,7 +119,9 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     },
     getObatMauBeli() {
       this.norencanas = []
+      this.rencanas = []
       this.loadingList = true
+
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli', param)
@@ -103,16 +130,28 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             console.log('obat direncakan', resp.data)
             const rencana = resp?.data?.data ?? resp?.data
             if (rencana.length) {
-              this.rencanas = rencana
               this.rencanaAlls = rencana
               const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
               if (noren.length) {
                 noren.forEach(a => {
                   const anu = { no_rencbeliobat: a }
+                  const head = this.rencanaAlls.filter(kep => kep.noperencanaan === a)
+                  if (head.length) {
+                    const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
+                    const gud = gudA[0] ?? {}
+                    console.log('gu', gud)
+                    const temp = {
+                      no_rencbeliobat: a,
+                      gudang: gud,
+                      tglperencanaan: head[0]?.tglperencanaan,
+                      detail: head
+                    }
+                    this.rencanas.push(temp)
+                  }
                   this.norencanas.push(anu)
                 })
               }
-              console.log('no ren', noren)
+              console.log('rencanas', this.rencanas)
             }
 
             // this.rencanas = resp.data
