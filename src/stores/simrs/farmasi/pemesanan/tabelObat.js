@@ -87,6 +87,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.pesan.setForm('no_rencbeliobat', null)
     },
     cariRencana(val) {
+      this.setParam('no_rencbeliobat', '')
       this.rencanas = []
       const ren = this.rencanaAlls.filter(a => a.noperencanaan.includes(val))
       if (ren.length) {

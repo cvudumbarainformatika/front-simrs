@@ -124,6 +124,9 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setForm('nopemesanan', val?.nopemesanan)
     },
     clearPemesanan() {
+      const ruang = this.form.kdruang
+      this.setForm('kdruang', ruang)
+      this.setForm('gudang', ruang)
       this.setForm('nopemesanan', null)
       this.items = null
       this.details = []
@@ -363,6 +366,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             notifSuccess(resp)
             const list = useListPenerimaanStore()
             list.cariRencanaBeli()
+            this.setClose()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })

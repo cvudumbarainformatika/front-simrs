@@ -94,6 +94,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
               }
               val.jumlahallpesan += val.jumlahdipesan
             }
+
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -110,6 +111,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             this.loading = false
             this.resetForm()
             resolve(resp)
+            this.setClose()
           })
           .catch(() => {
             this.loading = false
