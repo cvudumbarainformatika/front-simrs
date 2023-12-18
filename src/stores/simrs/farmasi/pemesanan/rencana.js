@@ -36,9 +36,11 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       this.param[key] = val
     },
     resetForm() {
+      const kodeGudang = this.form.kd_ruang
       this.form = {
         tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-        no_rencbeliobat: ''
+        no_rencbeliobat: '',
+        kd_ruang: kodeGudang
       }
       this.getInitialData()
       const tabel = useTabelObatDirencanakaStore()

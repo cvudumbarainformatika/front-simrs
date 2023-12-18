@@ -5,6 +5,7 @@ import { useTabelPemesananObatStore } from './tabelObat'
 
 export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingPihakTiga: false,
     items: [],
@@ -38,6 +39,9 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       this.getInitialData()
       const tabel = useTabelPemesananObatStore()
       tabel.getInitialData()
+    },
+    setClose() {
+      this.isOpen = false
     },
     getInitialData() {
       this.getPihakKetiga()
@@ -82,15 +86,15 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             console.log(resp)
             this.loading = false
             if (resp.data) {
-              if (resp.data.notrans) {
-                this.setForm('nopemesanan', resp.data.notrans)
-              }
+              this.setForm('nopemesanan', resp?.data?.notrans)
+
               if (resp.data.tgl_pemesanan) {
                 this.setForm('tgl_pemesanan', resp.data.tgl_pemesanan)
                 this.disp.tanggal = date.formatDate(resp.data.tgl_pemesanan, 'DD MMMM YYYY')
               }
               val.jumlahallpesan += val.jumlahdipesan
             }
+
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -107,6 +111,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             this.loading = false
             this.resetForm()
             resolve(resp)
+            this.setClose()
           })
           .catch(() => {
             this.loading = false
