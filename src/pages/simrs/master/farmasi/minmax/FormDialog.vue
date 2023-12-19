@@ -75,6 +75,7 @@
                 valid
                 outlined
                 debounce="800"
+                :loading="store.loading"
                 @update:model-value="obatInput"
               />
             </div>
@@ -189,7 +190,7 @@ function obatInput(val) {
   console.log('obat input', val, val.length % 2)
   store.filterObat = val
   const needle = val.toLowerCase()
-  const splits = ['namaobat']
+  const splits = ['namaobat', 'kd_obat']
   const multiFilter = (data = [], filterKeys = [], value = '') =>
     data.filter((item) =>
       filterKeys.some(
