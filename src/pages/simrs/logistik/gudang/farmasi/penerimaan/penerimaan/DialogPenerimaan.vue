@@ -465,7 +465,7 @@
                 <app-input
                   ref="refHarga"
                   v-model="det.harga"
-                  label="Harga (Satuan besar)"
+                  :label="'Harga' + ' per ' + det.satuan_bsr"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
@@ -480,7 +480,7 @@
                 <app-input
                   ref="refHargaKcl"
                   v-model="det.harga_kcl"
-                  label="Harga (Satuan kecil)"
+                  :label="'Harga' + ' per ' + det.satuan_kcl"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
@@ -584,7 +584,7 @@ const refJenisSurat = ref(null) // inp
 const refNoSurat = ref(null) // inp
 const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
-const refTotalFaktur = ref(null) // inp
+// const refTotalFaktur = ref(null) // inp
 // det
 const refPpn = ref(null)
 const refJmlDiterima = ref(null)
@@ -605,7 +605,7 @@ function validasi(index) {
   const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
-  const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
+  // const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
 
   const ppn = refPpn.value[index].refInput.validate()
   const diterima = refJmlDiterima.value[index].refInput.validate()
@@ -613,9 +613,9 @@ function validasi(index) {
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, totalFaktur, ppn, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
+  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, ppn, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
   if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && Gudang && noSurat && pengirim && totalFaktur && ppn && diterima && isi && exp && harga && hargaKcl) return true
+  if (jenisSurat && Gudang && noSurat && pengirim && ppn && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }
 const ind = ref(null)
@@ -675,21 +675,14 @@ function setHargaNetNew(evt, det, key) {
         det.jumlah = parseFloat(jmlTerimaK)
         jmlTerimaB = det.jumlah / det.isi
       }
-
-      // const jmlAll = jmlTerimaK + det.jml_terima_lalu
-      // if (jmlAll > det.jumlahdpesan) {
-      //   console.log('lebih')
-      //   jmlTerimaK = ((det.jumlahdpesan / det.isi) - det.jml_terima_lalu)
-      //   det.jumlah = jmlTerimaK
-      //   jmlTerimaB = det.jumlah * det.isi
     }
     isiPrev = det.isi
   }
 
   if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
   if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
-  if (key === 'harga' || key === 'isi') hargaKcl = harga * isi
-  if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl / isi
+  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
+  if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
   const jmlAll = jmlTerimaK + det.jml_terima_lalu
   console.log('terima ', jmlAll, jmlTerimaK)
   if (jmlAll > parseFloat(det.jumlahdpesan)) {

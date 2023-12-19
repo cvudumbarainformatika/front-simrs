@@ -154,8 +154,10 @@ import { notifErrVue } from 'src/modules/utils'
 import { useMasterFarmasiMinMaxObatStore } from 'src/stores/simrs/master/farmasi/minmax/minmax.js'
 const store = useMasterFarmasiMinMaxObatStore()
 function onSubmit(val) {
-  console.log('on Submit', store.form, val)
-  store.simpanData(val) // .then(() => {
+  console.log('on Submit', val)
+  if (val.max > 0 && val.min > 0) {
+    store.simpanData(val) // .then(() => {
+  }
   //   store.setOpen()
   // })
 }

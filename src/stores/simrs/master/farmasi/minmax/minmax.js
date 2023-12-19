@@ -243,8 +243,8 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
         min: val.min,
         max: val.max
       }
+      console.log('store', form)
       if (val.min <= val.max) {
-        console.log(form)
         val.loading = true
         return new Promise(resolve => {
           api.post('v1/simrs/farmasinew/minmaxobat', form)

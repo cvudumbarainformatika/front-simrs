@@ -141,7 +141,7 @@
         </div>
       </template>
       <template #left-acttion="{ row }">
-        <div v-if="!row.flag">
+        <div v-if="!row.kunci">
           <q-btn
             flat
             icon="icon-mat-lock_open"
@@ -158,7 +158,7 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag">
+        <div v-if="row.kunci">
           <div class="row items-center">
             <div class="q-mr-sm" />
             <div>

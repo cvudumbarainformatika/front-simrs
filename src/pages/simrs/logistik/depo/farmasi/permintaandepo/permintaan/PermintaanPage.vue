@@ -466,6 +466,25 @@ const user = computed(() => {
         store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
         store.getListObat()
       }
+    } else if (apps.user.pegawai?.kdruangansim) {
+      const peg = store.depos.filter(val => val.value === apps.user.pegawai?.kdruangansim)
+      if (peg.length) {
+        store.setForm('dari', peg[0].value)
+        store.setDisp('depo', peg[0].nama)
+        const dep = store.floor.filter(a => a.kode === peg[0].value)
+        console.log('dep', dep)
+        if (dep.length) {
+          store.setForm('tujuan', 'Gd-05010100')
+          store.setParam('kdgudang', 'Gd-05010100')
+          store.setDisp('gudang', 'Gudang Farmasi(Kamar Obat)')
+          store.getListObat()
+        } else {
+          store.setForm('tujuan', 'Gd-05010100')
+          store.setParam('kdgudang', 'Gd-05010100')
+          store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+          store.getListObat()
+        }
+      }
     }
   }
   return apps.user
