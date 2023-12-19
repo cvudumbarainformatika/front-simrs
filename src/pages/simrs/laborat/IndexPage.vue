@@ -1,4 +1,3 @@
-
 <template>
   <q-page>
     <Suspense>
