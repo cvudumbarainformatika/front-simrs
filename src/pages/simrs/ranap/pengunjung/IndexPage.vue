@@ -19,7 +19,11 @@
         <list-pengunjung v-else />
       </q-scroll-area>
       <div class=" absolute-bottom bg-primary text-white z-top">
-        <footer-page />
+        <footer-page
+          v-if="store.pasiens.length"
+          :meta="store.meta"
+          @go-to="(val)=> store.goToPage(val)"
+        />
       </div>
     </q-card>
   </q-page>

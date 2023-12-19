@@ -45,6 +45,11 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
         this.loading = false
       }
     },
+
+    goToPage(val) {
+      this.params.page = val
+      this.getData()
+    },
     bukaLayanan(val) {
       this.pageLayanan = val
     },
