@@ -694,7 +694,7 @@ function setHargaNetNew(evt, det, key) {
   console.log('terima ', jmlAll, jmlTerimaK)
   if (jmlAll > parseFloat(det.jumlahdpesan)) {
     console.log('lebih')
-    notifErrVue('Jumlah Maksimal diteriman ' + det.jumlahdpesan)
+    notifErrVue('Jumlah Maksimal diterima ' + det.jumlahdpesan + ' ' + det?.satuan_kcl)
     jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu)
     jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu) / isi
   }
