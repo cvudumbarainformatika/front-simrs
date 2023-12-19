@@ -124,6 +124,12 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.setForm('nopemesanan', val?.nopemesanan)
     },
     clearPemesanan() {
+      this.form = {
+        nopenerimaan: '',
+        tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        batasbayar: null,
+        tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      }
       const ruang = this.form.kdruang
       this.setForm('kdruang', ruang)
       this.setForm('gudang', ruang)
@@ -367,6 +373,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             const list = useListPenerimaanStore()
             list.cariRencanaBeli()
             this.setClose()
+            this.clearPemesanan()
+            this.ambilPemesanan()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
