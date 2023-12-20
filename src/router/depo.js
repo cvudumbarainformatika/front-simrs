@@ -64,6 +64,10 @@ const depo = {
       children: [
         { path: '', name: 'depo', redirect: '/depo/dashboard' }
       ]
+    },
+    {
+      path: '/depo/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }

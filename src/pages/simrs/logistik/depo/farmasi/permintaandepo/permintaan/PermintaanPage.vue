@@ -456,9 +456,9 @@ const user = computed(() => {
       const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
       console.log('dep', dep)
       if (dep.length) {
-        store.setForm('tujuan', 'Gd-05010100')
-        store.setParam('kdgudang', 'Gd-05010100')
-        store.setDisp('gudang', 'Gudang Farmasi(Kamar Obat)')
+        store.setForm('tujuan', 'Gd-03010100')
+        store.setParam('kdgudang', 'Gd-03010100')
+        store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
         store.getListObat()
       } else {
         store.setForm('tujuan', 'Gd-05010100')
@@ -474,9 +474,9 @@ const user = computed(() => {
         const dep = store.floor.filter(a => a.kode === peg[0].value)
         console.log('dep', dep)
         if (dep.length) {
-          store.setForm('tujuan', 'Gd-05010100')
-          store.setParam('kdgudang', 'Gd-05010100')
-          store.setDisp('gudang', 'Gudang Farmasi(Kamar Obat)')
+          store.setForm('tujuan', 'Gd-03010100')
+          store.setParam('kdgudang', 'Gd-03010100')
+          store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
           store.getListObat()
         } else {
           store.setForm('tujuan', 'Gd-05010100')

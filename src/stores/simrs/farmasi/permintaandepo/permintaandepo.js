@@ -25,7 +25,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     disp: {
       tgl_permintaan: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
-    floor: [ // racikan
+    floor: [ // racikan / floor stok
       { kode: 'Gd-03010101' },
       { kode: 'Gd-04010101' }
     ],
