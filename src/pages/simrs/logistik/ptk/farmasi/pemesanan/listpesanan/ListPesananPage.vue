@@ -108,7 +108,7 @@
             flat
             icon="icon-mat-lock_open"
             dense
-            color="negative"
+            color="green"
             :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
             @click="kunci(row)"
           >
@@ -125,7 +125,7 @@
             flat
             icon="icon-mat-lock"
             dense
-            color="green"
+            color="negative"
             @click="info(row)"
           >
             <q-tooltip

@@ -260,7 +260,15 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
                   const obat = anu[0]
                   rinc.nama_obat = obat.nama_obat
                 }
-                this.details.push(rinc)
+                const adaDetail = this.details.filter(ob => ob.kdobat === rinc.kdobat)
+                if (adaDetail.length) {
+                  const data = adaDetail[0]
+                  if (data) {
+                    Object.assign(data, rinc)
+                  }
+                } else {
+                  this.details.push(rinc)
+                }
               }
             }
             this.clearObat()

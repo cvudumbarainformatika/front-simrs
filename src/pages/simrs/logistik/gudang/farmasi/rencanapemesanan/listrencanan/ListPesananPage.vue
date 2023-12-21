@@ -98,7 +98,7 @@
             flat
             icon="icon-mat-lock_open"
             dense
-            color="negative"
+            color="green"
             :loading="rencana.loading && row.no_rencbeliobat=== toloadBeli"
             @click="kunci(row)"
           >
@@ -115,7 +115,7 @@
             flat
             icon="icon-mat-lock"
             dense
-            color="green"
+            color="negative"
             @click="info(row)"
           >
             <q-tooltip
