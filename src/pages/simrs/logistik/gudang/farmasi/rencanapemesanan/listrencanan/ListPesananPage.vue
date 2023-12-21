@@ -28,6 +28,7 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      row-no
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"

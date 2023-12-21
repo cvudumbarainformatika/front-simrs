@@ -28,6 +28,7 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      row-no
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -141,12 +142,12 @@
         </div>
       </template>
       <template #left-acttion="{ row }">
-        <div v-if="!row.kunci">
+        <div v-if="!row.flag">
           <q-btn
             flat
             icon="icon-mat-lock_open"
             dense
-            color="negative"
+            color="green"
             :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
@@ -158,7 +159,7 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.kunci">
+        <div v-if="row.flag">
           <div class="row items-center">
             <div class="q-mr-sm" />
             <div>
@@ -166,7 +167,7 @@
                 flat
                 icon="icon-mat-lock"
                 dense
-                color="green"
+                color="negative"
                 @click="info(row)"
               >
                 <q-tooltip
