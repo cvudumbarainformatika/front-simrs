@@ -272,6 +272,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
               }
             }
             this.clearObat()
+            this.getListObat()
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -285,6 +286,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             this.loadingMax = false
             console.log('max', resp.data)
             notifSuccess(resp)
+            this.getListObat()
             resolve(resp)
           }).catch(() => { this.loadingMax = false })
       })
