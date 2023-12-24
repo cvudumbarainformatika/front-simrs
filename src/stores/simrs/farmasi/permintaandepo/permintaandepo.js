@@ -216,6 +216,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             const list = useListPermintaanStore()
             list.ambilPermintaan()
             this.details = []
+            this.getListObat()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
