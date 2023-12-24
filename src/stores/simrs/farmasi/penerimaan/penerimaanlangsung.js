@@ -20,7 +20,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       batasbayar: null,
       tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       kdobat: '',
-      jenispenerimaan: ''
+      jenispenerimaan: '',
+      total_faktur_pbf: 0
     },
     disp: {
       tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
@@ -62,7 +63,9 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     rincis: [],
     filterObat: '',
     obats: [],
-    obatTerpilih: null
+    obatTerpilih: null,
+    pihakTigas: [],
+    allPihakTigas: []
   }),
   actions: {
     setForm(key, val) {
@@ -70,6 +73,45 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     },
     setDisp(key, val) {
       this.disp[key] = val
+    },
+    resetRinci() {
+      this.setForm('kdobat', '')
+      this.setForm('isi', 1)
+      this.setForm('jml_terima_b', 0)
+      this.setForm('harga', 0)
+      this.setForm('diskon', 0)
+      this.setForm('diskon_rp', 0)
+      this.setForm('ppn', 0)
+      this.setForm('ppn_rp', 0)
+      this.setForm('harga_netto', 0)
+      this.setForm('subtotal', 0)
+      this.setForm('no_batch', '')
+      this.setForm('tgl_exp', null)
+      this.setDisp('tgl_exp', null)
+      this.setForm('no_retur_rs', '')
+    },
+    resetForm() {
+      const gudang = this.form.gudang
+      this.form = {
+        nopenerimaan: '',
+        isi: 1,
+        harga_netto: 0,
+        subtotal: 0,
+        tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        batasbayar: null,
+        tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        kdobat: '',
+        jenispenerimaan: '',
+        total_faktur_pbf: 0
+      }
+      this.disp = {
+        tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+        batasbayar: null,
+        surat: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      }
+      this.setForm('gudang', gudang)
+      this.setForm('kdruang', gudang)
+      this.rincis = []
     },
     setNexMonth() {
       const now = new Date()
@@ -213,8 +255,13 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       this.setForm('batasbayar', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
       this.setDisp('batasbayar', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
 
-      this.ambilPemesanan()
       this.getPihakKetiga()
+      this.getDataObat()
+    },
+    cariPihatTiga(val) {
+      const pihaktiga = this.allPihakTigas.filter(pht => pht.nama.toLowerCase().incudes(val.toLowerCase))
+      if (pihaktiga.length) this.pihakTigas = pihaktiga
+      else this.getPihakKetiga()
     },
     // cari obat
     getDataObat(val) {
@@ -240,23 +287,10 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             this.loadingPihakTiga = false
             console.log('pihak tiga', resp.data)
             this.pihakTigas = resp.data
+            this.allPihakTigas = resp.data
             resolve(resp)
           })
-      })
-    },
-    ambilPemesanan() {
-      this.loading = true
-      return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/penerimaan/dialogpemesananobat----')
-          .then(resp => {
-            this.loading = false
-            console.log('ambil pemesanan', resp)
-            this.pemesanans = resp.data
-            resolve(resp.data)
-          })
-          .catch(() => {
-            this.loading = false
-          })
+          .catch(() => { this.loadingPihakTiga = false })
       })
     },
     selesaiDanKunci() {
@@ -275,6 +309,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             notifSuccess(resp)
             const list = useListPenerimaanStore()
             list.cariRencanaBeli()
+            this.resetForm()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
@@ -295,6 +330,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             }
             if (resp.data.rinci) {
               const rin = resp.data.rinci
+              const obat = this.obats.filter(ob => ob.kodeobat === rin.kdobat)
+              if (obat.length) rin.masterobat = obat[0]
               const index = findWithAttr(this.rincis, 'kdobat', rin.kdobat)
               if (index > 0) {
                 this.rincis[index] = rin
@@ -302,6 +339,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
                 this.rincis.push(rin)
               }
             }
+            this.resetRinci()
 
             resolve(resp)
           })
