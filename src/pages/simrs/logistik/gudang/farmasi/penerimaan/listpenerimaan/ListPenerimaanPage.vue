@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="fixed-top row items-center justify-end q-mr-sm"
     style="z-index: 10;"
   >
@@ -14,7 +14,7 @@
         @click="style.setComponentFull"
       />
     </div>
-  </div>
+  </div> -->
   <div class="q-mt-xl q-mx-sm">
     <app-table-extend
       :columns="store.columns"
@@ -29,6 +29,7 @@
       :ada-tambah="false"
       :ada-filter="false"
       row-no
+      use-full
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -93,7 +94,10 @@
             {{ row.tglsurat ? dateFullFormat(row.tglsurat) : '-' }}
           </div>
         </div>
-        <div class="row items-center justify-between no-wrap q-mb-xs text-deep-orange">
+        <div
+          v-if="row.batasbayar"
+          class="row items-center justify-between no-wrap q-mb-xs text-deep-orange"
+        >
           <div class="q-mr-sm">
             Batas Bayar
           </div>
@@ -296,12 +300,10 @@
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useStyledStore } from 'src/stores/app/styled'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
-import { ref } from 'vue'
 
-const style = useStyledStore()
+import { ref } from 'vue'
 const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
 // click

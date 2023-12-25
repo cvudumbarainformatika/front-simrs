@@ -7,7 +7,10 @@
         name="header-for-print"
       />
     </div>
-    <div class="flex items-center justify-between q-mb-md print-hide">
+    <div
+      class="flex items-center justify-between q-mb-md print-hide"
+      :class="useFull?'bg-primary round-edge':''"
+    >
       <!-- title -->
       <!-- <div class="title-table q-pr-sm f-14 text-bold">
         {{ title }}
@@ -22,6 +25,7 @@
             :debounce="debounce"
             clearable
             dense
+            :dark="useFull?true:false"
             :placeholder="textCari"
             @keydown.enter.prevent="searchEnter"
           >
@@ -65,6 +69,7 @@
           v-if="adaRefresh"
           unelevated
           round
+          :color="useFull?'yellow':'cyan'"
           size="sm"
           icon="icon-mat-refresh"
           @click="emits('refresh')"
@@ -167,7 +172,7 @@
           class="q-ml-sm"
           unelevated
           round
-          color="primary"
+          :color="useFull?'green':'primary'"
           size="sm"
           icon="icon-mat-add"
           @click="emits('newData')"
@@ -177,6 +182,24 @@
             :offset="[10, 10]"
           >
             Data Baru
+          </q-tooltip>
+        </q-btn>
+        <!-- style -->
+        <q-btn
+          v-if="useFull"
+          flat
+          :icon="!style.componentfull ? 'icon-mat-open_in_full' : 'icon-mat-close_fullscreen'"
+          round
+          :color="style.componentfull ? 'green' : 'white'"
+          size="12px"
+          class="q-ml-md"
+          @click="style.setComponentFull"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Full Screen
           </q-tooltip>
         </q-btn>
       </div>
@@ -681,6 +704,9 @@
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
 import { date, useQuasar } from 'quasar'
+import { useStyledStore } from 'src/stores/app/styled'
+
+const style = useStyledStore()
 
 const $q = useQuasar()
 const props = defineProps({
@@ -715,6 +741,7 @@ const props = defineProps({
   adaFilter: { type: Boolean, default: true },
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
+  useFull: { type: Boolean, default: false },
   textSize: { type: Number, default: 12 }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
@@ -876,6 +903,10 @@ $pfs: v-bind(pts);
   }
 }
 
+.round-edge{
+  padding: 10px;
+  border-radius: 5px 5px 0px 0px;
+}
 .app-table {
   width: 100%; /* print width */
   font-size:$fs;
