@@ -23,13 +23,10 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
     disp: { no_permintaan: '' },
     terpilih: {},
     columns: [
-      'obat',
       'no_permintaan',
       'tgl_permintaan',
-      'jumlah',
-      'status',
-      'act',
-      'user'
+      'dari',
+      'status'
     ],
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -138,7 +135,8 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/gudang/distribusi/rencanadistribusikedepo', param)
+        // api.get('v1/simrs/farmasinew/gudang/distribusi/rencanadistribusikedepo', param)
+        api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
           .then(resp => {
             this.loading = false
             console.log('list PErmintaan depo', resp.data)

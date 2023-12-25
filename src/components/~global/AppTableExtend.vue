@@ -69,7 +69,7 @@
           v-if="adaRefresh"
           unelevated
           round
-          :color="useFull?'yellow':'cyan'"
+          :color="useFull?'yellow':'blue-grey'"
           size="sm"
           icon="icon-mat-refresh"
           @click="emits('refresh')"
