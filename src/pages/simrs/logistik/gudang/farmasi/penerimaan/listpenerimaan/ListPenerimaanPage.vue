@@ -15,7 +15,7 @@
       />
     </div>
   </div> -->
-  <div class="q-mt-xl q-mx-sm">
+  <div class="q-mr-sm">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
