@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 export const useDistribusiPermintaanDepoStore = defineStore('distribusi_permintaan_depo', {
   state: () => ({
     loading: false,
+    loadingSimpan: false,
     loadingCariPermintaan: false,
     loadingKunci: false,
     items: [],
@@ -26,7 +27,8 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
       'no_permintaan',
       'tgl_permintaan',
       'dari',
-      'status'
+      'status',
+      'act'
     ],
     gudangs: [
       { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -139,30 +141,54 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
         api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
           .then(resp => {
             this.loading = false
-            console.log('list PErmintaan depo', resp.data)
-            this.items = resp.data.data
+            this.items = resp?.data?.data
             this.meta = resp.data
+            if (this.items.length) {
+              console.log('items anu', this.items)
+              this.items.forEach(it => {
+                if (it?.permintaanrinci.length) {
+                  it?.permintaanrinci.forEach(ri => {
+                    ri.jumlahdiminta = ri.jumlah_minta
+                    ri.jumlah_minta = 0
+                  })
+                }
+              })
+            }
+            console.log('list PErmintaan depo', this.items)
             resolve(resp)
           })
           .catch(() => { this.loading = false })
       })
     },
     simpanDetail(val) {
-      this.loading = true
+      this.loadingSimpan = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/gudang/distribusi/simpandistribusidepo', val)
           .then(resp => {
-            this.loading = false
+            this.loadingSimpan = false
             console.log('didtribusi', resp)
             notifSuccess(resp)
-            this.getPermintaanDepo()
+            // this.getPermintaanDepo()
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          .catch(() => { this.loadingSimpan = false })
       })
     },
-    kunci() {
+    kunci(val) {
       console.log('store.kunci')
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/kuncipermintaandaridepo', val)
+          .then(resp => {
+            this.loadingKunci = false
+            this.getPermintaanDepo()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingKunci = false
+          })
+      })
     }
   }
 })
