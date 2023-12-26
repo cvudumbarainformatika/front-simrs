@@ -207,6 +207,7 @@ export const useTransaksiDistribusiStore = defineStore('transaksi_distribusi', {
             resolve(resp)
           }).catch(() => {
             this.loading = false
+            this.getDataTable()
           })
       })
       // console.log('ora budhal wes..')
