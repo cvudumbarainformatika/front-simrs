@@ -18,11 +18,13 @@
       :ada-filter="false"
       :ada-cari="false"
       row-no
+      use-full
       text-cari="Cari ..."
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
+      @on-click="onClick"
     >
       <!-- @edit-data="store.editData" -->
       <!--
@@ -31,7 +33,7 @@
             -->
 
       <template #header-left-after-search>
-        <div class="q-ml-md">
+        <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
               Status :
@@ -43,6 +45,8 @@
                 unchecked-icon="icon-mat-panorama_fish_eye"
                 val="non-konsinyasi"
                 label="Non-Konsinyasi"
+                keep-color
+                color="white"
                 :disable="store.loading"
                 @update:model-value="store.gantiJenisDistribusi"
               />
@@ -54,6 +58,8 @@
                 unchecked-icon="icon-mat-panorama_fish_eye"
                 val="konsinyasi"
                 label="Konsinyasi"
+                keep-color
+                color="white"
                 :disable="store.loading"
                 @update:model-value="store.gantiJenisDistribusi"
               />
@@ -61,14 +67,11 @@
           </div>
         </div>
       </template>
-      <template #col-obat>
-        <div>Obat</div>
-      </template>
       <template #col-no_permintaan>
-        <div>Pemintaan</div>
+        <div>No Pemintaan</div>
       </template>
       <template #col-tgl_permintaan>
-        <div>Tanggal</div>
+        <div>Tanggal Permintaan</div>
       </template>
       <template #col-dari>
         <div>Dari</div>
@@ -82,143 +85,30 @@
       <template #col-act>
         <div>#</div>
       </template>
-      <template #cell-obat="{ row }">
-        <div class="row justify-between no-wrap q-mt-xs">
-          <div class="q-mr-xs">
-            Kode
-          </div>
-          <div class="text-deep-purple text-weight-bold">
-            {{ row.kdobat }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap q-mt-xs">
-          <div class="q-mr-xs">
-            Nama
-          </div>
-          <div class=" text-weight-bold">
-            {{ row.masterobat ? row.masterobat.nama_obat : '-' }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap q-mt-xs anu">
-          <div class="q-mr-xs">
-            Fornas
-          </div>
-          <div
-            class=" text-weight-bold"
-            :class="row.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
-          >
-            {{ row.masterobat.status_fornas === '1' ? 'Ya' : 'Tidak' }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap q-mt-xs anu">
-          <div class="q-mr-xs">
-            Forkit
-          </div>
-          <div
-            class=" text-weight-bold"
-            :class="row.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
-          >
-            {{ row.masterobat.status_forkid === '1' ? 'Ya' : 'Tidak' }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap q-mt-xs anu">
-          <div class="q-mr-xs">
-            Generik
-          </div>
-          <div
-            class=" text-weight-bold"
-            :class="row.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
-          >
-            {{ row.masterobat.status_generik === '1' ? 'Ya' : 'Tidak' }}
-          </div>
-        </div>
-
-        <div class="row justify-between no-wrap q-mt-xs anu">
-          <div class="q-mr-xs">
-            Sistem Bayar
-          </div>
-          <div class=" text-weight-bold">
-            {{ row.masterobat.sistembayar }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap q-mt-xs anu">
-          <div class="q-mr-xs">
-            Satuan
-          </div>
-          <div class=" text-weight-bold">
-            {{ row.masterobat.satuan_k }}
-          </div>
-        </div>
-      </template>
       <template #cell-tgl_permintaan="{ row }">
         <div class="row justify-between no-wrap">
-          <div>
-            Permintaan
-          </div>
-          <div class="q-ml-sm text-weight-bold">
-            {{ row.permintaanobatheder ? dateFullFormat(row.permintaanobatheder.tgl_permintaan):'-' }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap">
-          <div>
-            Verif
-          </div>
-          <div class="q-ml-sm text-weight-bold">
-            {{ row.tgl_verif ? dateFullFormat(row.tgl_verif):'-' }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap">
-          <div>
-            Distribusi
-          </div>
-          <div class="q-ml-sm text-weight-bold">
-            {{ row.tgl_distribusi ? dateFullFormat(row.tgl_distribusi):'-' }}
-          </div>
+          {{ row.tgl_permintaan ? dateFullFormat(row.tgl_permintaan):'-' }}
         </div>
       </template>
       <template #cell-no_permintaan="{ row }">
         <div class="row justify-between no-wrap q-mt-xs">
-          <div class="q-mr-xs">
-            Nomor
-          </div>
           <div class=" text-weight-bold">
             {{ row.no_permintaan }}
           </div>
         </div>
-        <div class="row justify-between no-wrap q-mt-xs">
-          <div class="q-mr-xs">
-            Dari
-          </div>
-          <div class=" text-weight-bold">
-            {{ row.permintaanobatheder?depo(row.permintaanobatheder.dari) :'-' }}
-          </div>
-        </div>
       </template>
-      <template #cell-jumlah="{ row }">
+      <template #cell-dari="{ row }">
         <div class="row justify-between no-wrap">
-          <div class="q-mr-xs">
-            Permintaan
-          </div>
-          <div class="text-weight-bold text-blue">
-            {{ row.jumlah_minta }}
-          </div>
-        </div>
-        <div class="row justify-between no-wrap text-weight-bold text-green">
-          <div class="q-mr-xs">
-            Verif
-          </div>
-          <div class="">
-            {{ row.jumlah_diverif }}
-          </div>
+          {{ row.dari?depo(row?.dari) :'-' }}
         </div>
       </template>
       <template #cell-status="{ row }">
         <div class="row">
           <q-chip
             class="f-10"
-            :color="!row.flag_distribusi ? 'green' : 'blue'"
-            :text-color="!row.flag_distribusi ? 'yellow' : 'white'"
-            :label="!row.flag_distribusi ? 'Belum' : 'Sudah'"
+            :color="color(row.flag)"
+            :label="label(row.flag)"
+            text-color="white"
           />
         </div>
       </template>
@@ -258,7 +148,7 @@
           </q-tooltip>
         </div>
       </template>
-      <!-- <template #expand="{ row }">
+      <template #expand="{ row }">
         <div v-if="row.permintaanrinci.length">
           <div class="row items-center text-weight-bold">
             <div class="col-3 text-center">
@@ -282,69 +172,39 @@
             <div class="row items-center q-col-gutter-sm anu">
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs">
-                  <div class="q-mr-xs">
-                    Kode
-                  </div>
                   <div class="text-deep-purple text-weight-bold">
                     {{ rin.kdobat }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs">
-                  <div class="q-mr-xs">
-                    Nama
-                  </div>
                   <div class=" text-weight-bold">
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div class="q-mr-xs">
-                    Fornas
-                  </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Ya' : 'Tidak' }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div class="q-mr-xs">
-                    Forkit
+                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Ya' : 'Tidak' }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div class="q-mr-xs">
-                    Generik
+                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Ya' : 'Tidak' }}
+                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
                   </div>
                 </div>
 
-                <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div class="q-mr-xs">
-                    Sistem Bayar
-                  </div>
+                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
                   <div class=" text-weight-bold">
-                    {{ rin.masterobat.sistembayar }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div class="q-mr-xs">
-                    Satuan
-                  </div>
-                  <div class=" text-weight-bold">
-                    {{ rin.masterobat.satuan_k }}
+                    ({{ rin.masterobat.satuan_k }})
                   </div>
                 </div>
               </div>
@@ -358,6 +218,9 @@
                       <div v-if="rin.stokreal.length">
                         {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a,
                                                                                                                         b) => a + b, 0) }}
+                      </div>
+                      <div v-if="!rin.stokreal.length">
+                        0
                       </div>
                     </div>
                   </div>
@@ -382,7 +245,6 @@
                 </div>
 
                 <div class="row justify-between no-wrap q-mt-xs">
-
                   <div
                     v-if="rin.user_verif === '' || rin.editable"
                     class="col-12"
@@ -497,17 +359,23 @@
         <div v-else>
           Tidak ada Rincian
         </div>
-      </template> -->
+      </template>
     </app-table-extend>
   </div>
 </template>
 
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 const store = useDistribusiPermintaanDepoStore()
-
+const apps = useAplikasiStore()
+onMounted(() => {
+  store.setForm('kdgudang', apps?.user?.pegawai?.kdruangansim)
+  store.setParams('kdgudang', apps?.user?.pegawai?.kdruangansim)
+  store.getInitialData()
+})
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)
   // console.log('temp', temp)
@@ -517,16 +385,12 @@ function depo (val) {
     return val
   }
 }
-// function gudang (val) {
-//   const temp = store.gudangs.filter(a => a.value === val)
-//   // console.log('temp', temp)
-//   if (temp.length) {
-//     return temp[0].nama
-//   } else {
-//     return val
-//   }
-// }
-
+// click
+function onClick (val) {
+  // console.log('click', val)
+  val.item.expand = !val.item.expand
+  val.item.highlight = !val.item.highlight
+}
 const toloadBeli = ref('')
 function kunci (val) {
   toloadBeli.value = val.no_permintaan
@@ -539,80 +403,76 @@ function kunci (val) {
   console.log('val', val, form)
 
   store.simpanDetail(val)
-  // .then(() => {
-  //   toloadBeli.value = ''
-  //   // if (!val.flag) val.flag = 1
-  // })
 }
-store.getInitialData()
 
-// const color = val => {
-//   switch (val) {
-//     case 99:
-//       return 'white'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '':
-//       return 'grey'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '1':
-//       return 'cyan'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '2':
-//       return 'blue'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '3':
-//       return 'orange'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '4':
-//       return 'grey'
-//       // eslint-disable-next-line no-unreachable
-//       break
+const color = val => {
+  switch (val) {
+    case 99:
+      return 'white'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '':
+      return 'negative'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'cyan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
 
-//     default:
-//       return 'red'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//   }
-// }
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
 
-// const label = (status) => {
-//   switch (status) {
-//     case '':
-//       return 'Tampilkan semua'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '1':
-//       return 'Menunggu verifikasi'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '2':
-//       return 'Telah di verifikasi'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '3':
-//       return 'Telah di distribusikan'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case '4':
-//       return 'Telah di distribusikan'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//     case 99:
-//       return 'Status belum di filter'
-//       // eslint-disable-next-line no-unreachable
-//       break
+const label = (status) => {
+  switch (status) {
+    case '':
+      return 'Draft'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'Permintaan dikirim ke Gudang'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'Diterima Gudang'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'Telah di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'Diterima Depo'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 99:
+      return 'Status belum di filter'
+      // eslint-disable-next-line no-unreachable
+      break
 
-//     default:
-//       return 'Belum di definisikan'
-//       // eslint-disable-next-line no-unreachable
-//       break
-//   }
-// }
+    default:
+      return 'Belum di definisikan'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+
 </script>
 
 <style>

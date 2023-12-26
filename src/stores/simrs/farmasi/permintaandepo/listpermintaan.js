@@ -8,7 +8,7 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
     items: [],
     meta: {},
     param: {
-      cari: '',
+      no_permintaan: '',
       per_page: 10,
       page: 1,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
@@ -27,7 +27,7 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
       this.param[key] = val
     },
     setSearch(payload) {
-      this.setParam('cari', payload)
+      this.setParam('no_permintaan', payload)
       this.setParam('page', 1)
       this.ambilPermintaan()
     },
@@ -56,8 +56,8 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
           .then(resp => {
             this.loading = false
             console.log('list permintaan', resp.data)
-            this.items = resp.data
-            // this.meta = resp.data
+            this.items = resp?.data?.data ?? resp.data
+            this.meta = resp.data
             resolve(resp)
           })
           .catch(() => {

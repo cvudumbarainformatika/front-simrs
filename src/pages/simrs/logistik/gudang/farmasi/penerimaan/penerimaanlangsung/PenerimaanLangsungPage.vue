@@ -18,7 +18,9 @@
             icon="icon-mat-done"
             dense
             color="primary"
-            @click="store.selesaiDanKunci()"
+            :loading="store.loadingKunci"
+            :disable="store.loadingKunci"
+            @click="kunci()"
           >
             <q-tooltip
               class="primary"
@@ -164,7 +166,7 @@
             />
           </div>
         </div>
-        <div class="row q-mb-xs">
+        <!-- <div class="row q-mb-xs">
           <div class="col-12">
             <app-input-date-human
               ref="refTglTempo"
@@ -176,20 +178,20 @@
               @db-model="setTempo"
             />
           </div>
-        </div>
-        <div class="row q-mb-xs">
+        </div> -->
+        <!-- <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
               ref="refTotalFaktur"
               v-model="store.form.total_faktur_pbf"
-              label="Total Faktur PBF"
+              label="Total Nilai"
               outlined
               :rules="[
                 val => !isNaN(val) || 'Harus pakai Nomor'
               ]"
             />
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <q-separator class="q-mb-xs" />
@@ -295,11 +297,15 @@
       <div class="col-2">
         harga netto : <strong> {{ formatRp(store.form.harga_netto) }} </strong>
       </div>
-      <div class="col-3">
+      <div class="col-2">
         subtotal : <strong>{{ formatRp(store.form.subtotal) }}</strong>
       </div>
       <div class="col-2">
+        Total Nilai : <strong>{{ formatRp(store.form.total_faktur_pbf) }}</strong>
+      </div>
+      <div class="col-2">
         <app-input
+          ref="refBatch"
           v-model="store.form.no_batch"
           label="No Batch"
           outlined
@@ -352,6 +358,70 @@
         </q-btn>
       </div>
     </div>
+    <q-separator class="q-my-md" />
+    <div v-if="store.rincis.length">
+      <q-list
+        bordered
+        separator
+      >
+        <q-item
+          v-for="(item,i) in store.rincis"
+          :key="i"
+          v-ripple
+          class="row items-center q-col-gutter-sm"
+        >
+          <q-item-section>
+            <div class="row">
+              {{ item?.masterobat?.namaobat }}
+            </div>
+            <div class="row">
+              {{ item?.masterobat?.kodeobat }}
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              {{ item?.no_batch }}
+            </div>
+            <div class="row">
+              {{ item?.tgl_exp }}
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              {{ item?.jml_terima_b }} ({{ item?.masterobat?.satuan_b }})
+            </div>
+            <div class="row">
+              {{ item?.jml_terima_k }} ({{ item?.satuan_kcl }})
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              {{ item?.harga }}
+            </div>
+            <div class="row">
+              {{ item?.harga_kcl }}
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              {{ item?.diskon ?? 0 }} %  (Rp. {{ formatRp(item?.diskon_rp) }})
+            </div>
+            <div class="row">
+              {{ item?.ppn ??0 }} % (Rp. {{ formatRp(item?.ppn_rp) }})
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="row">
+              {{ item?.harga_netto }}
+            </div>
+            <div class="row">
+              {{ item?.subtotal }}
+            </div>
+          </q-item-section>
+          <!-- {{ item }} -->
+        </q-item>
+      </q-list>
+    </div>
   </div>
 </template>
 <script setup>
@@ -360,7 +430,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onUnmounted } from 'vue'
 
 const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
@@ -368,6 +438,7 @@ const apps = useAplikasiStore()
 onMounted(() => {
   store.setForm('gudang', apps?.user?.pegawai?.kdruangansim)
 })
+store.getInitialData()
 function setHargaNetto() {
   const isi = store.form.isi ?? 1
   const harga = store.form.harga ?? 0
@@ -379,7 +450,15 @@ function setHargaNetto() {
   const ppnRp = hargaSetelahDiskon * (ppn / 100)
   const hargaPembelian = hargaSetelahDiskon + ppnRp
   const subtotal = hargaPembelian * jmlTerimaB
+  let totalPbf = 0
+  if (store.rincis.length) {
+    const sub = store.rincis.map(m => parseFloat(m.subtotal)).reduce((a, b) => a + b, 0)
+    totalPbf = sub + subtotal
+  } else {
+    totalPbf = subtotal
+  }
 
+  store.setForm('total_faktur_pbf', totalPbf)
   store.setForm('diskon_rp', diskonRp)
   store.setForm('ppn_rp', ppnRp)
   store.setForm('harga_netto', hargaPembelian)
@@ -442,17 +521,17 @@ function dispSurat (val) {
   store.setDisp('surat', val)
 }
 
-function setTempo (val) {
-  store.setForm('batasbayar', val)
-}
-function dispTempo (val) {
-  store.setDisp('tempo', val)
-}
+// function setTempo (val) {
+//   store.setForm('batasbayar', val)
+// }
+// function dispTempo (val) {
+//   store.setDisp('tempo', val)
+// }
 
 function cariPihakTiga (val) {
   console.log('cari pihak tiga', val)
   store.namaPihakKetiga = val
-  store.getPihakKetiga()
+  store.cariPihatTiga(val)
 }
 function myDebounce(func, timeout = 800) {
   let timer
@@ -469,8 +548,12 @@ function simpan() {
   console.log('from ', store.form)
   console.log('validasi ', validasi())
   if (validasi()) {
-    store.simpanPenerimaan()
+    if (!store.form.kdruang) store.setForm('kdruang', store.form.gudang)
+    store.simpanPenerimaan().then(() => { resetValidation() })
   }
+}
+function kunci() {
+  store.selesaiDanKunci().then(() => { resetValidation() })
 }
 
 // head
@@ -482,8 +565,8 @@ const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
 const refTglTran = ref(null) // inp date
 const refTglSurat = ref(null) // inp date
-const refTglTempo = ref(null) // inp date
-const refTotalFaktur = ref(null) // inp
+// const refTglTempo = ref(null) // inp date
+// const refTotalFaktur = ref(null) // inp
 
 // det
 const refObat = ref(null) // auto
@@ -491,6 +574,7 @@ const refIsi = ref(null)
 const refJumlah = ref(null)
 const refExp = ref(null)
 const refHarga = ref(null)
+const refBatch = ref(null)
 // const refHargaKcl = ref(null)
 function validasi() {
   // console.log('index', index)
@@ -508,20 +592,42 @@ function validasi() {
   const pengirim = refPengirim.value.$refs.refInput.validate()
   const tglTran = refTglTran.value.$refs.refInputDate.validate()
   const tglSurat = refTglSurat.value.$refs.refInputDate.validate()
-  const tglTempo = refTglTempo.value.$refs.refInputDate.validate()
-  const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
+  // const tglTempo = refTglTempo.value.$refs.refInputDate.validate()
+  // const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
 
   const obat = refObat.value ? refObat.value.$refs.refAuto.validate() : false
   const jmlTerimaB = refJumlah.value.refInput.validate()
   const isi = refIsi.value.refInput.validate()
   const exp = refExp.value.$refs.refInputDate.validate()
   const harga = refHarga.value.refInput.validate()
+  const bacth = refBatch.value.refInput.validate()
   // const hargaKcl = refHargaKcl.value.refInput.validate()
   if (!gudang && !store.form.kdruang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
   if (
-    pbf && jnsPenerimaan && gudang && jenisSurat && noSurat && pengirim && totalFaktur && tglTran && tglSurat && tglTempo &&
-    jmlTerimaB && isi && exp && harga && obat // && hargaKcl
+    pbf && jnsPenerimaan && gudang && jenisSurat && noSurat && pengirim && tglTran && tglSurat &&
+    jmlTerimaB && isi && exp && harga && obat && bacth
   ) return true
   else return false
 }
+function resetValidation() {
+  if (refPbf.value) refPbf.value.$refs.refAuto.resetValidation()
+  if (refJnsPenerimaan.value) refJnsPenerimaan.value.$refs.refAuto.resetValidation()
+
+  if (refGudang.value) refGudang.value.$refs.refAuto.resetValidation()
+  refJenisSurat.value.$refs.refAuto.resetValidation()
+  refNoSurat.value.$refs.refInput.resetValidation()
+  refPengirim.value.$refs.refInput.resetValidation()
+  refTglTran.value.$refs.refInputDate.resetValidation()
+  refTglSurat.value.$refs.refInputDate.resetValidation()
+
+  if (refObat.value) refObat.value.$refs.refAuto.resetValidation()
+  refJumlah.value.refInput.resetValidation()
+  refIsi.value.refInput.resetValidation()
+  refExp.value.$refs.refInputDate.resetValidation()
+  refHarga.value.refInput.resetValidation()
+  refBatch.value.refInput.resetValidation()
+}
+onUnmounted(() => {
+  store.resetForm()
+})
 </script>

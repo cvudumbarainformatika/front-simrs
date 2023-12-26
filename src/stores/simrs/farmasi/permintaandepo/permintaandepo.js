@@ -216,6 +216,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             const list = useListPermintaanStore()
             list.ambilPermintaan()
             this.details = []
+            this.getListObat()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
@@ -260,10 +261,19 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
                   const obat = anu[0]
                   rinc.nama_obat = obat.nama_obat
                 }
-                this.details.push(rinc)
+                const adaDetail = this.details.filter(ob => ob.kdobat === rinc.kdobat)
+                if (adaDetail.length) {
+                  const data = adaDetail[0]
+                  if (data) {
+                    Object.assign(data, rinc)
+                  }
+                } else {
+                  this.details.push(rinc)
+                }
               }
             }
             this.clearObat()
+            this.getListObat()
             resolve(resp)
           })
           .catch(() => { this.loading = false })
@@ -277,6 +287,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             this.loadingMax = false
             console.log('max', resp.data)
             notifSuccess(resp)
+            this.getListObat()
             resolve(resp)
           }).catch(() => { this.loadingMax = false })
       })

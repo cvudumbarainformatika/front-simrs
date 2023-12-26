@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="fixed-top row items-center justify-end q-mr-sm"
     style="z-index: 10;"
   >
@@ -14,8 +14,8 @@
         @click="style.setComponentFull"
       />
     </div>
-  </div>
-  <div class="q-mt-xl q-mx-sm">
+  </div> -->
+  <div class="q-mx-sm">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -23,11 +23,13 @@
       :meta="store.meta"
       :per-page="store.param.per_page"
       :loading="store.loading"
-      :to-search="store.param.cari"
+      :to-search="store.param.no_permintaan"
       :click-able="true"
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      row-no
+      use-full
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -141,12 +143,12 @@
         </div>
       </template>
       <template #left-acttion="{ row }">
-        <div v-if="!row.kunci">
+        <div v-if="!row.flag">
           <q-btn
             flat
             icon="icon-mat-lock_open"
             dense
-            color="negative"
+            color="green"
             :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
@@ -158,7 +160,7 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.kunci">
+        <div v-if="row.flag">
           <div class="row items-center">
             <div class="q-mr-sm" />
             <div>
@@ -166,7 +168,7 @@
                 flat
                 icon="icon-mat-lock"
                 dense
-                color="green"
+                color="negative"
                 @click="info(row)"
               >
                 <q-tooltip
@@ -186,14 +188,18 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useStyledStore } from 'src/stores/app/styled'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListPermintaanStore } from 'src/stores/simrs/farmasi/permintaandepo/listpermintaan'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
-const style = useStyledStore()
 const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
+const apps = useAplikasiStore()
+onMounted(() => {
+  store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.getInitialData()
+})
 // click
 function onClick (val) {
   // console.log('click', val)
@@ -281,7 +287,6 @@ function label (val) {
       break
   }
 }
-store.getInitialData()
 </script>
 <style lang="scss" scoped>
 .anu {

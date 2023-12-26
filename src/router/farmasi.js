@@ -10,6 +10,11 @@ const farmasi = {
       component: () => import('pages/simrs/farmasi/IndexPage.vue')
     },
     {
+      path: '/farmasi/stok',
+      name: 'farmasi.stok',
+      component: () => import('pages/simrs/farmasi/stok/IndexPage.vue')
+    },
+    {
       path: '/farmasi/pemesanan',
       // name: 'farmasi.pemesanan', //sing duwe children tak boleh pake name
       component: () => import('src/pages/simrs/farmasi/pemesanan/IndexPage.vue'),

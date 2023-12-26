@@ -46,7 +46,7 @@ const thumbStyle = ref({
   right: '0px',
   borderRadius: '5px',
   backgroundColor: '#027be3',
-  width: '2px',
+  width: '4px',
   opacity: 0.75
 })
 const barStyle = ref({

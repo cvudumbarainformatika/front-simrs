@@ -31,8 +31,12 @@
           v-close-popup
           color="dark"
           :label="labelBtnClose"
+          :loading="loading"
+          @click="emits('onCancel')"
         />
         <app-btn
+          :loading="loading"
+          :disble="loading"
           :label="labelBtnOk"
           @click="emits('onOk')"
         />
@@ -41,8 +45,12 @@
   </q-dialog>
 </template>
 <script setup>
-const emits = defineEmits(['onOk'])
+const emits = defineEmits(['onOk', 'onCancel'])
 defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  },
   label: {
     type: String,
     default: 'Dialog'
