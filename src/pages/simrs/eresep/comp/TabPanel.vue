@@ -26,12 +26,9 @@
     >
       <q-tab-panel
         name="nonracikan"
-        class="full-height bg-red"
+        class="full-height"
       >
-        <div class="text-h6">
-          Mails
-        </div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <nonracikan-page />
       </q-tab-panel>
 
       <q-tab-panel name="racikan">
@@ -46,5 +43,6 @@
 
 <script setup>
 import { ref } from 'vue'
+import NonracikanPage from './NonracikanPage.vue'
 const tab = ref('nonracikan')
 </script>

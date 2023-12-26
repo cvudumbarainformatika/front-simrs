@@ -173,7 +173,7 @@ const menus = ref([
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
-    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/EResepPage.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
   },
   {
     name: 'sharing-bpjs-page',
