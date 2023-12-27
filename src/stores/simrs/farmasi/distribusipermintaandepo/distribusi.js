@@ -149,7 +149,8 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
                     ri.jumlah_minta = 0
                     if (it?.mutasigudangkedepo.length) {
                       const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
-                      ri.distribusi = isNaN(dist) ? dist : 0
+                      console.log('dist', dist)
+                      ri.distribusi = !isNaN(dist) ? dist : 0
                     }
                   })
                 }

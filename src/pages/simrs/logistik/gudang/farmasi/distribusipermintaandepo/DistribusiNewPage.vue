@@ -279,7 +279,7 @@
 
                 <div class="row justify-between no-wrap q-mt-xs">
                   <div
-                    v-if="row.flag === '2' || rin.editable"
+                    v-if="row.flag === '2' && rin.distribusi===0"
                     class="col-12"
                   >
                     <app-input
@@ -301,9 +301,10 @@
                     v-else
                     class="col-12"
                   >
+                    <!-- v-model="rin.jumlah_minta" -->
                     <app-input
                       ref="refInputVerif"
-                      v-model="rin.jumlah_minta"
+                      v-model="rin.distribusi"
                       label="Jumlah Didistribusikan"
                       outlined
                       debounce="800"
@@ -363,7 +364,7 @@
                   >
                     Terima Terlebih dahulu
                   </div>
-                  <div
+                  <!-- <div
                     v-if="rin.user_verif !== '' && !rin.editable && row.flag === '2'"
                     class="row justify-end text-weight-bold text-green q-py-xs"
                   >
@@ -388,7 +389,7 @@
                         </q-tooltip>
                       </q-btn>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -458,10 +459,10 @@ function distribusikan (val) {
   store.distribusi(form)
 }
 
-function setEdit(val) {
-  console.log('edit ', val)
-  val.editable = true
-}
+// function setEdit(val) {
+//   console.log('edit ', val)
+//   val.editable = true
+// }
 const refInputVerif = ref(null)
 function kirim (val, i, row) {
   console.log('ref', refInputVerif.value, i)
