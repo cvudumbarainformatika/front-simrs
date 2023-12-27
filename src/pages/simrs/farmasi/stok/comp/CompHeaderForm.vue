@@ -65,12 +65,12 @@
           label="Nomor Batch"
         />
       </div>
-      <div
+      <!-- <div
         v-if="store.form.id"
         class="col-6"
       >
         {{ store.form.id }}
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

@@ -45,9 +45,6 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
       { nama: 'Tampilkan semua', value: '', color: 'grey' },
       { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
       { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
-      // { nama: 'Barang sudah bisa diambil', value: 6, color: 'green' },
-      // { nama: 'Telah di distribusikan', value: 7, color: 'orange' },
-      // { nama: 'Ditolak', value: 20, color: 'red' }
     ],
     paramStatus: {
       nama: 'Belum di filter', value: 99, color: 'cyan'
@@ -150,6 +147,11 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
                   it?.permintaanrinci.forEach(ri => {
                     ri.jumlahdiminta = ri.jumlah_minta
                     ri.jumlah_minta = 0
+                    if (it?.mutasigudangkedepo.length) {
+                      const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
+                      console.log('dist', dist)
+                      ri.distribusi = !isNaN(dist) ? dist : 0
+                    }
                   })
                 }
               })
@@ -179,6 +181,22 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
       this.loadingKunci = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/gudang/distribusi/kuncipermintaandaridepo', val)
+          .then(resp => {
+            this.loadingKunci = false
+            this.getPermintaanDepo()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingKunci = false
+          })
+      })
+    },
+    distribusi(val) {
+      console.log('store.kunci')
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/distribusikan', val)
           .then(resp => {
             this.loadingKunci = false
             this.getPermintaanDepo()

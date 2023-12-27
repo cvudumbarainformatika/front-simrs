@@ -11,10 +11,12 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     loadingRole: false,
     loadingPoli: false,
     loadingRuang: false,
+    loadingGudang: false,
     currentApp: '',
     roles: [],
     polis: [],
     ruangs: [],
+    gudangs: [],
     par: {
       q: ''
     }
@@ -202,7 +204,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       this.loadingPoli = true
       await api.post('v1/settings/appakses/store-poli', form)
         .then(resp => {
-          console.log('simpan poli', resp.data)
+          // console.log('simpan poli', resp.data)
           this.loadingPoli = false
           // this.pegawai.poli = resp.data
           this.pegawai.kdruangansim = resp.data?.kdruangansim
@@ -239,7 +241,41 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         })
         .catch(() => { this.loadingRuang = false })
     },
+    async getGudang() {
+      this.loadingGudang = true
+      const param = { params: this.par }
+      await api.get('v1/gudang/gudang', param)
+        .then(resp => {
+          this.loadingGudang = false
+          // console.log('ruang', resp.data)
+          this.gudangs = resp.data
+        })
+        .catch(() => { this.loadingGudang = false })
+    },
+    setGudang(val) {
+      const form = {
+        id: this.pegawai.id,
+        kodepoli: val
+      }
+      // console.log('val', val, 'form', form)
+      this.simpanGudang(form)
+    },
 
+    async simpanGudang(val) {
+      const form = {
+        id: this.pegawai.id,
+        kodepoli: val
+      }
+      this.loadingGudang = true
+      await api.post('v1/settings/appakses/store-poli', form)
+        .then(resp => {
+          // console.log('simpan role', resp.data)
+          this.loadingGudang = false
+          this.pegawai.kdruangansim = resp.data?.kdruangansim
+          return Promise.resolve(resp)
+        })
+        .catch(() => { this.loadingGudang = false })
+    },
     async saveNew(idx) {
       const params = this.items[idx]
       delete params.id
