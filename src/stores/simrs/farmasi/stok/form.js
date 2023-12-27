@@ -88,7 +88,7 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
       this.setForm('jumlah', val.jumlah)
       this.setForm('harga', val.harga)
       this.setForm('nobatch', val.nobatch)
-      this.setForm('id', val.id)
+      this.setForm('id', val?.idx)
       this.setOpen()
     },
     getInitialData() {

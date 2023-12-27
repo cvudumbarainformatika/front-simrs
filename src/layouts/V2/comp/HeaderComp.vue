@@ -47,9 +47,9 @@
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
-          <div class="text-right q-mr-sm items-center">
+          <!-- <div class="text-right q-mr-sm items-center">
             anu
-          </div>
+          </div> -->
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
               {{ user?.nama }}
@@ -61,19 +61,19 @@
               {{ user?.pegawai?.ruang?.uraian }}
             </div>
             <div
-              v-if="user?.pegawai?.depo"
+              v-else-if="!!user?.pegawai?.depo"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
             <div
-              v-if="user?.pegawai?.depo_sim"
+              v-else-if="!!user?.pegawai?.depo_sim"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo_sim?.nama }}
             </div>
             <div
-              v-if="!!user?.pegawai?.kdruangansim"
+              v-else-if="!!user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
             >
               {{ poli(user?.pegawai) }}
@@ -116,7 +116,7 @@ onMounted(() => {
   // console.log('route', route)
 })
 
-defineProps({
+const props = defineProps({
   dark: {
     type: Boolean,
     default: false
@@ -145,7 +145,7 @@ function poli(val) {
   const anu2 = []
   let ruang = ''
   let fin2 = null
-  if (temp.length) {
+  if (temp.length && (parseInt(props?.user?.pegawai?.role_id) < 3 || parseInt(props?.user?.pegawai?.role_id) > 7)) {
     temp.forEach(a => {
       if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
         console.log('pol')
