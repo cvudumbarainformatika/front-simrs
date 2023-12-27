@@ -134,6 +134,70 @@
               </q-menu>
             </q-btn>
           </div>
+          <div class="ellipsis">
+            <strong>Gudang / Depo : </strong>
+            <q-btn
+              :label="gudang(item)"
+              no-caps
+              flat
+              size="12px"
+              :loading="store.loadingGudang"
+              @click="setGudang(item)"
+            >
+              <q-menu
+                ref="refMenu"
+                @hide="hideMenu"
+              >
+                <div class="fixed-top pos bg-white">
+                  <app-btn
+                    class="full-width q-mb-sm"
+                    label="simpan"
+                    color="green"
+                    :loading="store.loadingGudang"
+                    @click="simpanGudang"
+                  />
+                  <app-input
+                    v-model="gud"
+                    outlined
+                    label="cari gudang"
+                    autofocus
+                    valid
+                    @update:model-value="filterGud"
+                  />
+                </div>
+                <q-list
+                  class="q-mt-xl q-mt-xl"
+                  style="min-width: 100px;"
+                >
+                  <q-item
+                    v-for="(poli,i) in filteredGud"
+                    :key="i"
+                    v-close-popup
+                    clickable
+                  >
+                    <!-- @click="store.setPoli(poli)" -->
+                    <q-item-section avatar>
+                      <q-checkbox
+                        v-model="kodegudangs"
+                        :val="poli?.kode"
+                        color="teal"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <div class="row justify-between">
+                        <div>
+                          {{ poli?.nama }}
+                        </div>
+                        <div>
+                          ({{ poli?.kode }})
+                        </div>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
         </div>
       </div>
     </q-card-section>
@@ -312,9 +376,17 @@ const store = useSettingsAplikasi()
 const filtered = ref(store.polis)
 const kodepolis = ref(null)
 const filt = ref('')
+const filteredGud = ref(store.gudangs)
+const kodegudangs = ref(null)
+const gud = ref('')
 function filter(val) {
   if (val) {
     filtered.value = store.polis.filter(a => a.polirs.toLowerCase().includes(val.toLowerCase()))
+  }
+}
+function filterGud(val) {
+  if (val) {
+    filteredGud.value = store.gudangs.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))
   }
 }
 defineProps({
@@ -348,6 +420,15 @@ function simpan() {
     refMenu.value.hide()
   })
 }
+function simpanGudang() {
+  const anu = kodegudangs.value?.length ? kodegudangs.value.filter(a => a.length > 4) : null
+  const arr = anu?.join('|') ?? null
+  console.log('kode', anu)
+  console.log(arr)
+  store.simpanGudang(arr).then(() => {
+    refMenu.value.hide()
+  })
+}
 function ruangan(val) {
   let fin = null
   if (val.kdruangansim) {
@@ -365,6 +446,30 @@ function ruangan(val) {
   }
   const ruang = fin ?? 'Tidak ada Akses Poli'
   // console.log(ruang)
+
+  return ruang
+}
+
+function setGudang(val) {
+  kodegudangs.value = val.kdruangansim.split('|')
+}
+function gudang(val) {
+  let fin = null
+  if (val.kdruangansim) {
+    const temp = val.kdruangansim.split('|')
+    const anu = []
+    if (temp.length) {
+      temp.forEach(a => {
+        const pol = store.gudangs.filter(b => b.kode === a)
+        if (pol.length) anu.push(pol[0])
+      })
+      if (anu.length) {
+        fin = anu.map(x => x.nama).join(', ')
+      }
+    }
+  }
+  const ruang = fin ?? 'Tidak ada Akses Gudang / Depo'
+  console.log(ruang)
 
   return ruang
 }

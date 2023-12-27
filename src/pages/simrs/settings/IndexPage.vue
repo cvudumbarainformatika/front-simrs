@@ -188,6 +188,7 @@ onMounted(() => {
   store.getRuang()
   store.getRole()
   store.getPoli()
+  store.getGudang()
 })
 
 function newData() {

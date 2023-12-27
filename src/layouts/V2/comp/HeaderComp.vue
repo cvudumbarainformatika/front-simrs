@@ -47,6 +47,9 @@
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
+          <div class="text-right q-mr-sm items-center">
+            anu
+          </div>
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
               {{ user?.nama }}
@@ -58,19 +61,19 @@
               {{ user?.pegawai?.ruang?.uraian }}
             </div>
             <div
-              v-else-if="user?.pegawai?.depo"
+              v-if="user?.pegawai?.depo"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
             <div
-              v-else-if="user?.pegawai?.depo_sim"
+              v-if="user?.pegawai?.depo_sim"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo_sim?.nama }}
             </div>
             <div
-              v-else-if="user?.pegawai?.kdruangansim"
+              v-if="!!user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
             >
               {{ poli(user?.pegawai) }}
@@ -128,18 +131,24 @@ defineProps({
   }
 })
 const setting = useSettingsAplikasi()
+if (!setting.gudangs.length) setting.getGudang()
+if (!setting.polis.length) setting.getPoli()
 function poli(val) {
-  const gudangs = [
-    { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-    { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-  ]
+  // const gudangs = [
+  //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+  //   { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+  // ]
   console.log(val)
   const temp = val.kdruangansim.split('|')
   const anu = []
   let fin = null
+  const anu2 = []
+  let ruang = ''
+  let fin2 = null
   if (temp.length) {
     temp.forEach(a => {
       if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
+        console.log('pol')
         if (setting.polis?.length) {
           const pol = setting?.polis?.filter(b => b.kodepoli === a)
           if (pol.length) anu.push(pol[0])
@@ -147,20 +156,30 @@ function poli(val) {
           if (anu.length) {
             fin = anu.map(x => x.polirs).join(', ')
           }
-          const ruang = fin ?? 'Tidak ada Akses Poli'
-          return ruang
+          ruang = fin ?? 'Tidak ada Akses Poli'
         } else {
-          return 'Menunggu data poli'
+          ruang = 'Menunggu data poli'
         }
-      }
-      if (a.toLowerCase().includes('gd')) {
-        const gud = gudangs.filter(c => c.value === a)
-        if (gud.length) return gud[0].nama
+      } else if (a.toLowerCase().includes('gd')) {
+        if (setting.gudangs?.length) {
+          const gud = setting?.gudangs.filter(c => c.kode === a)
+          if (gud.length) anu2.push(gud[0])
+          if (anu2.length) {
+            fin2 = anu2.map(x => x.nama).join(', ')
+          }
+          ruang = fin2 ?? 'Tidak ada Akses gudang / depo'
+        } else {
+          ruang = 'Menunggu data gudang'
+        }
+      } else {
+        ruang = 'NN'
       }
     })
   } else {
-    return 'data ruangan tidak ditemukan'
+    ruang = 'data ruangan tidak ditemukan'
   }
+  console.log(ruang)
+  return ruang
 }
 
 function namaPath(val) {
