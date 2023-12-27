@@ -141,7 +141,7 @@
             icon="icon-mat-move_to_inbox"
             dense
             color="primary"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
             <q-tooltip
@@ -422,11 +422,13 @@ function kunci (val) {
   val.highlight = !val.highlight
   toloadBeli.value = val.no_permintaan
   const form = {
-    no_permintaan: val.no_permintaan
+    no_permintaan: val.no_permintaan,
+    kdruang: val.tujuan, // gudang
+    tujuan: val.dari// depo
   }
   console.log('val', val, form)
 
-  store.kunci(form)
+  store.simpanDetail(form)
 }
 const color = val => {
   switch (val) {

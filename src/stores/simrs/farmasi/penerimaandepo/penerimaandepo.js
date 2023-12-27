@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerimaan_depo', {
   state: () => ({
     loading: false,
+    loadingSimpan: false,
     items: [],
     meta: {},
     params: {
@@ -83,6 +85,20 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    simpanDetail(val) {
+      this.loadingSimpan = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/terimadistribusi', val)
+          .then(resp => {
+            this.loadingSimpan = false
+            console.log('terima', resp)
+            notifSuccess(resp)
+            this.getPermintaanDepo()
+            resolve(resp)
+          })
+          .catch(() => { this.loadingSimpan = false })
       })
     }
   }
