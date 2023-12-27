@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="fixed-top row items-center justify-end q-mr-sm"
     style="z-index: 10;"
   >
@@ -14,8 +14,8 @@
         @click="style.setComponentFull"
       />
     </div>
-  </div>
-  <div class="q-mt-xl q-mx-sm">
+  </div> -->
+  <div class="q-mx-sm">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -29,6 +29,7 @@
       :ada-tambah="false"
       :ada-filter="false"
       row-no
+      use-full
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -133,12 +134,12 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useStyledStore } from 'src/stores/app/styled'
+// import { useStyledStore } from 'src/stores/app/styled'
 import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listrencana'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { ref } from 'vue'
 
-const style = useStyledStore()
+// const style = useStyledStore()
 const store = useListRencanaPemesananStore()
 const rencana = useRencanaPemesananObatStore()
 // click

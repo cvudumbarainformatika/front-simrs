@@ -119,6 +119,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       this.cariRencanaBeli()
     },
     kirimRencana(val) {
+      const tabel = useTabelObatDirencanakaStore()
       console.log('form ', this.form)
       console.log('kirim ', val)
       this.setForm('kd_obat', val.kd_obat)
@@ -149,6 +150,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
                 this.setForm('no_rencbeliobat', resp.data.notrans)
               }
             }
+            tabel.getInitialData()
             notifSuccess(resp)
             resolve(resp)
           })

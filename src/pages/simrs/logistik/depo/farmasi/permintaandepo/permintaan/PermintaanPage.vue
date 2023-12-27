@@ -273,7 +273,7 @@
                 <div class="q-mr-sm text-weight-bold">
                   tidak ada
                 </div>
-                <div
+                <!-- <div
                   v-if="(store.form.kdobat && !mintaMax) "
                   class="q-mr-sm"
                 >
@@ -282,7 +282,7 @@
                     color="orange"
                     @click="setMinta"
                   />
-                </div>
+                </div> -->
                 <div
                   v-if="store.form.kdobat && mintaMax"
                   class="q-mr-sm"
@@ -408,9 +408,9 @@ const store = useFarmasiPermintaanDepoStore()
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
 const JumlahMintaMin = ref(10)
-function setMinta() {
-  mintaMax.value = true
-}
+// function setMinta() {
+//   mintaMax.value = true
+// }
 function simpanMintaAlokasi() {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
   const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0

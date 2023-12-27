@@ -149,6 +149,17 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
     setParam(key, val) {
       this.params[key] = val
     },
+    clearForm() {
+      const dari = this.form.dari
+      const tujuan = this.form.tujuan
+      this.form = {
+        tgl_permintaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        status_obat: 'non-konsinyasi',
+        no_permintaan: '',
+        dari,
+        tujuan
+      }
+    },
     obatSelected(val) {
       this.setForm('kdobat', val)
       this.setForm('jumlah_minta', 0)
@@ -217,6 +228,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_dep
             list.ambilPermintaan()
             this.details = []
             this.getListObat()
+            this.clearForm()
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })

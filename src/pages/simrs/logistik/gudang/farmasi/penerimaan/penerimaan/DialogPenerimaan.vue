@@ -1,4 +1,9 @@
 <template>
+  <div class="row f-24 bg-primary text-white rounded">
+    <div class="col-12 q-ma-sm text-weight-bold">
+      Form Penerimaan
+    </div>
+  </div>
   <div
     class="row no-wrap items-center justify-between q-mx-sm bg-white"
     style="z-index: 10;"
@@ -884,3 +889,9 @@ const gudang = computed(() => {
 console.log('gudang', gudang.value)
 store.getInitialData()
 </script>
+<style lang="scss" scoped>
+.rounded{
+  border-radius: 5px;
+  margin-top: -10px;
+}
+</style>

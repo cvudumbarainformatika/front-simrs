@@ -151,6 +151,8 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
                       const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
                       console.log('dist', dist)
                       ri.distribusi = !isNaN(dist) ? dist : 0
+                    } else {
+                      ri.distribusi = 0
                     }
                   })
                 }

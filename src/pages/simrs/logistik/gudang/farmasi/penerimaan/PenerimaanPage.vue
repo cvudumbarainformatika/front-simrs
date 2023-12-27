@@ -59,7 +59,7 @@ const barStyle = ref({
 const page = useRoute()
 const title = computed(() => {
   if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
-    return 'PENERIMAAN'
+    return 'LIST PEMESANAN'
   } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
     return 'PENERIMAAN LANGSUNG'
   } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {

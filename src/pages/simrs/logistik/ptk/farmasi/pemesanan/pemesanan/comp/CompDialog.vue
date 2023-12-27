@@ -23,7 +23,8 @@
           <q-btn
             v-if="store.form.nopemesanan"
             flat
-            icon="icon-mat-done"
+            label="selesai"
+            icon="icon-mat-lock"
             dense
             color="primary"
             @click="store.selesaiDanKunci()"
@@ -74,7 +75,7 @@
             <app-input-date-human
               :model="table.tglRencana"
               outlined
-              readonly
+              disable
               label="Tanggal Perencanaan"
             />
           </div>

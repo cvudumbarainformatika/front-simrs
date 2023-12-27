@@ -24,7 +24,7 @@
           glossy
           push
           color="deep-orange"
-          label="Penerimaan"
+          label="List Pemesanan"
           size="md"
           @click="goTo('/gudang/farmasi/penerimaan/penerimaan')"
         />
