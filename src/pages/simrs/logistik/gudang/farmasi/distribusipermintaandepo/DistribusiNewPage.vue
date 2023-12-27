@@ -155,7 +155,8 @@
         <div v-if="row.flag==='2'">
           <q-btn
             flat
-            icon="icon-mat-send"
+            icon="icon-mat-done_alt"
+            label="selesai"
             dense
             color="green"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
@@ -287,7 +288,7 @@
                       v-model="rin.jumlah_minta"
                       label="Jumlah Didistribusikan"
                       outlined
-                      debounce="800"
+                      debounce="100"
                       :rules="[
                         val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
                         val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
