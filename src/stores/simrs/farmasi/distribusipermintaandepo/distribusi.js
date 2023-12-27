@@ -189,6 +189,22 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
             this.loadingKunci = false
           })
       })
+    },
+    distribusi(val) {
+      console.log('store.kunci')
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/distribusikan', val)
+          .then(resp => {
+            this.loadingKunci = false
+            this.getPermintaanDepo()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingKunci = false
+          })
+      })
     }
   }
 })

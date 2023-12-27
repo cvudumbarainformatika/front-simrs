@@ -118,7 +118,7 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="row.flag==='2'">
+        <div v-if="row.flag==='3'">
           <q-btn
             flat
             icon="icon-mat-lock"
@@ -131,16 +131,16 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Kunci
+              Sudah di kirim ke depo
             </q-tooltip>
           </q-btn>
         </div>
         <div v-if="row.flag==='1'">
           <q-btn
             flat
-            icon="icon-mat-lock_open"
+            icon="icon-mat-move_to_inbox"
             dense
-            color="green"
+            color="primary"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
@@ -148,7 +148,24 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Kunci
+              Terima
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div v-if="row.flag==='2'">
+          <q-btn
+            flat
+            icon="icon-mat-send"
+            dense
+            color="green"
+            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            @click="distribusikan(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Distribusikan
             </q-tooltip>
           </q-btn>
         </div>
@@ -262,7 +279,7 @@
 
                 <div class="row justify-between no-wrap q-mt-xs">
                   <div
-                    v-if="row.flag === '1' || rin.editable"
+                    v-if="row.flag === '2' || rin.editable"
                     class="col-12"
                   >
                     <app-input
@@ -302,9 +319,9 @@
                 </div>
               </div>
               <div class="col-3 ">
-                <div v-if="parseFloat(rin.jumlah_minta) > 0 && row.flag==='1'">
+                <div v-if="parseFloat(rin.jumlah_minta) > 0 && row.flag==='2'">
                   <div
-                    v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='1'"
+                    v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='2'"
                     class="row justify-end"
                   >
                     <q-btn
@@ -329,19 +346,25 @@
                 </div>
                 <div v-else>
                   <div
-                    v-if="parseFloat(rin.jumlah_minta) <= 0 && row.flag==='1'"
+                    v-if="parseFloat(rin.jumlah_minta) <= 0 && row.flag==='2'"
                     class="row justify-end text-weight-bold"
                   >
                     Jumlah Distribusi salah
                   </div>
                   <div
-                    v-if="row.flag==='2'"
+                    v-if="row.flag==='3'"
                     class="row justify-end text-weight-bold text-green"
                   >
                     Sudah Di Distribusikan
                   </div>
                   <div
-                    v-if="rin.user_verif !== '' && !rin.editable && row.flag === '1'"
+                    v-if="row.flag==='1'"
+                    class="row justify-end text-weight-bold text-red"
+                  >
+                    Terima Terlebih dahulu
+                  </div>
+                  <div
+                    v-if="rin.user_verif !== '' && !rin.editable && row.flag === '2'"
                     class="row justify-end text-weight-bold text-green q-py-xs"
                   >
                     <div class="row justify-end">
@@ -418,6 +441,17 @@ function kunci (val) {
   console.log('val', val, form)
 
   store.kunci(form)
+}
+function distribusikan (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  const form = {
+    no_permintaan: val.no_permintaan
+  }
+  console.log('val', val, form)
+
+  store.distribusi(form)
 }
 
 function setEdit(val) {
