@@ -346,7 +346,7 @@
                 </div>
                 <div v-else>
                   <div
-                    v-if="parseFloat(rin.jumlah_minta) <= 0 && row.flag==='2'"
+                    v-if="(parseFloat(rin.jumlah_minta) <= 0 || mutasi(row,rin)) && row.flag==='2'"
                     class="row justify-end text-weight-bold"
                   >
                     Jumlah Distribusi salah
@@ -423,6 +423,10 @@ function depo (val) {
   } else {
     return val
   }
+}
+function mutasi(row, rin) {
+  console.log('row', row)
+  console.log('rin', rin)
 }
 // click
 function onClick (val) {
