@@ -45,9 +45,6 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
       { nama: 'Tampilkan semua', value: '', color: 'grey' },
       { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
       { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
-      // { nama: 'Barang sudah bisa diambil', value: 6, color: 'green' },
-      // { nama: 'Telah di distribusikan', value: 7, color: 'orange' },
-      // { nama: 'Ditolak', value: 20, color: 'red' }
     ],
     paramStatus: {
       nama: 'Belum di filter', value: 99, color: 'cyan'

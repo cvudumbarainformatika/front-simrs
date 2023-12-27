@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-xs bg-white">
-    <div class="row bg-primary text-white q-pa-xs q-mb-md">
+    <div class="row bg-primary text-white q-pa-sm q-mb-sm rouded-border">
       <div class="f-16 text-weight-bold">
         Halaman Distribusi Permintaan Depo
       </div>
@@ -579,5 +579,8 @@ const label = (status) => {
   white-space: normal !important;
   inline-size: 170px;
   overflow-wrap: break-word;
+}
+.rouded-border{
+  border-radius: 5px;
 }
 </style>
