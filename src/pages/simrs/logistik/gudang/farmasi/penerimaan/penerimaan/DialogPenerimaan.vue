@@ -704,8 +704,11 @@ function setHargaNetNew(evt, det, key) {
   det.jml_terima_b = jmlTerimaB
   det.jml_terima_k = jmlTerimaK
   det.diskon_rp = diskonRp
+  det.diskon_rp_kecil = diskonRp / isi
   det.ppn_rp = ppnRp
+  det.ppn_rp_kecil = ppnRp / isi
   det.harga_netto = hargaPembelian
+  det.harga_netto_kecil = hargaPembelian / isi
   det.subtotal = subtotal
   // console.log('evt', evt)
   // console.log('nilai', nilai)
