@@ -44,16 +44,10 @@ const depo = {
         {
           path: '/depo/farmasi/penerimaan',
           component: () => import('src/pages/simrs/logistik/depo/farmasi/penerimaan/IndexPage.vue')
-          // children: [
-          //   { path: '', redirect: '/depo/farmasi/penerimaan/depo' },
-          //   {
-          //     path: '/depo/farmasi/penerimaan/depo',
-          //     name: 'depo.farmasi.penerimaan.depo',
-          //     meta: { transition: 'slide-up' },
-          //     component: () =>
-          //       import('pages/simrs/logistik/depo/farmasi/penerimaan/IndexPage.vue')
-          //   }
-          // ]
+        },
+        {
+          path: '/depo/farmasi/formresep',
+          component: () => import('src/pages/simrs/logistik/depo/farmasi/formresep/IndexPage.vue')
         },
         {
           path: '/depo/farmasi/retur',

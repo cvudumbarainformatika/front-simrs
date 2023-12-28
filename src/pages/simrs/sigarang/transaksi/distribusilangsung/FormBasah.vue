@@ -116,7 +116,11 @@ const emits = defineEmits(['simpanList'])
 //   console.log('form', store.form)
 // }
 function setJmlDist(evt, val) {
-  const jml = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const jml = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  // const jml = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   // console.log(val)
   if (jml > val.total_stok) {
     val.toDistribute = val.total_stok

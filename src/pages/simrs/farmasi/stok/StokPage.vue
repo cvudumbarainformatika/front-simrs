@@ -74,6 +74,7 @@ function openDialog() {
 onMounted(() => {
   if (apps?.user?.pegawai?.kdruangansim !== '') {
     store.setForm('kdruang', apps?.user?.pegawai?.kdruangansim)
+    table.setParam('kdruang', apps?.user?.pegawai?.kdruangansim)
   }
 })
 function simpan() {

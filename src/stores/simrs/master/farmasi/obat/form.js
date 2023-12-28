@@ -53,9 +53,9 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       { label: 'TIDAK', value: '0' }
     ],
     optionSistemBayars: [
-      { label: 'SEMUA', value: 'semua' },
-      { label: 'UMUM', value: 'umum' },
-      { label: 'BPJS', value: 'bpjs' }
+      { label: 'SEMUA', value: 'SEMUA' },
+      { label: 'UMUM', value: 'UMUM' },
+      { label: 'BPJS', value: 'BPJS' }
     ],
     optionGudangs: [
       { label: 'Semua Gudang', value: '' },

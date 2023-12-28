@@ -20,7 +20,9 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
     columnHide: []
   }),
   actions: {
-
+    setParam(key, val) {
+      this.params[key] = val
+    },
     setQ(payload) {
       this.params.page = 1
       this.params.q = payload
