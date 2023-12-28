@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
+import { api } from 'src/boot/axios'
 
 export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore', {
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingCari: false,
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       resep_masuk: date.formatDate(Date.now(), 'HH:mm'),
@@ -57,7 +59,14 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       // tgl_kunjungan: '2023-12-01 08:41:51',
       // tgllahir: '2006-05-02',
       // usia: '17 Tahun 7 Bulan 26 Hari'
-    }
+    },
+
+    floor: [ // racikan / floor stok
+      { kode: 'Gd-03010101' },
+      { kode: 'Gd-04010101' }
+    ],
+    obats: [],
+    obatTerpilih: null
   }),
   actions: {
     setForm(key, val) {
@@ -70,6 +79,35 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       console.log('pasien', val)
       if (val) this.pasien = val
       this.isOpen = false
+    },
+    obatSelected(val) {
+      this.setForm('kdobat', val)
+      const obat = this.obats.filter(a => a.kdobat === val)
+      console.log('obat', obat)
+      if (obat.length) {
+        // this.obatTerpilih = obat[0]
+        this.setForm('satuan_bsr', obat[0].satuan_b)
+        this.setForm('satuan_kcl', obat[0].satuan_k)
+      }
+    },
+
+    clearObat() {
+      this.setForm('kdobat', null)
+      this.obatTerpilih = null
+    },
+    getDataObat(val) {
+      this.loadingCari = true
+      const params = { params: val }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/depo/lihatstokobateresep', params)
+          .then(resp => {
+            this.loadingCari = false
+            this.obats = resp.data?.dataobat
+            console.log(resp.data)
+            resolve(resp)
+          })
+          .catch(() => { this.loadingCari = false })
+      })
     },
     cariPaseian() {}
   }
