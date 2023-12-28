@@ -17,6 +17,31 @@
           @buang="cariObat"
         />
       </div>
+      <div class="col-3">
+        <app-input
+          ref="refJumlah"
+          v-model="store.form.jumlah"
+          label="Jumlah"
+          outlined
+          @update:model-value="setJumlah($event,'jumlah')"
+        />
+      </div>
+      <div class="col-2">
+        <app-input
+          ref="refAturan"
+          v-model="store.form.aturan"
+          label="Aturan"
+          outlined
+        />
+      </div>
+      <div class="col-3">
+        <app-input
+          ref="refKeterangan"
+          v-model="store.form.keterangan"
+          label="Keterangan"
+          outlined
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -45,5 +70,13 @@ function cariObat (val) {
       options.value = store.obats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))
     })
   }
+}
+
+function setJumlah(evt, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  store.setForm(key, nilai)
 }
 </script>

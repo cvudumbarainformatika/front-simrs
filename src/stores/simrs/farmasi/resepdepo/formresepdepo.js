@@ -6,6 +6,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingSimulasi: false,
     loadingCari: false,
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -77,8 +78,11 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     },
     setPasien(val) {
       console.log('pasien', val)
-      if (val) this.pasien = val
-      this.isOpen = false
+      if (val) {
+        this.pasien = val
+        this.isOpen = false
+        this.cariSimulasi(val?.noreg)
+      }
     },
     obatSelected(val) {
       this.setForm('kdobat', val)
@@ -109,6 +113,23 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
           .catch(() => { this.loadingCari = false })
       })
     },
-    cariPaseian() {}
+    cariSimulasi(val) {
+      this.loadingSimulasi = true
+      const param = {
+        params: { noreg: val }
+      }
+      return new Promise(resolve => {
+        api.get('v1/simrs/pelayanan/carisimulasi', param)
+          .then(resp => {
+            this.loadingSimulasi = false
+            console.log('cri simulasi', resp)
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSimulasi = false
+          })
+      })
+    }
   }
 })
