@@ -276,7 +276,7 @@ const DialogCari = defineAsyncComponent(() => import('./comp/DialogCari.vue'))
 const tinggiDetailPas = ref(180)
 const tab = ref('Resep')
 const tabs = ref([
-  { page: 'Resep', name: 'Resep' },
+  { page: 'Resep', name: 'Obat Keluar' },
   { page: 'Racikan', name: 'Racikan' },
   { page: 'List', name: 'List Resep' }
 ])
