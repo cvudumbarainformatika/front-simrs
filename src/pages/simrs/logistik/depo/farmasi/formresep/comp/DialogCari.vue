@@ -109,7 +109,7 @@ import { api } from 'src/boot/axios'
 // import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { ref } from 'vue'
 
-defineEmits(['updated'])
+const emitss = defineEmits(['updated', 'jenis'])
 
 const search = ref('')
 const options = ref(null)
@@ -122,6 +122,7 @@ const jenispasien = ref('rjl')
 
 let url = '/v1/simrs/farmasinew/depo/caripasienpoli'
 function setJenisPasien(val) {
+  emitss('jenis', val)
   if (val === 'rjl') url = '/v1/simrs/farmasinew/depo/caripasienpoli'
   if (val === 'rnp') url = '/v1/simrs/farmasinew/depo/caripasienranap'
   if (val === 'igd') url = '/v1/simrs/farmasinew/depo/caripasienigd'

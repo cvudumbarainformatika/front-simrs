@@ -1,46 +1,51 @@
 <template>
   <div class="full-width q-mt-md">
     <div class="row items-center q-col-gutter-sm">
-      <div class="col-4">
-        <AutoComObt
-          ref="refObat"
-          :model="store.form.kdobat"
-          autocomplete="namaobat"
-          :option-label="['namaobat','total','kanduangan']"
-          option-value="kdobat"
-          label="Pilih Obat"
-          outlined
-          :source="options"
-          :loading="store.loadingCari"
-          @on-select="store.obatSelected"
-          @clear="store.clearObat"
-          @buang="cariObat"
-        />
+      <div class="col-6">
+        <div class="q-my-sm">
+          <AutoComObt
+            ref="refObat"
+            :model="store.form.kdobat"
+            autocomplete="namaobat"
+            :option-label="['namaobat','total','kanduangan']"
+            option-value="kdobat"
+            label="Pilih Obat"
+            outlined
+            :source="options"
+            :loading="store.loadingCari"
+            @on-select="store.obatSelected"
+            @clear="store.clearObat"
+            @buang="cariObat"
+          />
+        </div>
+        <div class="q-my-sm">
+          <app-input
+            ref="refJumlah"
+            v-model="store.form.jumlah"
+            label="Jumlah"
+            outlined
+            @update:model-value="setJumlah($event,'jumlah')"
+          />
+        </div>
+        <div class="q-my-sm">
+          <app-input
+            ref="refAturan"
+            v-model="store.form.aturan"
+            label="Aturan"
+            outlined
+          />
+        </div>
+        <div class="q-my-sm">
+          <app-input
+            ref="refKeterangan"
+            v-model="store.form.keterangan"
+            label="Keterangan"
+            outlined
+          />
+        </div>
       </div>
-      <div class="col-3">
-        <app-input
-          ref="refJumlah"
-          v-model="store.form.jumlah"
-          label="Jumlah"
-          outlined
-          @update:model-value="setJumlah($event,'jumlah')"
-        />
-      </div>
-      <div class="col-2">
-        <app-input
-          ref="refAturan"
-          v-model="store.form.aturan"
-          label="Aturan"
-          outlined
-        />
-      </div>
-      <div class="col-3">
-        <app-input
-          ref="refKeterangan"
-          v-model="store.form.keterangan"
-          label="Keterangan"
-          outlined
-        />
+      <div class="col-6">
+        anu
       </div>
     </div>
   </div>

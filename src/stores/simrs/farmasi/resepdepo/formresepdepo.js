@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 
 export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore', {
   state: () => ({
@@ -8,6 +9,8 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     loading: false,
     loadingSimulasi: false,
     loadingCari: false,
+    loadingDokter: false,
+    jenispasien: 'rjl',
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       resep_masuk: date.formatDate(Date.now(), 'HH:mm'),
@@ -23,43 +26,6 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     notas: [],
     nota: '',
     pasien: {
-      // agama: 'Islam',
-      // alamat: 'DSN MASJID 01/03 SUMBERLELE - KRAKSAAN KEL Sumberlele RT 001 RW 003 Kraksaan KAB. PROBOLINGGO JAWA TIMUR',
-      // datasimpeg: { id: 1085, nip: '091601141649', nik: '3578262808560001', nama: 'dr. UTOYO SUNARYO, Sp.S', kelamin: 'Laki-Laki' },
-      // dokter: 'Utoyo Sunaryo, dr. Sp.S',
-      // dokterdpjp: 'dr. Utoyo Sunaryo, Sp. S',
-      // groups: '1',
-      // jenispasien: 'lama',
-      // kdunit: null,
-      // kelamin: 'Laki-laki',
-      // kodedokter: '2',
-      // kodedokterdpjp: '14947',
-      // kodepoli: 'POL019',
-      // kodepolibpjs: 'SAR',
-      // kodesistembayar: 'BPJS2',
-      // nama: 'Tn.  JABIR ',
-      // nama_panggil: 'JABIR',
-      // nktp: '3513140205060005',
-      // nohp: '085233710265',
-      // noka: '0003562652237',
-      // noreg: '91582/11/2023/J',
-      // norm: '257460',
-      // norujukan: '132815011123Y001464',
-      // panggil_antrian: 'Poli Syaraf',
-      // pendidikan: 'SMU',
-      // poli: 'Poli Peny. Saraf',
-      // polibpjs: 'SARAF',
-      // rs1: '91582/11/2023/J',
-      // rs4: '',
-      // rs9: '2',
-      // sep: '1327R0011123V009230',
-      // sistembayar: 'BPJS JAMKESMAS',
-      // status: '1',
-      // suku: 'Jawa',
-      // templahir: 'PROBOLINGGO',
-      // tgl_kunjungan: '2023-12-01 08:41:51',
-      // tgllahir: '2006-05-02',
-      // usia: '17 Tahun 7 Bulan 26 Hari'
     },
 
     floor: [ // racikan / floor stok
@@ -67,7 +33,8 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       { kode: 'Gd-04010101' }
     ],
     obats: [],
-    obatTerpilih: null
+    obatTerpilih: null,
+    dokters: []
   }),
   actions: {
     setForm(key, val) {
@@ -78,11 +45,22 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     },
     setPasien(val) {
       console.log('pasien', val)
+      console.log('jenis pasien', this.jenispasien)
       if (val) {
         this.pasien = val
         this.isOpen = false
         this.cariSimulasi(val?.noreg)
+        if (this.jenispasien === 'rjl') this.getBillRajal(val)
       }
+    },
+    getBillRajal(val) {
+      const kunjRajal = useKasirRajalListKunjunganStore()
+      const param = { noreg: val?.noreg }
+      kunjRajal.getBill(param).then(resp => {
+        this.setForm('tagihanrs', resp?.data?.totalall)
+        console.log('bill', resp?.data)
+        console.log('form', this.form)
+      })
     },
     obatSelected(val) {
       this.setForm('kdobat', val)
@@ -123,11 +101,35 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
           .then(resp => {
             this.loadingSimulasi = false
             console.log('cri simulasi', resp)
+            const tarif = resp?.data?.response?.cbg?.base_tariff ?? (resp?.data?.response?.cbg?.tariff ?? 0)
+            this.setForm('kodeincbg', resp?.data?.response?.cbg?.code ?? '-')
+            this.setForm('uraianinacbg', resp?.data?.response?.cbg?.description ?? '-')
+            this.setForm('tarifina', tarif ?? '-')
 
             resolve(resp)
           })
           .catch(() => {
             this.loadingSimulasi = false
+          })
+      })
+    },
+    cariDokter(val) {
+      this.loadingDokter = true
+      const params = {
+        params: {
+          q: val
+        }
+      }
+      return new Promise(resolve => {
+        api.get('/v1/settings/appmenu/cari_dokter', params)
+          .then(resp => {
+            this.loadingDokter = false
+            console.log('dokter', resp?.data)
+            this.dokters = resp?.data
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingDokter = false
           })
       })
     }

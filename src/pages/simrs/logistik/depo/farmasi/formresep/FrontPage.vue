@@ -110,8 +110,31 @@
             <div class="row q-pl-sm q-my-sm text-weight-bold text-orange">
               {{ store?.pasien?.ruangan }}
             </div>
-            <div class="row q-pl-sm q-my-sm text-weight-bold">
+            <div
+              v-if="store.jenispasien!=='rnp'"
+              class="row q-pl-sm q-my-sm text-weight-bold"
+            >
               {{ store?.pasien?.dokter }}
+            </div>
+            <div
+              v-if="store.jenispasien==='rnp'"
+              class="row q-pl-sm q-my-sm text-weight-bold"
+            >
+              <app-autocomplete-new
+                ref="refObat"
+                :model="store.form.dokter"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="kdpegsimrs"
+                label="Cari Dokter"
+                outlined
+                bg-color="white"
+                :source="optionDoks"
+                :loading="store.loadingCari"
+                @on-select="store.setForm('dokter',$event)"
+                @clear="store.setForm('dokter',null)"
+                @buang="cariDokter"
+              />
             </div>
           </div>
           <div class="col-4">
@@ -226,6 +249,7 @@
   <DialogCari
     v-model="store.isOpen"
     @updated="(val)=>store.setPasien(val)"
+    @jenis="(val)=>store.jenispasien=val"
   />
 </template>
 
@@ -240,10 +264,12 @@ const tinggiDetailPas = ref(180)
 const tab = ref('Resep')
 const tabs = ref([
   { page: 'Resep', name: 'Resep' },
-  { page: 'Racikan', name: 'Racikan' }
+  { page: 'Racikan', name: 'Racikan' },
+  { page: 'List', name: 'List Resep' }
 ])
 
 const comp = [
+  { nama: 'List', page: defineAsyncComponent(() => import('./comp/ListPage.vue')) },
   { nama: 'Racikan', page: defineAsyncComponent(() => import('./comp/RacikanPage.vue')) },
   { nama: 'Resep', page: defineAsyncComponent(() => import('./comp/ResepPage.vue')) }
 ]
@@ -253,6 +279,19 @@ const cekPanel = () => {
   const ganti = val.replace(/ /g, '')
   const arr = findWithAttr(comp, 'nama', ganti)
   return arr >= 0 ? comp[arr].page : ''
+}
+
+const optionDoks = ref([])
+function cariDokter(val) {
+  let opt = store.dokters.filter(dok => dok.nama.toLowerCase().includes(val.toLowerCase()))
+  if (opt.length) optionDoks.value = opt
+  else {
+    store.cariDokter(val)
+      .then(() => {
+        opt = store.dokters.filter(dok => dok.nama.toLowerCase().includes(val.toLowerCase()))
+        optionDoks.value = opt
+      })
+  }
 }
 </script>
 
