@@ -1,11 +1,11 @@
 <template>
-  <div class="full-width q-mt-md">
-    <div class="row items-center q-col-gutter-sm">
+  <div class="full-width q-mt-md q-mb-lg">
+    <div class="row items-start q-col-gutter-sm">
       <div class="col-6">
         <div class="q-my-sm">
           <AutoComObt
             ref="refObat"
-            :model="store.form.kdobat"
+            :model="store.form.kodeobat"
             autocomplete="namaobat"
             :option-label="['namaobat','total','kandungan']"
             option-value="kodeobat"
@@ -45,7 +45,53 @@
         </div>
       </div>
       <div class="col-6">
-        anu
+        <div v-if="!!store.obatTerpilih">
+          <div class="text-weight-bold text-orange">
+            {{ store?.obatTerpilih?.kandungan }}
+          </div>
+          <div class="text-weight-bold text-blue">
+            {{ store?.obatTerpilih?.kekuatandosis }}
+          </div>
+          <div class="text-weight-bold">
+            {{ parseFloat(store?.obatTerpilih?.total) }} <span class="text-italic f-10">({{ store?.obatTerpilih?.satuankecil }})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-end">
+      <div class="q-mr-md">
+        <app-btn
+          label="Simpan"
+          :loading="store.loading"
+          :disable="store.loading"
+          @click="store.simpanObat"
+        />
+      </div>
+    </div>
+    <q-separator class="q-my-sm" />
+    <div
+      v-if="store.reseprinci.length"
+    >
+      <div
+        v-for="(res,i) in store.reseprinci"
+        :key="i"
+        class="row"
+      >
+        <div class="col q-mr-sm">
+          {{ res?.kdobat }}
+        </div>
+        <div class="col q-mr-sm">
+          {{ res?.kandungan }}
+        </div>
+        <div class="col q-mr-sm">
+          {{ res?.jumlah }}
+        </div>
+        <div class="col q-mr-sm">
+          {{ res?.aturan }}
+        </div>
+        <div class="col q-mr-sm">
+          {{ res?.keterangan }}
+        </div>
       </div>
     </div>
   </div>

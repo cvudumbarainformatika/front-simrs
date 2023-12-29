@@ -129,8 +129,8 @@
                 label="Cari Dokter"
                 outlined
                 bg-color="white"
-                :source="optionDoks"
-                :loading="store.loadingCari"
+                :source="store.filtDokters"
+                :loading="store.loadingDokter"
                 @on-select="store.setForm('dokter',$event)"
                 @clear="store.setForm('dokter',null)"
                 @buang="cariDokter"
@@ -170,6 +170,16 @@
                   bg-color="white"
                   outlined
                   @set-model="store.setForm('resep_keluar',$event)"
+                />
+              </div>
+            </div>
+            <div class="row q-mt-sm">
+              <div class="col-12">
+                <app-input
+                  v-model="store.form.noresep"
+                  label="Nomor Resep"
+                  bg-color="white"
+                  outlined
                 />
               </div>
             </div>
@@ -254,10 +264,13 @@
 </template>
 
 <script setup>
+import { date } from 'quasar'
 import { findWithAttr } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/resepdepo/formresepdepo'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, onBeforeUnmount, onMounted } from 'vue'
 const store = useResepDepoFarmasiStore()
+const apps = useAplikasiStore()
 
 const DialogCari = defineAsyncComponent(() => import('./comp/DialogCari.vue'))
 const tinggiDetailPas = ref(180)
@@ -281,18 +294,27 @@ const cekPanel = () => {
   return arr >= 0 ? comp[arr].page : ''
 }
 
-const optionDoks = ref([])
 function cariDokter(val) {
-  let opt = store.dokters.filter(dok => dok.nama.toLowerCase().includes(val.toLowerCase()))
-  if (opt.length) optionDoks.value = opt
+  const opt = store.dokters.filter(dok => dok.nama.toLowerCase().includes(val.toLowerCase()))
+  if (opt.length) store.filtDokters = opt
   else {
     store.cariDokter(val)
-      .then(() => {
-        opt = store.dokters.filter(dok => dok.nama.toLowerCase().includes(val.toLowerCase()))
-        optionDoks.value = opt
-      })
   }
 }
+// ----- timer start -----
+
+function timer() {
+  store.setForm('resep_keluar', date.formatDate(Date.now(), 'HH:mm'))
+}
+const setTimer = setInterval(timer, 10000)
+onBeforeUnmount(() => {
+  clearInterval(setTimer)
+})
+// ----- timer end -----
+
+onMounted(() => {
+  store.setForm('kodedepo', apps?.user?.pegawai?.kdruangansim)
+})
 </script>
 
 <style></style>
