@@ -7,8 +7,8 @@
             ref="refObat"
             :model="store.form.kdobat"
             autocomplete="namaobat"
-            :option-label="['namaobat','total','kanduangan']"
-            option-value="kdobat"
+            :option-label="['namaobat','total','kandungan']"
+            option-value="kodeobat"
             label="Pilih Obat"
             outlined
             :source="options"
