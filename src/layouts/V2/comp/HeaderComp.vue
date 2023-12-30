@@ -68,8 +68,9 @@
             <div class="q-mr-sm text-weight-bold">
               {{ user?.nama }}
             </div>
+
             <div
-              v-if="user?.pegawai?.ruang"
+              v-if="!!user?.pegawai?.ruang?.uraian"
               class="q-mr-sm  text-primary"
             >
               {{ user?.pegawai?.ruang?.uraian }}
@@ -176,10 +177,10 @@ function poli(val) {
   const anu3 = []
   let fin3 = null
   let ruang = ''
-  if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 || parseInt(props?.user?.pegawai?.role_id) <= 7)) {
+  if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
     temp.forEach(a => {
       if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
-        console.log('pol')
+        // console.log('pol')
         if (props.polis?.length) {
           const pol = props?.polis?.filter(b => b.kodepoli === a)
           if (pol.length) anu.push(pol[0])

@@ -199,6 +199,13 @@
                 />
               </div>
             </div>
+            <div class="row q-mt-sm">
+              <div
+                class="col-12 bg-white text-black"
+              >
+                {{ store.form?.diagnosa !=='' ? store.form?.diagnosa : 'Tidak ada diagnosa' }}
+              </div>
+            </div>
           </div>
         </div>
         <!-- {{ store.pasien }} -->
