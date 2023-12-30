@@ -15,8 +15,6 @@
         >
           <!-- Header nya -->
           <q-item
-            v-ripple
-            clickable
             class="bg-dark text-white"
           >
             <q-item-section style="width: 60%;">
@@ -42,10 +40,7 @@
             </q-item-section>
           </q-item>
           <!-- Inputan -->
-          <q-item
-            v-ripple
-            clickable
-          >
+          <q-item>
             <q-item-section style="width: 60%;">
               <q-input
                 placeholder="Cari Obat / tekan Ctrl + Enter untuk racikan"
