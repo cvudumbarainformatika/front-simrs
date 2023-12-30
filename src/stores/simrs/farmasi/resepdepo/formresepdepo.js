@@ -71,6 +71,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
         this.setForm('sistembayar', val.kodesistembayar)
         this.setForm('dokter', val.kodedokter)
         this.setForm('diagnosa', diag ?? '-')
+        this.reseprinci = []
         this.cariSimulasi(val?.noreg)
         if (this.jenispasien === 'rjl') this.getBillRajal(val)
         if (this.jenispasien === 'rnp') this.getBillRanap(val)

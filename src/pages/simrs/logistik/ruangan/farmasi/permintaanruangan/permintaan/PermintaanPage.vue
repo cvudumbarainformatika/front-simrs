@@ -121,7 +121,7 @@
         <div v-if="apps.user.pegawai.role_id !== 1">
           <div class="row no-wrap q-mb-xs">
             <div class="col-4">
-              Gudang Asal :
+              Depo Asal :
             </div>
             <div
               v-if="store.disp.gudang"
@@ -133,7 +133,7 @@
               v-if="!store.disp.gudang"
               class="col-4 text-weight-bold text-negative"
             >
-              Anda Tidak Memiliki Akses Permintaan Depo
+              Anda Tidak Memiliki Akses Permintaan Ruangan
             </div>
             <div class="col-4 text-cyan">
               ({{ store.form.tujuan ? store.form.tujuan :'-' }})
@@ -141,7 +141,7 @@
           </div>
           <div class="row no-wrap q-mb-xs">
             <div class="col-4 ">
-              Depo Tujuan :
+              Ruang Tujuan :
             </div>
             <div
               v-if="store.disp.depo"
@@ -153,7 +153,7 @@
               v-if="!store.disp.depo"
               class="col-4 text-weight-bold text-negative"
             >
-              Anda Tidak Memiliki Akses Permintaan Depo
+              Anda Tidak Memiliki Akses Permintaan Ruangan
             </div>
             <div class="col-4 text-cyan">
               ({{ store.form.dari ? store.form.dari :'-' }})
@@ -441,8 +441,8 @@ const user = computed(() => {
   if (apps.user.pegawai) {
     if (apps.user.pegawai.role_id === 1) {
       if (!store.form.dari) {
-        store.setForm('dari', 'Gd-04010103')
-        store.setParam('kddepo', 'Gd-03010101')
+        store.setForm('dari', 'R-0202010')
+        store.setParam('kddepo', 'R-0202010')
         store.getListObat()
       }
       if (!store.form.tujuan) {
@@ -456,14 +456,14 @@ const user = computed(() => {
       const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
       console.log('dep', dep)
       if (dep.length) {
-        store.setForm('tujuan', 'Gd-03010100')
-        store.setParam('kdgudang', 'Gd-03010100')
-        store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
+        store.setForm('tujuan', 'Gd-03010101')
+        store.setParam('kdgudang', 'Gd-03010101')
+        store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
         store.getListObat()
       } else {
         store.setForm('tujuan', 'Gd-03010101')
         store.setParam('kdgudang', 'Gd-03010101')
-        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+        store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
         store.getListObat()
       }
     } else if (apps.user.pegawai?.kdruangansim) {
@@ -476,7 +476,7 @@ const user = computed(() => {
 
         store.setForm('tujuan', 'Gd-03010101')
         store.setParam('kdgudang', 'Gd-03010101')
-        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+        store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
         store.getListObat()
       }
     }

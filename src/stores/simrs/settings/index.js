@@ -16,6 +16,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     roles: [],
     polis: [],
     ruangs: [],
+    ruangansims: [],
     gudangs: [],
     par: {
       q: ''
@@ -212,6 +213,18 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           return Promise.resolve(resp)
         })
         .catch(() => { this.loadingPoli = false })
+    },
+    async getRuanganSim() {
+      this.loadingRuang = true
+      const param = { params: this.par }
+      await api.get('v1/ruang/ruang', param)
+        .then(resp => {
+          this.loadingRuang = false
+          // console.log('ruang', resp.data)
+          this.ruangansims = resp.data
+          return Promise.resolve(resp.data)
+        })
+        .catch(() => { this.loadingRuang = false })
     },
     async getRuang() {
       this.loadingRuang = true

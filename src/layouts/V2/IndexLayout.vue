@@ -12,6 +12,7 @@
       :user="apps.user"
       :gudangs="apps.gudangs"
       :polis="apps.polis"
+      :ruangs="apps.ruangs"
       @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
       @set-gudang="apps.setUserKey('kdruangansim',$event)"
     />
@@ -117,6 +118,7 @@ const apps = useAplikasiStore()
 const setting = useSettingsAplikasi()
 if (!apps.gudangs?.length) setting.getGudang().then(resp => { apps.setGudang(setting?.gudangs) })
 if (!apps.polis?.length) setting.getPoli().then(resp => { apps.setPoli(setting?.polis) })
+if (!apps.ruangs?.length) setting.getRuanganSim().then(resp => { apps.setRuang(setting?.ruangansims) })
 
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)

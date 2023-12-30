@@ -12,7 +12,8 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     currentApp: null,
     user: null,
     gudangs: null,
-    polis: null
+    polis: null,
+    ruangs: null
 
   }),
   persist: true,
@@ -35,6 +36,10 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     setPoli(val) {
       // console.log('set poli', val)
       this.polis = val
+    },
+    setRuang(val) {
+      // console.log('set poli', val)
+      this.ruangs = val
     },
     setUser(val) {
       this.user = val

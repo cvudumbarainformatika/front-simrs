@@ -146,6 +146,10 @@ const props = defineProps({
   polis: {
     type: Object,
     default: null
+  },
+  ruangs: {
+    type: Object,
+    default: null
   }
 })
 
@@ -168,8 +172,10 @@ function poli(val) {
   const anu = []
   let fin = null
   const anu2 = []
-  let ruang = ''
   let fin2 = null
+  const anu3 = []
+  let fin3 = null
+  let ruang = ''
   if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 || parseInt(props?.user?.pegawai?.role_id) <= 7)) {
     temp.forEach(a => {
       if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
@@ -195,6 +201,17 @@ function poli(val) {
           ruang = fin2 ?? 'Tidak ada Akses gudang / depo'
         } else {
           ruang = 'Menunggu data gudang'
+        }
+      } else if (a.toLowerCase().includes('r-')) {
+        if (props.ruangs?.length) {
+          const gud = props?.ruangs.filter(c => c.kode === a)
+          if (gud.length) anu3.push(gud[0])
+          if (anu3.length) {
+            fin3 = anu3.map(x => x.uraian).join(', ')
+          }
+          ruang = fin3 ?? 'Tidak ada Akses Ruangan'
+        } else {
+          ruang = 'Menunggu data ruangan'
         }
       } else {
         ruang = 'NN'
