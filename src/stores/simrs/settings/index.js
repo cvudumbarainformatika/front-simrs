@@ -154,13 +154,14 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         .then(resp => {
           console.log('Poli', resp.data)
           this.polis = resp.data
+          return Promise.resolve(resp.data)
         })
     },
     getHeaderPoli() {
       return new Promise((resolve, reject) => {
         api.get('v1/settings/appakses/poli')
           .then(resp => {
-            console.log('Poli', resp.data)
+            // console.log('Poli', resp.data)
             this.polis = resp.data
             resolve(resp)
           }).catch(err => {
@@ -247,8 +248,9 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       await api.get('v1/gudang/gudang', param)
         .then(resp => {
           this.loadingGudang = false
-          // console.log('ruang', resp.data)
+          // console.log('gudang', resp.data)
           this.gudangs = resp.data
+          return Promise.resolve(resp.data)
         })
         .catch(() => { this.loadingGudang = false })
     },

@@ -10,7 +10,7 @@
           No Permintaan:
         </div>
         <div class="q-mr-sm">
-          {{ store.form.no_permintaan ? store.form.no_permintaan : '-' }}
+          {{ store.form.no_permintaan ? store.form.no_permintaan :'-' }}
         </div>
         <!-- <app-input
           v-model="store.form.no_permintaan"
@@ -54,7 +54,6 @@
   </div>
   <!-- Permintaan -->
   <div class="q-mt-lg q-py-md q-px-sm">
-    Ruangan minta kemana?
     <div class="row q-col-gutter-md ">
       <div class="col-6">
         <div class="row q-mb-xs">
@@ -79,7 +78,7 @@
                 option-value="value"
                 outlined
                 clearable
-                :source="store.depos"
+                :source="store.gudangs"
                 @selected="gudangSelected"
               />
             </div>
@@ -122,7 +121,7 @@
         <div v-if="apps.user.pegawai.role_id !== 1">
           <div class="row no-wrap q-mb-xs">
             <div class="col-4">
-              Depo Asal :
+              Gudang Asal :
             </div>
             <div
               v-if="store.disp.gudang"
@@ -137,27 +136,27 @@
               Anda Tidak Memiliki Akses Permintaan Depo
             </div>
             <div class="col-4 text-cyan">
-              ({{ store.form.tujuan ? store.form.tujuan : '-' }})
+              ({{ store.form.tujuan ? store.form.tujuan :'-' }})
             </div>
           </div>
           <div class="row no-wrap q-mb-xs">
             <div class="col-4 ">
-              Ruangan Tujuan :
+              Depo Tujuan :
             </div>
             <div
-              v-if="store.disp.ruang"
+              v-if="store.disp.depo"
               class="col-4 text-weight-bold"
             >
-              {{ store.disp.ruang }}
+              {{ store.disp.depo }}
             </div>
             <div
-              v-if="!store.disp.ruang"
+              v-if="!store.disp.depo"
               class="col-4 text-weight-bold text-negative"
             >
               Anda Tidak Memiliki Akses Permintaan Depo
             </div>
             <div class="col-4 text-cyan">
-              ({{ store.form.dari ? store.form.dari : '-' }})
+              ({{ store.form.dari ? store.form.dari :'-' }})
             </div>
           </div>
         </div>
@@ -171,7 +170,9 @@
           Rincian Permintaan
         </div>
       </div> -->
-      <div class="row bg-grey q-pa-xs q-mt-sm">
+      <div
+        class="row bg-grey q-pa-xs q-mt-sm"
+      >
         <div class="f-12 text-weight-bold">
           Rincian Permintaan Obat
         </div>
@@ -179,7 +180,9 @@
       <div class="row q-my-sm q-col-gutter-md">
         <div class="col-6">
           <div class="row q-mb-xs">
-            <div class="col-12">
+            <div
+              class="col-12"
+            >
               <CompSelect
                 ref="refGudang"
                 :model="store.form.kdobat"
@@ -204,7 +207,6 @@
                 v-model="store.form.jumlah_minta"
                 label="Jumlah Minta"
                 outlined
-                :disable="!store.form.kdobat"
                 :rules="[
                   val => !isNaN(val) || 'Harus pakai Nomor'
                 ]"
@@ -240,7 +242,7 @@
           <div class="row q-mb-xs">
             <div>Kode Barang</div>
             <div class="q-ml-sm text-weight-bold">
-              {{ store.form.kdobat ? store.form.kdobat : '-' }}
+              {{ store.form.kdobat ? store.form.kdobat:'-' }}
             </div>
           </div>
           <div class="row q-mb-xs">
@@ -252,7 +254,7 @@
           <div class="row q-mb-xs">
             <div>Stok Alokasi</div>
             <div class="q-ml-sm text-weight-bold">
-              {{ store.form.stok_alokasi ? store.form.stok_alokasi : 0 }}
+              {{ store.form.stok_alokasi ? store.form.stok_alokasi:0 }}
             </div>
           </div>
           <div class="row no-wrap q-mb-xs items-center">
@@ -271,8 +273,8 @@
                 <div class="q-mr-sm text-weight-bold">
                   tidak ada
                 </div>
-                <div
-                  v-if="(store.form.kdobat && !mintaMax)"
+                <!-- <div
+                  v-if="(store.form.kdobat && !mintaMax) "
                   class="q-mr-sm"
                 >
                   <app-btn
@@ -280,7 +282,7 @@
                     color="orange"
                     @click="setMinta"
                   />
-                </div>
+                </div> -->
                 <div
                   v-if="store.form.kdobat && mintaMax"
                   class="q-mr-sm"
@@ -328,14 +330,16 @@
           @click="simpan"
         />
       </div>
-      <div class="row bg-grey q-pa-xs">
+      <div
+        class="row bg-grey q-pa-xs"
+      >
         <div class="f-12 text-weight-bold">
           Rincian Permintaan Tersimpan
         </div>
       </div>
       <div v-if="store.details.length">
         <div
-          v-for="(det, i) in store.details"
+          v-for="(det,i) in store.details"
           :key="i"
           class="anu"
         >
@@ -344,13 +348,13 @@
               <div class="row no-wrap justify-between q-mr-sm det">
                 <div>Kode</div>
                 <div class="text-weight-bold">
-                  {{ det.kdobat ? det.kdobat : '-' }}
+                  {{ det.kdobat? det.kdobat:'-' }}
                 </div>
               </div>
               <div class="row no-wrap justify-between q-mr-sm det">
                 <div>Nama</div>
                 <div class="text-weight-bold">
-                  {{ det.nama_obat ? det.nama_obat : '-' }}
+                  {{ det.nama_obat? det.nama_obat:'-' }}
                 </div>
               </div>
             </div>
@@ -396,7 +400,7 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
 import { computed, ref } from 'vue'
 
-import CompSelect from 'src/pages/simrs/farmasi/permintaandepo/permintaan/comp/CompSelect.vue'
+import CompSelect from './comp/CompSelect.vue'
 
 const style = useStyledStore()
 const store = useFarmasiPermintaanRuanganStore()
@@ -404,10 +408,10 @@ const store = useFarmasiPermintaanRuanganStore()
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
 const JumlahMintaMin = ref(10)
-function setMinta () {
-  mintaMax.value = true
-}
-function simpanMintaAlokasi () {
+// function setMinta() {
+//   mintaMax.value = true
+// }
+function simpanMintaAlokasi() {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
   const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0
   if (mintamax > 0) {
@@ -438,36 +442,49 @@ const user = computed(() => {
     if (apps.user.pegawai.role_id === 1) {
       if (!store.form.dari) {
         store.setForm('dari', 'Gd-04010103')
-        store.setParam('kddepo', 'Gd-04010103')
+        store.setParam('kddepo', 'Gd-03010101')
         store.getListObat()
       }
       if (!store.form.tujuan) {
-        store.setForm('tujuan', 'Gd-04010101')
-        store.setParam('kdgudang', 'Gd-04010101')
+        store.setForm('tujuan', 'Gd-03010101')
+        store.setParam('kdgudang', 'Gd-03010101')
         store.getListObat()
       }
-    } else if (apps.user.pegawai.ruang) {
-      store.setForm('dari', apps.user.pegawai.ruang.kode)
-      store.setDisp('ruang', apps.user.pegawai.ruang.uraian)
-      // const dep = store.floor.filter(a => a.kode === apps.user.pegawai.ruang.kode)
-      // console.log('dep', dep)
-      // if (dep.length) {
-      store.setForm('tujuan', 'Gd-04010101')
-      store.setParam('kdgudang', 'Gd-04010101')
-      store.setDisp('gudang', 'Floor Stock 2 (Obat)')
-      store.getListObat()
-      // } else {
-      // store.setForm('tujuan', 'Gd-05010100')
-      // store.setParam('kdgudang', 'Gd-05010100')
-      // store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
-      // store.getListObat()
-      // }
+    } else if (apps.user.pegawai.depo) {
+      store.setForm('dari', apps.user.pegawai.depo.kode)
+      store.setDisp('depo', apps.user.pegawai.depo.nama)
+      const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
+      console.log('dep', dep)
+      if (dep.length) {
+        store.setForm('tujuan', 'Gd-03010100')
+        store.setParam('kdgudang', 'Gd-03010100')
+        store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
+        store.getListObat()
+      } else {
+        store.setForm('tujuan', 'Gd-03010101')
+        store.setParam('kdgudang', 'Gd-03010101')
+        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+        store.getListObat()
+      }
+    } else if (apps.user.pegawai?.kdruangansim) {
+      const peg = store.ruangans.filter(val => val.kode === apps.user.pegawai?.kdruangansim)
+      if (peg.length) {
+        store.setForm('dari', peg[0].kode)
+        store.setDisp('depo', peg[0].uraian)
+        const dep = store.floor.filter(a => a.kode === peg[0].kode)
+        console.log('dep', dep)
+
+        store.setForm('tujuan', 'Gd-03010101')
+        store.setParam('kdgudang', 'Gd-03010101')
+        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+        store.getListObat()
+      }
     }
   }
   return apps.user
 })
 
-function gudangSelected (val) {
+function gudangSelected(val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
 }
@@ -476,7 +493,7 @@ function depoSelected (val) {
   store.setParam('kddepo', val)
 }
 
-function setJumlahMinta (evt) {
+function setJumlahMinta(evt) {
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   store.setForm('jumlah_minta', jumlah)
   // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
@@ -487,7 +504,7 @@ function setJumlahMinta (evt) {
   //   store.setForm('jumlah_minta', jumlah)
   // }
 }
-function validasi () {
+function validasi() {
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
   const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
   const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
@@ -500,7 +517,7 @@ function validasi () {
     return false
   }
 }
-function simpan () {
+function simpan() {
   console.log('form', store.form)
   if (validasi()) {
     console.log('disp', store.disp)
@@ -518,7 +535,6 @@ store.getInitialData()
 .anu:hover {
   background-color: #87e9df;
 }
-
 .det:hover {
   background-color: #3555f7;
   color: rgb(255, 255, 255);

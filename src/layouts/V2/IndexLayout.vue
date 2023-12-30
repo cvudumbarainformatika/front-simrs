@@ -10,7 +10,10 @@
       :dark="dark"
       :mobile="mobile"
       :user="apps.user"
+      :gudangs="apps.gudangs"
+      :polis="apps.polis"
       @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
+      @set-gudang="apps.setUserKey('kdruangansim',$event)"
     />
     <LeftDrawer
       :tampil="!style.componentfull"
@@ -102,6 +105,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
 import * as storage from 'src/modules/storage'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const tanggal = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const router = useRouter()
@@ -109,6 +113,10 @@ const transition = useTransitionStore()
 const store = useAuthStore()
 const style = useStyledStore()
 const apps = useAplikasiStore()
+
+const setting = useSettingsAplikasi()
+if (!apps.gudangs?.length) setting.getGudang().then(resp => { apps.setGudang(setting?.gudangs) })
+if (!apps.polis?.length) setting.getPoli().then(resp => { apps.setPoli(setting?.polis) })
 
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)

@@ -4,7 +4,7 @@ import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { useListPermintaanStore } from './listpermintaan'
 
-export const useFarmasiPermintaanDepoStore = defineStore('fermasi_permintaan_depo', {
+export const useFarmasiPermintaanDepoStore = defineStore('farmasi_permintaan_depo', {
   state: () => ({
     loading: false,
     loadingKunci: false,

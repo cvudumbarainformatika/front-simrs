@@ -89,6 +89,9 @@
           </div>
         </div>
         <div class="row no-wrap text-italic f-10">
+          Rp  {{ formatRp( row.harga ) }}
+        </div>
+        <div class="row no-wrap text-italic f-10">
           exp : {{ dateFullFormat( row.tglexp ) }}
         </div>
       </template>
@@ -116,7 +119,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'

@@ -48,7 +48,21 @@
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
           <!-- <div class="text-right q-mr-sm items-center">
-            anu
+            <app-autocomplete-new
+              ref="refObat"
+              :key="user.kdruangansim"
+              :model="user.kdruangansim"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kdruangansim"
+              label="Set Gudang / Depo"
+              outlined
+              bg-color="white"
+              :source="optionsGudang"
+              :loading="setting.loadingGudang"
+              @on-select="emit('setGudang',$event)"
+              @clear="emit('setGudang',null)"
+            />
           </div> -->
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
@@ -107,14 +121,10 @@
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import AdmHeaderMenuProfile from './AdmHeaderMenuProfile.vue'
 import { useRoute } from 'vue-router'
-import { onMounted } from 'vue'
-const emit = defineEmits(['goToSso'])
+import { onMounted, ref } from 'vue'
+const emit = defineEmits(['goToSso', 'setGudang'])
 
 const route = useRoute()
-
-onMounted(() => {
-  // console.log('route', route)
-})
 
 const props = defineProps({
   dark: {
@@ -128,11 +138,26 @@ const props = defineProps({
   user: {
     type: Object,
     default: null
+  },
+  gudangs: {
+    type: Object,
+    default: null
+  },
+  polis: {
+    type: Object,
+    default: null
   }
 })
+
+onMounted(() => {
+  // console.log('route', route)
+  const temp = props.user?.pegawai?.kdruangansim.split('|')
+  if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
+})
+
+// eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
-if (!setting.gudangs.length) setting.getGudang()
-if (!setting.polis.length) setting.getPoli()
+const optionsGudang = ref([])
 function poli(val) {
   // const gudangs = [
   //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -145,12 +170,12 @@ function poli(val) {
   const anu2 = []
   let ruang = ''
   let fin2 = null
-  if (temp.length && (parseInt(props?.user?.pegawai?.role_id) < 3 || parseInt(props?.user?.pegawai?.role_id) > 7)) {
+  if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 || parseInt(props?.user?.pegawai?.role_id) <= 7)) {
     temp.forEach(a => {
       if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
         console.log('pol')
-        if (setting.polis?.length) {
-          const pol = setting?.polis?.filter(b => b.kodepoli === a)
+        if (props.polis?.length) {
+          const pol = props?.polis?.filter(b => b.kodepoli === a)
           if (pol.length) anu.push(pol[0])
 
           if (anu.length) {
@@ -161,8 +186,8 @@ function poli(val) {
           ruang = 'Menunggu data poli'
         }
       } else if (a.toLowerCase().includes('gd')) {
-        if (setting.gudangs?.length) {
-          const gud = setting?.gudangs.filter(c => c.kode === a)
+        if (props.gudangs?.length) {
+          const gud = props?.gudangs.filter(c => c.kode === a)
           if (gud.length) anu2.push(gud[0])
           if (anu2.length) {
             fin2 = anu2.map(x => x.nama).join(', ')
@@ -179,6 +204,7 @@ function poli(val) {
     ruang = 'data ruangan tidak ditemukan'
   }
   console.log(ruang)
+  optionsGudang.value = anu2
   return ruang
 }
 
