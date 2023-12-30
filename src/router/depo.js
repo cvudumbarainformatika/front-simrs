@@ -50,6 +50,10 @@ const depo = {
           component: () => import('src/pages/simrs/logistik/depo/farmasi/formresep/IndexPage.vue')
         },
         {
+          path: '/depo/farmasi/distribusipermintaanruangan',
+          component: () => import('src/pages/simrs/logistik/depo/farmasi/distribusipermintaanruangan/IndexPage.vue')
+        },
+        {
           path: '/depo/farmasi/retur',
           component: () => import('src/pages/simrs/logistik/depo/farmasi/retur/IndexPage.vue'),
           children: [
