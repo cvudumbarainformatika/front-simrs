@@ -148,7 +148,7 @@
                 ref="refMenu"
                 @hide="hideMenu"
               >
-                <div class="fixed-top pos bg-white">
+                <div class="fixed-top pos-g bg-white">
                   <app-btn
                     class="full-width q-mb-sm"
                     label="simpan"
@@ -187,6 +187,70 @@
                       <div class="row justify-between">
                         <div>
                           {{ poli?.nama }}
+                        </div>
+                        <div>
+                          ({{ poli?.kode }})
+                        </div>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
+          <div class="ellipsis">
+            <strong>Ruangan sim : </strong>
+            <q-btn
+              :label="ruangsim(item)"
+              no-caps
+              flat
+              size="12px"
+              :loading="store.loadingRuangSim"
+              @click="setRuanganSim(item)"
+            >
+              <q-menu
+                ref="refMenu"
+                @hide="hideMenu"
+              >
+                <div class="fixed-top pos-r bg-white">
+                  <app-btn
+                    class="full-width q-mb-sm"
+                    label="simpan"
+                    color="green"
+                    :loading="store.loadingRuangSim"
+                    @click="simpanRunganSim"
+                  />
+                  <app-input
+                    v-model="rua"
+                    outlined
+                    label="cari gudang"
+                    autofocus
+                    valid
+                    @update:model-value="filterRuang"
+                  />
+                </div>
+                <q-list
+                  class="q-mt-xl q-mt-xl"
+                  style="min-width: 100px;"
+                >
+                  <q-item
+                    v-for="(poli,i) in filteredRua"
+                    :key="i"
+                    v-close-popup
+                    clickable
+                  >
+                    <!-- @click="store.setPoli(poli)" -->
+                    <q-item-section avatar>
+                      <q-checkbox
+                        v-model="koderuang"
+                        :val="poli?.kode"
+                        color="teal"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <div class="row justify-between">
+                        <div>
+                          {{ poli?.uraian }}
                         </div>
                         <div>
                           ({{ poli?.kode }})
@@ -379,6 +443,9 @@ const filt = ref('')
 const filteredGud = ref(store.gudangs)
 const kodegudangs = ref(null)
 const gud = ref('')
+const filteredRua = ref(store.ruangansims)
+const koderuang = ref(null)
+const rua = ref('')
 function filter(val) {
   if (val) {
     filtered.value = store.polis.filter(a => a.polirs.toLowerCase().includes(val.toLowerCase()))
@@ -387,6 +454,11 @@ function filter(val) {
 function filterGud(val) {
   if (val) {
     filteredGud.value = store.gudangs.filter(a => a.nama.toLowerCase().includes(val.toLowerCase()))
+  }
+}
+function filterRuang(val) {
+  if (val) {
+    filteredRua.value = store.ruangansims.filter(a => a.uraian.toLowerCase().includes(val.toLowerCase()))
   }
 }
 defineProps({
@@ -426,6 +498,15 @@ function simpanGudang() {
   console.log('kode', anu)
   console.log(arr)
   store.simpanGudang(arr).then(() => {
+    refMenu.value.hide()
+  })
+}
+function simpanRunganSim() {
+  const anu = koderuang.value?.length ? kodegudangs.value.filter(a => a.length > 4) : null
+  const arr = anu?.join('|') ?? null
+  console.log('kode', anu)
+  console.log(arr)
+  store.simpanRuanganSim(arr).then(() => {
     refMenu.value.hide()
   })
 }
@@ -473,6 +554,30 @@ function gudang(val) {
 
   return ruang
 }
+
+function setRuanganSim(val) {
+  koderuang.value = val.kdruangansim.split('|')
+}
+function ruangsim(val) {
+  let fin = null
+  if (val.kdruangansim) {
+    const temp = val.kdruangansim.split('|')
+    const anu = []
+    if (temp.length) {
+      temp.forEach(a => {
+        const pol = store.ruangansims.filter(b => b.kode === a)
+        if (pol.length) anu.push(pol[0])
+      })
+      if (anu.length) {
+        fin = anu.map(x => x.uraian).join(', ')
+      }
+    }
+  }
+  const ruang = fin ?? 'Tidak ada Akses Ruangan Sim'
+  console.log(ruang)
+
+  return ruang
+}
 defineEmits(['simpan', 'allCheck', 'appCheck', 'menuCheck', 'submenuCheck'])
 
 const check = ref(false)
@@ -495,5 +600,17 @@ function getImage(row) {
   width:280px;
   margin-top:130px;
   margin-left:138px;
+}
+.pos-g{
+
+  width:448px;
+  margin-top:170px;
+  margin-left:208px;
+}
+.pos-r{
+
+  width:446px;
+  margin-top:200px;
+  margin-left:199px;
 }
 </style>

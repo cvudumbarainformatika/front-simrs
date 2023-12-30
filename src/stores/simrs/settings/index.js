@@ -11,6 +11,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     loadingRole: false,
     loadingPoli: false,
     loadingRuang: false,
+    loadingRuangSim: false,
     loadingGudang: false,
     currentApp: '',
     roles: [],
@@ -215,16 +216,16 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         .catch(() => { this.loadingPoli = false })
     },
     async getRuanganSim() {
-      this.loadingRuang = true
+      this.loadingRuangSim = true
       const param = { params: this.par }
       await api.get('v1/ruang/ruang', param)
         .then(resp => {
-          this.loadingRuang = false
+          this.loadingRuangSim = false
           // console.log('ruang', resp.data)
           this.ruangansims = resp.data
           return Promise.resolve(resp.data)
         })
-        .catch(() => { this.loadingRuang = false })
+        .catch(() => { this.loadingRuangSim = false })
     },
     async getRuang() {
       this.loadingRuang = true
@@ -290,6 +291,21 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           return Promise.resolve(resp)
         })
         .catch(() => { this.loadingGudang = false })
+    },
+    async simpanRuanganSim(val) {
+      const form = {
+        id: this.pegawai.id,
+        kodepoli: val
+      }
+      this.loadingRuangSim = true
+      await api.post('v1/settings/appakses/store-poli', form)
+        .then(resp => {
+          // console.log('simpan role', resp.data)
+          this.loadingRuangSim = false
+          this.pegawai.kdruangansim = resp.data?.kdruangansim
+          return Promise.resolve(resp)
+        })
+        .catch(() => { this.loadingRuangSim = false })
     },
     async saveNew(idx) {
       const params = this.items[idx]
