@@ -203,21 +203,38 @@
                     {{ rin.keterangan }}
                   </div>
                   <div class="q-mr-sm">
-                    <q-btn
-                      flat
-                      icon="icon-mat-delete_sweep"
-                      dense
-                      color="negative"
-                      :loading="store.loadingHapus && id===rin.id"
-                      @click="hapusResep(row,rin)"
-                    >
-                      <q-tooltip
-                        class="primary"
-                        :offset="[10, 10]"
+                    <div class="row q-col-gutter-sm">
+                      <q-btn
+                        flat
+                        icon="icon-mat-print"
+                        dense
+                        color="dark"
+                        round
+                        @click="toPrint(row,rin)"
                       >
-                        Hapus Obat
-                      </q-tooltip>
-                    </q-btn>
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Print Etiket
+                        </q-tooltip>
+                      </q-btn>
+                      <q-btn
+                        flat
+                        icon="icon-mat-delete_sweep"
+                        dense
+                        color="negative"
+                        :loading="store.loadingHapus && id===rin.id"
+                        @click="hapusResep(row,rin)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Hapus Obat
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -237,9 +254,11 @@ import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListResepDepoStore } from 'src/stores/simrs/farmasi/resepdepo/listresep'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const store = useListResepDepoStore()
 const apps = useAplikasiStore()
+const router = useRouter()
 onMounted(() => {
   store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
   store.getInitialData()
@@ -258,5 +277,29 @@ function hapusResep (val, rin) {
   store.hapusResep(val, rin).then(() => {
     id.value = null
   })
+}
+function toPrint(row, rin) {
+  console.log('row', row)
+  console.log('rin', rin)
+  const tglResep = row?.tgl
+  const norm = row?.norm
+  const noresep = row?.noresep
+  const aturan = rin?.aturan
+  const keterangan = rin?.keterangan
+  const obat = rin?.mobat?.nama_obat
+  const nama = 'nama Pasien'
+  const routeData = router.resolve({
+    path: '/print/etiket',
+    query: {
+      tglResep,
+      norm,
+      noresep,
+      aturan,
+      keterangan,
+      obat,
+      nama
+    }
+  })
+  window.open(routeData.href, '_blank')
 }
 </script>
