@@ -189,6 +189,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     },
     simpanObat() {
       this.setForm('kddokter', this.form.dokter)
+      this.setForm('nota', this.nota)
       console.log('form', this.form)
       this.loading = true
       return new Promise(resolve => {
@@ -196,8 +197,17 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
           .then(resp => {
             this.loading = false
             console.log('simpan obat', resp?.data)
-            this.reseprinci.push(resp?.data?.rinci)
+            if (resp?.data?.rinci) this.reseprinci.push(resp?.data?.rinci)
+            if (resp?.data?.nota) {
+              const temp = resp?.data?.nota
+              const adaNota = this.notas.filter(a => a === temp)
+              if (!adaNota?.length) {
+                this.notas.push(temp)
+                this.nota = temp
+              }
+            }
             this.resetObat()
+
             resolve(resp)
           })
           .catch(() => {
