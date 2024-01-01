@@ -17,31 +17,35 @@
           <q-item
             class="bg-dark text-white"
           >
-            <q-item-section style="width: 60%;">
+            <q-item-section style="width: 50%;">
               NAMA OBAT
             </q-item-section>
             <q-item-section
               side
-              style="width:40%"
+              style="width:50%"
             >
-              <div class="text-white row items-center q-gutter-sm full-width">
+              <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  style="width: 30%;"
-                  class="text-right col-auto"
+                  class="text-right col-2"
                 >
                   Jumlah
                 </div>
                 <div
+                  class="col-3 text-right"
+                >
+                  Atr Pakai
+                </div>
+                <div
                   class="col text-right"
                 >
-                  Cara Pakai
+                  Keterangan
                 </div>
               </div>
             </q-item-section>
           </q-item>
           <!-- Inputan -->
           <q-item>
-            <q-item-section style="width: 60%;">
+            <q-item-section style="width: 50%;">
               <q-input
                 placeholder="Cari Obat / tekan Ctrl + Enter untuk racikan"
                 dense
@@ -57,12 +61,11 @@
             </q-item-section>
             <q-item-section
               side
-              style="width:40%"
+              style="width:50%"
             >
-              <div class="text-white row items-center q-gutter-sm full-width">
+              <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  style="width: 30%;"
-                  class="text-right col-auto"
+                  class="text-right col-2"
                 >
                   <q-input
                     placeholder="Qty"
@@ -72,13 +75,24 @@
                   />
                 </div>
                 <div
-                  class="col text-right"
+                  class="col-4 text-right"
                 >
                   <q-input
-                    placeholder="Cara Pakai"
+                    placeholder="Aturan Pakai"
                     dense
                     standout="bg-yellow-3"
                     outlined
+                  />
+                </div>
+                <div
+                  class="col text-right"
+                >
+                  <q-input
+                    placeholder="Keterangan"
+                    dense
+                    standout="bg-yellow-3"
+                    outlined
+                    class="full-width"
                   />
                 </div>
               </div>
@@ -108,5 +122,6 @@
 <script setup>
 function racikan() {
   console.log('ok')
+  alert('oooi')
 }
 </script>
