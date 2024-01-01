@@ -287,7 +287,7 @@ function toPrint(row, rin) {
   const aturan = rin?.aturan
   const keterangan = rin?.keterangan
   const obat = rin?.mobat?.nama_obat
-  const nama = 'nama Pasien'
+  const nama = row?.datapasien?.rs2
   const routeData = router.resolve({
     path: '/print/etiket',
     query: {

@@ -22,8 +22,14 @@
             <div class="f-12">
               Instalasi Farmasi
             </div>
-            <div class="q-mb-xs">
+            <div class="">
               RSUD dr.Moh Saleh
+            </div>
+            <div class="f-8">
+              (0335) 433478,433119,421118
+            </div>
+            <div class="f-8 q-mb-xs">
+              Fax. (0335) 432702
             </div>
           </div>
         </div>
