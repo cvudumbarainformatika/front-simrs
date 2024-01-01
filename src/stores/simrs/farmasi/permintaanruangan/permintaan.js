@@ -39,7 +39,8 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
       { nama: 'Floor Stock 2 (Obat)', value: 'Gd-04010101' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
       { nama: 'Depo OK', value: 'Gd-04010103' },
-      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' }
+      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
+      { nama: 'Depo IGD', value: 'Gd-02010104' }
     ],
     ruangans: [],
     stokDewe: [],

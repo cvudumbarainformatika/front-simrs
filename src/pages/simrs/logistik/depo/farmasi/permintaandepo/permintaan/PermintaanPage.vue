@@ -443,7 +443,7 @@ const user = computed(() => {
       if (!store.form.dari) {
         store.setForm('dari', 'Gd-04010103')
         store.setParam('kddepo', 'Gd-05010100')
-        store.getListObat()
+        // store.getListObat()
       }
       if (!store.form.tujuan) {
         store.setForm('tujuan', 'Gd-05010100')
@@ -500,10 +500,22 @@ function depoSelected (val) {
 }
 
 function setJumlahMinta(evt) {
+  // console.log('maks stok', parseFloat(store.form.mak_stok))
+  // if (parseFloat(store.form.mak_stok) <= 0 || isNaN(parseFloat(store.form.mak_stok))) {
+  //   store.setForm('jumlah_minta', 0)
+  //   notifErrVue('Tidak Ada maksimal stok, tidak bisa melanjutkan transaksi')
+  //   return
+  // }
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   store.setForm('jumlah_minta', jumlah)
+  // const max = parseFloat(store.form.mak_stok) ?? 0
+  // const stok = parseFloat(store.form.stok) ?? 0
+  // const bisaMinta = max - stok
   // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
-  // if (alokasi < jumlah) {
+  // if (bisaMinta < jumlah) {
+  //   store.setForm('jumlah_minta', bisaMinta)
+  //   notifInfVue('Jumlah minta tidak boleh melebihi stok maksimal user')
+  // } else if (alokasi < jumlah) {
   //   store.setForm('jumlah_minta', alokasi)
   //   notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
   // } else {

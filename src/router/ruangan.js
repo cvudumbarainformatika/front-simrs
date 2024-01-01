@@ -89,6 +89,11 @@ const ruangan = {
       children: [
         { path: '', name: 'ruangan', redirect: '/ruangan/dashboard' }
       ]
+    },
+
+    {
+      path: '/ruangan/notfound',
+      component: () => import('pages/MidlewareNotFound.vue')
     }
   ]
 }
