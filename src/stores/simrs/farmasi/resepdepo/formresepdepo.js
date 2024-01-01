@@ -68,7 +68,8 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
         this.isOpen = false
         this.setForm('noreg', val.noreg)
         this.setForm('norm', val.norm)
-        this.setForm('sistembayar', val.kodesistembayar)
+        this.setForm('groupsistembayar', val.groups)
+        this.setForm('sistembayar', val.kodesistembayar ?? val?.kdsistembayar)
         this.setForm('dokter', val.kodedokter)
         this.setForm('diagnosa', diag ?? '-')
         this.reseprinci = []
