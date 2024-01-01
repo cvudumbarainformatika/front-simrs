@@ -42,6 +42,10 @@ const ruangan = {
           ]
         },
         {
+          path: '/ruangan/farmasi/penerimaanruangan',
+          component: () => import('src/pages/simrs/logistik/ruangan/farmasi/penerimaanruangan/IndexPage.vue')
+        },
+        {
           path: '/ruangan/farmasi/pemakaianruangan',
           component: () => import('src/pages/simrs/logistik/ruangan/farmasi/pemakaianruangan/IndexPage.vue'),
           children: [

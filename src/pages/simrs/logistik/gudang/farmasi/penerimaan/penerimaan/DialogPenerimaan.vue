@@ -652,17 +652,17 @@ function setHargaNetNew(evt, det, key) {
   let harga = det.harga ?? 0
   let hargaKcl = det.harga_kcl ?? 0
   const diskon = det.diskon ?? 0
-  const ppn = det.ppn ?? 0
+  const ppn = det.ppn ?? 11
   let jmlTerimaB = det.jml_terima_b ?? 0
   let jmlTerimaK = det.jml_terima_k ?? 0
   const diskonRp = harga * (diskon / 100)
   const hargaSetelahDiskon = harga - diskonRp
-  const ppnRp = hargaSetelahDiskon * (ppn / 100)
+  const ppnRp = isNaN(hargaSetelahDiskon * (ppn / 100)) ? 0 : hargaSetelahDiskon * (ppn / 100)
   const hargaPembelian = hargaSetelahDiskon + ppnRp
   const subtotal = hargaPembelian * jmlTerimaB
   if (key === 'isi') {
     if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
-      console.log('isi if', parseFloat(evt), isiPrev)
+      // console.log('isi if', parseFloat(evt), isiPrev)
       if (isiPrev > det.isi) {
         if (parseFloat(jmlTerimaK) < 1) {
           const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
@@ -689,7 +689,7 @@ function setHargaNetNew(evt, det, key) {
   if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
   if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
   const jmlAll = jmlTerimaK + det.jml_terima_lalu
-  console.log('terima ', jmlAll, jmlTerimaK)
+  // console.log('terima ', jmlAll, jmlTerimaK)
   if (jmlAll > parseFloat(det.jumlahdpesan)) {
     console.log('lebih')
     notifErrVue('Jumlah Maksimal diterima ' + det.jumlahdpesan + ' ' + det?.satuan_kcl)
@@ -712,7 +712,7 @@ function setHargaNetNew(evt, det, key) {
   det.subtotal = subtotal
   // console.log('evt', evt)
   // console.log('nilai', nilai)
-  console.log('det', det)
+  // console.log('det', det)
   // console.log('key', key)
 }
 function setHargaNet(val) {

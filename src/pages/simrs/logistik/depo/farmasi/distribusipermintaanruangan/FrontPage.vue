@@ -2,7 +2,7 @@
   <div class="q-pa-xs bg-white">
     <div class="row bg-primary text-white q-pa-sm q-mb-sm rouded-border">
       <div class="f-16 text-weight-bold">
-        Halaman Distribusi Permintaan Depo
+        Halaman Distribusi Permintaan Ruangan
       </div>
     </div>
     <app-table-extend
@@ -131,7 +131,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Sudah di kirim ke depo
+              Sudah di kirim ke ruangan
             </q-tooltip>
           </q-btn>
         </div>
@@ -210,8 +210,11 @@
                     {{ rin.kdobat }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs">
-                  <div class=" text-weight-bold">
+                <div class="row wrap q-mt-xs">
+                  <div
+                    class="col full-width text-weight-bold"
+                    style="white-space: wrap;"
+                  >
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
                 </div>
@@ -245,7 +248,7 @@
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs text-purple">
                   <div class="q-mr-xs">
-                    Depo
+                    Ruangan
                   </div>
                   <div class="">
                     <div v-if="rin.stokreal">
@@ -408,9 +411,9 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
+import { useDistribusiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/distribusipermintaanruangan/distribusi'
 import { ref, onMounted } from 'vue'
-const store = useDistribusiPermintaanDepoStore()
+const store = useDistribusiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 onMounted(() => {
   store.setForm('kdgudang', apps?.user?.pegawai?.kdruangansim)
@@ -418,10 +421,10 @@ onMounted(() => {
   store.getInitialData()
 })
 function depo (val) {
-  const temp = store.depos.filter(a => a.value === val)
+  const temp = apps.ruangs.filter(a => a.kode === val)
   // console.log('temp', temp)
   if (temp.length) {
-    return temp[0].nama
+    return temp[0].uraian
   } else {
     return val
   }
@@ -551,11 +554,11 @@ const label = (status) => {
       // eslint-disable-next-line no-unreachable
       break
     case '1':
-      return 'Permintaan dikirim ke Gudang'
+      return 'Permintaan dikirim ke Depo'
       // eslint-disable-next-line no-unreachable
       break
     case '2':
-      return 'Diterima Gudang'
+      return 'Diterima Depo'
       // eslint-disable-next-line no-unreachable
       break
     case '3':
@@ -563,7 +566,7 @@ const label = (status) => {
       // eslint-disable-next-line no-unreachable
       break
     case '4':
-      return 'Diterima Depo'
+      return 'Diterima Ruangan'
       // eslint-disable-next-line no-unreachable
       break
     case 99:

@@ -61,7 +61,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       console.log('pasien', val)
       console.log('jenis pasien', this.jenispasien)
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
-      const diag = temp.join(',')
+      const diag = temp?.length ? temp.join(',') : '-'
       console.log('diag', diag)
       if (val) {
         this.pasien = val
@@ -141,26 +141,29 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       })
     },
     cariSimulasi(val) {
-      this.loadingSimulasi = true
-      const param = {
-        params: { noreg: val }
-      }
-      return new Promise(resolve => {
-        api.get('v1/simrs/pelayanan/carisimulasi', param)
-          .then(resp => {
-            this.loadingSimulasi = false
-            console.log('cri simulasi', resp)
-            const tarif = resp?.data?.response?.cbg?.base_tariff ?? (resp?.data?.response?.cbg?.tariff ?? 0)
-            this.setForm('kodeincbg', resp?.data?.response?.cbg?.code ?? '-')
-            this.setForm('uraianinacbg', resp?.data?.response?.cbg?.description ?? '-')
-            this.setForm('tarifina', tarif ?? '-')
+      this.setForm('kodeincbg', '-')
+      this.setForm('uraianinacbg', '-')
+      this.setForm('tarifina', 0)
+      // this.loadingSimulasi = true
+      // const param = {
+      //   params: { noreg: val }
+      // }
+      // return new Promise(resolve => {
+      //   api.get('v1/simrs/pelayanan/carisimulasi', param)
+      //     .then(resp => {
+      //       this.loadingSimulasi = false
+      //       console.log('cri simulasi', resp)
+      //       const tarif = resp?.data?.response?.cbg?.base_tariff ?? (resp?.data?.response?.cbg?.tariff ?? 0)
+      //       this.setForm('kodeincbg', resp?.data?.response?.cbg?.code ?? '-')
+      //       this.setForm('uraianinacbg', resp?.data?.response?.cbg?.description ?? '-')
+      //       this.setForm('tarifina', tarif ?? '-')
 
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loadingSimulasi = false
-          })
-      })
+      //       resolve(resp)
+      //     })
+      //     .catch(() => {
+      //       this.loadingSimulasi = false
+      //     })
+      // })
     },
     cariDokter(val) {
       this.loadingDokter = true

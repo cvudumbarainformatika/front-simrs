@@ -34,6 +34,11 @@ const routes = [
         path: '/print/antrian',
         name: 'print.antrian',
         component: () => import('pages/simrs/PrintAntrian.vue')
+      },
+      {
+        path: '/print/etiket',
+        name: 'print.etiket',
+        component: () => import('pages/simrs/print/PrintEtiketResep.vue')
       }
     ]
   },
