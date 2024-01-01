@@ -61,7 +61,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       console.log('pasien', val)
       console.log('jenis pasien', this.jenispasien)
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
-      const diag = temp.join(',')
+      const diag = temp?.length ? temp.join(',') : '-'
       console.log('diag', diag)
       if (val) {
         this.pasien = val
