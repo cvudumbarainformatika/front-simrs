@@ -144,8 +144,11 @@
                     {{ rin.kdobat }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs">
-                  <div class=" text-weight-bold">
+                <div class="row justify-between q-mt-xs">
+                  <div
+                    class="col-12 text-weight-bold"
+                    style="overflow-wrap: normal; white-space: normal;"
+                  >
                     {{ rin.mobat ? rin.mobat.nama_obat : '-' }}
                   </div>
                 </div>

@@ -502,7 +502,7 @@ function simpanGudang() {
   })
 }
 function simpanRunganSim() {
-  const anu = koderuang.value?.length ? kodegudangs.value.filter(a => a.length > 4) : null
+  const anu = koderuang.value?.length ? koderuang.value?.filter(a => a.length > 4) : null
   const arr = anu?.join('|') ?? null
   console.log('kode', anu)
   console.log(arr)

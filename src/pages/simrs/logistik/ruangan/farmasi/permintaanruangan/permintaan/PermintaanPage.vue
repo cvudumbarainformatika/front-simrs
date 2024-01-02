@@ -273,7 +273,7 @@
                 <div class="q-mr-sm text-weight-bold">
                   tidak ada
                 </div>
-                <!-- <div
+                <div
                   v-if="(store.form.kdobat && !mintaMax) "
                   class="q-mr-sm"
                 >
@@ -282,7 +282,7 @@
                     color="orange"
                     @click="setMinta"
                   />
-                </div> -->
+                </div>
                 <div
                   v-if="store.form.kdobat && mintaMax"
                   class="q-mr-sm"
@@ -303,6 +303,7 @@
                     label="Jumlah Minta Max"
                     outlined
                     :loading="store.loadingMax"
+                    @update:model-value="numberMax"
                   />
                 </div>
                 <div
@@ -394,11 +395,11 @@
   </div>
 </template>
 <script setup>
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifInfVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
@@ -407,10 +408,14 @@ const store = useFarmasiPermintaanRuanganStore()
 
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
-const JumlahMintaMin = ref(10)
-// function setMinta() {
-//   mintaMax.value = true
-// }
+const JumlahMintaMin = ref(5)
+function setMinta() {
+  mintaMax.value = true
+}
+function numberMax(val) {
+  const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
+  JumlahMintaMax.value = temp
+}
 function simpanMintaAlokasi() {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
   const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0
@@ -443,7 +448,7 @@ const user = computed(() => {
       if (!store.form.dari) {
         store.setForm('dari', 'R-0202010')
         store.setParam('kddepo', 'R-0202010')
-        store.getListObat()
+        // store.getListObat()
       }
       if (!store.form.tujuan) {
         store.setForm('tujuan', 'Gd-03010101')
@@ -496,13 +501,19 @@ function depoSelected (val) {
 function setJumlahMinta(evt) {
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   store.setForm('jumlah_minta', jumlah)
-  // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
-  // if (alokasi < jumlah) {
-  //   store.setForm('jumlah_minta', alokasi)
-  //   notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
-  // } else {
-  //   store.setForm('jumlah_minta', jumlah)
-  // }
+  const max = parseFloat(store.form.mak_stok) ?? 0
+  const stok = parseFloat(store.form.stok) ?? 0
+  const bisaMinta = max - stok
+  const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
+  if (bisaMinta < jumlah) {
+    store.setForm('jumlah_minta', bisaMinta)
+    notifInfVue('Jumlah minta tidak boleh melebihi stok maksimal user')
+  } else if (alokasi < jumlah) {
+    store.setForm('jumlah_minta', alokasi)
+    notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
+  } else {
+    store.setForm('jumlah_minta', jumlah)
+  }
 }
 function validasi() {
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
@@ -524,7 +535,11 @@ function simpan() {
     store.simpan()
   }
 }
-store.getInitialData()
+onMounted(() => {
+  setTimeout(() => {
+  }, 2000)
+  store.getInitialData()
+})
 </script>
 <style lang="scss" scoped>
 .anu {
