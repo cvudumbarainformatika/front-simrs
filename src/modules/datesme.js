@@ -10,6 +10,11 @@ const bulans = (num) => {
   return arr[0]
 }
 
+const months = () => {
+  const arr = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember']
+  return arr
+}
+
 export {
-  daysInMonth, bulans
+  daysInMonth, bulans, months
 }
