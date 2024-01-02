@@ -1,14 +1,14 @@
 <template>
   <q-list
-    dense
     separator
   >
     <q-item
       v-for="(item, i) in store.items"
       :key="i"
+      clickable
     >
       <q-item-section style="width:40%">
-        {{ item?.nama_obat }}
+        {{ item?.nama_obat }} <span class="text-negative f-10"> {{ item?.kd_obat }}</span>
       </q-item-section>
       <q-item-section
         style="width:60%"
@@ -16,16 +16,16 @@
       >
         <div class="row items-center full-width q-col-gutter-xs">
           <div class="col-3 text-right">
-            Saldo Awal
+            {{ hitungSaldoAwal(item?.saldoawal) ?? 0 }}
           </div>
           <div class="col-3 text-right">
-            Trans In
+            {{ hitungPenerimaan(item?.penerimaanrinci) ?? 0 }}
           </div>
           <div class="col-3 text-right">
-            Trans Out
+            {{ hitungMutasi(item?.mutasi) ?? 0 }}
           </div>
           <div class="col-3 text-right">
-            Saldo Akhir
+            {{ hitungSaldoAwal(item?.saldoawal) + hitungPenerimaan(item?.penerimaanrinci) - hitungMutasi(item?.mutasi) }}
           </div>
         </div>
       </q-item-section>
@@ -37,4 +37,16 @@
 import { useKartuStokFarmasiStore } from '../../../../../../../stores/simrs/farmasi/katustok'
 
 const store = useKartuStokFarmasiStore()
+
+function hitungSaldoAwal(arr) {
+  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+}
+
+function hitungPenerimaan(arr) {
+  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+}
+
+function hitungMutasi(arr) {
+  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
 </script>

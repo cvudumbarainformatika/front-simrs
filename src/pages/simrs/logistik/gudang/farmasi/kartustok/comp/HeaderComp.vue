@@ -38,9 +38,10 @@
           dense
           color="white"
           style="width:150px"
+          @update:model-value="changeMonth"
         />
         <q-select
-          v-model="tahun"
+          v-model="store.params.tahun"
           :options="tahuns"
           outlined
           dark
@@ -77,7 +78,7 @@
                 Trans Out
               </div>
               <div class="col-3 text-right">
-                Saldo Akhir
+                Sld Saatini
               </div>
             </div>
           </q-item-section>
@@ -95,21 +96,20 @@ import { useKartuStokFarmasiStore } from '../../../../../../../stores/simrs/farm
 const store = useKartuStokFarmasiStore()
 const bulan = ref('Januari')
 const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
-const tahun = ref(2024)
 const tahuns = ref([])
+
 onMounted(() => {
   init()
-  store.getData()
 })
 
 function init() {
   const d = new Date()
   const b = d.getMonth()
   bulan.value = bulans.value[b]
-  tahun.value = d.getFullYear()
+  // store.setTahun(d.getFullYear())
+  store.params.tahun = d.getFullYear()
   generateArrayOfYears()
-  // console.log('bulan', bulan)
-  // console.log('tahun', tahun.value)
+  changeMonth(bulan.value)
 }
 
 function generateArrayOfYears() {
@@ -121,5 +121,12 @@ function generateArrayOfYears() {
     years.push(i)
   }
   tahuns.value = years
+}
+
+function changeMonth(val) {
+  const cariIndexBulans = bulans.value.findIndex((x) => x === val) + 1
+  const serial = cariIndexBulans <= 9 ? '0' + cariIndexBulans : cariIndexBulans
+  store.params.bulan = serial
+  store.getData()
 }
 </script>

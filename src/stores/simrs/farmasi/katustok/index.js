@@ -23,10 +23,15 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.loading = false
         this.meta = resp.data
         this.items = resp.data.data
-        console.log('kjkjsdfs', this.items)
+        // console.log('kjkjsdfs', this.items)
+        console.log('kjkjsdfs', resp)
       } else {
         this.loading = false
       }
+    },
+    setTahun(val) {
+      this.params.tahun = val
     }
+
   }
 })
