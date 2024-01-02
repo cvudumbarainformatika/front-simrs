@@ -45,6 +45,8 @@
             :source="store.signas"
             :loading="store.loadingSigna"
             @on-select="store.signaSelected"
+            @buang="store.writeSigna"
+            @on-enter="store.saveSigna"
           />
           <!-- @clear="store.clearObat"
             @buang="cariObat" -->

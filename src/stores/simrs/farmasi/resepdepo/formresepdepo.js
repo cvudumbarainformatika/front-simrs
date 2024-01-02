@@ -144,6 +144,13 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       console.log('signa selected', signa)
       console.log('form', this.form)
     },
+    writeSigna(val) {
+      console.log('write signa', val)
+      this.setForm('aturan', val)
+    },
+    saveSigna(val) {
+      console.log('save signa', val)
+    },
     async getSigna() {
       this.loadingSigna = true
       await api.get('v1/simrs/farmasinew/depo/get-signa')
