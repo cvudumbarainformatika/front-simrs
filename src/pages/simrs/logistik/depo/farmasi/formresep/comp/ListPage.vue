@@ -45,6 +45,9 @@
         <div>#</div>
       </template>
       <template #cell-pasien="{ row }">
+        <div class="row text-weight-bold no-wrap text-primary">
+          {{ row?.datapasien?.rs2 }}
+        </div>
         <div class="row justify-between no-wrap text-teal">
           {{ row?.noreg }} || {{ row?.norm }}
         </div>
