@@ -73,6 +73,7 @@
             <div
               v-else-if="!!user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
+              style="max-width: 80%;"
             >
               {{ poli(user?.pegawai) }}
             </div>
@@ -190,12 +191,6 @@ const setting = useSettingsAplikasi()
 const optionsGudang = ref([])
 const optionsRuangans = ref([])
 function poli(val) {
-  // const gudangs = [
-  //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-  //   { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-  // ]
-  console.log(val)
-  const temp = val.kdruangansim.split('|')
   const anu = []
   let fin = null
   const anu2 = []
@@ -203,6 +198,8 @@ function poli(val) {
   const anu3 = []
   let fin3 = null
   let ruang = ''
+  // console.log(val)
+  const temp = val.kdruangansim.split('|')
   // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
     temp.forEach(a => {
@@ -248,7 +245,7 @@ function poli(val) {
   } else {
     ruang = 'data ruangan tidak ditemukan'
   }
-  console.log(ruang)
+  // console.log(ruang)
   optionsGudang.value = anu2
   optionsRuangans.value = anu3
   // console.log('gud', optionsGudang.value)
