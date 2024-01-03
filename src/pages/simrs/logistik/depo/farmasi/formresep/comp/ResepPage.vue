@@ -28,12 +28,28 @@
           />
         </div>
         <div class="q-my-sm">
-          <app-input
+          <!-- <app-input
             ref="refAturan"
             v-model="store.form.aturan"
             label="Aturan"
             outlined
+          /> -->
+          <app-autocomplete-new
+            ref="refAturan"
+            :model="store.form.aturan"
+            autocomplete="signa"
+            option-label="signa"
+            option-value="signa"
+            label="Pilih Signa"
+            outlined
+            :source="store.signas"
+            :loading="store.loadingSigna"
+            @on-select="store.signaSelected"
+            @buang="store.writeSigna"
+            @on-enter="store.saveSigna"
           />
+          <!-- @clear="store.clearObat"
+            @buang="cariObat" -->
         </div>
         <div class="q-my-sm">
           <app-input
@@ -46,6 +62,9 @@
       </div>
       <div class="col-6">
         <div v-if="!!store.obatTerpilih">
+          <div class="">
+            {{ store?.obatTerpilih?.kodeobat }}
+          </div>
           <div class="text-weight-bold text-orange">
             {{ store?.obatTerpilih?.kandungan }}
           </div>
@@ -81,7 +100,7 @@
           {{ res?.kdobat }}
         </div>
         <div class="col q-mr-sm">
-          {{ res?.kandungan }}
+          {{ res?.mobat?.nama_obat }}
         </div>
         <div class="col q-mr-sm">
           {{ res?.jumlah }}
@@ -129,5 +148,11 @@ function setJumlah(evt, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   store.setForm(key, nilai)
+  if (key === 'jumlah') {
+    if (store.form.jumlahdosis > 0) {
+      const kons = nilai / store.form.jumlahdosis
+      this.setForm('konsumsi', kons)
+    }
+  }
 }
 </script>

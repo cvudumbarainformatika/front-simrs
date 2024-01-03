@@ -110,15 +110,17 @@ export const useMasterBarangRSForm = defineStore('master_barangrs_form', {
         this.setForm(key, val[key])
       })
       console.log('edit', val)
-      const index108 = findWithAttr(this.barang108s, 'kode', val.barang108.kode)
-      const index50 = findWithAttr(this.rekening50s, 'kode', val.rekening50.kode)
+      console.log('108', this?.barang108s)
+      console.log('50', this?.barang50s)
+      const index108 = this?.barang108s?.length ? findWithAttr(this.barang108s, 'kode', val?.barang108?.kode) : -1
+      // const index50 = this?.rekening50s?.length ? findWithAttr(this.rekening50s, 'kode', val?.rekening50?.kode) : -1
       // console.log('index 108 ', index108, index50)
       if (index108 < 0) {
         this.barang108s.push(val.barang108)
       }
-      if (index50 < 0) {
-        this.rekening50s.push(val.rekening50)
-      }
+      // if (index50 < 0) {
+      //   this.rekening50s.push(val.rekening50)
+      // }
       // console.log('val barnag ', val.barang108, val.rekening50)
       // const temp108=this.barang108s
       // kecuali yang ada di object user

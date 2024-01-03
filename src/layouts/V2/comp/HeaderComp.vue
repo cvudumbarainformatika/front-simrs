@@ -47,23 +47,6 @@
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
-          <!-- <div class="text-right q-mr-sm items-center">
-            <app-autocomplete-new
-              ref="refObat"
-              :key="user.kdruangansim"
-              :model="user.kdruangansim"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kdruangansim"
-              label="Set Gudang / Depo"
-              outlined
-              bg-color="white"
-              :source="optionsGudang"
-              :loading="setting.loadingGudang"
-              @on-select="emit('setGudang',$event)"
-              @clear="emit('setGudang',null)"
-            />
-          </div> -->
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
               {{ user?.nama }}
@@ -81,15 +64,16 @@
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
-            <div
+            <!-- <div
               v-else-if="!!user?.pegawai?.depo_sim"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo_sim?.nama }}
-            </div>
+            </div> -->
             <div
               v-else-if="!!user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
+              style="max-width: 80%;"
             >
               {{ poli(user?.pegawai) }}
             </div>
@@ -99,6 +83,48 @@
             >
               Tidak ada ruangan
             </div>
+          </div>
+          <div
+            v-if="optionsGudang?.length >1"
+            class="q-mr-sm items-center"
+            style="width: 180px;"
+          >
+            <app-autocomplete-new
+              ref="refObat"
+              :key="user.kdruangansim"
+              :model="user.kdruangansim"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              label="Set Gudang / Depo"
+              outlined
+              bg-color="white"
+              :source="optionsGudang"
+              :loading="setting.loadingGudang"
+              @on-select="emit('setGudang',$event)"
+              @clear="emit('setGudang',null)"
+            />
+          </div>
+          <div
+            v-if="optionsRuangans?.length >1"
+            class="q-mr-sm items-center"
+            style="width: 180px;"
+          >
+            <app-autocomplete-new
+              ref="refObat"
+              :key="user.kdruangansim"
+              :model="user.kdruangansim"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              label="Set Ruangan"
+              outlined
+              bg-color="white"
+              :source="optionsRuangans"
+              :loading="setting.loadingRuangSim"
+              @on-select="emit('setGudang',$event)"
+              @clear="emit('setGudang',null)"
+            />
           </div>
           <q-btn
             flat
@@ -163,13 +189,8 @@ onMounted(() => {
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
 const optionsGudang = ref([])
+const optionsRuangans = ref([])
 function poli(val) {
-  // const gudangs = [
-  //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-  //   { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-  // ]
-  console.log(val)
-  const temp = val.kdruangansim.split('|')
   const anu = []
   let fin = null
   const anu2 = []
@@ -177,6 +198,8 @@ function poli(val) {
   const anu3 = []
   let fin3 = null
   let ruang = ''
+  // console.log(val)
+  const temp = val.kdruangansim.split('|')
   // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
     temp.forEach(a => {
@@ -222,8 +245,10 @@ function poli(val) {
   } else {
     ruang = 'data ruangan tidak ditemukan'
   }
-  console.log(ruang)
+  // console.log(ruang)
   optionsGudang.value = anu2
+  optionsRuangans.value = anu3
+  // console.log('gud', optionsGudang.value)
   return ruang
 }
 

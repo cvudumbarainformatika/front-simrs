@@ -20,13 +20,31 @@
             :style=" `height: ${tinggiDetailPas}px; margin-top:43px`"
           >
             <div class="absolute-top-right">
-              <div class="q-pa-sm">
-                <q-btn
-                  outline
-                  round
-                  style="color: goldenrod;"
-                  label="id"
-                />
+              <div class="row">
+                <div class="q-pa-sm">
+                  <q-btn
+                    outline
+                    round
+                    style="color: goldenrod;"
+                    label="id"
+                  />
+                </div>
+                <!-- <div v-if="Object.keys( store.pasien).length">
+                  <q-btn
+                    flat
+                    outline
+                    round
+                    icon="icon-mat-cancel"
+                    style="color: rgb(208, 5, 5);"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Tutup Pasien
+                    </q-tooltip>
+                  </q-btn>
+                </div> -->
               </div>
             </div>
             <div class="absolute-top">
@@ -321,6 +339,7 @@ onBeforeUnmount(() => {
 
 onMounted(() => {
   store.setForm('kodedepo', apps?.user?.pegawai?.kdruangansim)
+  store.getSigna()
 })
 </script>
 

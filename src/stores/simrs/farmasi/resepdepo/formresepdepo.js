@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import { date } from 'quasar'
+import { Dialog, date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useListResepDepoStore } from './listresep'
+import { dateFullFormat } from 'src/modules/formatter'
 
 export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore', {
   state: () => ({
@@ -11,6 +13,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     loadingSimulasi: false,
     loadingCari: false,
     loadingDokter: false,
+    loadingSigna: false,
     jenispasien: 'rjl',
     form: {
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -19,7 +22,9 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       jumlah: 0,
       keterangan: '-',
       aturan: '',
-      noresep: date.formatDate(Date.now(), 'YYMMDDHHmmss')
+      konsumsi: '',
+      noresep: date.formatDate(Date.now(), 'YYMMDDHHmmss'),
+      lanjuTr: ''
     },
     params: {
       nama: '',
@@ -41,7 +46,8 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     obatTerpilih: null,
     dokters: [],
     filtDokters: [],
-    reseprinci: []
+    reseprinci: [],
+    signas: []
   }),
   actions: {
     setForm(key, val) {
@@ -55,15 +61,20 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       this.form.keterangan = '-'
       this.form.aturan = ''
       this.form.kodeobat = ''
+      this.form.konsumsi = ''
       this.obatTerpilih = null
     },
     setPasien(val) {
+      const list = useListResepDepoStore()
       console.log('pasien', val)
       console.log('jenis pasien', this.jenispasien)
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
       const diag = temp?.length ? temp.join(',') : '-'
       console.log('diag', diag)
       if (val) {
+        this.notas = []
+        this.nota = ''
+        list.setParam('noreg', val?.noreg)
         this.pasien = val
         this.isOpen = false
         this.setForm('noreg', val.noreg)
@@ -122,7 +133,36 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
         this.setForm('uraian50', obat[0]?.uraian50 ?? '-')
       }
     },
-
+    signaSelected(val) {
+      this.setForm('aturan', val)
+      const signa = this.signas.filter(sig => sig.signa === val)
+      if (signa.length) {
+        this.setForm('jumlahdosis', parseFloat(signa[0]?.jumlah))
+        if (parseFloat(this.form.jumlah) > 0) {
+          const kons = this.form.jumlah / parseFloat(signa[0]?.jumlah)
+          this.setForm('konsumsi', kons)
+        }
+      }
+      console.log('signa selected', signa)
+      console.log('form', this.form)
+    },
+    writeSigna(val) {
+      console.log('write signa', val)
+      this.setForm('aturan', val)
+    },
+    saveSigna(val) {
+      console.log('save signa', val)
+    },
+    async getSigna() {
+      this.loadingSigna = true
+      await api.get('v1/simrs/farmasinew/depo/get-signa')
+        .then(resp => {
+          this.loadingSigna = false
+          console.log('signa', resp?.data)
+          this.signas = resp?.data
+        })
+        .catch(() => { this.loadingSigna = false })
+    },
     clearObat() {
       this.setForm('kdobat', null)
       this.obatTerpilih = null
@@ -197,16 +237,22 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
           .then(resp => {
             this.loading = false
             console.log('simpan obat', resp?.data)
-            if (resp?.data?.rinci) this.reseprinci.push(resp?.data?.rinci)
-            if (resp?.data?.nota) {
-              const temp = resp?.data?.nota
-              const adaNota = this.notas.filter(a => a === temp)
-              if (!adaNota?.length) {
-                this.notas.push(temp)
-                this.nota = temp
+            if (resp?.status === 202) {
+              console.log('202', resp)
+              this.openDialog(resp?.data)
+            } else {
+              if (resp?.data?.rinci) this.reseprinci.push(resp?.data?.rinci)
+              if (resp?.data?.nota) {
+                const temp = resp?.data?.nota
+                const adaNota = this.notas.filter(a => a === temp)
+                if (!adaNota?.length) {
+                  this.notas.push(temp)
+                  this.nota = temp
+                }
               }
+              this.resetObat()
+              this.setForm('lanjuTr', '')
             }
-            this.resetObat()
 
             resolve(resp)
           })
@@ -214,6 +260,28 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
             this.loading = false
           })
       })
+    },
+    openDialog(val) {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
+        ok: {
+          push: true,
+          label: 'Lanjutkan',
+          'no-caps': true,
+          color: 'primary'
+        },
+        cancel: {
+          push: true,
+          label: 'Batal',
+          'no-caps': true,
+          color: 'dark'
+        }
+      })
+        .onOk(() => {
+          this.setForm('lanjuTr', '1')
+          this.simpanObat()
+        })
     }
   }
 })

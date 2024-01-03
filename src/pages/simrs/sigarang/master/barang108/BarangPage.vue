@@ -29,6 +29,19 @@
             <template #col-uraian>
               <div>Uraian</div>
             </template>
+            <template #col-maping>
+              <div>Maping 50</div>
+            </template>
+            <template #cell-maping="{row}">
+              <div class="row">
+                <div class="q-mr-sm">
+                  {{ row?.maping?.kode50 }}
+                </div>
+                <div class="q-mr-sm">
+                  {{ row?.maping?.uraian50 }}
+                </div>
+              </div>
+            </template>
           </app-table>
           <!--
             row-image="image"

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+// eslint-disable-next-line no-unused-vars
 import { useRencanaPemesananObatStore } from './rencana'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
@@ -119,13 +120,13 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
           .then(resp => {
             this.loading = false
             console.log('obat mau dibeli', resp?.data)
-            const temp = resp?.data?.data ?? resp?.data
-            const renc = useRencanaPemesananObatStore()
-            this.assignItems(temp, renc)
-            this.meta = resp?.data?.current_page ? resp?.data : null
-            if (renc.form?.kd_ruang) {
-              this.filterItem(renc.form?.kd_ruang)
-            }
+            // const temp = resp?.data?.data ?? resp?.data
+            // const renc = useRencanaPemesananObatStore()
+            // this.assignItems(temp, renc)
+            // this.meta = resp?.data?.current_page ? resp?.data : null
+            // if (renc.form?.kd_ruang) {
+            //   this.filterItem(renc.form?.kd_ruang)
+            // }
             resolve(resp)
           })
           .catch(() => {
