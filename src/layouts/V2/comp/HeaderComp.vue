@@ -47,23 +47,6 @@
       <!-- RIGHT -->
       <div :class="!mobile?'q-pr-md':'q-pr-sm'">
         <div class="row items-center">
-          <!-- <div class="text-right q-mr-sm items-center">
-            <app-autocomplete-new
-              ref="refObat"
-              :key="user.kdruangansim"
-              :model="user.kdruangansim"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="kdruangansim"
-              label="Set Gudang / Depo"
-              outlined
-              bg-color="white"
-              :source="optionsGudang"
-              :loading="setting.loadingGudang"
-              @on-select="emit('setGudang',$event)"
-              @clear="emit('setGudang',null)"
-            />
-          </div> -->
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
               {{ user?.nama }}
@@ -81,12 +64,12 @@
             >
               {{ user?.pegawai?.depo?.nama }}
             </div>
-            <div
+            <!-- <div
               v-else-if="!!user?.pegawai?.depo_sim"
               class="q-mr-sm text-primary"
             >
               {{ user?.pegawai?.depo_sim?.nama }}
-            </div>
+            </div> -->
             <div
               v-else-if="!!user?.pegawai?.kdruangansim"
               class="q-mr-sm text-primary"
@@ -99,6 +82,48 @@
             >
               Tidak ada ruangan
             </div>
+          </div>
+          <div
+            v-if="optionsGudang?.length >1"
+            class="q-mr-sm items-center"
+            style="width: 180px;"
+          >
+            <app-autocomplete-new
+              ref="refObat"
+              :key="user.kdruangansim"
+              :model="user.kdruangansim"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              label="Set Gudang / Depo"
+              outlined
+              bg-color="white"
+              :source="optionsGudang"
+              :loading="setting.loadingGudang"
+              @on-select="emit('setGudang',$event)"
+              @clear="emit('setGudang',null)"
+            />
+          </div>
+          <div
+            v-if="optionsRuangans?.length >1"
+            class="q-mr-sm items-center"
+            style="width: 180px;"
+          >
+            <app-autocomplete-new
+              ref="refObat"
+              :key="user.kdruangansim"
+              :model="user.kdruangansim"
+              autocomplete="nama"
+              option-label="nama"
+              option-value="kode"
+              label="Set Ruangan"
+              outlined
+              bg-color="white"
+              :source="optionsRuangans"
+              :loading="setting.loadingRuangSim"
+              @on-select="emit('setGudang',$event)"
+              @clear="emit('setGudang',null)"
+            />
           </div>
           <q-btn
             flat
@@ -163,6 +188,7 @@ onMounted(() => {
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
 const optionsGudang = ref([])
+const optionsRuangans = ref([])
 function poli(val) {
   // const gudangs = [
   //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -224,6 +250,8 @@ function poli(val) {
   }
   console.log(ruang)
   optionsGudang.value = anu2
+  optionsRuangans.value = anu3
+  // console.log('gud', optionsGudang.value)
   return ruang
 }
 
