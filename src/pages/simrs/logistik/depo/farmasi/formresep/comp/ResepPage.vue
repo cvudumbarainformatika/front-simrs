@@ -62,6 +62,9 @@
       </div>
       <div class="col-6">
         <div v-if="!!store.obatTerpilih">
+          <div class="">
+            {{ store?.obatTerpilih?.kodeobat }}
+          </div>
           <div class="text-weight-bold text-orange">
             {{ store?.obatTerpilih?.kandungan }}
           </div>

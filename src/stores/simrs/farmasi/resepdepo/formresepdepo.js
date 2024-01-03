@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { date } from 'quasar'
+import { Dialog, date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListResepDepoStore } from './listresep'
+import { dateFullFormat } from 'src/modules/formatter'
 
 export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore', {
   state: () => ({
@@ -22,7 +23,8 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       keterangan: '-',
       aturan: '',
       konsumsi: '',
-      noresep: date.formatDate(Date.now(), 'YYMMDDHHmmss')
+      noresep: date.formatDate(Date.now(), 'YYMMDDHHmmss'),
+      lanjuTr: ''
     },
     params: {
       nama: '',
@@ -235,16 +237,22 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
           .then(resp => {
             this.loading = false
             console.log('simpan obat', resp?.data)
-            if (resp?.data?.rinci) this.reseprinci.push(resp?.data?.rinci)
-            if (resp?.data?.nota) {
-              const temp = resp?.data?.nota
-              const adaNota = this.notas.filter(a => a === temp)
-              if (!adaNota?.length) {
-                this.notas.push(temp)
-                this.nota = temp
+            if (resp?.status === 202) {
+              console.log('202', resp)
+              this.openDialog(resp?.data)
+            } else {
+              if (resp?.data?.rinci) this.reseprinci.push(resp?.data?.rinci)
+              if (resp?.data?.nota) {
+                const temp = resp?.data?.nota
+                const adaNota = this.notas.filter(a => a === temp)
+                if (!adaNota?.length) {
+                  this.notas.push(temp)
+                  this.nota = temp
+                }
               }
+              this.resetObat()
+              this.setForm('lanjuTr', '')
             }
-            this.resetObat()
 
             resolve(resp)
           })
@@ -252,6 +260,28 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
             this.loading = false
           })
       })
+    },
+    openDialog(val) {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
+        ok: {
+          push: true,
+          label: 'Lanjutkan',
+          'no-caps': true,
+          color: 'primary'
+        },
+        cancel: {
+          push: true,
+          label: 'Batal',
+          'no-caps': true,
+          color: 'dark'
+        }
+      })
+        .onOk(() => {
+          this.setForm('lanjuTr', '1')
+          this.simpanObat()
+        })
     }
   }
 })
