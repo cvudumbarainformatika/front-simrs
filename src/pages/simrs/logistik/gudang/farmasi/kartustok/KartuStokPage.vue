@@ -14,10 +14,22 @@
       <q-scroll-area style="height:calc( 100% - 40px)">
         <ListObat />
       </q-scroll-area>
-      <div class="absolute-bottom bg-primary text-white">
-        <BottomComp />
+      <div
+        v-if="store.meta"
+        class="absolute-bottom bg-primary text-white"
+      >
+        <BottomComp
+          :meta="store.meta"
+          @go-to="store.goToPage"
+        />
       </div>
     </q-card>
+
+    <KartuStokRinci
+      v-model="store.dialogRinci"
+      :item="store.item"
+      :params="store.params"
+    />
   </q-page>
 </template>
 
@@ -25,8 +37,11 @@
 import HeaderComp from './comp/HeaderComp.vue'
 import ListObat from './comp/ListObat.vue'
 import BottomComp from './comp/BottomCompPage.vue'
+import KartuStokRinci from './comp/KartuStokRinci.vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { useKartuStokFarmasiStore } from '../../../../../../stores/simrs/farmasi/katustok'
 
 const style = useStyledStore()
+const store = useKartuStokFarmasiStore()
 
 </script>

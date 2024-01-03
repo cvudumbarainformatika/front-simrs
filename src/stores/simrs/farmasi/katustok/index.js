@@ -9,10 +9,12 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       q: '',
       bulan: '01',
       tahun: 2024,
-      per_page: 20,
+      per_page: 50,
       page: 1
     },
-    loading: false
+    loading: false,
+    dialogRinci: false,
+    item: null
   }),
   actions: {
     async getData() {
@@ -31,6 +33,19 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     },
     setTahun(val) {
       this.params.tahun = val
+    },
+
+    goToPage(val) {
+      this.params.page = val
+      this.getData()
+    },
+
+    setDialogRinci() {
+      this.dialogRinci = !this.dialogRinci
+    },
+    setItem(val) {
+      this.item = val
+      this.dialogRinci = true
     }
 
   }
