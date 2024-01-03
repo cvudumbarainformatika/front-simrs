@@ -71,25 +71,38 @@
               {{ user?.pegawai?.depo_sim?.nama }}
             </div> -->
             <div
-              v-else-if="!!user?.pegawai?.kdruangansim"
+              v-else-if="user?.pegawai?.kdruangansim.split('|').length===1 || (user?.pegawai?.kdruangansim.split('|').length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
               class="q-mr-sm text-primary"
-              style="max-width: 80%;"
             >
+              <!-- style="max-width: 80%;" -->
               {{ poli(user?.pegawai) }}
             </div>
-            <div
+            <!-- <div
               v-else
               class="q-mr-sm text-primary"
             >
               Tidak ada ruangan
-            </div>
+            </div> -->
           </div>
           <div
             v-if="optionsGudang?.length >1"
             class="q-mr-sm items-center"
-            style="width: 180px;"
           >
-            <app-autocomplete-new
+            <!-- :label="labelGd()" -->
+            <q-btn
+              no-caps
+              dense
+              color="primary"
+            >
+              <div class="f-10">
+                {{ labelGd() }}
+              </div>
+              <adm-choice-ruangan
+                :option="optionsGudang"
+                @set-gudang="emit('setGudang',$event)"
+              />
+            </q-btn>
+            <!-- <app-autocomplete-new
               ref="refObat"
               :key="user.kdruangansim"
               :model="user.kdruangansim"
@@ -104,13 +117,27 @@
               @on-select="emit('setGudang',$event)"
               @clear="emit('setGudang',null)"
             />
+              -->
           </div>
           <div
             v-if="optionsRuangans?.length >1"
             class="q-mr-sm items-center"
-            style="width: 180px;"
           >
-            <app-autocomplete-new
+            <!-- style="width: 180px;" -->
+            <q-btn
+              no-caps
+              dense
+              color="primary"
+            >
+              <div class="f-10">
+                {{ labelRu() }}
+              </div>
+              <adm-choice-ruangan
+                :option="optionsRuangans"
+                @set-gudang="emit('setGudang',$event)"
+              />
+            </q-btn>
+            <!-- <app-autocomplete-new
               ref="refObat"
               :key="user.kdruangansim"
               :model="user.kdruangansim"
@@ -124,7 +151,7 @@
               :loading="setting.loadingRuangSim"
               @on-select="emit('setGudang',$event)"
               @clear="emit('setGudang',null)"
-            />
+            /> -->
           </div>
           <q-btn
             flat
@@ -147,6 +174,7 @@
 <script setup>
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import AdmHeaderMenuProfile from './AdmHeaderMenuProfile.vue'
+import AdmChoiceRuangan from './AdmChoiceRuangan.vue'
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 const emit = defineEmits(['goToSso', 'setGudang'])
@@ -184,71 +212,53 @@ onMounted(() => {
   // console.log('route', route)
   const temp = props.user?.pegawai?.kdruangansim.split('|')
   if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
+  optionsGudang.value = props?.gudangs.filter(gud => temp.includes(gud.kode))
+  optionsRuangans.value = props?.ruangs.filter(gud => temp.includes(gud.kode))
 })
-
+function labelGd() {
+  const anu = props?.gudangs.filter(gud => gud.kode === props.user?.kdruangansim)
+  if (anu.length) return anu[0]?.nama
+  else return 'Tidak ada ruangan'
+}
+function labelRu() {
+  const anu = props?.ruangs.filter(gud => gud.kode === props.user?.kdruangansim)
+  if (anu.length) return anu[0]?.uraian
+  else return 'Tidak ada ruangan'
+}
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
 const optionsGudang = ref([])
 const optionsRuangans = ref([])
 function poli(val) {
-  const anu = []
   let fin = null
-  const anu2 = []
-  let fin2 = null
-  const anu3 = []
-  let fin3 = null
+  // optionsGudang.value = []
+  // optionsRuangans.value = []
   let ruang = ''
   // console.log(val)
   const temp = val.kdruangansim.split('|')
   // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
-    temp.forEach(a => {
-      if (a.toLowerCase().includes('pol') || a.toLowerCase().includes('pen')) {
-        // console.log('pol')
-        if (props.polis?.length) {
-          const pol = props?.polis?.filter(b => b.kodepoli === a)
-          if (pol.length) anu.push(pol[0])
-
-          if (anu.length) {
-            fin = anu.map(x => x.polirs).join(', ')
-          }
-          ruang = fin ?? 'Tidak ada Akses Poli'
-        } else {
-          ruang = 'Menunggu data poli'
-        }
-      } else if (a.toLowerCase().includes('gd')) {
-        if (props.gudangs?.length) {
-          const gud = props?.gudangs.filter(c => c.kode === a)
-          if (gud.length) anu2.push(gud[0])
-          if (anu2.length) {
-            fin2 = anu2.map(x => x.nama).join(', ')
-          }
-          ruang = fin2 ?? 'Tidak ada Akses gudang / depo'
-        } else {
-          ruang = 'Menunggu data gudang'
-        }
-      } else if (a.toLowerCase().includes('r-')) {
-        if (props.ruangs?.length) {
-          const gud = props?.ruangs.filter(c => c.kode === a)
-          if (gud.length) anu3.push(gud[0])
-          if (anu3.length) {
-            fin3 = anu3.map(x => x.uraian).join(', ')
-          }
-          ruang = fin3 ?? 'Tidak ada Akses Ruangan'
-        } else {
-          ruang = 'Menunggu data ruangan'
-        }
-      } else {
-        ruang = 'NN'
-      }
-    })
+    const anu = props?.polis.filter(gud => temp.includes(gud.kodepoli))
+    if (anu.length) {
+      fin = anu.map(x => x.polirs).join(', ')
+      console.log('gu', optionsRuangans.value.map(x => x.uraian))
+    } else if (optionsGudang.value.length) {
+      fin = optionsGudang.value.map(x => x.nama).join(', ')
+      console.log('gu', optionsRuangans.value.map(x => x.uraian))
+    } else if (optionsRuangans.value.length) {
+      fin = optionsRuangans.value.map(x => x.uraian).join(', ')
+      console.log('ru', optionsRuangans.value.map(x => x.uraian))
+    }
+    ruang = fin ?? 'Tidak ada Akses Ruangan'
+    // console.log('gud', optionsRuangans.value)
   } else {
     ruang = 'data ruangan tidak ditemukan'
   }
   // console.log(ruang)
-  optionsGudang.value = anu2
-  optionsRuangans.value = anu3
+  // optionsGudang.value = anu2
+  // optionsRuangans.value = anu3
   // console.log('gud', optionsGudang.value)
+  // console.log('ru', optionsRuangans.value.map(x => x.uraian)).join(', ')
   return ruang
 }
 
