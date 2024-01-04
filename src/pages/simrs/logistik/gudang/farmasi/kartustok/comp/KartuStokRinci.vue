@@ -33,7 +33,7 @@
                     <div style="width:100px">
                       Ruangan
                     </div>
-                    <div> : Ruangan jkj</div>
+                    <div> : {{ params.koderuangan }}</div>
                   </div>
                   <div class="row">
                     <div style="width:100px">
