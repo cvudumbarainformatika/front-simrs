@@ -71,7 +71,7 @@
               {{ user?.pegawai?.depo_sim?.nama }}
             </div> -->
             <div
-              v-else-if="user?.pegawai?.kdruangansim.split('|').length===1 || (user?.pegawai?.kdruangansim.split('|').length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
+              v-else-if="(rsim.length===1&&rsim[0]!=='') || (rsim.length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
               class="q-mr-sm text-primary"
             >
               <!-- style="max-width: 80%;" -->
@@ -176,7 +176,7 @@ import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import AdmHeaderMenuProfile from './AdmHeaderMenuProfile.vue'
 import AdmChoiceRuangan from './AdmChoiceRuangan.vue'
 import { useRoute } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 const emit = defineEmits(['goToSso', 'setGudang'])
 
 const route = useRoute()
@@ -210,14 +210,22 @@ const props = defineProps({
 
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
-const optionsGudang = ref([])
-const optionsRuangans = ref([])
+const rsim = computed(() => {
+  return props.user?.pegawai?.kdruangansim.split('|')
+})
+const optionsGudang = computed(() => {
+  return props?.gudangs?.filter(gud => rsim.value.includes(gud.kode))
+})
+const optionsRuangans = computed(() => {
+  return props?.ruangs?.filter(gud => rsim.value.includes(gud.kode))
+})
+const optionsPolis = computed(() => {
+  return props?.polis?.filter(gud => rsim.value.includes(gud.kodepoli))
+})
 onMounted(() => {
-  // console.log('route', route)
   const temp = props.user?.pegawai?.kdruangansim.split('|')
   if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
-  optionsGudang.value = props?.gudangs?.filter(gud => temp.includes(gud.kode))
-  optionsRuangans.value = props?.ruangs?.filter(gud => temp.includes(gud.kode))
+  // rsim.value = temp
 })
 function labelGd() {
   const anu = props?.gudangs.filter(gud => gud.kode === props.user?.kdruangansim)
@@ -231,34 +239,20 @@ function labelRu() {
 }
 function poli(val) {
   let fin = null
-  // optionsGudang.value = []
-  // optionsRuangans.value = []
   let ruang = ''
-  // console.log(val)
   const temp = val.kdruangansim.split('|')
-  // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
-    const anu = props?.polis?.filter(gud => temp.includes(gud.kodepoli))
-    if (anu.length) {
-      fin = anu.map(x => x.polirs).join(', ')
-      console.log('gu', optionsRuangans.value.map(x => x.uraian))
-    } else if (optionsGudang.value.length) {
+    if (optionsPolis.value.length) {
+      fin = optionsPolis.value.map(x => x.polirs).join(', ')
+    } else if (optionsGudang.value?.length) {
       fin = optionsGudang.value.map(x => x.nama).join(', ')
-      console.log('gu', optionsRuangans.value.map(x => x.uraian))
-    } else if (optionsRuangans.value.length) {
+    } else if (optionsRuangans.value?.length) {
       fin = optionsRuangans.value.map(x => x.uraian).join(', ')
-      console.log('ru', optionsRuangans.value.map(x => x.uraian))
     }
     ruang = fin ?? 'Tidak ada Akses Ruangan'
-    // console.log('gud', optionsRuangans.value)
   } else {
     ruang = 'data ruangan tidak ditemukan'
   }
-  // console.log(ruang)
-  // optionsGudang.value = anu2
-  // optionsRuangans.value = anu3
-  // console.log('gud', optionsGudang.value)
-  // console.log('ru', optionsRuangans.value.map(x => x.uraian)).join(', ')
   return ruang
 }
 

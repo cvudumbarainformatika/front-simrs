@@ -44,11 +44,11 @@
             <div>Beli</div>
           </template>
           <template #cell-obat="{row}">
-            <div class="row no-wrap text-weight-bold text-green">
-              {{ row.kd_obat }}
-            </div>
             <div class="row text-weight-bold text-amber-10 box text-right no-wrap items-center">
-              {{ row.nama_obat }}
+              {{ row.nama_obat??row.namaobat }}
+            </div>
+            <div class="row no-wrap text-italic f-10">
+              {{ row.kd_obat }}
             </div>
             <div class="row text-weight-bold no-wrap text-italic f-10">
               ( {{ row.satuan_k ? row.satuan_k :'-' }} )
@@ -84,93 +84,41 @@
           </template>
           <template #cell-stok="{row}">
             <div
-              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100'"
-              class="row justify-between no-wrap "
-              :class="row.stokGudangFs > 0 ? 'text-brown' : ''"
+              class="cursor-pointer"
+              @click="store.getRinciMinmax(row)"
             >
-              <div class="q-mr-xs">
-                Gudang FS
+              <div
+                class="row justify-between no-wrap "
+                :class="row.stokRS > 0 ? 'text-orange' : ''"
+              >
+                <div class="q-mr-xs">
+                  Seluruh Rumah Sakit
+                </div>
+                <div>
+                  {{ row.stokRS }}
+                </div>
               </div>
-              <div class="">
-                {{ row.stokGudangFs }}
+              <div
+                class="row justify-between no-wrap "
+                :class="row.stokMinRS > 0 ? 'text-cyan' : ''"
+              >
+                <div class="q-mr-xs">
+                  Minimal Rumah Sakit
+                </div>
+                <div>
+                  {{ row.stokMinRS }}
+                </div>
               </div>
-            </div>
-            <div
-              v-if="row.stokMaxGudangFs > 0 && (!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100')"
-              class="row justify-between no-wrap "
-              :class="row.stokMaxGudangFs > 0 ? 'text-purple' : ''"
-            >
-              <div class="q-mr-xs">
-                Maksimal Gudang FS
-              </div>
-              <div>
-                {{ row.stokMaxGudangFs }}
-              </div>
-            </div>
-            <q-separator
-              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-03010100'"
-              class="q-my-xs"
-            />
-            <div
-              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
-              class="row justify-between no-wrap "
-              :class="row.stokGudangKo > 0 ? 'text-brown' : ''"
-            >
-              <div class="q-mr-xs">
-                Gudang KO
-              </div>
-              <div class="">
-                {{ row.stokGudangKo }}
-              </div>
-            </div>
-
-            <div
-              v-if="row.stokMaxGudangKo > 0 && (!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100')"
-              class="row justify-between no-wrap "
-              :class="row.stokMaxGudangKo > 0 ? 'text-purple' : ''"
-            >
-              <div class="q-mr-xs">
-                Maksimal Gudang KO
-              </div>
-              <div>
-                {{ row.stokMaxGudangKo }}
-              </div>
-            </div>
-            <q-separator
-              v-if="!store.form.kd_ruang || store.form.kd_ruang==='Gd-05010100'"
-              class="q-my-xs"
-            />
-            <div
-              class="row justify-between no-wrap "
-              :class="row.stokGudang > 0 ? 'text-brown' : ''"
-            >
-              <div class="q-mr-xs">
-                Gudang
-              </div>
-              <div class="">
-                {{ row.stokGudang }}
-              </div>
-            </div>
-            <div
-              class="row justify-between no-wrap "
-              :class="row.stokRS > 0 ? 'text-orange' : ''"
-            >
-              <div class="q-mr-xs">
-                Seluruh Rumah Sakit
-              </div>
-              <div>
-                {{ row.stokRS }}
-              </div>
-            </div>
-            <div
-              class="row justify-between no-wrap "
-              :class="row.stokMaxRS > 0 ? 'text-purple' : ''"
-            >
-              <div class="q-mr-xs">
-                Maksimal Rumah Sakit
-              </div>
-              <div>
-                {{ row.stokMaxRS }}
+              <div
+                class="row justify-between no-wrap "
+                :class="row.stokMaxRS > 0 ? 'text-purple' : ''"
+              >
+                <div class="q-mr-xs">
+                  Maksimal Rumah Sakit
+                </div>
+                <div>
+                  {{ row.stokMaxRS }}
+                </div>
               </div>
             </div>
           </template>
@@ -243,13 +191,16 @@
       </q-card-section>
     </q-card>
   </div>
+  <DetailMinMax v-model="store.isOpen" />
 </template>
 <script setup>
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { useTabelObatDirencanakaStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObatRencana'
+import { defineAsyncComponent } from 'vue'
 
 const table = useTabelObatDirencanakaStore()
 const store = useRencanaPemesananObatStore()
+const DetailMinMax = defineAsyncComponent(() => import('./DetailMinMax.vue'))
 
 function setJumlah(evt, val) {
   const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
