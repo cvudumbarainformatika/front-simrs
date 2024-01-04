@@ -88,23 +88,23 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
     },
     assignItems(val, renc) {
       const apps = useAplikasiStore()
-      const kdRuang = apps?.user?.pegawai?.kdruangansim ?? renc?.form?.kd_ruang
+      const kdRuang = apps?.user?.kdruangansim ?? renc?.form?.kd_ruang
       if (kdRuang) {
         console.log('koRuang jarene true')
       }
-      console.log('kode ruang user', apps?.user?.pegawai?.kdruangansim, kdRuang)
+      console.log('kode ruang user', apps?.user?.kdruangansim, kdRuang)
       val.forEach(item => {
         item.checked = false
-        item.stokGudang = item.stokrealgudang.length ? item.stokrealgudang.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokGudangFs = item.stokrealgudangfs.length ? item.stokrealgudangfs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokGudangKo = item.stokrealgudangko.length ? item.stokrealgudangko.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokRS = item.stokrealallrs.length ? item.stokrealallrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokMaxRS = item.stokmaxrs.length ? item.stokmaxrs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokMaxGudangKo = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-05010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokMaxGudangFs = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-03010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+        item.stokGudang = item?.stok ?? 0
+        // item.stokGudangFs = item.stokrealgudangfs.length ? item.stokrealgudangfs.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+        // item.stokGudangKo = item.stokrealgudangko.length ? item.stokrealgudangko.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+        item.stokRS = item.stok ?? 0
+        item.stokMaxRS = item.summax ?? 0
+        // item.stokMaxGudangKo = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-05010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
+        // item.stokMaxGudangFs = item.stokmaxpergudang.length ? item.stokmaxpergudang.filter(a => a.kd_ruang === 'Gd-03010100').map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
         item.sudahDirencanakan = item.perencanaanrinci.length ? item.perencanaanrinci.map(a => parseInt(a.jumlah)).reduce((a, b) => a + b, 0) : 0
-        item.stokMaxs = !kdRuang ? item.stokMaxRS : (kdRuang === 'Gd-05010100' ? (item.stokMaxGudangKo) : (item.stokMaxGudangFs))
-        item.stokReals = !kdRuang ? item.stokGudang : (kdRuang === 'Gd-05010100' ? (item.stokGudangKo) : (item.stokGudangFs))
+        item.stokMaxs = item.stokMaxRS ?? 0
+        item.stokReals = item.stokRS ?? 0
         item.bisaBeli = (item.stokMaxs - item.stokRS - item.sudahDirencanakan) > 0 ? (item.stokMaxs - item.stokRS - item.sudahDirencanakan) : 0
 
         item.jumlahBeli = item.bisaBeli
@@ -120,13 +120,13 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
           .then(resp => {
             this.loading = false
             console.log('obat mau dibeli', resp?.data)
-            // const temp = resp?.data?.data ?? resp?.data
-            // const renc = useRencanaPemesananObatStore()
-            // this.assignItems(temp, renc)
-            // this.meta = resp?.data?.current_page ? resp?.data : null
-            // if (renc.form?.kd_ruang) {
-            //   this.filterItem(renc.form?.kd_ruang)
-            // }
+            const temp = resp?.data?.data ?? resp?.data
+            const renc = useRencanaPemesananObatStore()
+            this.assignItems(temp, renc)
+            this.meta = resp?.data?.current_page ? resp?.data : null
+            if (renc.form?.kd_ruang) {
+              this.filterItem(renc.form?.kd_ruang)
+            }
             resolve(resp)
           })
           .catch(() => {

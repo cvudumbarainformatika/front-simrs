@@ -89,7 +89,7 @@
 <script setup>
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 
 const apps = useAplikasiStore()
 const store = useRencanaPemesananObatStore()
@@ -108,7 +108,11 @@ function gudang(val) {
 }
 onMounted(() => {
   if (apps?.user?.pegawai?.kdruangansim !== '') {
-    store.setForm('kd_ruang', apps?.user?.pegawai?.kdruangansim)
+    store.setForm('kd_ruang', apps?.user?.kdruangansim)
   }
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  // console.log('watch', obj)
+  store.setForm('kd_ruang', obj)
 })
 </script>
