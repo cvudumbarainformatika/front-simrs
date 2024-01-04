@@ -92,7 +92,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
         const apps = useAplikasiStore()
         const param = {
           groups: val?.groups,
-          kdruang: apps?.user?.pegawai?.kdruangansim
+          kdruang: apps?.user?.kdruangansim
         }
         this.getDataObat(param)
       }

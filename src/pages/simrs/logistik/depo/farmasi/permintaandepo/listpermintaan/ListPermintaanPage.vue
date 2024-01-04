@@ -197,7 +197,7 @@ const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.setParam('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 // click

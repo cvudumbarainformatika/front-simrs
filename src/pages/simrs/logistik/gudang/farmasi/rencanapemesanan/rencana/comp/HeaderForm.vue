@@ -61,7 +61,7 @@
       {{ apps?.user?.pegawai?.depo_sim?.nama }}
     </div>
     <div
-      v-else-if="apps?.user?.pegawai?.kdruangansim!==''"
+      v-else-if="apps?.user?.kdruangansim!==''"
       class="text-weight-bold text-white q-mr-sm"
     >
       {{ gudang(store.form.kd_ruang) }}
@@ -107,7 +107,7 @@ function gudang(val) {
   else return 'form gudang tidak terisi'
 }
 onMounted(() => {
-  if (apps?.user?.pegawai?.kdruangansim !== '') {
+  if (apps?.user?.kdruangansim !== '') {
     store.setForm('kd_ruang', apps?.user?.kdruangansim)
   }
 })

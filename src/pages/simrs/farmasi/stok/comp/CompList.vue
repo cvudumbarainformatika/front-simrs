@@ -131,8 +131,8 @@ const apps = useAplikasiStore()
 function cariGudang(val) {
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)
-    if (apps?.user?.pegawai?.kdruangansim !== '') {
-      const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.pegawai?.kdruangansim)
+    if (apps?.user?.kdruangansim !== '') {
+      const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.kdruangansim)
       store.setDisp('kdruang', gudang2[0]?.nama)
     }
     if (gudang.length) {

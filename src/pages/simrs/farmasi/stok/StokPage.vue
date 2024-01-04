@@ -72,9 +72,9 @@ function openDialog() {
 }
 
 onMounted(() => {
-  if (apps?.user?.pegawai?.kdruangansim !== '') {
-    store.setForm('kdruang', apps?.user?.pegawai?.kdruangansim)
-    table.setParam('kdruang', apps?.user?.pegawai?.kdruangansim)
+  if (apps?.user?.kdruangansim !== '') {
+    store.setForm('kdruang', apps?.user?.kdruangansim)
+    table.setParam('kdruang', apps?.user?.kdruangansim)
   }
 })
 function simpan() {

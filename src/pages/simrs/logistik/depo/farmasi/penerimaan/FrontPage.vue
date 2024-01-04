@@ -396,8 +396,8 @@ import { onMounted, ref } from 'vue'
 const store = useDistribusiPenerimaanDepoStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setForm('kddepo', apps?.user?.pegawai?.kdruangansim)
-  store.setParams('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('kddepo', apps?.user?.kdruangansim)
+  store.setParams('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 

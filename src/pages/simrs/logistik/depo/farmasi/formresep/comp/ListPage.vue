@@ -266,7 +266,7 @@ const store = useListResepDepoStore()
 const apps = useAplikasiStore()
 const router = useRouter()
 onMounted(() => {
-  store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.setParam('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 function onClick (val) {

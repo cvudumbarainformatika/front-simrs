@@ -879,8 +879,8 @@ const apps = useAplikasiStore()
 
 const gudang = computed(() => {
   let gud = null
-  if (apps.user.pegawai.kdruangansim !== '') {
-    const anu = store.gudangs.filter(a => a.value === apps.user.pegawai.kdruangansim)
+  if (apps.user.kdruangansim !== '') {
+    const anu = store.gudangs.filter(a => a.value === apps.user.kdruangansim)
     if (anu.length) {
       gud = anu[0]
       store.setForm('kdruang', gud.value)

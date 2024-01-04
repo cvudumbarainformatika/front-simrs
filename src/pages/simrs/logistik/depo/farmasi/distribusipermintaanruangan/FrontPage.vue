@@ -416,8 +416,8 @@ import { ref, onMounted } from 'vue'
 const store = useDistribusiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setForm('kdgudang', apps?.user?.pegawai?.kdruangansim)
-  store.setParams('kdgudang', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('kdgudang', apps?.user?.kdruangansim)
+  store.setParams('kdgudang', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 function depo (val) {

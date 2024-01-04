@@ -131,7 +131,7 @@ function cariObat (val) {
   console.log(val)
   const param = {
     groups: store?.pasien?.groups,
-    kdruang: apps?.user?.pegawai?.kdruangansim
+    kdruang: apps?.user?.kdruangansim
   }
   if (store.obats.length) {
     options.value = store.obats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))

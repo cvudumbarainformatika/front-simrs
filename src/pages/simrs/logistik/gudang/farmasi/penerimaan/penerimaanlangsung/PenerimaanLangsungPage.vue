@@ -134,7 +134,7 @@
               option-value="value"
               label="Pilih Gudang"
               outlined
-              :disable="apps?.user?.pegawai?.kdruangansim!==''"
+              :disable="apps?.user?.kdruangansim!==''"
               :source="store.gudangs"
               @on-select="store.gudangSelected"
               @clear="store.clearGudang"
@@ -436,7 +436,7 @@ const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setForm('gudang', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('gudang', apps?.user?.kdruangansim)
 })
 store.getInitialData()
 function setHargaNetto() {

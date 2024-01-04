@@ -338,7 +338,7 @@ onBeforeUnmount(() => {
 // ----- timer end -----
 
 onMounted(() => {
-  store.setForm('kodedepo', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('kodedepo', apps?.user?.kdruangansim)
   store.getSigna()
 })
 </script>
