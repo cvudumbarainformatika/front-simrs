@@ -11,9 +11,9 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     aksesSubs: [],
     currentApp: null,
     user: null,
-    gudangs: null,
-    polis: null,
-    ruangs: null
+    gudangs: [],
+    polis: [],
+    ruangs: []
 
   }),
   persist: true,
