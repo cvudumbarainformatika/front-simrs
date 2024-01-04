@@ -2,12 +2,16 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelObatDirencanakaStore } from './tabelObatRencana'
-import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { filterDuplicateArrays, notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan_obat', {
   state: () => ({
+    isOpen: false,
     loading: false,
+    loadingRinci: false,
     items: [],
+    rincis: {},
+    obat: null,
     param: {
       no_rencbeliobat: '',
       per_page: 10,
@@ -35,6 +39,14 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
     setParam(key, val) {
       this.param[key] = val
     },
+    setOpen() {
+      this.isOpen = true
+    },
+    setClose() {
+      this.isOpen = false
+      this.obat = null
+    },
+
     resetForm() {
       const kodeGudang = this.form.kd_ruang
       this.form = {
@@ -58,8 +70,56 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       tabel.filterItem('')
       console.log('gudang deleteed', null)
     },
+    parsingDataRinci(data) {
+      console.log('max ', data)
+      const rinc = []
+      const mm = data?.viewrinciminmax?.map(x => x.kd_ruang)
+      const st = data?.viewrincistok?.map(x => x.kdruang)
+      const all = filterDuplicateArrays(mm.concat(st))
+      if (all?.length) {
+        all.forEach(a => {
+          const max = data?.viewrinciminmax?.find(rm => rm.kd_ruang === a)
+          const sto = data?.viewrincistok?.find(rm => rm.kdruang === a)
+          const temp = {
+            kode_ruang: a,
+            nama_ruang: max?.gudang?.nama ?? sto?.gudangdepo?.nama,
+            min: isNaN(parseFloat(max?.min)) ? 0 : parseFloat(max?.min),
+            max: isNaN(parseFloat(max?.max)) ? 0 : parseFloat(max?.max),
+            stok: isNaN(parseFloat(sto?.jumlah)) ? 0 : parseFloat(sto?.jumlah),
+            nama_obat: ''
+          }
+          rinc.push(temp)
+        })
+      }
+
+      this.rincis = rinc
+      // console.log('mm ', mm)
+      // console.log('st ', st)
+      // console.log('all ', all)
+      console.log('rinci ', rinc)
+    },
     getInitialData() {
       this.cariRencanaBeli()
+    },
+    getRinciMinmax(val) {
+      this.obat = val
+      this.setOpen()
+      const param = {
+        params: {
+          kdobat: val?.kd_obat
+        }
+      }
+      this.loadingRinci = true
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/dialogperencanaanobatdetail', param)
+          .then(resp => {
+            this.loadingRinci = false
+            this.parsingDataRinci(resp?.data)
+            resolve(resp)
+          })
+          .catch(() => { this.loadingRinci = false })
+      })
+      // console.log('get rinci', val)
     },
     //
     selesaiDanKunci() {

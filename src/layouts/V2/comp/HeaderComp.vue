@@ -71,7 +71,7 @@
               {{ user?.pegawai?.depo_sim?.nama }}
             </div> -->
             <div
-              v-else-if="user?.pegawai?.kdruangansim.split('|').length===1 || (user?.pegawai?.kdruangansim.split('|').length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
+              v-else-if="(rsim.length===1&&rsim[0]!=='') || (rsim.length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
               class="q-mr-sm text-primary"
             >
               <!-- style="max-width: 80%;" -->
@@ -212,9 +212,11 @@ const props = defineProps({
 const setting = useSettingsAplikasi()
 const optionsGudang = ref([])
 const optionsRuangans = ref([])
+const rsim = ref([])
 onMounted(() => {
   // console.log('route', route)
   const temp = props.user?.pegawai?.kdruangansim.split('|')
+  rsim.value = temp
   if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
   optionsGudang.value = props?.gudangs?.filter(gud => temp.includes(gud.kode))
   optionsRuangans.value = props?.ruangs?.filter(gud => temp.includes(gud.kode))
@@ -234,8 +236,8 @@ function poli(val) {
   // optionsGudang.value = []
   // optionsRuangans.value = []
   let ruang = ''
-  // console.log(val)
   const temp = val.kdruangansim.split('|')
+  console.log('lemp lengt', temp, temp.length)
   // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
     const anu = props?.polis?.filter(gud => temp.includes(gud.kodepoli))
