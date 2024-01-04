@@ -18,9 +18,10 @@ import ptk from './ptk'
 import ruangan from './ruangan'
 import igd from './igd'
 import ranap from './ranap'
+import satset from './satset'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
-  kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap
+  kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset
 }
