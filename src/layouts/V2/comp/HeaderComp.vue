@@ -208,12 +208,16 @@ const props = defineProps({
   }
 })
 
+// eslint-disable-next-line no-unused-vars
+const setting = useSettingsAplikasi()
+const optionsGudang = ref([])
+const optionsRuangans = ref([])
 onMounted(() => {
   // console.log('route', route)
   const temp = props.user?.pegawai?.kdruangansim.split('|')
   if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
-  optionsGudang.value = props?.gudangs.filter(gud => temp.includes(gud.kode))
-  optionsRuangans.value = props?.ruangs.filter(gud => temp.includes(gud.kode))
+  optionsGudang.value = props?.gudangs?.filter(gud => temp.includes(gud.kode))
+  optionsRuangans.value = props?.ruangs?.filter(gud => temp.includes(gud.kode))
 })
 function labelGd() {
   const anu = props?.gudangs.filter(gud => gud.kode === props.user?.kdruangansim)
@@ -221,14 +225,10 @@ function labelGd() {
   else return 'Tidak ada ruangan'
 }
 function labelRu() {
-  const anu = props?.ruangs.filter(gud => gud.kode === props.user?.kdruangansim)
+  const anu = props?.ruangs?.filter(gud => gud.kode === props.user?.kdruangansim)
   if (anu.length) return anu[0]?.uraian
   else return 'Tidak ada ruangan'
 }
-// eslint-disable-next-line no-unused-vars
-const setting = useSettingsAplikasi()
-const optionsGudang = ref([])
-const optionsRuangans = ref([])
 function poli(val) {
   let fin = null
   // optionsGudang.value = []
@@ -238,7 +238,7 @@ function poli(val) {
   const temp = val.kdruangansim.split('|')
   // if (temp.length && (parseInt(props?.user?.pegawai?.role_id) >= 3 && parseInt(props?.user?.pegawai?.role_id) <= 7)) {
   if (temp.length) {
-    const anu = props?.polis.filter(gud => temp.includes(gud.kodepoli))
+    const anu = props?.polis?.filter(gud => temp.includes(gud.kodepoli))
     if (anu.length) {
       fin = anu.map(x => x.polirs).join(', ')
       console.log('gu', optionsRuangans.value.map(x => x.uraian))
