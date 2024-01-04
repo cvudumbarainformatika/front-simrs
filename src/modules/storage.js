@@ -35,4 +35,8 @@ export const delAPend = () => localStorage.removeItem('pendaftaranAutocomplete')
 export const setActiveTime = localStorage.setItem('activeTime', new Date())
 export const getActiveTime = () => localStorage.getItem('activeTime')
 
+// satset
+export const setTokenSatset = data => localStorage?.setItem('satset', JSON.stringify(data))
+export const getAuthSatset = () => JSON.parse(localStorage.getItem('satset'))
+
 export const clearStore = () => localStorage.clear()
