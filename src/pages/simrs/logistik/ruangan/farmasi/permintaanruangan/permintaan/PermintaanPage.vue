@@ -455,24 +455,24 @@ const user = computed(() => {
         store.setParam('kdgudang', 'Gd-03010101')
         store.getListObat()
       }
-    } else if (apps.user.pegawai.depo) {
-      store.setForm('dari', apps.user.pegawai.depo.kode)
-      store.setDisp('depo', apps.user.pegawai.depo.nama)
-      const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
-      console.log('dep', dep)
-      if (dep.length) {
-        store.setForm('tujuan', 'Gd-03010101')
-        store.setParam('kdgudang', 'Gd-03010101')
-        store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
-        store.getListObat()
-      } else {
-        store.setForm('tujuan', 'Gd-03010101')
-        store.setParam('kdgudang', 'Gd-03010101')
-        store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
-        store.getListObat()
-      }
-    } else if (apps.user.pegawai?.kdruangansim) {
-      const peg = store.ruangans.filter(val => val.kode === apps.user.pegawai?.kdruangansim)
+    // } else if (apps.user.pegawai.depo) {
+    //   store.setForm('dari', apps.user.pegawai.depo.kode)
+    //   store.setDisp('depo', apps.user.pegawai.depo.nama)
+    //   const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
+    //   console.log('dep', dep)
+    //   if (dep.length) {
+    //     store.setForm('tujuan', 'Gd-03010101')
+    //     store.setParam('kdgudang', 'Gd-03010101')
+    //     store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
+    //     store.getListObat()
+    //   } else {
+    //     store.setForm('tujuan', 'Gd-03010101')
+    //     store.setParam('kdgudang', 'Gd-03010101')
+    //     store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
+    //     store.getListObat()
+    //   }
+    } else if (apps.user?.kdruangansim) {
+      const peg = store.ruangans.filter(val => val.kode === apps.user?.kdruangansim)
       if (peg.length) {
         store.setForm('dari', peg[0].kode)
         store.setDisp('depo', peg[0].uraian)
