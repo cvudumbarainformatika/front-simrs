@@ -53,17 +53,25 @@
       <template #expand="{row}">
         <div v-if="row.rinci.length">
           <div class="row items-center text-weight-bold">
-            <div class="col-2">
-              Kode Obat
+            <div class="col-4">
+              Obat
             </div>
-            <div class="col-2">
-              Stok Gudang
-            </div>
-            <div class="col-2">
-              Stok RS
-            </div>
-            <div class="col-2">
-              Stok Max
+            <div class="col-4">
+              <div class="row justify-center">
+                Stok
+              </div>
+              <q-separator />
+              <div class="row">
+                <div class="col-4">
+                  Gudang
+                </div>
+                <div class="col-4">
+                  Rs
+                </div>
+                <div class="col-4">
+                  Max
+                </div>
+              </div>
             </div>
             <div class="col-2">
               Jumlah Bisa di beli
@@ -77,17 +85,35 @@
             :key="i"
           >
             <div class="row items-center anu">
-              <div class="col-2">
-                {{ rin.kdobat }}
+              <div class="col-4">
+                <div
+                  class="row"
+                  style="white-space: normal;"
+                >
+                  {{ rin?.masterobat?.nama_obat }}
+                </div>
+                <div class="row text-italic f-8">
+                  {{ rin.kdobat }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-4">
+                    {{ rin.stok_real_gudang }}
+                  </div>
+                  <div class="col-4">
+                    {{ rin.stok_real_rs }}
+                  </div>
+                  <div class="col-4">
+                    {{ rin.stok_max_rs }}
+                  </div>
+                </div>
+                <!-- <div class="col-1">
               </div>
               <div class="col-2">
-                {{ rin.stok_real_gudang }}
               </div>
               <div class="col-2">
-                {{ rin.stok_real_rs }}
-              </div>
-              <div class="col-2">
-                {{ rin.stok_max_rs }}
+              </div> -->
               </div>
               <div class="col-2">
                 {{ rin.jumlah_bisa_dibeli }}

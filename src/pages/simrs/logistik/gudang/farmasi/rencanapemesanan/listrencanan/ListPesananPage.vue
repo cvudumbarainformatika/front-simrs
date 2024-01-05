@@ -49,7 +49,7 @@
         <div v-if="row.rincian.length">
           <div class="row items-center text-weight-bold">
             <div class="col-3">
-              Kode Obat
+              Obat
             </div>
             <div class="col-2">
               Stok Gudang
@@ -71,7 +71,15 @@
           >
             <div class="row items-center anu">
               <div class="col-3">
-                {{ rin.kdobat }}
+                <div
+                  class="row"
+                  style="white-space: normal;"
+                >
+                  {{ rin?.mobat?.nama_obat }}
+                </div>
+                <div class="row text-italic f-8">
+                  {{ rin.kdobat }}
+                </div>
               </div>
               <div class="col-2">
                 {{ rin.stok_real_gudang }}
