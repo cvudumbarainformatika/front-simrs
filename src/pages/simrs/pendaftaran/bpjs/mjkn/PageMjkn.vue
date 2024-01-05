@@ -25,6 +25,7 @@
         :loading-send="store.loadingSend"
         :rm="Rm"
         @kirim-poli="kirimPoli"
+        @cetak-antrian="cetakAntrian"
       />
     </div>
     <div class="fixed-bottom">
@@ -737,6 +738,16 @@ function toSimpan(dataPasien, form) {
     // dialogCetak()
   })
 }
+
+function cetakAntrian(val) {
+  console.log('cetak', val)
+  nomor = val?.nomorantrean ?? '-'
+  poli = val?.namapoli ?? '-'
+  norm = val?.norm ?? '-'
+  const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+  window.open(routeData.href, '_blank')
+}
+
 const keterangan = ref('')
 const loadingP = ref(false)
 function simpanPengajuan() {

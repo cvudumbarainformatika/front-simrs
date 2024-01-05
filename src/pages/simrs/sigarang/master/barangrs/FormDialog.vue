@@ -40,7 +40,7 @@
                 ref="refNama"
                 v-model="store.form.nama"
                 label="Nama*"
-                :disable="store.edited"
+                :disable="store.edited && role!=='root'"
                 outlined
                 autofocus
               />
@@ -179,10 +179,11 @@
 <script setup>
 // import { useMasterBarang108Form } from 'src/stores/simrs/logistik/sigarang/master/barang108/form'
 import { Dialog } from 'quasar'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useMasterBarangRSForm } from 'src/stores/simrs/logistik/sigarang/master/barangrs/form'
 import { useMasterMapingBarangForm } from 'src/stores/simrs/logistik/sigarang/master/mapingbarang/form'
 // import { useTransaksiPemensananForm } from 'src/stores/simrs/logistik/sigarang/transaksi/pemesanan/form'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 const store = useMasterBarangRSForm()
 const mapingbarang = useMasterMapingBarangForm()
 // const pemesanan = useTransaksiPemensananForm()
@@ -192,7 +193,10 @@ const refNama = ref(null)
 const refKodeSatuan = ref(null)
 const ref108 = ref(null)
 const refDepo = ref(null)
-
+const apps = useAplikasiStore()
+const role = computed(() => {
+  return apps?.user?.pegawai ? apps?.user?.pegawai?.role?.nama : ''
+})
 function get108(val) {
   console.log('108', val)
   store.autocompleteParams.q = val

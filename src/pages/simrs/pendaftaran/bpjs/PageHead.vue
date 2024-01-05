@@ -55,7 +55,7 @@
           size="md"
           @click="goTo('/pendaftaran/bpjs/listmjkn')"
         />
-        <q-btn
+        <!-- <q-btn
           :outline="path!=='/pendaftaran/bpjs/konsulan'"
           glossy
           push
@@ -63,7 +63,7 @@
           label="List konsulan"
           size="md"
           @click="goTo('/pendaftaran/bpjs/konsulan')"
-        />
+        /> -->
         <q-btn
           :outline="path!=='/pendaftaran/bpjs/listsharing'"
           glossy
