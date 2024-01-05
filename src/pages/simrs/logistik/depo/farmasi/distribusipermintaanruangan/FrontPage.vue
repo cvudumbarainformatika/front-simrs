@@ -412,13 +412,18 @@
 import { dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/distribusipermintaanruangan/distribusi'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 const store = useDistribusiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 onMounted(() => {
   store.setForm('kdgudang', apps?.user?.kdruangansim)
   store.setParams('kdgudang', apps?.user?.kdruangansim)
   store.getInitialData()
+})
+
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kdgudang', obj)
+  store.setParams('kdgudang', obj)
 })
 function depo (val) {
   const temp = apps.ruangs.filter(a => a.kode === val)

@@ -259,7 +259,7 @@
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListResepDepoStore } from 'src/stores/simrs/farmasi/resepdepo/listresep'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const store = useListResepDepoStore()
@@ -268,6 +268,10 @@ const router = useRouter()
 onMounted(() => {
   store.setParam('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
+})
+
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setParam('kddepo', obj)
 })
 function onClick (val) {
   // console.log('click', val)

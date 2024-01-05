@@ -50,7 +50,7 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { defineAsyncComponent, onMounted, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const style = useStyledStore()
@@ -76,6 +76,10 @@ onMounted(() => {
     store.setForm('kdruang', apps?.user?.kdruangansim)
     table.setParam('kdruang', apps?.user?.kdruangansim)
   }
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kdruang', obj)
+  table.setParam('kdruang', obj)
 })
 function simpan() {
   console.log('form', store.form)

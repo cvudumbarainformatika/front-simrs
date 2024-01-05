@@ -142,6 +142,9 @@ function cariObat (val) {
   }
 }
 
+// watch(() => apps?.user?.kdruangansim, (obj) => {
+
+// })
 function setJumlah(evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')

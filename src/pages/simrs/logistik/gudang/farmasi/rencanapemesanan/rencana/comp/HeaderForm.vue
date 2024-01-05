@@ -61,7 +61,7 @@
       {{ apps?.user?.pegawai?.depo_sim?.nama }}
     </div>
     <div
-      v-else-if="apps?.user?.kdruangansim!==''"
+      v-else-if="apps?.user?.pegawai?.kdruangansim!==''"
       class="text-weight-bold text-white q-mr-sm"
     >
       {{ gudang(store.form.kd_ruang) }}
@@ -112,7 +112,6 @@ onMounted(() => {
   }
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  // console.log('watch', obj)
   store.setForm('kd_ruang', obj)
 })
 </script>

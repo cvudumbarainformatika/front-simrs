@@ -391,7 +391,7 @@
 import { dateFullFormat } from 'src/modules/formatter'
 import { useDistribusiPenerimaanDepoStore } from 'src/stores/simrs/farmasi/penerimaandepo/penerimaandepo'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const store = useDistribusiPenerimaanDepoStore()
 const apps = useAplikasiStore()
@@ -399,6 +399,10 @@ onMounted(() => {
   store.setForm('kddepo', apps?.user?.kdruangansim)
   store.setParams('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kddepo', obj)
+  store.setParams('kddepo', obj)
 })
 
 function onClick (val) {

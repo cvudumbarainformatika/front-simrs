@@ -430,13 +430,16 @@ import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePenerimaanLangsungFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaanlangsung'
-import { onMounted, ref, onUnmounted } from 'vue'
+import { onMounted, ref, onUnmounted, watch } from 'vue'
 
 const style = useStyledStore()
 const store = usePenerimaanLangsungFarmasiStore()
 const apps = useAplikasiStore()
 onMounted(() => {
   store.setForm('gudang', apps?.user?.kdruangansim)
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('gudang', obj)
 })
 store.getInitialData()
 function setHargaNetto() {

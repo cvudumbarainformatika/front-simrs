@@ -293,7 +293,7 @@ import { date } from 'quasar'
 import { findWithAttr } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/resepdepo/formresepdepo'
-import { defineAsyncComponent, ref, onBeforeUnmount, onMounted } from 'vue'
+import { defineAsyncComponent, ref, onBeforeUnmount, onMounted, watch } from 'vue'
 const store = useResepDepoFarmasiStore()
 const apps = useAplikasiStore()
 
@@ -340,6 +340,10 @@ onBeforeUnmount(() => {
 onMounted(() => {
   store.setForm('kodedepo', apps?.user?.kdruangansim)
   store.getSigna()
+})
+
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kodedepo', obj)
 })
 </script>
 

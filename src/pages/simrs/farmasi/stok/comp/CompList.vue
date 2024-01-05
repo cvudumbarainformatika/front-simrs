@@ -142,6 +142,10 @@ function cariGudang(val) {
     return 'menunggu data Gudang / Depo'
   }
 }
+
+// watch(() => apps?.user?.kdruangansim, (obj) => {
+
+// })
 function editData(val) {
   store.editData(val)
   console.log('edit', val)
