@@ -6,12 +6,17 @@ import * as storage from 'src/modules/storage'
 export const useSatsetStore = defineStore('satset_store', {
   state: () => ({
     auth: null,
-    loading: false
+    loading: false,
+    params: {
+      token: null,
+      q: ''
+    },
+    dialogTambah: false
   }),
   persist: true,
   actions: {
     async getAuth() {
-      const resp = await api.get('v1/satusehat/auhorization')
+      const resp = await api.get('v1/satusehat/authorization')
       console.log('percobaan', resp)
       if (resp.status === 200) {
         storage.setTokenSatset(resp.data)
@@ -24,13 +29,15 @@ export const useSatsetStore = defineStore('satset_store', {
 
     SET_TOKEN_SATSET (token) {
       this.auth = token
+      this.params.token = this.auth?.access_token
       setTimeout(() => {
         this.loading = false
       }, 2000)
     },
-    async getData() {
-      // const resp = await api.get('v1/satusehat/percobaan')
-      // console.log('percobaan', resp)
+    async getOrganisasi() {
+      const params = { params: this.params }
+      const resp = await api.get('v1/satusehat/organization', params)
+      console.log('organization', resp)
     }
   }
 })
