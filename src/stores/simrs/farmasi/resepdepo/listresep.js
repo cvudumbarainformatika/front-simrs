@@ -17,7 +17,8 @@ export const useListResepDepoStore = defineStore('list_resep_depo', {
       'pasien',
       'resep',
       'tagihan',
-      'ina'
+      'ina',
+      'diagnosa'
     ]
   }),
   actions: {
