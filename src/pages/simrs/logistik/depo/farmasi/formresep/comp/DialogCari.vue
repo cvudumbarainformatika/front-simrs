@@ -21,7 +21,7 @@
           dense
         />
       </q-card-section>
-      <q-card-section class="row items-center q-pb-none">
+      <!-- <q-card-section class="row items-center q-pb-none">
         <div class="">
           <q-option-group
             v-model="jenispasien"
@@ -33,7 +33,7 @@
           />
         </div>
         <q-space />
-      </q-card-section>
+      </q-card-section> -->
       <q-separator class="q-my-xs" />
       <q-card-section>
         <q-select
@@ -106,27 +106,44 @@
 
 <script setup>
 import { api } from 'src/boot/axios'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 // import { useSettingsAplikasi } from 'src/stores/simrs/settings'
-import { ref } from 'vue'
-
+import { ref, watch } from 'vue'
+const props = defineProps({
+  depos: {
+    type: Array,
+    default: () => []
+  }
+})
 const emitss = defineEmits(['updated', 'jenis'])
-
+const apps = useAplikasiStore()
 const search = ref('')
 const options = ref(null)
-const optionJenisPasiens = ref([
-  { label: 'Rawat Jalan', value: 'rjl' },
-  { label: 'Rawat Inap', value: 'rnp' },
-  { label: 'IGD', value: 'igd' }
-])
-const jenispasien = ref('rjl')
-
+// const optionJenisPasiens = ref([
+//   { label: 'Rawat Jalan', value: 'rjl' },
+//   { label: 'Rawat Inap', value: 'rnp' },
+//   { label: 'IGD', value: 'igd' }
+// ])
+// const jenispasien = ref('rjl')
 let url = '/v1/simrs/farmasinew/depo/caripasienpoli'
-function setJenisPasien(val) {
-  emitss('jenis', val)
-  if (val === 'rjl') url = '/v1/simrs/farmasinew/depo/caripasienpoli'
-  if (val === 'rnp') url = '/v1/simrs/farmasinew/depo/caripasienranap'
-  if (val === 'igd') url = '/v1/simrs/farmasinew/depo/caripasienigd'
-}
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  const ruang = props.depos.filter(dep => dep.value === obj)
+  if (ruang.length) {
+    const val = ruang[0].jenis
+    if (val === 'rjl') url = '/v1/simrs/farmasinew/depo/caripasienpoli'
+    if (val === 'rnp') url = '/v1/simrs/farmasinew/depo/caripasienranap'
+    if (val === 'ok') url = '/v1/simrs/farmasinew/depo/caripasienranap'
+    if (val === 'igd') url = '/v1/simrs/farmasinew/depo/caripasienigd'
+    emitss('jenis', val)
+  }
+})
+// function setJenisPasien(val) {
+//   emitss('jenis', val)
+//   if (val === 'rjl') url = '/v1/simrs/farmasinew/depo/caripasienpoli'
+//   if (val === 'rnp') url = '/v1/simrs/farmasinew/depo/caripasienranap'
+//   if (val === 'ok') url = '/v1/simrs/farmasinew/depo/caripasienranap'
+//   if (val === 'igd') url = '/v1/simrs/farmasinew/depo/caripasienigd'
+// }
 async function filterOptions (val, update) {
   if (!val) {
     update(() => {

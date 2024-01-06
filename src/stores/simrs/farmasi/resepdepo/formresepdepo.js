@@ -42,6 +42,13 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       { kode: 'Gd-03010101' },
       { kode: 'Gd-04010101' }
     ],
+    depos: [
+      { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101', jenis: '' },
+      { nama: 'Depo Rawat inap', value: 'Gd-04010102', jenis: 'rnp' },
+      { nama: 'Depo OK', value: 'Gd-04010103', jenis: 'ok' },
+      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101', jenis: 'rjl' },
+      { nama: 'Depo IGD', value: 'Gd-02010104', jenis: 'igd' }
+    ],
     obats: [],
     obatTerpilih: null,
     dokters: [],
