@@ -24,6 +24,27 @@ export const useListResepDepoStore = defineStore('list_resep_depo', {
     setParam(key, val) {
       this.params[key] = val
     },
+    setParams(key, val) {
+      this.params[key] = val
+    },
+    setSearch(payload) {
+      this.setParam('q', payload)
+      this.setParam('page', 1)
+      this.getData()
+    },
+    setPage(payload) {
+      this.setParam('page', payload)
+      this.getData()
+    },
+    setPerPage(payload) {
+      this.setParam('per_page', payload)
+      this.setParam('page', 1)
+      this.getData()
+    },
+    refreshTable() {
+      this.setParam('page', 1)
+      this.getData()
+    },
     getInitialData() {
       this.getData()
     },

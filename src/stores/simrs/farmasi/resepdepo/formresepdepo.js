@@ -27,11 +27,14 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       lanjuTr: ''
     },
     params: {
+      q: '',
       nama: '',
       nik: '',
       norm: '',
       noreg: '',
-      nosep: ''
+      nosep: '',
+      per_page: 10,
+      page: 1
     },
     notas: [],
     nota: '',
@@ -59,9 +62,6 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
   actions: {
     setForm(key, val) {
       this.form[key] = val
-    },
-    setParams(key, val) {
-      this.params[key] = val
     },
     resetObat() {
       this.form.jumlah = 0
