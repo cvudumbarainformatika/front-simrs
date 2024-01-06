@@ -191,14 +191,17 @@ import { notifSuccessVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListPermintaanStore } from 'src/stores/simrs/farmasi/permintaandepo/listpermintaan'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.setParam('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setParam('kddepo', obj)
 })
 // click
 function onClick (val) {

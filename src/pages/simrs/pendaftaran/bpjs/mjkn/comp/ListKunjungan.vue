@@ -129,15 +129,17 @@
                   />
                 </div>
               </div>
-              <!-- <div class="row q-mt-sm text-end">
+              <div class="row q-mt-sm text-end">
                 <div class="q-ml-sm">
-                  <q-badge
-                    outline
-                    :color="item.generalconsent?'teal':'negative'"
-                    :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
+                  <q-btn
+                    size="sm"
+                    color="teal"
+                    no-caps
+                    label="Cetak Antrian"
+                    @click="emits('cetakAntrian',item)"
                   />
                 </div>
-              </div> -->
+              </div>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -159,7 +161,7 @@ defineProps({
   loadingSend: { type: Boolean, default: false },
   items: { type: Array, default: () => [] }
 })
-const emits = defineEmits(['kirimPoli'])
+const emits = defineEmits(['kirimPoli', 'cetakAntrian'])
 // krirm ke poli
 // function kirimPoli(val) {
 //   console.log('kirim poli ', val)

@@ -409,13 +409,17 @@
 import { dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 const store = useDistribusiPermintaanDepoStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setForm('kdgudang', apps?.user?.pegawai?.kdruangansim)
-  store.setParams('kdgudang', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('kdgudang', apps?.user?.kdruangansim)
+  store.setParams('kdgudang', apps?.user?.kdruangansim)
   store.getInitialData()
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kdgudang', obj)
+  store.setParams('kdgudang', obj)
 })
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)

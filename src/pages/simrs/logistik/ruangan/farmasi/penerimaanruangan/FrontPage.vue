@@ -282,15 +282,19 @@
 import { dateFullFormat } from 'src/modules/formatter'
 import { useDistribusiPenerimaanRuanganStore } from 'src/stores/simrs/farmasi/penerimaanruangan/penerimaanruangan'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const store = useDistribusiPenerimaanRuanganStore()
 const apps = useAplikasiStore()
 onMounted(() => {
-  store.setForm('kddepo', apps?.user?.pegawai?.kdruangansim)
-  store.setParams('kddepo', apps?.user?.pegawai?.kdruangansim)
+  store.setForm('kddepo', apps?.user?.kdruangansim)
+  store.setParams('kddepo', apps?.user?.kdruangansim)
   store.setParams('kdgudang', 'Gd-03010101')
   store.getInitialData()
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kddepo', obj)
+  store.setParams('kddepo', obj)
 })
 
 function onClick (val) {

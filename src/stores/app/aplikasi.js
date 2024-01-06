@@ -45,8 +45,8 @@ export const useAplikasiStore = defineStore('aplikasiX', {
       this.user = val
     },
     setUserKey(key, val) {
-      console.log('key', key)
-      console.log('val', val)
+      // console.log('key', key)
+      // console.log('val', val)
       this.user[key] = val
     },
     setAksesApps(val) {

@@ -450,24 +450,24 @@ const user = computed(() => {
         store.setParam('kdgudang', 'Gd-05010100')
         store.getListObat()
       }
-    } else if (apps.user.pegawai.depo) {
-      store.setForm('dari', apps.user.pegawai.depo.kode)
-      store.setDisp('depo', apps.user.pegawai.depo.nama)
-      const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
-      console.log('dep', dep)
-      if (dep.length) {
-        store.setForm('tujuan', 'Gd-03010100')
-        store.setParam('kdgudang', 'Gd-03010100')
-        store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
-        store.getListObat()
-      } else {
-        store.setForm('tujuan', 'Gd-05010100')
-        store.setParam('kdgudang', 'Gd-05010100')
-        store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
-        store.getListObat()
-      }
-    } else if (apps.user.pegawai?.kdruangansim) {
-      const peg = store.depos.filter(val => val.value === apps.user.pegawai?.kdruangansim)
+    // } else if (apps.user.pegawai.depo) {
+    //   store.setForm('dari', apps.user.pegawai.depo.kode)
+    //   store.setDisp('depo', apps.user.pegawai.depo.nama)
+    //   const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
+    //   console.log('dep', dep)
+    //   if (dep.length) {
+    //     store.setForm('tujuan', 'Gd-03010100')
+    //     store.setParam('kdgudang', 'Gd-03010100')
+    //     store.setDisp('gudang', 'Gudang Farmasi (Floor Stok)')
+    //     store.getListObat()
+    //   } else {
+    //     store.setForm('tujuan', 'Gd-05010100')
+    //     store.setParam('kdgudang', 'Gd-05010100')
+    //     store.setDisp('gudang', 'Gudang Farmasi ( Kamar Obat )')
+    //     store.getListObat()
+    //   }
+    } else if (apps.user?.kdruangansim) {
+      const peg = store.depos.filter(val => val.value === apps.user?.kdruangansim)
       if (peg.length) {
         store.setForm('dari', peg[0].value)
         store.setDisp('depo', peg[0].nama)

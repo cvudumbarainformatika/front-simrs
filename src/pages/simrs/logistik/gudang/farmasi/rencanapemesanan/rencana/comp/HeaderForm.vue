@@ -107,12 +107,11 @@ function gudang(val) {
   else return 'form gudang tidak terisi'
 }
 onMounted(() => {
-  if (apps?.user?.pegawai?.kdruangansim !== '') {
+  if (apps?.user?.kdruangansim !== '') {
     store.setForm('kd_ruang', apps?.user?.kdruangansim)
   }
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  // console.log('watch', obj)
   store.setForm('kd_ruang', obj)
 })
 </script>
