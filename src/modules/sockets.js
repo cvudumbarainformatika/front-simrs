@@ -66,7 +66,7 @@ window.Echo = new Echo({
 })
 const channel = window.Echo.channel('public.playground.1')
 const channelLogin = window.Echo.channel('public.login.qr')
-const qrcodeChannel = window.Echo.channel('qrcode')
+// const qrcodeChannel = window.Echo.channel('qrcode')
 
 // INI CHANNEL LOCAL
 const antreanChannel = window.Echo.channel('public.antrean')
@@ -85,7 +85,7 @@ const antreanChannel = window.Echo.channel('public.antrean')
 
 export {
   channel,
-  qrcodeChannel,
+  // qrcodeChannel,
   channelLogin,
   antreanChannel
   // anjunganChannel,
