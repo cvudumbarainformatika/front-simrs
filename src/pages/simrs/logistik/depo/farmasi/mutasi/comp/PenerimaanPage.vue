@@ -1,0 +1,3 @@
+<template>
+  Penerimaan
+</template>
