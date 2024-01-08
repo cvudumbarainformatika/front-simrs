@@ -6,17 +6,15 @@
       :meta="store.meta"
       :per-page="store.params.per_page"
       :loading="store.loading"
-      :to-search="store.params.no_permintaan"
+      :to-search="store.params.q"
       :click-able="true"
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
-      :ada-cari="false"
-      :ada-refresh="false"
-      :ada-per-page="false"
       :ada-paginasi="Object.keys( store.meta).length>0"
+      use-full
       row-no
-      text-cari="Cari ..."
+      text-cari="(rm/reg/nama/noresep) ..."
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -41,6 +39,9 @@
       <template #col-ina>
         <div>Inacgbg</div>
       </template>
+      <template #col-diagnosa>
+        <div>Diagnosa</div>
+      </template>
       <template #col-act>
         <div>#</div>
       </template>
@@ -53,14 +54,6 @@
         </div>
         <div class="row justify-between no-wrap text-orange">
           {{ row?.sistembayar?.rs2 }}
-        </div>
-        <div class="row no-wrap">
-          <div
-            class="col"
-            style="white-space: normal;"
-          >
-            {{ row?.diagnosa }}
-          </div>
         </div>
       </template>
       <template #cell-resep="{ row }">
@@ -77,6 +70,18 @@
       <template #cell-tagihan="{ row }">
         <div class="row justify-between no-wrap">
           {{ formatRp( row?.tagihanrs) }}
+        </div>
+      </template>
+      <template #cell-diagnosa="{ row }">
+        <div
+          class="row"
+          style="white-space: normal; width: 200%;"
+        >
+          <div
+            class="col"
+          >
+            {{ row?.diagnosa }}
+          </div>
         </div>
       </template>
       <template #cell-ina="{ row }">
@@ -272,6 +277,7 @@ onMounted(() => {
 
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParam('kddepo', obj)
+  store.getData()
 })
 function onClick (val) {
   // console.log('click', val)

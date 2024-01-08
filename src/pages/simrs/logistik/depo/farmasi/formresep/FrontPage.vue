@@ -307,6 +307,7 @@
   </div>
   <DialogCari
     v-model="store.isOpen"
+    :depos="store.depos"
     @updated="(val)=>store.setPasien(val)"
     @jenis="(val)=>store.jenispasien=val"
   />

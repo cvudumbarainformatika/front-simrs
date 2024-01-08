@@ -1,0 +1,60 @@
+<template>
+  <div class="q-ma-xs">
+    <Header
+      ref="pageRef"
+      :head="head"
+      :heads="heads"
+      title="Mutasi Antar Depo"
+      subtitle="Mutasi Persediaan Antar Depo Farmasi"
+      @ganti="gantiHead"
+    />
+
+    <div>
+      <q-tab-panels
+        v-model="head"
+        animated
+        class="full-height"
+      >
+        <q-tab-panel
+          v-for="(panel, n) in heads"
+          :key="n"
+          :name="panel.page"
+          class="full-height q-pa-none"
+        >
+          <component
+            :is="cekPanel()"
+          />
+        </q-tab-panel>
+      </q-tab-panels>
+    </div>
+  </div>
+</template>
+<script setup>
+import { findWithAttr } from 'src/modules/utils'
+import { defineAsyncComponent, ref } from 'vue'
+
+const Header = defineAsyncComponent(() => import('./comp/PageHead.vue'))
+const head = ref('minta')
+const heads = ref([
+  { page: 'minta', label: 'Mutasi Masuk', color: 'deep-orange' },
+  { page: 'terima', label: 'Mutasi Keluar', color: 'primary' },
+  { page: 'list', label: 'List Mutasi', color: 'green' }
+])
+function gantiHead(val) {
+  head.value = val
+}
+
+const comp = [
+  { nama: 'minta', page: defineAsyncComponent(() => import('./comp/PemintaanPage.vue')) },
+  { nama: 'terima', page: defineAsyncComponent(() => import('./comp/PenerimaanPage.vue')) },
+  { nama: 'list', page: defineAsyncComponent(() => import('./comp/ListPage.vue')) }
+]
+
+// console.log('comp', comp)
+const cekPanel = () => {
+  const val = head.value
+  const ganti = val.replace(/ /g, '')
+  const arr = findWithAttr(comp, 'nama', ganti)
+  return arr >= 0 ? comp[arr].page : ''
+}
+</script>

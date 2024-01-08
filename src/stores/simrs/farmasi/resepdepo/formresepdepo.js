@@ -27,11 +27,14 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       lanjuTr: ''
     },
     params: {
+      q: '',
       nama: '',
       nik: '',
       norm: '',
       noreg: '',
-      nosep: ''
+      nosep: '',
+      per_page: 10,
+      page: 1
     },
     notas: [],
     nota: '',
@@ -41,6 +44,13 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
     floor: [ // racikan / floor stok
       { kode: 'Gd-03010101' },
       { kode: 'Gd-04010101' }
+    ],
+    depos: [
+      { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101', jenis: '' },
+      { nama: 'Depo Rawat inap', value: 'Gd-04010102', jenis: 'rnp' },
+      { nama: 'Depo OK', value: 'Gd-04010103', jenis: 'ok' },
+      { nama: 'Depo Rawat Jalan', value: 'Gd-05010101', jenis: 'rjl' },
+      { nama: 'Depo IGD', value: 'Gd-02010104', jenis: 'igd' }
     ],
     obats: [],
     obatTerpilih: null,
@@ -52,9 +62,6 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
   actions: {
     setForm(key, val) {
       this.form[key] = val
-    },
-    setParams(key, val) {
-      this.params[key] = val
     },
     resetObat() {
       this.form.jumlah = 0
@@ -69,7 +76,7 @@ export const useResepDepoFarmasiStore = defineStore('resep_depo_farmasi_setore',
       console.log('pasien', val)
       console.log('jenis pasien', this.jenispasien)
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
-      const diag = temp?.length ? temp.join(',') : '-'
+      const diag = temp?.length ? temp.join(', ') : '-'
       console.log('diag', diag)
       if (val) {
         this.notas = []
