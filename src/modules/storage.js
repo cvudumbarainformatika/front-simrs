@@ -38,5 +38,6 @@ export const getActiveTime = () => localStorage.getItem('activeTime')
 // satset
 export const setTokenSatset = data => localStorage?.setItem('satset', JSON.stringify(data))
 export const getAuthSatset = () => JSON.parse(localStorage.getItem('satset'))
+export const delAuthSatset = () => localStorage.removeItem('satset')
 
 export const clearStore = () => localStorage.clear()

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-// import { routerInstance } from 'src/boot/router'
+import { routerInstance } from 'src/boot/router'
 import * as storage from 'src/modules/storage'
 
 export const useSatsetStore = defineStore('satset_store', {
@@ -33,6 +33,13 @@ export const useSatsetStore = defineStore('satset_store', {
       setTimeout(() => {
         this.loading = false
       }, 2000)
+    },
+
+    DELETE_TOKEN_SATSET() {
+      storage.delAuthSatset()
+      this.auth = null
+      this.params.token = null
+      routerInstance.push({ path: '/' })
     },
     async getOrganisasi() {
       const params = { params: this.params }
