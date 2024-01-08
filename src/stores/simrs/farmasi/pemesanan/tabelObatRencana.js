@@ -122,7 +122,7 @@ export const useTabelObatDirencanakaStore = defineStore('tabel_obat_direncanakan
         api.get('v1/simrs/farmasinew/dialogperencanaanobat', param)
           .then(resp => {
             this.loading = false
-            console.log('obat mau dibeli', resp?.data)
+            console.log('obat mau dibeli', resp?.data?.data)
             const temp = resp?.data?.data ?? resp?.data
             const renc = useRencanaPemesananObatStore()
             this.assignItems(temp, renc)

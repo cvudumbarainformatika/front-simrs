@@ -89,7 +89,7 @@
             >
               <div
                 class="row justify-between no-wrap "
-                :class="row.stokRS > 0 ? 'text-orange' : ''"
+                :class="row.stokRS > 0 ? 'text-primary' : ''"
               >
                 <div class="q-mr-xs">
                   Seluruh Rumah Sakit
