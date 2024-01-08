@@ -37,11 +37,13 @@
 
     <!-- dialogForm -->
     <DialogForm v-model="store.dialogTambah" />
+    <DialogSatset v-model="store.dialogSatset" />
   </q-page>
 </template>
 
 <script setup>
 import HeaderComp from './comp/HeaderComp.vue'
+import DialogSatset from './comp/DialogSatset.vue'
 import ListOrganisasi from './comp/ListOrganisasi.vue'
 import DialogForm from './comp/DialogForm.vue'
 import { useStyledStore } from 'src/stores/app/styled'
@@ -64,4 +66,8 @@ onMounted(() => {
 
   store.getData()
 })
+
+// onBeforeUnmount(() => {
+//   satset.DELETE_TOKEN_SATSET()
+// })
 </script>

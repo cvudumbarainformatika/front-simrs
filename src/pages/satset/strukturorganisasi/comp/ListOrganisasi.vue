@@ -10,6 +10,9 @@
         <th class="text-end">
           STATUS
         </th>
+        <th class="text-end">
+          OPTIONS
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -25,7 +28,7 @@
           </td>
           <td class="text-end">
             <div
-              v-if="!item.satset"
+              v-if="!item.satset_uuid"
               class="row q-gutter-sm justify-end"
             >
               <q-badge
@@ -34,6 +37,20 @@
                 label="Belum Terkoneksi Satu Sehat"
                 class="q-pa-sm"
               />
+            </div>
+            <q-badge
+              v-else
+              outline
+              color="primary"
+              label="Terkoneksi Satu Sehat"
+              class="q-pa-sm"
+            />
+          </td>
+          <td>
+            <div
+              v-if="!item.satset_uuid"
+              class="row items-center justify-end"
+            >
               <q-btn
                 icon="icon-mat-send"
                 size="sm"
@@ -45,13 +62,21 @@
                 <q-tooltip>Kirim Ke Satu Sehat</q-tooltip>
               </q-btn>
             </div>
-            <q-badge
+            <div
               v-else
-              outline
-              color="primary"
-              label="Terkoneksi Satu Sehat"
-              class="q-pa-sm"
-            />
+              class="row items-center justify-end"
+            >
+              <q-btn
+                icon="icon-mat-visibility"
+                size="sm"
+                round
+                color="orange"
+                flat
+                @click="store.setItem(item)"
+              >
+                <q-tooltip>lihat Data</q-tooltip>
+              </q-btn>
+            </div>
           </td>
         </tr>
       </template>
