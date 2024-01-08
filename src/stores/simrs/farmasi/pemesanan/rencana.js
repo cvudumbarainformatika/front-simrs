@@ -29,7 +29,12 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
     ],
     columns: [],
-    columnHide: ['id', 'created_at', 'updated_at', 'deleted_at']
+    columnHide: ['id', 'created_at', 'updated_at', 'deleted_at'],
+    viewrinci: {
+      min: 0,
+      max: 0,
+      stok: 0
+    }
 
   }),
   actions: {
@@ -93,6 +98,9 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       }
 
       this.rincis = rinc
+      this.viewrinci.min = rinc.map(r => r.min).reduce((a, b) => a + b, 0)
+      this.viewrinci.max = rinc.map(r => r.max).reduce((a, b) => a + b, 0)
+      this.viewrinci.stok = rinc.map(r => r.stok).reduce((a, b) => a + b, 0)
       // console.log('mm ', mm)
       // console.log('st ', st)
       // console.log('all ', all)

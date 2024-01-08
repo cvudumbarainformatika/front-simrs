@@ -70,6 +70,21 @@
               </div>
             </div>
           </div>
+          <q-separator class="q-my-sm" />
+          <div class="row text-weight-bold fit q-mb-sm">
+            <div class="col-6">
+              Jumlah
+            </div>
+            <div class="col-2">
+              {{ store.viewrinci.min }}
+            </div>
+            <div class="col-2">
+              {{ store.viewrinci.max }}
+            </div>
+            <div class="col-2">
+              {{ store.viewrinci.stok }}
+            </div>
+          </div>
         </div>
         <div v-else>
           <app-no-data />
