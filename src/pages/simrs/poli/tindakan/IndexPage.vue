@@ -90,6 +90,7 @@
                   v-else
                   :key="pasien"
                   :pasien="pasien"
+                  depo="rjl"
                 />
               </template>
               <template #fallback>
