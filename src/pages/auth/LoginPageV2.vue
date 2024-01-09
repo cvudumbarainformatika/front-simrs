@@ -35,18 +35,18 @@ const store = useAuthStore()
 channelLogin.subscribed(() => {
   console.log('subscribed login!!!')
 }).listen('.login-qr', (e) => {
-  console.log('listen', e)
+  // console.log('listen', e)
   const msg = e.message
   const browser = msg.data
   const match = ids.qrCode === browser
   if (match) {
-    console.log('matches !!!')
+    // console.log('matches !!!')
     login(msg.email, msg.token)
   }
 })
 
 function login(email, token) {
-  console.log('email', email)
+  // console.log('email', email)
   const formData = new FormData()
   formData.append('email', email)
   store.loginQr(formData)

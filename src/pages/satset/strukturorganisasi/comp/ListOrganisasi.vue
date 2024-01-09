@@ -57,6 +57,8 @@
                 round
                 color="primary"
                 flat
+                :loading="store.loadingSatset"
+                :disable="store.loadingSatset"
                 @click="store.kirimSatset(item)"
               >
                 <q-tooltip>Kirim Ke Satu Sehat</q-tooltip>

@@ -366,7 +366,7 @@ const loadingRes = (cond) => {
   antreanChannel.subscribed(() => {
     console.log('subscribed antrean channel!!! on LoadingRes')
   }).listen('.antrean', (e) => {
-    console.log('util antrean', app.user.id, e.message)
+    // console.log('util antrean', app.user.id, e.message)
     if (e.message.kode && e.message.user === app.user.id) {
     // if (e.message.kode) {
       // console.log('util metadata', e.message.kode.metadata)
