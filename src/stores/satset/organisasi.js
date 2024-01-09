@@ -34,8 +34,8 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
     async getData() {
       this.loading = true
       const params = { params: this.params }
-      const resp = await api.get('v1/satusehat/listOrganisasiRs', params)
-      console.log(resp)
+      const resp = await api.get('/v1/satusehat/listOrganisasiRs', params)
+      // console.log(resp)
       if (resp?.status === 200) {
         this.items = resp.data
         this.loading = false
@@ -47,7 +47,7 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
     postData() {
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.post('v1/satusehat/postOrganisasiRs', this.form)
+        api.post('/v1/satusehat/postOrganisasiRs', this.form)
           .then(resp => {
             // console.log(resp)
             this.loading = false
@@ -64,7 +64,7 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
       // console.log(this.item)
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.post('v1/satusehat/postOrganisasiRs', this.item)
+        api.post('/v1/satusehat/postOrganisasiRs', this.item)
           .then(resp => {
             // console.log(resp)
             this.loading = false
@@ -86,18 +86,26 @@ export const useOrganisasiStore = defineStore('organisasi_store', {
       this.sender.id = item?.id
       const params = { params: this.sender }
 
-      const resp = await api.get('v1/satusehat/sendToSatset', params)
-      if (resp.status === 200) {
-        if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+      try {
+        const resp = await api.get('/v1/satusehat/sendToSatset', params)
+        console.log(resp)
+        if (resp.status === 200) {
+          if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
           // harus login lagi
-          console.log('token expired')
-          satset.DELETE_TOKEN_SATSET()
-          return
+            console.log('token expired')
+            satset.DELETE_TOKEN_SATSET()
+            return
+          }
+          this.dialogSatset = false
+          this.loadingSatset = false
+          this.dialogTambah = false
+          this.getData()
+        } else {
+          this.loadingSatset = false
         }
-        this.dialogSatset = false
+      } catch (error) {
+        console.log('error send to satset', error)
         this.loadingSatset = false
-        this.dialogTambah = false
-        this.getData()
       }
     },
 

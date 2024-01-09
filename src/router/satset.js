@@ -9,6 +9,11 @@ const satset = {
       name: 'satset.strukturorganisasi',
       component: () => import('pages/satset/strukturorganisasi/IndexPage.vue')
     },
+    {
+      path: '/satset/location',
+      name: 'satset.location',
+      component: () => import('pages/satset/location/IndexPage.vue')
+    },
 
     {
       path: '/satset/notfound',
