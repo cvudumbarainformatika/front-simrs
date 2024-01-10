@@ -278,8 +278,19 @@
                     @update:model-value="setDosis($event,'dosis_resep')"
                   />
                 </div>
-
                 <div
+                  v-if="store.racikan.jenis!=='DTD'"
+                  class="col-2"
+                >
+                  <app-input
+                    v-model="store.racikan.jumlah_obat"
+                    label="Jumlah Obat"
+                    outlined
+                    @update:model-value="setDosis($event,'jumlah_obat')"
+                  />
+                </div>
+                <div
+                  v-if="store.racikan.jenis==='DTD'"
                   class="col-2"
                 >
                   {{ store.racikan.jumlah_obat }}
@@ -339,12 +350,14 @@ function setDosis(evt, key) {
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   store.setRacikan(key, nilai)
 
+  if (store.racikan.jenis === 'DTD') {
   // jumlah_diminta , jumlah_obat, dosis_obat, dosis_resep
-  const jumlahDiminta = store.racikan?.jumlah_diminta ?? 1
-  const dosisObat = store.racikan?.dosis_obat ?? 1
-  const dosisResep = store.racikan?.dosis_resep ?? 1
-  const jumlahObat = dosisResep / dosisObat * jumlahDiminta
-  store.setRacikan('jumlah_obat', jumlahObat)
+    const jumlahDiminta = store.racikan?.jumlah_diminta ?? 1
+    const dosisObat = store.racikan?.dosis_obat ?? 1
+    const dosisResep = store.racikan?.dosis_resep ?? 1
+    const jumlahObat = dosisResep / dosisObat * jumlahDiminta
+    store.setRacikan('jumlah_obat', jumlahObat)
+  }
 }
 function inputObat(val) {
   if (val !== '') store.cariObat(val)
