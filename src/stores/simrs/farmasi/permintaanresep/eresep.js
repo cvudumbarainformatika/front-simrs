@@ -39,12 +39,15 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       nama: '-',
       keterangan: '-',
       jumlah_diminta: 1,
-      jenis: 'DTD'
+      jenis: 'DTD',
+      dosis_obat: 1,
+      dosis_resep: 1
     },
     tipeRacikan: [
       { label: 'DTD', value: 'DTD' },
       { label: 'non-DTD', value: 'non-DTD' }
-    ]
+    ],
+    counterRacikan: 1
     // section racikan end---
   }),
   actions: {

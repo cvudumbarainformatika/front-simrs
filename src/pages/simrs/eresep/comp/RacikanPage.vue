@@ -29,7 +29,7 @@
             >
               <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
+                  class=" col-2"
                 >
                   Tipe Racikan
                 </div>
@@ -40,7 +40,7 @@
                 </div>
 
                 <div
-                  class="col-2 text-right"
+                  class="col-2 "
                 >
                   Atr Pakai
                 </div>
@@ -69,7 +69,7 @@
             >
               <div class="row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
+                  class="col-2"
                 >
                   <q-option-group
                     v-model="store.racikan.jenis"
@@ -89,7 +89,7 @@
                     v-model="store.racikan.jumlah_diminta"
                     label="Jumlah Racikan"
                     outlined
-                    @update:model-value="setNumber($event,'jumlah_diminta')"
+                    @update:model-value="setDosis($event,'jumlah_diminta')"
                   />
                 </div>
 
@@ -129,82 +129,39 @@
           <div class="q-mt-lg f-14 bg-yellow q-pa-sm">
             Bahan Obat Racikan
           </div>
-          <!-- Header nya Obat non DTD-->
-          <q-item
-            class="bg-dark text-white"
-          >
-            <q-item-section style="width: 20%;">
-              OBAT
-            </q-item-section>
-            <q-item-section
-              side
-              style="width:80%"
-            >
-              <div class="text-white row items-center q-col-gutter-sm full-width">
-                <div
-                  class="text-right col-2"
-                >
-                  Jumlah
-                </div>
-
-                <div
-                  class="col text-right"
-                >
-                  Keterangan
-                </div>
-              </div>
-            </q-item-section>
-          </q-item>
-          <!-- input nya Obat non DTD-->
-          <q-item
-            class=""
-          >
-            <q-item-section style="width: 20%;">
-              nama obat,stok alokasi, kandungan, dosis
-            </q-item-section>
-            <q-item-section
-              side
-              style="width:80%"
-            >
-              <div class=" row items-center q-col-gutter-sm full-width">
-                <div
-                  class="text-right col-2"
-                >
-                  Jumlah
-                </div>
-
-                <div
-                  class="col text-right"
-                >
-                  Keterangan
-                </div>
-              </div>
-            </q-item-section>
-          </q-item>
           <!-- Header nya Obat DTD-->
           <q-item
             class="bg-dark text-white"
           >
-            <q-item-section style="width: 20%;">
+            <q-item-section style="width: 30%;">
               OBAT
             </q-item-section>
             <q-item-section
               side
-              style="width:80%"
+              style="width:70%"
             >
               <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
-                >
-                  Dosis
-                </div>
-                <div
-                  class="text-right col-2"
+
+                  class="col-2"
                 >
                   Satuan
                 </div>
                 <div
-                  class="text-right col-2"
+                  v-if="store.racikan.jenis==='DTD'"
+                  class="col-2"
+                >
+                  Dosis obat
+                </div>
+                <div
+                  v-if="store.racikan.jenis==='DTD'"
+                  class="col-2"
+                >
+                  Dosis resep
+                </div>
+
+                <div
+                  class="col-2"
                 >
                   Jumlah
                 </div>
@@ -221,59 +178,195 @@
           <q-item
             class=""
           >
-            <q-item-section style="width: 20%;">
-              nama obat,stok alokasi, kandungan, dosis
+            <q-item-section style="width: 30%;">
+              <q-select
+                ref="refObat"
+                v-model="store.namaObat"
+                use-input
+                label="Cari Obat"
+                dense
+                option-label="namaobat"
+                option-value="kodeobat"
+                standout="bg-yellow-3"
+                outlined
+                input-debounce="800"
+                class="full-width"
+                hide-dropdown-icon
+                :rules="[obatValid]"
+                lazy-rules
+                hide-bottom-space
+                no-error-icon
+                :options="store.Obats"
+                :loading="store.loadingObat"
+                @input-value="inputObat"
+                @update:model-value="obatSelected"
+              >
+                <template #prepend>
+                  <q-icon name="icon-mat-search" />
+                </template>
+                <template #option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <div
+                      v-if="scope.opt.namaobat"
+                    >
+                      {{ scope.opt.namaobat }}
+                    </div>
+                    <div
+                      v-if="scope.opt.kandungan"
+                      class="q-ml-xs q-mr-xs text-deep-orange"
+                    >
+                      ({{ scope.opt.kandungan }})
+                    </div>
+                    <div
+                      v-if="scope.opt.kekuatandosis"
+                      class="q-ml-xs q-mr-xs text-green"
+                    >
+                      ({{ scope.opt.kekuatandosis }})
+                    </div>
+                    <div
+                      v-if="scope.opt.alokasi"
+                      class="q-ml-xs text-weight-bold tetx-green"
+                    >
+                      {{ scope.opt.alokasi }}
+                    </div>
+                    <div
+                      v-if="scope.opt.satuankecil"
+                      class="q-ml-xs text-primary"
+                    >
+                      {{ scope.opt.satuankecil }}
+                    </div>
+                  </q-item>
+                </template>
+                <template #no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      No results
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
             </q-item-section>
             <q-item-section
               side
-              style="width:80%"
+              style="width:70%"
             >
-              <div class=" row items-center q-col-gutter-sm full-width">
+              <div class="text-dark row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
+                  class="col-2"
                 >
-                  Dosis
+                  {{ store.namaObat?.satuankecil }}
                 </div>
                 <div
-                  class="text-right col-2"
+                  v-if="store.racikan.jenis==='DTD'"
+                  class="col-2"
                 >
-                  Satuan
+                  <app-input
+                    v-model="store.racikan.dosis_obat"
+                    label="Dosis Obat"
+                    outlined
+                    @update:model-value="setDosis($event,'dosis_obat')"
+                  />
                 </div>
                 <div
-                  class="text-right col-2"
+                  v-if="store.racikan.jenis==='DTD'"
+                  class="col-2"
                 >
-                  Jumlah
+                  <app-input
+                    v-model="store.racikan.dosis_resep"
+                    label="Dosis resep"
+                    outlined
+                    @update:model-value="setDosis($event,'dosis_resep')"
+                  />
+                </div>
+
+                <div
+                  class="col-2"
+                >
+                  {{ store.racikan.jumlah_obat }}
                 </div>
 
                 <div
                   class="col text-right"
                 >
-                  Keterangan
+                  <app-input
+                    v-model="store.racikan.keterangan2"
+                    label="Keterangan Obat"
+                    outlined
+                  />
                 </div>
+              </div>
+            </q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section />
+            <q-item-section>
+              <div class="text-right q-mr-sm">
+                <q-btn
+                  color="dark"
+                  dense
+                  no-caps
+                  :loading="store.loading"
+                  :disable="store.loading"
+                  @click="simpanObat"
+                >
+                  Simpan Obat
+                </q-btn>
               </div>
             </q-item-section>
           </q-item>
         </q-list>
       </q-scroll-area>
-      <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
+      <!-- <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         ada
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script setup>
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = usePermintaanEResepStore()
+onMounted(() => {
+  store.setRacikan('nama', 'racikan-' + store.counterRacikan)
+})
 
-function setNumber(evt, key) {
+function setDosis(evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   store.setRacikan(key, nilai)
+
+  // jumlah_diminta , jumlah_obat, dosis_obat, dosis_resep
+  const jumlahDiminta = store.racikan?.jumlah_diminta ?? 1
+  const dosisObat = store.racikan?.dosis_obat ?? 1
+  const dosisResep = store.racikan?.dosis_resep ?? 1
+  const jumlahObat = dosisResep / dosisObat * jumlahDiminta
+  store.setRacikan('jumlah_obat', jumlahObat)
+}
+function inputObat(val) {
+  if (val !== '') store.cariObat(val)
+}
+function obatSelected(val) {
+  // console.log('obat selected', val)
+  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+  store.setForm('kodeobat', val?.kodeobat ?? '-')
+  store.setForm('kandungan', val?.kandungan ?? '-')
+  store.setForm('fornas', val?.fornas ?? '-')
+  store.setForm('forkit', val?.forkit ?? '-')
+  store.setForm('generik', val?.generik ?? '-')
+  store.setForm('kode108', val?.kode108 ?? '-')
+  store.setForm('uraian108', val?.uraian108 ?? '-')
+  store.setForm('kode50', val?.kode50 ?? '-')
+  store.setForm('uraian50', val?.uraian50 ?? '-')
+  store.setForm('stokalokasi', val?.alokasi ?? '-')
+  store.setForm('kodedepo', store.dpPar)
+  // console.log('form', store.form)
+}
+function obatValid (val) {
+  return (val !== null && val !== '') || 'Harap diisi'
 }
 const signa = ref('')
 function signaSelected(val) {
@@ -286,5 +379,8 @@ function signaSelected(val) {
 }
 function sigaValid (val) {
   return (val !== null && val !== '') || 'Harap diisi'
+}
+function simpanObat() {
+  console.log('simpan')
 }
 </script>
