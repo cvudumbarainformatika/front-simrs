@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifErr, notifSuccess } from 'src/modules/utils'
+import { useSatsetStore } from '.'
 // import { routerInstance } from 'src/boot/router'
 // import * as storage from 'src/modules/storage'
 
@@ -12,99 +14,8 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     dialogFormRuangan: false,
     loading: false,
 
-    organization_id: '100026342',
+    organization_id: '100026342'
 
-    satsetFormLocation: {
-      resourceType: 'Location',
-      identifier: [
-        {
-          system: 'http://sys-ids.kemkes.go.id/location/' + this.organization_id,
-          value: 'G-2-R-1A'
-        }
-      ],
-      status: 'active',
-      name: 'Ruang 1A IRJT',
-      description: 'Ruang 1A, Poliklinik Bedah Rawat Jalan Terpadu, Lantai 2, Gedung G',
-      mode: 'instance',
-      telecom: [
-        {
-          system: 'phone',
-          value: '2328',
-          use: 'work'
-        },
-        {
-          system: 'fax',
-          value: '2329',
-          use: 'work'
-        },
-        {
-          system: 'email',
-          value: 'second wing admissions'
-        },
-        {
-          system: 'url',
-          value: 'http://sampleorg.com/southwing',
-          use: 'work'
-        }
-      ],
-      address: {
-        use: 'work',
-        line: [
-          'Gd. Prof. Dr. Sujudi Lt.5, Jl. H.R. Rasuna Said Blok X5 Kav. 4-9 Kuningan'
-        ],
-        city: 'Jakarta',
-        postalCode: '12950',
-        country: 'ID',
-        extension: [
-          {
-            url: 'https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode',
-            extension: [
-              {
-                url: 'province',
-                valueCode: '10'
-              },
-              {
-                url: 'city',
-                valueCode: '1010'
-              },
-              {
-                url: 'district',
-                valueCode: '1010101'
-              },
-              {
-                url: 'village',
-                valueCode: '1010101101'
-              },
-              {
-                url: 'rt',
-                valueCode: '1'
-              },
-              {
-                url: 'rw',
-                valueCode: '2'
-              }
-            ]
-          }
-        ]
-      },
-      physicalType: {
-        coding: [
-          {
-            system: 'http://terminology.hl7.org/CodeSystem/location-physical-type',
-            code: 'ro',
-            display: 'Room'
-          }
-        ]
-      },
-      position: {
-        longitude: -6.23115426275766,
-        latitude: 106.83239885393944,
-        altitude: 0
-      },
-      managingOrganization: {
-        reference: 'Organization/10000004'
-      }
-    }
   }),
   persist: true,
   actions: {
@@ -116,6 +27,16 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     setRuangan(val) {
       this.ruangan = null
       this.ruangan = val
+
+      this.ruangan.phone = '(0335) 433119,421118'
+      this.ruangan.fax = '-'
+      this.ruangan.email = 'rsudprob@probolinggokota.go.id'
+      this.ruangan.web = 'https://rsud.probolinggokota.go.id'
+      this.ruangan.alamat = 'Jl. Mayjen Panjaitan No.65 Kota Probolinggo'
+      this.ruangan.rt = '-'
+      this.ruangan.rw = '-'
+      this.ruangan.longitude = '-7.744970846652828'
+      this.ruangan.latitude = '113.21050988068147'
       this.dialogFormRuangan = true
     },
 
@@ -130,6 +51,34 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
       } else {
         this.loading = false
       }
+    },
+
+    async updateDataRuangan() {
+      this.loading = true
+      const satset = useSatsetStore()
+      this.ruangan.token = satset.params.token
+      return new Promise((resolve, reject) => {
+        api.post('v1/satusehat/updateLocation', this.ruangan)
+          .then(resp => {
+            // console.log(resp)
+            if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+              satset.DELETE_TOKEN_SATSET()
+              return
+            }
+            if (resp.data.message === 'failed') {
+              notifErr(resp)
+            }
+            this.loading = false
+            notifSuccess(resp)
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+            this.loading = false
+            notifErr(err)
+            reject(err)
+          })
+      })
     }
+
   }
 })
