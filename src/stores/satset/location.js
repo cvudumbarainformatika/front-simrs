@@ -27,6 +27,16 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     setRuangan(val) {
       this.ruangan = null
       this.ruangan = val
+
+      this.ruangan.phone = '(0335) 433119,421118'
+      this.ruangan.fax = '-'
+      this.ruangan.email = 'rsudprob@probolinggokota.go.id'
+      this.ruangan.web = 'https://rsud.probolinggokota.go.id'
+      this.ruangan.alamat = 'Jl. Mayjen Panjaitan No.65 Kota Probolinggo'
+      this.ruangan.rt = '-'
+      this.ruangan.rw = '-'
+      this.ruangan.longitude = '-7.744970846652828'
+      this.ruangan.latitude = '113.21050988068147'
       this.dialogFormRuangan = true
     },
 
