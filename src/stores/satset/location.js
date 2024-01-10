@@ -17,7 +17,6 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
     organization_id: '100026342'
 
   }),
-  persist: true,
   actions: {
     setItem(item) {
       this.item = null
