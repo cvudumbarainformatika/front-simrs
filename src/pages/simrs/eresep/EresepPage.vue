@@ -9,16 +9,18 @@
       />
     </div>
     <div class="col-4 full-height q-pa-xs">
-      dgdfg
+      <listpage />
     </div>
   </div>
 </template>
 
 <script setup>
-// import TabPanel from './comp/TabPanel.vue'
+import { defineAsyncComponent, shallowRef } from 'vue'
 import FormResep from './comp/FormResep.vue'
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
 })
+
+const listpage = shallowRef(defineAsyncComponent(() => import('./comp/LitsPage.vue')))
 </script>

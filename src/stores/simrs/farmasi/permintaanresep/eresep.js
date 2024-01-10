@@ -10,7 +10,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     loadingObat: false,
     form: {
       keterangan: '-',
-      jumlah_diminta: 1
+      jumlah_diminta: 1,
+      tiperesep: 'normal'
     },
     listPemintaanSementara: [],
     signas: [],
@@ -26,11 +27,32 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     Obats: [],
     namaObat: null,
     pasien: null,
-    depo: ''
+    depo: '',
+    tipeReseps: [
+      { label: 'Normal', value: 'normal' },
+      { label: 'PRB', value: 'prb' },
+      { label: 'Iter', value: 'iter' }
+    ],
+    // section racikan ---
+    racikanOpen: false,
+    racikan: {
+      nama: '-',
+      keterangan: '-',
+      jumlah_diminta: 1,
+      jenis: 'DTD'
+    },
+    tipeRacikan: [
+      { label: 'DTD', value: 'DTD' },
+      { label: 'non-DTD', value: 'non-DTD' }
+    ]
+    // section racikan end---
   }),
   actions: {
     setForm(key, val) {
       this.form[key] = val
+    },
+    setRacikan(key, val) {
+      this.racikan[key] = val
     },
     resetForm() {},
     resetObat() {
@@ -53,14 +75,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         kdruang: this.dpPar
       }
       const filtObat = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-      if (filtObat.length) {
+      if (filtObat?.length > 10) {
         this.Obats = filtObat
       } else {
         console.log('obat', val, this.namaObat)
         this.loadingObat = true
         const params = { params: param }
         return new Promise(resolve => {
-          api.get('v1/simrs/farmasinew/depo/lihatstokobateresep', params)
+          api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
             .then(resp => {
               this.loadingObat = false
               this.nonFilteredObat = resp.data?.dataobat

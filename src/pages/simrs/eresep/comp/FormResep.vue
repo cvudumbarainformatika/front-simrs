@@ -6,8 +6,20 @@
       </div>
     </div>
     <div class="col full-height relative-position">
+      <!-- Option tipe Resep -->
+      <div class="row q-my-xs items-center">
+        Tipe Resep:
+        <q-option-group
+          v-model="store.form.tiperesep"
+          :options="store.tipeReseps"
+          color="primary"
+          class="q-ml-sm"
+          dense
+          inline
+        />
+      </div>
       <q-scroll-area
-        style="height: calc( 100% ); padding-bottom: 60px;"
+        style="height: 100% ; padding-bottom: 60px;"
       >
         <q-list
           separator
@@ -89,10 +101,10 @@
                       ({{ scope.opt.kandungan }})
                     </div>
                     <div
-                      v-if="scope.opt.stokalokasi"
+                      v-if="scope.opt.alokasi"
                       class="q-ml-xs text-weight-bold tetx-green"
                     >
-                      {{ scope.opt.stokalokasi }}
+                      {{ scope.opt.alokasi }}
                     </div>
                     <div
                       v-if="scope.opt.satuankecil"
@@ -244,12 +256,15 @@
       </div>
     </div>
   </div>
+  <app-fullscreen-blue v-model="store.racikanOpen">
+    <template #default>
+      <racikanpage />
+    </template>
+  </app-fullscreen-blue>
 </template>
 
 <script setup>
-// import { api } from 'src/boot/axios'
-// import { notifErrVue } from 'src/modules/utils'
-import { onMounted, ref } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
 const props = defineProps({
@@ -262,6 +277,7 @@ onMounted(() => {
   store.pasien = props?.pasien
   store.depo = props?.depo
   store.getSigna()
+  store.cariObat()
   setPasien()
 })
 function setPasien() {
@@ -282,60 +298,14 @@ function setPasien() {
     // store.getBillRajal(val)
   }
 }
-
-// const namaObat = ref('')
-// const carObat = ref(false)
-// const loadingObat = ref(false)
-// const Obats = ref([])
-
+/// / set Racikan ------
+const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
 function racikan() {
-  console.log('ok')
-  alert('oooi')
+  // console.log('ok')
+  // alert('oooi')
+  store.racikanOpen = true
 }
-// eslint-disable-next-line no-unused-vars
-// const depos = [
-//   { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101', jenis: 't' },
-//   { nama: 'Depo Rawat inap', value: 'Gd-04010102', jenis: 'rnp' },
-//   { nama: 'Depo OK', value: 'Gd-04010103', jenis: 'ok' },
-//   { nama: 'Depo Rawat Jalan', value: 'Gd-05010101', jenis: 'rjl' },
-//   { nama: 'Depo IGD', value: 'Gd-02010104', jenis: 'igd' }
-// ]
-// let nonFilteredObat = []
-// // eslint-disable-next-line no-unused-vars
-// let dpPar = ''
-// function cariObat(val) {
-//   const depo = depos.filter(pa => pa.jenis === props.depo)
-//   console.log('depo', props?.depo, depo)
-//   if (depo.length) {
-//     dpPar = depo[0]?.value
-//   } else return notifErrVue('depo tujuan tidak ditemukan')
-//   const param = {
-//     groups: props?.pasien?.groups,
-//     kdruang: dpPar
-//   }
-//   const filtObat = nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-//   if (filtObat.length) {
-//     Obats.value = filtObat
-//   } else {
-//     console.log('obat', val, namaObat.value)
-//     loadingObat.value = true
-//     const params = { params: param }
-//     return new Promise(resolve => {
-//       api.get('v1/simrs/farmasinew/depo/lihatstokobateresep', params)
-//         .then(resp => {
-//           loadingObat.value = false
-//           nonFilteredObat = resp.data?.dataobat
-//           Obats.value = nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-//           console.log(resp.data)
-//           resolve(resp)
-//         })
-//         .catch(() => {
-//           loadingObat.value = false
-//           Obats.value = []
-//         })
-//     })
-//   }
-// }
+/// / set Racikan end ------
 function inputObat(val) {
   if (val !== '') store.cariObat(val)
 }
@@ -351,7 +321,7 @@ function obatSelected(val) {
   store.setForm('uraian108', val?.uraian108 ?? '-')
   store.setForm('kode50', val?.kode50 ?? '-')
   store.setForm('uraian50', val?.uraian50 ?? '-')
-  store.setForm('stokalokasi', val?.stokalokasi ?? '-')
+  store.setForm('stokalokasi', val?.alokasi ?? '-')
   store.setForm('kodedepo', store.dpPar)
   // console.log('form', store.form)
 }
@@ -408,10 +378,7 @@ function validate() {
     if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
     // console.log('at', store.signas, sign)
   }
-  // console.log('obat', refObat.value.validate())
-  // console.log('qty', refQty.value.validate())
-  // console.log('signa', refSigna.value.validate())
-  // console.log('form', store.form)
+
   if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
