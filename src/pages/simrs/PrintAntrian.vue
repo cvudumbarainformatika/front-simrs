@@ -27,9 +27,14 @@
         {{ route.query.poli }}
       </div>
       <div>no.RM : {{ route.query.norm }}</div>
-      <div>{{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}</div>
-      <div class="f-14 text-weight-bold q-mb-xl">
+      <div v-if="route.query?.tgl">
+        Tanggal Periksa : {{ route.query?.tgl }}
+      </div>
+      <div class="f-14 text-weight-bold q-my-xs">
         TERIMAKASIH
+      </div>
+      <div class="text-italic f-10  q-mb-xl">
+        {{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}
       </div>
     </div>
 

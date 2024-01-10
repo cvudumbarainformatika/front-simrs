@@ -220,6 +220,7 @@ import { useRegistrasiPasienBPJSStore } from 'src/stores/simrs/pendaftaran/form/
 import { date, Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useRouter } from 'vue-router'
+import { dateFullFormat } from 'src/modules/formatter'
 // import { useRouter } from 'vue-router'
 // import { routerInstance } from 'src/boot/router'
 
@@ -284,6 +285,7 @@ function kirimPoli(val) {
 let nomor = '-'
 let poli = '-'
 let norm = '-'
+let tgl = dateFullFormat(new Date())
 function pilihPasienIni(val, jkn) {
   if (val === '' || val === null || val === undefined || !val) return
   val.noka = val.nokabpjs
@@ -741,10 +743,12 @@ function toSimpan(dataPasien, form) {
 
 function cetakAntrian(val) {
   console.log('cetak', val)
+  const tglPer = (val?.tanggalperiksa ? dateFullFormat(val?.tanggalperiksa) : false)
   nomor = val?.nomorantrean ?? '-'
   poli = val?.namapoli ?? '-'
   norm = val?.norm ?? '-'
-  const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+  tgl = tglPer ?? tgl
+  const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm, tgl } })
   window.open(routeData.href, '_blank')
 }
 
