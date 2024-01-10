@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifErr, notifSuccess } from 'src/modules/utils'
+import { useSatsetStore } from '.'
 // import { routerInstance } from 'src/boot/router'
 // import * as storage from 'src/modules/storage'
 
@@ -43,10 +45,27 @@ export const useLocationSatsetStore = defineStore('satset_location_store', {
 
     async updateDataRuangan() {
       this.loading = true
+      const satset = useSatsetStore()
+      this.ruangan.token = satset.params.token
       return new Promise((resolve, reject) => {
-        api.post('v1/satusehat/postLocation', this.ruangan)
+        api.post('v1/satusehat/updateLocation', this.ruangan)
           .then(resp => {
-            console.log(resp)
+            // console.log(resp)
+            if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+              satset.DELETE_TOKEN_SATSET()
+              return
+            }
+            if (resp.data.message === 'failed') {
+              notifErr(resp)
+            }
+            this.loading = false
+            notifSuccess(resp)
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+            this.loading = false
+            notifErr(err)
+            reject(err)
           })
       })
     }

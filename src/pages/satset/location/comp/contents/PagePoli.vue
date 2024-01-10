@@ -28,7 +28,7 @@
           >Terkoneksi Satu Sehat</em>
         </td>
         <td class="text-end">
-          <div v-if="!item?.satset_uuid">
+          <div>
             <q-btn
               icon="icon-mat-send"
               flat
