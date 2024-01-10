@@ -4,9 +4,9 @@
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs'"
   >
     <div class="header">
-      <div class="q-pa-md">
+      <div class="row q-pa-md">
         <div class="f-12 text-weight-bold">
-          Data Lokasi Ruangan
+          Data Practitioner
         </div>
       </div>
     </div>
@@ -20,27 +20,24 @@
         style="height:calc( 100% - 1px)"
         class="q-pa-lg"
       >
-        <ListPages />
+        <!-- <ListPages /> -->
       </q-scroll-area>
     </q-card>
 
     <!-- dialogPage -->
-    <DialogPage v-model="store.dialogOpen" />
   </q-page>
 </template>
 
 <script setup>
-import DialogPage from './comp/DialogPage.vue'
-import ListPages from './comp/ListPages.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useSatsetStore } from 'src/stores/satset/index'
-import { useLocationSatsetStore } from 'src/stores/satset/location'
+// import { usePractitionerStore } from 'src/stores/satset/practitioner'
 // import { useOrganisasiStore } from 'src/stores/satset/organisasi'
 import { computed, onMounted } from 'vue'
 const style = useStyledStore()
 
 const satset = useSatsetStore()
-const store = useLocationSatsetStore()
+// const store = usePractitionerStore()
 
 const auth = computed(() => {
   return satset.auth

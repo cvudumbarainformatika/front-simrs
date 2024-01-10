@@ -2,6 +2,7 @@
   <q-list
     bordered
     padding
+    separator
   >
     <q-item
       v-for="(item, i) in items"
@@ -43,6 +44,7 @@ import { ref } from 'vue'
 const store = useLocationSatsetStore()
 
 const items = ref([
-  { nama: 'Ruangan Polikliknik', desc: 'Instalasi Rawat Jalan', content: 'poli', comp: 'PagePoli' }
+  { nama: 'Ruangan Polikliknik', desc: 'Instalasi Rawat Jalan', content: 'poli', comp: 'PagePoli' },
+  { nama: 'Ruangan Rawat Inap', desc: 'Instalasi Rawat Inap', content: 'ranap', comp: 'PageRanap' }
 ])
 </script>

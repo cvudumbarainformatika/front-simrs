@@ -14,6 +14,11 @@ const satset = {
       name: 'satset.location',
       component: () => import('pages/satset/location/IndexPage.vue')
     },
+    {
+      path: '/satset/practitioner',
+      name: 'satset.practitioner',
+      component: () => import('pages/satset/practitioner/IndexPage.vue')
+    },
 
     {
       path: '/satset/notfound',
