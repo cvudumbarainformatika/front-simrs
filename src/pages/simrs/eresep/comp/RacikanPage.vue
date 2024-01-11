@@ -58,7 +58,7 @@
           >
             <q-item-section style="width: 20%;">
               <app-input
-                v-model="store.racikan.nama"
+                v-model="store.form.namaracikan"
                 label="Nama Racikan"
                 outlined
               />
@@ -72,7 +72,7 @@
                   class="col-2"
                 >
                   <q-option-group
-                    v-model="store.racikan.jenis"
+                    v-model="store.form.jenisracikan"
                     :options="store.tipeRacikan"
                     color="primary"
                     class="q-ml-sm"
@@ -86,10 +86,10 @@
                   class="text-right col-2"
                 >
                   <app-input
-                    v-model="store.racikan.jumlah_diminta"
+                    v-model="store.form.jumlahdibutuhkan"
                     label="Jumlah Racikan"
                     outlined
-                    @update:model-value="setDosis($event,'jumlah_diminta')"
+                    @update:model-value="setDosis($event,'jumlahdibutuhkan')"
                   />
                 </div>
 
@@ -118,7 +118,7 @@
                   class="col text-right"
                 >
                   <app-input
-                    v-model="store.racikan.keterangan"
+                    v-model="store.form.keterangan"
                     label="Keterangan"
                     outlined
                   />
@@ -148,13 +148,13 @@
                   Satuan
                 </div>
                 <div
-                  v-if="store.racikan.jenis==='DTD'"
+                  v-if="store.form.jenisracikan==='DTD'"
                   class="col-2"
                 >
                   Dosis obat
                 </div>
                 <div
-                  v-if="store.racikan.jenis==='DTD'"
+                  v-if="store.form.jenisracikan==='DTD'"
                   class="col-2"
                 >
                   Dosis resep
@@ -257,50 +257,50 @@
                   {{ store.namaObat?.satuankecil }}
                 </div>
                 <div
-                  v-if="store.racikan.jenis==='DTD'"
+                  v-if="store.form.jenisracikan==='DTD'"
                   class="col-2"
                 >
                   <app-input
-                    v-model="store.racikan.dosis_obat"
+                    v-model="store.form.dosisobat"
                     label="Dosis Obat"
                     outlined
-                    @update:model-value="setDosis($event,'dosis_obat')"
+                    @update:model-value="setDosis($event,'dosisobat')"
                   />
                 </div>
                 <div
-                  v-if="store.racikan.jenis==='DTD'"
+                  v-if="store.form.jenisracikan==='DTD'"
                   class="col-2"
                 >
                   <app-input
-                    v-model="store.racikan.dosis_resep"
+                    v-model="store.form.dosismaksimum"
                     label="Dosis resep"
                     outlined
-                    @update:model-value="setDosis($event,'dosis_resep')"
+                    @update:model-value="setDosis($event,'dosismaksimum')"
                   />
                 </div>
                 <div
-                  v-if="store.racikan.jenis!=='DTD'"
+                  v-if="store.form.jenisracikan!=='DTD'"
                   class="col-2"
                 >
                   <app-input
-                    v-model="store.racikan.jumlah_obat"
+                    v-model="store.form.jumlah"
                     label="Jumlah Obat"
                     outlined
-                    @update:model-value="setDosis($event,'jumlah_obat')"
+                    @update:model-value="setDosis($event,'jumlah')"
                   />
                 </div>
                 <div
-                  v-if="store.racikan.jenis==='DTD'"
+                  v-if="store.form.jenisracikan==='DTD'"
                   class="col-2"
                 >
-                  {{ store.racikan.jumlah_obat }}
+                  {{ store.form.jumlah }}
                 </div>
 
                 <div
                   class="col text-right"
                 >
                   <app-input
-                    v-model="store.racikan.keterangan2"
+                    v-model="store.form.keteranganx"
                     label="Keterangan Obat"
                     outlined
                   />
@@ -340,7 +340,14 @@ import { ref, onMounted } from 'vue'
 // eslint-disable-next-line no-unused-vars
 const store = usePermintaanEResepStore()
 onMounted(() => {
-  store.setRacikan('nama', 'racikan-' + store.counterRacikan)
+  // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
+  store.setForm('jenisresep', 'Racikan')
+  store.setForm('keteranganx', '-')
+  store.setForm('jumlah', 1)
+  store.setForm('jenisracikan', 'DTD')
+  store.setForm('dosisobat', 1)
+  store.setForm('dosismaksimum', 1)
+  store.getNomor()
 })
 
 function setDosis(evt, key) {
@@ -348,24 +355,25 @@ function setDosis(evt, key) {
   const ind = evt.indexOf('.')
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
-  store.setRacikan(key, nilai)
+  store.setForm(key, nilai)
 
-  if (store.racikan.jenis === 'DTD') {
-  // jumlah_diminta , jumlah_obat, dosis_obat, dosis_resep
-    const jumlahDiminta = store.racikan?.jumlah_diminta ?? 1
-    const dosisObat = store.racikan?.dosis_obat ?? 1
-    const dosisResep = store.racikan?.dosis_resep ?? 1
+  if (store.form.jenisracikan === 'DTD') {
+  // jumlahdibutuhkan , jumlah, dosisobat, dosismaksimum
+    const jumlahDiminta = store.form?.jumlahdibutuhkan ?? 1
+    const dosisObat = store.form?.dosisobat ?? 1
+    const dosisResep = store.form?.dosismaksimum ?? 1
     const jumlahObat = dosisResep / dosisObat * jumlahDiminta
-    store.setRacikan('jumlah_obat', jumlahObat)
+    store.setForm('jumlah', jumlahObat)
   }
 }
 function inputObat(val) {
   if (val !== '') store.cariObat(val)
+  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 }
 function obatSelected(val) {
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kodeobat ?? '-')
+  store.setForm('kodeobat', val?.kdobat ?? '-')
   store.setForm('kandungan', val?.kandungan ?? '-')
   store.setForm('fornas', val?.fornas ?? '-')
   store.setForm('forkit', val?.forkit ?? '-')
@@ -383,17 +391,32 @@ function obatValid (val) {
 }
 const signa = ref('')
 function signaSelected(val) {
-  store.setRacikan('aturan', val?.signa)
-  store.setRacikan('jumlahdosis', parseFloat(val?.jumlah))
-  if (parseFloat(store.racikan.jumlah_diminta) > 0) {
-    const kons = store.racikan.jumlah_diminta / parseFloat(val?.jumlah)
-    store.setRacikan('konsumsi', kons)
+  store.setForm('aturan', val?.signa)
+  store.setForm('jumlahdosis', parseFloat(val?.jumlah))
+  if (parseFloat(store.form.jumlahdibutuhkan) > 0) {
+    const kons = store.form.jumlahdibutuhkan / parseFloat(val?.jumlah)
+    store.setForm('konsumsi', kons)
   }
 }
 function sigaValid (val) {
   return (val !== null && val !== '') || 'Harap diisi'
 }
+function mergeObj(from, to) {
+  const key = Object.keys(from)
+  key.forEach(a => {
+    to[a] = from[a]
+  })
+}
 function simpanObat() {
-  console.log('simpan')
+  // const form = []
+  mergeObj(store.form, store.form)
+  // mergeObj(store.form, form)
+
+  // console.log('simpan', form)
+  console.log('form', store.form)
+  // console.log('racikan', store.form)
+  store.simpanObat().then(() => {
+    store.resetRacikan()
+  })
 }
 </script>

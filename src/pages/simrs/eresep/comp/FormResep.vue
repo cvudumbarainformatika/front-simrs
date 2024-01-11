@@ -207,7 +207,45 @@
               <!-- {{ item }} -->
               <q-item-section style="width: 50%;">
                 <div class="row">
-                  {{ item?.mobat?.namaobat }}
+                  {{ item?.mobat?.nama_obat }}
+                </div>
+                <div class="row text-italic f-10">
+                  {{ item?.kdobat }}
+                </div>
+              </q-item-section>
+              <q-item-section
+                side
+                style="width:50%"
+              >
+                <div class="row items-center q-col-gutter-sm full-width">
+                  <div
+                    class="text-right col-2"
+                  >
+                    {{ item?.jumlah }}
+                  </div>
+                  <div
+                    class="col-3 text-right"
+                  >
+                    {{ item?.aturan }}
+                  </div>
+                  <div
+                    class="col text-right"
+                  >
+                    {{ item?.keterangan }}
+                  </div>
+                </div>
+              </q-item-section>
+            </q-item>
+          </template>
+          <template v-if="store.listRacikan.length">
+            <q-item
+              v-for="(item, i) in store.listRacikan"
+              :key="i"
+            >
+              <!-- {{ item }} -->
+              <q-item-section style="width: 50%;">
+                <div class="row">
+                  {{ item?.mobat?.nama_obat }}
                 </div>
                 <div class="row text-italic f-10">
                   {{ item?.kdobat }}
@@ -284,18 +322,23 @@ function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   const diag = temp?.length ? temp.join(', ') : '-'
-  if (val) {
-    store.setForm('noreg', val.noreg)
-    store.setForm('norm', val.norm)
-    store.setForm('groupsistembayar', val.groups)
-    store.setForm('sistembayar', val.kodesistembayar ?? val?.kdsistembayar)
-    store.setForm('dokter', val.kodedokter)
-    store.setForm('diagnosa', diag ?? '-')
-    store.cariSimulasi(val?.noreg)
-    if (props?.depo === 'rjl') store.getBillRajal(val)
-    if (props?.depo === 'rnp') store.getBillRanap(val)
-    if (props?.depo === 'igd') store.getBillIgd(val)
-    // store.getBillRajal(val)
+
+  store.setForm('noreg', val?.noreg)
+  store.setForm('norm', val?.norm)
+  store.setForm('groupsistembayar', val?.groups)
+  store.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
+  store.setForm('dokter', val?.kodedokter)
+  store.setForm('diagnosa', diag ?? '-')
+  store.cariSimulasi(val?.noreg)
+  if (props?.depo === 'rjl') store.getBillRajal(val)
+  if (props?.depo === 'rnp') store.getBillRanap(val)
+  if (props?.depo === 'igd') store.getBillIgd(val)
+  // store.getBillRajal(val)
+
+  if (props?.pasien?.newapotekrajal?.flag === '') {
+    store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
+    store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
+    store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
   }
 }
 /// / set Racikan ------
@@ -308,11 +351,12 @@ function racikan() {
 /// / set Racikan end ------
 function inputObat(val) {
   if (val !== '') store.cariObat(val)
+  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 }
 function obatSelected(val) {
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kodeobat ?? '-')
+  store.setForm('kodeobat', val?.kdobat ?? '-')
   store.setForm('kandungan', val?.kandungan ?? '-')
   store.setForm('fornas', val?.fornas ?? '-')
   store.setForm('forkit', val?.forkit ?? '-')
@@ -384,7 +428,8 @@ function validate() {
 }
 function simpanObat() {
   if (validate()) {
-    store.simpanObat()
+    const form = store.form
+    store.simpanObat(form)
   }
 }
 </script>
