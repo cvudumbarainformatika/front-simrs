@@ -237,43 +237,43 @@
               </q-item-section>
             </q-item>
           </template>
+          {{ store.listRacikan }}
           <template v-if="store.listRacikan.length">
-            <q-item
+            <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
             >
-              <!-- {{ item }} -->
-              <q-item-section style="width: 50%;">
-                <div class="row">
-                  {{ item?.mobat?.nama_obat }}
-                </div>
-                <div class="row text-italic f-10">
-                  {{ item?.kdobat }}
-                </div>
-              </q-item-section>
-              <q-item-section
-                side
-                style="width:50%"
-              >
-                <div class="row items-center q-col-gutter-sm full-width">
-                  <div
-                    class="text-right col-2"
-                  >
-                    {{ item?.jumlah }}
+              {{ item }}
+              <q-item>
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ item?.nama }}
                   </div>
-                  <div
-                    class="col-3 text-right"
-                  >
-                    {{ item?.aturan }}
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-2"
+                    >
+                      {{ item?.jumlah }}
+                    </div>
+                    <div
+                      class="col-3 text-right"
+                    >
+                      {{ item?.aturan }}
+                    </div>
+                    <div
+                      class="col text-right"
+                    >
+                      {{ item?.keterangan }}
+                    </div>
                   </div>
-                  <div
-                    class="col text-right"
-                  >
-                    {{ item?.keterangan }}
-                  </div>
-                </div>
-              </q-item-section>
-            </q-item>
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
           </template>
         </q-list>
       </q-scroll-area>
@@ -337,8 +337,11 @@ function setPasien() {
 
   if (props?.pasien?.newapotekrajal?.flag === '') {
     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-    store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-    store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+    if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
+    if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+
+    // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
+    // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
   }
 }
 /// / set Racikan ------

@@ -123,10 +123,28 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       }
     },
     setList(key) {
+      key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
       this.listPemintaanSementara.push(key)
     },
+    setListArray(array) {
+      array.forEach(arr => {
+        this.setList(arr)
+      })
+    },
     setListRacikan(key) {
-      this.listRacikan.push(key)
+      key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+      const temp = {
+        nama: key?.namaracikan,
+        harga: key?.harga,
+        jumlahracikan: key?.jumlahdibutuhkan,
+        rician: key
+      }
+      this.listRacikan.push(temp)
+    },
+    setListRacikanArray(array) {
+      array.forEach(arr => {
+        this.setListRacikan(arr)
+      })
     },
     cariObat(val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
