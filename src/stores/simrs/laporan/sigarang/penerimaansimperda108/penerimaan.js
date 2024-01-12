@@ -15,8 +15,16 @@ export const useSimrsLaporanSigarangPenerimaanSimperda108Store = defineStore('la
       page: 1,
       // tgl: date.formatDate(Date.now(), 'YYYY-05-01'),
       tgl: date.formatDate(Date.now(), 'YYYY-MM-01'),
-      tglx: date.formatDate(Date.now(), 'YYYY-MM-DD')
-    }
+      tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      kode_ruang: ''
+    },
+    gudangs: [
+      { nama: 'Semua Depo', value: '' },
+      // { nama: 'Gudang Habis Pakai', value: 'Gd-02010100' },
+      { nama: 'Depo PNM', value: 'Gd-02010101' },
+      { nama: 'Depo Gizi', value: 'Gd-02010102' },
+      { nama: 'Depo Habis Pakai', value: 'Gd-02010103' }
+    ]
   }),
   actions: {
     setParam(key, val) {
