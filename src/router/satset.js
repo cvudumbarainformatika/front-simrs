@@ -19,6 +19,11 @@ const satset = {
       name: 'satset.practitioner',
       component: () => import('pages/satset/practitioner/IndexPage.vue')
     },
+    {
+      path: '/satset/kunjungan',
+      name: 'satset.kunjungan',
+      component: () => import('pages/satset/kunjungan/IndexPage.vue')
+    },
 
     {
       path: '/satset/notfound',

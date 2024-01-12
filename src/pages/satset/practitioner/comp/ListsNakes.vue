@@ -12,37 +12,73 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        v-for="(item, n) in store.items"
-        :key="n"
-      >
-        <td>{{ item.nama }}</td>
-        <td class="text-end">
-          <em
-            v-if="!item?.satset_uuid"
-            class="text-negative"
-          >Belum Terkoneksi </em>
-          <em
-            v-else
-            class="text-primary"
-          >Terkoneksi</em>
-        </td>
-        <td class="text-end">
-          <div>
-            <q-btn
-              icon="icon-mat-send"
-              flat
-              dense
-              size="sm"
-              round
-              color="primary"
-              :loading="store.loadingSend && indexId===item?.id"
-              :disable="store.loadingSend && indexId === item?.id"
-              @click="send(item?.id)"
+      <template v-if="store.loading">
+        <tr
+          v-for="n in store.params.per_page"
+          :key="n"
+        >
+          <td>
+            <q-skeleton
+              type="text"
+              width="200px"
+              height="14px"
             />
-          </div>
-        </td>
-      </tr>
+          </td>
+          <td class="text-end">
+            <div class="row justify-end">
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="row justify-end">
+              <q-skeleton
+                type="circle"
+                width="20px"
+                height="20px"
+              />
+            </div>
+          </td>
+        </tr>
+      </template>
+      <template v-else>
+        <tr
+          v-for="(item, n) in store.items"
+          :key="n"
+        >
+          <td>
+            {{ item.nama }}
+          </td>
+          <td class="text-end">
+            <em
+              v-if="!item?.satset_uuid"
+              class="text-negative"
+            >Belum Terkoneksi </em>
+            <em
+              v-else
+              class="text-primary"
+            >Terkoneksi</em>
+          </td>
+          <td class="text-end">
+            <div>
+              <q-btn
+                icon="icon-mat-send"
+                flat
+                dense
+                size="sm"
+                round
+                color="primary"
+                :loading="store.loadingSend && indexId===item?.id"
+                :disable="store.loadingSend && indexId === item?.id"
+                @click="send(item?.id)"
+              />
+            </div>
+          </td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>
@@ -83,7 +119,7 @@ td {
   text-indent: -0.5em;
 }
 td {
-  padding: 0.5em 0.5em 0.5em 1em;
+  padding: 0.5em 0.5em 0.5em 1.5em;
 }
 th {
   padding: 0.5em 0.5em 0.5em 1em;

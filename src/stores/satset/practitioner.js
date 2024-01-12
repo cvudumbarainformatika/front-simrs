@@ -10,6 +10,7 @@ export const usePractitionerStore = defineStore('satset_practitioner_store', {
     meta: null,
     params: {
       q: '',
+      status: 'Semua',
       per_page: 30,
       page: 1
     },
@@ -29,6 +30,17 @@ export const usePractitionerStore = defineStore('satset_practitioner_store', {
       } else {
         this.loading = false
       }
+    },
+
+    whereStatus() {
+      this.params.page = 1
+      this.getData()
+    },
+
+    searchData(val) {
+      this.params.page = 1
+      this.params.q = val
+      this.getData()
     },
 
     goToPage(val) {
