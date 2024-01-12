@@ -68,6 +68,29 @@
               />
             </div>
           </div>
+          <div class="row q-col-gutter-sm q-my-sm">
+            <div class="col-9">
+              <app-autocomplete
+                v-model="store.params.kode_ruang"
+                label="Pilih Gudang / Depo"
+                autocomplete="nama"
+                option-label="nama"
+                option-value="value"
+                valid
+                outlined
+                :source="store.gudangs"
+                :loading="store.loading"
+              />
+            </div>
+            <!-- <div class="col-2">
+              <app-btn
+                label="Ambil Data"
+                :disable="store.loading"
+                :loading="store.loading"
+                @click="store.getDataTable"
+              />
+            </div> -->
+          </div>
         </div>
         <!-- tgl dan print -->
         <div class="col-6">

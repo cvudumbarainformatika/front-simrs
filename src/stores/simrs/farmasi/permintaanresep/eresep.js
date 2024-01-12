@@ -10,7 +10,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     loadingObat: false,
     form: {
       keterangan: '-',
-      jumlah_diminta: 1
+      jumlah_diminta: 1,
+      tiperesep: 'normal'
     },
     listPemintaanSementara: [],
     signas: [],
@@ -26,21 +27,133 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     Obats: [],
     namaObat: null,
     pasien: null,
-    depo: ''
+    depo: '',
+    tipeReseps: [
+      { label: 'Normal', value: 'normal' },
+      { label: 'PRB', value: 'prb' },
+      { label: 'Iter', value: 'iter' }
+    ],
+    // section racikan ---
+    racikanOpen: false,
+    racikan: {
+      jenisresep: 'Racikan',
+      namaracikan: '-',
+      keteranganx: '-',
+      jumlah: 1,
+      jenisracikan: 'DTD',
+      dosisobat: 1,
+      dosismaksimum: 1 // dosis resep
+    },
+    tipeRacikan: [
+      { label: 'DTD', value: 'DTD' },
+      { label: 'non-DTD', value: 'non-DTD' }
+    ],
+    counterRacikan: 1,
+    listRacikan: []
+    // section racikan end---
   }),
   actions: {
     setForm(key, val) {
       this.form[key] = val
     },
-    resetForm() {},
+    setRacikan(key, val) {
+      this.racikan[key] = val
+    },
+    setPasien() {
+      const val = this?.pasien
+      const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+      const diag = temp?.length ? temp.join(', ') : '-'
+      this.setForm('noreg', val.noreg)
+      this.setForm('norm', val.norm)
+      this.setForm('groupsistembayar', val.groups)
+      this.setForm('sistembayar', val.kodesistembayar ?? val?.kdsistembayar)
+      this.setForm('dokter', val.kodedokter)
+      this.setForm('diagnosa', diag ?? '-')
+      // this.cariSimulasi(val?.noreg)
+      // if (this?.depo === 'rjl') this.getBillRajal(val)
+      // if (this?.depo === 'rnp') this.getBillRanap(val)
+      // if (this?.depo === 'igd') this.getBillIgd(val)
+    },
+    resetForm() {
+      this.namaObat = null
+      const tagihanrs = this.form?.tagihanrs ?? 0
+      const kodeincbg = this.form?.kodeincbg ?? '-'
+      const uraianinacbg = this.form?.uraianinacbg ?? '-'
+      const tarifina = this.form?.tarifina ?? 0
+      const tiperesep = this.form?.tiperesep ?? 'normal'
+      this.form = {
+        keterangan: '-',
+        jumlah_diminta: 1,
+        tiperesep,
+        tagihanrs,
+        kodeincbg,
+        uraianinacbg,
+        tarifina
+      }
+      this.setPasien()
+    },
     resetObat() {
-      this.setForm('jumlah_diminta', 1)
-      this.setForm('aturan', '')
-      this.setForm('kodeobat', '')
-      this.setForm('keterangan', '-')
+      const tagihanrs = this.form?.tagihanrs ?? 0
+      const kodeincbg = this.form?.kodeincbg ?? '-'
+      const uraianinacbg = this.form?.uraianinacbg ?? '-'
+      const tarifina = this.form?.tarifina ?? 0
+      const tiperesep = this.form?.tiperesep ?? 'normal'
+      this.form = {
+        keterangan: '-',
+        jumlah_diminta: 1,
+        tiperesep,
+        tagihanrs,
+        kodeincbg,
+        uraianinacbg,
+        tarifina
+      }
+      this.setPasien()
+    },
+    resetRacikan() {
+      const jen = this.racikan?.jenisracikan ?? '-'
+      const nam = this.racikan?.namaracikan ?? '-'
+      this.racikan = {
+        jenisresep: 'Racikan',
+        namaracikan: nam,
+        keteranganx: '-',
+        jumlah: 1,
+        jenisracikan: jen,
+        dosisobat: 1,
+        dosismaksimum: 1 // dosis resep
+      }
     },
     setList(key) {
-      this.listPemintaanSementara.unshift(key)
+      key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+      this.listPemintaanSementara.push(key)
+    },
+    setListArray(array) {
+      array.forEach(arr => {
+        this.setList(arr)
+      })
+    },
+    setListRacikan(key) {
+      key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+      const namaracikan = key?.namaracikan
+      const adaList = this.listRacikan.filter(list => list.namaracikan === namaracikan)
+      if (adaList.length) {
+        adaList[0].rincian.push(key)
+      } else {
+        const temp = {
+          nama: key?.namaracikan,
+          harga: key?.harga,
+          aturan: key?.aturan,
+          keterangan: key?.keterangan,
+          jumlahracikan: key?.jumlahdibutuhkan,
+          rician: [key]
+        }
+        this.listRacikan.push(temp)
+      }
+      console.log('list racikan', this.listRacikan)
+    },
+    setListRacikanArray(array) {
+      array.forEach(arr => {
+        this.setListRacikan(arr)
+      })
     },
     cariObat(val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
@@ -53,14 +166,15 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         kdruang: this.dpPar
       }
       const filtObat = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-      if (filtObat.length) {
+      if (filtObat?.length > 10) {
         this.Obats = filtObat
       } else {
+        this.Obats = filtObat
         console.log('obat', val, this.namaObat)
         this.loadingObat = true
         const params = { params: param }
         return new Promise(resolve => {
-          api.get('v1/simrs/farmasinew/depo/lihatstokobateresep', params)
+          api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
             .then(resp => {
               this.loadingObat = false
               this.nonFilteredObat = resp.data?.dataobat
@@ -86,21 +200,21 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         .catch(() => { this.loadingSigna = false })
     },
     getBillRajal(val) {
-      this.setForm('kdruangan', val.kodepoli)
+      this.setForm('kdruangan', val?.kodepoli)
       const kunjRajal = useKasirRajalListKunjunganStore()
       const param = { noreg: val?.noreg }
       kunjRajal.getBill(param).then(resp => {
         this.setForm('tagihanrs', resp?.data?.totalall)
         console.log('bill', resp?.data)
-        console.log('form', this.form)
+        // console.log('form', this.form)
       })
     },
     getBillRanap(val) {
-      this.setForm('kdruangan', val.kdruangan)
+      this.setForm('kdruangan', val?.kdruangan)
       if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
     },
     getBillIgd(val) {
-      this.setForm('kdruangan', val.kodepoli)
+      this.setForm('kdruangan', val?.kodepoli)
       if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
     },
     cariSimulasi(val) {
@@ -128,17 +242,38 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       //     })
       // })
     },
-    simpanObat() {
-      console.log('form', this.form)
+    async getNomor() {
+      const param = {
+        params: {
+          noresep: this.form?.noresep
+        }
+      }
+      await api.get('v1/simrs/farmasinew/depo/conterracikan', param)
+        .then(resp => {
+          // console.log(resp?.data)
+          this.setForm('namaracikan', resp?.data)
+        })
+    },
+    simpanObat(payload) {
+      const form = payload
+      console.log('payload', form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)
           .then(resp => {
             this.loading = false
             console.log(resp)
+            if (resp?.data?.rinci !== 0) {
+              this.setList(resp?.data?.rinci)
+            }
+            if (resp?.data?.simpandtd !== 0) {
+              this.setListRacikan(resp?.data?.simpandtd)
+            }
+            if (resp?.data?.simpannondtd !== 0) {
+              this.setListRacikan(resp?.data?.simpandtd)
+            }
+            this.resetForm()
             this.setForm('noresep', resp?.data?.nota)
-            this.setList(resp?.data?.rinci)
-            this.resetObat()
             resolve(resp)
           })
           .catch(() => {

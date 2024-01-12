@@ -14,6 +14,11 @@ const poli = {
       name: 'poli.suratkontrol',
       component: () => import('pages/simrs/poli/suratkontrol/IndexPage.vue')
     },
+    {
+      path: '/poli/listresep',
+      name: 'poli.listresep',
+      component: () => import('pages/simrs/poli/listresep/IndexPage.vue')
+    },
 
     {
       path: '/poli/notfound',

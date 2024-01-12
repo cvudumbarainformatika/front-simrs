@@ -74,6 +74,7 @@ export const useLaporanSigarangMutasiStore = defineStore('laporan_sigarang_mutas
       this.getDataTable()
     },
     mapingItem(val) {
+      this.items = []
       if (val.length) {
         val.forEach(item => {
           const month = item.monthly.length ? item.monthly.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
