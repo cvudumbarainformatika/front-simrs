@@ -7,7 +7,10 @@
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
-      <div class="row q-my-xs items-center">
+      <div
+        v-if="!store.listPemintaanSementara.length && !store.listRacikan.length"
+        class="row q-my-xs items-center"
+      >
         Tipe Resep:
         <q-option-group
           v-model="store.form.tiperesep"
@@ -17,6 +20,12 @@
           dense
           inline
         />
+      </div>
+      <div
+        v-else
+        class="row q-my-xs items-center"
+      >
+        Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
       </div>
       <q-scroll-area
         style="height: 100% ; padding-bottom: 60px;"
@@ -224,9 +233,14 @@
                     {{ item?.jumlah }}
                   </div>
                   <div
-                    class="col-3 text-right"
+                    class="col-2 text-right"
                   >
                     {{ item?.aturan }}
+                  </div>
+                  <div
+                    class="col-3 text-right"
+                  >
+                    {{ formatRpDouble( item?.harga) }}
                   </div>
                   <div
                     class="col text-right"
@@ -237,14 +251,13 @@
               </q-item-section>
             </q-item>
           </template>
-          {{ store.listRacikan }}
+          <!-- {{ store.listRacikan }} -->
           <template v-if="store.listRacikan.length">
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
             >
-              {{ item }}
-              <q-item>
+              <template #header>
                 <q-item-section style="width: 50%;">
                   <div class="row">
                     {{ item?.nama }}
@@ -258,17 +271,54 @@
                     <div
                       class="text-right col-2"
                     >
-                      {{ item?.jumlah }}
+                      {{ item?.jumlahracikan }}
+                    </div>
+                    <div
+                      class="col-2 text-right"
+                    >
+                      {{ item?.aturan }}
                     </div>
                     <div
                       class="col-3 text-right"
                     >
-                      {{ item?.aturan }}
+                      {{ formatRpDouble(item?.harga) }}
                     </div>
                     <div
                       class="col text-right"
                     >
                       {{ item?.keterangan }}
+                    </div>
+                  </div>
+                </q-item-section>
+              </template>
+              <q-item
+                v-for="(obat, j) in item?.rician"
+                :key="j"
+              >
+                <!-- {{ j }} {{ obat }} -->
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ obat?.mobat?.nama_obat }}
+                  </div>
+                  <div class="row text-italic f-10">
+                    {{ obat?.kdobat }}
+                  </div>
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-2"
+                    >
+                      {{ obat?.jumlah }}
+                    </div>
+
+                    <div
+                      class="col text-right"
+                    >
+                      {{ obat?.keteranganx }}
                     </div>
                   </div>
                 </q-item-section>
@@ -304,6 +354,8 @@
 <script setup>
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+import { formatRpDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 
 const props = defineProps({
   pasien: { type: Object, default: null },
@@ -337,11 +389,15 @@ function setPasien() {
 
   if (props?.pasien?.newapotekrajal?.flag === '') {
     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
+    store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
 
     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  } else {
+    store.listRacikan = []
+    store.listPemintaanSementara = []
   }
 }
 /// / set Racikan ------
@@ -357,6 +413,10 @@ function inputObat(val) {
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 }
 function obatSelected(val) {
+  if (val?.alokasi <= 0) {
+    store.namaObat = null
+    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+  }
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
   store.setForm('kodeobat', val?.kdobat ?? '-')

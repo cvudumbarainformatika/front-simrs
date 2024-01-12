@@ -334,6 +334,7 @@
   </div>
 </template>
 <script setup>
+import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { ref, onMounted } from 'vue'
 
@@ -371,6 +372,10 @@ function inputObat(val) {
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 }
 function obatSelected(val) {
+  if (val?.alokasi <= 0) {
+    store.namaObat = null
+    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+  }
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
   store.setForm('kodeobat', val?.kdobat ?? '-')
