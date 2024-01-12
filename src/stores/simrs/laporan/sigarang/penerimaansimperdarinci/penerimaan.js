@@ -33,7 +33,7 @@ export const useSimrsLaporanSigarangPenerimaanSimperdaRinciStore = defineStore('
     mapingItems(val) {
       // kode108
       // kode_barang
-
+      this.items = []
       const adaisi = val.filter(a => a.barangrs.length)
       if (adaisi.length) {
         adaisi.forEach(isi => {
