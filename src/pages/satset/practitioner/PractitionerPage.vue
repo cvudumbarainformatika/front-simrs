@@ -4,15 +4,7 @@
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs'"
   >
     <div class="header">
-      <div class="row items-center q-pa-sm">
-        <q-icon
-          name="icon-mat-person_3"
-          size="sm"
-        />
-        <div class="f-16 text-weight-bold q-ml-sm">
-          Data Practitioner / Nakes
-        </div>
-      </div>
+      <HeaderCompPage />
     </div>
     <q-card
       flat
@@ -41,6 +33,7 @@
 </template>
 
 <script setup>
+import HeaderCompPage from './comp/HeaderCompPage.vue'
 import ListsNakes from './comp/ListsNakes.vue'
 import BottomComp from './comp/BottomComp.vue'
 import { useStyledStore } from 'src/stores/app/styled'
