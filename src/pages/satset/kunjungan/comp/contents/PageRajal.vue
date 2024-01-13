@@ -2,9 +2,12 @@
   <table>
     <thead>
       <tr>
-        <th>Pasien</th>
-        <th>Noreg</th>
-        <th>ID SATSET</th>
+        <th>PASIEN</th>
+        <th>NOREG</th>
+        <th>POLIKLINIK</th>
+        <th class="text-end">
+          ID SATSET
+        </th>
         <th class="text-end">
           OPTIONS
         </th>
@@ -19,19 +22,20 @@
           <span>{{ pasien?.nama }}</span> <em class="text-negative">{{ pasien?.norm }}</em>
         </td>
         <td>{{ pasien?.noreg }}</td>
-        <td>
+        <td>{{ pasien?.poli }}</td>
+        <td class="text-end">
           <em
-            v-if="!pasien.satset_uuid"
+            v-if="!pasien.pasien_uuid"
             class="text-negative"
           >Belum Ada</em>
           <em
             v-else
             class="text-primary"
-          >{{ pasien?.satset_uuid }}</em>
+          >{{ pasien?.pasien_uuid }}</em>
         </td>
         <td class="text-end">
           <q-btn
-            v-if="!pasien.satset_uuid"
+            v-if="!pasien.pasien_uuid && !pasien.satset"
             label="Dapatkan ID"
             dense
             color="teal"
@@ -40,13 +44,21 @@
             @click="getIdSatset(pasien)"
           />
           <q-btn
-            v-else
+            v-else-if="pasien.pasien_uuid && !pasien.satset"
             label="Kirim Kunjungan"
             dense
             color="primary"
             size="sm"
             class="q-px-md"
             @click="kirimKunjungan(pasien)"
+          />
+          <q-btn
+            v-else
+            label="Satu Sehat"
+            dense
+            color="orange"
+            size="sm"
+            class="q-px-md"
           />
         </td>
       </tr>
