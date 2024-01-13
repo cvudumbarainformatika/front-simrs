@@ -198,8 +198,8 @@
                   color="dark"
                   dense
                   no-caps
+                  :disable="store.loading || store.loadingkirim"
                   :loading="store.loading"
-                  :disable="store.loading"
                   @click="simpanObat"
                 >
                   Simpan Obat
@@ -291,6 +291,22 @@
                   </div>
                 </q-item-section>
               </template>
+              <q-item>
+                <q-item-section />
+                <q-item-section>
+                  <div class="text-right q-mr-sm">
+                    <q-btn
+                      color="primary"
+                      dense
+                      no-caps
+                      :disable="store.loading || store.loadingkirim"
+                      @click="racikanTambah"
+                    >
+                      Tambah
+                    </q-btn>
+                  </div>
+                </q-item-section>
+              </q-item>
               <q-item
                 v-for="(obat, j) in item?.rician"
                 :key="j"
@@ -395,6 +411,8 @@ function setPasien() {
 
     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  } else if (props?.pasien?.newapotekrajal?.flag !== '') {
+    store.setListResep(props?.pasien?.newapotekrajal)
   } else {
     store.listRacikan = []
     store.listPemintaanSementara = []
@@ -406,6 +424,13 @@ function racikan() {
   // console.log('ok')
   // alert('oooi')
   store.racikanOpen = true
+  store.racikanTambah = false
+}
+function racikanTambah() {
+  // console.log('ok')
+  // alert('oooi')
+  store.racikanOpen = true
+  store.racikanTambah = true
 }
 /// / set Racikan end ------
 function inputObat(val) {

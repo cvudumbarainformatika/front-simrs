@@ -8,6 +8,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     loading: false,
     loadingSigna: false,
     loadingObat: false,
+    loadingkirim: false,
     form: {
       keterangan: '-',
       jumlah_diminta: 1,
@@ -35,6 +36,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     ],
     // section racikan ---
     racikanOpen: false,
+    racikanTambah: false,
     racikan: {
       jenisresep: 'Racikan',
       namaracikan: '-',
@@ -49,7 +51,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       { label: 'non-DTD', value: 'non-DTD' }
     ],
     counterRacikan: 1,
-    listRacikan: []
+    listRacikan: [],
+    resepPasien: []
     // section racikan end---
   }),
   actions: {
@@ -137,6 +140,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const adaList = this.listRacikan.filter(list => list.namaracikan === namaracikan)
       if (adaList.length) {
         adaList[0].rincian.push(key)
+        const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+        adaList[0].harga = harga
       } else {
         const temp = {
           nama: key?.namaracikan,
@@ -154,6 +159,31 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       array.forEach(arr => {
         this.setListRacikan(arr)
       })
+    },
+    setListResep(resep) {
+      if (resep?.permintaanracikan?.length) {
+        const rac = resep?.permintaanracikan
+        rac.forEach(arr => {
+          arr.harga = (parseFloat(arr?.jumlah) * parseFloat(arr?.harga_jual)) + parseFloat(arr?.r)
+          const namaracikan = arr?.namaracikan
+          const adaList = arr.listRacikan.filter(list => list.namaracikan === namaracikan)
+          if (adaList.length) {
+            adaList[0].rincian.push(arr)
+            const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+            adaList[0].harga = harga
+          } else {
+            const temp = {
+              nama: arr?.namaracikan,
+              harga: arr?.harga,
+              aturan: arr?.aturan,
+              keterangan: arr?.keterangan,
+              jumlahracikan: arr?.jumlahdibutuhkan,
+              rician: [arr]
+            }
+            arr.listRacikan.push(temp)
+          }
+        })
+      }
     },
     cariObat(val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
@@ -282,12 +312,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     async selesaiResep() {
+      this.loadingkirim = true
       await api.get('v1/simrs/farmasinew/depo/kirimresep', this.form)
         .then(resp => {
           // console.log(resp?.data)
           // this.setForm('namaracikan', resp?.data)
+          this.loadingkirim = false
+          this.setListResep(this.pasien?.newapotekrajal)
+          this.listPemintaanSementara = []
+          this.listRacikan = []
           notifSuccess(resp)
         })
+        .catch(() => { this.loadingkirim = false })
     }
   }
 })

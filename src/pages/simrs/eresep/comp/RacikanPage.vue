@@ -325,6 +325,80 @@
               </div>
             </q-item-section>
           </q-item>
+          <template v-if="store.listRacikan.length">
+            <q-expansion-item
+              v-for="(item, i) in store.listRacikan"
+              :key="i"
+            >
+              <template #header>
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ item?.nama }}
+                  </div>
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-2"
+                    >
+                      {{ item?.jumlahracikan }}
+                    </div>
+                    <div
+                      class="col-2 text-right"
+                    >
+                      {{ item?.aturan }}
+                    </div>
+                    <div
+                      class="col-3 text-right"
+                    >
+                      {{ formatRpDouble(item?.harga) }}
+                    </div>
+                    <div
+                      class="col text-right"
+                    >
+                      {{ item?.keterangan }}
+                    </div>
+                  </div>
+                </q-item-section>
+              </template>
+
+              <q-item
+                v-for="(obat, j) in item?.rician"
+                :key="j"
+              >
+                <!-- {{ j }} {{ obat }} -->
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ obat?.mobat?.nama_obat }}
+                  </div>
+                  <div class="row text-italic f-10">
+                    {{ obat?.kdobat }}
+                  </div>
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-2"
+                    >
+                      {{ obat?.jumlah }}
+                    </div>
+
+                    <div
+                      class="col text-right"
+                    >
+                      {{ obat?.keteranganx }}
+                    </div>
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
+          </template>
         </q-list>
       </q-scroll-area>
       <!-- <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
@@ -334,6 +408,7 @@
   </div>
 </template>
 <script setup>
+import { formatRpDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { ref, onMounted } from 'vue'
@@ -348,7 +423,7 @@ onMounted(() => {
   store.setForm('jenisracikan', 'DTD')
   store.setForm('dosisobat', 1)
   store.setForm('dosismaksimum', 1)
-  store.getNomor()
+  if (!store.racikanTambah) store.getNomor()
 })
 
 function setDosis(evt, key) {
