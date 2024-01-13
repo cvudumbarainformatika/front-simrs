@@ -148,12 +148,18 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           harga: key?.harga,
           aturan: key?.aturan,
           keterangan: key?.keterangan,
+          jenisracikan: key?.tiperacikan,
           jumlahracikan: key?.jumlahdibutuhkan,
           rician: [key]
         }
         this.listRacikan.push(temp)
       }
       console.log('list racikan', this.listRacikan)
+
+      this.tipeRacikan = [
+        { label: 'DTD', value: 'DTD', disable: true },
+        { label: 'non-DTD', value: 'non-DTD', disable: true }
+      ]
     },
     setListRacikanArray(array) {
       array.forEach(arr => {
@@ -161,13 +167,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     setListResep(resep) {
+      if (!resep.listRacikan) resep.listRacikan = []
       if (resep?.permintaanracikan?.length) {
         const rac = resep?.permintaanracikan
         rac.forEach(arr => {
           arr.harga = (parseFloat(arr?.jumlah) * parseFloat(arr?.harga_jual)) + parseFloat(arr?.r)
           const namaracikan = arr?.namaracikan
-          const adaList = arr.listRacikan.filter(list => list.namaracikan === namaracikan)
-          if (adaList.length) {
+          const adaList = resep?.listRacikan?.filter(list => list.namaracikan === namaracikan)
+          if (adaList?.length) {
             adaList[0].rincian.push(arr)
             const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
             adaList[0].harga = harga
@@ -177,11 +184,17 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               harga: arr?.harga,
               aturan: arr?.aturan,
               keterangan: arr?.keterangan,
+              jenisracikan: arr?.tiperacikan,
               jumlahracikan: arr?.jumlahdibutuhkan,
               rician: [arr]
             }
-            arr.listRacikan.push(temp)
+            resep.listRacikan.push(temp)
           }
+        })
+      }
+      if (resep?.permintaanresep?.length) {
+        resep?.permintaanresep.forEach(arr => {
+          arr.harga = (parseFloat(arr?.jumlah) * parseFloat(arr?.hargajual)) + parseFloat(arr?.r)
         })
       }
     },
@@ -313,15 +326,20 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     async selesaiResep() {
       this.loadingkirim = true
-      await api.get('v1/simrs/farmasinew/depo/kirimresep', this.form)
+      await api.post('v1/simrs/farmasinew/depo/kirimresep', this.form)
         .then(resp => {
           // console.log(resp?.data)
           // this.setForm('namaracikan', resp?.data)
           this.loadingkirim = false
-          this.setListResep(this.pasien?.newapotekrajal)
           this.listPemintaanSementara = []
           this.listRacikan = []
+          this.tipeRacikan = [
+            { label: 'DTD', value: 'DTD', disable: false },
+            { label: 'non-DTD', value: 'non-DTD', disable: false }
+          ]
           notifSuccess(resp)
+          this.setListResep(this.pasien?.newapotekrajal)
+          this.pasien.newapotekrajal.flag = '1'
         })
         .catch(() => { this.loadingkirim = false })
     }

@@ -61,6 +61,7 @@
                 v-model="store.form.namaracikan"
                 label="Nama Racikan"
                 outlined
+                readonly
               />
             </q-item-section>
             <q-item-section
@@ -342,6 +343,11 @@
                 >
                   <div class="row items-center q-col-gutter-sm full-width">
                     <div
+                      class="text-right col-1"
+                    >
+                      {{ item?.jenisracikan }}
+                    </div>
+                    <div
                       class="text-right col-2"
                     >
                       {{ item?.jumlahracikan }}
@@ -354,7 +360,7 @@
                     <div
                       class="col-3 text-right"
                     >
-                      {{ formatRpDouble(item?.harga) }}
+                      {{ formatDouble(item?.harga) }}
                     </div>
                     <div
                       class="col text-right"
@@ -408,7 +414,7 @@
   </div>
 </template>
 <script setup>
-import { formatRpDouble } from 'src/modules/formatter'
+import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { ref, onMounted } from 'vue'

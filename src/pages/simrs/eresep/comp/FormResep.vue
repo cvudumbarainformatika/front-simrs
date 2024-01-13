@@ -240,7 +240,7 @@
                   <div
                     class="col-3 text-right"
                   >
-                    {{ formatRpDouble( item?.harga) }}
+                    {{ formatDouble( item?.harga) }}
                   </div>
                   <div
                     class="col text-right"
@@ -256,6 +256,7 @@
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
+              dense-toggle
             >
               <template #header>
                 <q-item-section style="width: 50%;">
@@ -269,6 +270,11 @@
                 >
                   <div class="row items-center q-col-gutter-sm full-width">
                     <div
+                      class="text-right col-1"
+                    >
+                      {{ item?.jenisracikan }}
+                    </div>
+                    <div
                       class="text-right col-2"
                     >
                       {{ item?.jumlahracikan }}
@@ -281,7 +287,7 @@
                     <div
                       class="col-3 text-right"
                     >
-                      {{ formatRpDouble(item?.harga) }}
+                      {{ formatDouble(item?.harga) }}
                     </div>
                     <div
                       class="col text-right"
@@ -300,7 +306,7 @@
                       dense
                       no-caps
                       :disable="store.loading || store.loadingkirim"
-                      @click="racikanTambah"
+                      @click="racikanTambah(item)"
                     >
                       Tambah
                     </q-btn>
@@ -352,6 +358,8 @@
         <div>
           <q-btn
             color="primary"
+            :loading="store.loadingkirim"
+            :disable="store.loadingkirim"
             @click="store.selesaiResep"
           >
             Kirim Resep
@@ -370,7 +378,7 @@
 <script setup>
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { formatRpDouble } from 'src/modules/formatter'
+import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 
 const props = defineProps({
@@ -425,12 +433,24 @@ function racikan() {
   // alert('oooi')
   store.racikanOpen = true
   store.racikanTambah = false
+  store.setForm('namaracikan', '')
+  store.tipeRacikan = [
+    { label: 'DTD', value: 'DTD', disable: false },
+    { label: 'non-DTD', value: 'non-DTD', disable: false }
+  ]
 }
-function racikanTambah() {
-  // console.log('ok')
+function racikanTambah(val) {
+  console.log('ok', val)
   // alert('oooi')
   store.racikanOpen = true
   store.racikanTambah = true
+  store.setForm('jenisracikan', val?.jenisracikan)
+  store.setForm('namaracikan', val?.nama)
+
+  store.tipeRacikan = [
+    { label: 'DTD', value: 'DTD', disable: true },
+    { label: 'non-DTD', value: 'non-DTD', disable: true }
+  ]
 }
 /// / set Racikan end ------
 function inputObat(val) {
