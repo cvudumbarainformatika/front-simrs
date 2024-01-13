@@ -77,6 +77,10 @@
             <q-item-label>
               Tanggal : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
             </q-item-label>
+            <q-item-label>
+              No Antrian : <span class="text-teal text-weight-bold"> {{ item?.noantrian }}</span>
+            </q-item-label>
+
             <q-item-label
               caption
             >
