@@ -1,0 +1,296 @@
+<template>
+  <table>
+    <thead>
+      <tr>
+        <th width="5%">
+          No
+        </th>
+        <th>
+          Resep
+        </th>
+        <th>
+          Pasien
+        </th>
+        <th>
+          Dokter
+        </th>
+        <th>
+          Poli
+        </th>
+        <th class="text-end">
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <template v-if="store.loading">
+        <tr
+          v-for="n in store.params.per_page"
+          :key="n"
+        >
+          <td width="5%">
+            <q-skeleton
+              type="text"
+              width="20px"
+              height="14px"
+            />
+          </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="50px"
+              height="14px"
+            />
+            <q-skeleton
+              type="text"
+              width="40px"
+              height="10px"
+            />
+          </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="70px"
+              height="14px"
+            />
+            <div class="row">
+              <q-skeleton
+                type="text"
+                width="40px"
+                height="14px"
+                class="q-mr-xs"
+              />
+              ||
+              <q-skeleton
+                type="text"
+                width="40px"
+                height="14px"
+                class="q-ml-xs"
+              />
+            </div>
+          </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="100px"
+              height="14px"
+            />
+          </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="100px"
+              height="14px"
+            />
+          </td>
+          <td class="text-end">
+            <div class="row justify-end">
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </div>
+          </td>
+        </tr>
+      </template>
+      <template v-else>
+        <tr
+          v-for="(item, n) in store.items"
+          :key="n"
+        >
+          <td width="5%">
+            {{ n+1 }}
+          </td>
+          <td>
+            <div class="row ">
+              {{ item?.noresep }}
+            </div>
+            <div class="row text-grey f-10">
+              {{ dateFullFormat(item?.tgl_permintaan) }}
+            </div>
+          </td>
+          <td>
+            <div class="row text-weight-bold">
+              {{ item?.datapasien?.nama }}
+            </div>
+            <div class="row">
+              {{ item?.noreg }}   ||   {{ item?.norm }}
+            </div>
+          </td>
+          <td>
+            {{ item?.dokter }}
+          </td>
+          <td>
+            {{ item?.poli?.rs2 }}
+          </td>
+          <td class="text-end">
+            <q-chip
+              square
+              class="f-10"
+              :color="color(item?.flag)"
+              text-color="white"
+            >
+              {{ status(item?.flag) }}
+            </q-chip>
+          </td>
+          <!-- <td class="text-end">
+            <div>
+              <q-btn
+                icon="icon-mat-send"
+                flat
+                dense
+                size="sm"
+                round
+                color="primary"
+                :loading="store.loadingSend && indexId===item?.id"
+                :disable="store.loadingSend && indexId === item?.id"
+                @click="send(item?.id)"
+              />
+            </div>
+          </td> -->
+        </tr>
+      </template>
+    </tbody>
+  </table>
+</template>
+
+<script setup>
+// import { ref } from 'vue'
+import { dateFullFormat } from 'src/modules/formatter'
+import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
+
+const store = useEResepDepoFarmasiStore()
+// const indexId = ref(0)
+function status(val) {
+  let balik = ' Belum ada status'
+  switch (val) {
+    case '':
+      balik = ' draft'
+      break
+    case '1':
+      balik = 'Siap di kerjakan'
+      break
+
+    default:
+      break
+  }
+  return balik
+}
+function color(val) {
+  let balik = 'grey'
+  switch (val) {
+    case '':
+      balik = 'grey'
+      break
+    case '1':
+      balik = 'green'
+      break
+
+    default:
+      break
+  }
+  return balik
+}
+// function send(id) {
+//   indexId.value = id
+//   store.sendToSatset(id)
+// }
+</script>
+
+<style lang="scss" scoped>
+
+.text-end{
+  text-align: end;
+}
+/* Standard Tables */
+
+table {
+  // margin: 1em 0;
+  border-collapse: collapse;
+  border: 1px solid #d6d6d6;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+th,
+td {
+
+  vertical-align: text-top;
+  text-align: left;
+  text-indent: -0.5em;
+}
+td {
+  padding: 0.5em 0.5em 0.5em 1.5em;
+}
+th {
+  padding: 0.5em 0.5em 0.5em 1em;
+  vertical-align: bottom;
+  background-color: $dark;
+  color: $white;
+}
+
+tr:nth-child(even) th[scope=row] {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) th[scope=row] {
+  background-color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+td:nth-of-type(2) {
+  font-style: italic;
+}
+
+// th:nth-of-type(3),
+// td:nth-of-type(3) {
+//   text-align: right;
+// }
+/* Fixed Headers */
+
+th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+th[scope=row] {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+th[scope=row] {
+  vertical-align: top;
+  color: inherit;
+  background-color: inherit;
+  background: linear-gradient(90deg, transparent 0%, transparent calc(100% - .05em), #d6d6d6 calc(100% - .05em), #d6d6d6 100%);
+}
+
+table:nth-of-type(2) th:not([scope=row]):first-child {
+  left: 0;
+  z-index: 3;
+  background: linear-gradient(90deg, #666 0%, #666 calc(100% - .05em), #ccc calc(100% - .05em), #ccc 100%);
+}
+
+/* Strictly for making the scrolling happen. */
+
+th[scope=row] + td {
+  min-width: 24em;
+}
+
+th[scope=row] {
+  min-width: 20em;
+}
+
+</style>
