@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 // import { routerInstance } from 'src/boot/router'
 // import * as storage from 'src/modules/storage'
 import { useSatsetStore } from 'src/stores/satset/index'
@@ -40,13 +41,30 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
       return new Promise((resolve, reject) => {
         api.post('v1/satusehat/getPasienByNikSatset', params)
           .then((resp) => {
-            // console.log(resp)
+            console.log(resp)
             this.loading = false
             this.getData()
+            if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+              // harus login lagi
+              console.log('token expired')
+              satset.DELETE_TOKEN_SATSET()
+              return
+            }
+            if (resp.data.message === 'failed') {
+              // harus login lagi
+              notifErr(resp)
+              return
+            }
+            if (resp.data.message === 'success') {
+              notifSuccess(resp)
+            } else {
+              notifErr(resp)
+            }
           })
           .catch(err => {
             console.log(err)
             this.loading = false
+            notifErr(err)
           })
       })
     },
@@ -63,11 +81,21 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
           .then((resp) => {
             console.log('kirim kunjungan', resp)
             this.loadingSend = false
-            // this.getData()
+
+            if (resp.data.message === 'failed' && resp.data.data.response.issue[0].code === 'invalid-access-token') {
+              // harus login lagi
+              console.log('token expired')
+              satset.DELETE_TOKEN_SATSET()
+            }
+            if (resp.data.message === 'success') {
+              notifSuccess(resp)
+              this.getData()
+            }
           })
           .catch(err => {
             console.log(err)
             this.loadingSend = false
+            notifErr(err)
           })
       })
     }
