@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
-import { notifErrVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
   state: () => ({
@@ -281,8 +281,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           })
       })
     },
-    selesaiResep() {
-      console.log('selesai', this.form)
+    async selesaiResep() {
+      await api.get('v1/simrs/farmasinew/depo/kirimresep', this.form)
+        .then(resp => {
+          // console.log(resp?.data)
+          // this.setForm('namaracikan', resp?.data)
+          notifSuccess(resp)
+        })
     }
   }
 })
