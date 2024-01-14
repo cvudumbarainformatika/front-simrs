@@ -28,11 +28,12 @@
         Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
       </div>
       <q-scroll-area
-        style="height: 100% ; padding-bottom: 60px;"
+        style="height: 100%; padding-bottom: 60px;"
       >
         <q-list
           separator
           bordered
+          style=" padding-bottom: 60px;"
         >
           <!-- Header nya -->
           <q-item
@@ -261,7 +262,7 @@
               <template #header>
                 <q-item-section style="width: 50%;">
                   <div class="row">
-                    {{ item?.nama }}
+                    {{ item?.namaracikan }}
                   </div>
                 </q-item-section>
                 <q-item-section
@@ -314,7 +315,7 @@
                 </q-item-section>
               </q-item>
               <q-item
-                v-for="(obat, j) in item?.rician"
+                v-for="(obat, j) in item?.rincian"
                 :key="j"
               >
                 <!-- {{ j }} {{ obat }} -->
@@ -394,6 +395,7 @@ onMounted(() => {
   store.cariObat()
   setPasien()
 })
+
 function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
@@ -419,8 +421,8 @@ function setPasien() {
 
     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  } else if (props?.pasien?.newapotekrajal?.flag !== '') {
-    store.setListResep(props?.pasien?.newapotekrajal)
+  } else if (props?.pasien?.newapotekrajal) {
+    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
   } else {
     store.listRacikan = []
     store.listPemintaanSementara = []
@@ -444,8 +446,12 @@ function racikanTambah(val) {
   // alert('oooi')
   store.racikanOpen = true
   store.racikanTambah = true
-  store.setForm('jenisracikan', val?.jenisracikan)
-  store.setForm('namaracikan', val?.nama)
+  store.setForm('tiperacikan', val?.tiperacikan)
+  store.setForm('namaracikan', val?.namaracikan)
+  store.setForm('aturan', val?.aturan)
+  store.setForm('konsumsi', val?.konsumsi)
+  store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
+  store.setForm('keterangan', val?.keterangan)
 
   store.tipeRacikan = [
     { label: 'DTD', value: 'DTD', disable: true },
@@ -537,7 +543,7 @@ function validate() {
 function simpanObat() {
   if (validate()) {
     const form = store.form
-    store.simpanObat(form)
+    store.simpanObat(form).then(() => { signa.value = null })
   }
 }
 </script>

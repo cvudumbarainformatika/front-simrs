@@ -48,19 +48,22 @@
             />
           </td>
           <td>
-            <q-skeleton
-              type="text"
-              width="70px"
-              height="14px"
-            />
-            <div class="row">
+            <div class="row q-mb-xs q-col-gutter-sm">
+              <q-skeleton
+                type="text"
+                width="100px"
+                height="14px"
+              />
+            </div>
+            <div class="row q-col-gutter-sm items-center">
               <q-skeleton
                 type="text"
                 width="40px"
                 height="14px"
-                class="q-mr-xs"
               />
-              ||
+              <div class="text-grey q-pt-none">
+                ||
+              </div>
               <q-skeleton
                 type="text"
                 width="40px"
@@ -95,45 +98,49 @@
         </tr>
       </template>
       <template v-else>
-        <tr
+        <template
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <td width="5%">
-            {{ n+1 }}
-          </td>
-          <td>
-            <div class="row ">
-              {{ item?.noresep }}
-            </div>
-            <div class="row text-grey f-10">
-              {{ dateFullFormat(item?.tgl_permintaan) }}
-            </div>
-          </td>
-          <td>
-            <div class="row text-weight-bold">
-              {{ item?.datapasien?.nama }}
-            </div>
-            <div class="row">
-              {{ item?.noreg }}   ||   {{ item?.norm }}
-            </div>
-          </td>
-          <td>
-            {{ item?.dokter }}
-          </td>
-          <td>
-            {{ item?.poli?.rs2 }}
-          </td>
-          <td class="text-end">
-            <q-chip
-              square
-              class="f-10"
-              :color="color(item?.flag)"
-              text-color="white"
-            >
-              {{ status(item?.flag) }}
-            </q-chip>
-          </td>
+          <tr
+            class="cursor-pointer"
+            @click="buka(item)"
+          >
+            <td width="5%">
+              {{ n+1 }}
+            </td>
+            <td>
+              <div class="row ">
+                {{ item?.noresep }}
+              </div>
+              <div class="row text-grey f-10">
+                {{ dateFullFormat(item?.tgl_permintaan) }}
+              </div>
+            </td>
+            <td>
+              <div class="row text-weight-bold">
+                {{ item?.datapasien?.nama }}
+              </div>
+              <div class="row">
+                {{ item?.noreg }}   ||   {{ item?.norm }}
+              </div>
+            </td>
+            <td>
+              {{ item?.dokter }}
+            </td>
+            <td>
+              {{ item?.poli?.rs2 }}
+            </td>
+            <td class="text-end">
+              <q-chip
+                square
+                class="f-10"
+                :color="color(item?.flag)"
+                text-color="white"
+              >
+                {{ status(item?.flag) }}
+              </q-chip>
+            </td>
           <!-- <td class="text-end">
             <div>
               <q-btn
@@ -149,7 +156,13 @@
               />
             </div>
           </td> -->
-        </tr>
+          </tr>
+          <!-- <tr v-if="item.expand">
+            <td colspan="6">
+              <div>{{ item }}</div>
+            </td>
+          </tr> -->
+        </template>
       </template>
     </tbody>
   </table>
@@ -161,6 +174,7 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 
 const store = useEResepDepoFarmasiStore()
+
 // const indexId = ref(0)
 function status(val) {
   let balik = ' Belum ada status'
@@ -191,6 +205,14 @@ function color(val) {
       break
   }
   return balik
+}
+
+function buka(val) {
+  console.log('buka', val)
+  store.setOpen()
+  store.setResep(val)
+  // if (val?.expand === undefined) val.expand = true
+  // else val.expand = !val.expand
 }
 // function send(id) {
 //   indexId.value = id

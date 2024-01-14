@@ -38,6 +38,14 @@
     </q-card>
 
     <!-- dialogPage -->
+    <app-fullscreen-blue
+      v-model="store.isOpen"
+      @close="store.setClose"
+    >
+      <template #default>
+        <DialogPage />
+      </template>
+    </app-fullscreen-blue>
   </q-page>
 </template>
 
@@ -50,6 +58,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
+const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 
 const style = useStyledStore()
 const store = useEResepDepoFarmasiStore()

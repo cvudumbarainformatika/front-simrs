@@ -42,7 +42,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       namaracikan: '-',
       keteranganx: '-',
       jumlah: 1,
-      jenisracikan: 'DTD',
+      tiperacikan: 'DTD',
       dosisobat: 1,
       dosismaksimum: 1 // dosis resep
     },
@@ -113,14 +113,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       this.setPasien()
     },
     resetRacikan() {
-      const jen = this.racikan?.jenisracikan ?? '-'
+      const jen = this.racikan?.tiperacikan ?? '-'
       const nam = this.racikan?.namaracikan ?? '-'
       this.racikan = {
         jenisresep: 'Racikan',
         namaracikan: nam,
         keteranganx: '-',
         jumlah: 1,
-        jenisracikan: jen,
+        tiperacikan: jen,
         dosisobat: 1,
         dosismaksimum: 1 // dosis resep
       }
@@ -144,13 +144,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         adaList[0].harga = harga
       } else {
         const temp = {
-          nama: key?.namaracikan,
+          namaracikan: key?.namaracikan,
           harga: key?.harga,
           aturan: key?.aturan,
           keterangan: key?.keterangan,
-          jenisracikan: key?.tiperacikan,
+          tiperacikan: key?.tiperacikan,
+          konsumsi: key?.konsumsi,
           jumlahracikan: key?.jumlahdibutuhkan,
-          rician: [key]
+          rincian: [key]
         }
         this.listRacikan.push(temp)
       }
@@ -180,13 +181,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             adaList[0].harga = harga
           } else {
             const temp = {
-              nama: arr?.namaracikan,
+              namaracikan: arr?.namaracikan,
               harga: arr?.harga,
               aturan: arr?.aturan,
               keterangan: arr?.keterangan,
-              jenisracikan: arr?.tiperacikan,
+              tiperacikan: arr?.tiperacikan,
+              konsumsi: arr?.konsumsi,
               jumlahracikan: arr?.jumlahdibutuhkan,
-              rician: [arr]
+              rincian: [arr]
             }
             resep.listRacikan.push(temp)
           }
@@ -305,18 +307,19 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)
           .then(resp => {
             this.loading = false
-            console.log(resp)
+            this.resetForm()
+            this.setForm('noresep', resp?.data?.nota)
             if (resp?.data?.rinci !== 0) {
               this.setList(resp?.data?.rinci)
             }
-            if (resp?.data?.simpandtd !== 0) {
-              this.setListRacikan(resp?.data?.simpandtd)
+            if (resp?.data?.rincidtd !== 0) {
+              this.setListRacikan(resp?.data?.rincidtd)
             }
-            if (resp?.data?.simpannondtd !== 0) {
-              this.setListRacikan(resp?.data?.simpandtd)
+            if (resp?.data?.rincinondtd !== 0) {
+              this.setListRacikan(resp?.data?.rincinondtd)
             }
-            this.resetForm()
-            this.setForm('noresep', resp?.data?.nota)
+
+            console.log('simpan ', resp?.data)
             resolve(resp)
           })
           .catch(() => {
@@ -328,18 +331,24 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       this.loadingkirim = true
       await api.post('v1/simrs/farmasinew/depo/kirimresep', this.form)
         .then(resp => {
-          // console.log(resp?.data)
+          console.log(resp?.data)
           // this.setForm('namaracikan', resp?.data)
           this.loadingkirim = false
+          notifSuccess(resp)
+
+          this.setListResep(resp?.data?.data)
+          this.pasien.newapotekrajal = resp?.data?.data
           this.listPemintaanSementara = []
           this.listRacikan = []
           this.tipeRacikan = [
             { label: 'DTD', value: 'DTD', disable: false },
             { label: 'non-DTD', value: 'non-DTD', disable: false }
           ]
-          notifSuccess(resp)
-          this.setListResep(this.pasien?.newapotekrajal)
-          this.pasien.newapotekrajal.flag = '1'
+          // if (this.pasien?.newapotekrajal) {
+          //   this.setListResep(this.pasien?.newapotekrajal)
+          //   this.pasien.newapotekrajal.flag = '1'
+          // } else {
+          // }
         })
         .catch(() => { this.loadingkirim = false })
     }

@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
   state: () => ({
+    isOpen: false,
     loading: false,
     items: [],
     meta: {},
@@ -18,12 +19,13 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       { nama: 'Depo OK', value: 'Gd-04010103' },
       { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
       { nama: 'Depo IGD', value: 'Gd-02010104' }
-    ]
+    ],
+    resep: {}
   }),
   actions: {
-    setParams(key, val) {
-      this.params[key] = val
-    },
+    setOpen() { this.isOpen = true },
+    setClose() { this.isOpen = false },
+    setParams(key, val) { this.params[key] = val },
     setSearch(val) {
       this.setParams('q', val)
       this.setParams('page', 1)
@@ -41,6 +43,10 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     refresh() {
       this.setParams('page', 1)
       this.getDataTable()
+    },
+    setResep(val) {
+      const res = val
+      this.resep = res
     },
     async getDataTable() {
       this.loading = true

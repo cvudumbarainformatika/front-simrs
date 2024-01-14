@@ -68,7 +68,7 @@
               style="width: 30%;"
             >
               <div class="row">
-                {{ item?.nama }}
+                {{ item?.namaracikan }}
               </div>
             </q-item-section>
             <q-item-section
@@ -79,7 +79,7 @@
                 <div
                   class="text-right col-2"
                 >
-                  {{ item?.jenisracikan }}
+                  {{ item?.tiperacikan }}
                 </div>
                 <div
                   class="text-right col-2"
@@ -106,7 +106,7 @@
           </template>
 
           <q-item
-            v-for="(obat, j) in item?.rician"
+            v-for="(obat, j) in item?.rincian"
             :key="j"
           >
             <!-- {{ j }} {{ obat }} -->
