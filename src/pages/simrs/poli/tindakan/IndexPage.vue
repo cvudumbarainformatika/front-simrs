@@ -4,7 +4,7 @@
     persistent
     :maximized="true"
     transition-hide="slide-right"
-    @before-hide="lihatSebelumTertutup"
+    @hide="lihatSebelumTertutup"
   >
     <q-card
       v-if="pasien?.dokter !== '' || pasien?.dokter !== null"

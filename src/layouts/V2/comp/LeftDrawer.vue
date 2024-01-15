@@ -188,16 +188,16 @@ const dark = computed(() => {
   return $q.dark.isActive
 })
 // const toggle = ref(false)
-console.log(dark)
+// console.log(dark)
 // function setDark(val) {
 //   $q.dark.set(val)
 // }
 
 onMounted(() => {
   // auth.getUserNew()
-  // console.log('left drawer route', route.matched[2].path)
-  // console.log('left drawer filtermenus', filtermenus.value)
-  // console.log('middleware', middleWare.value)
+  // // console.log('left drawer route', route.matched[2].path)
+  // // console.log('left drawer filtermenus', filtermenus.value)
+  // // console.log('middleware', middleWare.value)
   if (!middleWare.value) {
     const newroute = route.matched[0].path + '/notfound'
     router.replace({ path: newroute })
