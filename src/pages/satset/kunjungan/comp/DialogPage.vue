@@ -31,31 +31,26 @@
             </q-tooltip>
           </q-btn>
         </q-bar>
-
-        <div class="q-px-md q-py-sm">
-          Ini Header Nantinya
-        </div>
       </div>
 
       <div class="col full-height">
-        <q-scroll-area style="height:calc( 100% - 1px)">
-          <component
-            :is="layout"
-          />
-        </q-scroll-area>
-        <div class="absolute-bottom q-pa-sm bg-primary">
+        <!-- <q-scroll-area style="height:calc( 100% - 1px)"> -->
+        <component
+          :is="layout"
+        />
+        <!-- </q-scroll-area> -->
+        <!-- <div class="absolute-bottom q-pa-sm bg-primary">
           Bottom Page
-        </div>
+        </div> -->
       </div>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup>
-// import ListPasien from './ListPasien.vue'
 import PageRajal from './contents/PageRajal.vue'
 import PageRanap from './contents/PageRanap.vue'
-// import DialogFormRuangan from './DialogFormRuangan.vue'
+
 import { computed } from 'vue'
 const props = defineProps({
   item: {
