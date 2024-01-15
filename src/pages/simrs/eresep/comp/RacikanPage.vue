@@ -3,11 +3,11 @@
     class="bg-white column"
     style="height:90vh"
   >
-    <div class="col-auto bg-primary text-white">
+    <!-- <div class="col-auto bg-primary text-white">
       <div class="q-pa-sm f-16">
         Input Obat Racikan
       </div>
-    </div>
+    </div> -->
     <div class="col full-height relative-position">
       <q-scroll-area
         style="height: calc( 100% ); padding-bottom: 60px;"

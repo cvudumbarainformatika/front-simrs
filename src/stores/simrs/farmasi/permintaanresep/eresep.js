@@ -208,31 +208,31 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       } else return notifErrVue('depo tujuan tidak ditemukan')
       const param = {
         groups: this?.pasien?.groups,
-        kdruang: this.dpPar
+        kdruang: this.dpPar,
+        q: val
       }
-      const filtObat = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-      if (filtObat?.length > 10) {
-        this.Obats = filtObat
-      } else {
-        this.Obats = filtObat
-        console.log('obat', val, this.namaObat)
-        this.loadingObat = true
-        const params = { params: param }
-        return new Promise(resolve => {
-          api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
-            .then(resp => {
-              this.loadingObat = false
-              this.nonFilteredObat = resp.data?.dataobat
-              this.Obats = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-              console.log(resp.data)
-              resolve(resp)
-            })
-            .catch(() => {
-              this.loadingObat = false
-              this.Obats = []
-            })
-        })
-      }
+
+      const filtObat = val?.length ? this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase())) : this.nonFilteredObat
+
+      this.Obats = filtObat
+      console.log('obat', val, filtObat)
+      this.loadingObat = true
+      const params = { params: param }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
+          .then(resp => {
+            this.loadingObat = false
+            this.nonFilteredObat = resp.data?.dataobat
+            this.Obats = val?.length ? this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase())) : this.nonFilteredObat
+            console.log('hasil', this.nonFilteredObat, this.Obats)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingObat = false
+            this.Obats = []
+          })
+      })
+      // }
     },
     async getSigna() {
       this.loadingSigna = true
@@ -351,6 +351,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           // }
         })
         .catch(() => { this.loadingkirim = false })
+    },
+    hapusObat(val) {
+      console.log('hapusObat', val)
     }
   }
 })

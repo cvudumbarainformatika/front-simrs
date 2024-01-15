@@ -33,7 +33,6 @@
         <q-list
           separator
           bordered
-          style=" padding-bottom: 60px;"
         >
           <!-- Header nya -->
           <q-item
@@ -92,7 +91,9 @@
                 :loading="store.loadingObat"
                 @keyup.alt.enter="racikan"
                 @input-value="inputObat"
+                @focus="inputObat"
                 @update:model-value="obatSelected"
+                @keyup.enter.stop="obatEnter"
               >
                 <template #prepend>
                   <q-icon name="icon-mat-search" />
@@ -146,13 +147,14 @@
                     v-model="store.form.jumlah_diminta"
                     label="Qty"
                     dense
-                    :rules="[val=> parseFloat(val) >= 1 || 'lebih besar dari 0']"
+                    :rules="[val=> parseFloat(val) >= 1 || '']"
                     lazy-rules
                     no-error-icon
                     hide-bottom-space
                     standout="bg-yellow-3"
                     outlined
                     @update:model-value="setJumlah"
+                    @keyup.enter.stop="qtyEnter"
                   />
                 </div>
                 <div
@@ -174,40 +176,44 @@
                     hide-dropdown-icon
                     :options="store.signas"
                     @update:model-value="signaSelected"
+                    @keyup.enter.stop="signaEnter"
                   />
                 </div>
                 <div
                   class="col text-right"
                 >
                   <q-input
+                    ref="refKet"
                     v-model="store.form.keterangan"
                     label="Keterangan"
                     dense
                     standout="bg-yellow-3"
                     outlined
                     class="full-width"
+                    @keyup.enter="ketEnter"
                   />
+                </div>
+                <div
+                  class="col-shrink text-right"
+                >
+                  <q-btn
+                    color="dark"
+                    dense
+                    flat
+                    icon="icon-mat-save"
+                    :disable="store.loading || store.loadingkirim"
+                    :loading="store.loading"
+                    @click="simpanObat"
+                  >
+                    <q-tooltip class="bg-white text-primary">
+                      Simpan Obat
+                    </q-tooltip>
+                  </q-btn>
                 </div>
               </div>
             </q-item-section>
           </q-item>
-          <q-item>
-            <q-item-section />
-            <q-item-section>
-              <div class="text-right q-mr-sm">
-                <q-btn
-                  color="dark"
-                  dense
-                  no-caps
-                  :disable="store.loading || store.loadingkirim"
-                  :loading="store.loading"
-                  @click="simpanObat"
-                >
-                  Simpan Obat
-                </q-btn>
-              </div>
-            </q-item-section>
-          </q-item>
+
           <!-- hasil Inputan -->
           <template v-if="store.listPemintaanSementara.length">
             <q-item
@@ -248,6 +254,22 @@
                   >
                     {{ item?.keterangan }}
                   </div>
+                  <div class="col-shrink text-right">
+                    <q-btn
+                      color="negative"
+                      dense
+                      flat
+                      no-caps
+                      size="xs"
+                      icon="icon-mat-delete"
+                      :disable="store.loading || store.loadingkirim"
+                      @click="store.hapusObat(item)"
+                    >
+                      <q-tooltip class="bg-white text-primary">
+                        Hapus
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
                 </div>
               </q-item-section>
             </q-item>
@@ -258,6 +280,7 @@
               v-for="(item, i) in store.listRacikan"
               :key="i"
               dense-toggle
+              class="bg-grey-4"
             >
               <template #header>
                 <q-item-section style="width: 50%;">
@@ -295,10 +318,25 @@
                     >
                       {{ item?.keterangan }}
                     </div>
+                    <div class="col-shrink text-right">
+                      <q-btn
+                        color="primary"
+                        dense
+                        flat
+                        no-caps
+                        icon="icon-mat-add_circle"
+                        :disable="store.loading || store.loadingkirim"
+                        @click="racikanTambah(item)"
+                      >
+                        <q-tooltip class="bg-white text-primary">
+                          Tambah obat Racikan
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
                   </div>
                 </q-item-section>
               </template>
-              <q-item>
+              <!-- <q-item>
                 <q-item-section />
                 <q-item-section>
                   <div class="text-right q-mr-sm">
@@ -313,10 +351,11 @@
                     </q-btn>
                   </div>
                 </q-item-section>
-              </q-item>
+              </q-item> -->
               <q-item
                 v-for="(obat, j) in item?.rincian"
                 :key="j"
+                class="bg-white"
               >
                 <!-- {{ j }} {{ obat }} -->
                 <q-item-section style="width: 50%;">
@@ -343,12 +382,29 @@
                     >
                       {{ obat?.keteranganx }}
                     </div>
+                    <div class="col-shrink text-right">
+                      <q-btn
+                        color="negative"
+                        dense
+                        flat
+                        no-caps
+                        size="xs"
+                        icon="icon-mat-delete"
+                        :disable="store.loading || store.loadingkirim"
+                        @click="store.hapusObat(item)"
+                      >
+                        <q-tooltip class="bg-white text-primary">
+                          Hapus
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
                   </div>
                 </q-item-section>
               </q-item>
             </q-expansion-item>
           </template>
         </q-list>
+        <q-separator class="q-mt-lg" />
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
@@ -369,7 +425,10 @@
       </div>
     </div>
   </div>
-  <app-fullscreen-blue v-model="store.racikanOpen">
+  <app-fullscreen-blue
+    v-model="store.racikanOpen"
+    title="Input Obat Racikan"
+  >
     <template #default>
       <racikanpage />
     </template>
@@ -381,20 +440,18 @@ import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
+import { Dialog } from 'quasar'
 
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
 })
 const store = usePermintaanEResepStore()
-onMounted(() => {
-  console.log('depo', props?.depo, props.pasien)
-  store.pasien = props?.pasien
-  store.depo = props?.depo
-  store.getSigna()
-  store.cariObat()
-  setPasien()
-})
+
+const refObat = ref(null)
+const refQty = ref(null)
+const refSigna = ref(null)
+const refKet = ref(null)
 
 function setPasien() {
   const val = props?.pasien
@@ -464,6 +521,7 @@ function inputObat(val) {
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 }
 function obatSelected(val) {
+  console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -481,12 +539,16 @@ function obatSelected(val) {
   store.setForm('uraian50', val?.uraian50 ?? '-')
   store.setForm('stokalokasi', val?.alokasi ?? '-')
   store.setForm('kodedepo', store.dpPar)
-  // console.log('form', store.form)
+}
+
+function obatEnter() {
+  refQty.value.focus()
+  refQty.value.select()
 }
 // signa
 const signa = ref('')
 function signaSelected(val) {
-  // console.log('signa', val)
+  console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
@@ -496,7 +558,11 @@ function signaSelected(val) {
     store.setForm('konsumsi', kons)
   }
   // }
-  // console.log('form', store.form)
+}
+function signaEnter() {
+  refKet.value.focus()
+  refKet.value.select()
+  console.log('signa enter')
 }
 // jumlah
 function setJumlah(val) {
@@ -516,14 +582,17 @@ function setJumlah(val) {
     }
   }
 }
-const refObat = ref(null)
-const refQty = ref(null)
-const refSigna = ref(null)
+// eslint-disable-next-line no-unused-vars
+function qtyEnter() {
+  // if (parseFloat(store.form.jumlah_diminta) > 1)
+  refSigna.value.focus()
+  refSigna.value.showPopup()
+}
 function obatValid (val) {
-  return (val !== null && val !== '') || 'Harap diisi'
+  return (val !== null && val !== '') || ''
 }
 function sigaValid (val) {
-  return (val !== null && val !== '') || 'Harap diisi'
+  return (val !== null && val !== '') || ''
 }
 function validate() {
   if (store?.form?.kodeobat !== '') {
@@ -540,10 +609,43 @@ function validate() {
   if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
+function ketEnter() {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Akan dilanjutkan untuk di simpan?',
+    ok: {
+      push: true,
+      label: 'Simpan',
+      color: 'primary',
+      'no-caps': true
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      color: 'dark',
+      'no-caps': true
+    }
+  })
+    .onOk(() => {
+      simpanObat()
+    })
+}
 function simpanObat() {
   if (validate()) {
     const form = store.form
     store.simpanObat(form).then(() => { signa.value = null })
   }
 }
+onMounted(() => {
+  console.log('depo', props?.depo, props.pasien)
+  store.pasien = props?.pasien
+  store.depo = props?.depo
+  store.getSigna()
+  store.cariObat()
+  setPasien()
+  // console.log('ref Obat', refObat.value)
+  refObat.value.focus()
+  refObat.value.showPopup()
+})
+
 </script>
