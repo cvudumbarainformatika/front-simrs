@@ -154,7 +154,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     async getPoli() {
       await api.get('v1/settings/appakses/poli')
         .then(resp => {
-          console.log('Poli', resp.data)
+          // console.log('Poli', resp.data)
           this.polis = resp.data
           return Promise.resolve(resp.data)
         })
@@ -377,7 +377,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
       const sub = val.sub
       const key = Object.keys(sub)
       const kosong = key.filter(a => sub[a] === 'kosong')
-      console.log('key', key, 'kosong', kosong)
+      // console.log('key', key, 'kosong', kosong)
       if (sub.menu_id && !kosong.length) {
         this.loading = true
         return new Promise(resolve => {
