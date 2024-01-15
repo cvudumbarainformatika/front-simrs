@@ -1,86 +1,115 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th>PASIEN</th>
-        <th>NOREG</th>
-        <th>POLIKLINIK</th>
-        <th class="text-end">
-          ID SATSET
-        </th>
-        <th class="text-end">
-          OPTIONS
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(pasien, n) in store.pasiens"
-        :key="n"
-      >
-        <td>
-          <span>{{ pasien?.nama }}</span> <em class="text-negative">{{ pasien?.norm }}</em>
-        </td>
-        <td>{{ pasien?.noreg }}</td>
-        <td>{{ pasien?.poli }}</td>
-        <td class="text-end">
-          <em
-            v-if="!pasien.pasien_uuid"
-            class="text-negative"
-          >Belum Ada</em>
-          <em
-            v-else
-            class="text-primary"
-          >{{ pasien?.pasien_uuid }}</em>
-        </td>
-        <td class="text-end">
-          <q-btn
-            v-if="!pasien.pasien_uuid && !pasien.satset"
-            label="Dapatkan ID"
-            dense
-            color="teal"
-            size="sm"
-            class="q-px-md"
-            @click="getIdSatset(pasien)"
-          />
-          <q-btn
-            v-else-if="pasien.pasien_uuid && !pasien.satset"
-            label="Kirim Kunjungan"
-            dense
-            color="primary"
-            size="sm"
-            class="q-px-md"
-            @click="kirimKunjungan(pasien)"
-          />
-          <q-btn
-            v-else
-            label="Satu Sehat"
-            dense
-            color="orange"
-            size="sm"
-            class="q-px-md"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="column full-height">
+    <div class="col-auto">
+      <HeaderRajal />
+    </div>
+    <div class="col full-height">
+      <q-scroll-area style="height:calc( 100% - 1px )">
+        <table>
+          <thead>
+            <tr>
+              <th>PASIEN</th>
+              <th>DPJP</th>
+              <th>POLIKLINIK</th>
+              <th class="text-end">
+                ID SATSET
+              </th>
+              <th class="text-end">
+                OPTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(pasien, n) in store.pasiens"
+              :key="n"
+            >
+              <td>
+                <div><span>{{ pasien?.nama }}</span> </div>
+                <div><span>NOREG : </span> <em class="text-primary">{{ pasien?.noreg }}</em> <span> NORM : </span> <em class="text-negative">{{ pasien?.norm }}</em></div>
+              </td>
+              <td>{{ pasien?.dokter ? pasien.dokter:'---' }}</td>
+              <td>{{ pasien?.poli }}</td>
+              <td class="text-end">
+                <em
+                  v-if="!pasien.pasien_uuid"
+                  class="text-negative"
+                >Belum Ada</em>
+                <em
+                  v-else
+                  class="text-primary"
+                >{{ pasien?.pasien_uuid }}</em>
+              </td>
+              <td class="text-end">
+                <q-btn
+                  v-if="!pasien.pasien_uuid && !pasien.satset"
+                  label="Dapatkan ID"
+                  dense
+                  color="teal"
+                  size="sm"
+                  class="q-px-md"
+                  :loading="store.loading && pas===n"
+                  :disable="store.loading && pas===n"
+                  @click="getIdSatset(pasien, n)"
+                />
+                <q-btn
+                  v-else-if="pasien.pasien_uuid && !pasien.satset"
+                  :label="pasien.satset_error? 'Error Kunjungan':'Kirim Kunjungan'"
+                  dense
+                  :color="pasien.satset_error?'negative':'primary'"
+                  size="sm"
+                  class="q-px-md"
+                  :loading="store.loadingSend && pas===n"
+                  :disable="store.loadingSend && pas===n"
+                  @click="kirimKunjungan(pasien, n)"
+                />
+                <q-btn
+                  v-else
+                  label="Satu Sehat"
+                  dense
+                  color="orange"
+                  size="sm"
+                  class="q-px-md"
+                />
+                <!-- <div v-if="store.pasien.satset_error">
+                  <em>Pengiriman Kunjungan Error !</em>
+                </div> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </q-scroll-area>
+
+      <div class="absolute-bottom bg-primary">
+        <bottom-rajal
+          v-if="store.meta"
+          :meta="store.meta"
+          @go-to="(val)=> store.goToPage(val)"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
+import HeaderRajal from './HeaderRajal.vue'
+import BottomRajal from './BottomRajal.vue'
 import { useSatsetRajalStore } from 'src/stores/satset/rajal'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useSatsetRajalStore()
-
+const pas = ref(0)
 onMounted(() => {
   store.getData()
 })
 
-function getIdSatset(pasien) {
+function getIdSatset(pasien, n) {
+  pas.value = n
   store.getSatsetId(pasien)
 }
 
-function kirimKunjungan(pasien) {
+function kirimKunjungan(pasien, n) {
+  pas.value = n
   store.kirimKunjunganSatset(pasien)
 }
 </script>
@@ -103,7 +132,8 @@ table {
 th,
 td {
 
-  vertical-align: text-top;
+  //vertical-align: text-top;
+  vertical-align: middle;
   text-align: left;
   text-indent: -0.5em;
 }

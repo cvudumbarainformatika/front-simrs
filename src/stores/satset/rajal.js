@@ -13,9 +13,12 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
       q: '',
       jenis: 'rajal',
       page: 1,
-      per_page: 20
+      per_page: 20,
+      to: '',
+      from: ''
     },
-    pasiens: []
+    pasiens: [],
+    meta: null
   }),
   actions: {
     async getData() {
@@ -25,10 +28,16 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
       console.log(resp)
       if (resp.status === 200) {
         this.loading = false
+        this.meta = resp.data
         this.pasiens = resp?.data?.data
       } else {
         this.loading = false
       }
+    },
+
+    goToPage(val) {
+      this.params.page = val
+      this.getData()
     },
 
     getSatsetId(pasien) {
@@ -86,10 +95,14 @@ export const useSatsetRajalStore = defineStore('satset_rajal_store', {
               // harus login lagi
               console.log('token expired')
               satset.DELETE_TOKEN_SATSET()
+              return
             }
+
+            this.getData()
             if (resp.data.message === 'success') {
               notifSuccess(resp)
-              this.getData()
+            } else {
+              notifErr(resp)
             }
           })
           .catch(err => {
