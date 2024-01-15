@@ -82,7 +82,7 @@ const store = useLayananPoli()
 
 // const inacbg = useInacbgPoli()
 onMounted(() => {
-  console.log('tabs', store.tabs)
+  // console.log('tabs', store.tabs)
   store.getNota(props.pasien)
 })
 </script>

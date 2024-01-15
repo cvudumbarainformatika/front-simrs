@@ -81,15 +81,15 @@ const minus = computed(() => {
 })
 
 watch(() => ina.tarifIna, (obj) => {
-  console.log('watch tarifIna', obj)
+  // console.log('watch tarifIna', obj)
   hitungSelisih()
 }, { deep: true })
 watch(() => props.pasien?.tindakan, (obj) => {
-  console.log('watch tindakan', obj)
+  // console.log('watch tindakan', obj)
   ina.setTotalTindakan(props.pasien)
 }, { deep: true })
 watch(() => props.pasien?.laborats, (obj) => {
-  console.log('watch laborat', obj)
+  // console.log('watch laborat', obj)
   ina.setTotalLaborat(props.pasien)
 }, { deep: true })
 </script>

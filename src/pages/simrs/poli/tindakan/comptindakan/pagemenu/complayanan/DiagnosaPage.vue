@@ -50,5 +50,5 @@ function savePemeriksaan() {
   })
 }
 
-console.log('diagnosa page', props.pasien)
+// console.log('diagnosa page', props.pasien)
 </script>

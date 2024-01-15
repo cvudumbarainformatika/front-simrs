@@ -137,7 +137,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
           : this.formtindakan.subtotal = 0
       }
 
-      console.log('setKdTindakana', this.formtindakan)
+      // console.log('setKdTindakana', this.formtindakan)
       return new Promise((resolve, reject) => {
         resolve()
       })
@@ -152,14 +152,14 @@ export const useLayananPoli = defineStore('layanan-poli', {
       form.norm = pasien?.norm
       form.kodedokter = pasien?.kodedokter
       form.ruangan = pasien?.kodepoli
-      console.log('sdiag', form)
+      // console.log('sdiag', form)
 
       this.loadingFormDiagnosa = true
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpandiagnosa', form)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
-          console.log('simpan diagnosa', resp)
+          // console.log('simpan diagnosa', resp)
           const storePasien = usePengunjungPoliStore()
           let isi = resp.data.result
           if (resp.data.result === 1) {
@@ -189,7 +189,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
         }
         this.loadingFormDiagnosa = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.loadingFormDiagnosa = false
       }
     },
@@ -216,8 +216,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
         kasus: val.rs7,
         tipediagnosa: val.rs4
       }
-      console.log('form', this.form)
-      console.log('xxx', val)
+      // console.log('form', this.form)
+      // console.log('xxx', val)
     },
 
     // ==================================================================================== TINDAKAN =========================================================================
@@ -237,7 +237,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       form.nota = this.notaTindakan === 'BARU' || this.notaTindakan === '' ? '' : this.notaTindakan //
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpantindakanpoli', form)
-        console.log('simpan tindakan', resp)
+        // console.log('simpan tindakan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -262,7 +262,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       }
 
       const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
-      console.log('notas', resp)
+      // console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
         this.notaTindakans = arr.length ? arr : []
@@ -276,7 +276,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
 
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapustindakanpoli', payload)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataTindakan(pasien, id)
@@ -338,8 +338,8 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
     saveIcd(pasien) {
       this.loadingSaveIcd = true
-      this.setFormIcd('noreg', pasien?.noreg)
-      console.log('form icd', this.formicd)
+      // this.setFormIcd('noreg', pasien?.noreg)
+      // console.log('form icd', this.formicd)
       return new Promise(resolve => {
         api.post('v1/simrs/pelayanan/simpanprocedure', this.formicd)
           .then(resp => {
@@ -366,7 +366,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
       return new Promise(resolve => {
         api.get('v1/simrs/pelayanan/simpanprocedure', payload)
           .then(resp => {
-            console.log('list', resp.data)
+            // console.log('list', resp.data)
             resolve(resp)
           })
       })

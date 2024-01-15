@@ -54,7 +54,7 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
 
     async getData() {
       const resp = await api.get('v1/simrs/master/pemeriksaanfisik/data')
-      console.log('get mpemeriksaan fisik', resp)
+      // console.log('get mpemeriksaan fisik', resp)
       if (resp.status === 200) {
         this.items = resp.data
       }
@@ -66,7 +66,7 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
       this.form = item
       const arr = item?.lokalis?.split('||')
       const found = this.masterpoli?.filter(item => arr.includes(item?.kodepoli))
-      console.log('founds', found)
+      // console.log('founds', found)
       this.multiLokalis = found
     },
 
@@ -78,7 +78,7 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
 
     uploadImages(file) {
       const files = file
-      console.log('store upload image', files)
+      // console.log('store upload image', files)
       const data = new FormData()
       for (let i = 0; i < files.length; i++) {
         const images = files[i]
@@ -92,7 +92,7 @@ export const useMasterPemeriksaanFisik = defineStore('master-pemeriksaan-fisik',
           }
         })
           .then(res => {
-            console.log('uploads', res)
+            // console.log('uploads', res)
             const objIndex = this.items.findIndex(obj => obj.id === res?.data?.result?.id)
             if (objIndex > -1) {
               this.items[objIndex] = res?.data?.result

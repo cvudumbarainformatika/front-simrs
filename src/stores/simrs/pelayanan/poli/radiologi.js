@@ -33,14 +33,14 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
   actions: {
     async getRadiologi() {
       const resp = await api.get('v1/simrs/penunjang/radiologi/listpermintaanradiologirinci')
-      console.log('master radiologi', resp)
+      // console.log('master radiologi', resp)
       if (resp.status === 200) {
         this.namaPemeriksaans = resp.data
       }
     },
     async getJenisRadiologi() {
       const resp = await api.get('v1/simrs/penunjang/radiologi/jenispermintaanradiologi')
-      console.log('jenis radiologi', resp)
+      // console.log('jenis radiologi', resp)
       if (resp.status === 200) {
         this.jenisPemeriksaans = resp.data
       }
@@ -59,10 +59,10 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
       this.form.kodesistembayar = pasien?.kodesistembayar
       this.form.kodepoli = pasien?.kodepoli
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
-      // console.log('form rad', this.form)
+      // // console.log('form rad', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/radiologi/simpanpermintaanradiologi', this.form)
-        console.log('save', resp)
+        // console.log('save', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -74,14 +74,14 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
         }
         this.loadingSave = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.loadingSave = false
       }
     },
     async getNota(pasien) {
       const params = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/radiologi/getnota', params)
-      console.log('nota rad', resp)
+      // console.log('nota rad', resp)
       if (resp.status === 200) {
         this.setNotas(resp.data)
       }
@@ -104,7 +104,7 @@ export const useRadiologiPoli = defineStore('poli-radiologi', {
           notifSuccess(resp)
         }
       } catch (error) {
-        console.log('hpus rad', error)
+        // console.log('hpus rad', error)
       }
     },
 

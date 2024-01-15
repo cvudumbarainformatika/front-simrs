@@ -194,7 +194,7 @@ const menu = ref(menus.value[0])
 
 const inacbg = useInacbgPoli()
 onMounted(() => {
-  console.log('pasien', props?.pasien)
+  // console.log('pasien', props?.pasien)
   menu.value = menus.value[0]
   inacbg.getDataIna(props.pasien)
   inacbg.setTotalTindakan(props.pasien)
@@ -209,14 +209,14 @@ onBeforeMount(() => {
 })
 
 onBeforeUnmount(() => {
-  console.log('beforeunmount')
+  // console.log('beforeunmount')
   menu.value = menus.value[0]
   fisik.setFullCanvasFalse()
   // fisik.initReset(true)
 })
 
 onUnmounted(() => {
-  console.log('pasien', props.pasien)
+  // console.log('pasien', props.pasien)
   menu.value = menus.value[0]
   fisik.setFullCanvasFalse()
 })

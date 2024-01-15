@@ -110,7 +110,7 @@ onMounted(() => {
       const ada = listVoices.value?.map(x => x.lang)
       const ind = ada.findIndex(x => x === 'id-ID') ?? 0
       indexVoices.value = ind
-      console.log('onMounted :', ind)
+      // console.log('onMounted :', ind)
     }
 
     speech.synth.onvoiceschanged = () => {

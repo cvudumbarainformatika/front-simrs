@@ -120,11 +120,11 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
           this.specialDrugOpts.splice(0, 0, { code: '', description: 'none' })
         }
       }
-      console.log('obj da', obj)
-      console.log('procedure ', this.specialProcedureOpts)
-      console.log('Prosthesis ', this.specialProsthesisOpts)
-      console.log('Investigation ', this.specialInvestigationOpts)
-      console.log('Drug ', this.specialDrugOpts)
+      // console.log('obj da', obj)
+      // console.log('procedure ', this.specialProcedureOpts)
+      // console.log('Prosthesis ', this.specialProsthesisOpts)
+      // console.log('Investigation ', this.specialInvestigationOpts)
+      // console.log('Drug ', this.specialDrugOpts)
     },
 
     setTotalTindakan(pasien) {
@@ -150,7 +150,7 @@ export const useInacbgPoli = defineStore('inacbg-poli', {
       })
 
       this.totalLaborat = lab?.length ? lab?.reduce((acc, cur) => acc + cur, 0) : 0
-      console.log('total lab', this.totalLaborat)
+      // console.log('total lab', this.totalLaborat)
       this.tarifRs = parseInt(this.totalTindakan) + parseInt(this.totalLaborat)
     },
     setFormSpecial(key, val) {

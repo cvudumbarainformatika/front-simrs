@@ -29,7 +29,7 @@ export const usePoliSharingStore = defineStore('sharing_poli_store', {
       await api.get('v1/simrs/pelayanan/dialogmaster')
         .then(resp => {
           this.loading = false
-          console.log('resp sharing', resp)
+          // console.log('resp sharing', resp)
           this.sharings = resp.data
         })
         .catch(() => { this.loading = false })
@@ -41,7 +41,7 @@ export const usePoliSharingStore = defineStore('sharing_poli_store', {
         api.post('v1/simrs/pelayanan/simpansharing', this.form)
           .then(resp => {
             this.loadingSave = false
-            console.log('resp', resp.data)
+            // console.log('resp', resp.data)
             if (resp.status === 200) {
               const storePasien = usePengunjungPoliStore()
               const isi = resp?.data?.result

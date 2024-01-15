@@ -23,7 +23,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
   actions: {
     async getPenunjangLain() {
       const resp = await api.get('v1/simrs/penunjang/lain/penunjanglain')
-      console.log('penunjang lain', resp)
+      // console.log('penunjang lain', resp)
       if (resp.status === 200) {
         this.penunjangs = resp.data
       }
@@ -41,7 +41,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       try {
         const resp = await api.post('v1/simrs/penunjang/lain/simpanpenunjanglain', this.form)
-        console.log('save penunjang lain', resp)
+        // console.log('save penunjang lain', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -60,7 +60,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
     async getNota(pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/lain/getnota', payload)
-      console.log('nota lain', resp)
+      // console.log('nota lain', resp)
       if (resp.status === 200) {
         this.setNotas(resp?.data)
       }
@@ -77,7 +77,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
       const payload = { noreg: pasien?.noreg, id }
       try {
         const resp = await api.post('v1/simrs/penunjang/lain/hapuspermintaan', payload)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataPenunjangLain(pasien, id)
@@ -85,7 +85,7 @@ export const usePenunjangLainPoliStore = defineStore('penunjang-lain-poli', {
           notifSuccess(resp)
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     },
 

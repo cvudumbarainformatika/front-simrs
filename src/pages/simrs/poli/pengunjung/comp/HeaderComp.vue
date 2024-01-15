@@ -197,8 +197,8 @@ onMounted(() => {
       per_page: 100,
       kodepoli: poli.value?.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
     }
-    console.log('init poli', poli.value)
-    console.log('init pengunjung', params)
+    // console.log('init poli', poli.value)
+    // console.log('init pengunjung', params)
     store.init(params)
   })
 })
@@ -313,8 +313,8 @@ function gantiPeriode(val) {
     tahunIni()
   }
 
-  console.log(to.value)
-  console.log(from.value)
+  // console.log(to.value)
+  // console.log(from.value)
   const per = {
     to: to.value,
     from: from.value,
