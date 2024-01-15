@@ -28,11 +28,12 @@
         Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
       </div>
       <q-scroll-area
-        style="height: 100% ; padding-bottom: 60px;"
+        style="height: 100%; padding-bottom: 60px;"
       >
         <q-list
           separator
           bordered
+          style=" padding-bottom: 60px;"
         >
           <!-- Header nya -->
           <q-item
@@ -198,8 +199,8 @@
                   color="dark"
                   dense
                   no-caps
+                  :disable="store.loading || store.loadingkirim"
                   :loading="store.loading"
-                  :disable="store.loading"
                   @click="simpanObat"
                 >
                   Simpan Obat
@@ -240,7 +241,7 @@
                   <div
                     class="col-3 text-right"
                   >
-                    {{ formatRpDouble( item?.harga) }}
+                    {{ formatDouble( item?.harga) }}
                   </div>
                   <div
                     class="col text-right"
@@ -256,11 +257,12 @@
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
+              dense-toggle
             >
               <template #header>
                 <q-item-section style="width: 50%;">
                   <div class="row">
-                    {{ item?.nama }}
+                    {{ item?.namaracikan }}
                   </div>
                 </q-item-section>
                 <q-item-section
@@ -268,6 +270,11 @@
                   style="width:50%"
                 >
                   <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-1"
+                    >
+                      {{ item?.jenisracikan }}
+                    </div>
                     <div
                       class="text-right col-2"
                     >
@@ -281,7 +288,7 @@
                     <div
                       class="col-3 text-right"
                     >
-                      {{ formatRpDouble(item?.harga) }}
+                      {{ formatDouble(item?.harga) }}
                     </div>
                     <div
                       class="col text-right"
@@ -291,8 +298,24 @@
                   </div>
                 </q-item-section>
               </template>
+              <q-item>
+                <q-item-section />
+                <q-item-section>
+                  <div class="text-right q-mr-sm">
+                    <q-btn
+                      color="primary"
+                      dense
+                      no-caps
+                      :disable="store.loading || store.loadingkirim"
+                      @click="racikanTambah(item)"
+                    >
+                      Tambah
+                    </q-btn>
+                  </div>
+                </q-item-section>
+              </q-item>
               <q-item
-                v-for="(obat, j) in item?.rician"
+                v-for="(obat, j) in item?.rincian"
                 :key="j"
               >
                 <!-- {{ j }} {{ obat }} -->
@@ -336,6 +359,8 @@
         <div>
           <q-btn
             color="primary"
+            :loading="store.loadingkirim"
+            :disable="store.loadingkirim"
             @click="store.selesaiResep"
           >
             Kirim Resep
@@ -354,7 +379,7 @@
 <script setup>
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { formatRpDouble } from 'src/modules/formatter'
+import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 
 const props = defineProps({
@@ -370,6 +395,7 @@ onMounted(() => {
   store.cariObat()
   setPasien()
 })
+
 function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
@@ -395,6 +421,8 @@ function setPasien() {
 
     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  } else if (props?.pasien?.newapotekrajal) {
+    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
   } else {
     store.listRacikan = []
     store.listPemintaanSementara = []
@@ -406,6 +434,29 @@ function racikan() {
   // console.log('ok')
   // alert('oooi')
   store.racikanOpen = true
+  store.racikanTambah = false
+  store.setForm('namaracikan', '')
+  store.tipeRacikan = [
+    { label: 'DTD', value: 'DTD', disable: false },
+    { label: 'non-DTD', value: 'non-DTD', disable: false }
+  ]
+}
+function racikanTambah(val) {
+  console.log('ok', val)
+  // alert('oooi')
+  store.racikanOpen = true
+  store.racikanTambah = true
+  store.setForm('tiperacikan', val?.tiperacikan)
+  store.setForm('namaracikan', val?.namaracikan)
+  store.setForm('aturan', val?.aturan)
+  store.setForm('konsumsi', val?.konsumsi)
+  store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
+  store.setForm('keterangan', val?.keterangan)
+
+  store.tipeRacikan = [
+    { label: 'DTD', value: 'DTD', disable: true },
+    { label: 'non-DTD', value: 'non-DTD', disable: true }
+  ]
 }
 /// / set Racikan end ------
 function inputObat(val) {
@@ -492,7 +543,7 @@ function validate() {
 function simpanObat() {
   if (validate()) {
     const form = store.form
-    store.simpanObat(form)
+    store.simpanObat(form).then(() => { signa.value = null })
   }
 }
 </script>

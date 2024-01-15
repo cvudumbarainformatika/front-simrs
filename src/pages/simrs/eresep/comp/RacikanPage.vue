@@ -61,6 +61,7 @@
                 v-model="store.form.namaracikan"
                 label="Nama Racikan"
                 outlined
+                readonly
               />
             </q-item-section>
             <q-item-section
@@ -72,7 +73,7 @@
                   class="col-2"
                 >
                   <q-option-group
-                    v-model="store.form.jenisracikan"
+                    v-model="store.form.tiperacikan"
                     :options="store.tipeRacikan"
                     color="primary"
                     class="q-ml-sm"
@@ -148,13 +149,13 @@
                   Satuan
                 </div>
                 <div
-                  v-if="store.form.jenisracikan==='DTD'"
+                  v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
                   Dosis obat
                 </div>
                 <div
-                  v-if="store.form.jenisracikan==='DTD'"
+                  v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
                   Dosis resep
@@ -257,7 +258,7 @@
                   {{ store.namaObat?.satuankecil }}
                 </div>
                 <div
-                  v-if="store.form.jenisracikan==='DTD'"
+                  v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
                   <app-input
@@ -268,7 +269,7 @@
                   />
                 </div>
                 <div
-                  v-if="store.form.jenisracikan==='DTD'"
+                  v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
                   <app-input
@@ -279,7 +280,7 @@
                   />
                 </div>
                 <div
-                  v-if="store.form.jenisracikan!=='DTD'"
+                  v-if="store.form.tiperacikan!=='DTD'"
                   class="col-2"
                 >
                   <app-input
@@ -290,7 +291,7 @@
                   />
                 </div>
                 <div
-                  v-if="store.form.jenisracikan==='DTD'"
+                  v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
                   {{ store.form.jumlah }}
@@ -325,6 +326,90 @@
               </div>
             </q-item-section>
           </q-item>
+          <template v-if="store.listRacikan.length">
+            <q-expansion-item
+              v-for="(item, i) in store.listRacikan"
+              :key="i"
+            >
+              <template #header>
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ item?.namaracikan }}
+                  </div>
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class="text-right col-1"
+                    >
+                      {{ item?.tiperacikan }}
+                    </div>
+                    <div
+                      class=" col-2"
+                    >
+                      {{ item?.jumlahracikan }}
+                    </div>
+                    <div
+                      class="col-2 text-right"
+                    >
+                      {{ item?.aturan }}
+                    </div>
+                    <div
+                      class="col-3 text-right"
+                    >
+                      {{ formatDouble(item?.harga) }}
+                    </div>
+                    <div
+                      class="col text-right"
+                    >
+                      {{ item?.keterangan }}
+                    </div>
+                  </div>
+                </q-item-section>
+              </template>
+
+              <q-item
+                v-for="(obat, j) in item?.rincian"
+                :key="j"
+              >
+                <!-- {{ j }} {{ obat }} -->
+                <q-item-section style="width: 50%;">
+                  <div class="row">
+                    {{ obat?.mobat?.nama_obat }}
+                  </div>
+                  <div class="row text-italic f-10">
+                    {{ obat?.kdobat }}
+                  </div>
+                </q-item-section>
+                <q-item-section
+                  side
+                  style="width:50%"
+                >
+                  <div class="row items-center q-col-gutter-sm full-width">
+                    <div
+                      class=" col-4"
+                    >
+                      {{ obat?.jumlah }}
+                    </div>
+                    <div
+                      class="text-right col-3"
+                    >
+                      {{ formatDouble(obat?.harga) }}
+                    </div>
+
+                    <div
+                      class="col text-right"
+                    >
+                      {{ obat?.keteranganx }}
+                    </div>
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
+          </template>
         </q-list>
       </q-scroll-area>
       <!-- <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
@@ -334,6 +419,7 @@
   </div>
 </template>
 <script setup>
+import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { ref, onMounted } from 'vue'
@@ -342,13 +428,19 @@ import { ref, onMounted } from 'vue'
 const store = usePermintaanEResepStore()
 onMounted(() => {
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
-  store.setForm('jenisresep', 'Racikan')
   store.setForm('keteranganx', '-')
+  store.setForm('jenisresep', 'Racikan')
   store.setForm('jumlah', 1)
-  store.setForm('jenisracikan', 'DTD')
   store.setForm('dosisobat', 1)
   store.setForm('dosismaksimum', 1)
-  store.getNomor()
+  if (!store.racikanTambah) {
+    store.setForm('tiperacikan', 'DTD')
+    store.getNomor()
+  } else {
+    const sig = store.signas.filter(s => s.signa === store?.form?.aturan)
+    if (sig?.length) signa.value = sig[0]
+  }
+  console.log('form', store.form)
 })
 
 function setDosis(evt, key) {
@@ -358,7 +450,7 @@ function setDosis(evt, key) {
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   store.setForm(key, nilai)
 
-  if (store.form.jenisracikan === 'DTD') {
+  if (store.form.tiperacikan === 'DTD') {
   // jumlahdibutuhkan , jumlah, dosisobat, dosismaksimum
     const jumlahDiminta = store.form?.jumlahdibutuhkan ?? 1
     const dosisObat = store.form?.dosisobat ?? 1

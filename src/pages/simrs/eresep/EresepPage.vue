@@ -15,7 +15,8 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, shallowRef } from 'vue'
+import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+import { defineAsyncComponent, shallowRef, onUnmounted } from 'vue'
 import FormResep from './comp/FormResep.vue'
 const props = defineProps({
   pasien: { type: Object, default: null },
@@ -23,4 +24,11 @@ const props = defineProps({
 })
 
 const listpage = shallowRef(defineAsyncComponent(() => import('./comp/LitsPage.vue')))
+
+const store = usePermintaanEResepStore()
+onUnmounted(() => {
+  store.listRacikan = []
+  store.listPemintaanSementara = []
+  store.resetForm()
+})
 </script>
