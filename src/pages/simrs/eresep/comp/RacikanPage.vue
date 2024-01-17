@@ -86,11 +86,16 @@
                 <div
                   class="text-right col-2"
                 >
-                  <app-input
+                  <q-input
+                    ref="refJmlButuh"
                     v-model="store.form.jumlahdibutuhkan"
                     label="Jumlah Racikan"
+                    standout="bg-yellow-3"
+                    dense
                     outlined
                     @update:model-value="setDosis($event,'jumlahdibutuhkan')"
+                    @keyup.enter.stop="enterJmlButuh"
+                    @focus="focusJmlButuh"
                   />
                 </div>
 
@@ -113,15 +118,20 @@
                     hide-dropdown-icon
                     :options="store.signas"
                     @update:model-value="signaSelected"
+                    @keyup.enter.stop="enterSigna"
                   />
                 </div>
                 <div
                   class="col text-right"
                 >
-                  <app-input
+                  <q-input
+                    ref="refKet"
                     v-model="store.form.keterangan"
                     label="Keterangan"
                     outlined
+                    standout="bg-yellow-3"
+                    dense
+                    @keyup.enter.stop="enterKet"
                   />
                 </div>
               </div>
@@ -201,6 +211,7 @@
                 :loading="store.loadingObat"
                 @input-value="inputObat"
                 @update:model-value="obatSelected"
+                @keyup.enter.stop="enterObat"
               >
                 <template #prepend>
                   <q-icon name="icon-mat-search" />
@@ -261,33 +272,45 @@
                   v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
-                  <app-input
+                  <q-input
+                    ref="refDosis"
                     v-model="store.form.dosisobat"
                     label="Dosis Obat"
                     outlined
+                    standout="bg-yellow-3"
+                    dense
                     @update:model-value="setDosis($event,'dosisobat')"
+                    @keyup.enter.stop="enterDosis"
                   />
                 </div>
                 <div
                   v-if="store.form.tiperacikan==='DTD'"
                   class="col-2"
                 >
-                  <app-input
+                  <q-input
+                    ref="refDosisMax"
                     v-model="store.form.dosismaksimum"
                     label="Dosis resep"
                     outlined
+                    standout="bg-yellow-3"
+                    dense
                     @update:model-value="setDosis($event,'dosismaksimum')"
+                    @keyup.enter.stop="enterDosisMax"
                   />
                 </div>
                 <div
                   v-if="store.form.tiperacikan!=='DTD'"
                   class="col-2"
                 >
-                  <app-input
+                  <q-input
+                    ref="refJumlah"
                     v-model="store.form.jumlah"
                     label="Jumlah Obat"
                     outlined
+                    standout="bg-yellow-3"
+                    dense
                     @update:model-value="setDosis($event,'jumlah')"
+                    @keyup.enter.stop="enterJumlah"
                   />
                 </div>
                 <div
@@ -300,10 +323,14 @@
                 <div
                   class="col text-right"
                 >
-                  <app-input
+                  <q-input
+                    ref="refKetx"
                     v-model="store.form.keteranganx"
                     label="Keterangan Obat"
                     outlined
+                    standout="bg-yellow-3"
+                    dense
+                    @keyup.enter.stop="enterKetx"
                   />
                 </div>
               </div>
@@ -405,6 +432,23 @@
                     >
                       {{ obat?.keteranganx }}
                     </div>
+                    <div class="col-shrink text-right">
+                      <q-btn
+                        color="negative"
+                        dense
+                        flat
+                        no-caps
+                        size="xs"
+                        icon="icon-mat-delete"
+                        :disable="store.loading || store.loadingkirim"
+                        :loading="store.loadingHapus && store.obatId === obat.id"
+                        @click="store.hapusObat(obat)"
+                      >
+                        <q-tooltip class="bg-white text-primary">
+                          Hapus
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
                   </div>
                 </q-item-section>
               </q-item>
@@ -419,6 +463,7 @@
   </div>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
@@ -426,6 +471,7 @@ import { ref, onMounted } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = usePermintaanEResepStore()
+
 onMounted(() => {
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
   store.setForm('keteranganx', '-')
@@ -435,14 +481,91 @@ onMounted(() => {
   store.setForm('dosismaksimum', 1)
   if (!store.racikanTambah) {
     store.setForm('tiperacikan', 'DTD')
+    store.setForm('jumlahdibutuhkan', 1)
+    store.setForm('keterangan', '-')
     store.getNomor()
   } else {
     const sig = store.signas.filter(s => s.signa === store?.form?.aturan)
     if (sig?.length) signa.value = sig[0]
+    enterKet()
   }
   console.log('form', store.form)
 })
+// key up ---
+// header
+const refJmlButuh = ref(null)
+const refSigna = ref(null)
+const refKet = ref(null)
+// isi
+const refObat = ref(null)
+const refKetx = ref(null)
+// dtd
+const refDosis = ref(null)
+const refDosisMax = ref(null)
+// non dtd
+const refJumlah = ref(null)
 
+// ket enter
+function focusJmlButuh() {
+  refJmlButuh.value.select()
+}
+function enterJmlButuh() {
+  refSigna.value.focus()
+  refSigna.value.showPopup()
+}
+function enterSigna() {
+  refKet.value.focus()
+  refKet.value.select()
+}
+function enterKet() {
+  refObat.value.focus()
+  // refObat.value.showPopup()
+}
+function enterObat() {
+  if (store.form.tiperacikan === 'DTD') {
+    refDosis.value.focus()
+    refDosis.value.select()
+  } else {
+    refJumlah.value.focus()
+    refJumlah.value.select()
+  }
+}
+
+function enterDosis() {
+  refDosisMax.value.focus()
+  refDosisMax.value.select()
+}
+function enterDosisMax() {
+  refKetx.value.focus()
+  refKetx.value.select()
+}
+function enterJumlah() {
+  refKetx.value.focus()
+  refKetx.value.select()
+}
+function enterKetx() {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Akan dilanjutkan untuk di simpan?',
+    ok: {
+      push: true,
+      label: 'Simpan',
+      color: 'primary',
+      'no-caps': true
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      color: 'dark',
+      'no-caps': true
+    }
+  })
+    .onOk(() => {
+      simpanObat()
+    })
+}
+
+// key up end---
 function setDosis(evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
@@ -459,10 +582,17 @@ function setDosis(evt, key) {
     store.setForm('jumlah', jumlahObat)
   }
 }
-function inputObat(val) {
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const inputObat = myDebounce((val) => {
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-}
+})
 function obatSelected(val) {
   if (val?.alokasi <= 0) {
     store.namaObat = null
@@ -484,7 +614,7 @@ function obatSelected(val) {
   // console.log('form', store.form)
 }
 function obatValid (val) {
-  return (val !== null && val !== '') || 'Harap diisi'
+  return (val !== null && val !== '') || ''
 }
 const signa = ref('')
 function signaSelected(val) {
@@ -496,24 +626,26 @@ function signaSelected(val) {
   }
 }
 function sigaValid (val) {
-  return (val !== null && val !== '') || 'Harap diisi'
+  return (val !== null && val !== '') || ''
 }
-function mergeObj(from, to) {
-  const key = Object.keys(from)
-  key.forEach(a => {
-    to[a] = from[a]
-  })
-}
+// function mergeObj(from, to) {
+//   const key = Object.keys(from)
+//   key.forEach(a => {
+//     to[a] = from[a]
+//   })
+// }
 function simpanObat() {
   // const form = []
-  mergeObj(store.form, store.form)
+  // mergeObj(store.form, store.form)
   // mergeObj(store.form, form)
 
   // console.log('simpan', form)
   console.log('form', store.form)
   // console.log('racikan', store.form)
   store.simpanObat().then(() => {
-    store.resetRacikan()
+    // store.resetRacikan()
+    refObat.value.focus()
+    // refObat.value.showPopup()
   })
 }
 </script>

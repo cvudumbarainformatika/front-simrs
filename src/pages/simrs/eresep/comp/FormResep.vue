@@ -263,6 +263,7 @@
                       size="xs"
                       icon="icon-mat-delete"
                       :disable="store.loading || store.loadingkirim"
+                      :loading="store.loadingHapus && store.obatId === item.id && !store.namaRacikan"
                       @click="store.hapusObat(item)"
                     >
                       <q-tooltip class="bg-white text-primary">
@@ -391,7 +392,8 @@
                         size="xs"
                         icon="icon-mat-delete"
                         :disable="store.loading || store.loadingkirim"
-                        @click="store.hapusObat(item)"
+                        :loading="store.loadingHapus && store.obatId === obat.id && !!store.namaRacikan"
+                        @click="store.hapusObat(obat)"
                       >
                         <q-tooltip class="bg-white text-primary">
                           Hapus
@@ -439,7 +441,7 @@
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { formatDouble } from 'src/modules/formatter'
-import { notifErrVue } from 'src/modules/utils'
+import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
 
 const props = defineProps({
@@ -493,6 +495,8 @@ function racikan() {
   store.racikanOpen = true
   store.racikanTambah = false
   store.setForm('namaracikan', '')
+  store.setForm('jumlahdibutuhkan', 1)
+  store.setForm('keterangan', '-')
   store.tipeRacikan = [
     { label: 'DTD', value: 'DTD', disable: false },
     { label: 'non-DTD', value: 'non-DTD', disable: false }
@@ -500,14 +504,15 @@ function racikan() {
 }
 function racikanTambah(val) {
   console.log('ok', val)
+  if (!store?.signas?.length) return notifCenterVue('mohon tunggu sebentar, masih menunggu data Signa dari server')
   // alert('oooi')
   store.racikanOpen = true
   store.racikanTambah = true
-  store.setForm('tiperacikan', val?.tiperacikan)
   store.setForm('namaracikan', val?.namaracikan)
   store.setForm('aturan', val?.aturan)
   store.setForm('konsumsi', val?.konsumsi)
   store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
+  store.setForm('tiperacikan', val?.tiperacikan)
   store.setForm('keterangan', val?.keterangan)
 
   store.tipeRacikan = [
@@ -516,10 +521,22 @@ function racikanTambah(val) {
   ]
 }
 /// / set Racikan end ------
-function inputObat(val) {
+
+function myDebounce(func, timeout = 800) {
+  let timer
+  return (...arg) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+  }
+}
+const inputObat = myDebounce((val) => {
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-}
+})
+// function inputObat(val) {
+//   if (val !== '') store.cariObat(val)
+//   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+// }
 function obatSelected(val) {
   console.log('select obat', val)
   if (val?.alokasi <= 0) {
@@ -633,7 +650,11 @@ function ketEnter() {
 function simpanObat() {
   if (validate()) {
     const form = store.form
-    store.simpanObat(form).then(() => { signa.value = null })
+    store.simpanObat(form).then(() => {
+      signa.value = null
+      refObat.value.focus()
+      // refObat.value.showPopup()
+    })
   }
 }
 onMounted(() => {
@@ -645,7 +666,7 @@ onMounted(() => {
   setPasien()
   // console.log('ref Obat', refObat.value)
   refObat.value.focus()
-  refObat.value.showPopup()
+  // refObat.value.showPopup()
 })
 
 </script>
