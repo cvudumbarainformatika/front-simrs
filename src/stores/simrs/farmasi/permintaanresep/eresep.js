@@ -115,6 +115,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.setForm('jumlahdibutuhkan', jumlahdibutuhkan)
         this.setForm('tiperacikan', tiperacikan)
         this.setForm('keterangan', keterangan)
+        this.setForm('keteranganx', '-')
         if (tiperacikan === 'DTD') {
           this.setForm('jumlah', 1)
           this.setForm('dosisobat', 1)

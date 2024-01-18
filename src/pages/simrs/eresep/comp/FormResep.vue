@@ -505,7 +505,7 @@ function racikan() {
   ]
 }
 function racikanTambah(val) {
-  console.log('ok', val)
+  // console.log('ok', val)
   if (!store?.signas?.length) return notifCenterVue('mohon tunggu sebentar, masih menunggu data Signa dari server')
   // alert('oooi')
   store.racikanOpen = true
@@ -532,6 +532,8 @@ function myDebounce(func, timeout = 800) {
   }
 }
 const inputObat = myDebounce((val) => {
+  // console.log('input obat', val, typeof val)
+  if ((typeof val) !== 'string') val = ''
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 })
