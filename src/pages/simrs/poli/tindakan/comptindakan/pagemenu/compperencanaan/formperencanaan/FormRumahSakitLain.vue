@@ -166,13 +166,22 @@
         />
       </div>
       <div class="col-4">
-        <q-input
+        <!-- <q-input
           v-model="store.formRsLain.diagnosarujukan"
           label="Diagnosa rujukan (Primer)"
           dense
           outlined
           readonly
           standout="bg-yellow-3"
+        /> -->
+        <app-autocomplete
+          v-model="store.formRsLain.diagnosarujukan"
+          label="Diagnosa rujukan"
+          dense
+          outlined
+          option-label="rs3"
+          option-value="rs3"
+          :source="pasien?.diagnosa"
         />
       </div>
       <div class="col-12">

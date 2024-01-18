@@ -32,7 +32,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       try {
         const resp = await api.post('v1/simrs/penunjang/ok/permintaanoperasi', this.form)
-        console.log('save penunjang ok', resp)
+        // console.log('save penunjang ok', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -51,7 +51,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
     async getNota(pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/ok/getnota', payload)
-      console.log('nota ok', resp)
+      // console.log('nota ok', resp)
       if (resp.status === 200) {
         this.setNotas(resp?.data)
       }
@@ -68,7 +68,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
       const payload = { noreg: pasien?.noreg, id }
       try {
         const resp = await api.post('v1/simrs/penunjang/ok/hapuspermintaanok', payload)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataOk(pasien, id)
@@ -76,7 +76,7 @@ export const useOperasiPoli = defineStore('operasi-poli', {
           notifSuccess(resp)
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     },
 

@@ -9,6 +9,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     loadingSigna: false,
     loadingObat: false,
     loadingkirim: false,
+    loadingHapus: false,
+    obatId: null,
+    namaRacikan: false,
     form: {
       keterangan: '-',
       jumlah_diminta: 1,
@@ -84,6 +87,16 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const uraianinacbg = this.form?.uraianinacbg ?? '-'
       const tarifina = this.form?.tarifina ?? 0
       const tiperesep = this.form?.tiperesep ?? 'normal'
+      const jenisresep = this.form?.jenisresep ?? '-'
+      const kdruangan = this.form?.kdruangan ?? '-'
+
+      const aturan = this.form?.aturan ?? '-'
+      const konsumsi = this.form?.konsumsi ?? '-'
+      const namaracikan = this.form?.namaracikan ?? '-'
+      const jumlahdibutuhkan = this.form?.jumlahdibutuhkan ?? '-'
+      const tiperacikan = this.form?.tiperacikan ?? 'DTD'
+      const keterangan = this.form?.keterangan ?? '-'
+      console.log('jenis resep', jenisresep)
       this.form = {
         keterangan: '-',
         jumlah_diminta: 1,
@@ -91,7 +104,24 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         tagihanrs,
         kodeincbg,
         uraianinacbg,
-        tarifina
+        tarifina,
+        kdruangan
+      }
+      if (jenisresep === 'Racikan') {
+        this.setForm('jenisresep', jenisresep)
+        this.setForm('aturan', aturan)
+        this.setForm('konsumsi', konsumsi)
+        this.setForm('namaracikan', namaracikan)
+        this.setForm('jumlahdibutuhkan', jumlahdibutuhkan)
+        this.setForm('tiperacikan', tiperacikan)
+        this.setForm('keterangan', keterangan)
+        if (tiperacikan === 'DTD') {
+          this.setForm('jumlah', 1)
+          this.setForm('dosisobat', 1)
+          this.setForm('dosismaksimum', 1)
+        } else {
+          this.setForm('jumlah', 1)
+        }
       }
       this.setPasien()
     },
@@ -110,6 +140,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         uraianinacbg,
         tarifina
       }
+
       this.setPasien()
     },
     resetRacikan() {
@@ -124,6 +155,30 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         dosisobat: 1,
         dosismaksimum: 1 // dosis resep
       }
+    },
+    hapusList(obat) {
+      if (obat?.namaracikan) {
+        const racikan = this.listRacikan.filter(a => a.namaracikan === obat?.namaracikan)
+        if (racikan?.length) {
+          if (racikan[0]?.rincian.length > 1) {
+            const index = racikan[0]?.rincian?.findIndex(x => x.id === obat?.id)
+            if (index >= 0)racikan[0]?.rincian.splice(index, 1)
+          } else {
+            const index = this.listRacikan.findIndex(x => x.namaracikan === obat?.namaracikan)
+            if (index >= 0) this.listRacikan.splice(index, 1)
+          }
+        }
+        const index = this?.pasien?.newapotekrajal?.permintaanracikan.findIndex(x => x.id === obat?.id)
+        if (index >= 0) this?.pasien?.newapotekrajal?.permintaanracikan.splice(index, 1)
+        console.log('new', index)
+      } else {
+        const index = this.listPemintaanSementara.findIndex(x => x.id === obat?.id)
+        if (index >= 0) this.listPemintaanSementara.splice(index, 1)
+        const indexp = this?.pasien?.newapotekrajal?.permintaanresep.findIndex(x => x.id === obat?.id)
+        if (indexp >= 0) this?.pasien?.newapotekrajal?.permintaanresep.splice(indexp, 1)
+        console.log('new', indexp)
+      }
+      console.log('pasien', this?.pasien?.newapotekrajal)
     },
     setList(key) {
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
@@ -208,31 +263,28 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       } else return notifErrVue('depo tujuan tidak ditemukan')
       const param = {
         groups: this?.pasien?.groups,
-        kdruang: this.dpPar
+        kdruang: this.dpPar,
+        q: val
       }
-      const filtObat = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-      if (filtObat?.length > 10) {
-        this.Obats = filtObat
-      } else {
-        this.Obats = filtObat
-        console.log('obat', val, this.namaObat)
-        this.loadingObat = true
-        const params = { params: param }
-        return new Promise(resolve => {
-          api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
-            .then(resp => {
-              this.loadingObat = false
-              this.nonFilteredObat = resp.data?.dataobat
-              this.Obats = this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase()))
-              console.log(resp.data)
-              resolve(resp)
-            })
-            .catch(() => {
-              this.loadingObat = false
-              this.Obats = []
-            })
-        })
-      }
+      // console.log('obat', val, filtObat)
+      this.loadingObat = true
+      const params = { params: param }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
+          .then(resp => {
+            this.loadingObat = false
+            this.nonFilteredObat = resp.data?.dataobat
+            this.Obats = val?.length ? this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase())) : this.nonFilteredObat
+            // console.log('hasil', this.nonFilteredObat, this.Obats)
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingObat = false
+            this.Obats = []
+          })
+      })
+      // }
     },
     async getSigna() {
       this.loadingSigna = true
@@ -351,6 +403,26 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           // }
         })
         .catch(() => { this.loadingkirim = false })
+    },
+    async hapusObat(val) {
+      console.log('hapusObat', val)
+      this.loadingHapus = true
+      this.obatId = val?.id
+      this.namaRacikan = val?.namaracikan ?? false
+      await api.post('v1/simrs/farmasinew/depo/hapus-permintaan-obat', val)
+        .then(resp => {
+          console.log('resp', resp?.data)
+          // hapus list
+          this.hapusList(resp?.data?.obat)
+
+          this.loadingHapus = false
+          this.obatId = null
+          notifSuccess(resp)
+        })
+        .catch(() => {
+          this.loadingHapus = false
+          this.obatId = null
+        })
     }
   }
 })

@@ -82,7 +82,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       this.fNama = q
       this.setCustom()
       this.getData()
-      // console.log(val)
+      // // console.log(val)
     },
     filterItem(val) {
       this.filteredItems = this.items.filter(a => a?.nama?.toLowerCase().includes(val.toLowerCase()))
@@ -99,7 +99,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
         // api.get('v1/simrs/rajal/poli/listsuratkontrol')
           .then(resp => {
             this.loading = false
-            console.log('list surat kontrol ', resp.data)
+            // console.log('list surat kontrol ', resp.data)
             // eslint-disable-next-line no-unused-vars
             const apps = useAplikasiStore()
             // eslint-disable-next-line no-unused-vars
@@ -147,7 +147,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
         api.get('v1/simrs/rajal/poli/listrujukankeluarrs', param)
           .then(resp => {
             this.loadingSuKe = false
-            console.log('surat keluar', resp?.data)
+            // console.log('surat keluar', resp?.data)
             resolve(resp)
           })
           .catch(() => {
@@ -158,13 +158,13 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
     getjadwalDokterDpjp() {
       this.jadwalDpjps = []
       this.loadingJadwalDokter = true
-      // console.log('get jadwal dokter')
+      // // console.log('get jadwal dokter')
       this.setForm('kodeDokter', null)
       return new Promise(resolve => {
         api.post('v1/simrs/rajal/poli/jadwal', this.form)
           .then(resp => {
             this.loadingJadwalDokter = false
-            console.log(resp.data)
+            // console.log(resp.data)
             if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
               this.jadwalDpjps = resp?.data?.result
               if (this.jadwalDpjps.length) {
@@ -185,7 +185,7 @@ export const useSuratKontrolPoliStore = defineStore('surat_kontrol_poli', {
       return new Promise(resolve => {
         api.post('v1/simrs/rajal/poli/editsuratkontrol', this.form)
           .then(resp => {
-            console.log(resp)
+            // console.log(resp)
             this.loading = false
             if (resp?.data?.result?.metadata?.code === '200') {
               this.getData()

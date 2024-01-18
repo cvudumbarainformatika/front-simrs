@@ -29,14 +29,14 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
   actions: {
     async getMasterPenerimaEdukasi() {
       const resp = await api.get('v1/simrs/pelayanan/mpenerimaedukasi')
-      console.log('mpenerimaedukasi', resp)
+      // console.log('mpenerimaedukasi', resp)
       if (resp?.status === 200) {
         this.mpenerimaedukasi = resp?.data
       }
     },
     async getMasterKebutuhanEdukasi() {
       const resp = await api.get('v1/simrs/pelayanan/mkebutuhanedukasi')
-      console.log('mkebutuhanedukasi', resp)
+      // console.log('mkebutuhanedukasi', resp)
       if (resp?.status === 200) {
         this.mkebutuhanedukasi = resp?.data
       }
@@ -52,7 +52,7 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
       this.form.koderuang = pasien?.kodepoli
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanedukasi', this.form)
-        console.log('save edukasi', resp)
+        // console.log('save edukasi', resp)
         if (resp?.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -61,7 +61,7 @@ export const useEdukasiPoliStore = defineStore('edukasi-poli', {
           this.loadingSave = false
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.loadingSave = false
       }
     },

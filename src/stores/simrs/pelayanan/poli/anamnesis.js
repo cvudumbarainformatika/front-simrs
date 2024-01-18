@@ -47,7 +47,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpananamnesis', this.form)
         if (resp.status === 200) {
-          console.log('simpan anamnesis', resp)
+          // console.log('simpan anamnesis', resp)
           const storePasien = usePengunjungPoliStore()
           let isi = resp.data.result
           if (resp.data.result === 1) {
@@ -62,7 +62,7 @@ export const useAnamnesis = defineStore('anamnesis', {
 
         this.loadingForm = false
       } catch (error) {
-        console.log('anamnesis err', error)
+        // console.log('anamnesis err', error)
         this.loadingForm = false
         notifErr(error)
       }
@@ -112,7 +112,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const payload = { id }
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusanamnesis', payload)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataAnamnesis(pasien, id)
@@ -128,7 +128,7 @@ export const useAnamnesis = defineStore('anamnesis', {
       const params = { params: { norm } }
       try {
         const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
-        console.log('history', resp)
+        // console.log('history', resp)
         if (resp.status === 200) {
           if (resp.data.length) {
             const arr = resp.data

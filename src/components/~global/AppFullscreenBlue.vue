@@ -4,9 +4,13 @@
     maximized
     transition-show="slide-left"
     transition-hide="fade"
+    @before-show="emits('clear')"
   >
     <q-card flat>
       <q-bar class="bg-primary text-white">
+        <div class="f-12">
+          {{ title }}
+        </div>
         <q-space />
 
         <q-btn
@@ -22,7 +26,7 @@
         </q-btn>
       </q-bar>
 
-      <q-card-section>
+      <q-card-section class="q-pa-none">
         <slot />
       </q-card-section>
     </q-card>
@@ -33,5 +37,8 @@
 // import { ref } from 'vue'
 
 // const maximizedToggle = ref(true)
-const emits = defineEmits(['close'])
+const emits = defineEmits(['close', 'clear'])
+defineProps({
+  title: { type: String, default: '' }
+})
 </script>

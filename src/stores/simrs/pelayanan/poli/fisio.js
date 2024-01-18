@@ -34,7 +34,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
       this.form.nota = this.form.nota === 'BARU' ? '' : this.form.nota
       try {
         const resp = await api.post('v1/simrs/penunjang/fisioterapi/permintaanfisioterapipoli', this.form)
-        console.log('save penunjang fisio', resp.data)
+        // console.log('save penunjang fisio', resp.data)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -53,7 +53,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
     async getNota(pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/fisioterapi/getnota', payload)
-      console.log('nota fisio', resp.data)
+      // console.log('nota fisio', resp.data)
       if (resp.status === 200) {
         this.setNotas(resp?.data)
       }
@@ -72,7 +72,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
       try {
         const resp = await api.post('v1/simrs/penunjang/fisioterapi/hapuspermintaan', payload)
         this.loadingHapus = false
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataFisio(pasien, id)
@@ -81,7 +81,7 @@ export const useFisioPoli = defineStore('fisio-poli', {
         }
       } catch (error) {
         this.loadingHapus = false
-        console.log(error)
+        // console.log(error)
       }
     },
 

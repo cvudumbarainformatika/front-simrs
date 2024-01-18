@@ -4,7 +4,7 @@
     no-padding
   >
     <q-item
-      v-for="item in 20"
+      v-for="item in 10"
       :key="item"
     >
       <q-item-section avatar>
@@ -80,3 +80,6 @@
     </q-item>
   </q-list>
 </template>
+
+<script setup>
+</script>

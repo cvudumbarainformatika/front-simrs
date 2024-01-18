@@ -24,7 +24,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
   actions: {
     async getData() {
       const resp = await api.get('v1/simrs/pelayanan/diagnosakeperawatan')
-      console.log('diagnosa keperawatan', resp)
+      // console.log('diagnosa keperawatan', resp)
       if (resp.status === 200) {
         this.diagnosas = resp.data
       }
@@ -66,11 +66,11 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
         diagnosa: thumb
       }
 
-      console.log('diagnosa saved ', form)
+      // console.log('diagnosa saved ', form)
 
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpandiagnosakeperawatan', form)
-        console.log('simpan', resp)
+        // console.log('simpan', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const arr = resp.data.result
@@ -84,7 +84,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
         }
         this.loadingSave = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         notifErr(error)
       }
     },
@@ -92,7 +92,7 @@ export const useDiagnosaKeperawatan = defineStore('diagnosa-keperawatan', {
     async deleteDiagnosa(pasien, id) {
       const payload = { id }
       const resp = await api.post('v1/simrs/pelayanan/deletediagnosakeperawatan', payload)
-      console.log('delete', resp)
+      // console.log('delete', resp)
       if (resp.status === 200) {
         const storePasien = usePengunjungPoliStore()
         storePasien.hapusDataDiagnosaKeperawatan(pasien, id)

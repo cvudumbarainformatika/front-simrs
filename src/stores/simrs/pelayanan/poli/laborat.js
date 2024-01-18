@@ -73,7 +73,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
           const groupped = this.groupByx(arr2, gruper => gruper.gruper)
           this.masterlaborat = groupped
           this.loadingMasterLab = false
-          console.log('group pemeriksaan', groupped)
+          // console.log('group pemeriksaan', groupped)
           // const result = Object.groupBy(arr2, ({ gruper }) => gruper)
           // console.log('arr pemeriksaan', result)
 
@@ -143,7 +143,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         thumb.push(obj)
       }
       this.form.details = thumb
-      console.log('thumb', this.form)
+      // console.log('thumb', this.form)
       // return new Promise((resolve, reject) => {
       //   resolve()
       // })
@@ -166,7 +166,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
 
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
-      console.log('save', this.form)
+      // console.log('save', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaborat', this.form)
         // console.log('save resp', resp)
@@ -181,7 +181,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         }
         this.loadingSaveLab = false
       } catch (error) {
-        console.log('save laborat', error)
+        // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
@@ -225,11 +225,11 @@ export const useLaboratPoli = defineStore('laborat-poli', {
 
       // const formbaru = { form: arr }
       const formbaru = this.form
-      console.log('payload', formbaru)
+      // console.log('payload', formbaru)
 
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
-        console.log('save resp', resp)
+        // console.log('save resp', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const arr = resp?.data?.result
@@ -246,7 +246,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
         }
         this.loadingSaveLab = false
       } catch (error) {
-        console.log('save laborat', error)
+        // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
@@ -278,7 +278,7 @@ export const useLaboratPoli = defineStore('laborat-poli', {
       const payload = { id, noreg: pasien?.noreg }
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaboratbaru', payload)
-        console.log('hapus laborat', resp)
+        // console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const databaru = resp?.data?.result

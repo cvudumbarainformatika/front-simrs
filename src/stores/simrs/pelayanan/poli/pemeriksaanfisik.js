@@ -124,11 +124,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.gambarActive = val
       this.fileGambar = file
       this.setDialogTemplate()
-      // console.log('store file', file)
+      // // console.log('store file', file)
     },
     setFullCanvas() {
       this.fullCanvas = !this.fullCanvas
-      // console.log(this.fullCanvas)
+      // // console.log(this.fullCanvas)
       // const master = useMasterPemeriksaanFisik()
       // const file = master?.items[0]?.gambars[0]?.url
       // this.templateActive = this
@@ -193,7 +193,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         a.splice(a.findIndex(e => e.x === x && e.y === y), 1)
         this.mata?.splice(a.findIndex(e => e.x === x && e.y === y), 1)
-        console.log('store delete object', a)
+        // console.log('store delete object', a)
         resolve()
       })
     },
@@ -226,7 +226,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.dialogForm[key] = val
     },
     setDialogTemplate() {
-      // console.log('oooi')
+      // // console.log('oooi')
       this.dialogTemplate = !this.dialogTemplate
     },
 
@@ -295,10 +295,10 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       }
 
       form.deleteDetails = this.deleteShapes
-      // console.log('LOG FORM', form)
+      // // console.log('LOG FORM', form)
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpanpemeriksaanfisik', form)
-        console.log('save', resp)
+        // console.log('save', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp.data.result
@@ -314,7 +314,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         this.loadingform = false
       } catch (error) {
-        console.log('savepemeriksaan', error)
+        // console.log('savepemeriksaan', error)
         // notifErr(error.response)
         this.loadingform = false
       }
@@ -331,12 +331,12 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
           notifSuccess(resp)
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     },
 
     async saveImage(img, pasien, details) {
-      // console.log(details)
+      // // console.log(details)
       this.loadingform = true
       let keterangan = ''
       if (details.length) {
@@ -351,7 +351,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       try {
         const resp = await api.post('v1/simrs/pelayanan/simpangambar', obj)
         if (resp.status === 200) {
-          console.log('simpan gambar', resp)
+          // console.log('simpan gambar', resp)
           const storePasien = usePengunjungPoliStore()
           const isi = resp.data.result
           storePasien.injectDataPasien(pasien, isi, 'gambars')
@@ -370,7 +370,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       try {
         const resp = await api.post('v1/simrs/pelayanan/hapusgambar', payload)
         if (resp.status === 200) {
-          // console.log(resp)
+          // // console.log(resp)
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusGambars(pasien, nama)
           notifSuccess(resp)
@@ -382,7 +382,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         }
         this.loadingform = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.loadingform = false
       }
     },
@@ -411,11 +411,11 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.fileGambar = file
       this.templateActive = template
       this.urlGambar = pathImg + imgUrl
-      // console.log('init url', pathImg + imgUrl)
-      // console.log('init', file)
-      // console.log('init template', this.templateActive)
-      // console.log('init gambar', this.gambarActive)
-      // console.log('init master', master?.items)
+      // // console.log('init url', pathImg + imgUrl)
+      // // console.log('init', file)
+      // // console.log('init template', this.templateActive)
+      // // console.log('init gambar', this.gambarActive)
+      // // console.log('init master', master?.items)
 
       this.deleteShapes = []
 
@@ -522,7 +522,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     },
 
     editForm(item, pasien) {
-      console.log('edit form', item)
+      // console.log('edit form', item)
       this.initReset(false, pasien)
       this.edited = true
       this.formVital = {
@@ -604,7 +604,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         this.mata = []
       }
 
-      console.log('edit mata', this.mata)
+      // console.log('edit mata', this.mata)
     },
 
     setNotEdit() {

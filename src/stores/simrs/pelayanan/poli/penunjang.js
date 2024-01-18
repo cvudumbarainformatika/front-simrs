@@ -68,7 +68,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       this.loadingMasterLab = true
       try {
         const resp = await api.get('v1/simrs/penunjang/laborat/dialoglaboratpoli')
-        // console.log('masterlaborat', resp)
+        // // console.log('masterlaborat', resp)
         if (resp.status === 200) {
           const arr = resp.data
           const arr2 = arr.length > 0 ? arr.map(x =>
@@ -85,7 +85,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           const groupped = this.groupBy(arr2, gruper => gruper.gruper)
           this.masterlaborat = groupped
           this.loadingMasterLab = false
-          console.log('group pemeriksaan', groupped)
+          // console.log('group pemeriksaan', groupped)
         }
         this.loadingMasterLab = false
       } catch (error) {
@@ -110,7 +110,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     async getNota(pasien) {
       const payload = { params: { noreg: pasien?.noreg } }
       const resp = await api.get('v1/simrs/penunjang/laborat/getnota', payload)
-      // console.log('notalaborat', resp)
+      // // console.log('notalaborat', resp)
       if (resp.status === 200) {
         this.setNotas(resp?.data)
         // const arr = resp.data.map(x => x.nota)
@@ -132,7 +132,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
     setDetails(pemeriksaan) {
       // this.form.details = []
       const thumb = []
-      // console.log('pemeriksaan', pemeriksaan)
+      // // console.log('pemeriksaan', pemeriksaan)
       for (let i = 0; i < pemeriksaan?.value.length; i++) {
         const element = pemeriksaan?.value[i]
         this.form.biaya_layanan = element?.aslix?.hargapelayananpolispesialis // ini bisa element?.aslix?.hargapelayananpoliumum
@@ -144,7 +144,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         thumb.push(obj)
       }
       this.form.details = thumb
-      console.log('thumb', this.form)
+      // console.log('thumb', this.form)
       // return new Promise((resolve, reject) => {
       //   resolve()
       // })
@@ -167,10 +167,10 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
 
       this.form.kdsistembayar = pasien?.kodesistembayar
       this.form.kodedokter = pasien?.kodedokter
-      console.log('save', this.form)
+      // console.log('save', this.form)
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaborat', this.form)
-        // console.log('save resp', resp)
+        // // console.log('save resp', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const isi = resp?.data?.result
@@ -182,7 +182,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         }
         this.loadingSaveLab = false
       } catch (error) {
-        console.log('save laborat', error)
+        // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
@@ -213,7 +213,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           form: this.form,
           details: []
         }
-        // console.log('pemeriksaan', pemeriksaan)
+        // // console.log('pemeriksaan', pemeriksaan)
         for (let i = 0; i < element?.value.length; i++) {
           const el = element?.value[i]
           this.form.biaya_layanan = el?.aslix?.hargapelayananpolispesialis // ini bisa el?.aslix?.hargapelayananpoliumum
@@ -234,7 +234,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
 
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/simpanpermintaanlaboratbaru', formbaru)
-        console.log('save resp', resp)
+        // console.log('save resp', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           const arr = resp?.data?.result
@@ -251,7 +251,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
         }
         this.loadingSaveLab = false
       } catch (error) {
-        console.log('save laborat', error)
+        // console.log('save laborat', error)
         this.loadingSaveLab = false
       }
     },
@@ -268,7 +268,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
       const payload = { id, noreg: pasien?.noreg }
       try {
         const resp = await api.post('v1/simrs/penunjang/laborat/hapuspermintaanlaborat', payload)
-        // console.log('hapus laborat', resp)
+        // // console.log('hapus laborat', resp)
         if (resp.status === 200) {
           const storePasien = usePengunjungPoliStore()
           storePasien.hapusDataLaborat(pasien, id)
@@ -276,7 +276,7 @@ export const usePenunjangPoli = defineStore('penunjang-poli', {
           notifSuccess(resp)
         }
       } catch (error) {
-        console.log('hapus laborat', error)
+        // console.log('hapus laborat', error)
       }
     },
     setNotas(array) {
