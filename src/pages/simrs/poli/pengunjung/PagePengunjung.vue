@@ -43,6 +43,7 @@
         :loading-terima="store.loadingTerima"
         @tindakan="bukaTindakan"
         @panggilan="panggil"
+        @tidakdatang="tidakdatangs"
       />
     </q-card>
 
@@ -176,6 +177,22 @@ function bukaTindakan(val) {
   }
   pasien.value = val
   store.setTerima(val)
+}
+
+function tidakdatangs(val) {
+  if (val?.groups === '1') {
+    if (!val?.sep) {
+      $q.notify({
+        type: 'negative',
+        title: 'Peringatan',
+        message: 'INFO WARNING <b/> MAAF,<em><b>Pasien Ini Belum terbit SEP</b></em>',
+        html: true,
+        timeout: 1000
+      })
+      return
+    }
+  }
+  store.settidakdatang(val)
 }
 
 // function actPrintRekap() {

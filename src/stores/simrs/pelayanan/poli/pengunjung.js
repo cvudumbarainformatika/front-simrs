@@ -11,6 +11,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     loading: false,
     loadingIcare: false,
     loadingTerima: false,
+    loadingTidakhadir: false,
     noreg: null,
 
     statuses: ['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'],
@@ -219,6 +220,31 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         this.loadingTerima = false
         this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+
+    async settidakdatang(val) {
+      this.loadingTidakhadir = true
+      const form = { noreg: val?.noreg }
+      this.noreg = val?.noreg
+
+      try {
+        const resp = await api.post('v1/simrs/rajal/poli/tidakhadir', form)
+        this.loadingTidakhadir = false
+        this.setinject(val?.noreg)
+        console.log('wew', resp)
+      } catch (error) {
+        this.loadingTidakhadir = false
+        this.hidden = false
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+
+    setinject (noreg) {
+      const findPasien = this.items.filter(x => x.noreg === noreg)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        data.status = '3'
       }
     },
 
