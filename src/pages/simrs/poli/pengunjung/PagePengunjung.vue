@@ -110,7 +110,7 @@ onMounted(() => {
       const ada = listVoices.value?.map(x => x.lang)
       const ind = ada.findIndex(x => x === 'id-ID') ?? 0
       indexVoices.value = ind
-      // console.log('onMounted :', ind)
+      console.log('onMounted :', ind)
     }
 
     speech.synth.onvoiceschanged = () => {
@@ -130,26 +130,28 @@ onMounted(() => {
   diagnosa.getTindakanDropdown()
 })
 
-function setSpeech(txt) {
-  // console.log(speech.voiceList[11])
-  const voice = speech.utterance
-  voice.text = txt
-  voice.voice = speech.voiceList[indexVoices.value]
+// function setSpeech(txt) {
+//   // console.log(speech.voiceList[11])
+//   const voice = speech.utterance
+//   voice.text = txt
+//   voice.voice = speech.voiceList[indexVoices.value]
 
-  voice.volume = 1
-  voice.pitch = 1
-  voice.rate = 1
+//   voice.volume = 1
+//   voice.pitch = 1
+//   voice.rate = 1
 
-  return voice
-}
+//   return voice
+// }
 
 function panggil(row) {
-  console.log('voiceIndex', speech.voiceList[indexVoices.value])
+  // console.log('voiceIndex', listVoices.value[indexVoices.value])
   // console.log('voiceList', listVoices.value)
-  const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
+  // const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2
-  speech.synth.speak(setSpeech(txt1))
+  // speech.synth.speak(setSpeech(txt1))
+  // console.log(row)
+  store.sendPanggil(row?.noreg)
 }
 function bukaTindakan(val) {
   // console.log('buka tindakan', val)

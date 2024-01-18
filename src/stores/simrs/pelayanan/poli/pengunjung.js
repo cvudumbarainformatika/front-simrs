@@ -40,7 +40,19 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.params = val
       this.getData()
     },
-
+    async sendPanggil(noreg) {
+      const params = { noreg }
+      await api.post('v1/fordisplay/send_panggilan', params)
+        .then((resp) => {
+          console.log('call', resp)
+          if (resp.status === 200) {
+            // this.meta = resp.data
+            // this.items = resp.data.data
+          }
+        }).catch((err) => {
+          console.log('call', err)
+        })
+    },
     setPolis(val) {
       this.params.kodepoli = val
       this.getData()
