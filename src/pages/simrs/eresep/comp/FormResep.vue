@@ -406,7 +406,9 @@
             </q-expansion-item>
           </template>
         </q-list>
-        <q-separator class="q-mt-lg" />
+        <div
+          class="q-mt-lg"
+        />
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
