@@ -382,6 +382,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     },
     simpanPenerimaan() {
       this.loading = true
+      const tgl = this.form.tglpenerimaan
+      this.form.tglpenerimaan = tgl + date.formatDate(Date.now(), ' HH:mm:ss')
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/penerimaan/simpan', this.form)
           .then(resp => {
@@ -414,7 +416,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
                 this.details[index].subtotal = 0
               }
             }
-
+            this.form.tglpenerimaan = tgl
             resolve(resp)
           })
           .catch(() => {
