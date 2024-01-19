@@ -4,7 +4,8 @@
     maximized
     transition-show="slide-left"
     transition-hide="fade"
-    @before-show="emits('clear')"
+    @before-show="emits('show')"
+    @before-hide="emits('hide')"
   >
     <q-card flat>
       <q-bar class="bg-primary text-white">
@@ -37,7 +38,7 @@
 // import { ref } from 'vue'
 
 // const maximizedToggle = ref(true)
-const emits = defineEmits(['close', 'clear'])
+const emits = defineEmits(['close', 'show', 'hide'])
 defineProps({
   title: { type: String, default: '' }
 })
