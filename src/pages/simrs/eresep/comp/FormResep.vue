@@ -494,20 +494,22 @@ function setPasien() {
   if (props?.depo === 'igd') store.getBillIgd(val)
   // store.getBillRajal(val)
 
-  if (props?.pasien?.newapotekrajal?.flag === '') {
-    store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-    store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-    if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-    if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+  //   if (props?.pasien?.newapotekrajal?.flag === '') {
+  //     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
+  //     store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
+  //     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
+  //     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
 
-    // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-    // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  } else if (props?.pasien?.newapotekrajal) {
-    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
-  } else {
-    store.listRacikan = []
-    store.listPemintaanSementara = []
-  }
+  //     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
+  //     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  //   } else if (props?.pasien?.newapotekrajal) {
+  //     if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
+  //   } else {
+  // }
+  store.setNoreseps(props?.pasien?.newapotekrajal)
+
+  store.listRacikan = []
+  store.listPemintaanSementara = []
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
