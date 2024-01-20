@@ -473,6 +473,7 @@ import { ref, onMounted } from 'vue'
 const store = usePermintaanEResepStore()
 
 onMounted(() => {
+  store.namaObat = null
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
   store.setForm('keteranganx', '-')
   store.setForm('jenisresep', 'Racikan')
