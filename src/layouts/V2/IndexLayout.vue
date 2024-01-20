@@ -107,6 +107,7 @@ import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
 import * as storage from 'src/modules/storage'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+// import { laravelEcho } from 'src/modules/newsockets'
 
 const tanggal = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const router = useRouter()
@@ -163,9 +164,7 @@ onBeforeUnmount(() => {
 })
 // ----- timer end -----
 onMounted(() => {
-  // console.log('layout user', store.currentUser)
-  // console.log('router', router?.currentRoute.value)
-  // setTimer
+  // subscribedPrivateChannel()
 })
 onBeforeMount(() => {
   // console.log('layout user', store.currentUser)
@@ -173,30 +172,14 @@ onBeforeMount(() => {
   // setTimer
 })
 
-// timer
-// const angka = ref(0)
-// const hitung = () => {
-//   angka.value = angka.value + 1
-//   console.log('hitung', angka.value)
-//   // if (angka.value === store.time) {
-//   //   store.setTab('awal')
-//   //   goTo('/')
-//   // }
-// }
-// const updateTimeInterval = setInterval(hitung, 1000)
-// onBeforeUnmount(() => {
-//   clearInterval(updateTimeInterval)
-// })
-// onUpdated(() => {
-//   angka.value = 0
-//   console.log('updated', angka.value)
-// })
-
-// const afterEnter = () => {
-//   window.scrollTo(0, 0)
-// }
-// const afterLeave = () => {
-//   transition.setPageTransition('default')
+// function subscribedPrivateChannel() {
+//   const channel = laravelEcho.private('private.notif.1')
+//   channel.subscribed(() => {
+//     console.log('subscribed notif channel!!!')
+//   })
+//     .listen('.notif-message', (e) => {
+//       console.log('listen private notif', e)
+//     })
 // }
 
 </script>

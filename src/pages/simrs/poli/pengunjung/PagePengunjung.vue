@@ -79,6 +79,8 @@ import ListPengunjung from './comp/ListPengunjung.vue'
 // import PageTindakan from './comp/PageTindakan.vue'
 import PageTindakan from '../tindakan/IndexPage.vue'
 
+import { laravelEcho } from 'src/modules/newsockets'
+
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
@@ -91,6 +93,9 @@ const diagnosa = useLayananPoli()
 const pasien = ref(null)
 const indexVoices = ref(11)
 const listVoices = ref([])
+
+const socket = ref(null)
+const usersOnline = ref([])
 
 // const settings = useSettingsAplikasi()
 
@@ -129,6 +134,8 @@ onMounted(() => {
   // store.init()
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
+
+  subscribedChannel()
 })
 
 // function setSpeech(txt) {
@@ -195,6 +202,32 @@ function tidakdatangs(val) {
     }
   }
   store.settidakdatang(val)
+}
+
+function subscribedChannel() {
+  const channel = laravelEcho.join('presence.chat.poli')
+
+  socket.value = channel
+
+  channel.here((users) => {
+    usersOnline.value = [...users]
+    console.log('subscribed poli channel')
+  })
+    .joining((user) => {
+      console.log({ user }, 'joined')
+      usersOnline.value.push(user)
+    })
+    .leaving((user) => {
+      console.log({ user }, 'leaving')
+      usersOnline.value = usersOnline.value.filter(x => x.id !== user.id)
+      console.log('usersOnline', usersOnline.value)
+    })
+    .listen('.chat-message', (e) => {
+      console.log('listen', e)
+      // const thumb = [...chatMessages.value]
+      // if (e.message !== null || e.message !== '') { thumb.push(e.message) }
+      // chatMessages.value = thumb
+    })
 }
 
 // function actPrintRekap() {

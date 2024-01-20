@@ -33,7 +33,7 @@ const ids = useIdentityStore()
 const store = useAuthStore()
 
 channelLogin.subscribed(() => {
-  console.log('subscribed login!!!')
+  // console.log('subscribed login!!!')
 }).listen('.login-qr', (e) => {
   // console.log('listen', e)
   const msg = e.message
