@@ -333,10 +333,27 @@
                     @keyup.enter.stop="enterKetx"
                   />
                 </div>
+                <div
+                  class="col-shrink text-right"
+                >
+                  <q-btn
+                    color="dark"
+                    dense
+                    flat
+                    icon="icon-mat-save"
+                    :disable="store.loading"
+                    :loading="store.loading"
+                    @click="simpanObat"
+                  >
+                    <q-tooltip class="bg-white text-primary">
+                      Simpan Obat
+                    </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </q-item-section>
           </q-item>
-          <q-item>
+          <!-- <q-item>
             <q-item-section />
             <q-item-section>
               <div class="text-right q-mr-sm">
@@ -352,9 +369,9 @@
                 </q-btn>
               </div>
             </q-item-section>
-          </q-item>
-          <template v-if="store.listRacikan.length">
-            <q-expansion-item
+          </q-item> -->
+          <template v-if="store.listRincianRacikan.length">
+            <!-- <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
             >
@@ -397,62 +414,61 @@
                   </div>
                 </q-item-section>
               </template>
-
-              <q-item
-                v-for="(obat, j) in item?.rincian"
-                :key="j"
+</q-expansion-item> -->
+            <q-item
+              v-for="(obat, j) in store?.listRincianRacikan"
+              :key="j"
+            >
+              <!-- {{ j }} {{ obat }} -->
+              <q-item-section style="width: 50%;">
+                <div class="row">
+                  {{ obat?.mobat?.nama_obat }}
+                </div>
+                <div class="row text-italic f-10">
+                  {{ obat?.kdobat }}
+                </div>
+              </q-item-section>
+              <q-item-section
+                side
+                style="width:50%"
               >
-                <!-- {{ j }} {{ obat }} -->
-                <q-item-section style="width: 50%;">
-                  <div class="row">
-                    {{ obat?.mobat?.nama_obat }}
+                <div class="row items-center q-col-gutter-sm full-width">
+                  <div
+                    class=" col-4"
+                  >
+                    {{ obat?.jumlah }}
                   </div>
-                  <div class="row text-italic f-10">
-                    {{ obat?.kdobat }}
+                  <div
+                    class="text-right col-3"
+                  >
+                    {{ formatDouble(obat?.harga) }}
                   </div>
-                </q-item-section>
-                <q-item-section
-                  side
-                  style="width:50%"
-                >
-                  <div class="row items-center q-col-gutter-sm full-width">
-                    <div
-                      class=" col-4"
-                    >
-                      {{ obat?.jumlah }}
-                    </div>
-                    <div
-                      class="text-right col-3"
-                    >
-                      {{ formatDouble(obat?.harga) }}
-                    </div>
 
-                    <div
-                      class="col text-right"
-                    >
-                      {{ obat?.keteranganx }}
-                    </div>
-                    <div class="col-shrink text-right">
-                      <q-btn
-                        color="negative"
-                        dense
-                        flat
-                        no-caps
-                        size="xs"
-                        icon="icon-mat-delete"
-                        :disable="store.loading || store.loadingkirim"
-                        :loading="store.loadingHapus && store.obatId === obat.id"
-                        @click="store.hapusObat(obat)"
-                      >
-                        <q-tooltip class="bg-white text-primary">
-                          Hapus
-                        </q-tooltip>
-                      </q-btn>
-                    </div>
+                  <div
+                    class="col text-right"
+                  >
+                    {{ obat?.keteranganx }}
                   </div>
-                </q-item-section>
-              </q-item>
-            </q-expansion-item>
+                  <div class="col-shrink text-right">
+                    <q-btn
+                      color="negative"
+                      dense
+                      flat
+                      no-caps
+                      size="xs"
+                      icon="icon-mat-delete"
+                      :disable="store.loading || store.loadingkirim"
+                      :loading="store.loadingHapus && store.obatId === obat.id"
+                      @click="store.hapusObat(obat)"
+                    >
+                      <q-tooltip class="bg-white text-primary">
+                        Hapus
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                </div>
+              </q-item-section>
+            </q-item>
           </template>
         </q-list>
       </q-scroll-area>
@@ -473,6 +489,7 @@ import { ref, onMounted } from 'vue'
 const store = usePermintaanEResepStore()
 
 onMounted(() => {
+  store.namaObat = null
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
   store.setForm('keteranganx', '-')
   store.setForm('jenisresep', 'Racikan')
@@ -489,6 +506,9 @@ onMounted(() => {
     if (sig?.length) signa.value = sig[0]
     enterKet()
   }
+  const rac = store.listRacikan.find(x => x.namaracikan === store.form.namaracikan)
+  store.listRincianRacikan = rac?.rincian
+  console.log('rac', rac)
   console.log('form', store.form)
 })
 // key up ---

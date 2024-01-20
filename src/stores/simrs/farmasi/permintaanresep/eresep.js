@@ -31,12 +31,15 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     Obats: [],
     namaObat: null,
     pasien: null,
+    indexRacikan: -1,
     depo: '',
     tipeReseps: [
       { label: 'Normal', value: 'normal' },
       { label: 'PRB', value: 'prb' },
       { label: 'Iter', value: 'iter' }
     ],
+    noresep: '',
+    noreseps: [],
     // section racikan ---
     racikanOpen: false,
     racikanTambah: false,
@@ -55,6 +58,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     ],
     counterRacikan: 1,
     listRacikan: [],
+    listRincianRacikan: [],
     resepPasien: []
     // section racikan end---
   }),
@@ -211,6 +215,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         }
         this.listRacikan.push(temp)
       }
+      this.listRincianRacikan.push(key)
       console.log('list racikan', this.listRacikan)
 
       this.tipeRacikan = [
@@ -223,8 +228,31 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.setListRacikan(arr)
       })
     },
+    setNoreseps(reseps) {
+      this.noreseps = ['BARU']
+      reseps.forEach(resep => {
+        this.noreseps.push(resep?.noresep)
+      })
+    },
+    setResep(val) {
+      this.setForm('noresep', '')
+      this.listRacikan = []
+      this.listPemintaanSementara = []
+      const reseps = this.pasien?.newapotekrajal
+      const resep = reseps.find(x => x.noresep === val)
+      this.indexRacikan = reseps.findIndex(x => x.noresep === val)
+      if (resep?.flag === '') {
+        this.setForm('tiperesep', resep?.tiperesep ?? 'normal')
+        this.setForm('noresep', val)
+        if (resep?.permintaanresep?.length) this.setListArray(resep?.permintaanresep)
+        if (resep?.permintaanracikan?.length) this.setListRacikanArray(resep?.permintaanracikan)
+      } else {
+        if (resep?.flag !== '') this.setListResep(resep)
+      }
+      console.log('set resep', val, resep)
+    },
     setListResep(resep) {
-      if (!resep.listRacikan) resep.listRacikan = []
+      resep.listRacikan = []
       if (resep?.permintaanracikan?.length) {
         const rac = resep?.permintaanracikan
         rac.forEach(arr => {

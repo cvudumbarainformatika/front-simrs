@@ -29,6 +29,9 @@ const store = usePermintaanEResepStore()
 onUnmounted(() => {
   store.listRacikan = []
   store.listPemintaanSementara = []
+  store.noreseps = []
+  store.noresep = ''
+  store.setForm('jenisresep', '')
   store.resetForm()
 })
 </script>
