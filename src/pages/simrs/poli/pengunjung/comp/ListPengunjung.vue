@@ -110,6 +110,7 @@
             top
           >
             <q-btn
+              v-if="item.status < 3"
               dense
               outline
               size="sm"
@@ -129,9 +130,23 @@
               no-caps
               color="orange-7"
               label="PANGGIL"
+              class="q-mb-lg"
               icon-right="icon-mat-volume_up"
               style="min-width: 120px;"
               @click="emits('panggilan', item)"
+            />
+            <q-btn
+              v-if="item.status < 3"
+              dense
+              size="sm"
+              no-caps
+              color="red"
+              label="TIDAK DATANG"
+              icon-right="icon-mat-hand-front-left"
+              style="min-width: 120px;"
+              :loading="store.loadingTidakhadir && store.noreg === item?.noreg"
+
+              @click="emits('tidakdatang', item)"
             />
           </q-item-section>
         </q-item>
@@ -150,7 +165,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
-const emits = defineEmits(['tindakan', 'panggilan'])
+const emits = defineEmits(['tindakan', 'panggilan', 'tidakdatang'])
 defineProps({
   items: {
     type: Array,
@@ -161,6 +176,10 @@ defineProps({
     default: false
   },
   loadingTerima: {
+    type: Boolean,
+    default: false
+  },
+  loadingTidakhadir: {
     type: Boolean,
     default: false
   }
@@ -178,7 +197,7 @@ function getStatus(val) {
   } else if (val === '2') {
     return 'SUDAH DITERIMA'
   } else {
-    return 'BATAL'
+    return 'Tidak Hadir'
   }
 }
 
@@ -190,7 +209,7 @@ function labelLayanan(val) {
   } else if (val === '2') {
     return 'SUDAH DITERIMA'
   } else if (val === '3') {
-    return 'BATAL'
+    return 'Tidak Hadir'
   }
 }
 

@@ -15,19 +15,29 @@
       style="overflow: hidden;"
     >
       <q-scroll-area style="height: calc(100% - 1px);">
-        <list-pengunjung />
+        <list-loading v-if="store.loading" />
+        <list-pengunjung v-else />
       </q-scroll-area>
-      <div class=" absolute-bottom bg-primary text-white z-top">
-        <footer-page />
+      <div
+        v-if="store.meta!==null"
+        class=" absolute-bottom bg-primary text-white z-top"
+      >
+        <footer-page
+          :meta="store.meta"
+          @go-to="store.goToPage"
+        />
       </div>
     </q-card>
   </q-page>
 </template>
 
 <script setup>
+import ListLoading from './ListLoading.vue'
 import ListPengunjung from './ListPengunjung.vue'
 import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
+const store = usePengunjungIgdStore()
 const style = useStyledStore()
 </script>

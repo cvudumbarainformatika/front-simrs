@@ -22,9 +22,12 @@
         >
           <HeaderLayout
             :pasien="pasien"
+            :loading-save-dpjp="store.loadingSaveGantiDpjp"
             @toggle-left-drawer="()=> drawer = !drawer"
+            @gantidpjp="(val)=>store.gantiDpjp(val, pasien)"
           />
         </q-header>
+
         <!-- LEFT DRAWER ======================================================================================-->
         <q-drawer
           v-model="drawer"
@@ -53,20 +56,11 @@
               timeout="0"
             >
               <template #default>
-                <!-- <div
-                  v-if="pasien?.dokter==='' || pasien?.dokter === null"
-                  class="column full-height flex-center absolute-center z-top full-width"
-                  style="background-color: black; opacity: .9;"
-                >
-                  <div class="text-white">
-                    Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
-                  </div>
-                </div> -->
                 <component
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
-                  depo="rnp"
+                  depo="igd"
                 />
               </template>
               <template #fallback>
@@ -82,10 +76,13 @@
 
 <script setup>
 import { defineAsyncComponent, ref, shallowRef } from 'vue'
-import HeaderLayout from './layoutcomp/HeaderLayout.vue'
-import LeftDrawer from './layoutcomp/LeftDrawer.vue'
+import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
+const store = usePengunjungIgdStore()
 
+const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
+const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
 const drawer = ref(false)
+
 defineProps({
   pasien: {
     type: Object,
@@ -106,8 +103,8 @@ const menu = ref(menus.value[0])
 function menuDiganti(val) {
   menu.value = val
 }
-</script>
 
+</script>
 <style lang="scss">
 .contain{
     display: flex;
