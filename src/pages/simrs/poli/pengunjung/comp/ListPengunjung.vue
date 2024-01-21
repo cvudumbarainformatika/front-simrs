@@ -128,11 +128,13 @@
               dense
               size="sm"
               no-caps
-              color="orange-7"
+              color="accent"
               label="PANGGIL"
               class="q-mb-lg"
               icon-right="icon-mat-volume_up"
               style="min-width: 120px;"
+              :loading="loadingCall && store.noreg === item?.noreg"
+              :disable="loadingCall && store.noreg === item?.noreg"
               @click="emits('panggilan', item)"
             />
             <q-btn
@@ -177,6 +179,10 @@ defineProps({
     default: false
   },
   loadingTerima: {
+    type: Boolean,
+    default: false
+  },
+  loadingCall: {
     type: Boolean,
     default: false
   },
