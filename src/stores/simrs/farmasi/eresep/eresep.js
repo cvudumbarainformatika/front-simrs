@@ -50,8 +50,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       if (res?.permintaanracikan?.length) {
         res?.permintaanracikan.forEach(key => {
           key.jumlahresep = key.jumlah
-          key.jumlah = Math.ceil(key.jumlahresep)
-          key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+          key.jumlahobat = Math.ceil(key.jumlah)
+          key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
           const namaracikan = key?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
           if (adaList.length) {

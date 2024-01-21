@@ -200,21 +200,46 @@
                 <div class="row full-width">
                   <div class="col-6">
                     <div class="row">
-                      Aturan : {{ rinc?.aturan }}
+                      <div class="col-4">
+                        Aturan
+                      </div>
+                      <div class="col-8">
+                        {{ rinc?.aturan }}
+                      </div>
                     </div>
                     <div class="row">
-                      Jumlah Obat : {{ rinc?.jumlah }}
+                      <div class="col-4">
+                        Jumlah Obat
+                      </div>
+                      <div class="col-8">
+                        {{ rinc?.jumlah }}
+                      </div>
                     </div>
                     <div class="row">
-                      Konsumsi : {{ rinc?.konsumsi }} hari
+                      <div class="col-4">
+                        Konsumsi
+                      </div>
+                      <div class="col-8">
+                        {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari
+                      </div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="row">
-                      Harga : {{ rinc?.hargajual }}
+                      <div class="col-4">
+                        Harga
+                      </div>
+                      <div class="col-8">
+                        {{ formatDouble( parseFloat(rinc?.hargajual),2) }}
+                      </div>
                     </div>
                     <div class="row">
-                      Keterangan : {{ rinc?.keterangan }}
+                      <div class="col-4">
+                        Keterangan
+                      </div>
+                      <div class="col-8">
+                        {{ rinc?.keterangan }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -263,11 +288,11 @@
               <div class="col-shrink q-mr-xs text-italic">
                 {{ item?.aturan }}
               </div>
-              <div class="col-shrink q-mr-xs text-italic f-10">
-                ( {{ item?.konsumsi }} hari)
-              </div>
               <div class="col-shrink q-mr-xs">
                 {{ item?.keterangan }}
+              </div>
+              <div class="col-shrink q-mr-xs text-italic f-10">
+                ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
               </div>
               <div class="col-grow">
                 <q-separator
@@ -326,24 +351,54 @@
                   <div class="row full-width">
                     <div class="col-6">
                       <div class="row">
-                        Dosis Obat : {{ rinc?.dosisobat }}
+                        <div class="col-4">
+                          Dosis Obat
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.dosisobat }}
+                        </div>
                       </div>
                       <div class="row">
-                        Dosis Resep : {{ rinc?.dosismaksimum }}
+                        <div class="col-4">
+                          Dosis Resep
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.dosismaksimum }}
+                        </div>
                       </div>
                       <div class="row">
-                        Jumlah Resep : {{ rinc?.jumlahresep }}
+                        <div class="col-4">
+                          Jumlah Resep
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.jumlahresep }}
+                        </div>
                       </div>
                       <div class="row">
-                        Jumlah Obat : {{ rinc?.jumlah }}
+                        <div class="col-4">
+                          Jumlah Obat
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.jumlahobat }}
+                        </div>
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="row">
-                        Harga : {{ rinc?.harga }}
+                        <div class="col-4">
+                          Harga
+                        </div>
+                        <div class="col-8">
+                          {{ formatDouble(parseFloat(rinc?.harga),2) }}
+                        </div>
                       </div>
                       <div class="row">
-                        Keterangan : {{ rinc?.keteranganx }}
+                        <div class="col-4">
+                          Keterangan
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.keteranganx }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -359,8 +414,8 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
-import { dateFull, formatRpDouble } from 'src/modules/formatter'
 
 const store = useEResepDepoFarmasiStore()
 

@@ -39,6 +39,11 @@ const routes = [
         path: '/print/etiket',
         name: 'print.etiket',
         component: () => import('pages/simrs/print/PrintEtiketResep.vue')
+      },
+      {
+        path: '/print/eresep',
+        name: 'print.eresep',
+        component: () => import('pages/simrs/print/PrintPermintaanResep.vue')
       }
     ]
   },
