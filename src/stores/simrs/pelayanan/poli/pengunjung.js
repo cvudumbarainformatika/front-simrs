@@ -41,11 +41,11 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.params = val
       this.getData()
     },
-    async sendPanggil(noreg) {
-      const params = { noreg }
+    async sendPanggil(pasien) {
+      const params = { noreg: pasien?.noreg, noantrian: pasien?.noantrian }
       await api.post('v1/fordisplay/send_panggilan', params)
         .then((resp) => {
-          console.log('call', resp)
+          // console.log('call', resp)
           if (resp.status === 200) {
             // this.meta = resp.data
             // this.items = resp.data.data

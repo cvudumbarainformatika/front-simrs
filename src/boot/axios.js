@@ -15,6 +15,11 @@ const SERV = 'http://192.168.101.80/api.laborat/public'
 // const SERV = 'http://192.168.101.78:8080/api.laborat/public' // ari
 // const SERV = 'http://localhost/api.laborat/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
+
+// const WSHOST = '192.168.150.111'
+const WSHOST = '192.168.101.80'
+const WSPORT = 6003
+
 const SERVER = SERV + '/api'
 
 const api = axios.create({ baseURL: SERVER })
@@ -81,6 +86,8 @@ export default boot(({ app }) => {
   app.config.globalProperties.$SERV = SERV
   app.config.globalProperties.$api = api
   app.config.globalProperties.$pathImg = pathImg
+  app.config.globalProperties.$WSHOST = WSHOST
+  app.config.globalProperties.$WSPORT = WSPORT
   // getApp()
 })
 
@@ -90,4 +97,4 @@ const setToken = (token) => {
 }
 const deleteToken = () => delete api.defaults.headers.common.Authorization
 
-export { axios, api, pathImg, setToken, deleteToken, SERV, SERVER }
+export { axios, api, pathImg, setToken, deleteToken, SERV, SERVER, WSHOST, WSPORT }

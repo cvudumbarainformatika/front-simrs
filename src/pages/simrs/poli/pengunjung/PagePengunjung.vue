@@ -70,7 +70,7 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 // import FooterComp from './comp/FooterComp.vue'
 import FilterPage from './comp/FilterPage.vue'
@@ -84,7 +84,7 @@ import { laravelEcho } from 'src/modules/newsockets'
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
-// import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
 const speech = useSpeechStore()
@@ -97,7 +97,18 @@ const listVoices = ref([])
 const socket = ref(null)
 const usersOnline = ref([])
 
-// const settings = useSettingsAplikasi()
+const setting = useSettingsAplikasi()
+
+const kdDisplay = computed(() => {
+  const poli = setting.polis
+  const kdpoli = store.params.kodepoli[0] ?? 'POL'
+
+  const target = poli.filter(x => x.kodepoli === kdpoli)
+  if (target.length) {
+    return target[0].displaykode
+  }
+  return null
+})
 
 // const printRekap = ref(false)
 
@@ -136,6 +147,7 @@ onMounted(() => {
   diagnosa.getTindakanDropdown()
 
   subscribedChannel()
+  // console.log('setting', kdDisplay.value)
 })
 
 // function setSpeech(txt) {
@@ -159,7 +171,7 @@ function panggil(row) {
   // const txt = jns === 'nama' ? txt1 : txt2
   // speech.synth.speak(setSpeech(txt1))
   // console.log(row)
-  store.sendPanggil(row?.noreg)
+  store.sendPanggil(row)
 }
 function bukaTindakan(val) {
   // console.log('buka tindakan', val)
@@ -205,32 +217,38 @@ function tidakdatangs(val) {
 }
 
 function subscribedChannel() {
-  const channel = laravelEcho.join('presence.chat.poli')
-
-  socket.value = channel
-
-  channel.here((users) => {
-    usersOnline.value = [...users]
-    console.log('subscribed poli channel')
-  })
-    .joining((user) => {
-      console.log({ user }, 'joined')
-      usersOnline.value.push(user)
+  if (kdDisplay.value) {
+    const channel = laravelEcho.join('presence.chat.display' + kdDisplay.value)
+    socket.value = channel
+    channel.here((users) => {
+      usersOnline.value = [...users]
+      console.log(`subscribed display${kdDisplay.value} channel`)
     })
-    .leaving((user) => {
-      console.log({ user }, 'leaving')
-      usersOnline.value = usersOnline.value.filter(x => x.id !== user.id)
-      console.log('usersOnline', usersOnline.value)
-    })
-    .listen('.chat-message', (e) => {
-      console.log('listen', e)
+      .joining((user) => {
+        // console.log({ user }, 'joined')
+        usersOnline.value.push(user)
+      })
+      .leaving((user) => {
+        // console.log({ user }, 'leaving')
+        usersOnline.value = usersOnline.value.filter(x => x.id !== user.id)
+        // console.log('usersOnline', usersOnline.value)
+      })
+      .listen('.chat-message', (e) => {
+        console.log('listen', e)
       // const thumb = [...chatMessages.value]
       // if (e.message !== null || e.message !== '') { thumb.push(e.message) }
       // chatMessages.value = thumb
-    })
+      })
+  }
 }
 
 // function actPrintRekap() {
 //   printRekap.value = false
 // }
+
+watch(() => kdDisplay.value, (obj, old) => {
+  // console.log('new', obj)
+  // console.log('old', old)
+  subscribedChannel()
+}, { deep: true })
 </script>

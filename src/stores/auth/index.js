@@ -433,18 +433,20 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async logout () {
+    logout () {
       waitLoad('show')
-      try {
-        await api.post('/v1/logout').then(resp => {
-          this.REMOVE_LOKAL()
-          routerInstance.replace('/login')
-          waitLoad('done')
-        })
-      } catch (error) {
-        console.log(error)
+      // try {
+
+      this.REMOVE_LOKAL()
+      setTimeout(() => {
+        routerInstance.replace('/login')
         waitLoad('done')
-      }
+      }, 200)
+
+      // } catch (error) {
+      //   console.log(error)
+      //   waitLoad('done')
+      // }
     }
   }
 })
