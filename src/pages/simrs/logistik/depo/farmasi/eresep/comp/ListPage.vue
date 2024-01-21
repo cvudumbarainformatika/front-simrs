@@ -15,7 +15,7 @@
           Dokter
         </th>
         <th>
-          Poli
+          Ruangan
         </th>
         <th class="text-end">
           Status
@@ -129,7 +129,12 @@
               {{ item?.dokter }}
             </td>
             <td>
-              {{ item?.poli?.rs2 }}
+              <div v-if="item?.poli">
+                {{ item?.poli?.rs2 }}
+              </div>
+              <div v-if="item?.ruanganranap">
+                {{ item?.ruanganranap?.rs2 }}
+              </div>
             </td>
             <td class="text-end">
               <q-chip
@@ -208,9 +213,9 @@ function color(val) {
 }
 
 function buka(val) {
-  console.log('buka', val)
   store.setOpen()
   store.setResep(val)
+  console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }
