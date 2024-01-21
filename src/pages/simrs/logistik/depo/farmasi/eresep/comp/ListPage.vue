@@ -15,10 +15,13 @@
           Dokter
         </th>
         <th>
-          Poli
+          Ruangan
+        </th>
+        <th>
+          Status
         </th>
         <th class="text-end">
-          Status
+          Aksi
         </th>
       </tr>
     </thead>
@@ -102,10 +105,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr
-            class="cursor-pointer"
-            @click="buka(item)"
-          >
+          <tr>
             <td width="5%">
               {{ n+1 }}
             </td>
@@ -129,9 +129,14 @@
               {{ item?.dokter }}
             </td>
             <td>
-              {{ item?.poli?.rs2 }}
+              <div v-if="item?.poli">
+                {{ item?.poli?.rs2 }}
+              </div>
+              <div v-if="item?.ruanganranap">
+                {{ item?.ruanganranap?.rs2 }}
+              </div>
             </td>
-            <td class="text-end">
+            <td>
               <q-chip
                 square
                 class="f-10"
@@ -140,6 +145,61 @@
               >
                 {{ status(item?.flag) }}
               </q-chip>
+            </td>
+            <td class="text-end q-mr-sm">
+              <q-btn
+                round
+                class="f-10 q-mr-sm"
+                color="dark"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="toPrint(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print resep
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                round
+                class="f-10 q-mr-sm"
+                :color="color(item?.flag)"
+                text-color="white"
+                icon="icon-mat-move_to_inbox"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Terima
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                round
+                class="f-10 q-mr-sm"
+                :color="color(item?.flag)"
+                text-color="white"
+                icon="icon-mat-done_all"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Selesai
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                square
+                class="f-10"
+                color="primary"
+                text-color="white"
+                no-caps
+                @click="buka(item)"
+              >
+                Buka
+              </q-btn>
             </td>
           <!-- <td class="text-end">
             <div>
@@ -172,8 +232,11 @@
 // import { ref } from 'vue'
 import { dateFullFormat } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
+import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
+import { useRouter } from 'vue-router'
 
 const store = useEResepDepoFarmasiStore()
+const router = useRouter()
 
 // const indexId = ref(0)
 function status(val) {
@@ -183,7 +246,13 @@ function status(val) {
       balik = ' draft'
       break
     case '1':
+      balik = 'Belum diterima'
+      break
+    case '2':
       balik = 'Siap di kerjakan'
+      break
+    case '3':
+      balik = 'Selesai'
       break
 
     default:
@@ -198,7 +267,13 @@ function color(val) {
       balik = 'grey'
       break
     case '1':
+      balik = 'grey'
+      break
+    case '2':
       balik = 'green'
+      break
+    case '3':
+      balik = 'red'
       break
 
     default:
@@ -208,9 +283,9 @@ function color(val) {
 }
 
 function buka(val) {
-  console.log('buka', val)
   store.setOpen()
   store.setResep(val)
+  console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }
@@ -218,6 +293,19 @@ function buka(val) {
 //   indexId.value = id
 //   store.sendToSatset(id)
 // }
+const print = usePrintEresepStore()
+function toPrint(row) {
+  print.setResep(row)
+  console.log('row', row)
+  const noresep = row?.noresep
+  const routeData = router.resolve({
+    path: '/print/eresep',
+    query: {
+      noresep
+    }
+  })
+  window.open(routeData.href, '_blank')
+}
 </script>
 
 <style lang="scss" scoped>
