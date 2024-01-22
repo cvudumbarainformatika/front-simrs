@@ -236,16 +236,16 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       }
     },
 
-    async settidakdatang(val) {
+    async settidakdatang(pasien) {
       this.loadingTidakhadir = true
-      const form = { noreg: val?.noreg }
-      this.noreg = val?.noreg
+      const form = { noreg: pasien?.noreg }
+      this.noreg = pasien?.noreg
 
       try {
-        const resp = await api.post('v1/simrs/rajal/poli/tidakhadir', form)
+        await api.post('v1/simrs/rajal/poli/tidakhadir', form)
+
         this.loadingTidakhadir = false
-        this.setinject(val?.noreg)
-        console.log('wew', resp)
+        this.setinject(pasien?.noreg)
       } catch (error) {
         this.loadingTidakhadir = false
         this.hidden = false
@@ -255,6 +255,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
 
     setinject (noreg) {
       const findPasien = this.items.filter(x => x.noreg === noreg)
+      console.log('wew', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
         data.status = '3'
