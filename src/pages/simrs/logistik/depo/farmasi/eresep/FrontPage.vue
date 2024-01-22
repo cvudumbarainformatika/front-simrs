@@ -54,6 +54,7 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { defineAsyncComponent, watch, onMounted } from 'vue'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { laravelEcho } from 'src/modules/newsockets'
 
 const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
@@ -63,13 +64,22 @@ const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 const style = useStyledStore()
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
-
+function subscribedChannel() {
+  const channel = laravelEcho.private('private.notif.depo-farmasi')
+  channel.subscribed(() => {
+    console.log('subscribed private.notif.depo-farmasi channel !!!')
+  }).listen('.notif-message', (e) => {
+    console.log('listen notif', e)
+    store.getSatuResep(e?.message?.data)
+  })
+}
 onMounted(() => {
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {
     store.setParams('kddepo', apps?.user?.kdruangansim)
     store.getDataTable()
   }
+  subscribedChannel()
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)

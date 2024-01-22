@@ -86,6 +86,19 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           this.meta = resp?.data?.data ? resp?.data : {}
         })
         .catch(() => { this.loading = false })
+    },
+    async getSatuResep(val) {
+      const param = {
+        id: val?.id,
+        noreg: val?.noreg
+      }
+      // console.log('obat', val, filtObat)
+      this.loadingObat = true
+      const params = { params: param }
+      await api.get('v1/simrs/farmasinew/depo/get-single-resep', params)
+        .then(resp => {
+          console.log('get single', resp.data)
+        })
     }
   }
 })

@@ -163,6 +163,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="item?.flag==='1'"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
@@ -177,6 +178,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="item?.flag==='2'"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
