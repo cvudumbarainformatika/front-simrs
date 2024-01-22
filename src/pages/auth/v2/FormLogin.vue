@@ -84,7 +84,6 @@
 import { ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useQuasar } from 'quasar'
-
 const $q = useQuasar()
 
 const isPasw = ref(true)
@@ -103,6 +102,13 @@ function onSubmit () {
   formData.append('password', form.value.password)
   formData.append('device_name', form.value.device_name)
   storeAuth.login(formData)
+  // .then(() => {
+  //   const channel = laravelEcho.join('private.notif.1')
+
+  //   channel.subscribed(() => {
+  //     console.log('subscribed notif channel!!!')
+  //   })
+  // })
   // .then(() => {
   //   // console.log('loading false', storeAuth.aplications)
   //   if (storeAuth.aplications.length === 1) {

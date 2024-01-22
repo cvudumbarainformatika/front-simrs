@@ -4,6 +4,7 @@ import * as storage from 'src/modules/storage'
 import { routerInstance } from 'src/boot/router'
 import { removeToken, waitLoad } from 'src/modules/utils'
 import { useAplikasiStore } from '../app/aplikasi'
+// import { chatChannel } from 'src/modules/localsocket'
 // import { useRouter } from 'vue-router'
 
 const apps = useAplikasiStore()
@@ -24,7 +25,10 @@ export const useAuthStore = defineStore('auth', {
     ruang: {},
     kode_ruang: null,
     depo: {},
-    mode: 'qr'
+    mode: 'qr',
+
+    // baru
+    onlineUsers: []
   }),
   getters: {
     isAuth (state) {
@@ -254,10 +258,10 @@ export const useAuthStore = defineStore('auth', {
     // },
 
     //
-    async loginQr(payload) {
+    loginQr(payload) {
       this.loading = true
-      try {
-        await api.post('/v1/login-qr', payload).then(resp => {
+      return new Promise((resolve, reject) => {
+        api.post('/v1/login-qr', payload).then(resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)
           localStorage.setItem('activeTime', new Date())
@@ -266,42 +270,81 @@ export const useAuthStore = defineStore('auth', {
           if (hdd && hddUser) {
             this.SET_TOKEN_USER(hdd, hddUser)
           }
-          setTimeout(() => {
-            this.loading = false
-          }, 1000)
+          // setTimeout(() => {
+          //   this.loading = false
+          // }, 1000)
+          resolve(resp)
         })
-      } catch (error) {
-        this.loading = false
-        console.log('err loginQr', error.response)
-      }
+          .catch(error => {
+            console.log('err loginQr', error.response)
+            reject(error)
+          })
+      })
+      // try {
+      //   await api.post('/v1/login-qr', payload).then(resp => {
+      //     storage.setLocalToken(resp.data.token)
+      //     storage.setUser(resp.data.user)
+      //     localStorage.setItem('activeTime', new Date())
+      //     const hdd = storage.getLocalToken()
+      //     const hddUser = storage.getUser()
+      //     if (hdd && hddUser) {
+      //       this.SET_TOKEN_USER(hdd, hddUser)
+      //     }
+      //     setTimeout(() => {
+      //       this.loading = false
+      //     }, 1000)
+      //   })
+      // } catch (error) {
+      //   this.loading = false
+      //   console.log('err loginQr', error.response)
+      // }
     },
-    async login (payload) {
+    login (payload) {
       this.loading = true
       // waitLoad('show')
-      try {
-        await api.post('/v1/login', payload).then(resp => {
-          storage.setLocalToken(resp.data.token)
-          storage.setUser(resp.data.user)
-          localStorage.setItem('activeTime', new Date())
-          // console.log('login', resp)
-          const hdd = storage.getLocalToken()
-          const hddUser = storage.getUser()
-          if (hdd && hddUser) {
-            this.SET_TOKEN_USER(hdd, hddUser)
-          }
-          setTimeout(() => {
+      return new Promise((resolve, reject) => {
+        api.post('/v1/login', payload)
+          .then(resp => {
+            storage.setLocalToken(resp.data.token)
+            storage.setUser(resp.data.user)
+            localStorage.setItem('activeTime', new Date())
+            // console.log('login', resp)
+            const hdd = storage.getLocalToken()
+            const hddUser = storage.getUser()
+            if (hdd && hddUser) {
+              this.SET_TOKEN_USER(hdd, hddUser)
+            }
+            // setTimeout(() => {
+            //   this.loading = false
+            // }, 1000)
+            resolve(resp)
+          })
+          .catch((error) => {
+            console.log(error)
             this.loading = false
-          }, 1000)
-
-          // waitLoad('done')
-          // this.mapingMenu2(resp.data)
-        })
-      } catch (error) {
-        // waitLoad('done')
-        this.loading = false
-        // console.log('err login', error.response)
-        // notifErr(error.response)
-      }
+            reject(error)
+          })
+      })
+      // try {
+      //   await api.post('/v1/login', payload).then(resp => {
+      //     storage.setLocalToken(resp.data.token)
+      //     storage.setUser(resp.data.user)
+      //     localStorage.setItem('activeTime', new Date())
+      //     // console.log('login', resp)
+      //     const hdd = storage.getLocalToken()
+      //     const hddUser = storage.getUser()
+      //     if (hdd && hddUser) {
+      //       this.SET_TOKEN_USER(hdd, hddUser)
+      //     }
+      //     setTimeout(() => {
+      //       this.loading = false
+      //     }, 1000)
+      //   })
+      // } catch (error) {
+      //   // waitLoad('done')
+      //   this.loading = false
+      //   // console.log('err login', error.response)
+      // }
     },
     // login2(payload) {
     //   this.loading = true
@@ -331,10 +374,12 @@ export const useAuthStore = defineStore('auth', {
     //       })
     //   })
     // },
-    SET_TOKEN_USER (token, user) {
+    SET_TOKEN_USER (token, auth) {
       storage.setHeaderToken(token)
       this.token = token
-      this.user = user
+      this.user = auth
+      // send to channel
+
       this.loading = false
       routerInstance.push({ path: '/' })
       setTimeout(() => {
@@ -370,7 +415,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       try {
         await api.get('/v1/authuser').then(resp => {
-          console.log('authuser', resp)
+          // console.log('authuser', resp)
           if (resp.status === 200) {
             const hdd = storage.setUser(resp.data.user)
             if (hdd) {
@@ -388,18 +433,20 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async logout () {
+    logout () {
       waitLoad('show')
-      try {
-        await api.post('/v1/logout').then(resp => {
-          this.REMOVE_LOKAL()
-          routerInstance.replace('/login')
-          waitLoad('done')
-        })
-      } catch (error) {
-        console.log(error)
+      // try {
+
+      this.REMOVE_LOKAL()
+      setTimeout(() => {
+        routerInstance.replace('/login')
         waitLoad('done')
-      }
+      }, 200)
+
+      // } catch (error) {
+      //   console.log(error)
+      //   waitLoad('done')
+      // }
     }
   }
 })

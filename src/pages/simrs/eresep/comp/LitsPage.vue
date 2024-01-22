@@ -1,16 +1,35 @@
 <template>
   <div class="bg-white full-height column">
+    <q-bar class="col-auto bg-teal text-white">
+      <div class="q-py-sm f-14 ">
+        List Nomor Resep
+      </div>
+      <q-space />
+      <div class="q-py-xs">
+        <q-select
+          v-model="store.noresep"
+          outlined
+          standout="bg-yellow-3"
+          bg-color="white"
+          dense
+          :options="store.noreseps"
+          :display-value="`${store.noresep === null || store.noresep === '' || store.noresep === 'BARU' ? 'BARU' : store.noresep}`"
+          style="min-width: 200px;"
+          @update:model-value="store.setResep"
+        />
+      </div>
+    </q-bar>
     <div
-      v-if="store?.pasien?.newapotekrajal?.flag==='1'"
+      v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.flag==='1'"
       class=""
     >
       <div class="text-weight-bold text-orange q-my-md q-ml-md">
-        resep nomor : {{ store?.pasien?.newapotekrajal?.noresep }}
+        resep nomor : {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.noresep }}
       </div>
-      <!-- {{ store?.pasien?.newapotekrajal?.permintaanresep?.length }} -->
-      <template v-if="store?.pasien?.newapotekrajal?.permintaanresep?.length">
+      <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
+      <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
         <q-item
-          v-for="(item, i) in store?.pasien?.newapotekrajal?.permintaanresep"
+          v-for="(item, i) in store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep"
           :key="i"
           class="q-pl-sm"
         >
@@ -53,11 +72,11 @@
         </q-item>
       </template>
       <!-- {{ store.listRacikan }} -->
-      <template v-if="store?.pasien?.newapotekrajal?.listRacikan?.length">
+      <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.listRacikan?.length">
         <!-- <template v-if="store?.listRacikan?.length"> -->
         <!-- v-for="(item, i) in store?.listRacikan" -->
         <q-expansion-item
-          v-for="(item, i) in store?.pasien?.newapotekrajal?.listRacikan"
+          v-for="(item, i) in store?.pasien?.newapotekrajal[store.indexRacikan]?.listRacikan"
           :key="i"
           dense
           dense-toggle
@@ -141,7 +160,7 @@
       </template>
     </div>
     <div
-      v-if="store?.pasien?.newapotekrajal?.flag===''"
+      v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.flag===''"
       class=""
     >
       <app-no-data text="Belum ada Resep terkirim ke depo" />

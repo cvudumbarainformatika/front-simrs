@@ -62,18 +62,18 @@
 </template>
 
 <script setup>
-import { api } from 'src/boot/axios'
-// import { chatChannel } from 'src/modules/sockets'
+// import { api } from 'src/boot/axios'
+// import { chatChannel } from 'src/modules/localsocket'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, ref } from 'vue'
+// import { onMounted, ref } from 'vue'
 
 // const app = useAplikasiStore()
 
-const onlineUsers = ref([])
-const chatMessages = ref([])
-const text = ref(null)
-const txtSM = ref(null)
-const typing = ref(false)
+// const onlineUsers = ref([])
+// const chatMessages = ref([])
+// const text = ref(null)
+// const txtSM = ref(null)
+// const typing = ref(false)
 
 // chatChannel.here((users) => {
 //   console.log({ users })
@@ -101,23 +101,23 @@ const typing = ref(false)
 //     typing.value = false
 //   })
 
-onMounted(() => {
-  coba()
-})
+// onMounted(() => {
+//   coba()
+// })
 
-async function coba() {
-  txtSM.value = text.value
-  const params = {
-    message: text.value
-  }
-  text.value = null
-  typing.value = false
-  await api.post('/v1/percobaan', params)
-    .then(resp => {
-      txtSM.value = null
-      typing.value = false
-    })
-}
+// async function coba() {
+//   txtSM.value = text.value
+//   const params = {
+//     message: text.value
+//   }
+//   text.value = null
+//   typing.value = false
+//   await api.post('/v1/percobaan', params)
+//     .then(resp => {
+//       txtSM.value = null
+//       typing.value = false
+//     })
+// }
 
 // function whisper() {
 //   if (text.value === null || text.value === '') {

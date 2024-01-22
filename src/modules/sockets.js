@@ -4,52 +4,8 @@ import Pusher from 'pusher-js'
 // import { api } from 'src/boot/axios'
 
 const host = 'xenter.my.id'
-// const ser = 'https://xenter.my.id'
-// const host2 = 'localhost' // '127.0.0.1' || '192.168.101.80'
-// const host = '36.89.103.117'
-// const host = '192.168.101.79'
-// const host2 = '192.168.150.103'
-// const getLocalToken = () => JSON.parse(localStorage.getItem('token'))
+
 window.Pusher = Pusher
-// const api = axios.create({ baseURL: host })
-// api.defaults.headers.get.Accepts = 'application/json'
-
-// api.defaults.headers.common.Authorization = `Bearer ${getLocalToken()}`
-// window.Echo = new Echo({
-//   broadcaster: 'pusher',
-//   key: 'simrs_key_harry141312',
-//   cluster: 'mt1',
-//   wsHost: host,
-//   // wsHost: host2,
-//   encrypted: false,
-//   wssPort: 6002,
-//   wsPort: 6002,
-//   disableStats: false,
-//   forceTLS: true, // default true
-//   enabledTransports: ['ws', 'wss'],
-//   // enabledTransports: ['ws'],
-//   authorizer: (channel) => {
-//     return {
-//       authorize: (socketId, callback) => {
-//         // api.post('/broadcasting/auth', {
-//         // axios.create({ baseURL: ser })
-//         axios.defaults.headers.get.Accepts = 'application/json'
-
-//         axios.defaults.headers.common.Authorization = `Bearer ${getLocalToken()}`
-//         axios.post(ser + '/api/broadcasting/auth', {
-//           socket_id: socketId,
-//           channel_name: channel.name
-//         })
-//           .then(response => {
-//             callback(null, response.data)
-//           })
-//           .catch(error => {
-//             callback(error)
-//           })
-//       }
-//     }
-//   }
-// })
 
 window.Echo = new Echo({
   broadcaster: 'pusher',
@@ -70,24 +26,10 @@ const channelLogin = window.Echo.channel('public.login.qr')
 
 // INI CHANNEL LOCAL
 const antreanChannel = window.Echo.channel('public.antrean')
-// const anjunganChannel = window.Echo.channel('public.anjungan')
-// const chatChannel = window.Echo.join('presence.chat.1')
-// const socket = () => {
-//   let msg = null
-//   channel.subscribed(() => {
-//     console.log('subscribed!!!')
-//   }).listen('.playground', (e) => {
-//     msg = e
-//   })
-
-//   return msg
-// }
 
 export {
   channel,
   // qrcodeChannel,
   channelLogin,
   antreanChannel
-  // anjunganChannel,
-  // chatChannel
 }

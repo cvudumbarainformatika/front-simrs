@@ -128,15 +128,17 @@
               dense
               size="sm"
               no-caps
-              color="orange-7"
+              color="accent"
               label="PANGGIL"
               class="q-mb-lg"
               icon-right="icon-mat-volume_up"
               style="min-width: 120px;"
+              :loading="loadingCall && store.noreg === item?.noreg"
+              :disable="loadingCall && store.noreg === item?.noreg"
               @click="emits('panggilan', item)"
             />
             <q-btn
-              v-if="item.status < 3"
+              v-if="parseInt(item.status) < 3 "
               dense
               size="sm"
               no-caps
@@ -145,6 +147,7 @@
               icon-right="icon-mat-hand-front-left"
               style="min-width: 120px;"
               :loading="store.loadingTidakhadir && store.noreg === item?.noreg"
+              :class="item.status==='1' ? 'invisible':'visible'"
 
               @click="emits('tidakdatang', item)"
             />
@@ -176,6 +179,10 @@ defineProps({
     default: false
   },
   loadingTerima: {
+    type: Boolean,
+    default: false
+  },
+  loadingCall: {
     type: Boolean,
     default: false
   },

@@ -41,6 +41,7 @@
         :items="store.items"
         :loading="store.loading"
         :loading-terima="store.loadingTerima"
+        :loading-call="speech.isLoading"
         @tindakan="bukaTindakan"
         @panggilan="panggil"
         @tidakdatang="tidakdatangs"
@@ -70,7 +71,7 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 // import FooterComp from './comp/FooterComp.vue'
 import FilterPage from './comp/FilterPage.vue'
@@ -79,20 +80,32 @@ import ListPengunjung from './comp/ListPengunjung.vue'
 // import PageTindakan from './comp/PageTindakan.vue'
 import PageTindakan from '../tindakan/IndexPage.vue'
 
+import { laravelEcho } from 'src/modules/newsockets'
+
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
 import { useQuasar } from 'quasar'
 import { useSpeechStore } from 'src/stores/antrian/speech'
-// import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
 const speech = useSpeechStore()
 const store = usePengunjungPoliStore()
 const diagnosa = useLayananPoli()
 const pasien = ref(null)
-const indexVoices = ref(11)
-const listVoices = ref([])
+const indexVoices = ref(0)
 
-// const settings = useSettingsAplikasi()
+const setting = useSettingsAplikasi()
+
+const kdDisplay = computed(() => {
+  const poli = setting.polis
+  const kdpoli = store.params.kodepoli[0] ?? 'POL'
+
+  const target = poli.filter(x => x.kodepoli === kdpoli)
+  if (target.length) {
+    return target[0].displaykode
+  }
+  return null
+})
 
 // const printRekap = ref(false)
 
@@ -101,59 +114,87 @@ const listVoices = ref([])
 
 const $q = useQuasar()
 onMounted(() => {
-  let voices = []
-  setTimeout(() => {
-    voices = speech.synth.getVoices()
-    listVoices.value = voices
-
-    if (listVoices.value.length) {
-      speech.setLoading(false)
-      const ada = listVoices.value?.map(x => x.lang)
-      const ind = ada.findIndex(x => x === 'id-ID') ?? 0
-      indexVoices.value = ind
-      console.log('onMounted :', ind)
-    }
-
-    speech.synth.onvoiceschanged = () => {
-      speech.setVoiceList(speech.synth.getVoices())
-      // give a bit of delay to show loading screen
-      // just for the sake of it, I suppose. Not the best reason dsfa
-      speech.setLoading(false)
-      // setTimeout(() => {
-      //   speech.setLoading(false)
-      // }, 500)
-    }
-  }, 500)
-  // console.log(voices)
-
   // store.init()
+  // setTimeout(() => settingsVoice(), 750)
+
   diagnosa.getDiagnosaDropdown()
   diagnosa.getTindakanDropdown()
+
+  getListVoices().then((x) => {
+    settingsVoice()
+  })
+
+  subscribedChannel()
+  // console.log('setting', kdDisplay.value)
 })
 
-// function setSpeech(txt) {
-//   // console.log(speech.voiceList[11])
-//   const voice = speech.utterance
-//   voice.text = txt
-//   voice.voice = speech.voiceList[indexVoices.value]
+function getListVoices() {
+  return new Promise(
+    function (resolve, reject) {
+      const synth = speech.synth
+      let id = 0
 
-//   voice.volume = 1
-//   voice.pitch = 1
-//   voice.rate = 1
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          speech.voiceList = synth.getVoices()
+          resolve(synth.getVoices())
+          clearInterval(id)
+        }
+      }, 10)
+    }
+  )
+}
 
-//   return voice
-// }
+function settingsVoice() {
+  const voices = speech.voiceList
+  if (voices.length) {
+    const lang = voices?.map(x => x.lang)
+    const ind = lang.findIndex(x => x === 'id-ID') ?? 0
+    indexVoices.value = ind
+  }
+
+  // const synth = window.speechSynthesis
+  speech.synth.onvoiceschanged = () => {
+    speech.synth.setVoiceList(voices)
+  }
+  // console.log('voices', voices)
+  // console.log('speech', speech)
+  listenForSpeechEvents()
+}
+
+function listenForSpeechEvents() {
+  speech.utterance.onstart = () => {
+    // console.log('start...')
+    speech.isLoading = true
+  }
+  speech.utterance.onend = () => {
+    // console.log('end...')
+    speech.isLoading = false
+  }
+}
+
+function setSpeech(txt) {
+  // console.log(speech.voiceList[11])
+  const voice = speech.utterance
+  voice.text = txt
+  voice.voice = speech.voiceList[indexVoices.value]
+
+  voice.volume = 1
+  voice.pitch = 1
+  voice.rate = 1
+
+  return voice
+}
 
 function panggil(row) {
-  // console.log('voiceIndex', listVoices.value[indexVoices.value])
-  // console.log('voiceList', listVoices.value)
-  // const txt1 = 'paasieen . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
+  const txt1 = 'paasien . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
   // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
   // const txt = jns === 'nama' ? txt1 : txt2
-  // speech.synth.speak(setSpeech(txt1))
+  speech.synth.speak(setSpeech(txt1))
   // console.log(row)
-  store.sendPanggil(row?.noreg)
+  store.sendPanggil(row, `display${kdDisplay.value}`)
 }
+
 function bukaTindakan(val) {
   // console.log('buka tindakan', val)
   if (val?.groups === '1') {
@@ -197,7 +238,45 @@ function tidakdatangs(val) {
   store.settidakdatang(val)
 }
 
+function subscribedChannel() {
+  if (kdDisplay.value) {
+    // const channel = laravelEcho.join('presence.chat.display' + kdDisplay.value)
+    // socket.value = channel
+    // channel.here((users) => {
+    //   usersOnline.value = [...users]
+    //   console.log(`subscribed display${kdDisplay.value} channel`)
+    // })
+    //   .joining((user) => {
+    //     // console.log({ user }, 'joined')
+    //     usersOnline.value.push(user)
+    //   })
+    //   .leaving((user) => {
+    //     // console.log({ user }, 'leaving')
+    //     usersOnline.value = usersOnline.value.filter(x => x.id !== user.id)
+    //     // console.log('usersOnline', usersOnline.value)
+    //   })
+    //   .listen('.chat-message', (e) => {
+    //     console.log('listen', e)
+    //   // const thumb = [...chatMessages.value]
+    //   // if (e.message !== null || e.message !== '') { thumb.push(e.message) }
+    //   // chatMessages.value = thumb
+    //   })
+    const channel = laravelEcho.private('private.notif.display' + kdDisplay.value)
+    channel.subscribed(() => {
+      console.log(`subscribed private.notif.display${kdDisplay.value} channel !!!`)
+    }).listen('.notif-message', (e) => {
+      console.log(`listen notif${kdDisplay.value}`, e)
+    })
+  }
+}
+
 // function actPrintRekap() {
 //   printRekap.value = false
 // }
+
+watch(() => kdDisplay.value, (obj, old) => {
+  // console.log('new', obj)
+  // console.log('old', old)
+  subscribedChannel()
+}, { deep: true })
 </script>

@@ -7,25 +7,44 @@
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
-      <div
-        v-if="!store.listPemintaanSementara.length && !store.listRacikan.length"
-        class="row q-my-xs items-center"
-      >
-        Tipe Resep:
-        <q-option-group
-          v-model="store.form.tiperesep"
-          :options="store.tipeReseps"
-          color="primary"
-          class="q-ml-sm"
-          dense
-          inline
-        />
-      </div>
-      <div
-        v-else
-        class="row q-my-xs items-center"
-      >
-        Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
+      <div class="row justify-between items-center">
+        <div>
+          <div
+            v-if="!store.listPemintaanSementara.length && !store.listRacikan.length"
+            class="row q-my-xs items-center"
+          >
+            Tipe Resep:
+            <q-option-group
+              v-model="store.form.tiperesep"
+              :options="store.tipeReseps"
+              color="primary"
+              class="q-ml-sm"
+              dense
+              inline
+            />
+          </div>
+          <div
+            v-else
+            class="row q-my-xs items-center"
+          >
+            Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
+          </div>
+        </div>
+        <div class="q-mr-sm">
+          <q-btn
+            outline
+            push
+            dense
+            color="deep-orange"
+            label="Racikan"
+            no-caps
+            @click="racikan"
+          >
+            <q-tooltip class="bg-white text-primary">
+              Buka Racikan
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
       <q-scroll-area
         style="height: 100%; padding-bottom: 60px;"
@@ -432,6 +451,7 @@
   <app-fullscreen-blue
     v-model="store.racikanOpen"
     title="Input Obat Racikan"
+    @hide="resetFormRacik"
   >
     <template #default>
       <racikanpage />
@@ -474,20 +494,22 @@ function setPasien() {
   if (props?.depo === 'igd') store.getBillIgd(val)
   // store.getBillRajal(val)
 
-  if (props?.pasien?.newapotekrajal?.flag === '') {
-    store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-    store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-    if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-    if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+  //   if (props?.pasien?.newapotekrajal?.flag === '') {
+  //     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
+  //     store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
+  //     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
+  //     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
 
-    // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-    // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  } else if (props?.pasien?.newapotekrajal) {
-    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
-  } else {
-    store.listRacikan = []
-    store.listPemintaanSementara = []
-  }
+  //     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
+  //     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  //   } else if (props?.pasien?.newapotekrajal) {
+  //     if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
+  //   } else {
+  // }
+  store.setNoreseps(props?.pasien?.newapotekrajal)
+
+  store.listRacikan = []
+  store.listPemintaanSementara = []
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
@@ -521,6 +543,10 @@ function racikanTambah(val) {
     { label: 'DTD', value: 'DTD', disable: true },
     { label: 'non-DTD', value: 'non-DTD', disable: true }
   ]
+}
+function resetFormRacik() {
+  store.setForm('jenisresep', '')
+  store.resetForm()
 }
 /// / set Racikan end ------
 
