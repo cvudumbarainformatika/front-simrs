@@ -217,6 +217,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
 
     async setTerima(pasien) {
+      this.loadingCall = false
       this.loadingTerima = true
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
@@ -242,6 +243,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
 
     async settidakdatang(pasien) {
       this.loadingTidakhadir = true
+      this.loadingCall = false
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
 
