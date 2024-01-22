@@ -98,6 +98,10 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       await api.get('v1/simrs/farmasinew/depo/get-single-resep', params)
         .then(resp => {
           console.log('get single', resp.data)
+          if (resp.status === 200) {
+            this.items.splice(this.items.length - 1, 1)
+            this.items.unshift(resp.data)
+          }
         })
     }
   }
