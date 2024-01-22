@@ -105,7 +105,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr>
+          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
             <td width="5%">
               {{ n+1 }}
             </td>

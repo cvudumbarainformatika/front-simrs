@@ -99,7 +99,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         .then(resp => {
           console.log('get single', resp.data)
           if (resp.status === 200) {
-            this.items.splice(this.items.length - 1, 1)
+            if (this.params.per_page <= this.items.length) this.items.splice(this.items.length - 1, 1)
             this.items.unshift(resp.data)
           }
         })

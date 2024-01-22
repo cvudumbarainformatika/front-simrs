@@ -70,14 +70,17 @@ function subscribedChannel() {
     console.log('subscribed private.notif.depo-farmasi channel !!!')
   }).listen('.notif-message', (e) => {
     console.log('listen notif', e)
-    store.getSatuResep(e?.message?.data)
+    if (apps?.user?.kdruangansim === e?.message?.data?.depo && e?.message?.data?.status === '1') {
+      if (store.params.page === 1) store.getSatuResep(e?.message?.data)
+      else store.getDataTable(false)
+    }
   })
 }
 onMounted(() => {
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {
     store.setParams('kddepo', apps?.user?.kdruangansim)
-    store.getDataTable()
+    store.getDataTable(true)
   }
   subscribedChannel()
 })
