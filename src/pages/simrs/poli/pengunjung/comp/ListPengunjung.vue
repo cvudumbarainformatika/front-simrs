@@ -110,7 +110,7 @@
             top
           >
             <q-btn
-              v-if="item.status < 3"
+              v-if="item.status !== '3'"
               dense
               outline
               size="sm"
@@ -138,7 +138,7 @@
               @click="emits('panggilan', item)"
             />
             <q-btn
-              v-if="parseInt(item.status) < 3 "
+              v-if="item.status === '' "
               dense
               size="sm"
               no-caps
@@ -147,7 +147,6 @@
               icon-right="icon-mat-hand-front-left"
               style="min-width: 120px;"
               :loading="store.loadingTidakhadir && store.noreg === item?.noreg"
-              :class="item.status==='1' ? 'invisible':'visible'"
 
               @click="emits('tidakdatang', item)"
             />
