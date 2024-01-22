@@ -12,6 +12,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     loadingIcare: false,
     loadingTerima: false,
     loadingTidakhadir: false,
+    loadingCall: false,
     noreg: null,
 
     statuses: ['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'],
@@ -42,17 +43,20 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.getData()
     },
     async sendPanggil(pasien, channel) {
+      this.loadingCall = true
       const params = { noreg: pasien?.noreg, noantrian: pasien?.noantrian, kdpoli: pasien?.kodepoli, tglkunjungan: pasien?.tgl_kunjungan, channel }
       this.noreg = pasien?.noreg
       await api.post('v1/fordisplay/send_panggilan', params)
         .then((resp) => {
           // console.log('call', resp)
+          this.loadingCall = false
           if (resp.status === 200) {
             // this.meta = resp.data
             // this.items = resp.data.data
           }
         }).catch((err) => {
           console.log('call', err)
+          this.loadingCall = false
         })
     },
     setPolis(val) {

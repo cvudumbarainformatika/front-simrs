@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
+import { Dialog } from 'quasar'
+import { dateFullFormat } from 'src/modules/formatter'
 
 export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
   state: () => ({
@@ -388,20 +390,26 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)
           .then(resp => {
             this.loading = false
-            this.resetForm()
-            this.setForm('noresep', resp?.data?.nota)
-            if (resp?.data?.rinci !== 0) {
-              this.setList(resp?.data?.rinci)
-            }
-            if (resp?.data?.rincidtd !== 0) {
-              this.setListRacikan(resp?.data?.rincidtd)
-            }
-            if (resp?.data?.rincinondtd !== 0) {
-              this.setListRacikan(resp?.data?.rincinondtd)
-            }
-
             console.log('simpan ', resp?.data)
-            resolve(resp)
+            if (resp.status === 202) {
+              this.openDialog(resp?.data)
+            } else {
+              notifSuccess(resp)
+              this.resetForm()
+              this.setForm('noresep', resp?.data?.nota)
+              if (resp?.data?.rinci !== 0) {
+                this.setList(resp?.data?.rinci)
+              }
+              if (resp?.data?.rincidtd !== 0) {
+                this.setListRacikan(resp?.data?.rincidtd)
+              }
+              if (resp?.data?.rincinondtd !== 0) {
+                this.setListRacikan(resp?.data?.rincinondtd)
+              }
+
+              this.setForm('lanjuTr', '')
+              resolve(resp)
+            }
           })
           .catch(() => {
             this.loading = false
@@ -451,6 +459,28 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         .catch(() => {
           this.loadingHapus = false
           this.obatId = null
+        })
+    },
+    openDialog(val) {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,
+        ok: {
+          push: true,
+          label: 'Lanjutkan',
+          'no-caps': true,
+          color: 'primary'
+        },
+        cancel: {
+          push: true,
+          label: 'Batal',
+          'no-caps': true,
+          color: 'dark'
+        }
+      })
+        .onOk(() => {
+          this.setForm('lanjuTr', '1')
+          this.simpanObat()
         })
     }
   }
