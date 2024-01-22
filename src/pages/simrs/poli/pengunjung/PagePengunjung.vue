@@ -240,6 +240,7 @@ function tidakdatangs(val) {
 
 function subscribedChannel() {
   if (kdDisplay.value) {
+    // ok persiiip
     // const channel = laravelEcho.join('presence.chat.display' + kdDisplay.value)
     // socket.value = channel
     // channel.here((users) => {
