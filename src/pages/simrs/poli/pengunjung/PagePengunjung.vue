@@ -265,7 +265,7 @@ function subscribedChannel() {
     channel.subscribed(() => {
       console.log(`subscribed private.notif.display${kdDisplay.value} channel !!!`)
     }).listen('.notif-message', (e) => {
-      console.log(`listen notif${kdDisplay.value}`, e)
+      // console.log(`listen notif${kdDisplay.value}`, e)
     })
   }
 }
