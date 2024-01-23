@@ -126,7 +126,7 @@
               </div>
             </td>
             <td>
-              {{ item?.dokter }}
+              {{ item?.dokter?.nama }}
             </td>
             <td>
               <div v-if="item?.poli">

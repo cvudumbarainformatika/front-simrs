@@ -65,7 +65,7 @@
               {{ dateFull(store?.resep?.tgl_kirim) }}
             </div>
             <div class="row">
-              {{ store?.resep?.dokter }}
+              {{ store?.resep?.dokter?.nama }}
             </div>
             <div
               v-if="store?.resep?.poli"
