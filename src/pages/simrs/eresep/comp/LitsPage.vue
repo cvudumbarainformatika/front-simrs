@@ -20,7 +20,7 @@
       </div>
     </q-bar>
     <div
-      v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.flag==='1'"
+      v-if="parseInt(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)>=1"
       class=""
     >
       <div class="q-my-md q-ml-md">
@@ -32,6 +32,7 @@
         >
           {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
         </q-chip>
+        <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
       </div>
       <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
       <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
