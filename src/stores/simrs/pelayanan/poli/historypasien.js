@@ -10,7 +10,15 @@ export const useHistoryPasien = defineStore('history-pasien', {
       page: 1,
       per_page: 20,
       norm: ''
-    }
+    },
+    optionsTingkatkesadaran: [
+      { value: 0, label: 'Sadar Baik/Alert' },
+      { value: 1, label: 'Berespon denga kata-kata / Voice' },
+      { value: 2, label: 'Hanya berespons jika dirangsang nyeri / Pain' },
+      { value: 3, label: 'Pasien tidak sadar / Unresponsive' },
+      { value: 4, label: 'Gelisah atau bingung' },
+      { value: 5, label: 'Acute Confusional States' }
+    ]
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
