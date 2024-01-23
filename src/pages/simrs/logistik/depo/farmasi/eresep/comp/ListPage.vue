@@ -169,6 +169,9 @@
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-move_to_inbox"
+                :disable="store.loadingTerima && store.noresLoad===item?.noresep"
+                :loading="store.loadingTerima && store.noresLoad===item?.noresep"
+                @click="store.terimaResep(item)"
               >
                 <q-tooltip
                   class="primary"
@@ -184,6 +187,9 @@
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-done_all"
+                :disable="store.loadingSelesai && store.noresLoad===item?.noresep"
+                :loading="store.loadingSelesai && store.noresLoad===item?.noresep"
+                @click="store.resepSelesai(item)"
               >
                 <q-tooltip
                   class="primary"

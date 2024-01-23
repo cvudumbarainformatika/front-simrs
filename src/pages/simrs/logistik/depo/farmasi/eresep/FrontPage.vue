@@ -9,10 +9,12 @@
         ada-refresh
         use-full
         :search="store.params.q"
+        :flag="store.params.flag"
         :per-page="store.params.per_page"
         @cari="store.setSearch"
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
+        @set-flag="store.setFlag"
       />
     </div>
     <q-card
@@ -71,7 +73,7 @@ function subscribedChannel() {
   }).listen('.notif-message', (e) => {
     console.log('listen notif', e)
     if (apps?.user?.kdruangansim === e?.message?.data?.depo && e?.message?.data?.status === '1') {
-      if (store.params.page === 1) store.getSatuResep(e?.message?.data)
+      if (store.params.page === 1 && store.items.length < store.params.per_page && store.meta?.last_page === 1) store.getSatuResep(e?.message?.data)
       else store.getDataTable(true)
     }
   })
@@ -80,7 +82,7 @@ onMounted(() => {
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {
     store.setParams('kddepo', apps?.user?.kdruangansim)
-    store.getDataTable(true)
+    store.getDataTable()
   }
   subscribedChannel()
 })
