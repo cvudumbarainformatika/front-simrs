@@ -47,7 +47,7 @@
       </div>
       <div class="row ">
         <div class="col-shrink q-mr-xs">
-          {{ store?.resep?.dokter }}
+          {{ store?.resep?.dokter?.nama }}
         </div>
         <div
           v-if="store?.resep?.poli"
