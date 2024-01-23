@@ -75,8 +75,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       }
       this.resep = res
     },
-    async getDataTable() {
-      this.loading = true
+    async getDataTable(val) {
+      if (!val) this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/farmasinew/depo/listresepbydokter', param)
         .then(resp => {

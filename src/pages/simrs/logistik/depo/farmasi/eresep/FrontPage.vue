@@ -72,7 +72,7 @@ function subscribedChannel() {
     console.log('listen notif', e)
     if (apps?.user?.kdruangansim === e?.message?.data?.depo && e?.message?.data?.status === '1') {
       if (store.params.page === 1) store.getSatuResep(e?.message?.data)
-      else store.getDataTable(false)
+      else store.getDataTable(true)
     }
   })
 }
