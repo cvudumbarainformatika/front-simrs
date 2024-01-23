@@ -236,7 +236,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       val.loading = true
       this.simpan(val).then((resp) => {
         console.log('obat', resp)
-        const item = this.items.find(x => x.id === this.resep.id)
+        const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)
         if (item) {
           item?.rincian.push(resp?.data?.rinci)
           this.metaniItem(item)
@@ -259,7 +259,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       val.loading = true
       this.simpan(temp).then((resp) => {
         console.log('Racikan', resp)
-        const item = this.items.find(x => x.id === this.resep.id)
+        const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)
         if (item) {
           item?.rincianracik.push(resp?.data?.rinci)
           this.metaniItem(item)
