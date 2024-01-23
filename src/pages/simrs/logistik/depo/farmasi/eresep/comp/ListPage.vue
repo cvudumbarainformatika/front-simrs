@@ -169,8 +169,8 @@
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && store.noresLoad===item?.noresep"
-                :loading="store.loadingTerima && store.noresLoad===item?.noresep"
+                :disable="store.loadingTerima && item?.loading"
+                :loading="store.loadingTerima && item?.loading"
                 @click="store.terimaResep(item)"
               >
                 <q-tooltip
@@ -187,8 +187,8 @@
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && store.noresLoad===item?.noresep"
-                :loading="store.loadingSelesai && store.noresLoad===item?.noresep"
+                :disable="store.loadingSelesai && item?.loading"
+                :loading="store.loadingSelesai && item?.loading"
                 @click="store.resepSelesai(item)"
               >
                 <q-tooltip

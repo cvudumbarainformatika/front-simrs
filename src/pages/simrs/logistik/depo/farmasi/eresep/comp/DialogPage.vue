@@ -224,7 +224,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-5">
                     <div class="row">
                       <div class="col-4">
                         Harga
@@ -240,6 +240,33 @@
                       <div class="col-8">
                         {{ rinc?.keterangan }}
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-1">
+                    <div v-if="store?.resep?.flag==='1'">
+                      Resep Belum diterima
+                    </div>
+                    <div v-if="store?.resep?.flag==='3'">
+                      Resep Sudah selesai
+                    </div>
+                    <div v-if="store?.resep?.flag==='2'">
+                      <q-btn
+                        round
+                        class="f-10 q-mr-sm"
+                        color="primary"
+                        text-color="white"
+                        icon="icon-mat-save"
+                        :loading="store.loadingSimpan && rinc?.loading"
+                        :disable="store.loadingSimpan && rinc?.loading"
+                        @click="store.simpanObat(rinc)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Simpan Obat
+                        </q-tooltip>
+                      </q-btn>
                     </div>
                   </div>
                 </div>
@@ -383,7 +410,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                       <div class="row">
                         <div class="col-4">
                           Harga
@@ -399,6 +426,33 @@
                         <div class="col-8">
                           {{ rinc?.keteranganx }}
                         </div>
+                      </div>
+                    </div>
+                    <div class="col-1">
+                      <div v-if="store?.resep?.flag==='1'">
+                        Resep Belum diterima
+                      </div>
+                      <div v-if="store?.resep?.flag==='3'">
+                        Resep Sudah selesai
+                      </div>
+                      <div v-if="store?.resep?.flag==='2'">
+                        <q-btn
+                          round
+                          class="f-10 q-mr-sm"
+                          color="primary"
+                          text-color="white"
+                          icon="icon-mat-save"
+                          :loading="store.loadingSimpan && rinc?.loading"
+                          :disable="store.loadingSimpan && rinc?.loading"
+                          @click="store.simpanRacikan(rinc)"
+                        >
+                          <q-tooltip
+                            class="primary"
+                            :offset="[10, 10]"
+                          >
+                            Simpan Obat
+                          </q-tooltip>
+                        </q-btn>
                       </div>
                     </div>
                   </div>
