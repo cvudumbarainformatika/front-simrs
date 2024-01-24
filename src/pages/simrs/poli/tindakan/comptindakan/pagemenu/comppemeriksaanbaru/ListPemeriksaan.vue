@@ -315,14 +315,14 @@
                   </q-item>
                   <!-- DETAIL -->
                   <div class="q-pa-sm flex items-center">
-                    <q-btn
+                    <!-- <q-btn
                       color="grey"
                       round
                       flat
                       dense
                       :icon="expanded===i+1 ? 'icon-mat-keyboard_arrow_up' : 'icon-mat-keyboard_arrow_down'"
                       @click="expand(i)"
-                    />
+                    /> -->
                     <q-space />
                     <div class="q-gutter-sm">
                       <q-btn
@@ -357,7 +357,8 @@
                     square
                   >
                     <q-slide-transition>
-                      <div v-show="expanded===i+1">
+                      <!-- <div v-show="expanded===i+1"> -->
+                      <div>
                         <q-separator dark />
                         <q-list
                           v-if="item.detailgambars.length"
@@ -438,15 +439,15 @@
 
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useQuasar } from 'quasar'
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 const store = usePemeriksaanFisik()
 const $q = useQuasar()
 
-const expanded = ref(0)
-function expand(i) {
-  expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
-}
+// const expanded = ref(0)
+// function expand(i) {
+//   expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
+// }
 const props = defineProps({
   pasien: {
     type: Object,
