@@ -69,7 +69,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const params = { params: this.params }
       await api.get('/v1/simrs/rajal/poli/kunjunganpoli', params)
         .then((resp) => {
-          // console.log('kunjungan poli', resp)
+          console.log('kunjungan poli', resp)
           this.loading = false
           if (resp.status === 200) {
             this.meta = resp.data

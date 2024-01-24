@@ -378,6 +378,23 @@
                             </q-item-section>
                             <q-item-section>
                               <q-item-label>{{ row.anatomy }}</q-item-label>
+                              <q-item-label v-if="item?.pemeriksaankhususmata.length">
+                                <div class="column q-ml-sm">
+                                  <div><em>Details Pemeriksaan (Khusus Mata)</em></div>
+                                  <div class="q-ml-sm">
+                                    <div>- VOD AWAL : <b>{{ item?.pemeriksaankhususmata[n]?.rs4 ?? '-' }}</b></div>
+                                    <div>- VOD REFR : <b>{{ item?.pemeriksaankhususmata[n]?.rs5 ?? '-' }}</b></div>
+                                    <div>- VOD AKHIR : <b>{{ item?.pemeriksaankhususmata[n]?.rs6 ?? '-' }}</b></div>
+                                    <div>- TOD : <b>{{ item?.pemeriksaankhususmata[n]?.rs10 ?? '-' }}</b></div>
+                                    <div>- FONDOS OD : <b>{{ item?.pemeriksaankhususmata[n]?.rs12 ?? '-' }}</b></div>
+                                    <div>- VOS AWAL : <b>{{ item?.pemeriksaankhususmata[n]?.rs7 ?? '-' }}</b></div>
+                                    <div>- VOS REFR : <b>{{ item?.pemeriksaankhususmata[n]?.rs8 ?? '-' }}</b></div>
+                                    <div>- VOS AKHIR : <b>{{ item?.pemeriksaankhususmata[n]?.rs9 ?? '-' }}</b></div>
+                                    <div>- TOS : <b>{{ item?.pemeriksaankhususmata[n]?.rs11 ?? '-' }}</b></div>
+                                    <div>- FONDOS OS : <b>{{ item?.pemeriksaankhususmata[n]?.rs13 ?? '-' }}</b></div>
+                                  </div>
+                                </div>
+                              </q-item-label>
                               <q-item-label caption>
                                 {{ row.ket }}
                               </q-item-label>
