@@ -6,6 +6,7 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingKirim: false,
     meta: {},
     items: [],
     params: {
@@ -68,6 +69,10 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
           // key.jumlahresep = key.jumlah
           // key.jumlahobat = Math.ceil(key.jumlah)
           // key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+          key.jumlah = parseFloat(key.jumlah)
+          key.jumlahasal = key.jumlah
+          key.nilai_r = parseFloat(key.nilai_r)
+          key.harga_jual = parseFloat(key.harga_jual)
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.nilai_r)
           const namaracikan = key?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
@@ -92,6 +97,10 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
       }
       if (res?.rincian?.length) {
         res?.rincian.forEach(key => {
+          key.jumlah = parseFloat(key.jumlah)
+          key.jumlahasal = key.jumlah
+          key.nilai_r = parseFloat(key.nilai_r)
+          key.harga_jual = parseFloat(key.harga_jual)
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.nilai_r)
         })
       }
@@ -110,6 +119,9 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
           console.log('items', this.items)
         })
         .catch(() => { this.loading = false })
+    },
+    kirim() {
+      console.log('kirim', this.resep)
     }
   }
 })

@@ -128,30 +128,30 @@
         </div>
       </div>
     </div>
-    <!-- <div
-      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep && store?.resep?.doneracik"
+    <div
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
         rounded
         push
-        label="Selesai"
+        label="Proses retur"
         class="f-12 q-mr-sm"
         color="green"
         text-color="white"
-        icon="icon-mat-done_all"
-        :disable="store.loadingSelesai && store?.resep?.loading"
-        :loading="store.loadingSelesai && store?.resep?.loading"
-        @click="store.resepSelesai(store?.resep)"
+        icon-right="icon-mat-send"
+        :disable="store.loadingKirim && store?.resep?.loading"
+        :loading="store.loadingKirim && store?.resep?.loading"
+        @click="kirim()"
       >
         <q-tooltip
           class="primary"
           :offset="[10, 10]"
         >
-          Selesai
+          Proses retur
         </q-tooltip>
       </q-btn>
-    </div> -->
+    </div>
+
     <div
       class="column q-pa-sm "
       :style="`height: calc(100vh - ${tinggiDetailPas+32}px);`"
@@ -224,31 +224,17 @@
                 <div class="row full-width">
                   <div class="col-6">
                     <div class="row">
-                      <div class="col-4">
-                        Aturan
-                      </div>
-                      <div class="col-8">
-                        {{ rinc?.aturan }}
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                        Jumlah Obat
-                      </div>
-                      <div class="col-8">
-                        {{ rinc?.jumlah }}
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-4">
-                        Konsumsi
-                      </div>
-                      <div class="col-8">
-                        {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari
-                      </div>
+                      <q-input
+                        v-model="rinc.jumlah"
+                        label="Jumlah"
+                        outlined
+                        dense
+                        standout="bg-yellow-3"
+                        @update:model-value="reguler($event,rinc,'jumlah')"
+                      />
                     </div>
                   </div>
-                  <div class="col-5">
+                  <div class="col-6">
                     <div class="row">
                       <div class="col-4">
                         Harga
@@ -271,37 +257,6 @@
                       </div>
                       <div class="col-8">
                         {{ rinc?.keterangan }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-1">
-                    <div v-if="store?.resep?.flag==='1'">
-                      Resep Belum diterima
-                    </div>
-                    <div v-if="store?.resep?.flag==='3'">
-                      Resep Sudah selesai
-                    </div>
-                    <div v-if="store?.resep?.flag==='2'">
-                      <q-btn
-                        v-if="!rinc?.obatkeluar"
-                        round
-                        class="f-10 q-mr-sm"
-                        color="primary"
-                        text-color="white"
-                        icon="icon-mat-save"
-                        :loading="store.loadingSimpan && rinc?.loading"
-                        :disable="store.loadingSimpan && rinc?.loading"
-                        @click="store.simpanObat(rinc)"
-                      >
-                        <q-tooltip
-                          class="primary"
-                          :offset="[10, 10]"
-                        >
-                          Simpan Obat
-                        </q-tooltip>
-                      </q-btn>
-                      <div v-if="rinc?.obatkeluar">
-                        Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                       </div>
                     </div>
                   </div>
@@ -345,18 +300,6 @@
                   {{ item?.tiperacikan }}
                 </q-chip>
               </div>
-              <!-- <div class="col-shrink q-mr-xs text-green text-weight-bold">
-                {{ item?.jumlahdibutuhkan }}
-              </div>
-              <div class="col-shrink q-mr-xs text-italic">
-                {{ item?.aturan }}
-              </div>
-              <div class="col-shrink q-mr-xs">
-                {{ item?.keterangan }}
-              </div>
-              <div class="col-shrink q-mr-xs text-italic f-10">
-                ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
-              </div> -->
               <div class="col-grow">
                 <q-separator
                   size="1px"
@@ -414,39 +357,17 @@
                   <div class="row full-width">
                     <div class="col-6">
                       <div class="row">
-                        <div class="col-4">
-                          Dosis Obat
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.dosisobat }}
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4">
-                          Dosis Resep
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.dosismaksimum }}
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4">
-                          Jumlah Resep
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.jumlahresep }}
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4">
-                          Jumlah Obat
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.jumlahobat }}
-                        </div>
+                        <q-input
+                          v-model="rinc.jumlah"
+                          label="Jumlah"
+                          outlined
+                          dense
+                          standout="bg-yellow-3"
+                          @update:model-value="racik($event,rinc,'jumlah')"
+                        />
                       </div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-6">
                       <div class="row">
                         <div class="col-4">
                           Harga
@@ -472,37 +393,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-1">
-                      <div v-if="store?.resep?.flag==='1'">
-                        Resep Belum diterima
-                      </div>
-                      <div v-if="store?.resep?.flag==='3'">
-                        Resep Sudah selesai
-                      </div>
-                      <div v-if="store?.resep?.flag==='2'">
-                        <q-btn
-                          v-if="!rinc?.obatkeluar"
-                          round
-                          class="f-10 q-mr-sm"
-                          color="primary"
-                          text-color="white"
-                          icon="icon-mat-save"
-                          :loading="store.loadingSimpan && rinc?.loading"
-                          :disable="store.loadingSimpan && rinc?.loading"
-                          @click="store.simpanRacikan(rinc)"
-                        >
-                          <q-tooltip
-                            class="primary"
-                            :offset="[10, 10]"
-                          >
-                            Simpan Obat
-                          </q-tooltip>
-                        </q-btn>
-                        <div v-if="rinc?.obatkeluar">
-                          Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </q-item-section>
               </q-item>
@@ -518,6 +408,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useReturDepoStore()
 
@@ -527,6 +418,35 @@ const h = computed(() => {
   // console.log('h', pageRef.value)
   return pageRef.value?.$el?.clientHeight + 5
 })
+
+function kirim() {
+  console.log(store.resep)
+}
+
+function reguler(evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  if (key === 'jumlah' && nilai > det.jumlahasal) {
+    det.jumlah = det.jumlahasal
+    notifErrVue('jumlah retur tidak boleh melebihi jumlah obat')
+  }
+  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah)) + parseFloat(det?.nilai_r)
+  // console.log(evt, det, key)
+}
+function racik(evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah)) + parseFloat(det?.nilai_r)
+  const index = store?.resep?.rincianracik.findIndex(x => x.id === det.id)
+  if (index >= 0) store.resep.rincianracik[index] = det
+  // console.log(evt, det, key)
+}
 onMounted(() => {
   // h.value = pageRef.value.$el.clientHeight
   // console.log('h', pageRef.value.$el.clientHeight)
