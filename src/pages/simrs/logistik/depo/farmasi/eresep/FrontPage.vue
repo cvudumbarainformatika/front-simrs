@@ -15,6 +15,7 @@
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
         @set-flag="store.setFlag"
+        @set-periode="(val)=>store.setPeriodik(val)"
       />
     </div>
     <q-card
@@ -90,5 +91,9 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)
   const depo = store.depos.filter(a => a.value === obj)
   if (depo.length) store.getDataTable()
+  else {
+    store.items = []
+    store.meta = {}
+  }
 })
 </script>

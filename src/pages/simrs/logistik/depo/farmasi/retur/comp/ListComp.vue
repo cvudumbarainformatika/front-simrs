@@ -119,7 +119,7 @@
             </td>
             <td>
               <div class="row text-weight-bold">
-                {{ item?.datapasien?.nama }}
+                {{ item?.datapasien?.rs2 }}
               </div>
               <div class="row">
                 {{ item?.noreg }}   ||   {{ item?.norm }}
@@ -147,7 +147,7 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
+              <!-- <q-btn
                 round
                 class="f-10 q-mr-sm"
                 color="dark"
@@ -161,43 +161,8 @@
                 >
                   Print resep
                 </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item?.flag==='1'"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && item?.loading"
-                :loading="store.loadingTerima && item?.loading"
-                @click="store.terimaResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Terima
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && item?.loading"
-                :loading="store.loadingSelesai && item?.loading"
-                @click="store.resepSelesai(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Selesai
-                </q-tooltip>
-              </q-btn>
+              </q-btn> -->
+
               <q-btn
                 square
                 class="f-10"
@@ -239,12 +204,12 @@
 <script setup>
 // import { ref } from 'vue'
 import { dateFullFormat } from 'src/modules/formatter'
-import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
-import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
-import { useRouter } from 'vue-router'
+import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
+// import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
+// import { useRouter } from 'vue-router'
 
-const store = useEResepDepoFarmasiStore()
-const router = useRouter()
+const store = useReturDepoStore()
+// const router = useRouter()
 
 // const indexId = ref(0)
 function status(val) {
@@ -252,12 +217,6 @@ function status(val) {
   switch (val) {
     case '':
       balik = ' draft'
-      break
-    case '1':
-      balik = 'Belum diterima'
-      break
-    case '2':
-      balik = 'Siap di kerjakan'
       break
     case '3':
       balik = 'Selesai'
@@ -277,17 +236,11 @@ function color(val) {
     case '':
       balik = 'grey'
       break
-    case '1':
-      balik = 'grey'
-      break
-    case '2':
-      balik = 'green'
+    case '4':
+      balik = 'deep-orange'
       break
     case '3':
       balik = 'red'
-      break
-    case '4':
-      balik = 'deep-orange'
       break
 
     default:
@@ -303,23 +256,20 @@ function buka(val) {
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }
-// function send(id) {
-//   indexId.value = id
-//   store.sendToSatset(id)
+
+// const print = usePrintEresepStore()
+// function toPrint(row) {
+//   print.setResep(row)
+//   console.log('row', row)
+//   const noresep = row?.noresep
+//   const routeData = router.resolve({
+//     path: '/print/eresep',
+//     query: {
+//       noresep
+//     }
+//   })
+//   window.open(routeData.href, '_blank')
 // }
-const print = usePrintEresepStore()
-function toPrint(row) {
-  print.setResep(row)
-  console.log('row', row)
-  const noresep = row?.noresep
-  const routeData = router.resolve({
-    path: '/print/eresep',
-    query: {
-      noresep
-    }
-  })
-  window.open(routeData.href, '_blank')
-}
 </script>
 
 <style lang="scss" scoped>

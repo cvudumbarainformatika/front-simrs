@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { dateDbFormat } from 'src/modules/formatter'
 import { notifSuccess } from 'src/modules/utils'
 
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
@@ -16,7 +17,9 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       page: 1,
       per_page: 10,
       kddepo: '',
-      flag: ['1', '2']
+      flag: ['1', '2'],
+      to: dateDbFormat(new Date()),
+      from: dateDbFormat(new Date())
     },
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
@@ -62,6 +65,14 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     },
     refresh() {
       this.setParams('page', 1)
+      this.removedItemId = []
+      this.getDataTable()
+    },
+    setPeriodik(val) {
+      this.params.page = 1
+      const { to, from } = val
+      this.params.to = to
+      this.params.from = from
       this.removedItemId = []
       this.getDataTable()
     },

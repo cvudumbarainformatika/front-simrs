@@ -140,7 +140,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
@@ -154,14 +154,11 @@ const props = defineProps({
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
   perPage: { type: Number, default: 5 },
-  flag: { type: Array, default: () => ['1'] }
+  flag: { type: Array, default: () => ['3'] }
 })
 
-function enterSearch(evt) {
-  const val = evt?.target?.value
-  emits('cari', val)
-}
 const options = ref([5, 10, 20, 50, 100])
+
 const selectPerPage = computed({
   get () {
     return props.perPage
@@ -178,11 +175,14 @@ const search = computed({
     emits('cari', newVal)
   }
 })
+function enterSearch(evt) {
+  const val = evt?.target?.value
+  emits('cari', val)
+}
 // flag
 const flagOptions = ref([
-  { label: 'Belum Diterima', value: '1' },
-  { label: 'Siap Dikerjakan', value: '2' },
-  { label: 'Selesai', value: '3' }
+  { label: 'Selesai', value: '3' },
+  { label: 'Returned', value: '4' }
 ])
 const toFlag = computed({
   get () {
