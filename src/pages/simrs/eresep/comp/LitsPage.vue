@@ -20,11 +20,19 @@
       </div>
     </q-bar>
     <div
-      v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.flag==='1'"
+      v-if="parseInt(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)>=1"
       class=""
     >
-      <div class="text-weight-bold text-orange q-my-md q-ml-md">
-        resep nomor : {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.noresep }}
+      <div class="q-my-md q-ml-md">
+        <q-chip
+          square
+          class="f-10"
+          :color="color(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)"
+          text-color="white"
+        >
+          {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
+        </q-chip>
+        <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
       </div>
       <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
       <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
@@ -170,8 +178,62 @@
 
 <script setup>
 import { formatDouble } from 'src/modules/formatter'
+// import { laravelEcho } from 'src/modules/newsockets'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
-// import { ref } from 'vue'
+import { onMounted } from 'vue'
 const store = usePermintaanEResepStore()
+function status(val) {
+  let balik = ' Belum ada status'
+  switch (val) {
+    case '':
+      balik = ' draft'
+      break
+    case '1':
+      balik = 'Dikirim Ke Depo'
+      break
+    case '2':
+      balik = 'Sedang dikerjakan'
+      break
+    case '3':
+      balik = 'Selesai'
+      break
+
+    default:
+      break
+  }
+  return balik
+}
+function color(val) {
+  let balik = 'grey'
+  switch (val) {
+    case '':
+      balik = 'grey'
+      break
+    case '1':
+      balik = 'grey'
+      break
+    case '2':
+      balik = 'primary'
+      break
+    case '3':
+      balik = 'green'
+      break
+
+    default:
+      break
+  }
+  return balik
+}
+// function subscribedChannel() {
+//   const channel = laravelEcho.private('private.notif.depo-farmasi')
+//   channel.subscribed(() => {
+//     console.log('subscribed private.notif.depo-farmasi channel !!!')
+//   }).listen('.notif-message', (e) => {
+//     console.log('listen notif', e)
+//   })
+// }
+onMounted(() => {
+  // subscribedChannel()
+})
 </script>

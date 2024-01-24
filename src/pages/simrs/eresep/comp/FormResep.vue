@@ -32,7 +32,6 @@
         </div>
         <div class="q-mr-sm">
           <q-btn
-            outline
             push
             dense
             color="deep-orange"

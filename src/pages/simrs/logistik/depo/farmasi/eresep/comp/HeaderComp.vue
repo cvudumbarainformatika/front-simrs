@@ -1,7 +1,7 @@
 <template>
   <div class="column">
     <div class="row justify-between items-center q-pa-sm bg-primary text-white">
-      <div class="kiri row q-gutter-sm">
+      <div class="kiri row q-gutter-sm items-center">
         <q-input
           v-model="search"
           outlined
@@ -31,6 +31,15 @@
             />
           </template>
         </q-input>
+        <q-option-group
+          v-model="toFlag"
+          :options="flagOptions"
+          color="primary"
+          class="q-ml-sm"
+          dense
+          type="checkbox"
+          inline
+        />
       </div>
       <div class="kanan">
         <!-- refresh Ids -->
@@ -121,17 +130,23 @@ import { computed, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag'])
 const props = defineProps({
   search: { type: String, default: '' },
   labelCari: { type: String, default: 'Cari ...' },
   adaPerPage: { type: Boolean, default: false },
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
-  perPage: { type: Number, default: 5 }
+  perPage: { type: Number, default: 5 },
+  flag: { type: Array, default: () => ['1'] }
 })
 
 const options = ref([5, 10, 20, 50, 100])
+const flagOptions = ref([
+  { label: 'Belum Diterima', value: '1' },
+  { label: 'Siap Dikerjakan', value: '2' },
+  { label: 'Selesai', value: '3' }
+])
 const selectPerPage = computed({
   get () {
     return props.perPage
@@ -146,6 +161,14 @@ const search = computed({
   },
   set (newVal) {
     emits('cari', newVal)
+  }
+})
+const toFlag = computed({
+  get () {
+    return props.flag
+  },
+  set (newVal) {
+    emits('setFlag', newVal)
   }
 })
 function enterSearch(evt) {

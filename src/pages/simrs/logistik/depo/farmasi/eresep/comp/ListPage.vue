@@ -105,7 +105,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr>
+          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
             <td width="5%">
               {{ n+1 }}
             </td>
@@ -126,7 +126,7 @@
               </div>
             </td>
             <td>
-              {{ item?.dokter }}
+              {{ item?.dokter?.nama }}
             </td>
             <td>
               <div v-if="item?.poli">
@@ -163,11 +163,15 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="item?.flag==='1'"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-move_to_inbox"
+                :disable="store.loadingTerima && item?.loading"
+                :loading="store.loadingTerima && item?.loading"
+                @click="store.terimaResep(item)"
               >
                 <q-tooltip
                   class="primary"
@@ -177,11 +181,15 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-done_all"
+                :disable="store.loadingSelesai && item?.loading"
+                :loading="store.loadingSelesai && item?.loading"
+                @click="store.resepSelesai(item)"
               >
                 <q-tooltip
                   class="primary"

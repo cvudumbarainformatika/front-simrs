@@ -233,13 +233,17 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     setNoreseps(reseps) {
       this.noreseps = ['BARU']
       reseps.forEach(resep => {
-        this.noreseps.push(resep?.noresep)
+        this.noreseps.unsift(resep?.noresep)
       })
     },
     setResep(val) {
       this.setForm('noresep', '')
       this.listRacikan = []
       this.listPemintaanSementara = []
+      if (val === '') {
+        this.indexRacikan = -1
+        return
+      }
       const reseps = this.pasien?.newapotekrajal
       const resep = reseps.find(x => x.noresep === val)
       this.indexRacikan = reseps.findIndex(x => x.noresep === val)
@@ -395,6 +399,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               this.openDialog(resp?.data)
             } else {
               notifSuccess(resp)
+              if (!this.form.noresep || this.form.noresep === '') {
+                this.noreseps.push(resp?.data?.nota)
+                this.noresep = resp?.data?.nota
+              }
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
               if (resp?.data?.rinci !== 0) {
@@ -426,7 +434,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           notifSuccess(resp)
 
           this.setListResep(resp?.data?.data)
-          this.pasien.newapotekrajal = resp?.data?.data
+          const res = resp?.data?.data
+          const reseps = this.pasien?.newapotekrajal
+          const index = reseps.findIndex(x => x.noresep === res?.noresep)
+          if (index >= 0) {
+            this.pasien.newapotekrajal[index] = res
+            this.indexRacikan = index
+          }
           this.listPemintaanSementara = []
           this.listRacikan = []
           this.tipeRacikan = [
