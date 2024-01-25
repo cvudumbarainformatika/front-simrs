@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { filterDuplicateArrays, notifSuccess } from 'src/modules/utils'
 
 export const useReturDepoStore = defineStore('retur_dari_depo', {
   state: () => ({
@@ -64,32 +65,37 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
     setResep(val) {
       const res = val
       res.listRacikan = []
+      res.listObat = []
+
       if (res?.rincianracik?.length) {
         res?.rincianracik.forEach(key => {
-          // key.jumlahresep = key.jumlah
-          // key.jumlahobat = Math.ceil(key.jumlah)
-          // key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
-          key.jumlah = parseFloat(key.jumlah)
-          key.jumlahasal = key.jumlah
+          key.jumlah_keluar = parseFloat(key.jumlah)
           key.nilai_r = parseFloat(key.nilai_r)
           key.harga_jual = parseFloat(key.harga_jual)
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.nilai_r)
-          const namaracikan = key?.namaracikan
+          key.jumlah_retur = 0
+        })
+      }
+      const obatraciks = filterDuplicateArrays(res?.rincianracik.map(x => x.kdobat))
+      // console.log('rinc', obatraciks)
+      if (obatraciks.length) {
+        obatraciks.forEach(key => {
+          const temp = res?.rincianracik.filter(x => x.kdobat === key)
+          const obat = res?.rincianracik.find(x => x.kdobat === key)
+          obat.jumlah_keluar = temp.map(x => x.jumlah_keluar).reduce((a, b) => a + b, 0)
+          // console.log('key', temp, obat)
+          // metani by namaracikan
+          const namaracikan = obat?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
           if (adaList.length) {
-            adaList[0].rincian.push(key)
+            adaList[0].rincian.push(obat)
             const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
             adaList[0].harga = harga
           } else {
             const temp = {
-              namaracikan: key?.namaracikan,
-              harga: key?.harga,
-              // aturan: key?.aturan,
-              // keterangan: key?.keterangan,
-              // tiperacikan: key?.tiperacikan,
-              // konsumsi: key?.konsumsi,
-              // jumlahdibutuhkan: key?.jumlahdibutuhkan,
-              rincian: [key]
+              namaracikan: obat?.namaracikan,
+              harga: obat?.harga,
+              rincian: [obat]
             }
             res.listRacikan.push(temp)
           }
@@ -97,11 +103,20 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
       }
       if (res?.rincian?.length) {
         res?.rincian.forEach(key => {
-          key.jumlah = parseFloat(key.jumlah)
-          key.jumlahasal = key.jumlah
+          key.jumlah_keluar = parseFloat(key.jumlah)
           key.nilai_r = parseFloat(key.nilai_r)
           key.harga_jual = parseFloat(key.harga_jual)
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.nilai_r)
+          key.jumlah_retur = 0
+        })
+      }
+      const obats = filterDuplicateArrays(res?.rincian.map(x => x.kdobat))
+      if (obats.length) {
+        obats.forEach(key => {
+          const temp = res?.rincian.filter(x => x.kdobat === key)
+          const obat = res?.rincian.find(x => x.kdobat === key)
+          obat.jumlah_keluar = temp.map(x => x.jumlah_keluar).reduce((a, b) => a + b, 0)
+          res.listObat.push(obat)
         })
       }
       this.resep = res
@@ -122,6 +137,24 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
     },
     kirim() {
       console.log('kirim', this.resep)
+      this.loadingKirim = true
+      this.resep.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/returpenjualan', this.resep)
+          .then(resp => {
+            this.loadingKirim = false
+            this.resep.loading = false
+            console.log('resp', resp)
+            this.resep.flag = '4'
+            this.setClose()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.resep.loading = false
+            this.loadingKirim = false
+          })
+      })
     }
   }
 })
