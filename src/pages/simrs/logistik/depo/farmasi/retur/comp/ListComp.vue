@@ -237,10 +237,10 @@ function color(val) {
       balik = 'grey'
       break
     case '4':
-      balik = 'deep-orange'
+      balik = 'orange'
       break
     case '3':
-      balik = 'red'
+      balik = 'negative'
       break
 
     default:

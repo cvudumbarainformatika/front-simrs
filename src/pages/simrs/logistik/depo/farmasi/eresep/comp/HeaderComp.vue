@@ -182,7 +182,8 @@ const search = computed({
 const flagOptions = ref([
   { label: 'Belum Diterima', value: '1' },
   { label: 'Siap Dikerjakan', value: '2' },
-  { label: 'Selesai', value: '3' }
+  { label: 'Selesai', value: '3' },
+  { label: 'Returned', value: '4' }
 ])
 const toFlag = computed({
   get () {

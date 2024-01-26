@@ -129,6 +129,7 @@
       </div>
     </div>
     <div
+      v-if="store?.resep?.flag==='3'"
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
@@ -160,7 +161,7 @@
         style="height: 100%;"
       >
         <div
-          v-if="store?.resep?.rincian?.length"
+          v-if="store?.resep?.listObat?.length"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -180,7 +181,7 @@
             bordered
           >
             <q-item
-              v-for="(rinc,j) in store?.resep?.rincian"
+              v-for="(rinc,j) in store?.resep?.listObat"
               :key="j"
             >
               <q-item-section style="width: 30%;">
@@ -221,20 +222,29 @@
                 side
                 style="width:70%"
               >
-                <div class="row full-width">
+                <div class="row full-width items-center">
                   <div class="col-6">
                     <div class="row">
                       <q-input
-                        v-model="rinc.jumlah"
+                        v-model="rinc.jumlah_retur"
                         label="Jumlah"
                         outlined
                         dense
                         standout="bg-yellow-3"
-                        @update:model-value="reguler($event,rinc,'jumlah')"
+                        @update:model-value="reguler($event,rinc,'jumlah_retur')"
                       />
                     </div>
                   </div>
                   <div class="col-6">
+                    <div class="row">
+                      <div class="col-4">
+                        Max retur
+                      </div>
+                      <div class="col-8">
+                        {{ rinc.jumlah_keluar }}
+                      </div>
+                    </div>
+                  <!--
                     <div class="row">
                       <div class="col-4">
                         Harga
@@ -259,6 +269,7 @@
                         {{ rinc?.keterangan }}
                       </div>
                     </div>
+                  -->
                   </div>
                 </div>
               </q-item-section>
@@ -321,7 +332,7 @@
                     {{ rinc?.mobat?.nama_obat }}
                   </div>
                   <div class="row f-10">
-                    ( {{ rinc?.kandungan }} )
+                    ( {{ rinc?.mobat?.kandungan }} )
                   </div>
                   <div class="row text-italic f-10">
                     {{ rinc?.kdobat }}
@@ -354,20 +365,29 @@
                   side
                   style="width:70%"
                 >
-                  <div class="row full-width">
+                  <div class="row full-width items-center">
                     <div class="col-6">
                       <div class="row">
                         <q-input
-                          v-model="rinc.jumlah"
+                          v-model="rinc.jumlah_retur"
                           label="Jumlah"
                           outlined
                           dense
                           standout="bg-yellow-3"
-                          @update:model-value="racik($event,rinc,'jumlah')"
+                          @update:model-value="racik($event,rinc,'jumlah_retur')"
                         />
                       </div>
                     </div>
                     <div class="col-6">
+                      <div class="row">
+                        <div class="col-4">
+                          Max retur
+                        </div>
+                        <div class="col-8">
+                          {{ rinc.jumlah_keluar }}
+                        </div>
+                      </div>
+                      <!--
                       <div class="row">
                         <div class="col-4">
                           Harga
@@ -392,6 +412,7 @@
                           {{ rinc?.keteranganx }}
                         </div>
                       </div>
+                    -->
                     </div>
                   </div>
                 </q-item-section>
@@ -406,7 +427,7 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
+import { dateFull, formatRpDouble } from 'src/modules/formatter'
 import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
 import { notifErrVue } from 'src/modules/utils'
 
@@ -421,6 +442,7 @@ const h = computed(() => {
 
 function kirim() {
   console.log(store.resep)
+  store.kirim()
 }
 
 function reguler(evt, det, key) {
@@ -429,11 +451,11 @@ function reguler(evt, det, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   det[key] = nilai
-  if (key === 'jumlah' && nilai > det.jumlahasal) {
-    det.jumlah = det.jumlahasal
+  if (key === 'jumlah_retur' && nilai > det.jumlah_keluar) {
+    det.jumlah_retur = det.jumlah_keluar
     notifErrVue('jumlah retur tidak boleh melebihi jumlah obat')
   }
-  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah)) + parseFloat(det?.nilai_r)
+  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
   // console.log(evt, det, key)
 }
 function racik(evt, det, key) {
@@ -442,8 +464,14 @@ function racik(evt, det, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   det[key] = nilai
-  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah)) + parseFloat(det?.nilai_r)
+
+  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
+
   const index = store?.resep?.rincianracik.findIndex(x => x.id === det.id)
+  if (key === 'jumlah_retur' && nilai > det.jumlah_keluar) {
+    det.jumlah_retur = det.jumlah_keluar
+    notifErrVue('jumlah retur tidak boleh melebihi jumlah obat')
+  }
   if (index >= 0) store.resep.rincianracik[index] = det
   // console.log(evt, det, key)
 }
