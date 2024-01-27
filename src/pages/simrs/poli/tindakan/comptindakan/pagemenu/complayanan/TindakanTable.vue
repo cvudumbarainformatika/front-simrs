@@ -87,8 +87,11 @@
                         flat
                         round
                         size="sm"
-                        icon="icon-mat-edit"
-                      />
+                        icon="icon-mat-cloud_upload"
+                        @click="modalUpload = !modalUpload"
+                      >
+                        <q-tooltip>Upload Gambar Dokumen</q-tooltip>
+                      </q-btn>
                       <q-btn
                         flat
                         round
@@ -96,7 +99,9 @@
                         icon="icon-mat-delete"
                         color="negative"
                         @click="hapusItem(item.id)"
-                      />
+                      >
+                        <q-tooltip>Hapus </q-tooltip>
+                      </q-btn>
                     </div>
                     <q-item-label>
                       <!-- <span
@@ -128,6 +133,36 @@
         </div>
       </div>
     </div>
+
+    <!-- upload tindakan -->
+    <q-dialog
+      v-model="modalUpload"
+      full-height
+    >
+      <q-card style="width:80vw;">
+        <div class="column full-height">
+          <div class="col-auto header--modal bg-primary text-white">
+            <div class="q-pa-md">
+              Form Upload Tindakan
+            </div>
+          </div>
+          <div class="col full-height scroll bg-yellow">
+            asd
+          </div>
+          <div class="col-auto q-pa-md">
+            <div class="text-right">
+              <q-btn
+                v-close-popup
+                label="close"
+                color="dark"
+                dense
+                class="q-px-md"
+              />
+            </div>
+          </div>
+        </div>
+      </q-card>
+    </q-dialog>
   </q-card>
 </template>
 
@@ -135,10 +170,11 @@
 import { useQuasar } from 'quasar'
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const store = useLayananPoli()
 const $q = useQuasar()
+const modalUpload = ref()
 const props = defineProps({
   pasien: {
     type: Object,
