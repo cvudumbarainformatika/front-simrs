@@ -271,6 +271,40 @@ export const useLayananPoli = defineStore('layanan-poli', {
       }
     },
 
+    uploadImages(file, id, pasien) {
+      const files = file
+      // console.log('store upload image', id)
+      const data = new FormData()
+      for (let i = 0; i < files.length; i++) {
+        const images = files[i]
+        data.append(`images[${i}]`, images)
+      }
+      data.append('rs73_id', id)
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/simpandokumentindakanpoli', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(res => {
+            // console.log('uploads', res)
+            if (res.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const tindakan = res?.data?.result
+              storePasien.injectDokumenTindakan(pasien, tindakan)
+            }
+            // const objIndex = this.items.findIndex(obj => obj.id === res?.data?.result?.id)
+            // if (objIndex > -1) {
+            //   this.items[objIndex] = res?.data?.result
+            // }
+            notifSuccess(res)
+            resolve(res)
+          }).catch(err => {
+            console.log('upload err', err)
+          })
+      })
+    },
+
     async hapusTindakan(pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
 
