@@ -412,7 +412,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
@@ -475,6 +475,18 @@ function depoSelected (val) {
   console.log('depo', val)
   store.setParam('kddepo', val)
 }
+
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setParam('kddepo', obj)
+  store.setForm('dari', obj)
+  const depo = store.depos.filter(a => a.value === obj)
+  if (depo.length) store.disp.depo = depo[0]?.nama
+  // if (depo.length) store.getDataTable()
+  // else {
+  //   store.items = []
+  //   store.meta = {}
+  // }
+})
 
 function setJumlahMinta(evt) {
   // console.log('maks stok', parseFloat(store.form.mak_stok))
