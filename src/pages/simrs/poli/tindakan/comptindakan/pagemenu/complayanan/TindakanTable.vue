@@ -116,6 +116,16 @@
                         :label="`Rp. ${formatRp(item.subtotal)}`"
                       />
                     </q-item-label>
+                    <q-item-label v-if="item.gambardokumens?.length">
+                      <q-btn
+                        label="lihat dokumen"
+                        class="q-px-md"
+                        dense
+                        color="info"
+                        size="sm"
+                        @click="lihatDokumen(item)"
+                      />
+                    </q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-separator size="2px" />
@@ -141,10 +151,18 @@
       v-model="modalUpload"
       :pasien="pasien"
     />
+
+    <!-- drawer -->
+    <dialog-dokumen
+      v-model="drawerRight"
+      :dokumen="dokumen"
+      @hapus-dokumen="(val)=> hapusDokumen(val)"
+    />
   </q-card>
 </template>
 
 <script setup>
+import DialogDokumen from './DialogDokumen.vue'
 import DialogUploadokumen from './DialogUploadokumen.vue'
 import { useQuasar } from 'quasar'
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
@@ -153,8 +171,10 @@ import { computed, ref } from 'vue'
 
 const store = useLayananPoli()
 const $q = useQuasar()
-const modalUpload = ref()
+const modalUpload = ref(false)
+const drawerRight = ref(false)
 const idTindakan = ref(0)
+const dokumen = ref(null)
 const props = defineProps({
   pasien: {
     type: Object,
@@ -188,5 +208,32 @@ function hapusItem(id) {
 function bukaUploadan(id) {
   idTindakan.value = id
   modalUpload.value = !modalUpload.value
+}
+
+function lihatDokumen(item) {
+  dokumen.value = null
+  dokumen.value = item
+  drawerRight.value = !drawerRight.value
+}
+function hapusDokumen(id) {
+  $q.dialog({
+    dark: true,
+    title: 'Peringatan',
+    message: 'Apakah Dokumen ini akan dihapus?',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    // console.log('HAPUS', id)
+    store.hapusDokumen(props.pasien, id)
+      .then(() => {
+        if (dokumen.value?.gambardokumens?.length === 0) {
+          drawerRight.value = false
+        }
+      })
+  }).onCancel(() => {
+    // console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
 }
 </script>

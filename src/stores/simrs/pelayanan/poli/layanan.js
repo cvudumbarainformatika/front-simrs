@@ -305,6 +305,40 @@ export const useLayananPoli = defineStore('layanan-poli', {
       })
     },
 
+    hapusDokumen(pasien, id) {
+      // hapusdokumentindakan
+      const payload = { id }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/hapusdokumentindakan', payload)
+          .then((resp) => {
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const tindakan = resp?.data?.result
+              storePasien.injectDokumenTindakan(pasien, tindakan)
+              notifSuccess(resp)
+              resolve(resp)
+            }
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+
+      // try {
+      //   const resp = await api.post('v1/simrs/pelayanan/hapusdokumentindakan', payload)
+      //   console.log('hapus tindakan poli', resp)
+      //   if (resp.status === 200) {
+      //     const storePasien = usePengunjungPoliStore()
+      //     const tindakan = resp?.data?.result
+      //     storePasien.injectDokumenTindakan(pasien, tindakan)
+      //     notifSuccess(resp)
+      //   }
+      // } catch (error) {
+      //   // console.log('hapus tindakan poli', error)
+      // }
+    },
+
     async hapusTindakan(pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
 

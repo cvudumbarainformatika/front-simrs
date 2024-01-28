@@ -58,8 +58,9 @@
                   </div>
                   <div
                     v-else
+                    class="full-width full-height row"
                   >
-                    <q-list separator>
+                    <!-- <q-list separator>
                       <q-item
                         v-for="file in scope.files"
                         :key="file.__key"
@@ -104,7 +105,36 @@
                           />
                         </q-item-section>
                       </q-item>
-                    </q-list>
+                    </q-list> -->
+                    <div
+                      v-for="file in scope.files"
+                      :key="file.__key"
+                      class="col-6 q-pa-sm"
+                      style="max-height: 50%; "
+                    >
+                      <q-img
+                        :src="file.__img.src"
+                        style="border-radius: 10px; border: 2px solid grey; overflow: hidden; "
+                      >
+                        <div class="absolute-bottom text-subtitle2">
+                          <div class="row items-center justify-between">
+                            <div>
+                              {{ file.__sizeLabel }} / {{ file.__progressLabel }}
+                            </div>
+                            <q-btn
+                              class="gt-xs"
+                              size="md"
+                              color="negative"
+                              flat
+                              dense
+                              round
+                              icon="icon-mat-delete"
+                              @click="scope.removeFile(file)"
+                            />
+                          </div>
+                        </div>
+                      </q-img>
+                    </div>
                   </div>
                 </div>
               </template>
