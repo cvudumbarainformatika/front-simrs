@@ -80,6 +80,7 @@
     <app-table-extend
       id="printMe"
       :columns="store.columns"
+      :column-hide="store.columnsHide"
       :items="store.items"
       :meta="store.meta"
       :per-page="store.params.per_page"
@@ -222,7 +223,7 @@
             Satuan
           </div>
         </th>
-        <th colspan="4">
+        <!-- <th colspan="4">
           <div class="row">
             <div class="col-12 text-center">
               Nilai Persediaan
@@ -243,7 +244,49 @@
               Sisa (Rp)
             </div>
           </div>
-        </th>
+        </th> -->
+      </template>
+      <template #bottom-row>
+        <td colspan="5">
+          <div class="text-right">
+            Jumlah
+          </div>
+        </td>
+        <td colspan="4">
+          <div
+            v-if="store.items.length"
+            class="text-right"
+          >
+            <div class="row no-wrap justify-end items-center">
+              {{ parseFloat( store.total ?? 0) }}
+            </div>
+            <div class="row no-wrap justify-end f-8 text-italic print-hide">
+              tabel :  {{ parseFloat( store.tTotal.toFixed(2) ?? 0) }}
+            </div>
+            <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
+          </div>
+        </td>
+        <!--
+          <td>
+            <div
+              v-if="store.items.length"
+              class="text-right"
+            />
+          </td>
+          <td colspan="4">
+          <div
+            v-if="store.items.length"
+            class="text-right"
+          >
+            <div class="row no-wrap justify-end items-center">
+              {{ formatRp( store.htotal?? 0) }}
+            </div>
+            <div class="row no-wrap f-8 justify-end text-italic print-hide">
+              tabel :  {{ formatRp( store.htTotal?? 0) }}
+            </div>
+          </div>
+        </td>
+      -->
       </template>
       <template #col-kode_108>
         Kode 108
@@ -375,48 +418,6 @@
         >
           tabel :{{ formatRp( row.htAkhir?? 0) }}
         </div>
-      </template>
-
-      <template #bottom-row>
-        <td colspan="5">
-          <div class="text-right">
-            Jumlah
-          </div>
-        </td>
-        <td colspan="4">
-          <div
-            v-if="store.items.length"
-            class="text-right"
-          >
-            <div class="row no-wrap justify-end items-center">
-              {{ parseFloat( store.total ?? 0) }}
-            </div>
-            <div class="row no-wrap justify-end f-8 text-italic print-hide">
-              tabel :  {{ parseFloat( store.tTotal.toFixed(2) ?? 0) }}
-            </div>
-            <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
-          </div>
-        </td>
-        <td>
-          <div
-            v-if="store.items.length"
-            class="text-right"
-          />
-        </td>
-        <td colspan="4">
-          <div
-            v-if="store.items.length"
-            class="text-right"
-          >
-            <div class="row no-wrap justify-end items-center">
-              {{ formatRp( store.htotal?? 0) }}
-            </div>
-            <div class="row no-wrap f-8 justify-end text-italic print-hide">
-              tabel :  {{ formatRp( store.htTotal?? 0) }}
-            </div>
-            <!-- {{ store.items.map(anu=>anu.subtotal) }} -->
-          </div>
-        </td>
       </template>
     </app-table-extend>
   </div>
