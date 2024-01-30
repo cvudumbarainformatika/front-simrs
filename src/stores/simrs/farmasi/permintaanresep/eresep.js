@@ -9,6 +9,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
   state: () => ({
     loading: false,
     loadingSigna: false,
+    loadingSaveSigna: false,
     loadingObat: false,
     loadingkirim: false,
     loadingHapus: false,
@@ -21,6 +22,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     listPemintaanSementara: [],
     signas: [],
+    fromSigna: { signa: '', jumlah: 1 },
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101', jenis: 't' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102', jenis: 'rnp' },
@@ -103,6 +105,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const jumlahdibutuhkan = this.form?.jumlahdibutuhkan ?? '-'
       const tiperacikan = this.form?.tiperacikan ?? 'DTD'
       const keterangan = this.form?.keterangan ?? '-'
+      const satuanRacik = this.form?.satuan_racik ?? '-'
       console.log('jenis resep', jenisresep)
       this.form = {
         keterangan: '-',
@@ -122,6 +125,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.setForm('jumlahdibutuhkan', jumlahdibutuhkan)
         this.setForm('tiperacikan', tiperacikan)
         this.setForm('keterangan', keterangan)
+        this.setForm('satuan_racik', satuanRacik)
         this.setForm('keteranganx', '-')
         if (tiperacikan === 'DTD') {
           this.setForm('jumlah', 1)
@@ -332,6 +336,23 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.signas = resp?.data
         })
         .catch(() => { this.loadingSigna = false })
+    },
+    seveSigna() {
+      this.loadingSaveSigna = true
+      return new Promise(resolve => {
+        api.post('v1', this.fromSigna)
+          .then(resp => {
+            this.loadingSaveSigna = false
+            console.log('resp save signa', resp)
+            notifSuccess(resp)
+            this.fromSigna = { signa: '', jumlah: 1 }
+            this.signas.push(resp.data)
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingSaveSigna = false
+          })
+      })
     },
     getBillRajal(val) {
       this.setForm('kdruangan', val?.kodepoli)
