@@ -58,6 +58,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       { label: 'DTD', value: 'DTD' },
       { label: 'non-DTD', value: 'non-DTD' }
     ],
+    satuanRaciks: ['Bungkus', 'Kapsul', 'Pot'],
     counterRacikan: 1,
     listRacikan: [],
     listRincianRacikan: [],
@@ -231,10 +232,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     setNoreseps(reseps) {
-      this.noreseps = ['BARU']
+      this.noreseps = []
       reseps.forEach(resep => {
-        this.noreseps.unsift(resep?.noresep)
+        this.noreseps.unshift(resep?.noresep)
       })
+      this.noreseps.unshift('BARU')
     },
     setResep(val) {
       this.setForm('noresep', '')

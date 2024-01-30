@@ -36,7 +36,12 @@
                 <div
                   class="text-center col-2"
                 >
-                  Jumlah (Bungkus/Kapsul/pot)
+                  Jumlah
+                </div>
+                <div
+                  class="text-center col-2"
+                >
+                  Satuan (Bungkus/Kapsul/pot)
                 </div>
 
                 <div
@@ -99,6 +104,26 @@
                   />
                 </div>
 
+                <div
+                  class="col-2 text-right"
+                >
+                  <q-select
+                    ref="refSat"
+                    v-model="store.form.satuan_racik"
+                    label="Satuan Racikan"
+                    use-input
+                    dense
+                    standout="bg-yellow-3"
+                    outlined
+                    :rules="[satValid]"
+                    lazy-rules
+                    no-error-icon
+                    hide-bottom-space
+                    hide-dropdown-icon
+                    :options="store.satuanRaciks"
+                    @keyup.enter.stop="enterSat"
+                  />
+                </div>
                 <div
                   class="col-2 text-right"
                 >
@@ -370,7 +395,7 @@
               </div>
             </q-item-section>
           </q-item> -->
-          <template v-if="store.listRincianRacikan.length">
+          <template v-if="store?.listRincianRacikan?.length">
             <!-- <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
@@ -516,6 +541,7 @@ onMounted(() => {
 const refJmlButuh = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
+const refSat = ref(null)
 // isi
 const refObat = ref(null)
 const refKetx = ref(null)
@@ -530,6 +556,10 @@ function focusJmlButuh() {
   refJmlButuh.value.select()
 }
 function enterJmlButuh() {
+  refSat.value.focus()
+  refSat.value.showPopup()
+}
+function enterSat() {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
@@ -646,6 +676,9 @@ function signaSelected(val) {
   }
 }
 function sigaValid (val) {
+  return (val !== null && val !== '') || ''
+}
+function satValid (val) {
   return (val !== null && val !== '') || ''
 }
 // function mergeObj(from, to) {

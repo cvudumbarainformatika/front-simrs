@@ -30,6 +30,14 @@
             Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
           </div>
         </div>
+        <div v-if="store?.form?.tiperesep==='iter'">
+          <app-input-date
+            :model="store.form.iter_expired"
+            label="Iter Berlaku Sampai"
+            outlined
+            @set-model="store.setForm('iter_expired',$event)"
+          />
+        </div>
         <div class="q-mr-sm">
           <q-btn
             push
