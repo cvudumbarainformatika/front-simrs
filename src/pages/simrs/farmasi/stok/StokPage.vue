@@ -64,8 +64,6 @@ const HeaderComp = defineAsyncComponent(() => import('./comp/CompHeader.vue'))
 const headerForm = defineAsyncComponent(() => import('./comp/CompHeaderForm.vue'))
 const listForm = defineAsyncComponent(() => import('./comp/CompList.vue'))
 
-table.getInitialData()
-store.getInitialData()
 function openDialog() {
   store.edit = false
   store.setOpen()
@@ -75,11 +73,21 @@ onMounted(() => {
   if (apps?.user?.kdruangansim !== '') {
     store.setForm('kdruang', apps?.user?.kdruangansim)
     table.setParam('kdruang', apps?.user?.kdruangansim)
+    const dep = apps.depos.find(x => x.value === apps?.user?.kdruangansim)
+    if (dep)store.setDisp('kdruang', dep.nama)
+    // console.log(dep)
   }
+
+  table.getInitialData()
+  store.getInitialData()
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kdruang', obj)
   table.setParam('kdruang', obj)
+  table.getDataTable()
+  const dep = apps.depos.find(x => x.value === apps?.user?.kdruangansim)
+  if (dep)store.setDisp('kdruang', dep.nama)
+  // console.log(dep)
 })
 function simpan() {
   console.log('form', store.form)
