@@ -19,8 +19,6 @@
 
 <script setup>
 
-import '../../modules/wacom/q.js'
-
 function tabletDemo() {
   console.log('ok')
 }
