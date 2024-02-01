@@ -233,8 +233,8 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a,
-                                                                                                                        b) => a + b, 0) }}
+                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a,
+                                                                                                                   b) => a + b, 0) }}
                       </div>
                       <div v-if="!rin.stokreal.length">
                         0
