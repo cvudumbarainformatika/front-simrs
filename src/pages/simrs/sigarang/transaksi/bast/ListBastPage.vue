@@ -19,6 +19,7 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      row-no
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
@@ -110,7 +111,7 @@
           v-if="row.tanggal"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
-          {{ dateFullFormat(row.tanggal) }}
+          {{ row.tanggal_bast?dateFullFormat(row.tanggal_bast):dateFullFormat(row.tanggal) }}
           <!-- <div class="q-mr-xs">
             Penerimaan
           </div>
