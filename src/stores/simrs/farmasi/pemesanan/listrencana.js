@@ -13,6 +13,7 @@ export const useListRencanaPemesananStore = defineStore('list_rencana_pemesanan'
       page: 1,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
+    form: {},
     columns: [
       'no_rencbeliobat',
       'tgl'
@@ -22,6 +23,9 @@ export const useListRencanaPemesananStore = defineStore('list_rencana_pemesanan'
   actions: {
     setParam(key, val) {
       this.param[key] = val
+    },
+    setForm(key, val) {
+      this.form[key] = val
     },
     setSearch(payload) {
       this.setParam('no_rencbeliobat', payload)
@@ -40,6 +44,11 @@ export const useListRencanaPemesananStore = defineStore('list_rencana_pemesanan'
     refreshTable() {
       this.setParam('page', 1)
       this.cariRencanaBeli()
+    },
+    setEdit(row, rin) {
+      rin.edit = true
+      console.log('row', row)
+      console.log('rin', rin)
     },
     getInitialData() {
       this.cariRencanaBeli()
@@ -61,6 +70,11 @@ export const useListRencanaPemesananStore = defineStore('list_rencana_pemesanan'
             this.loading = false
           })
       })
+    },
+    simpan(row, rin) {
+      rin.edit = false
+      console.log('row', row)
+      console.log('rin', rin)
     }
   }
 })

@@ -51,17 +51,29 @@
             <div class="col-3">
               Obat
             </div>
-            <div class="col-2">
-              Stok Gudang
-            </div>
-            <div class="col-2">
-              Stok RS
-            </div>
-            <div class="col-2">
-              Stok Max
+            <div class="col-6">
+              <div class="row justify-center">
+                Stok
+              </div>
+              <div class="row">
+                <!-- <div class="col-4">
+                  Stok Gudang
+                </div> -->
+                <div class="col-4">
+                  Stok RS
+                </div>
+                <div class="col-4">
+                  Stok Max
+                </div>
+              </div>
             </div>
             <div class="col-2">
               Rencana Beli
+            </div>
+            <div class="col-1 text-right">
+              <div class="q-mr-sm">
+                #
+              </div>
             </div>
           </div>
           <q-separator />
@@ -81,17 +93,68 @@
                   {{ rin.kdobat }}
                 </div>
               </div>
-              <div class="col-2">
-                {{ rin.stok_real_gudang }}
+              <div class="col-6">
+                <div class="row">
+                  <!-- <div class="col-4">
+                    {{ rin.stok_real_gudang }}
+                  </div> -->
+                  <div class="col-4">
+                    {{ rin.stok_real_rs }}
+                  </div>
+                  <div class="col-4">
+                    {{ rin.stok_max_rs }}
+                  </div>
+                </div>
               </div>
               <div class="col-2">
-                {{ rin.stok_real_rs }}
+                <div v-if="!rin.edit">
+                  {{ rin.jumlahdirencanakan }}
+                </div>
+                <div v-if="rin.edit">
+                  <q-input
+                    v-model="rin.jumlahdirencanakan"
+                    label="Jumlah Direncanakan"
+                    dense
+                    standout="bg-yellow-3"
+                    outlined
+                  />
+                </div>
               </div>
-              <div class="col-2">
-                {{ rin.stok_max_rs }}
-              </div>
-              <div class="col-2">
-                {{ rin.jumlahdirencanakan }}
+              <div class="col-1 text-right">
+                <div class="q-mr-sm">
+                  <q-btn
+                    v-if="!rin.edit"
+                    round
+                    flat
+                    icon="icon-mat-edit"
+                    size="sm"
+                    color="primary"
+                    @click="store.setEdit(row,rin)"
+                  >
+                    <q-tooltip
+                      transition-show="flip-right"
+                      transition-hide="flip-left"
+                    >
+                      Edit
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    v-if="rin.edit"
+                    round
+                    flat
+                    icon="icon-mat-save"
+                    size="sm"
+                    color="primary"
+                    @click="store.simpan(row,rin)"
+                  >
+                    <q-tooltip
+                      transition-show="flip-right"
+                      transition-hide="flip-left"
+                    >
+                      simpan
+                    </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </div>
             <q-separator />
