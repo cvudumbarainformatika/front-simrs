@@ -454,8 +454,16 @@ const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
     if (!store.form.dari) {
-      store.setForm('dari', 'Gd-04010103')
-      store.setParam('kddepo', 'Gd-05010100')
+      // store.setForm('dari', 'Gd-04010103')
+
+      if (apps?.user?.kdruangansim) {
+        const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
+        if (depo.length) {
+          store.setForm('dari', apps?.user?.kdruangansim)
+          store.setDisp('depo', depo[0]?.nama)
+          store.setParam('kddepo', apps?.user?.kdruangansim)
+        }
+      }
       // store.getListObat()
     }
     if (!store.form.tujuan) {
