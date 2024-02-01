@@ -36,7 +36,7 @@ import { defineAsyncComponent, ref } from 'vue'
 const Header = defineAsyncComponent(() => import('./comp/PageHead.vue'))
 const head = ref('minta')
 const heads = ref([
-  { page: 'minta', label: 'Mutasi Masuk', color: 'deep-orange' },
+  { page: 'minta', label: 'Pemintaan Mutasi', color: 'deep-orange' },
   { page: 'terima', label: 'Mutasi Keluar', color: 'primary' },
   { page: 'list', label: 'List Mutasi', color: 'green' }
 ])

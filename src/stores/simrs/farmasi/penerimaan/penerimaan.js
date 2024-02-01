@@ -150,7 +150,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
                 const rinci = apem.penerimaanrinci ? apem.penerimaanrinci : []
                 if (rinci.length) {
                   rinci.forEach(a => {
-                    console.log('penerimaan rinci', a)
+                    // console.log('penerimaan rinci', a)
                     a.jml_terima_b = parseFloat(a.jml_terima_b)
                     a.jml_terima_k = parseFloat(a.jml_terima_k)
                     terRi.push(a)
@@ -163,18 +163,18 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             const ter = []
             if (kod.length) {
               const filtKod = filterDuplicateArrays(kod) // pastikan tidak ada duplikasi kode obat
-              console.log('filtKod ', filtKod)
+              // console.log('filtKod ', filtKod)
               filtKod.forEach(koda => {
                 let temp = 0
                 let tempK = 0
-                console.log('terRi ', terRi)
+                // console.log('terRi ', terRi)
                 const tam = terRi.filter(anu => anu.kdobat === koda).map(b => b.jml_terima_b).reduce((c, d) => c + d, 0)
                 const tamK = terRi.filter(anu => anu.kdobat === koda).map(b => b.jml_terima_k).reduce((c, d) => c + d, 0)
                 temp += tam
                 tempK += tamK
 
-                console.log('tam', koda, terRi.filter(terrigu => terrigu.kdobat === koda))
-                console.log('temp', koda, temp)
+                // console.log('tam', koda, terRi.filter(terrigu => terrigu.kdobat === koda))
+                // console.log('temp', koda, temp)
                 const temp2 = {
                   kode: koda,
                   jml: temp,

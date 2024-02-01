@@ -62,6 +62,14 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       { label: 'Gudang Farmasi ( Floor Stok )', value: 'Gd-03010100' },
       { label: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' }
     ],
+    optionKronis: [
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
+    ],
+    optionPrb: [
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '0' }
+    ],
 
     kelasTerapis: [],
     kelompokPenyimpanans: [],

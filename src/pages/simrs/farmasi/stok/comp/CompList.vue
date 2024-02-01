@@ -78,7 +78,8 @@
       </template>
       <template #cell-stok="{row}">
         <div class="row no-wrap text-italic">
-          {{ cariGudang(row.kdruang) }}
+          <!-- {{ cariGudang(row.kdruang) }} -->
+          {{ store?.disp?.kdruang }}
         </div>
         <div class="row no-wrap text-weight-bold  items-end">
           <div>
@@ -120,28 +121,28 @@
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
 
 const table = UseFarmasiStokTable()
 const store = UseFarmasiStokStore()
-const apps = useAplikasiStore()
+// const apps = useAplikasiStore()
 
-function cariGudang(val) {
-  if (table.gudangs.length) {
-    const gudang = table.gudangs.filter(gud => gud.kode === val)
-    if (apps?.user?.kdruangansim !== '') {
-      const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.kdruangansim)
-      store.setDisp('kdruang', gudang2[0]?.nama)
-    }
-    if (gudang.length) {
-      return gudang[0]?.nama
-    } else return 'Gudang / Depo tidak ditemukan'
-  } else {
-    return 'menunggu data Gudang / Depo'
-  }
-}
+// function cariGudang(val) {
+//   if (table.gudangs.length) {
+//     const gudang = table.gudangs.filter(gud => gud.kode === val)
+//     if (apps?.user?.kdruangansim !== '') {
+//       const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.kdruangansim)
+//       store.setDisp('kdruang', gudang2[0]?.nama)
+//     }
+//     if (gudang.length) {
+//       return gudang[0]?.nama
+//     } else return 'Gudang / Depo tidak ditemukan'
+//   } else {
+//     return 'menunggu data Gudang / Depo'
+//   }
+// }
 
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 

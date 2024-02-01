@@ -292,6 +292,34 @@
                 </div>
               </div>
               <div
+                v-if="row.status_kronis"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
+              >
+                <div class="">
+                  Obat Kronis
+                </div>
+                <div
+                  class="text-right text-weight-bold"
+                  :class="row.status_kronis==='1'?'text-green':'text-negative'"
+                >
+                  {{ row.status_kronis==='1'?'YA':'TIDAK' }}
+                </div>
+              </div>
+              <div
+                v-if="row.status_prb"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
+              >
+                <div class="">
+                  Obat PRB
+                </div>
+                <div
+                  class="text-right text-weight-bold"
+                  :class="row.status_prb==='1'?'text-green':'text-negative'"
+                >
+                  {{ row.status_prb==='1'?'YA':'TIDAK' }}
+                </div>
+              </div>
+              <div
                 v-if="row.nilai_kdn"
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
