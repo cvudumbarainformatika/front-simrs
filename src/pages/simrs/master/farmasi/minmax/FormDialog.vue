@@ -189,7 +189,6 @@ function setMax(evt, val) {
 //   store.getDataObat()
 // }
 function obatInput(val) {
-  console.log('obat input', val, val.length % 2)
   store.filterObat = val
   const needle = val.toLowerCase()
   const splits = ['namaobat', 'kd_obat']
@@ -197,8 +196,8 @@ function obatInput(val) {
     data.filter((item) =>
       filterKeys.some(
         (key) =>
-          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
-                item[key]
+          item[key]?.toString()?.toLowerCase()?.includes(value.toLowerCase()) &&
+    item[key]
       )
     )
   const filteredData = multiFilter(store.obats, splits, needle)
@@ -210,6 +209,7 @@ function obatInput(val) {
       notifErrVue('ruangan belum dipilih')
     }
   }
+  console.log('obat input', val, store.obats, store.filteredObats)
 }
 function clearRuang() {
   store.setForm('koderuang', '')
