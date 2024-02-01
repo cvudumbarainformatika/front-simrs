@@ -182,6 +182,7 @@
                 :ttd="store.form.ttdpasien"
                 @save-ttd="(val)=> store.setForm('ttdpasien',val)"
               /> -->
+              <app-ttd-wacom />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
