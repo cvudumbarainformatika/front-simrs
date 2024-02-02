@@ -75,6 +75,12 @@ export const useListRencanaPemesananStore = defineStore('list_rencana_pemesanan'
       rin.edit = false
       console.log('row', row)
       console.log('rin', rin)
+    },
+    hapusHeader(val) {
+      console.log('hapus Header', val)
+    },
+    hapusRinci(val) {
+      console.log('hapus rinci', val)
     }
   }
 })

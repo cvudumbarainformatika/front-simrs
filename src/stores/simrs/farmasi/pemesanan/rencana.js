@@ -85,9 +85,11 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
         all.forEach(a => {
           const max = data?.viewrinciminmax?.find(rm => rm.kd_ruang === a)
           const sto = data?.viewrincistok?.find(rm => rm.kdruang === a)
+          const gud = max?.gudang?.nama ?? sto?.gudangdepo?.nama
+          const ruang = max?.ruang?.uraian
           const temp = {
             kode_ruang: a,
-            nama_ruang: max?.gudang?.nama ?? sto?.gudangdepo?.nama,
+            nama_ruang: gud ?? ruang,
             min: isNaN(parseFloat(max?.min)) ? 0 : parseFloat(max?.min),
             max: isNaN(parseFloat(max?.max)) ? 0 : parseFloat(max?.max),
             stok: isNaN(parseFloat(sto?.jumlah)) ? 0 : parseFloat(sto?.jumlah),
