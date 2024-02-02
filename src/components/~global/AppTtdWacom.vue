@@ -18,6 +18,33 @@
 </template>
 
 <script setup>
+// import { onMounted } from 'vue'
+
+// import * as Q from '../../modules/wacom/q.js'
+// import WacomGSS from '../../modules/wacom/sdkstu.js'
+
+// let retry = 0
+// const MAXRETRIES = 20
+// const TIMEOUT_LONG = 1000
+
+// onMounted(() => {
+//   setTimeout(checkForSigCaptX, 500)
+// })
+
+// function checkForSigCaptX() {
+//   retry = retry + 1
+//   if (WacomGSS.STU.isServiceReady()) {
+//     retry = 0
+//     console.log('SigCaptX Web Service: ready')
+//   } else {
+//     console.log('SigCaptX Web Service: not connected')
+//     if (retry < MAXRETRIES) {
+//       setTimeout(checkForSigCaptX, TIMEOUT_LONG)
+//     } else {
+//       alert('Unable to establish connection to SigCaptX')
+//     }
+//   }
+// }
 
 function tabletDemo() {
   console.log('ok')
