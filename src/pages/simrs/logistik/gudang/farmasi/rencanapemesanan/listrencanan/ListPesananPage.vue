@@ -123,7 +123,10 @@
                 </div>
               </div>
               <div class="col-1 text-right">
-                <div class="q-mr-sm">
+                <div
+                  v-if="!row.flag"
+                  class="q-mr-sm"
+                >
                   <q-btn
                     v-if="!rin.edit"
                     class="q-mr-md"
@@ -132,7 +135,7 @@
                     dense
                     color="negative"
                     :loading="store.loadingHapus && rin.loading"
-                    @click="store.hapusRinci(rin)"
+                    @click="store.hapusRinci(rin, row)"
                   >
                     <q-tooltip
                       class="primary"
@@ -164,6 +167,7 @@
                     icon="icon-mat-save"
                     size="sm"
                     color="primary"
+                    :loading="store.loadingSimpan && rin.loading"
                     @click="simpan(row,rin)"
                   >
                     <q-tooltip
@@ -304,14 +308,17 @@ function setEdit(row, rin, i) {
       refInpJum.value[index].focus()
       refInpJum.value[index].select()
     }
-  }, 300)
+  }, 200)
 }
 
 function simpan(row, rin) {
   const index = urutanInp.value.findIndex(ind => ind.id === rin.id)
   urutanInp.value.splice(index, 1)
-
-  rin.edit = false
+  inpIndex = urutanInp.value.length - 1
+  store.simpan(rin)
+    .then(() => {
+      rin.edit = false
+    })
 }
 
 store.getInitialData()

@@ -41,6 +41,21 @@
               Kunci Rencana pemesanan di List Rencana Pemesanan
             </q-tooltip>
           </q-btn>
+          <q-btn
+            v-if="store.form.no_rencbeliobat"
+            flat
+            icon="icon-mat-restart_alt"
+            dense
+            color="negative"
+            @click="store.resetForm()"
+          >
+            <q-tooltip
+              class="green"
+              :offset="[10, 10]"
+            >
+              Reset Form Rencana Pemesanan (Nomor Perencanaan baru)
+            </q-tooltip>
+          </q-btn>
         </div>
       </div>
     </div>
