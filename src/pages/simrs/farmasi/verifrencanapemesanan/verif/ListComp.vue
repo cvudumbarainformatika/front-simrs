@@ -129,8 +129,8 @@
                 color="green"
                 text-color="white"
                 icon="icon-mat-done_all"
-                :disable="store.loadingTerima && item?.loading"
-                :loading="store.loadingTerima && item?.loading"
+                :disable="store.loadingVerif && item?.loading"
+                :loading="store.loadingVerif && item?.loading"
                 @click="store.terimaResep(item)"
               >
                 <q-tooltip
