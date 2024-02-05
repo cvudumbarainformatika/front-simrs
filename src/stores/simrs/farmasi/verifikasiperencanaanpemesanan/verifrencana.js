@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 
 export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pemesanan', {
   state: () => ({
+    isOpen: false,
     loading: false,
     items: [],
     meta: {},
@@ -11,9 +12,22 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
       page: 1,
       per_page: 10,
       flag: ['1']
-    }
+    },
+    rencana: {}
   }),
   actions: {
+    setOpen() {
+      this.isOpen = true
+    },
+    setClose() {
+      this.isOpen = false
+    },
+    setRencana(val) {
+      this.rencana = val
+    },
+    delRencanan() {
+      this.rencana = {}
+    },
     setForm(key, val) {
       this.form[key] = val
     },
@@ -55,6 +69,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
           this.meta = resp?.data?.data ? resp?.data : {}
         })
         .catch(() => { this.loading = false })
-    }
+    },
+    selesaiVerif(val) {}
   }
 })

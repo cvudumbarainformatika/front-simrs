@@ -40,6 +40,15 @@
       </div>
     </q-card>
   </div>
+  <app-fullscreen-blue
+    v-model="store.isOpen"
+    title="Verifikasi Rencana Pemesanan"
+    @hide="store.delRencanan"
+  >
+    <template #default>
+      <DialogComp />
+    </template>
+  </app-fullscreen-blue>
 </template>
 <script setup>
 import { defineAsyncComponent, onMounted } from 'vue'
@@ -52,6 +61,7 @@ const store = useVerifikasiRencanaPesanStore()
 const HeaderComp = defineAsyncComponent(() => import('./HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./ListComp.vue'))
+const DialogComp = defineAsyncComponent(() => import('./DialogComp.vue'))
 
 onMounted(() => {
   store.getDataTable()

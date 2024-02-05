@@ -131,7 +131,7 @@
                 icon="icon-mat-done_all"
                 :disable="store.loadingVerif && item?.loading"
                 :loading="store.loadingVerif && item?.loading"
-                @click="store.terimaResep(item)"
+                @click="store.selesaiVerif(item)"
               >
                 <q-tooltip
                   class="primary"
@@ -140,24 +140,6 @@
                   Terima
                 </q-tooltip>
               </q-btn>
-              <!-- <q-btn
-                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && item?.loading"
-                :loading="store.loadingSelesai && item?.loading"
-                @click="store.resepSelesai(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Selesai
-                </q-tooltip>
-              </q-btn> -->
               <q-btn
                 square
                 class="f-10"
@@ -169,27 +151,7 @@
                 Buka
               </q-btn>
             </td>
-          <!-- <td class="text-end">
-            <div>
-              <q-btn
-                icon="icon-mat-send"
-                flat
-                dense
-                size="sm"
-                round
-                color="primary"
-                :loading="store.loadingSend && indexId===item?.id"
-                :disable="store.loadingSend && indexId === item?.id"
-                @click="send(item?.id)"
-              />
-            </div>
-          </td> -->
           </tr>
-          <!-- <tr v-if="item.expand">
-            <td colspan="6">
-              <div>{{ item }}</div>
-            </td>
-          </tr> -->
         </template>
       </template>
     </tbody>
@@ -255,7 +217,7 @@ function color(val) {
 
 function buka(val) {
   store.setOpen()
-  store.setResep(val)
+  store.setRencana(val)
   console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
