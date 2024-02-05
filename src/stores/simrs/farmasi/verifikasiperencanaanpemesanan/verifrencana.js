@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { filterDuplicateArrays } from 'src/modules/utils'
 
 export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pemesanan', {
   state: () => ({
@@ -58,6 +59,37 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
       this.setParams('page', 1)
       this.getDataTable()
     },
+    metaniItem() {
+      this.items.forEach(item => {
+        item?.rincian.forEach(rinci => {
+          rinci.kd_obat = rinci.kdobat
+          rinci.nama_obat = rinci?.mobat?.nama_obat
+          rinci.jumlah_verif = 0
+          rinci.totalStok = 0
+          rinci.maxRs = 0
+          rinci.minRs = 0
+          rinci.stokRuangan = []
+          if (rinci?.stok?.length) {
+            rinci.totalStok = rinci?.stok?.map(x => parseFloat(x.jumlah)).reduce((a, b) => a + b, 0)
+            const ru = filterDuplicateArrays(rinci?.stok?.map(x => x.kdruang))
+            if (ru.length) {
+              ru.forEach(r => {
+                const stok = rinci?.stok?.filter(x => x.kdruang === r)
+                if (stok.length) {
+                  const temp = stok[0]
+                  temp.stok = stok.map(x => parseFloat(x.jumlah)).reduce((a, b) => a + b, 0)
+                  rinci.stokRuangan.push(temp)
+                }
+              })
+            }
+          }
+          if (rinci?.minmax?.length) {
+            rinci.maxRs = rinci?.minmax?.map(x => parseFloat(x.max)).reduce((a, b) => a + b, 0)
+            rinci.minRs = rinci?.minmax?.map(x => parseFloat(x.min)).reduce((a, b) => a + b, 0)
+          }
+        })
+      })
+    },
     async getDataTable() {
       const param = { params: this.params }
       this.loading = true
@@ -67,9 +99,12 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
           console.log('rencana', resp.data)
           this.items = resp?.data?.data ?? resp.data
           this.meta = resp?.data?.data ? resp?.data : {}
+          this.metaniItem()
         })
         .catch(() => { this.loading = false })
     },
-    selesaiVerif(val) {}
+    selesaiVerif(val) {
+      console.log('selesai verif', val)
+    }
   }
 })
