@@ -112,16 +112,38 @@
                 </div>
                 <div v-if="rin.edit">
                   <q-input
+                    ref="refInpJum"
                     v-model="rin.jumlahdirencanakan"
                     label="Jumlah Direncanakan"
                     dense
                     standout="bg-yellow-3"
                     outlined
+                    @update:model-value="setJumlah($event, rin)"
                   />
                 </div>
               </div>
               <div class="col-1 text-right">
-                <div class="q-mr-sm">
+                <div
+                  v-if="!row.flag"
+                  class="q-mr-sm"
+                >
+                  <q-btn
+                    v-if="!rin.edit"
+                    class="q-mr-md"
+                    flat
+                    icon="icon-mat-delete"
+                    dense
+                    color="negative"
+                    :loading="store.loadingHapus && rin.loading"
+                    @click="store.hapusRinci(rin, row)"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Hapus Rencana Pembelian
+                    </q-tooltip>
+                  </q-btn>
                   <q-btn
                     v-if="!rin.edit"
                     round
@@ -129,7 +151,7 @@
                     icon="icon-mat-edit"
                     size="sm"
                     color="primary"
-                    @click="store.setEdit(row,rin)"
+                    @click="setEdit(row,rin,i)"
                   >
                     <q-tooltip
                       transition-show="flip-right"
@@ -145,7 +167,8 @@
                     icon="icon-mat-save"
                     size="sm"
                     color="primary"
-                    @click="store.simpan(row,rin)"
+                    :loading="store.loadingSimpan && rin.loading"
+                    @click="simpan(row,rin)"
                   >
                     <q-tooltip
                       transition-show="flip-right"
@@ -166,6 +189,22 @@
       </template>
       <template #left-acttion="{row}">
         <div v-if="!row.flag">
+          <q-btn
+            class="q-mr-md"
+            flat
+            icon="icon-mat-delete"
+            dense
+            color="negative"
+            :loading="store.loadingHapus && row.loading"
+            @click="hapusHeader(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Hapus Rencana Pembelian
+            </q-tooltip>
+          </q-btn>
           <q-btn
             flat
             icon="icon-mat-lock_open"
@@ -204,7 +243,7 @@
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
-import { notifSuccessVue } from 'src/modules/utils'
+import { notifSuccessVue, notifErrVue } from 'src/modules/utils'
 // import { useStyledStore } from 'src/stores/app/styled'
 import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listrencana'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
@@ -235,6 +274,53 @@ function kunci(val) {
     if (!val.flag) val.flag = 1
   })
 }
+function hapusHeader(val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_rencbeliobat
+  store.hapusHeader(val)
+  // .then(() => {
+  //   toloadBeli.value = ''
+  //   if (!val.flag) val.flag = 1
+  // })
+}
+function setJumlah(evt, val) {
+  const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  const bisaRen = parseFloat(val?.jumlah_bisa_dibeli)
+  if (bisaRen < beli) {
+    notifErrVue('Maksimal Direncanakan adalah ' + bisaRen)
+    val.jumlahdirencanakan = bisaRen
+  } else { val.jumlahdirencanakan = beli }
+}
+
+const refInpJum = ref(null)
+const urutanInp = ref([])
+let inpIndex = 0
+function setEdit(row, rin, i) {
+  rin.edit = true
+  const temp = { index: inpIndex, id: rin.id }
+  inpIndex = +1
+  urutanInp.value.push(temp)
+  setTimeout(() => {
+    const index = urutanInp.value.findIndex(ind => ind.id === rin.id)
+    console.log('ect rin', urutanInp.value, rin, index)
+    if (index >= 0) {
+      refInpJum.value[index].focus()
+      refInpJum.value[index].select()
+    }
+  }, 200)
+}
+
+function simpan(row, rin) {
+  const index = urutanInp.value.findIndex(ind => ind.id === rin.id)
+  urutanInp.value.splice(index, 1)
+  inpIndex = urutanInp.value.length - 1
+  store.simpan(rin)
+    .then(() => {
+      rin.edit = false
+    })
+}
+
 store.getInitialData()
 </script>
 <style lang="scss" scoped>

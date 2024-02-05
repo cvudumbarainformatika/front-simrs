@@ -64,6 +64,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       polirujukan: ''
     },
     formRanap: {
+      kdSaran: '3',
       noka: '',
       noreg: '',
       norm: '',
@@ -168,6 +169,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
         polirujukan: ''
       }
       this.formRanap = {
+        kdSaran: '3',
         noka: '',
         noreg: '',
         norm: '',
@@ -518,6 +520,7 @@ export const usePerencanaanPoliStore = defineStore('perencanaan-poli', {
       this.formPrb.tipefaskes = '1'
     },
     initPasienRanap(pasien) {
+      this.formRanap.kdSaran = pasien?.kdSaran
       this.formRanap.norm = pasien?.norm
       this.formRanap.noka = pasien?.noka
       this.formRanap.noreg = pasien?.noreg

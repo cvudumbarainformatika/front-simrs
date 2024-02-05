@@ -27,7 +27,7 @@
       </q-card-section>
       <q-card-section v-else>
         <div class="row text-weight-bold text-amber-10">
-          {{ store?.obat?.namaobat }}
+          {{ store?.obat?.namaobat??store?.obat?.nama_obat }}
         </div>
         <div class="row text-italic f-10">
           {{ store?.obat?.kd_obat }}
@@ -36,7 +36,7 @@
         <div v-if="store.rincis.length">
           <div class="row text-weight-bold fit q-mb-sm">
             <div class="col-6">
-              Depo / Gudang
+              Gudang / Depo / Ruangan
             </div>
             <div class="col-2">
               Min
@@ -53,11 +53,16 @@
             :key="i"
           >
             <div
-              class="row"
+              class="row items-center"
               :class="i%2===0?'':'bg-blue-grey-3'"
             >
               <div class="col-6">
-                {{ rinc?.nama_ruang }}
+                <div class="row">
+                  {{ rinc?.nama_ruang }}
+                </div>
+                <div class="row text-italic f-10">
+                  ({{ rinc?.kode_ruang?.includes('R-')?'Ruangan': 'Gudang / Depo' }})
+                </div>
               </div>
               <div class="col-2">
                 {{ rinc?.min }}

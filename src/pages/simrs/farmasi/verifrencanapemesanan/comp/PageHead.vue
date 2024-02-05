@@ -17,25 +17,18 @@
       </div>
     </div>
 
-    <div class="row items-center">
+    <div class="row items-center bg-grey-3">
       <q-btn-group outline>
         <q-btn
-          :outline="path !== '/farmasi/permintaanruangan/permintaanruangan'"
+          v-for="(item,i) in heads"
+          :key="i"
+          :outline="head !== item.page"
           glossy
           push
-          color="deep-orange"
-          label="Permintaan Ruangan"
+          :color="item?.color??'primary'"
+          :label="item.label"
           size="md"
-          @click="goTo('/farmasi/permintaanruangan/permintaanruangan')"
-        />
-        <q-btn
-          :outline="path !== '/farmasi/permintaanruangan/listpermintaanruangan'"
-          glossy
-          push
-          color="green"
-          label="List Permintaan Ruangan"
-          size="md"
-          @click="goTo('/farmasi/permintaanruangan/listpermintaanruangan')"
+          @click="emits('ganti',item.page)"
         />
       </q-btn-group>
     </div>
@@ -43,11 +36,6 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-// const emits = defineEmits(['togleDraw'])
 defineProps({
   title: {
     type: String,
@@ -57,14 +45,15 @@ defineProps({
     type: String,
     default: null
   },
-  path: {
+  head: {
     type: String,
     default: null
+  },
+  heads: {
+    type: Array,
+    default: () => []
   }
 })
-
-function goTo (val) {
-  router.push({ path: val, replace: true })
-}
+const emits = defineEmits(['ganti'])
 
 </script>
