@@ -3645,3 +3645,5 @@ WacomGSS.STUConstructor = (function() {
 })()
 
 WacomGSS.STU = new WacomGSS.STUConstructor()
+
+export { WacomGSS }

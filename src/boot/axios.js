@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { getLocalToken } from 'src/modules/storage'
 import { notifErr } from 'src/modules/utils'
+// import { WacomGSS } from 'src/modules/wacom/sdkstu'
 // import { setCssVar } from 'quasar'
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
@@ -95,6 +96,8 @@ export default boot(({ app }) => {
   app.config.globalProperties.$pathImg = pathImg
   app.config.globalProperties.$WSHOST = WSHOST
   app.config.globalProperties.$WSPORT = WSPORT
+
+  // app.config.globalProperties.$WacomGSS = WacomGSS
   // getApp()
 })
 
