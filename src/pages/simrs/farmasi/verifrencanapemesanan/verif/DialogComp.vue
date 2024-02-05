@@ -217,6 +217,7 @@
                       dense
                       outlined
                       standout="bg-yellow-3"
+                      :disable="store.loadingSimpan && rinc.loading"
                       @update:model-value="setNumber($event,rinc)"
                     />
                   </div>
@@ -231,6 +232,9 @@
                   flat
                   color="primary"
                   dense
+                  :loading="store.loadingSimpan && rinc.loading"
+                  :disable="store.loadingSimpan && rinc.loading"
+                  @click="store.simpanObat(rinc)"
                 >
                   <q-tooltip
                     class="primary"

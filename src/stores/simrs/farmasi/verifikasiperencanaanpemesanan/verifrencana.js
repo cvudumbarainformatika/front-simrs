@@ -6,6 +6,8 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
   state: () => ({
     isOpen: false,
     loading: false,
+    loadingVerif: false,
+    loadingSimpan: false,
     items: [],
     meta: {},
     params: {
@@ -102,6 +104,9 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
           this.metaniItem()
         })
         .catch(() => { this.loading = false })
+    },
+    simpanObat(val) {
+      console.log('Simpan Obat', val)
     },
     selesaiVerif(val) {
       console.log('selesai verif', val)
