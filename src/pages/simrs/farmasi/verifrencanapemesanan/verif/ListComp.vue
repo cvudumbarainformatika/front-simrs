@@ -122,7 +122,7 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
+              <!-- <q-btn
                 v-if="item?.flag==='1'"
                 round
                 class="f-10 q-mr-sm"
@@ -137,9 +137,9 @@
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Terima
+                  Klik untuk selesai verif
                 </q-tooltip>
-              </q-btn>
+              </q-btn> -->
               <q-btn
                 square
                 class="f-10"
