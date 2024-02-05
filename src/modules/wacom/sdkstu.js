@@ -19,7 +19,8 @@
 //NOTE: Requires q lib https://github.com/kriskowal/q/raw/v1/q.js
 
 // global namespace
-const WacomGSS = WacomGSS || {}
+import Q from 'q'
+const WacomGSS = {}
 
 // UTF-8 helper functions
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa
@@ -3575,5 +3576,4 @@ WacomGSS.STUConstructor = (function () {
 })()
 
 WacomGSS.STU = new WacomGSS.STUConstructor()
-
 export { WacomGSS }
