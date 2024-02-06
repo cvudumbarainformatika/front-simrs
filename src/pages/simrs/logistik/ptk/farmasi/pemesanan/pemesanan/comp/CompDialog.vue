@@ -358,7 +358,9 @@ function selected(val) {
       }
     })
       .onOk(() => {
-        store.resetForm()
+        // store.resetForm()
+        // store?.form?.nopemesanan=''
+        store.setForm('nopemesanan', '')
         store.setForm('kdpbf', val)
       })
       .onCancel(() => {

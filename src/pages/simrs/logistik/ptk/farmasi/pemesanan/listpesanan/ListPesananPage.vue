@@ -131,6 +131,24 @@
       <template #left-acttion="{row}">
         <div v-if="!row.flag">
           <q-btn
+            class="q-mr-md"
+            push
+            icon="icon-mat-cancel"
+            dense
+            label="Batal"
+            no-caps
+            color="negative"
+            :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
+            @click="batal(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Batalkan Pesanan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
             flat
             icon="icon-mat-lock_open"
             dense
@@ -195,6 +213,16 @@ function kunci (val) {
   val.highlight = !val.highlight
   toloadBeli.value = val.nopemesanan
   pemesanan.kunci(val.nopemesanan).then(() => {
+    toloadBeli.value = ''
+    if (!val.flag) val.flag = 1
+  })
+}
+function batal (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.nopemesanan
+  console.log('batal', val)
+  pemesanan.batal(val.nopemesanan).then(() => {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
   })
