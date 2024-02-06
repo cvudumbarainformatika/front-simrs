@@ -11,8 +11,13 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
       nopemesanan: '',
       per_page: 10,
       page: 1,
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      gudang: ['Gd-05010100'] // "Gd-03010100"
     },
+    gudangs: [
+      { label: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { label: 'Gudang Farmasi ( Floor Stok )', value: 'Gd-03010100' }
+    ],
     columns: [
       'nopemesanan',
       'tgl',
@@ -40,6 +45,10 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
     },
     refreshTable() {
       this.setParam('page', 1)
+      this.cariRencanaBeli()
+    },
+    setGudang(val) {
+      this.setParam('gudang', val)
       this.cariRencanaBeli()
     },
     getInitialData() {

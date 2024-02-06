@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     class="fixed-top row items-center justify-end q-mr-sm"
     style="z-index: 10;"
   >
@@ -14,8 +14,8 @@
         @click="style.setComponentFull"
       />
     </div>
-  </div>
-  <div class="q-mt-xl q-mx-sm">
+  </div> -->
+  <div class="q-mx-sm">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -29,12 +29,27 @@
       :ada-tambah="false"
       :ada-filter="false"
       row-no
+      use-full
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
       @on-click="onClick"
     >
+      <template #header-left-after-search>
+        <div class="q-ml-xs text-white">
+          <q-option-group
+            v-model="store.param.gudang"
+            :options="store.gudangs"
+            color="primary"
+            class="q-ml-sm"
+            dense
+            type="checkbox"
+            inline
+            @update:model-value="store.setGudang"
+          />
+        </div>
+      </template>
       <template #col-nopemesanan>
         <div>Nomor Pemesanan</div>
       </template>
@@ -187,12 +202,12 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useStyledStore } from 'src/stores/app/styled'
+// import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
 import { ref } from 'vue'
 
-const style = useStyledStore()
+// const style = useStyledStore()
 const store = useListPemesananStore()
 const pemesanan = usePemesananObatStore()
 // click
