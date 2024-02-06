@@ -68,6 +68,12 @@
           :label="label(row.flag)"
         />
       </template>
+      <template #cell-dari="{ row }">
+        {{ row?.asal?.nama }}
+      </template>
+      <template #cell-tujuan="{ row }">
+        {{ row?.menuju?.nama }}
+      </template>
       <template #expand="{ row }">
         <div v-if="row.permintaanrinci.length">
           <div class="row items-center text-weight-bold">
@@ -92,11 +98,14 @@
                     {{ rin.kdobat }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap">
+                <div class="row justify-between no-wrap items-center">
                   <div class="q-mr-sm">
                     Nama
                   </div>
-                  <div class="text-weight-bold text-primary">
+                  <div
+                    class="text-weight-bold text-primary text-right"
+                    style="white-space: normal;"
+                  >
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
                 </div>
@@ -202,6 +211,7 @@ onMounted(() => {
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParam('kddepo', obj)
+  store.getInitialData()
 })
 // click
 function onClick (val) {
@@ -285,7 +295,7 @@ function label (val) {
       break
 
     default:
-      return 'red'
+      return 'status belum ditentukan'
       // eslint-disable-next-line no-unreachable
       break
   }
