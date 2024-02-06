@@ -483,12 +483,28 @@ function depoSelected (val) {
   console.log('depo', val)
   store.setParam('kddepo', val)
 }
-
+const floor = ['Gd-03010101', 'Gd-04010101']
+const gud = ['Gd-03010100', 'Gd-05010100']
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParam('kddepo', obj)
   store.setForm('dari', obj)
+  const dpFl = floor.find(a => a === obj)
+  const gd = gud.find(a => a === obj)
+  if (dpFl) {
+    store.setForm('tujuan', 'Gd-03010100')
+    store.setParam('kdgudang', 'Gd-03010100')
+  } else {
+    if (!gd) {
+      store.setForm('tujuan', 'Gd-05010100')
+      store.setParam('kdgudang', 'Gd-05010100')
+    }
+  }
+  console.log('floor', dpFl)
   const depo = store.depos.filter(a => a.value === obj)
-  if (depo.length) store.disp.depo = depo[0]?.nama
+  if (depo.length) {
+    store.disp.depo = depo[0]?.nama
+    store.getListObat()
+  }
   // if (depo.length) store.getDataTable()
   // else {
   //   store.items = []
