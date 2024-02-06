@@ -192,6 +192,22 @@
           <q-btn
             class="q-mr-md"
             flat
+            icon="icon-mat-add_circle"
+            dense
+            color="primary"
+            :loading="store.loadingHapus && row.loading"
+            @click="tambahObat(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tambah Obat
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            class="q-mr-md"
+            flat
             icon="icon-mat-delete"
             dense
             color="negative"
@@ -248,6 +264,7 @@ import { notifSuccessVue, notifErrVue } from 'src/modules/utils'
 import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listrencana'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 // const style = useStyledStore()
 const store = useListRencanaPemesananStore()
@@ -320,7 +337,16 @@ function simpan(row, rin) {
       rin.edit = false
     })
 }
+const router = useRouter()
+function tambahObat(val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  rencana.setForm('no_rencbeliobat', val?.no_rencbeliobat)
 
+  router.push({ path: '/gudang/farmasi/rencanapemesanan/rencana', replace: true })
+  console.log('tambah obat', val)
+  console.log('router', router)
+}
 store.getInitialData()
 </script>
 <style lang="scss" scoped>
