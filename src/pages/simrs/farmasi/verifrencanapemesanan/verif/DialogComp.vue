@@ -144,21 +144,21 @@
                 <!-- <div class="row text-weight-bold f-10">
                   ( {{ rinc?.mobat?.satuan_k }} )
                 </div> -->
-                <q-item-label class="row q-col-gutter-sm text-weight-bold f-10 q-pa-none q-ma-none">
+                <q-item-label class="row text-weight-bold f-10 q-pa-none q-ma-none">
                   <div
-                    class="col-shrink q-pa-none q-ma-none"
+                    class="col-shrink q-mr-sm"
                     :class="rinc?.mobat?.status_fornas==='1'?'text-green':'text-red'"
                   >
                     {{ rinc?.mobat?.status_fornas==='1'?'Fornas':'Non-Fornas' }}
                   </div>
                   <div
-                    class="col-shrink q-pa-none q-ma-none"
+                    class="col-shrink q-mr-sm"
                     :class="rinc?.mobat?.status_forkid==='1'?'text-green':'text-red'"
                   >
                     {{ rinc?.mobat?.status_forkid==='1'?'Forkit':'Non-Forkit' }}
                   </div>
                   <div
-                    class="col-shrink q-pa-none q-ma-none"
+                    class="col-shrink q-mr-sm"
                     :class="rinc?.mobat?.status_generik==='1'?'text-green':'text-red'"
                   >
                     {{ rinc?.mobat?.status_generik==='1'?'Generik':'Non-Generik' }}
@@ -184,15 +184,15 @@
                     {{ rinc?.mobat?.status_generik==='1'?'Generik':'Non-Generik' }}
                   </div>
                 </div> -->
-                <q-item-label class="row q-col-gutter-sm text-weight-bold f-10 q-pa-none q-ma-none">
+                <q-item-label class="row text-weight-bold f-10 q-pa-none q-ma-none">
                   <div
-                    class="col-shrink  q-pa-none q-ma-none"
+                    class="col-shrink  q-mr-sm"
                     :class="rinc?.mobat?.status_kronis==='1'?'text-green':'text-red'"
                   >
                     {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'Non-Kronis' }}
                   </div>
                   <div
-                    class="col-shrink  q-pa-none q-ma-none"
+                    class="col-shrink  q-mr-sm"
                     :class="rinc?.mobat?.status_prb==='1'?'text-green':'text-red'"
                   >
                     {{ rinc?.mobat?.status_prb==='1'?'PRB':'Non-PRB' }}
@@ -216,7 +216,69 @@
               <q-item-section
                 style="width:55%"
               >
-                <div
+                <q-item-label class="row fit items-center q-pa-none q-ma-none ">
+                  <div
+                    class="col-6 cursor-pointer"
+                    @click="rencana.getRinciMinmax(rinc)"
+                  >
+                    <div class="row q-mb-xs text-weight-bold text-green">
+                      <div class="col-4">
+                        Jml Rencana
+                      </div>
+                      <div class="col-6 text-right">
+                        {{ parseFloat(rinc?.jumlahdirencanakan) }}
+                      </div>
+                    </div>
+                    <div class="row q-mb-xs text-purple">
+                      <div class="col-4">
+                        Stok Rs
+                      </div>
+                      <div class="col-6 text-right">
+                        {{ rinc?.totalStok }}
+                      </div>
+                    </div>
+                    <div class="row q-mb-xs text-cyan">
+                      <div class="col-4">
+                        Maks Stok Rs
+                      </div>
+                      <div class="col-6 text-right">
+                        {{ rinc?.maxRs }}
+                      </div>
+                    </div>
+                    <div class="row q-mb-xs text-light-blue">
+                      <div class="col-4">
+                        Min Stok Rs
+                      </div>
+                      <div class="col-6 text-right">
+                        {{ rinc?.minRs }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div v-if="store?.rencana?.flag==='1'">
+                      <q-input
+                        v-model="rinc.jumlah_verif"
+                        label="Jumlah Verif"
+                        dense
+                        outlined
+                        standout="bg-yellow-3"
+                        :disable="store.loadingSimpan && rinc.loading"
+                        @update:model-value="setNumber($event,rinc)"
+                      />
+                    </div>
+                    <div v-else>
+                      <div class="row fit">
+                        <div class="col-6">
+                          Jumlah diverif
+                        </div>
+                        <div class="col-6">
+                          {{ rinc?.jumlah_verif }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </q-item-label>
+                <!-- <div
                   class="row items-center q-pa-none q-ma-none "
                 >
                   <div
@@ -279,14 +341,15 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </q-item-section>
               <q-item-section
-                v-if="store?.rencana?.flag==='1'"
+
                 side
                 style="width:5%"
               >
                 <q-btn
+                  v-if="store?.rencana?.flag==='1'"
                   icon="icon-mat-send"
                   flat
                   color="primary"
