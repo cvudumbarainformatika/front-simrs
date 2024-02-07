@@ -212,7 +212,7 @@
                   <div class="col-6">
                     <div v-if="store?.rencana?.flag==='1'">
                       <q-input
-                        v-model="rinc.jumlah_verif"
+                        v-model="rinc.jumlah_diverif"
                         label="Jumlah Verif"
                         dense
                         outlined
@@ -227,7 +227,7 @@
                           Jumlah diverif
                         </div>
                         <div class="col-6">
-                          {{ rinc?.jumlah_verif }}
+                          {{ rinc?.jumlah_diverif }}
                         </div>
                       </div>
                     </div>
@@ -314,12 +314,12 @@ function setNumber(evt, det) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   if (nilai > det.maxRs) {
-    det.jumlah_verif = det.maxRs
+    det.jumlah_diverif = det.maxRs
     notifErrVue('Tidak Boleh Lebih dari jumlah Stok Maksimal Rumah Sakit')
   } else if (nilai > parseFloat(det.jumlahdirencanakan)) {
-    det.jumlah_verif = parseFloat(det.jumlahdirencanakan)
+    det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)
     notifErrVue('Tidak Boleh Lebih dari jumlah direncanakan')
-  } else det.jumlah_verif = nilai
+  } else det.jumlah_diverif = nilai
 }
 function icon(val) {
   let balik = ' Belum ada status'

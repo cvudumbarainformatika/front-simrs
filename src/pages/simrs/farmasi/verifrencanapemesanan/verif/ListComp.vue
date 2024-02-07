@@ -94,9 +94,9 @@
               <div class="row ">
                 {{ item?.no_rencbeliobat }}
               </div>
-              <div class="row ">
+              <!-- <div class="row ">
                 {{ item?.no_verif }}
-              </div>
+              </div> -->
             </td>
             <td>
               <div class="row text-weight-bold">
