@@ -54,7 +54,7 @@ export const useListBastPenerimaanStore = defineStore('list_bast_penerimaan', {
             this.loading = false
             console.log('list bast', resp.data)
             this.items = resp.data.data
-            this.meta = resp.data
+            this.meta = resp.data.meta
             resolve(resp)
           })
           .catch(() => { this.loading = false })

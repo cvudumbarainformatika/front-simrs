@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { dateDbFormat } from 'src/modules/formatter'
 import { notifSuccess } from 'src/modules/utils'
 
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
@@ -8,6 +9,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loading: false,
     loadingTerima: false,
     loadingSelesai: false,
+    loadingSimpan: false,
     items: [],
     meta: {},
     params: {
@@ -15,7 +17,9 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       page: 1,
       per_page: 10,
       kddepo: '',
-      flag: ['1', '2']
+      flag: ['1', '2'],
+      to: dateDbFormat(new Date()),
+      from: dateDbFormat(new Date())
     },
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
@@ -25,34 +29,51 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       { nama: 'Depo IGD', value: 'Gd-02010104' }
     ],
     resep: {},
-    noresLoad: null
+    noresLoad: null,
+    removedItemId: []
   }),
   actions: {
     setOpen() { this.isOpen = true },
-    setClose() { this.isOpen = false },
+    setClose() {
+      this.isOpen = false
+      this.resep = {}
+    },
     setParams(key, val) { this.params[key] = val },
     setFlag(val) {
       // console.log('flag', val)
       this.setParams('flag', val)
       this.setParams('page', 1)
+      this.removedItemId = []
       this.getDataTable()
     },
     setSearch(val) {
       this.setParams('q', val)
       this.setParams('page', 1)
+      this.removedItemId = []
       this.getDataTable()
     },
     setPerPage(val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
+      this.removedItemId = []
       this.getDataTable()
     },
     setPage(val) {
       this.setParams('page', val)
+      this.removedItemId = []
       this.getDataTable()
     },
     refresh() {
       this.setParams('page', 1)
+      this.removedItemId = []
+      this.getDataTable()
+    },
+    setPeriodik(val) {
+      this.params.page = 1
+      const { to, from } = val
+      this.params.to = to
+      this.params.from = from
+      this.removedItemId = []
       this.getDataTable()
     },
     setResep(val) {
@@ -84,18 +105,69 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           }
         })
       }
+      if (res?.permintaanresep?.length) {
+        res?.permintaanresep.forEach(key => {
+          key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+        })
+      }
       this.resep = res
+    },
+    metanirinci() {
+      if (this.items.length) {
+        this.items.forEach(item => {
+          this.metaniItem(item)
+        })
+      }
+    },
+    metaniItem(item) {
+      if (item.permintaanresep.length) {
+        item.permintaanresep.forEach(resep => {
+          const rinci = item?.rincian.find(x => x.kdobat === resep.kdobat)
+          if (rinci) {
+            resep.obatkeluar = rinci.jumlah
+            resep.hargajual = rinci.harga_jual
+            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
+            resep.done = true
+          } else {
+            resep.done = false
+          }
+          // console.log('rinci ', rinci)
+        })
+      }
+      if (item.permintaanracikan.length) {
+        item.permintaanracikan.forEach(resep => {
+          const rinci = item?.rincianracik.find(x => x.kdobat === resep.kdobat)
+          if (rinci) {
+            resep.obatkeluar = rinci.jumlah
+            resep.harga_jual = rinci.harga_jual
+            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
+            resep.done = true
+          } else {
+            resep.done = false
+          }
+          // console.log('rinci rac', rinci)
+        })
+      }
+      item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
+      item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
+      console.log('item', item)
     },
     async getDataTable(val) {
       if (!val) this.loading = true
       const param = { params: this.params }
-      console.log('loading', val, this.loading)
+      // console.log('loading', val, this.loading)
       await api.get('v1/simrs/farmasinew/depo/listresepbydokter', param)
         .then(resp => {
           console.log('get data table', resp?.data)
           this.loading = false
-          this.items = resp?.data?.data ?? resp?.data
+          const data = resp?.data?.data ?? resp?.data
+          if (this.removedItemId.length) {
+            this.items = data.filter(x => !this.removedItemId.includes(x.id))
+          } else {
+            this.items = data
+          }
           this.meta = resp?.data?.data ? resp?.data : {}
+          this.metanirinci()
         })
         .catch(() => { this.loading = false })
     },
@@ -119,42 +191,106 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     async terimaResep(val) {
       console.log('terima resep', val)
       this.loadingTerima = true
-      this.noresLoad = val?.noresep
+      val.loading = true
       await api.post('v1/simrs/farmasinew/depo/terima-resep', val)
         .then(resp => {
           console.log('resp', resp)
           this.loadingTerima = false
-          this.noresLoad = null
+          delete val.loading
           const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
-          if (index >= 0) this.items[index].flag = '2'
-          this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+          if (this.params.flag.includes('2')) {
+            if (index >= 0) this.items[index].flag = '2'
+            this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+          } else {
+            if (index >= 0) this.items.splice(index, 1)
+            this.removedItemId.push(resp?.data?.data.id)
+          }
           this.getDataTable(true)
           notifSuccess(resp)
         })
         .catch(() => {
           this.loadingTerima = false
+          delete val.loading
         })
       // this.loadingTerima = true
     },
     async resepSelesai(val) {
       console.log('resep selesai', val)
       this.loadingSelesai = true
-      this.noresLoad = val?.noresep
+      val.loading = true
       await api.post('v1/simrs/farmasinew/depo/resep-selesai', val)
         .then(resp => {
           console.log('resp', resp)
           this.loadingSelesai = false
-          this.noresLoad = null
+          delete val.loading
           const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
-          if (index >= 0) this.items[index].flag = '3'
-          this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+          if (this.params.flag.includes('3')) {
+            if (index >= 0) this.items[index].flag = '3'
+            this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+          } else {
+            if (index >= 0) this.items.splice(index, 1)
+            this.removedItemId.push(resp?.data?.data.id)
+          }
           this.getDataTable(true)
+          this.setClose()
           notifSuccess(resp)
         })
         .catch(() => {
           this.loadingSelesai = false
+          delete val.loading
         })
       // this.loadingTerima = true
+    },
+    simpanObat(val) {
+      val.nilai_r = val?.r
+      val.kodedepo = this.params.kddepo
+      val.loading = true
+      this.simpan(val).then((resp) => {
+        console.log('obat', resp)
+        const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)
+        if (item) {
+          item?.rincian.push(resp?.data?.rinci)
+          this.metaniItem(item)
+        }
+        delete val.loading
+      }).catch(() => { delete val.loading })
+    },
+    simpanRacikan(val) {
+      val.kodedepo = this.params.kddepo
+      const temp = new FormData()
+      const key = Object.keys(val)
+      key.forEach(a => {
+        if (a === 'jumlah') temp.append(a, val?.jumlahobat)
+        else temp.append(a, val[a])
+      })
+      temp.append('nilai_r', val?.r)
+      temp.append('jenisresep', 'Racikan')
+      temp.append('jenisresep', 'Racikan')
+
+      val.loading = true
+      this.simpan(temp).then((resp) => {
+        console.log('Racikan', resp)
+        const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)
+        if (item) {
+          item?.rincianracik.push(resp?.data?.rinci)
+          this.metaniItem(item)
+        }
+        delete val.loading
+      }).catch(() => { delete val.loading })
+    },
+    simpan(val) {
+      this.loadingSimpan = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/farmasinew/depo/eresepobatkeluar', val)
+          .then(resp => {
+            this.loadingSimpan = false
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loadingSimpan = false
+            reject(err)
+          })
+      })
     }
   }
 })

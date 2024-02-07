@@ -129,6 +129,30 @@
       </div>
     </div>
     <div
+      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep && store?.resep?.doneracik"
+      class="text-right q-mr-md q-my-sm"
+    >
+      <q-btn
+        rounded
+        push
+        label="Selesai"
+        class="f-12 q-mr-sm"
+        color="green"
+        text-color="white"
+        icon="icon-mat-done_all"
+        :disable="store.loadingSelesai && store?.resep?.loading"
+        :loading="store.loadingSelesai && store?.resep?.loading"
+        @click="store.resepSelesai(store?.resep)"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Selesai
+        </q-tooltip>
+      </q-btn>
+    </div>
+    <div
       class="column q-pa-sm "
       :style="`height: calc(100vh - ${tinggiDetailPas+32}px);`"
     >
@@ -224,7 +248,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-6">
+                  <div class="col-5">
                     <div class="row">
                       <div class="col-4">
                         Harga
@@ -235,10 +259,49 @@
                     </div>
                     <div class="row">
                       <div class="col-4">
+                        Subtotal
+                      </div>
+                      <div class="col-8">
+                        {{ formatDouble( parseFloat(rinc?.harga),2) }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
                         Keterangan
                       </div>
                       <div class="col-8">
                         {{ rinc?.keterangan }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-1">
+                    <div v-if="store?.resep?.flag==='1'">
+                      Resep Belum diterima
+                    </div>
+                    <div v-if="store?.resep?.flag==='3'">
+                      Resep Sudah selesai
+                    </div>
+                    <div v-if="store?.resep?.flag==='2'">
+                      <q-btn
+                        v-if="!rinc?.obatkeluar"
+                        round
+                        class="f-10 q-mr-sm"
+                        color="primary"
+                        text-color="white"
+                        icon="icon-mat-save"
+                        :loading="store.loadingSimpan && rinc?.loading"
+                        :disable="store.loadingSimpan && rinc?.loading"
+                        @click="store.simpanObat(rinc)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Simpan Obat
+                        </q-tooltip>
+                      </q-btn>
+                      <div v-if="rinc?.obatkeluar">
+                        Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                       </div>
                     </div>
                   </div>
@@ -383,10 +446,18 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                       <div class="row">
                         <div class="col-4">
                           Harga
+                        </div>
+                        <div class="col-8">
+                          {{ formatDouble(parseFloat(rinc?.harga_jual),2) }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          Subtotal
                         </div>
                         <div class="col-8">
                           {{ formatDouble(parseFloat(rinc?.harga),2) }}
@@ -398,6 +469,37 @@
                         </div>
                         <div class="col-8">
                           {{ rinc?.keteranganx }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-1">
+                      <div v-if="store?.resep?.flag==='1'">
+                        Resep Belum diterima
+                      </div>
+                      <div v-if="store?.resep?.flag==='3'">
+                        Resep Sudah selesai
+                      </div>
+                      <div v-if="store?.resep?.flag==='2'">
+                        <q-btn
+                          v-if="!rinc?.obatkeluar"
+                          round
+                          class="f-10 q-mr-sm"
+                          color="primary"
+                          text-color="white"
+                          icon="icon-mat-save"
+                          :loading="store.loadingSimpan && rinc?.loading"
+                          :disable="store.loadingSimpan && rinc?.loading"
+                          @click="store.simpanRacikan(rinc)"
+                        >
+                          <q-tooltip
+                            class="primary"
+                            :offset="[10, 10]"
+                          >
+                            Simpan Obat
+                          </q-tooltip>
+                        </q-btn>
+                        <div v-if="rinc?.obatkeluar">
+                          Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                         </div>
                       </div>
                     </div>
@@ -419,8 +521,8 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 
 const store = useEResepDepoFarmasiStore()
 
-const tinggiDetailPas = ref(130)
 const pageRef = ref()
+const tinggiDetailPas = ref(130)
 const h = computed(() => {
   // console.log('h', pageRef.value)
   return pageRef.value?.$el?.clientHeight + 5

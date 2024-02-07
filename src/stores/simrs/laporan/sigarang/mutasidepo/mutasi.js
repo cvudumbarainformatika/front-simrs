@@ -52,6 +52,13 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
       'hsisa'
 
     ],
+    columnsHide: [
+      'hawal',
+      'hmasuk',
+      'hkeluar',
+      'hsisa'
+
+    ],
     total: 0,
     tTotal: 0,
     htotal: 0,

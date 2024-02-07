@@ -20,20 +20,40 @@
           :loading="store.loading"
         /> -->
 
-        <div class="q-ml-md">
+        <div
+          v-if="store.form.no_rencbeliobat"
+          class="q-ml-md"
+        >
+          <!-- Kunci Rencana pemesanan di List -->
           <q-btn
             v-if="store.form.no_rencbeliobat"
             flat
             icon="icon-mat-done"
             dense
             color="green"
+            disable
             @click="store.selesaiDanKunci()"
           >
             <q-tooltip
               class="green"
               :offset="[10, 10]"
             >
-              Selesai dan Kunci Rencana Pemesanan
+              Kunci Rencana pemesanan di List Rencana Pemesanan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            v-if="store.form.no_rencbeliobat"
+            flat
+            icon="icon-mat-restart_alt"
+            dense
+            color="negative"
+            @click="store.resetForm()"
+          >
+            <q-tooltip
+              class="green"
+              :offset="[10, 10]"
+            >
+              Reset Form Rencana Pemesanan (Nomor Perencanaan baru)
             </q-tooltip>
           </q-btn>
         </div>

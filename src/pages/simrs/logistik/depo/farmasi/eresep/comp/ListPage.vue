@@ -169,8 +169,8 @@
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && store.noresLoad===item?.noresep"
-                :loading="store.loadingTerima && store.noresLoad===item?.noresep"
+                :disable="store.loadingTerima && item?.loading"
+                :loading="store.loadingTerima && item?.loading"
                 @click="store.terimaResep(item)"
               >
                 <q-tooltip
@@ -181,14 +181,14 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="item?.flag==='2'"
+                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
                 text-color="white"
                 icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && store.noresLoad===item?.noresep"
-                :loading="store.loadingSelesai && store.noresLoad===item?.noresep"
+                :disable="store.loadingSelesai && item?.loading"
+                :loading="store.loadingSelesai && item?.loading"
                 @click="store.resepSelesai(item)"
               >
                 <q-tooltip
@@ -262,6 +262,9 @@ function status(val) {
     case '3':
       balik = 'Selesai'
       break
+    case '4':
+      balik = 'Returned'
+      break
 
     default:
       break
@@ -281,7 +284,10 @@ function color(val) {
       balik = 'green'
       break
     case '3':
-      balik = 'red'
+      balik = 'negative'
+      break
+    case '4':
+      balik = 'orange'
       break
 
     default:

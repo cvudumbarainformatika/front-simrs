@@ -265,7 +265,7 @@
                       </q-item-label>
                     </q-item-section>
                   </q-item>
-                  <!-- KHUSUS PARU POL018-->
+                  <!-- ========================================================================================== KHUSUS PARU POL018-->
                   <q-separator
                     dark
                     inset
@@ -315,14 +315,14 @@
                   </q-item>
                   <!-- DETAIL -->
                   <div class="q-pa-sm flex items-center">
-                    <q-btn
+                    <!-- <q-btn
                       color="grey"
                       round
                       flat
                       dense
                       :icon="expanded===i+1 ? 'icon-mat-keyboard_arrow_up' : 'icon-mat-keyboard_arrow_down'"
                       @click="expand(i)"
-                    />
+                    /> -->
                     <q-space />
                     <div class="q-gutter-sm">
                       <q-btn
@@ -357,7 +357,8 @@
                     square
                   >
                     <q-slide-transition>
-                      <div v-show="expanded===i+1">
+                      <!-- <div v-show="expanded===i+1"> -->
+                      <div>
                         <q-separator dark />
                         <q-list
                           v-if="item.detailgambars.length"
@@ -378,6 +379,23 @@
                             </q-item-section>
                             <q-item-section>
                               <q-item-label>{{ row.anatomy }}</q-item-label>
+                              <q-item-label v-if="item?.pemeriksaankhususmata.length">
+                                <div class="column q-ml-sm">
+                                  <div><em>Details Pemeriksaan (Khusus Mata)</em></div>
+                                  <div class="q-ml-sm">
+                                    <div>- VOD AWAL : <b>{{ item?.pemeriksaankhususmata[n]?.rs4 ?? '-' }}</b></div>
+                                    <div>- VOD REFR : <b>{{ item?.pemeriksaankhususmata[n]?.rs5 ?? '-' }}</b></div>
+                                    <div>- VOD AKHIR : <b>{{ item?.pemeriksaankhususmata[n]?.rs6 ?? '-' }}</b></div>
+                                    <div>- TOD : <b>{{ item?.pemeriksaankhususmata[n]?.rs10 ?? '-' }}</b></div>
+                                    <div>- FONDOS OD : <b>{{ item?.pemeriksaankhususmata[n]?.rs12 ?? '-' }}</b></div>
+                                    <div>- VOS AWAL : <b>{{ item?.pemeriksaankhususmata[n]?.rs7 ?? '-' }}</b></div>
+                                    <div>- VOS REFR : <b>{{ item?.pemeriksaankhususmata[n]?.rs8 ?? '-' }}</b></div>
+                                    <div>- VOS AKHIR : <b>{{ item?.pemeriksaankhususmata[n]?.rs9 ?? '-' }}</b></div>
+                                    <div>- TOS : <b>{{ item?.pemeriksaankhususmata[n]?.rs11 ?? '-' }}</b></div>
+                                    <div>- FONDOS OS : <b>{{ item?.pemeriksaankhususmata[n]?.rs13 ?? '-' }}</b></div>
+                                  </div>
+                                </div>
+                              </q-item-label>
                               <q-item-label caption>
                                 {{ row.ket }}
                               </q-item-label>
@@ -421,15 +439,15 @@
 
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useQuasar } from 'quasar'
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 const store = usePemeriksaanFisik()
 const $q = useQuasar()
 
-const expanded = ref(0)
-function expand(i) {
-  expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
-}
+// const expanded = ref(0)
+// function expand(i) {
+//   expanded.value === i + 1 ? expanded.value === 0 ? expanded.value = i + 1 : expanded.value = 0 : expanded.value = i + 1
+// }
 const props = defineProps({
   pasien: {
     type: Object,

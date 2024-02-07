@@ -242,7 +242,11 @@ function cancelShape() {
   emits('cancelShape')
 }
 
-const lokalisparus = ref(['Infiltrat', 'Cavitas', 'Cairan', 'Massa', 'Nodul', 'Konsolidasi', 'Air Bronchogram', 'Clear Zone (Memo Thorax)', 'Normal'])
+const lokalisparus = ref([
+  'Normal', 'Infiltrat', 'Cavitas', 'Cairan', 'Massa', 'Nodul', 'Konsolidasi', 'Air Bronchogram', 'Clear Zone (Pneumothorax)',
+  'Fibrosis', 'Fibroinfiltrat', 'Kalsifikasi', 'Fibrokalsifikasi', 'Schwarte', 'Bronchitis', 'Bronchiectasis (Honeycomb appearance)',
+  'Tuberkuloma', 'Acute Lung Oedema', 'Bronchovaskular pattern meningkat'
+])
 
 onMounted(() => {
   const opt = menus.value.filter(x => x.nama !== 'Body').map(x => x.nama)

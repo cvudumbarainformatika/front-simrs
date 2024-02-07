@@ -72,6 +72,13 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
     getInitialData() {
       this.getPermintaanDepo()
     },
+    metaniRinci() {
+      this.items.forEach(item => {
+        item?.permintaanrinci?.forEach(rinc => {
+          rinc.distribusi = item?.mutasigudangkedepo?.filter(x => x.kd_obat === rinc.kdobat).map(m => parseFloat(m.jml)).reduce((a, b) => a + b, 0) ?? 0
+        })
+      })
+    },
     getPermintaanDepo() {
       this.loading = true
       const param = { params: this.params }
@@ -83,6 +90,7 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
             this.meta = resp.data
 
             console.log('list PErmintaan depo', resp?.data)
+            if (this.items?.length) this.metaniRinci()
             resolve(resp)
           })
           .catch(() => { this.loading = false })

@@ -30,9 +30,16 @@
             Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
           </div>
         </div>
+        <div v-if="store?.form?.tiperesep==='iter'">
+          <app-input-date
+            :model="store.form.iter_expired"
+            label="Iter Berlaku Sampai"
+            outlined
+            @set-model="store.setForm('iter_expired',$event)"
+          />
+        </div>
         <div class="q-mr-sm">
           <q-btn
-            outline
             push
             dense
             color="deep-orange"
@@ -194,6 +201,7 @@
                     hide-bottom-space
                     hide-dropdown-icon
                     :options="store.signas"
+                    @new-value="signaCreateValue"
                     @update:model-value="signaSelected"
                     @keyup.enter.stop="signaEnter"
                   />
@@ -457,6 +465,60 @@
       <racikanpage />
     </template>
   </app-fullscreen-blue>
+
+  <q-dialog
+    v-model="signaNewVal"
+    @show="getFocus"
+    @hide="lostFocus"
+  >
+    <q-card
+      flat
+      style="min-width:50vw;"
+    >
+      <q-bar class="bg-primary text-white">
+        <div class="f-12">
+          Lengkapi data Signa
+        </div>
+        <q-space />
+
+        <q-btn
+          v-close-popup
+          dense
+          flat
+          icon="icon-mat-close"
+          @click="lostFocus"
+        >
+          <q-tooltip class="bg-white text-primary">
+            Close
+          </q-tooltip>
+        </q-btn>
+      </q-bar>
+      <q-card-section>
+        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari</span>
+      </q-card-section>
+      <q-card-section>
+        <q-input
+          ref="refJmlHarSig"
+          v-model="store.fromSigna.jumlah"
+          label="Jumlah konsumsi per hari"
+          outlined
+          standout="bg-yellow-3"
+          dense
+          @keyup.enter.stop="simpan"
+        />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn
+          label="Simpan"
+          flat
+          color="primary"
+          :loading="store.loadingSaveSigna"
+          :disable="store.loadingSaveSigna"
+          @click="simpan"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -594,6 +656,8 @@ function obatEnter() {
 }
 // signa
 const signa = ref('')
+const refJmlHarSig = ref(null)
+const signaNewVal = ref(false)
 function signaSelected(val) {
   console.log('signa', val)
   store.setForm('aturan', val?.signa)
@@ -606,10 +670,51 @@ function signaSelected(val) {
   }
   // }
 }
+function signaCreateValue(val, done) {
+  signaNewVal.value = true
+  let newSigna = ''
+  if (val.includes('x')) {
+    const anu = val.split('x')
+    // console.log('anu', anu)
+    if (anu?.length) {
+      store.fromSigna.jumlah = anu[0]
+      const depan = anu[0] + ' x ' + anu[1]
+      if (anu?.length === 2) {
+        newSigna = depan
+      } else {
+        const temp = anu
+        const belakang = temp.slice(2).join(' x ')
+        // console.log('dep', temp, '--->', depan, ' -- ', belakang)
+        newSigna = depan + belakang
+      }
+    }
+  } else newSigna = val
+  store.fromSigna.signa = newSigna
+  done(store.fromSigna)
+
+  console.log('signa new val', signa.value)
+}
+function getFocus() {
+  refJmlHarSig.value?.focus()
+  refJmlHarSig.value?.select()
+}
+function lostFocus() {
+  signaNewVal.value = false
+}
+function simpan() {
+  store.seveSigna().then((resp) => {
+    signaNewVal.value = false
+    signaSelected(resp.signa)
+    refKet.value.focus()
+    refKet.value.select()
+  })
+}
 function signaEnter() {
-  refKet.value.focus()
-  refKet.value.select()
-  console.log('signa enter')
+  if (!signaNewVal.value) {
+    refKet.value.focus()
+    refKet.value.select()
+    console.log('signa enter')
+  }
 }
 // jumlah
 function setJumlah(val) {

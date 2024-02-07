@@ -412,7 +412,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
@@ -454,8 +454,16 @@ const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
     if (!store.form.dari) {
-      store.setForm('dari', 'Gd-04010103')
-      store.setParam('kddepo', 'Gd-05010100')
+      // store.setForm('dari', 'Gd-04010103')
+
+      if (apps?.user?.kdruangansim) {
+        const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
+        if (depo.length) {
+          store.setForm('dari', apps?.user?.kdruangansim)
+          store.setDisp('depo', depo[0]?.nama)
+          store.setParam('kddepo', apps?.user?.kdruangansim)
+        }
+      }
       // store.getListObat()
     }
     if (!store.form.tujuan) {
@@ -475,6 +483,34 @@ function depoSelected (val) {
   console.log('depo', val)
   store.setParam('kddepo', val)
 }
+const floor = ['Gd-03010101', 'Gd-04010101']
+const gud = ['Gd-03010100', 'Gd-05010100']
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setParam('kddepo', obj)
+  store.setForm('dari', obj)
+  const dpFl = floor.find(a => a === obj)
+  const gd = gud.find(a => a === obj)
+  if (dpFl) {
+    store.setForm('tujuan', 'Gd-03010100')
+    store.setParam('kdgudang', 'Gd-03010100')
+  } else {
+    if (!gd) {
+      store.setForm('tujuan', 'Gd-05010100')
+      store.setParam('kdgudang', 'Gd-05010100')
+    }
+  }
+  console.log('floor', dpFl)
+  const depo = store.depos.filter(a => a.value === obj)
+  if (depo.length) {
+    store.disp.depo = depo[0]?.nama
+    store.getListObat()
+  }
+  // if (depo.length) store.getDataTable()
+  // else {
+  //   store.items = []
+  //   store.meta = {}
+  // }
+})
 
 function setJumlahMinta(evt) {
   // console.log('maks stok', parseFloat(store.form.mak_stok))

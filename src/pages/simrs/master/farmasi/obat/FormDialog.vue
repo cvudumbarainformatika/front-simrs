@@ -397,6 +397,30 @@
                   inline
                 />
               </div>
+              <!-- Kronis -->
+              <div class="row q-mb-xs items-center">
+                Obat Kronis ?
+                <q-option-group
+                  v-model="store.form.status_kronis"
+                  :options="store.optionKronis"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+              </div>
+              <!-- PRB -->
+              <div class="row q-mb-xs items-center">
+                Obat PRB ?
+                <q-option-group
+                  v-model="store.form.status_prb"
+                  :options="store.optionPrb"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+              </div>
               <!-- sistem bayar -->
               <div class="row q-mb-xs items-center">
                 Sistem bayar:

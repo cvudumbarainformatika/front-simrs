@@ -24,7 +24,7 @@
           emit-value
           map-options
           option-value="kdtindakan"
-          :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan : ' Cari Tindakan '"
+          :option-label="opt => Object(opt) === opt && 'tindakan' in opt ? opt.kdtindakan + ' ~ ' + opt.tindakan + ' --> ' + opt.icd9 : ' Cari Tindakan '"
           input-debounce="0"
           :options="options"
           label="Cari Tindakan"
@@ -167,11 +167,11 @@ function filterFn(val, update, abort) {
   update(() => {
     const needle = val.toLowerCase()
     const arr = store.listTindakan
-    const filter = ['kdtindakan', 'tindakan']
+    const filter = ['kdtindakan', 'tindakan', 'icd9']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
       data.filter((item) => filterKeys.some(
         (key) =>
-          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+          item[key]?.toString()?.toLowerCase()?.includes(value.toLowerCase()) &&
           item[key]
       )
       )

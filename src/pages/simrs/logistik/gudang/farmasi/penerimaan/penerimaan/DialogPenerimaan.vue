@@ -688,13 +688,13 @@ function setHargaNetNew(evt, det, key) {
   if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
   if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
   if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
-  const jmlAll = jmlTerimaK + det.jml_terima_lalu
-  // console.log('terima ', jmlAll, jmlTerimaK)
+  const jmlAll = jmlTerimaK + det.jml_terima_laluK
+  console.log('terima ', jmlAll, jmlTerimaK)
+  console.log('lebih', det)
   if (jmlAll > parseFloat(det.jumlahdpesan)) {
-    console.log('lebih')
     notifErrVue('Jumlah Maksimal diterima ' + det.jumlahdpesan + ' ' + det?.satuan_kcl)
-    jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu)
-    jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_lalu) / isi
+    jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_laluK)
+    jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_laluK) / isi
   }
   det.isi = isi
   det.harga = harga

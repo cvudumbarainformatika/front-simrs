@@ -20,22 +20,20 @@
           :loading="store.loading"
         /> -->
         <div class="q-ml-md">
-          <q-btn
+          <q-icon
             v-if="store.form.nopemesanan"
             flat
-            label="selesai"
-            icon="icon-mat-lock"
-            dense
+            name="icon-mat-lock"
             color="primary"
-            @click="store.selesaiDanKunci()"
+            size="sm"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Selesai dan Kunci Pemesanan
+              Selesai dan Kunci Pemesanan di List
             </q-tooltip>
-          </q-btn>
+          </q-icon>
         </div>
       </div>
     </div>
@@ -98,6 +96,7 @@
                 val => !!val || 'tidak boleh kosong'
               ]"
               @buang="cariPihakTiga"
+              @on-select="selected"
             />
           </div>
         </div>
@@ -327,6 +326,7 @@
   </div>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
@@ -336,6 +336,38 @@ import { ref } from 'vue'
 const store = usePemesananObatStore()
 const table = useTabelPemesananObatStore()
 
+function selected(val) {
+  const current = store?.form?.kdpbf
+  console.log(store?.form?.kdpbf)
+  console.log(val)
+  if (store?.form?.nopemesanan) {
+    Dialog.create({
+      title: 'KonFirmasi',
+      message: 'Anda akan mengganti Penyedia, akan dibuatkan Nomor Pemesanan baru, dan Anda tidak bisa kembali menggunakan Nomor Pemesanan sebelumnya. Apakah akan dilajutkan ?',
+      ok: {
+        push: true,
+        label: 'Lanjut',
+        color: 'primary',
+        'no-caps': true
+      },
+      cancel: {
+        push: true,
+        label: 'Batal',
+        color: 'dark',
+        'no-caps': true
+      }
+    })
+      .onOk(() => {
+        // store.resetForm()
+        // store?.form?.nopemesanan=''
+        store.setForm('nopemesanan', '')
+        store.setForm('kdpbf', val)
+      })
+      .onCancel(() => {
+        store.setForm('kdpbf', current)
+      })
+  }
+}
 function setDispTanggal(val) {
   store.disp.tanggal = val
 }

@@ -31,6 +31,20 @@
             />
           </template>
         </q-input>
+        <q-select
+          v-model="periode"
+          dense
+          outlined
+          dark
+          color="white"
+          :options="periods"
+          label="Periode"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+          @update:model-value="gantiPeriode"
+        />
         <q-option-group
           v-model="toFlag"
           :options="flagOptions"
@@ -126,11 +140,13 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { dateDbFormat } from 'src/modules/formatter'
+import { date } from 'quasar'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
 const props = defineProps({
   search: { type: String, default: '' },
   labelCari: { type: String, default: 'Cari ...' },
@@ -141,12 +157,11 @@ const props = defineProps({
   flag: { type: Array, default: () => ['1'] }
 })
 
+function enterSearch(evt) {
+  const val = evt?.target?.value
+  emits('cari', val)
+}
 const options = ref([5, 10, 20, 50, 100])
-const flagOptions = ref([
-  { label: 'Belum Diterima', value: '1' },
-  { label: 'Siap Dikerjakan', value: '2' },
-  { label: 'Selesai', value: '3' }
-])
 const selectPerPage = computed({
   get () {
     return props.perPage
@@ -163,6 +178,13 @@ const search = computed({
     emits('cari', newVal)
   }
 })
+// flag
+const flagOptions = ref([
+  { label: 'Belum Diterima', value: '1' },
+  { label: 'Siap Dikerjakan', value: '2' },
+  { label: 'Selesai', value: '3' },
+  { label: 'Returned', value: '4' }
+])
 const toFlag = computed({
   get () {
     return props.flag
@@ -171,8 +193,54 @@ const toFlag = computed({
     emits('setFlag', newVal)
   }
 })
-function enterSearch(evt) {
-  const val = evt?.target?.value
-  emits('cari', val)
+
+// periode
+const to = ref(dateDbFormat(new Date()))
+const from = ref(dateDbFormat(new Date()))
+const periode = ref(1)
+const periods = ref([
+  { value: 1, label: 'Hari ini' },
+  { value: 2, label: 'Minggu Ini' },
+  { value: 3, label: 'Bulan Ini' }
+  // { value: 4, label: 'Tahun Ini' }
+])
+
+function hariIni() {
+  const cDate = new Date()
+  to.value = dateDbFormat(cDate)
+  from.value = dateDbFormat(cDate)
 }
+function mingguIni() {
+  const curr = new Date()
+  const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+  const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
+}
+function bulanIni() {
+  const curr = new Date()
+  const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
+  const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
+}
+
+function gantiPeriode(val) {
+  if (val === 1) {
+    hariIni()
+  } else if (val === 2) {
+    mingguIni()
+  } else if (val === 3) {
+    bulanIni()
+  }
+
+  const per = {
+    to: to.value,
+    from: from.value
+  }
+  emits('setPeriode', per)
+}
+onMounted(() => {
+  hariIni()
+})
 </script>

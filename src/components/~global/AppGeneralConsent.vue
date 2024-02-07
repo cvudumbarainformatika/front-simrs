@@ -11,10 +11,12 @@
         style="z-index: 1;"
       >
         <q-bar class="bg-primary text-white">
-          <div>📝 Form General Consent Pasien</div>
+          <div class="f-14">
+            📝 Form General Consent Pasien
+          </div>
           <q-space />
 
-          <q-btn
+          <!-- <q-btn
             dense
             flat
             icon="icon-mat-minimize"
@@ -27,8 +29,8 @@
             >
               Minimize
             </q-tooltip>
-          </q-btn>
-          <q-btn
+          </q-btn> -->
+          <!-- <q-btn
             dense
             flat
             icon="icon-mat-crop_square"
@@ -41,7 +43,7 @@
             >
               Maximize
             </q-tooltip>
-          </q-btn>
+          </q-btn> -->
           <q-btn
             v-close-popup
             dense
@@ -61,7 +63,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <!-- <q-card-section>
         <div class="row justify-between">
           <app-input-date
             v-model="store.form.tanggal"
@@ -76,7 +78,7 @@
             />
           </div>
         </div>
-      </q-card-section>
+      </q-card-section> -->
       <q-separator />
       <q-card-section>
         <div class="text-weight-bold text-center">
@@ -165,20 +167,22 @@
                 class="ttd-petugas q-px-xl"
                 style="min-height:150px; border:1px solid gray"
               /> -->
-              <app-ttd
+              <!-- <app-ttd
                 :ttd="store.form.ttdpetugas"
                 @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
-              />
-              <div>Nama & Tanda Tangan</div>
+              /> -->
+              <div class="q-py-lg" />
+              <div>{{ app?.user?.pegawai?.nama }}</div>
             </div>
           </div>
           <div class="col-6">
             <div class="text-center">
               <div>Pasien / Wali</div>
-              <app-ttd
+              <!-- <app-ttd
                 :ttd="store.form.ttdpasien"
                 @save-ttd="(val)=> store.setForm('ttdpasien',val)"
-              />
+              /> -->
+              <app-ttd-wacom />
               <div>Nama & Tanda Tangan</div>
             </div>
           </div>
@@ -199,8 +203,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalconsent/index'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const maximizedToggle = ref(true)
+const app = useAplikasiStore()
 const emits = defineEmits(['close', 'openPreviewGc'])
 
 const props = defineProps({

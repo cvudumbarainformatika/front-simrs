@@ -36,7 +36,12 @@
                 <div
                   class="text-center col-2"
                 >
-                  Jumlah (Bungkus/Kapsul/pot)
+                  Jumlah
+                </div>
+                <div
+                  class="text-center col-2"
+                >
+                  Satuan (Bungkus/Kapsul/pot)
                 </div>
 
                 <div
@@ -103,6 +108,26 @@
                   class="col-2 text-right"
                 >
                   <q-select
+                    ref="refSat"
+                    v-model="store.form.satuan_racik"
+                    label="Satuan Racikan"
+                    use-input
+                    dense
+                    standout="bg-yellow-3"
+                    outlined
+                    :rules="[satValid]"
+                    lazy-rules
+                    no-error-icon
+                    hide-bottom-space
+                    hide-dropdown-icon
+                    :options="store.satuanRaciks"
+                    @keyup.enter.stop="enterSat"
+                  />
+                </div>
+                <div
+                  class="col-2 text-right"
+                >
+                  <q-select
                     ref="refSigna"
                     v-model="signa"
                     label="Aturan Pakai"
@@ -117,6 +142,7 @@
                     hide-bottom-space
                     hide-dropdown-icon
                     :options="store.signas"
+                    @new-value="signaCreateValue"
                     @update:model-value="signaSelected"
                     @keyup.enter.stop="enterSigna"
                   />
@@ -370,7 +396,7 @@
               </div>
             </q-item-section>
           </q-item> -->
-          <template v-if="store.listRincianRacikan.length">
+          <template v-if="store?.listRincianRacikan?.length">
             <!-- <q-expansion-item
               v-for="(item, i) in store.listRacikan"
               :key="i"
@@ -477,6 +503,60 @@
       </div> -->
     </div>
   </div>
+
+  <q-dialog
+    v-model="signaNewVal"
+    @show="getFocus"
+    @hide="lostFocus"
+  >
+    <q-card
+      flat
+      style="min-width:50vw;"
+    >
+      <q-bar class="bg-primary text-white">
+        <div class="f-12">
+          Lengkapi data Signa
+        </div>
+        <q-space />
+
+        <q-btn
+          v-close-popup
+          dense
+          flat
+          icon="icon-mat-close"
+          @click="lostFocus"
+        >
+          <q-tooltip class="bg-white text-primary">
+            Close
+          </q-tooltip>
+        </q-btn>
+      </q-bar>
+      <q-card-section>
+        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari</span>
+      </q-card-section>
+      <q-card-section>
+        <q-input
+          ref="refJmlHarSig"
+          v-model="store.fromSigna.jumlah"
+          label="Jumlah konsumsi per hari"
+          outlined
+          standout="bg-yellow-3"
+          dense
+          @keyup.enter.stop="simpan"
+        />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn
+          label="Simpan"
+          flat
+          color="primary"
+          :loading="store.loadingSaveSigna"
+          :disable="store.loadingSaveSigna"
+          @click="simpan"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { Dialog } from 'quasar'
@@ -516,6 +596,7 @@ onMounted(() => {
 const refJmlButuh = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
+const refSat = ref(null)
 // isi
 const refObat = ref(null)
 const refKetx = ref(null)
@@ -530,12 +611,18 @@ function focusJmlButuh() {
   refJmlButuh.value.select()
 }
 function enterJmlButuh() {
+  refSat.value.focus()
+  refSat.value.showPopup()
+}
+function enterSat() {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
 function enterSigna() {
-  refKet.value.focus()
-  refKet.value.select()
+  if (!signaNewVal.value) {
+    refKet.value.focus()
+    refKet.value.select()
+  }
 }
 function enterKet() {
   refObat.value.focus()
@@ -636,7 +723,12 @@ function obatSelected(val) {
 function obatValid (val) {
   return (val !== null && val !== '') || ''
 }
+// Signa
+
 const signa = ref('')
+const refJmlHarSig = ref(null)
+const signaNewVal = ref(false)
+
 function signaSelected(val) {
   store.setForm('aturan', val?.signa)
   store.setForm('jumlahdosis', parseFloat(val?.jumlah))
@@ -645,7 +737,50 @@ function signaSelected(val) {
     store.setForm('konsumsi', kons)
   }
 }
+function signaCreateValue(val, done) {
+  signaNewVal.value = true
+  let newSigna = ''
+  if (val.includes('x')) {
+    const anu = val.split('x')
+    // console.log('anu', anu)
+    if (anu?.length) {
+      store.fromSigna.jumlah = anu[0]
+      const depan = anu[0] + ' x ' + anu[1]
+      if (anu?.length === 2) {
+        newSigna = depan
+      } else {
+        const temp = anu
+        const belakang = temp.slice(2).join(' x ')
+        // console.log('dep', temp, '--->', depan, ' -- ', belakang)
+        newSigna = depan + belakang
+      }
+    }
+  } else newSigna = val
+  store.fromSigna.signa = newSigna
+  done(store.fromSigna)
+
+  console.log('signa new val', signa.value)
+}
+function getFocus() {
+  refJmlHarSig.value?.focus()
+  refJmlHarSig.value?.select()
+}
+function lostFocus() {
+  signaNewVal.value = false
+}
+function simpan() {
+  store.seveSigna().then((resp) => {
+    signaNewVal.value = false
+    signaSelected(resp.signa)
+    refKet.value.focus()
+    refKet.value.select()
+  })
+}
+// end signa
 function sigaValid (val) {
+  return (val !== null && val !== '') || ''
+}
+function satValid (val) {
   return (val !== null && val !== '') || ''
 }
 // function mergeObj(from, to) {

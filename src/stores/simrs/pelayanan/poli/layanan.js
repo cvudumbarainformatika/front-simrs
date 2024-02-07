@@ -61,7 +61,7 @@ export const useLayananPoli = defineStore('layanan-poli', {
     },
     async getTindakanDropdown() {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
-      // console.log('list tindakan', resp)
+      console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
       }
@@ -269,6 +269,74 @@ export const useLayananPoli = defineStore('layanan-poli', {
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]
       }
+    },
+
+    uploadImages(file, id, pasien) {
+      const files = file
+      // console.log('store upload image', id)
+      const data = new FormData()
+      for (let i = 0; i < files.length; i++) {
+        const images = files[i]
+        data.append(`images[${i}]`, images)
+      }
+      data.append('rs73_id', id)
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/simpandokumentindakanpoli', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(res => {
+            // console.log('uploads', res)
+            if (res.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const tindakan = res?.data?.result
+              storePasien.injectDokumenTindakan(pasien, tindakan)
+            }
+            // const objIndex = this.items.findIndex(obj => obj.id === res?.data?.result?.id)
+            // if (objIndex > -1) {
+            //   this.items[objIndex] = res?.data?.result
+            // }
+            notifSuccess(res)
+            resolve(res)
+          }).catch(err => {
+            console.log('upload err', err)
+          })
+      })
+    },
+
+    hapusDokumen(pasien, id) {
+      // hapusdokumentindakan
+      const payload = { id }
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/hapusdokumentindakan', payload)
+          .then((resp) => {
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const tindakan = resp?.data?.result
+              storePasien.injectDokumenTindakan(pasien, tindakan)
+              notifSuccess(resp)
+              resolve(resp)
+            }
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+
+      // try {
+      //   const resp = await api.post('v1/simrs/pelayanan/hapusdokumentindakan', payload)
+      //   console.log('hapus tindakan poli', resp)
+      //   if (resp.status === 200) {
+      //     const storePasien = usePengunjungPoliStore()
+      //     const tindakan = resp?.data?.result
+      //     storePasien.injectDokumenTindakan(pasien, tindakan)
+      //     notifSuccess(resp)
+      //   }
+      // } catch (error) {
+      //   // console.log('hapus tindakan poli', error)
+      // }
     },
 
     async hapusTindakan(pasien, id) {

@@ -9,6 +9,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
   state: () => ({
     loading: false,
     loadingSigna: false,
+    loadingSaveSigna: false,
     loadingObat: false,
     loadingkirim: false,
     loadingHapus: false,
@@ -21,6 +22,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     listPemintaanSementara: [],
     signas: [],
+    fromSigna: { signa: '', jumlah: 1 },
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101', jenis: 't' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102', jenis: 'rnp' },
@@ -58,6 +60,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       { label: 'DTD', value: 'DTD' },
       { label: 'non-DTD', value: 'non-DTD' }
     ],
+    satuanRaciks: ['Bungkus', 'Kapsul', 'Pot'],
     counterRacikan: 1,
     listRacikan: [],
     listRincianRacikan: [],
@@ -102,6 +105,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const jumlahdibutuhkan = this.form?.jumlahdibutuhkan ?? '-'
       const tiperacikan = this.form?.tiperacikan ?? 'DTD'
       const keterangan = this.form?.keterangan ?? '-'
+      const satuanRacik = this.form?.satuan_racik ?? '-'
       console.log('jenis resep', jenisresep)
       this.form = {
         keterangan: '-',
@@ -121,6 +125,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.setForm('jumlahdibutuhkan', jumlahdibutuhkan)
         this.setForm('tiperacikan', tiperacikan)
         this.setForm('keterangan', keterangan)
+        this.setForm('satuan_racik', satuanRacik)
         this.setForm('keteranganx', '-')
         if (tiperacikan === 'DTD') {
           this.setForm('jumlah', 1)
@@ -231,15 +236,20 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     setNoreseps(reseps) {
-      this.noreseps = ['BARU']
+      this.noreseps = []
       reseps.forEach(resep => {
-        this.noreseps.push(resep?.noresep)
+        this.noreseps.unshift(resep?.noresep)
       })
+      this.noreseps.unshift('BARU')
     },
     setResep(val) {
       this.setForm('noresep', '')
       this.listRacikan = []
       this.listPemintaanSementara = []
+      if (val === '') {
+        this.indexRacikan = -1
+        return
+      }
       const reseps = this.pasien?.newapotekrajal
       const resep = reseps.find(x => x.noresep === val)
       this.indexRacikan = reseps.findIndex(x => x.noresep === val)
@@ -327,6 +337,23 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         })
         .catch(() => { this.loadingSigna = false })
     },
+    seveSigna() {
+      this.loadingSaveSigna = true
+      return new Promise(resolve => {
+        api.post('v1', this.fromSigna)
+          .then(resp => {
+            this.loadingSaveSigna = false
+            console.log('resp save signa', resp)
+            notifSuccess(resp)
+            this.fromSigna = { signa: '', jumlah: 1 }
+            this.signas.push(resp.data)
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loadingSaveSigna = false
+          })
+      })
+    },
     getBillRajal(val) {
       this.setForm('kdruangan', val?.kodepoli)
       const kunjRajal = useKasirRajalListKunjunganStore()
@@ -395,6 +422,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               this.openDialog(resp?.data)
             } else {
               notifSuccess(resp)
+              if (!this.form.noresep || this.form.noresep === '') {
+                this.noreseps.push(resp?.data?.nota)
+                this.noresep = resp?.data?.nota
+              }
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
               if (resp?.data?.rinci !== 0) {
@@ -426,7 +457,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           notifSuccess(resp)
 
           this.setListResep(resp?.data?.data)
-          this.pasien.newapotekrajal = resp?.data?.data
+          const res = resp?.data?.data
+          const reseps = this.pasien?.newapotekrajal
+          const index = reseps.findIndex(x => x.noresep === res?.noresep)
+          if (index >= 0) {
+            this.pasien.newapotekrajal[index] = res
+            this.indexRacikan = index
+          }
           this.listPemintaanSementara = []
           this.listRacikan = []
           this.tipeRacikan = [

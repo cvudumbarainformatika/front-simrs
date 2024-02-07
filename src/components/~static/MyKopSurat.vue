@@ -28,7 +28,7 @@
       <div class="q-pa-md">
         <div
           class="text-weight-bold text-center"
-          style="max-width: 100px;"
+          style="max-width: 150px;"
         >
           PERSETUJUAN UMUM
           <div>(GENERAL CONSENT)</div>

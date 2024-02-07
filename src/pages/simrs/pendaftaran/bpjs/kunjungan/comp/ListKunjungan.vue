@@ -160,7 +160,9 @@
       @open-preview-gc="openPreviewGc()"
     />
     <app-preview-general-consent
+      :key="pasien"
       v-model="openPrevGc"
+      :pasien="pasien"
       @close="openPrevGc = !openPrevGc"
     />
     <app-dialog-form

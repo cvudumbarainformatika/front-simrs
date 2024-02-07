@@ -64,7 +64,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       })
       this.setForm('kodeobat', val.kd_obat)
       this.setForm('koderuang', val.kd_ruang)
-      const obatnya = findWithAttr(this.obats, 'kodeobat', val.kd_obat)
+      const obatnya = findWithAttr(this.obats, 'kd_obat', val.kd_obat)
       if (obatnya < 0) {
         const obt = { kodeobat: val.obat.rs1, namaobat: val.obat.namaobat }
         this.obats.push(obt)

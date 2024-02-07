@@ -152,7 +152,8 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag==='2'">
+        <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
+        <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
           <q-btn
             flat
             icon="icon-mat-done_all"
@@ -210,7 +211,7 @@
                     {{ rin.kdobat }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs">
+                <div class="row justify-between no-wrap q-mt-xs space-normal">
                   <div class=" text-weight-bold">
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
@@ -250,8 +251,8 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a,
-                                                                                                                        b) => a + b, 0) }}
+                        <!-- {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a,b) => a + b, 0) }} -->
+                        {{ rin.stok }}
                       </div>
                       <div v-if="!rin.stokreal.length">
                         0
@@ -280,7 +281,26 @@
 
                 <div class="row justify-between no-wrap q-mt-xs">
                   <div
-                    v-if="row.flag === '2' && rin.distribusi===0"
+                    v-if="row.flag === '2' && rin.distribusi===0 && parseFloat(rin.mak_stok) < rin.stok"
+                    class="col-12"
+                  >
+                    <app-input
+                      ref="refInputVerif"
+                      v-model="rin.jumlah_minta"
+                      label="Jumlah Didistribusikan"
+                      outlined
+                      debounce="100"
+                      readonly
+                      :rules="[
+                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
+                        val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
+                      ]"
+                      @keyup.enter="kirim(rin, i,row)"
+                      @update:model-value="sudah($event, rin)"
+                    />
+                  </div>
+                  <div
+                    v-else-if="row.flag === '2' && rin.distribusi===0"
                     class="col-12"
                   >
                     <app-input
@@ -349,9 +369,36 @@
                 <div v-else>
                   <div
                     v-if="(parseFloat(rin.jumlah_minta) <= 0 || mutasi(row,rin)) && row.flag==='2'"
-                    class="row justify-end text-weight-bold"
+                    class="row justify-end text-weight-bold space-normal"
                   >
-                    Jumlah Distribusi salah
+                    <div
+                      v-if="row.flag === '2' && rin.distribusi===0 && parseFloat(rin.mak_stok) < rin.stok"
+                      class="text-negative text-right"
+                    >
+                      Jumlah Stok melebihi Jumlah Maksimal Stok
+                    </div>
+                    <div
+                      v-else-if="row.flag === '2' && rin.distribusi<=parseFloat(rin.jumlahdiminta) && rin.distribusi>0"
+                      class="text-negative"
+                    >
+                      <q-icon
+                        name="icon-mat-lock"
+                        color="negative"
+                        size="sm"
+                      >
+                        <q-tooltip
+                          anchor="top middle"
+                          self="center middle"
+                        >
+                          <div class="row justify-end">
+                            Sudah Di distribusikan
+                          </div>
+                        </q-tooltip>
+                      </q-icon>
+                    </div>
+                    <div v-else>
+                      Jumlah Distribusi salah
+                    </div>
                   </div>
                   <div
                     v-if="row.flag==='3'"
@@ -407,6 +454,7 @@
 
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
 import { ref, onMounted, watch } from 'vue'
@@ -417,9 +465,13 @@ onMounted(() => {
   store.setParams('kdgudang', apps?.user?.kdruangansim)
   store.getInitialData()
 })
+
+const gud = ['Gd-03010100', 'Gd-05010100']
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kdgudang', obj)
   store.setParams('kdgudang', obj)
+  const gd = gud.find(a => a === obj)
+  if (gd) store.refreshTable()
 })
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)
@@ -506,8 +558,17 @@ function setJumlah (evt, val) {
   const panj = evt.length
   const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
-  val.jumlah_minta = beli
-  console.log('beli', beli)
+  const max = parseFloat(val?.mak_stok)
+  const stok = parseFloat(val?.stok)
+  // jumlah total stok tidak boleh melebihi jumlah stok maksimal
+  const totalStok = stok + beli
+  if (totalStok > max) {
+    notifErrVue('Jumlah Stok Depo tidak boleh melebihi jumlah stok maksimal')
+    val.jumlah_minta = 0
+  } else {
+    val.jumlah_minta = beli
+  }
+  console.log('beli', beli, evt, max, stok, totalStok)
 }
 function sudah(evt, val) {
   const anu = val.jumlah_minta
@@ -592,5 +653,8 @@ const label = (status) => {
 }
 .rouded-border{
   border-radius: 5px;
+}
+.space-normal{
+  white-space: normal;
 }
 </style>
