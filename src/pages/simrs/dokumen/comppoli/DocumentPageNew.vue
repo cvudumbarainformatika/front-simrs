@@ -134,6 +134,13 @@ const documents = ref([
     jenis: 'R P',
     label: 'Rencana Pasien',
     value: 'Rencana'
+  },
+  {
+    icon: 'icon-mat-email',
+    color: 'primary',
+    jenis: 'RM RJ-1c',
+    label: 'Pengkajian Awal Medis Rawat Jalan',
+    value: 'Pengkajian'
   }
 ])
 // eslint-disable-next-line no-unused-vars
@@ -149,7 +156,8 @@ const comp = [
   { nama: 'Sehat', page: defineAsyncComponent(() => import('../surat/compsurat/SuratSehatPage.vue')) },
   { nama: 'Rencana', page: defineAsyncComponent(() => import('../surat/compsurat/SuratRencanaPage.vue')) },
   { nama: 'prb', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRujukBalik.vue')) },
-  { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) }
+  { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) },
+  { nama: 'Pengkajian', page: defineAsyncComponent(() => import('../erm/poli/PengkajianAwalMedisRJPage.vue')) }
 ]
 // eslint-disable-next-line no-unused-vars
 const cekPanel = () => {
@@ -172,6 +180,7 @@ function goTo(val) {
     min-height: 90vh;
     border-radius: 10px;
     backdrop-filter: blur(5px);
+    font-size:10px;
     // backdrop-filter: sepia(.5);
     box-shadow: 0 25px 45px rgba(0,0,0,0.1);
     border: 3px solid rgba(255,255,255,0.5);

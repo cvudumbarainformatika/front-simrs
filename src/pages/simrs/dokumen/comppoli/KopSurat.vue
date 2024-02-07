@@ -9,16 +9,19 @@
     </div>
     <div class="col-8 ">
       <div class="row justify-center">
-        <div class="text-weight-bold">
+        <div
+          class="text-weight-bold"
+          style="font-size: 2em"
+        >
           UOBK RSUD dr. MOHAMAD SALEH
         </div>
       </div>
       <div class="row  justify-center">
-        <div>
+        <div class="text-weight-bold">
           Jl. Mayjend Panjaitan No. 65 Probolinggo Jawa Timur
         </div>
       </div>
-      <div class="row justify-center">
+      <div class="row justify-center text-weight-bold">
         Telp. (0335) 433478,433119,421118 Fax. (0335) 432702
       </div>
     </div>
