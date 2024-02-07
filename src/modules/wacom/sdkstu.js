@@ -193,14 +193,16 @@ WacomGSS.STUConstructor = (function () {
   }
 
   function receive(message) {
-    if (typeof message.data !== 'undefined' && message.data != '') {
-      //console.log("receive: " + message.data);
+    // if (typeof message?.data !== 'undefined' && message?.data !== '') {
+    // console.log('receivedddd: ', message)
+    if (message.data) {
       const arg = JSON.parse(message.data)
+      // console.log('receivedddd: ', arg)
       if (checkExists(arg.ticket) && checkExists(table[arg.ticket])) {
         if (checkExists(arg.success) && arg.success == true && checkExists(arg.data)) {
-          table[arg.ticket].resolve(arg.data)
+          table[arg?.ticket]?.resolve(arg.data)
         } else {
-          table[arg.ticket].reject(new Error(checkExists(arg.error) ? arg.error : ''))
+          table[arg?.ticket]?.reject(new Error(checkExists(arg?.error) ? arg.error : ''))
         }
         delete table[arg.ticket]
       } else if (checkExists(arg.stream) && checkExists(stream[arg.stream]) && checkExists(arg.data)) {

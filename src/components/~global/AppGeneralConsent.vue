@@ -182,8 +182,11 @@
                 :ttd="store.form.ttdpasien"
                 @save-ttd="(val)=> store.setForm('ttdpasien',val)"
               /> -->
-              <app-ttd-wacom />
-              <div>Nama & Tanda Tangan</div>
+              <app-ttd-wacom
+                :ttd="store.form.ttdpasien"
+                @save-ttd="(val)=> store.setForm('ttdpasien',val)"
+              />
+              <div>{{ pasien?.nama }}</div>
             </div>
           </div>
         </div>

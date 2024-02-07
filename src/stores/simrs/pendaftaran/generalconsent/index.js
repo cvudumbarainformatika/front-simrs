@@ -18,6 +18,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       ttdpasien: null,
       ttdpetugas: null
     },
+    ttdpasienmentahan: null,
 
     options: ['Diri Sendiri', 'Ayah Kandung', 'Ibu Kandung', 'Kakak Kandung', 'Adik Kandung', 'Paman', 'Kakek', 'Cucu', 'Saudara']
   }),
