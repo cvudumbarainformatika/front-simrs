@@ -82,7 +82,7 @@
         icon="icon-mat-done_all"
         :disable="store.loadingVerif && store?.rencana?.loading"
         :loading="store.loadingVerif && store?.rencana?.loading"
-        @click="store.selesaiVerif(store?.rencana)"
+        @click="selesaiVerif(store?.rencana)"
       >
         <q-tooltip
           class="primary"
@@ -212,11 +212,13 @@
                   <div class="col-6">
                     <div v-if="store?.rencana?.flag==='1'">
                       <q-input
+                        ref="refVerif"
                         v-model="rinc.jumlah_diverif"
                         label="Jumlah Verif"
                         dense
                         outlined
                         standout="bg-yellow-3"
+                        :rules="[val=>!!val||'tidak boleh kosong']"
                         :disable="store.loadingSimpan && rinc.loading"
                         @update:model-value="setNumber($event,rinc)"
                       />
@@ -308,6 +310,7 @@ const DetailMinMax = defineAsyncComponent(() => import('src/pages/simrs/logistik
 
 const tinggiDetailPas = ref(60)
 const h = ref(0)
+const refVerif = ref(null)
 function setNumber(evt, det) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
@@ -320,6 +323,25 @@ function setNumber(evt, det) {
     det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)
     notifErrVue('Tidak Boleh Lebih dari jumlah direncanakan')
   } else det.jumlah_diverif = nilai
+}
+
+// function simpanObat(rinc) {
+//   console.log('rinc', refVerif.value)
+//   let valid = true
+//   refVerif.value?.forEach(ver => {
+//     console.log(ver, ver.validate())
+//     if (!ver.validate()) valid = false
+//   })
+//   if (valid) store.simpanObat(rinc)
+// }
+function selesaiVerif(rinc) {
+  console.log('rinc', refVerif.value)
+  let valid = true
+  refVerif.value?.forEach(ver => {
+    console.log(ver, ver.validate())
+    if (!ver.validate()) valid = false
+  })
+  if (valid) store.selesaiVerif(rinc)
 }
 function icon(val) {
   let balik = ' Belum ada status'

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays } from 'src/modules/utils'
+import { filterDuplicateArrays, notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pemesanan', {
   state: () => ({
@@ -66,7 +66,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
         item?.rincian.forEach(rinci => {
           rinci.kd_obat = rinci.kdobat
           rinci.nama_obat = rinci?.mobat?.nama_obat
-          rinci.jumlah_diverif = rinci.jumlah_diverif ?? 0
+
           rinci.totalStok = 0
           rinci.maxRs = 0
           rinci.minRs = 0
@@ -92,9 +92,9 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
         })
       })
     },
-    async getDataTable() {
+    async getDataTable(val) {
       const param = { params: this.params }
-      this.loading = true
+      this.loading = !val
       await api.get('v1/simrs/farmasinew/list-verif', param)
         .then(resp => {
           this.loading = false
@@ -107,9 +107,45 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
     },
     simpanObat(val) {
       console.log('Simpan Obat', val)
+      if (!val?.jumlah_diverif) return notifErrVue('Jumlah Verif Tidak boleh kosong')
+      this.loadingSimpan = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/verif/verifpemesananrinci', val)
+          .then(resp => {
+            console.log('simpan obat', resp.data)
+            this.loadingSimpan = false
+            val.loading = false
+
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingSimpan = false
+            val.loading = false
+          })
+      })
     },
     selesaiVerif(val) {
       console.log('selesai verif', val)
+      this.loadingVerif = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/verif/verifpemesanheder', val)
+          .then(resp => {
+            console.log('simpan obat', resp.data)
+            this.loadingVerif = false
+            val.loading = false
+            this.setClose()
+            this.getDataTable(true)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingVerif = false
+            val.loading = false
+          })
+      })
     }
   }
 })
