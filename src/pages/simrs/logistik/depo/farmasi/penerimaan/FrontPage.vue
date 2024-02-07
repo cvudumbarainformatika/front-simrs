@@ -194,34 +194,50 @@
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs">
-                  <div class=" text-weight-bold">
+                  <div
+                    class=" text-weight-bold"
+                    style="white-space: normal;"
+                  >
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs anu">
+                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
+                  <div class=" text-weight-bold">
+                    ({{ rin.masterobat.satuan_k }})
+                  </div>
+                </div>
+                <div class="row no-wrap q-mt-xs anu f-10">
                   <div
-                    class=" text-weight-bold"
+                    class="text-weight-bold q-mr-sm"
                     :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
                     {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
                   </div>
                   <div
-                    class=" text-weight-bold"
+                    class=" text-weight-bold  q-mr-sm"
                     :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
                     {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
                   </div>
                   <div
-                    class=" text-weight-bold"
+                    class=" text-weight-bold  q-mr-sm"
                     :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
                     {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
                   </div>
                 </div>
-
-                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
-                  <div class=" text-weight-bold">
-                    ({{ rin.masterobat.satuan_k }})
+                <div class="row f-10 no-wrap q-mt-xs anu">
+                  <div
+                    class=" text-weight-bold q-mr-sm"
+                    :class="rin.masterobat.status_kronis === '1' ? 'text-green' : 'text-negative'"
+                  >
+                    {{ rin.masterobat.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
+                  </div>
+                  <div
+                    class=" text-weight-bold q-mr-sm"
+                    :class="rin.masterobat.status_prb === '1' ? 'text-green' : 'text-negative'"
+                  >
+                    {{ rin.masterobat.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
                   </div>
                 </div>
               </div>
