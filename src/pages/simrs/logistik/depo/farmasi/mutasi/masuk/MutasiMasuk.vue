@@ -1,3 +1,3 @@
 <template>
-  Penerimaan
+  Mutasu Masuk
 </template>

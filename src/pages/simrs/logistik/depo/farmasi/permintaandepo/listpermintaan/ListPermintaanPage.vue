@@ -290,7 +290,7 @@ function label (val) {
       break
     case '4':
       // return 'grey'
-      return 'Status (-)'
+      return 'Diterima Depo'
       // eslint-disable-next-line no-unreachable
       break
 
