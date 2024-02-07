@@ -233,8 +233,7 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a,
-                                                                                                                   b) => a + b, 0) }}
+                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a, b) => a + b, 0) }}
                       </div>
                       <div v-if="!rin.stokreal.length">
                         0
@@ -252,129 +251,23 @@
                 </div>
               </div>
               <div class="col-3">
-                <div class="row justify-between no-wrap q-mt-xs text-green">
+                <div class="row justify-between no-wrap q-mt-xs text-orange">
                   <div class="q-mr-xs">
                     Permintaan
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.jumlah_minta }}
+                    {{ parseFloat(rin?.jumlah_minta) }}
                   </div>
                 </div>
-
-                <!-- <div class="row justify-between no-wrap q-mt-xs">
-                  <div
-                    v-if="row.flag === '2' || rin.editable"
-                    class="col-12"
-                  >
-                    <app-input
-                      ref="refInputVerif"
-                      v-model="rin.jumlah_minta"
-                      label="Jumlah Didistribusikan"
-                      outlined
-                      debounce="800"
-                      :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
-                        val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
-                      ]"
-                      @focus="setNol(rin)"
-                      @keyup.enter="kirim(rin, i,row)"
-                      @update:model-value="setJumlah($event, rin)"
-                    />
+                <div class="row justify-between no-wrap q-mt-xs text-green">
+                  <div class="q-mr-xs">
+                    Didistribusikan
                   </div>
-                  <div
-                    v-else
-                    class="col-12"
-                  >
-                    <app-input
-                      ref="refInputVerif"
-                      v-model="rin.jumlah_minta"
-                      label="Jumlah Didistribusikan"
-                      outlined
-                      debounce="800"
-                      readonly
-                      :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
-                        val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
-                      ]"
-                      @keyup.enter="gaKirim(rin, i)"
-                      @update:model-value="sudah($event, rin)"
-                    />
+                  <div class="text-weight-bold">
+                    {{ rin?.distribusi }}
                   </div>
-                </div> -->
+                </div>
               </div>
-              <!-- <div class="col-3 ">
-                <div v-if="parseFloat(rin.jumlah_minta) > 0 && row.flag==='2'">
-                  <div
-                    v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='2'"
-                    class="row justify-end"
-                  >
-                    <q-btn
-                      flat
-                      no-caps
-                      icon-right="icon-mat-send"
-                      label="Distribusikan"
-                      color="green"
-                      :loading="store.loadingSimpan && (store.form.id === rin.id)"
-                      @click="kirim(rin, i,row)"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="center middle"
-                      >
-                        <div class="row justify-end">
-                          Distribusikan Obat ini
-                        </div>
-                      </q-tooltip>
-                    </q-btn>
-                  </div>
-                </div>
-                <div v-else>
-                  <div
-                    v-if="parseFloat(rin.jumlah_minta) <= 0 && row.flag==='2'"
-                    class="row justify-end text-weight-bold"
-                  >
-                    Jumlah Distribusi salah
-                  </div>
-                  <div
-                    v-if="row.flag==='3'"
-                    class="row justify-end text-weight-bold text-green"
-                  >
-                    Sudah Di Distribusikan
-                  </div>
-                  <div
-                    v-if="row.flag==='1'"
-                    class="row justify-end text-weight-bold text-red"
-                  >
-                    Terima Terlebih dahulu
-                  </div>
-                  <div
-                    v-if="rin.user_verif !== '' && !rin.editable && row.flag === '2'"
-                    class="row justify-end text-weight-bold text-green q-py-xs"
-                  >
-                    <div class="row justify-end">
-                      <q-btn
-                        dense
-                        glossy
-                        no-caps
-                        icon="icon-mat-edit"
-                        label="Edit"
-                        color="primary"
-                        :loading="store.loading && (store.form.id === rin.id)"
-                        @click="setEdit(rin)"
-                      >
-                        <q-tooltip
-                          anchor="top middle"
-                          self="center middle"
-                        >
-                          <div>
-                            edit
-                          </div>
-                        </q-tooltip>
-                      </q-btn>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
             <q-separator />
           </div>
@@ -403,6 +296,7 @@ onMounted(() => {
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kddepo', obj)
   store.setParams('kddepo', obj)
+  store.getInitialData()
 })
 
 function onClick (val) {

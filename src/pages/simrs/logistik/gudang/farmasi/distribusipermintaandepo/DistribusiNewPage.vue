@@ -373,9 +373,28 @@
                   >
                     <div
                       v-if="row.flag === '2' && rin.distribusi===0 && parseFloat(rin.mak_stok) < rin.stok"
-                      class="text-negative"
+                      class="text-negative text-right"
                     >
                       Jumlah Stok melebihi Jumlah Maksimal Stok
+                    </div>
+                    <div
+                      v-else-if="row.flag === '2' && rin.distribusi<=parseFloat(rin.jumlahdiminta) && rin.distribusi>0"
+                      class="text-negative"
+                    >
+                      <q-icon
+                        name="icon-mat-lock"
+                        color="negative"
+                        size="sm"
+                      >
+                        <q-tooltip
+                          anchor="top middle"
+                          self="center middle"
+                        >
+                          <div class="row justify-end">
+                            Sudah Di distribusikan
+                          </div>
+                        </q-tooltip>
+                      </q-icon>
                     </div>
                     <div v-else>
                       Jumlah Distribusi salah
