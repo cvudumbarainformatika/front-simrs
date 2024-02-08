@@ -6,6 +6,7 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
   state: () => ({
     loading: false,
     loadingSimpan: false,
+    loadingKunci: false,
     items: [],
     meta: {},
     params: {
@@ -15,14 +16,14 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
       jenisdistribusi: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: ''
+      flag: '0'
     },
     form: {},
     columns: [
       'no_permintaan',
       'tgl_permintaan',
-      'tujuan',
       'dari',
+      'tujuan',
       'status',
       'act'
     ],
@@ -108,6 +109,26 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
             resolve(resp)
           })
           .catch(() => { this.loadingSimpan = false })
+      })
+    },
+    kirim(val) {
+      const data = {
+        no_permintaan: val
+      }
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/kuncipermintaan', data)
+          .then(resp => {
+            this.loadingKunci = false
+            console.log('kunci permintaan ', resp)
+            notifSuccess(resp)
+            this.getPermintaanDepo()
+            this.details = []
+            this.getListObat()
+            this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => { this.loadingKunci = false })
       })
     }
   }

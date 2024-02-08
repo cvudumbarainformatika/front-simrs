@@ -142,10 +142,10 @@
         <div>Tanggal Permintaan</div>
       </template>
       <template #col-dari>
-        <div>Mutasi Dari</div>
+        <div>Depo Minta</div>
       </template>
       <template #col-tujuan>
-        <div>Tujuan</div>
+        <div>Depo Tujuan</div>
       </template>
       <template #col-jumlah>
         <div>Jumlah</div>
@@ -202,7 +202,7 @@
             color="negative"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
           >
-            <!-- @click="kunci(row)" -->
+            <!-- @click="kirim(row)" -->
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
@@ -218,7 +218,24 @@
             dense
             color="primary"
             :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
+            @click="terima(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Terima
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div v-if="row.flag===''">
+          <q-btn
+            flat
+            icon="icon-mat-send"
+            dense
+            color="primary"
+            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            @click="kirim(row)"
           >
             <q-tooltip
               class="primary"
@@ -419,23 +436,19 @@ onMounted(() => {
     gudangs.value = apps.depos.filter(x => x.value !== apps?.user?.kdruangansim)
     gudangs.value.forEach(a => { a.label = a.nama })
 
-    if (store.form.kdgudang === '' || store.params.kdgudang === '') {
-      setTimeout(() => {
-        store.setForm('kdgudang', gudangs.value[0].value)
-        store.setParams('kdgudang', gudangs.value[0].value)
-      }, 800)
-    }
     if (store.form.kdgudang === apps?.user?.kdruangansim || store.params.kdgudang === apps?.user?.kdruangansim) {
       store.setForm('kdgudang', gudangs.value[0].value)
       store.setParams('kdgudang', gudangs.value[0].value)
-      // store.params.kdgudang = []
-      // store.params.kdgudang.push(gudangs.value[0].value)
-      // gud.value.push(gudangs.value[0].value)
     }
   }
   store.setForm('kddepo', apps?.user?.kdruangansim)
   store.setParams('kddepo', apps?.user?.kdruangansim)
   gudangs.value.push({ label: 'semua depo', value: 'all' })
+  if (store.form.kdgudang === '' || store.params.kdgudang === '') {
+    const panj = gudangs.value.length - 1
+    store.setForm('kdgudang', gudangs.value[panj].value)
+    store.setParams('kdgudang', gudangs.value[panj].value)
+  }
   store.getInitialData()
   console.log(gudangs.value)
 })
@@ -445,12 +458,9 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kddepo', obj)
   store.setParams('kddepo', obj)
   if (store.form.kdgudang === apps?.user?.kdruangansim || store.params.kdgudang === apps?.user?.kdruangansim) {
-    store.setForm('kdgudang', gudangs.value[0].value)
-    store.setParams('kdgudang', gudangs.value[0].value)
-    // store.params.kdgudang = []
-    // store.params.kdgudang.push(gudangs.value[0].value)
-    // gud.value = []
-    // gud.value.push(gudangs.value[0].value)
+    const panj = gudangs.value.length - 1
+    store.setForm('kdgudang', gudangs.value[panj].value)
+    store.setParams('kdgudang', gudangs.value[panj].value)
   }
 
   gudangs.value.push({ label: 'semua depo', value: 'all' })
@@ -473,7 +483,18 @@ function depo (val) {
 }
 
 const toloadBeli = ref('')
-function kunci (val) {
+function kirim (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  const form = {
+    no_permintaan: val.no_permintaan
+  }
+  console.log('val', val, form)
+
+  store.kirim(form)
+}
+function terima (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   toloadBeli.value = val.no_permintaan
@@ -484,7 +505,7 @@ function kunci (val) {
   }
   console.log('val', val, form)
 
-  store.simpanDetail(form)
+  store.kirim(form)
 }
 const color = val => {
   switch (val) {
