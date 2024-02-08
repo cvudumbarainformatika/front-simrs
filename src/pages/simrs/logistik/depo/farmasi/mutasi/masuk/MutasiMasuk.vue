@@ -78,6 +78,7 @@
             </div> -->
             <div class="q-mx-sm">
               <app-autocomplete
+                :key="gudangs"
                 v-model="store.params.kdgudang"
                 label="Tujuan"
                 option-value="value"
@@ -384,11 +385,12 @@ const statOptions = ref([
   { label: 'Konsinyasi', value: 'konsinyasi' }
 ])
 const flagOptions = ref([
-  { label: 'Draft', value: '' },
+  { label: 'Draft', value: '0' },
   { label: 'Pemintaan Dikirim', value: '1' },
-  { label: 'Diterima', value: '2' },
+  { label: 'Sedang di proses', value: '2' },
   { label: 'Permintaan Selesai', value: '3' },
-  { label: 'Diterima', value: '4' }
+  { label: 'Diterima Depo', value: '4' },
+  { label: 'Semua', value: '5' }
 ])
 const gudangs = ref([])
 const gd = apps.depos
@@ -433,6 +435,7 @@ onMounted(() => {
   }
   store.setForm('kddepo', apps?.user?.kdruangansim)
   store.setParams('kddepo', apps?.user?.kdruangansim)
+  gudangs.value.push({ label: 'semua depo', value: 'all' })
   store.getInitialData()
   console.log(gudangs.value)
 })
@@ -449,6 +452,8 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
     // gud.value = []
     // gud.value.push(gudangs.value[0].value)
   }
+
+  gudangs.value.push({ label: 'semua depo', value: 'all' })
   store.getInitialData()
 })
 
