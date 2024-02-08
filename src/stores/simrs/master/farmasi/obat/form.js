@@ -38,19 +38,19 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
 
     optionNapzas: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
     optionStatusGeneriks: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
     optionStatusForkits: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
     optionStatusFornases: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
     optionSistemBayars: [
       { label: 'SEMUA', value: 'SEMUA' },
@@ -64,11 +64,11 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     ],
     optionKronis: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
     optionPrb: [
       { label: 'YA', value: '1' },
-      { label: 'TIDAK', value: '0' }
+      { label: 'TIDAK', value: '' }
     ],
 
     kelasTerapis: [],
