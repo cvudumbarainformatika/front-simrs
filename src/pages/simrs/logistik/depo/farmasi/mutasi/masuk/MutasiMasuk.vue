@@ -47,35 +47,6 @@
                 @selected="jenisDistSelected"
               />
             </div>
-            <!-- <div class="q-mr-sm">
-              Status :
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.params.jenisdistribusi"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="non-konsinyasi"
-                label="Non-Konsinyasi"
-                keep-color
-                color="white"
-                :disable="store.loading"
-                @update:model-value="store.gantiJenisDistribusi"
-              />
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.params.jenisdistribusi"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="konsinyasi"
-                label="Konsinyasi"
-                keep-color
-                color="white"
-                :disable="store.loading"
-                @update:model-value="store.gantiJenisDistribusi"
-              />
-            </div> -->
             <div class="q-mx-sm">
               <app-autocomplete
                 :key="gudangs"
@@ -101,37 +72,6 @@
                 @selected="selectFlag"
               />
             </div>
-            <!-- <div class="q-mx-sm">
-              Tujuan :
-            </div>
-            <div class="q-mr-sm">
-              <q-option-group
-                v-model="gud"
-                :options="gudangs"
-                color="primary"
-                class="q-ml-sm"
-                dense
-                type="checkbox"
-                @update:model-value="selectGudang"
-              />
-            </div> -->
-            <!-- <div class="q-mx-sm">
-              ||
-            </div>
-            <div class="q-mx-sm">
-              status :
-            </div>
-            <div class="q-mr-sm">
-              <q-option-group
-                v-model="store.params.flag"
-                :options="flagOptions"
-                color="primary"
-                class="q-ml-sm"
-                dense
-                type="checkbox"
-                @update:model-value="selectFlag"
-              />
-            </div> -->
           </div>
         </div>
       </template>
@@ -505,7 +445,7 @@ function terima (val) {
   }
   console.log('val', val, form)
 
-  store.kirim(form)
+  store.simpanDetail(form)
 }
 const color = val => {
   switch (val) {
@@ -548,11 +488,11 @@ const label = (status) => {
       // eslint-disable-next-line no-unreachable
       break
     case '1':
-      return 'Permintaan dikirim ke Gudang'
+      return 'Permintaan dikirim'
       // eslint-disable-next-line no-unreachable
       break
     case '2':
-      return 'Diterima Gudang'
+      return 'Diterima Depo Tujuan'
       // eslint-disable-next-line no-unreachable
       break
     case '3':
@@ -560,7 +500,7 @@ const label = (status) => {
       // eslint-disable-next-line no-unreachable
       break
     case '4':
-      return 'Diterima Depo'
+      return 'Selesai'
       // eslint-disable-next-line no-unreachable
       break
     case 99:
