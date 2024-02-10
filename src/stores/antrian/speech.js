@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useSpeechStore = defineStore('speech', {
   state: () => ({
-    isLoading: true,
+    isLoading: false,
     name: '',
     selectedVoice: 0,
     synth: window.speechSynthesis,

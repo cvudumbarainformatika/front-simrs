@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 
 export const useGeneralConsentStore = defineStore('general_consent', {
   state: () => ({
@@ -16,9 +17,8 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       nohp: null,
       hubunganpasien: 'Diri Sendiri',
       ttdpasien: null,
-      ttdpetugas: null
+      nikpetugas: null
     },
-    ttdpasienmentahan: null,
 
     options: ['Diri Sendiri', 'Ayah Kandung', 'Ibu Kandung', 'Kakak Kandung', 'Adik Kandung', 'Paman', 'Kakek', 'Cucu', 'Saudara']
   }),
@@ -62,11 +62,28 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       }
       this.setForm('tanggal', dateDbFormat(new Date()))
     },
-    async saveGeneralConsentPasien() {
-      console.log('save general cons', this.form)
+    async saveGeneralConsentPasien(pegawai) {
+      if (!this.form.ttdpasien) {
+        notifErrVue('Maaf tanda tangan pasien Belum Ada')
+        return
+      }
+      if (!this.form.norm) {
+        notifErrVue('Maaf NORM pasien KOSONG !!!')
+        return
+      }
+      if (!pegawai.nik) {
+        notifErrVue('Maaf !, NIK Petugas Tidak Boleh KOSONG !!!')
+        return
+      }
+      // console.log('save general cons', pegawai)
+      this.form.nikpetugas = pegawai?.nik
+      // console.log('save general cons', this.form)
       await api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
         .then(resp => {
           console.log(resp)
+          this.form.ttdpasien = resp.data
+        }).catch(err => {
+          console.log('save general cons', err)
         })
     }
   }

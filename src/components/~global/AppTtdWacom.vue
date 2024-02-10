@@ -10,18 +10,27 @@
     id="signatureDiv"
   >
     <canvas
-      v-show="SIGNATUREIMAGE === null"
+      v-show="imgTtd === null"
       id="signatureCanvas"
       ref="canvasRef"
       width="320"
       height="200"
       style="border:4px solid rgb(122, 122, 122)"
     />
-    <q-img
-      v-show="SIGNATUREIMAGE !== null"
-      :src="getImage()"
-      style="border:4px solid rgb(122, 122, 122)"
-    />
+    <div v-show=" imgTtd !==null">
+      <q-img
+        v-if="SIGNATUREIMAGE !== null"
+        :key="SIGNATUREIMAGE"
+        :src="SIGNATUREIMAGE"
+        style="border:4px solid rgb(122, 122, 122)"
+      />
+      <q-img
+        v-else
+        :key="imgTtd"
+        :src="getImage()"
+        style="border:4px solid rgb(122, 122, 122)"
+      />
+    </div>
   </div>
   <div class="q-mt-md">
     <q-btn
@@ -51,6 +60,7 @@
 import Q from 'q'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { WacomGSS } from 'src/modules/wacom/sdkstu'
+// eslint-disable-next-line no-unused-vars
 import { pathImg } from 'src/boot/axios'
 
 const props = defineProps({ ttd: { type: String, default: null } })
@@ -94,7 +104,7 @@ const HEIGHT = ref('200px')
 const FORMTOP = ref('320px')
 const FORMLEFT = ref('200px')
 // eslint-disable-next-line no-unused-vars
-const SIGNATUREIMAGE = ref()
+const SIGNATUREIMAGE = ref(null)
 
 // const imgTtd = ref(null)
 
@@ -105,12 +115,14 @@ const ctx = ref()
 onMounted(() => {
   ctx.value = canvasRef.value.getContext('2d')
   setTimeout(checkForSigCaptX, 500)
+  SIGNATUREIMAGE.value = null
   // // console.log('Q', SDKSTU)
 })
 
 onBeforeUnmount(() => {
   // const confirmationMessage = ''
-  WacomGSS?.STU?.close()
+  // WacomGSS?.STU?.close()
+  disconnect()
 })
 
 function checkForSigCaptX() {
@@ -145,8 +157,12 @@ function getImage() {
   if (!imgTtd.value) {
     return SIGNATUREIMAGE.value
   }
-
+  // if (imgTtd.value !== null && SIGNATUREIMAGE.value !== null) {
+  //   return SIGNATUREIMAGE.value
+  // }
+  // SIGNATUREIMAGE.value = pathImg + imgTtd.value
   return pathImg + imgTtd.value
+  // return SIGNATUREIMAGE.value
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -527,14 +543,14 @@ function btnClearClick() {
   clearScreen()
 }
 
-// eslint-disable-next-line no-unused-vars
 function clearScreen() {
   clearCanvas(canvasRef.value, ctx.value)
   drawButtons()
   // eslint-disable-next-line no-array-constructor
   MPENDATA.value = new Array()
-  tablet.writeImage(ENCODINGMODE.value, MIMGDATA.value)
+  tablet?.writeImage(ENCODINGMODE.value, MIMGDATA.value)
   SIGNATUREIMAGE.value = null
+  emits('saveTtd', null)
 }
 
 function createModalWindow(w, h) {
@@ -565,7 +581,6 @@ function clearCanvas(canvas, cx) {
 const clearPad = () => {
   clearCanvas(canvasRef.value, ctx.value)
   clearScreen()
-  // emits('saveTtd', null)
   setTimeout(close, 0)
 }
 

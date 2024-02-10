@@ -103,24 +103,21 @@
                   />
                 </div>
               </div>
-              <div class="row q-mt-sm text-end">
-                <div class="q-ml-sm">
-                  <q-btn
-                    outline
-                    size="sm"
-                    padding="xs"
-                    :color="item.generalconsent?'teal':'negative'"
-                    :label="item.generalconsent?'Ada General Consent':'General Consent Belum Ada'"
-                    @click="genCon(item)"
-                  />
-                </div>
+              <div class="row q-mt-sm justify-end">
+                <q-btn
+                  outline
+                  size="sm"
+                  class="q-px-md"
+                  :color="item.generalconsent?'teal':'negative'"
+                  :label="item.generalconsent?'Lihat General Consent':'General Consent Belum Ada'"
+                  @click="genCon(item)"
+                />
               </div>
               <div class="row q-mt-sm justify-end">
                 <div class="q-ml-sm">
                   <q-btn
                     outline
                     size="sm"
-                    padding="xs"
                     color="teal"
                     :loading="loadingP && temp===item.noka"
                     label="Pengajuan SEP"
