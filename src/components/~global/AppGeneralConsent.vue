@@ -4,6 +4,7 @@
     :maximized="maximizedToggle"
     transition-show="slide-left"
     transition-hide="slide-right"
+    @before-show="cekTtdPasien"
   >
     <q-card flat>
       <div
@@ -182,8 +183,12 @@
                 :ttd="store.form.ttdpasien"
                 @save-ttd="(val)=> store.setForm('ttdpasien',val)"
               /> -->
-              <app-ttd-wacom />
-              <div>Nama & Tanda Tangan</div>
+              <app-ttd-wacom
+                :key="pasien"
+                :ttd="store.form.ttdpasien"
+                @save-ttd="(val)=> store.setForm('ttdpasien',val)"
+              />
+              <div>{{ pasien?.nama }}</div>
             </div>
           </div>
         </div>
@@ -193,7 +198,7 @@
         <q-btn
           color="primary"
           label="Simpan General Consent Pasien"
-          @click="store.saveGeneralConsentPasien()"
+          @click="store.saveGeneralConsentPasien(app?.user?.pegawai)"
         />
       </q-card-section>
     </q-card>
@@ -237,5 +242,11 @@ function changeHubunganPasien() {
     store.setForm('alamat', null)
     store.setForm('nohp', null)
   }
+}
+
+function cekTtdPasien() {
+  const ttdpasien = props?.pasien?.ttdpasien
+  store.setForm('ttdpasien', ttdpasien)
+  console.log('cekttd', store.form)
 }
 </script>

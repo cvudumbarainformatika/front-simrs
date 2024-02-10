@@ -164,17 +164,17 @@ function settingsVoice() {
 
 function listenForSpeechEvents() {
   speech.utterance.onstart = () => {
-    // console.log('start...')
+    console.log('start...')
     speech.isLoading = true
   }
   speech.utterance.onend = () => {
-    // console.log('end...')
+    console.log('end...')
     speech.isLoading = false
   }
 }
 
 function setSpeech(txt) {
-  // console.log(speech.voiceList[11])
+  console.log(speech.voiceList[indexVoices.value])
   const voice = speech.utterance
   voice.text = txt
   voice.voice = speech.voiceList[indexVoices.value]
@@ -187,8 +187,14 @@ function setSpeech(txt) {
 }
 
 function panggil(row) {
-  const txt1 = 'paasien . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
-  // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
+  // console.log(row)
+  const nama = (row?.nama_panggil) ? (row?.nama_panggil)?.toLowerCase() : ''
+  const unit = row?.panggil_antrian
+  const noAntrean = row?.noantrian ? row.noantrian.toUpperCase() : ' '
+  // eslint-disable-next-line no-unused-vars
+  const txt1 = 'pasien ? . ' + nama + '? ...Harap menujuu  ' + unit
+  // eslint-disable-next-line no-unused-vars
+  const txt2 = 'Nomor Antrean ... ' + noAntrean + '...Harap menuju... ke...' + unit
   // const txt = jns === 'nama' ? txt1 : txt2
   speech.synth.speak(setSpeech(txt1))
   // console.log(row)

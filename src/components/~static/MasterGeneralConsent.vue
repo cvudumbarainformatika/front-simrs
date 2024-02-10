@@ -125,7 +125,7 @@
         <div class="row q-mt-md">
           <div class="col text-center">
             <div>Mengetahui,</div>
-            <div class="q-mt-md">
+            <div class="q-mt-xs">
               Petugas Tpp Rawat Jalan
             </div>
             <div
@@ -138,14 +138,23 @@
           </div>
           <div class="col text-center">
             <div>Probolinggo, {{ pasien?.tgl_kunjungan ? humanDate(pasien?.tgl_kunjungan) : defaultForm }}</div>
-            <div class="q-mt-md">
+            <div class="q-mt-xs">
               Pasien / Keluarga
             </div>
             <div
               style="min-height: 50px;"
               class="column flex-center"
             >
-              Ttd
+              <div v-if="!pasien?.ttdpasien">
+                Ttd
+              </div>
+              <div v-else>
+                <q-img
+                  :src="pathImg + pasien?.ttdpasien"
+                  width="150px"
+                />
+                <!-- {{ pasien?.ttdpasien }} -->
+              </div>
             </div>
             <div>{{ pasien?.nama ?? 'Nama' }}</div>
           </div>
@@ -160,6 +169,8 @@
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
+// eslint-disable-next-line no-unused-vars
+import { pathImg } from 'src/boot/axios'
 
 const app = useAplikasiStore()
 
