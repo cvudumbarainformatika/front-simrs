@@ -181,6 +181,7 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
             this.loadingSimpan = false
             console.log('didtribusi', resp)
             notifSuccess(resp)
+            val.distribusi = parseFloat(val?.jumlah_minta)
             // this.getPermintaanDepo()
             resolve(resp)
           })

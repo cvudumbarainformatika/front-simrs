@@ -140,7 +140,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
                   if (head.length) {
                     const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
                     const gud = gudA[0] ?? {}
-                    console.log('gu', gud)
+                    // console.log('gu', gud)
                     const temp = {
                       no_rencbeliobat: a,
                       gudang: gud,

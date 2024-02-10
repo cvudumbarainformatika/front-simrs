@@ -40,7 +40,7 @@
 </template>
 <script setup>
 
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onUnmounted } from 'vue'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { useTabelObatDirencanakaStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObatRencana'
 import { useStyledStore } from 'src/stores/app/styled'
@@ -72,6 +72,9 @@ const listForm = defineAsyncComponent(() => import('./comp/ListForm.vue'))
 
 table.getInitialData()
 store.getInitialData()
+onUnmounted(() => {
+  store.resetForm()
+})
 </script>
 <style lang="scss" scoped>
 .box {

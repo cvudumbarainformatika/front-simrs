@@ -2,10 +2,11 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerimaan_depo', {
+export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
   state: () => ({
     loading: false,
     loadingSimpan: false,
+    loadingKunci: false,
     items: [],
     meta: {},
     params: {
@@ -15,13 +16,14 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
       jenisdistribusi: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: ''
+      flag: '0'
     },
     form: {},
     columns: [
       'no_permintaan',
       'tgl_permintaan',
       'dari',
+      'tujuan',
       'status',
       'act'
     ],
@@ -31,7 +33,6 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
     ],
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
-      { nama: 'Floor Stock 2 (Obat)', value: 'Gd-04010101' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
       { nama: 'Depo OK', value: 'Gd-04010103' },
       { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
@@ -83,7 +84,7 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
+        api.get('v1/simrs/farmasinew/depo/list-mutasi', param)
           .then(resp => {
             this.loading = false
             this.items = resp?.data?.data ?? resp?.data
@@ -108,6 +109,26 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
             resolve(resp)
           })
           .catch(() => { this.loadingSimpan = false })
+      })
+    },
+    kirim(val) {
+      const data = {
+        no_permintaan: val
+      }
+      this.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/kuncipermintaan', data)
+          .then(resp => {
+            this.loadingKunci = false
+            console.log('kunci permintaan ', resp)
+            notifSuccess(resp)
+            this.getPermintaanDepo()
+            this.details = []
+            this.getListObat()
+            this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => { this.loadingKunci = false })
       })
     }
   }

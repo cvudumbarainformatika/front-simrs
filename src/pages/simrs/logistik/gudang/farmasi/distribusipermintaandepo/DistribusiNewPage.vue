@@ -152,7 +152,8 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag==='2'">
+        <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
+        <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
           <q-btn
             flat
             icon="icon-mat-done_all"
@@ -372,9 +373,28 @@
                   >
                     <div
                       v-if="row.flag === '2' && rin.distribusi===0 && parseFloat(rin.mak_stok) < rin.stok"
-                      class="text-negative"
+                      class="text-negative text-right"
                     >
                       Jumlah Stok melebihi Jumlah Maksimal Stok
+                    </div>
+                    <div
+                      v-else-if="row.flag === '2' && rin.distribusi<=parseFloat(rin.jumlahdiminta) && rin.distribusi>0"
+                      class="text-negative"
+                    >
+                      <q-icon
+                        name="icon-mat-lock"
+                        color="negative"
+                        size="sm"
+                      >
+                        <q-tooltip
+                          anchor="top middle"
+                          self="center middle"
+                        >
+                          <div class="row justify-end">
+                            Sudah Di distribusikan
+                          </div>
+                        </q-tooltip>
+                      </q-icon>
                     </div>
                     <div v-else>
                       Jumlah Distribusi salah
@@ -445,9 +465,13 @@ onMounted(() => {
   store.setParams('kdgudang', apps?.user?.kdruangansim)
   store.getInitialData()
 })
+
+const gud = ['Gd-03010100', 'Gd-05010100']
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kdgudang', obj)
   store.setParams('kdgudang', obj)
+  const gd = gud.find(a => a === obj)
+  if (gd) store.refreshTable()
 })
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)

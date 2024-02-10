@@ -26,8 +26,9 @@
         <app-loading />
       </q-card-section>
       <q-card-section v-else>
+        <!-- {{ store?.obat }} -->
         <div class="row text-weight-bold text-amber-10">
-          {{ store?.obat?.namaobat??store?.obat?.nama_obat }}
+          {{ store?.obat?.nama_obat??store?.obat?.namaobat }}
         </div>
         <div class="row text-italic f-10">
           {{ store?.obat?.kd_obat }}

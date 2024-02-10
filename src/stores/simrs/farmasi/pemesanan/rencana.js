@@ -106,7 +106,7 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       // console.log('mm ', mm)
       // console.log('st ', st)
       // console.log('all ', all)
-      console.log('rinci ', rinc)
+      // console.log('rinci ', rinc)
     },
     getInitialData() {
       this.cariRencanaBeli()

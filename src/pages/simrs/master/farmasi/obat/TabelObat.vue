@@ -306,6 +306,17 @@
                 </div>
               </div>
               <div
+                v-if="row.keterangan_kronis"
+                class="row box-tiga justify-between items-center no-wrap q-mb-sm"
+              >
+                <div class="">
+                  Ket. Kronis
+                </div>
+                <div style="white-space: normal;">
+                  {{ row.keterangan_kronis }}
+                </div>
+              </div>
+              <div
                 v-if="row.status_prb"
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >

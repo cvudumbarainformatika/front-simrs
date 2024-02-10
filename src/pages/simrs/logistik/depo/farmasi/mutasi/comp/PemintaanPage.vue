@@ -1,3 +1,0 @@
-<template>
-  Permimntaan
-</template>

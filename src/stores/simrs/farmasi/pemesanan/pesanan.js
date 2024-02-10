@@ -42,6 +42,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
     },
     setClose() {
       this.isOpen = false
+      this.resetForm()
     },
     getInitialData() {
       this.getPihakKetiga()
@@ -67,6 +68,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
         kdpbf: this.form.kdpbf,
         noperencanaan: val.noperencanaan,
         kdobat: val.kdobat,
+        kd_ruang: val.kd_ruang,
         stok_real_gudang: val.stokgudang,
         stok_real_rs: val.stokrs,
         stok_max_rs: val.stomaxkrs,
@@ -126,6 +128,24 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       const tabel = useTabelPemesananObatStore()
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/pemesananobat/kuncipemesanan', data)
+          .then(resp => {
+            this.loading = false
+            tabel.getInitialData()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    batal(val) {
+      this.loading = true
+      const data = {
+        nopemesanan: val
+      }
+      const tabel = useTabelPemesananObatStore()
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/pemesananobat/batal', data)
           .then(resp => {
             this.loading = false
             tabel.getInitialData()

@@ -118,41 +118,21 @@
             {{ user.nama }}
           </div>
         </div>
-        <div v-if="apps.user.pegawai.role_id !== 1 || ( apps.user.pegawai.role_id === 1 && apps.user?.kdruangansim!=='')">
+        <div>
           <div class="row no-wrap q-mb-xs">
             <div class="col-12">
               <app-autocomplete
                 v-model="store.form.tujuan"
-                label="Pilih Gudang"
+                label="Pilih Depo Tujuan"
                 option-label="nama"
                 option-value="value"
                 outlined
                 clearable
-                :source="store.gudangs"
+                :source="gudangs"
                 @selected="gudangSelected"
               />
             </div>
           </div>
-          <!-- <div class="row no-wrap q-mb-xs">
-            <div class="col-4">
-              Gudang Asal :
-            </div>
-            <div
-              v-if="store.disp.gudang"
-              class="col-4 text-weight-bold"
-            >
-              {{ store.disp.gudang }}
-            </div>
-            <div
-              v-if="!store.disp.gudang"
-              class="col-4 text-weight-bold text-negative"
-            >
-              Anda Tidak Memiliki Akses Permintaan Depo
-            </div>
-            <div class="col-4 text-cyan">
-              ({{ store.form.tujuan ? store.form.tujuan :'-' }})
-            </div>
-          </div> -->
           <div class="row no-wrap q-mb-xs">
             <div class="col-4 ">
               Depo Tujuan :
@@ -177,13 +157,6 @@
       </div>
     </div>
     <div class="bg-grey-2">
-      <!-- <div
-        class="row bg-grey q-pa-sm"
-      >
-        <div class="f-14 text-weight-bold">
-          Rincian Permintaan
-        </div>
-      </div> -->
       <div
         class="row bg-grey q-pa-xs q-mt-sm"
       >
@@ -287,16 +260,6 @@
                 <div class="q-mr-sm text-weight-bold">
                   tidak ada
                 </div>
-                <!-- <div
-                  v-if="(store.form.kdobat && !mintaMax) "
-                  class="q-mr-sm"
-                >
-                  <app-btn
-                    label="Minta Max Stok"
-                    color="orange"
-                    @click="setMinta"
-                  />
-                </div> -->
                 <div
                   v-if="store.form.kdobat && mintaMax"
                   class="q-mr-sm"
@@ -411,13 +374,13 @@
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
-import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { computed, ref, watch } from 'vue'
+import { useFarmasiPermintaanMutasiDepoStore } from 'src/stores/simrs/farmasi/mutasi/depo/minta'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
 const style = useStyledStore()
-const store = useFarmasiPermintaanDepoStore()
+const store = useFarmasiPermintaanMutasiDepoStore()
 
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
@@ -454,8 +417,6 @@ const apps = useAplikasiStore()
 const user = computed(() => {
   if (apps.user.pegawai) {
     if (!store.form.dari) {
-      // store.setForm('dari', 'Gd-04010103')
-
       if (apps?.user?.kdruangansim) {
         const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
         if (depo.length) {
@@ -464,12 +425,6 @@ const user = computed(() => {
           store.setParam('kddepo', apps?.user?.kdruangansim)
         }
       }
-      // store.getListObat()
-    }
-    if (!store.form.tujuan) {
-      store.setForm('tujuan', 'Gd-05010100')
-      store.setParam('kdgudang', 'Gd-05010100')
-      store.getListObat()
     }
   }
   return apps.user
@@ -478,62 +433,17 @@ const user = computed(() => {
 function gudangSelected(val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
+  store.setForm('tujuan', val)
+  store.getListObat()
 }
 function depoSelected (val) {
   console.log('depo', val)
   store.setParam('kddepo', val)
 }
-const floor = ['Gd-03010101', 'Gd-04010101']
-const gud = ['Gd-03010100', 'Gd-05010100']
-watch(() => apps?.user?.kdruangansim, (obj) => {
-  store.setParam('kddepo', obj)
-  store.setForm('dari', obj)
-  const dpFl = floor.find(a => a === obj)
-  const gd = gud.find(a => a === obj)
-  if (dpFl) {
-    store.setForm('tujuan', 'Gd-03010100')
-    store.setParam('kdgudang', 'Gd-03010100')
-  } else {
-    if (!gd) {
-      store.setForm('tujuan', 'Gd-05010100')
-      store.setParam('kdgudang', 'Gd-05010100')
-    }
-  }
-  console.log('floor', dpFl)
-  const depo = store.depos.filter(a => a.value === obj)
-  if (depo.length) {
-    store.disp.depo = depo[0]?.nama
-    store.getListObat()
-  }
-  // if (depo.length) store.getDataTable()
-  // else {
-  //   store.items = []
-  //   store.meta = {}
-  // }
-})
 
 function setJumlahMinta(evt) {
-  // console.log('maks stok', parseFloat(store.form.mak_stok))
-  // if (parseFloat(store.form.mak_stok) <= 0 || isNaN(parseFloat(store.form.mak_stok))) {
-  //   store.setForm('jumlah_minta', 0)
-  //   notifErrVue('Tidak Ada maksimal stok, tidak bisa melanjutkan transaksi')
-  //   return
-  // }
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   store.setForm('jumlah_minta', jumlah)
-  // const max = parseFloat(store.form.mak_stok) ?? 0
-  // const stok = parseFloat(store.form.stok) ?? 0
-  // const bisaMinta = max - stok
-  // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
-  // if (bisaMinta < jumlah) {
-  //   store.setForm('jumlah_minta', bisaMinta)
-  //   notifInfVue('Jumlah minta tidak boleh melebihi stok maksimal user')
-  // } else if (alokasi < jumlah) {
-  //   store.setForm('jumlah_minta', alokasi)
-  //   notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
-  // } else {
-  //   store.setForm('jumlah_minta', jumlah)
-  // }
 }
 function validasi() {
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
@@ -555,6 +465,28 @@ function simpan() {
     store.simpan()
   }
 }
+const gudangs = ref([])
+onMounted(() => {
+  gudangs.value = store.depos
+  if (apps?.user?.kdruangansim) {
+    gudangs.value = store.depos.filter(x => x.value !== apps?.user?.kdruangansim)
+  }
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  if (store.params.kdgudang === obj) {
+    store.setParam('kdgudang', '')
+    store.setForm('tujuan', '')
+  }
+  store.setParam('kddepo', obj)
+  store.setForm('dari', obj)
+  const depo = store.depos.filter(a => a.value === obj)
+  if (depo.length) {
+    store.disp.depo = depo[0]?.nama
+    gudangs.value = store.depos.filter(x => x.value !== apps?.user?.kdruangansim)
+    store.getListObat()
+  }
+})
+
 store.getInitialData()
 </script>
 <style lang="scss" scoped>

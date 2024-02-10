@@ -409,6 +409,18 @@
                   inline
                 />
               </div>
+              <!--  Keterangan Kronis  -->
+              <div class="row q-mb-xs items-center">
+                <div class="col-12">
+                  <q-input
+                    v-model="store.form.keterangan_kronis"
+                    dense
+                    label="Keterangan Kronis"
+                    standout="bg-yellow-3"
+                    outlined
+                  />
+                </div>
+              </div>
               <!-- PRB -->
               <div class="row q-mb-xs items-center">
                 Obat PRB ?
@@ -584,7 +596,7 @@
               <div class="row q-mb-xs items-center">
                 Status Forkit:
                 <q-option-group
-                  v-model="store.form.status_forkid"
+                  v-model="store.form.keterangan_kronis"
                   :options="store.optionStatusForkits"
                   color="primary"
                   class="q-ml-sm"

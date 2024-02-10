@@ -36,6 +36,18 @@
         <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
+              <app-autocomplete
+                v-model="store.params.jenisdistribusi"
+                label="Status Obat"
+                option-value="value"
+                option-label="label"
+                :source="statOptions"
+                outlined
+                dark
+                @selected="jenisDistSelected"
+              />
+            </div>
+            <!-- <div class="q-mr-sm">
               Status :
             </div>
             <div class="q-mr-sm">
@@ -63,7 +75,63 @@
                 :disable="store.loading"
                 @update:model-value="store.gantiJenisDistribusi"
               />
+            </div> -->
+            <div class="q-mx-sm">
+              <app-autocomplete
+                :key="gudangs"
+                v-model="store.params.kdgudang"
+                label="Tujuan"
+                option-value="value"
+                option-label="label"
+                :source="gudangs"
+                outlined
+                dark
+                @selected="selectGudang"
+              />
             </div>
+            <div class="q-mx-sm">
+              <app-autocomplete
+                v-model="store.params.flag"
+                label="Status Mutasi"
+                option-value="value"
+                option-label="label"
+                :source="flagOptions"
+                outlined
+                dark
+                @selected="selectFlag"
+              />
+            </div>
+            <!-- <div class="q-mx-sm">
+              Tujuan :
+            </div>
+            <div class="q-mr-sm">
+              <q-option-group
+                v-model="gud"
+                :options="gudangs"
+                color="primary"
+                class="q-ml-sm"
+                dense
+                type="checkbox"
+                @update:model-value="selectGudang"
+              />
+            </div> -->
+            <!-- <div class="q-mx-sm">
+              ||
+            </div>
+            <div class="q-mx-sm">
+              status :
+            </div>
+            <div class="q-mr-sm">
+              <q-option-group
+                v-model="store.params.flag"
+                :options="flagOptions"
+                color="primary"
+                class="q-ml-sm"
+                dense
+                type="checkbox"
+                @update:model-value="selectFlag"
+              />
+            </div> -->
           </div>
         </div>
       </template>
@@ -74,7 +142,10 @@
         <div>Tanggal Permintaan</div>
       </template>
       <template #col-dari>
-        <div>Dari</div>
+        <div>Depo Minta</div>
+      </template>
+      <template #col-tujuan>
+        <div>Depo Tujuan</div>
       </template>
       <template #col-jumlah>
         <div>Jumlah</div>
@@ -102,6 +173,11 @@
           {{ row.dari?depo(row?.dari) :'-' }}
         </div>
       </template>
+      <template #cell-tujuan="{ row }">
+        <div class="row justify-between no-wrap">
+          {{ row.tujuan?depo(row?.tujuan) :'-' }}
+        </div>
+      </template>
       <template #cell-status="{ row }">
         <div class="row">
           <q-chip
@@ -126,7 +202,7 @@
             color="negative"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
           >
-            <!-- @click="kunci(row)" -->
+            <!-- @click="kirim(row)" -->
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
@@ -142,7 +218,24 @@
             dense
             color="primary"
             :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
+            @click="terima(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Terima
+            </q-tooltip>
+          </q-btn>
+        </div>
+        <div v-if="row.flag===''">
+          <q-btn
+            flat
+            icon="icon-mat-send"
+            dense
+            color="primary"
+            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            @click="kirim(row)"
           >
             <q-tooltip
               class="primary"
@@ -298,20 +391,79 @@
 
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
-import { useDistribusiPenerimaanDepoStore } from 'src/stores/simrs/farmasi/penerimaandepo/penerimaandepo'
+import { useMutasiMasukDepoStore } from 'src/stores/simrs/farmasi/mutasi/depo/masuk'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { onMounted, ref, watch } from 'vue'
 
-const store = useDistribusiPenerimaanDepoStore()
+const store = useMutasiMasukDepoStore()
 const apps = useAplikasiStore()
+const statOptions = ref([
+  { label: 'Non-Konsinyasi', value: 'non-konsinyasi' },
+  { label: 'Konsinyasi', value: 'konsinyasi' }
+])
+const flagOptions = ref([
+  { label: 'Draft', value: '0' },
+  { label: 'Pemintaan Dikirim', value: '1' },
+  { label: 'Sedang di proses', value: '2' },
+  { label: 'Permintaan Selesai', value: '3' },
+  { label: 'Diterima Depo', value: '4' },
+  { label: 'Semua', value: '5' }
+])
+const gudangs = ref([])
+const gd = apps.depos
+// const gud = ref([])
+function selectGudang(val) {
+  console.log('select gudang', val)
+  store.setParams('kdgudang', val)
+  store.getPermintaanDepo()
+}
+function selectFlag(val) {
+  // console.log('select gudang', val)
+  // store.setParams('kdgudang', val)
+  store.getPermintaanDepo()
+}
+function jenisDistSelected(val) {
+  console.log('jenis dist', val)
+  // store.setParams('kdgudang', val)
+  store.getPermintaanDepo()
+}
 onMounted(() => {
+  gd.forEach(a => {
+    a.label = a.nama
+  })
+  gudangs.value = gd
+  if (apps?.user?.kdruangansim) {
+    gudangs.value = apps.depos.filter(x => x.value !== apps?.user?.kdruangansim)
+    gudangs.value.forEach(a => { a.label = a.nama })
+
+    if (store.form.kdgudang === apps?.user?.kdruangansim || store.params.kdgudang === apps?.user?.kdruangansim) {
+      store.setForm('kdgudang', gudangs.value[0].value)
+      store.setParams('kdgudang', gudangs.value[0].value)
+    }
+  }
   store.setForm('kddepo', apps?.user?.kdruangansim)
   store.setParams('kddepo', apps?.user?.kdruangansim)
+  gudangs.value.push({ label: 'semua depo', value: 'all' })
+  if (store.form.kdgudang === '' || store.params.kdgudang === '') {
+    const panj = gudangs.value.length - 1
+    store.setForm('kdgudang', gudangs.value[panj].value)
+    store.setParams('kdgudang', gudangs.value[panj].value)
+  }
   store.getInitialData()
+  console.log(gudangs.value)
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
+  gudangs.value = apps.depos.filter(x => x.value !== apps?.user?.kdruangansim)
+  gudangs.value.forEach(a => { a.label = a.nama })
   store.setForm('kddepo', obj)
   store.setParams('kddepo', obj)
+  if (store.form.kdgudang === apps?.user?.kdruangansim || store.params.kdgudang === apps?.user?.kdruangansim) {
+    const panj = gudangs.value.length - 1
+    store.setForm('kdgudang', gudangs.value[panj].value)
+    store.setParams('kdgudang', gudangs.value[panj].value)
+  }
+
+  gudangs.value.push({ label: 'semua depo', value: 'all' })
   store.getInitialData()
 })
 
@@ -321,7 +473,7 @@ function onClick (val) {
   val.item.highlight = !val.item.highlight
 }
 function depo (val) {
-  const temp = store.depos.filter(a => a.value === val)
+  const temp = apps.gudangs.filter(a => a.kode === val)
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
@@ -331,7 +483,18 @@ function depo (val) {
 }
 
 const toloadBeli = ref('')
-function kunci (val) {
+function kirim (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  const form = {
+    no_permintaan: val.no_permintaan
+  }
+  console.log('val', val, form)
+
+  store.kirim(form)
+}
+function terima (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   toloadBeli.value = val.no_permintaan
@@ -342,7 +505,7 @@ function kunci (val) {
   }
   console.log('val', val, form)
 
-  store.simpanDetail(form)
+  store.kirim(form)
 }
 const color = val => {
   switch (val) {

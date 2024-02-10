@@ -875,7 +875,7 @@
                   Nama
                 </div>
                 <div class="col-7">
-                  {{ tandatangan.data.ppk.nama }}
+                  {{ tandatangan?.data?.ppk?.nama }}
                 </div>
               </div>
               <div class="fit row no-wrap justify-start items-center q-my-sm">
@@ -884,7 +884,7 @@
                   NIP
                 </div>
                 <div class="col-7">
-                  {{ tandatangan.data.ppk.nip_baru===''?tandatangan.data.ppk.nip:tandatangan.data.ppk.nip_baru }}
+                  {{ tandatangan?.data?.ppk?.nip_baru===''?tandatangan?.data?.ppk?.nip:tandatangan?.data?.ppk?.nip_baru }}
                 </div>
               </div>
               <div class="fit row no-wrap justify-start items-center q-my-sm">
@@ -893,7 +893,7 @@
                   Jabatan
                 </div>
                 <div class="col-7">
-                  {{ tandatangan.data.ppk.relasi_jabatan?tandatangan.data.ppk.relasi_jabatan.jabatan:'jabatan tidak ditemukan' }}
+                  {{ tandatangan?.data?.ppk?.relasi_jabatan?tandatangan?.data?.ppk?.relasi_jabatan?.jabatan:'jabatan tidak ditemukan' }}
                 </div>
               </div>
               <div class="fit row no-wrap justify-start items-center q-my-sm">
@@ -917,7 +917,7 @@
               <div class="fit row no-wrap justify-start items-center q-my-sm">
                 <div class="col-1" />
                 <div class="col-11">
-                  yang ditugaskan sebagai Pejabat Penandatanganan Kontrak berdasarkan Keputusan Direktur UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Nomor:100.3/01/KEP/425.102.8/2023 tanggal 02 Januari 2023 Tentang Penunjukan dan Pengangkatan Pejabat Penandatangan Kontrak (PPK), Pejabat Teknis Kegiatan (PTK), dan Pembantu PTK Anggaran Badan Layanan Umum Daerah pada UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Tahun Anggaran 2023,
+                  yang ditugaskan sebagai Pejabat Penandatanganan Kontrak berdasarkan Keputusan Direktur UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Nomor : 100.3/01/KEP/425.102.8/{{ date.formatDate(Date.now(),'YYYY') }} tanggal 02 Januari {{ date.formatDate(Date.now(),'YYYY') }} Tentang Penunjukan dan Pengangkatan Pejabat Penandatangan Kontrak (PPK), Pejabat Teknis Kegiatan (PTK), dan Pembantu PTK Anggaran Badan Layanan Umum Daerah pada UOBK RSUD Dokter Mohamad Saleh Kota Probolinggo Tahun Anggaran {{ date.formatDate(Date.now(),'YYYY') }},
                   yang selanjutnya disebut <span class="text-weight-bold">PIHAK KEDUA.</span>
                 </div>
               </div>
@@ -1110,8 +1110,8 @@
                   option-value="value"
                   outlined
                   valid
-                  :source="tandatangan.optionTT"
-                  @on-select="tandatangan.kiriSelected"
+                  :source="tandatangan?.optionTT"
+                  @on-select="tandatangan?.kiriSelected"
                 />
               </div>
               <div class="col-6 text-center">
@@ -1123,8 +1123,8 @@
                   option-value="value"
                   outlined
                   valid
-                  :source="tandatangan.optionTT"
-                  @on-select="tandatangan.kananSelected"
+                  :source="tandatangan?.optionTT"
+                  @on-select="tandatangan?.kananSelected"
                 />
               </div>
             </div>
@@ -1149,24 +1149,24 @@
             </div>
             <div class="row justify-between q-col-gutter-sm">
               <div class="col-6 text-center">
-                {{ tandatangan.kiri }}
+                {{ tandatangan?.kiri }}
               </div>
               <div class="col-6 text-center">
-                {{ tandatangan.kanan }}
+                {{ tandatangan?.kanan }}
               </div>
             </div>
             <div class="row justify-between q-col-gutter-sm q-mb-xl">
               <div class="col-6 text-center">
-                {{ tandatangan.onKiri.acr }}
+                {{ tandatangan?.onKiri?.acr }}
               </div>
               <div class="col-6 text-center">
-                {{ tandatangan.onKanan.acr }}
+                {{ tandatangan?.onKanan?.acr }}
               </div>
             </div>
             <div class="row justify-between q-col-gutter-sm">
               <div class="col-6 text-center">
-                <div v-if="!tandatangan.onKiri.ada">
-                  <div v-if="tandatangan.tt.kiri!==null">
+                <div v-if="!tandatangan?.onKiri?.ada">
+                  <div v-if="tandatangan?.tt?.kiri!==null">
                     <div class="print-hide">
                       <app-input
                         v-model="freeTextKiri"
@@ -1179,18 +1179,18 @@
                     </div>
                   </div>
                 </div>
-                <div v-if="tandatangan.onKiri.ada">
+                <div v-if="tandatangan?.onKiri?.ada">
                   <div class="row justify-center">
-                    {{ tandatangan.onKiri.nama }}
+                    {{ tandatangan?.onKiri?.nama }}
                   </div>
                   <div class="row justify-center">
-                    {{ tandatangan.onKiri.nip }}
+                    {{ tandatangan?.onKiri?.nip }}
                   </div>
                 </div>
               </div>
               <div class="col-6 text-center">
-                <div v-if="!tandatangan.onKanan.ada">
-                  <div v-if="tandatangan.tt.kanan!==null">
+                <div v-if="!tandatangan?.onKanan?.ada">
+                  <div v-if="tandatangan?.tt?.kanan!==null">
                     <div class="print-hide">
                       <app-input
                         v-model="freeTextKanan"

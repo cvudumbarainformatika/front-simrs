@@ -521,8 +521,8 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 
 const store = useEResepDepoFarmasiStore()
 
-const tinggiDetailPas = ref(130)
 const pageRef = ref()
+const tinggiDetailPas = ref(130)
 const h = computed(() => {
   // console.log('h', pageRef.value)
   return pageRef.value?.$el?.clientHeight + 5
