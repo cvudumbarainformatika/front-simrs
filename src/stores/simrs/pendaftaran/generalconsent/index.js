@@ -17,6 +17,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       nohp: null,
       hubunganpasien: 'Diri Sendiri',
       ttdpasien: null,
+      ttdpetugas: null,
       nikpetugas: null
     },
 

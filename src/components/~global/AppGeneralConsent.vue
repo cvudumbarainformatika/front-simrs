@@ -172,7 +172,12 @@
                 :ttd="store.form.ttdpetugas"
                 @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
               /> -->
-              <div class="q-py-lg" />
+              <!-- <div class="q-py-lg" /> -->
+              <app-ttd-wacom
+                :key="pasien"
+                :ttd="store.form.ttdpetugas"
+                @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
+              />
               <div>{{ app?.user?.pegawai?.nama }}</div>
             </div>
           </div>

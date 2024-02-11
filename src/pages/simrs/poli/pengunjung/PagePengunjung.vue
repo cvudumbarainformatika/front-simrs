@@ -174,7 +174,7 @@ function listenForSpeechEvents() {
 }
 
 function setSpeech(txt) {
-  console.log(speech.voiceList[indexVoices.value])
+  // console.log(speech.voiceList[indexVoices.value])
   const voice = speech.utterance
   voice.text = txt
   voice.voice = speech.voiceList[indexVoices.value]
@@ -190,13 +190,15 @@ function panggil(row) {
   // console.log(row)
   const nama = (row?.nama_panggil) ? (row?.nama_panggil)?.toLowerCase() : ''
   const unit = row?.panggil_antrian
-  const noAntrean = row?.noantrian ? row.noantrian.toUpperCase() : ' '
+  const noAntrean = row?.noantrian ? row.noantrian.toUpperCase() : ''
   // eslint-disable-next-line no-unused-vars
   const txt1 = 'pasien ? . ' + nama + '? ...Harap menujuu  ' + unit
   // eslint-disable-next-line no-unused-vars
-  const txt2 = 'Nomor Antrean ... ' + noAntrean + '...Harap menuju... ke...' + unit
+  const txt2 = 'Nomor Antrian ... ' + noAntrean + '? ...Harap menujuu' + unit
+
+  const txt3 = 'Nomor Antrian ... ' + noAntrean + '... nama!  ' + nama + '! ...Harap menujuu  ' + unit
   // const txt = jns === 'nama' ? txt1 : txt2
-  speech.synth.speak(setSpeech(txt1))
+  speech.synth.speak(setSpeech(txt3))
   // console.log(row)
   store.sendPanggil(row, `display${kdDisplay.value}`)
 }

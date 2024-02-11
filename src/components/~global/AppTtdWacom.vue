@@ -1,4 +1,4 @@
-<!-- eslint-disable no-unused-expressions -->Point
+<!-- eslint-disable no-unused-expressions -->
 <!-- eslint-disable no-lone-blocks -->
 <!-- eslint-disable func-call-spacing -->
 <!-- eslint-disable func-call-spacing -->
