@@ -140,8 +140,8 @@ const props = defineProps({
 // defineExpose({ resetValidasi })
 
 onMounted(() => {
-  console.log(formmRef.value)
-  options.value = store.listTindakan
+  options.value = store.listTindakan?.filter(x => x.kdpoli?.includes(props.pasien?.kodepoli))
+  // console.log('options', options.value)
   // store.initReset()
   // formmRef.value?.resetValidation()
 })
@@ -166,7 +166,7 @@ function filterFn(val, update, abort) {
 
   update(() => {
     const needle = val.toLowerCase()
-    const arr = store.listTindakan
+    const arr = store.listTindakan?.filter(x => x.kdpoli?.includes(props.pasien?.kodepoli))
     const filter = ['kdtindakan', 'tindakan', 'icd9']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
       data.filter((item) => filterKeys.some(

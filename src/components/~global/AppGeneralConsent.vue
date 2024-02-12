@@ -201,7 +201,7 @@ function changeHubunganPasien() {
 function cekTtdPasien() {
   const ttdpasien = props?.pasien?.ttdpasien
   store.setForm('ttdpasien', ttdpasien)
-  console.log('cekttd', store.form)
+  console.log('cekttd', ttdpasien)
 }
 
 function saveGeneralConsent() {
