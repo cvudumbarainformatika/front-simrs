@@ -178,10 +178,12 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
         api.post('v1/simrs/farmasinew/gudang/distribusi/simpandistribusidepo', val)
           .then(resp => {
             this.loadingSimpan = false
-            console.log('didtribusi', resp)
-            notifSuccess(resp)
-            val.distribusi = parseFloat(val?.jumlah_minta)
+            console.log('didtribusi', resp?.data)
+            // console.log('val', val)
+            // console.log('jml', resp?.data?.data?.jml)
+            val.distribusi = parseFloat(resp?.data?.data?.jml)
             // this.getPermintaanDepo()
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => { this.loadingSimpan = false })
