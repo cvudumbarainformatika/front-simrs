@@ -172,6 +172,7 @@ export const useDistribusiPermintaanRuanganStore = defineStore('distribusi_permi
           .then(resp => {
             this.loadingSimpan = false
             console.log('didtribusi', resp)
+            val.distribusi = parseFloat(resp?.data?.data?.jml)
             notifSuccess(resp)
             // this.getPermintaanDepo()
             resolve(resp)

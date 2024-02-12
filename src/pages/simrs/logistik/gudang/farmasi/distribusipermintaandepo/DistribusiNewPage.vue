@@ -346,7 +346,24 @@
                     v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='2'"
                     class="row justify-end"
                   >
+                    <q-icon
+                      v-if="rin.distribusi>0"
+                      class="q-mr-md"
+                      name="icon-mat-done"
+                      color="green"
+                      size="sm"
+                    >
+                      <q-tooltip
+                        anchor="top middle"
+                        self="center middle"
+                      >
+                        <div class="row justify-end">
+                          Sudah Di distribusikan
+                        </div>
+                      </q-tooltip>
+                    </q-icon>
                     <q-btn
+                      v-else
                       flat
                       no-caps
                       icon-right="icon-mat-send"
@@ -540,6 +557,7 @@ function kirim (val, i, row) {
     console.log('form', form)
     store.simpanDetail(form).then(() => {
       val.editable = false
+      val.distribusi = form.distribusi
     })
   }
   val.editable = false
