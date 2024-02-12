@@ -75,7 +75,9 @@ const emits = defineEmits(['saveTtd'])
 //   }
 // })
 
-const imgTtd = computed(() => props.ttd)
+const imgTtd = computed(() => {
+  return props.ttd
+})
 
 let retry = 0
 const MAXRETRIES = 20
@@ -154,9 +156,9 @@ function Point(x, y) {
 }
 
 function getImage() {
-  if (!imgTtd.value) {
-    return SIGNATUREIMAGE.value
-  }
+  // if (!imgTtd.value) {
+  //   return SIGNATUREIMAGE.value
+  // }
   // if (imgTtd.value !== null && SIGNATUREIMAGE.value !== null) {
   //   return SIGNATUREIMAGE.value
   // }

@@ -16,35 +16,6 @@
             📝 Form General Consent Pasien
           </div>
           <q-space />
-
-          <!-- <q-btn
-            dense
-            flat
-            icon="icon-mat-minimize"
-            :disable="!maximizedToggle"
-            @click="maximizedToggle = false"
-          >
-            <q-tooltip
-              v-if="maximizedToggle"
-              class="bg-white text-primary"
-            >
-              Minimize
-            </q-tooltip>
-          </q-btn> -->
-          <!-- <q-btn
-            dense
-            flat
-            icon="icon-mat-crop_square"
-            :disable="maximizedToggle"
-            @click="maximizedToggle = true"
-          >
-            <q-tooltip
-              v-if="!maximizedToggle"
-              class="bg-white text-primary"
-            >
-              Maximize
-            </q-tooltip>
-          </q-btn> -->
           <q-btn
             v-close-popup
             dense
@@ -64,22 +35,6 @@
         </div>
       </q-card-section>
       <q-separator />
-      <!-- <q-card-section>
-        <div class="row justify-between">
-          <app-input-date
-            v-model="store.form.tanggal"
-            label="tanggal"
-            outlined
-          />
-          <div style="min-width: 200px;">
-            <app-autocomplete
-              v-model="store.form.petugas"
-              label="petugas"
-              outlined
-            />
-          </div>
-        </div>
-      </q-card-section> -->
       <q-separator />
       <q-card-section>
         <div class="text-weight-bold text-center">
@@ -90,12 +45,6 @@
         </div>
         <div class="row justify-between q-mt-md q-col-gutter-md">
           <div class="col-6">
-            <!-- <app-input
-              v-model="store.form.hubunganpasien"
-              label="Hubungan Pasien"
-              class="q-mb-sm"
-              outlined
-            /> -->
             <q-select
               v-model="store.form.hubunganpasien"
               outlined
@@ -203,7 +152,7 @@
         <q-btn
           color="primary"
           label="Simpan General Consent Pasien"
-          @click="store.saveGeneralConsentPasien(app?.user?.pegawai)"
+          @click="saveGeneralConsent"
         />
       </q-card-section>
     </q-card>
@@ -254,4 +203,26 @@ function cekTtdPasien() {
   store.setForm('ttdpasien', ttdpasien)
   console.log('cekttd', store.form)
 }
+
+function saveGeneralConsent() {
+  store.saveGeneralConsentPasien(app?.user?.pegawai).then(() => {
+    // ini buat pdf
+    emits('openPreviewGc')
+  })
+}
+
+// function generatePdf() {
+//   const doc = new jsPDF()
+
+//   // doc.text('Hello world!', 10, 10)
+//   // doc.save('a4.pdf')
+//   const source = window.document.getElementById('pdfHtml')
+//   doc.html(source, {
+//     callback: function (doc) {
+//       doc.save()
+//     },
+//     x: 10,
+//     y: 10
+//   })
+// }
 </script>

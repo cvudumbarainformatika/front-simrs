@@ -1,6 +1,13 @@
 <template>
-  <div class="page-A4 f-12 bg-white">
-    <div class="contentx">
+  <div
+    id="pdfDoc"
+    ref="rePdfDoc"
+    class="page-A4 f-12 bg-white"
+  >
+    <div
+
+      class="contentx"
+    >
       <!-- kop -->
       <my-kop-surat />
       <!-- content -->
@@ -171,8 +178,13 @@ import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
 // eslint-disable-next-line no-unused-vars
 import { pathImg } from 'src/boot/axios'
-
+import { ref, watch } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
 const app = useAplikasiStore()
+
+const rePdfDoc = ref(null)
 
 const saveWork = () => {
   changeIsi('irja')
@@ -182,7 +194,51 @@ const props = defineProps({
   editableMaster: { type: Boolean, default: false },
   isiPasien: { type: Object, default: null }
 })
-const { isi, pasien, defaultForm, changeIsi } = useContent(props?.isiPasien)
+const { isi, pasien, defaultForm, changeIsi, isOk } = useContent(props?.isiPasien)
+
+// eslint-disable-next-line no-unused-vars
+function createPdf() {
+  // console.log(rePdfDoc.value.innerHTML)
+  // eslint-disable-next-line new-cap
+  const doc = new jsPDF({
+    orientation: 'p',
+    unit: 'px',
+    format: 'a4',
+    hotfixes: ['px_scaling']
+  })
+
+  // doc.text('Hello world!', 10, 10)
+  // doc.save('a4.pdf')
+  // const source = window.document.getElementById('pdfDoc')
+  const source = rePdfDoc.value
+  // doc.html(source, {
+  //   callback: function (doc) {
+  //     doc.save('general-cosnsent.pdf')
+  //   },
+  //   margin: [0, 0, 0, 0],
+  //   autoPaging: 'text',
+  //   x: 0,
+  //   y: 0,
+  //   width: 595, // target width in the PDF document
+  //   windowWidth: 794 // window width in CSS pixels
+  // })
+  html2canvas(source, {
+    width: doc.internal.pageSize.getWidth(),
+    height: doc.internal.pageSize.getHeight()
+  }).then((canvas) => {
+    const img = canvas.toDataURL('image/jpeg', 0.5)
+
+    doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
+    doc.save('general-cosnsent.pdf')
+  })
+}
+
+watch(() => isOk.value, (n, old) => {
+  console.log(n)
+  if (n === true) {
+    // setTimeout(createPdf, 1000)
+  }
+})
 
 </script>
 
@@ -192,10 +248,10 @@ const { isi, pasien, defaultForm, changeIsi } = useContent(props?.isiPasien)
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5vh;
-  padding-bottom: 5vh;
+  //margin-top: 5vh;
+  //padding-bottom: 5vh;
   // margin-bottom: 0.5cm;
-  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+  //box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
   // width: 21cm;
   // width: 595pt;
   // height: auto;

@@ -63,7 +63,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       }
       this.setForm('tanggal', dateDbFormat(new Date()))
     },
-    async saveGeneralConsentPasien(pegawai) {
+    saveGeneralConsentPasien(pegawai) {
       if (!this.form.ttdpasien) {
         notifErrVue('Maaf tanda tangan pasien Belum Ada')
         return
@@ -79,13 +79,17 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       // console.log('save general cons', pegawai)
       this.form.nikpetugas = pegawai?.nik
       // console.log('save general cons', this.form)
-      await api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
-        .then(resp => {
-          console.log(resp)
-          this.form.ttdpasien = resp.data
-        }).catch(err => {
-          console.log('save general cons', err)
-        })
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
+          .then(resp => {
+            console.log(resp)
+            this.form.ttdpasien = resp.data
+            resolve(resp)
+          }).catch(err => {
+            console.log('save general cons', err)
+            reject(err)
+          })
+      })
     }
   }
 })
