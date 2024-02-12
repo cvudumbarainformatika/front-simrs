@@ -155,6 +155,24 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
             this.loading = false
           })
       })
+    },
+    batalRinci(val) {
+      this.loading = true
+      const data = {
+        nopemesanan: val
+      }
+      const tabel = useTabelPemesananObatStore()
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/pemesananobat/batal', data)
+          .then(resp => {
+            this.loading = false
+            tabel.getInitialData()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     }
   }
 })

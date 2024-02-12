@@ -511,7 +511,7 @@
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
-                <app-input
+                <!-- <app-input
                   ref="refPpn"
                   v-model="det.ppn"
                   label="Ppn (%)"
@@ -521,6 +521,11 @@
                     val => !isNaN(val) || 'Harus pakai Nomor'
                   ]"
                   @update:model-value="setHargaNetNew($event, det,'ppn')"
+                /> -->
+                <q-checkbox
+                  v-model="det.adaPPN"
+                  label="PPN 11%"
+                  @update:model-value="adaPPN($event,det)"
                 />
               </div>
             </div>
@@ -591,7 +596,7 @@ const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
 // const refTotalFaktur = ref(null) // inp
 // det
-const refPpn = ref(null)
+// const refPpn = ref(null)
 const refJmlDiterima = ref(null)
 const refIsi = ref(null)
 const refExp = ref(null)
@@ -612,15 +617,15 @@ function validasi(index) {
   const pengirim = refPengirim.value.$refs.refInput.validate()
   // const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
 
-  const ppn = refPpn.value[index].refInput.validate()
+  // const ppn = refPpn.value[index].refInput.validate()
   const diterima = refJmlDiterima.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, ppn, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
+  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
   if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && Gudang && noSurat && pengirim && ppn && diterima && isi && exp && harga && hargaKcl) return true
+  if (jenisSurat && Gudang && noSurat && pengirim && diterima && isi && exp && harga && hargaKcl) return true
   else return false
 }
 const ind = ref(null)
@@ -640,6 +645,11 @@ function simpan(index) {
     console.log('simpan valid', store.details[index])
     store.simpanPenerimaan().then(() => { ind.value = null })
   }
+}
+function adaPPN(evt, det) {
+  // console.log('ada ppn', evt, det)
+  if (evt) setHargaNetNew('11', det, 'ppn')
+  if (!evt) setHargaNetNew('0', det, 'ppn')
 }
 let isiPrev = 0
 function setHargaNetNew(evt, det, key) {
@@ -689,8 +699,8 @@ function setHargaNetNew(evt, det, key) {
   if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
   if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
   const jmlAll = jmlTerimaK + det.jml_terima_laluK
-  console.log('terima ', jmlAll, jmlTerimaK)
-  console.log('lebih', det)
+  // console.log('terima ', jmlAll, jmlTerimaK)
+  // console.log('lebih', det)
   if (jmlAll > parseFloat(det.jumlahdpesan)) {
     notifErrVue('Jumlah Maksimal diterima ' + det.jumlahdpesan + ' ' + det?.satuan_kcl)
     jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_laluK)

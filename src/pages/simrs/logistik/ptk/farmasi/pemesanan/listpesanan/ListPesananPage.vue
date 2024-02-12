@@ -71,7 +71,7 @@
             <div class="col-4">
               Obat
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <div class="row justify-center">
                 Stok
               </div>
@@ -94,6 +94,11 @@
             <div class="col-2">
               Jumlah Dipesan
             </div>
+            <div class="col-1 text-right">
+              <div class="q-mr-md">
+                #
+              </div>
+            </div>
           </div>
           <div
             v-for="(rin, i) in row.rinci"
@@ -111,7 +116,7 @@
                   {{ rin.kdobat }}
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <div class="row">
                   <div class="col-4">
                     {{ rin.stok_real_gudang }}
@@ -123,18 +128,32 @@
                     {{ rin.stok_max_rs }}
                   </div>
                 </div>
-                <!-- <div class="col-1">
-              </div>
-              <div class="col-2">
-              </div>
-              <div class="col-2">
-              </div> -->
               </div>
               <div class="col-2">
                 {{ rin.jumlah_bisa_dibeli }}
               </div>
               <div class="col-2">
                 {{ rin.jumlahdpesan }}
+              </div>
+              <div class="col-1 text-right">
+                <q-btn
+                  v-if="!row.flag"
+                  class="q-mr-md"
+                  flat
+                  icon="icon-mat-delete"
+                  size="sm"
+                  no-caps
+                  color="negative"
+                  :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
+                  @click="batalRinci(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Batalkan Rincian Pesanan
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
           </div>
@@ -147,10 +166,9 @@
         <div v-if="!row.flag">
           <q-btn
             class="q-mr-md"
-            push
-            icon="icon-mat-cancel"
+            flat
+            icon="icon-mat-delete"
             dense
-            label="Batal"
             no-caps
             color="negative"
             :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
@@ -239,7 +257,17 @@ function batal (val) {
   console.log('batal', val)
   pemesanan.batal(val.nopemesanan).then(() => {
     toloadBeli.value = ''
-    if (!val.flag) val.flag = 1
+    // if (!val.flag) val.flag = 1
+  })
+}
+function batalRinci (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.nopemesanan
+  console.log('batal rinci', val)
+  pemesanan.batalRinci(val.nopemesanan).then(() => {
+    toloadBeli.value = ''
+    // if (!val.flag) val.flag = 1
   })
 }
 store.getInitialData()
