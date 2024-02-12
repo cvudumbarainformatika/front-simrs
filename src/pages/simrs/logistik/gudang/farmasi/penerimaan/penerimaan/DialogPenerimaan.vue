@@ -525,6 +525,7 @@
                 <q-checkbox
                   v-model="det.adaPPN"
                   label="PPN 11%"
+                  :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
                   @update:model-value="adaPPN($event,det)"
                 />
               </div>
@@ -581,6 +582,10 @@
   </div>
 </template>
 <script setup>
+/* catatatan :
+  setelah simpan detail, belum terupdate data sudah diterima.
+  cara cek, jika data sudah masuk, readonly aktif.
+*/
 import { formatRpDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
