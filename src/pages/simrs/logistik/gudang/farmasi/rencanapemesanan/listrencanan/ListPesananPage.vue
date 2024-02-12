@@ -133,6 +133,7 @@
                     flat
                     icon="icon-mat-delete"
                     dense
+                    size="sm"
                     color="negative"
                     :loading="store.loadingHapus && rin.loading"
                     @click="store.hapusRinci(rin, row)"
@@ -177,6 +178,23 @@
                       simpan
                     </q-tooltip>
                   </q-btn>
+                  <q-btn
+                    v-if="rin.edit"
+                    round
+                    flat
+                    icon="icon-mat-cancel"
+                    size="sm"
+                    color="dark"
+                    :loading="store.loadingSimpan && rin.loading"
+                    @click="batalEdit(row,rin)"
+                  >
+                    <q-tooltip
+                      transition-show="flip-right"
+                      transition-hide="flip-left"
+                    >
+                      batal edit
+                    </q-tooltip>
+                  </q-btn>
                 </div>
               </div>
             </div>
@@ -210,6 +228,7 @@
             flat
             icon="icon-mat-delete"
             dense
+            size="sm"
             color="negative"
             :loading="store.loadingHapus && row.loading"
             @click="hapusHeader(row)"
@@ -336,6 +355,13 @@ function simpan(row, rin) {
     .then(() => {
       rin.edit = false
     })
+}
+function batalEdit(row, rin) {
+  const index = urutanInp.value.findIndex(ind => ind.id === rin.id)
+  urutanInp.value.splice(index, 1)
+  inpIndex = urutanInp.value.length - 1
+
+  rin.edit = false
 }
 const router = useRouter()
 function tambahObat(val) {
