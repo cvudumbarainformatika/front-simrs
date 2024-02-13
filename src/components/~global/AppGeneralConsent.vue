@@ -200,29 +200,17 @@ function changeHubunganPasien() {
 
 function cekTtdPasien() {
   const ttdpasien = props?.pasien?.ttdpasien
+  const ttdpetugas = app?.user?.pegawai?.ttdpegawai
   store.setForm('ttdpasien', ttdpasien)
+  store.setForm('ttdpetugas', ttdpetugas)
   console.log('cekttd', ttdpasien)
 }
 
 function saveGeneralConsent() {
-  store.saveGeneralConsentPasien(app?.user?.pegawai).then(() => {
-    // ini buat pdf
-    emits('openPreviewGc')
-  })
+  store.saveGeneralConsentPasien(app?.user?.pegawai)
+    .then(() => {
+      // ini buat pdf
+      emits('openPreviewGc', 'cetak')
+    })
 }
-
-// function generatePdf() {
-//   const doc = new jsPDF()
-
-//   // doc.text('Hello world!', 10, 10)
-//   // doc.save('a4.pdf')
-//   const source = window.document.getElementById('pdfHtml')
-//   doc.html(source, {
-//     callback: function (doc) {
-//       doc.save()
-//     },
-//     x: 10,
-//     y: 10
-//   })
-// }
 </script>
