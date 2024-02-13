@@ -2,9 +2,9 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
-import { useListPermintaanRuanganStore } from './listpermintaan'
+import { useListPersiapanOperasiStore } from './listpermintaan'
 
-export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_ruangan', {
+export const usePersiapanOerasiStore = defineStore('persiapan_operasi_ruangan', {
   state: () => ({
     loading: false,
     loadingKunci: false,
@@ -134,7 +134,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
             this.loadingKunci = false
             console.log('kunci permintaan ', resp)
             notifSuccess(resp)
-            const list = useListPermintaanRuanganStore()
+            const list = useListPersiapanOperasiStore()
             list.ambilPermintaan()
             this.details = []
             this.getListObat()
