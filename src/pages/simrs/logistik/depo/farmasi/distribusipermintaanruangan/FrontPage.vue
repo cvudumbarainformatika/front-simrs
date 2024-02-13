@@ -152,7 +152,7 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag==='2'">
+        <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
           <q-btn
             flat
             icon="icon-mat-done_all"
@@ -218,6 +218,11 @@
                     {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
                   </div>
                 </div>
+                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
+                  <div class=" text-weight-bold">
+                    ({{ rin.masterobat.satuan_k }})
+                  </div>
+                </div>
                 <div class="row justify-between no-wrap q-mt-xs anu">
                   <div
                     class=" text-weight-bold"
@@ -238,12 +243,6 @@
                     {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
                   </div>
                 </div>
-
-                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
-                  <div class=" text-weight-bold">
-                    ({{ rin.masterobat.satuan_k }})
-                  </div>
-                </div>
               </div>
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs text-purple">
@@ -253,8 +252,7 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a,
-                                                                                                                        b) => a + b, 0) }}
+                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a, b) => a + b, 0) }}
                       </div>
                       <div v-if="!rin.stokreal.length">
                         0
@@ -385,32 +383,6 @@
                   >
                     Terima Terlebih dahulu
                   </div>
-                  <!-- <div
-                    v-if="rin.user_verif !== '' && !rin.editable && row.flag === '2'"
-                    class="row justify-end text-weight-bold text-green q-py-xs"
-                  >
-                    <div class="row justify-end">
-                      <q-btn
-                        dense
-                        glossy
-                        no-caps
-                        icon="icon-mat-edit"
-                        label="Edit"
-                        color="primary"
-                        :loading="store.loading && (store.form.id === rin.id)"
-                        @click="setEdit(rin)"
-                      >
-                        <q-tooltip
-                          anchor="top middle"
-                          self="center middle"
-                        >
-                          <div>
-                            edit
-                          </div>
-                        </q-tooltip>
-                      </q-btn>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -432,16 +404,26 @@ import { useDistribusiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/di
 import { ref, onMounted, watch } from 'vue'
 const store = useDistribusiPermintaanRuanganStore()
 const apps = useAplikasiStore()
+
+const depos = ['Gd-03010101', 'Gd-04010102', 'Gd-04010103', 'Gd-05010101', 'Gd-02010104']
 onMounted(() => {
-  store.setForm('kdgudang', apps?.user?.kdruangansim)
-  store.setParams('kdgudang', apps?.user?.kdruangansim)
-  store.getInitialData()
+  const gd = depos.find(a => a === apps?.user?.kdruangansim)
+  if (gd) {
+    store.setForm('kdgudang', apps?.user?.kdruangansim)
+    store.setParams('kdgudang', apps?.user?.kdruangansim)
+    store.getInitialData()
+  }
 })
 
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  store.setForm('kdgudang', obj)
-  store.setParams('kdgudang', obj)
+  const gd = depos.find(a => a === obj)
+  if (gd) {
+    store.setForm('kdgudang', obj)
+    store.setParams('kdgudang', obj)
+    store.getInitialData()
+  }
 })
+
 function depo (val) {
   const temp = apps.ruangs.filter(a => a.kode === val)
   // console.log('temp', temp)

@@ -66,6 +66,12 @@
           :label="label(row.flag)"
         />
       </template>
+      <template #cell-dari="{ row }">
+        {{ dari(row?.dari) }}
+      </template>
+      <template #cell-tujuan="{ row }">
+        {{ tujuan(row?.tujuan) }}
+      </template>
       <template #expand="{ row }">
         <div v-if="row.permintaanrinci.length">
           <div class="row items-center text-weight-bold">
@@ -159,7 +165,52 @@
           </q-btn>
         </div>
         <div v-if="row.flag">
-          <div class="row items-center">
+          <div
+            v-if="row.flag==='3'"
+            class="row items-center"
+          >
+            <div class="q-mr-sm" />
+            <div>
+              <q-btn
+                flat
+                icon="icon-mat-move_to_inbox"
+                dense
+                color="primary"
+                @click="terima(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Terima
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+          <div
+            v-else-if="row.flag==='4'"
+            class="row items-center"
+          >
+            <div class="q-mr-sm" />
+            <div>
+              <q-icon
+                name="icon-mat-done"
+                color="green"
+                size="sm"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Sudah Diterima
+                </q-tooltip>
+              </q-icon>
+            </div>
+          </div>
+          <div
+            v-else
+            class="row items-center"
+          >
             <div class="q-mr-sm" />
             <div>
               <q-btn
@@ -186,14 +237,16 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/listpermintaan'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const style = useStyledStore()
 const store = useListPermintaanRuanganStore()
 const permintaan = useFarmasiPermintaanRuanganStore()
+const apps = useAplikasiStore()
 // click
 function onClick (val) {
   // console.log('click', val)
@@ -206,6 +259,20 @@ function info (val) {
   val.highlight = !val.highlight
   notifSuccessVue('Penerimaan nomor ' + val.no_permintaan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
+
+function terima (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  const form = {
+    no_permintaan: val.no_permintaan,
+    kdruang: val.tujuan, // gudang
+    tujuan: val.dari// depo
+  }
+  console.log('val', val, form)
+
+  store.simpanDetail(form)
+}
 const toloadBeli = ref('')
 function kunci (val) {
   val.expand = !val.expand
@@ -216,7 +283,18 @@ function kunci (val) {
     if (!val.flag) val.flag = 1
   })
 }
-
+function dari(val) {
+  const rua = apps.ruangs.find(x => x.kode === val)
+  if (rua) {
+    return rua?.uraian
+  } else return val
+}
+function tujuan(val) {
+  const gud = apps.gudangs.find(x => x.kode === val)
+  if (gud) {
+    return gud?.nama
+  } else return val
+}
 function color (val) {
   switch (val) {
     case '':
@@ -271,7 +349,7 @@ function label (val) {
       break
     case '4':
       // return 'grey'
-      return 'Status (-)'
+      return 'Diterima Ruangan'
       // eslint-disable-next-line no-unreachable
       break
 
@@ -281,7 +359,17 @@ function label (val) {
       break
   }
 }
-store.getInitialData()
+onMounted(() => {
+  if (apps?.user?.kdruangansim) {
+    store.setParam('kddepo', apps?.user?.kdruangansim)
+  } else if (apps?.user?.pegawai?.kdruangansim) {
+    const ru = apps?.user?.pegawai?.kdruangansim.split('|')
+    if (ru.length === 1) {
+      store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
+    }
+  }
+  store.getInitialData()
+})
 </script>
 <style lang="scss" scoped>
 .anu {

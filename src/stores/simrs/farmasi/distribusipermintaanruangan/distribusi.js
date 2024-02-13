@@ -136,7 +136,7 @@ export const useDistribusiPermintaanRuanganStore = defineStore('distribusi_permi
       const param = { params: this.params }
       return new Promise(resolve => {
         // api.get('v1/simrs/farmasinew/gudang/distribusi/rencanadistribusikedepo', param)
-        api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
+        api.get('v1/simrs/farmasinew/gudang/distribusi/list-permintaan-ruangan', param)
           .then(resp => {
             this.loading = false
             this.items = resp?.data?.data

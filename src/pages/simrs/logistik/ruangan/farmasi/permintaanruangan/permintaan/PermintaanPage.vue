@@ -73,12 +73,12 @@
             <div class="col-12">
               <app-autocomplete
                 v-model="store.form.tujuan"
-                label="Pilih Gudang"
+                label="Pilih Depo"
                 option-label="nama"
                 option-value="value"
                 outlined
                 clearable
-                :source="store.gudangs"
+                :source="store.depos"
                 @selected="gudangSelected"
               />
             </div>
@@ -87,12 +87,12 @@
             <div class="col-12">
               <app-autocomplete
                 v-model="store.form.dari"
-                label="Pilih Depo"
-                option-label="nama"
-                option-value="value"
+                label="Pilih Ruangan"
+                option-label="uraian"
+                option-value="kode"
                 outlined
                 clearable
-                :source="store.depos"
+                :source="apps.ruangs"
                 @selected="depoSelected"
               />
             </div>
@@ -455,22 +455,6 @@ const user = computed(() => {
         store.setParam('kdgudang', 'Gd-03010101')
         store.getListObat()
       }
-    // } else if (apps.user.pegawai.depo) {
-    //   store.setForm('dari', apps.user.pegawai.depo.kode)
-    //   store.setDisp('depo', apps.user.pegawai.depo.nama)
-    //   const dep = store.floor.filter(a => a.kode === apps.user.pegawai.depo.kode)
-    //   console.log('dep', dep)
-    //   if (dep.length) {
-    //     store.setForm('tujuan', 'Gd-03010101')
-    //     store.setParam('kdgudang', 'Gd-03010101')
-    //     store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
-    //     store.getListObat()
-    //   } else {
-    //     store.setForm('tujuan', 'Gd-03010101')
-    //     store.setParam('kdgudang', 'Gd-03010101')
-    //     store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
-    //     store.getListObat()
-    //   }
     } else if (apps.user?.kdruangansim) {
       const peg = store.ruangans.filter(val => val.kode === apps.user?.kdruangansim)
       if (peg.length) {
@@ -536,8 +520,6 @@ function simpan() {
   }
 }
 onMounted(() => {
-  setTimeout(() => {
-  }, 2000)
   store.getInitialData()
 })
 </script>
