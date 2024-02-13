@@ -3,7 +3,7 @@ import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruangan_store', {
+export const useListPersiapanOperasiStore = defineStore('list_persiapan_operasi_store', {
   state: () => ({
     loading: false,
     items: [],
