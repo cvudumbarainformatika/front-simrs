@@ -136,10 +136,18 @@
               Petugas Tpp Rawat Jalan
             </div>
             <div
+              v-if="!app?.user?.pegawai?.ttdpegawai"
               style="min-height: 50px;"
               class="column flex-center"
             >
               Ttd
+            </div>
+            <div v-else>
+              <q-img
+                :src="pathImg + app?.user?.pegawai?.ttdpegawai"
+                width="150px"
+              />
+              <!-- {{ pasien?.ttdpasien }} -->
             </div>
             <div>{{ app?.user?.pegawai?.nama || 'Nama' }}</div>
           </div>
@@ -177,7 +185,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
 // eslint-disable-next-line no-unused-vars
-import { pathImg } from 'src/boot/axios'
+import { api, pathImg } from 'src/boot/axios'
 import { ref, watch } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { jsPDF } from 'jspdf'
@@ -192,6 +200,7 @@ const saveWork = () => {
 
 const props = defineProps({
   editableMaster: { type: Boolean, default: false },
+  cetak: { type: Boolean, default: false },
   isiPasien: { type: Object, default: null }
 })
 const { isi, pasien, defaultForm, changeIsi, isOk } = useContent(props?.isiPasien)
@@ -206,22 +215,7 @@ function createPdf() {
     format: 'a4',
     hotfixes: ['px_scaling']
   })
-
-  // doc.text('Hello world!', 10, 10)
-  // doc.save('a4.pdf')
-  // const source = window.document.getElementById('pdfDoc')
   const source = rePdfDoc.value
-  // doc.html(source, {
-  //   callback: function (doc) {
-  //     doc.save('general-cosnsent.pdf')
-  //   },
-  //   margin: [0, 0, 0, 0],
-  //   autoPaging: 'text',
-  //   x: 0,
-  //   y: 0,
-  //   width: 595, // target width in the PDF document
-  //   windowWidth: 794 // window width in CSS pixels
-  // })
   html2canvas(source, {
     width: doc.internal.pageSize.getWidth(),
     height: doc.internal.pageSize.getHeight()
@@ -229,14 +223,28 @@ function createPdf() {
     const img = canvas.toDataURL('image/jpeg', 0.5)
 
     doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
-    doc.save('general-cosnsent.pdf')
+
+    // doc.save('general-cosnsent.pdf')
+
+    simpanPdf(doc)
   })
+}
+
+function simpanPdf(doc) {
+  const blob = doc.output(props?.pasien?.norm)
+  const formData = new FormData()
+  formData.append('pdf', blob)
+  formData.append('norm', props?.pasien?.norm)
+
+  api.post('v1/')
 }
 
 watch(() => isOk.value, (n, old) => {
   console.log(n)
   if (n === true) {
-    // setTimeout(createPdf, 1000)
+    if (props.cetak === true) {
+      setTimeout(createPdf, 1000)
+    }
   }
 })
 
