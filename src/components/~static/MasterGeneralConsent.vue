@@ -1,3 +1,4 @@
+<!-- eslint-disable no-unused-vars -->
 <template>
   <div
     id="pdfDoc"
@@ -143,10 +144,20 @@
               Ttd
             </div>
             <div v-else>
-              <q-img
+              <!-- <embed
+                type="image/png"
+                :src="pathImg + app?.user?.pegawai?.ttdpegawai"
+                width="120"
+              > -->
+              <!-- <q-img
                 :src="pathImg + app?.user?.pegawai?.ttdpegawai"
                 width="150px"
-              />
+              /> -->
+              <img
+                :src="pathImg + app?.user?.pegawai?.ttdpegawai"
+                alt="ttd-pasien-rsudmohsaleh"
+                width="150"
+              >
               <!-- {{ pasien?.ttdpasien }} -->
             </div>
             <div>{{ app?.user?.pegawai?.nama || 'Nama' }}</div>
@@ -164,11 +175,16 @@
                 Ttd
               </div>
               <div v-else>
-                <q-img
-                  :src="pathImg + pasien?.ttdpasien"
+                <!-- <q-img
+                  :src="ttdPas"
                   width="150px"
-                />
+                /> -->
                 <!-- {{ pasien?.ttdpasien }} -->
+                <img
+                  :src="toDataURL(pathImg+pasien.ttdpasien)"
+                  alt="ttd-pasien-rsudmohsaleh"
+                  width="150"
+                >
               </div>
             </div>
             <div>{{ pasien?.nama ?? 'Nama' }}</div>
@@ -189,6 +205,7 @@ import { api, pathImg } from 'src/boot/axios'
 import { ref, watch } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { jsPDF } from 'jspdf'
+// eslint-disable-next-line no-unused-vars
 import html2canvas from 'html2canvas'
 const app = useAplikasiStore()
 
@@ -216,27 +233,57 @@ function createPdf() {
     hotfixes: ['px_scaling']
   })
   const source = rePdfDoc.value
-  html2canvas(source, {
-    width: doc.internal.pageSize.getWidth(),
-    height: doc.internal.pageSize.getHeight()
-  }).then((canvas) => {
-    const img = canvas.toDataURL('image/jpeg', 0.5)
 
-    doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
-
-    // doc.save('general-cosnsent.pdf')
-
-    simpanPdf(doc)
+  doc.html(source, {
+    callback: function (pdf) {
+      // doc.addImage(pathImg + pasien?.value.ttdpasien, 'PNG', 15, 40, 200, 114)
+      // doc.output('datauri')
+      pdf.save()
+    }
   })
+  // html2canvas(source, {
+  //   width: doc.internal.pageSize.getWidth(),
+  //   height: doc.internal.pageSize.getHeight(),
+  //   logging: false,
+  //   letterRendering: 1,
+  //   allowTaint: false,
+  //   useCORS: false
+  // }).then((canvas) => {
+  //   const img = canvas.toDataURL('image/jpeg', 0.5)
+
+  //   doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
+  //   doc.save(pasien?.value?.norm + '.pdf')
+
+  //   // const pdf = new File([doc.output('datauristring')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
+  //   // simpanPdf(img)
+  // })
 }
 
-function simpanPdf(doc) {
-  const blob = doc.output(props?.pasien?.norm)
-  const formData = new FormData()
-  formData.append('pdf', blob)
-  formData.append('norm', props?.pasien?.norm)
+// eslint-disable-next-line no-unused-vars
+const toDataURL = url => fetch(url)
+  .then(response => response.blob())
+  .then(blob => new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  }))
 
-  api.post('v1/')
+// eslint-disable-next-line no-unused-vars
+function blob2file(blobData) {
+  const fd = new FormData()
+  fd.set('a', blobData, pasien?.value?.norm + '.pdf')
+  return fd.get('a')
+}
+
+// eslint-disable-next-line no-unused-vars
+async function simpanPdf(pdf) {
+  const formData = new FormData()
+  formData.append('pdf', pdf)
+  formData.append('norm', pasien?.value?.norm)
+
+  const resp = await api.post('/v1/simrs/pendaftaran/generalconscent/simpanpdf', formData)
+  console.log('simpan pdf', resp)
 }
 
 watch(() => isOk.value, (n, old) => {
