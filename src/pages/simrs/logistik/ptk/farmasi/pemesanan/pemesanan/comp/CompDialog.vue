@@ -203,6 +203,20 @@
                 {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
               </div>
             </div>
+            <div class="row justify-start no-wrap q-my-xs">
+              <div
+                class="text-weight-bold q-ml-sm"
+                :class="row.status_forkid === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_forkid==='1' ?'Forkit':'Non-Forkit' }}
+              </div>
+              <div
+                class="text-weight-bold q-ml-sm"
+                :class="row.status_generik === '1'?'text-green':'text-negative'"
+              >
+                {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
+              </div>
+            </div>
             <!-- <div class="row justify-start no-wrap q-my-xs">
               <div
                 class="text-weight-bold"
@@ -243,7 +257,7 @@
           <template #cell-jumlah="{row}">
             <div class="row justify-between no-wrap text-green">
               <div class="q-mr-xs">
-                di rencakan
+                di verif
               </div>
               <div class="text-weight-bold">
                 {{ row.jumlahdirencanakan }}
@@ -310,13 +324,13 @@
                 v-if="row.jumlahdirencanakan > 0"
                 class="row"
               >
-                Perencanaan {{ row.jumlahdirencanakan }}
+                Perencanaan diverifikasi {{ row.jumlahdirencanakan }}
               </div>
               <div
                 v-if="(row.jumlahdirencanakan <= parseFloat(row.jumlahallpesan))"
                 class="row"
               >
-                Jumlah Pesanan <strong>sudah sama dengan</strong> / <strong>melebihi</strong>  jumlah Direncanakan
+                Jumlah Pesanan <strong>sudah sama dengan</strong> / <strong>melebihi</strong>  jumlah Diverif
               </div>
             </div>
           </template>

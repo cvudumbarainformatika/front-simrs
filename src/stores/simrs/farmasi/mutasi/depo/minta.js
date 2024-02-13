@@ -64,6 +64,7 @@ export const useFarmasiPermintaanMutasiDepoStore = defineStore('farmasi_perminta
         dari,
         tujuan
       }
+      this.details = []
     },
     obatSelected(val) {
       this.setForm('kdobat', val)

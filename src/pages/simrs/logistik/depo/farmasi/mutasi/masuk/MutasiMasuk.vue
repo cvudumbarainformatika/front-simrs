@@ -181,21 +181,9 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Terima
+              Kirim Permintaan
             </q-tooltip>
           </q-btn>
-        </div>
-
-        <div
-          v-else
-          class="text-primary text-weight-bold"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
-          >
-            Tidak Ada yang perlu dilakukan
-          </q-tooltip>
         </div>
       </template>
       <template #expand="{ row }">

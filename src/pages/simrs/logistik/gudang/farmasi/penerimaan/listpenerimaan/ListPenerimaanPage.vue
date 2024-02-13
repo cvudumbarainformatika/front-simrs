@@ -135,15 +135,18 @@
                   <div class="q-mr-sm">
                     Kode
                   </div>
-                  <div class="text-weight-bold">
+                  <div class="text-weight-bold text-right">
                     {{ rin.kdobat }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap">
+                <div class="row justify-between no-wrap items-center">
                   <div class="q-mr-sm">
                     Nama
                   </div>
-                  <div class="text-weight-bold">
+                  <div
+                    class="text-weight-bold text-right"
+                    style="white-space: normal;"
+                  >
                     {{ rin.masterobat? rin.masterobat.nama_obat:'-' }}
                   </div>
                 </div>
@@ -214,7 +217,7 @@
                     Besar
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.satuan_bsr }}
+                    {{ rin.satuan_bsr?? rin.satuan }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">

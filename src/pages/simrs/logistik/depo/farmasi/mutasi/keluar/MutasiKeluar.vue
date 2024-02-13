@@ -153,7 +153,10 @@
           </q-btn>
         </div>
         <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
-        <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
+        <div
+          v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0"
+          :key="row"
+        >
           <q-btn
             flat
             icon="icon-mat-done_all"
@@ -279,7 +282,10 @@
                   </div>
                 </div>
 
-                <div class="row justify-between no-wrap q-mt-xs">
+                <div
+                  :key="rin.distribusi"
+                  class="row justify-between no-wrap q-mt-xs"
+                >
                   <div
                     v-if="row.flag === '2' && rin.distribusi===0 && parseFloat(rin.mak_stok) < rin.stok"
                     class="col-12"
@@ -346,7 +352,24 @@
                     v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='2'"
                     class="row justify-end"
                   >
+                    <q-icon
+                      v-if="rin.distribusi>0"
+                      class="q-mr-md"
+                      name="icon-mat-done"
+                      color="green"
+                      size="sm"
+                    >
+                      <q-tooltip
+                        anchor="top middle"
+                        self="center middle"
+                      >
+                        <div class="row justify-end">
+                          Sudah Di distribusikan
+                        </div>
+                      </q-tooltip>
+                    </q-icon>
                     <q-btn
+                      v-else
                       flat
                       no-caps
                       icon-right="icon-mat-send"
@@ -499,7 +522,7 @@ function kirim (val, i, row) {
   console.log('ref', refInputVerif.value, i)
   const valid = refInputVerif.value[i].$refs.refInput.validate()
   console.log('kirim', val)
-  console.log('kirim row', row)
+  // console.log('kirim row', row)
   if (valid) {
     store.setForm('id', val.id)
     const form = {
@@ -514,6 +537,9 @@ function kirim (val, i, row) {
     console.log('form', form)
     store.simpanDetail(form).then(() => {
       val.editable = false
+      val.distribusi = form.distribusi
+      console.log('after kirim', val)
+      // console.log('after kirim row', row)
     })
   }
   val.editable = false

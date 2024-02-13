@@ -188,6 +188,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               a.diskon = 0
               a.isi = 1
               a.ppn = 11
+              a.adaPPN = true
               a.diskon_rp = 0
               a.ppn_rp = 0
               a.jumlah = ''
