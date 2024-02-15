@@ -194,7 +194,7 @@ onMounted(() => {
       status: '',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      per_page: 100,
+      per_page: 50,
       kodepoli: poli.value?.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
     }
     // console.log('init poli', poli.value)

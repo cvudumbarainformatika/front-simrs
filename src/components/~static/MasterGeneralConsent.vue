@@ -26,7 +26,7 @@
                 :
               </div>
               <div class="col-shrink q-ml-xs">
-                {{ pasien?.nama? pasien?.nama:defaultForm }}
+                {{ pasien?.nama? pasien?.name:defaultForm }}
               </div>
             </div>
 
@@ -40,7 +40,7 @@
                 :
               </div>
               <div class="col-shrink q-ml-xs">
-                {{ pasien?.kelamin? pasien?.kelamin:defaultForm }}
+                {{ pasien?.kelamin ? pasien?.kelamin:defaultForm }}
               </div>
             </div>
 
@@ -93,7 +93,7 @@
                 Hubungan dg Pasien
               </div>
               <div class="col-shrink">
-                : {{ pasien?.tgllahir? pasien?.tgllahir:defaultForm }}
+                : {{ pasien?.generalcons?.hubunganpasien? pasien?.generalcons?.hubunganpasien:defaultForm }}
               </div>
             </div>
           </div>
@@ -154,8 +154,8 @@
                 width="150px"
               /> -->
               <img
-                :src="pathImg + app?.user?.pegawai?.ttdpegawai"
-                alt="ttd-pasien-rsudmohsaleh"
+                :src="app?.user?.pegawai?.ttdpegawai_url"
+                alt="ttd-pegawai-rsudmohsaleh"
                 width="150"
               >
               <!-- {{ pasien?.ttdpasien }} -->
@@ -181,13 +181,13 @@
                 /> -->
                 <!-- {{ pasien?.ttdpasien }} -->
                 <img
-                  :src="toDataURL(pathImg+pasien.ttdpasien)"
+                  :src="pasien?.generalcons?.ttdpasien_url"
                   alt="ttd-pasien-rsudmohsaleh"
                   width="150"
                 >
               </div>
             </div>
-            <div>{{ pasien?.nama ?? 'Nama' }}</div>
+            <div>{{ pasien?.name ?? 'Nama' }}</div>
           </div>
         </div>
       </div>
@@ -234,40 +234,60 @@ function createPdf() {
   })
   const source = rePdfDoc.value
 
-  doc.html(source, {
-    callback: function (pdf) {
-      // doc.addImage(pathImg + pasien?.value.ttdpasien, 'PNG', 15, 40, 200, 114)
-      // doc.output('datauri')
-      pdf.save()
-    }
-  })
-  // html2canvas(source, {
-  //   width: doc.internal.pageSize.getWidth(),
-  //   height: doc.internal.pageSize.getHeight(),
-  //   logging: false,
-  //   letterRendering: 1,
-  //   allowTaint: false,
-  //   useCORS: false
-  // }).then((canvas) => {
-  //   const img = canvas.toDataURL('image/jpeg', 0.5)
-
-  //   doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
-  //   doc.save(pasien?.value?.norm + '.pdf')
-
-  //   // const pdf = new File([doc.output('datauristring')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
-  //   // simpanPdf(img)
+  // doc.html(source, {
+  //   callback: function (pdf) {
+  //     doc.addImage(pathImg + pasien?.value.ttdpasien, 'JPEG', 15, 40, 200, 114)
+  //     // doc.output('datauri')
+  //     pdf.save()
+  //   }
   // })
+  html2canvas(source, {
+    width: doc.internal.pageSize.getWidth(),
+    height: doc.internal.pageSize.getHeight(),
+    logging: false,
+    letterRendering: 1,
+    allowTaint: false,
+    useCORS: false
+  }).then((canvas) => {
+    const img = canvas.toDataURL('image/jpeg', 0.8)
+
+    doc.addImage(img, 'JPEG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'FAST')
+    // doc.save(pasien?.value?.norm + '.pdf')
+
+    const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
+    simpanPdf(pdf)
+  })
 }
 
 // eslint-disable-next-line no-unused-vars
-const toDataURL = url => fetch(url)
-  .then(response => response.blob())
-  .then(blob => new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(blob)
-  }))
+// const imageUrlToBase64 = async (url) => {
+//   await fetch(url, {
+//     mode: 'no-cors'
+//   })
+
+//     .then(data => data.blob())
+//     .then(blob => {
+//       console.log('blob', blob) // log the blob and check its size;
+//       const blobUrl = URL.createObjectURL(blob)
+//       console.log('blobUrl', blobUrl)
+//       const a = document.createElement('a')
+//       console.log('a', a)
+//     })
+//     .catch(err => {
+//       console.log('base64Err', err)
+//     })
+// const blob = await data.blob()
+// return new Promise((resolve, reject) => {
+//   const reader = new FileReader()
+//   reader.readAsDataURL(blob)
+//   reader.onloadend = () => {
+//     const base64data = reader.result
+//     console.log('base64', base64data)
+//     resolve(base64data)
+//   }
+//   reader.onerror = reject
+// })
+// }
 
 // eslint-disable-next-line no-unused-vars
 function blob2file(blobData) {
