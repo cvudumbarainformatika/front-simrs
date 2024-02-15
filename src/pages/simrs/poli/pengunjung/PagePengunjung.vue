@@ -211,16 +211,8 @@ function bukaTindakan(val) {
         type: 'negative',
         title: 'Peringatan',
         message: 'INFO WARNING <b/> MAAF, <em><b>Pasien Ini Belum terbit SEP</b></em>',
-        // color: 'primary',
         html: true,
-        // multiLine: true,
-        // avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-        // position: 'center',
-        timeout: 1000
-        // actions: [
-        //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
-
-      // ]
+        timeout: 500
       })
 
       return
