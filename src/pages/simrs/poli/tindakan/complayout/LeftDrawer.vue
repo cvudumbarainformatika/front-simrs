@@ -17,7 +17,7 @@
   </div>
 
   <div
-    class="absolute-top bg-dark text-white"
+    class="absolute-top bg-dark text-white "
     :style=" `height: ${tinggiDetailPas}px`"
   >
     <div class="absolute-top-right">
@@ -40,7 +40,10 @@
       </div>
     </div>
     <div class="absolute-bottom">
-      <div class="q-pa-md">
+      <div
+        class="q-pa-md cursor-pointer"
+        @click="emits('showProfile')"
+      >
         <app-avatar-pasien
           :key="pasien"
           :pasien="pasien"
@@ -115,7 +118,7 @@ import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
 const printRekap = ref(false)
 // const tinggiBot = ref(180)
-const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare'])
+const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare', 'showProfile'])
 defineProps({
   pasien: {
     type: Object,
