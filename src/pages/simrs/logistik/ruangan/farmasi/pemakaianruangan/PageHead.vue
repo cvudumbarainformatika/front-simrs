@@ -24,7 +24,7 @@
           glossy
           push
           color="cyan"
-          label="Rencana Pemesanan"
+          label="Pemakaian"
           size="md"
           @click="goTo('/ruangan/farmasi/pemakaianruangan/pemakaian')"
         />
@@ -33,7 +33,7 @@
           glossy
           push
           color="blue"
-          label="List Rencana Pemesanan"
+          label="List Pemakaian"
           size="md"
           @click="goTo('/ruangan/farmasi/pemakaianruangan/listpemakaian')"
         />
