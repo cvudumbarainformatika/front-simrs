@@ -14,11 +14,14 @@
         :flag="store.params.flag"
         :per-page="store.params.per_page"
         :items="store.items"
+        :nomor="store?.form?.nopemakaian"
         @cari="store.setSearch"
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
         @set-flag="store.setFlag"
         @set-periode="(val)=>store.setPeriodik(val)"
+        @simpan="simpan"
+        @selesai="selesai"
       />
     </div>
     <q-card
@@ -64,6 +67,12 @@ const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/TableComp.vue'))
 
+function simpan() {
+  console.log('simpan')
+  if (!store.form.nopemakaian) store.setForm('nopemakaian', 'asdasdasdas')
+  else store.setForm('nopemakaian', '')
+}
+function selesai() { console.log('selesai') }
 onMounted(() => {
   // console.log('ref', pageRef.value.$el.clientHeight);
   if (apps?.user?.kdruangansim) store.setParam('kdruang', apps?.user?.kdruangansim)
