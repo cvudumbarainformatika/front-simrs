@@ -46,6 +46,7 @@
             @history-pasien="historyPasien"
             @print-rekap="emits('printRekapBill')"
             @icare="getIcare"
+            @show-profile="profile = !profile"
           />
         </q-drawer>
 
@@ -90,6 +91,7 @@
                   v-else
                   :key="pasien"
                   :pasien="pasien"
+                  :loading-terima="store.loadingTerima"
                   depo="rjl"
                 />
               </template>
@@ -101,6 +103,13 @@
         </q-page-container>
       </q-layout>
     </q-card>
+
+    <!-- dialogProfile -->
+    <DialogProfile
+      :key="pasien"
+      v-model="profile"
+      :pasien="pasien"
+    />
   </q-dialog>
 </template>
 
@@ -108,6 +117,7 @@
 import LeftDrawer from './complayout/LeftDrawer.vue'
 import RightDrawer from './complayout/RightDrawer.vue'
 import HeaderLayout from './complayout/HeaderLayout.vue'
+import DialogProfile from './DialogProfile.vue'
 // import LoaderPage from './LoaderPage.vue'
 import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
@@ -125,6 +135,7 @@ const anamnesis = useAnamnesis()
 const fisik = usePemeriksaanFisik()
 const drawer = ref(false)
 const drawerRight = ref(false)
+const profile = ref(false)
 const props = defineProps({
   pasien: {
     type: Object,
