@@ -22,12 +22,13 @@
         @set-poli="(val)=> store.setPolis(val)"
       />
     </div>
-    <div class="footer absolute-bottom bg-primary text-white z-top">
+    <div class="footer absolute-bottom text-white z-top">
       <!-- <FooterComp :items="store.items" /> -->
       <BottomComp
         v-if="store.meta !==null"
         :key="store.meta"
         :meta="store.meta"
+        color="bg-dark"
         @go-to="store.setPage"
       />
     </div>
@@ -58,6 +59,7 @@
       :key="pasien"
       v-model="store.pageTindakan"
       :pasien="pasien"
+      :loading-terima="store?.loadingTerima"
     />
     <!-- <CetakRekapBilling
       v-model="printRekap"

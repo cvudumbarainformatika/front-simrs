@@ -90,6 +90,7 @@
                   v-else
                   :key="pasien"
                   :pasien="pasien"
+                  :loading-terima="store.loadingTerima"
                   depo="rjl"
                 />
               </template>

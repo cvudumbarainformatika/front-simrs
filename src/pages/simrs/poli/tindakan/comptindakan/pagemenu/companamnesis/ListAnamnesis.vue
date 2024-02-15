@@ -20,6 +20,17 @@
       class="full-height bg-grey"
     >
       <div
+        v-if="loadingTerima"
+        class="column full-height flex-center"
+      >
+        <div class="text-white">
+          Harap Tunggu .....
+        </div>
+        <div class="text-white">
+          Sinkron Data Ke DATABASE
+        </div>
+      </div>
+      <div
         v-if="pasien?.anamnesis?.length <= 0"
         class="column full-height flex-center"
       >
@@ -134,6 +145,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loadingTerima: {
+    type: Boolean,
+    default: false
   }
 })
 
