@@ -73,7 +73,7 @@ const title = computed(() => {
 })
 const subtitle = computed(() => {
   if (page.path === '/ruangan/farmasi/pemakaianruangan/pemakaian') {
-    return 'Pemakain Obat Oleh Ruangan'
+    return 'List Stok dan Form Pemakaian ruangan'
   } else if (page.path === '/ruangan/farmasi/pemakaianruangan/listpemakaian') {
     return 'List Pemakain Obat Oleh Ruangan'
   } else {

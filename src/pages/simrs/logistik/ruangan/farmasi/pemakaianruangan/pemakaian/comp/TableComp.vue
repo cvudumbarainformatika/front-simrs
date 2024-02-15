@@ -6,22 +6,19 @@
           No
         </th>
         <th>
-          Resep
-        </th>
-        <th>
-          Pasien
-        </th>
-        <th>
-          Dokter
+          Obat
         </th>
         <th>
           Ruangan
         </th>
         <th>
-          Status
+          Stok
+        </th>
+        <th>
+          Dipakai
         </th>
         <th class="text-end">
-          Aksi
+          #
         </th>
       </tr>
     </thead>
@@ -41,39 +38,9 @@
           <td>
             <q-skeleton
               type="text"
-              width="50px"
+              width="100px"
               height="14px"
             />
-            <q-skeleton
-              type="text"
-              width="40px"
-              height="10px"
-            />
-          </td>
-          <td>
-            <div class="row q-mb-xs q-col-gutter-sm">
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </div>
-            <div class="row q-col-gutter-sm items-center">
-              <q-skeleton
-                type="text"
-                width="40px"
-                height="14px"
-              />
-              <div class="text-grey q-pt-none">
-                ||
-              </div>
-              <q-skeleton
-                type="text"
-                width="40px"
-                height="14px"
-                class="q-ml-xs"
-              />
-            </div>
           </td>
           <td>
             <q-skeleton
@@ -87,13 +54,20 @@
               type="text"
               width="100px"
               height="14px"
+            />
+          </td>
+          <td>
+            <q-skeleton
+              type="text"
+              width="100px"
+              height="18px"
             />
           </td>
           <td class="text-end">
             <div class="row justify-end">
               <q-skeleton
                 type="text"
-                width="100px"
+                width="30px"
                 height="14px"
               />
             </div>
@@ -105,49 +79,53 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
+          <tr
+            class="cursor-pointer"
+            :class="item?.higlight?'bg-light-blue-2 ':''"
+          >
             <td width="5%">
               {{ n+1 }}
             </td>
             <td>
               <div class="row ">
-                {{ item?.noresep }}
+                {{ item?.obat?.nama_obat }}
               </div>
               <div class="row text-grey f-10">
-                {{ dateFullFormat(item?.tgl_permintaan) }}
+                {{ item?.kdobat }}
               </div>
             </td>
             <td>
-              <div class="row text-weight-bold">
-                {{ item?.datapasien?.nama }}
+              <div v-if="item?.ruang">
+                {{ item?.ruang?.uraian }}
               </div>
+            </td>
+            <td>
+              <div class="row items-end justify-start">
+                <div class="col">
+                  {{ item?.stok }}
+                </div>
+                <div class="col text-weight-bold f-10">
+                  ({{ item?.obat?.satuan_k }})
+                </div>
+              </div>
+            </td>
+            <td>
               <div class="row">
-                {{ item?.noreg }}   ||   {{ item?.norm }}
+                <div class="col-12">
+                  <q-input
+                    ref="refInput"
+                    v-model="item.dipakai"
+                    label=". Jumlah Dipakai"
+                    dense
+                    outlined
+                    standout="bg-yellow-3"
+                    @update:model-value="setNumber($event,item,'dipakai')"
+                  />
+                </div>
               </div>
-            </td>
-            <td>
-              {{ item?.dokter?.nama }}
-            </td>
-            <td>
-              <div v-if="item?.poli">
-                {{ item?.poli?.rs2 }}
-              </div>
-              <div v-if="item?.ruanganranap">
-                {{ item?.ruanganranap?.rs2 }}
-              </div>
-            </td>
-            <td>
-              <q-chip
-                square
-                class="f-10"
-                :color="color(item?.flag)"
-                text-color="white"
-              >
-                {{ status(item?.flag) }}
-              </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
+              <!-- <q-btn
                 round
                 class="f-10 q-mr-sm"
                 color="dark"
@@ -161,75 +139,19 @@
                 >
                   Print resep
                 </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item?.flag==='1'"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && item?.loading"
-                :loading="store.loadingTerima && item?.loading"
-                @click="store.terimaResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Terima
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && item?.loading"
-                :loading="store.loadingSelesai && item?.loading"
-                @click="store.resepSelesai(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Selesai
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                square
-                class="f-10"
-                color="primary"
-                text-color="white"
-                no-caps
-                @click="buka(item)"
-              >
-                Buka
-              </q-btn>
-            </td>
-          <!-- <td class="text-end">
-            <div>
-              <q-btn
-                icon="icon-mat-send"
-                flat
-                dense
-                size="sm"
-                round
-                color="primary"
-                :loading="store.loadingSend && indexId===item?.id"
-                :disable="store.loadingSend && indexId === item?.id"
-                @click="send(item?.id)"
+              </q-btn> -->
+              <q-checkbox
+                v-model="item.checked"
+                size="xs"
+                @update:model-value="setCheck($event, item,n)"
               />
-            </div>
-          </td> -->
+            </td>
           </tr>
-          <!-- <tr v-if="item.expand">
-            <td colspan="6">
+          <tr v-if="item.expand">
+            <td colspan="5">
               <div>{{ item }}</div>
             </td>
-          </tr> -->
+          </tr>
         </template>
       </template>
     </tbody>
@@ -237,88 +159,27 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue'
-import { dateFullFormat } from 'src/modules/formatter'
-import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
+import { ref } from 'vue'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
-import { useRouter } from 'vue-router'
 
 const store = useFarmasiPemakaianRuanganStore()
-const router = useRouter()
-
-// const indexId = ref(0)
-function status(val) {
-  let balik = ' Belum ada status'
-  switch (val) {
-    case '':
-      balik = ' draft'
-      break
-    case '1':
-      balik = 'Belum diterima'
-      break
-    case '2':
-      balik = 'Siap di kerjakan'
-      break
-    case '3':
-      balik = 'Selesai'
-      break
-    case '4':
-      balik = 'Returned'
-      break
-
-    default:
-      break
+const refInput = ref(null)
+function setNumber(evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+}
+function setCheck(evt, item, n) {
+  console.log('ref', refInput.value, n)
+  // console.log('evt', evt)
+  // console.log('item', item)
+  if (item.checked) {
+    item.dipakai = item.dipakai ?? 0
+    refInput.value[n].focus()
+    refInput.value[n].select()
   }
-  return balik
-}
-function color(val) {
-  let balik = 'grey'
-  switch (val) {
-    case '':
-      balik = 'grey'
-      break
-    case '1':
-      balik = 'grey'
-      break
-    case '2':
-      balik = 'green'
-      break
-    case '3':
-      balik = 'negative'
-      break
-    case '4':
-      balik = 'orange'
-      break
-
-    default:
-      break
-  }
-  return balik
-}
-
-function buka(val) {
-  store.setOpen()
-  store.setResep(val)
-  console.log('buka', val)
-  // if (val?.expand === undefined) val.expand = true
-  // else val.expand = !val.expand
-}
-// function send(id) {
-//   indexId.value = id
-//   store.sendToSatset(id)
-// }
-const print = usePrintEresepStore()
-function toPrint(row) {
-  print.setResep(row)
-  console.log('row', row)
-  const noresep = row?.noresep
-  const routeData = router.resolve({
-    path: '/print/eresep',
-    query: {
-      noresep
-    }
-  })
-  window.open(routeData.href, '_blank')
 }
 </script>
 

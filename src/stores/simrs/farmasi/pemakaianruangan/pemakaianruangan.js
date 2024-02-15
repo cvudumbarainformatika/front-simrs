@@ -39,7 +39,13 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
       this.setParam('page', 1)
       this.getStokRuangan()
     },
-
+    metanidata() {
+      if (this.items?.length) {
+        this?.items?.forEach(item => {
+          item.checked = false
+        })
+      }
+    },
     getInitialData() {
       this.getStokRuangan()
     },
@@ -52,6 +58,7 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
           console.log('stok ruangan', resp.data)
           this.items = resp?.data?.data ?? resp?.data
           this.meta = resp?.data?.data ? resp?.data : {}
+          this.metanidata()
         })
         .catch(() => { this.loading = false })
     }

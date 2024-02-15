@@ -136,6 +136,25 @@
         </q-btn>
       </div>
     </div>
+    <div
+      v-if="checked"
+      class="row justify-end q-mr-md q-my-xs"
+    >
+      <q-btn
+        label="Selesai dan Simpan"
+        no-caps
+        dense
+        color="green"
+        icon="icon-mat-save"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Selesai dan Simpan
+        </q-tooltip>
+      </q-btn>
+    </div>
   </div>
 </template>
 
@@ -154,7 +173,8 @@ const props = defineProps({
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
   perPage: { type: Number, default: 5 },
-  flag: { type: Array, default: () => ['1'] }
+  flag: { type: Array, default: () => ['1'] },
+  items: { type: Array, default: () => [] }
 })
 
 function enterSearch(evt) {
@@ -162,6 +182,7 @@ function enterSearch(evt) {
   emits('cari', val)
 }
 const options = ref([5, 10, 20, 50, 100])
+
 const selectPerPage = computed({
   get () {
     return props.perPage
@@ -178,68 +199,11 @@ const search = computed({
     emits('cari', newVal)
   }
 })
-// flag
-// const flagOptions = ref([
-//   { label: 'Belum Diterima', value: '1' },
-//   { label: 'Siap Dikerjakan', value: '2' },
-//   { label: 'Selesai', value: '3' },
-//   { label: 'Returned', value: '4' }
-// ])
-// const toFlag = computed({
-//   get () {
-//     return props.flag
-//   },
-//   set (newVal) {
-//     emits('setFlag', newVal)
-//   }
-// })
-
-// periode
-// const to = ref(dateDbFormat(new Date()))
-// const from = ref(dateDbFormat(new Date()))
-// const periode = ref(1)
-// const periods = ref([
-//   { value: 1, label: 'Hari ini' },
-//   { value: 2, label: 'Minggu Ini' },
-//   { value: 3, label: 'Bulan Ini' }
-//   // { value: 4, label: 'Tahun Ini' }
-// ])
-
-// function hariIni() {
-//   const cDate = new Date()
-//   to.value = dateDbFormat(cDate)
-//   from.value = dateDbFormat(cDate)
-// }
-// function mingguIni() {
-//   const curr = new Date()
-//   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
-//   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
-//   from.value = dateDbFormat(firstday)
-//   to.value = dateDbFormat(lastday)
-// }
-// function bulanIni() {
-//   const curr = new Date()
-//   const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
-//   const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
-//   from.value = dateDbFormat(firstday)
-//   to.value = dateDbFormat(lastday)
-// }
-
-// function gantiPeriode(val) {
-//   if (val === 1) {
-//     hariIni()
-//   } else if (val === 2) {
-//     mingguIni()
-//   } else if (val === 3) {
-//     bulanIni()
-//   }
-
-//   const per = {
-//     to: to.value,
-//     from: from.value
-//   }
-//   emits('setPeriode', per)
-// }
+const checked = computed(() => {
+  const ada = props.items.filter(a => a.checked === true)
+  if (ada.length) return true
+  else return false
+})
 onMounted(() => {
   // hariIni()
 })

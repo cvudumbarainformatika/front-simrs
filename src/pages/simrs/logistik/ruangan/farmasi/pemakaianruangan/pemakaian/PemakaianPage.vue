@@ -13,6 +13,7 @@
         :search="store.params.q"
         :flag="store.params.flag"
         :per-page="store.params.per_page"
+        :items="store.items"
         @cari="store.setSearch"
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
