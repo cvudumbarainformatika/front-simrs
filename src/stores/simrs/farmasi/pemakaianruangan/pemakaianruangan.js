@@ -21,6 +21,24 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
     setForm(key, val) {
       this.form[key] = val
     },
+    setSearch(val) {
+      this.setParam('q', val)
+      this.setParam('page', 1)
+      this.getStokRuangan()
+    },
+    setPerPage(val) {
+      this.setParam('per_page', val)
+      this.setParam('page', 1)
+      this.getStokRuangan()
+    },
+    setPage(val) {
+      this.setParam('page', val)
+      this.getStokRuangan()
+    },
+    refresh() {
+      this.setParam('page', 1)
+      this.getStokRuangan()
+    },
 
     getInitialData() {
       this.getStokRuangan()

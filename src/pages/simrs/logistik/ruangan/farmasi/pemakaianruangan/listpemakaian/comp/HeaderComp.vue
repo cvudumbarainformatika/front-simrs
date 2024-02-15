@@ -31,7 +31,7 @@
             />
           </template>
         </q-input>
-        <!-- <q-select
+        <q-select
           v-model="periode"
           dense
           outlined
@@ -53,7 +53,7 @@
           dense
           type="checkbox"
           inline
-        /> -->
+        />
       </div>
       <div class="kanan">
         <!-- refresh Ids -->
@@ -142,8 +142,8 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
-// import { dateDbFormat } from 'src/modules/formatter'
-// import { date } from 'quasar'
+import { dateDbFormat } from 'src/modules/formatter'
+import { date } from 'quasar'
 
 const style = useStyledStore()
 const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
@@ -179,68 +179,68 @@ const search = computed({
   }
 })
 // flag
-// const flagOptions = ref([
-//   { label: 'Belum Diterima', value: '1' },
-//   { label: 'Siap Dikerjakan', value: '2' },
-//   { label: 'Selesai', value: '3' },
-//   { label: 'Returned', value: '4' }
-// ])
-// const toFlag = computed({
-//   get () {
-//     return props.flag
-//   },
-//   set (newVal) {
-//     emits('setFlag', newVal)
-//   }
-// })
+const flagOptions = ref([
+  { label: 'Belum Diterima', value: '1' },
+  { label: 'Siap Dikerjakan', value: '2' },
+  { label: 'Selesai', value: '3' },
+  { label: 'Returned', value: '4' }
+])
+const toFlag = computed({
+  get () {
+    return props.flag
+  },
+  set (newVal) {
+    emits('setFlag', newVal)
+  }
+})
 
 // periode
-// const to = ref(dateDbFormat(new Date()))
-// const from = ref(dateDbFormat(new Date()))
-// const periode = ref(1)
-// const periods = ref([
-//   { value: 1, label: 'Hari ini' },
-//   { value: 2, label: 'Minggu Ini' },
-//   { value: 3, label: 'Bulan Ini' }
-//   // { value: 4, label: 'Tahun Ini' }
-// ])
+const to = ref(dateDbFormat(new Date()))
+const from = ref(dateDbFormat(new Date()))
+const periode = ref(1)
+const periods = ref([
+  { value: 1, label: 'Hari ini' },
+  { value: 2, label: 'Minggu Ini' },
+  { value: 3, label: 'Bulan Ini' }
+  // { value: 4, label: 'Tahun Ini' }
+])
 
-// function hariIni() {
-//   const cDate = new Date()
-//   to.value = dateDbFormat(cDate)
-//   from.value = dateDbFormat(cDate)
-// }
-// function mingguIni() {
-//   const curr = new Date()
-//   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
-//   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
-//   from.value = dateDbFormat(firstday)
-//   to.value = dateDbFormat(lastday)
-// }
-// function bulanIni() {
-//   const curr = new Date()
-//   const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
-//   const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
-//   from.value = dateDbFormat(firstday)
-//   to.value = dateDbFormat(lastday)
-// }
+function hariIni() {
+  const cDate = new Date()
+  to.value = dateDbFormat(cDate)
+  from.value = dateDbFormat(cDate)
+}
+function mingguIni() {
+  const curr = new Date()
+  const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+  const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
+}
+function bulanIni() {
+  const curr = new Date()
+  const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
+  const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
+  from.value = dateDbFormat(firstday)
+  to.value = dateDbFormat(lastday)
+}
 
-// function gantiPeriode(val) {
-//   if (val === 1) {
-//     hariIni()
-//   } else if (val === 2) {
-//     mingguIni()
-//   } else if (val === 3) {
-//     bulanIni()
-//   }
+function gantiPeriode(val) {
+  if (val === 1) {
+    hariIni()
+  } else if (val === 2) {
+    mingguIni()
+  } else if (val === 3) {
+    bulanIni()
+  }
 
-//   const per = {
-//     to: to.value,
-//     from: from.value
-//   }
-//   emits('setPeriode', per)
-// }
+  const per = {
+    to: to.value,
+    from: from.value
+  }
+  emits('setPeriode', per)
+}
 onMounted(() => {
-  // hariIni()
+  hariIni()
 })
 </script>

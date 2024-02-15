@@ -9,6 +9,7 @@
         ada-per-page
         ada-refresh
         use-full
+        label-cari="cari obat ..."
         :search="store.params.q"
         :flag="store.params.flag"
         :per-page="store.params.per_page"
