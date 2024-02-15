@@ -161,6 +161,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useFarmasiPemakaianRuanganStore()
 const refInput = ref(null)
@@ -170,6 +171,12 @@ function setNumber(evt, det, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   det[key] = nilai
+  if (key === 'dipakai') {
+    if (nilai > det.stok) {
+      notifErrVue('Pemakaian tidak boleh lebih dari jumlah Stok')
+      det.dipakai = det.stok
+    }
+  }
 }
 function setCheck(evt, item, n) {
   console.log('ref', refInput.value, n)
