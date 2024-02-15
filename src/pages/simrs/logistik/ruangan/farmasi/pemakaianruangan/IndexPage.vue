@@ -16,4 +16,7 @@ import { defineAsyncComponent } from 'vue'
 const AsyncComp = defineAsyncComponent(() =>
   import('./PakaiPage.vue')
 )
+// const AsyncComp = defineAsyncComponent(() =>
+//   import('./pemakaian/PemakaianPage.vue')
+// )
 </script>
