@@ -40,14 +40,14 @@
             v-ripple
           >
             <q-item-section>
-              <q-item-label><span>USIA : {{ pasien?.tgllahir ? dateFullFormat(pasien?.tgllahir) : '-' }}</span> </q-item-label>
+              <q-item-label><span>TGL LAHIR : {{ pasien?.tgllahir ? dateFullFormat(pasien?.tgllahir) : '-' }}</span> </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
             v-ripple
           >
             <q-item-section>
-              <q-item-label><span>TGL LAHIR : {{ pasien?.usia ?? '-' }}</span> </q-item-label>
+              <q-item-label><span>USIA : {{ pasien?.usia ?? '-' }}</span> </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
