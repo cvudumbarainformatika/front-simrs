@@ -29,7 +29,7 @@
       no-shadow
       square
       class="my-flex-1 scroll"
-      style="height: calc( 100vh - 170px);"
+      :style="`height: calc( 100vh - ${ pakai ? 172+64 : 172}px);`"
     >
       <!-- style="`height:{props.tinggi}px`" -->
       <q-scroll-area
@@ -56,7 +56,7 @@ import { notifCenterVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 const h = ref(516)
 const style = useStyledStore()
@@ -67,12 +67,22 @@ const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/TableComp.vue'))
 
+const pakai = computed(() => {
+  const ada = store.items.filter(a => a.checked === true)
+  if (ada.length) return true
+  else return false
+})
 function simpan() {
   console.log('simpan')
   if (!store.form.nopemakaian) store.setForm('nopemakaian', 'asdasdasdas')
   else store.setForm('nopemakaian', '')
+
+  store.simpanPemakaian()
 }
-function selesai() { console.log('selesai') }
+function selesai() {
+  console.log('selesai')
+  store.selesaiPemakaian()
+}
 onMounted(() => {
   // console.log('ref', pageRef.value.$el.clientHeight);
   if (apps?.user?.kdruangansim) store.setParam('kdruang', apps?.user?.kdruangansim)

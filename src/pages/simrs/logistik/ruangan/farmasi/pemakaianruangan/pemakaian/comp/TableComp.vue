@@ -120,6 +120,7 @@
                     outlined
                     standout="bg-yellow-3"
                     @update:model-value="setNumber($event,item,'dipakai')"
+                    @blur="addToForm(item)"
                   />
                 </div>
               </div>
@@ -186,6 +187,16 @@ function setCheck(evt, item, n) {
     item.dipakai = item.dipakai ?? 0
     refInput.value[n].focus()
     refInput.value[n].select()
+  } else {
+    console.log('not checked', store.form)
+    const index = store.form.obats.findIndex(a => a.id === item.id)
+    if (index >= 0) store.form.obats.splice(index, 1)
+  }
+}
+function addToForm(item) {
+  if (item.checked) {
+    const ada = store.form.obats.find(a => a.id === item.id)
+    if (!ada && item.dipakai > 0) store.form.obats.push(item)
   }
 }
 </script>

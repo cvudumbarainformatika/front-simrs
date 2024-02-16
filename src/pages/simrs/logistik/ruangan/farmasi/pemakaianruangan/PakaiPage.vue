@@ -26,13 +26,15 @@
         >
       </q-scroll-area>
       -->
-      <router-view v-slot="{ Component, route }">
-        <transition :name="route.meta.transition || 'fade'">
-          <component
-            :is="Component"
-          />
-        </transition>
-      </router-view>
+      <q-card-section class="q-pa-none q-ma-none">
+        <router-view v-slot="{ Component, route }">
+          <transition :name="route.meta.transition || 'fade'">
+            <component
+              :is="Component"
+            />
+          </transition>
+        </router-view>
+      </q-card-section>
     </q-card>
   </q-page>
 </template>
