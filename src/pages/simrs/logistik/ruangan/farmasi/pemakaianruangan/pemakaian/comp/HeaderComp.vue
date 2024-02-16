@@ -138,22 +138,55 @@
     </div>
     <div
       v-if="checked"
-      class="row justify-end q-mr-md q-my-xs"
+      class="row q-my-xs items-center "
     >
-      <q-btn
-        label="Selesai dan Simpan"
-        no-caps
-        dense
-        color="green"
-        icon="icon-mat-save"
-      >
-        <q-tooltip
-          class="primary"
-          :offset="[10, 10]"
+      <div class="col-6">
+        <div
+          v-if="!!nomor"
+          class="row items-center"
         >
-          Selesai dan Simpan
-        </q-tooltip>
-      </q-btn>
+          <div class="col">
+            Nomor pemakaian : {{ nomor }}
+          </div>
+          <div class="col q-ml-sm">
+            <q-btn
+              push
+              label="Selesai "
+              no-caps
+              dense
+              color="green"
+              icon="icon-mat-done_all"
+              @click="emits('selesai')"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Selesai
+              </q-tooltip>
+            </q-btn>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 text-right">
+        <q-btn
+          push
+          label="Simpan "
+          no-caps
+          dense
+          color="primary"
+          icon="icon-mat-save"
+          class="q-mr-md"
+          @click="emits('simpan')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Simpan
+          </q-tooltip>
+        </q-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -165,10 +198,11 @@ import { useStyledStore } from 'src/stores/app/styled'
 // import { date } from 'quasar'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'selesai', 'simpan'])
 const props = defineProps({
   search: { type: String, default: '' },
   labelCari: { type: String, default: 'Cari ...' },
+  nomor: { type: String, default: '' },
   adaPerPage: { type: Boolean, default: false },
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },

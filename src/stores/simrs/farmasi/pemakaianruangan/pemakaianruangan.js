@@ -12,7 +12,10 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
       per_page: 10,
       kdruang: ''
     },
-    form: {}
+    form: {
+      nopemakaian: '',
+      obats: []
+    }
   }),
   actions: {
     setParam(key, val) {
@@ -44,6 +47,13 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
         this?.items?.forEach(item => {
           item.checked = false
         })
+
+        if (this.form.obats.length) {
+          this.form.obats.forEach(obat => {
+            const ada = this.items.find(a => a.id === obat.id)
+            if (ada) ada.checked = true
+          })
+        }
       }
     },
     getInitialData() {
@@ -61,6 +71,12 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
           this.metanidata()
         })
         .catch(() => { this.loading = false })
+    },
+    simpanPemakaian() {
+      console.log('simpan pemakaian', this.form)
+    },
+    selesaiPemakaian(val) {
+      console.log('selesai pemakaian ', val)
     }
   }
 })

@@ -120,6 +120,7 @@
                     outlined
                     standout="bg-yellow-3"
                     @update:model-value="setNumber($event,item,'dipakai')"
+                    @blur="addToForm(item)"
                   />
                 </div>
               </div>
@@ -161,6 +162,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useFarmasiPemakaianRuanganStore()
 const refInput = ref(null)
@@ -170,6 +172,12 @@ function setNumber(evt, det, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   det[key] = nilai
+  if (key === 'dipakai') {
+    if (nilai > det.stok) {
+      notifErrVue('Pemakaian tidak boleh lebih dari jumlah Stok')
+      det.dipakai = det.stok
+    }
+  }
 }
 function setCheck(evt, item, n) {
   console.log('ref', refInput.value, n)
@@ -179,6 +187,16 @@ function setCheck(evt, item, n) {
     item.dipakai = item.dipakai ?? 0
     refInput.value[n].focus()
     refInput.value[n].select()
+  } else {
+    console.log('not checked', store.form)
+    const index = store.form.obats.findIndex(a => a.id === item.id)
+    if (index >= 0) store.form.obats.splice(index, 1)
+  }
+}
+function addToForm(item) {
+  if (item.checked) {
+    const ada = store.form.obats.find(a => a.id === item.id)
+    if (!ada && item.dipakai > 0) store.form.obats.push(item)
   }
 }
 </script>
