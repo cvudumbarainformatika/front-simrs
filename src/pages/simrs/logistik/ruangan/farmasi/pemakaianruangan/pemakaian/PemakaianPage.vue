@@ -29,20 +29,74 @@
       no-shadow
       square
       class="my-flex-1 scroll"
-      :style="`height: calc( 100vh - ${ pakai ? 172+64 : 172}px);`"
+      :style="`height: calc( 100vh - ${ pakai ? 172 : 172}px);`"
     >
       <!-- style="`height:{props.tinggi}px`" -->
       <q-scroll-area
         style="height: calc(100%);"
       >
-        <ListPage />
+        <ListPage :style="`margin-bottom:  ${ pakai ? 95 : 55}px;`" />
       </q-scroll-area>
 
       <div
-        v-if="Object.keys(store.meta).length"
-        class="absolute-bottom bg-primary text-white"
+
+        class="absolute-bottom "
       >
+        <div
+          v-if="checked"
+          class="row q-py-xs items-center bg-white"
+        >
+          <div class="col-6">
+            <div
+              v-if="!!store.form.nopemakaian"
+              class="row items-center"
+            >
+              <div class="col">
+                Nomor pemakaian : {{ store.form.nopemakaian }}
+              </div>
+              <div class="col q-ml-sm">
+                <q-btn
+                  push
+                  label="Selesai "
+                  no-caps
+                  dense
+                  color="green"
+                  icon="icon-mat-done_all"
+                  @click="selesai"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Selesai
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 text-right">
+            <q-btn
+              push
+              label="Simpan "
+              no-caps
+              dense
+              color="primary"
+              icon="icon-mat-save"
+              class="q-mr-md"
+              @click="simpan"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Simpan
+              </q-tooltip>
+            </q-btn>
+          </div>
+        </div>
         <BottomComp
+          v-if="Object.keys(store.meta).length"
+          class="bg-primary text-white"
           :meta="store.meta"
           @go-to="store.setPage"
         />
@@ -83,6 +137,11 @@ function selesai() {
   console.log('selesai')
   store.selesaiPemakaian()
 }
+const checked = computed(() => {
+  const ada = store.items.filter(a => a.checked === true)
+  if (ada.length) return true
+  else return false
+})
 onMounted(() => {
   // console.log('ref', pageRef.value.$el.clientHeight);
   if (apps?.user?.kdruangansim) store.setParam('kdruang', apps?.user?.kdruangansim)
@@ -90,7 +149,10 @@ onMounted(() => {
     const adaRu = apps?.user?.pegawai?.kdruangansim.split('|')
     const ruNya = adaRu.filter(x => x.includes('R-'))
     if (ruNya.length > 1) notifCenterVue('ada lebih dari satu akses ruangan')
-    else store.setParam('kdruang', ruNya[0])
+    else {
+      store.setParam('kdruang', ruNya[0])
+      store.setForm('kdruang', ruNya[0])
+    }
   }
   store.getInitialData()
 })
