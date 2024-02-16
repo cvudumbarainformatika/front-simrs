@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
 
 export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ruangan', {
   state: () => ({
@@ -74,9 +75,31 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
     },
     simpanPemakaian() {
       console.log('simpan pemakaian', this.form)
+      if (this.form.obats.length <= 1) return notifErrVue('tidak ada input obat dipakai')
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/ruangan/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            this.getStokRuangan()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     },
     selesaiPemakaian(val) {
       console.log('selesai pemakaian ', val)
+      if (this.form.nopemakaian) return notifErrVue('Nomor Pemakaian tidak ada')
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/ruangan/selesai', this.form)
+          .then(resp => {
+            this.loading = false
+            this.getStokRuangan()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

@@ -128,8 +128,6 @@ const pakai = computed(() => {
 })
 function simpan() {
   console.log('simpan')
-  if (!store.form.nopemakaian) store.setForm('nopemakaian', 'asdasdasdas')
-  else store.setForm('nopemakaian', '')
 
   store.simpanPemakaian()
 }
