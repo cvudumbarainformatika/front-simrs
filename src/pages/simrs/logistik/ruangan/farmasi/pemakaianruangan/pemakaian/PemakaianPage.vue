@@ -75,23 +75,31 @@
             </div>
           </div>
           <div class="col-6 text-right">
-            <q-btn
-              push
-              label="Simpan "
-              no-caps
-              dense
-              color="primary"
-              icon="icon-mat-save"
-              class="q-mr-md"
-              @click="simpan"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
+            <div class="row justify-end">
+              <app-input-date
+                :model="store.form.tgl"
+                label="tanggal"
+                outlined
+                @set-model="store.setForm('tgl', $event)"
+              />
+              <q-btn
+                push
+                label="Simpan "
+                no-caps
+                dense
+                color="primary"
+                icon="icon-mat-save"
+                class="q-mx-md"
+                @click="simpan"
               >
-                Simpan
-              </q-tooltip>
-            </q-btn>
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Simpan
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
         </div>
         <BottomComp
@@ -142,8 +150,10 @@ const checked = computed(() => {
 })
 onMounted(() => {
   // console.log('ref', pageRef.value.$el.clientHeight);
-  if (apps?.user?.kdruangansim) store.setParam('kdruang', apps?.user?.kdruangansim)
-  else {
+  if (apps?.user?.kdruangansim) {
+    store.setParam('kdruang', apps?.user?.kdruangansim)
+    store.setForm('kdruang', apps?.user?.kdruangansim)
+  } else {
     const adaRu = apps?.user?.pegawai?.kdruangansim.split('|')
     const ruNya = adaRu.filter(x => x.includes('R-'))
     if (ruNya.length > 1) notifCenterVue('ada lebih dari satu akses ruangan')
