@@ -43,7 +43,7 @@
         class="absolute-bottom "
       >
         <div
-          v-if="checked"
+          v-if="checked || !!store.form.nopemakaian"
           class="row q-py-xs items-center bg-white"
         >
           <div class="col-6">
@@ -75,7 +75,10 @@
             </div>
           </div>
           <div class="col-6 text-right">
-            <div class="row justify-end">
+            <div
+              v-if="checked "
+              class="row justify-end"
+            >
               <app-input-date
                 :model="store.form.tgl"
                 label="tanggal"
@@ -131,7 +134,7 @@ const ListPage = defineAsyncComponent(() => import('./comp/TableComp.vue'))
 
 const pakai = computed(() => {
   const ada = store.items.filter(a => a.checked === true)
-  if (ada.length) return true
+  if (ada.length || !!store.form.nopemakaian) return true
   else return false
 })
 function simpan() {
