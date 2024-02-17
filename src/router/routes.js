@@ -1,6 +1,7 @@
 import {
   pegawai, sigarang, antrian, laborat, laporan, settings,
-  masters, pendaftaran, percobaan, farmasi, poli, monitoring, kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset
+  masters, pendaftaran, percobaan, farmasi, poli, monitoring, kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset,
+  kamaroperasi
 } from './modules'
 
 const routes = [
@@ -68,6 +69,7 @@ const routes = [
   igd,
   ranap,
   satset,
+  kamaroperasi,
   {
     path: '/display_antrian',
     component: () => import('layouts/antrian/display/DisplayLayout.vue'),
