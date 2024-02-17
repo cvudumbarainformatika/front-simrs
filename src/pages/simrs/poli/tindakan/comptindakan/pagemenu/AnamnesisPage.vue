@@ -12,6 +12,7 @@
         <ListAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"
+          :loading-terima="loadingTerima"
         />
       </div>
     </div>
@@ -42,6 +43,10 @@ const props = defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loadingTerima: {
+    type: Boolean,
+    default: false
   }
 })
 onMounted(() => {

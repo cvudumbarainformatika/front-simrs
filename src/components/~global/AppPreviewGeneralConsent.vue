@@ -33,6 +33,7 @@
         <master-general-consent
           :editable-master="false"
           :isi-pasien="pasien"
+          :cetak="cetak"
         />
         <!-- </div> -->
       </q-card-section>
@@ -45,6 +46,10 @@ defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  cetak: {
+    type: Boolean,
+    default: false
   }
 })
 const emits = defineEmits(['close'])

@@ -241,8 +241,8 @@ function setFlagKarcis(val) {
   store.paramKarcis.flag = val
   console.log(store.paramKarcis)
   store.getKarcisPoli().then(() => {
-    store.display.hargakarcis = store.kasrcispoli.tarif
-    store.form.karcis = store.kasrcispoli.tarif
+    store.display.hargakarcis = store?.kasrcispoli?.tarif ?? 0
+    store.form.karcis = store?.kasrcispoli?.tarif ?? 0
   })
 }
 // expose function

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruangan_store', {
   state: () => ({
@@ -52,7 +53,7 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
       console.log('penerimaan ', this.param)
       const params = { params: this.param }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/depo/listpermintaandepo', params)
+        api.get('v1/simrs/farmasinew/depo/list-permintaan-ruangan', params)
           .then(resp => {
             this.loading = false
             console.log('list permintaan', resp.data)
@@ -63,6 +64,20 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
           .catch(() => {
             this.loading = false
           })
+      })
+    },
+    simpanDetail(val) {
+      this.loadingSimpan = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/terimadistribusi', val)
+          .then(resp => {
+            this.loadingSimpan = false
+            console.log('terima', resp)
+            notifSuccess(resp)
+            this.ambilPermintaan()
+            resolve(resp)
+          })
+          .catch(() => { this.loadingSimpan = false })
       })
     }
   }

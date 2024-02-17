@@ -11,7 +11,7 @@
         @set-search="table.cariRencana"
         @set-row="table.setPerPage"
         @set-periode="table.setPeriodik"
-        @refresh="table.getLists"
+        @refresh="table.getObatMauBeli"
         @filter="table.setFilters"
       />
     </div>

@@ -5,9 +5,10 @@ import { onMounted, ref } from 'vue'
 export function useContent(isiPasien) {
   const items = ref([])
   const pasien = ref(null)
-  const petugas = ref({})
+  const petugas = ref(null)
   const isi = ref('What you see is <b>what</b> you get.')
   const defaultForm = ref('..........................')
+  const isOk = ref(false)
 
   async function changeIsi(kelompok) {
     const params = {
@@ -33,6 +34,7 @@ export function useContent(isiPasien) {
         // console.log(resp)
         if (resp.status === 200) {
           isi.value = resp.data[0].pernyataan
+          isOk.value = true
         }
       })
   }
@@ -51,6 +53,7 @@ export function useContent(isiPasien) {
     petugas,
     isi,
     defaultForm,
+    isOk,
     changeIsi
   }
 }

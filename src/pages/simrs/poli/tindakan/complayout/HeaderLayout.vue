@@ -13,7 +13,7 @@
           class="q-pl-xs"
           flat
         >
-          <div class="row items-center no-wrap q-gutter-sm text-white">
+          <div class="row items-center no-wrap q-gutter-sm text-white cursor-pointer">
             <q-avatar size="30px">
               <img :src="getImageDokter(pasien?.datasimpeg?.kelamin, pasien?.datasimpeg)">
             </q-avatar>

@@ -15,7 +15,8 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       order_by: 'id',
       // tgl: dateDbFormat(new Date()),
       to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date())
+      from: dateDbFormat(new Date()),
+      kdbayar: null
     },
     loading: false,
     loadingH: false,

@@ -45,9 +45,9 @@ function gantiHead(val) {
 }
 
 const comp = [
-  { nama: 'minta', page: defineAsyncComponent(() => import('./permintaan/PermintaanMutasi.vue')) },
-  { nama: 'terima', page: defineAsyncComponent(() => import('./keluar/MutasiKeluar.vue')) },
-  { nama: 'list', page: defineAsyncComponent(() => import('./masuk/MutasiMasuk.vue')) }
+  { nama: 'minta', page: defineAsyncComponent(() => import('./permintaan/IndexPage.vue')) },
+  { nama: 'terima', page: defineAsyncComponent(() => import('./keluar/IndexPage.vue')) },
+  { nama: 'list', page: defineAsyncComponent(() => import('./masuk/IndexPage.vue')) }
 ]
 
 // console.log('comp', comp)

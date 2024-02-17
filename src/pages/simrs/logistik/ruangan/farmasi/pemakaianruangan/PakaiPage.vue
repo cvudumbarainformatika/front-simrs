@@ -2,9 +2,9 @@
   <q-page
     ref="pageRef"
     class="column full-height full-width"
-    :class="!style.componentfull ? 'q-pa-xs' : 'q-pa-xs'"
+    :class="!style.componentfull ? '' : 'q-pa-xs'"
   >
-    <div class="col-auto bg-primary text-white">
+    <div class="col-auto ">
       <PageHead
         v-if="!style.componentfull"
         :title="title"
@@ -15,19 +15,26 @@
     <q-card
       flat
       class="col full-width full-height"
-      :style="`max-height: ${!style.componentfull ? h - 60 : h + 40}px; overflow:hidden`"
+      :style="`max-height: ${!style.componentfull ? h-125 : h + 50}px; overflow:hidden`"
     >
-      <q-scroll-area
-        :style="`height: ${!style.componentfull ? h - 95 : h + 40}px; max-width: 100%;`"
-        :thumb-style="thumbStyle"
-        :bar-style="barStyle"
-      >
+      <!-- {{ h }} -->
+      <!--
+        <q-scroll-area
+          :style="`height: ${!style.componentfull ? h : h + 49}px; max-width: 100%;`"
+          :thumb-style="thumbStyle"
+          :bar-style="barStyle"
+        >
+      </q-scroll-area>
+      -->
+      <q-card-section class="q-pa-none q-ma-none">
         <router-view v-slot="{ Component, route }">
           <transition :name="route.meta.transition || 'fade'">
-            <component :is="Component" />
+            <component
+              :is="Component"
+            />
           </transition>
         </router-view>
-      </q-scroll-area>
+      </q-card-section>
     </q-card>
   </q-page>
 </template>
@@ -42,20 +49,20 @@ const style = useStyledStore()
 const pageRef = ref()
 const h = ref(0)
 
-const thumbStyle = ref({
-  right: '0px',
-  borderRadius: '5px',
-  backgroundColor: '#027be3',
-  width: '2px',
-  opacity: 0.75
-})
-const barStyle = ref({
-  right: '0px',
-  borderRadius: '9px',
-  backgroundColor: '#027be3',
-  width: '5px',
-  opacity: 0.2
-})
+// const thumbStyle = ref({
+//   right: '0px',
+//   borderRadius: '5px',
+//   backgroundColor: '#027be3',
+//   width: '2px',
+//   opacity: 0.75
+// })
+// const barStyle = ref({
+//   right: '0px',
+//   borderRadius: '9px',
+//   backgroundColor: '#027be3',
+//   width: '5px',
+//   opacity: 0.2
+// })
 const page = useRoute()
 const title = computed(() => {
   if (page.path === '/ruangan/farmasi/pemakaianruangan/pemakaian') {
@@ -68,7 +75,7 @@ const title = computed(() => {
 })
 const subtitle = computed(() => {
   if (page.path === '/ruangan/farmasi/pemakaianruangan/pemakaian') {
-    return 'Pemakain Obat Oleh Ruangan'
+    return 'List Stok dan Form Pemakaian ruangan'
   } else if (page.path === '/ruangan/farmasi/pemakaianruangan/listpemakaian') {
     return 'List Pemakain Obat Oleh Ruangan'
   } else {
@@ -76,8 +83,8 @@ const subtitle = computed(() => {
   }
 })
 onMounted(() => {
-  console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
+  console.log('page ', h.value, pageRef.value)
 })
 
 </script>

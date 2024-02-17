@@ -4,6 +4,7 @@
     :maximized="maximizedToggle"
     transition-show="slide-left"
     transition-hide="slide-right"
+    @before-show="cekTtdPasien"
   >
     <q-card flat>
       <div
@@ -15,35 +16,6 @@
             📝 Form General Consent Pasien
           </div>
           <q-space />
-
-          <!-- <q-btn
-            dense
-            flat
-            icon="icon-mat-minimize"
-            :disable="!maximizedToggle"
-            @click="maximizedToggle = false"
-          >
-            <q-tooltip
-              v-if="maximizedToggle"
-              class="bg-white text-primary"
-            >
-              Minimize
-            </q-tooltip>
-          </q-btn> -->
-          <!-- <q-btn
-            dense
-            flat
-            icon="icon-mat-crop_square"
-            :disable="maximizedToggle"
-            @click="maximizedToggle = true"
-          >
-            <q-tooltip
-              v-if="!maximizedToggle"
-              class="bg-white text-primary"
-            >
-              Maximize
-            </q-tooltip>
-          </q-btn> -->
           <q-btn
             v-close-popup
             dense
@@ -63,22 +35,6 @@
         </div>
       </q-card-section>
       <q-separator />
-      <!-- <q-card-section>
-        <div class="row justify-between">
-          <app-input-date
-            v-model="store.form.tanggal"
-            label="tanggal"
-            outlined
-          />
-          <div style="min-width: 200px;">
-            <app-autocomplete
-              v-model="store.form.petugas"
-              label="petugas"
-              outlined
-            />
-          </div>
-        </div>
-      </q-card-section> -->
       <q-separator />
       <q-card-section>
         <div class="text-weight-bold text-center">
@@ -89,12 +45,6 @@
         </div>
         <div class="row justify-between q-mt-md q-col-gutter-md">
           <div class="col-6">
-            <!-- <app-input
-              v-model="store.form.hubunganpasien"
-              label="Hubungan Pasien"
-              class="q-mb-sm"
-              outlined
-            /> -->
             <q-select
               v-model="store.form.hubunganpasien"
               outlined
@@ -171,7 +121,12 @@
                 :ttd="store.form.ttdpetugas"
                 @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
               /> -->
-              <div class="q-py-lg" />
+              <!-- <div class="q-py-lg" /> -->
+              <app-ttd-wacom
+                :key="pasien"
+                :ttd="store.form.ttdpetugas"
+                @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
+              />
               <div>{{ app?.user?.pegawai?.nama }}</div>
             </div>
           </div>
@@ -182,8 +137,12 @@
                 :ttd="store.form.ttdpasien"
                 @save-ttd="(val)=> store.setForm('ttdpasien',val)"
               /> -->
-              <app-ttd-wacom />
-              <div>Nama & Tanda Tangan</div>
+              <app-ttd-wacom
+                :key="pasien"
+                :ttd="store.form.ttdpasien"
+                @save-ttd="(val)=> store.setForm('ttdpasien',val)"
+              />
+              <div>{{ pasien?.nama }}</div>
             </div>
           </div>
         </div>
@@ -193,7 +152,7 @@
         <q-btn
           color="primary"
           label="Simpan General Consent Pasien"
-          @click="store.saveGeneralConsentPasien()"
+          @click="saveGeneralConsent"
         />
       </q-card-section>
     </q-card>
@@ -237,5 +196,21 @@ function changeHubunganPasien() {
     store.setForm('alamat', null)
     store.setForm('nohp', null)
   }
+}
+
+function cekTtdPasien() {
+  const ttdpasien = props?.pasien?.ttdpasien
+  const ttdpetugas = app?.user?.pegawai?.ttdpegawai
+  store.setForm('ttdpasien', ttdpasien)
+  store.setForm('ttdpetugas', ttdpetugas)
+  console.log('cekttd', ttdpasien)
+}
+
+function saveGeneralConsent() {
+  store.saveGeneralConsentPasien(app?.user?.pegawai)
+    .then(() => {
+      // ini buat pdf
+      emits('openPreviewGc', 'cetak')
+    })
 }
 </script>

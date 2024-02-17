@@ -24,7 +24,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       status: '',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      per_page: 100,
+      per_page: 50,
       kodepoli: []
     },
     pageTindakan: false,
@@ -71,9 +71,15 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         .then((resp) => {
           // console.log('kunjungan poli', resp)
           this.loading = false
+          // if (resp.status === 200) {
+          //   this.meta = resp.data
+          //   this.items = resp.data.data
+          // }
+          // ini yang baru
           if (resp.status === 200) {
-            this.meta = resp.data
-            this.items = resp.data.data
+            this.meta = resp.data.table
+            this.items = resp.data.table.data
+            this.meta.total = resp?.data.total
           }
         }).catch((err) => {
           console.log(err)
@@ -140,7 +146,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.loadingSaveGantiDpjp = true
       try {
         const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
-        console.log(resp)
+        // console.log(resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
@@ -164,7 +170,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       return new Promise((resolve, reject) => {
         api.post('/v1/simrs/pelayanan/gantimemo', form)
           .then(resp => {
-            console.log(resp)
+            // console.log(resp)
             if (resp.status === 200) {
               const findPasien = this.items.filter(x => x === pasien)
               if (findPasien.length) {
@@ -202,7 +208,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       }
       try {
         const resp = await api.post('v1/simrs/rajal/poli/flagfinish', form)
-        console.log('rsp ', form, resp)
+        // console.log('rsp ', form, resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
@@ -222,17 +228,37 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       this.loadingTerima = true
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
+      this.togglePageTindakan()
       try {
         const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
         // console.log('terima', resp)
         if (resp.status === 200) {
-          const findPasien = this.items.filter(x => x === pasien)
+          const findPasien = this.items.filter(x => x?.rs1 === pasien?.noreg)
           if (findPasien.length) {
             findPasien[0].status = findPasien[0].status === '' ? '2' : findPasien[0].status
+
+            // BARU
+            findPasien[0].anamnesis = resp?.data?.anamnesis
+            findPasien[0].datasimpeg = resp?.data?.datasimpeg
+            findPasien[0].diagnosa = resp?.data?.diagnosa
+            findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
+            findPasien[0].diet = resp?.data?.diet
+            findPasien[0].edukasi = resp?.data?.edukasi
+            findPasien[0].fisio = resp?.data?.fisio
+            findPasien[0].gambars = resp?.data?.gambars
+            findPasien[0].laborats = resp?.data?.laborats
+            findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
+            findPasien[0].ok = resp?.data?.ok
+            findPasien[0].pemeriksaanfisik = resp?.data?.pemeriksaanfisik
+            findPasien[0].penunjanglain = resp?.data?.penunjanglain
+            findPasien[0].planning = resp?.data?.planning
+            findPasien[0].radiologi = resp?.data?.radiologi
+            findPasien[0].sharing = resp?.data?.sharing
+            findPasien[0].taskid = resp?.data?.taskid
+            findPasien[0].tindakan = resp?.data?.tindakan
           }
           this.loadingTerima = false
           this.noreg = null
-          this.togglePageTindakan()
         }
       } catch (error) {
         console.log(error)
@@ -240,6 +266,8 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
+
+      await api.post('v1/simrs/rajal/poli/updatewaktubpjs', form)
     },
 
     async settidakdatang(pasien) {
@@ -262,7 +290,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
 
     setinject (noreg) {
       const findPasien = this.items.filter(x => x.noreg === noreg)
-      console.log('wew', findPasien)
+      // console.log('wew', findPasien)
       if (findPasien.length) {
         const data = findPasien[0]
         data.status = '3'
@@ -442,7 +470,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
     },
     getDataIcare(pasien) {
       this.loadingIcare = true
-      console.log('get data icare', pasien)
+      // console.log('get data icare', pasien)
       const param = {
         params: {
           noka: pasien.noka,
@@ -453,7 +481,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         api.get('v1/simrs/pelayanan/icare', param)
           .then(resp => {
             this.loadingIcare = false
-            console.log('resp icare', resp)
+            // console.log('resp icare', resp)
             if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
               resolve(resp.data)
             } else {

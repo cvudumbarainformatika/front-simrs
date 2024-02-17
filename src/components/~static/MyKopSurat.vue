@@ -3,10 +3,10 @@
     <div class="col-grow br-black">
       <div class="row q-pa-xs">
         <div class="col-auto">
-          <q-img
+          <img
             src="~assets/images/logo-kota-grey.png"
-            width="80px"
-          />
+            width="80"
+          >
         </div>
         <div class="col-grow">
           <div class="text-center">

@@ -21,9 +21,6 @@ const SERV = 'http://localhost:8080/api.laborat/public' // ari
 // const WSHOST = '192.168.101.80'
 const WSHOST = 'localhost'
 
-// const WSHOST = '192.168.101.80'
-// const WSHOST = 'localhost'
-
 const WSPORT = 6003
 // const WSHOST = 'xenter.my.id'
 // const WSPORT = 6002

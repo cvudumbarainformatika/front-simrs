@@ -22,12 +22,13 @@
         @set-poli="(val)=> store.setPolis(val)"
       />
     </div>
-    <div class="footer absolute-bottom bg-primary text-white z-top">
+    <div class="footer absolute-bottom text-white z-top">
       <!-- <FooterComp :items="store.items" /> -->
       <BottomComp
         v-if="store.meta !==null"
         :key="store.meta"
         :meta="store.meta"
+        color="bg-dark"
         @go-to="store.setPage"
       />
     </div>
@@ -58,6 +59,7 @@
       :key="pasien"
       v-model="store.pageTindakan"
       :pasien="pasien"
+      :loading-terima="store?.loadingTerima"
     />
     <!-- <CetakRekapBilling
       v-model="printRekap"
@@ -164,17 +166,17 @@ function settingsVoice() {
 
 function listenForSpeechEvents() {
   speech.utterance.onstart = () => {
-    // console.log('start...')
+    console.log('start...')
     speech.isLoading = true
   }
   speech.utterance.onend = () => {
-    // console.log('end...')
+    console.log('end...')
     speech.isLoading = false
   }
 }
 
 function setSpeech(txt) {
-  // console.log(speech.voiceList[11])
+  // console.log(speech.voiceList[indexVoices.value])
   const voice = speech.utterance
   voice.text = txt
   voice.voice = speech.voiceList[indexVoices.value]
@@ -187,10 +189,18 @@ function setSpeech(txt) {
 }
 
 function panggil(row) {
-  const txt1 = 'paasien . ' + (row?.nama_panggil).toLowerCase() + '? ...Harap menujuu  ' + row?.panggil_antrian
-  // const txt2 = 'Nomor Antrean ... ' + (row.nomorantrean.toUpperCase()) + '...Harap menuju... ke...' + row.namapoli
+  // console.log(row)
+  const nama = (row?.nama_panggil) ? (row?.nama_panggil)?.toLowerCase() : ''
+  const unit = row?.panggil_antrian
+  const noAntrean = row?.noantrian ? row.noantrian.toUpperCase() : ''
+  // eslint-disable-next-line no-unused-vars
+  const txt1 = 'pasien ? . ' + nama + '? ...Harap menujuu  ' + unit
+  // eslint-disable-next-line no-unused-vars
+  const txt2 = 'Nomor Antrian ... ' + noAntrean + '? ...Harap menujuu' + unit
+
+  const txt3 = 'Nomor Antrian ... ' + noAntrean + '... nama!  ' + nama + '! ...Harap menujuu  ' + unit
   // const txt = jns === 'nama' ? txt1 : txt2
-  speech.synth.speak(setSpeech(txt1))
+  speech.synth.speak(setSpeech(txt3))
   // console.log(row)
   store.sendPanggil(row, `display${kdDisplay.value}`)
 }
@@ -203,16 +213,8 @@ function bukaTindakan(val) {
         type: 'negative',
         title: 'Peringatan',
         message: 'INFO WARNING <b/> MAAF, <em><b>Pasien Ini Belum terbit SEP</b></em>',
-        // color: 'primary',
         html: true,
-        // multiLine: true,
-        // avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-        // position: 'center',
-        timeout: 1000
-        // actions: [
-        //   { label: 'Reply', color: 'yellow', handler: () => { /* ... */ } }
-
-      // ]
+        timeout: 500
       })
 
       return

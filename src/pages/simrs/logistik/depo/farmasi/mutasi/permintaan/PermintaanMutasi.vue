@@ -120,8 +120,12 @@
         </div>
         <div>
           <div class="row no-wrap q-mb-xs">
-            <div class="col-12">
+            <div
+              :key=" gudangs"
+              class="col-12"
+            >
               <app-autocomplete
+                :key="store.form.tujuan"
                 v-model="store.form.tujuan"
                 label="Pilih Depo Tujuan"
                 option-label="nama"
@@ -467,6 +471,7 @@ function simpan() {
 }
 const gudangs = ref([])
 onMounted(() => {
+  store.clearForm()
   gudangs.value = store.depos
   if (apps?.user?.kdruangansim) {
     gudangs.value = store.depos.filter(x => x.value !== apps?.user?.kdruangansim)
@@ -488,6 +493,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 })
 
 store.getInitialData()
+
 </script>
 <style lang="scss" scoped>
 .anu {

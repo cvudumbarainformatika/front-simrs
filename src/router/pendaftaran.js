@@ -137,6 +137,10 @@ const pendaftaran = {
       //   }
       // ]
     },
+    {
+      path: '/pendaftaran/general-consent',
+      component: () => import('pages/simrs/pendaftaran/generalconsent/IndexPage.vue')
+    },
 
     {
       path: '/pendaftaran/middleware',
