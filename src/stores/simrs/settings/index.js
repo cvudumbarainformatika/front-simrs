@@ -151,27 +151,27 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
           this.roles = resp.data
         })
     },
-    // async getPoli() {
-    //   await api.get('v1/settings/appakses/poli')
-    //     .then(resp => {
-    //       // console.log('Poli', resp.data)
-    //       this.polis = resp.data
-    //       return Promise.resolve(resp.data)
-    //     })
-    // },
-    // getHeaderPoli() {
-    //   return new Promise((resolve, reject) => {
-    //     api.get('v1/settings/appakses/poli')
-    //       .then(resp => {
-    //         // console.log('Poli', resp.data)
-    //         this.polis = resp.data
-    //         resolve(resp)
-    //       }).catch(err => {
-    //         console.log(err)
-    //         reject(err)
-    //       })
-    //   })
-    // },
+    async getPoli() {
+      await api.get('v1/settings/appakses/poli')
+        .then(resp => {
+          // console.log('Poli', resp.data)
+          this.polis = resp.data
+          return Promise.resolve(resp.data)
+        })
+    },
+    getHeaderPoli() {
+      return new Promise((resolve, reject) => {
+        api.get('v1/settings/appakses/poli')
+          .then(resp => {
+            // console.log('Poli', resp.data)
+            this.polis = resp.data
+            resolve(resp)
+          }).catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
     setRole(val) {
       const form = {
         id: this.pegawai.id,
