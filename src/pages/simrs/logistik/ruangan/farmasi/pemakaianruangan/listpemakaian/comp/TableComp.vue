@@ -6,13 +6,7 @@
           No
         </th>
         <th>
-          Resep
-        </th>
-        <th>
-          Pasien
-        </th>
-        <th>
-          Dokter
+          Nomor
         </th>
         <th>
           Ruangan
@@ -51,31 +45,6 @@
             />
           </td>
           <td>
-            <div class="row q-mb-xs q-col-gutter-sm">
-              <q-skeleton
-                type="text"
-                width="100px"
-                height="14px"
-              />
-            </div>
-            <div class="row q-col-gutter-sm items-center">
-              <q-skeleton
-                type="text"
-                width="40px"
-                height="14px"
-              />
-              <div class="text-grey q-pt-none">
-                ||
-              </div>
-              <q-skeleton
-                type="text"
-                width="40px"
-                height="14px"
-                class="q-ml-xs"
-              />
-            </div>
-          </td>
-          <td>
             <q-skeleton
               type="text"
               width="100px"
@@ -105,36 +74,23 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
+          <tr
+            :class="item?.higlight?'bg-light-blue-2 cursor-pointer':'cursor-pointer'"
+            @click="expand(item)"
+          >
             <td width="5%">
               {{ n+1 }}
             </td>
             <td>
               <div class="row ">
-                {{ item?.noresep }}
+                {{ item?.nopemakaian }}
               </div>
               <div class="row text-grey f-10">
-                {{ dateFullFormat(item?.tgl_permintaan) }}
+                {{ dateFullFormat(item?.tgl) }}
               </div>
             </td>
             <td>
-              <div class="row text-weight-bold">
-                {{ item?.datapasien?.nama }}
-              </div>
-              <div class="row">
-                {{ item?.noreg }}   ||   {{ item?.norm }}
-              </div>
-            </td>
-            <td>
-              {{ item?.dokter?.nama }}
-            </td>
-            <td>
-              <div v-if="item?.poli">
-                {{ item?.poli?.rs2 }}
-              </div>
-              <div v-if="item?.ruanganranap">
-                {{ item?.ruanganranap?.rs2 }}
-              </div>
+              {{ item?.ruangan?.uraian }}
             </td>
             <td>
               <q-chip
@@ -147,7 +103,7 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
+              <!-- <q-btn
                 round
                 class="f-10 q-mr-sm"
                 color="dark"
@@ -161,53 +117,74 @@
                 >
                   Print resep
                 </q-tooltip>
-              </q-btn>
+              </q-btn> -->
               <q-btn
                 v-if="item?.flag==='1'"
                 round
+                flat
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && item?.loading"
-                :loading="store.loadingTerima && item?.loading"
-                @click="store.terimaResep(item)"
+                icon="icon-mat-lock"
               >
                 <q-tooltip
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Terima
+                  Sudah dikunci
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
+                v-if="item?.flag===''"
                 round
+                flat
                 class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-done_all"
+                color="negative"
+                icon="icon-mat-lock_open"
                 :disable="store.loadingSelesai && item?.loading"
                 :loading="store.loadingSelesai && item?.loading"
-                @click="store.resepSelesai(item)"
+                @click="selesai(item)"
               >
                 <q-tooltip
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Selesai
+                  Kunci
                 </q-tooltip>
               </q-btn>
               <q-btn
-                square
-                class="f-10"
-                color="primary"
-                text-color="white"
-                no-caps
-                @click="buka(item)"
+                v-if="item?.flag===''"
+                round
+                flat
+                class="f-10 q-mr-sm"
+                color="negative"
+                icon="icon-mat-delete_sweep"
+                :disable="(store.loadingHead && item?.loading) || rincLoading(item)"
+                :loading="store.loadingHead && item?.loading"
+                @click="hapusHead(item)"
               >
-                Buka
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Hapus Data Pemakaian
+                </q-tooltip>
               </q-btn>
+              <q-btn
+                v-if="item.expand"
+                round
+                flat
+                class="f-10"
+                color="grey"
+                icon="icon-mat-expand_less"
+              />
+              <q-btn
+                v-if="!item.expand"
+                round
+                flat
+                class="f-10"
+                color="grey"
+                icon="icon-mat-expand_more"
+              />
             </td>
           <!-- <td class="text-end">
             <div>
@@ -225,11 +202,76 @@
             </div>
           </td> -->
           </tr>
-          <!-- <tr v-if="item.expand">
-            <td colspan="6">
-              <div>{{ item }}</div>
+          <tr v-if="item.expand">
+            <td
+              colspan="5"
+              class="bg-white"
+            >
+              <div class="head">
+                <div class="row">
+                  <div class="col-1">
+                    No
+                  </div>
+                  <div class="col-8">
+                    Obat
+                  </div>
+                  <div class="col-2">
+                    Jumlah
+                  </div>
+                  <div class="col-1 text-right">
+                    <div class="q-mr-md">
+                      #
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-for="(rin,i) in item?.rinci"
+                :key="i"
+                class="child"
+              >
+                <!-- {{ rin }} -->
+                <div class="row items-center">
+                  <div class="col-1">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-8">
+                    <div class="row text-weight-bold">
+                      {{ rin?.obat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10 text-grey">
+                      {{ rin?.obat?.kd_obat }}
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    {{ rin?.total }}
+                  </div>
+                  <div class="col-1 text-right">
+                    <div class="q-mr-md">
+                      <q-btn
+                        v-if="item?.flag===''"
+                        round
+                        flat
+                        class="f-8 q-mr-sm"
+                        color="negative"
+                        icon="icon-mat-delete"
+                        :disable="(store.loadingRinci && rin?.loading ) || item?.loading"
+                        :loading="store.loadingRinci && rin?.loading"
+                        @click="hapusRinci(rin)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Hapus Obat
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </td>
-          </tr> -->
+          </tr>
         </template>
       </template>
     </tbody>
@@ -239,22 +281,43 @@
 <script setup>
 // import { ref } from 'vue'
 import { dateFullFormat } from 'src/modules/formatter'
-import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
-import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
-import { useRouter } from 'vue-router'
+// import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
+import { useListPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/listpemakaian'
+// import { useRouter } from 'vue-router'
 
-const store = useFarmasiPemakaianRuanganStore()
-const router = useRouter()
-
+const store = useListPemakaianRuanganStore()
+// const router = useRouter()
+function expand(item) {
+  item.expand = !item.expand
+  item.higlight = !item.higlight
+}
+function selesai(item) {
+  item.expand = !item.expand
+  item.higlight = !item.higlight
+  store.selesaiPemakaian(item)
+}
+function hapusHead(item) {
+  item.expand = !item.expand
+  item.higlight = !item.higlight
+  store.hapusHead(item)
+}
+function hapusRinci(item) {
+  store.hapusRinci(item)
+}
+function rincLoading(val) {
+  const ada = val?.rinci.filter(rin => rin.loading)
+  if (ada.length) return true
+  else return false
+}
 // const indexId = ref(0)
 function status(val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
-      balik = ' draft'
+      balik = ' Belum dikunci'
       break
     case '1':
-      balik = 'Belum diterima'
+      balik = 'Dikunci'
       break
     case '2':
       balik = 'Siap di kerjakan'
@@ -278,7 +341,7 @@ function color(val) {
       balik = 'grey'
       break
     case '1':
-      balik = 'grey'
+      balik = 'green'
       break
     case '2':
       balik = 'green'
@@ -296,34 +359,45 @@ function color(val) {
   return balik
 }
 
-function buka(val) {
-  store.setOpen()
-  store.setResep(val)
-  console.log('buka', val)
-  // if (val?.expand === undefined) val.expand = true
-  // else val.expand = !val.expand
-}
+// function buka(val) {
+//   store.setOpen()
+//   store.setResep(val)
+//   console.log('buka', val)
+//   // if (val?.expand === undefined) val.expand = true
+//   // else val.expand = !val.expand
+// }
 // function send(id) {
 //   indexId.value = id
 //   store.sendToSatset(id)
 // }
-const print = usePrintEresepStore()
-function toPrint(row) {
-  print.setResep(row)
-  console.log('row', row)
-  const noresep = row?.noresep
-  const routeData = router.resolve({
-    path: '/print/eresep',
-    query: {
-      noresep
-    }
-  })
-  window.open(routeData.href, '_blank')
-}
+// const print = usePrintEresepStore()
+// function toPrint(row) {
+//   print.setResep(row)
+//   console.log('row', row)
+//   const noresep = row?.noresep
+//   const routeData = router.resolve({
+//     path: '/print/eresep',
+//     query: {
+//       noresep
+//     }
+//   })
+//   window.open(routeData.href, '_blank')
+// }
 </script>
 
 <style lang="scss" scoped>
-
+.head{
+  border: 1px solid rgb(44, 43, 43);
+  padding-left: 10px;
+  background-color:  rgba(0, 0, 0, 0.9);
+  color: white;
+}
+.child{
+  border-bottom: 1px solid rgb(44, 43, 43);
+  border-left: 1px solid rgb(44, 43, 43);
+  border-right: 1px solid rgb(44, 43, 43);
+  padding-left: 10px;
+}
 .text-end{
   text-align: end;
 }

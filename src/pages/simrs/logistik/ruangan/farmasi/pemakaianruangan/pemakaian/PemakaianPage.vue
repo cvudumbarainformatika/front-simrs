@@ -57,7 +57,7 @@
               <div class="col q-ml-sm">
                 <q-btn
                   push
-                  label="Selesai "
+                  label="Kunci "
                   no-caps
                   dense
                   color="green"
@@ -68,7 +68,7 @@
                     class="primary"
                     :offset="[10, 10]"
                   >
-                    Selesai
+                    Kunci Pemakaian
                   </q-tooltip>
                 </q-btn>
               </div>
@@ -121,7 +121,7 @@ import { notifCenterVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, onUnmounted } from 'vue'
 
 const h = ref(516)
 const style = useStyledStore()
@@ -166,6 +166,9 @@ onMounted(() => {
     }
   }
   store.getInitialData()
+})
+onUnmounted(() => {
+  store.resetForm()
 })
 </script>
 
