@@ -63,7 +63,7 @@
         style="min-width: 150px;"
         @update:model-value="gantiTxt"
       />
-      <q-btn-dropdown
+      <!-- <q-btn-dropdown
         class="glossy q-ml-sm"
         color="orange"
         :label="poli?.polirs"
@@ -89,7 +89,7 @@
             </q-item-section>
           </q-item>
         </q-list>
-      </q-btn-dropdown>
+      </q-btn-dropdown> -->
     </div>
     <div v-else>
       <q-btn
@@ -159,7 +159,7 @@
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+import { usePermintaanOperasistore } from 'src/stores/simrs/kamaroperasi/permintaanoperasi'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { computed, onMounted, ref } from 'vue'
 
@@ -178,7 +178,7 @@ const periods = ref([
 ])
 
 const setting = useSettingsAplikasi()
-const store = usePengunjungPoliStore()
+const store = usePermintaanOperasistore()
 const app = useAplikasiStore()
 const periode = ref(1)
 
@@ -290,9 +290,9 @@ function tahunIni() {
 
 function gantiStatus(val) {
   if (val === 'BELUM TERLAYANI') {
-    return ''
-  } else if (val === 'TERLAYANI') {
     return '1'
+  } else if (val === 'TERLAYANI') {
+    return '2'
   } else {
     return 'all'
   }
@@ -323,12 +323,12 @@ function gantiPeriode(val) {
   emits('setPeriode', per)
 }
 
-function gantiPoli(val) {
-  poli.value = val
-  const sendt = poli.value?.kodepoli === 'SEMUA POLI' ? polis.value?.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
-  console.log(sendt)
-  emits('setPoli', sendt)
-}
+// function gantiPoli(val) {
+//   poli.value = val
+//   const sendt = poli.value?.kodepoli === 'SEMUA POLI' ? polis.value?.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
+//   console.log(sendt)
+//   emits('setPoli', sendt)
+// }
 
 function kembaliNormal() {
   periode.value = 1

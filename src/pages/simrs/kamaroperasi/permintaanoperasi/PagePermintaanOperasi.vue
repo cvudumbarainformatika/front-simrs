@@ -36,15 +36,11 @@
       no-shadow
       class="my-flex-1 scroll"
     >
-      <list-pengunjung
+      <ListPermintaanok
         :key="store.items"
         :items="store.items"
         :loading="store.loading"
         :loading-terima="store.loadingTerima"
-        :loading-call="speech.isLoading"
-        @tindakan="bukaTindakan"
-        @panggilan="panggil"
-        @tidakdatang="tidakdatangs"
       />
     </q-card>
 
@@ -54,11 +50,11 @@
       @filter-data="store.filterData"
     />
 
-    <page-tindakan
+    <!-- <page-tindakan
       :key="pasien"
       v-model="store.pageTindakan"
       :pasien="pasien"
-    />
+    /> -->
     <!-- <CetakRekapBilling
       v-model="printRekap"
       :pasien="pasien"
@@ -69,22 +65,21 @@
 
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
+import { usePermintaanOperasistore } from 'src/stores/simrs/kamaroperasi/permintaanoperasi'
 // import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 // import { computed, onMounted, ref, watch } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import FilterPage from './comp/FilterPage.vue'
 import BottomComp from './comp/BottomComp.vue'
-import ListPengunjung from './comp/ListPengunjung.vue'
-import PageTindakan from '../tindakan/IndexPage.vue'
+import ListPermintaanok from './comp/ListPermintaanok.vue'
 
 // import { useQuasar } from 'quasar'
-import { useSpeechStore } from 'src/stores/antrian/speech'
+// import { useSpeechStore } from 'src/stores/antrian/speech'
 // import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
-const speech = useSpeechStore()
-const store = usePengunjungPoliStore()
+// const speech = useSpeechStore()
+const store = usePermintaanOperasistore()
 // const diagnosa = useLayananPoli()
 // const pasien = ref(null)
 // const indexVoices = ref(0)

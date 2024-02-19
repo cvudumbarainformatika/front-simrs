@@ -24,8 +24,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       status: '',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date()),
-      per_page: 100,
-      kodepoli: []
+      per_page: 100
     },
     pageTindakan: false,
     filters: false,
@@ -42,32 +41,32 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       this.params = val
       this.getData()
     },
-    async sendPanggil(pasien, channel) {
-      this.loadingCall = true
-      const params = { noreg: pasien?.noreg, noantrian: pasien?.noantrian, kdpoli: pasien?.kodepoli, tglkunjungan: pasien?.tgl_kunjungan, channel }
-      this.noreg = pasien?.noreg
-      await api.post('v1/fordisplay/send_panggilan', params)
-        .then((resp) => {
-          // console.log('call', resp)
-          this.loadingCall = false
-          if (resp.status === 200) {
-            // this.meta = resp.data
-            // this.items = resp.data.data
-            // coba
-          }
-        }).catch((err) => {
-          console.log('call', err)
-          this.loadingCall = false
-        })
-    },
-    setPolis(val) {
-      this.params.kodepoli = val
-      this.getData()
-    },
+    // async sendPanggil(pasien, channel) {
+    //   this.loadingCall = true
+    //   const params = { noreg: pasien?.noreg, noantrian: pasien?.noantrian, kdpoli: pasien?.kodepoli, tglkunjungan: pasien?.tgl_kunjungan, channel }
+    //   this.noreg = pasien?.noreg
+    //   await api.post('v1/fordisplay/send_panggilan', params)
+    //     .then((resp) => {
+    //       // console.log('call', resp)
+    //       this.loadingCall = false
+    //       if (resp.status === 200) {
+    //         // this.meta = resp.data
+    //         // this.items = resp.data.data
+    //         // coba
+    //       }
+    //     }).catch((err) => {
+    //       console.log('call', err)
+    //       this.loadingCall = false
+    //     })
+    // },
+    // setPolis(val) {
+    //   this.params.kodepoli = val
+    //   this.getData()
+    // },
     async getData() {
       this.loading = true
       const params = { params: this.params }
-      await api.get('/v1/simrs/rajal/poli/kunjunganpoli', params)
+      await api.get('/v1/simrs/penunjang/ok/listkamaroperasi', params)
         .then((resp) => {
           // console.log('kunjungan poli', resp)
           this.loading = false
