@@ -237,7 +237,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     setNoreseps(reseps) {
       this.noreseps = []
-      reseps.forEach(resep => {
+      reseps?.forEach(resep => {
         this.noreseps.unshift(resep?.noresep)
       })
       this.noreseps.unshift('BARU')
@@ -340,13 +340,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     seveSigna() {
       this.loadingSaveSigna = true
       return new Promise(resolve => {
-        api.post('v1', this.fromSigna)
+        api.post('v1/simrs/master/signa/store-signa', this.fromSigna)
           .then(resp => {
             this.loadingSaveSigna = false
             console.log('resp save signa', resp)
             notifSuccess(resp)
             this.fromSigna = { signa: '', jumlah: 1 }
-            this.signas.push(resp.data)
+            this.signas.push(resp?.data?.data)
             resolve(resp.data)
           })
           .catch(() => {

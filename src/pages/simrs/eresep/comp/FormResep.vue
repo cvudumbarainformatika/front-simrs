@@ -494,7 +494,7 @@
         </q-btn>
       </q-bar>
       <q-card-section>
-        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari</span>
+        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari berdasarkan aturan signa</span>
       </q-card-section>
       <q-card-section>
         <q-input
@@ -677,7 +677,11 @@ function signaCreateValue(val, done) {
     const anu = val.split('x')
     // console.log('anu', anu)
     if (anu?.length) {
-      store.fromSigna.jumlah = anu[0]
+      const satu = anu[0]
+      const temp = anu[1].slice(0, 4).split('')
+      const num = temp.filter(a => !isNaN(parseFloat(a)))
+      // console.log('temp', temp, num, isNaN(parseFloat(temp[0])))
+      store.fromSigna.jumlah = satu * num[0] ?? 1
       const depan = anu[0] + ' x ' + anu[1]
       if (anu?.length === 2) {
         newSigna = depan
@@ -704,7 +708,7 @@ function lostFocus() {
 function simpan() {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
-    signaSelected(resp.signa)
+    signaSelected(resp.data)
     refKet.value.focus()
     refKet.value.select()
   })
