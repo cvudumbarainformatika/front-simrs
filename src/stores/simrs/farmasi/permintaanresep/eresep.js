@@ -305,7 +305,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const param = {
         groups: this?.pasien?.groups,
         kdruang: this.dpPar,
-        q: val
+        q: val,
+        tiperesep: this.form.tiperesep
       }
       // console.log('obat', val, filtObat)
       this.loadingObat = true
