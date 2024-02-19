@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 
 export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ruangan', {
   state: () => ({
@@ -14,6 +16,8 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
     },
     form: {
       nopemakaian: '',
+      kdruang: '',
+      tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       obats: []
     }
   }),
@@ -51,10 +55,18 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
         if (this.form.obats.length) {
           this.form.obats.forEach(obat => {
             const ada = this.items.find(a => a.id === obat.id)
-            if (ada) ada.checked = true
+            if (ada) {
+              ada.checked = true
+              ada.dipakai = obat?.dipakai ?? 0
+            }
           })
         }
       }
+    },
+    resetForm() {
+      this.setForm('nopemakaian', '')
+      this.setForm('obats', [])
+      this.setForm('tgl', date.formatDate(Date.now(), 'YYYY-MM-DD'))
     },
     getInitialData() {
       this.getStokRuangan()
@@ -74,9 +86,37 @@ export const useFarmasiPemakaianRuanganStore = defineStore('farmasi_pemakaian_ru
     },
     simpanPemakaian() {
       console.log('simpan pemakaian', this.form)
+      if (this.form.obats.length <= 0) return notifErrVue('tidak ada input obat dipakai')
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/ruangan/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('pakai', resp?.data)
+            this.setForm('nopemakaian', resp?.data?.head?.nopemakaian)
+            this.setForm('obats', [])
+            notifSuccess(resp)
+            this.getStokRuangan()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     },
     selesaiPemakaian(val) {
       console.log('selesai pemakaian ', val)
+      if (!this.form.nopemakaian) return notifErrVue('Nomor Pemakaian tidak ada')
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/ruangan/selesai', this.form)
+          .then(resp => {
+            this.loading = false
+            this.resetForm()
+            notifSuccess(resp)
+            this.getStokRuangan()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
     }
   }
 })

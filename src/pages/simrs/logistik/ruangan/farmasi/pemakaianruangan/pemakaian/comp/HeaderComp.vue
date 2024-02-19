@@ -136,7 +136,7 @@
         </q-btn>
       </div>
     </div>
-    <div
+    <!-- <div
       v-if="checked"
       class="row q-my-xs items-center "
     >
@@ -187,7 +187,7 @@
           </q-tooltip>
         </q-btn>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -233,6 +233,7 @@ const search = computed({
     emits('cari', newVal)
   }
 })
+// eslint-disable-next-line no-unused-vars
 const checked = computed(() => {
   const ada = props.items.filter(a => a.checked === true)
   if (ada.length) return true

@@ -21,6 +21,7 @@
               class="q-ml-sm"
               dense
               inline
+              @update:model-value="setTipe"
             />
           </div>
           <div
@@ -114,7 +115,6 @@
                 hide-bottom-space
                 no-error-icon
                 :options="store.Obats"
-                :loading="store.loadingObat"
                 @keyup.alt.enter="racikan"
                 @input-value="inputObat"
                 @focus="inputObat"
@@ -494,7 +494,7 @@
         </q-btn>
       </q-bar>
       <q-card-section>
-        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari</span>
+        <span class="text-weight-bold f-12">Masukkan jumlah konsumsi per hari berdasarkan aturan signa</span>
       </q-card-section>
       <q-card-section>
         <q-input
@@ -539,6 +539,10 @@ const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
 
+function setTipe(val) {
+  console.log('tipe resep', val)
+  store.cariObat('')
+}
 function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
@@ -677,7 +681,11 @@ function signaCreateValue(val, done) {
     const anu = val.split('x')
     // console.log('anu', anu)
     if (anu?.length) {
-      store.fromSigna.jumlah = anu[0]
+      const satu = anu[0]
+      const temp = anu[1].slice(0, 4).split('')
+      const num = temp.filter(a => !isNaN(parseFloat(a)))
+      store.fromSigna.jumlah = satu * num[0] ?? 1
+      // console.log('temp', temp, num, isNaN(parseFloat(temp[0])))
       const depan = anu[0] + ' x ' + anu[1]
       if (anu?.length === 2) {
         newSigna = depan
@@ -704,7 +712,7 @@ function lostFocus() {
 function simpan() {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
-    signaSelected(resp.signa)
+    signaSelected(resp.data)
     refKet.value.focus()
     refKet.value.select()
   })

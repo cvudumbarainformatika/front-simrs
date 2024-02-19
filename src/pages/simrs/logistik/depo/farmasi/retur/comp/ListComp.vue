@@ -100,6 +100,13 @@
           </td>
         </tr>
       </template>
+      <template v-else-if="!store.items.length">
+        <tr>
+          <td colspan="7">
+            <app-no-data />
+          </td>
+        </tr>
+      </template>
       <template v-else>
         <template
           v-for="(item, n) in store.items"
