@@ -21,7 +21,14 @@
 
     <!-- dialog -->
 
-    <HistoryAnamnesis
+    <!-- <HistoryAnamnesis
+      :key="props.pasien"
+      :seamless="seamless"
+      :pasien="props.pasien"
+      @close="seamless =!seamless"
+    /> -->
+
+    <HistoryKanan
       :key="props.pasien"
       :seamless="seamless"
       :pasien="props.pasien"
@@ -34,7 +41,8 @@
 // import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 import ListAnamnesis from './ListAnamnesis.vue'
 import FormAnamnesis from './FormAnamnesis.vue'
-import HistoryAnamnesis from './HistoryAnamnesis.vue'
+// import HistoryAnamnesis from './HistoryAnamnesis.vue'
+import HistoryKanan from './HistoryKanan.vue'
 import { onMounted, ref } from 'vue'
 
 // const store = useAnamnesis()

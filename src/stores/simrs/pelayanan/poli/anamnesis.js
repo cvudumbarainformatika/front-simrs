@@ -30,7 +30,8 @@ export const useAnamnesis = defineStore('anamnesis', {
 
     alergis: ['Obat', 'Makanan', 'Udara', 'Lain-lain', 'Tidak ada Alergi'],
     selection: [],
-    historys: []
+    historys: [],
+    historyMeta: null
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -91,6 +92,28 @@ export const useAnamnesis = defineStore('anamnesis', {
       // console.log('form', this.form)
       // console.log('xxx', val)
     },
+    copyForm(val) {
+      this.form = {
+        keluhanutama: val.keluhanutama,
+        riwayatpenyakit: val.riwayatpenyakit,
+        riwayatpenyakitsekarang: val.riwayatpenyakitsekarang,
+        riwayatalergi: val.riwayatalergi,
+        keteranganalergi: val.keteranganalergi,
+        riwayatpengobatan: val.riwayatpengobatan,
+        // baru
+        riwayatpenyakitkeluarga: val.riwayatpenyakitkeluarga,
+        skreeninggizi: val.skreeninggizi,
+        asupanmakan: val.asupanmakan,
+        kondisikhusus: val.kondisikhusus,
+        skor: val.skor,
+        skornyeri: isNaN(parseInt(val?.scorenyeri)) ? 0 : parseInt(val?.scorenyeri),
+        keteranganscorenyeri: val?.keteranganscorenyeri
+      }
+      const kommatext = val?.riwayatalergi?.split(', ')
+      this.selection = kommatext
+      // console.log('form', this.form)
+      // console.log('xxx', val)
+    },
 
     setForm(key, val) {
       this.form[key] = val
@@ -128,10 +151,32 @@ export const useAnamnesis = defineStore('anamnesis', {
       const params = { params: { norm } }
       try {
         const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
-        // console.log('history', resp)
+        console.log('history', resp)
         if (resp.status === 200) {
-          if (resp.data.length) {
+          if (resp.data?.length) {
             const arr = resp.data
+            this.historyMeta = null
+            this.historys = arr
+          } else {
+            this.historys = []
+          }
+        }
+        this.loadingHistory = false
+      } catch (error) {
+        this.loadingHistory = false
+        notifErr(error)
+      }
+    },
+    async nextHistory(cursor) {
+      this.loadingHistory = true
+      const params = { params: { cursor } }
+      try {
+        const resp = await api.get('v1/simrs/pelayanan/historyanamnesis', params)
+        console.log('history', resp)
+        if (resp.status === 200) {
+          if (resp.data?.length) {
+            const arr = resp.data
+            this.historyMeta = null
             this.historys = arr
           } else {
             this.historys = []
