@@ -69,6 +69,13 @@
           </td>
         </tr>
       </template>
+      <template v-else-if="!store.items.length">
+        <tr>
+          <td colspan="5">
+            <app-no-data />
+          </td>
+        </tr>
+      </template>
       <template v-else>
         <template
           v-for="(item, n) in store.items"
@@ -123,7 +130,7 @@
                 round
                 flat
                 class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
+                color="negative"
                 icon="icon-mat-lock"
               >
                 <q-tooltip
@@ -138,7 +145,7 @@
                 round
                 flat
                 class="f-10 q-mr-sm"
-                color="negative"
+                color="green"
                 icon="icon-mat-lock_open"
                 :disable="store.loadingSelesai && item?.loading"
                 :loading="store.loadingSelesai && item?.loading"
