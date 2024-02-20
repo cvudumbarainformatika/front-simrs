@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Notify } from 'quasar'
+import { Notify, date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
@@ -35,34 +35,20 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
+    getUsia(x, y) {
+      const xx = new Date(x)
+      const yy = new Date(y)
+      const unit = 'years'
+      const diff = date.getDateDiff(xx, yy, unit)
+
+      return diff.toString()
+    },
 
     init(val) {
       // console.log('')
       this.params = val
       this.getData()
     },
-    // async sendPanggil(pasien, channel) {
-    //   this.loadingCall = true
-    //   const params = { noreg: pasien?.noreg, noantrian: pasien?.noantrian, kdpoli: pasien?.kodepoli, tglkunjungan: pasien?.tgl_kunjungan, channel }
-    //   this.noreg = pasien?.noreg
-    //   await api.post('v1/fordisplay/send_panggilan', params)
-    //     .then((resp) => {
-    //       // console.log('call', resp)
-    //       this.loadingCall = false
-    //       if (resp.status === 200) {
-    //         // this.meta = resp.data
-    //         // this.items = resp.data.data
-    //         // coba
-    //       }
-    //     }).catch((err) => {
-    //       console.log('call', err)
-    //       this.loadingCall = false
-    //     })
-    // },
-    // setPolis(val) {
-    //   this.params.kodepoli = val
-    //   this.getData()
-    // },
     async getData() {
       this.loading = true
       const params = { params: this.params }
@@ -73,6 +59,10 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
           if (resp.status === 200) {
             this.meta = resp.data
             this.items = resp.data.data
+            this.items.forEach(xxx => {
+              xxx.kelamin = xxx?.kunjunganranap?.masterpasien?.rs17 ?? xxx?.kunjunganrajal?.masterpasien?.rs17
+              xxx.usia = this.getUsia(xxx?.rs3, xxx?.kunjunganranap?.masterpasien?.rs16)
+            })
           }
         }).catch((err) => {
           console.log(err)
