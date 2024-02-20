@@ -35,46 +35,27 @@
       <template #header-left-after-search>
         <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
-            <div class="q-mr-sm">
-              Status :
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.params.jenisdistribusi"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="non-konsinyasi"
-                label="Non-Konsinyasi"
-                keep-color
-                color="white"
-                :disable="store.loading"
-                @update:model-value="store.gantiJenisDistribusi"
-              />
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.params.jenisdistribusi"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="konsinyasi"
-                label="Konsinyasi"
-                keep-color
-                color="white"
-                :disable="store.loading"
-                @update:model-value="store.gantiJenisDistribusi"
-              />
-            </div>
+            <q-option-group
+              v-model="store.params.flag"
+              :options="flagOptions"
+              color="primary"
+              class="q-ml-sm"
+              dense
+              type="checkbox"
+              inline
+              @update:model-value="store.getPermintaan()"
+            />
           </div>
         </div>
       </template>
-      <template #col-no_permintaan>
-        <div>No Pemintaan</div>
+      <template #col-permintaan>
+        <div>Pemintaan</div>
       </template>
-      <template #col-tgl_permintaan>
-        <div>Tanggal Permintaan</div>
+      <template #col-pasien>
+        <div>Pasien</div>
       </template>
-      <template #col-dari>
-        <div>Dari</div>
+      <template #col-tanggal>
+        <div>Tanggal</div>
       </template>
       <template #col-jumlah>
         <div>Jumlah</div>
@@ -85,16 +66,40 @@
       <template #col-act>
         <div>#</div>
       </template>
-      <template #cell-tgl_permintaan="{ row }">
-        <div class="row justify-between no-wrap">
-          {{ row.tgl_permintaan ? dateFullFormat(row.tgl_permintaan):'-' }}
+      <template #cell-pasien="{ row }">
+        <div class="row justify-between text-weight-bold">
+          {{ row?.pasien?.rs2 }}
+        </div>
+        <div class="row justify-between text-italic f-10">
+          {{ row?.noreg }} || {{ row?.norm }}
         </div>
       </template>
-      <template #cell-no_permintaan="{ row }">
+      <template #cell-tanggal="{ row }">
+        <div class="row justify-between no-wrap">
+          <div class="q-mr-sm">
+            Distribusi
+          </div>
+          <div class="text-italic">
+            {{ row.tgl_distribusi ? dateFullFormat(row.tgl_distribusi):'-' }}
+          </div>
+        </div>
+        <div class="row justify-between no-wrap">
+          <div class="q-mr-sm">
+            Dibuatkan Resep
+          </div>
+          <div class="text-italic">
+            {{ row.tgl_resep ? dateFullFormat(row.tgl_resep):'-' }}
+          </div>
+        </div>
+      </template>
+      <template #cell-permintaan="{ row }">
         <div class="row justify-between no-wrap q-mt-xs">
           <div class=" text-weight-bold">
-            {{ row.no_permintaan }}
+            {{ row.nopermintaan }}
           </div>
+        </div>
+        <div class="row justify-between no-wrap text-italic f-10">
+          {{ row.tgl_permintaan ? dateFullFormat(row.tgl_permintaan):'-' }}
         </div>
       </template>
       <template #cell-dari="{ row }">
@@ -166,16 +171,16 @@
         </div>
       </template>
       <template #expand="{ row }">
-        <div v-if="row.permintaanrinci.length">
+        <div v-if="row.rinci.length">
           <div class="row items-center text-weight-bold">
-            <div class="col-3 text-center">
+            <div class="col-3 ">
               Obat
             </div>
-            <div class="col-3 text-center">
-              Stok
-            </div>
-            <div class="col-3 text-center">
+            <div class="col-3 ">
               Jumlah
+            </div>
+            <div class="col-3 ">
+              Input
             </div>
             <div class="col-3 text-right">
               #
@@ -183,104 +188,135 @@
           </div>
           <q-separator />
           <div
-            v-for="(rin, i) in row.permintaanrinci"
+            v-for="(rin, i) in row.rinci"
             :key="i"
           >
             <div class="row items-center q-col-gutter-sm anu">
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs">
-                  <div class="text-deep-purple text-weight-bold">
-                    {{ rin.kdobat }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs">
                   <div
                     class=" text-weight-bold"
                     style="white-space: normal;"
                   >
-                    {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
+                    {{ rin.obat ? rin.obat.nama_obat : '-' }}
+                  </div>
+                </div>
+                <div class="row justify-between f-10 no-wrap q-mt-xs">
+                  <div class="text-deep-purple text-italic">
+                    {{ rin.kd_obat }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
-                  <div class=" text-weight-bold">
-                    ({{ rin.masterobat.satuan_k }})
+                  <div class="">
+                    ({{ rin.obat.satuan_k }})
                   </div>
                 </div>
-                <div class="row no-wrap q-mt-xs anu f-10">
+                <!-- <div class="row no-wrap q-mt-xs anu f-10">
                   <div
                     class="text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin.obat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin.obat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
-                    :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin.obat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin.obat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
-                    :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin.obat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin.obat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
                   </div>
                 </div>
                 <div class="row f-10 no-wrap q-mt-xs anu">
                   <div
                     class=" text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_kronis === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin.obat.status_kronis === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
+                    {{ rin.obat.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
                   </div>
                   <div
                     class=" text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_prb === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin.obat.status_prb === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
+                    {{ rin.obat.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs text-purple">
                   <div class="q-mr-xs">
-                    Depo
+                    Minta
                   </div>
-                  <div class="">
-                    <div v-if="rin.stokreal">
-                      <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a, b) => a + b, 0) }}
-                      </div>
-                      <div v-if="!rin.stokreal.length">
-                        0
-                      </div>
-                    </div>
+                  <div class="text-weight-bold">
+                    {{ rin?.jumlah_minta }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs text-cyan">
+                <div
+                  v-if="parseInt( row?.flag)>=2"
+                  class="row justify-between no-wrap q-mt-xs text-green"
+                >
                   <div class="q-mr-xs">
-                    Max
+                    Di distribusikan
                   </div>
-                  <div class="">
-                    {{ parseFloat(rin.mak_stok) }}
+                  <div class="text-weight-bold">
+                    {{ rin?.jumlah_distribusi }}
+                  </div>
+                </div>
+                <div
+                  v-if="parseInt( row?.flag)>=3"
+                  class="row justify-between no-wrap q-mt-xs text-green"
+                >
+                  <div class="q-mr-xs">
+                    Diresepkan Dokter
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin?.jumlah_resep }}
+                  </div>
+                </div>
+                <div
+                  v-if="parseInt( row?.flag)>=4"
+                  class="row justify-between no-wrap q-mt-xs text-green"
+                >
+                  <div class="q-mr-xs">
+                    Dikembalikan
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ rin?.jumlah_kembali }}
                   </div>
                 </div>
               </div>
               <div class="col-3">
-                <div class="row justify-between no-wrap q-mt-xs text-orange">
-                  <div class="q-mr-xs">
-                    Permintaan
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ parseFloat(rin?.jumlah_minta) }}
+                <div
+                  v-if="row?.flag==='1'"
+                  class="row justify-between no-wrap q-mt-xs text-orange"
+                >
+                  <div class="col-12 q-mr-xs">
+                    <q-input
+                      v-model="rin.jumlah_distribusi"
+                      outlined
+                      label="Jumlah Distribusi"
+                      dense
+                      standout="bg-yellow-3"
+                    />
                   </div>
                 </div>
-                <div class="row justify-between no-wrap q-mt-xs text-green">
-                  <div class="q-mr-xs">
-                    Didistribusikan
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin?.distribusi }}
+
+                <div
+                  v-if="row?.flag==='3'"
+                  class="row justify-between no-wrap q-mt-xs text-green"
+                >
+                  <div class="col-12 q-mr-xs">
+                    <q-input
+                      v-model="rin.jumlah_kembali"
+                      outlined
+                      label="Jumlah Kembali"
+                      dense
+                      standout="bg-yellow-3"
+                    />
                   </div>
                 </div>
               </div>
@@ -329,7 +365,13 @@ function depo (val) {
     return val
   }
 }
-
+// flag
+const flagOptions = ref([
+  { label: 'Dikirm', value: '1' },
+  { label: 'Didistribusikan', value: '2' },
+  { label: 'Ada Resep', value: '3' },
+  { label: 'Selesai', value: '4' }
+])
 const toloadBeli = ref('')
 function kunci (val) {
   val.expand = !val.expand
@@ -385,19 +427,19 @@ const label = (status) => {
       // eslint-disable-next-line no-unreachable
       break
     case '1':
-      return 'Permintaan dikirim ke Gudang'
+      return 'Permintaan dikirim ke Depo'
       // eslint-disable-next-line no-unreachable
       break
     case '2':
-      return 'Diterima Gudang'
-      // eslint-disable-next-line no-unreachable
-      break
-    case '3':
       return 'Telah di distribusikan'
       // eslint-disable-next-line no-unreachable
       break
+    case '3':
+      return 'Dibuatkan Resep'
+      // eslint-disable-next-line no-unreachable
+      break
     case '4':
-      return 'Diterima Depo'
+      return 'Selesai'
       // eslint-disable-next-line no-unreachable
       break
     case 99:

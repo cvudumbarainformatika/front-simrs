@@ -12,16 +12,16 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
       page: 1,
       q: '',
       per_page: 10,
-      jenisdistribusi: 'non-konsinyasi',
+      jenis: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: ''
+      flag: ['1']
     },
     form: {},
     columns: [
-      'no_permintaan',
-      'tgl_permintaan',
-      'dari',
+      'pasien',
+      'permintaan',
+      'tanggal',
       'status',
       'act'
     ],
@@ -31,7 +31,6 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
     ],
     depos: [
       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
-      { nama: 'Floor Stock 2 (Obat)', value: 'Gd-04010101' },
       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
       { nama: 'Depo OK', value: 'Gd-04010103' },
       { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
@@ -54,23 +53,23 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
     setSearch(val) {
       this.setParams('no_permintaan', val)
       this.setParams('page', 1)
-      this.getPermintaanDepo()
+      this.getPermintaan()
     },
     setPage(val) {
       this.setParams('page', val)
-      this.getPermintaanDepo()
+      this.getPermintaan()
     },
     setPerPage(val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
-      this.getPermintaanDepo()
+      this.getPermintaan()
     },
     refreshTable(val) {
       this.setParams('page', 1)
-      this.getPermintaanDepo()
+      this.getPermintaan()
     },
     getInitialData() {
-      this.getPermintaanDepo()
+      this.getPermintaan()
     },
     metaniRinci() {
       this.items.forEach(item => {
@@ -79,11 +78,11 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
         })
       })
     },
-    getPermintaanDepo() {
+    getPermintaan() {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/gudang/distribusi/listpermintaandepo', param)
+        api.get('v1/simrs/penunjang/farmasinew/obatoperasi/get-permintaan', param)
           .then(resp => {
             this.loading = false
             this.items = resp?.data?.data ?? resp?.data
@@ -99,12 +98,12 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
     simpanDetail(val) {
       this.loadingSimpan = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/depo/terimadistribusi', val)
+        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-distribusi', val)
           .then(resp => {
             this.loadingSimpan = false
             console.log('terima', resp)
             notifSuccess(resp)
-            this.getPermintaanDepo()
+            this.getPermintaan()
             resolve(resp)
           })
           .catch(() => { this.loadingSimpan = false })
