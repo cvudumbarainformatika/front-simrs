@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
@@ -15,7 +16,9 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
       jenis: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: ['1']
+      flag: ['1'],
+      from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      to: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     form: {},
     columns: [
@@ -95,13 +98,27 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
           .catch(() => { this.loading = false })
       })
     },
-    simpanDetail(val) {
+    simpanDistribusi(val) {
       this.loadingSimpan = true
       return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-distribusi', val)
+        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/distribusi', val)
           .then(resp => {
             this.loadingSimpan = false
-            console.log('terima', resp)
+            console.log('distribusi', resp)
+            notifSuccess(resp)
+            this.getPermintaan()
+            resolve(resp)
+          })
+          .catch(() => { this.loadingSimpan = false })
+      })
+    },
+    terimaPengembalian(val) {
+      this.loadingSimpan = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/terima-pengembalian', val)
+          .then(resp => {
+            this.loadingSimpan = false
+            console.log('kembali', resp)
             notifSuccess(resp)
             this.getPermintaan()
             resolve(resp)

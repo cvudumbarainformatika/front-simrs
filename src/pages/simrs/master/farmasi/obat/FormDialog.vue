@@ -617,6 +617,17 @@
                   />
                 </div> -->
               </div>
+              <div class="row q-mb-xs items-center">
+                Status Konsinyasi:
+                <q-option-group
+                  v-model="store.form.status_konsinyasi"
+                  :options="store.optionStatusKonsinyasi"
+                  color="primary"
+                  class="q-ml-sm"
+                  dense
+                  inline
+                />
+              </div>
               <!-- Gudang -->
               <div class="row q-mb-xs items-center justify-between">
                 di Gudang:

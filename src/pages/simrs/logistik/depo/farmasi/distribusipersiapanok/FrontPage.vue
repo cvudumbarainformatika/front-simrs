@@ -35,16 +35,52 @@
       <template #header-left-after-search>
         <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
-            <q-option-group
-              v-model="store.params.flag"
-              :options="flagOptions"
-              color="primary"
-              class="q-ml-sm"
-              dense
-              type="checkbox"
-              inline
-              @update:model-value="store.getPermintaan()"
-            />
+            <div class="q-mr-sm cursor-pointer waktu">
+              <div class="row text-yellow q-pt-xs q-px-xs">
+                {{ dateFullFormat(store.params.from) }}
+              </div>
+              <q-separator color="white" />
+              <div class="row text-amber q-pb-xs q-px-xs">
+                {{ dateFullFormat(store.params.to) }}
+              </div>
+              <q-menu
+                @show="menuShow"
+                @hide="menuHide"
+              >
+                <q-card flat>
+                  <q-card-section>
+                    <app-input-date
+                      :model="store.params.from"
+                      outlined
+                      label="Dari tanggal"
+                      standout="bg-yellow-3"
+                      @set-model="store.setParams('from',$event)"
+                    />
+                  </q-card-section>
+                  <q-card-section>
+                    <app-input-date
+                      :model="store.params.to"
+                      outlined
+                      label="Sampai tanggal"
+                      standout="bg-yellow-3"
+                      @set-model="store.setParams('to',$event)"
+                    />
+                  </q-card-section>
+                </q-card>
+              </q-menu>
+            </div>
+            <div class="q-mr-sm">
+              <q-option-group
+                v-model="store.params.flag"
+                :options="flagOptions"
+                color="primary"
+                class="q-ml-sm"
+                dense
+                type="checkbox"
+                inline
+                @update:model-value="store.getPermintaan()"
+              />
+            </div>
           </div>
         </div>
       </template>
@@ -80,7 +116,7 @@
             Distribusi
           </div>
           <div class="text-italic">
-            {{ row.tgl_distribusi ? dateFullFormat(row.tgl_distribusi):'-' }}
+            {{ row.tgl_distribusi ? dateFull(row.tgl_distribusi):'-' }}
           </div>
         </div>
         <div class="row justify-between no-wrap">
@@ -88,7 +124,7 @@
             Dibuatkan Resep
           </div>
           <div class="text-italic">
-            {{ row.tgl_resep ? dateFullFormat(row.tgl_resep):'-' }}
+            {{ row.tgl_resep ? dateFull(row.tgl_resep):'-' }}
           </div>
         </div>
       </template>
@@ -99,7 +135,7 @@
           </div>
         </div>
         <div class="row justify-between no-wrap text-italic f-10">
-          {{ row.tgl_permintaan ? dateFullFormat(row.tgl_permintaan):'-' }}
+          {{ row.tgl_permintaan ? dateFull(row.tgl_permintaan):'-' }}
         </div>
       </template>
       <template #cell-dari="{ row }">
@@ -123,13 +159,30 @@
         </div>
       </template>
       <template #cell-act="{ row }">
+        <div v-if="row.flag==='1'">
+          <q-btn
+            flat
+            icon="icon-mat-send"
+            dense
+            color="primary"
+            :loading="store.loadingDistribusi && row.loading"
+            @click="distribusi(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Distribusikan
+            </q-tooltip>
+          </q-btn>
+        </div>
         <div v-if="row.flag==='4'">
           <q-btn
             flat
             icon="icon-mat-lock"
             dense
             color="negative"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            :loading="store.loadingKunci && row.loading"
           >
             <!-- @click="kunci(row)" -->
             <q-tooltip
@@ -146,14 +199,14 @@
             icon="icon-mat-move_to_inbox"
             dense
             color="primary"
-            :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
+            :loading="store.loadingSimpan && row.loading"
+            @click="teimaPengembalian(row)"
           >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Terima
+              Terima Pengembalian
             </q-tooltip>
           </q-btn>
         </div>
@@ -296,11 +349,17 @@
                 >
                   <div class="col-12 q-mr-xs">
                     <q-input
+                      ref="refDistribusi"
                       v-model="rin.jumlah_distribusi"
                       outlined
                       label="Jumlah Distribusi"
                       dense
                       standout="bg-yellow-3"
+                      :rules="[
+                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
+                        val => ((parseFloat(val) <= parseFloat(rin.jumlah_minta))) || 'Tidak Boleh Lebih dari Jumlah minta'
+                      ]"
+                      @update:model-value="setJumlah($event,rin,'jumlah_distribusi')"
                     />
                   </div>
                 </div>
@@ -311,11 +370,17 @@
                 >
                   <div class="col-12 q-mr-xs">
                     <q-input
+                      ref="refKembali"
                       v-model="rin.jumlah_kembali"
                       outlined
                       label="Jumlah Kembali"
                       dense
                       standout="bg-yellow-3"
+                      :rules="[
+                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
+                        val => (parseFloat(val) <= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Tidak Boleh Lebih dari Jumlah distribusi dikurangi jumlah diresepkan dokter'
+                      ]"
+                      @update:model-value="setJumlah($event,rin,'jumlah_kembali')"
                     />
                   </div>
                 </div>
@@ -333,10 +398,11 @@
 </template>
 
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFull, dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { onMounted, ref, watch } from 'vue'
 import { useDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/distribusi'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
@@ -351,6 +417,22 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   store.getInitialData()
 })
 
+// menu hide and show
+let prevFrom = null
+let prevTo = null
+function menuShow() {
+  prevFrom = store.params.from
+  prevTo = store.params.to
+  // console.log('show', prevFrom, prevTo)
+}
+function menuHide() {
+  const samaFrom = store.params.from === prevFrom
+  const samaTo = store.params.to === prevTo
+  // console.log('hide', samaFrom, samaTo)
+  if (!samaFrom || !samaTo) store.getPermintaan()
+}
+
+/// /
 function onClick (val) {
   // console.log('click', val)
   val.item.expand = !val.item.expand
@@ -372,19 +454,81 @@ const flagOptions = ref([
   { label: 'Ada Resep', value: '3' },
   { label: 'Selesai', value: '4' }
 ])
-const toloadBeli = ref('')
-function kunci (val) {
+
+const refDistribusi = ref(null)
+const refKembali = ref(null)
+function teimaPengembalian (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.no_permintaan
-  const form = {
-    no_permintaan: val.no_permintaan,
-    kdruang: val.tujuan, // gudang
-    tujuan: val.dari// depo
-  }
-  console.log('val', val, form)
 
-  store.simpanDetail(form)
+  // console.log('val', val, refKembali.value)
+  // console.log('ref', refKembali.value)
+  setTimeout(() => {
+    const valid = []
+    if (refKembali.value?.length) {
+      refKembali.value.forEach(ref => {
+        // console.log('fref', ref.validate())
+        if (!ref.validate()) valid.push(false)
+      })
+      console.log('valid', valid.length)
+      if (valid.length <= 0) store.terimaPengembalian(val)
+      else notifErrVue('periksa kembali jumlah kembali')
+    } else {
+      // console.log('else', val?.rinci)
+      val?.rinci.forEach(rin => { rin.sisa = parseFloat(rin.jumlah_distribusi - rin.jumlah_resep) })
+      const ada = val?.rinci.filter(a => a.sisa !== a.jumlah_kembali)
+      if (ada.length) return notifErrVue('periksa kembali jumlah pengembalian, ada yang tidak sama antara jumlah distribusi dikurangi jumlah resep dengan jumlah kembali')
+      else store.terimaPengembalian(val)
+    }
+  }, 100)
+}
+function distribusi (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+
+  // console.log('val', val, refDistribusi.value)
+  console.log('ref', refDistribusi.value)
+  setTimeout(() => {
+    const valid = []
+    if (refDistribusi.value?.length) {
+      refDistribusi.value.forEach(ref => {
+        // console.log('fref', ref.validate())
+        if (!ref.validate()) valid.push(false)
+      })
+      console.log('valid', valid.length)
+      if (valid.length <= 0) store.simpanDistribusi(val)
+      else notifErrVue('periksa kembali jumlah distribusi')
+    } else {
+      // console.log('else', val?.rinci)
+      const ada = val?.rinci.filter(a => a.jumlah_distribusi <= 0)
+      // console.log('ada', ada)
+      if (ada.length) return notifErrVue('periksa kembali jumlah distribusi, tidak boleh 0')
+      else store.simpanDistribusi(val)
+    }
+  }, 100)
+  // store.simpanDistribusi(val)
+}
+
+function setJumlah (evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
+  det[key] = beli
+  if (key === 'jumlah_distribusi') {
+    if (parseFloat(det.jumlah_minta) < beli) {
+      notifErrVue('jumlah distribusi tidak boleh lebih dari jumlah minta')
+      det[key] = parseFloat(det.jumlah_minta)
+    }
+  }
+  if (key === 'jumlah_kembali') {
+    const sisa = parseFloat(det.jumlah_distribusi) - parseFloat(det.jumlah_resep)
+    if (sisa < beli) {
+      notifErrVue('jumlah kembali tidak boleh lebih dari jumlah didisribusikan dikurangi jumlah resep')
+      det[key] = sisa
+    }
+  }
 }
 const color = val => {
   switch (val) {
@@ -464,5 +608,10 @@ const label = (status) => {
 }
 .rouded-border{
   border-radius: 5px;
+}
+.waktu{
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  background-color: rgb(84, 139, 188);
 }
 </style>
