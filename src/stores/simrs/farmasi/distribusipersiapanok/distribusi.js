@@ -7,6 +7,7 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
   state: () => ({
     loading: false,
     loadingSimpan: false,
+    loadingDistribusi: false,
     items: [],
     meta: {},
     params: {
@@ -99,31 +100,41 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
       })
     },
     simpanDistribusi(val) {
-      this.loadingSimpan = true
+      this.loadingDistribusi = true
+      val.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/obatoperasi/distribusi', val)
           .then(resp => {
-            this.loadingSimpan = false
+            this.loadingDistribusi = false
+            val.loading = false
             console.log('distribusi', resp)
             notifSuccess(resp)
             this.getPermintaan()
             resolve(resp)
           })
-          .catch(() => { this.loadingSimpan = false })
+          .catch(() => {
+            this.loadingDistribusi = false
+            val.loading = false
+          })
       })
     },
     terimaPengembalian(val) {
       this.loadingSimpan = true
+      val.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/obatoperasi/terima-pengembalian', val)
           .then(resp => {
             this.loadingSimpan = false
+            val.loading = false
             console.log('kembali', resp)
             notifSuccess(resp)
             this.getPermintaan()
             resolve(resp)
           })
-          .catch(() => { this.loadingSimpan = false })
+          .catch(() => {
+            this.loadingSimpan = false
+            val.loading = false
+          })
       })
     }
   }

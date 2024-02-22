@@ -331,7 +331,7 @@
                 </div>
               </div>
               <div
-                v-if="row.status_konsinyasi==='konsinyasi'"
+                v-if="row.status_konsinyasi"
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
@@ -339,9 +339,9 @@
                 </div>
                 <div
                   class="text-right text-weight-bold"
-                  :class="row.status_konsinyasi==='konsinyasi'?'text-green':'text-negative'"
+                  :class="row.status_konsinyasi==='1'?'text-green':'text-negative'"
                 >
-                  {{ row.status_konsinyasi==='konsinyasi'?'YA':'TIDAK' }}
+                  {{ row.status_konsinyasi==='1'?'YA':'TIDAK' }}
                 </div>
               </div>
               <div

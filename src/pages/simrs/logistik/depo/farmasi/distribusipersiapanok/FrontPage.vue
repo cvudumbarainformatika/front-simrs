@@ -182,7 +182,6 @@
             icon="icon-mat-lock"
             dense
             color="negative"
-            :loading="store.loadingKunci && row.loading"
           >
             <!-- @click="kunci(row)" -->
             <q-tooltip
