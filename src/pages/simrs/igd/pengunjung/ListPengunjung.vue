@@ -38,7 +38,7 @@
               />
               <div v-if="!item?.sep">
                 <q-badge
-                  v-if="reg!==item.noreg && item.groups==='1'"
+                  v-if="item.groups==='1'"
                   label="SEP BELUM TERBIT"
                   color="negative"
                   class="cursor-pointer"
