@@ -434,8 +434,10 @@ function menuHide() {
 /// /
 function onClick (val) {
   store.items.forEach(item => {
-    item.expand = false
-    item.highlight = false
+    if (item.id !== val.item.id) {
+      item.expand = false
+      item.highlight = false
+    }
   })
   // console.log('click', val)
   val.item.expand = !val.item.expand
