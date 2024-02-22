@@ -376,8 +376,8 @@
                       dense
                       standout="bg-yellow-3"
                       :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
-                        val => (parseFloat(val) <= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Tidak Boleh Lebih dari Jumlah distribusi dikurangi jumlah diresepkan dokter'
+                        val => (parseFloat(val) <= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Tidak Boleh Lebih dari Jumlah distribusi dikurangi jumlah diresepkan dokter',
+                        val => (parseFloat(val) >= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Apakah ada obat yang hilang?'
                       ]"
                       @update:model-value="setJumlah($event,rin,'jumlah_kembali')"
                     />
@@ -433,6 +433,10 @@ function menuHide() {
 
 /// /
 function onClick (val) {
+  store.items.forEach(item => {
+    item.expand = false
+    item.highlight = false
+  })
   // console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
@@ -491,7 +495,7 @@ function distribusi (val) {
     const valid = []
     if (refDistribusi.value?.length) {
       refDistribusi.value.forEach(ref => {
-        // console.log('fref', ref.validate())
+        console.log('fref', ref.validate())
         if (!ref.validate()) valid.push(false)
       })
       console.log('valid', valid.length)
