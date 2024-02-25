@@ -59,7 +59,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
           if (item?.rinci?.length) {
             item?.rinci?.forEach(rin => {
               rin.checked = false
-              this.rincBelId.push(rin?.id)
+              if (rin?.noresep === '') this.rincBelId.push(rin?.id)
             })
           }
         })

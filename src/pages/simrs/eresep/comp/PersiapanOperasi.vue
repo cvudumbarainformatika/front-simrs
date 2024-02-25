@@ -1,6 +1,6 @@
 <template>
   <div
-    class="row full-width bg-primary items-center text-white q-mb-sm"
+    class="row full-width bg-primary items-center text-white"
     style="z-index: 2;"
   >
     <div class="col-auto">
@@ -45,7 +45,7 @@
     </div>
     <div
       v-if="!store.loading"
-      class="row full-height full-width q-col-gutter-sm q-mb-xl"
+      class="row full-height full-width q-col-gutter-sm q-mb-xl q-mt-sm"
     >
       <div class="col-8 full-height q-pt-xs">
         <BelumPage v-if="store.belums?.length" />
@@ -60,10 +60,10 @@
   <div class="row absolute-bottom bg-white">
     <div class="col-8">
       <div class="row items-center">
-        <div class="col-4 text-right">
-          <div class="q-mr-md">
+        <div class="col-1 text-right">
+          <!-- <div class="q-mr-md">
             <q-btn
-              label="Nomor Resep Selesai"
+              label="No resep baru"
               no-caps
               dense
               push
@@ -72,11 +72,16 @@
               :disable="store.loadingSelesai"
               @click="selesai()"
             />
-          </div>
+          </div> -->
         </div>
-        <div class="col-6">
-          <div class="q-ml-sm">
-            {{ store.form?.noresep }}
+        <div class="col-9">
+          <div class="row">
+            <div class="q-ml-sm">
+              Nomor Resep :
+            </div>
+            <div class="q-ml-sm text-weight-bold">
+              {{ store.form?.noresep }}
+            </div>
           </div>
         </div>
         <div class="col-2">
@@ -115,6 +120,7 @@ function simpan() {
   console.log('form', store.form)
   store.simpan()
 }
+// eslint-disable-next-line no-unused-vars
 function selesai() {
   console.log('form', store.form)
   store.selesai()

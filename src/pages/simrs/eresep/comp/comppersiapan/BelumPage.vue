@@ -9,11 +9,33 @@
           {{ item?.nopermintaan }}
         </div>
       </div>
-      <div class="col-3 text-italic">
+      <div class="col-2 text-italic">
         {{ dateFullFormat( item?.tgl_permintaan) }}
       </div>
       <div class="col-2">
         {{ item?.userminta?.nama }}
+      </div>
+      <div
+        v-if="adaResep(item)"
+        class="col-2"
+      >
+        <q-btn
+          label="Selesai"
+          no-caps
+          dense
+          push
+          color="green"
+          :loading="store.loadingSelesai"
+          :disable="store.loadingSelesai"
+          @click="selesai()"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Tidak dibuatkan resep
+          </q-tooltip>
+        </q-btn>
       </div>
       <div class="col-grow">
         <q-separator
@@ -29,58 +51,62 @@
       <div
         v-for="(rin, r) in item?.rinci"
         :key="r"
-        class="row items-center q-my-xs"
       >
         <div
-          class="col-auto q-mr-sm"
-          style="width:2%;"
+          v-if="rin?.noresep===''"
+          class="row items-center q-my-xs"
         >
-          {{ r+1 }}
-        </div>
-        <div class="col-5">
-          <div class="row items-center">
-            {{ rin?.obat?.nama_obat }}
+          <div
+            class="col-auto q-mr-sm"
+            style="width:2%;"
+          >
+            {{ nomor(item,rin) }}
           </div>
-          <div class="row">
-            <div class="f-10 text-italic">
-              {{ rin?.kd_obat }}
+          <div class="col-5">
+            <div class="row items-center">
+              {{ rin?.obat?.nama_obat }}
             </div>
-            <div class="f-10 text-weight-bold q-ml-sm">
-              ({{ rin?.obat?.satuan_k }})
-            </div>
-          </div>
-        </div>
-        <div class="col-2">
-          <div class="row justify-between">
-            <div class="col">
-              Disiapkan:
-            </div>
-            <div class="col text-weight-bold">
-              {{ rin?.jumlah_distribusi }}
+            <div class="row">
+              <div class="f-10 text-italic">
+                {{ rin?.kd_obat }}
+              </div>
+              <div class="f-10 text-weight-bold q-ml-sm">
+                ({{ rin?.obat?.satuan_k }})
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-2">
-          <q-input
-            ref="refInput"
-            v-model="rin.jumlah_resep"
-            label="Jumlah Diresepkan"
-            dense
-            outlined
-            standout="bg-yellow-3"
-            @update:model-value="setNumber($event,rin,'jumlah_resep')"
-            @blur="addToForm(rin)"
-          />
-        </div>
-        <div
-          class="col-auto q-mx-sm"
-          style="width:3%;"
-        >
-          <q-checkbox
-            v-model="rin.checked"
-            size="xs"
-            @update:model-value="setCheck($event, rin, r)"
-          />
+          <div class="col-2">
+            <div class="row justify-between">
+              <div class="col">
+                Disiapkan:
+              </div>
+              <div class="col text-weight-bold">
+                {{ rin?.jumlah_distribusi }}
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <q-input
+              ref="refInput"
+              v-model="rin.jumlah_resep"
+              label="Jumlah Diresepkan"
+              dense
+              outlined
+              standout="bg-yellow-3"
+              @update:model-value="setNumber($event,rin,'jumlah_resep')"
+              @blur="addToForm(rin)"
+            />
+          </div>
+          <div
+            class="col-auto q-mx-sm"
+            style="width:3%;"
+          >
+            <q-checkbox
+              v-model="rin.checked"
+              size="xs"
+              @update:model-value="setCheck($event, rin, r)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -95,6 +121,16 @@ import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permint
 const store = useResepPermintaanOperasiStore()
 const refInput = ref(null)
 // functions in here
+function nomor(item, val) {
+  const filtered = item?.rinci.filter(a => a.noresep === '')
+  const index = filtered.findIndex(a => val?.id === a.id)
+  return index + 1 ?? '-'
+}
+function adaResep(item) {
+  const filtered = item?.rinci.filter(a => a.noresep !== '')
+  console.log(filtered?.length >= 1)
+  return filtered?.length >= 1
+}
 function setNumber(evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
