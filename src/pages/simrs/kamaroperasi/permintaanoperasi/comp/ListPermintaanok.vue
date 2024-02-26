@@ -102,7 +102,7 @@
               style="min-width: 120px;"
               :loading="loadingTerima && store.noreg === item?.noreg"
               :disable="loadingTerima"
-              @click="emits('tindakan', item)"
+              @click="emits('pelayanan', item)"
             />
           </q-item-section>
         </q-item>
@@ -122,7 +122,7 @@ import EmptyData from './EmptyData.vue'
 // import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 // import { ref } from 'vue'
 import { usePermintaanOperasistore } from 'src/stores/simrs/kamaroperasi/permintaanoperasi'
-const emits = defineEmits(['tindakan', 'panggilan', 'tidakdatang'])
+const emits = defineEmits(['pelayanan'])
 defineProps({
   items: {
     type: Array,

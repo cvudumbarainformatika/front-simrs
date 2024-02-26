@@ -41,6 +41,7 @@
         :items="store.items"
         :loading="store.loading"
         :loading-terima="store.loadingTerima"
+        @pelayanan="bukaPelayanan"
       />
     </q-card>
 
@@ -50,16 +51,17 @@
       @filter-data="store.filterData"
     />
 
-    <!-- <page-tindakan
+    <page-pelayanan
       :key="pasien"
-      v-model="store.pageTindakan"
+      v-model="store.pagePelayanan"
       :pasien="pasien"
-    /> -->
+      :loading-terima="store?.loadingTerima"
+    />
     <!-- <CetakRekapBilling
       v-model="printRekap"
       :pasien="pasien"
       @tutup="actPrintRekap"
-    /> -->
+    />-->
   </q-page>
 </template>
 
@@ -67,21 +69,30 @@
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePermintaanOperasistore } from 'src/stores/simrs/kamaroperasi/permintaanoperasi'
 // import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
-// import { computed, onMounted, ref, watch } from 'vue'
+import { ref } from 'vue'
 import HeaderComp from './comp/HeaderComp.vue'
 import FilterPage from './comp/FilterPage.vue'
 import BottomComp from './comp/BottomComp.vue'
 import ListPermintaanok from './comp/ListPermintaanok.vue'
+
+import PagePelayanan from '../pelayanan/IndexPage.vue'
 
 // import { useQuasar } from 'quasar'
 // import { useSpeechStore } from 'src/stores/antrian/speech'
 // import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const style = useStyledStore()
+const pasien = ref(null)
 // const speech = useSpeechStore()
 const store = usePermintaanOperasistore()
 // const diagnosa = useLayananPoli()
 // const pasien = ref(null)
 // const indexVoices = ref(0)
+
+function bukaPelayanan(val) {
+  pasien.value = val
+  store.pagePelayanan = true
+  // store.setTerima(val)
+}
 
 </script>

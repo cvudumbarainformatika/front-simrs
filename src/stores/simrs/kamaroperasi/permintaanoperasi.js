@@ -26,7 +26,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       from: dateDbFormat(new Date()),
       per_page: 100
     },
-    pageTindakan: false,
+    pagePelayanan: false,
     filters: false,
     custom: false,
     loadingSaveGantiDpjp: false
