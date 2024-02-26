@@ -25,9 +25,9 @@
           dense
           push
           color="green"
-          :loading="store.loadingSelesai"
-          :disable="store.loadingSelesai"
-          @click="selesai()"
+          :loading="store.loadingSelesai && item.loading"
+          :disable="store.loadingSelesai && item.loading"
+          @click="openDialog(item)"
         >
           <q-tooltip
             class="primary"
@@ -111,6 +111,71 @@
       </div>
     </div>
   </div>
+  <q-dialog
+    v-model="isOpen"
+    persistent
+  >
+    <q-card style="min-width: 500px;">
+      <q-bar class="bg-primary">
+        <q-space />
+
+        <q-btn
+          v-close-popup
+          dense
+          flat
+          color="white"
+          icon="icon-mat-close"
+          @click="isOpen=false"
+        >
+          <q-tooltip class="bg-white text-primary">
+            Close
+          </q-tooltip>
+        </q-btn>
+      </q-bar>
+      <q-card-section>
+        <div class="row text-weight-bold">
+          Obat :
+        </div>
+        <div
+          v-for="(obat,o) in noresepObats"
+          :key="o"
+          class="row items-center"
+        >
+          <div
+            class="col-auto"
+            style="width:3%"
+          >
+            {{ o+1 }}
+          </div>
+          <div
+            class="col-auto text-weight-bold text-negative"
+            style="width: 80%"
+          >
+            {{ obat?.obat?.nama_obat }}
+          </div>
+        </div>
+        <div class="row text-weight-bold">
+          Belum dibuatkan resep. Apakah {{ noresepObats?.length >1?'obat-obat':'obat' }} tersebut memang tidak akan dibuatkan resep?
+        </div>
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn
+          label="tidak"
+          color="negative"
+          dense
+          push
+          @click="isOpen=false"
+        />
+        <q-btn
+          label="ya"
+          color="primary"
+          dense
+          push
+          @click="selesai()"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
@@ -120,6 +185,7 @@ import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permint
 
 const store = useResepPermintaanOperasiStore()
 const refInput = ref(null)
+const isOpen = ref(false)
 // functions in here
 function nomor(item, val) {
   const filtered = item?.rinci.filter(a => a.noresep === '')
@@ -162,5 +228,21 @@ function addToForm(item) {
     const ada = store.form.obats.find(a => a.id === item.id)
     if (!ada && item.jumlah_resep > 0) store.form.obats.push(item)
   }
+}
+
+const noresepObats = ref([])
+let itemnya = null
+function openDialog(item) {
+  itemnya = item
+  noresepObats.value = item?.rinci?.filter(a => a.noresep === '')
+  console.log('obat', noresepObats.value)
+  if (noresepObats.value?.length) isOpen.value = true
+}
+function selesai() {
+  // cek ada yang belum di buatkan resep atau tidak, popup tanyakan apakah obat2 tsb tidak akan dibuatkan resep
+  // console.log('item', item)
+
+  store.selesai(itemnya)
+  isOpen.value = false
 }
 </script>

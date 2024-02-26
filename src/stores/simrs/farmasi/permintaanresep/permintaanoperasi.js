@@ -1,16 +1,18 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { notifSuccess } from 'src/modules/utils'
+import { filterDuplicateArrays, notifSuccess } from 'src/modules/utils'
 
 export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_operasi', {
   state: () => ({
     loading: false,
     loadingSimpan: false,
     loadingSelesai: false,
+    loadingHapus: false,
     isOpen: false,
     belums: [],
     sudahs: [],
+    filteredSudahs: [],
     form: {
       obats: []
     },
@@ -21,7 +23,10 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       to: date.formatDate(Date.now(), 'YYYY-MM-DD')
 
-    }
+    },
+    // noreseps
+    noreseps: [],
+    noresep: ''
   }),
   actions: {
     setForm(key, val) {
@@ -51,9 +56,21 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       this.setForm('sistembayar', val?.kodesistembayar)
       this.setParams('noreg', val?.noreg)
     },
+    setResep(val) {
+      if (val === 'BARU') {
+        this.setForm('noresep', '')
+        // this.setParams('noresep', '')
+        this.filteredSudahs = []
+      } else {
+        this.setForm('noresep', val)
+        // this.setParams('noresep', val)
+        this.filteredSudahs = this.sudahs.filter(a => a.noresep === val)
+      }
+    },
     setValues() {
       this.rincBelId = []
       this.rincSudId = []
+      const noreseps = []
       if (this.belums?.length) {
         this.belums?.forEach(item => {
           if (item?.rinci?.length) {
@@ -66,15 +83,13 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       }
       if (this.sudahs?.length) {
         this.sudahs?.forEach(item => {
-          if (item?.rinci?.length) {
-            item?.rinci?.forEach(rin => {
-              rin.checked = false
-              this.rincSudId.push(rin?.id)
-            })
-          }
+          if (item?.noresep !== '') noreseps.unshift(item?.noresep)
         })
       }
-      console.log('belum', this.rincBelId, 'sudah', this.rincSudId)
+      this.noreseps = filterDuplicateArrays(noreseps)
+      this.noreseps.unshift('BARU')
+      if (!!this.noresep && this.noresep !== 'BARU') this.setResep(this.noresep)
+      // console.log('belum', this.rincBelId, 'sudah', this.rincSudId)
     },
     async getData(val) {
       if (!val) this.loading = true
@@ -103,15 +118,39 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
         })
         .catch(() => { this.loadingSimpan = false })
     },
-    async selesai() {
+    async selesai(item) {
       this.loadingSelesai = true
-      await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/selesai-resep', this.form)
+      item.loading = true
+      await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/selesai-resep', item)
         .then(resp => {
           this.loadingSelesai = false
+          item.loading = false
           notifSuccess(resp)
+          this.getData()
           console.log('Simpan resep', resp?.data)
         })
-        .catch(() => { this.loadingSelesai = false })
+        .catch(() => {
+          this.loadingSelesai = false
+          item.loading = false
+        })
+    },
+    async hapusObat(item) {
+      item.loading = true
+      this.loadingHapus = true
+      await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/batal-obat-resep', item)
+        .then(resp => {
+          item.loading = false
+          this.loadingHapus = false
+          notifSuccess(resp)
+          this.getData(true)
+          const index = this.sudahs.findIndex(a => a.id === item.id)
+          if (index >= 0) this.sudahs.splice(index, 1)
+          console.log('Simpan resep', resp?.data, index)
+        })
+        .catch(() => {
+          this.loadingHapus = false
+          item.loading = false
+        })
     }
   }
 })

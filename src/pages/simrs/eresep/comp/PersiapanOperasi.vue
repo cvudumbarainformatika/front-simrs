@@ -51,7 +51,7 @@
         <BelumPage v-if="store.belums?.length" />
         <app-no-data v-if="!store.belums?.length" />
       </div>
-      <div class="col-4 full-height q-pt-xs">
+      <div class="col-4 full-height q-pt-xs bg-grey-2 q-pb-sm">
         <SudahPage v-if="store.sudahs?.length" />
         <app-no-data v-if="!store.sudahs?.length" />
       </div>
@@ -99,7 +99,7 @@
       </div>
     </div>
     <div class="col-4">
-      kanan
+      <!-- kanan -->
     </div>
   </div>
 </template>
@@ -121,10 +121,10 @@ function simpan() {
   store.simpan()
 }
 // eslint-disable-next-line no-unused-vars
-function selesai() {
-  console.log('form', store.form)
-  store.selesai()
-}
+// function selesai() {
+//   console.log('form', store.form)
+//   store.selesai()
+// }
 watch(store.params, (par) => {
   // console.log('params', par)
   store.getData()
