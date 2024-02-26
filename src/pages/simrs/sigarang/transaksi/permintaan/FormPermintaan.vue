@@ -494,7 +494,7 @@ const time = () => {
   // const sekarang = Date.now()
   const anu = Date.now()
   const sekarang = new Date(anu)
-  // sekarang.setDate(27)
+  // sekarang.setDate(29)
   tanggal.value.day = date.formatDate(sekarang, 'D')
   tanggal.value.dayOfWeek = date.formatDate(sekarang, 'd')
   tanggal.value.month = date.formatDate(sekarang, 'M')
@@ -522,7 +522,7 @@ const time = () => {
           tutupPermintaan.value = false
         }
       }
-      if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 25) : !!(parseInt(tanggal.value.day) > 28)) {
+      if (tanggal.value.month === '2' ? !!(parseInt(tanggal.value.day) > 28) : !!(parseInt(tanggal.value.day) > 28)) {
         if (role.value !== 'root') {
           stokOpname.value = true
         } else {
