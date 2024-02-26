@@ -141,8 +141,9 @@ function anotherValid (val) {
 }
 
 function closeDate () {
-  // console.log('hide', refPopup.value)
+  // console.log('hide', refInputDate.value)
   refPopup.value.hide()
+  refInputDate.value.blur()
 }
 function showDate () {
   // console.log('show', refPopup.value)

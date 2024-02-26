@@ -8,9 +8,9 @@
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
       <div class="row justify-between items-center">
-        <div>
+        <div v-if="depo==='rjl'">
           <div
-            v-if="!store.listPemintaanSementara.length && !store.listRacikan.length"
+            v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
             class="row q-my-xs items-center"
           >
             Tipe Resep:
@@ -29,6 +29,19 @@
             class="row q-my-xs items-center"
           >
             Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
+          </div>
+        </div>
+        <div v-if="depo!=='rjl'">
+          <!-- depo Ok -->
+          <div>
+            <q-btn
+              push
+              dense
+              color="green"
+              no-caps
+              label="obat permintaan operasi"
+              @click="openPersiapanOperasi"
+            />
           </div>
         </div>
         <div v-if="store?.form?.tiperesep==='iter'">
@@ -456,6 +469,8 @@
       </div>
     </div>
   </div>
+
+  <!-- racikan -->
   <app-fullscreen-blue
     v-model="store.racikanOpen"
     title="Input Obat Racikan"
@@ -463,6 +478,16 @@
   >
     <template #default>
       <racikanpage />
+    </template>
+  </app-fullscreen-blue>
+
+  <!-- Permintaan Operasi OK -->
+  <app-fullscreen-blue
+    v-model="permintaan.isOpen"
+    title="Copy Resep Obat Persiapan Operasi"
+  >
+    <template #default>
+      <persiapan />
     </template>
   </app-fullscreen-blue>
 
@@ -524,6 +549,7 @@
 <script setup>
 import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
 import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
@@ -533,6 +559,7 @@ const props = defineProps({
   depo: { type: String, default: '' }
 })
 const store = usePermintaanEResepStore()
+const permintaan = useResepPermintaanOperasiStore()
 
 const refObat = ref(null)
 const refQty = ref(null)
@@ -615,7 +642,13 @@ function resetFormRacik() {
   store.resetForm()
 }
 /// / set Racikan end ------
-
+// perispan Operasi -----
+const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOperasi.vue')))
+function openPersiapanOperasi() {
+  permintaan.isOpen = true
+  permintaan.setPasien(props.pasien)
+}
+// perispan Operasi end -----
 function myDebounce(func, timeout = 800) {
   let timer
   return (...arg) => {

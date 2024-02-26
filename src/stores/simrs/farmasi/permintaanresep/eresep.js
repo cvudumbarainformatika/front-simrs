@@ -367,11 +367,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     getBillRanap(val) {
       this.setForm('kdruangan', val?.kdruangan)
-      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
+      // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
     getBillIgd(val) {
       this.setForm('kdruangan', val?.kodepoli)
-      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
+      // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
     cariSimulasi(val) {
       this.setForm('kodeincbg', '-')
