@@ -31,7 +31,7 @@
             Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
           </div>
         </div>
-        <div v-if="depo!=='rjl'">
+        <div v-if="depo==='ok'">
           <!-- depo Ok -->
           <div>
             <q-btn
@@ -52,6 +52,7 @@
             @set-model="store.setForm('iter_expired',$event)"
           />
         </div>
+        <div v-else />
         <div class="q-mr-sm">
           <q-btn
             push
@@ -647,6 +648,7 @@ const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOpera
 function openPersiapanOperasi() {
   permintaan.isOpen = true
   permintaan.setPasien(props.pasien)
+  console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
 function myDebounce(func, timeout = 800) {
