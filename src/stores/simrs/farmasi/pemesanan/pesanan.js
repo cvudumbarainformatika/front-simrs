@@ -66,6 +66,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       const data = {
         nopemesanan: this.form.nopemesanan,
         kdpbf: this.form.kdpbf,
+        gudang: this.form.gudang,
         noperencanaan: val.noperencanaan,
         kdobat: val.kdobat,
         kd_ruang: val.kd_ruang,

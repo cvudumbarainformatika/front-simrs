@@ -59,8 +59,14 @@
       <template #col-penyedia>
         <div>Penyedia</div>
       </template>
+      <template #col-gudang>
+        <div>Gudang</div>
+      </template>
       <template #cell-penyedia="{row}">
         <div>{{ row.pihakketiga? row.pihakketiga.nama:'-' }}</div>
+      </template>
+      <template #cell-gudang="{row}">
+        <div>{{ row.gudang? row.gudang.nama:'-' }}</div>
       </template>
       <template #cell-tgl="{row}">
         <div>{{ row.tgl_pemesanan? dateFullFormat( row.tgl_pemesanan) : '-' }}</div>

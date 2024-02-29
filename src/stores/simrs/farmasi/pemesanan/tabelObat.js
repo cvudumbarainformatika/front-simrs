@@ -65,6 +65,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.pesan.setForm('no_rencbeliobat', val)
       const item = this.rencanaAlls.filter(a => a.noperencanaan === val)
       if (item.length) {
+        this.pesan.setForm('gudang', item[0].gudang)
         const gud = this.gudangs.filter(a => a.value === item[0].gudang)
         if (gud.length) this.gudang = gud[0].nama
         this.tglRencana = date.formatDate(item[0].tglperencanaan, 'DD MMMM YYYY')
