@@ -77,7 +77,7 @@
             <div class="col-4">
               Obat
             </div>
-            <div class="col-3">
+            <!-- <div class="col-3">
               <div class="row justify-center">
                 Stok
               </div>
@@ -93,14 +93,17 @@
                   Max
                 </div>
               </div>
-            </div>
-            <div class="col-2">
+            </div> -->
+            <div class="col-2 text-right">
               Jumlah Bisa di beli
             </div>
-            <div class="col-2">
+            <div class="col-2 text-right">
               Jumlah Dipesan
             </div>
-            <div class="col-1 text-right">
+            <div class="col-2 text-right">
+              Harga
+            </div>
+            <div class="col-2 text-right">
               <div class="q-mr-md">
                 #
               </div>
@@ -122,7 +125,7 @@
                   {{ rin.kdobat }}
                 </div>
               </div>
-              <div class="col-3">
+              <!-- <div class="col-3">
                 <div class="row">
                   <div class="col-4">
                     {{ rin.stok_real_gudang }}
@@ -134,14 +137,17 @@
                     {{ rin.stok_max_rs }}
                   </div>
                 </div>
-              </div>
-              <div class="col-2">
+              </div> -->
+              <div class="col-2 text-right">
                 {{ rin.jumlah_bisa_dibeli }}
               </div>
-              <div class="col-2">
+              <div class="col-2 text-right">
                 {{ rin.jumlahdpesan }}
               </div>
-              <div class="col-1 text-right">
+              <div class="col-2 text-right">
+                {{ formatRp( rin.harga) }}
+              </div>
+              <div class="col-2 text-right">
                 <q-btn
                   v-if="!row.flag"
                   class="q-mr-md"
@@ -224,7 +230,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 // import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
