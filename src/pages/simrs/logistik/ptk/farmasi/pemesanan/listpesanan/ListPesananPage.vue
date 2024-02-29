@@ -150,8 +150,8 @@
                   size="sm"
                   no-caps
                   color="negative"
-                  :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
-                  @click="batalRinci(row)"
+                  :loading="pemesanan.loading && rin.loading "
+                  @click="batalRinci(rin)"
                 >
                   <q-tooltip
                     class="primary"
@@ -177,7 +177,7 @@
             dense
             no-caps
             color="negative"
-            :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
+            :loading="pemesanan.loading && row.loading"
             @click="batal(row)"
           >
             <q-tooltip
@@ -259,9 +259,8 @@ function kunci (val) {
 function batal (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.nopemesanan
   console.log('batal', val)
-  pemesanan.batal(val.nopemesanan).then(() => {
+  pemesanan.batal(val).then(() => {
     toloadBeli.value = ''
     // if (!val.flag) val.flag = 1
   })
@@ -269,9 +268,8 @@ function batal (val) {
 function batalRinci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.nopemesanan
   console.log('batal rinci', val)
-  pemesanan.batalRinci(val.nopemesanan).then(() => {
+  pemesanan.batalRinci(val).then(() => {
     toloadBeli.value = ''
     // if (!val.flag) val.flag = 1
   })
