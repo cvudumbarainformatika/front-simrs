@@ -35,11 +35,11 @@
       @click-btn="clickslideRight"
     >
       <template #content>
-        <HistoryKanan
+        <!-- <HistoryKanan
           :key="pasien"
           :pasien="pasien"
           title="HISTORY ANAMNESSIS LALU"
-        />
+        /> -->
       </template>
     </app-drawer-right-new>
   </div>

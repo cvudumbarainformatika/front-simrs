@@ -316,7 +316,6 @@ f<template>
                         no-caps
                         icon="icon-mat-add_circle"
                         :disable="store.loading || store.loadingkirim"
-                        s
                       >
                         <q-tooltip class="bg-white text-primary">
                           Tambah obat Racikan
@@ -423,9 +422,9 @@ f<template>
     title="Input Obat Racikan"
     @hide="resetFormRacik"
   >
-    <template #default>
+    <!-- <template #default>
       <racikanpage />
-    </template>
+    </template> -->
   </app-fullscreen-blue>
 
   <q-dialog
@@ -508,22 +507,23 @@ const refKet = ref(null)
 function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+  // eslint-disable-next-line no-unused-vars
   const diag = temp?.length ? temp.join(', ') : '-'
 
-  store.setForm('noreg', val?.noreg)
-  store.setForm('norm', val?.norm)
-  store.setForm('groupsistembayar', val?.groups)
-  store.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
-  store.setForm('dokter', val?.kodedokter)
-  store.setForm('diagnosa', diag ?? '-')
-  store.cariSimulasi(val?.noreg)
-  if (props?.depo === 'rjl') store.getBillRajal(val)
-  if (props?.depo === 'rnp') store.getBillRanap(val)
-  if (props?.depo === 'igd') store.getBillIgd(val)
-  store.setNoreseps(props?.pasien?.newapotekrajal)
-
-  store.listRacikan = []
-  store.listPemintaanSementara = []
+  // store.setForm('noreg', val?.rs1)
+  // store.setForm('norm', val?.norm)
+  // store.setForm('groupsistembayar', val?.groups)
+  // store.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
+  // store.setForm('dokter', val?.kodedokter)
+  // store.setForm('diagnosa', diag ?? '-')
+  // store.cariSimulasi(val?.noreg)
+  // if (props?.depo === 'rjl') store.getBillRajal(val)
+  // if (props?.depo === 'rnp') store.getBillRanap(val)
+  // if (props?.depo === 'igd') store.getBillIgd(val)
+  // store.setNoreseps(props?.pasien?.newapotekrajal)
+  // console.log('sasa', val)
+  // store.listRacikan = []
+  // store.listPemintaanSementara = []
 }
 
 function resetFormRacik() {
@@ -550,7 +550,7 @@ const inputObat = myDebounce((val) => {
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
 function obatSelected(val) {
-  console.log('select obat', val)
+  // console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -579,7 +579,7 @@ const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
 function signaSelected(val) {
-  console.log('signa', val)
+  // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
@@ -708,16 +708,11 @@ function ketEnter() {
 }
 function simpanObat() {
   if (validate()) {
-    const form = store.form
-    store.simpanObat(form).then(() => {
-      signa.value = null
-      refObat.value.focus()
-      // refObat.value.showPopup()
-    })
+    store.setPasien()
   }
 }
 onMounted(() => {
-  console.log('depo', props?.depo, props.pasien)
+  // console.log('depo', props?.depo, props.pasien)
   store.pasien = props?.pasien
   store.depo = 'ok'
   store.dpPar = 'Gd-04010103'

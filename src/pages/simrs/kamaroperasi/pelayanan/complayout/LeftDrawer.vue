@@ -100,13 +100,13 @@
       </q-bar>
     </div>
   </div>
-  <CetakRekapBilling
+  <!-- <CetakRekapBilling
     ref="refBilling"
     v-model="printRekap"
     :pasien="pasien"
     style="z-index: 19000;"
     @tutup="actPrintRekap"
-  />
+  /> -->
 </template>
 
 <script setup>
@@ -138,7 +138,7 @@ function bukaBill() {
   // console.log('ref bill', refBilling.value)
   printRekap.value = true
 }
-function actPrintRekap() {
-  printRekap.value = false
-}
+// function actPrintRekap() {
+//   printRekap.value = false
+// }
 </script>

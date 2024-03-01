@@ -83,21 +83,21 @@
             v-ripple
           >
             <q-item-section>
-              <q-item-label><span>PENJAMIN : {{ pasien?.kunjunganranap ?? pasien?.kunjunganrajal ?? '-' }}</span> </q-item-label>
+              <q-item-label><span>PENJAMIN : {{ pasien?.sistembayar?.rs2 ?? '-' }}</span> </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
             v-ripple
           >
             <q-item-section>
-              <q-item-label><span>NOKA : {{ pasien?.noka ?? '-' }}</span> </q-item-label>
+              <q-item-label><span>NOKA : {{ pasien?.kunjunganranap?.masterpasien?.rs46 ?? pasien?.kunjunganrajal?.masterpasien?.rs46 ?? '-' }}</span> </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
             v-ripple
           >
             <q-item-section>
-              <q-item-label><span>NO. RUJUKAN : {{ pasien?.norujukan ?? '-' }}</span> </q-item-label>
+              <q-item-label><span>NO. PERMINTAAN : {{ pasien?.rs2 ?? '-' }}</span> </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
