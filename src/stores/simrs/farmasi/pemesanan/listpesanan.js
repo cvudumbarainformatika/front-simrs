@@ -21,7 +21,8 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
     columns: [
       'nopemesanan',
       'tgl',
-      'penyedia'
+      'penyedia',
+      'gudang'
     ],
     columnHide: []
   }),

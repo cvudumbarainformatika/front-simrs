@@ -14,7 +14,7 @@
           </q-avatar>
           <div class="column f-12">
             <div>
-              DPJP | {{ pasien?.dokter.nama }}
+              DPJP | {{ pasien?.dokter?.nama }}
             </div>
           </div>
         </div>

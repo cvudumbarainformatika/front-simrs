@@ -50,11 +50,11 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
     },
     setPasien(val) {
       console.log('pasien', val)
-      this.setForm('noreg', val?.noreg)
-      this.setForm('norm', val?.norm)
-      this.setForm('groupsistembayar', val?.groupsistembayar)
-      this.setForm('sistembayar', val?.kodesistembayar)
-      this.setParams('noreg', val?.noreg)
+      this.setForm('noreg', val?.rs1)
+      this.setForm('norm', val?.kunjunganrajal?.masterpasien?.rs1 ?? val?.kunjunganranap.masterpasien?.rs1)
+      this.setForm('groupsistembayar', val?.groupsistembayar ?? val?.sistembayar?.groups)
+      this.setForm('sistembayar', val?.kodesistembayar ?? val?.sistembayar?.rs1)
+      this.setParams('noreg', val?.rs1)
     },
     setResep(val) {
       if (val === 'BARU') {

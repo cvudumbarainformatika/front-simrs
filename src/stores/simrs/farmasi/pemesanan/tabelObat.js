@@ -19,6 +19,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       'obat',
       'stok',
       'jumlah',
+      'harga',
       'centang'
     ],
     columnHide: [],
@@ -65,6 +66,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.pesan.setForm('no_rencbeliobat', val)
       const item = this.rencanaAlls.filter(a => a.noperencanaan === val)
       if (item.length) {
+        this.pesan.setForm('gudang', item[0].gudang)
         const gud = this.gudangs.filter(a => a.value === item[0].gudang)
         if (gud.length) this.gudang = gud[0].nama
         this.tglRencana = date.formatDate(item[0].tglperencanaan, 'DD MMMM YYYY')
@@ -138,6 +140,17 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
                   const anu = { no_rencbeliobat: a }
                   const head = this.rencanaAlls.filter(kep => kep.noperencanaan === a)
                   if (head.length) {
+                    head.forEach(he => {
+                      if (he?.rincian.length) {
+                        const rinc = he.rincian.filter(a => a.kdobat === he.kdobat)
+                        if (rinc.length) {
+                          const trm = rinc[0].penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+                          const stok = rinc[0].stok.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+                          console.log('trm', trm, 'stok', stok)
+                          he.harga = trm > 0 ? trm : stok
+                        }
+                      }
+                    })
                     const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
                     const gud = gudA[0] ?? {}
                     // console.log('gu', gud)
