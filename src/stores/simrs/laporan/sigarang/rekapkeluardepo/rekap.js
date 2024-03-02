@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_sigarang_rekap_pengeluaran', {
   state: () => ({
@@ -15,7 +17,8 @@ export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_siga
       to: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       year: date.formatDate(Date.now(), 'YYYY'),
       kode_ruang: '',
-      kode_rs: null
+      kode_rs: null,
+      ruang: ''
     },
     display: {
       from: date.formatDate(Date.now(), '01 MMMM YYYY'),
@@ -27,6 +30,7 @@ export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_siga
       { nama: 'Depo Gizi', value: 'Gd-02010102' },
       { nama: 'Depo Habis Pakai', value: 'Gd-02010103' }
     ],
+    ruangs: [],
     columns: [
       'kode',
       'nama',
@@ -70,6 +74,19 @@ export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_siga
       this.getDataTable()
     },
     getInitialData() {
+      const apps = useAplikasiStore()
+      if (apps?.ruangs?.length) {
+        console.log('ruang', apps.ruangs)
+        this.ruangs = apps.ruangs
+        this.ruangs?.unshift({ kode: '', uraian: 'Semua' })
+      } else {
+        const setting = useSettingsAplikasi()
+        setting.getRuanganSim().then(() => {
+          apps.ruangs.setRuang(setting.ruangansims)
+          this.ruangs = setting.ruangansims
+          this.ruangs.unshift({ kode: '', uraian: 'Semua Ruangan' })
+        })
+      }
       this.getDataTable()
       // this.getBarang()
     },

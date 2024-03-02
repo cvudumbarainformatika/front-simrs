@@ -79,7 +79,7 @@
       </div> -->
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
-      <div class="col-4">
+      <div class="col-2">
         <app-autocomplete
           v-model="store.params.kode_ruang"
           label="pilih Depo"
@@ -89,6 +89,19 @@
           valid
           outlined
           :source="store.gudangs"
+          :loading="store.loading"
+        />
+      </div>
+      <div class="col-2">
+        <app-autocomplete
+          v-model="store.params.ruang"
+          label="pilih Ruangan"
+          autocomplete="uraian"
+          option-label="uraian"
+          option-value="kode"
+          valid
+          outlined
+          :source="store.ruangs"
           :loading="store.loading"
         />
       </div>
