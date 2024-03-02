@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 export const useLaporanSigarangRekapPemasukanStore = defineStore('laporan_sigarang_rekap_pemasukan', {
   state: () => ({
@@ -74,19 +72,6 @@ export const useLaporanSigarangRekapPemasukanStore = defineStore('laporan_sigara
       this.getDataTable()
     },
     getInitialData() {
-      const apps = useAplikasiStore()
-      if (apps?.ruangs?.length) {
-        console.log('ruang', apps.ruangs)
-        this.ruangs = apps.ruangs
-        this.ruangs?.unshift({ kode: '', uraian: 'Semua' })
-      } else {
-        const setting = useSettingsAplikasi()
-        setting.getRuanganSim().then(() => {
-          apps.ruangs.setRuang(setting.ruangansims)
-          this.ruangs = setting.ruangansims
-          this.ruangs.unshift({ kode: '', uraian: 'Semua Ruangan' })
-        })
-      }
       this.getDataTable()
       // this.getBarang()
     },
@@ -113,18 +98,18 @@ export const useLaporanSigarangRekapPemasukanStore = defineStore('laporan_sigara
           item.satuan = item.satuan?.nama
           bulan.forEach(bul => {
             item[bul] = 0
-            if (item.detail_permintaanruangan.length) {
-              const it = item.detail_permintaanruangan.filter(f => date.formatDate(f?.tanggal, 'MM') === bul)
+            if (item.detail_distribusi_depo.length) {
+              const it = item.detail_distribusi_depo.filter(f => date.formatDate(f?.tanggal, 'MM') === bul)
               if (it.length) {
                 item[bul] = it.map(m => m.jumlah).reduce((a, b) => a + b, 0)
               }
             }
-            if (item.detail_distribusi_langsung.length) {
-              const it = item.detail_distribusi_langsung.filter(f => date.formatDate(f?.tanggal, 'MM') === bul)
-              if (it.length) {
-                item[bul] = it.map(m => m.jumlah).reduce((a, b) => a + b, 0)
-              }
-            }
+            // if (item.detail_distribusi_langsung.length) {
+            //   const it = item.detail_distribusi_langsung.filter(f => date.formatDate(f?.tanggal, 'MM') === bul)
+            //   if (it.length) {
+            //     item[bul] = it.map(m => m.jumlah).reduce((a, b) => a + b, 0)
+            //   }
+            // }
             item.Total += item[bul]
             // console.log('bul sum', item.Total, item[bul])
           })
@@ -138,10 +123,10 @@ export const useLaporanSigarangRekapPemasukanStore = defineStore('laporan_sigara
     async getDataTable() {
       this.loading = true
       const param = { params: this.params }
-      await api.get('v1/simrs/laporan/sigarang/rekap-pengeluaran-depo', param)
+      await api.get('v1/simrs/laporan/sigarang/lap-masuk-depo', param)
         .then(resp => {
           this.loading = false
-          console.log('data tabel', resp)
+          console.log('data tabel', resp?.data)
           this.meta = resp.data
           this.mapingitem(resp.data.data)
           // this.items = resp.data.data ?? []

@@ -76,15 +76,18 @@ export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_siga
     getInitialData() {
       const apps = useAplikasiStore()
       if (apps?.ruangs?.length) {
-        console.log('ruang', apps.ruangs)
-        this.ruangs = apps.ruangs
-        this.ruangs?.unshift({ kode: '', uraian: 'Semua' })
+        this.ruangs?.push({ kode: '', uraian: 'Semua' })
+        apps.ruangs.forEach(ru => {
+          this.ruangs?.push({ kode: ru.kode, uraian: ru.uraian })
+        })
       } else {
         const setting = useSettingsAplikasi()
         setting.getRuanganSim().then(() => {
           apps.ruangs.setRuang(setting.ruangansims)
-          this.ruangs = setting.ruangansims
-          this.ruangs.unshift({ kode: '', uraian: 'Semua Ruangan' })
+          this.ruangs?.push({ kode: '', uraian: 'Semua' })
+          setting.ruangansims.forEach(ru => {
+            this.ruangs?.push({ kode: ru.kode, uraian: ru.uraian })
+          })
         })
       }
       this.getDataTable()

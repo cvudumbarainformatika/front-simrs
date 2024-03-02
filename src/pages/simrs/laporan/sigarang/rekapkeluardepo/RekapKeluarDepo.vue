@@ -385,9 +385,10 @@ function onClick (val) {
   val.item.highlight = !val.item.highlight
 }
 
-const curY = parseInt(store.params.tahun)
+const curY = parseInt(store.params.year)
 const years = ref([])
 for (let index = 0; index < 11; index++) {
+  console.log('year', curY, store.params.year)
   years.value[index] = curY - 5 + index
 }
 const printObj = {

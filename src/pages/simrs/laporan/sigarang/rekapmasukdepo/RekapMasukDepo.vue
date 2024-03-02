@@ -4,7 +4,7 @@
       class="row bg-primary text-white q-pa-sm q-mb-sm"
     >
       <div class="f-14 text-weight-bold">
-        Laporan Rekap Pengeluaran Depo
+        Laporan Rekap Pemasukan Depo
       </div>
     </div>
     <div class="row items-center garis-bawah">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="row justify-center f-16 text-weight-bold q-my-sm">
-      Laporan Rekap Pengeluaran Depo
+      Laporan Rekap Pemasukan Depo
     </div>
     <div class="row justify-center f-12 text-weight-bold q-my-sm">
       Tahun {{ store.params.year }}
@@ -79,7 +79,7 @@
       </div> -->
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
-      <div class="col-2">
+      <div class="col-4">
         <app-autocomplete
           v-model="store.params.kode_ruang"
           label="pilih Depo"
@@ -92,7 +92,7 @@
           :loading="store.loading"
         />
       </div>
-      <div class="col-2">
+      <!-- <div class="col-2">
         <app-autocomplete
           v-model="store.params.ruang"
           label="pilih Ruangan"
@@ -104,7 +104,7 @@
           :source="store.ruangs"
           :loading="store.loading"
         />
-      </div>
+      </div> -->
       <div class="col-2">
         <app-btn
           label="Ambil Data"
@@ -175,7 +175,7 @@
         </div>
 
         <div class="row justify-center f-16 text-weight-bold q-my-sm">
-          Laporan Rekap Pengeluaran Depo
+          Laporan Rekap Pemasukan Depo
         </div>
         <div class="row justify-center f-12 text-weight-bold q-my-sm">
           Tahun {{ store.params.year }}
@@ -360,7 +360,7 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { useLaporanSigarangRekapPemasukanStore } from 'src/stores/simrs/laporan/sigarang/rekapmasukdepo/rekap'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useLaporanSigarangRekapPemasukanStore()
 store.getInitialData()
@@ -385,14 +385,17 @@ function onClick (val) {
   val.item.highlight = !val.item.highlight
 }
 
-const curY = parseInt(store.params.tahun)
+const curY = parseInt(store.params.year)
 const years = ref([])
-for (let index = 0; index < 11; index++) {
-  years.value[index] = curY - 5 + index
-}
+onMounted(() => {
+  for (let index = 0; index < 11; index++) {
+    console.log('year', curY, store.params.year)
+    years.value[index] = curY - 5 + index
+  }
+})
 const printObj = {
   id: 'printMe',
-  popTitle: 'Laporan Rekap Pengeluaran Depo'
+  popTitle: 'Laporan Rekap Pemasukan Depo'
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
 
