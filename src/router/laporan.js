@@ -91,6 +91,11 @@ const laporan = {
       component: () => import('pages/simrs/laporan/sigarang/rekapkeluardepo/IndexPage.vue')
     },
     {
+      path: '/laporan/sigarang/rekapmasukdepo',
+      name: 'laporan.sigarang.rekapmasukdepo',
+      component: () => import('pages/simrs/laporan/sigarang/rekapmasukdepo/IndexPage.vue')
+    },
+    {
       path: '/laporan/sigarang/penerimaanptk',
       name: 'laporan.sigarang.penerimaanptk',
       component: () => import('pages/simrs/laporan/sigarang/penerimaanptk/IndexPage.vue')
