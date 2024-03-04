@@ -5,7 +5,7 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { Dialog } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
 
-export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
+export const usePersiapanOperasiStore = defineStore('resep_sementara', {
   state: () => ({
     loading: false,
     loadingSigna: false,
@@ -76,14 +76,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     setPasien() {
       const val = this?.pasien
-      const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
-      const diag = temp?.length ? temp.join(', ') : '-'
-      this.setForm('noreg', val.noreg)
-      this.setForm('norm', val.norm)
-      this.setForm('groupsistembayar', val.groups)
-      this.setForm('sistembayar', val.kodesistembayar ?? val?.kdsistembayar)
-      this.setForm('dokter', val.kodedokter)
-      this.setForm('diagnosa', diag ?? '-')
+      //  console.log('xxx', val)
+      // const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+      // const diag = temp?.length ? temp.join(', ') : '-'
+      this.setForm('noreg', val?.kunjunganranap?.rs1 ?? val?.kunjunganrajal?.rs1)
+      this.setForm('norm', val?.kunjunganranap?.masterpasien?.rs1 ?? val?.kunjunganrajal?.masterpasien?.rs1)
+      this.setForm('groupsistembayar', val?.sistembayar?.groups)
+      this.setForm('sistembayar', val?.sistembayar?.rs1)
+      this.setForm('dokter', val?.dokter?.kdpegsimrs)
       // this.cariSimulasi(val?.noreg)
       // if (this?.depo === 'rjl') this.getBillRajal(val)
       // if (this?.depo === 'rnp') this.getBillRanap(val)
@@ -106,7 +106,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const tiperacikan = this.form?.tiperacikan ?? 'DTD'
       const keterangan = this.form?.keterangan ?? '-'
       const satuanRacik = this.form?.satuan_racik ?? '-'
-      console.log('jenis resep', jenisresep)
+      // console.log('jenis resep', jenisresep)
       this.form = {
         keterangan: '-',
         jumlah_diminta: 1,
@@ -298,7 +298,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     cariObat(val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
-      console.log('depo', this?.depo, depo)
+      // console.log('depo', this?.depo, depo)
       if (depo.length) {
         this.dpPar = depo[0]?.value
       } else return notifErrVue('depo tujuan tidak ditemukan')
@@ -367,11 +367,11 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     getBillRanap(val) {
       this.setForm('kdruangan', val?.kdruangan)
-      // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
+      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
     },
     getBillIgd(val) {
       this.setForm('kdruangan', val?.kodepoli)
-      // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
+      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
     },
     cariSimulasi(val) {
       this.setForm('kodeincbg', '-')
@@ -398,27 +398,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       //     })
       // })
     },
-    async getNomor() {
-      const param = {
-        params: {
-          noresep: this.form?.noresep
-        }
-      }
-      await api.get('v1/simrs/farmasinew/depo/conterracikan', param)
-        .then(resp => {
-          // console.log(resp?.data)
-          this.setForm('namaracikan', resp?.data)
-        })
-    },
     simpanObat(payload) {
-      const form = payload
-      console.log('payload', form)
       this.loading = true
+      console.log('xxxxxxxxxxxxx')
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)
+        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-permintaan', this.form)
           .then(resp => {
             this.loading = false
-            console.log('simpan ', resp?.data)
             if (resp.status === 202) {
               this.openDialog(resp?.data)
             } else {

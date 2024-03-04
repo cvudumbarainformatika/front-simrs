@@ -52,6 +52,10 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       { label: 'YA', value: '1' },
       { label: 'TIDAK', value: '' }
     ],
+    optionStatusKonsinyasi: [
+      { label: 'Konsinyasi', value: '1' },
+      { label: 'Non-Konsinyasi', value: '' }
+    ],
     optionSistemBayars: [
       { label: 'SEMUA', value: 'SEMUA' },
       { label: 'UMUM', value: 'UMUM' },

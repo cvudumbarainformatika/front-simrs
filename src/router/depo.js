@@ -46,6 +46,10 @@ const depo = {
           component: () => import('src/pages/simrs/logistik/depo/farmasi/penerimaan/IndexPage.vue')
         },
         {
+          path: '/depo/farmasi/distribusi-persiapan-operasi',
+          component: () => import('src/pages/simrs/logistik/depo/farmasi/distribusipersiapanok/IndexPage.vue')
+        },
+        {
           path: '/depo/farmasi/formresep',
           component: () => import('src/pages/simrs/logistik/depo/farmasi/formresep/IndexPage.vue')
         },

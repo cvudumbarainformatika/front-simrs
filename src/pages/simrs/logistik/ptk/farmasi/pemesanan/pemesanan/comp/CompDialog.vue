@@ -149,6 +149,9 @@
           <template #col-jumlah>
             <div>Jumlah</div>
           </template>
+          <template #col-harga>
+            <div>Harga</div>
+          </template>
           <template #col-centang>
             <div />
           </template>
@@ -284,6 +287,19 @@
               />
             </div>
           </template>
+          <template #cell-harga="{row}">
+            <div class="row justify-between no-wrap items-end">
+              <app-input
+                v-model="row.harga"
+                :label="'Harga / ' + row.satuan_k??'-'"
+                outlined
+                @update:model-value="setHarga($event, row)"
+              />
+              <!-- <div class="f-10 text-italic">
+                ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+              </div> -->
+            </div>
+          </template>
           <template #cell-centang="{row}">
             <!-- {{ parseFloat(row.jumlahallpesan) }} -->
             <!-- {{ row.jumlahdirencanakan >= parseFloat(row.jumlahallpesan) }} -->
@@ -390,6 +406,11 @@ function setTanggal(val) {
   console.log('param ', store.param)
 }
 
+function setHarga(evt, val) {
+  const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+
+  val.harga = dipesan
+}
 function setJumlah(evt, val) {
   const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   // console.log('direncanaka ', val.jumlahdirencanakan)

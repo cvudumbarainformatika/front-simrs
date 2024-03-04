@@ -85,12 +85,13 @@ const options = ref(null)
 
 function getImage(row) {
   const kelamin = row.kelamin
-  if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
+  if (row.foto_pegawai === null || row.foto_pegawai === '' || row.foto_pegawai === 'undefined') {
     return kelamin === 'Perempuan'
       ? new URL('../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../assets/images/user-avatar.svg', import.meta.url).href
   } else {
-    return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+    // return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+    return row.foto_pegawai
   }
 }
 

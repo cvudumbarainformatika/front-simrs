@@ -158,17 +158,17 @@
 <script setup>
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
-import { useAplikasiStore } from 'src/stores/app/aplikasi'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePermintaanOperasistore } from 'src/stores/simrs/kamaroperasi/permintaanoperasi'
-import { useSettingsAplikasi } from 'src/stores/simrs/settings'
+// import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { computed, onMounted, ref } from 'vue'
 
 const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const poli = ref({
-  kodepoli: 'SEMUA POLI',
-  polirs: 'SEMUA POLI'
-})
+// const poli = ref({
+//   kodepoli: 'SEMUA POLI',
+//   polirs: 'SEMUA POLI'
+// })
 const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'setPeriode', 'filter', 'normal', 'setPoli'])
 const periods = ref([
   { value: 1, label: 'Hari ini' },
@@ -177,30 +177,30 @@ const periods = ref([
   // { value: 4, label: 'Tahun Ini' }
 ])
 
-const setting = useSettingsAplikasi()
+// const setting = useSettingsAplikasi()
 const store = usePermintaanOperasistore()
-const app = useAplikasiStore()
+// const app = useAplikasiStore()
 const periode = ref(1)
 
 onMounted(() => {
-  setting.getHeaderPoli().then(() => {
-    poli.value = polis.value[0] ?? [{
-      kodepoli: 'SEMUA POLI',
-      polirs: 'SEMUA POLI'
-    }]
-    const params = {
-      page: 1,
-      q: '',
-      status: '',
-      to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date()),
-      per_page: 100,
-      kodepoli: poli.value?.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
-    }
-    // console.log('init poli', poli.value)
-    // console.log('init pengunjung', params)
-    store.init(params)
-  })
+  // setting.getHeaderPoli().then(() => {
+  //   poli.value = polis.value[0] ?? [{
+  //     kodepoli: 'SEMUA POLI',
+  //     polirs: 'SEMUA POLI'
+  //   }]
+  const params = {
+    page: 1,
+    q: '',
+    status: '1',
+    to: dateDbFormat(new Date()),
+    from: dateDbFormat(new Date()),
+    per_page: 100
+    // kodepoli: poli.value?.kodepoli === 'SEMUA POLI' ? polis.value.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
+  }
+  // console.log('init poli', poli.value)
+  // console.log('init pengunjung', params)
+  store.init(params)
+  // })
 })
 // const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
@@ -233,29 +233,29 @@ const q = computed({
   }
 })
 
-const polis = computed(() => {
-  const aksesruangan = app.user?.pegawai?.kdruangansim
-  let arr = []
-  if (aksesruangan === '' || aksesruangan === null) {
-    arr = setting.polis
-  } else {
-    const split = aksesruangan.split('|')
-    const res = []
-    for (let i = 0; i < split.length; i++) {
-      const kd = split[i]
-      res.push(setting.polis.filter(x => x.kodepoli === kd)[0])
-    }
+// const polis = computed(() => {
+//   const aksesruangan = app.user?.pegawai?.kdruangansim
+//   let arr = []
+//   if (aksesruangan === '' || aksesruangan === null) {
+//     arr = setting.polis
+//   } else {
+//     const split = aksesruangan.split('|')
+//     const res = []
+//     for (let i = 0; i < split.length; i++) {
+//       const kd = split[i]
+//       res.push(setting.polis.filter(x => x.kodepoli === kd)[0])
+//     }
 
-    arr = res ?? []
-    // console.log('asdas', arr)
-  }
+//     arr = res ?? []
+//     // console.log('asdas', arr)
+//   }
 
-  arr?.push({
-    kodepoli: 'SEMUA POLI',
-    polirs: 'SEMUA POLI'
-  })
-  return arr
-})
+//   arr?.push({
+//     kodepoli: 'SEMUA POLI',
+//     polirs: 'SEMUA POLI'
+//   })
+//   return arr
+// })
 
 const to = ref(dateDbFormat(new Date()))
 const from = ref(dateDbFormat(new Date()))

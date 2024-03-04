@@ -59,8 +59,14 @@
       <template #col-penyedia>
         <div>Penyedia</div>
       </template>
+      <template #col-gudang>
+        <div>Gudang</div>
+      </template>
       <template #cell-penyedia="{row}">
         <div>{{ row.pihakketiga? row.pihakketiga.nama:'-' }}</div>
+      </template>
+      <template #cell-gudang="{row}">
+        <div>{{ row.gudang? row.gudang.nama:'-' }}</div>
       </template>
       <template #cell-tgl="{row}">
         <div>{{ row.tgl_pemesanan? dateFullFormat( row.tgl_pemesanan) : '-' }}</div>
@@ -71,7 +77,7 @@
             <div class="col-4">
               Obat
             </div>
-            <div class="col-3">
+            <!-- <div class="col-3">
               <div class="row justify-center">
                 Stok
               </div>
@@ -87,14 +93,17 @@
                   Max
                 </div>
               </div>
-            </div>
-            <div class="col-2">
+            </div> -->
+            <div class="col-2 text-right">
               Jumlah Bisa di beli
             </div>
-            <div class="col-2">
+            <div class="col-2 text-right">
               Jumlah Dipesan
             </div>
-            <div class="col-1 text-right">
+            <div class="col-2 text-right">
+              Harga
+            </div>
+            <div class="col-2 text-right">
               <div class="q-mr-md">
                 #
               </div>
@@ -116,7 +125,7 @@
                   {{ rin.kdobat }}
                 </div>
               </div>
-              <div class="col-3">
+              <!-- <div class="col-3">
                 <div class="row">
                   <div class="col-4">
                     {{ rin.stok_real_gudang }}
@@ -128,14 +137,17 @@
                     {{ rin.stok_max_rs }}
                   </div>
                 </div>
-              </div>
-              <div class="col-2">
+              </div> -->
+              <div class="col-2 text-right">
                 {{ rin.jumlah_bisa_dibeli }}
               </div>
-              <div class="col-2">
+              <div class="col-2 text-right">
                 {{ rin.jumlahdpesan }}
               </div>
-              <div class="col-1 text-right">
+              <div class="col-2 text-right">
+                {{ formatRp( rin.harga) }}
+              </div>
+              <div class="col-2 text-right">
                 <q-btn
                   v-if="!row.flag"
                   class="q-mr-md"
@@ -144,8 +156,8 @@
                   size="sm"
                   no-caps
                   color="negative"
-                  :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
-                  @click="batalRinci(row)"
+                  :loading="pemesanan.loading && rin.loading "
+                  @click="batalRinci(rin)"
                 >
                   <q-tooltip
                     class="primary"
@@ -171,7 +183,7 @@
             dense
             no-caps
             color="negative"
-            :loading="pemesanan.loading && row.nopemesanan === toloadBeli"
+            :loading="pemesanan.loading && row.loading"
             @click="batal(row)"
           >
             <q-tooltip
@@ -218,7 +230,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat } from 'src/modules/formatter'
+import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 // import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
@@ -253,9 +265,8 @@ function kunci (val) {
 function batal (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.nopemesanan
   console.log('batal', val)
-  pemesanan.batal(val.nopemesanan).then(() => {
+  pemesanan.batal(val).then(() => {
     toloadBeli.value = ''
     // if (!val.flag) val.flag = 1
   })
@@ -263,9 +274,8 @@ function batal (val) {
 function batalRinci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.nopemesanan
   console.log('batal rinci', val)
-  pemesanan.batalRinci(val.nopemesanan).then(() => {
+  pemesanan.batalRinci(val).then(() => {
     toloadBeli.value = ''
     // if (!val.flag) val.flag = 1
   })

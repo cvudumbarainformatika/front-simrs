@@ -1,49 +1,13 @@
-<template>
+f<template>
   <div class="bg-white full-height column">
     <div class="col-auto bg-primary text-white">
       <div class="q-pa-sm">
-        Form Resep Dokter
+        Form Persiapan Operasi
       </div>
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
       <div class="row justify-between items-center">
-        <div v-if="depo==='rjl'">
-          <div
-            v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
-            class="row q-my-xs items-center"
-          >
-            Tipe Resep:
-            <q-option-group
-              v-model="store.form.tiperesep"
-              :options="store.tipeReseps"
-              color="primary"
-              class="q-ml-sm"
-              dense
-              inline
-              @update:model-value="setTipe"
-            />
-          </div>
-          <div
-            v-else
-            class="row q-my-xs items-center"
-          >
-            Tipe Resep: {{ store.form.tiperesep.charAt(0).toUpperCase() + store.form.tiperesep.slice(1) }}
-          </div>
-        </div>
-        <div v-if="depo==='ok'">
-          <!-- depo Ok -->
-          <div>
-            <q-btn
-              push
-              dense
-              color="green"
-              no-caps
-              label="obat permintaan operasi"
-              @click="openPersiapanOperasi"
-            />
-          </div>
-        </div>
         <div v-if="store?.form?.tiperesep==='iter'">
           <app-input-date
             :model="store.form.iter_expired"
@@ -51,21 +15,6 @@
             outlined
             @set-model="store.setForm('iter_expired',$event)"
           />
-        </div>
-        <div v-else />
-        <div class="q-mr-sm">
-          <q-btn
-            push
-            dense
-            color="deep-orange"
-            label="Racikan"
-            no-caps
-            @click="racikan"
-          >
-            <q-tooltip class="bg-white text-primary">
-              Buka Racikan
-            </q-tooltip>
-          </q-btn>
         </div>
       </div>
       <q-scroll-area
@@ -115,7 +64,7 @@
                 ref="refObat"
                 v-model="store.namaObat"
                 use-input
-                label="Cari Obat / tekan Alt + Enter untuk racikan"
+                label="Cari Obat"
                 dense
                 option-label="namaobat"
                 option-value="kodeobat"
@@ -129,7 +78,6 @@
                 hide-bottom-space
                 no-error-icon
                 :options="store.Obats"
-                @keyup.alt.enter="racikan"
                 @input-value="inputObat"
                 @focus="inputObat"
                 @update:model-value="obatSelected"
@@ -368,7 +316,6 @@
                         no-caps
                         icon="icon-mat-add_circle"
                         :disable="store.loading || store.loadingkirim"
-                        @click="racikanTambah(item)"
                       >
                         <q-tooltip class="bg-white text-primary">
                           Tambah obat Racikan
@@ -470,26 +417,14 @@
       </div>
     </div>
   </div>
-
-  <!-- racikan -->
   <app-fullscreen-blue
     v-model="store.racikanOpen"
     title="Input Obat Racikan"
     @hide="resetFormRacik"
   >
-    <template #default>
+    <!-- <template #default>
       <racikanpage />
-    </template>
-  </app-fullscreen-blue>
-
-  <!-- Permintaan Operasi OK -->
-  <app-fullscreen-blue
-    v-model="permintaan.isOpen"
-    title="Copy Resep Obat Persiapan Operasi"
-  >
-    <template #default>
-      <persiapan />
-    </template>
+    </template> -->
   </app-fullscreen-blue>
 
   <q-dialog
@@ -548,109 +483,55 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
-import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
+import { onMounted, ref } from 'vue'
+import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/resepsemntara'
 import { formatDouble } from 'src/modules/formatter'
-import { notifCenterVue, notifErrVue } from 'src/modules/utils'
+import { notifErrVue } from 'src/modules/utils'
 import { Dialog } from 'quasar'
 
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
 })
-const store = usePermintaanEResepStore()
-const permintaan = useResepPermintaanOperasiStore()
+const store = usePersiapanOperasiStore()
 
 const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
 
-function setTipe(val) {
-  console.log('tipe resep', val)
-  store.cariObat('')
-}
+// function setTipe() {
+//   console.log('tipe resep', 'Normal')
+//   store.cariObat('')
+// }
 function setPasien() {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
+  // eslint-disable-next-line no-unused-vars
   const diag = temp?.length ? temp.join(', ') : '-'
 
-  store.setForm('noreg', val?.noreg)
-  store.setForm('norm', val?.norm)
-  store.setForm('groupsistembayar', val?.groups)
-  store.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
-  store.setForm('dokter', val?.kodedokter)
-  store.setForm('diagnosa', diag ?? '-')
-  store.cariSimulasi(val?.noreg)
-  if (props?.depo === 'rjl') store.getBillRajal(val)
-  if (props?.depo === 'rnp') store.getBillRanap(val)
-  if (props?.depo === 'igd') store.getBillIgd(val)
-  // store.getBillRajal(val)
-
-  //   if (props?.pasien?.newapotekrajal?.flag === '') {
-  //     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-  //     store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-  //     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-  //     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
-
-  //     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-  //     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  //   } else if (props?.pasien?.newapotekrajal) {
-  //     if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
-  //   } else {
-  // }
-  store.setNoreseps(props?.pasien?.newapotekrajal)
-
-  store.listRacikan = []
-  store.listPemintaanSementara = []
+  // store.setForm('noreg', val?.rs1)
+  // store.setForm('norm', val?.norm)
+  // store.setForm('groupsistembayar', val?.groups)
+  // store.setForm('sistembayar', val?.kodesistembayar ?? val?.kdsistembayar)
+  // store.setForm('dokter', val?.kodedokter)
+  // store.setForm('diagnosa', diag ?? '-')
+  // store.cariSimulasi(val?.noreg)
+  // if (props?.depo === 'rjl') store.getBillRajal(val)
+  // if (props?.depo === 'rnp') store.getBillRanap(val)
+  // if (props?.depo === 'igd') store.getBillIgd(val)
+  // store.setNoreseps(props?.pasien?.newapotekrajal)
+  // console.log('sasa', val)
+  // store.listRacikan = []
+  // store.listPemintaanSementara = []
 }
-/// / set Racikan ------
-const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
-function racikan() {
-  // console.log('ok')
-  // alert('oooi')
-  store.racikanOpen = true
-  store.racikanTambah = false
-  store.setForm('namaracikan', '')
-  store.setForm('jumlahdibutuhkan', 1)
-  store.setForm('keterangan', '-')
-  store.tipeRacikan = [
-    { label: 'DTD', value: 'DTD', disable: false },
-    { label: 'non-DTD', value: 'non-DTD', disable: false }
-  ]
-}
-function racikanTambah(val) {
-  // console.log('ok', val)
-  if (!store?.signas?.length) return notifCenterVue('mohon tunggu sebentar, masih menunggu data Signa dari server')
-  // alert('oooi')
-  store.racikanOpen = true
-  store.racikanTambah = true
-  store.setForm('namaracikan', val?.namaracikan)
-  store.setForm('aturan', val?.aturan)
-  store.setForm('konsumsi', val?.konsumsi)
-  store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
-  store.setForm('tiperacikan', val?.tiperacikan)
-  store.setForm('keterangan', val?.keterangan)
 
-  store.tipeRacikan = [
-    { label: 'DTD', value: 'DTD', disable: true },
-    { label: 'non-DTD', value: 'non-DTD', disable: true }
-  ]
-}
 function resetFormRacik() {
   store.setForm('jenisresep', '')
   store.resetForm()
 }
 /// / set Racikan end ------
-// perispan Operasi -----
-const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOperasi.vue')))
-function openPersiapanOperasi() {
-  permintaan.isOpen = true
-  permintaan.setPasien(props.pasien)
-  console.log('props pasien', props.pasien)
-}
-// perispan Operasi end -----
+
 function myDebounce(func, timeout = 800) {
   let timer
   return (...arg) => {
@@ -669,7 +550,7 @@ const inputObat = myDebounce((val) => {
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
 function obatSelected(val) {
-  console.log('select obat', val)
+  // console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -686,7 +567,7 @@ function obatSelected(val) {
   store.setForm('kode50', val?.kode50 ?? '-')
   store.setForm('uraian50', val?.uraian50 ?? '-')
   store.setForm('stokalokasi', val?.alokasi ?? '-')
-  store.setForm('kodedepo', store.dpPar)
+  store.setForm('kodedepo', 'Gd-04010103')
 }
 
 function obatEnter() {
@@ -698,7 +579,7 @@ const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
 function signaSelected(val) {
-  console.log('signa', val)
+  // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
@@ -827,18 +708,14 @@ function ketEnter() {
 }
 function simpanObat() {
   if (validate()) {
-    const form = store.form
-    store.simpanObat(form).then(() => {
-      signa.value = null
-      refObat.value.focus()
-      // refObat.value.showPopup()
-    })
+    store.setPasien()
   }
 }
 onMounted(() => {
-  console.log('depo', props?.depo, props.pasien)
+  // console.log('depo', props?.depo, props.pasien)
   store.pasien = props?.pasien
-  store.depo = props?.depo
+  store.depo = 'ok'
+  store.dpPar = 'Gd-04010103'
   store.getSigna()
   store.cariObat()
   setPasien()

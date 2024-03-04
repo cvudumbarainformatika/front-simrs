@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { useTabelPemesananObatStore } from './tabelObat'
+import { useListPemesananStore } from './listpesanan'
 
 export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
   state: () => ({
@@ -66,6 +67,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       const data = {
         nopemesanan: this.form.nopemesanan,
         kdpbf: this.form.kdpbf,
+        gudang: this.form.gudang,
         noperencanaan: val.noperencanaan,
         kdobat: val.kdobat,
         kd_ruang: val.kd_ruang,
@@ -140,15 +142,16 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
     },
     batal(val) {
       this.loading = true
-      const data = {
-        nopemesanan: val
-      }
+      val.loading = true
       const tabel = useTabelPemesananObatStore()
+      const list = useListPemesananStore()
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/pemesananobat/batal', data)
+        api.post('v1/simrs/farmasinew/pemesananobat/batal', val)
           .then(resp => {
             this.loading = false
+            val.loading = false
             tabel.getInitialData()
+            list.getInitialData()
             resolve(resp)
           })
           .catch(() => {
@@ -158,19 +161,21 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
     },
     batalRinci(val) {
       this.loading = true
-      const data = {
-        nopemesanan: val
-      }
+      val.loading = true
       const tabel = useTabelPemesananObatStore()
+      const list = useListPemesananStore()
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/pemesananobat/batal', data)
+        api.post('v1/simrs/farmasinew/pemesananobat/batal-rinci', val)
           .then(resp => {
             this.loading = false
+            val.loading = false
             tabel.getInitialData()
+            list.getInitialData()
             resolve(resp)
           })
           .catch(() => {
             this.loading = false
+            val.loading = false
           })
       })
     }
