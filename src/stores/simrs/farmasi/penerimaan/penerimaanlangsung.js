@@ -72,6 +72,9 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     setForm(key, val) {
       this.form[key] = val
     },
+    setParam(key, val) {
+      this.params[key] = val
+    },
     setDisp(key, val) {
       this.disp[key] = val
     },
@@ -221,11 +224,13 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     },
     obatSelected(val) {
       this.setForm('kdobat', val)
-      const obat = this.obats.filter(a => a.kodeobat === val)
+      const obat = this.obats.filter(a => a.kd_obat === val)
+      console.log('obat selected', obat, val)
       if (obat.length) {
         // this.obatTerpilih = obat[0]
         this.setForm('satuan_bsr', obat[0].satuan_b)
         this.setForm('satuan_kcl', obat[0].satuan_k)
+        this.setForm('harga', obat[0].harga)
       }
     },
     clearObat() {
@@ -242,6 +247,13 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     },
     jenisPenerimaanSelected(val) {
       this.setForm('jenispenerimaan', val)
+      if (val === 'Konsinyasi') {
+        this.setParam('konsinyasi', '1')
+        this.getDataObat()
+      } else {
+        this.setParam('konsinyasi', '')
+        this.getDataObat()
+      }
     },
     clearJenisPenerimaan() {
       this.setForm('jenispenerimaan', null)
@@ -267,12 +279,18 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     // cari obat
     getDataObat(val) {
       this.loadingCari = true
-      const params = { params: { q: val } }
+      this.setParam('q', val)
+      const params = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/master/cariObat', params)
+        api.get('v1/simrs/master/cari-obat-harga', params)
           .then(resp => {
             this.loadingCari = false
             this.obats = resp.data
+            if (this.obats?.length) {
+              this.obats.forEach(ob => {
+                ob.harga = ob?.onestok ? parseFloat(ob?.onestok?.harga) : 0
+              })
+            }
             console.log(resp)
             resolve(resp)
           })
