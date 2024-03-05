@@ -10,7 +10,7 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     aksesMenus: [],
     aksesSubs: [],
     currentApp: null,
-    user: null,
+    user: {},
     gudangs: [],
     polis: [],
     ruangs: [],
@@ -34,6 +34,7 @@ export const useAplikasiStore = defineStore('aplikasiX', {
     },
 
     setItems(val) {
+      // console.log('set items', val)
       this.items = val
     },
     setGudang(val) {
@@ -52,14 +53,13 @@ export const useAplikasiStore = defineStore('aplikasiX', {
       this.user = val
     },
     setUserKey(key, val) {
-      // console.log('key', key)
-      // console.log('val', val)
+      // console.log('set user key', val)
       this.user[key] = val
     },
     setAksesApps(val) {
       this.aksesApps = val
+      // console.log('set akses apps', val, this.user)
     },
-
     setCurrentApp(val) {
       this.currentApp = val
     }

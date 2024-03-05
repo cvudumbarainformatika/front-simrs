@@ -71,7 +71,7 @@
               {{ user?.pegawai?.depo_sim?.nama }}
             </div> -->
             <div
-              v-else-if="(rsim.length===1&&rsim[0]!=='') || (rsim.length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
+              v-else-if="(rsim?.length===1&&rsim[0]!=='') || (rsim?.length>1 && !optionsGudang?.length && !optionsRuangans?.length )"
               class="q-mr-sm text-primary"
             >
               <!-- style="max-width: 80%;" -->
@@ -214,17 +214,17 @@ const rsim = computed(() => {
   return props.user?.pegawai?.kdruangansim.split('|')
 })
 const optionsGudang = computed(() => {
-  return props?.gudangs?.filter(gud => rsim.value.includes(gud.kode))
+  return props?.gudangs?.filter(gud => rsim.value?.includes(gud.kode))
 })
 const optionsRuangans = computed(() => {
-  return props?.ruangs?.filter(gud => rsim.value.includes(gud.kode))
+  return props?.ruangs?.filter(gud => rsim.value?.includes(gud.kode))
 })
 const optionsPolis = computed(() => {
-  return props?.polis?.filter(gud => rsim.value.includes(gud.kodepoli))
+  return props?.polis?.filter(gud => rsim.value?.includes(gud.kodepoli))
 })
 onMounted(() => {
   const temp = props.user?.pegawai?.kdruangansim.split('|')
-  if (!props.user?.kdruangansim && temp.length) emit('setGudang', temp[0])
+  if (!props.user?.kdruangansim && temp?.length) emit('setGudang', temp[0])
   // rsim.value = temp
 })
 function labelGd() {
