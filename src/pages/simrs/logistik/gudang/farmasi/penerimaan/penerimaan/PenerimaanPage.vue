@@ -37,6 +37,11 @@
               {{ dateFullFormat(item?.tgl_pemesanan) }}
             </div>
           </q-item-section>
+          <q-item-section>
+            <div class="text-italic">
+              {{ item?.gudang?.nama }}
+            </div>
+          </q-item-section>
         </q-item>
       </q-list>
     <!-- {{ store.filteredPemesanans }} -->
@@ -64,12 +69,26 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, watch } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const style = useStyledStore()
 const store = usePenerimaanFarmasiStore()
 const HeaderComp = defineAsyncComponent(() => import('./comp/CompHeader.vue'))
 const DialogPenerimaan = defineAsyncComponent(() => import('./DialogPenerimaan.vue'))
+
+const apps = useAplikasiStore()
+store.setParam('gudang', apps?.user?.kdruangansim)
+
 store.getInitialData()
+
+watch(() => apps?.user?.kdruangansim, (kod) => {
+  const gud = store.gudangs.find(a => a.value === kod)
+  if (gud) {
+    store.setParam('gudang', gud?.value)
+    store.ambilPemesanan()
+  }
+  console.log('kode', gud)
+})
 </script>

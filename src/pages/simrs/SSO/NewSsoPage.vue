@@ -81,6 +81,11 @@ onMounted(() => {
 const goTo = (item) => {
   loading.value = true
   apps.setCurrentApp(item)
+  const localAp = JSON.parse(localStorage.getItem('aplikasiX'))
+  if (localAp?.currentApp === null) {
+    localAp.currentApp = item
+    localStorage.setItem('aplikasiX', JSON.stringify(localAp))
+  }
   router.push({ path: item.url, replace: true })
   setTimeout(() => {
     loading.value = false

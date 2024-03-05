@@ -38,226 +38,6 @@ export const useAuthStore = defineStore('auth', {
     userGetter: () => storage.getUser() !== null || storage.getUser() !== undefined
   },
   actions: {
-    // maping menu
-    // mapingMenu(val) {
-    //   // ini sebagai catatan
-    //   // console.log('prototype aplikasi', Object.getPrototypeOf(val.aplikasi).constructor.name === 'Object')
-    //   // console.log('prototype menu', Object.getPrototypeOf(val.menus).constructor.name === 'Object')
-    //   // console.log('prototype role', Object.getPrototypeOf(val.role).constructor.name === 'Array')
-    //   // console.log('prototype submenu', Object.getPrototypeOf(val.submenu).constructor.name === 'Array')
-    //   console.log('data menu', val)
-
-    //   const aplKey = Object.keys(val.aplikasi)
-    //   const menuKey = Object.keys(val.menus)
-    //   console.log('submenu', menuKey)
-    //   const apli = aplKey.map(key => {
-    //     const temp = {}
-    //     temp.aplikasi = val.aplikasi[key].aplikasi
-    //     temp.id = val.aplikasi[key].id
-    //     temp.color = val.aplikasi[key].color
-    //     temp.url = val.aplikasi[key].url
-    //     temp.keterangan = val.aplikasi[key].keterangan
-    //     temp.julukan = val.aplikasi[key].julukan
-    //     temp.singkatan = val.aplikasi[key].singkatan
-    //     temp.icon = val.aplikasi[key].icon
-    //     temp.nama = val.aplikasi[key].nama
-    //     const menu = menuKey.map(menu => {
-    //       if (val.aplikasi[key].id === val.menus[menu].aplikasi_id) {
-    //         return val.menus[menu]
-    //       } else { return false }
-    //     })
-
-    //     const menus = menu.filter(data => { return data !== false })
-    //       .map(men => {
-    //         if (Object.getPrototypeOf(men.submenus).constructor.name === 'Object') {
-    //           const a = Object.keys(men.submenus)
-    //           const b = []
-    //           a.forEach(mbem => {
-    //             b.push(men.submenus[mbem])
-    //           })
-    //           const c = {
-    //             aplikasi_id: men.aplikasi_id,
-    //             icon: men.icon,
-    //             link: men.link,
-    //             nama: men.nama,
-    //             name: men.name,
-    //             submenus: b
-    //           }
-    //           return c
-    //         } else {
-    //           return men
-    //         }
-    //       })
-    //     temp.menus = menus
-    //     // console.log('menus', menus)
-
-    //     return temp
-    //   })
-    //   this.aplications = apli
-    //   this.role = val.role[0].nama
-    //   this.foto = val.foto
-    //   this.ruang = val.ruang
-    //   this.kode_ruang = val.kode_ruang
-    //   this.depo = val.depo
-    //   if (apli.length === 1) {
-    //     this.menus = apli[0].menus
-    //     const apem = {}
-    //     switch (apli[0].aplikasi) {
-    //       case 'sigarang':
-    //         console.log('switch sigarang', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             apem.name = this.menus[0].submenus[0].name
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-    //       case 'pegawai':
-    //         console.log('switch pegawai', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-    //       case 'master':
-    //         console.log('switch master', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-    //       case 'pendaftaran':
-    //         console.log('switch pendaftaran', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-
-    //       default:
-    //         // console.log('switch default', apli[0].aplikasi)
-    //         this.route.link = '/admin/sso'
-    //         // router.replace({ name: 'admin.sso' })
-    //         break
-    //     }
-    //     // console.log('panjangnya cuma satu', apli)
-    //   }
-    //   // console.log('aplikasi', apli)
-    //   // console.log('role', this.role)
-    // },
-    // mapingMenu2(val) {
-    //   // ini sebagai catatan
-    //   // console.log('prototype aplikasi', Object.getPrototypeOf(val.aplikasi).constructor.name === 'Object')
-    //   // console.log('prototype menu', Object.getPrototypeOf(val.menus).constructor.name === 'Object')
-    //   // console.log('prototype role', Object.getPrototypeOf(val.role).constructor.name === 'Array')
-    //   // console.log('prototype submenu', Object.getPrototypeOf(val.submenu).constructor.name === 'Array')
-    //   // console.log('data menu', val)
-
-    //   const aplKey = Object.keys(val.aplikasi2)
-    //   const menuKey = Object.keys(val.menus2)
-    //   console.log('submenu', menuKey)
-    //   const apli = aplKey.map(key => {
-    //     const temp = {}
-    //     temp.aplikasi = val.aplikasi2[key].aplikasi
-    //     temp.id = val.aplikasi2[key].id
-    //     temp.color = val.aplikasi2[key].color
-    //     temp.url = val.aplikasi2[key].url
-    //     temp.keterangan = val.aplikasi2[key].keterangan
-    //     temp.julukan = val.aplikasi2[key].julukan
-    //     temp.singkatan = val.aplikasi2[key].singkatan
-    //     temp.icon = val.aplikasi2[key].icon
-    //     temp.nama = val.aplikasi2[key].nama
-    //     const menu = menuKey.map(menu => {
-    //       if (val.aplikasi2[key].id === val.menus2[menu].aplikasi_id) {
-    //         return val.menus2[menu]
-    //       } else { return false }
-    //     })
-
-    //     const menus = menu.filter(data => { return data !== false })
-    //       .map(men => {
-    //         if (Object.getPrototypeOf(men.submenus).constructor.name === 'Object') {
-    //           const a = Object.keys(men.submenus)
-    //           const b = []
-    //           a.forEach(mbem => {
-    //             b.push(men.submenus[mbem])
-    //           })
-    //           const c = {
-    //             aplikasi_id: men.aplikasi_id,
-    //             icon: men.icon,
-    //             link: men.link,
-    //             nama: men.nama,
-    //             name: men.name,
-    //             submenus: b
-    //           }
-    //           return c
-    //         } else {
-    //           return men
-    //         }
-    //       })
-    //     temp.menus = menus
-    //     // console.log('menus', menus)
-
-    //     return temp
-    //   })
-    //   this.aplications = apli
-    //   this.role = val.role[0].nama
-    //   this.foto = val.foto
-    //   this.ruang = val.ruang
-    //   this.kode_ruang = val.kode_ruang
-    //   this.depo = val.depo
-    //   if (apli.length === 1) {
-    //     this.menus = apli[0].menus
-    //     const apem = {}
-    //     switch (apli[0].aplikasi) {
-    //       case 'sigarang':
-    //         // console.log('switch sigarang', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             apem.name = this.menus[0].submenus[0].name
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-    //       case 'pegawai':
-    //         // console.log('switch pegawai', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-    //       case 'master':
-    //         console.log('switch master', apli[0].aplikasi)
-    //         if (this.menus.length) {
-    //           if (this.menus[0].submenus.length) {
-    //             apem.link = this.menus[0].submenus[0].link
-    //             this.route = this.menus[0].submenus[0]
-    //           }
-    //         }
-    //         break
-
-    //       default:
-    //         // console.log('switch default', apli[0].aplikasi)
-    //         this.route.link = '/admin/sso'
-    //         // router.replace({ name: 'admin.sso' })
-    //         break
-    //     }
-    //     // console.log('panjangnya cuma satu', apli)
-    //   }
-    //   // console.log('aplikasi', apli)
-    //   // console.log('role', this.role)
-    // },
-
-    //
     loginQr(payload) {
       this.loading = true
       return new Promise((resolve, reject) => {
@@ -270,9 +50,6 @@ export const useAuthStore = defineStore('auth', {
           if (hdd && hddUser) {
             this.SET_TOKEN_USER(hdd, hddUser)
           }
-          // setTimeout(() => {
-          //   this.loading = false
-          // }, 1000)
           resolve(resp)
         })
           .catch(error => {
@@ -280,24 +57,6 @@ export const useAuthStore = defineStore('auth', {
             reject(error)
           })
       })
-      // try {
-      //   await api.post('/v1/login-qr', payload).then(resp => {
-      //     storage.setLocalToken(resp.data.token)
-      //     storage.setUser(resp.data.user)
-      //     localStorage.setItem('activeTime', new Date())
-      //     const hdd = storage.getLocalToken()
-      //     const hddUser = storage.getUser()
-      //     if (hdd && hddUser) {
-      //       this.SET_TOKEN_USER(hdd, hddUser)
-      //     }
-      //     setTimeout(() => {
-      //       this.loading = false
-      //     }, 1000)
-      //   })
-      // } catch (error) {
-      //   this.loading = false
-      //   console.log('err loginQr', error.response)
-      // }
     },
     login (payload) {
       this.loading = true
@@ -314,9 +73,6 @@ export const useAuthStore = defineStore('auth', {
             if (hdd && hddUser) {
               this.SET_TOKEN_USER(hdd, hddUser)
             }
-            // setTimeout(() => {
-            //   this.loading = false
-            // }, 1000)
             resolve(resp)
           })
           .catch((error) => {
@@ -325,55 +81,7 @@ export const useAuthStore = defineStore('auth', {
             reject(error)
           })
       })
-      // try {
-      //   await api.post('/v1/login', payload).then(resp => {
-      //     storage.setLocalToken(resp.data.token)
-      //     storage.setUser(resp.data.user)
-      //     localStorage.setItem('activeTime', new Date())
-      //     // console.log('login', resp)
-      //     const hdd = storage.getLocalToken()
-      //     const hddUser = storage.getUser()
-      //     if (hdd && hddUser) {
-      //       this.SET_TOKEN_USER(hdd, hddUser)
-      //     }
-      //     setTimeout(() => {
-      //       this.loading = false
-      //     }, 1000)
-      //   })
-      // } catch (error) {
-      //   // waitLoad('done')
-      //   this.loading = false
-      //   // console.log('err login', error.response)
-      // }
     },
-    // login2(payload) {
-    //   this.loading = true
-    //   waitLoad('show')
-    //   return new Promise((resolve) => {
-    //     api.post('/v1/login', payload)
-    //       .then(resp => {
-    //         console.log('login', resp)
-    //         if (Object.keys(resp.data.aplikasi).length) {
-    //           storage.setLocalToken(resp.data.token)
-    //           storage.setUser(resp.data.user)
-    //           const hdd = storage.getLocalToken()
-    //           const hddUser = storage.getUser()
-    //           if (hdd) {
-    //             this.SET_TOKEN_USER(hdd, hddUser)
-    //           }
-    //           resolve(resp)
-    //           this.mapingMenu2(resp.data)
-    //         } else {
-    //           notifErrVue('Anda tidak memiliki Akses')
-    //         }
-    //         this.loading = false
-    //         waitLoad('done')
-    //       }).catch(() => {
-    //         this.loading = false
-    //         waitLoad('done')
-    //       })
-    //   })
-    // },
     SET_TOKEN_USER (token, auth) {
       storage.setHeaderToken(token)
       this.token = token
@@ -413,24 +121,84 @@ export const useAuthStore = defineStore('auth', {
     },
     async getUserNew() {
       this.loading = true
-      try {
-        await api.get('/v1/authuser').then(resp => {
-          // console.log('authuser', resp)
-          if (resp.status === 200) {
-            const hdd = storage.setUser(resp.data.user)
-            if (hdd) {
-              this.currentUser = resp.data.user
-            }
-            apps.setUser(resp.data.user)
-            apps.setItems(resp.data.apps)
-            apps.setAksesApps(resp.data.akses)
-            this.loading = false
+
+      await api.get('/v1/authuser').then(resp => {
+        if (resp.status === 200) {
+          this.loading = false
+          const hdd = storage.setUser(resp?.data?.user)
+          if (hdd) {
+            this.currentUser = resp?.data?.user
           }
+
+          const user = resp?.data?.user
+          const aplikasi = resp?.data?.apps
+          const akses = resp?.data?.akses
+          apps.setUser(user)
+          apps.setItems(aplikasi)
+          apps.setAksesApps(akses)
+
+          // --- ada user yang tidak update datanya
+          // const stringnya1 = localStorage.getItem('aplikasiX')
+          // if (stringnya1 === null) {
+          //   const temp = {
+          //     items: [],
+          //     aksesApps: [],
+          //     aksesMenus: [],
+          //     aksesSubs: [],
+          //     currentApp: null,
+          //     user: {},
+          //     gudangs: [],
+          //     polis: [],
+          //     ruangs: [],
+          //     depos: [
+          //       { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
+          //       { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
+          //       { nama: 'Depo OK', value: 'Gd-04010103' },
+          //       { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
+          //       { nama: 'Depo IGD', value: 'Gd-02010104' }
+          //     ]
+          //   }
+          //   localStorage.setItem('aplikasiX', JSON.stringify(temp))
+          // }
+
+          // const stringnya = localStorage.getItem('aplikasiX')
+          // console.log('the app', stringnya)
+
+          // if (stringnya !== null) {
+          //   const localAppss = JSON.parse(localStorage.getItem('aplikasiX'))
+
+          //   console.log('the app yes', localAppss)
+          //   if (!Object.keys(localAppss?.user).length) {
+          //     localAppss.user = user
+          //     localStorage.setItem('aplikasiX', JSON.stringify(localAppss))
+          //   }
+          //   if (!localAppss?.items.length) {
+          //     localAppss.items = aplikasi
+          //     localStorage.setItem('aplikasiX', JSON.stringify(localAppss))
+          //   }
+          //   if (!localAppss?.aksesApps.length) {
+          //     localAppss.aksesApps = akses
+          //     localStorage.setItem('aplikasiX', JSON.stringify(localAppss))
+          //   }
+          // }
+          // else {
+          //   const key = ['items', 'aksesApps', 'aksesMenus', 'aksesSubs', 'currentApp', 'user', 'gudangs', 'polis', 'ruangs', 'depos']
+          //   const temp = {}
+          //   key.forEach(a => {
+          //     temp[a] = apps[a]
+          //   })
+          //   const jsonnya = JSON.stringify(temp)
+          //   console.log('else nya', temp, jsonnya)
+          //   // localStorage.setItem('aplikasiX', JSON.stringify(temp))
+          //   console.log('the app no', temp)
+          // }
+          // --- ada user yang tidak update datanya end
+        }
+      })
+        .catch(() => {
+          removeToken()
+          this.loading = false
         })
-      } catch (error) {
-        removeToken()
-        this.loading = false
-      }
     },
 
     logout () {

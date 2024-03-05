@@ -203,7 +203,7 @@
           :model="store.form.kdobat"
           autocomplete="namaobat"
           option-label="namaobat"
-          option-value="kodeobat"
+          option-value="kd_obat"
           label="Pilih Obat"
           outlined
           :source="store.obats"
@@ -478,6 +478,13 @@ function setHargaNetto() {
 function setIsi(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   store.setForm('isi', temp)
+  if (temp > 0) {
+    const obat = store.obats.find(a => a.kd_obat === store.form.kdobat)
+    if (obat) {
+      const harga = parseFloat(obat?.harga) ?? 0
+      store.setForm('harga', harga * parseFloat(temp))
+    }
+  }
 }
 function setJumlah(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0

@@ -33,7 +33,7 @@
           <div
             v-else
           >
-            {{ userLocal? userLocal.nama:'-' }}
+            {{ userLocal? userLocal?.nama:'-' }}
           </div>
         </div>
         <q-avatar

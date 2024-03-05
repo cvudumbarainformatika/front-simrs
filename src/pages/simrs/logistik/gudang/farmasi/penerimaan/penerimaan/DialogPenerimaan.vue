@@ -701,8 +701,8 @@ function setHargaNetNew(evt, det, key) {
 
   if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
   if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
-  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
   if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
+  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
   const jmlAll = jmlTerimaK + det.jml_terima_laluK
   // console.log('terima ', jmlAll, jmlTerimaK)
   // console.log('lebih', det)

@@ -120,6 +120,8 @@ const setting = useSettingsAplikasi()
 if (!apps.gudangs?.length) setting.getGudang().then(resp => { apps.setGudang(setting?.gudangs) })
 if (!apps.polis?.length) setting.getPoli().then(resp => { apps.setPoli(setting?.polis) })
 if (!apps.ruangs?.length) setting.getRuanganSim().then(resp => { apps.setRuang(setting?.ruangansims) })
+if (!Object.keys(apps.user)?.length) store.getUserNew()
+// console.log('apps user', apps.user, !Object.keys(apps.user)?.length)
 
 // const rightDrawerOpen = ref(false)
 // const leftDrawerOpen = ref(false)
