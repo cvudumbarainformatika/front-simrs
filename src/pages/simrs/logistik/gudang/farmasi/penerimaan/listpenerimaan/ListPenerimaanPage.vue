@@ -109,7 +109,7 @@
       <template #expand="{ row }">
         <div v-if="row.penerimaanrinci">
           <div class="row items-center text-weight-bold">
-            <div class="col-4">
+            <div class="col-3">
               Obat
             </div>
             <div class="col-2">
@@ -124,13 +124,16 @@
             <div class="col-2">
               Info
             </div>
+            <div class="col-1 text-right">
+              #
+            </div>
           </div>
           <div
             v-for="(rin, i) in row.penerimaanrinci"
             :key="i"
           >
             <div class="row items-center q-col-gutter-sm anu">
-              <div class="col-4">
+              <div class="col-3">
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
                     Kode
@@ -255,6 +258,24 @@
                   </div>
                 </div>
               </div>
+              <div class="col-1 text-right">
+                <q-btn
+                  flat
+                  icon="icon-mat-delete"
+                  dense
+                  size="sm"
+                  color="negative"
+                  :loading="penerimaan.loadingDelete && row.loading"
+                  @click="penerimaan.deleteRinci(rin)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Hapus
+                  </q-tooltip>
+                </q-btn>
+              </div>
             </div>
           </div>
         </div>
@@ -263,7 +284,26 @@
         </div>
       </template>
       <template #left-acttion="{ row }">
-        <div v-if="!row.kunci">
+        <div
+          v-if="!row.kunci"
+          class="row items-center"
+        >
+          <q-btn
+            flat
+            icon="icon-mat-delete"
+            dense
+            size="sm"
+            color="negative"
+            :loading="penerimaan.loadingDelete && row.loading"
+            @click="penerimaan.deleteHeader(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Hapus
+            </q-tooltip>
+          </q-btn>
           <q-btn
             flat
             icon="icon-mat-lock_open"

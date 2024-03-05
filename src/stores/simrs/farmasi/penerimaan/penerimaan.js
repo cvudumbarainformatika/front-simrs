@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays, findWithAttr, notifErrVue, notifSuccess } from 'src/modules/utils'
+import { filterDuplicateArrays, notifErrVue, notifSuccess } from 'src/modules/utils'
 import { useListPenerimaanStore } from './listpenerimaan'
 
 export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
@@ -10,6 +10,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     loading: false,
     loadingPihakTiga: false,
     loadingKunci: false,
+    loadingDelete: false,
     items: null,
     form: {
       nopenerimaan: '',
@@ -397,27 +398,6 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
                 this.setForm('nopenerimaan', resp.data.heder.nopenerimaan)
               }
             }
-            if (resp.data.rinci) {
-              const rin = resp.data.rinci
-              const index = findWithAttr(this.details, 'kdobat', rin.kdobat)
-              if (index >= 0) {
-                this.details[index].jml_terima_lalu = rin.jml_terima_lalu
-                this.details[index].jml_all_penerimaan = rin.jml_all_penerimaan
-                this.details[index].jumlah = 0
-                this.details[index].inpJumlah = 0
-                this.details[index].isi = 1
-                this.details[index].harga = 0
-                this.details[index].harga_kcl = 0
-                this.details[index].no_batch = ''
-                this.details[index].tgl_exp = ''
-                this.details[index].diskon = 0
-                this.details[index].ppn = 0
-                this.details[index].diskon_rp = 0
-                this.details[index].ppn_rp = 0
-                this.details[index].harga_netto = 0
-                this.details[index].subtotal = 0
-              }
-            }
             this.form.tglpenerimaan = tgl
             resolve(resp)
           })
@@ -425,6 +405,14 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             this.loading = false
           })
       })
+    },
+    deleteHeader(val) {
+      val.expand = !val.expand
+      val.highlight = !val.highlight
+      console.log('deleteHeader', val)
+    },
+    deleteRinci(val) {
+      console.log('deleteRinci', val)
     }
   }
 })

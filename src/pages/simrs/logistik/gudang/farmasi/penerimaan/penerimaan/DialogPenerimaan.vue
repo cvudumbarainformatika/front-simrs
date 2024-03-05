@@ -427,7 +427,11 @@
                   v-model="det.jml_terima_k"
                   :label="'Diterima ('+ det.satuan_kcl+')'"
                   outlined
-                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
+                  :rules="[
+                    val => !isNaN(val) || 'Harus pakai Nomor',
+                    val => !!val || 'Harap di isi',
+                  ]"
                   @update:model-value="setHargaNetNew($event, det,'jml_terima_k')"
                 />
               </div>
