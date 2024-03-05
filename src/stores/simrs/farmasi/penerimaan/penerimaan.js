@@ -194,6 +194,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               a.jumlah = ''
               a.jml_pesan = a.jumlahdpesan
               a.harga_netto = 0
+              a.harga = a.harga_kcl ?? 0
               a.subtotal = 0
               a.satuan_bsr = a.masterobat ? a.masterobat.satuan_b : '-'
               a.satuan_kcl = a.masterobat ? a.masterobat.satuan_k : '-'
