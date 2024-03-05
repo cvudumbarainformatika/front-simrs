@@ -56,6 +56,12 @@
           >
             <DiagnosaKeperawatanPage :pasien="props.pasien" />
           </q-tab-panel>
+          <q-tab-panel
+            name="Pra Anestesia"
+            class="full-height q-pa-none"
+          >
+            <PraAnestesiaPage :pasien="props.pasien" />
+          </q-tab-panel>
         </q-tab-panels>
       </div>
     </div>
@@ -69,6 +75,7 @@ import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
 import IcdPage from './complayanan/IcdPage.vue'
 import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
+import PraAnestesiaPage from './complayanan/PraAnestesiaPage.vue'
 import { onMounted } from 'vue'
 
 const props = defineProps({
@@ -82,7 +89,8 @@ const store = useLayananPoli()
 
 // const inacbg = useInacbgPoli()
 onMounted(() => {
-  // console.log('tabs', store.tabs)
+  console.log('tabs', store.tabs)
   store.getNota(props.pasien)
 })
+
 </script>
