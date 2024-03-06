@@ -19,7 +19,7 @@
                 v-for="(item, i) in store.masterKajian"
                 :key="i"
               >
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-7">
                     {{ item.kajian }}
                   </div>
@@ -34,7 +34,12 @@
                       size="sm"
                     />
                   </div>
-                </div>
+                </div> -->
+                <q-checkbox
+                  v-model="item.check"
+                  size="xs"
+                  :label="item.kajian"
+                />
                 <q-separator class="q-my-xs" />
               </template>
 
@@ -46,7 +51,7 @@
                 v-for="(item, i) in store.masterKajian2"
                 :key="i"
               >
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-7">
                     {{ item.kajian }}
                   </div>
@@ -61,7 +66,12 @@
                       size="sm"
                     />
                   </div>
-                </div>
+                </div> -->
+                <q-checkbox
+                  v-model="item.check"
+                  size="xs"
+                  :label="item.kajian"
+                />
                 <q-separator class="q-my-xs" />
               </template>
             </div>
@@ -72,6 +82,7 @@
             </div>
             <div class="col q-ml-sm">
               <q-input
+                v-model="store.form.keteranganKajianSistem"
                 dense
                 outlined
                 standout="bg-yellow-3"
@@ -87,7 +98,7 @@
             KEADAAN UMUM
           </div>
           <q-separator class="q-mb-md q-mt-xs" />
-          <template
+          <!-- <template
             v-for="(item, n) in store.masterKeadaanUmum"
             :key="n"
           >
@@ -106,7 +117,62 @@
                 />
               </div>
             </div>
-          </template>
+          </template> -->
+          <div class="row q-col-gutter-md">
+            <div class="col-6 q-gutter-xs">
+              <q-input
+                v-model="store.form.skorMallampati"
+                label="Skor Mallampati"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+              <q-input
+                v-model="store.form.jantung"
+                label="Jantung"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+              <q-input
+                v-model="store.form.paruparu"
+                label="Paru-paru"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+              <q-input
+                v-model="store.form.abdomen"
+                label="Abdomen"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+            </div>
+            <div class="col-6 q-gutter-xs">
+              <q-input
+                v-model="store.form.tulangbelakang"
+                label="Tulang Belakang"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+              <q-input
+                v-model="store.form.ekstremitas"
+                label="Ekstremitas"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+              <q-input
+                v-model="store.form.neurologi"
+                label="ENeurologi (Bila dapat diperiksa)"
+                dense
+                outlined
+                standout="bg-yellow-3"
+              />
+            </div>
+          </div>
           <q-separator class="q-my-md" />
 
           <!-- Laboratorium -->
@@ -167,6 +233,7 @@
               </div>
               <div class="col q-ml-sm">
                 <q-input
+                  v-model="store.form.keteranganLaborat"
                   dense
                   outlined
                   standout="bg-yellow-3"
@@ -194,7 +261,7 @@
                   size="xs"
                   :label="item.nama"
                 />
-                <q-separator style="margin-top:-5px; margin-bottom:-2px;" />
+                <q-separator style="margin-top:0px; margin-bottom:0px;" />
               </div>
             </div>
             <div class="col-6">
@@ -203,13 +270,65 @@
               </div>
               <q-separator class="q-my-xs" />
               <div>
-                <q-input
+                <q-btn
+                  label="Klik disini untuk tambah inputan"
+                  color="primary"
                   dense
-                  outlined
-                  standout="bg-yellow-3"
-                  class="full-width"
-                  label="Penyulit Anestesia Lain"
-                />
+                  no-caps
+                  size="sm"
+                  class="q-px-sm full-width"
+                  outline
+                >
+                  <q-popup-edit
+                    v-slot="scope"
+                    v-model="store.penyulit"
+                    class="q-pa-none"
+                    persistent
+                    @update:model-value="addPenyulit"
+                  >
+                    <q-input
+                      v-model="scope.value"
+                      dense
+                      standout="bg-yellow-3"
+                      autofocus
+                      outlined
+                      placeholder="Enter untuk menambahkan"
+                      @keyup.enter="scope.set"
+                    />
+                  </q-popup-edit>
+                </q-btn>
+              </div>
+              <div class="q-my-sm">
+                <table>
+                  <tr
+                    v-for="(isian,i) in store.form.penyulitAnastesi"
+                    :key="i"
+                  >
+                    <td class="f-12">
+                      {{ i+1 }}.
+                      <span class="cursor-pointer">
+                        {{ isian }}
+                        <q-popup-edit
+                          v-slot="scope"
+                          v-model="store.form.penyulitAnastesi[i]"
+                          auto-save
+                          :cover="false"
+                          :offset="[0, 0]"
+                          class="q-pa-none"
+                        >
+                          <q-input
+                            v-model="scope.value"
+                            dense
+                            autofocus
+                            outlined
+                            standout="bg-yellow-3"
+                            @keyup.enter="scope.set"
+                          />
+                        </q-popup-edit>
+                      </span>
+                    </td>
+                  </tr>
+                </table>
               </div>
             </div>
           </div>
@@ -222,6 +341,7 @@
           <q-separator class="q-my-sm" />
           <div class="q-gutter-sm">
             <q-input
+              v-model="store.form.catatan"
               dense
               outlined
               standout="bg-yellow-3"
@@ -229,6 +349,7 @@
               label="Catatan Tindak Lanjut"
             />
             <q-input
+              v-model="store.form.perencanaan"
               dense
               outlined
               standout="bg-yellow-3"
@@ -247,7 +368,10 @@
         dark
       >
         <div class="flex justify-end q-pa-md">
-          <q-btn color="primary">
+          <q-btn
+            color="primary"
+            @click="store.saveData"
+          >
             Simpan Pra Anestesia
           </q-btn>
         </div>
@@ -258,6 +382,7 @@
 
 <script setup>
 import { usePraAnastesiStore } from 'src/stores/simrs/pelayanan/poli/praanastesi'
+// eslint-disable-next-line no-unused-vars
 import { ref, onMounted } from 'vue'
 
 const store = usePraAnastesiStore()
@@ -266,15 +391,21 @@ onMounted(() => {
   store.getMaster()
 })
 
-const options = ref([
-  {
-    label: 'Ya',
-    value: '1'
-  },
-  {
-    label: 'Tidak',
-    value: '0'
-  }])
+function addPenyulit() {
+  store.setPenyulits().then(() => {
+    store.penyulit = null
+  })
+}
+
+// const options = ref([
+//   {
+//     label: 'Ya',
+//     value: '1'
+//   },
+//   {
+//     label: 'Tidak',
+//     value: '0'
+//   }])
 
 // const masterPraAnastesi = computed(() => store.master)
 
