@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 // import { usePengunjungPoliStore } from './pengunjung'
-// import { notifErr, notifSuccess } from 'src/modules/utils'
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
   state: () => ({
@@ -28,7 +28,9 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       catatan: null,
       perencanaan: null,
       penyulitAnastesi: []
-    }
+    },
+    resultPraAnastesi: [],
+    waiting: false
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -53,13 +55,13 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
     },
 
     reducerMaster(m) {
+      this.master = m
       const kaj = m.filter(x => x.group === 'kajian sistem')?.map(x => {
         return {
           kajian: x.nama,
           check: false
         }
       })
-      this.master = m
       this.masterKajian = kaj.splice(0, 8)
       this.masterKajian2 = kaj
 
@@ -92,7 +94,24 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         resolve()
       })
     },
-    saveData() {
+    initForm() {
+      this.skorMallampati = null
+      this.jantung = null
+      this.paruparu = null
+      this.abdomen = null
+      this.tulangbelakang = null
+      this.ekstremitas = null
+      this.neurologi = null
+      this.keteranganKajianSistem = null
+      this.keteranganLaborat = null
+      this.catatan = null
+      this.perencanaan = null
+      this.penyulitAnastesi = []
+      const m = [...this.master]
+      this.reducerMaster(m)
+    },
+    saveData(pasien) {
+      this.waiting = true
       return new Promise((resolve, reject) => {
         const kaj1 = this.masterKajian.filter(x => x.check)?.map(x => x.kajian)
         const kaj2 = this.masterKajian2.filter(x => x.check)?.map(x => x.kajian)
@@ -106,8 +125,63 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         this.form.kajianSistem = kajianSistem
         this.form.laboratorium = laboratorium
         this.form.asaClasification = asa
+        this.form.noreg = pasien?.noreg
+        this.form.norm = pasien?.norm
 
         console.log('form', this.form)
+
+        api.post('/v1/simrs/pelayanan/praanastesi/savedata', this.form)
+          .then(resp => {
+            console.log('post pra', resp)
+            if (resp.status === 200) {
+              this.resultPraAnastesi.push(resp?.data)
+              notifSuccess(resp)
+              this.waiting = false
+            }
+            this.waiting = false
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log(err)
+            notifErr(err)
+            this.waiting = false
+            reject(err)
+          })
+      })
+    },
+    getData(pasien) {
+      const params = { params: { noreg: pasien?.noreg } }
+      return new Promise((resolve, reject) => {
+        api.get('/v1/simrs/pelayanan/praanastesi/getPraAnastesiKunjunganPoli', params)
+          .then(resp => {
+            console.log('get pra', resp)
+            if (resp.status === 200) {
+              this.resultPraAnastesi = resp.data
+            }
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    deleteData(id) {
+      const form = { id }
+      return new Promise((resolve, reject) => {
+        api.post('/v1/simrs/pelayanan/praanastesi/deletedata', form)
+          .then(resp => {
+            // console.log('del pra', resp)
+            const pos = this.resultPraAnastesi?.findIndex(el => el.id === id)
+            if (pos >= 0) { this.resultPraAnastesi.splice(pos, 1) }
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            console.log(err)
+            notifErr(err)
+            reject(err)
+          })
       })
     }
   }
