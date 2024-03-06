@@ -20,7 +20,7 @@
           icon="icon-mat-chevron_left"
           size="sm"
           round
-          :disable="meta.prev_page===null"
+          :disable="meta.current_page===1"
           @click="emits('goTo',meta.current_page-1)"
         />
         <div class="q-px-sm">
@@ -40,7 +40,7 @@
           icon="icon-mat-chevron_right"
           size="sm"
           round
-          :disable="meta.current_page===meta.last_page"
+          :disable="meta.current_page===lastPage"
           @click="emits('goTo',meta.current_page+1)"
         />
         <q-btn
@@ -49,7 +49,7 @@
           icon="icon-mat-skip_next"
           size="sm"
           round
-          :disable="meta.current_page===meta.last_page"
+          :disable="meta.current_page===lastPage"
           @click="emits('goTo',meta.last_page)"
         />
       </div>
