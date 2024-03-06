@@ -168,7 +168,7 @@
                     Terima
                   </div>
                   <div class="text-weight-bold">
-                    {{ rin.jml_terima }}
+                    {{ rin.jml_terima_k }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">
@@ -265,7 +265,7 @@
                   dense
                   size="sm"
                   color="negative"
-                  :loading="penerimaan.loadingDelete && row.loading"
+                  :loading="penerimaan.loadingDelete && rin.loading"
                   @click="penerimaan.deleteRinci(rin)"
                 >
                   <q-tooltip

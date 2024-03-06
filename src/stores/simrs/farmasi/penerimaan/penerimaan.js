@@ -75,6 +75,15 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     },
     setClose() {
       this.isOpen = false
+      this.resetForm()
+    },
+    resetForm() {
+      this.form = {
+        nopenerimaan: '',
+        tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        batasbayar: null,
+        tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      }
     },
     setNexMonth() {
       const now = new Date()
@@ -410,9 +419,54 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       val.expand = !val.expand
       val.highlight = !val.highlight
       console.log('deleteHeader', val)
+      this.loadingDelete = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/batal-header', val)
+          .then(resp => {
+            this.loadingDelete = false
+            val.loading = false
+            console.log('batal header', resp.data)
+            const list = useListPenerimaanStore()
+            const indexItem = list?.items?.findIndex(a => a.nopenerimaan === val.nopenerimaan)
+            if (indexItem >= 0) list.items.splice(indexItem, 1)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingDelete = false
+            val.loading = false
+          })
+      })
     },
     deleteRinci(val) {
       console.log('deleteRinci', val)
+      this.loadingDelete = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/batal-rinci', val)
+          .then(resp => {
+            this.loadingDelete = false
+            val.loading = false
+            console.log('batal rinci', resp.data)
+            const list = useListPenerimaanStore()
+            const item = list?.items?.find(a => a.nopenerimaan === val.nopenerimaan)
+            if (item) {
+              const indexRinci = item?.penerimaanrinci?.findIndex(a => a.kdobat === val.kdobat)
+              if (indexRinci >= 0) list.items.splice(indexRinci, 1)
+              if (item?.penerimaanrinci?.length <= 1) {
+                const indexItem = list?.items?.findIndex(a => a.nopenerimaan === val.nopenerimaan)
+                if (indexItem >= 0) list.items.splice(indexItem, 1)
+              }
+            }
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingDelete = false
+            val.loading = false
+          })
+      })
     }
   }
 })
