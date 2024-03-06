@@ -667,6 +667,8 @@ function setHargaNetNew(evt, det, key) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   det[key] = nilai
+  if (key === 'isi' && nilai <= 0) return
+
   const isi = det.isi ?? 1
   let harga = det.harga ?? 0
   let hargaKcl = det.harga_kcl ?? 0
@@ -680,27 +682,29 @@ function setHargaNetNew(evt, det, key) {
   const hargaPembelian = hargaSetelahDiskon + ppnRp
   const subtotal = hargaPembelian * jmlTerimaB
   if (key === 'isi') {
-    if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
-      // console.log('isi if', parseFloat(evt), isiPrev)
-      if (isiPrev > det.isi) {
-        if (parseFloat(jmlTerimaK) < 1) {
-          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
-          det.jumlah = jml
-          jmlTerimaK = jml
-          jmlTerimaB = jml / det.isi
+    if (nilai > 0) {
+      if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
+        // console.log('isi if', parseFloat(evt), isiPrev)
+        if (isiPrev > det.isi) {
+          if (parseFloat(jmlTerimaK) < 1) {
+            const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+            det.jumlah = jml
+            jmlTerimaK = jml
+            jmlTerimaB = jml / det.isi
+          }
+          if (parseFloat(det.isi) <= 1) {
+            const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
+            det.jumlah = jml
+            jmlTerimaK = jml
+            jmlTerimaB = jml / det.isi
+          }
+        } else {
+          det.jumlah = parseFloat(jmlTerimaK)
+          jmlTerimaB = det.jumlah / det.isi
         }
-        if (parseFloat(det.isi) <= 1) {
-          const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
-          det.jumlah = jml
-          jmlTerimaK = jml
-          jmlTerimaB = jml / det.isi
-        }
-      } else {
-        det.jumlah = parseFloat(jmlTerimaK)
-        jmlTerimaB = det.jumlah / det.isi
       }
+      isiPrev = det.isi
     }
-    isiPrev = det.isi
   }
 
   if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
