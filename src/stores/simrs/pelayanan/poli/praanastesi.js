@@ -129,23 +129,9 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           this.asaClass.filter(x => x.nama === el).map(x => x.check = true)
         }
         this.form.penyulitAnastesi = item.penyulitAnastesi
+        this.form.id = item.id
       }
     },
-
-    // editForm(item) {
-    //   this.form.skorMallampati = item?.skorMallampati
-    //   this.form.jantung = item?.jantung
-    //   this.form.paruparu = item?.paruparu
-    //   this.form.abdomen = item?.abdomen
-    //   this.form.tulangbelakang = item?.tulangbelakang
-    //   this.form.ekstremitas = item?.ekstremitas
-    //   this.form.neurologi = item?.neurologi
-    //   this.form.keteranganKajianSistem = item?.keteranganKajianSistem
-    //   this.form.keteranganLaborat = item?.keteranganLaborat
-    //   this.form.catatan = item?.catatan
-    //   this.form.perencanaan = item?.perencanaan
-    //   this.form.penyulitAnastesi = item?.penyulitAnastesi
-    // },
     saveData(pasien) {
       this.waiting = true
       return new Promise((resolve, reject) => {
@@ -172,7 +158,15 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           .then(resp => {
             console.log('post pra', resp)
             if (resp.status === 200) {
-              this.resultPraAnastesi.push(resp?.data)
+              // ==================jika bukan edit
+              const check = this.resultPraAnastesi.filter(x => x.id === resp.data.id)
+              const target = this.resultPraAnastesi.find(x => x.id === resp?.data?.id)
+              if (check.length) {
+                Object.assign(target, resp?.data)
+              } else {
+                this.resultPraAnastesi.push(resp?.data)
+              }
+              delete this.form.id
               notifSuccess(resp)
               this.waiting = false
             }

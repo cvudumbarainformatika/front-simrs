@@ -38,9 +38,8 @@ onMounted(() => {
     .then(() => store.initForm())
 })
 
-// console.log(props.pasien)
 function lihat(val) {
-  console.log(val)
+  // console.log(val)
   store.initForm(val)
 }
 </script>
