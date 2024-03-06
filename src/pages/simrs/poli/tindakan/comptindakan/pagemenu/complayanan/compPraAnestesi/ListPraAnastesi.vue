@@ -211,7 +211,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['hapus'])
+const emits = defineEmits(['hapus', 'edit'])
 
 </script>
 

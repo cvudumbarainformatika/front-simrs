@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 // import { usePengunjungPoliStore } from './pengunjung'
@@ -94,25 +95,61 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         resolve()
       })
     },
-    initForm() {
-      this.skorMallampati = null
-      this.jantung = null
-      this.paruparu = null
-      this.abdomen = null
-      this.tulangbelakang = null
-      this.ekstremitas = null
-      this.neurologi = null
-      this.keteranganKajianSistem = null
-      this.keteranganLaborat = null
-      this.catatan = null
-      this.perencanaan = null
-      this.penyulitAnastesi = []
-      const m = [...this.master]
-      this.reducerMaster(m)
+    initForm(item) {
+      delete this.form.id
+      // ===================
+      this.form.skorMallampati = item ? item?.skorMallampati : null
+      this.form.jantung = item ? item?.jantung : null
+      this.form.paruparu = item ? item?.paruparu : null
+      this.form.abdomen = item ? item?.abdomen : null
+      this.form.tulangbelakang = item ? item?.tulangbelakang : null
+      this.form.ekstremitas = item ? item?.ekstremitas : null
+      this.form.neurologi = item ? item?.neurologi : null
+      this.form.keteranganKajianSistem = item ? item?.keteranganKajianSistem : null
+      this.form.keteranganLaborat = item ? item?.keteranganLaborat : null
+      this.form.catatan = item ? item?.catatan : null
+      this.form.perencanaan = item ? item?.perencanaan : null
+      this.form.penyulitAnastesi = []
+      if (!item || item === undefined || item === 'undefined') {
+        const m = [...this.master]
+        this.reducerMaster(m)
+      } else {
+        for (let i = 0; i < item.kajianSistem.length; i++) {
+          const el = item.kajianSistem[i]
+          this.masterKajian.filter(x => x.kajian === el).map(x => x.check = true)
+          this.masterKajian2.filter(x => x.kajian === el).map(x => x.check = true)
+        }
+        for (let i = 0; i < item.laboratorium.length; i++) {
+          const el = item.laboratorium[i]
+          this.masterLab.filter(x => x.nama === el.nama).map(x => x.model = el.model)
+          this.masterLab2.filter(x => x.nama === el.nama).map(x => x.model = el.model)
+        }
+        for (let i = 0; i < item.asaClasification.length; i++) {
+          const el = item.asaClasification[i]
+          this.asaClass.filter(x => x.nama === el).map(x => x.check = true)
+        }
+        this.form.penyulitAnastesi = item.penyulitAnastesi
+      }
     },
+
+    // editForm(item) {
+    //   this.form.skorMallampati = item?.skorMallampati
+    //   this.form.jantung = item?.jantung
+    //   this.form.paruparu = item?.paruparu
+    //   this.form.abdomen = item?.abdomen
+    //   this.form.tulangbelakang = item?.tulangbelakang
+    //   this.form.ekstremitas = item?.ekstremitas
+    //   this.form.neurologi = item?.neurologi
+    //   this.form.keteranganKajianSistem = item?.keteranganKajianSistem
+    //   this.form.keteranganLaborat = item?.keteranganLaborat
+    //   this.form.catatan = item?.catatan
+    //   this.form.perencanaan = item?.perencanaan
+    //   this.form.penyulitAnastesi = item?.penyulitAnastesi
+    // },
     saveData(pasien) {
       this.waiting = true
       return new Promise((resolve, reject) => {
+        // if (!this.form.id || this.form.id === null) {
         const kaj1 = this.masterKajian.filter(x => x.check)?.map(x => x.kajian)
         const kaj2 = this.masterKajian2.filter(x => x.check)?.map(x => x.kajian)
         const kajianSistem = kaj1.concat(kaj2)
@@ -127,6 +164,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         this.form.asaClasification = asa
         this.form.noreg = pasien?.noreg
         this.form.norm = pasien?.norm
+        // }
 
         console.log('form', this.form)
 
