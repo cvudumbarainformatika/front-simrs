@@ -3,9 +3,43 @@
     v-for="(item,i) in store.belums"
     :key="i"
   >
-    <div class="row items-center">
-      <div class="col-2 text-weight-bold">
-        <div class="q-ml-sm">
+    <div
+      v-if="item?.flag==='1'"
+      class="row items-center"
+    >
+      <div class="col-4 text-weight-bold">
+        <div
+          class="q-ml-sm"
+          style="overflow-wrap: anywhere"
+        >
+          {{ item?.nopermintaan }}
+        </div>
+      </div>
+      <div class="col-2 text-italic">
+        {{ dateFullFormat( item?.tgl_permintaan) }}
+      </div>
+      <div class="col-2">
+        {{ item?.userminta?.nama }}
+      </div>
+      <div class="col-2">
+        proses oleh depo
+      </div>
+      <div class="col-grow">
+        <q-separator
+          size="1px"
+          color="blue-grey-6"
+        />
+      </div>
+    </div>
+    <div
+      v-if="item?.flag==='2'"
+      class="row items-center"
+    >
+      <div class="col-3 text-weight-bold">
+        <div
+          class="q-ml-sm"
+          style="overflow-wrap: anywhere"
+        >
           {{ item?.nopermintaan }}
         </div>
       </div>
@@ -45,7 +79,7 @@
       </div>
     </div>
     <div
-      v-if="item?.rinci?.length"
+      v-if="item?.rinci?.length && item?.flag==='2'"
       class="q-my-sm"
     >
       <div

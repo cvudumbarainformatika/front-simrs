@@ -4,15 +4,13 @@
   >
     <div class="row q-col-gutter-x-xs full-height">
       <div class="col-6 full-height">
-        <FormAnamnesis
+        <FormPersiapan
           :key="props.pasien"
           :pasien="props.pasien"
-          tooltip="History Pasien (Shift + H)"
-          @open-history="seamless = !seamless"
         />
       </div>
       <div class="col-6 full-height">
-        <ListAnamnesis
+        <ListPersiapan
           :key="props.pasien"
           :pasien="props.pasien"
           :loading-terima="loadingTerima"
@@ -46,9 +44,8 @@
 </template>
 
 <script setup>
-// import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
-import ListAnamnesis from './comppersiapanoperasi/ListPersiapanoperasi.vue'
-import FormAnamnesis from './comppersiapanoperasi/FormPersiapanoperasi.vue'
+import ListPersiapan from './comppersiapanoperasi/ListPersiapanoperasi.vue'
+import FormPersiapan from './comppersiapanoperasi/FormPersiapanoperasi.vue'
 // eslint-disable-next-line no-unused-vars
 import { onMounted, onUnmounted, ref } from 'vue'
 
