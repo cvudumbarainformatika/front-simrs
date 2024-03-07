@@ -73,6 +73,7 @@ const search = ref('')
 const kodedpjp = ref(null)
 const kdpegsimrs = ref(null)
 const options = ref([])
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
     type: Object,
@@ -96,16 +97,16 @@ function updateKodeDpjp(val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function gantiDpjp() {
-  // console.log('ok')
-  const form = {
-    kodedpjp: kodedpjp.value ?? '',
-    kdpegsimrs: kdpegsimrs.value,
-    noreg: props?.pasien?.noreg
-  }
+// function gantiDpjp() {
+//   // console.log('ok')
+//   const form = {
+//     kodedpjp: kodedpjp.value ?? '',
+//     kdpegsimrs: kdpegsimrs.value,
+//     noreg: props?.pasien?.noreg
+//   }
 
-  emits('gantidpjp', form)
-}
+//   // emits('gantidpjp', form)
+// }
 
 // eslint-disable-next-line no-unused-vars
 function getImage(kelamin, row) {

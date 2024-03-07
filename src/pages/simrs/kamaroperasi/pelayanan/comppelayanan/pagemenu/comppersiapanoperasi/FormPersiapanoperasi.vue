@@ -210,18 +210,18 @@ f<template>
           </q-item>
 
           <!-- hasil Inputan -->
-          <template v-if="store.listPemintaanSementara.length">
+          <template v-if="store.listBelum?.rinci?.length">
             <q-item
-              v-for="(item, i) in store.listPemintaanSementara"
+              v-for="(item, i) in store.listBelum?.rinci"
               :key="i"
             >
               <!-- {{ item }} -->
               <q-item-section style="width: 50%;">
                 <div class="row">
-                  {{ item?.mobat?.nama_obat }}
+                  {{ item?.obat?.nama_obat }}
                 </div>
                 <div class="row text-italic f-10">
-                  {{ item?.kdobat }}
+                  {{ item?.kd_obat }}
                 </div>
               </q-item-section>
               <q-item-section
@@ -230,24 +230,25 @@ f<template>
               >
                 <div class="row items-center q-col-gutter-sm full-width">
                   <div
-                    class="text-right col-2"
+                    class="text-right col-3"
                   >
-                    {{ item?.jumlah }}
+                    {{ item?.jumlah_minta }}
                   </div>
-                  <div
+                  <!-- <div
                     class="col-2 text-right"
                   >
                     {{ item?.aturan }}
-                  </div>
-                  <div
+                  </div> -->
+                  <!-- <div
                     class="col-3 text-right"
                   >
                     {{ formatDouble( item?.harga) }}
                   </div>
+                -->
                   <div
                     class="col text-right"
                   >
-                    {{ item?.keterangan }}
+                    <!-- {{ item?.keterangan }} -->
                   </div>
                   <div class="col-shrink text-right">
                     <q-btn
@@ -417,7 +418,7 @@ f<template>
             :disable="store.loadingkirim"
             @click="store.selesaiResep"
           >
-            Kirim Resep
+            Kirim Permintaan
           </q-btn>
         </div>
       </div>
@@ -516,6 +517,7 @@ function setPasien() {
   // eslint-disable-next-line no-unused-vars
   const diag = temp?.length ? temp.join(', ') : '-'
   store.setPasien()
+
   // store.setForm('noreg', val?.rs1)
   // store.setForm('norm', val?.norm)
   // store.setForm('groupsistembayar', val?.groups)
@@ -720,13 +722,14 @@ function simpanObat() {
   }
 }
 onMounted(() => {
-  // console.log('depo', props?.depo, props.pasien)
+  console.log('depo', props.pasien)
   store.pasien = props?.pasien
   store.depo = 'ok'
   store.dpPar = 'Gd-04010103'
   // store.getSigna()
   store.cariObat()
   setPasien()
+  if (props?.pasien?.permintaanobatoperasi?.length) store.setNopermintaan(props?.pasien?.permintaanobatoperasi)
   // console.log('ref Obat', refObat.value)
   refObat.value.focus()
   // refObat.value.showPopup()
