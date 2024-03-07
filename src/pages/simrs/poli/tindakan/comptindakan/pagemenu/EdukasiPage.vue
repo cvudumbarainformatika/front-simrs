@@ -3,60 +3,57 @@
     class="column full-height q-ma-sm"
     style="overflow: hidden;"
   >
-    <div class="row q-col-gutter-x-xs full-height">
-      <div class="col-8 full-height">
-        <FormEdukasi :pasien="pasien" />
+    <div class="column full-height">
+      <div class="col-auto bg-red">
+        <q-tabs
+          v-model="menu"
+          no-caps
+          inline-label
+          class="bg-primary text-white shadow-2"
+          align="left"
+          dense
+          active-color="yellow"
+          active-bg-color="dark"
+        >
+          <q-tab
+            v-for="(item, i) in tabs"
+            :key="i"
+            :name="item.menu"
+            :label="item.label"
+          />
+        </q-tabs>
       </div>
-      <div class="col-4 full-height">
-        <div
-          v-if="pasien?.edukasi?.length"
+      <div
+        class="col full-height"
+        style="overflow: hidden;"
+      >
+        <q-tab-panels
+          v-model="menu"
+          animated
           class="full-height"
         >
-          <q-scroll-area style="height:calc(100% - 1px);">
-            <q-card
-              v-for="(item, i) in pasien?.edukasi"
-              :key="i"
-              flat
-              bordered
-            >
-              <q-card-section>
-                <div class="column">
-                  <div>{{ item?.perlupenerjemah==='Iya'? 'Pasien Perlu Penerjemah' : 'Pasien Tidak Perlu Penerjemah' }}</div>
-                  <div>{{ item?.bahasaisyarat==='Iya'? 'Pasien Memakai Bahasa Isyarat' : 'Pasien Tidak Memakai Bahasa Isyarat' }}</div>
-                  <div>{{ item?.caraedukasi==='Lisan'? 'Edukasi Memakai Lisan' : 'Edukasi Memakai Tulisan' }}</div>
-                  <div>{{ item?.kesediaan==='Iya'? 'Pasien Bersedia' : 'Pasien Tidak Bersedia' }}</div>
-                  <div> Kebutuhan : <b><em>{{ item?.kebutuhanedukasi }}</em></b>  </div>
-                  <div> Penerima Edukasi : <b><em>{{ item?.rs9 }}</em></b>  </div>
-                </div>
-              </q-card-section>
-              <q-card-section align="right">
-                <q-btn
-                  flat
-                  round
-                  size="sm"
-                  icon="icon-mat-delete"
-                  color="negative"
-                  @click="hapusItem(item.id)"
-                />
-              </q-card-section>
-            </q-card>
-          </q-scroll-area>
-        </div>
-        <div
-          v-else
-          class="column full-height flex-center"
-        >
-          Belum Ada Edukasi
-        </div>
+          <q-tab-panel
+            name="edukasi"
+            class="full-height q-pa-none"
+          >
+            <component
+              :is="tab.comp"
+              :key="pasien"
+              :pasien="props.pasien"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-import FormEdukasi from './compedukasi/FormEdukasi.vue'
 import { useEdukasiPoliStore } from 'src/stores/simrs/pelayanan/poli/edukasi'
+import { ref, shallowRef, defineAsyncComponent, onMounted } from 'vue'
+
+// eslint-disable-next-line no-unused-vars
+const store = useEdukasiPoliStore()
 
 const props = defineProps({
   pasien: {
@@ -65,22 +62,25 @@ const props = defineProps({
   }
 })
 
-const $q = useQuasar()
-const store = useEdukasiPoliStore()
+const tabs = ref([
+  {
+    menu: 'edukasi',
+    label: 'Edukasi',
+    comp: shallowRef(defineAsyncComponent(() => import('./compedukasi/IndexPage.vue')))
+  },
+  {
+    menu: 'informentConsent',
+    label: 'Informan Consent',
+    comp: shallowRef(defineAsyncComponent(() => import('./compedukasi/InformConsent.vue')))
+  }
+])
 
-function hapusItem(id) {
-  $q.dialog({
-    dark: true,
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    store.hapusItem(props?.pasien, id)
-  }).onCancel(() => {
-    // console.log('Cancel')
-  }).onDismiss(() => {
-    // console.log('I am triggered on both OK and Cancel')
-  })
-}
+const tab = ref(tabs.value[0])
+const menu = ref(tabs.value[0].menu)
+
+onMounted(() => {
+  tab.value = tabs.value[0]
+  menu.value = tabs.value[0]?.menu
+})
+
 </script>
