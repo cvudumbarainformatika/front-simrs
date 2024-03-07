@@ -28,12 +28,12 @@
       ],
       "vue$": [
         "node_modules/vue/dist/vue.runtime.esm-bundler.js"
-      ],
+      ]
     }
   },
-  "vueCompilerOptions": {
-    "experimentalDisableTemplateSupport": true
-  },
+  // "vueCompilerOptions": {
+  //   "experimentalDisableTemplateSupport": true
+  // },
   "exclude": [
     "dist",
     ".quasar",

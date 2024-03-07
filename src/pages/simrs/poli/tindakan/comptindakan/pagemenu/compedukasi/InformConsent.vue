@@ -1,7 +1,5 @@
 <template>
-  <div>
-    {{ pasien }}
-  </div>
+  di
 </template>
 <script setup>
 defineProps({
