@@ -1,208 +1,241 @@
 <template>
-  <q-card
-    flat
-    bordered
-    square
-    class="full-height bg-teal-2"
-    style="overflow: hidden;"
-  >
-    <q-bar
-      class="bg-teal text-white z-top"
-      style="width: inherit;"
-    >
-      <div class="f-12">
-        Persiapan Operasi
+  <div class="bg-white full-height column">
+    <q-bar class="col-auto bg-teal text-white">
+      <div class="q-py-sm f-14 ">
+        List Nomor Resep
       </div>
       <q-space />
+      <div class="q-py-xs">
+        <q-select
+          v-model="store.nopermintaan"
+          outlined
+          standout="bg-yellow-3"
+          bg-color="white"
+          dense
+          :options="store.nopermintaans"
+          :display-value="`${store.nopermintaan === null || store.nopermintaan === '' || store.nopermintaan === 'BARU' ? 'BARU' : store.nopermintaan}`"
+          style="min-width: 200px;"
+          @update:model-value="store.setResep"
+        />
+      </div>
     </q-bar>
-    <q-card-section
-      style="padding:0"
-      class="full-height bg-grey"
-    >
+    <template v-if="store?.indexRacikan>=0">
       <div
-        v-if="loadingTerima"
-        class="column full-height flex-center"
+        v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
+        class=""
       >
-        <div class="text-white">
-          Harap Tunggu .....
+        <div class="q-my-md q-ml-md">
+          <q-chip
+            square
+            class="f-10"
+            :color="color(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)"
+            text-color="white"
+          >
+            {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
+          </q-chip>
+          <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
         </div>
-        <div class="text-white">
-          Sinkron Data Ke DATABASE
-        </div>
-      </div>
-      <div
-        v-if="pasien?.anamnesis?.length <= 0"
-        class="column full-height flex-center"
-      >
-        <div class="text-white">
-          Belum Ada data tersimpan
-        </div>
-      </div>
-      <q-scroll-area
-        v-else
-        style="height:calc(100% - 32px);"
-      >
-        <q-list
-          class="bg-white"
-          separator
-        >
-          <transition-group name="list">
-            <q-item
-              v-for="(item , n) in lists"
-              :key="n"
-              class="list-move"
+        <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
+        <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
+          <q-item
+            v-for="(item, i) in store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep"
+            :key="i"
+            class="q-pl-sm"
+          >
+            <!-- {{ item }} -->
+            <q-item-section style="width: 30%;">
+              <div class="row">
+                {{ item?.mobat?.nama_obat }}
+              </div>
+              <div class="row text-italic f-10">
+                {{ item?.kdobat }}
+              </div>
+            </q-item-section>
+            <q-item-section
+              side
+              style="width:70%"
             >
-              <q-item-section>
-                <q-item-label
-                  class="f-12"
+              <div class="row items-center q-col-gutter-sm full-width">
+                <div
+                  class="text-right col-2"
                 >
-                  <span class="">Keluhan Utama </span> : <span class="text-weight-bold">{{ item?.rs4 }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Riwayat Penyakit (Sekarang) </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakitsekarang }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Riwayat Penyakit </span> : <span class="text-weight-bold">{{ item?.riwayatpenyakit }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Riwayat Alergi </span> : <span class="text-weight-bold">{{ item?.riwayatalergi }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Reaksi berupa </span> : <span class="text-weight-bold">{{ item?.keteranganalergi }}</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">Riwayat Pengobatan</span> : <span class="text-weight-bold">{{ item?.riwayatpengobatan }}</span>
-                </q-item-label>
-                <q-separator class="q-my-md" />
-                <q-item-label>
-                  <span class="text-weight-bold">Skreening Gizi</span>
-                </q-item-label>
-                <q-item-label>
-                  <span class="">- Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? <b>{{ getYT(item?.skreeninggizi) }}</b></span>
-                  <div class="q-my-xs">
-                    - Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.asupanmakan) }}</b>
-                  </div>
-                  <div>- Kondisi Khusus : <em>{{ item?.kondisikhusus }}</em> <b>Skor : {{ item?.skor }}</b> </div>
-                </q-item-label>
-                <q-item-label>
-                  <span class="text-weight-bold">Keluhan Nyeri</span>
-                </q-item-label>
-                <q-item-label>
-                  <div>
-                    - Skor Nyeri : <b>{{ item?.scorenyeri??'-' }}</b>
-                    <span
-                      v-if="!isNaN(parseInt(item?.scorenyeri))"
-                      class="q-mx-sm"
-                    >
-                      <q-icon
-                        size="xs"
-                        color="teal"
-                        :name="iconNyeri(item?.scorenyeri)"
-                      />
-                    </span>
-                    <em class="text-primary"> {{ item?.keteranganscorenyeri ?? '-' }}</em>
-                  </div>
-                </q-item-label>
+                  {{ item?.jumlah }}
+                </div>
+                <div
+                  class="col-2 text-right"
+                >
+                  {{ item?.aturan }}
+                </div>
+                <div
+                  class="col-5 text-right"
+                >
+                  {{ formatDouble(item?.harga) }}
+                </div>
+                <div
+                  class="col text-right"
+                >
+                  {{ item?.keterangan }}
+                </div>
+              </div>
+            </q-item-section>
+          </q-item>
+        </template>
+        <!-- {{ store.listRacikan }} -->
+        <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.listRacikan?.length">
+          <!-- <template v-if="store?.listRacikan?.length"> -->
+          <!-- v-for="(item, i) in store?.listRacikan" -->
+          <q-expansion-item
+            v-for="(item, i) in store?.pasien?.newapotekrajal[store.indexRacikan]?.listRacikan"
+            :key="i"
+            dense
+            dense-toggle
+            class="q-pl-none"
+          >
+            <template #header>
+              <q-item-section
+                style="width: 30%;"
+              >
+                <div class="row">
+                  {{ item?.namaracikan }}
+                </div>
               </q-item-section>
-
               <q-item-section
                 side
+                style="width:70%"
               >
-                <div class="q-gutter-sm">
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="icon-mat-edit"
-                    @click="store.editForm(item)"
-                  />
-                  <q-btn
-                    flat
-                    round
-                    size="sm"
-                    icon="icon-mat-delete"
-                    color="negative"
-                    @click="hapusItem(item.id)"
-                  />
+                <div class="row items-center q-col-gutter-sm full-width">
+                  <div
+                    class="text-right col-2"
+                  >
+                    {{ item?.tiperacikan }}
+                  </div>
+                  <div
+                    class="text-right col-2"
+                  >
+                    {{ item?.jumlahracikan }}
+                  </div>
+                  <div
+                    class="col-2 text-right"
+                  >
+                    {{ item?.aturan }}
+                  </div>
+                  <div
+                    class="col-3 text-right"
+                  >
+                    {{ formatDouble(item?.harga) }}
+                  </div>
+                  <div
+                    class="col text-right"
+                  >
+                    {{ item?.keterangan }}
+                  </div>
+                </div>
+              </q-item-section>
+            </template>
+
+            <q-item
+              v-for="(obat, j) in item?.rincian"
+              :key="j"
+            >
+              <!-- {{ j }} {{ obat }} -->
+              <q-item-section style="width: 50%;">
+                <div class="row">
+                  {{ obat?.mobat?.nama_obat }}
+                </div>
+                <div class="row text-italic f-10">
+                  {{ obat?.kdobat }}
+                </div>
+              </q-item-section>
+              <q-item-section
+                side
+                style="width:50%"
+              >
+                <div class="row items-center q-col-gutter-sm full-width">
+                  <div
+                    class="text-right col-2"
+                  >
+                    {{ obat?.jumlah }}
+                  </div>
+
+                  <div
+                    class="col text-right"
+                  >
+                    {{ obat?.keteranganx }}
+                  </div>
                 </div>
               </q-item-section>
             </q-item>
-          </transition-group>
-          <q-separator />
-        </q-list>
-      </q-scroll-area>
-    </q-card-section>
-  </q-card>
+          </q-expansion-item>
+        </template>
+      </div>
+      <div
+        v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.flag===''"
+        class=""
+      >
+        <app-no-data text="Belum ada Resep terkirim ke depo" />
+      </div>
+    </template>
+  </div>
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
-import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
-import { computed } from 'vue'
-const store = useAnamnesis()
-const $q = useQuasar()
-const props = defineProps({
-  pasien: {
-    type: Object,
-    default: null
-  },
-  loadingTerima: {
-    type: Boolean,
-    default: false
+import { formatDouble } from 'src/modules/formatter'
+import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/resepsemntara'
+// import { laravelEcho } from 'src/modules/newsockets'
+
+import { onMounted } from 'vue'
+const store = usePersiapanOperasiStore()
+function status(val) {
+  let balik = ' Belum ada status'
+  switch (val) {
+    case '':
+      balik = ' draft'
+      break
+    case '1':
+      balik = 'Dikirim Ke Depo'
+      break
+    case '2':
+      balik = 'Sedang dikerjakan'
+      break
+    case '3':
+      balik = 'Selesai'
+      break
+
+    default:
+      break
   }
+  return balik
+}
+function color(val) {
+  let balik = 'grey'
+  switch (val) {
+    case '':
+      balik = 'grey'
+      break
+    case '1':
+      balik = 'grey'
+      break
+    case '2':
+      balik = 'primary'
+      break
+    case '3':
+      balik = 'green'
+      break
+
+    default:
+      break
+  }
+  return balik
+}
+// function subscribedChannel() {
+//   const channel = laravelEcho.private('private.notif.depo-farmasi')
+//   channel.subscribed(() => {
+//     console.log('subscribed private.notif.depo-farmasi channel !!!')
+//   }).listen('.notif-message', (e) => {
+//     console.log('listen notif', e)
+//   })
+// }
+onMounted(() => {
+  // subscribedChannel()
 })
-
-const lists = computed(() => {
-  const arr = props.pasien?.anamnesis
-  return arr?.sort((a, b) => { return b.id - a.id })
-})
-
-function getYT(val) {
-  if (val === 1 || val === '1') {
-    return 'Ya'
-  } else if (val === 0 || val === '0') {
-    return 'Tidak'
-  } else {
-    return '-'
-  }
-}
-
-function hapusItem(id) {
-  $q.dialog({
-    dark: true,
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    // console.log('OK')
-    store.deleteData(props.pasien, id)
-  }).onCancel(() => {
-    // console.log('Cancel')
-  }).onDismiss(() => {
-    // console.log('I am triggered on both OK and Cancel')
-  })
-}
-
-function iconNyeri (anu) {
-  const val = typeof anu === 'string' ? (isNaN(parseInt(anu)) ? 0 : parseInt(anu)) : 0
-  // console.log('val nyeri', val)
-  // console.log('anu nyeri', anu)
-  let icon = 'icon-my-emoticon-excited-outline'
-  if (val < 2) {
-    icon = 'icon-my-emoticon-excited-outline'
-  } else if (val >= 2 && val < 4) {
-    icon = 'icon-my-emoticon-outline'
-  } else if (val >= 4 && val < 6) {
-    icon = 'icon-my-emoticon-neutral-outline'
-  } else if (val >= 6 && val < 8) {
-    icon = 'icon-my-emoticon-confused-outline'
-  } else if (val >= 8 && val < 10) {
-    icon = 'icon-my-emoticon-angry-outline'
-  } else if (val === 10) {
-    icon = 'icon-my-emoticon-cry-outline'
-  }
-
-  return icon
-}
 </script>

@@ -37,11 +37,11 @@ f<template>
             >
               <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
+                  class="col"
                 >
                   Jumlah
                 </div>
-                <div
+                <!-- <div
                   class="col-3 text-right"
                 >
                   Atr Pakai
@@ -50,7 +50,7 @@ f<template>
                   class="col text-right"
                 >
                   Keterangan
-                </div>
+                </div> -->
               </div>
             </q-item-section>
           </q-item>
@@ -111,6 +111,12 @@ f<template>
                     >
                       {{ scope.opt.satuankecil }}
                     </div>
+                    <div
+                      v-if="scope.opt.status_konsinyasi!==''"
+                      class="q-ml-xs text-italic f-10 text-weight-bold text-deep-purple"
+                    >
+                      ( Konsinyasi )
+                    </div>
                   </q-item>
                 </template>
                 <template #no-option>
@@ -128,11 +134,11 @@ f<template>
             >
               <div class="text-white row items-center q-col-gutter-sm full-width">
                 <div
-                  class="text-right col-2"
+                  class="text-right col"
                 >
                   <q-input
                     ref="refQty"
-                    v-model="store.form.jumlah_diminta"
+                    v-model="store.form.jumlah_minta"
                     label="Qty"
                     dense
                     :rules="[val=> parseFloat(val) >= 1 || '']"
@@ -142,9 +148,9 @@ f<template>
                     standout="bg-yellow-3"
                     outlined
                     @update:model-value="setJumlah"
-                    @keyup.enter.stop="qtyEnter"
                   />
                 </div>
+                <!--
                 <div
                   class="col-4 text-right"
                 >
@@ -181,7 +187,7 @@ f<template>
                     class="full-width"
                     @keyup.enter="ketEnter"
                   />
-                </div>
+                </div> -->
                 <div
                   class="col-shrink text-right"
                 >
@@ -487,7 +493,7 @@ import { onMounted, ref } from 'vue'
 import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/resepsemntara'
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
-import { Dialog } from 'quasar'
+// import { Dialog } from 'quasar'
 
 const props = defineProps({
   pasien: { type: Object, default: null },
@@ -497,7 +503,7 @@ const store = usePersiapanOperasiStore()
 
 const refObat = ref(null)
 const refQty = ref(null)
-const refSigna = ref(null)
+// const refSigna = ref(null)
 const refKet = ref(null)
 
 // function setTipe() {
@@ -509,7 +515,7 @@ function setPasien() {
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   // eslint-disable-next-line no-unused-vars
   const diag = temp?.length ? temp.join(', ') : '-'
-
+  store.setPasien()
   // store.setForm('noreg', val?.rs1)
   // store.setForm('norm', val?.norm)
   // store.setForm('groupsistembayar', val?.groups)
@@ -559,6 +565,7 @@ function obatSelected(val) {
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
   store.setForm('kodeobat', val?.kdobat ?? '-')
   store.setForm('kandungan', val?.kandungan ?? '-')
+  store.setForm('status_konsinyasi', val?.status_konsinyasi ?? '-')
   store.setForm('fornas', val?.fornas ?? '-')
   store.setForm('forkit', val?.forkit ?? '-')
   store.setForm('generik', val?.generik ?? '-')
@@ -584,40 +591,40 @@ function signaSelected(val) {
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
   store.setForm('jumlahdosis', parseFloat(val?.jumlah))
-  if (parseFloat(store.form.jumlah_diminta) > 0) {
-    const kons = store.form.jumlah_diminta / parseFloat(val?.jumlah)
+  if (parseFloat(store.form.jumlah_minta) > 0) {
+    const kons = store.form.jumlah_minta / parseFloat(val?.jumlah)
     store.setForm('konsumsi', kons)
   }
   // }
 }
-function signaCreateValue(val, done) {
-  signaNewVal.value = true
-  let newSigna = ''
-  if (val.includes('x')) {
-    const anu = val.split('x')
-    // console.log('anu', anu)
-    if (anu?.length) {
-      const satu = anu[0]
-      const temp = anu[1].slice(0, 4).split('')
-      const num = temp.filter(a => !isNaN(parseFloat(a)))
-      store.fromSigna.jumlah = satu * num[0] ?? 1
-      // console.log('temp', temp, num, isNaN(parseFloat(temp[0])))
-      const depan = anu[0] + ' x ' + anu[1]
-      if (anu?.length === 2) {
-        newSigna = depan
-      } else {
-        const temp = anu
-        const belakang = temp.slice(2).join(' x ')
-        // console.log('dep', temp, '--->', depan, ' -- ', belakang)
-        newSigna = depan + belakang
-      }
-    }
-  } else newSigna = val
-  store.fromSigna.signa = newSigna
-  done(store.fromSigna)
+// function signaCreateValue(val, done) {
+//   signaNewVal.value = true
+//   let newSigna = ''
+//   if (val.includes('x')) {
+//     const anu = val.split('x')
+//     // console.log('anu', anu)
+//     if (anu?.length) {
+//       const satu = anu[0]
+//       const temp = anu[1].slice(0, 4).split('')
+//       const num = temp.filter(a => !isNaN(parseFloat(a)))
+//       store.fromSigna.jumlah = satu * num[0] ?? 1
+//       // console.log('temp', temp, num, isNaN(parseFloat(temp[0])))
+//       const depan = anu[0] + ' x ' + anu[1]
+//       if (anu?.length === 2) {
+//         newSigna = depan
+//       } else {
+//         const temp = anu
+//         const belakang = temp.slice(2).join(' x ')
+//         // console.log('dep', temp, '--->', depan, ' -- ', belakang)
+//         newSigna = depan + belakang
+//       }
+//     }
+//   } else newSigna = val
+//   store.fromSigna.signa = newSigna
+//   done(store.fromSigna)
 
-  console.log('signa new val', signa.value)
-}
+//   console.log('signa new val', signa.value)
+// }
 function getFocus() {
   refJmlHarSig.value?.focus()
   refJmlHarSig.value?.select()
@@ -633,13 +640,13 @@ function simpan() {
     refKet.value.select()
   })
 }
-function signaEnter() {
-  if (!signaNewVal.value) {
-    refKet.value.focus()
-    refKet.value.select()
-    console.log('signa enter')
-  }
-}
+// function signaEnter() {
+//   if (!signaNewVal.value) {
+//     refKet.value.focus()
+//     refKet.value.select()
+//     console.log('signa enter')
+//   }
+// }
 // jumlah
 function setJumlah(val) {
   console.log('jumlah', val)
@@ -659,56 +666,57 @@ function setJumlah(val) {
   }
 }
 // eslint-disable-next-line no-unused-vars
-function qtyEnter() {
-  // if (parseFloat(store.form.jumlah_diminta) > 1)
-  refSigna.value.focus()
-  refSigna.value.showPopup()
-}
+// function qtyEnter() {
+//   // if (parseFloat(store.form.jumlah_minta) > 1)
+//   refSigna.value.focus()
+//   refSigna.value.showPopup()
+// }
 function obatValid (val) {
   return (val !== null && val !== '') || ''
 }
-function sigaValid (val) {
-  return (val !== null && val !== '') || ''
-}
+// function sigaValid (val) {
+//   return (val !== null && val !== '') || ''
+// }
 function validate() {
   if (store?.form?.kodeobat !== '') {
-    const ob = store.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
-    if (ob.length && !Object.keys(store.namaObat)?.length) store.namaObat = ob[0]
+    const ob = store?.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
+    if (ob.length && !Object?.keys(store?.namaObat)?.length) store.namaObat = ob[0]
     // console.log('non', store.nonFilteredObat)
   }
-  if (store?.form?.aturan !== '') {
-    const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
-    if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
-    // console.log('at', store.signas, sign)
-  }
+  // if (store?.form?.aturan !== '') {
+  //   const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
+  //   if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
+  //   // console.log('at', store.signas, sign)
+  // }
 
-  if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
+  if (refObat.value.validate() && refQty.value.validate()) return true
   else return false
 }
-function ketEnter() {
-  Dialog.create({
-    title: 'Konfirmasi',
-    message: 'Apakah Akan dilanjutkan untuk di simpan?',
-    ok: {
-      push: true,
-      label: 'Simpan',
-      color: 'primary',
-      'no-caps': true
-    },
-    cancel: {
-      push: true,
-      label: 'Batal',
-      color: 'dark',
-      'no-caps': true
-    }
-  })
-    .onOk(() => {
-      simpanObat()
-    })
-}
+// function ketEnter() {
+//   Dialog.create({
+//     title: 'Konfirmasi',
+//     message: 'Apakah Akan dilanjutkan untuk di simpan?',
+//     ok: {
+//       push: true,
+//       label: 'Simpan',
+//       color: 'primary',
+//       'no-caps': true
+//     },
+//     cancel: {
+//       push: true,
+//       label: 'Batal',
+//       color: 'dark',
+//       'no-caps': true
+//     }
+//   })
+//     .onOk(() => {
+//       simpanObat()
+//     })
+// }
 function simpanObat() {
+  console.log('simpan', store.form)
   if (validate()) {
-    store.setPasien()
+    store.simpanObat()
   }
 }
 onMounted(() => {
@@ -716,7 +724,7 @@ onMounted(() => {
   store.pasien = props?.pasien
   store.depo = 'ok'
   store.dpPar = 'Gd-04010103'
-  store.getSigna()
+  // store.getSigna()
   store.cariObat()
   setPasien()
   // console.log('ref Obat', refObat.value)

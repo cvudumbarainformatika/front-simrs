@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { Dialog } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
@@ -16,8 +15,9 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
     obatId: null,
     namaRacikan: false,
     form: {
+      kodeobat: '',
       keterangan: '-',
-      jumlah_diminta: 1,
+      jumlah_minta: 1,
       tiperesep: 'normal'
     },
     listPemintaanSementara: [],
@@ -42,8 +42,8 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       { label: 'PRB', value: 'prb' },
       { label: 'Iter', value: 'iter' }
     ],
-    noresep: '',
-    noreseps: [],
+    nopermintaan: '',
+    nopermintaans: [],
     // section racikan ---
     racikanOpen: false,
     racikanTambah: false,
@@ -77,17 +77,11 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
     setPasien() {
       const val = this?.pasien
       //  console.log('xxx', val)
-      // const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
-      // const diag = temp?.length ? temp.join(', ') : '-'
       this.setForm('noreg', val?.kunjunganranap?.rs1 ?? val?.kunjunganrajal?.rs1)
       this.setForm('norm', val?.kunjunganranap?.masterpasien?.rs1 ?? val?.kunjunganrajal?.masterpasien?.rs1)
       this.setForm('groupsistembayar', val?.sistembayar?.groups)
       this.setForm('sistembayar', val?.sistembayar?.rs1)
       this.setForm('dokter', val?.dokter?.kdpegsimrs)
-      // this.cariSimulasi(val?.noreg)
-      // if (this?.depo === 'rjl') this.getBillRajal(val)
-      // if (this?.depo === 'rnp') this.getBillRanap(val)
-      // if (this?.depo === 'igd') this.getBillIgd(val)
     },
     resetForm() {
       this.namaObat = null
@@ -108,8 +102,10 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       const satuanRacik = this.form?.satuan_racik ?? '-'
       // console.log('jenis resep', jenisresep)
       this.form = {
+
+        kodeobat: '',
         keterangan: '-',
-        jumlah_diminta: 1,
+        jumlah_minta: 1,
         tiperesep,
         tagihanrs,
         kodeincbg,
@@ -145,7 +141,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       const tiperesep = this.form?.tiperesep ?? 'normal'
       this.form = {
         keterangan: '-',
-        jumlah_diminta: 1,
+        jumlah_minta: 1,
         tiperesep,
         tagihanrs,
         kodeincbg,
@@ -236,11 +232,11 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       })
     },
     setNoreseps(reseps) {
-      this.noreseps = []
+      this.nopermintaans = []
       reseps?.forEach(resep => {
-        this.noreseps.unshift(resep?.noresep)
+        this.nopermintaans.unshift(resep?.nopermintaan)
       })
-      this.noreseps.unshift('BARU')
+      this.nopermintaans.unshift('BARU')
     },
     setResep(val) {
       this.setForm('noresep', '')
@@ -303,7 +299,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         this.dpPar = depo[0]?.value
       } else return notifErrVue('depo tujuan tidak ditemukan')
       const param = {
-        groups: this?.pasien?.groups,
+        groups: this?.pasien?.sistembayar?.groups,
         kdruang: this.dpPar,
         q: val,
         tiperesep: this.form.tiperesep
@@ -312,7 +308,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       this.loadingObat = true
       const params = { params: param }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
+        api.get('v1/simrs/penunjang/farmasinew/obatoperasi/get-obat-persiapan', params)
           .then(resp => {
             this.loadingObat = false
             this.nonFilteredObat = resp.data?.dataobat
@@ -328,102 +324,33 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       })
       // }
     },
-    async getSigna() {
-      this.loadingSigna = true
-      await api.get('v1/simrs/farmasinew/depo/get-signa')
-        .then(resp => {
-          this.loadingSigna = false
-          console.log('signa', resp?.data)
-          this.signas = resp?.data
-        })
-        .catch(() => { this.loadingSigna = false })
-    },
-    seveSigna() {
-      this.loadingSaveSigna = true
-      return new Promise(resolve => {
-        api.post('v1/simrs/master/signa/store-signa', this.fromSigna)
-          .then(resp => {
-            this.loadingSaveSigna = false
-            console.log('resp save signa', resp)
-            notifSuccess(resp)
-            this.fromSigna = { signa: '', jumlah: 1 }
-            this.signas.push(resp?.data?.data)
-            resolve(resp.data)
-          })
-          .catch(() => {
-            this.loadingSaveSigna = false
-          })
-      })
-    },
-    getBillRajal(val) {
-      this.setForm('kdruangan', val?.kodepoli)
-      const kunjRajal = useKasirRajalListKunjunganStore()
-      const param = { noreg: val?.noreg }
-      kunjRajal.getBill(param).then(resp => {
-        this.setForm('tagihanrs', resp?.data?.totalall)
-        console.log('bill', resp?.data)
-        // console.log('form', this.form)
-      })
-    },
-    getBillRanap(val) {
-      this.setForm('kdruangan', val?.kdruangan)
-      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
-    },
-    getBillIgd(val) {
-      this.setForm('kdruangan', val?.kodepoli)
-      if (!!this.form.dokter && !this.dokters.length) this.cariDokter(this.form.dokter)
-    },
-    cariSimulasi(val) {
-      this.setForm('kodeincbg', '-')
-      this.setForm('uraianinacbg', '-')
-      this.setForm('tarifina', 0)
-      // this.loadingSimulasi = true
-      // const param = {
-      //   params: { noreg: val }
-      // }
-      // return new Promise(resolve => {
-      //   api.get('v1/simrs/pelayanan/carisimulasi', param)
-      //     .then(resp => {
-      //       this.loadingSimulasi = false
-      //       console.log('cri simulasi', resp)
-      //       const tarif = resp?.data?.response?.cbg?.base_tariff ?? (resp?.data?.response?.cbg?.tariff ?? 0)
-      //       this.setForm('kodeincbg', resp?.data?.response?.cbg?.code ?? '-')
-      //       this.setForm('uraianinacbg', resp?.data?.response?.cbg?.description ?? '-')
-      //       this.setForm('tarifina', tarif ?? '-')
-
-      //       resolve(resp)
-      //     })
-      //     .catch(() => {
-      //       this.loadingSimulasi = false
-      //     })
-      // })
-    },
     simpanObat(payload) {
       this.loading = true
-      console.log('xxxxxxxxxxxxx')
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-permintaan', this.form)
           .then(resp => {
+            console.log('simpan obat', resp.data)
             this.loading = false
             if (resp.status === 202) {
               this.openDialog(resp?.data)
             } else {
               notifSuccess(resp)
-              if (!this.form.noresep || this.form.noresep === '') {
-                this.noreseps.push(resp?.data?.nota)
-                this.noresep = resp?.data?.nota
+              if (!this.form.nopermintaan || this.form.nopermintaan === '') {
+                this.nopermintaans.push(resp?.data?.nota)
+                this.nopermintaan = resp?.data?.nota
               }
               this.resetForm()
-              this.setForm('noresep', resp?.data?.nota)
-              if (resp?.data?.rinci !== 0) {
-                this.setList(resp?.data?.rinci)
-              }
-              if (resp?.data?.rincidtd !== 0) {
-                this.setListRacikan(resp?.data?.rincidtd)
-              }
-              if (resp?.data?.rincinondtd !== 0) {
-                this.setListRacikan(resp?.data?.rincinondtd)
-              }
+              this.setForm('nopermintaan', resp?.data?.nota)
+
+              // if (resp?.data?.rinci !== 0) {
+              //   this.setList(resp?.data?.rinci)
+              // }
+              // if (resp?.data?.rincidtd !== 0) {
+              //   this.setListRacikan(resp?.data?.rincidtd)
+              // }
+              // if (resp?.data?.rincinondtd !== 0) {
+              //   this.setListRacikan(resp?.data?.rincinondtd)
+              // }
 
               this.setForm('lanjuTr', '')
               resolve(resp)
