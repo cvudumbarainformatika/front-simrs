@@ -32,7 +32,7 @@
           square
           class="f-10"
           :color="color(store.listSudah?.flag)"
-          text-color="white"
+          :text-color="store.listSudah?.flag==='2'?'':'white'"
         >
           {{ status(store.listSudah?.flag) }}
         </q-chip>
@@ -103,9 +103,12 @@ function status(val) {
       balik = 'Dikirim Ke Depo'
       break
     case '2':
-      balik = 'Sedang dikerjakan'
+      balik = 'Sudah didistribusikan oleh depo'
       break
     case '3':
+      balik = 'Sudah dibuatkan resep'
+      break
+    case '4':
       balik = 'Selesai'
       break
 
@@ -124,9 +127,12 @@ function color(val) {
       balik = 'grey'
       break
     case '2':
-      balik = 'primary'
+      balik = 'yellow'
       break
     case '3':
+      balik = 'orange'
+      break
+    case '4':
       balik = 'green'
       break
 
