@@ -456,7 +456,7 @@ const props = defineProps({
 })
 
 function getKesadaran(val) {
-  const temp = store.optionsTingkatkesadaran.filter(a => a.value === val)
+  const temp = store.optionsTingkatkesadaran.filter(a => a.value === parseInt(val))
   if (temp.length) {
     return temp[0].label
   } else {

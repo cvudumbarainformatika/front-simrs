@@ -1,7 +1,7 @@
 <template>
   <div class="column fit bg-orange">
     <div class="col-auto bg-dark text-white">
-      <div class="q-pa-sm text-weight-bold f-14">
+      <div class="q-pa-md text-weight-bold f-12">
         FORM PRA - ANESTESIA (Diisi oleh Dokter)
       </div>
     </div>
@@ -19,28 +19,12 @@
                 v-for="(item, i) in store.masterKajian"
                 :key="i"
               >
-                <!-- <div class="row">
-                  <div class="col-7">
-                    {{ item.kajian }}
-                  </div>
-                  <div class="col-5">
-                    <q-option-group
-                      v-model="item.model"
-                      :options="options"
-                      color="primary"
-                      type="checkbox"
-                      inline
-                      dense
-                      size="sm"
-                    />
-                  </div>
-                </div> -->
                 <q-checkbox
                   v-model="item.check"
                   size="xs"
                   :label="item.kajian"
                 />
-                <q-separator class="q-my-xs" />
+                <q-separator />
               </template>
 
               <!-- mulai -->
@@ -51,28 +35,12 @@
                 v-for="(item, i) in store.masterKajian2"
                 :key="i"
               >
-                <!-- <div class="row">
-                  <div class="col-7">
-                    {{ item.kajian }}
-                  </div>
-                  <div class="col-5">
-                    <q-option-group
-                      v-model="item.model"
-                      :options="options"
-                      color="primary"
-                      type="checkbox"
-                      inline
-                      dense
-                      size="sm"
-                    />
-                  </div>
-                </div> -->
                 <q-checkbox
                   v-model="item.check"
                   size="xs"
                   :label="item.kajian"
                 />
-                <q-separator class="q-my-xs" />
+                <q-separator />
               </template>
             </div>
           </div>
@@ -98,26 +66,6 @@
             KEADAAN UMUM
           </div>
           <q-separator class="q-mb-md q-mt-xs" />
-          <!-- <template
-            v-for="(item, n) in store.masterKeadaanUmum"
-            :key="n"
-          >
-            <div class="row full-width">
-              <div class="col-4">
-                {{ item.nama }}
-              </div>
-              <div class="col q-ml-sm q-mb-xs">
-                <q-input
-                  v-model="item.model"
-                  dense
-                  outlined
-                  standout="bg-yellow-3"
-                  class="full-width"
-                  :label="item.nama"
-                />
-              </div>
-            </div>
-          </template> -->
           <div class="row q-col-gutter-md">
             <div class="col-6 q-gutter-xs">
               <q-input
@@ -187,9 +135,6 @@
                 :key="n"
               >
                 <div class="row full-width">
-                  <!-- <div class="col-4">
-                    {{ item.nama }}
-                  </div> -->
                   <div class="col q-ml-sm q-mb-xs">
                     <q-input
                       v-model="item.model"
@@ -210,9 +155,6 @@
                 :key="n"
               >
                 <div class="row full-width">
-                  <!-- <div class="col-4">
-                    {{ item.nama }}
-                  </div> -->
                   <div class="col q-ml-sm q-mb-xs">
                     <q-input
                       v-model="item.model"
@@ -370,7 +312,9 @@
         <div class="flex justify-end q-pa-md">
           <q-btn
             color="primary"
-            @click="store.saveData"
+            :loading="store.waiting"
+            :disable="store.waiting"
+            @click="saveData"
           >
             Simpan Pra Anestesia
           </q-btn>
@@ -386,7 +330,12 @@ import { usePraAnastesiStore } from 'src/stores/simrs/pelayanan/poli/praanastesi
 import { ref, onMounted } from 'vue'
 
 const store = usePraAnastesiStore()
-
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
 onMounted(() => {
   store.getMaster()
 })
@@ -395,6 +344,13 @@ function addPenyulit() {
   store.setPenyulits().then(() => {
     store.penyulit = null
   })
+}
+
+function saveData() {
+  store.saveData(props.pasien)
+    .then(() => {
+      store.initForm()
+    })
 }
 
 // const options = ref([

@@ -123,7 +123,7 @@ import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMasterPemeriksaanFisik } from 'src/stores/simrs/master/poliklinik/pemeriksaanfisik'
-import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef, watchEffect } from 'vue'
 import { useAnamnesis } from 'src/stores/simrs/pelayanan/poli/anamnesis'
 import { useQuasar } from 'quasar'
 
@@ -207,9 +207,7 @@ const inacbg = useInacbgPoli()
 onMounted(() => {
   // console.log('pasien', props?.pasien)
   menu.value = menus.value[0]
-  inacbg.getDataIna(props.pasien)
-  inacbg.setTotalTindakan(props.pasien)
-  inacbg.setTotalLaborat(props.pasien)
+
   master.getData()
   fisik.initReset(false, props?.pasien)
 })
@@ -281,6 +279,15 @@ function harapSimpanPerubahanPemeriksaanFisik(val) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+
+watchEffect(() => {
+  // console.log('watch effect', store.loadingTerima)
+  if (store.loadingTerima === false) {
+    inacbg.getDataIna(props.pasien)
+    inacbg.setTotalTindakan(props.pasien)
+    inacbg.setTotalLaborat(props.pasien)
+  }
+})
 </script>
 
 <style lang="scss">
