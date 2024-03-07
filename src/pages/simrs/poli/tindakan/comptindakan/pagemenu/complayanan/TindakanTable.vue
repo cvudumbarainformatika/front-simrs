@@ -74,7 +74,7 @@
                       lines="2"
                       class="f-10 text-italic"
                     >
-                      <span class="">oleh</span> : <span class="">{{ item?.pegawai?.nama }} </span>
+                      <span class="">oleh</span> : <span class="">{{ setPelaksana(item) }} </span>
                     </q-item-label>
                   </q-item-section>
 
@@ -235,5 +235,23 @@ function hapusDokumen(id) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function setPelaksana(item) {
+  const nota = item?.rs2
+  const notaDariSimrsBaru = nota.includes('RJ')
+
+  // INI JIKA DARI SIMRS LAma
+  // console.log('pelaksana', item)
+  let pelaksana = null
+  if (!notaDariSimrsBaru) {
+    pelaksana = item?.pelaksanalamasimrs?.nama
+  } else {
+    // INI DARI SIMRS BARU
+    pelaksana = item?.pegawai?.nama
+  }
+  return pelaksana
+
+  // const pelaksanaSimrsLama = item.
 }
 </script>

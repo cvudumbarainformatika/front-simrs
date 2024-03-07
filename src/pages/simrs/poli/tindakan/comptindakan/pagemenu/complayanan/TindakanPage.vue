@@ -49,4 +49,5 @@ const props = defineProps({
     default: null
   }
 })
+// console.log('tindakan', props.pasien)
 </script>
