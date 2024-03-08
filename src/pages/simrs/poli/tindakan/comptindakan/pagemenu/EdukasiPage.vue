@@ -6,7 +6,7 @@
     <div class="column full-height">
       <div class="col-auto bg-red">
         <q-tabs
-          v-model="menu"
+          v-model="tab"
           no-caps
           inline-label
           class="bg-primary text-white shadow-2"
@@ -27,17 +27,20 @@
         class="col full-height"
         style="overflow: hidden;"
       >
+        <!-- {{ tab }} {{ menu }} -->
         <q-tab-panels
           v-model="menu"
           animated
           class="full-height"
         >
           <q-tab-panel
-            name="edukasi"
+            v-for="(item, i) in tabs"
+            :key="i"
+            :name="item.menu"
             class="full-height q-pa-none"
           >
             <component
-              :is="tab.comp"
+              :is="item.comp"
               :key="pasien"
               :pasien="props.pasien"
             />
@@ -50,7 +53,7 @@
 
 <script setup>
 import { useEdukasiPoliStore } from 'src/stores/simrs/pelayanan/poli/edukasi'
-import { ref, shallowRef, defineAsyncComponent, onMounted } from 'vue'
+import { ref, shallowRef, defineAsyncComponent, onMounted, watchEffect } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = useEdukasiPoliStore()
@@ -75,12 +78,18 @@ const tabs = ref([
   }
 ])
 
-const tab = ref(tabs.value[0])
+const tab = ref('edukasi')
 const menu = ref(tabs.value[0].menu)
 
 onMounted(() => {
-  tab.value = tabs.value[0]
-  menu.value = tabs.value[0]?.menu
+  console.log('edukasi Page')
+})
+
+watchEffect(() => {
+  const index = tabs.value.findIndex(x => x.menu === tab.value)
+  menu.value = tabs.value[index].menu
+  console.log('index', index)
+  // menu.value = tabs.value['menu']
 })
 
 </script>
