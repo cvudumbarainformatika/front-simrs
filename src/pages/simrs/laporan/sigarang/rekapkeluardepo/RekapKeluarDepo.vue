@@ -44,8 +44,23 @@
       </div>
     </div>
 
-    <div class="row justify-center f-16 text-weight-bold q-my-sm">
+    <div
+      v-if="!store.params.ruang"
+      class="row justify-center f-16 text-weight-bold q-my-sm"
+    >
       Laporan Rekap Pengeluaran Depo
+    </div>
+    <div
+      v-if="store.params.ruang"
+      class="row justify-center f-14 text-weight-bold q-my-sm"
+    >
+      Laporan Rekap Per Ruangan
+    </div>
+    <div
+      v-if="store.params.ruang"
+      class="row justify-center f-16 text-weight-bold q-my-sm text-italic"
+    >
+      {{ ruangan }}
     </div>
     <div class="row justify-center f-12 text-weight-bold q-my-sm">
       Tahun {{ store.params.year }}
@@ -79,7 +94,7 @@
       </div> -->
     </div>
     <div class="row q-col-gutter-sm q-my-sm">
-      <div class="col-2">
+      <div :class="store.params.kode_ruang!=='Gd-02010102'?'col-2':'col-4'">
         <app-autocomplete
           v-model="store.params.kode_ruang"
           label="pilih Depo"
@@ -92,7 +107,10 @@
           :loading="store.loading"
         />
       </div>
-      <div class="col-2">
+      <div
+        v-if="store.params.kode_ruang!=='Gd-02010102'"
+        class="col-2"
+      >
         <app-autocomplete
           v-model="store.params.ruang"
           label="pilih Ruangan"
@@ -174,8 +192,23 @@
           </div>
         </div>
 
-        <div class="row justify-center f-16 text-weight-bold q-my-sm">
+        <div
+          v-if="!store.params.ruang"
+          class="row justify-center f-16 text-weight-bold q-my-sm"
+        >
           Laporan Rekap Pengeluaran Depo
+        </div>
+        <div
+          v-if="store.params.ruang"
+          class="row justify-center f-14 text-weight-bold q-my-sm"
+        >
+          Laporan Rekap Per Ruangan
+        </div>
+        <div
+          v-if="store.params.ruang"
+          class="row justify-center f-16 text-weight-bold q-my-sm text-italic"
+        >
+          {{ ruangan }}
         </div>
         <div class="row justify-center f-12 text-weight-bold q-my-sm">
           Tahun {{ store.params.year }}
@@ -360,11 +393,15 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { useLaporanSigarangRekapPengeluaranStore } from 'src/stores/simrs/laporan/sigarang/rekapkeluardepo/rekap'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const store = useLaporanSigarangRekapPengeluaranStore()
 store.getInitialData()
-
+const ruangan = computed(() => {
+  const temp = store.ruangs.filter(a => a.kode === store.params.ruang)
+  console.log('temp', temp)
+  return temp.length ? temp[0]?.uraian : '-'
+})
 // function setDari(val) {
 //   store.setParams('from', val)
 // }
