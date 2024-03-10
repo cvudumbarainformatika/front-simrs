@@ -52,8 +52,9 @@
         <app-no-data v-if="!store.belums?.length" />
       </div>
       <div class="col-4 full-height q-pt-xs bg-grey-2 q-pb-sm">
-        <SudahPage v-if="store.sudahs?.length" />
-        <app-no-data v-if="!store.sudahs?.length" />
+        <!-- <SudahPage v-if="store.sudahs?.length" /> -->
+        <!-- <app-no-data v-if="!store.sudahs?.length" /> -->
+        <SudahPage />
       </div>
     </div>
   </q-scroll-area>

@@ -73,7 +73,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       const noreseps = []
       if (this.belums?.length) {
         this.belums?.forEach(item => {
-          if (item?.rinci?.length) {
+          if (item?.rinci?.length && item?.flag === '2') {
             item?.rinci?.forEach(rin => {
               rin.checked = false
               if (rin?.noresep === '') this.rincBelId.push(rin?.id)
@@ -87,8 +87,14 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
         })
       }
       this.noreseps = filterDuplicateArrays(noreseps)
+      if (!this.sudahs?.length) {
+        this.noresep = 'BARU'
+        this.setForm('noresep', '')
+      } else {
+        this.noresep = this.noreseps[0] ?? 'BARU'
+      }
       this.noreseps.unshift('BARU')
-      if (!!this.noresep && this.noresep !== 'BARU') this.setResep(this.noresep)
+      this.setResep(this.noresep)
       // console.log('belum', this.rincBelId, 'sudah', this.rincSudId)
     },
     async getData(val) {
@@ -113,6 +119,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
           this.loadingSimpan = false
           notifSuccess(resp)
           if (resp?.data.noresep) this.setForm('noresep', resp?.data.noresep)
+          this.setForm('obats', [])
           this.getData(true)
           console.log('Simpan resep', resp?.data)
         })
@@ -140,6 +147,8 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/batal-obat-resep', item)
         .then(resp => {
           item.loading = false
+          this.filteredSudahs = []
+          this.noresep = 'BARU'
           this.loadingHapus = false
           notifSuccess(resp)
           this.getData(true)
