@@ -167,6 +167,123 @@
             </div>
           </q-card-section>
           <q-separator style="margin-top: -10px;" />
+          <q-card-section style="margin-top: -10px;">
+            <div class="row">
+              <div class="col-6">
+                <div class="text-weight-bold">
+                  Teknik Khsusus
+                </div>
+                <table class="column full-width">
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        v-for="(tk, x) in item?.teknikKhusus"
+                        :key="x"
+                        class="flex"
+                      >
+                        <div> <b>{{ tk.nama }}</b> </div>
+                        <div> : {{ tk.keterangan }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-6">
+                <div class="text-weight-bold">
+                  Teknik Anestesia
+                </div>
+                <table class="column full-width">
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        v-for="(ta, x) in item?.teknikAnestesia"
+                        :key="x"
+                        class="flex"
+                      >
+                        <div> <b>{{ ta.nama }}</b> </div>
+                        <div> : {{ ta.keterangan }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator style="margin-top: -10px;" />
+          <q-card-section style="margin-top: -10px;">
+            <div class="row">
+              <div class="col-12">
+                <div class="text-weight-bold">
+                  Perawatan Pasca Anestesia
+                </div>
+                <table class="column full-width">
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        v-for="(pa, x) in item?.pascaAnastesi"
+                        :key="x"
+                        class="flex"
+                      >
+                        <div> <b>{{ pa.nama }}</b> </div>
+                        <div> : {{ pa.keterangan }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </q-card-section>
+          <q-card-section style="margin-top: -20px;">
+            <div class="row">
+              <div class="col-12">
+                <div class="text-weight-bold">
+                  Persiapan Pasca Anestesia
+                </div>
+                <table class="column full-width">
+                  <tr class="column full-width">
+                    <td>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Puasa Mulai Jam</b> </div>
+                        <div> : {{ item.puasaMulaiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.puasaMulaiTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Pre Medikasi Jam</b> </div>
+                        <div> : {{ item.preMedikasiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.preMedikasiTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Trans ke Km Bedah  Jam</b> </div>
+                        <div> : {{ item.transKeKamarBedahJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.transKeKamarBedahTgl }}</div>
+                      </div>
+                      <div
+                        class="flex"
+                      >
+                        <div> <b>Rencana Operasi  Jam</b> </div>
+                        <div> : {{ item.rencanaOperasiJam }}</div>
+                        <div> <b>Tanggal</b> : {{ item.rencanaOperasiTgl }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator style="margin-top: -10px;" />
+          <q-card-section>
+            <div>Catatan Persiapan Pra Anestesia : </div>
+            <div>{{ item?.catatanPersiapanPraAnastesi }}</div>
+            <div>Tindak Lanjut : </div>
+            <div>{{ item?.kolomTindakLanjut }}</div>
+          </q-card-section>
+          <q-separator style="margin-top: -10px;" />
           <q-card-section>
             <div class="flex q-gutter-sm justify-end">
               <q-btn

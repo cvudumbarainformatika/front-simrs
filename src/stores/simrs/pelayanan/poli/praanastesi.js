@@ -1,5 +1,6 @@
 /* eslint-disable no-return-assign */
 import { defineStore } from 'pinia'
+// import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 // import { usePengunjungPoliStore } from './pengunjung'
 import { notifErr, notifSuccess } from 'src/modules/utils'
@@ -13,6 +14,14 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
     masterLab: [],
     masterLab2: [],
     asaClass: [],
+    // baru
+    teknikAnestesia: [],
+    teknikKhusus: [],
+    pascaAnastesi: [],
+    rawatKhusus: [],
+    modelRawatKhusus: [],
+    regionals: [],
+    regional: [],
     // keteranganKajianSistem: null,
     // keteranganLaborat: null,
     penyulit: null,
@@ -28,7 +37,27 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       keteranganLaborat: null,
       catatan: null,
       perencanaan: null,
-      penyulitAnastesi: []
+      penyulitAnastesi: [],
+      // baru
+      keteranganLainlainRawatKhusus: null,
+      // mulaiPuasaTgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      // mulaiPuasajam: date.formatDate(Date.now(), 'HH:mm'),
+      // preMedikasiTgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      // preMedikasiJam: date.formatDate(Date.now(), 'HH:mm'),
+      // transKeKamarBedahTgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      // transKeKamarBedahJam: date.formatDate(Date.now(), 'HH:mm'),
+      // rencanaOperasiTgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      // rencanaOperasiJam: date.formatDate(Date.now(), 'HH:mm'),
+      mulaiPuasaTgl: null,
+      mulaiPuasajam: null,
+      preMedikasiTgl: null,
+      preMedikasiJam: null,
+      transKeKamarBedahTgl: null,
+      transKeKamarBedahJam: null,
+      rencanaOperasiTgl: null,
+      rencanaOperasiJam: null,
+      catatanPersiapanPraAnastesi: null,
+      kolomTindakLanjut: null
     },
     resultPraAnastesi: [],
     waiting: false
@@ -86,6 +115,39 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           check: false
         }
       })
+      this.teknikAnestesia = m.filter(x => x.group === 'teknik anestesia').map(x => {
+        return {
+          nama: x.nama,
+          check: false,
+          keterangan: null
+        }
+      })
+      this.teknikKhusus = m.filter(x => x.group === 'teknik khusus').map(x => {
+        return {
+          nama: x.nama,
+          check: false,
+          keterangan: null
+        }
+      })
+      this.regionals = m.filter(x => x.group === 'regional').map(x => {
+        return {
+          label: x.nama,
+          value: x.nama
+        }
+      })
+      this.pascaAnastesi = m.filter(x => x.group === 'pasca anestesia').map(x => {
+        return {
+          nama: x.nama,
+          check: false,
+          keterangan: null
+        }
+      })
+      this.rawatKhusus = m.filter(x => x.group === 'rawat khusus').map(x => {
+        return {
+          label: x.nama,
+          value: x.nama
+        }
+      })
     },
     setPenyulits() {
       return new Promise((resolve, reject) => {
@@ -110,6 +172,18 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       this.form.catatan = item ? item?.catatan : null
       this.form.perencanaan = item ? item?.perencanaan : null
       this.form.penyulitAnastesi = []
+      //  baru
+      this.form.mulaiPuasaTgl = item ? item?.mulaiPuasaTgl : null
+      this.form.mulaiPuasajam = item ? item.mulaiPuasaJam : null
+      this.form.preMedikasiTgl = item ? item.preMedikasiTgl : null
+      this.form.preMedikasiJam = item ? item.preMedikasiJam : null
+      this.form.transKeKamarBedahTgl = item ? item.transKeKamarBedahTgl : null
+      this.form.transKeKamarBedahJam = item ? item.transKeKamarBedahJam : null
+      this.form.rencanaOperasiTgl = item ? item.rencanaOperasiTgl : null
+      this.form.rencanaOperasiJam = item ? item.rencanaOperasiJam : null
+      this.form.catatanPersiapanPraAnastesi = item ? item.catatanPersiapanPraAnastesi : null
+      this.form.kolomTindakLanjut = item ? item.kolomTindakLanjut : null
+
       if (!item || item === undefined || item === 'undefined') {
         const m = [...this.master]
         this.reducerMaster(m)
@@ -129,13 +203,58 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
           this.asaClass.filter(x => x.nama === el).map(x => x.check = true)
         }
         this.form.penyulitAnastesi = item.penyulitAnastesi
+
+        // baru
+        for (let i = 0; i < item.teknikAnestesia.length; i++) {
+          const el = item.teknikAnestesia[i]
+          // eslint-disable-next-line array-callback-return
+          this.teknikAnestesia.filter(x => x.nama === el.nama).map(x => {
+            x.nama = el.nama
+            x.check = el.check
+            x.keterangan = el.keterangan
+          })
+
+          if (el.nama === 'Regional' && el.keterangan !== null) {
+            const ket = el.keterangan
+            const arr = ket.split('||')
+            this.regional = arr
+          }
+        }
+        for (let i = 0; i < item.teknikKhusus.length; i++) {
+          const el = item.teknikKhusus[i]
+          // eslint-disable-next-line array-callback-return
+          this.teknikKhusus.filter(x => x.nama === el.nama).map(x => {
+            x.nama = el.nama
+            x.check = el.check
+            x.keterangan = el.keterangan
+          })
+        }
+        for (let i = 0; i < item.pascaAnastesi.length; i++) {
+          const el = item.pascaAnastesi[i]
+          // eslint-disable-next-line array-callback-return
+          this.pascaAnastesi.filter(x => x.nama === el.nama).map(x => {
+            x.nama = el.nama
+            x.check = el.check
+            x.keterangan = el.keterangan
+          })
+          if (el.nama === 'Rawat Khusus' && el.keterangan !== null) {
+            const ket = el.keterangan
+            const arr = ket.split('||')
+            this.modelRawatKhusus = arr
+          }
+          this.form.keteranganLainlainRawatKhusus = item.keteranganLainlainRawatKhusus
+        }
         this.form.id = item.id
+
+        console.log('oooi', this.regional)
       }
     },
     saveData(pasien) {
       this.waiting = true
       return new Promise((resolve, reject) => {
-        // if (!this.form.id || this.form.id === null) {
+        this.form.noreg = pasien?.noreg
+        this.form.norm = pasien?.norm
+
         const kaj1 = this.masterKajian.filter(x => x.check)?.map(x => x.kajian)
         const kaj2 = this.masterKajian2.filter(x => x.check)?.map(x => x.kajian)
         const kajianSistem = kaj1.concat(kaj2)
@@ -148,9 +267,10 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
         this.form.kajianSistem = kajianSistem
         this.form.laboratorium = laboratorium
         this.form.asaClasification = asa
-        this.form.noreg = pasien?.noreg
-        this.form.norm = pasien?.norm
-        // }
+        // baru
+        this.form.teknikAnestesia = this.teknikAnestesia.filter(x => x.check) ?? []
+        this.form.teknikKhusus = this.teknikKhusus.filter(x => x.check) ?? []
+        this.form.pascaAnastesi = this.pascaAnastesi.filter(x => x.check) ?? []
 
         console.log('form', this.form)
 

@@ -300,7 +300,247 @@
             />
           </div>
           <q-separator class="q-my-xs" />
+
+          <div class="row q-col-gutter-md">
+            <div class="col-6">
+              <div class="text-weight-bold f-14">
+                TEKNIK KHUSUS
+              </div>
+              <q-separator class="q-my-sm" />
+              <div
+                v-for="(item, i) in store.teknikKhusus"
+                :key="i"
+              >
+                <q-checkbox
+                  v-model="item.check"
+                  :label="item.nama"
+                  size="sm"
+                  dense
+                  class="q-py-xs"
+                />
+                <q-input
+                  v-if="item.check"
+                  v-model="item.keterangan"
+                  dense
+                  autofocus
+                  outlined
+                  standout="bg-yellow-3"
+                  placeholder="Keterangan Jika Ada"
+                />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="text-weight-bold f-14">
+                TEKNIK ANESTESIA
+              </div>
+              <q-separator class="q-my-sm" />
+              <div
+                v-for="(item, i) in store.teknikAnestesia"
+                :key="i"
+              >
+                <q-checkbox
+                  v-model="item.check"
+                  :label="item.nama"
+                  size="sm"
+                  dense
+                  class="q-py-xs"
+                />
+                <div
+                  v-if="item.check"
+                >
+                  <q-input
+                    v-show="item.nama !== 'Regional'"
+                    v-model="item.keterangan"
+                    dense
+                    autofocus
+                    outlined
+                    standout="bg-yellow-3"
+                    placeholder="Keterangan Jika Ada"
+                  />
+                  <div
+                    v-show="item.nama === 'Regional'"
+                    class="q-pl-md q-py-xs rounded-borders"
+                    style="border: 1px solid grey;"
+                  >
+                    <q-option-group
+                      v-model="store.regional"
+                      :options="store.regionals"
+                      color="primary"
+                      inline
+                      size="xs"
+                      type="checkbox"
+                      dense
+                      @update:model-value="(val)=> setRegional(item, val)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- perawatan pasca anestesia -->
+          <q-separator class="q-my-xs" />
+          <div class="text-weight-bold f-14">
+            PERAWATAN PASCA ANESTESIA
+          </div>
+          <q-separator class="q-my-sm" />
+          <div
+            v-for="(item, i) in store.pascaAnastesi"
+            :key="i"
+          >
+            <q-checkbox
+              v-model="item.check"
+              :label="item.nama"
+              size="sm"
+              dense
+              class="q-py-xs"
+            />
+            <div
+              v-if="item?.check && item?.nama==='Rawat Khusus'"
+              class="q-pl-md q-py-xs rounded-borders row items-center"
+              style="border: 1px solid grey;"
+            >
+              <q-option-group
+                v-model="store.modelRawatKhusus"
+                :options="store.rawatKhusus"
+                color="primary"
+                inline
+                size="xs"
+                type="checkbox"
+                dense
+                class="col-auto"
+                @update:model-value="(val)=> setRawatKhusus(item, val)"
+              />
+              <q-input
+                v-if="rawatkhususLainlain"
+                v-model="store.form.keteranganLainlainRawatKhusus"
+                dense
+                autofocus
+                outlined
+                standout="bg-yellow-3"
+                placeholder="Keterangan Lain-lain Jika Ada"
+                class="col q-ml-sm"
+              />
+            </div>
+            <q-input
+              v-else-if="item?.check && item?.nama==='APS'"
+              v-model="item.keterangan"
+              dense
+              autofocus
+              outlined
+              standout="bg-yellow-3"
+              placeholder="Keterangan Lain-lain Jika Ada"
+            />
+          </div>
+
+          <!-- persiapan pra anestesia -->
+          <q-separator class="q-my-xs" />
+          <div class="text-weight-bold f-14">
+            PERSIAPAN PRA ANESTESIA
+          </div>
+          <q-separator class="q-my-sm" />
+
+          <div class="flex q-gutter-sm items-center q-mb-xs">
+            <div>Puasa Mulai : </div>
+            <app-input-date
+              :model="store.form.mulaiPuasajam"
+              label="Jam"
+              outlined
+              :type-date="false"
+              clearable
+              valid
+              @set-model="val=>store.form.mulaiPuasajam=val"
+            />
+            <app-input-date
+              :model="store.form.mulaiPuasaTgl"
+              label="Tanggal"
+              clearable
+              valid
+              outlined
+              @set-model="val=>store.form.mulaiPuasaTgl=val"
+            />
+          </div>
+          <div class="flex q-gutter-sm items-center q-mb-xs">
+            <div>Pre Nedikasi : </div>
+            <app-input-date
+              :model="store.form.preMedikasiJam"
+              label="Jam"
+              clearable
+              valid
+              outlined
+              :type-date="false"
+              @set-model="val=>store.form.preMedikasiJam=val"
+            />
+            <app-input-date
+              :model="store.form.preMedikasiTgl"
+              label="Tanggal"
+              clearable
+              valid
+              outlined
+              @set-model="val=>store.form.preMedikasiTgl=val"
+            />
+          </div>
+          <div class="flex q-gutter-sm items-center q-mb-xs">
+            <div>Transportasi Ke Kamar Bedah : </div>
+            <app-input-date
+              :model="store.form.transKeKamarBedahJam"
+              label="Jam"
+              clearable
+              valid
+              outlined
+              :type-date="false"
+              @set-model="val=>store.form.transKeKamarBedahJam=val"
+            />
+            <app-input-date
+              :model="store.form.transKeKamarBedahTgl"
+              label="Tanggal"
+              clearable
+              valid
+              outlined
+              @set-model="val=>store.form.transKeKamarBedahTgl=val"
+            />
+          </div>
+          <div class="flex q-gutter-sm items-center q-mb-xs">
+            <div>Rencana Operasi : </div>
+            <app-input-date
+              :model="store.form.rencanaOperasiJam"
+              label="Jam"
+              clearable
+              valid
+              outlined
+              :type-date="false"
+              @set-model="val=>store.form.rencanaOperasiJam=val"
+            />
+            <app-input-date
+              :model="store.form.rencanaOperasiTgl"
+              label="Tanggal"
+              clearable
+              valid
+              outlined
+              @set-model="val=>store.form.rencanaOperasiTgl=val"
+            />
+          </div>
+          <q-input
+            v-model="store.form.catatanPersiapanPraAnastesi"
+            label="CATATAN PERSIAPAN PRA ANESTESIA"
+            type="textarea"
+            outlined
+            standout="bg-yellow-3"
+            rows="2"
+            class="q-mb-xs"
+          />
+          <q-input
+            v-model="store.form.kolomTindakLanjut"
+            label="TINDAK LANJUT"
+            type="textarea"
+            outlined
+            standout="bg-yellow-3"
+            rows="2"
+          />
+
+          <!-- ini q-pa-md akhir -->
         </div>
+
         <div style="margin-bottom: 200px;" />
       </q-scroll-area>
 
@@ -327,9 +567,15 @@
 <script setup>
 import { usePraAnastesiStore } from 'src/stores/simrs/pelayanan/poli/praanastesi'
 // eslint-disable-next-line no-unused-vars
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 
 const store = usePraAnastesiStore()
+
+// const regional = ref([])
+// eslint-disable-next-line no-unused-vars
+const rawatkhusus = ref([])
+const rawatkhususLainlain = ref(false)
+
 const props = defineProps({
   pasien: {
     type: Object,
@@ -345,6 +591,25 @@ function addPenyulit() {
     store.penyulit = null
   })
 }
+function setRegional(item, val) {
+  const str = val.join('||')
+  item.keterangan = str
+}
+function setRawatKhusus(item, val) {
+  const str = val.join('||')
+  item.keterangan = str
+  if (val.includes('Lain-lain')) {
+    rawatkhususLainlain.value = true
+  } else {
+    rawatkhususLainlain.value = false
+  }
+}
+
+watchEffect(() => {
+  if (store.form.keteranganLainlainRawatKhusus !== null) {
+    rawatkhususLainlain.value = true
+  }
+})
 
 function saveData() {
   store.saveData(props.pasien)
@@ -353,99 +618,6 @@ function saveData() {
     })
 }
 
-// const options = ref([
-//   {
-//     label: 'Ya',
-//     value: '1'
-//   },
-//   {
-//     label: 'Tidak',
-//     value: '0'
-//   }])
-
-// const masterPraAnastesi = computed(() => store.master)
-
-// ==========================================================KAJIAN SISTEM
-// const kajianSistem = computed(() => {
-//   const arr = masterPraAnastesi.value
-//   return arr.filter(x => x.group === 'kajian sistem')?.map(x => {
-//     const obj = {
-//       kajian: x.nama,
-//       model: []
-//     }
-//     return obj
-//   })
-// })
-
-// const arr = computed(() => {
-//   const arr = kajianSistem.value
-//   return arr
-// })
-// const arr1 = computed(() => {
-//   const arr1 = arr.value
-//   return arr1.splice(0, 8)
-// })
-
-// const kajianSistem = ref([
-//   { kajian: 'Hilangnya Gigi', model: [] },
-//   { kajian: 'Masalah Mobilisasi Leher', model: [] },
-//   { kajian: 'Leher Pendek', model: [] },
-//   { kajian: 'Batuk', model: [] },
-//   { kajian: 'Sesak Nafas', model: [] },
-//   { kajian: 'Baru Saja Menderita Infeksi', model: [] },
-//   { kajian: 'Saluran Nafas Atas Sakit dada', model: [] },
-//   { kajian: 'Denyut Jantung Tidak Normal', model: [] },
-//   { kajian: 'Muntah', model: [] },
-//   { kajian: 'Pingsan', model: [] },
-//   { kajian: 'Stroke', model: [] },
-//   { kajian: 'Kejang', model: [] },
-//   { kajian: 'Sedang Hamil', model: [] },
-//   { kajian: 'Kelainan Tulang Belakang', model: [] },
-//   { kajian: 'Obesitas', model: [] }
-// ])
-// // eslint-disable-next-line no-unused-vars
-// const KeadaanUmum = ref([
-//   { nama: 'Skor Mailampati', model: '' },
-//   { nama: 'Jantung', model: '' },
-//   { nama: 'Paru-paru', model: '' },
-//   { nama: 'Abdomen', model: '' },
-//   { nama: 'Tulang Belakang', model: '' },
-//   { nama: 'Ekstremitas', model: '' },
-//   { nama: 'Neurologi', model: '' },
-//   { nama: 'Denyut Jantung Tidak Normal', model: '' }
-// ])
-// eslint-disable-next-line no-unused-vars
-// const laboratorium = ref([
-//   { nama: 'Hb/Ht', model: '', check: false },
-//   { nama: 'PT', model: '', check: false },
-//   { nama: 'Glukosa Darah', model: '', check: false },
-//   { nama: 'Tes Kehamilan', model: '', check: false },
-//   { nama: 'Kalium', model: '', check: false },
-//   { nama: 'Leukosit', model: '', check: false },
-//   { nama: 'Ureum', model: '', check: false },
-//   { nama: 'Trombosit', model: '', check: false },
-//   { nama: 'Rontgen Dada', model: '', check: false },
-//   { nama: 'EKG (40 tahun keatas)', model: '', check: false },
-//   { nama: 'Na/CI', model: '', check: false },
-//   { nama: 'Kreatinin', model: '', check: false }
-// ])
-// // eslint-disable-next-line no-unused-vars
-// const asaClass = ref([
-//   { nama: 'ASA 1 Pasien normal yang sehat', model: '', check: false },
-//   { nama: 'ASA 2 Pasien dengan penyakit Sistemik ringan', model: '', check: false },
-//   { nama: 'ASA 3 Pasien dengan penyakit sistemik berat', model: '', check: false },
-//   { nama: 'ASA 4 Pasien dengan penyakit sistemik berat yang mengancam nyawa', model: '', check: false }
-// ])
-
-// const lab = computed(() => {
-//   const arr = laboratorium.value
-//   return arr
-// })
-// eslint-disable-next-line no-unused-vars
-// const lab1 = computed(() => {
-//   const arr1 = lab.value
-//   return arr1.splice(0, 6)
-// })
 </script>
 
 <style lang="scss" scoped>

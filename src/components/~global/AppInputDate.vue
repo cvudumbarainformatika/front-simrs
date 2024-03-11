@@ -27,6 +27,16 @@
         @click="showDate"
       />
     </template>
+    <template
+      v-else-if="modelProp"
+      #append
+    >
+      <q-icon
+        name="icon-mat-cancel"
+        class="cursor-pointer"
+        @click.stop.prevent="modelProp = null"
+      />
+    </template>
     <template #prepend>
       <q-popup-proxy
         ref="refPopup"
@@ -104,6 +114,7 @@ const props = defineProps({
     default: true
   },
   valid: { type: Boolean, default: false },
+  clearable: { type: Boolean, default: false },
   autofocus: { type: Boolean, default: false },
   dense: { type: Boolean, default: true },
   filled: { type: Boolean, default: true },
