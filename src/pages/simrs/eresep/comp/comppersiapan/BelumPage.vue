@@ -228,8 +228,8 @@ function nomor(item, val) {
 }
 function adaResep(item) {
   const filtered = item?.rinci.filter(a => a.noresep !== '')
-  console.log(filtered?.length >= 1)
-  return filtered?.length >= 1
+  console.log('adaresep', filtered?.length >= 1, item?.rinci?.length === 1)
+  return filtered?.length >= 1 || item?.rinci?.length === 1
 }
 function setNumber(evt, det, key) {
   const inc = evt.includes('.')
@@ -247,6 +247,7 @@ function setNumber(evt, det, key) {
 function setCheck(evt, item, n) {
   if (item.checked) {
     const ind = store.rincBelId.findIndex(a => a === item?.id)
+    console.log('index', ind, store.rincBelId)
     item.jumlah_resep = item.jumlah_resep ?? 0
     if (ind >= 0) {
       refInput.value[ind]?.focus()

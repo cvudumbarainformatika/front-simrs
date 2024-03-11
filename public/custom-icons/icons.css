@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?682922a47f15d03e0f65776a8d9fd464") format("woff"),
-url("./icons.woff2?682922a47f15d03e0f65776a8d9fd464") format("woff2");
+    src: url("./icons.woff?876f4dd3653fca7eb3c389abbef1bce2") format("woff"),
+url("./icons.woff2?876f4dd3653fca7eb3c389abbef1bce2") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -813,7 +813,7 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-finger-svgrepo-com:before {
     content: "\f20a";
 }
-.icon-my-foot-bones-svgrepo-com-(1):before {
+.icon-my-foot-bones-svgrepo-com-1:before {
     content: "\f20b";
 }
 .icon-my-foot-bones-svgrepo-com:before {
@@ -834,7 +834,7 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
 .icon-my-how_to_reg:before {
     content: "\f211";
 }
-.icon-my-human-back-svgrepo-com-(1):before {
+.icon-my-human-back-svgrepo-com-1:before {
     content: "\f212";
 }
 .icon-my-human-back-svgrepo-com:before {

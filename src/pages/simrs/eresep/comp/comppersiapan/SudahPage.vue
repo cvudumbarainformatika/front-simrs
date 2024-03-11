@@ -7,6 +7,7 @@
       <q-space />
       <div class="q-py-xs">
         <q-select
+          :key="store.noreseps"
           v-model="store.noresep"
           label="List nomor resep"
           outlined
@@ -20,6 +21,9 @@
         />
       </div>
     </q-bar>
+  </div>
+  <div>
+    <app-no-data v-if="!store.sudahs?.length" />
   </div>
   <div
     v-if="store?.filteredSudahs?.length"

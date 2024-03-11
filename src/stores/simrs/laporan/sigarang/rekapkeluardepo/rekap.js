@@ -74,6 +74,7 @@ export const useLaporanSigarangRekapPengeluaranStore = defineStore('laporan_siga
       this.getDataTable()
     },
     getInitialData() {
+      this.ruangs = []
       const apps = useAplikasiStore()
       if (apps?.ruangs?.length) {
         this.ruangs?.push({ kode: '', uraian: 'Semua' })

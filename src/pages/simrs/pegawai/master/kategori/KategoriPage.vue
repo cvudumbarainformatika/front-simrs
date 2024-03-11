@@ -7,10 +7,19 @@
       <template #content>
         <div class="row fit justify-end q-mb-md">
           <div class="q-mr-sm">
-            ramadhan
-          </div>
-          <div class="q-mr-sm">
-            lebaran
+            <q-btn
+              dense
+              label="ganti jadwal"
+              color="primary"
+              @click="store.isGanti=true"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Ganti jadwal pegawai
+              </q-tooltip>
+            </q-btn>
           </div>
         </div>
         <app-table
@@ -78,12 +87,24 @@
       </template>
     </app-card>
     <FormDialog v-model="store.isOpen" />
+    <app-fullscreen-blue
+      v-model="store.isGanti"
+      title="Ganti Jadwal Pegawai"
+    >
+      <template #default>
+        <GantiDialog />
+      </template>
+    </app-fullscreen-blue>
   </div>
 </template>
 <script setup>
+import { defineAsyncComponent, shallowRef } from 'vue'
 import { useKategoriJadwalStore } from 'src/stores/simrs/pegawai/master/kategori/kategori'
-import FormDialog from './FormDialog.vue'
+// import FormDialog from './FormDialog.vue'
 const store = useKategoriJadwalStore()
+
+const FormDialog = shallowRef(defineAsyncComponent(() => import('./FormDialog.vue')))
+const GantiDialog = shallowRef(defineAsyncComponent(() => import('./GantiJadwalDialog.vue')))
 
 const formatJam = data => {
   const temp = data.split(':')

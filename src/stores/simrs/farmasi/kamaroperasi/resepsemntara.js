@@ -178,7 +178,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       } else {
         const indehead = this?.pasien?.permintaanobatoperasi?.findIndex(x => x.nopermintaan === data?.head?.nopermintaan)
         if (indehead >= 1) this?.pasien?.permintaanobatoperasi.splice(indehead, 1)
-        const indexper = this.nopermintaans.findIndex(noper => noper === data?.nota)
+        const indexper = this.nopermintaans.findIndex(noper => noper === data?.head?.nopermintaan)
         if (indexper >= 1) {
           this.nopermintaans.splice(indexper, 1)
           this.nopermintaan = 'BARU'
