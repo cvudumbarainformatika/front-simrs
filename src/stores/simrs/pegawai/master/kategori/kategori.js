@@ -4,8 +4,12 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
   state: () => ({
-    loading: true,
+    loading: false,
+    loadingPeg: false,
+    loadingSimpan: false,
+    loadingJadwal: false,
     isOpen: false,
+    isGanti: false,
     items: [],
     meta: {},
     columns: [],
@@ -21,7 +25,23 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
     },
     katogories: [],
     proxyMasuk: '07:00',
-    proxyPulang: '14:00'
+    proxyPulang: '14:00',
+
+    // ganti jadwal pegawai
+    filteredKatogories: [],
+    paramsPeg: {
+      q: ''
+    },
+    pegawaies: [],
+    jadwalPegawaies: [],
+    haries: [],
+    formPeg: {
+      id_peg: '',
+      id_kategory: 1,
+      hari: [],
+      masuk: null,
+      pulang: null
+    }
   }),
   actions: {
     resetFORM() {
@@ -190,6 +210,102 @@ export const useKategoriJadwalStore = defineStore('kategori_jadwal_store', {
             reject(err)
           })
       })
+    },
+    // ganti jadwal pegawai
+    setParamPeg(key, val) {
+      this.paramsPeg[key] = val
+    },
+    setFormPeg(key, val) {
+      this.formPeg[key] = val
+      if (key === 'id_kategory') this.getDataPegawai()
+    },
+    resetFormPeg() {
+      this.formPeg = {
+        id_peg: '',
+        id_kategory: 1,
+        hari: [],
+        masuk: null,
+        pulang: null
+      }
+    },
+    async cariPeg(val) {
+      console.log('cariPeg', val)
+      this.loadingPeg = true
+      this.setParamPeg('q', val)
+      this.setParamPeg('id_kategory', this.formPeg?.id_kategory ?? '')
+      const param = { params: this.paramsPeg }
+      await api.get('v1/pegawai/absensi/kategori/get-pegawai', param)
+        .then(resp => {
+          this.loadingPeg = false
+          if (resp?.data?.length) this.pegawaies = resp?.data
+          this.pegawaies.unshift({ nama: 'Semua', id: '' })
+          console.log('data Peg', this.pegawaies)
+        })
+        .catch(() => {
+          this.loadingPeg = false
+        })
+    },
+    async getDataPegawai() {
+      this.loadingPeg = true
+      this.setParamPeg('id_kategory', this.formPeg?.id_kategory ?? '')
+      const param = { params: this.paramsPeg }
+      await api.get('v1/pegawai/absensi/kategori/get-pegawai', param)
+        .then(resp => {
+          this.loadingPeg = false
+          if (resp?.data?.length) this.pegawaies = resp?.data
+          this.pegawaies.unshift({ nama: 'Semua', id: '' })
+          console.log('data Peg', this.pegawaies)
+        })
+        .catch(() => {
+          this.loadingPeg = false
+        })
+    },
+    async getDataKetegory() {
+      await api.get('v1/pegawai/absensi/kategori/get-kategory')
+        .then(resp => {
+          console.log('data kate', resp?.data)
+          if (resp?.data?.length) this.filteredKatogories = resp?.data
+        })
+    },
+    async getDataJadwal() {
+      this.jadwalPegawaies = []
+      this.loadingJadwal = true
+      const param = { params: this.formPeg }
+      await api.get('v1/pegawai/absensi/kategori/get-jadwal', param)
+        .then(resp => {
+          this.loadingJadwal = false
+          console.log('data jadwal', resp?.data)
+          if (resp?.data?.length) this.jadwalPegawaies = resp?.data
+        })
+        .catch(() => {
+          this.loadingJadwal = false
+        })
+    },
+    async getDataHari() {
+      this.haries = []
+      await api.get('v1/pegawai/absensi/kategori/get-hari')
+        .then(resp => {
+          console.log('data hari', resp?.data)
+          if (resp?.data?.length) {
+            resp?.data.forEach(har => {
+              this.haries.push({ label: har?.nama, value: har?.nama })
+            })
+          }
+        })
+    },
+    async simpanPerubahanJadwal() {
+      console.log('form nya', this.formPeg)
+      this.loadingSimpan = true
+      await api.post('v1/pegawai/absensi/kategori/simpan-perubahan-jadwal', this.formPeg)
+        .then(resp => {
+          console.log('simpan', resp?.data)
+          this.loadingSimpan = false
+          this.getDataJadwal()
+          notifSuccess(resp)
+        })
+        .catch(() => {
+          this.loadingSimpan = false
+        })
     }
   }
 })
