@@ -784,7 +784,7 @@
               class="row"
             >
               <div class="col-12">
-                {{ item?.tindakan }}
+                {{ item?.tindakan }} ({{ item?.keterangan }})
               </div>
             </div>
           </div>
