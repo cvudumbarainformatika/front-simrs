@@ -139,6 +139,10 @@ const gudang = {
           component: () => import('pages/simrs/logistik/gudang/farmasi/kartustok/IndexPage.vue')
         },
         {
+          path: '/gudang/farmasi/listkonsinyasi',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/listkonsinyasi/IndexPage.vue')
+        },
+        {
           path: '/gudang/farmasi/notfound',
           component: () => import('pages/MidlewareNotFound.vue')
         }
