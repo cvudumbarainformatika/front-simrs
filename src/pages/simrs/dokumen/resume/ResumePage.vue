@@ -396,7 +396,6 @@
                   <q-separator v-if="pasien?.kodepoli==='POL018'" />
                   <q-item
                     v-if="pasien?.kodepoli==='POL018'"
-                    class="q-pa-none list-move"
                   >
                     <q-item-section class="q-pa-xs">
                       <q-item-label
@@ -433,6 +432,64 @@
                         lines="2"
                       >
                         Suara Nafas Tambahan (Kiri) : <em>{{ item?.auskultasisuaratambahankiri??'-' }}</em>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-separator v-if="pasien?.kodepoli==='POL017'" />
+                  <q-item
+                    v-if="pasien?.kodepoli==='POL017'"
+                    class="q-pa-none list-move"
+                  >
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD AWAL: <em>{{ store.item?.pemeriksaanfisikmata?.rs4??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD REFR : <em>{{ store.item?.pemeriksaanfisikmata?.rs5??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD AKHIR : <em>{{ store.item?.pemeriksaanfisikmata?.rs6??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        TOD : <em>{{ store.item?.pemeriksaanfisikmata?.rs10??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        FONDOS OD : <em>{{ store.item?.pemeriksaanfisikmata?.rs12??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS AWAL : <em>{{ store.item?.pemeriksaanfisikmata?.rs7??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS REFR : <em>{{ store.item?.pemeriksaanfisikmata?.rs8??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS AKHIR : <em>{{ store.item?.pemeriksaanfisikmata?.rs9??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        TOS : <em>{{ store.item?.pemeriksaanfisikmata?.rs11??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        FONDOS OS : <em>{{ store.item?.pemeriksaanfisikmata?.rs13??'-' }}</em>
                       </q-item-label>
                     </q-item-section>
                   </q-item>
@@ -783,8 +840,17 @@
               :key="i"
               class="row"
             >
-              <div class="col-12">
+              <div
+                v-if="item?.keterangan !== ''"
+                class="col-12"
+              >
                 {{ item?.tindakan }} ({{ item?.keterangan }})
+              </div>
+              <div
+                v-else
+                class="col-12"
+              >
+                {{ item?.tindakan }}
               </div>
             </div>
           </div>
