@@ -71,6 +71,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
         noperencanaan: val.noperencanaan,
         kdobat: val.kdobat,
         kd_ruang: val.kd_ruang,
+        harga: val.harga,
         stok_real_gudang: val.stokgudang,
         stok_real_rs: val.stokrs,
         stok_max_rs: val.stomaxkrs,

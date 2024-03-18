@@ -10,7 +10,7 @@
           dense
           :label="labelCari"
           debounce="500"
-          style="min-width: 250px;"
+          style="min-width: 200px;"
           @keyup.enter="enterSearch"
         >
           <template
@@ -45,7 +45,36 @@
           style="min-width: 150px;"
           @update:model-value="gantiPeriode"
         />
-        <q-option-group
+        <q-select
+          v-model="toFlag"
+          dense
+          outlined
+          dark
+          multiple
+          color="white"
+          :options="flagOptions"
+          label="Status"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+        />
+        <q-select
+          v-if="ruang==='Gd-05010101'"
+          v-model="tipeResep"
+          dense
+          outlined
+          dark
+          color="white"
+          :options="tipeOptions"
+          label="Tipe Resep"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+        />
+        <!-- @update:model-value="gantiPeriode" -->
+        <!-- <q-option-group
           v-model="toFlag"
           :options="flagOptions"
           color="primary"
@@ -53,7 +82,7 @@
           dense
           type="checkbox"
           inline
-        />
+        /> -->
       </div>
       <div class="kanan">
         <!-- refresh Ids -->
@@ -146,15 +175,17 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
+const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode', 'setTipe'])
 const props = defineProps({
+  ruang: { type: String, default: '' },
   search: { type: String, default: '' },
   labelCari: { type: String, default: 'Cari ...' },
   adaPerPage: { type: Boolean, default: false },
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
   perPage: { type: Number, default: 5 },
-  flag: { type: Array, default: () => ['1'] }
+  flag: { type: Array, default: () => ['1'] },
+  tipe: { type: String, default: '' }
 })
 
 function enterSearch(evt) {
@@ -191,6 +222,21 @@ const toFlag = computed({
   },
   set (newVal) {
     emits('setFlag', newVal)
+  }
+})
+// iter
+const tipeOptions = ref([
+  { label: 'semua', value: '' },
+  { label: 'Normal', value: 'normal' },
+  { label: 'PRB', value: 'prb' },
+  { label: 'Iter', value: 'iter' }
+])
+const tipeResep = computed({
+  get () {
+    return props.tipe
+  },
+  set (newVal) {
+    emits('setTipe', newVal)
   }
 })
 

@@ -17,6 +17,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       page: 1,
       per_page: 10,
       kddepo: '',
+      tipe: '',
       flag: ['1', '2'],
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
@@ -42,6 +43,12 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     setFlag(val) {
       // console.log('flag', val)
       this.setParams('flag', val)
+      this.setParams('page', 1)
+      this.removedItemId = []
+      this.getDataTable()
+    },
+    setTipe(val) {
+      this.setParams('tipe', val)
       this.setParams('page', 1)
       this.removedItemId = []
       this.getDataTable()
