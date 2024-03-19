@@ -168,7 +168,7 @@
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.bisaBeli>0">
+            <div v-if="row.bisaBeli>0 ">
               <!-- <q-checkbox
                 v-model="row.checked"
                 dense
@@ -180,6 +180,7 @@
                 label="kirim"
                 color="primary"
                 :loading="store.loading && (store.form.kd_obat === row.kd_obat)"
+                :disable="(store.loading && (store.form.kd_obat === row.kd_obat)) || parseFloat(row.jumlahBeli) <= 0"
                 @click="store.kirimRencana(row)"
               />
             </div>
