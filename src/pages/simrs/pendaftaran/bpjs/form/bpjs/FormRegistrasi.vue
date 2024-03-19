@@ -764,6 +764,8 @@ function assignSuratKontrol(val) {
   store.getDiagnosaAwal().then(() => {
     setNamaDiagnosa(val.sep.diagnosa)
   })
+
+  setFlagKarcis('Lama')
 }
 function cekSuratRujukanIni(evt) {
   // console.log(evt.target.value)

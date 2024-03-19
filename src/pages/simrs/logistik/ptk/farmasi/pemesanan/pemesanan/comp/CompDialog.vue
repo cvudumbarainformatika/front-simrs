@@ -311,6 +311,7 @@
                 label="Beli"
                 color="primary"
                 :loading="store.loading && (store.form.kdobat === row.kdobat) && (store.form.noperencanaan === row.noperencanaan)"
+                :disable="(store.loading && (store.form.kdobat === row.kdobat) && (store.form.noperencanaan === row.noperencanaan)) || parseFloat(row.jumlahdipesan) <= 0"
                 @click="kirimRencana(row)"
               >
                 <q-tooltip
