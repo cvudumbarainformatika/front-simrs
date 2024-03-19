@@ -151,11 +151,12 @@
               ref="refBayar"
               v-model="trm.nilai_pembayaran"
               label="Nilai Belanja"
-              type="number"
-              :rules="[val => val > 0 || 'Input tidak valid' ]"
               outlined
+              valid
               @update:model-value="setNilaiBelanja($event,trm)"
             />
+            <!-- type="number"
+              :rules="[val => val > 0 || 'Input tidak valid' ]" -->
           </div>
         </div>
         <div
@@ -212,7 +213,7 @@ const tglByr = ref(null)
 const refBayar = ref(null)
 
 function setNilaiBelanja(evt, trm) {
-  const value = isNaN(parseFloat(evt)) ? 0 : parseFloat(evt)
+  const value = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   trm.nilai_pembayaran = value
   console.log('evt', parseFloat(evt), value)
   // console.log('evt', evt, 'trm', trm)
