@@ -764,8 +764,6 @@ function assignSuratKontrol(val) {
   store.getDiagnosaAwal().then(() => {
     setNamaDiagnosa(val.sep.diagnosa)
   })
-
-  setFlagKarcis('Lama')
 }
 function cekSuratRujukanIni(evt) {
   // console.log(evt.target.value)
@@ -816,6 +814,7 @@ function cekSuratKontrol() {
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
+  setFlagKarcis('Lama')
 
   const index = findWithAttr(store.polis, 'kodepoli', val)
   store.form.dpjp = ''
