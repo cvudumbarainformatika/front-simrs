@@ -24,17 +24,17 @@
           <q-btn
             v-if="store.form.no_permintaan"
             flat
-            icon="icon-mat-done"
+            icon="icon-mat-info"
             dense
             color="primary"
             :loading="store.loadingKunci"
-            @click="store.selesaiDanKunci()"
           >
+            <!-- @click="store.selesaiDanKunci()" -->
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Selesai dan Kunci Penerimaan
+              Kunci Permintaan di list
             </q-tooltip>
           </q-btn>
         </div>
@@ -228,7 +228,7 @@
               />
             </div>
           </div>
-          <div class="row q-mb-xs q-ml-xs items-center">
+          <!-- <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
               Status :
             </div>
@@ -250,7 +250,7 @@
                 label="Konsinyasi"
               />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="col-6">
           <div class="row q-mb-xs">
@@ -356,6 +356,7 @@
           v-for="(det,i) in store.details"
           :key="i"
           class="anu"
+          :class="i%2===0?'bg-white':'bg-blue-grey-3'"
         >
           <div class="row no-wrap">
             <div class="col-6">
@@ -391,12 +392,12 @@
                   {{ det.mak_stok ? det.mak_stok : '-' }}
                 </div>
               </div>
-              <div class="row no-wrap justify-between q-mr-md det">
+              <!-- <div class="row no-wrap justify-between q-mr-md det">
                 <div>Status obat</div>
                 <div class="text-weight-bold">
                   {{ det.status_obat ? det.status_obat : '-' }}
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -412,7 +413,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
 
@@ -483,6 +484,56 @@ function depoSelected (val) {
   console.log('depo', val)
   store.setParam('kddepo', val)
 }
+
+function setJumlahMinta(evt) {
+  // console.log('maks stok', parseFloat(store.form.mak_stok))
+  const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+  const stok = parseFloat(store.form.stok) ?? 0
+  const maks = parseFloat(store.form.mak_stok) ?? 0
+  const bisaMinta = maks - stok
+  const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
+
+  if (parseFloat(store.form.mak_stok) <= 0 || isNaN(parseFloat(store.form.mak_stok))) {
+    store.setForm('jumlah_minta', 0)
+    notifErrVue('Tidak Ada maksimal stok, tidak bisa melanjutkan transaksi')
+    return
+  }
+
+  if (jumlah > alokasi) {
+    if (alokasi < bisaMinta) {
+      store.setForm('jumlah_minta', alokasi)
+      notifErrVue('Jumlah minta tidak boleh melebihi alokasi')
+    } else {
+      store.setForm('jumlah_minta', bisaMinta)
+      notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok ')
+    }
+  } else if (jumlah > bisaMinta) {
+    store.setForm('jumlah_minta', bisaMinta)
+    notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok')
+  } else store.setForm('jumlah_minta', jumlah)
+}
+
+function validasi() {
+  const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
+  const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
+  const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
+  if (adaMax && adaAlokasi && adaJumlahMinta) {
+    return true
+  } else {
+    if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
+    if (!adaAlokasi) notifErrVue('Tidak Ada Jumlah Stok Alokasi, Pastikan ada Stok di gudang dan pastikan tidak ada transaksi permintaan yang belum selesai')
+    if (!adaJumlahMinta) notifErrVue('Tidak Ada Jumlah Minta, Silahkan Isi Jumlah Minta')
+    return false
+  }
+}
+function simpan() {
+  console.log('form', store.form)
+  if (validasi()) {
+    console.log('disp', store.disp)
+    store.simpan()
+  }
+}
+
 const floor = ['Gd-03010101', 'Gd-04010101']
 const gud = ['Gd-03010100', 'Gd-05010100']
 watch(() => apps?.user?.kdruangansim, (obj) => {
@@ -511,51 +562,33 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   //   store.meta = {}
   // }
 })
-
-function setJumlahMinta(evt) {
-  // console.log('maks stok', parseFloat(store.form.mak_stok))
-  // if (parseFloat(store.form.mak_stok) <= 0 || isNaN(parseFloat(store.form.mak_stok))) {
-  //   store.setForm('jumlah_minta', 0)
-  //   notifErrVue('Tidak Ada maksimal stok, tidak bisa melanjutkan transaksi')
-  //   return
-  // }
-  const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  store.setForm('jumlah_minta', jumlah)
-  // const max = parseFloat(store.form.mak_stok) ?? 0
-  // const stok = parseFloat(store.form.stok) ?? 0
-  // const bisaMinta = max - stok
-  // const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
-  // if (bisaMinta < jumlah) {
-  //   store.setForm('jumlah_minta', bisaMinta)
-  //   notifInfVue('Jumlah minta tidak boleh melebihi stok maksimal user')
-  // } else if (alokasi < jumlah) {
-  //   store.setForm('jumlah_minta', alokasi)
-  //   notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
-  // } else {
-  //   store.setForm('jumlah_minta', jumlah)
-  // }
-}
-function validasi() {
-  const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
-  const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
-  const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
-  if (adaMax && adaAlokasi && adaJumlahMinta) {
-    return true
+onMounted(() => {
+  store.setParam('kddepo', apps?.user?.kdruangansim)
+  store.setForm('dari', apps?.user?.kdruangansim)
+  const dpFl = floor.find(a => a === apps?.user?.kdruangansim)
+  const gd = gud.find(a => a === apps?.user?.kdruangansim)
+  if (dpFl) {
+    store.setForm('tujuan', 'Gd-03010100')
+    store.setParam('kdgudang', 'Gd-03010100')
   } else {
-    if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
-    if (!adaAlokasi) notifErrVue('Tidak Ada Jumlah Stok Alokasi, Pastikan ada Stok di gudang dan pastikan tidak ada transaksi permintaan yang belum selesai')
-    if (!adaJumlahMinta) notifErrVue('Tidak Ada Jumlah Minta, Silahkan Isi Jumlah Minta')
-    return false
+    if (!gd) {
+      store.setForm('tujuan', 'Gd-05010100')
+      store.setParam('kdgudang', 'Gd-05010100')
+    }
   }
-}
-function simpan() {
-  console.log('form', store.form)
-  if (validasi()) {
-    console.log('disp', store.disp)
-    store.simpan()
+  const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
+  if (depo.length) {
+    store.disp.depo = depo[0]?.nama
+    store.getListObat()
   }
-}
-store.getInitialData()
+  store.getInitialData()
+})
+
+onUnmounted(() => {
+  store.clearForm()
+  store.details = []
+})
+
 </script>
 <style lang="scss" scoped>
 .anu {
