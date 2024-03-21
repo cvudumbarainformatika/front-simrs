@@ -8,6 +8,7 @@ export const useFarmasiPermintaanDepoStore = defineStore('farmasi_permintaan_dep
   state: () => ({
     loading: false,
     loadingKunci: false,
+    loadingBatal: false,
     loadingObat: false,
     loadingMax: false,
     params: {
@@ -233,6 +234,58 @@ export const useFarmasiPermintaanDepoStore = defineStore('farmasi_permintaan_dep
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
+      })
+    },
+    batalHead(val) {
+      const data = { id: val?.id }
+      this.loadingBatal = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-head', data)
+          .then(resp => {
+            this.loadingBatal = false
+            val.loading = false
+            console.log('hapus permintaan ', resp)
+            notifSuccess(resp)
+            const list = useListPermintaanStore()
+            list.ambilPermintaan()
+            this.details = []
+            this.getListObat()
+            this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBatal = false
+            val.loading = false
+          })
+      })
+    },
+    batalRinci(val, row) {
+      const data = { id: val?.id }
+      this.loadingBatal = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-rinci', data)
+          .then(resp => {
+            this.loadingBatal = false
+            val.loading = false
+            console.log('hapus det permintaan ', resp)
+            notifSuccess(resp)
+            const index = row.permintaanrinci.findIndex(a => a.id === val.id)
+            if (index >= 0) row.permintaanrinci.splice(index, 1)
+            if (!row.permintaanrinci.length) {
+              const list = useListPermintaanStore()
+              list.ambilPermintaan()
+            }
+            // this.details = []
+            // this.getListObat()
+            // this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBatal = false
+            val.loading = false
+          })
       })
     },
     getListObat() {

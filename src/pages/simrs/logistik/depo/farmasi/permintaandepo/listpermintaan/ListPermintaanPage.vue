@@ -127,14 +127,14 @@
                     {{ rin.jumlah_minta }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap">
+                <!-- <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
                     Disetujui
                   </div>
                   <div class="text-weight-bold">
                     {{ rin.jumlah_disetujui? rin.jumlah_disetujui:'-' }}
                   </div>
-                </div>
+                </div> -->
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
                     Maks Stok
@@ -143,6 +143,24 @@
                     {{ rin.mak_stok? rin.mak_stok:'-' }}
                   </div>
                 </div>
+              </div>
+              <div class="col-6 text-right">
+                <q-btn
+                  flat
+                  icon="icon-mat-delete"
+                  size="sm"
+                  color="red"
+                  round
+                  :loading="permintaan.loadingBatal && rin.loading"
+                  @click="batalRinci(rin,row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Hapus Obat
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
           </div>
@@ -153,21 +171,60 @@
       </template>
       <template #left-acttion="{ row }">
         <div v-if="!row.flag">
-          <q-btn
-            flat
-            icon="icon-mat-lock_open"
-            dense
-            color="green"
-            :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Permintaan Depo sudah selesai dan siap di kunci
-            </q-tooltip>
-          </q-btn>
+          <div class="row items-center">
+            <div class="col">
+              <q-btn
+                flat
+                icon="icon-mat-add_circle"
+                size="13px"
+                color="primary"
+                round
+                @click="tambah(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Tambah Obat
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div class="col">
+              <q-btn
+                flat
+                icon="icon-mat-delete"
+                size="sm"
+                color="red"
+                round
+                :loading="permintaan.loadingBatal && row.loading"
+                @click="batal(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Batal Pemintaan
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div class="col">
+              <q-btn
+                flat
+                icon="icon-mat-lock_open"
+                dense
+                color="green"
+                :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
+                @click="kunci(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Permintaan Depo sudah selesai dan siap di kunci
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
         </div>
         <div v-if="row.flag">
           <div class="row items-center">
@@ -201,6 +258,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useListPermintaanStore } from 'src/stores/simrs/farmasi/permintaandepo/listpermintaan'
 import { useFarmasiPermintaanDepoStore } from 'src/stores/simrs/farmasi/permintaandepo/permintaandepo'
 import { ref, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
@@ -229,11 +287,32 @@ const toloadBeli = ref('')
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  toloadBeli.value = val.no_permintaan
   permintaan.kunci(val.no_permintaan).then(() => {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
   })
+}
+const router = useRouter()
+function tambah (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  console.log(val)
+  permintaan.setForm('no_permintaan', val.no_permintaan)
+  permintaan.details = val?.permintaanrinci
+  permintaan.details.forEach(det => {
+    det.nama_obat = det?.masterobat?.nama_obat
+  })
+  router.push({ path: '/depo/farmasi/permintaandepo/permintaan', replace: true })
+}
+function batal (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  permintaan.batalHead(val)
+}
+function batalRinci (val, row) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  permintaan.batalRinci(val, row)
 }
 
 function color(val) {

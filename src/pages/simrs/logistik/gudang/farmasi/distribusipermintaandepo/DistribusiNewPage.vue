@@ -34,7 +34,7 @@
 
       <template #header-left-after-search>
         <div class="q-ml-md text-white">
-          <div class="row q-mb-xs q-ml-xs items-center">
+          <!-- <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
               Status :
             </div>
@@ -64,7 +64,7 @@
                 @update:model-value="store.gantiJenisDistribusi"
               />
             </div>
-          </div>
+          </div> -->
         </div>
       </template>
       <template #col-no_permintaan>
