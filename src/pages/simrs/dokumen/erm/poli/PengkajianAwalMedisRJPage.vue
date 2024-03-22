@@ -257,7 +257,7 @@
             :
           </div>
           <div class="col-2">
-            {{ erm?.pemeriksaanfisik[0]?.rs4 }}
+            {{ erm?.pemeriksaanfisik[0]?.kesadaran }}
           </div>
           <div class="col-2">
             - Keadaan Umum
@@ -269,9 +269,26 @@
             -
           </div>
         </div>
+        <q-separator />
         <div class="row">
           <div class="col-1">
                 &nbsp;
+          </div>
+          <div class="col-2">
+            - Keadaan Gizi
+          </div>
+          <div class="col-1">
+            :
+          </div>
+          <div class="col-2">
+            <span class=""> Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? <b>{{ getYT(item?.skreeninggizi) }}</b></span><br>
+            <span class=""> Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.skreeninggizi) }}</b></span>
+          </div>
+        </div>
+        <q-separator />
+        <div class="row">
+          <div class="col-1">
+              &nbsp;
           </div>
           <div class="col-2">
             - Tekanan Darah
@@ -283,27 +300,13 @@
             {{ erm?.pemeriksaanfisik[0]?.diastole }}/{{ erm?.pemeriksaanfisik[0]?.sistole }}
           </div>
           <div class="col-2">
-            - Keadaan Gizi
-          </div>
-          <div class="col-1">
-            :
-          </div>
-          <div class="col-2">
-            ????????????????
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1">
-              &nbsp;
-          </div>
-          <div class="col-2">
             - Nadi
           </div>
           <div class="col-1">
             :
           </div>
           <div class="col-1">
-            ?????????????
+            {{ erm?.pemeriksaanfisik[0]?.rs4 }}
           </div>
         </div>
         <div class="row">
@@ -316,11 +319,9 @@
           <div class="col-1">
             :
           </div>
-          <div class="col-2">
+          <div class="col-1">
             {{ erm?.pemeriksaanfisik[0]?.suhutubuh }}
           </div>
-        </div>
-        <div class="row">
           <div class="col-1">
           &nbsp;
           </div>
@@ -330,68 +331,320 @@
           <div class="col-1">
             :
           </div>
-          <div class="col-3">
+          <div class="col-1">
             {{ erm?.pemeriksaanfisik[0]?.pernapasan }}
           </div>
         </div>
-        <q-separator />
-        <q-markup-table
-          separator="vertical"
-          flat
-          bordered
-          dense
-          dark
-        >
-          <thead>
-            <tr>
-              <th class="text-left">
-                Anatomy
-              </th>
-              <th class="text-left">
-                Keterangan
-              </th>
-              <th class="text-left">
-                Gambar
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(detailgambars, dg) in store.item"
-              :key="dg"
-              v-ripple
-              clickable
-            >
-              <td
-                class="text-left"
-                style="max-width: 150px;"
+        <div class="q-pa-md">
+          <q-markup-table
+            separator="vertical"
+            flat
+            bordered
+            dense
+            center
+            style="width: 50%;"
+          >
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Anatomy
+                </th>
+                <th class="text-left">
+                  Keterangan
+                </th>
+                <th class="text-left">
+                  Gambar
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(detailgambars, dg) in store.item"
+                :key="dg"
+                v-ripple
+                clickable
               >
-                {{ detailgambars?.pemeriksaanfisik[0]?.detailgambars[0]?.anatomy }}
-              </td>
-              <td
-                class="text-left"
-              >
-                {{ detailgambars?.pemeriksaanfisik[0]?.detailgambars[0]?.ket }}
-              </td>
-              <td
-                class="text-left"
-                style="max-width: 150px;"
-              >
-                {{ detailgambars.pemeriksaanfisik[0].detailgambars[0].templategambar }}"
-                <img
-                  src=" require(' {{ detailgambars.pemeriksaanfisik[0].detailgambars[0].templategambar }}')"
-                  height="10"
-                  width="10"
+                <td
+                  class="text-left"
+                  style="max-width: 150px;"
                 >
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+                  {{ detailgambars?.pemeriksaanfisik[0]?.detailgambars[0]?.anatomy }}
+                </td>
+                <td
+                  class="text-left"
+                >
+                  {{ detailgambars?.pemeriksaanfisik[0]?.detailgambars[0]?.ket }}
+                </td>
+                <td
+                  class="text-left"
+                  style="max-width: 150px;"
+                >
+                  <!-- {{ detailgambars.pemeriksaanfisik[0].detailgambars[0].templategambar }} -->
+                  <img
+                    src=" require(' {{ detailgambars?.pemeriksaanfisik[0]?.detailgambars[0]?.templategambar }}')"
+                    height="10"
+                    width="10"
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </div>
       </div>
+      <br>
+      <q-separator />
+      <div class="q-mt-md">
+        <b>3. <u>PEMERIKSAAN PENUNJANG PRE-RAWAT JALAN :</u></b>
+      </div>
+      <div class="row">
+        <div class="col-1">
+                 &nbsp;
+        </div>
+        <div class="col-1">
+          - Laboratorium
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div
+          class="col-7"
+        >
+          <div>
+            <q-markup-table
+              separator="vertical"
+              flat
+              bordered
+              dense
+            >
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    Nama Pemeriksaan
+                  </th>
+                  <th class="text-left">
+                    Nama Paket
+                  </th>
+                  <th class="text-right">
+                    Hasil
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(lab, lxx) in store?.item[0]?.laborat"
+                  :key="lxx"
+                >
+                  <td
+                    class="text-left f-12 ellipsis"
+                    style="max-width: 250px;"
+                  >
+                    {{ lab?.pemeriksaanlab?.rs2 }}
+                  </td>
+                  <td
+                    class="text-left f-12 ellipsis"
+                    style="max-width: 250px;"
+                  >
+                    {{ lab?.pemeriksaanlab?.rs21 ? lab?.pemeriksaanlab?.rs21:'-' }}
+                  </td>
+                  <td
+                    class="text-right f-12"
+                    style="max-width: 150px;"
+                  >
+                    {{ lab?.rs21 }}
+                  </td>
+                </tr>
+              </tbody>
+            </q-markup-table>
+          </div>
+        </div>
+      </div>
+      <br>
+      <q-separator />
+      <div class="row">
+        <div class="col-1">
+            &nbsp;
+        </div>
+        <div class="col-1">
+          - Hasil Radiologi
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-3">
+          {{ store.item[0]?.pembacaanradiologi[0]?.rs3 ? store.item[0]?.pembacaanradiologi[0]?.rs3:'-'
+          }}
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>4. <u>DIAGNOSIS KERJA :</u></b>
+          </div>
+          <div
+            v-for="(diagp, dp) in store.item[0]?.diagnosa"
+            :key="dp"
+            class="col-3"
+          >
+            <div>
+              - {{ diagp?.rs4 === 'Primer' ? diagp?.masterdiagnosa?.rs4 : ''
+
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>5. <u>DIAGNOSIS BANDING :</u></b>
+          </div>
+          <div
+            v-for="(diagb, db) in store.item[0]?.diagnosa"
+            :key="db"
+            class="col-3"
+          >
+            <div>
+              - {{ diagb?.rs4 !== 'Primer' ? diagb?.masterdiagnosa?.rs4 : ''
+
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>6. <u>PENGOBATAN :</u></b>
+          </div>
+          <div class="col-3">
+            <div
+              v-if="store.item?.apotekracikanrajal?.length || store.item?.apotekracikanrajallalu?.length || store.item?.apotekrajal?.length || store.item?.apotekrajal?.length"
+              class="row items-center text-weight-bold"
+            >
+              <div class="col-9">
+                Obat
+              </div>
+              <div class="col-3">
+                Jumlah
+              </div>
+            </div>
+            <!-- <div v-if="store.item?.apotekracikanrajal?.length">
+            <div
+              v-for="(item,i) in store.item?.apotekracikanrajal"
+              :key="i"
+              class="row items-center"
+            >
+              <div class="col-9">
+                {{ item?.obat??'-' }}
+              </div>
+              <div class="col-3">
+                {{ item?.jumlah??'0' }}
+              </div>
+            </div>
+          </div>
+          <div v-if="store.item?.apotekracikanrajallalu?.length">
+            <div
+              v-for="(item,i) in store.item?.apotekracikanrajallalu"
+              :key="i"
+              class="row items-center"
+            >
+              <div class="col-9">
+                {{ item?.obat??'-' }}
+              </div>
+              <div class="col-3">
+                {{ item?.jumlah??'0' }}
+              </div>
+            </div>
+          </div> -->
+            <div v-if="store.item[0]?.apotekrajal?.length">
+              <div
+                v-for="(item,i) in store.item[0]?.apotekrajal"
+                :key="i"
+                class="row items-center"
+              >
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
+                </div>
+              </div>
+            </div>
+            <!-- <div v-if="store.item[0]?.apotekrajal?.length">
+              <div
+                v-for="(item,i) in store.item[0]?.apotekrajal"
+                :key="i"
+                class="row items-center"
+              >
+                <div class="col-9">
+                  {{ item?.obat??'-' }}
+                </div>
+                <div class="col-3">
+                  {{ item?.jumlah??'0' }}
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>7. <u>RENCANA :</u></b>
+          </div>
+          <div
+            v-for="(plan, pl) in store.item[0]?.planning"
+            :key="pl"
+            class="col-3"
+          >
+            <div>
+              - {{ plan?.rs4
+
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>8. <u>TARGET KEBERHASILAN :</u></b>
+          </div>
+          <div
+            class="col-3"
+          >
+            <div>
+              - ??????????????????
+            </div>
+          </div>
+        </div>
+      </div>
+      <q-separator />
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-2">
+            <b>9. <u>CATATAN KIE :</u></b>
+          </div>
+          <div
+            v-for="(planx, plx) in store.item[0]?.planning"
+            :key="plx"
+            class="col-3"
+          >
+            <div>
+              - {{ planx?.rs4 }} {{ planx }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <q-separator />
 
       <div class="q-mt-md">
         <div class="row">
-          <div class="col-6" />
           <div class="col-6">
             <div class="text-center text-weight-bold">
               Probolinggo, {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
@@ -423,12 +676,12 @@
           </div>
         </div>
       </div>
+      <div v-if="store.loading">
+        <app-loading />
+      </div>
     </div>
-    <div v-if="store.loading">
-      <app-loading />
-    </div>
+    <!-- </div> -->
   </div>
-  <!-- </div> -->
 </template>
 <script setup>
 import { date } from 'quasar'
@@ -440,6 +693,7 @@ const props = defineProps({
     default: null
   }
 })
+
 const store = useDokumenpengkajianawalmedisrjStore()
 store.setParams('noreg', props.pasien?.noreg)
 store.getData()

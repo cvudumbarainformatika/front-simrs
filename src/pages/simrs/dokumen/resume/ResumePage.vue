@@ -440,58 +440,63 @@
                     v-if="pasien?.kodepoli==='POL017'"
                     class="q-pa-none list-move"
                   >
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD AWAL: <em>{{ store.item?.pemeriksaanfisikmata?.rs4??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD REFR : <em>{{ store.item?.pemeriksaanfisikmata?.rs5??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD AKHIR : <em>{{ store.item?.pemeriksaanfisikmata?.rs6??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        TOD : <em>{{ store.item?.pemeriksaanfisikmata?.rs10??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        FONDOS OD : <em>{{ store.item?.pemeriksaanfisikmata?.rs12??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS AWAL : <em>{{ store.item?.pemeriksaanfisikmata?.rs7??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS REFR : <em>{{ store.item?.pemeriksaanfisikmata?.rs8??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS AKHIR : <em>{{ store.item?.pemeriksaanfisikmata?.rs9??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        TOS : <em>{{ store.item?.pemeriksaanfisikmata?.rs11??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        FONDOS OS : <em>{{ store.item?.pemeriksaanfisikmata?.rs13??'-' }}</em>
-                      </q-item-label>
-                    </q-item-section>
+                    <div
+                      v-for="(pmata,pm) in store.item?.pemeriksaanfisik[0].pemeriksaankhususmata"
+                      :key="pm"
+                    >
+                      <q-item-section class="q-pa-xs">
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD AWAL: <em>{{ pmata?.rs4??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD REFR : <em>{{ pmata?.rs5??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD AKHIR : <em>{{ pmata?.rs6??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          TOD : <em>{{ pmata?.rs10 }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          FONDOS OD : <em>{{ pmata?.rs12??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS AWAL : <em>{{ pmata?.rs7??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS REFR : <em>{{ pmata?.rs8??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS AKHIR : <em>{{ pmata?.rs9??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          TOS : <em>{{ pmata?.rs11??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          FONDOS OS : <em>{{ pmata?.rs13??'-' }}</em>
+                        </q-item-label>
+                      </q-item-section>
+                    </div>
                   </q-item>
                 <!-- DETAIL -->
 
@@ -806,7 +811,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="store.item?.apotekrajal?.length">
+            <!-- <div v-if="store.item?.apotekrajal?.length">
               <div
                 v-for="(item,i) in store.item?.apotekrajal"
                 :key="i"
@@ -819,7 +824,7 @@
                   {{ item?.jumlah??'0' }}
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <q-separator />
@@ -874,7 +879,7 @@
               class="row"
             >
               <div class="col-12">
-                {{ item?.rs4 }}
+                {{ item?.rs4f }}
               </div>
             </div>
           </div>
