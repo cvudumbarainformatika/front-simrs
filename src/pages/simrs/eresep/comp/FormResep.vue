@@ -587,6 +587,7 @@ function setPasien() {
   if (props?.depo === 'rjl') store.getBillRajal(val)
   if (props?.depo === 'rnp') store.getBillRanap(val)
   if (props?.depo === 'igd') store.getBillIgd(val)
+  if (props?.depo === 'ok') store.getBillOk(val)
   // store.getBillRajal(val)
 
   if (props?.pasien?.newapotekrajal?.flag === '') {

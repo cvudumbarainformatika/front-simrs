@@ -207,7 +207,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
       const adaRin = this.listRincianRacikan.find(ri => ri.id === key.id)
       if (!adaRin) this.listRincianRacikan?.push(key)
-      this.pasien.newapotekrajal.permintaanracikan = this.listRincianRacikan
+      const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === key.noresep)
+      console.log('pasResRac', pasResRac)
+      pasResRac.permintaanracikan = this.listRincianRacikan
 
       const namaracikan = key?.namaracikan
       const adaList = this.listRacikan.find(list => list.namaracikan === namaracikan)
@@ -258,13 +260,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       this.listRacikan = []
       this.listPemintaanSementara = []
 
-      // console.log('resep', val)
       if (val === '' || val === 'BARU') {
         this.indexRacikan = -1
         return
       }
       const reseps = this.pasien?.newapotekrajal
+
       const resep = reseps.find(x => x.noresep === val)
+      console.log('resep', resep)
       this.setForm('iter_expired', resep?.iter_expired ?? '')
       this.indexRacikan = reseps.findIndex(x => x.noresep === val)
       if (resep?.flag === '') {
@@ -385,6 +388,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     getBillIgd(val) {
       this.setForm('kdruangan', val?.kodepoli)
+      // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
+    },
+    getBillOk(val) {
+      this.setForm('kdruangan', val?.kdruangan)
       // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
     cariSimulasi(val) {
