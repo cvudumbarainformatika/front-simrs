@@ -19,7 +19,7 @@
         />
       </div>
     </q-bar>
-    <template v-if="store?.indexRacikan>=0">
+    <template v-if="store?.indexRacikan>=0 && store?.pasien?.newapotekrajal">
       <div
         v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
         class=""

@@ -587,8 +587,8 @@ onMounted(() => {
   }
   const rac = store.listRacikan.find(x => x.namaracikan === store.form.namaracikan)
   store.listRincianRacikan = rac?.rincian
-  console.log('rac', rac)
-  console.log('form', store.form)
+  // console.log('rac', rac)
+  // console.log('form', store.form)
 })
 // key up ---
 // header

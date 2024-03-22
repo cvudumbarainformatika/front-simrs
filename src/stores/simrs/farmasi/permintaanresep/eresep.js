@@ -203,13 +203,20 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     setListRacikan(key) {
+      console.log('set list racikan', key)
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+      const adaRin = this.listRincianRacikan.find(ri => ri.id === key.id)
+      if (!adaRin) this.listRincianRacikan?.push(key)
+      this.pasien.newapotekrajal.permintaanracikan = this.listRincianRacikan
+
       const namaracikan = key?.namaracikan
-      const adaList = this.listRacikan.filter(list => list.namaracikan === namaracikan)
-      if (adaList.length) {
-        adaList[0].rincian.push(key)
-        const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
-        adaList[0].harga = harga
+      const adaList = this.listRacikan.find(list => list.namaracikan === namaracikan)
+      if (adaList) {
+        const adaLiRin = adaList.rincian.find(ri => ri.id === key.id)
+        if (!adaLiRin) adaList.rincian.push(key)
+
+        const harga = adaList.rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+        adaList.harga = harga
       } else {
         const temp = {
           namaracikan: key?.namaracikan,
@@ -218,13 +225,16 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           keterangan: key?.keterangan,
           tiperacikan: key?.tiperacikan,
           konsumsi: key?.konsumsi,
+          satuan_racik: key?.satuan_racik,
           jumlahracikan: key?.jumlahdibutuhkan,
           rincian: [key]
         }
-        this.listRacikan.push(temp)
+        const adaLi = this.listRacikan.find(ri => ri.id === key.id)
+        if (!adaLi) this.listRacikan.push(temp)
       }
-      this.listRincianRacikan.push(key)
+
       console.log('list racikan', this.listRacikan)
+      console.log('list rincian racikan', this.listRincianRacikan)
 
       this.tipeRacikan = [
         { label: 'DTD', value: 'DTD', disable: true },
@@ -247,7 +257,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       this.setForm('noresep', '')
       this.listRacikan = []
       this.listPemintaanSementara = []
-      if (val === '') {
+
+      // console.log('resep', val)
+      if (val === '' || val === 'BARU') {
         this.indexRacikan = -1
         return
       }
@@ -413,8 +425,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         })
     },
     simpanObat(payload) {
-      const form = payload
-      console.log('payload', form)
+      // const form = payload
+      console.log('payload', this.form)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)

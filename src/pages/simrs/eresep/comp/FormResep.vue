@@ -317,6 +317,7 @@
             </q-item>
           </template>
           <!-- {{ store.listRacikan }} -->
+          <!-- {{ store.listRacikan }} -->
           <template v-if="store.listRacikan.length">
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
@@ -548,7 +549,7 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
 import { formatDouble } from 'src/modules/formatter'
@@ -588,18 +589,17 @@ function setPasien() {
   if (props?.depo === 'igd') store.getBillIgd(val)
   // store.getBillRajal(val)
 
-  //   if (props?.pasien?.newapotekrajal?.flag === '') {
-  //     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-  //     store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-  //     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-  //     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+  if (props?.pasien?.newapotekrajal?.flag === '') {
+    store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
+    store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
+    if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
+    if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
 
-  //     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-  //     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  //   } else if (props?.pasien?.newapotekrajal) {
-  //     if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
-  //   } else {
-  // }
+    // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
+    // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
+  } else if (props?.pasien?.newapotekrajal) {
+    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
+  }
   store.setNoreseps(props?.pasien?.newapotekrajal)
 
   store.listRacikan = []
@@ -632,6 +632,7 @@ function racikanTambah(val) {
   store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
   store.setForm('tiperacikan', val?.tiperacikan)
   store.setForm('keterangan', val?.keterangan)
+  store.setForm('satuan_racik', val?.satuan_racik)
 
   store.tipeRacikan = [
     { label: 'DTD', value: 'DTD', disable: true },
@@ -837,14 +838,17 @@ function simpanObat() {
 }
 onMounted(() => {
   console.log('depo', props?.depo, props.pasien)
-  store.pasien = props?.pasien
-  store.depo = props?.depo
+  // console.log('ref Obat', refObat.value)
+  // refObat.value.showPopup()
   store.getSigna()
   store.cariObat()
-  setPasien()
-  // console.log('ref Obat', refObat.value)
   refObat.value.focus()
-  // refObat.value.showPopup()
+})
+watchEffect(() => {
+  store.pasien = props?.pasien
+  store.depo = props?.depo
+  setPasien()
+  console.log('pasi', props.pasien)
 })
 
 </script>
