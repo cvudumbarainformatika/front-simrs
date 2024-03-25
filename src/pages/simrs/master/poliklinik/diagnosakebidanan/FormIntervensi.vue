@@ -16,7 +16,7 @@
           standout="bg-yellow-3"
           dense
           autofocus
-          @update:model-value="store.addGroupIntervensi"
+          @keyup.enter="store.addGroupIntervensi"
         />
       </div>
 
