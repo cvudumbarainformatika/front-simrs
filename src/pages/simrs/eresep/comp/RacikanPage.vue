@@ -443,14 +443,25 @@
             <q-item
               v-for="(obat, j) in store?.listRincianRacikan"
               :key="j"
+              style="padding:4px 16px;"
             >
               <!-- {{ j }} {{ obat }} -->
               <q-item-section style="width: 50%;">
-                <div class="row">
-                  {{ obat?.mobat?.nama_obat }}
-                </div>
-                <div class="row text-italic f-10">
-                  {{ obat?.kdobat }}
+                <div class="row no-wrap">
+                  <div
+                    class="col-auto"
+                    style="width: 5%;"
+                  >
+                    {{ j+1 }}
+                  </div>
+                  <div class="col-auto">
+                    <div class="row">
+                      {{ obat?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ obat?.kdobat }}
+                    </div>
+                  </div>
                 </div>
               </q-item-section>
               <q-item-section
@@ -586,8 +597,8 @@ onMounted(() => {
     enterKet()
   }
   const rac = store.listRacikan.find(x => x.namaracikan === store.form.namaracikan)
-  store.listRincianRacikan = rac?.rincian
-  console.log('rac', rac)
+  store.listRincianRacikan = rac?.rincian ?? []
+  console.log('rac', rac, store.listRincianRacikan)
   console.log('form', store.form)
 })
 // key up ---
