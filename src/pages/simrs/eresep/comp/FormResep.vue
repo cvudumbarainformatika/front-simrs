@@ -395,56 +395,74 @@
                   </div>
                 </q-item-section>
               </q-item> -->
-              <q-item
-                v-for="(obat, j) in item?.rincian"
-                :key="j"
-                class="bg-white"
-              >
-                <!-- {{ j }} {{ obat }} -->
-                <q-item-section style="width: 50%;">
-                  <div class="row">
-                    {{ obat?.mobat?.nama_obat }}
-                  </div>
-                  <div class="row text-italic f-10">
-                    {{ obat?.kdobat }}
-                  </div>
-                </q-item-section>
-                <q-item-section
-                  side
-                  style="width:50%"
+              <div class="bg-white">
+                <q-item
+                  v-for="(obat, j) in item?.rincian"
+                  :key="j"
+                  style="padding:4px 16px;"
                 >
-                  <div class="row items-center q-col-gutter-sm full-width">
-                    <div
-                      class="text-right col-2"
-                    >
-                      {{ obat?.jumlah }}
-                    </div>
-
-                    <div
-                      class="col text-right"
-                    >
-                      {{ obat?.keteranganx }}
-                    </div>
-                    <div class="col-shrink text-right">
-                      <q-btn
-                        color="negative"
-                        dense
-                        flat
-                        no-caps
-                        size="xs"
-                        icon="icon-mat-delete"
-                        :disable="store.loading || store.loadingkirim"
-                        :loading="store.loadingHapus && store.obatId === obat.id && !!store.namaRacikan"
-                        @click="store.hapusObat(obat)"
+                  <!-- {{ j }} {{ obat }} -->
+                  <q-item-section style="width: 50%;">
+                    <div class="row no-wrap">
+                      <div
+                        class="col-auto"
+                        style="width: 5%;"
                       >
-                        <q-tooltip class="bg-white text-primary">
-                          Hapus
-                        </q-tooltip>
-                      </q-btn>
+                        {{ j+1 }}
+                      </div>
+                      <div class="col-auto">
+                        <div class="row">
+                          {{ obat?.mobat?.nama_obat }}
+                        </div>
+                        <div class="row text-italic f-10">
+                          {{ obat?.kdobat }}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </q-item-section>
-              </q-item>
+                    <!-- <div class="row">
+                      {{ obat?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ obat?.kdobat }}
+                    </div> -->
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:45%"
+                  >
+                    <div class="row items-center q-col-gutter-sm full-width">
+                      <div
+                        class="text-right col-2"
+                      >
+                        {{ obat?.jumlah }}
+                      </div>
+
+                      <div
+                        class="col text-right"
+                      >
+                        {{ obat?.keteranganx }}
+                      </div>
+                      <div class="col-shrink text-right">
+                        <q-btn
+                          color="negative"
+                          dense
+                          flat
+                          no-caps
+                          size="xs"
+                          icon="icon-mat-delete"
+                          :disable="store.loading || store.loadingkirim"
+                          :loading="store.loadingHapus && store.obatId === obat.id && !!store.namaRacikan"
+                          @click="store.hapusObat(obat)"
+                        >
+                          <q-tooltip class="bg-white text-primary">
+                            Hapus
+                          </q-tooltip>
+                        </q-btn>
+                      </div>
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </div>
             </q-expansion-item>
           </template>
         </q-list>
@@ -596,6 +614,7 @@ function setPasien() {
     const resep = props?.pasien?.newapotekrajal?.find(val => val.noresep === store?.noresep)
     if (resep) {
       if (resep?.flag === '') {
+        store.listPemintaanSementara = []
         store.setForm('noresep', resep?.noresep ?? '-')
         store.setForm('tiperesep', resep?.tiperesep ?? 'normal')
         if (resep?.permintaanresep?.length) store.setListArray(resep?.permintaanresep)
@@ -680,7 +699,7 @@ const inputObat = myDebounce((val) => {
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
 function obatSelected(val) {
-  console.log('select obat', val)
+  // console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -709,7 +728,7 @@ const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
 function signaSelected(val) {
-  console.log('signa', val)
+  // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
@@ -746,7 +765,7 @@ function signaCreateValue(val, done) {
   store.fromSigna.signa = newSigna
   done(store.fromSigna)
 
-  console.log('signa new val', signa.value)
+  // console.log('signa new val', signa.value)
 }
 function getFocus() {
   refJmlHarSig.value?.focus()
@@ -767,12 +786,12 @@ function signaEnter() {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
-    console.log('signa enter')
+    // console.log('signa enter')
   }
 }
 // jumlah
 function setJumlah(val) {
-  console.log('jumlah', val)
+  // console.log('jumlah', val)
   if (Object.keys(signa.value)?.length) {
     if (parseFloat(val) > 0) {
       const kons = val / parseFloat(signa.value?.jumlah)
@@ -847,7 +866,7 @@ function simpanObat() {
   }
 }
 onMounted(() => {
-  console.log('depo', props?.depo, props.pasien)
+  // console.log('depo', props?.depo, props.pasien)
   // console.log('ref Obat', refObat.value)
   // refObat.value.showPopup()
   store.getSigna()
