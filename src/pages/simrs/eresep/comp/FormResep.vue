@@ -603,8 +603,10 @@ function setPasien() {
   }
   store.setNoreseps(props?.pasien?.newapotekrajal)
 
-  store.listRacikan = []
-  store.listPemintaanSementara = []
+  if (store?.noresep === 'BARU') {
+    store.listRacikan = []
+    store.listPemintaanSementara = []
+  }
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
@@ -643,6 +645,9 @@ function racikanTambah(val) {
 function resetFormRacik() {
   store.setForm('jenisresep', '')
   store.resetForm()
+  setTimeout(() => {
+    console.log('hide', store.listRacikan)
+  }, 1000)
 }
 /// / set Racikan end ------
 // perispan Operasi -----

@@ -27,6 +27,7 @@ const listpage = shallowRef(defineAsyncComponent(() => import('./comp/LitsPage.v
 
 const store = usePermintaanEResepStore()
 onUnmounted(() => {
+  // console.log('on mounted front page')
   store.listRacikan = []
   store.listPemintaanSementara = []
   store.noreseps = []
