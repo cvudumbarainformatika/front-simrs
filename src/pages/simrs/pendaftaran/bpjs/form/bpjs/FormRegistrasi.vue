@@ -814,6 +814,7 @@ function cekSuratKontrol() {
 // set kode Poli
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
+  setFlagKarcis('Lama')
 
   const index = findWithAttr(store.polis, 'kodepoli', val)
   store.form.dpjp = ''

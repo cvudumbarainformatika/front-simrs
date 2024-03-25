@@ -35,7 +35,7 @@
                   option-label="nama"
                   option-value="kode"
                   valid
-                  :loading="store.loading"
+                  :loading="store.loadingGudang"
                   :source="store.gudangDepo"
                   @on-select="gudangSelected"
                   @clear="gudangCleared"

@@ -317,6 +317,7 @@
             </q-item>
           </template>
           <!-- {{ store.listRacikan }} -->
+          <!-- {{ store.listRacikan }} -->
           <template v-if="store.listRacikan.length">
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
@@ -394,56 +395,74 @@
                   </div>
                 </q-item-section>
               </q-item> -->
-              <q-item
-                v-for="(obat, j) in item?.rincian"
-                :key="j"
-                class="bg-white"
-              >
-                <!-- {{ j }} {{ obat }} -->
-                <q-item-section style="width: 50%;">
-                  <div class="row">
-                    {{ obat?.mobat?.nama_obat }}
-                  </div>
-                  <div class="row text-italic f-10">
-                    {{ obat?.kdobat }}
-                  </div>
-                </q-item-section>
-                <q-item-section
-                  side
-                  style="width:50%"
+              <div class="bg-white">
+                <q-item
+                  v-for="(obat, j) in item?.rincian"
+                  :key="j"
+                  style="padding:4px 16px;"
                 >
-                  <div class="row items-center q-col-gutter-sm full-width">
-                    <div
-                      class="text-right col-2"
-                    >
-                      {{ obat?.jumlah }}
-                    </div>
-
-                    <div
-                      class="col text-right"
-                    >
-                      {{ obat?.keteranganx }}
-                    </div>
-                    <div class="col-shrink text-right">
-                      <q-btn
-                        color="negative"
-                        dense
-                        flat
-                        no-caps
-                        size="xs"
-                        icon="icon-mat-delete"
-                        :disable="store.loading || store.loadingkirim"
-                        :loading="store.loadingHapus && store.obatId === obat.id && !!store.namaRacikan"
-                        @click="store.hapusObat(obat)"
+                  <!-- {{ j }} {{ obat }} -->
+                  <q-item-section style="width: 50%;">
+                    <div class="row no-wrap">
+                      <div
+                        class="col-auto"
+                        style="width: 5%;"
                       >
-                        <q-tooltip class="bg-white text-primary">
-                          Hapus
-                        </q-tooltip>
-                      </q-btn>
+                        {{ j+1 }}
+                      </div>
+                      <div class="col-auto">
+                        <div class="row">
+                          {{ obat?.mobat?.nama_obat }}
+                        </div>
+                        <div class="row text-italic f-10">
+                          {{ obat?.kdobat }}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </q-item-section>
-              </q-item>
+                    <!-- <div class="row">
+                      {{ obat?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ obat?.kdobat }}
+                    </div> -->
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:45%"
+                  >
+                    <div class="row items-center q-col-gutter-sm full-width">
+                      <div
+                        class="text-right col-2"
+                      >
+                        {{ obat?.jumlah }}
+                      </div>
+
+                      <div
+                        class="col text-right"
+                      >
+                        {{ obat?.keteranganx }}
+                      </div>
+                      <div class="col-shrink text-right">
+                        <q-btn
+                          color="negative"
+                          dense
+                          flat
+                          no-caps
+                          size="xs"
+                          icon="icon-mat-delete"
+                          :disable="store.loading || store.loadingkirim"
+                          :loading="store.loadingHapus && store.obatId === obat.id && !!store.namaRacikan"
+                          @click="store.hapusObat(obat)"
+                        >
+                          <q-tooltip class="bg-white text-primary">
+                            Hapus
+                          </q-tooltip>
+                        </q-btn>
+                      </div>
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </div>
             </q-expansion-item>
           </template>
         </q-list>
@@ -548,7 +567,7 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef, watchEffect } from 'vue'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
 import { formatDouble } from 'src/modules/formatter'
@@ -573,6 +592,7 @@ function setTipe(val) {
 }
 function setPasien() {
   const val = props?.pasien
+  if (!val) return
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   const diag = temp?.length ? temp.join(', ') : '-'
 
@@ -586,24 +606,33 @@ function setPasien() {
   if (props?.depo === 'rjl') store.getBillRajal(val)
   if (props?.depo === 'rnp') store.getBillRanap(val)
   if (props?.depo === 'igd') store.getBillIgd(val)
+  if (props?.depo === 'ok') store.getBillOk(val)
   // store.getBillRajal(val)
 
-  //   if (props?.pasien?.newapotekrajal?.flag === '') {
-  //     store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-  //     store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-  //     if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-  //     if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+  console.log('pasien obat', props?.pasien?.newapotekrajal)
+  if (!!store?.noresep && store?.noresep !== 'BARU') {
+    const resep = props?.pasien?.newapotekrajal?.find(val => val.noresep === store?.noresep)
+    if (resep) {
+      if (resep?.flag === '') {
+        store.listPemintaanSementara = []
+        store.setForm('noresep', resep?.noresep ?? '-')
+        store.setForm('tiperesep', resep?.tiperesep ?? 'normal')
+        if (resep?.permintaanresep?.length) store.setListArray(resep?.permintaanresep)
+        if (resep?.permintaanracikan?.length) store.setListRacikanArray(resep?.permintaanracikan)
 
-  //     // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-  //     // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  //   } else if (props?.pasien?.newapotekrajal) {
-  //     if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
-  //   } else {
-  // }
+        // store.listPemintaanSementara = resep?.permintaanresep ?? []
+        // store.listRacikan = resep?.permintaanracikan ?? []
+      } else if (resep) {
+        if (resep?.flag !== '') store.setListResep(resep)
+      }
+    }
+  }
   store.setNoreseps(props?.pasien?.newapotekrajal)
-
-  store.listRacikan = []
-  store.listPemintaanSementara = []
+  console.log('form nya', store.form)
+  if (store?.noresep === 'BARU') {
+    store.listRacikan = []
+    store.listPemintaanSementara = []
+  }
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
@@ -632,6 +661,7 @@ function racikanTambah(val) {
   store.setForm('jumlahdibutuhkan', val?.jumlahracikan)
   store.setForm('tiperacikan', val?.tiperacikan)
   store.setForm('keterangan', val?.keterangan)
+  store.setForm('satuan_racik', val?.satuan_racik)
 
   store.tipeRacikan = [
     { label: 'DTD', value: 'DTD', disable: true },
@@ -648,7 +678,7 @@ const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOpera
 function openPersiapanOperasi() {
   permintaan.isOpen = true
   permintaan.setPasien(props.pasien)
-  console.log('props pasien', props.pasien)
+  // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
 function myDebounce(func, timeout = 800) {
@@ -669,7 +699,7 @@ const inputObat = myDebounce((val) => {
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
 function obatSelected(val) {
-  console.log('select obat', val)
+  // console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -698,7 +728,7 @@ const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
 function signaSelected(val) {
-  console.log('signa', val)
+  // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
   // if (sign.length) {
@@ -735,7 +765,7 @@ function signaCreateValue(val, done) {
   store.fromSigna.signa = newSigna
   done(store.fromSigna)
 
-  console.log('signa new val', signa.value)
+  // console.log('signa new val', signa.value)
 }
 function getFocus() {
   refJmlHarSig.value?.focus()
@@ -756,12 +786,12 @@ function signaEnter() {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
-    console.log('signa enter')
+    // console.log('signa enter')
   }
 }
 // jumlah
 function setJumlah(val) {
-  console.log('jumlah', val)
+  // console.log('jumlah', val)
   if (Object.keys(signa.value)?.length) {
     if (parseFloat(val) > 0) {
       const kons = val / parseFloat(signa.value?.jumlah)
@@ -836,15 +866,18 @@ function simpanObat() {
   }
 }
 onMounted(() => {
-  console.log('depo', props?.depo, props.pasien)
-  store.pasien = props?.pasien
-  store.depo = props?.depo
+  // console.log('depo', props?.depo, props.pasien)
+  // console.log('ref Obat', refObat.value)
+  // refObat.value.showPopup()
   store.getSigna()
   store.cariObat()
-  setPasien()
-  // console.log('ref Obat', refObat.value)
   refObat.value.focus()
-  // refObat.value.showPopup()
+})
+watchEffect(() => {
+  store.pasien = props?.pasien
+  store.depo = props?.depo
+  setPasien()
+  console.log('pasi', props.pasien)
 })
 
 </script>

@@ -123,6 +123,12 @@
               <div class="row text-grey f-10">
                 {{ dateFullFormat(item?.tgl_permintaan) }}
               </div>
+              <div
+                v-if="item?.tiperesep==='iter'"
+                class="row text-purple text-weight-bold f-10"
+              >
+                iter s/d {{ dateFullFormat(item?.iter_expired) }}
+              </div>
             </td>
             <td>
               <div class="row text-weight-bold">

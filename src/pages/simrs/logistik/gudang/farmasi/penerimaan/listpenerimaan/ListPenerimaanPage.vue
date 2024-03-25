@@ -52,7 +52,7 @@
         <div>Total</div>
       </template>
       <template #cell-penyedia="{ row }">
-        <div>{{ row.pbf ? row.pbf : '-' }}</div>
+        <div>{{ row.pihakketiga?.nama ? row.pihakketiga?.nama : '-' }}</div>
       </template>
       <template #cell-total="{ row }">
         <div class="text-weight-bold">

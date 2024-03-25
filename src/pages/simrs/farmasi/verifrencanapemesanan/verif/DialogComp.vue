@@ -61,7 +61,7 @@
                 Tanggal Verif
               </div>
               <div class="col-8">
-                {{ dateFullFormat(store?.rencana?.tgl_verif)??'-' }}
+                {{ dateFullFormat(store?.rencana?.tglverif)??'-' }}
               </div>
             </div>
           </div>
@@ -317,7 +317,9 @@ function setNumber(evt, det) {
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
   if (nilai > det.maxRs) {
-    det.jumlah_diverif = det.maxRs
+    if (parseFloat(det.jumlahdirencanakan) > det.maxRs) det.jumlah_diverif = det.maxRs
+    else det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)
+
     notifErrVue('Tidak Boleh Lebih dari jumlah Stok Maksimal Rumah Sakit')
   } else if (nilai > parseFloat(det.jumlahdirencanakan)) {
     det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)

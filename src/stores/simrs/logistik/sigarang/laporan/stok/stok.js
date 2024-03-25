@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 export const useStokStore = defineStore('stok_store', {
   state: () => ({
     loading: false,
+    loadingGudang: false,
     loadingKartuStok: false,
     isOpen: false,
     allItems: [],
@@ -157,11 +158,11 @@ export const useStokStore = defineStore('stok_store', {
       this.gudangDepo = [
         { nama: 'semua', kode: 'semua' }
       ]
-      this.loading = true
+      this.loadingGudang = true
       return new Promise(resolve => {
         api.get('v1/stok/ruang-has-stok')
           .then(resp => {
-            this.loading = false
+            this.loadingGudang = false
             // console.log('data gudang', resp)
             const keys = Object.keys(resp.data)
             keys.forEach(key => {
@@ -175,7 +176,7 @@ export const useStokStore = defineStore('stok_store', {
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            this.loadingGudang = false
           })
       })
     },

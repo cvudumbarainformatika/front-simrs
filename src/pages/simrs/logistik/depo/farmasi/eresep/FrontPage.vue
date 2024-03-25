@@ -8,13 +8,16 @@
         ada-per-page
         ada-refresh
         use-full
+        :ruang="kdruangansim"
         :search="store.params.q"
         :flag="store.params.flag"
+        :tipe="store.params.tipe"
         :per-page="store.params.per_page"
         @cari="store.setSearch"
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
         @set-flag="store.setFlag"
+        @set-tipe="store.setTipe"
         @set-periode="(val)=>store.setPeriodik(val)"
       />
     </div>
@@ -54,7 +57,7 @@
 
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { defineAsyncComponent, watch, onMounted } from 'vue'
+import { defineAsyncComponent, watch, onMounted, computed } from 'vue'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { laravelEcho } from 'src/modules/newsockets'
@@ -79,6 +82,9 @@ function subscribedChannel() {
     }
   })
 }
+const kdruangansim = computed(() => {
+  return apps?.user?.kdruangansim
+})
 onMounted(() => {
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {

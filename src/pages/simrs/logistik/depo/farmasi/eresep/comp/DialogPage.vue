@@ -352,6 +352,9 @@
                 {{ item?.aturan }}
               </div>
               <div class="col-shrink q-mr-xs">
+                ({{ item?.satuan_racik }})
+              </div>
+              <div class="col-shrink q-mr-xs">
                 {{ item?.keterangan }}
               </div>
               <div class="col-shrink q-mr-xs text-italic f-10">
@@ -412,16 +415,12 @@
                   style="width:70%"
                 >
                   <div class="row full-width">
+                    <!-- {{ item?.tiperacikan }} -->
                     <div class="col-6">
-                      <div class="row">
-                        <div class="col-4">
-                          Dosis Obat
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.dosisobat }}
-                        </div>
-                      </div>
-                      <div class="row">
+                      <div
+                        v-if="item?.tiperacikan==='DTD'"
+                        class="row"
+                      >
                         <div class="col-4">
                           Dosis Resep
                         </div>
@@ -429,6 +428,18 @@
                           {{ rinc?.dosismaksimum }}
                         </div>
                       </div>
+                      <div
+                        v-if="item?.tiperacikan==='DTD'"
+                        class="row text-black"
+                      >
+                        <div class="col-4">
+                          Dosis Obat
+                        </div>
+                        <div class="col-8">
+                          {{ rinc?.dosisobat }}
+                        </div>
+                      </div>
+
                       <div class="row">
                         <div class="col-4">
                           Jumlah Resep
@@ -437,7 +448,7 @@
                           {{ rinc?.jumlahresep }}
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row  text-black">
                         <div class="col-4">
                           Jumlah Obat
                         </div>

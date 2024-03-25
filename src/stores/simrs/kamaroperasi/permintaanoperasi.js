@@ -54,16 +54,22 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       const params = { params: this.params }
       await api.get('/v1/simrs/penunjang/ok/listkamaroperasi', params)
         .then((resp) => {
-          // console.log('kunjungan poli', resp)
           this.loading = false
           if (resp.status === 200) {
             this.meta = resp.data
             this.items = resp.data.data
             this.items.forEach(xxx => {
+              xxx.noreg = xxx?.rs1
               xxx.kelamin = xxx?.kunjunganranap?.masterpasien?.rs17 ?? xxx?.kunjunganrajal?.masterpasien?.rs17
+              xxx.norm = xxx?.kunjunganranap?.masterpasien?.rs1 ?? xxx?.kunjunganrajal?.masterpasien?.rs1
+              xxx.groups = xxx?.sistembayar?.groups
+              xxx.kodesistembayar = xxx?.rs14
+              xxx.kodedokter = xxx?.rs8
+              xxx.kdruangan = 'R-0101021'
               xxx.usia = this.getUsia(xxx?.rs3, xxx?.kunjunganranap?.masterpasien?.rs16)
             })
           }
+          console.log('kunjungan Ok', this.items)
         }).catch((err) => {
           console.log(err)
           this.loading = false

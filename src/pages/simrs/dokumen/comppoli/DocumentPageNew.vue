@@ -141,6 +141,13 @@ const documents = ref([
     jenis: 'RM RJ-1c',
     label: 'Pengkajian Awal Medis Rawat Jalan',
     value: 'Pengkajian'
+  },
+  {
+    icon: 'icon-mat-email',
+    color: 'primary',
+    jenis: 'RM IRJA-2',
+    label: 'Catatan Rawat Jalan',
+    value: 'Catatan'
   }
 ])
 // eslint-disable-next-line no-unused-vars
@@ -157,7 +164,8 @@ const comp = [
   { nama: 'Rencana', page: defineAsyncComponent(() => import('../surat/compsurat/SuratRencanaPage.vue')) },
   { nama: 'prb', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRujukBalik.vue')) },
   { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) },
-  { nama: 'Pengkajian', page: defineAsyncComponent(() => import('../erm/poli/PengkajianAwalMedisRJPage.vue')) }
+  { nama: 'Pengkajian', page: defineAsyncComponent(() => import('../erm/poli/PengkajianAwalMedisRJPage.vue')) },
+  { nama: 'Catatan', page: defineAsyncComponent(() => import('../erm/poli/CatatanRawatJalanPage.vue')) }
 ]
 // eslint-disable-next-line no-unused-vars
 const cekPanel = () => {
