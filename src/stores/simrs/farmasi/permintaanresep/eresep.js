@@ -278,7 +278,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       } else {
         if (resep?.flag !== '') this.setListResep(resep)
       }
-      console.log('set resep', val, resep)
+      console.log('set resep', val, resep, this.form)
     },
     setListResep(resep) {
       resep.listRacikan = []

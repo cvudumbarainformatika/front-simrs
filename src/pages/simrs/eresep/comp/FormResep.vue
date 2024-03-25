@@ -574,6 +574,7 @@ function setTipe(val) {
 }
 function setPasien() {
   const val = props?.pasien
+  if (!val) return
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   const diag = temp?.length ? temp.join(', ') : '-'
 
@@ -590,19 +591,25 @@ function setPasien() {
   if (props?.depo === 'ok') store.getBillOk(val)
   // store.getBillRajal(val)
 
-  if (props?.pasien?.newapotekrajal?.flag === '') {
-    store.setForm('noresep', props?.pasien?.newapotekrajal?.noresep ?? '-')
-    store.setForm('tiperesep', props?.pasien?.newapotekrajal?.tiperesep ?? 'normal')
-    if (props?.pasien?.newapotekrajal?.permintaanresep?.length) store.setListArray(props?.pasien?.newapotekrajal?.permintaanresep)
-    if (props?.pasien?.newapotekrajal?.permintaanracikan?.length) store.setListRacikanArray(props?.pasien?.newapotekrajal?.permintaanracikan)
+  console.log('pasien obat', props?.pasien?.newapotekrajal)
+  if (!!store?.noresep && store?.noresep !== 'BARU') {
+    const resep = props?.pasien?.newapotekrajal?.find(val => val.noresep === store?.noresep)
+    if (resep) {
+      if (resep?.flag === '') {
+        store.setForm('noresep', resep?.noresep ?? '-')
+        store.setForm('tiperesep', resep?.tiperesep ?? 'normal')
+        if (resep?.permintaanresep?.length) store.setListArray(resep?.permintaanresep)
+        if (resep?.permintaanracikan?.length) store.setListRacikanArray(resep?.permintaanracikan)
 
-    // store.listPemintaanSementara = props?.pasien?.newapotekrajal?.permintaanresep ?? []
-    // store.listRacikan = props?.pasien?.newapotekrajal?.permintaanracikan ?? []
-  } else if (props?.pasien?.newapotekrajal) {
-    if (props?.pasien?.newapotekrajal?.flag !== '') store.setListResep(props?.pasien?.newapotekrajal)
+        // store.listPemintaanSementara = resep?.permintaanresep ?? []
+        // store.listRacikan = resep?.permintaanracikan ?? []
+      } else if (resep) {
+        if (resep?.flag !== '') store.setListResep(resep)
+      }
+    }
   }
   store.setNoreseps(props?.pasien?.newapotekrajal)
-
+  console.log('form nya', store.form)
   if (store?.noresep === 'BARU') {
     store.listRacikan = []
     store.listPemintaanSementara = []
@@ -645,9 +652,6 @@ function racikanTambah(val) {
 function resetFormRacik() {
   store.setForm('jenisresep', '')
   store.resetForm()
-  setTimeout(() => {
-    console.log('hide', store.listRacikan)
-  }, 1000)
 }
 /// / set Racikan end ------
 // perispan Operasi -----
@@ -655,7 +659,7 @@ const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOpera
 function openPersiapanOperasi() {
   permintaan.isOpen = true
   permintaan.setPasien(props.pasien)
-  console.log('props pasien', props.pasien)
+  // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
 function myDebounce(func, timeout = 800) {
