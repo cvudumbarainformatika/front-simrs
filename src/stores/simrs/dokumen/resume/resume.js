@@ -24,6 +24,7 @@ export const useDokumenResumeStore = defineStore('dokumen_resume', {
             this.loading = false
             console.log('resp resume', resp.data)
             this.item = resp.data.length ? resp.data[0] : {}
+            this.items = resp.data
             resolve(resp)
           })
           .catch(() => { this.loading = false })

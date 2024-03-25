@@ -392,113 +392,6 @@
                       </q-item-label>
                     </q-item-section>
                   </q-item>
-                  <!-- KHUSUS PARU POL018-->
-                  <q-separator v-if="pasien?.kodepoli==='POL018'" />
-                  <q-item
-                    v-if="pasien?.kodepoli==='POL018'"
-                  >
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label
-                        lines="2"
-                      >
-                        Inspeksi : <em>{{ item?.inspeksi?? '-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Palpasi : <em>{{ item?.palpasi??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Perkusi Dada Kanan : <em>{{ item?.perkusidadakanan??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Perkusi Dada Kiri : <em>{{ item?.perkusidadakiri??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Suara Nafas Dasar : <em>{{ item?.auskultasisuaradasar??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Suara Nafas Tambahan (Kanan) : <em>{{ item?.auskultasisuaratambahankanan??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        Suara Nafas Tambahan (Kiri) : <em>{{ item?.auskultasisuaratambahankiri??'-' }}</em>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-separator v-if="pasien?.kodepoli==='POL017'" />
-                  <q-item
-                    v-if="pasien?.kodepoli==='POL017'"
-                    class="q-pa-none list-move"
-                  >
-                    <div
-                      v-for="(pmata,pm) in store.item?.pemeriksaanfisik[0].pemeriksaankhususmata"
-                      :key="pm"
-                    >
-                      <q-item-section class="q-pa-xs">
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOD AWAL: <em>{{ pmata?.rs4??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOD REFR : <em>{{ pmata?.rs5??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOD AKHIR : <em>{{ pmata?.rs6??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          TOD : <em>{{ pmata?.rs10 }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          FONDOS OD : <em>{{ pmata?.rs12??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOS AWAL : <em>{{ pmata?.rs7??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOS REFR : <em>{{ pmata?.rs8??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          VOS AKHIR : <em>{{ pmata?.rs9??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          TOS : <em>{{ pmata?.rs11??'-' }}</em>
-                        </q-item-label>
-                        <q-item-label
-                          lines="2"
-                        >
-                          FONDOS OS : <em>{{ pmata?.rs13??'-' }}</em>
-                        </q-item-label>
-                      </q-item-section>
-                    </div>
-                  </q-item>
-                <!-- DETAIL -->
 
                 <!-- <q-card
                   flat
@@ -547,6 +440,113 @@
                   size="5px"
                 /> -->
                 </template>
+                <!-- KHUSUS PARU POL018-->
+                <q-separator v-if="pasien?.kodepoli==='POL018'" />
+                <q-item
+                  v-if="pasien?.kodepoli==='POL018'"
+                >
+                  <q-item-section class="q-pa-xs">
+                    <q-item-label
+                      lines="2"
+                    >
+                      Inspeksi : <em>{{ item?.inspeksi?? '-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Palpasi : <em>{{ item?.palpasi??'-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Perkusi Dada Kanan : <em>{{ item?.perkusidadakanan??'-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Perkusi Dada Kiri : <em>{{ item?.perkusidadakiri??'-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Suara Nafas Dasar : <em>{{ item?.auskultasisuaradasar??'-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Suara Nafas Tambahan (Kanan) : <em>{{ item?.auskultasisuaratambahankanan??'-' }}</em>
+                    </q-item-label>
+                    <q-item-label
+                      lines="2"
+                    >
+                      Suara Nafas Tambahan (Kiri) : <em>{{ item?.auskultasisuaratambahankiri??'-' }}</em>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-separator v-if="pasien?.kodepoli==='POL017'" />
+                <q-item
+                  v-if="pasien?.kodepoli==='POL017'"
+                  class="q-pa-none list-move"
+                >
+                  <div
+                    v-for="(pmata,pm) in store.item?.pemeriksaanfisik[0].pemeriksaankhususmata"
+                    :key="pm"
+                  >
+                    <q-item-section class="q-pa-xs">
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD AWAL: <em>{{ pmata?.rs4??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD REFR : <em>{{ pmata?.rs5??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOD AKHIR : <em>{{ pmata?.rs6??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        TOD : <em>{{ pmata?.rs10 }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        FONDOS OD : <em>{{ pmata?.rs12??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS AWAL : <em>{{ pmata?.rs7??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS REFR : <em>{{ pmata?.rs8??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        VOS AKHIR : <em>{{ pmata?.rs9??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        TOS : <em>{{ pmata?.rs11??'-' }}</em>
+                      </q-item-label>
+                      <q-item-label
+                        lines="2"
+                      >
+                        FONDOS OS : <em>{{ pmata?.rs13??'-' }}</em>
+                      </q-item-label>
+                    </q-item-section>
+                  </div>
+                </q-item>
+                <!-- DETAIL -->
               </transition-group>
             </q-list>
           </div>
