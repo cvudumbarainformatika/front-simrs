@@ -185,7 +185,7 @@ const props = defineProps({
 const filterredTable = computed(() => {
   const val = store.notaTindakan
   const arr = props?.pasien?.tindakan
-  return arr.filter(x => x.rs2 === val)
+  return arr?.filter(x => x.rs2 === val)
 })
 
 function hapusItem(id) {

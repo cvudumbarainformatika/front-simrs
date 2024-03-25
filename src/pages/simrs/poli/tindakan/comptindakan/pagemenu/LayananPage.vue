@@ -62,6 +62,15 @@
           >
             <PraAnestesiaPage :pasien="props.pasien" />
           </q-tab-panel>
+          <q-tab-panel
+            name="Laporan Tindakan"
+            class="full-height q-pa-none"
+          >
+            <LaporanTindakan
+              :key="props.pasien"
+              :pasien="props.pasien"
+            />
+          </q-tab-panel>
         </q-tab-panels>
       </div>
     </div>
@@ -76,6 +85,7 @@ import TindakanPage from './complayanan/TindakanPage.vue'
 import IcdPage from './complayanan/IcdPage.vue'
 import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
 import PraAnestesiaPage from './complayanan/PraAnestesiaPage.vue'
+import LaporanTindakan from './complayanan/LaporanTindakan.vue'
 import { onMounted } from 'vue'
 
 const props = defineProps({

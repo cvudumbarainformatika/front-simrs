@@ -149,12 +149,12 @@ const masters = {
           path: '/master/poliklinik/diagnosakeperawatan',
           name: 'master.poliklinik.diagnosakeperawatan',
           component: () => import('pages/simrs/master/poliklinik/diagnosakeperawatan/IndexPage.vue')
+        },
+        {
+          path: '/master/poliklinik/diagnosakebidanan',
+          name: 'master.poliklinik.diagnosakebidanan',
+          component: () => import('pages/simrs/master/poliklinik/diagnosakebidanan/IndexPage.vue')
         }
-        // {
-        //   path: '/master/tindakan/ranap',
-        //   name: 'master.generalconsent.ranap',
-        //   component: () => import('pages/simrs/master/generalconsent/ranap/IndexPage.vue')
-        // }
       ]
     },
     {

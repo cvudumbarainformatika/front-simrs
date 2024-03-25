@@ -194,7 +194,7 @@ function init() {
 
   const canvas = cvn.value
   canvas.setDimensions({ width: widthEl.value, height: heightEl.value })
-  const img = markRaw(new fabric.Image(imgRef.value, (image, isError) => {
+  const img = markRaw(new fabric.Image(imgRef.value, (image, or) => {
     image.set({
       width: widthEl.value,
       heigh: heightEl.value,
