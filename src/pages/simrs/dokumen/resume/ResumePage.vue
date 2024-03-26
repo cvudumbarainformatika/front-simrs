@@ -489,61 +489,66 @@
                   class="q-pa-none list-move"
                 >
                   <div
-                    v-for="(pmata,pm) in store.item?.pemeriksaanfisik[0].pemeriksaankhususmata"
-                    :key="pm"
+                    v-for="(pmatax,pmx) in store.item?.pemeriksaanfisik"
+                    :key="pmx"
                   >
-                    <q-item-section class="q-pa-xs">
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD AWAL: <em>{{ pmata?.rs4??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD REFR : <em>{{ pmata?.rs5??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOD AKHIR : <em>{{ pmata?.rs6??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        TOD : <em>{{ pmata?.rs10 }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        FONDOS OD : <em>{{ pmata?.rs12??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS AWAL : <em>{{ pmata?.rs7??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS REFR : <em>{{ pmata?.rs8??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        VOS AKHIR : <em>{{ pmata?.rs9??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        TOS : <em>{{ pmata?.rs11??'-' }}</em>
-                      </q-item-label>
-                      <q-item-label
-                        lines="2"
-                      >
-                        FONDOS OS : <em>{{ pmata?.rs13??'-' }}</em>
-                      </q-item-label>
-                    </q-item-section>
+                    <div
+                      v-for="(pmata,pm) in pmatax?.pemeriksaankhususmata"
+                      :key="pm"
+                    >
+                      <q-item-section class="q-pa-xs">
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD AWAL: <em>{{ pmata?.rs4 }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD REFR : <em>{{ pmata?.rs5??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOD AKHIR : <em>{{ pmata?.rs6??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          TOD : <em>{{ pmata?.rs10 }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          FONDOS OD : <em>{{ pmata?.rs12??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS AWAL : <em>{{ pmata?.rs7??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS REFR : <em>{{ pmata?.rs8??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          VOS AKHIR : <em>{{ pmata?.rs9??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          TOS : <em>{{ pmata?.rs11??'-' }}</em>
+                        </q-item-label>
+                        <q-item-label
+                          lines="2"
+                        >
+                          FONDOS OS : <em>{{ pmata?.rs13??'-' }}</em>
+                        </q-item-label>
+                      </q-item-section>
+                    </div>
                   </div>
                 </q-item>
                 <!-- DETAIL -->

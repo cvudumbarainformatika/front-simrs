@@ -3,24 +3,44 @@
     <q-card>
       <q-card-section>
         <div class="row fit q-col-gutter-sm items-center">
-          <div class="col-6">
+          <div class="col-9">
             <div class="row fit q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
-                Nomor Kontrak
+                Penyedia
               </div>
               <div class="col-8">
                 <app-autocomplete-new
-                  v-model="store.form.kontrak"
-                  label="pilih kontrak"
+                  v-model="store.form.penyedia"
+                  label="pilih Penyedia"
                   debounce="700"
-                  autocomplete="kontrak"
-                  option-label="kontrak"
-                  option-value="kontrak"
+                  autocomplete="nama"
+                  option-label="nama"
+                  option-value="kode"
                   outlined
                   valid
                   :loading="store.loading"
-                  :source="store.kontraks"
-                  @on-select="store.kontrakSelected"
+                  :source="store.penyedias"
+                  @on-select="store.penyediaSelected"
+                />
+              </div>
+            </div>
+            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
+                Nomor BAST
+              </div>
+              <div class="col-8">
+                <app-autocomplete-new
+                  v-model="store.form.bast"
+                  label="Pilih Nomor BAST"
+                  debounce="700"
+                  autocomplete="no_bast"
+                  option-label="no_bast"
+                  option-value="no_bast"
+                  outlined
+                  valid
+                  :loading="store.loading"
+                  :source="store.basts"
+                  @on-select="store.bastSelected"
                 />
               </div>
             </div>
@@ -56,6 +76,14 @@
             </div>
             <div class="row fit q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
+                Tanggal Kontrak
+              </div>
+              <div class="col-8 text-weight-bold">
+                {{ dateFullFormat( store.kontrak.tglmulaikontrak) }}
+              </div>
+            </div>
+            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
+              <div class="col-4">
                 Nomor Pembayaran
               </div>
               <div class="col-8">
@@ -69,16 +97,9 @@
               </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-4">
-                Tanggal Kontrak
-              </div>
-              <div class="col-8 text-weight-bold">
-                {{ dateFullFormat( store.kontrak.tglmulaikontrak) }}
-              </div>
-            </div>
-            <div class="row fit q-col-gutter-sm items-center q-mb-xs">
+          <!--
+              <div class="col-6">
+              <div class="row fit q-col-gutter-sm items-center q-mb-xs">
               <div class="col-4">
                 Nama Penyedia
               </div>
@@ -87,6 +108,7 @@
               </div>
             </div>
           </div>
+          -->
         </div>
       </q-card-section>
       <q-card-actions align="right">
@@ -199,6 +221,7 @@ import { ref } from 'vue'
 
 const store = usePembayaranStore()
 store.getKontraks()
+store.getPenyedias()
 function setTanggal(val) {
   store.setForm('tanggal_pembayaran', date.formatDate(val, 'YYYY-MM-DD'))
 }

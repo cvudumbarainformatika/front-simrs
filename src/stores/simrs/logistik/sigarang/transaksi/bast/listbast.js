@@ -12,6 +12,7 @@ export const useListBastPenerimaanStore = defineStore('list_bast_penerimaan', {
       per_page: 10
     },
     columns: [
+      'penyedia',
       'no_bast',
       'tanggal',
       'total',
