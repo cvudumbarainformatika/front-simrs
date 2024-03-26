@@ -12,7 +12,7 @@
             <FormIntevensi />
           </div>
         </div>
-        <div class="col-6 full-height q-pa-md bg-grey-4">
+        <div class="col-6 full-height q-px-md bg-grey-4">
           <ListDiagnosa
             :items="store.items"
             @add-intervensi="store.setIntervensi"

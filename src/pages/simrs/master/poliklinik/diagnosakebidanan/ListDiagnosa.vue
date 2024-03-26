@@ -46,6 +46,8 @@
             color="primary"
             class="q-px-md"
             no-caps
+            outline
+            size="sm"
             @click="emits('addIntervensi', item)"
           >
             Add Interv
