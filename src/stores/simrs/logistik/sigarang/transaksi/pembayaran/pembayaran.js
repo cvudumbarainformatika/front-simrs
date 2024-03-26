@@ -6,6 +6,8 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
   state: () => ({
     loading: false,
     kontraks: [],
+    penyedias: [],
+    basts: [],
     kontrak: {},
     penerimaans: [],
     noBayar: 0,
@@ -66,6 +68,52 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
       })
       this.getKontrak()
     },
+    bastSelected(val) {
+      console.log('no_bast', val)
+      this.setParam('no_bast', val)
+      const bast = this.basts.find(x => x.no_bast === val)
+      this.setParam('kontrak', bast?.kontrak)
+      console.log('bast', bast)
+      this.getPenerimaanByBast().then(pnrm => {
+        this.getNoBayar().then(byr => {
+          if (pnrm.length) {
+            const nomor = pnrm[0].nomor
+            const tempNom = nomor.split('SP-')
+            let nom = ''
+            let nom2 = ''
+            const noByr = byr < 9 ? '0' + (byr + 1) : byr + 1
+            if (tempNom.length > 1) {
+              nom = tempNom[0].split('/')
+              nom2 = tempNom[1].split('/')
+              const dua = nom2[0] === '' ? nom2[1] + '/' + nom2[2] + '/' + nom2[3] : tempNom[1]
+              if (nom.length > 3) {
+                // this.setForm('no_kwitansi', noByr + '/KWTS/SP-' + nom[2] + '/' + dua)
+                this.setForm('no_pembayaran', noByr + '/BYR/SP-' + nom[2] + '/' + dua)
+              } else {
+                // this.setForm('no_kwitansi', noByr + '/KWTS/' + tempNom[1])
+                this.setForm('no_pembayaran', noByr + '/BYR/' + tempNom[1])
+              }
+            } else {
+              // this.setForm('no_kwitansi', noByr + '/KWTS/' + nomor)
+              this.setForm('no_pembayaran', noByr + '/BYR/' + nomor)
+            }
+            console.log('nom length', tempNom.length)
+            console.log('nom', nom2)
+          } else {
+            notifErrVue('tidak ada Transaksi Penerimaan')
+          }
+          console.log('penerimaan', pnrm)
+          console.log('anu', byr)
+        })
+      })
+      this.getKontrak()
+    },
+    penyediaSelected(val) {
+      console.log(val)
+      this.setForm('bast', '')
+      this.setParam('kode', val)
+      this.getBast()
+    },
     // api related function
     // ambil data kontrak
     getKontraks() {
@@ -92,6 +140,53 @@ export const usePembayaranStore = defineStore('pembayaran_store', {
             this.loading = false
             this.kontrak = resp.data
             resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    // ambil penyedia
+    getPenyedias() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.get('v1/transaksi/pembayaran/cari-penyedia')
+          .then(resp => {
+            console.log('penyedias ', resp.data)
+            this.loading = false
+            this.penyedias = resp.data
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    getBast() {
+      this.loading = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/pembayaran/cari-bast', param)
+          .then(resp => {
+            console.log('basts ', resp.data)
+            console.log('ada ', Object.keys(resp.data))
+            this.loading = false
+            this.basts = resp.data
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    getPenerimaanByBast() {
+      this.loading = true
+      const param = { params: this.params }
+      return new Promise(resolve => {
+        api.get('v1/transaksi/pembayaran/ambil-penerimaan-by-bast', param)
+          .then(resp => {
+            this.loading = false
+            // console.log('get penerimaan', resp.data)
+            const trm = resp.data.map(terima => {
+              terima.nilai_pembayaran = terima.nilai_tagihan
+              return terima
+            })
+            this.penerimaans = trm
+            resolve(resp.data)
           })
           .catch(() => { this.loading = false })
       })

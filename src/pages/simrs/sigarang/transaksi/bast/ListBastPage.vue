@@ -27,7 +27,10 @@
       @on-click="onClick"
     >
       <template #col-no_bast>
-        <div>Nomor Bast</div>
+        <div>Nomor</div>
+      </template>
+      <template #col-penyedia>
+        <div>Penyedia</div>
       </template>
       <template #col-tanggal>
         <div>Tanggal BAST</div>
@@ -38,18 +41,7 @@
       <template #col-oleh>
         <div>Oleh</div>
       </template>
-      <template #cell-nomor="{ row }">
-        <div
-          v-if="row.kontrak"
-          class="row no-wrap justify-between items-center q-mb-xs"
-        >
-          <div class="q-mr-xs text-primary">
-            Kontrak
-          </div>
-          <div class="box text-right">
-            {{ row.kontrak }}
-          </div>
-        </div>
+      <template #cell-no_bast="{ row }">
         <div
           v-if="row.nomor"
           class="row no-wrap justify-between items-center q-mb-xs"
@@ -266,7 +258,7 @@
           <div class="q-mr-xs">
             Penerimaan
           </div>
-          <div class="box text-right text-weight-bold text-primary">
+          <div class="box2 text-right text-weight-bold text-primary">
             {{ row.dibuat.nama }}
           </div>
         </div>
@@ -277,7 +269,7 @@
           <div class="q-mr-xs">
             BAST
           </div>
-          <div class="box text-right text-weight-bold text-deep-orange">
+          <div class="box2 text-right text-weight-bold text-deep-orange">
             {{ row.dibast.nama }}
           </div>
         </div>
@@ -510,7 +502,12 @@ store.getInitialData()
 
 .box {
   white-space: normal !important;
-    inline-size: 170px;
+    inline-size: 400px;
+    overflow-wrap: break-word;
+}
+.box2 {
+  white-space: normal !important;
+    inline-size: 150px;
     overflow-wrap: break-word;
 }
 .terima{
