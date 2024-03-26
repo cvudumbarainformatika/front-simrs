@@ -489,7 +489,7 @@
                   class="q-pa-none list-move"
                 >
                   <div
-                    v-for="(pmata,pm) in store.item?.pemeriksaanfisik[0].pemeriksaankhususmata"
+                    v-for="(pmata,pm) in store.item?.pemeriksaanfisik?.pemeriksaankhususmata"
                     :key="pm"
                   >
                     <q-item-section class="q-pa-xs">
