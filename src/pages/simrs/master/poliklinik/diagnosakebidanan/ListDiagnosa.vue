@@ -1,5 +1,8 @@
 <template>
-  <q-markup-table wrap-cells>
+  <q-markup-table
+    wrap-cells
+    dense
+  >
     <thead class="bg-primary text-white">
       <tr>
         <th
@@ -52,6 +55,24 @@
           >
             Add Interv
           </q-btn>
+          <q-btn
+            icon="icon-mat-edit"
+            size="sm"
+            round
+            color="primary"
+            flat
+            class="q-ml-sm"
+            @click="emits('edit', item)"
+          />
+          <q-btn
+            icon="icon-mat-delete"
+            size="sm"
+            round
+            color="negative"
+            flat
+            class="q-ml-sm"
+            @click="emits('delete', item?.id)"
+          />
         </td>
       </tr>
     </tbody>
@@ -66,5 +87,5 @@ defineProps({
   }
 })
 
-const emits = defineEmits(['addIntervensi'])
+const emits = defineEmits(['addIntervensi', 'edit', 'delete'])
 </script>

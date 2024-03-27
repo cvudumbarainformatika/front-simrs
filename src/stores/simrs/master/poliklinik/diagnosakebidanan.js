@@ -28,16 +28,17 @@ export const useMasterDiagnosaKebidanan = defineStore('master-diagnosa-kebidanan
         api.post('v1/simrs/master/diagnosakebidanan/store', this.form)
           .then((resp) => {
             if (resp.status === 200) {
-              notifSuccess(resp)
               const ada = this.items.filter(x => x.id === resp?.data?.result?.id)
               if (!ada.length) {
                 this.items?.splice(0, 0, resp.data.result)
               }
               this.resetForm()
+              notifSuccess(resp)
             } else if (resp.status === 201) {
               this.errorsForm = resp?.data?.message
             }
             this.loadingsave = false
+            resolve()
           })
           .catch(err => {
             console.log('err', err.response.data)
@@ -83,12 +84,33 @@ export const useMasterDiagnosaKebidanan = defineStore('master-diagnosa-kebidanan
             kode: this.diagnosa?.kode,
             group: val
           }
-          this.groupIntervensis.push(obj)
+          this.groupIntervensis?.push(obj)
         } else {
           notifErrVue('Maaf , Group intervensi sudah ada!')
         }
         resolve()
       })
+    },
+
+    editForm(val) {
+      this.form = null
+      this.isIntervensi = false
+      this.editedForm = true
+      this.form = val
+    },
+
+    resetForm() {
+      this.form = null
+      // return new Promise((resolve, reject) => {
+      this.form = {
+        kode: null,
+        nama: null
+      }
+
+      this.editedForm = false
+
+      // resolve()
+      // })
     },
 
     saveIntervensi(group, row) {
@@ -101,7 +123,7 @@ export const useMasterDiagnosaKebidanan = defineStore('master-diagnosa-kebidanan
         form.id = row?.id
       }
 
-      console.log(form)
+      // console.log(form)
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/master/diagnosakebidanan/storeintervensi', form)
           .then((resp) => {
@@ -123,6 +145,25 @@ export const useMasterDiagnosaKebidanan = defineStore('master-diagnosa-kebidanan
           })
       })
     },
+
+    async deleteItem(id) {
+      const payload = { id }
+      try {
+        const resp = await api.post('v1/simrs/master/diagnosakebidanan/delete', payload)
+        // console.log(resp)
+        if (resp.status === 200) {
+          notifSuccess(resp)
+          const findItem = this.items.filter(x => x.id === id)
+          if (findItem.length) {
+            const pos = this.items.findIndex(el => el.id === id)
+            if (pos >= 0) { this.items.splice(pos, 1) }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
     async deleteIntervensi(id) {
       const payload = { id }
       try {

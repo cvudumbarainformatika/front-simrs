@@ -7,14 +7,9 @@
             INFORM CONSENT
           </div>
         </div>
-        <div class="col full-height bg-yellow">
+        <div class="col full-height">
           <q-scroll-area style="height:calc(100% - 1px)">
-            <div
-              v-for="n in 100"
-              :key="n"
-            >
-              sadasdasd
-            </div>
+            Masih Maintenance
           </q-scroll-area>
         </div>
       </div>
@@ -26,14 +21,9 @@
             INFORM CONSENT TERSIMPAN
           </div>
         </div>
-        <div class="col full-height bg-red">
+        <div class="col full-height">
           <q-scroll-area style="height:calc(100% - 1px)">
-            <div
-              v-for="n in 100"
-              :key="n"
-            >
-              sadasdasd
-            </div>
+            Masih Maintenance
           </q-scroll-area>
         </div>
       </div>
