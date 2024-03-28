@@ -334,17 +334,17 @@ function label (val) {
       // eslint-disable-next-line no-unreachable
       break
     case '1':
-      return 'Dikirim Ke Gudang'
+      return 'Dikirim ke Depo'
       // eslint-disable-next-line no-unreachable
       break
     case '2':
       // return 'grey'
-      return 'Sudah Diverif'
+      return 'Sudah diverif'
       // eslint-disable-next-line no-unreachable
       break
     case '3':
       // return 'grey'
-      return 'Sudah Di distribusikan'
+      return 'Sudah di distribusikan'
       // eslint-disable-next-line no-unreachable
       break
     case '4':
