@@ -3,16 +3,41 @@
   <KopSurat />
   <IdentitasPage :pasien="props.pasien" />
   <div
-    class="row justify-end text-weight-bold"
+    class="row justify-end text-weight-bold q-gutter-sm"
     style="margin-right: 20px;"
   >
-    RM IRJA-2
+    <div class="col-1">
+      <q-select
+        v-model="storecatatanRJ.paramshistory.tahunawal"
+        label="Tahun"
+        :options="options"
+        outlined
+        option-label="nama"
+        emit-value
+        map-options=""
+        @update:model-value="storecatatanRJ.carikunjungan"
+      />
+    </div>
+
+    <div class="col-1">
+      <q-select
+        v-model="storecatatanRJ.paramshistory.tahunakhir"
+        label="Tahun"
+        outlined
+        :options="options"
+        option-label="nama"
+      />
+    </div>
+    <div class="col-1">
+      RM IRJA-2
+    </div>
   </div>
   <div
     class="row justify-center f-20 text-weight-bold q-mb-md"
   >
-    PENGKAJIAN AWAL MEDIS RAWAT JALAN
+    CATATAN RAWAT JALAN
   </div>
+
   <q-separator />
   <q-markup-table
     separator="vertical"
@@ -234,11 +259,14 @@
 <script setup>
 import KopSurat from '../../comppoli/KopSurat.vue'
 import IdentitasPage from '../../comppoli/IdentitasPage.vue'
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
 import { useDokumenResumeStore } from 'src/stores/simrs/dokumen/resume/resume.js'
+import { useCatatanRawatJalanStore } from 'src/stores/simrs/dokumen/erm/catatanrawatjalan'
 
 // eslint-disable-next-line no-unused-vars
 const store = useDokumenResumeStore()
+// eslint-disable-next-line no-unused-vars
+const storecatatanRJ = useCatatanRawatJalanStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -246,6 +274,24 @@ const props = defineProps({
   }
 })
 
+// eslint-disable-next-line no-use-before-define, no-undef
+const options = ref([])
+// eslint-disable-next-line no-unused-vars
+const tahun = new Date().getFullYear()
+storecatatanRJ.paramshistory.tahunawal = new Date().getFullYear()
+storecatatanRJ.paramshistory.tahunakhir = new Date().getFullYear()
+for (let i = tahun - 4; i <= tahun; i++) {
+  options.value.push(i)
+}
+
+// eslint-disable-next-line no-undef
+// options.value = i
+// console.log('adsad', options)
+
+// console.log('adsad', tahun)
+// return Array.from({ length: tahun - 1900 }, (value, index) => 1901 + index)
+
 store.setParams('noreg', props.pasien?.noreg)
 store.getData()
+
 </script>
