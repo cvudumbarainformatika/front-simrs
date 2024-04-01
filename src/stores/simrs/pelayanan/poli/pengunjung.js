@@ -258,7 +258,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             findPasien[0].tindakan = resp?.data?.tindakan
             // BARU
             findPasien[0].laporantindakan = resp?.data?.laporantindakan
-            findPasien[0].laporantindakan = resp?.data?.laporantindakan
+            findPasien[0].psikiatri = resp?.data?.psikiatri
           }
           this.loadingTerima = false
           this.noreg = null
