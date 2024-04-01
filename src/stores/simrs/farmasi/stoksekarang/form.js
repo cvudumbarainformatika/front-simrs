@@ -110,7 +110,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
       this.loading = true
       const form = this.form
       form.tglpenerimaan = this.form.tglpenerimaan + date.formatDate(Date.now(), ' HH:mm:ss')
-      const url = this.edit ? 'v1/simrs/farmasinew/penerimaan/updatestoksementara' : 'v1/simrs/farmasinew/penerimaan/insertsementara'
+      const url = this.edit ? 'v1/simrs/farmasinew/penerimaan/update-stok-sekarang' : 'v1/simrs/farmasinew/penerimaan/insertsementara/null'
       return new Promise(resolve => {
         api.post(url, form)
           .then(resp => {
