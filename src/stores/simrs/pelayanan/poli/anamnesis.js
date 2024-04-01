@@ -43,6 +43,11 @@ export const useAnamnesis = defineStore('anamnesis', {
       this.form.norm = pasien ? pasien.norm : ''
       this.form.noreg = pasien ? pasien.noreg : ''
 
+      const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
+      const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
+
+      this.form.skor = skor
+
       // console.log(this.form)
 
       try {
@@ -228,6 +233,15 @@ export const useAnamnesis = defineStore('anamnesis', {
 
         resolve()
       })
+    },
+
+    keteranganSkorGizi(nilai) {
+      const skor = nilai || 0
+      if (skor < 2) {
+        return 'tidak beresiko malnutrisi'
+      } else {
+        return 'Beresiko malnutrisi'
+      }
     }
 
   }

@@ -141,6 +141,14 @@
           </q-list>
         </template>
       </div>
+
+      <q-btn
+        color="dark"
+        class="q-my-lg"
+        @click="store.setIntervensi(null)"
+      >
+        Kembali
+      </q-btn>
     </div>
   </div>
 </template>
