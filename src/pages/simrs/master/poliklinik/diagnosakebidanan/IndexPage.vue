@@ -8,9 +8,7 @@
       <div class="absolute-top row full-height">
         <div class="col-6 full-height column">
           <FormDiagnosa v-if="!store.isIntervensi" />
-          <div v-else>
-            <FormIntevensi />
-          </div>
+          <FormIntevensi v-else />
         </div>
         <div class="col-6 full-height q-px-md bg-grey-4">
           <ListDiagnosa
