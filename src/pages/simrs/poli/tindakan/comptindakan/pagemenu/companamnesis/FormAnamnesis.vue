@@ -181,7 +181,7 @@
                   stack-label
                 />
               </div>
-              <div class="col-2">
+              <!-- <div class="col-2">
                 <q-input
                   v-model="store.form.skor"
                   outlined
@@ -190,8 +190,20 @@
                   label="Skor"
                   stack-label
                 />
+              </div> -->
+              <div class="col-12">
+                <q-separator class="q-my-xs" />
+                <div class="flex">
+                  Skor Skreening Gizi : <div class="q-mx-sm">
+                    <b>{{ store.form.skor }}</b>
+                  </div> <div>
+                    Keterangan : {{ store.keteranganSkorGizi(store.form.skor) }}
+                  </div>
+                </div>
               </div>
             </div>
+
+            <q-separator class="q-my-xs" />
           </div>
           <div class="col-6">
             <div class="text-weight-bold">
@@ -250,7 +262,7 @@ const emits = defineEmits(['openHistory'])
 const refForm = ref()
 
 const optionSkreening = ref([
-  { label: 'Iya (1)', value: 1 },
+  { label: 'Iya (2)', value: 2 },
   { label: 'Tidak (0)', value: 0 }
 ])
 const optionAsupanMakan = ref([

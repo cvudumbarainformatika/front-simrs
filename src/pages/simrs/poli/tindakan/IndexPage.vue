@@ -158,6 +158,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PemeriksaanPageBaru.vue')))
   },
   {
+    name: 'PsikiatriPage',
+    label: 'Pemeriksaan Psikologi',
+    icon: 'icon-mat-health_and_safety',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/PsikiatriPage.vue')))
+  },
+  {
     name: 'LayananPage',
     label: 'Assesment',
     icon: 'icon-mat-analytics',

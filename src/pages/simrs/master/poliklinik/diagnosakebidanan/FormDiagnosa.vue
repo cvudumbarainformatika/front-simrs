@@ -22,6 +22,7 @@
         :error="getErrorField('kode')"
         :error-message="store?.errorsForm?.kode ? store.errorsForm.kode[0] : ''"
         hide-bottom-space
+        :disable="store.editedForm"
       />
       <q-input
         v-model="store.form.nama"
@@ -63,6 +64,9 @@ function getErrorField(val) {
 }
 
 function onSubmit() {
-  store.saveDiagnosa()
+  store.saveDiagnosa().then(() => {
+    console.log('fdsf', formRef.value)
+    formRef.value.resetValidation()
+  })
 }
 </script>
