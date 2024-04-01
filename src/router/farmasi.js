@@ -15,6 +15,11 @@ const farmasi = {
       component: () => import('pages/simrs/farmasi/stok/IndexPage.vue')
     },
     {
+      path: '/farmasi/stoksekarang',
+      name: 'farmasi.stoksekarang',
+      component: () => import('pages/simrs/farmasi/stoksekarang/IndexPage.vue')
+    },
+    {
       path: '/farmasi/verif-rencana-pesanan',
       name: 'farmasi.verif-rencana-pesanan',
       component: () => import('pages/simrs/farmasi/verifrencanapemesanan/IndexPage.vue')

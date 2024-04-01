@@ -14,7 +14,7 @@
           placeholder="Cari ..."
           debounce="500"
         />
-        <app-autocomplete
+        <!-- <app-autocomplete
           v-model="yearSelected"
           :source="years"
           label="Pilih tahun"
@@ -36,7 +36,7 @@
           map-options
           style="min-width: 150px;"
           @update:model-value="gantiPeriode"
-        />
+        /> -->
       </div>
     </div>
     <div>
@@ -91,7 +91,7 @@
         </q-menu>
       </q-btn>
       <!-- add -->
-      <q-btn
+      <!-- <q-btn
         push
         color="green"
         icon="icon-mat-add"
@@ -105,7 +105,7 @@
         >
           Tambah Data
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
       <!-- refresh -->
       <q-btn
         class="q-ml-sm"
@@ -258,36 +258,25 @@ const years = ref([])
 const yearSelected = ref(date.formatDate(Date.now(), 'YYYY'))
 const periode = ref()
 const periods = ref([])
-function gantiPeriode(val) {
-  console.log('ganti', val)
-  // if (val === 1) {
-  //   hariIni()
-  // } else if (val === 2) {
-  //   mingguIni()
-  // } else if (val === 3) {
-  //   bulanIni()
-  // }
+// function gantiPeriode(val) {
+//   console.log('ganti', val)
 
-  // const per = {
-  //   to: to.value,
-  //   from: from.value
-  // }
-  emits('setPeriode', val?.eom)
-}
+//   emits('setPeriode', val?.eom)
+// }
 function gantiTahun() {
   const bu = [
-    { mth: 1, val: 0, label: 'Januari', eom: '' },
-    { mth: 2, val: 1, label: 'Pebruari', eom: '' },
-    { mth: 3, val: 2, label: 'Maret', eom: '' },
-    { mth: 4, val: 3, label: 'April', eom: '' },
-    { mth: 5, val: 4, label: 'Mei', eom: '' },
-    { mth: 6, val: 5, label: 'Juni', eom: '' },
-    { mth: 7, val: 6, label: 'Juli', eom: '' },
-    { mth: 8, val: 7, label: 'Agustus', eom: '' },
-    { mth: 9, val: 8, label: 'September', eom: '' },
-    { mth: 10, val: 9, label: 'Oktober', eom: '' },
-    { mth: 11, val: 10, label: 'Nopember', eom: '' },
-    { mth: 12, val: 11, label: 'Desember', eom: '' }
+    { val: 0, label: 'Januari', eom: '' },
+    { val: 1, label: 'Pebruari', eom: '' },
+    { val: 2, label: 'Maret', eom: '' },
+    { val: 3, label: 'April', eom: '' },
+    { val: 4, label: 'Mei', eom: '' },
+    { val: 5, label: 'Juni', eom: '' },
+    { val: 6, label: 'Juli', eom: '' },
+    { val: 7, label: 'Agustus', eom: '' },
+    { val: 8, label: 'September', eom: '' },
+    { val: 9, label: 'Oktober', eom: '' },
+    { val: 10, label: 'Nopember', eom: '' },
+    { val: 11, label: 'Desember', eom: '' }
 
   ]
   const th = yearSelected.value
@@ -304,12 +293,5 @@ onMounted(() => {
     years.value[index] = curY - 5 + index
   }
   gantiTahun()
-  const bulIni = parseInt(date.formatDate(Date.now(), 'M')) !== 1 ? parseInt(date.formatDate(Date.now(), 'M')) - 1 : 12
-  const per = periods.value.find(a => a.mth === bulIni)
-  if (per) {
-    periode.value = per
-    gantiPeriode(per)
-  }
-  // console.log('bulan ini', bulIni, per)
 })
 </script>
