@@ -10,7 +10,7 @@
         @fullscreen="style.setComponentFull"
         @set-search="table.setQ"
         @set-row="table.setPerPage"
-        @set-periode="table.setPeriodik"
+        @set-periode="table.setPeriode"
         @refresh="table.getLists"
         @filter="table.setFilters"
         @add="openDialog"

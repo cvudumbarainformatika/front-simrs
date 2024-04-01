@@ -4,15 +4,40 @@
     :class="`${color} text-${textColor}`"
   >
     <div>
-      <q-input
-        v-model="q"
-        outlined
-        dark
-        color="white"
-        dense
-        placeholder="Cari ..."
-        debounce="500"
-      />
+      <div class="row">
+        <q-input
+          v-model="q"
+          outlined
+          dark
+          color="white"
+          dense
+          placeholder="Cari ..."
+          debounce="500"
+        />
+        <app-autocomplete
+          v-model="yearSelected"
+          :source="years"
+          label="Pilih tahun"
+          class="q-ml-sm"
+          outlined
+          dark
+          @update:model-value="gantiTahun"
+        />
+        <q-select
+          v-model="periode"
+          dense
+          outlined
+          dark
+          color="white"
+          :options="periods"
+          label="Periode"
+          class="q-ml-sm"
+          emit-value
+          map-options
+          style="min-width: 150px;"
+          @update:model-value="gantiPeriode"
+        />
+      </div>
     </div>
     <div>
       <q-btn
@@ -28,7 +53,7 @@
         <q-popup-proxy ref="popup">
           <q-date
 
-            v-model="date"
+            v-model="tgl"
             minimal
             mask="YYYY-MM-DD"
             @update:model-value="lihatRef"
@@ -162,11 +187,12 @@
 </template>
 
 <script setup>
+import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add', 'setPeriode'])
 const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   adaTanggal: {
@@ -189,6 +215,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  year: {
+    type: String,
+    default: ''
+  },
   perPage: { type: Number, default: 10 },
   tanggal: {
     type: String,
@@ -207,7 +237,7 @@ const selectPerPage = computed({
   get () { return props.perPage },
   set (val) { emits('setRow', val) }
 })
-const date = computed({
+const tgl = computed({
   get() {
     return props.tanggal
   },
@@ -222,5 +252,57 @@ const q = computed({
   set(newVal) {
     emits('setSearch', newVal)
   }
+})
+
+const years = ref([])
+const yearSelected = ref(date.formatDate(Date.now(), 'YYYY'))
+const periode = ref()
+const periods = ref([])
+function gantiPeriode(val) {
+  console.log('ganti', val)
+  // if (val === 1) {
+  //   hariIni()
+  // } else if (val === 2) {
+  //   mingguIni()
+  // } else if (val === 3) {
+  //   bulanIni()
+  // }
+
+  // const per = {
+  //   to: to.value,
+  //   from: from.value
+  // }
+  emits('setPeriode', val?.eom)
+}
+function gantiTahun() {
+  const bu = [
+    { val: 0, label: 'Januari', eom: '' },
+    { val: 1, label: 'Pebruari', eom: '' },
+    { val: 2, label: 'Maret', eom: '' },
+    { val: 3, label: 'April', eom: '' },
+    { val: 4, label: 'Mei', eom: '' },
+    { val: 5, label: 'Juni', eom: '' },
+    { val: 6, label: 'Juli', eom: '' },
+    { val: 7, label: 'Agustus', eom: '' },
+    { val: 8, label: 'September', eom: '' },
+    { val: 9, label: 'Oktober', eom: '' },
+    { val: 10, label: 'Nopember', eom: '' },
+    { val: 11, label: 'Desember', eom: '' }
+
+  ]
+  const th = yearSelected.value
+  bu.forEach(bul => {
+    const pe = new Date(parseInt(th), bul.val + 1, 0)
+    bul.eom = date.formatDate(pe, 'YYYY-MM-DD')
+  })
+  periods.value = bu
+  periode.value = ''
+}
+onMounted(() => {
+  const curY = parseInt(date.formatDate(Date.now(), 'YYYY'))
+  for (let index = 0; index < 11; index++) {
+    years.value[index] = curY - 5 + index
+  }
+  gantiTahun()
 })
 </script>

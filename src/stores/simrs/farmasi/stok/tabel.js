@@ -40,6 +40,12 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
       console.log('periodik', to)
       this.getLists()
     },
+    setPeriode(val) {
+      this.params.to = val
+      this.params.from = val
+      console.log('periodik', val)
+      this.getLists()
+    },
     setPage(payload) {
       this.params.page = payload
       this.getLists()
