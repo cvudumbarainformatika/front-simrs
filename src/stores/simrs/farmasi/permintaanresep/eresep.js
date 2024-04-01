@@ -467,19 +467,21 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               if (!this.form.noresep || this.form.noresep === '') {
                 this.noreseps.push(resp?.data?.nota)
                 this.noresep = resp?.data?.nota
+                const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
+                if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
               }
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
               if (resp?.data?.rinci !== 0) {
-                this.tambahObat(resp?.data?.rinci)
+                // this.tambahObat(resp?.data?.rinci)
                 this.setList(resp?.data?.rinci)
               }
               if (resp?.data?.rincidtd !== 0) {
-                this.tambahObatRacikan(resp?.data?.rincidtd)
+                // this.tambahObatRacikan(resp?.data?.rincidtd)
                 this.setListRacikan(resp?.data?.rincidtd)
               }
               if (resp?.data?.rincinondtd !== 0) {
-                this.tambahObatRacikan(resp?.data?.rincinondtd)
+                // this.tambahObatRacikan(resp?.data?.rincinondtd)
                 this.setListRacikan(resp?.data?.rincinondtd)
               }
 
