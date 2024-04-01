@@ -316,7 +316,7 @@
                   </div>
 
                   <q-option-group
-                    v-model="group"
+                    v-model="store.form.simptom"
                     :options="store.optionSimptom"
                     color="green"
                     type="checkbox"
@@ -387,12 +387,11 @@
 <script setup>
 import ListPsikiatri from './comppsikiatri/ListPsikiatri.vue'
 import { usePsikologiPoli } from 'src/stores/simrs/pelayanan/poli/psikologi'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 
 const store = usePsikologiPoli()
 const $q = useQuasar()
-const group = ref([])
 const props = defineProps({
   pasien: {
     type: Object,
@@ -417,7 +416,8 @@ function deleteData(id) {
     cancel: true,
     persistent: true
   }).onOk(() => {
-    console.log('HAPUS', id)
+    // console.log('HAPUS', id)
+    store.deleteData(props.pasien, id)
   }).onCancel(() => {
     // console.log('Cancel')
   }).onDismiss(() => {

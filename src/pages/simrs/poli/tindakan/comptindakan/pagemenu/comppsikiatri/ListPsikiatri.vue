@@ -25,40 +25,40 @@
           >
             <q-item>
               <q-item-section>
-                <q-item-label>Urutan Kelahiran : {{ item.urutankelahiran }}</q-item-label>
+                <q-item-label>Urutan Kelahiran : <b>{{ item.urutankelahiran }}</b> </q-item-label>
               </q-item-section>
               <q-item-section>
-                <q-item-label>Tanggal Pemeriksaan : {{ item.tanggalpemeriksaan }}</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label>Penampilan Umum : {{ item.penampilanumum }}</q-item-label>
+                <q-item-label>Tanggal Pemeriksaan : <b>{{ item.tanggalpemeriksaan }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Sikap Thd Pemeriksaan : {{ item.sikapThdPemeriksaan }}</q-item-label>
+                <q-item-label>Penampilan Umum : <b>{{ item.penampilanumum }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Afek : {{ item.afek }}</q-item-label>
+                <q-item-label>Sikap Thd Pemeriksaan : <b>{{ item.sikapThdPemeriksaan }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Roman Muka : {{ item.romanMuka }}</q-item-label>
+                <q-item-label>Afek : <b>{{ item.afek }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Proses Pikir : {{ item.prosesPikir }}</q-item-label>
+                <q-item-label>Roman Muka : <b>{{ item.romanMuka }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Gangguan Persepsi : {{ item.gangguanPersepsi }}</q-item-label>
+                <q-item-label>Proses Pikir : <b>{{ item.prosesPikir }}</b> </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label>Gangguan Persepsi : <b>{{ item.gangguanPersepsi }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
@@ -67,29 +67,29 @@
                   Kognitif
                 </q-item-label>
                 <q-item-label>
-                  - Memory : {{ item.memory }}
+                  - Memory : <b>{{ item.memory }}</b>
                 </q-item-label>
                 <q-item-label>
-                  - Konsentrasi : {{ item.konsentrasi }}
+                  - Konsentrasi : <b>{{ item.konsentrasi }}</b>
                 </q-item-label>
                 <q-item-label>
-                  - Orientasi : {{ item.orientasi }}
+                  - Orientasi : <b>{{ item.orientasi }}</b>
                 </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Kemampuan verbal : {{ item.kemampuanverbal }}</q-item-label>
+                <q-item-label>Kemampuan verbal : <b>{{ item.kemampuanverbal }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Emosi : {{ item.emosi }}</q-item-label>
+                <q-item-label>Emosi : <b>{{ item.emosi }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Prilaku : {{ item.prilaku }}</q-item-label>
+                <q-item-label>Prilaku : <b>{{ item.prilaku }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
@@ -109,17 +109,17 @@
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Diagnosa Psikologi : {{ item.diagnosaPsikologi }}</q-item-label>
+                <q-item-label>Diagnosa Psikologi : <b>{{ item.diagnosaPsikologi }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Rencana Intervensi Psikologi : {{ item.rencanaIntervensiPsikologi }}</q-item-label>
+                <q-item-label>Rencana Intervensi Psikologi : <b>{{ item.rencanaIntervensiPsikologi }}</b> </q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Intervensi Psikologi : {{ item.intervensiPsikologi }}</q-item-label>
+                <q-item-label>Intervensi Psikologi : <b>{{ item.intervensiPsikologi }}</b> </q-item-label>
               </q-item-section>
             </q-item>
           </q-list>

@@ -102,22 +102,15 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/psikiatripoli/deletedata', payload)
           .then((resp) => {
-            console.log(resp)
-
-            const storePasien = usePengunjungPoliStore()
-            let isi = resp.data
-            if (resp.data === 1) {
-              isi = this.form
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              storePasien.hapusDataPsikiatri(pasien, id)
             }
-            storePasien.injectDataPasien(pasien, isi, 'psikiatri')
-
-            this.initForm()
             resolve(resp)
           })
           .catch((err) => {
             console.log(err)
             reject(err)
-            this.loadingSave = false
           })
       })
     }
