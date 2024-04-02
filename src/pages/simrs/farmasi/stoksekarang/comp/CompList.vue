@@ -78,8 +78,8 @@
       </template>
       <template #cell-stok="{row}">
         <div class="row no-wrap text-italic">
-          <!-- {{ cariGudang(row.kdruang) }} -->
-          {{ store?.disp?.kdruang }}
+          {{ cariGudang(row.kdruang) }}
+          <!-- {{ store?.disp?.kdruang }} -->
         </div>
         <div class="row no-wrap text-weight-bold  items-end">
           <div>
@@ -96,7 +96,7 @@
           exp : {{ dateFullFormat( row.tglexp ) }}
         </div>
       </template>
-      <!-- <template #left-acttion="{row}">
+      <template #left-acttion="{row}">
         <div class="q-mr-md">
           <q-btn
             flat
@@ -115,34 +115,34 @@
             </q-tooltip>
           </q-btn>
         </div>
-      </template> -->
+      </template>
     </app-table>
   </div>
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
-// import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
 import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 
 const table = UseFarmasiStokSekarangTable()
 const store = UseFarmasiStokSekarangStore()
-// const apps = useAplikasiStore()
+const apps = useAplikasiStore()
 
-// function cariGudang(val) {
-//   if (table.gudangs.length) {
-//     const gudang = table.gudangs.filter(gud => gud.kode === val)
-//     if (apps?.user?.kdruangansim !== '') {
-//       const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.kdruangansim)
-//       store.setDisp('kdruang', gudang2[0]?.nama)
-//     }
-//     if (gudang.length) {
-//       return gudang[0]?.nama
-//     } else return 'Gudang / Depo tidak ditemukan'
-//   } else {
-//     return 'menunggu data Gudang / Depo'
-//   }
-// }
+function cariGudang(val) {
+  if (table.gudangs.length) {
+    const gudang = table.gudangs.filter(gud => gud.kode === val)
+    if (apps?.user?.kdruangansim !== '') {
+      const gudang2 = table.gudangs.filter(gud => gud.kode === apps?.user?.kdruangansim)
+      store.setDisp('kdruang', gudang2[0]?.nama)
+    }
+    if (gudang.length) {
+      return gudang[0]?.nama
+    } else return 'Gudang / Depo tidak ditemukan'
+  } else {
+    return 'menunggu data Gudang / Depo'
+  }
+}
 
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
