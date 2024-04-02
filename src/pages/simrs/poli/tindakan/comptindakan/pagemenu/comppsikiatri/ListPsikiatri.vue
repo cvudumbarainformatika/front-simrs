@@ -94,12 +94,32 @@
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>Psikotes Pendukung</q-item-label>
+                <q-item-label> <b>Psikotes Pendukung</b> </q-item-label>
+                <q-separator />
+                <div
+                  v-for="(ss, n) in item.psikotespendukung"
+                  :key="n"
+                  class="row q-py-xs"
+                >
+                  <div class="q-mr-sm">
+                    {{ n + 1 }}
+                  </div> <div>{{ ss }}</div>
+                </div>
               </q-item-section>
             </q-item>
             <q-item>
               <q-item-section>
-                <q-item-label>simptom : {{ item.simptom }}</q-item-label>
+                <q-item-label> <b>simptom : </b>  </q-item-label>
+                <q-separator />
+                <div
+                  v-for="(sim, x) in item.simptom"
+                  :key="x"
+                  class="row q-py-xs"
+                >
+                  <div class="q-mr-sm">
+                    {{ x + 1 }}
+                  </div> <div>{{ sim }}</div>
+                </div>
               </q-item-section>
             </q-item>
             <q-item>

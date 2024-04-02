@@ -144,6 +144,7 @@
                   color="primary"
                   inline
                   dense
+                  @update:model-value="lihatPerubahan"
                 />
               </div>
             </div>
@@ -161,6 +162,7 @@
                   color="primary"
                   inline
                   dense
+                  @update:model-value="lihatPerubahan"
                 />
               </div>
             </div>
@@ -179,6 +181,7 @@
                   standout="bg-yellow-3"
                   label="Kondisi Khusus"
                   stack-label
+                  @update:model-value="lihatPerubahan"
                 />
               </div>
               <!-- <div class="col-2">
@@ -289,6 +292,10 @@ function onSubmit() {
 function historyOpen() {
   emits('openHistory')
   // store.getHistory(props.pasien?.norm)
+}
+
+function lihatPerubahan() {
+  store.hitungNilaiSkor()
 }
 
 // eslint-disable-next-line no-unused-vars

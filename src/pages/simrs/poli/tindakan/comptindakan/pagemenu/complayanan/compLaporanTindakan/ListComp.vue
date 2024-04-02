@@ -7,13 +7,14 @@
     >
       <q-card-section>
         <div>Dokter : <b>{{ getDokter(item) }}</b> </div>
-        <div>Jenis Tindakan : <b>{{ item?.jenistindakan }}</b> </div>
+        <div>Jenis Tindakan : <b>{{ namaTindakan(item?.jenistindakan) }}</b> </div>
         <div>di kirim unt pemeriksaa PA : <b>{{ item?.dikirimuntukpemeriksaanpa }}</b> </div>
         <div>tanggal : <b>{{ item?.tanggal }}</b> </div>
         <div>Jam dimulai : <b>{{ item?.jammulai }}</b> </div>
         <div>Jam Selesai : <b>{{ item?.jamselesai }}</b> </div>
         <div>catatan komplikasi : <b>{{ item?.catatankomplikasi ?? '-' }}</b> </div>
-        <div>List Tindakan :  </div>
+        <div>laporan Tindakan : <b>{{ item?.laporantindakan ?? '-' }}</b> </div>
+        <!-- <div>List Tindakan :  </div>
         <q-list
           dense
           separator
@@ -25,7 +26,7 @@
           >
             <q-item-label>{{ namaTindakan(it) }}</q-item-label>
           </q-item>
-        </q-list>
+        </q-list> -->
       </q-card-section>
       <q-separator />
       <q-card-section align="right">
@@ -77,6 +78,7 @@ function getDokter(item) {
   return '-'
 }
 
+// eslint-disable-next-line no-unused-vars
 function namaTindakan(kode) {
   const arr = props?.pasien?.tindakan
   const target = arr.filter(x => x.rs4 === kode)

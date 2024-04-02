@@ -38,15 +38,18 @@ export const useAnamnesis = defineStore('anamnesis', {
   // },
   actions: {
 
+    hitungNilaiSkor() {
+      const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
+      const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
+      this.form.skor = skor
+    },
+
     async saveData(pasien) {
       this.loadingForm = true
       this.form.norm = pasien ? pasien.norm : ''
       this.form.noreg = pasien ? pasien.noreg : ''
 
-      const skorKondKhusus = this.form.kondisikhusus.trim().length === 0 ? 0 : 2
-      const skor = parseInt(this.form.skreeninggizi) + parseInt(this.form.asupanmakan) + parseInt(skorKondKhusus)
-
-      this.form.skor = skor
+      this.hitungNilaiSkor()
 
       // console.log(this.form)
 
