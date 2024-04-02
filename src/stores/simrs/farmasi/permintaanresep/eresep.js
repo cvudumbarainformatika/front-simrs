@@ -241,7 +241,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
       // console.log('list racikan', this.listRacikan)
       // console.log('list rincian racikan', this.listRincianRacikan)
-
+      const rac = this.listRacikan.find(x => x.namaracikan === this.form.namaracikan)
+      this.listRincianRacikan = rac?.rincian ?? []
       this.tipeRacikan = [
         { label: 'DTD', value: 'DTD', disable: true },
         { label: 'non-DTD', value: 'non-DTD', disable: true }
@@ -482,6 +483,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     async selesaiResep() {
       this.loadingkirim = true
+      if (!this.form.noresep || this.form.noresep === '') {
+        if (this.noresep) this.setForm('noresep', this.noresep)
+        else return notifErrVue('nomor resep tidak terekam, silahkan pilih nomor resep yang akan dikirim')
+      }
       await api.post('v1/simrs/farmasinew/depo/kirimresep', this.form)
         .then(resp => {
           console.log('selesai', resp?.data)
