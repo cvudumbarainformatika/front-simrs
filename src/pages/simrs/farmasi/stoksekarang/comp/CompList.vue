@@ -96,7 +96,7 @@
           exp : {{ dateFullFormat( row.tglexp ) }}
         </div>
       </template>
-      <template #left-acttion="{row}">
+      <!-- <template #left-acttion="{row}">
         <div class="q-mr-md">
           <q-btn
             flat
@@ -115,7 +115,7 @@
             </q-tooltip>
           </q-btn>
         </div>
-      </template>
+      </template> -->
     </app-table>
   </div>
 </template>
@@ -147,6 +147,7 @@ const store = UseFarmasiStokSekarangStore()
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
 // })
+// eslint-disable-next-line no-unused-vars
 function editData(val) {
   store.editData(val)
   console.log('edit', val)

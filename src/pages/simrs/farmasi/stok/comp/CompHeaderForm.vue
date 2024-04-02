@@ -4,7 +4,7 @@
       <div class="col-6">
         <app-input-date-human
           :model="store.disp.tglpenerimaan"
-          label="Tanggal"
+          label="Tanggal Penerimaan"
           outlined
           @set-display="store.setDisp('tglpenerimaan',$event)"
           @db-model="store.setForm('tglpenerimaan',$event)"
