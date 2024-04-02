@@ -435,22 +435,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.setForm('namaracikan', resp?.data)
         })
     },
-    tambahObatRacikan(key) {
-      const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === key.noresep)
-      const adaRacRin = this.pasResRac?.permintaanracikan?.find(ri => ri.id === key.id)
-      if (!adaRacRin) {
-        pasResRac.permintaanracikan?.push(key)
-        this.listRincianRacikan?.push(key)
-      }
-    },
-    tambahObat(key) {
-      const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === key.noresep)
-      const adaRacRin = this.pasResRac?.permintaanresep?.find(ri => ri.id === key.id)
-      if (!adaRacRin) {
-        pasResRac.permintaanresep?.push(key)
-        this.listPemintaanSementara?.push(key)
-      }
-    },
     simpanObat(payload) {
       // const form = payload
       // console.log('payload', this.form)
@@ -464,24 +448,26 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               this.openDialog(resp?.data)
             } else {
               notifSuccess(resp)
+              // this.pasien.newapotekrajal = resp?.data?.heder
               if (!this.form.noresep || this.form.noresep === '') {
                 this.noreseps.push(resp?.data?.nota)
                 this.noresep = resp?.data?.nota
                 const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
                 if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
+                else {
+                  const indexOb = this.pasien.newapotekrajal.findIndex(a => a.noresep === resp?.data?.nota)
+                  if (indexOb >= 0) this.pasien.newapotekrajal[indexOb] = resp?.data?.heder
+                }
               }
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
               if (resp?.data?.rinci !== 0) {
-                // this.tambahObat(resp?.data?.rinci)
                 this.setList(resp?.data?.rinci)
               }
               if (resp?.data?.rincidtd !== 0) {
-                // this.tambahObatRacikan(resp?.data?.rincidtd)
                 this.setListRacikan(resp?.data?.rincidtd)
               }
               if (resp?.data?.rincinondtd !== 0) {
-                // this.tambahObatRacikan(resp?.data?.rincinondtd)
                 this.setListRacikan(resp?.data?.rincinondtd)
               }
 

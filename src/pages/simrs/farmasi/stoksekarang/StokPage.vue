@@ -48,15 +48,15 @@
 
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
-import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { defineAsyncComponent, onMounted, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
+import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
 
 const style = useStyledStore()
 
-const table = UseFarmasiStokTable()
-const store = UseFarmasiStokStore()
+const table = UseFarmasiStokSekarangTable()
+const store = UseFarmasiStokSekarangStore()
 const apps = useAplikasiStore()
 
 const BottomComp = defineAsyncComponent(() => import('./comp/CompBottom.vue'))

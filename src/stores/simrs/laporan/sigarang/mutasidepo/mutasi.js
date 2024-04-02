@@ -168,8 +168,8 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
               pak.totalRp = pak.rtotalRp
             })
           }
-          if (item.detail_distribusi_depo.length) {
-            item.detail_distribusi_depo.forEach(pak => {
+          if (item?.detail_distribusi_depo.length) {
+            item?.detail_distribusi_depo.forEach(pak => {
               pak.rtotalRp = 0
               if (pak.recent.length) {
                 const har = pak.recent.filter(a => a.no_penerimaan === pak.no_penerimaan && a.kode_rs === pak.kode_rs)
@@ -205,8 +205,8 @@ export const useLaporanSigarangMutasiDepoStore = defineStore('laporan_sigarang_m
           item.awal = item.stok_awal.length ? item.stok_awal.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : 0
           item.hAwal = item.stok_awal.length ? item.stok_awal.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
 
-          item.masuk = item.detail_distribusi_depo.length ? item.detail_distribusi_depo.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : 0
-          item.hMasuk = item.detail_distribusi_depo.length ? item.detail_distribusi_depo.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
+          item.masuk = item?.detail_distribusi_depo.length ? item.detail_distribusi_depo.map(a => a.total).reduce((a, b) => a + b, 0).toFixed(2) : 0
+          item.hMasuk = item?.detail_distribusi_depo.length ? item.detail_distribusi_depo.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : 0
 
           item.akhir = parseFloat(item.awal) + parseFloat(item.masuk) - parseFloat(item.keluar)
           item.hAkhir = parseFloat(item.hAwal) + parseFloat(item.hMasuk) - parseFloat(item.hKeluar)

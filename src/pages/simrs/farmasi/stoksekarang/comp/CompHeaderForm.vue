@@ -46,6 +46,7 @@
         <app-input
           v-model="store.form.jumlah"
           outlined
+          readonly
           :label="'Jumlah '+ satuan"
           @update:model-value="numberOnly($event,'jumlah')"
         />
@@ -75,10 +76,10 @@
   </div>
 </template>
 <script setup>
-import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
+import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 import { computed } from 'vue'
 
-const store = UseFarmasiStokStore()
+const store = UseFarmasiStokSekarangStore()
 
 function numberOnly(evt, key) {
   const inc = evt.includes('.')
