@@ -8,24 +8,27 @@
   >
     <div class="col-1">
       <q-select
-        v-model="storecatatanRJ.paramshistory.tahunawal"
+        v-model="store.params.tahunawal"
         label="Tahun"
         :options="options"
         outlined
         option-label="nama"
         emit-value
         map-options=""
-        @update:model-value="storecatatanRJ.carikunjungan"
+        @update:model-value="carikunjungan"
       />
     </div>
 
     <div class="col-1">
       <q-select
-        v-model="storecatatanRJ.paramshistory.tahunakhir"
+        v-model="store.params.tahunakhir"
         label="Tahun"
         outlined
         :options="options"
         option-label="nama"
+        emit-value
+        map-options=""
+        @update:model-value="carikunjungan"
       />
     </div>
     <div class="col-1">
@@ -39,6 +42,9 @@
   </div>
 
   <q-separator />
+  <div v-if="store.loading">
+    <app-loading />
+  </div>
   <q-markup-table
     separator="vertical"
     flat
@@ -77,22 +83,18 @@
           class="text-left f-12"
           width="7%"
         >
-          <div
-            v-for="(diagnosa, diag) in lasoapb?.diagnosa"
-            :key="diag"
-          >
-            <div>{{ diagnosa?.rs12 }} </div>
+          <div>
+            <div>{{ lasoapb?.jampulangtaskid[0]?.created_at }} </div>
           </div>
         </td>
         <td
-          class="text-left f-12 ellipsis"
+          class="text-left f-12"
           width="7%"
         >
-          <div
-            v-for="(diagnosa, diag1) in lasoapb?.diagnosa"
-            :key="diag1"
-          >
-            <div>Dokter</div>
+          <div>
+            <div>{{ lasoapb?.pegawai?.nama }} </div>
+            <br>
+            <div>{{ }} </div>
           </div>
         </td>
         <td
@@ -160,14 +162,22 @@
             v-for="(diagnosa, diagx) in lasoapb?.diagnosa"
             :key="diagx"
           >
-            <div>*) {{ diagnosa?.masterdiagnosa?.rs1 }} {{ diagnosa?.masterdiagnosa?.diagnosa }}</div>
+            <div>*) {{ diagnosa?.masterdiagnosa?.rs1 }} {{ diagnosa?.masterdiagnosa?.rs4 }}</div>
+          </div>
+          <q-separator />
+          <br>
+          <div
+            v-for="(diagnosakeperawatan, kep) in lasoapb?.diagnosakeperawatan"
+            :key="kep"
+          >
+            <div>*) {{ diagnosakeperawatan?.kode }} {{ diagnosakeperawatan?.nama }}</div>
           </div>
         </td>
         <td
           class="text-left f-12"
           width="25%"
         >
-          <div>
+          <div v-if="lasoapb?.laborat?.length">
             <u><b> Laborat </b></u>
             <div
               v-for="(laborat, lab) in lasoapb?.laborat"
@@ -176,7 +186,7 @@
               <div>*) {{ laborat?.pemeriksaanlab?.rs2 }} : {{ laborat?.rs21 }}</div>
             </div>
           </div>
-          <div>
+          <div v-if="lasoapb?.pembacaanradiologi?.length">
             <u><b> Radiologi </b></u>
             <div
               v-for="(pembacaanradiologi, w) in lasoapb?.pembacaanradiologi"
@@ -185,18 +195,84 @@
               <div>*) {{ pembacaanradiologi?.rs3 ? pembacaanradiologi?.rs3 : '-' }}</div>
             </div>
           </div>
-          <div>
+          <br>
+          <div
+            v-if="lasoapb?.apotekrajal?.length || lasoapb?.apotekrajalpolilalu?.length
+              || lasoapb?.apotekracikanrajal?.length || lasoapb?.apotekracikanrajallalu?.length"
+          >
             <u><b> Obat </b></u>
             <div
               v-for="(obatlalu, o) in lasoapb?.apotekrajalpolilalu"
               :key="o"
             >
-              <div>*) {{ obatlalu?.rs3 ? obatlalu?.rs3 : '-' }}</div>
+              <div>*) {{ obatlalu?.obat }}</div>
+            </div>
+            <div
+              v-for="(obat, o) in lasoapb?.apotekrajal"
+              :key="o"
+            >
+              <div>*) {{ obat?.obat }}</div>
+            </div>
+            <div
+              v-for="(obatracikan, o) in lasoapb?.apotekracikanrajal"
+              :key="o"
+            >
+              <div>*) {{ obatracikan?.obat }}</div>
+            </div>
+            <div
+              v-for="(obatracikanlalu, o) in lasoapb?.apotekracikanrajallalu"
+              :key="o"
+            >
+              <div>*) {{ obatracikanlalu?.obat }}</div>
+            </div>
+          </div>
+          <br>
+          <div v-if="lasoapb?.tindakan?.length">
+            <u><b> Tindakan </b></u>
+            <div
+              v-for="(tindakan, o) in lasoapb?.tindakan"
+              :key="o"
+            >
+              <div>*) {{ tindakan?.tindakan }} {{ tindakan?.keterangan ?? '' }}</div>
+            </div>
+          </div>
+          <div v-if="lasoapb?.kamaroperasi?.length">
+            <u><b> Operasi </b></u>
+            <div
+              v-for="(kamaroperasi, ok) in lasoapb?.kamaroperasi"
+              :key="ok"
+            >
+              <div>*) {{ kamaroperasi?.mastertindakanoperasi?.rs2 }}</div>
+            </div>
+          </div>
+          <br>
+          <div v-if="lasoapb?.usg?.length || lasoapb?.ecg?.length || lasoapb?.eeg">
+            <u><b> ParaKlinik </b></u>
+            <div
+              v-for="(usg, ok) in lasoapb?.usg"
+              :key="ok"
+            >
+              <div>*) {{ usg?.nama }} {{ usg?.hasil }}</div>
+            </div>
+            <br>
+            <div
+              v-for="(ecg, ec) in lasoapb?.ecg"
+              :key="ec"
+            >
+              <div>*) {{ ecg?.mastertindakan?.rs2 }} {{ ecg?.hasil }}</div>
+            </div>
+            <br>
+            <div
+              v-for="(eeg, ec) in lasoapb?.eeg"
+              :key="ec"
+            >
+              <div>*) {{ eeg?.klasifikasi }} {{ eeg?.impresi }}</div>
             </div>
           </div>
         </td>
       </tr>
-      <tr
+      <q-separator />
+      <!-- <tr
         v-for="(lasoapb, s) in store?.items"
         :key="s"
       >
@@ -252,7 +328,7 @@
           class="text-left f-12"
           width="25%"
         />
-      </tr>
+      </tr> -->
     </tbody>
   </q-markup-table>
 </template>
@@ -260,13 +336,11 @@
 import KopSurat from '../../comppoli/KopSurat.vue'
 import IdentitasPage from '../../comppoli/IdentitasPage.vue'
 import { defineProps, ref } from 'vue'
-import { useDokumenResumeStore } from 'src/stores/simrs/dokumen/resume/resume.js'
 import { useCatatanRawatJalanStore } from 'src/stores/simrs/dokumen/erm/catatanrawatjalan'
 
 // eslint-disable-next-line no-unused-vars
-const store = useDokumenResumeStore()
+const store = useCatatanRawatJalanStore()
 // eslint-disable-next-line no-unused-vars
-const storecatatanRJ = useCatatanRawatJalanStore()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -278,11 +352,18 @@ const props = defineProps({
 const options = ref([])
 // eslint-disable-next-line no-unused-vars
 const tahun = new Date().getFullYear()
-storecatatanRJ.paramshistory.tahunawal = new Date().getFullYear()
-storecatatanRJ.paramshistory.tahunakhir = new Date().getFullYear()
+store.params.tahunawal = new Date().getFullYear()
+store.params.tahunakhir = new Date().getFullYear()
 for (let i = tahun - 4; i <= tahun; i++) {
   options.value.push(i)
 }
+
+function carikunjungan() {
+  store.params.norm = props?.pasien?.norm
+  store.getDataCatatan()
+}
+
+store.init(props?.pasien?.norm)
 
 // eslint-disable-next-line no-undef
 // options.value = i
@@ -291,7 +372,7 @@ for (let i = tahun - 4; i <= tahun; i++) {
 // console.log('adsad', tahun)
 // return Array.from({ length: tahun - 1900 }, (value, index) => 1901 + index)
 
-store.setParams('noreg', props.pasien?.noreg)
-store.getData()
+// store.setParams('noreg', props.pasien?.noreg)
+// store.getData()
 
 </script>

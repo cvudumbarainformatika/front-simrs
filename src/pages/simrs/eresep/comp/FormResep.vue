@@ -609,7 +609,6 @@ function setPasien() {
   if (props?.depo === 'ok') store.getBillOk(val)
   // store.getBillRajal(val)
 
-  console.log('pasien obat', props?.pasien?.newapotekrajal)
   if (!!store?.noresep && store?.noresep !== 'BARU') {
     const resep = props?.pasien?.newapotekrajal?.find(val => val.noresep === store?.noresep)
     if (resep) {
@@ -628,11 +627,12 @@ function setPasien() {
     }
   }
   store.setNoreseps(props?.pasien?.newapotekrajal)
-  console.log('form nya', store.form)
+  // console.log('form nya', store.form)
   if (store?.noresep === 'BARU') {
     store.listRacikan = []
     store.listPemintaanSementara = []
   }
+  console.log('pasien obat', props?.pasien?.newapotekrajal)
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
@@ -877,7 +877,7 @@ watchEffect(() => {
   store.pasien = props?.pasien
   store.depo = props?.depo
   setPasien()
-  console.log('pasi', props.pasien)
+  // console.log('pasi', props.pasien)
 })
 
 </script>
