@@ -41,14 +41,63 @@
             </q-item>
           </template>
         </q-select>
-        <q-input
+        <!-- <q-input
           v-model="store.form.jenistindakan"
           label="Jenis Tindakan"
           dense
           standout="bg-yellow-3"
           outlined
           style="width: 50%;"
-        />
+        /> -->
+
+        <div>
+          Jenis Tindakan : <em
+            v-if="props.pasien?.tindakan?.length"
+            class="text-grey"
+          >Pilih Tindakan dibawah berikut !</em>
+          <em
+            v-else
+            class="text-negative"
+          >Maaf Belum Ada Tindakan pada pasien ini !</em>
+          <div
+            v-if="props.pasien?.tindakan?.length"
+            class="full-width"
+          >
+            <!-- <q-checkbox
+              v-model="store.selectAll"
+              color="teal"
+              size="xs"
+              label="Pilih Semua"
+            /> -->
+
+            <q-list
+              bordered
+              separator
+              dense
+              class="q-my-sm"
+            >
+              <q-item
+                v-for="(item, i) in props.pasien.tindakan"
+                :key="i"
+                v-ripple
+                tag="label"
+                dense
+              >
+                <q-item-section avatar>
+                  <q-radio
+                    v-model="store.form.jenistindakan"
+                    :val="item.rs4"
+                    size="xs"
+                  />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ item?.mastertindakan?.rs2 }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </div>
+
         <div class="flex q-py-md">
           dikirim untuk pemeriksaan PA?
           <q-option-group
@@ -74,7 +123,7 @@
             label="Jam dimulai"
             style="width: 25%;"
             :type-date="false"
-            @set-model="val=>store.form.jammulai=val"
+            @set-model="val=>store.setForm('jammulai',val)"
           />
           <app-input-date
             :model="store.form.jamselesai"
@@ -82,8 +131,12 @@
             label="Jam Selesai"
             style="width: 25%;"
             :type-date="false"
-            @set-model="val=>store.form.jamselesai=val"
+            @set-model="val=>store.setForm('jamselesai',val)"
           />
+          <div>
+            <div>Lama Tindakan </div>
+            <div>{{ store.form.lamatindakan }}</div>
+          </div>
         </div>
         <q-input
           v-model="store.form.catatankomplikasi"
@@ -94,7 +147,17 @@
           class="q-my-sm"
         />
 
-        <div>
+        <q-input
+          v-model="store.form.laporantindakan"
+          label="Laporan Tindakan"
+          type="textarea"
+          outlined
+          standout="bg-yellow-3"
+          class="q-my-sm"
+          :rules="[val => !!val || 'Maaf Harus diisi terlebih dahulu']"
+        />
+
+        <!-- <div>
           Laporan Tindakan : <em
             v-if="props.pasien?.tindakan?.length"
             class="text-grey"
@@ -141,7 +204,7 @@
               </q-item>
             </q-list>
           </div>
-        </div>
+        </div> -->
 
         <!-- <div
           v-for="n in 100"

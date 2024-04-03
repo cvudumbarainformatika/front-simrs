@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const UseFarmasiStokTable = defineStore('tabel_stok', {
+export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
   state: () => ({
     loading: false,
     params: {
@@ -72,7 +72,7 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/penerimaan/liststokreal', param)
+        api.get('v1/simrs/farmasinew/penerimaan/list-stok-sekarang', param)
           .then(resp => {
             this.loading = false
             console.log('setok ', resp.data)

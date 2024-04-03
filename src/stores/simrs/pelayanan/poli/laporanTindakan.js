@@ -17,7 +17,7 @@ export const useLaporanTindakanPoliStore = defineStore('laporan-tindakan-poli', 
       jamselesai: date.formatDate(Date.now(), 'HH:mm'),
       lamatindakan: null,
       catatankomplikasi: null,
-      laporantindakan: []
+      laporantindakan: null
     },
     selectAll: false,
     listdokters: []
@@ -42,14 +42,13 @@ export const useLaporanTindakanPoliStore = defineStore('laporan-tindakan-poli', 
     },
 
     simpanData(pasien) {
-      this.loading = true
-
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
-      if (this.form.laporantindakan.length === 0) {
+      if (this.form.jenistindakan === null || this.form.jenistindakan === '') {
         notifErrVue('Maaf, Harap pilih tindakan terlebih dahulu!')
         return
       }
+      this.loading = true
 
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/laporantindakan/simpan', this.form)
@@ -81,7 +80,31 @@ export const useLaporanTindakanPoliStore = defineStore('laporan-tindakan-poli', 
       this.form.jamselesai = date.formatDate(Date.now(), 'HH:mm')
       this.form.lamatindakan = null
       this.form.catatankomplikasi = null
-      this.form.laporantindakan = []
+      this.form.laporantindakan = null
+
+      this.lamaTindakan()
+    },
+
+    setForm(key, val) {
+      this.form[key] = val
+      this.lamaTindakan()
+    },
+
+    lamaTindakan() {
+      const date1 = new Date(this.form.tanggal + ' ' + this.form.jamselesai)
+      const date2 = new Date(this.form.tanggal + ' ' + this.form.jammulai)
+      const diff = date.getDateDiff(date1, date2, 'minutes')
+      const res = this.minutesToHours(diff)
+      this.form.lamatindakan = res
+      console.log(res)
+    },
+
+    minutesToHours(mins) {
+      const h = Math.floor(mins / 60)
+      const m = mins % 60
+      // h = h < 10 ? '0' + h : h // (or alternatively) h = String(h).padStart(2, '0')
+      // m = m < 10 ? '0' + m : m // (or alternatively) m = String(m).padStart(2, '0')
+      return `${h} jam  ${m} menit`
     },
 
     hapusData(pasien, id) {

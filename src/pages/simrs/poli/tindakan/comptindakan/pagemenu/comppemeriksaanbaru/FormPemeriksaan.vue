@@ -118,7 +118,7 @@
               @update:model-value="setNumber($event,'beratbadan')"
             />
           </div>
-          <div class="col-4">
+          <!-- <div class="col-4">
             <q-input
               v-model="store.formVital.vas"
               dense
@@ -132,7 +132,7 @@
               hide-bottom-space
               @update:model-value="setNumber($event,'vas')"
             />
-          </div>
+          </div> -->
           <div class="col-12">
             <q-select
               v-model="store.formVital.tingkatkesadaran"

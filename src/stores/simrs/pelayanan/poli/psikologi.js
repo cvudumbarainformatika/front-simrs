@@ -32,6 +32,7 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
     ],
     optionSimptom: [],
     loadingSave: false,
+    psikotes: null,
     form: {}
   }),
   actions: {
@@ -41,6 +42,15 @@ export const usePsikologiPoli = defineStore('poli-psikologi', {
           label: x,
           value: x
         }
+      })
+    },
+
+    setPsiko() {
+      return new Promise((resolve, reject) => {
+        if (this.psikotes !== null || this.psikotes !== '') {
+          this.form.psikotespendukung.push(this.psikotes)
+        }
+        resolve()
       })
     },
     initForm() {

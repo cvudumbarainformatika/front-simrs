@@ -122,11 +122,11 @@
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
-import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
+import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
+import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 
-const table = UseFarmasiStokTable()
-const store = UseFarmasiStokStore()
+const table = UseFarmasiStokSekarangTable()
+const store = UseFarmasiStokSekarangStore()
 const apps = useAplikasiStore()
 
 function cariGudang(val) {
@@ -147,6 +147,7 @@ function cariGudang(val) {
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
 // })
+// eslint-disable-next-line no-unused-vars
 function editData(val) {
   store.editData(val)
   console.log('edit', val)

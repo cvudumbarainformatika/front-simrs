@@ -295,12 +295,76 @@
                   </div>
 
                   <div class="column">
-                    <q-btn
-                      label="Tambah Psikotes Pendukung"
+                    <div class="relative-position q-mb-md">
+                      <q-btn
+                        label="Tambah Psikotes Pendukung"
+                        dense
+                        color="primary"
+                        class="full-width relative-position"
+                        outline
+                      >
+                        <q-popup-edit
+                          v-slot="scope"
+                          v-model="store.psikotes"
+                          class="q-pa-sm"
+                          persistent
+                          :cover="false"
+                          buttons
+                          style="width:30%"
+                          @update:model-value="addPsiko"
+                        >
+                          <q-input
+                            v-model="scope.value"
+                            dense
+                            standout="bg-yellow-3"
+                            autofocus
+                            outlined
+                            placeholder="Enter untuk menambahkan"
+                            @keyup.enter="scope.set"
+                          />
+                        </q-popup-edit>
+                      </q-btn>
+                    </div>
+
+                    <q-list
                       dense
-                      flat
-                      color="primary"
-                    />
+                      separator
+                      bordered
+                    >
+                      <q-item
+                        v-for="(item, i) in store.form.psikotespendukung"
+                        :key="i"
+                      >
+                        <q-item-section>
+                          <div class="row">
+                            <div class="q-pr-sm">
+                              {{ i +1 }}.
+                            </div>
+                            <div>
+                              {{ item }}
+                              <q-popup-edit
+                                v-slot="scope"
+                                v-model="store.form.psikotespendukung[i]"
+                                auto-save
+                                :cover="false"
+                                :offset="[0, 0]"
+                                class="q-pa-none"
+                              >
+                                <q-input
+                                  v-model="scope.value"
+                                  dense
+                                  autofocus
+                                  outlined
+                                  standout="bg-yellow-3"
+                                  @keyup.enter="scope.set"
+                                />
+                              </q-popup-edit>
+                            </div>
+                          </div>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+
                     <q-input
                       v-model="store.form.hasilTes"
                       dense
@@ -406,6 +470,12 @@ onMounted(() => {
 
 function simpanData() {
   store.saveData(props.pasien)
+}
+
+function addPsiko() {
+  store.setPsiko().then(() => {
+    store.psikotes = null
+  })
 }
 
 function deleteData(id) {

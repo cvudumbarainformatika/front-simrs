@@ -173,25 +173,41 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     hapusList(obat) {
       const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === obat?.noresep)
       if (obat?.namaracikan) {
-        const racikan = this.listRacikan.filter(a => a.namaracikan === obat?.namaracikan)
-        if (racikan?.length) {
-          if (racikan[0]?.rincian.length > 1) {
-            const index = racikan[0]?.rincian?.findIndex(x => x.id === obat?.id)
-            if (index >= 0)racikan[0]?.rincian.splice(index, 1)
+        // const racikan = this?.listRacikan?.filter(a => a.namaracikan === obat?.namaracikan)
+        const racikan = this?.listRacikan?.find(a => a.namaracikan === obat?.namaracikan)
+        // console.log('rac', racikan)
+        // if (racikan?.length) {
+        if (racikan) {
+          // if (racikan[0]?.rincian?.length > 1) {
+          //   const index = racikan[0]?.rincian?.findIndex(x => x.id === obat?.id)
+          //   if (index >= 0)racikan[0]?.rincian?.splice(index, 1)
+          if (racikan?.rincian?.length > 1) {
+            const index = racikan?.rincian?.findIndex(x => x.id === obat?.id)
+            if (index >= 0)racikan?.rincian?.splice(index, 1)
           } else {
-            const index = this.listRacikan.findIndex(x => x.namaracikan === obat?.namaracikan)
-            if (index >= 0) this.listRacikan.splice(index, 1)
+            const index = this?.listRacikan?.findIndex(x => x.namaracikan === obat?.namaracikan)
+            if (index >= 0) this?.listRacikan?.splice(index, 1)
           }
         }
-        const index = resep?.permintaanracikan.findIndex(x => x.id === obat?.id)
-        if (index >= 0) resep?.permintaanracikan.splice(index, 1)
+
+        const indexLis = this?.listRincianRacikan?.findIndex(x => x.id === obat?.id)
+        if (indexLis >= 0) this?.listRincianRacikan?.splice(indexLis, 1)
+        console.log('indexLis', indexLis)
+
+        const index = resep?.permintaanracikan?.findIndex(x => x.id === obat?.id)
+        if (index >= 0) resep?.permintaanracikan?.splice(index, 1)
         // console.log('new', index)
       } else {
-        const index = this.listPemintaanSementara.findIndex(x => x.id === obat?.id)
-        if (index >= 0) this.listPemintaanSementara.splice(index, 1)
-        const indexp = resep?.permintaanresep.findIndex(x => x.id === obat?.id)
-        if (indexp >= 0) resep?.permintaanresep.splice(indexp, 1)
+        const index = this?.listPemintaanSementara?.findIndex(x => x.id === obat?.id)
+        if (index >= 0) this?.listPemintaanSementara?.splice(index, 1)
+        const indexp = resep?.permintaanresep?.findIndex(x => x.id === obat?.id)
+        if (indexp >= 0) resep?.permintaanresep?.splice(indexp, 1)
         // console.log('new', indexp)
+      }
+      if (resep?.permintaanracikan.length <= 0 && resep?.permintaanresep.length <= 0) {
+        this.noresep = 'BARU'
+        const indexres = this?.noreseps?.findIndex(a => a === obat?.noresep)
+        if (indexres >= 0) this?.noreseps?.splice(indexres, 1)
       }
       console.log('pasien hapus obat', resep)
     },
@@ -241,7 +257,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
       // console.log('list racikan', this.listRacikan)
       // console.log('list rincian racikan', this.listRincianRacikan)
-
+      const rac = this.listRacikan.find(x => x.namaracikan === this.form.namaracikan)
+      this.listRincianRacikan = rac?.rincian ?? []
       this.tipeRacikan = [
         { label: 'DTD', value: 'DTD', disable: true },
         { label: 'non-DTD', value: 'non-DTD', disable: true }
@@ -435,22 +452,6 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.setForm('namaracikan', resp?.data)
         })
     },
-    tambahObatRacikan(key) {
-      const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === key.noresep)
-      const adaRacRin = this.pasResRac?.permintaanracikan?.find(ri => ri.id === key.id)
-      if (!adaRacRin) {
-        pasResRac.permintaanracikan?.push(key)
-        this.listRincianRacikan?.push(key)
-      }
-    },
-    tambahObat(key) {
-      const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === key.noresep)
-      const adaRacRin = this.pasResRac?.permintaanresep?.find(ri => ri.id === key.id)
-      if (!adaRacRin) {
-        pasResRac.permintaanresep?.push(key)
-        this.listPemintaanSementara?.push(key)
-      }
-    },
     simpanObat(payload) {
       // const form = payload
       // console.log('payload', this.form)
@@ -464,30 +465,35 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
               this.openDialog(resp?.data)
             } else {
               notifSuccess(resp)
-              if (!this.form.noresep || this.form.noresep === '') {
+              // this.pasien.newapotekrajal = resp?.data?.heder
+              if (!this.form.noresep || this.form.noresep === '' || this.noresep !== resp?.data?.nota) {
                 this.noreseps.push(resp?.data?.nota)
                 this.noresep = resp?.data?.nota
-                const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
-                if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
               }
+              this.pasien.newapotekrajal = resp?.data?.newapotekrajal
+              this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
+              // const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
+              // if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
+              // else {
+              //   const indexOb = this.pasien.newapotekrajal.findIndex(a => a.noresep === resp?.data?.nota)
+              //   if (indexOb >= 0) this.pasien.newapotekrajal[indexOb] = resp?.data?.heder
+              // }
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
-              if (resp?.data?.rinci !== 0) {
-                // this.tambahObat(resp?.data?.rinci)
-                this.setList(resp?.data?.rinci)
-              }
-              if (resp?.data?.rincidtd !== 0) {
-                // this.tambahObatRacikan(resp?.data?.rincidtd)
-                this.setListRacikan(resp?.data?.rincidtd)
-              }
-              if (resp?.data?.rincinondtd !== 0) {
-                // this.tambahObatRacikan(resp?.data?.rincinondtd)
-                this.setListRacikan(resp?.data?.rincinondtd)
-              }
+              // if (resp?.data?.rinci !== 0) {
+              //   this.setList(resp?.data?.rinci)
+              // }
+              // if (resp?.data?.rincidtd !== 0) {
+              //   this.setListRacikan(resp?.data?.rincidtd)
+              // }
+              // if (resp?.data?.rincinondtd !== 0) {
+              //   this.setListRacikan(resp?.data?.rincinondtd)
+              // }
 
               this.setForm('lanjuTr', '')
               resolve(resp)
             }
+            this.cariObat()
           })
           .catch(() => {
             this.loading = false
@@ -496,6 +502,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     async selesaiResep() {
       this.loadingkirim = true
+      if (!this.form.noresep || this.form.noresep === '') {
+        if (this.noresep) this.setForm('noresep', this.noresep)
+        else return notifErrVue('nomor resep tidak terekam, silahkan pilih nomor resep yang akan dikirim')
+      }
       await api.post('v1/simrs/farmasinew/depo/kirimresep', this.form)
         .then(resp => {
           console.log('selesai', resp?.data)
@@ -535,9 +545,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           console.log('resp hapus', resp?.data)
           // hapus list
           this.hapusList(resp?.data?.obat)
+          this.pasien.newapotekrajal = resp?.data?.newapotekrajal
+          this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.obat?.noresep)
 
           this.loadingHapus = false
           this.obatId = null
+          this.cariObat()
           notifSuccess(resp)
         })
         .catch(() => {
