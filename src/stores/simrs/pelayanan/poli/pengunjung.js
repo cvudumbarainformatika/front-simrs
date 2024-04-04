@@ -242,6 +242,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             findPasien[0].datasimpeg = resp?.data?.datasimpeg
             findPasien[0].diagnosa = resp?.data?.diagnosa
             findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
+            findPasien[0].diagnosakebidanan = resp?.data?.diagnosakebidanan
             findPasien[0].diet = resp?.data?.diet
             findPasien[0].edukasi = resp?.data?.edukasi
             findPasien[0].fisio = resp?.data?.fisio
@@ -455,6 +456,14 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].diagnosakeperawatan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataDiagnosaKebidanan(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].diagnosakebidanan
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
