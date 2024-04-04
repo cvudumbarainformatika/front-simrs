@@ -63,7 +63,7 @@ export const usePemesananObatStore = defineStore('pemesanan_obat_store', {
       })
     },
     kirimRencana(val) {
-      console.log('kirim pesanan', val)
+      // console.log('kirim pesanan', val)
       const data = {
         nopemesanan: this.form.nopemesanan,
         kdpbf: this.form.kdpbf,

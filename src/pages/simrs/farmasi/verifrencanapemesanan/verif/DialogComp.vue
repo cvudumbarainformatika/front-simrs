@@ -220,6 +220,7 @@
                         standout="bg-yellow-3"
                         :disable="store.loadingSimpan && rinc.loading"
                         @update:model-value="setNumber($event,rinc)"
+                        @keyup.enter.stop="simpanObat(rinc)"
                       />
                     </div>
                     <div v-else>
@@ -332,7 +333,6 @@ function simpanObat(rinc) {
     Dialog.create({
       title: 'Konfirmasi',
       message: 'Apakah Obat "' + rinc?.mobat?.nama_obat + '" tidak disetujui untuk di pesan?',
-      persistent: true,
       ok: {
         push: true,
         'no-caps': true,
