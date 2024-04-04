@@ -858,7 +858,7 @@ function ketEnter() {
 function simpanObat() {
   if (validate()) {
     const form = store.form
-    store.simpanObat(form).then(() => {
+    store.simpanObat(form)?.then(() => {
       signa.value = null
       refObat.value.focus()
       // refObat.value.showPopup()

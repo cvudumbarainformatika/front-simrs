@@ -60,11 +60,18 @@
                       />
                     </div>
                   </q-item-label>
-                  <!-- <q-item-label
+                  <q-item-label
                     lines="2"
                   >
-                    <em class="">Tipe</em>  <span class="text-weight-bold">{{ item.rs4 }}</span>
-                  </q-item-label> -->
+                    <div class="row q-gutter-sm">
+                      <div class="col-auto text-italic f-10 text-weight-bold">
+                        Tanggal Input :
+                      </div>
+                      <div class="col-auto text-italic f-10 text-weight-bold">
+                        {{ dateFullFormat( item?.rs12) }}
+                      </div>
+                    </div>
+                  </q-item-label>
                 </q-item-section>
 
                 <q-item-section
@@ -104,6 +111,7 @@
 <script setup>
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { useQuasar } from 'quasar'
+import { dateFullFormat } from 'src/modules/formatter'
 
 const store = useLayananPoli()
 const $q = useQuasar()
