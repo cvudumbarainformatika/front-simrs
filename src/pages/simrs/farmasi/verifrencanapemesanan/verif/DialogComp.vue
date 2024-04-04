@@ -218,7 +218,6 @@
                         dense
                         outlined
                         standout="bg-yellow-3"
-                        :rules="[val=>!!val||'tidak boleh kosong']"
                         :disable="store.loadingSimpan && rinc.loading"
                         @update:model-value="setNumber($event,rinc)"
                       />
@@ -249,7 +248,7 @@
                   dense
                   :loading="store.loadingSimpan && rinc.loading"
                   :disable="store.loadingSimpan && rinc.loading"
-                  @click="store.simpanObat(rinc)"
+                  @click="simpanObat(rinc)"
                 >
                   <q-tooltip
                     class="primary"
@@ -301,6 +300,7 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { useVerifikasiRencanaPesanStore } from 'src/stores/simrs/farmasi/verifikasiperencanaanpemesanan/verifrencana'
 import { defineAsyncComponent, ref } from 'vue'
+import { Dialog } from 'quasar'
 
 // eslint-disable-next-line no-unused-vars
 const store = useVerifikasiRencanaPesanStore()
@@ -327,15 +327,31 @@ function setNumber(evt, det) {
   } else det.jumlah_diverif = nilai
 }
 
-// function simpanObat(rinc) {
-//   console.log('rinc', refVerif.value)
-//   let valid = true
-//   refVerif.value?.forEach(ver => {
-//     console.log(ver, ver.validate())
-//     if (!ver.validate()) valid = false
-//   })
-//   if (valid) store.simpanObat(rinc)
-// }
+function simpanObat(rinc) {
+  if (parseFloat(rinc?.jumlah_diverif) <= 0) {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah Obat "' + rinc?.mobat?.nama_obat + '" tidak disetujui untuk di pesan?',
+      persistent: true,
+      ok: {
+        push: true,
+        'no-caps': true,
+        label: 'Tidak disetujui untuk dipesan',
+        color: 'negative'
+      },
+      cancel: {
+        push: true,
+        'no-caps': true,
+        label: 'Batal',
+        color: 'dark'
+      }
+    }).onOk(() => {
+      store.simpanObat(rinc)
+    })
+  } else {
+    store.simpanObat(rinc)
+  }
+}
 function selesaiVerif(rinc) {
   console.log('rinc', refVerif.value)
   let valid = true
