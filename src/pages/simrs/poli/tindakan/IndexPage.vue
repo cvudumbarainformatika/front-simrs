@@ -170,6 +170,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/LayananPage.vue')))
   },
   {
+    name: 'BayiAnakPage',
+    label: 'Bayi & Anak',
+    icon: 'icon-my-baby-head',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/BayiAnakPage.vue')))
+  },
+  {
     name: 'penunjang-page',
     label: 'Penunjang',
     icon: 'icon-my-local_hospital',
