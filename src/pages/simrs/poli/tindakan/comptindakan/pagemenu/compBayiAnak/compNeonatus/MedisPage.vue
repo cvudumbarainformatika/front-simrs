@@ -1,12 +1,21 @@
 <template>
   <div class="fit row">
     <div class="col-8 full-height">
-      <q-form class="full-height">
+      <q-form
+        class="full-height"
+        @submit="onSubmit"
+      >
         <div class="full-height q-pa-xs scroll">
           <FormMedis />
         </div>
-        <div class="absolute-bottom bg-primary text-white">
-          dfsd
+        <div class="absolute-bottom bg-primary q-pa-md">
+          <div class="text-right">
+            <q-btn
+              label="Simpan Data"
+              class="bg-white text-dark"
+              type="submit"
+            />
+          </div>
         </div>
       </q-form>
     </div>
@@ -30,4 +39,8 @@ const props = defineProps({
     default: null
   }
 })
+
+function onSubmit() {
+  store.saveData(props.pasien)
+}
 </script>

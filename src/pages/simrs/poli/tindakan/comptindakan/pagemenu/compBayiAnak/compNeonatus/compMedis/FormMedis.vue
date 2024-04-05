@@ -7,7 +7,7 @@
       <div><b>DATA IBU</b></div>
       <q-separator class="q-my-sm" />
       <q-input
-        v-model="store.form.usiaKehamilan"
+        v-model="store.form.usiaKehamilanIbu"
         label="Usia Kehamilan dlm Minggu"
         dense
         outlined
@@ -495,7 +495,224 @@
 
     <q-card-section>
       <div><b>DATA BAYI</b></div>
-      <q-separator />
+      <q-separator class="q-my-xs" />
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Lahir
+        </div>
+        <div class="col-4 row no-wrap">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <app-input-date
+            :model="store.form.lahirTgl"
+            label="Tgl Lahir"
+            outlined
+            clearable
+            valid
+            @set-model="val=>store.form.lahirTgl=val"
+          />
+        </div>
+        <div class="col-3">
+          <app-input-date
+            :model="store.form.lahirJam"
+            label="Jam Lahir"
+            outlined
+            :type-date="false"
+            clearable
+            valid
+            @set-model="val=>store.form.lahirJam=val"
+          />
+        </div>
+      </div>
+
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Resusitasi
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div class="flex q-gutter-sm">
+            <q-radio
+              v-for="item in store.resusitasis"
+              :key="item"
+              v-model="store.form.resusitasi"
+              :val="item"
+              :label="item"
+              dense
+              size="xs"
+            />
+          </div>
+          <div
+            v-if="store.form.resusitasi==='Ya'"
+            class="q-ml-sm"
+          >
+            <div class="flex q-gutter-sm">
+              <app-input-date
+                :model="store.form.resusitasiJamMulai"
+                label="Jam Mulai"
+                outlined
+                :type-date="false"
+                clearable
+                valid
+                @set-model="val=>store.form.resusitasiJamMulai=val"
+              />
+              <app-input-date
+                :model="store.form.resusitasiJamSelesai"
+                label="Jam Selesai"
+                outlined
+                :type-date="false"
+                clearable
+                valid
+                @set-model="val=>store.form.resusitasiJamSelesai=val"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Skor APGAR
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div>
+            <q-input
+              v-model="store.form.skorApgar"
+              label="Skor APGAR"
+              dense
+              outlined
+              standout="bg-yellow-3"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Berat Badan
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div class="flex q-gutter-sm">
+            <q-input
+              v-model="store.form.beratBadan"
+              label="Berat Badan / Gram"
+              dense
+              outlined
+              standout="bg-yellow-3"
+            />
+            <div
+              v-if="store.form.beratBadan"
+              class="flex q-gutter-xs"
+            >
+              <q-radio
+                v-for="item in store.beratBadans"
+                :key="item"
+                v-model="store.form.beratBadanKat"
+                :val="item"
+                :label="item"
+                dense
+                size="xs"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Panjang Badan
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div>
+            <q-input
+              v-model="store.form.panjangBadan"
+              label="Panjang Badan / Cm"
+              dense
+              outlined
+              standout="bg-yellow-3"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Lingkar Kepala
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div class="flex q-gutter-sm">
+            <q-input
+              v-model="store.form.lingkarKepala"
+              label="Lingkar Kepala / Cm"
+              dense
+              outlined
+              standout="bg-yellow-3"
+            />
+            <div
+              v-if="store.form.lingkarKepala"
+              class="flex q-gutter-xs"
+            >
+              <q-radio
+                v-for="item in store.lingkarKepalas"
+                :key="item"
+                v-model="store.form.lingkarKepalaKat"
+                :val="item"
+                :label="item"
+                dense
+                size="xs"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row items-center q-col-gutter-xs">
+        <div class="col-3">
+          Usia Kehamilan
+        </div>
+        <div class="col-9 row no-wrap q-mt-xs">
+          <div class="q-mr-sm">
+            :
+          </div>
+          <div class="flex q-gutter-sm">
+            <q-input
+              v-model="store.form.usiaKehamilanBayi"
+              label="Usia Khmilan / Mggu"
+              dense
+              outlined
+              standout="bg-yellow-3"
+            />
+            <div
+              v-if="store.form.usiaKehamilanBayi"
+              class="flex q-gutter-xs"
+            >
+              <q-radio
+                v-for="item in store.usiaKehamilanBayis"
+                :key="item"
+                v-model="store.form.usiaKehamilanBayiKat"
+                :val="item"
+                :label="item"
+                dense
+                size="xs"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </q-card-section>
   </q-card>
   <div style="margin-bottom: 100px;" />

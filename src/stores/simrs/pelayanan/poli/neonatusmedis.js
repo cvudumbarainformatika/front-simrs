@@ -1,4 +1,9 @@
 import { defineStore } from 'pinia'
+import { api } from 'src/boot/axios'
+// eslint-disable-next-line no-unused-vars
+import { usePengunjungPoliStore } from './pengunjung'
+// eslint-disable-next-line no-unused-vars
+import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const useNeonatusMedisStore = defineStore('neonatus-medis', {
   state: () => ({
@@ -15,12 +20,17 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
     kekeruhans: ['Jernih', 'Keruh'],
     baus: ['Tidak', 'Ya'],
     obatSebelumBersalins: ['Tidak', 'Ya'],
-    form: {}
+    resusitasis: ['Tidak', 'Ya'],
+    beratBadans: ['Normal', 'BBLR', 'BBLSR', 'BBLASR'],
+    lingkarKepalas: ['Normal', 'Ikrosefali', 'Makrosefali'],
+    usiaKehamilanBayis: ['SMK', 'KMK', 'BMK'],
+    form: {},
+    loadingSave: false
   }),
   actions: {
 
     initForm() {
-      this.form.usiaKehamilan = null
+      this.form.usiaKehamilanIbu = null
       this.form.anc = null
       this.form.ancLain = null
       this.form.rujukan = null
@@ -51,6 +61,39 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
       this.form.placenta = null
       this.form.obatSebelumBersalin = null
       this.form.obatSebelumBersalinYa = null
+      // objective
+      this.form.lahirTgl = null
+      this.form.lahirJam = null
+      this.form.resusitasi = null
+      this.form.resusitasiJamMulai = null
+      this.form.resusitasiJamSelesai = null
+      this.form.skorApgar = null
+      this.form.beratBadan = null
+      this.form.beratBadanKat = null
+      this.form.panjangBadan = null
+      this.form.lingkarKepala = null
+      this.form.lingkarKepalaKat = null
+      this.form.usiaKehamilanBayi = null
+      this.form.usiaKehamilanBayiKat = null
+    },
+
+    saveData(pasien) {
+      this.form.noreg = pasien?.noreg
+      this.form.norm = pasien?.norm
+      this.loadingSave = true
+
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/neonatusmedis', this.form)
+          .then((resp) => {
+            console.log('cb', resp)
+            this.loadingSave = true
+          })
+          .catch((err) => {
+            console.log(err)
+            this.loadingSave = false
+            reject(err)
+          })
+      })
     }
   }
 })
