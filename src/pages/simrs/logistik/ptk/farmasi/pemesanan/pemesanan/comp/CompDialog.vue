@@ -446,8 +446,10 @@ const refPbf = ref(null)
 function kirimRencana(val) {
   if (refPbf.value.$refs.refAuto.validate()) {
     store.kirimRencana(val).then(() => {
-      table.getObatMauBeli().then(() => {
+      table.getObatMauBeli().then(resp => {
+        console.log('get obat setelah kirim', resp)
         table.rencanaSelected(store.form.no_rencbeliobat)
+        if (!resp.length) store.setClose()
       })
     })
   }

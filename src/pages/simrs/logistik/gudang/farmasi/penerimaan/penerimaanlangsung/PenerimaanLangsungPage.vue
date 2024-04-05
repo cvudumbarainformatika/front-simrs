@@ -286,11 +286,16 @@
         />
       </div>
       <div class="col-2">
-        <app-input
+        <!-- <app-input
           v-model="store.form.ppn"
           label="PPN (%)"
           outlined
           valid
+          @update:model-value="adaPPN($event,det)"
+          /> -->
+        <q-checkbox
+          v-model="adaPPN"
+          label="PPN 11%"
           @update:model-value="setPpn($event)"
         />
       </div>
@@ -365,17 +370,46 @@
         separator
       >
         <q-item
+          class="row items-center q-col-gutter-sm"
+        >
+          <q-item-section>
+            No
+          </q-item-section>
+          <q-item-section>
+            Obat
+          </q-item-section>
+          <q-item-section>
+            batch & exp
+          </q-item-section>
+          <q-item-section>
+            Diterima
+          </q-item-section>
+          <q-item-section>
+            Harga (@)
+          </q-item-section>
+          <q-item-section>
+            disc & ppn
+          </q-item-section>
+          <q-item-section>
+            Harga net & Subtotal
+          </q-item-section>
+          <!-- {{ item }} -->
+        </q-item>
+        <q-item
           v-for="(item,i) in store.rincis"
           :key="i"
           v-ripple
           class="row items-center q-col-gutter-sm"
         >
           <q-item-section>
+            {{ i+1 }}
+          </q-item-section>
+          <q-item-section>
             <div class="row">
-              {{ item?.masterobat?.namaobat }}
+              {{ item?.masterobat?.nama_obat }}
             </div>
             <div class="row">
-              {{ item?.masterobat?.kodeobat }}
+              {{ item?.masterobat?.kd_obat }}
             </div>
           </q-item-section>
           <q-item-section>
@@ -395,11 +429,11 @@
             </div>
           </q-item-section>
           <q-item-section>
-            <div class="row">
-              {{ item?.harga }}
+            <div class="row ">
+              {{ formatRp(item?.harga) }}
             </div>
             <div class="row">
-              {{ item?.harga_kcl }}
+              {{ formatRp(item?.harga_kcl) }}
             </div>
           </q-item-section>
           <q-item-section>
@@ -412,10 +446,10 @@
           </q-item-section>
           <q-item-section>
             <div class="row">
-              {{ item?.harga_netto }}
+              {{ formatRp(item?.harga_netto) }}
             </div>
             <div class="row">
-              {{ item?.subtotal }}
+              {{ formatRp(item?.subtotal) }}
             </div>
           </q-item-section>
           <!-- {{ item }} -->
@@ -474,6 +508,8 @@ function setHargaNetto() {
   store.setForm('jml_all_penerimaan', jmlTerimaB)
   store.setForm('jml_pesan', 0)
   store.setForm('jml_terima_k', jmlTerimaB * isi)
+
+  console.log('form', store.form)
 }
 function setIsi(val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
@@ -510,12 +546,20 @@ function setDiskon(val) {
     setHargaNetto()
   }, 100)
 }
+// function adaPPN(evt, det) {
+//   // console.log('ada ppn', evt, det)
+//   if (evt) setHargaNetNew('11', det, 'ppn')
+//   if (!evt) setHargaNetNew('0', det, 'ppn')
+// }
+const adaPPN = ref(false)
 function setPpn(val) {
-  const inc = val.includes('.')
-  const ind = val.indexOf('.')
-  const panj = val.length
-  const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
-  store.setForm('ppn', temp)
+  // const inc = val.includes('.')
+  // const ind = val.indexOf('.')
+  // const panj = val.length
+  // const temp = isNaN(parseFloat(val)) ? 0 : (inc && (ind === (panj - 1)) ? val : parseFloat(val))
+  // store.setForm('ppn', temp)
+  if (val) store.setForm('ppn', 11)
+  if (!val) store.setForm('ppn', 0)
   setTimeout(() => {
     setHargaNetto()
   }, 100)

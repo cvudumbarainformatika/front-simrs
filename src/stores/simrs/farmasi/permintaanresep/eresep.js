@@ -454,7 +454,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
     simpanObat(payload) {
       // const form = payload
-      // console.log('payload', this.form)
+      console.log('payload', this.form)
+      const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === this.form?.noresep)
+      if (resep) {
+        if (resep?.flag !== '') this.form.noresep = ''
+      }
+      console.log('obat', this?.pasien?.newapotekrajal)
+      console.log('resep', resep)
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/pembuatanresep', this.form)

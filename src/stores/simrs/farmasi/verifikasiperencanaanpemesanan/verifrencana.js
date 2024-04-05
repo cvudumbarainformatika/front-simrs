@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays, notifErrVue, notifSuccess } from 'src/modules/utils'
+import { filterDuplicateArrays, notifSuccess } from 'src/modules/utils'
 
 export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pemesanan', {
   state: () => ({
@@ -107,7 +107,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
     },
     simpanObat(val) {
       console.log('Simpan Obat', val)
-      if (!val?.jumlah_diverif) return notifErrVue('Jumlah Verif Tidak boleh kosong')
+
       this.loadingSimpan = true
       val.loading = true
       return new Promise(resolve => {

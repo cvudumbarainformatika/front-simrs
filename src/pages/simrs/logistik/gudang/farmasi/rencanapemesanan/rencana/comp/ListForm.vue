@@ -147,7 +147,7 @@
               :class="row.sudahDirencanakan > 0 ? 'text-cyan' : ''"
             >
               <div class="q-mr-xs">
-                sudah Direncanakan
+                Dalam Proses
               </div>
               <div>
                 {{ row.sudahDirencanakan }}

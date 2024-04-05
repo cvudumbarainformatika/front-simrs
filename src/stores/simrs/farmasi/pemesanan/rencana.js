@@ -194,6 +194,8 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       console.log('kirim ', val)
       this.setForm('kd_obat', val.kd_obat)
       if (!this.form.kd_ruang) return notifErrVue('Gudang tidak boleh kosong')
+      const gudBen = this.gudangs.find(a => a.value === this.form.kd_ruang)
+      if (!gudBen) return notifErrVue('Pastikan akses Anda adalah akses Gudang, bukan Depo')
       const data = {
         norencanabeliobat: this.form.no_rencbeliobat,
         kd_ruang: this.form.kd_ruang,

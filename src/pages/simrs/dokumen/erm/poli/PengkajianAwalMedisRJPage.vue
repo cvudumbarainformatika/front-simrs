@@ -29,7 +29,7 @@
       <KopSurat />
       <div class="garis-bawah-dblue q-pb-sm q-mb-md">
         <div class="row justify-center f-20 text-weight-bold q-mb-md">
-          PENGKAJIAN AWAL MEDIS RAWAT JALAN
+          ASESMEN AWAL MEDIS RAWAT JALAN
         </div>
         <div class="row">
           <div class="col-5">
@@ -281,8 +281,14 @@
             :
           </div>
           <div class="col-2">
-            <span class=""> Apakah Pasian mengalami penurunan / peningkatan BB yang tidak diinginkan dalam 6 Bulan terakhir ? <b>{{ getYT(item?.skreeninggizi) }}</b></span><br>
-            <span class=""> Apakah Asupan Makan berkurang karena tidak nafsu makan ? <b>{{ getYT(item?.skreeninggizi) }}</b></span>
+            <span
+              v-if="item?.skreeninggizi >= 2 "
+              class="col-1"
+            >Beresiko Mal Nutrisi</span>
+            <span
+              v-else
+              class="col-1"
+            >Tidak Beresiko Mal Nutrisi</span>
           </div>
         </div>
         <q-separator />

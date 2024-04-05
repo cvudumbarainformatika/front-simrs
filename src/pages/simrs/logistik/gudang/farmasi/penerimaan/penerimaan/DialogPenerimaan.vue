@@ -447,6 +447,7 @@
             <div class="row no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
+                  ref="refBatch"
                   v-model="det.no_batch"
                   label="No Batch"
                   outlined
@@ -607,6 +608,7 @@ const refGudang = ref(null) // auto
 // det
 // const refPpn = ref(null)
 const refJmlDiterima = ref(null)
+const refBatch = ref(null)
 const refIsi = ref(null)
 const refExp = ref(null)
 const refHarga = ref(null)
@@ -628,13 +630,14 @@ function validasi(index) {
 
   // const ppn = refPpn.value[index].refInput.validate()
   const diterima = refJmlDiterima.value[index].refInput.validate()
+  const batch = refBatch.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
   console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
   if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && Gudang && noSurat && pengirim && diterima && isi && exp && harga && hargaKcl) return true
+  if (jenisSurat && Gudang && noSurat && pengirim && diterima && batch && isi && exp && harga && hargaKcl) return true
   else return false
 }
 const ind = ref(null)
