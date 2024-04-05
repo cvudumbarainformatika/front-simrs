@@ -168,6 +168,7 @@
                     icon="icon-mat-save"
                     size="sm"
                     color="primary"
+                    :disable="parseFloat(rin?.jumlahdirencanakan) === parseFloat(rin.prevRenc)"
                     :loading="store.loadingSimpan && rin.loading"
                     @click="simpan(row,rin)"
                   >
@@ -323,6 +324,7 @@ function hapusHeader(val) {
 function setJumlah(evt, val) {
   const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   const bisaRen = parseFloat(val?.jumlah_bisa_dibeli)
+
   if (bisaRen < beli) {
     notifErrVue('Maksimal Direncanakan adalah ' + bisaRen)
     val.jumlahdirencanakan = bisaRen
@@ -334,6 +336,7 @@ const urutanInp = ref([])
 let inpIndex = 0
 function setEdit(row, rin, i) {
   rin.edit = true
+  rin.prevRenc = rin.jumlahdirencanakan
   const temp = { index: inpIndex, id: rin.id }
   inpIndex = +1
   urutanInp.value.push(temp)
@@ -348,9 +351,20 @@ function setEdit(row, rin, i) {
 }
 
 function simpan(row, rin) {
+  console.log('rinci', rin)
+  if (parseFloat(rin?.jumlahdirencanakan) <= 0) {
+    rin.jumlahdirencanakan = rin.prevRenc
+    return notifErrVue('Tidak boleh 0, silahkan hapus obat jika memang tidak adakan direncanakan')
+  }
+
   const index = urutanInp.value.findIndex(ind => ind.id === rin.id)
   urutanInp.value.splice(index, 1)
   inpIndex = urutanInp.value.length - 1
+
+  if (parseFloat(rin?.jumlahdirencanakan) === parseFloat(rin.prevRenc)) {
+    rin.edit = false
+    return notifErrVue('Tidak ada perubahan, tidak perlu di simpan')
+  }
   store.simpan(rin)
     .then(() => {
       rin.edit = false

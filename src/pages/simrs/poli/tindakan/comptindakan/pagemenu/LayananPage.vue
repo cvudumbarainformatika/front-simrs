@@ -57,6 +57,12 @@
             <DiagnosaKeperawatanPage :pasien="props.pasien" />
           </q-tab-panel>
           <q-tab-panel
+            name="Diagnosa Kebidanan"
+            class="full-height q-pa-none"
+          >
+            <DiagnosaKebidananPage :pasien="props.pasien" />
+          </q-tab-panel>
+          <q-tab-panel
             name="Pra Anestesia"
             class="full-height q-pa-none"
           >
@@ -84,6 +90,7 @@ import DiagnosaPage from '../pagemenu/complayanan/DiagnosaPage.vue'
 import TindakanPage from './complayanan/TindakanPage.vue'
 import IcdPage from './complayanan/IcdPage.vue'
 import DiagnosaKeperawatanPage from './complayanan/DiagnosaKeperawatanPage.vue'
+import DiagnosaKebidananPage from './complayanan/DiagnosaKebidananPage.vue'
 import PraAnestesiaPage from './complayanan/PraAnestesiaPage.vue'
 import LaporanTindakan from './complayanan/LaporanTindakan.vue'
 import { onMounted } from 'vue'
