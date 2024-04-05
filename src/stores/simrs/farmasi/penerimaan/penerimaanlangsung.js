@@ -272,7 +272,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       this.getDataObat()
     },
     cariPihatTiga(val) {
-      const pihaktiga = this.allPihakTigas.filter(pht => pht.nama.toLowerCase().incudes(val.toLowerCase))
+      const pihaktiga = this.allPihakTigas.filter(pht => pht?.nama?.toLowerCase().includes(val.toLowerCase))
       if (pihaktiga.length) this.pihakTigas = pihaktiga
       else this.getPihakKetiga()
     },
@@ -349,8 +349,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             }
             if (resp.data.rinci) {
               const rin = resp.data.rinci
-              const obat = this.obats.filter(ob => ob.kodeobat === rin.kdobat)
-              if (obat.length) rin.masterobat = obat[0]
+              // const obat = this.obats.filter(ob => ob.kodeobat === rin.kdobat)
+              // if (obat.length) rin.masterobat = obat[0]
               const index = findWithAttr(this.rincis, 'kdobat', rin.kdobat)
               if (index > 0) {
                 this.rincis[index] = rin
