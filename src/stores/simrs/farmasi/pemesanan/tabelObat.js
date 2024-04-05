@@ -182,7 +182,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             // console.log('item', this.items)
             this.meta = resp.data
             // this.setColumns(resp.data.data)
-            resolve(resp)
+            resolve(rencana)
           })
           .catch(() => {
             this.loadingList = false
