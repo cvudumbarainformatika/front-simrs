@@ -89,6 +89,6 @@ watch(() => apps?.user?.kdruangansim, (kod) => {
     store.setParam('gudang', gud?.value)
     store.ambilPemesanan()
   }
-  console.log('kode', gud)
+  // console.log('kode', gud)
 })
 </script>
