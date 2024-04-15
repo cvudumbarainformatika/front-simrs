@@ -143,6 +143,18 @@ const gudang = {
           component: () => import('pages/simrs/logistik/gudang/farmasi/listkonsinyasi/IndexPage.vue')
         },
         {
+          path: '/gudang/farmasi/pemfakturan',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/pemfakturan/IndexPage.vue')
+        },
+        {
+          path: '/gudang/farmasi/bast',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/bast/IndexPage.vue')
+        },
+        {
+          path: '/gudang/farmasi/pembayaran',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/pembayaran/IndexPage.vue')
+        },
+        {
           path: '/gudang/farmasi/notfound',
           component: () => import('pages/MidlewareNotFound.vue')
         }
