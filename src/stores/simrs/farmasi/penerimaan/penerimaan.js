@@ -96,7 +96,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     pemesananSelected(val) {
       this.isOpen = true
       this.items = val
-      this.details = val?.rinci
+      this.details = val?.rinci ?? []
       this.namaPenyedia = val?.pihakketiga
       console.log('pemesanan selected ', val)
       // const pemesanan = this.pemesanans.filter(a => a.nopemesanan === val)
@@ -349,8 +349,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           })
       })
     },
-    ambilPemesanan() {
-      this.loading = true
+    ambilPemesanan(val) {
+      this.loading = !val
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/penerimaan/dialogpemesananobat', param)
@@ -408,6 +408,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               }
             }
             this.form.tglpenerimaan = tgl
+            this.ambilPemesanan(true)
             resolve(resp)
           })
           .catch(() => {
