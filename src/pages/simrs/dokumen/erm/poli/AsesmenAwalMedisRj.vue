@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="row justify-center f-20 text-weight-bold q-mb-md">
-        ASESMEN AWALKEPERAWATAN RAWAT JALAN
+        ASESMEN AWAL KEPERAWATAN RAWAT JALAN
       </div>
       <div v-if="store.loading">
         <app-loading />
@@ -352,43 +352,42 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="q-mt-md">
-      <div class="row">
-        <div class="col-6">
-          <div class="text-center text-weight-bold">
-            Probolinggo, {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
+      <div class="q-mt-md">
+        <div class="row">
+          <div class="col-6">
+            <div class="text-center text-weight-bold">
+              Probolinggo, {{ date.formatDate(Date.now(),'DD MMMM YYYY') }}
+            </div>
+          </div>
+        </div>
+        <div class="row q-mb-xl">
+          <div class="col-6">
+            <div class="text-center text-weight-bold">
+              Pasien / Keluarga
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center text-weight-bold">
+              Perawat
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class="text-center text-weight-bold">
+              (........................)
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center text-weight-bold">
+              ( ???????????????????? )
+            </div>
           </div>
         </div>
       </div>
-      <div class="row q-mb-xl">
-        <div class="col-6">
-          <div class="text-center text-weight-bold">
-            Pasien / Keluarga
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="text-center text-weight-bold">
-            Perawat
-          </div>
-        </div>
+      <div v-if="store.loading">
+        <app-loading />
       </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="text-center text-weight-bold">
-            (........................)
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="text-center text-weight-bold">
-            ( ???????????????????? )
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-if="store.loading">
-      <app-loading />
     </div>
   </div>
 </template>
@@ -408,7 +407,7 @@ const store = useDokumenpengkajianawalmedisrjStore()
 // eslint-disable-next-line no-use-before-define
 store.setParams('noreg', props.pasien?.noreg)
 // eslint-disable-next-line no-use-before-define
-console.log('noreg', props.pasien?.noreg)
+// console.log('noreg', props.pasien?.noreg)
 store.getData()
 
 function skorgizi (val) {

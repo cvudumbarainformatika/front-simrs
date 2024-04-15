@@ -136,6 +136,7 @@
               </div>
             </div>
             <!-- kitas -->
+
             <div
               v-if="!bpjs"
               class="row q-col-gutter-sm items-center q-mb-xs"
@@ -156,8 +157,9 @@
               </div>
             </div>
             <!-- KA BPJS -->
+
             <div class="row justify-between q-col-gutter-sm items-center q-mb-xs">
-              <div :class="bpjs?'bagi-tiga':'satu'">
+              <div :class="bpjs || pelayanan?'bagi-tiga':'satu'">
                 <app-input
                   ref="refNoKaBpjs"
                   v-model="store.form.noka"
@@ -171,7 +173,7 @@
                 />
               </div>
               <div
-                v-if="bpjs"
+                v-if="bpjs || pelayanan"
               >
                 <q-btn
                   color="primary"
@@ -183,7 +185,7 @@
                 />
               </div>
               <div
-                v-if="bpjs"
+                v-if="bpjs || pelayanan"
               >
                 <q-btn
                   no-caps
@@ -196,6 +198,7 @@
                 />
               </div>
             </div>
+
             <!-- nama -->
             <div class="row q-col-gutter-sm items-center q-mb-xs">
               <!-- <div class="col-4">
@@ -873,16 +876,18 @@
               </div>
             </div>
             <!-- Antrian -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refNoAntrian"
-                  v-model="store.form.noantrian"
-                  label="Nomor Antrian"
-                  outlined
-                  @blur="setNoAntrian($event)"
-                />
+            <div v-if="pelayanan !== 'igd'">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-input
+                    ref="refNoAntrian"
+                    v-model="store.form.noantrian"
+                    label="Nomor Antrian"
+                    outlined
+                    @blur="setNoAntrian($event)"
+                  />
                 <!-- @update:model-value="setNoAntrian" -->
+                </div>
               </div>
             </div>
           </div>
@@ -1300,7 +1305,8 @@ const props = defineProps({
   tglsep: { type: [String, Number], default: '' },
   full: { type: Boolean, default: false },
   notEdit: { type: Boolean, default: true },
-  bisaFull: { type: Boolean, default: true }
+  bisaFull: { type: Boolean, default: true },
+  pelayanan: { type: [String, Number], default: '' }
 })
 const regex = /^\d+$/
 const dialog = useDialogCariPasienPendaftaranUmum()
@@ -1438,7 +1444,7 @@ function resetValidation() {
   refSuku.value.$refs.refInput.resetValidation()
   refNoTlp.value.$refs.refInput.resetValidation()
   refKodePos.value.$refs.refInput.resetValidation()
-  refNoAntrian.value.$refs.refInput.resetValidation()
+  if (refNoAntrian.value) refNoAntrian.value.$refs.refInput.resetValidation()
   refKtp.value.$refs.refInput.resetValidation()
   if (refKitas.value) refKitas.value.$refs.refInput.resetValidation()
   refNoKaBpjs.value.$refs.refInput.resetValidation()
@@ -1477,7 +1483,7 @@ function setJenisPasien(val) {
     refNoRM.value.$refs.refInput.focus()
     store.form = { barulama: 'baru' }
     store.lahirHariIni()
-    console.log('pasien baru')
+    // console.log('pasien baru')
     setTimeout(() => {
       resetValidation()
     }, 1000)
@@ -1794,6 +1800,8 @@ const lahirValid = computed(() => {
 })
 let valid = false
 function validasi() {
+  // eslint-disable-next-line no-undef, no-use-before-define
+
   const JenisPasien = refJenisPasien.value.$refs.refAuto.validate()
   const NoRM = refNoRM.value.$refs.refInput.validate()
   const Nama = refNama.value.$refs.refInput.validate()
@@ -1817,7 +1825,8 @@ function validasi() {
 
   const NoTlp = refNoTlp.value.$refs.refInput.validate()
   const KodePos = refKodePos.value.$refs.refInput.validate()
-  const NoAntrian = refNoAntrian.value.$refs.refInput.validate()
+  const NoAntrian = refNoAntrian.value ? refNoAntrian.value.$refs.refInput.validate() : true
+
   const Ktp = refKtp.value.$refs.refInput.validate()
   const Kitas = refKitas.value ? refKitas.value.$refs.refInput.validate() : true
   const NoKaBpjs = refNoKaBpjs.value.$refs.refInput.validate()

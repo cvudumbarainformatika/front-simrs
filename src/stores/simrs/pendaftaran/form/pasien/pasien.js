@@ -270,6 +270,7 @@ export const usePendaftaranPasienStore = defineStore('pendaftaran_pasien', {
     kabupatenSelected(val) {
       const index = findWithAttr(this.kabupatens, 'kotakabupaten', val)
       const kabupaten = this.kabupatens[index]
+      console.log('kab', kabupaten)
       this.wilayah.kotakabupaten = val
       this.paramWilayah.kd_kotakabupaten = val
       this.setForm('kodekabupatenkota', val)

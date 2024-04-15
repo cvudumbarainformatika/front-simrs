@@ -2,13 +2,14 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { usePendaftaranAutocompleteStore } from '../../autocomplete'
+import { loadingRes } from 'src/modules/utils'
 
 export const useRegistrasiPasienIgdStore = defineStore('registrasi_pasien_igd', {
   state: () => ({
     autocompleteStore: usePendaftaranAutocompleteStore(),
     loading: false,
     form: {
-      tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+      // tglmasuk: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
     },
     display: {},
     paramKarcis: {},
@@ -186,17 +187,33 @@ export const useRegistrasiPasienIgdStore = defineStore('registrasi_pasien_igd', 
         })
     },
     simpanRegistrasi() {
-      console.log('simpan form igd', this.form)
-      // return new Promise(resolve => {
-      //   this.loading = true
-      //   api.post('v1/simrs/pendaftaran/simpandaftar', this.form)
-      //     .then(resp => {
-      //       console.log('simpan pendaftaran', resp)
-      //       this.loading = false
-      //       resolve(resp.data)
-      //     })
-      //     .catch(() => { this.loading = false })
-      // })
+      return new Promise(resolve => {
+        loadingRes('show')
+        this.loading = true
+        api.post('v1/simrs/pendaftaran/igd/simpankunjunganigd', this.form)
+          .then(resp => {
+            console.log('simpan pendaftaran', resp)
+            this.setForm('noreg', resp.data.noreg)
+            loadingRes('hide')
+            console.log('after simpan ', this.form.noreg)
+            this.loading = false
+            this.rujukanPostMRS = false
+            this.kontrolDPJP = false
+            resolve(resp.data)
+            // const antrian = resp.data.antrian.data
+            // const nomor = antrian ? antrian.nomor : '-'
+            // const poli = antrian ? antrian.nama_layanan : '-'
+            // const norm = antrian ? antrian.id_member : '-'
+            // console.log('Antrian ', antrian)
+            // const routeData = router.resolve({ path: '/print/antrian', query: { nomor, poli, norm } })
+            // console.log('rdata ', routeData)
+            // window.open(routeData.href, '_blank')
+          })
+          .catch(() => {
+            this.loading = false
+            loadingRes('hide')
+          })
+      })
     }
   }
 })
