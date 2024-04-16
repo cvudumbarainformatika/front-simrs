@@ -15,7 +15,7 @@
         style="width:30%"
       />
 
-      <div class="row q-col-gutter-sm q-my-xs items-center">
+      <div class="row q-col-gutter-sm q-my-xs">
         <div class="col-2">
           Ante Natal Care
         </div>
@@ -48,7 +48,7 @@
 
       <q-separator class=" q-my-xs" />
 
-      <div class="row q-col-gutter-sm items-center">
+      <div class="row q-col-gutter-sm">
         <div class="col-2">
           Rujukan :
         </div>
@@ -122,6 +122,7 @@
           color="primary"
           size="sm"
           class="q-ml-md q-px-md"
+          @click="store.modalRiwayat = true"
         /></span>
       </div>
       <q-separator class="q-my-sm" />
@@ -129,10 +130,10 @@
         dense
         bordered
         flat
-        separator="vertical"
+        separator="cell"
         wrap-cells
       >
-        <thead>
+        <thead class="bg-primary text-white">
           <tr>
             <th class="text-left">
               NO
@@ -155,15 +156,55 @@
             <th class="text-left">
               Sebab Kematian
             </th>
+            <th class="text-right">
+              #
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="store.form.riwayatKehamilan">
+          <tr v-if="!store.riwayatKehamilan.length">
             <td
               colspan="7"
               class="text-center"
             >
               Tidak Ada Data
+            </td>
+          </tr>
+          <tr
+            v-for="item in store.riwayatKehamilan"
+            v-else
+            :key="item"
+          >
+            <td class="text-left">
+              {{ item?.kehamilanNo }}
+            </td>
+            <td class="text-left">
+              {{ item?.penyulitKehamilan }}
+            </td>
+            <td class="text-left">
+              {{ item?.macamPersalinan }}
+            </td>
+            <td class="text-left">
+              {{ item?.lp }}
+            </td>
+            <td class="text-left">
+              {{ item?.hidupmati }}
+            </td>
+            <td class="text-left">
+              {{ item?.umursekarang }}
+            </td>
+            <td class="text-left">
+              {{ item?.sebabKematian }}
+            </td>
+            <td class="text-end">
+              <q-btn
+                icon="icon-mat-delete"
+                size="xs"
+                flat
+                round
+                color="negative"
+                @click="store.deleteRiwayat(item?.id)"
+              />
             </td>
           </tr>
         </tbody>
@@ -249,7 +290,7 @@
 
       <div class="row q-col-gutter-md items-center">
         <div class="col-3">
-          Cara Kelahiran
+          Anestesi
         </div>
         <div class="col-9">
           <div class="row q-gutter-sm">
@@ -270,7 +311,7 @@
 
       <div class="row q-col-gutter-md">
         <div class="col-3">
-          Anestesi
+          Cara Kelahiran
         </div>
         <div class="col-9">
           <div class="row q-gutter-sm">
@@ -716,17 +757,28 @@
     </q-card-section>
   </q-card>
   <div style="margin-bottom: 100px;" />
+
+  <modal-riwayat-form
+    v-model="store.modalRiwayat"
+    :pasien="props?.pasien"
+  />
 </template>
 
 <script setup>
+import ModalRiwayatForm from './ModalRiwayatForm.vue'
 import { useNeonatusMedisStore } from 'src/stores/simrs/pelayanan/poli/neonatusmedis'
 import { onMounted } from 'vue'
 const store = useNeonatusMedisStore()
 
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
 onMounted(() => {
   store.initForm()
 })
-
-console.log(store.form)
 
 </script>

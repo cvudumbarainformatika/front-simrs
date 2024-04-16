@@ -57,6 +57,8 @@ const props = defineProps({
   }
 })
 
+// console.log(props.pasien)
+
 const menu = ref('MedisPage')
 const menus = ref([
   {

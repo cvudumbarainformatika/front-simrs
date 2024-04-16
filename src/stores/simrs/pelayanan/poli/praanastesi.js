@@ -276,7 +276,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
 
         api.post('/v1/simrs/pelayanan/praanastesi/savedata', this.form)
           .then(resp => {
-            console.log('post pra', resp)
+            // console.log('post pra', resp)
             if (resp.status === 200) {
               // ==================jika bukan edit
               const check = this.resultPraAnastesi.filter(x => x.id === resp.data.id)

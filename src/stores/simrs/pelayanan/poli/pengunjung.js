@@ -260,6 +260,9 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             // BARU
             findPasien[0].laporantindakan = resp?.data?.laporantindakan
             findPasien[0].psikiatri = resp?.data?.psikiatri
+            findPasien[0].neonatusmedis = resp?.data?.neonatusmedis
+            findPasien[0].neonatuskeperawatan = resp?.data?.neonatuskeperawatan
+            findPasien[0].pediatri = resp?.data?.pediatri
           }
           this.loadingTerima = false
           this.noreg = null
@@ -480,6 +483,30 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].psikiatri
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataNeonatusmedis(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].neonatusmedis
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataNeonatusKeperawatan(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].neonatuskeperawatan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataInjectan(pasien, id, key) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0][key]
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

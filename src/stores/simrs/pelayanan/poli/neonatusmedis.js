@@ -25,6 +25,9 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
     lingkarKepalas: ['Normal', 'Ikrosefali', 'Makrosefali'],
     usiaKehamilanBayis: ['SMK', 'KMK', 'BMK'],
     form: {},
+    modalRiwayat: false,
+    formRiwayat: {},
+    riwayatKehamilan: [],
     loadingSave: false
   }),
   actions: {
@@ -77,20 +80,116 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
       this.form.usiaKehamilanBayiKat = null
     },
 
+    initFormRiwayat() {
+      this.formRiwayat.kehamilanNo = null
+      this.formRiwayat.penyulitKehamilan = null
+      this.formRiwayat.macamPersalinan = null
+      this.formRiwayat.lp = null
+      this.formRiwayat.hidupmati = null
+      this.formRiwayat.umursekarang = null
+      this.formRiwayat.sebabKematian = null
+    },
+
     saveData(pasien) {
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
       this.loadingSave = true
 
       return new Promise((resolve, reject) => {
-        api.post('v1/simrs/pelayanan/neonatusmedis', this.form)
+        api.post('v1/simrs/pelayanan/neonatusmedis/store', this.form)
           .then((resp) => {
-            console.log('cb', resp)
-            this.loadingSave = true
+            // console.log(resp)
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              const isi = resp.data
+              storePasien.injectDataPasien(pasien, isi, 'neonatusmedis')
+              notifSuccess(resp)
+              this.initForm()
+              this.loadingSave = false
+            }
+            this.loadingSave = false
           })
           .catch((err) => {
             console.log(err)
             this.loadingSave = false
+            reject(err)
+          })
+      })
+    },
+
+    deleteData(pasien, id) {
+      const payload = { id }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/neonatusmedis/deletedata', payload)
+          .then((resp) => {
+            // console.log('del', resp)
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              storePasien.hapusDataNeonatusmedis(pasien, id)
+              notifSuccess(resp)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getRiwayatKehamilan(pasien) {
+      const params = { params: { norm: pasien?.norm } }
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/neonatusmedis/riwayatKehamilan', params)
+          .then((resp) => {
+            console.log('get Riwayat', resp)
+            if (resp.status === 200) {
+              this.riwayatKehamilan = resp.data
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    saveRiwayat(pasien) {
+      this.formRiwayat.noreg = pasien?.noreg
+      this.formRiwayat.norm = pasien?.norm
+      this.loadingSave = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/neonatusmedis/storeRiwayatKehamilan', this.formRiwayat)
+          .then((resp) => {
+            // console.log(resp)
+            if (resp.status === 200) {
+              this.loadingSave = false
+              this.riwayatKehamilan.push(resp.data)
+            }
+            this.initFormRiwayat()
+            this.loadingSave = false
+            this.modalRiwayat = false
+            resolve()
+          })
+          .catch((err) => {
+            console.log(err)
+            this.loadingSave = false
+            reject(err)
+          })
+      })
+    },
+    deleteRiwayat(id) {
+      const payload = { id }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/neonatusmedis/deleteRiwayatKehamilan', payload)
+          .then((resp) => {
+            // console.log('del', resp)
+            if (resp.status === 200) {
+              const data = this.riwayatKehamilan
+              const pos = data.findIndex(el => el.id === id)
+              if (pos >= 0) { data.splice(pos, 1) }
+              notifSuccess(resp)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
             reject(err)
           })
       })
