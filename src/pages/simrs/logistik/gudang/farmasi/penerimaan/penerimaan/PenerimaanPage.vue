@@ -15,6 +15,28 @@
         bordered
         separator
       >
+        <q-item class="bg-dark text-white">
+          <q-item-section>
+            <div class="text-weight-bold">
+              Nomor Pemesanan
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              PBF
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Tanggal Pemesanan
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Gudang Pemesan
+            </div>
+          </q-item-section>
+        </q-item>
         <q-item
           v-for="(item,i) in store.filteredPemesanans"
           :key="i"

@@ -15,6 +15,33 @@
         bordered
         separator
       >
+        <q-item class="bg-dark text-white">
+          <q-item-section>
+            <div class="text-weight-bold">
+              Nomor Penerimaan
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              PBF
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Tanggal Penerimaan
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Jenis Surat
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Gudang Pemesan
+            </div>
+          </q-item-section>
+        </q-item>
         <q-item
           v-for="(item,i) in store.filteredPemesanans"
           :key="i"
@@ -35,6 +62,11 @@
           <q-item-section>
             <div class="text-cyan">
               {{ dateFullFormat(item?.tglpenerimaan) }}
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="">
+              {{ item?.jenissurat }}
             </div>
           </q-item-section>
           <q-item-section>
