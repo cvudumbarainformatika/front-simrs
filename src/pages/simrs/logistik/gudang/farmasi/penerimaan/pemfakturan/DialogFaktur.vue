@@ -8,15 +8,24 @@
     class="row no-wrap items-center justify-between q-mx-sm bg-white"
     style="z-index: 10;"
   >
+    <!--
     <div>
       <div class="row items-center">
-        <div class="q-mr-md">
+        <div class="col-6">
+          <app-input
+            v-model="store.form.nopenerimaan"
+            label="Nomor Penerimaan"
+            outlined
+            readonly
+          />
+        </div>
+          <div class="q-mr-md">
           No Penerimaan:
         </div>
         <div class="q-mr-sm">
           {{ store.form.nopenerimaan ? store.form.nopenerimaan :'-' }}
-        </div>
-        <!-- <app-input
+        </div> -->
+    <!-- <app-input
           v-model="store.form.nopenerimaan"
           label="Nomor Penerimaan"
           outlined
@@ -24,8 +33,9 @@
           valid
           :loading="store.loading"
         /> -->
-        <div class="q-ml-md">
-          <q-btn
+    <!--
+            <div class="q-ml-md">
+             <q-btn
             v-if="store.form.nopenerimaan"
             flat
             icon="icon-mat-done"
@@ -44,67 +54,41 @@
         </div>
       </div>
     </div>
+  -->
   </div>
   <!-- penerimaan -->
   <div class="q-py-md q-px-sm">
     <!-- header -->
     <div class="row items-center q-col-gutter-md q-px-sm q-pb-md">
       <div class="col-6">
-        <div class="q-mb-xs">
-          <div v-if="store.namaPenyedia">
-            <div class="row">
-              <div class="col-12">
-                <app-input
-                  v-model="store.namaPenyedia.nama "
-                  label="Penyedia"
-                  outlined
-                  readonly
-                />
-              </div>
-            </div>
+        <div class="row q-mb-xs">
+          <div class="col-12">
+            <app-input
+              v-model="store.form.nopemesanan"
+              label="Nomor Pemesanan"
+              outlined
+              readonly
+            />
           </div>
-          <div v-else>
-            -
+        </div>
+        <div class="row q-mb-xs">
+          <div class="col-12">
+            <app-input
+              v-model="store.form.nopenerimaan"
+              label="Nomor Penerimaan"
+              outlined
+              readonly
+            />
           </div>
         </div>
 
         <div class="row q-mb-xs">
           <div class="col-12">
             <app-input
-              v-model="store.form.nopemesanan"
-              label="Gudang"
+              v-model="store.form.jenissurat"
+              label="Jenis Surat"
               outlined
               readonly
-            />
-            <!--
-            <app-autocomplete-new
-              :model="store.form.nopemesanan"
-              autocomplete="nopemesanan"
-              option-label="nopemesanan"
-              option-value="nopemesanan"
-              label="Pilih Pemesanan"
-              outlined
-              :source="store.pemesanans"
-              @on-select="store.pemesananSelected"
-              @clear="store.clearPemesanan"
-            />
-        -->
-          </div>
-        </div>
-
-        <div class="row q-mb-xs">
-          <div class="col-12">
-            <app-autocomplete-new
-              ref="refJenisSurat"
-              :model="store.form.jenissurat"
-              autocomplete="nama"
-              option-label="nama"
-              option-value="nama"
-              label="Pilih Jenis Surat"
-              outlined
-              :source="store.jenisSurats"
-              @on-select="store.jenisSuratSelected"
-              @clear="store.clearJenisSurat"
             />
           </div>
         </div>
@@ -175,15 +159,30 @@
             </div>
           </div>
         </div>
-
+        <div class="q-mb-xs">
+          <div v-if="store.namaPenyedia">
+            <div class="row">
+              <div class="col-12">
+                <app-input
+                  v-model="store.namaPenyedia.nama "
+                  label="Penyedia"
+                  outlined
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            -
+          </div>
+        </div>
         <div class="row q-mb-xs">
           <div class="col-12">
-            <app-input-date-human
-              :model="store.disp.tanggal"
+            <app-input
+              v-model="store.disp.tanggal"
               label="Tanggal Transaksi"
               outlined
-              @set-display="dispTanggal"
-              @db-model="setTanggal"
+              readonly
             />
           </div>
         </div>
@@ -209,21 +208,23 @@
             />
           </div>
         </div>
-        <!-- <div class="row q-mb-xs">
-          <div class="col-12">
-            <app-input
-              ref="refTotalFaktur"
-              v-model="store.form.total_faktur_pbf"
-              label="Total Faktur PBF"
-              outlined
-              valid
-              :rules="[
-                val => !isNaN(val) || 'Harus pakai Nomor'
-              ]"
-            />
-          </div>
-        </div> -->
       </div>
+    </div>
+    <div class="q-my-sm text-right q-mr-md">
+      <q-btn
+        label="Simpan Header"
+        no-caps
+        dense
+        color="primary"
+        @click="simpanHeader"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Simpan Header Saja
+        </q-tooltip>
+      </q-btn>
     </div>
     <q-separator />
     <!-- details -->
@@ -398,8 +399,7 @@
                   v-model="det.isi"
                   label="Isi"
                   outlined
-                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  @update:model-value="setHargaNetNew($event, det,'isi')"
+                  readonly
                 />
               </div>
             </div>
@@ -408,15 +408,9 @@
                 <app-input
                   ref="refJmlDiterima"
                   v-model="det.jml_terima_b"
-                  :label="'Diterima ('+ det.satuan_bsr+')'"
+                  :label="'Diterima ('+ det.satuan+')'"
                   outlined
-                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor',
-                    val => !!val || 'Harap di isi',
-                    val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
-                  ]"
-                  @update:model-value="setHargaNetNew($event, det,'jml_terima_b')"
+                  readonly
                 />
               </div>
             </div>
@@ -427,12 +421,7 @@
                   v-model="det.jml_terima_k"
                   :label="'Diterima ('+ det.satuan_kcl+')'"
                   outlined
-                  :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor',
-                    val => !!val || 'Harap di isi',
-                  ]"
-                  @update:model-value="setHargaNetNew($event, det,'jml_terima_k')"
+                  readonly
                 />
               </div>
             </div>
@@ -475,7 +464,7 @@
                 <app-input
                   ref="refHarga"
                   v-model="det.harga"
-                  :label="'Harga' + ' per ' + det.satuan_bsr"
+                  :label="'Harga' + ' per ' + det.satuan"
                   outlined
                   :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
                   :rules="[
@@ -555,7 +544,7 @@
           <div class="anu q-mr-sm">
             <q-btn
               flat
-              icon="icon-mat-save"
+              icon="icon-mat-edit"
               color="primary"
               round
               :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
@@ -566,7 +555,7 @@
                 class="primary"
                 :offset="[10, 10]"
               >
-                Simpan Rincian Penerimaan
+                Edit Rincian Penerimaan
               </q-tooltip>
             </q-btn>
           </div>
@@ -600,7 +589,7 @@ import { computed, ref } from 'vue'
 const store = usePemfakturanFarmasiStore()
 
 // head
-const refJenisSurat = ref(null) // inp
+// const refJenisSurat = ref(null) // inp
 const refNoSurat = ref(null) // inp
 const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
@@ -622,7 +611,7 @@ function validasi(index) {
   // console.log('ref exp', refExp.value[index].$refs.refInputDate.validate())
   // console.log('ref harga', refHarga.value[index].refInput.validate())
 
-  const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
+  // const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
   const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
@@ -635,9 +624,9 @@ function validasi(index) {
   const exp = refExp.value[index].$refs.refInputDate.validate()
   const harga = refHarga.value[index].refInput.validate()
   const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
+  console.log('validasi', Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
   if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && Gudang && noSurat && pengirim && diterima && batch && isi && exp && harga && hargaKcl) return true
+  if (Gudang && noSurat && pengirim && diterima && batch && isi && exp && harga && hargaKcl) return true
   else return false
 }
 const ind = ref(null)
@@ -656,6 +645,20 @@ function simpan(index) {
     console.log('aa', store.form)
     console.log('simpan valid', store.details[index])
     store.simpanPenerimaan().then(() => { ind.value = null })
+  }
+}
+function validasiHeader() {
+  // console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
+  const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
+  const noSurat = refNoSurat.value.$refs.refInput.validate()
+  const pengirim = refPengirim.value.$refs.refInput.validate()
+  if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
+  if (Gudang && noSurat && pengirim) return true
+  else return false
+}
+function simpanHeader() {
+  if (validasiHeader()) {
+    console.log('simpan header', store.form)
   }
 }
 function adaPPN(evt, det) {
@@ -881,12 +884,12 @@ function setIsi(evt, val) {
 function detKadal(evt, val) {
   val.tgl_exp = evt
 }
-function setTanggal(val) {
-  store.setForm('tglpenerimaan', val)
-}
-function dispTanggal(val) {
-  store.setDisp('tanggal', val)
-}
+// function setTanggal(val) {
+//   store.setForm('tglpenerimaan', val)
+// }
+// function dispTanggal(val) {
+//   store.setDisp('tanggal', val)
+// }
 
 function setSurat(val) {
   store.setForm('tglpenerimaan', val)

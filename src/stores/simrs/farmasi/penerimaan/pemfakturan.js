@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
-import { filterDuplicateArrays, notifErrVue, notifSuccess } from 'src/modules/utils'
+import { notifErrVue, notifSuccess } from 'src/modules/utils'
 import { useListPenerimaanStore } from './listpenerimaan'
 
 export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
@@ -13,15 +13,15 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
     loadingDelete: false,
     items: null,
     form: {
-      nopenerimaan: '',
-      tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      batasbayar: null,
-      tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      // nopenerimaan: '',
+      // tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      // batasbayar: null,
+      // tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
     },
     disp: {
-      tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
-      batasbayar: null,
-      surat: date.formatDate(Date.now(), 'DD MMMM YYYY')
+      // tanggal: date.formatDate(Date.now(), 'DD MMMM YYYY'),
+      // batasbayar: null,
+      // surat: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     params: {
       q: '',
@@ -79,10 +79,10 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
     },
     resetForm() {
       this.form = {
-        nopenerimaan: '',
-        tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-        batasbayar: null,
-        tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
+        // nopenerimaan: '',
+        // tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        // batasbayar: null,
+        // tglsurat: date.formatDate(Date.now(), 'YYYY-MM-DD')
       }
     },
     setNexMonth() {
@@ -96,8 +96,19 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
     pemesananSelected(val) {
       this.isOpen = true
       this.items = val
-      this.details = val?.rinci ?? []
+      this.details = val?.penerimaanrinci ?? []
       this.namaPenyedia = val?.pihakketiga
+
+      this.setForm('jenissurat', 'Faktur')
+      this.setForm('nopenerimaan', val?.nopenerimaan)
+      this.setForm('tglpenerimaan', val?.tglpenerimaan)
+      this.setForm('batasbayar', val?.batasbayar)
+      this.setForm('tglsurat', val?.tglsurat)
+      this.setForm('pengirim', val?.pengirim)
+
+      this.setDisp('tanggal', date.formatDate(val?.tglpenerimaan, 'DD MMMM YYYY'))
+      this.setDisp('batasbayar', date.formatDate(val?.batasbayar, 'DD MMMM YYYY'))
+      this.setDisp('surat', date.formatDate(val?.tglsurat, 'DD MMMM YYYY'))
       console.log('pemesanan selected ', val)
       if (this.namaPenyedia) {
         this.setForm('kdpbf', this.namaPenyedia.kode)
@@ -123,82 +134,13 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
       this.namaPenyedia = null
     },
     metanirinci(pen) {
-      // console.log('pen', pen)
+      console.log('pen', pen)
       if (pen.length) {
         pen.forEach(item => {
-          if (item?.rinci?.length) {
-            const terima = item.penerimaan ? item.penerimaan : []
-            const terRi = []
-            if (terima.length) {
-              terima.forEach(apem => {
-                const rinci = apem.penerimaanrinci ? apem.penerimaanrinci : []
-                if (rinci.length) {
-                  rinci.forEach(a => {
-                    // console.log('penerimaan rinci', a)
-                    a.jml_terima_b = parseFloat(a.jml_terima_b)
-                    a.jml_terima_k = parseFloat(a.jml_terima_k)
-                    terRi.push(a)
-                  })
-                }
-              })
-            }
-
-            const kod = item?.rinci?.map(a => a.kdobat) // ambil kode obat
-            const ter = []
-            if (kod.length) {
-              const filtKod = filterDuplicateArrays(kod) // pastikan tidak ada duplikasi kode obat
-              // console.log('filtKod ', filtKod)
-              filtKod.forEach(koda => {
-                let temp = 0
-                let tempK = 0
-                // console.log('terRi ', terRi)
-                const tam = terRi.filter(anu => anu.kdobat === koda).map(b => b.jml_terima_b).reduce((c, d) => c + d, 0)
-                const tamK = terRi.filter(anu => anu.kdobat === koda).map(b => b.jml_terima_k).reduce((c, d) => c + d, 0)
-                temp += tam
-                tempK += tamK
-
-                // console.log('tam', koda, terRi.filter(terrigu => terrigu.kdobat === koda))
-                // console.log('temp', koda, temp)
-                const temp2 = {
-                  kode: koda,
-                  jml: temp,
-                  jmlK: tempK
-                }
-                ter.push(temp2)
-              })
-            }
-
-            item?.rinci?.forEach(a => {
-              a.diskon = 0
-              a.isi = 1
-              a.ppn = 11
-              a.adaPPN = true
-              a.diskon_rp = 0
-              a.ppn_rp = 0
-              a.jumlah = ''
-              a.jml_pesan = a.jumlahdpesan
-              a.harga_netto = 0
-              a.harga = a.harga_kcl ?? 0
-              a.subtotal = 0
-              a.satuan_bsr = a.masterobat ? a.masterobat.satuan_b : '-'
-              a.satuan_kcl = a.masterobat ? a.masterobat.satuan_k : '-'
-              if (ter.length) {
-                const temp = ter.filter(b => b.kode === a.kdobat)
-                if (temp.length) {
-                  a.jml_terima_lalu = temp[0].jml
-                  a.jml_terima_laluK = temp[0].jmlK
-                } else {
-                  a.jml_terima_lalu = 0
-                  a.jml_terima_laluK = 0
-                }
-                a.jml_all_penerimaan = a.jml_terima_laluK
-                // console.log('det temp', temp)
-              } else {
-                if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
-                a.jml_all_penerimaan = a.jml_terima_laluK
-              }
-            })
-          }
+          item?.penerimaanrinci?.forEach(rinc => {
+            rinc.adaPPN = false
+            if (parseFloat(rinc?.ppn) > 0) rinc.adaPPN = true
+          })
         })
       }
       this.pemesanans = pen
@@ -237,27 +179,27 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
       this.ambilPemesanan()
     },
     getInitialData() {
-      this.setForm('batasbayar', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
-      this.setDisp('batasbayar', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
+      // this.setForm('batasbayar', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
+      // this.setDisp('batasbayar', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
 
       this.ambilPemesanan()
       // this.getPihakKetiga()
     },
     // cari obat
-    getDataObat() {
-      this.loading = true
-      const params = { params: { q: this.filterObat } }
-      return new Promise(resolve => {
-        api.get('v1/simrs/master/cariObat', params)
-          .then(resp => {
-            this.loading = false
-            this.obats = resp.data
-            console.log(resp)
-            resolve(resp)
-          })
-          .catch(() => { this.loading = false })
-      })
-    },
+    // getDataObat() {
+    //   this.loading = true
+    //   const params = { params: { q: this.filterObat } }
+    //   return new Promise(resolve => {
+    //     api.get('v1/simrs/master/cariObat', params)
+    //       .then(resp => {
+    //         this.loading = false
+    //         this.obats = resp.data
+    //         console.log(resp)
+    //         resolve(resp)
+    //       })
+    //       .catch(() => { this.loading = false })
+    //   })
+    // },
     // getPihakKetiga() {
     //   const param = { params: { nama: this.namaPihakKetiga } }
     //   this.loadingPihakTiga = true
@@ -281,8 +223,8 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
             console.log('ambil pemesanan', resp)
             const data = resp?.data?.data ?? resp?.data
             this.metanirinci(data)
-            // this.pemesanans = resp.data
-            // this.filteredPemesanans = resp.data
+            // this.pemesanans = data
+            // this.filteredPemesanans = data
             resolve(resp.data)
           })
           .catch(() => {
@@ -319,38 +261,34 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
       const tgl = this.form.tglpenerimaan
       this.form.tglpenerimaan = tgl + date.formatDate(Date.now(), ' HH:mm:ss')
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/penerimaan/simpan', this.form)
+        api.post('v1/simrs/penunjang/farmasinew/gudang/simpan', this.form)
           .then(resp => {
             this.loading = false
-            console.log('sudah simpan', resp.data)
             notifSuccess(resp)
-            if (resp.data.heder) {
-              if (resp.data.heder.nopenerimaan) {
-                this.setForm('nopenerimaan', resp.data.heder.nopenerimaan)
-              }
-            }
+            // if (resp.data.heder) {
+            //   if (resp.data.heder.nopenerimaan) {
+            //     this.setForm('nopenerimaan', resp.data.heder.nopenerimaan)
+            //   }
+            // }
             this.form.tglpenerimaan = tgl
-            const det = this.details.find(ob => ob.kdobat === this.form.kdobat)
-            this.ambilPemesanan(true).then(() => {
-              const pes = this.pemesanans.find(a => a.nopemesanan === this.form.nopemesanan)
-              // console.log('pemesanannya', pes)
-              // console.log('dea', det)
-              if (pes) this.pemesananSelected(pes)
-              const detSud = this.details.find(ob => ob.kdobat === this.form.kdobat)
-              if (det && detSud) {
-                detSud.isi = det.isi
-                detSud.jml_terima_b = det.jml_terima_b
-                detSud.jml_terima_k = det.jml_terima_k
-                detSud.no_batch = det.no_batch
-                detSud.tgl_exp = det.tgl_exp
-                detSud.harga = det.harga
-                detSud.harga_kcl = det.harga_kcl
-                detSud.diskon = det.diskon
-                detSud.adaPPN = det.adaPPN
-                detSud.harga_netto = det.harga_netto
-                detSud.subtotal = det.subtotal
-              }
-            })
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    simpanHeader() {
+      this.loading = true
+      const tgl = this.form.tglpenerimaan
+      this.form.tglpenerimaan = tgl + date.formatDate(Date.now(), ' HH:mm:ss')
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/gudang/simpan-header', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('sudah simpan header', resp.data)
+            notifSuccess(resp)
+
             resolve(resp)
           })
           .catch(() => {
