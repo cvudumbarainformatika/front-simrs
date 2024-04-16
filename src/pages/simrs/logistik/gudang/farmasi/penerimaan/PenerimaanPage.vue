@@ -64,6 +64,8 @@ const title = computed(() => {
     return 'PENERIMAAN LANGSUNG'
   } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'LIST PENERIMAAN'
+  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
+    return 'PEMFAKTURAN'
   } else {
     return 'Penerimaan'
   }
@@ -75,6 +77,8 @@ const subtitle = computed(() => {
     return 'Penerimaan Langsung Obat'
   } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'List Penerimaan Obat'
+  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
+    return 'List Penerimaan Belum Ada Faktur'
   } else {
     return 'Penerimaan Obat'
   }
