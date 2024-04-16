@@ -182,9 +182,9 @@ const dialog = usePencarianPasienStore()
 const store = usePendaftaranPasienStore()
 const regis = useRegistrasiPasienBPJSStore()
 const emits = defineEmits(['hide', 'gantiPasien'])
-const props = defineProps({
-  bpjs: { type: Boolean, default: false }
-})
+// const props = defineProps({
+//   bpjs: { type: Boolean, default: false }
+// })
 
 function hiddenDialog() {
   dialog.setSearch('')
@@ -214,45 +214,47 @@ function pilihPasienIni(val) {
     if ((!store.form.kodekelurahandomisili ? true : store.form.kodekelurahandomisili === '') && store.form.kodekelurahan) store.setForm('kodekelurahandomisili', store.form.kodekelurahan)
   }
 
-  if (props.bpjs) {
-    // if (val.nik !== '') {
-    //   const form = { nik: val.nik, tglsep: regis.form.tglsep }
-    //   store.cekPesertaByNik(form).then(resp => {
-    //     console.log('nik ', resp)
-    //     store.alert = true
-    //     store.alertMsg = resp
-    //     if (resp.peserta.provUmum) {
-    //       const rujukan = {
-    //         kode: resp.peserta.provUmum.kdProvider,
-    //         nama: resp.peserta.provUmum.nmProvider
-    //       }
-    //       regis.ppkRujukans.push(rujukan)
-    //       regis.display.kode = rujukan.kode
-    //       regis.setForm('ppkRujukan', rujukan.kode)
-    //     }
-    //   })
-    // } else
-    if (val.noka !== '') {
-      console.log('noka', val.noka === undefined)
-      const form = { noka: val.noka, tglsep: regis.form.tglsep }
-      store.cekPesertaByNoka(form).then(resp => {
-        console.log('noka ', resp)
-        store.alert = true
-        store.alertMsg = resp
-        if (resp.peserta.provUmum) {
-          const rujukan = {
-            kode: resp.peserta.provUmum.kdProvider,
-            nama: resp.peserta.provUmum.nmProvider
-          }
-          regis.ppkRujukans.push(rujukan)
-          regis.display.kode = rujukan.kode
-          regis.setForm('ppkRujukan', rujukan.kode)
+  // if (props.bpjs) {
+  // if (val.nik !== '') {
+  //   const form = { nik: val.nik, tglsep: regis.form.tglsep }
+  //   store.cekPesertaByNik(form).then(resp => {
+  //     console.log('nik ', resp)
+  //     store.alert = true
+  //     store.alertMsg = resp
+  //     if (resp.peserta.provUmum) {
+  //       const rujukan = {
+  //         kode: resp.peserta.provUmum.kdProvider,
+  //         nama: resp.peserta.provUmum.nmProvider
+  //       }
+  //       regis.ppkRujukans.push(rujukan)
+  //       regis.display.kode = rujukan.kode
+  //       regis.setForm('ppkRujukan', rujukan.kode)
+  //     }
+  //   })
+  // } else
+
+  if (val.noka !== '') {
+    console.log('noka', val.noka === undefined)
+
+    const form = { noka: val.noka, tglsep: regis.form.tglsep }
+    store.cekPesertaByNoka(form).then(resp => {
+      console.log('noka ', resp)
+      store.alert = true
+      store.alertMsg = resp
+      if (resp.peserta.provUmum) {
+        const rujukan = {
+          kode: resp.peserta.provUmum.kdProvider,
+          nama: resp.peserta.provUmum.nmProvider
         }
-      })
-    } else {
-      notifErrVue('Noka Pasien kosong, tidak bisa dilakukan cek pasien')
-    }
+        regis.ppkRujukans.push(rujukan)
+        regis.display.kode = rujukan.kode
+        regis.setForm('ppkRujukan', rujukan.kode)
+      }
+    })
+  } else {
+    notifErrVue('Noka Pasien kosong, tidak bisa dilakukan cek pasien')
   }
+  // }
   const tglLahir = val.tgllahir.split('-')
   store.setForm('barulama', 'lama')
   if (tglLahir.length) {

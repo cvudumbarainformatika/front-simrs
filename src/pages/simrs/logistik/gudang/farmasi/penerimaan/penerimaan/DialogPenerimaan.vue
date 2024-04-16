@@ -916,7 +916,7 @@ const gudang = computed(() => {
   return gud
 })
 console.log('gudang', gudang.value)
-store.getInitialData()
+// store.getInitialData()
 </script>
 <style lang="scss" scoped>
 .rounded{

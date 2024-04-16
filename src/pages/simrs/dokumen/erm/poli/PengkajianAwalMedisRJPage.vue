@@ -266,7 +266,7 @@
             :
           </div>
           <div class="col-3">
-            -
+            ????
           </div>
         </div>
         <q-separator />
@@ -642,7 +642,7 @@
             class="col-3"
           >
             <div>
-              - {{ planx?.rs4 }} {{ planx }}
+              - {{ planx?.rs4 }}
             </div>
           </div>
         </div>

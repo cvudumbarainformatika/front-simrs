@@ -56,30 +56,32 @@
               </div>
             </div>
             <!-- kartu / karcis -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-6">
-                <app-autocomplete
-                  ref="refFlagKartu"
-                  v-model="store.form.jeniskarcis"
-                  label="Flag Kartu"
-                  autocomplete="jeniskarcis"
-                  option-value="jeniskarcis"
-                  option-label="jeniskarcis"
-                  outlined
-                  :disable="!store.paramKarcis.kd_poli"
-                  :source="store.jenisKarcises"
-                  :loading="store.loading"
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                  @selected="setFlagKarcis"
-                />
-              </div>
-              <div class="col-6">
-                <app-input
-                  v-model="store.display.hargakarcis"
-                  label="Karcis"
-                  outlined
-                  disable
-                />
+            <div v-if="!pelayanan">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-6">
+                  <app-autocomplete
+                    ref="refFlagKartu"
+                    v-model="store.form.jeniskarcis"
+                    label="Flag Kartu"
+                    autocomplete="jeniskarcis"
+                    option-value="jeniskarcis"
+                    option-label="jeniskarcis"
+                    outlined
+                    :disable="!store.paramKarcis.kd_poli"
+                    :source="store.jenisKarcises"
+                    :loading="store.loading"
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                    @selected="setFlagKarcis"
+                  />
+                </div>
+                <div class="col-6">
+                  <app-input
+                    v-model="store.display.hargakarcis"
+                    label="Karcis"
+                    outlined
+                    disable
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -126,22 +128,24 @@
               </div>
             </div>
             <!-- DPJP -->
-            <div class="row q-col-gutter-sm items-center q-mb-xs">
-              <div class="col-12">
-                <app-autocomplete
-                  ref="refDPJP"
-                  v-model="store.form.dpjp"
-                  label="DPJP"
-                  autocomplete="nama"
-                  option-value="dpjp"
-                  option-label="nama"
-                  :disable="!store.dpjps.length"
-                  outlined
-                  :source="store.dpjps"
-                  :loading="store.loading"
+            <div v-if="!pelayanan">
+              <div class="row q-col-gutter-sm items-center q-mb-xs">
+                <div class="col-12">
+                  <app-autocomplete
+                    ref="refDPJP"
+                    v-model="store.form.dpjp"
+                    label="DPJP"
+                    autocomplete="nama"
+                    option-value="dpjp"
+                    option-label="nama"
+                    :disable="!store.dpjps.length"
+                    outlined
+                    :source="store.dpjps"
+                    :loading="store.loading"
 
-                  :rules="[val => (!!val) || 'Harap diisi',]"
-                />
+                    :rules="[val => (!!val) || 'Harap diisi',]"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -155,6 +159,7 @@ import { useRegistrasiPasienIgdStore } from 'src/stores/simrs/pendaftaran/form/i
 // import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pasien/pasien'
 import { ref } from 'vue'
 import { findWithAttr, notifErrVue } from 'src/modules/utils'
+
 // const pasien = usePendaftaranPasienStore()
 const store = useRegistrasiPasienIgdStore()
 store.getInitialData()
@@ -167,7 +172,12 @@ function setSistembayar1(val) {
 }
 function setSistembayar(val) {
   store.setForm('sistembayar', val)
-  // console.log('form', store.form)
+  const index = findWithAttr(store.sistembayars, 'rs2', val)
+  console.log('sistem bayar dua ', store.sistembayars[index])
+  if (index >= 0) {
+    store.setForm('kodesistembayar', store.sistembayars[index].rs1)
+  }
+  console.log('form', store.form)
 }
 // emits
 const emits = defineEmits(['bisaSimpan'])
@@ -177,6 +187,11 @@ const refFlagKartu = ref(null)
 const refDPJP = ref(null)
 const refPoliTujuan = ref(null)
 const refSistemBayar = ref(null)
+
+// eslint-disable-next-line no-unused-vars
+const props = defineProps({
+  pelayanan: { type: [String, Number], default: '' }
+})
 // reset validasi
 function resetValidation() {
   refAsalRujukan.value.$refs.refAuto.resetValidation()
@@ -189,12 +204,24 @@ function resetValidation() {
 let valid = false
 function validasi() {
   const asalRujukan = refAsalRujukan.value.$refs.refAuto.validate()
-  const flagKartu = refFlagKartu.value.$refs.refAuto.validate()
-  const dpjp = refDPJP.value.$refs.refAuto.validate()
+  const flagKartu = refFlagKartu.value ? refFlagKartu.value.$refs.refAuto.validate() : true
+  const dpjp = refDPJP.value ? refDPJP.value.$refs.refAuto.validate() : true
   // const dpjp = true
   const poliTujuan = refPoliTujuan.value.$refs.refAuto.validate()
   const sistemBayar = refSistemBayar.value.$refs.refAuto.validate()
-  if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) { valid = true } else { valid = false }
+  if (props.pelayanan !== 'igd') {
+    if (asalRujukan && flagKartu && dpjp && poliTujuan && sistemBayar) {
+      valid = true
+    } else {
+      valid = false
+    }
+  } else {
+    if (asalRujukan && poliTujuan && sistemBayar) {
+      valid = true
+    } else {
+      valid = false
+    }
+  }
 }
 // set
 function set() {
@@ -212,20 +239,22 @@ function set() {
 function setPoliTujuan(val) {
   store.paramKarcis.kd_poli = val
   const index = findWithAttr(store.polis, 'kodepoli', val)
+  if (val !== 'POL014') {
   // store.paramDpjp.kdmappolibpjs = store.polis[index].jenispoli
-  store.form.dpjp = ''
-  refDPJP.value.$refs.refAuto.resetValidation()
-  if (store.paramKarcis.flag) {
-    if (store.paramKarcis.flag !== '') {
-      store.getKarcisPoli().then(() => {
-        store.display.hargakarcis = store.kasrcispoli.tarif
-        store.form.karcis = store.kasrcispoli.tarif
-      })
+    store.form.dpjp = ''
+    refDPJP.value.$refs.refAuto.resetValidation()
+    if (store.paramKarcis.flag) {
+      if (store.paramKarcis.flag !== '') {
+        store.getKarcisPoli().then(() => {
+          store.display.hargakarcis = store.kasrcispoli.tarif
+          store.form.karcis = store.kasrcispoli.tarif
+        })
+      }
     }
+    console.log(val)
+    store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
+    store.getDokterDpjp()
   }
-  console.log(val)
-  store.paramDpjp.kdmappolbpjs = store.polis[index].kodemapingbpjs
-  store.getDokterDpjp()
 }
 // set flag karcis
 function setFlagKarcis(val) {

@@ -96,7 +96,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     pemesananSelected(val) {
       this.isOpen = true
       this.items = val
-      this.details = val?.rinci
+      this.details = val?.rinci ?? []
       this.namaPenyedia = val?.pihakketiga
       console.log('pemesanan selected ', val)
       // const pemesanan = this.pemesanans.filter(a => a.nopemesanan === val)
@@ -349,8 +349,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           })
       })
     },
-    ambilPemesanan() {
-      this.loading = true
+    ambilPemesanan(val) {
+      this.loading = !val
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/penerimaan/dialogpemesananobat', param)
@@ -408,6 +408,27 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               }
             }
             this.form.tglpenerimaan = tgl
+            const det = this.details.find(ob => ob.kdobat === this.form.kdobat)
+            this.ambilPemesanan(true).then(() => {
+              const pes = this.pemesanans.find(a => a.nopemesanan === this.form.nopemesanan)
+              // console.log('pemesanannya', pes)
+              // console.log('dea', det)
+              if (pes) this.pemesananSelected(pes)
+              const detSud = this.details.find(ob => ob.kdobat === this.form.kdobat)
+              if (det && detSud) {
+                detSud.isi = det.isi
+                detSud.jml_terima_b = det.jml_terima_b
+                detSud.jml_terima_k = det.jml_terima_k
+                detSud.no_batch = det.no_batch
+                detSud.tgl_exp = det.tgl_exp
+                detSud.harga = det.harga
+                detSud.harga_kcl = det.harga_kcl
+                detSud.diskon = det.diskon
+                detSud.adaPPN = det.adaPPN
+                detSud.harga_netto = det.harga_netto
+                detSud.subtotal = det.subtotal
+              }
+            })
             resolve(resp)
           })
           .catch(() => {
