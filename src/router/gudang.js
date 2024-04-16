@@ -47,24 +47,29 @@ const gudang = {
             { path: '', redirect: '/gudang/farmasi/penerimaan/penerimaan' },
             {
               path: '/gudang/farmasi/penerimaan/penerimaan',
-              name: 'gudang/farmasi.penerimaan.penerimaan',
+              // name: 'gudang/farmasi.penerimaan.penerimaan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/penerimaan/penerimaan/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/penerimaan/penerimaanlangsung',
-              name: 'gudang.farmasi.penerimaan.penerimaanlangsung',
+              // name: 'gudang.farmasi.penerimaan.penerimaanlangsung',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/penerimaan/penerimaanlangsung/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/penerimaan/listpenerimaan',
-              name: 'gudang.farmasi.penerimaan.listpenerimaan',
+              // name: 'gudang.farmasi.penerimaan.listpenerimaan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/penerimaan/listpenerimaan/IndexPage.vue')
+            },
+            {
+              path: '/gudang/farmasi/penerimaan/pemfakturan',
+              meta: { transition: 'slide-up' },
+              component: () => import('pages/simrs/logistik/gudang/farmasi/penerimaan/pemfakturan/IndexPage.vue')
             }
           ]
         },
@@ -141,10 +146,6 @@ const gudang = {
         {
           path: '/gudang/farmasi/listkonsinyasi',
           component: () => import('pages/simrs/logistik/gudang/farmasi/listkonsinyasi/IndexPage.vue')
-        },
-        {
-          path: '/gudang/farmasi/pemfakturan',
-          component: () => import('pages/simrs/logistik/gudang/farmasi/pemfakturan/IndexPage.vue')
         },
         {
           path: '/gudang/farmasi/bast',
