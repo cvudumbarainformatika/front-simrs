@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-page>
     <Suspense>
       <!-- main content -->
       <AsyncComp />
@@ -8,12 +8,12 @@
         <app-loading />
       </template>
     </Suspense>
-  </div>
+  </q-page>
 </template>
 <script setup>
 import { defineAsyncComponent } from 'vue'
 
 const AsyncComp = defineAsyncComponent(() =>
-  import('./FormIgd.vue')
+  import('./KunjunganPage.vue')
 )
 </script>
