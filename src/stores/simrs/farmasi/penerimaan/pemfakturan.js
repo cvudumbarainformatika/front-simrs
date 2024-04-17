@@ -285,8 +285,9 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
           .then(resp => {
             this.loading = false
             console.log('sudah simpan header', resp.data)
+            this.ambilPemesanan()
             notifSuccess(resp)
-
+            this.setClose()
             resolve(resp)
           })
           .catch(() => {

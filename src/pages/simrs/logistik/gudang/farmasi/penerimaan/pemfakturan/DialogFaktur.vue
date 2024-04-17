@@ -327,7 +327,7 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center q-mb-xs text-green">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs text-green">
               <div class="q-mr-sm">
                 Dipesan
               </div>
@@ -337,7 +337,7 @@
               <div class="q-ml-sm text-weight-bold">
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
-            </div>
+            </div> -->
             <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -366,14 +366,14 @@
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
               <div class="q-mr-sm">
                 Diterima Sebelumnya
               </div>
               <div class="text-weight-bold">
                 {{ det.jml_terima_laluK ? det.jml_terima_laluK : 0 }}
               </div>
-            </div>
+            </div> -->
             <div
               class="row justify-between no-wrap items-center q-mb-xs"
               :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green':'text-negative'"
@@ -583,6 +583,7 @@
   setelah simpan detail, belum terupdate data sudah diterima.
   cara cek, jika data sudah masuk, readonly aktif.
 */
+import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
@@ -662,7 +663,25 @@ function validasiHeader() {
 function simpanHeader() {
   if (validasiHeader()) {
     console.log('simpan header', store.form)
-    store.simpanHeader()
+    // kasih warning dulu sebelum simpan
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah Semua Data Harga Obat Sudah di Update? Pastikan Semua Data Sudah Selesai, Karena Tidak Ada Menu Edit!',
+      ok: {
+        push: true,
+        color: 'primary',
+        label: 'Lanjutkan',
+        'no-caps': true
+      },
+      cancel: {
+        push: true,
+        color: 'dark',
+        label: 'Batal',
+        'no-caps': true
+      }
+    }).onOk(() => {
+      store.simpanHeader()
+    })
   }
 }
 function adaPPN(evt, det) {
