@@ -2,9 +2,9 @@
   <div>
     <DataPasien
       ref="refDataPasien"
+      :tglsep="register.paramDpjp.tglsep"
       :full="style.componentfull"
       :pelayanan="pelayanan"
-      :tglsep="register.paramDpjp.tglsep"
       @ganti-pasien="clearFormRegistrasi"
       @full-screen="style.setComponentFull"
     />
@@ -15,7 +15,8 @@
     />
     <!-- @bisa-simpan="simpanRegistrasi" -->
     <q-card
-      class="full-width"
+      class="full-width q-pb-xl"
+      flat
     >
       <q-card-actions align="right">
         <div class="q-mr-xl">

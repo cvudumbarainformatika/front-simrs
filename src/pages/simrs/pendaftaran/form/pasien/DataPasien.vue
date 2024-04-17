@@ -6,7 +6,7 @@
     <!-- :simpanData="simpanData" -->
     <div
       v-if="notEdit"
-      class="fixed-top row items-center justify-between bg-grey q-pa-sm"
+      class="absolute-top row items-center justify-between bg-grey q-pa-sm"
       style="z-index: 10;"
     >
       <div class="f-14 text-weight-bold">
