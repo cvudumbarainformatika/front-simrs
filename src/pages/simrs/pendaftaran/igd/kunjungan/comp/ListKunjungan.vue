@@ -52,7 +52,7 @@
             <q-item-label
               caption
             >
-              <i>Status Pasien: <span class="text-negative text-weight-bold">{{ getStatus(item.taskid) }}</span></i>
+              <i>Status Pasien: <span class="text-negative text-weight-bold">{{ getsatpasien(item.statpasien) }}</span></i>
             </q-item-label>
           </q-item-section>
           <!-- <q-item-section
@@ -94,7 +94,6 @@
                 </div>
                 <div
                   v-else
-                  :class="item.sep?'q-ml-sm':'q-ml-sm cursor-pointer'"
                 >
                   <q-badge
                     outline
@@ -191,7 +190,7 @@
         </div>
       </template>
     </app-dialog-form>
-    <DialogSep />
+    <!-- <DialogSep /> -->
     <!-- dialog hapus -->
     <q-dialog
       v-model="confirm"
@@ -233,10 +232,11 @@
 <script setup>
 // import DialogSep from './DialogSep.vue'
 import { api } from 'src/boot/axios'
-import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { notifCenterVue } from 'src/modules/utils'
-import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
-import { ref } from 'vue'
+import { dateFullFormat, formatJam } from 'src/modules/formatter'
+import { useListKunjunganIgd } from 'src/stores/simrs/pendaftaran/kunjungan/igd/kunjungan'
+// eslint-disable-next-line no-unused-vars
+import { onMounted, ref } from 'vue'
 
 defineProps({
   loading: { type: Boolean, default: false },
@@ -254,17 +254,17 @@ function batal() {
   tempData.value = ''
   confirm.value = false
 }
-function ambil() {
-  loadingReSep.value = tempData.value.noreg
-  sepStore.getSep(tempData.value).then(resp => {
-    console.log('resp sep', resp)
-    loadingReSep.value = ''
-    tempData.value = null
-    // emits('hapus', item)
-    console.log('Cancel dalem', loadingReSep.value)
-  })
-  confirm.value = false
-}
+// function ambil() {
+//   loadingReSep.value = tempData.value.noreg
+//   sepStore.getSep(tempData.value).then(resp => {
+//     console.log('resp sep', resp)
+//     loadingReSep.value = ''
+//     tempData.value = null
+//     // emits('hapus', item)
+//     console.log('Cancel dalem', loadingReSep.value)
+//   })
+//   confirm.value = false
+// }
 function tidak() {
   emits('hapus', tempData.value)
   confirm.value = false
@@ -328,21 +328,22 @@ function PengajuanSep(val) {
   dialog.value = true
   temp.value = val.noka
 }
-const sepStore = useSepBpjsStore()
+// eslint-disable-next-line no-unused-vars
+const storekunjunganigd = useListKunjunganIgd()
 const loadingReSep = ref(null)
-function bukaSep(val) {
-  console.log('buka sep', val)
-  // sepStore.setOpen()
-  loadingReSep.value = val.noreg
-  // const form = {
-  //   noreg: val.noreg,
-  //   norm: val.norm,
-  //   noka: val.noka
-  // }
-  if (!val.sep) {
-    sepStore.getSep(val)
-  }
-}
+// function bukaSep(val) {
+//   console.log('buka sep', val)
+//   // sepStore.setOpen()
+//   loadingReSep.value = val.noreg
+//   // const form = {
+//   //   noreg: val.noreg,
+//   //   norm: val.norm,
+//   //   noka: val.noka
+//   // }
+//   if (!val.sep) {
+//     sepStore.getSep(val)
+//   }
+// }
 function simpanPengajuan() {
   const data = {
     noka: temp.value,
@@ -368,47 +369,57 @@ function simpanPengajuan() {
       })
   })
 }
-function getStatus(arr) {
-  if (arr.length === 0) {
-    return '-'
-  }
+// function getStatus(arr) {
+//   if (arr.length === 0) {
+//     return '-'
+//   }
 
-  // 1 (mulai waktu tunggu admisi),
-  // 2 (akhir waktu tunggu admisi/mulai waktu layan admisi),
-  // 3 (akhir waktu layan admisi/mulai waktu tunggu poli),
-  // 4 (akhir waktu tunggu poli/mulai waktu layan poli),
-  // 5 (akhir waktu layan poli/mulai waktu tunggu farmasi),
-  // 6 (akhir waktu tunggu farmasi/mulai waktu layan farmasi membuat obat),
-  // 7 (akhir waktu obat selesai dibuat),
-  // 99 (tidak hadir/batal)
-  const arr0 = arr[0].taskid
-  let text
-  switch (arr0) {
-    case '1' || 1:
-      text = 'Menunggu di Admisi'
-      break
-    case '2' || 2:
-      text = 'Pelayanan di Admisi'
-      break
-    case '3' || 3:
-      text = 'Menunggu di Poli'
-      break
-    case '4' || 4:
-      text = 'Pelayanan di Poli'
-      break
-    case '5' || 5:
-      text = 'Menunggu di Farmasi'
-      break
-    case '6' || 6:
-      text = 'Farmasi'
-      break
-    case '7' || 7:
-      text = 'Sudah Ambil Obat di Farmasi'
-      break
-    default:
-      text = 'Tidak Hadir/ Batal'
+// 1 (mulai waktu tunggu admisi),
+// 2 (akhir waktu tunggu admisi/mulai waktu layan admisi),
+// 3 (akhir waktu layan admisi/mulai waktu tunggu poli),
+// 4 (akhir waktu tunggu poli/mulai waktu layan poli),
+// 5 (akhir waktu layan poli/mulai waktu tunggu farmasi),
+// 6 (akhir waktu tunggu farmasi/mulai waktu layan farmasi membuat obat),
+// 7 (akhir waktu obat selesai dibuat),
+// 99 (tidak hadir/batal)
+//   const arr0 = arr[0].taskid
+//   let text
+//   switch (arr0) {
+//     case '1' || 1:
+//       text = 'Menunggu di Admisi'
+//       break
+//     case '2' || 2:
+//       text = 'Pelayanan di Admisi'
+//       break
+//     case '3' || 3:
+//       text = 'Menunggu di Poli'
+//       break
+//     case '4' || 4:
+//       text = 'Pelayanan di Poli'
+//       break
+//     case '5' || 5:
+//       text = 'Menunggu di Farmasi'
+//       break
+//     case '6' || 6:
+//       text = 'Farmasi'
+//       break
+//     case '7' || 7:
+//       text = 'Sudah Ambil Obat di Farmasi'
+//       break
+//     default:
+//       text = 'Tidak Hadir/ Batal'
+//   }
+//   return text
+// }
+
+function getsatpasien(stat) {
+  if (stat === '') {
+    return 'BELUM TERLAYANI'
+  } else if (stat === '1') {
+    return 'PASIEN SUDAH DILAYANI'
+  } else {
+    return 'PASIEN MASIH DILAYANI'
   }
-  return text
 }
 
 function genCon(row) {
@@ -416,6 +427,10 @@ function genCon(row) {
   pasien.value = row
   openGen.value = !openGen.value
 }
+
+// onMounted(() => {
+//   storekunjunganigd.getLists()
+// })
 </script>
 <style scoped>
 .qrcode {

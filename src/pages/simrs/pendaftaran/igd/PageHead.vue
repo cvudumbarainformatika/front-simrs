@@ -45,7 +45,7 @@
           size="md"
           @click="goTo('/pendaftaran/bpjs/pasien')"
         />
-        <q-btn
+        <!-- <q-btn
           :outline="path!=='/pendaftaran/bpjs/listmjkn'"
           glossy
           push
@@ -53,7 +53,7 @@
           label="List mJKN"
           size="md"
           @click="goTo('/pendaftaran/bpjs/listmjkn')"
-        />
+        /> -->
         <!-- <q-btn
           :outline="path!=='/pendaftaran/bpjs/konsulan'"
           glossy
@@ -63,7 +63,7 @@
           size="md"
           @click="goTo('/pendaftaran/bpjs/konsulan')"
         /> -->
-        <q-btn
+        <!-- <q-btn
           :outline="path!=='/pendaftaran/bpjs/listsharing'"
           glossy
           push
@@ -71,7 +71,7 @@
           label="List Sharing"
           size="md"
           @click="goTo('/pendaftaran/bpjs/listsharing')"
-        />
+        /> -->
       </q-btn-group>
     </div>
   </div>
