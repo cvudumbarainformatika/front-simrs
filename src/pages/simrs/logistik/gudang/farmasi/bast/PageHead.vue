@@ -24,7 +24,7 @@
           glossy
           push
           color="deep-orange"
-          label="List Pemesanan"
+          label="BAST"
           size="md"
           @click="emits('ganti','bast')"
         />
@@ -33,7 +33,7 @@
           glossy
           push
           color="green"
-          label="List Penerimaan"
+          label="List BAST"
           size="md"
           @click="emits('ganti','list')"
         />
