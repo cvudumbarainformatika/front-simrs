@@ -116,13 +116,19 @@ const pendaftaran = {
           name: 'pendaftaran.form.igd',
           component: () =>
             import('pages/simrs/pendaftaran/igd/form/igd/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/igd/kunjungan',
+          name: 'pendaftaran.igd.kunjungan',
+          component: () =>
+            import('pages/simrs/pendaftaran/igd/kunjungan/IndexPage.vue')
+        },
+        {
+          path: '/pendaftaran/igd/pasien',
+          name: 'pendaftaran.igd.pasien',
+          component: () =>
+            import('pages/simrs/pendaftaran/igd/pasien/IndexPage.vue')
         }
-        // {
-        //   path: '/pendaftaran/igd/pasien',
-        //   name: 'pendaftaran.igd.pasien',
-        //   component: () =>
-        //     import('pages/simrs/pendaftaran/igd/pasien/IndexPage.vue')
-        // }
       ]
     },
     {
