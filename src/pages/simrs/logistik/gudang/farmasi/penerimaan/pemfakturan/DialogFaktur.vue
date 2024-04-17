@@ -97,7 +97,7 @@
             <app-input
               ref="refNoSurat"
               v-model="store.form.nomorsurat"
-              label="Nomor Surat"
+              label="Nomor Faktur"
               outlined
             />
           </div>
@@ -109,6 +109,7 @@
               v-model="store.form.pengirim"
               label="Nama Pengirim"
               outlined
+              readonly
             />
           </div>
         </div>
@@ -190,7 +191,7 @@
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.surat"
-              label="Tanggal Surat"
+              label="Tanggal Faktur"
               outlined
               @set-display="dispSurat"
               @db-model="setSurat"
@@ -212,17 +213,19 @@
     </div>
     <div class="q-my-sm text-right q-mr-md">
       <q-btn
-        label="Simpan Header"
+        label="Simpan Header dan Stok"
         no-caps
         dense
         color="primary"
+        :disable="store.loading"
+        :loading="store.loading"
         @click="simpanHeader"
       >
         <q-tooltip
           class="primary"
           :offset="[10, 10]"
         >
-          Simpan Header Saja
+          Simpan Header Saja Dan Masuk Stok
         </q-tooltip>
       </q-btn>
     </div>
@@ -324,7 +327,7 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <div class="row justify-between no-wrap items-center q-mb-xs text-green">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs text-green">
               <div class="q-mr-sm">
                 Dipesan
               </div>
@@ -334,7 +337,7 @@
               <div class="q-ml-sm text-weight-bold">
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
-            </div>
+            </div> -->
             <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -363,14 +366,14 @@
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
             </div>
-            <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
+            <!-- <div class="row justify-between no-wrap items-center q-mb-xs text-orange">
               <div class="q-mr-sm">
                 Diterima Sebelumnya
               </div>
               <div class="text-weight-bold">
                 {{ det.jml_terima_laluK ? det.jml_terima_laluK : 0 }}
               </div>
-            </div>
+            </div> -->
             <div
               class="row justify-between no-wrap items-center q-mb-xs"
               :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green':'text-negative'"
@@ -580,6 +583,7 @@
   setelah simpan detail, belum terupdate data sudah diterima.
   cara cek, jika data sudah masuk, readonly aktif.
 */
+import { Dialog } from 'quasar'
 import { formatRpDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
@@ -637,7 +641,7 @@ function simpan(index) {
   if (validasi(index)) {
     ind.value = index
     const deta = store.details[index]
-    deta.jml_all_penerimaan += deta.jumlah
+
     const key = Object.keys(deta)
     key.forEach(a => {
       if (a !== 'masterobat') store.setForm(a, deta[a])
@@ -659,6 +663,25 @@ function validasiHeader() {
 function simpanHeader() {
   if (validasiHeader()) {
     console.log('simpan header', store.form)
+    // kasih warning dulu sebelum simpan
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah Semua Data Harga Obat Sudah di Update? Pastikan Semua Data Sudah Selesai, Karena Tidak Ada Menu Edit!',
+      ok: {
+        push: true,
+        color: 'primary',
+        label: 'Lanjutkan',
+        'no-caps': true
+      },
+      cancel: {
+        push: true,
+        color: 'dark',
+        label: 'Batal',
+        'no-caps': true
+      }
+    }).onOk(() => {
+      store.simpanHeader()
+    })
   }
 }
 function adaPPN(evt, det) {
@@ -892,7 +915,7 @@ function detKadal(evt, val) {
 // }
 
 function setSurat(val) {
-  store.setForm('tglpenerimaan', val)
+  store.setForm('tglsurat', val)
 }
 function dispSurat(val) {
   store.setDisp('surat', val)

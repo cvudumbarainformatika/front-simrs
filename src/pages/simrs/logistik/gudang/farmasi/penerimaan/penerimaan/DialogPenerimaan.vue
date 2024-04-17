@@ -889,7 +889,7 @@ function dispTanggal(val) {
 }
 
 function setSurat(val) {
-  store.setForm('tglpenerimaan', val)
+  store.setForm('tglsurat', val)
 }
 function dispSurat(val) {
   store.setDisp('surat', val)
