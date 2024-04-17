@@ -97,7 +97,7 @@
             <app-input
               ref="refNoSurat"
               v-model="store.form.nomorsurat"
-              label="Nomor Surat"
+              label="Nomor Faktur"
               outlined
             />
           </div>
@@ -109,6 +109,7 @@
               v-model="store.form.pengirim"
               label="Nama Pengirim"
               outlined
+              readonly
             />
           </div>
         </div>
@@ -190,7 +191,7 @@
           <div class="col-12">
             <app-input-date-human
               :model="store.disp.surat"
-              label="Tanggal Surat"
+              label="Tanggal Faktur"
               outlined
               @set-display="dispSurat"
               @db-model="setSurat"
@@ -212,17 +213,19 @@
     </div>
     <div class="q-my-sm text-right q-mr-md">
       <q-btn
-        label="Simpan Header"
+        label="Simpan Header dan Stok"
         no-caps
         dense
         color="primary"
+        :disable="store.loading"
+        :loading="store.loading"
         @click="simpanHeader"
       >
         <q-tooltip
           class="primary"
           :offset="[10, 10]"
         >
-          Simpan Header Saja
+          Simpan Header Saja Dan Masuk Stok
         </q-tooltip>
       </q-btn>
     </div>
@@ -637,7 +640,7 @@ function simpan(index) {
   if (validasi(index)) {
     ind.value = index
     const deta = store.details[index]
-    deta.jml_all_penerimaan += deta.jumlah
+
     const key = Object.keys(deta)
     key.forEach(a => {
       if (a !== 'masterobat') store.setForm(a, deta[a])
@@ -659,6 +662,7 @@ function validasiHeader() {
 function simpanHeader() {
   if (validasiHeader()) {
     console.log('simpan header', store.form)
+    store.simpanHeader()
   }
 }
 function adaPPN(evt, det) {
@@ -892,7 +896,7 @@ function detKadal(evt, val) {
 // }
 
 function setSurat(val) {
-  store.setForm('tglpenerimaan', val)
+  store.setForm('tglsurat', val)
 }
 function dispSurat(val) {
   store.setDisp('surat', val)

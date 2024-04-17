@@ -280,8 +280,6 @@ export const usePemfakturanFarmasiStore = defineStore('farmasi_pemfakturan', {
     },
     simpanHeader() {
       this.loading = true
-      const tgl = this.form.tglpenerimaan
-      this.form.tglpenerimaan = tgl + date.formatDate(Date.now(), ' HH:mm:ss')
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/gudang/simpan-header', this.form)
           .then(resp => {

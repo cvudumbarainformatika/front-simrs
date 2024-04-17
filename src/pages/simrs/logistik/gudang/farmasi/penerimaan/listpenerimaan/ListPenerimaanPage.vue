@@ -55,8 +55,17 @@
         <div>{{ row.pihakketiga?.nama ? row.pihakketiga?.nama : '-' }}</div>
       </template>
       <template #cell-total="{ row }">
-        <div class="text-weight-bold">
+        <div
+          v-if="row.total_faktur_pbf"
+          class="text-weight-bold"
+        >
           {{ row.total_faktur_pbf? formatRp(row.total_faktur_pbf) :(row.total?formatRp(row.total):'-') }}
+        </div>
+        <div
+          v-if="row?.faktur && row?.jenissurat==='Surat Jalan'"
+          class="text-weight-bold"
+        >
+          {{ formatRp(row?.faktur?.total_faktur) ??'-' }}
         </div>
       </template>
       <template #cell-surat="{ row }">
@@ -74,6 +83,24 @@
           </div>
           <div class="q-mr-xs text-weight-bold">
             {{ row.jenissurat ?row.jenissurat : '-' }}
+          </div>
+        </div>
+        <div v-if="row?.faktur && row?.jenissurat==='Surat Jalan'">
+          <div class="row items-center justify-between no-wrap q-mb-xs">
+            <div class="q-mr-sm">
+              Nomor Faktur
+            </div>
+            <div class="q-mr-xs text-weight-bold">
+              {{ row?.faktur?.no_faktur??'-' }}
+            </div>
+          </div>
+          <div class="row items-center justify-between no-wrap q-mb-xs">
+            <div class="q-mr-sm">
+              Tanggal Faktur
+            </div>
+            <div class="q-mr-xs text-weight-bold">
+              {{ dateFullFormat(row?.faktur?.tgl_faktur)??'-' }}
+            </div>
           </div>
         </div>
       </template>
