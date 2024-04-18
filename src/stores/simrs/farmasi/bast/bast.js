@@ -110,6 +110,8 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
             temp.forEach(anu => {
               anu.checked = false
               anu.penerimaanrinci.forEach(det => {
+                det.adaPPN = false
+                if (parseFloat(det.ppn) > 0) det.adaPPN = true
                 det.checked = false
               })
             })

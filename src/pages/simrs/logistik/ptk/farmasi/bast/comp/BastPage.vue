@@ -214,7 +214,7 @@
                   Diskon (%)
                 </div>
                 <div class="deta text-weight-bold">
-                  PPN (%)
+                  PPN (11%)
                 </div>
                 <div class="deta text-weight-bold">
                   Harga Netto
@@ -249,44 +249,45 @@
                   {{ det.jml_terima_b }}
                 </div>
                 <div class="deta">
-                  {{ formatRpDouble(det.harga,2) }}
+                  <!-- {{ formatRpDouble(det.harga,2) }} -->
+                  <app-input
+                    v-model="det.harga"
+                    outlined
+                    label="Harga"
+                    dense
+                    @update:model-value="updateHargaAll($event,det,pesan,'harga')"
+                  />
                 </div>
                 <div class="deta">
-                  {{ det.diskon }} %
-                  <!-- <app-input
+                  <!-- {{ det.diskon }} % -->
+                  <app-input
                     v-model="det.diskon"
                     outlined
                     label="diskon"
                     dense
-                    type="number"
-                    @focus="assign(n,i,j)"
-                    @update:model-value="updateHargaDis($event,det)"
-                  /> -->
+                    valid
+                    @update:model-value="updateHargaAll($event,det,pesan,'diskon')"
+                  />
                 </div>
                 <div class="deta">
-                  {{ det.ppn }} %
+                  <!-- {{ det.ppn }} % -->
                   <!-- <app-input
                     v-model="det.ppn"
                     outlined
                     label="PPN"
                     dense
-                    type="number"
-                    @focus="assign(n,i,j)"
-                    @update:model-value="updateHargaPpn($event,det)"
+                    valid
+                    @update:model-value="updateHargaAll($event,det,pesan,'ppn')"
                   /> -->
+                  <q-checkbox
+                    v-model="det.adaPPN"
+                    label="PPN 11%"
+                    :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
+                    @update:model-value="adaPPN($event,det,pesan)"
+                  />
                 </div>
                 <div class="deta">
                   {{ formatRpDouble(det?.harga_netto,2) }}
-                  <!-- <app-input
-                    v-model="det.sub_total"
-                    outlined
-                    label="Sub Total"
-                    dense
-                    type="number"
-                    @focus="assign(n,i,j)"
-                    @update:model-value="updateHargaJadi"
-                  /> -->
-                  <!-- {{ formatRpDouble(det.harga_jadi,2) }} -->
                 </div>
                 <!-- nilai retur -->
                 <div class="deta">
@@ -343,66 +344,51 @@ function setTanggalDisp(val) {
   console.log('form ', store.form)
 }
 
-// eslint-disable-next-line no-unused-vars
-function pesanClicked(val, i) {
-  console.log('pesanan', val)
+function adaPPN(evt, det, pesan) {
+  // console.log('ada ppn', evt, det)
+  if (evt) updateHargaAll('11', det, pesan, 'ppn')
+  if (!evt) updateHargaAll('0', det, pesan, 'ppn')
 }
-let indPem = 0
-let indPene = 0
-// let indDet = 0
-// eslint-disable-next-line no-unused-vars
-function assign(n, i, j) {
-  indPem = n
-  indPene = i
-  // indDet = j
-}
-// eslint-disable-next-line no-unused-vars
-function updateHargaKo(evt, val) {
-  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
-  val.harga_kontrak = value
-  updateHarga(val)
-}
-// eslint-disable-next-line no-unused-vars
-function updateHargaDis(evt, val) {
-  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
-  val.diskon = value
-  updateHarga(val)
-}
-// eslint-disable-next-line no-unused-vars
-function updateHargaPpn(evt, val) {
-  const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
-  val.ppn = value
-  updateHarga(val)
-}
-function updateHarga(val) {
-  const hargaKontrak = !isNaN(val.harga_kontrak) && val.harga_kontrak !== '' ? parseFloat(val.harga_kontrak) : 0
+function updateHargaAll(evt, det, trm, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  console.log('nilai', parseFloat(evt), isNaN(parseFloat(evt)))
+  det[key] = nilai
 
-  const diskon = (val.diskon / 100) * hargaKontrak
-  const hargaDiskon = hargaKontrak - diskon
-  const ppn = (val.ppn / 100) * hargaDiskon
-  const ppnRp = ppn
-  val.harga_jadi = hargaKontrak - diskon + ppnRp
-  val.sub_total = (hargaKontrak - diskon + ppnRp) * val.qty
-  console.log(val)
-  // (store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty *
-  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak) -
-  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].diskon) +
-  // ((parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].harga_kontrak *
-  // store.pemesanans[indPem].penerimaan[indPene].details[indDet].qty) *
-  // parseFloat(store.pemesanans[indPem].penerimaan[indPene].details[indDet].ppn) / 100))
+  const isi = det.isi
+  const harga = det.harga ?? 0
+  let hargaKcl = det.harga_kcl
+  const diskon = det.diskon ?? 0
+  const ppn = det.ppn ?? 0
+  const jmlTerimaB = det.jml_terima_b
+  const jmlTerimaK = det.jml_terima_k
 
-  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
-}
-// eslint-disable-next-line no-unused-vars
-function updateHargaJadi(val) {
-  // console.log(val)
-  store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
+  const diskonRp = harga * (diskon / 100)
+  const hargaSetelahDiskon = harga - diskonRp
+  const ppnRp = isNaN(hargaSetelahDiskon * (ppn / 100)) ? 0 : hargaSetelahDiskon * (ppn / 100)
+  const hargaPembelian = hargaSetelahDiskon + ppnRp
+  const subtotal = hargaPembelian * jmlTerimaB
+
+  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
+
+  det.isi = isi
+  det.harga = harga
+  det.harga_kcl = hargaKcl
+  det.diskon = diskon
+  det.ppn = ppn
+  det.jml_terima_b = jmlTerimaB
+  det.jml_terima_k = jmlTerimaK
+  det.diskon_rp = diskonRp
+  det.diskon_rp_kecil = diskonRp / isi
+  det.ppn_rp = ppnRp
+  det.ppn_rp_kecil = ppnRp / isi
+  det.harga_netto = hargaPembelian
+  det.harga_netto_kecil = hargaPembelian / isi
+  det.subtotal = subtotal
 }
 
-// eslint-disable-next-line no-unused-vars
-function checkBox(val) {
-  // console.log('cek bok', val)
-}
 function itemClicked(val, i) {
   console.log('item clicked', val)
   // val.checked = !val.checked
