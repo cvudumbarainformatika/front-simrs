@@ -10,7 +10,7 @@
               </div>
               <div class="col-8">
                 <app-autocomplete-new
-                  v-model="store.form.kode_perusahaan"
+                  v-model="store.form.kdpbf"
                   label="pilih Perusahaan"
                   debounce="700"
                   autocomplete="namaperusahaan"
@@ -32,9 +32,9 @@
                 <app-autocomplete-new
                   v-model="store.form.kontrak"
                   label="pilih pemesanan"
-                  autocomplete="kontrak"
-                  option-label="kontrak"
-                  option-value="kontrak"
+                  autocomplete="nopemesanan"
+                  option-label="nopemesanan"
+                  option-value="nopemesanan"
                   outlined
                   valid
                   :loading="store.loading"
@@ -53,7 +53,7 @@
                   v-model="store.form.no_bast"
                   label="nomor BAST"
                   outlined
-                  :loading="store.loadingNomor"
+                  readonly
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@
               {{ formatRpDouble(pesan.total) }}
             </div>
           </div>
-          <div v-if="pesan.checked && pesan.penerimaan.length">
+          <div v-if="pesan?.checked && pesan.penerimaan.length">
             <div class="row fit no-wrap justify-start items-center text-weight-bolder">
               <div class="anak">
                 Nomor Faktur
