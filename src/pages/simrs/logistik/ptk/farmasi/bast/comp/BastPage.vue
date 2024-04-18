@@ -87,7 +87,7 @@
                 Jumlah BAST
               </div>
               <div class="col-8 text-weight-bold">
-                {{ formatRpDouble(store.form.jumlah_bast,2)??0 }}
+                {{ isNaN(formatRpDouble(store.form.jumlah_bast,2))?0 :formatRpDouble(store.form.jumlah_bast,2) }}
               </div>
             </div>
           </div>
