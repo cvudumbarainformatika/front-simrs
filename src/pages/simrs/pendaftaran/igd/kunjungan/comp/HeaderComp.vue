@@ -39,6 +39,7 @@
         emit-value
         map-options
         style="min-width: 150px;"
+        @update:model-value="gantiTxt"
       />
     </div>
     <div>
@@ -150,7 +151,6 @@
               v-ripple
               tag="label"
             >
-              <!-- <q-item-section> -->
               <q-radio
                 v-model="selectPerPage"
                 size="xs"
@@ -158,8 +158,6 @@
                 :label="opt + ' Baris'"
                 color="primary"
               />
-              <!-- </q-item-section> -->
-              <!-- <q-item-label /> -->
             </q-item>
           </q-list>
         </q-menu>
@@ -188,8 +186,8 @@
 import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
 import { computed, onMounted, ref } from 'vue'
-const txt = ref('SEMUA')
-const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
+const txt = ref('BELUM TERLAYANI')
+const txts = ref(['SEMUA', 'BELUM TERLAYANI', 'MASIH DILAYANI', 'SUDAH TERLAYANI'])
 const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'setPeriode', 'refresh', 'filter'])
 const options = ref([5, 10, 20, 50, 100])
 const periods = ref([
@@ -254,6 +252,22 @@ function tahunIni() {
   from.value = dateDbFormat(lastday)
 }
 
+function gantiStatus(val) {
+  if (val === 'BELUM TERLAYANI') {
+    return ''
+  } else if (val === 'SUDAH TERLAYANI') {
+    return '1'
+  } else if (val === 'MASIH DILAYANI') {
+    return '2'
+  } else {
+    return 'all'
+  }
+}
+
+function gantiTxt() {
+  gantiPeriode(periode.value)
+}
+
 function gantiPeriode(val) {
   if (val === 1) {
     hariIni()
@@ -269,7 +283,8 @@ function gantiPeriode(val) {
   console.log(from.value)
   const per = {
     to: to.value,
-    from: from.value
+    from: from.value,
+    status: gantiStatus(txt.value)
   }
   emits('setPeriode', per)
 }
@@ -281,10 +296,12 @@ onMounted(() => {
 // function lihatRef() {
 //   popup.value.hide()
 // }
-// const selectPerPage = computed({
-//   get () { return props.perPage },
-//   set (val) { emits('setRow', val) }
-// })
+const selectPerPage = computed({
+  get () {
+    return props.perPage
+  },
+  set (val) { emits('setRow', val) }
+})
 // const dateX = computed({
 //   get() {
 //     return props.tanggal

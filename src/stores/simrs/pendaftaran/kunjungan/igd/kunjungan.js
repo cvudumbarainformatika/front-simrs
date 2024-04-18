@@ -25,10 +25,10 @@ export const useListKunjunganIgd = defineStore('list_kunjungan_igd_pendaftaran',
     async getLists() {
       this.loading = true
       const params = { params: this.params }
-      const resp = await api.get('/v1/simrs/pendaftaran/kunjunganpasienbpjs', params)
+      const resp = await api.get('/v1/simrs/pendaftaran/igd/kunjunganpasienigd', params)
       if (resp.status === 200) {
         // console.log('kunjungan', resp)
-        this.items = resp.data.data
+        this.items = resp.data?.data
         this.meta = resp.data
         this.loading = false
       }
@@ -40,19 +40,27 @@ export const useListKunjunganIgd = defineStore('list_kunjungan_igd_pendaftaran',
       this.getLists()
     },
     setPerPage(payload) {
+      console.log('sasa', payload)
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
     },
     setPeriodik(val) {
-      const { to, from } = val
+      console.log('wew', val)
+      this.params.page = 1
+      const { to, from, status } = val
       this.params.to = to
       this.params.from = from
+      this.params.status = status
       console.log('periodik', to)
       this.getLists()
     },
     setFilters() {
       this.filters = !this.filters
+    },
+    setPage(payload) {
+      this.params.page = payload
+      this.getLists()
     }
   }
 })
