@@ -30,7 +30,7 @@
               </div>
               <div class="col-8">
                 <app-autocomplete-new
-                  v-model="store.form.kontrak"
+                  v-model="store.form.nopemesanan"
                   label="pilih pemesanan"
                   autocomplete="nopemesanan"
                   option-label="nopemesanan"
@@ -43,7 +43,7 @@
                 />
               </div>
             </div>
-            <div class="row q-col-gutter-sm items-center q-mb-sm">
+            <!-- <div class="row q-col-gutter-sm items-center q-mb-sm">
               <div class="col-4">
                 Nomor BAST
               </div>
@@ -56,7 +56,7 @@
                   readonly
                 />
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="col-6">
             <div class="row q-col-gutter-sm items-center q-mb-sm">
@@ -80,6 +80,14 @@
                   @set-display="setTanggalDisp"
                   @set-model="setTanggal"
                 />
+              </div>
+            </div>
+            <div class="row q-col-gutter-sm items-center q-mb-sm">
+              <div class="col-4">
+                Jumlah BAST
+              </div>
+              <div class="col-8 text-weight-bold">
+                {{ formatRpDouble(store.form.jumlah_bast,2)??0 }}
               </div>
             </div>
           </div>
@@ -310,7 +318,7 @@
                   Total
                 </div>
                 <div class="deta text-weight-bold">
-                  {{ formatRpDouble(pesan?.jumlah_bast,2) }}
+                  {{ formatRpDouble(pesan?.subtotal_bast,2) }}
                 </div>
               </div>
             </div>
@@ -386,7 +394,14 @@ function updateHargaAll(evt, det, trm, key) {
   det.ppn_rp_kecil = ppnRp / isi
   det.harga_netto = hargaPembelian
   det.harga_netto_kecil = hargaPembelian / isi
+  det.nilai_retur = det.jumlah_retur * det.harga_netto_kecil
   det.subtotal = subtotal
+
+  det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
+
+  // jumlahkan semua nilai bast
+  trm.subtotal_bast = trm.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
+  if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
 }
 
 function itemClicked(val, i) {
@@ -407,39 +422,25 @@ function itemClicked(val, i) {
       console.log('slice', ind)
     }
   }
+  store.form.jumlah_bast = 0
+  if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
   console.log('clicked bottom', store.tampilPenerimaans)
 }
 const refTaBast = ref(null)
-const refNoBast = ref(null)
-const refHargaKontrak = ref(null)
+// const refNoBast = ref(null)
 const refPemesanans = ref(null)
-// eslint-disable-next-line no-unused-vars
-const refPenerimaans = ref(null)
 const refDetails = ref(null)
 function simpanBast() {
-  refHargaKontrak?.value?.forEach(kuylah => {
-    console.log('harga Kontrak', kuylah.refInput.validate())
-  })
-  // console.log('harga Kontrak', refHargaKontrak.value[0].refInput)
-  // store.form.details = store.penerimaans.filter(x => x.checked)
-  const temp = store.pemesanans
-  store.form.penerimaans = temp.map(psn => {
-    const anu = psn
-    psn.penerimaan = psn.penerimaan.filter(trm => trm.checked)
-    if (anu.penerimaan.length) return anu.penerimaan
-    else return false
-  }).filter(x => x !== false)
+  const temp = store.newPenerimaans
+  console.log('temp', temp)
+  store.form.penerimaans = temp.filter(x => x !== false)
+
+  if (!store.form.penerimaans.length) notifErrVue('Belum ada Penerimaan dipilih')
   console.log('form', store.form)
   if (refTaBast.value.$refs.refInputDate.validate()) {
-    // store.form.pemesanans = temp.map(psn => {
-    //   const anu = psn
-    //   psn.penerimaan = psn.penerimaan.filter(trm => trm.checked)
-    //   return anu
-    // }).filter(x => x.checked)
     console.log('form', store.form)
-    console.log('pemesanan', store.pemesanans)
+    console.log('pemesanan', store.newPenerimaans)
     store.simpanBast().then(() => {
-      refNoBast.value.$refs.refInput.resetValidation()
       refTaBast.value.$refs.refInputDate.resetValidation()
     })
   } else {

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi', {
   state: () => ({
@@ -113,10 +114,13 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
                 det.adaPPN = false
                 if (parseFloat(det.ppn) > 0) det.adaPPN = true
                 det.checked = false
+                det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
               })
+              anu.subtotal_bast = anu.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
             })
 
             this.newPenerimaans = temp
+            this.form.jumlah_bast = 0
             console.log('pemesanan', this.newPenerimaans)
 
             resolve(resp)
@@ -134,6 +138,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
         api.post('v1/simrs/farmasinew/bast/simpan', this.form)
           .then(resp => {
             this.loading = false
+            notifSuccess(resp)
             this.form = {}
             this.pemesanan = {}
             this.pemesanans = []
