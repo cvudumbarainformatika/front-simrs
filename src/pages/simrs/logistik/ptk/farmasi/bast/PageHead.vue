@@ -33,7 +33,7 @@
           glossy
           push
           color="green"
-          label="List BAST"
+          label="LIST BAST"
           size="md"
           @click="emits('ganti','list')"
         />

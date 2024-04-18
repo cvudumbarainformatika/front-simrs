@@ -68,7 +68,6 @@ const barStyle = ref({
 })
 
 function gantiHalaman(val) {
-  console.log('ganti halaman', val)
   if (menu.value.name !== val) {
     const anu = menus.value.find(a => a.name === val)
     if (anu) menu.value = anu
