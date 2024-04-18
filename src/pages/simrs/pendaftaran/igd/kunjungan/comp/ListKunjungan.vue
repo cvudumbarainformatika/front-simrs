@@ -136,6 +136,18 @@
                   />
                 </div>
               </div>
+              <div class="row q-mt-sm justify-end">
+                <div class="q-ml-sm">
+                  <q-btn
+                    size="sm"
+                    padding="xs"
+                    color="orange"
+                    :loading="loadingH && temp===item.noka"
+                    label="Cetak Gelang Pasien"
+                    @click="cetakgelang(item)"
+                  />
+                </div>
+              </div>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -226,6 +238,10 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <gelang-pasien-page
+      v-model="cetakdialog"
+      :patien="patien"
+    />
   </div>
 </template>
 
@@ -235,6 +251,7 @@ import { api } from 'src/boot/axios'
 import { notifCenterVue } from 'src/modules/utils'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 import { useListKunjunganIgd } from 'src/stores/simrs/pendaftaran/kunjungan/igd/kunjungan'
+import GelangPasienPage from '../../cetak/GelangPasienPage.vue'
 // eslint-disable-next-line no-unused-vars
 import { onMounted, ref } from 'vue'
 
@@ -246,6 +263,7 @@ defineProps({
 // eslint-disable-next-line no-unused-vars
 const emits = defineEmits(['hapus'])
 
+const cetakdialog = ref(false)
 const temp = ref(null)
 const confirm = ref(false)
 const tempData = ref(null)
@@ -426,6 +444,14 @@ function genCon(row) {
   // console.log(row)
   pasien.value = row
   openGen.value = !openGen.value
+}
+
+const patien = ref(null)
+
+function cetakgelang(val) {
+  patien.value = val
+  console.log('wew', val)
+  cetakdialog.value = true
 }
 
 // onMounted(() => {
