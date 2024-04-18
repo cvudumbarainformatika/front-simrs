@@ -96,26 +96,41 @@
         </div>
       </q-card-section>
     </q-card>
-    <q-card v-if="store.pemesanans.length">
+    <q-card v-if="store.newPenerimaans.length">
       <q-card-section>
         <div
           class="row fit no-wrap items-center justify-start q-mb-sm q-col-gutter-sm text-weight-bold bb"
         >
           <div
-            class="col-1"
+            class="col-auto"
+            style="width:5%"
           />
-          <div class="col-5">
+
+          <div class="anak">
             Nomor Pemesanan
           </div>
-          <div class="col-3">
-            Tanggal
+          <div class="anak">
+            Nomor Penerimaan
           </div>
-          <div class="col-3">
+          <div class="anak">
+            Tanggal Penerimaan
+          </div>
+          <div class="anak">
+            Nomor Faktur
+          </div>
+          <div class="anak">
+            Tanggal Faktur
+          </div>
+          <div class="anak">
+            Nilai faktur
+          </div>
+
+          <!-- <div class="col-3">
             Total Pesanan
-          </div>
+          </div> -->
         </div>
         <div
-          v-for="(pesan, n) in store.pemesanans"
+          v-for="(pesan, n) in store.newPenerimaans"
           ref="refPemesanans"
           :key="n"
         >
@@ -124,224 +139,177 @@
             :class="pesan.checked?'':'bb'"
           >
             <div
-              class="col-1 cursor-pointer"
-              @click="pesanClicked(pesan,n)"
+              class="col-auto cursor-pointer"
+              style="width:5%"
+              @click="itemClicked(pesan,n)"
             >
               <q-checkbox
                 v-model="pesan.checked"
                 size="xs"
                 dense
-                @click="pesanClicked(pesan,n)"
+                @click="itemClicked(pesan,n)"
               />
             </div>
-            <div class="col-5">
-              {{ pesan.nomor }}
+
+            <div class="anak">
+              {{ pesan.nopemesanan }}
             </div>
-            <div class="col-3">
-              {{ dateFullFormat(pesan.tanggal) }}
+            <div class="anak">
+              {{ pesan.nopenerimaan }}
             </div>
-            <div class="col-3">
-              {{ formatRpDouble(pesan.total) }}
+            <div class="anak">
+              {{ dateFullFormat(pesan.tglpenerimaan) }}
+            </div>
+            <div class="anak">
+              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ pesan?.nomorsurat }}
+              </div>
+              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ pesan?.faktur?.no_faktur }}
+              </div>
+            </div>
+            <div class="anak">
+              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ dateFullFormat(pesan?.tglsurat) }}
+              </div>
+              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ dateFullFormat(pesan?.faktur?.tgl_faktur) }}
+              </div>
+            </div>
+            <div class="anak">
+              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ formatRpDouble(pesan.total_faktur_pbf) }}
+              </div>
+              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
+                {{ formatRpDouble(pesan?.faktur?.total_faktur) }}
+              </div>
             </div>
           </div>
-          <div v-if="pesan?.checked && pesan.penerimaan.length">
-            <div class="row fit no-wrap justify-start items-center text-weight-bolder">
-              <div class="anak">
-                Nomor Faktur
+          <div v-if="pesan?.checked && pesan.penerimaanrinci.length">
+            <div class="row q-mt-sm bb">
+              <div class="q-mb-md">
+                Daftar Barang Penerimaan <span class="text-weight-bold">{{ pesan?.nopenerimaan }}</span>
               </div>
-              <div class="anak">
-                Tanggal Faktur
-              </div>
-              <div class="anak">
-                Nilai faktur
-              </div>
-              <div class="anak">
-                Nomor Pemesanan
-              </div>
-              <div class="anak">
-                Nomor Penerimaan
-              </div>
-            </div>
-            <div
-              v-for="(item,i) in pesan.penerimaan"
-              ref="refPenerimaans"
-              :key="i"
-            >
-              <div
-                class="row fit no-wrap items-center justify-start q-mb-sm q-col-gutter-sm"
-                :class="item.checked?'':'bb'"
-              >
-                <div
-                  class="anak"
-                  @click="itemClicked(item,i)"
-                >
+              <div class="row fit no-wrap items-center q-mb-sm">
+                <div class="deta text-weight-bold">
                   <div class="row">
-                    <div
-                      class="col-1"
-                      @click="itemClicked(item,i)"
-                    >
-                      <q-checkbox
-                        v-model="item.checked"
-                        size="xs"
-                        dense
-                        @click="itemClicked(item,i)"
-                        @update:model-value="checkBox"
-                      />
+                    <div class="col-2">
+                      No
                     </div>
-                    <div class="col-11">
-                      <!-- {{ item.faktur?item.faktur:'-' }} -->
-                      <app-input
-                        v-model="item.faktur"
-                        label="faktur"
-                        outlined
-                      />
+                    <div class="col-10">
+                      Nama Barang
                     </div>
                   </div>
                 </div>
-                <div class="anak">
-                  {{ item.tanggal_faktur?dateFullFormat( item.tanggal_faktur):'-' }}
+                <div class="deta text-weight-bold">
+                  Satuan
                 </div>
-                <div class="anak">
-                  <!-- {{ item.nilai_tagihan?formatRpDouble(item.nilai_tagihan,2):'-' }} -->
-                  <app-input
-                    v-model="item.nilai_tagihan"
-                    label="nilai faktur"
-                    type="number"
-                    outlined
-                  />
+                <div class="deta text-weight-bold">
+                  Kuantitas
                 </div>
-                <div class="anak">
-                  {{ item.nomor }}
+                <div class="deta text-weight-bold">
+                  Harga
                 </div>
-                <div class="anak">
-                  {{ item.no_penerimaan }}
+                <div class="deta text-weight-bold">
+                  Diskon (%)
+                </div>
+                <div class="deta text-weight-bold">
+                  PPN (%)
+                </div>
+                <div class="deta text-weight-bold">
+                  Harga Netto
+                </div>
+                <div class="deta text-weight-bold">
+                  Nilai Retur
+                </div>
+                <div class="deta text-weight-bold">
+                  Jumlah
                 </div>
               </div>
-              <div v-if="item.checked">
-                <div class="row q-mt-sm bb">
-                  <div class="q-mb-md">
-                    Daftar Barang Pesanan <span class="text-weight-bold">{{ item.nomor }}</span>
-                  </div>
-                  <div class="row fit no-wrap items-center q-mb-sm">
-                    <div class="deta text-weight-bold">
-                      <div class="row">
-                        <div class="col-2">
-                          No
-                        </div>
-                        <div class="col-10">
-                          Nama Barang
-                        </div>
-                      </div>
+              <div
+                v-for="(det, j) in pesan?.penerimaanrinci"
+                ref="refDetails"
+                :key="j"
+                class="row fit no-wrap items-center q-mb-xs"
+              >
+                <div class="deta">
+                  <div class="row">
+                    <div class="col-2">
+                      {{ j+1 }}
                     </div>
-                    <div class="deta text-weight-bold">
-                      Satuan
-                    </div>
-                    <div class="deta text-weight-bold">
-                      Kuantitas
-                    </div>
-                    <div class="deta text-weight-bold">
-                      Harga Pemesanan
-                    </div>
-                    <div class="deta text-weight-bold">
-                      Harga Kontrak
-                    </div>
-                    <div class="deta text-weight-bold">
-                      Diskon (%)
-                    </div>
-                    <div class="deta text-weight-bold">
-                      PPN (%)
-                    </div>
-                    <div class="deta text-weight-bold">
-                      Jumlah
+                    <div class="col-10">
+                      {{ det?.masterobat?.nama_obat }}
                     </div>
                   </div>
-                  <div
-                    v-for="(det, j) in item.details"
-                    ref="refDetails"
-                    :key="j"
-                    class="row fit no-wrap items-center q-mb-xs"
-                  >
-                    <div class="deta">
-                      <div class="row">
-                        <div class="col-2">
-                          {{ j+1 }}
-                        </div>
-                        <div class="col-10">
-                          {{ det.nama_barang }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="deta">
-                      {{ det.satuan_besar }}
-                    </div>
-                    <div class="deta">
-                      {{ det.qty }}
-                    </div>
-                    <div class="deta">
-                      {{ formatRpDouble(det.harga,2) }}
-                    </div>
-                    <div class="deta">
-                      <app-input
-                        ref="refHargaKontrak"
-                        v-model="det.harga_kontrak"
-                        outlined
-                        label="harga kontrak"
-                        dense
-                        type="number"
-                        :rules="[val=> val > 0 ||'Harus lebih besar dari 0']"
-                        @focus="assign(n,i,j)"
-                        @update:model-value="updateHargaKo($event,det)"
-                      />
-                    </div>
-                    <div class="deta">
-                      <app-input
-                        v-model="det.diskon"
-                        outlined
-                        label="diskon"
-                        dense
-                        type="number"
-                        @focus="assign(n,i,j)"
-                        @update:model-value="updateHargaDis($event,det)"
-                      />
-                    </div>
-                    <div class="deta">
-                      <app-input
-                        v-model="det.ppn"
-                        outlined
-                        label="PPN"
-                        dense
-                        type="number"
-                        @focus="assign(n,i,j)"
-                        @update:model-value="updateHargaPpn($event,det)"
-                      />
-                    </div>
-                    <div class="deta">
-                      <app-input
-                        v-model="det.sub_total"
-                        outlined
-                        label="Sub Total"
-                        dense
-                        type="number"
-                        @focus="assign(n,i,j)"
-                        @update:model-value="updateHargaJadi"
-                      />
-                      <!-- {{ formatRpDouble(det.harga_jadi,2) }} -->
-                    </div>
-                  </div>
-                  <div class="row fit no-wrap items-center q-mb-sm">
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold" />
-                    <div class="deta text-weight-bold">
-                      Total
-                    </div>
-                    <div class="deta text-weight-bold">
-                      {{ formatRpDouble(item.nilai_tagihan,2) }}
-                    </div>
-                  </div>
+                </div>
+                <div class="deta">
+                  {{ det?.masterobat?.satuan_b }}
+                </div>
+                <div class="deta">
+                  {{ det.jml_terima_b }}
+                </div>
+                <div class="deta">
+                  {{ formatRpDouble(det.harga,2) }}
+                </div>
+                <div class="deta">
+                  {{ det.diskon }} %
+                  <!-- <app-input
+                    v-model="det.diskon"
+                    outlined
+                    label="diskon"
+                    dense
+                    type="number"
+                    @focus="assign(n,i,j)"
+                    @update:model-value="updateHargaDis($event,det)"
+                  /> -->
+                </div>
+                <div class="deta">
+                  {{ det.ppn }} %
+                  <!-- <app-input
+                    v-model="det.ppn"
+                    outlined
+                    label="PPN"
+                    dense
+                    type="number"
+                    @focus="assign(n,i,j)"
+                    @update:model-value="updateHargaPpn($event,det)"
+                  /> -->
+                </div>
+                <div class="deta">
+                  {{ formatRpDouble(det?.harga_netto,2) }}
+                  <!-- <app-input
+                    v-model="det.sub_total"
+                    outlined
+                    label="Sub Total"
+                    dense
+                    type="number"
+                    @focus="assign(n,i,j)"
+                    @update:model-value="updateHargaJadi"
+                  /> -->
+                  <!-- {{ formatRpDouble(det.harga_jadi,2) }} -->
+                </div>
+                <!-- nilai retur -->
+                <div class="deta">
+                  {{ formatRpDouble(det?.nilai_retur,2) }}
+                </div>
+                <!-- nilai faktur dikurangi nilai retur -->
+                <div class="deta">
+                  {{ formatRpDouble(det?.subtotal,2) }}
+                </div>
+              </div>
+              <div class="row fit no-wrap items-center q-mb-sm">
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold" />
+                <div class="deta text-weight-bold">
+                  Total
+                </div>
+                <div class="deta text-weight-bold">
+                  {{ formatRpDouble(pesan?.jumlah_bast,2) }}
                 </div>
               </div>
             </div>
@@ -368,34 +336,39 @@ const store = useTransaksiBastFarmasiStore()
 store.getInitialData()
 
 function setTanggal(val) {
-  store.setForm('tanggal_bast', date.formatDate(val, 'YYYY-MM-DD'))
+  store.setForm('tgl_bast', date.formatDate(val, 'YYYY-MM-DD'))
 }
 function setTanggalDisp(val) {
   store.setForm('tanggal', val)
   console.log('form ', store.form)
 }
 
+// eslint-disable-next-line no-unused-vars
 function pesanClicked(val, i) {
   console.log('pesanan', val)
 }
 let indPem = 0
 let indPene = 0
 // let indDet = 0
+// eslint-disable-next-line no-unused-vars
 function assign(n, i, j) {
   indPem = n
   indPene = i
   // indDet = j
 }
+// eslint-disable-next-line no-unused-vars
 function updateHargaKo(evt, val) {
   const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
   val.harga_kontrak = value
   updateHarga(val)
 }
+// eslint-disable-next-line no-unused-vars
 function updateHargaDis(evt, val) {
   const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
   val.diskon = value
   updateHarga(val)
 }
+// eslint-disable-next-line no-unused-vars
 function updateHargaPpn(evt, val) {
   const value = !isNaN(evt) && evt !== '' ? parseFloat(evt) : 0
   val.ppn = value
@@ -420,11 +393,13 @@ function updateHarga(val) {
 
   store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
 }
+// eslint-disable-next-line no-unused-vars
 function updateHargaJadi(val) {
   // console.log(val)
   store.pemesanans[indPem].penerimaan[indPene].nilai_tagihan = store.pemesanans[indPem].penerimaan[indPene].details.map(x => x.sub_total).reduce((a, b) => a + b, 0)
 }
 
+// eslint-disable-next-line no-unused-vars
 function checkBox(val) {
   // console.log('cek bok', val)
 }
@@ -452,10 +427,11 @@ const refTaBast = ref(null)
 const refNoBast = ref(null)
 const refHargaKontrak = ref(null)
 const refPemesanans = ref(null)
+// eslint-disable-next-line no-unused-vars
 const refPenerimaans = ref(null)
 const refDetails = ref(null)
 function simpanBast() {
-  refHargaKontrak.value.forEach(kuylah => {
+  refHargaKontrak?.value?.forEach(kuylah => {
     console.log('harga Kontrak', kuylah.refInput.validate())
   })
   // console.log('harga Kontrak', refHargaKontrak.value[0].refInput)
@@ -488,7 +464,7 @@ function simpanBast() {
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/6);
+  width:calc(100vw/7);
   margin-right: .5em;
   overflow-wrap: anywhere;
 }
@@ -497,7 +473,7 @@ function simpanBast() {
   overflow-wrap: anywhere;
 }
 .deta{
-  width:calc(100vw/9);
+  width:calc(100vw/10);
   margin-right: .5em;
   overflow-wrap: anywhere;
 }

@@ -10,6 +10,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
     pemesanans: [],
     penerimaans: [],
     tampilPenerimaans: [],
+    newPenerimaans: [],
     pemesanan: {},
     penerimaan: {},
     form: {},
@@ -29,6 +30,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       this.pemesanan = {}
       this.penerimaans = []
       this.pemesanans = []
+      this.newPenerimaans = []
       this.tampilPenerimaans = []
       this.penerimaan = {}
       this.setForm('kdpbf', val)
@@ -39,6 +41,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
     },
     kontrakSelected(val) {
       this.pemesanans = []
+      this.newPenerimaans = []
       this.penerimaans = []
       this.tampilPenerimaans = []
       // console.log('kontrak selected', val)
@@ -111,8 +114,8 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
               })
             })
 
-            this.pemesanans = temp
-            console.log('pemesanan', this.pemesanans)
+            this.newPenerimaans = temp
+            console.log('pemesanan', this.newPenerimaans)
 
             resolve(resp)
           })
@@ -126,12 +129,13 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       console.log('simpan', this.form)
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/bast/', this.form)
+        api.post('v1/simrs/farmasinew/bast/simpan', this.form)
           .then(resp => {
             this.loading = false
             this.form = {}
             this.pemesanan = {}
             this.pemesanans = []
+            this.newPenerimaans = []
             this.penerimaans = []
             this.tampilPenerimaans = []
             this.penerimaan = {}
