@@ -20,20 +20,20 @@
     <div class="row items-center bg-grey-3">
       <q-btn-group outline>
         <q-btn
-          :outline="path !== 'bast'"
+          :outline="path !== 'bayar'"
           glossy
           push
           color="deep-orange"
-          label="BAST"
+          label="PEMBAYARAN"
           size="md"
-          @click="emits('ganti','bast')"
+          @click="emits('ganti','bayar')"
         />
         <q-btn
           :outline="path !== 'list'"
           glossy
           push
           color="green"
-          label="LIST BAST"
+          label="LIST PEMBAYARAN"
           size="md"
           @click="emits('ganti','list')"
         />
