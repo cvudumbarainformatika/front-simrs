@@ -147,14 +147,14 @@ const gudang = {
           path: '/gudang/farmasi/listkonsinyasi',
           component: () => import('pages/simrs/logistik/gudang/farmasi/listkonsinyasi/IndexPage.vue')
         },
-        {
-          path: '/gudang/farmasi/bast',
-          component: () => import('pages/simrs/logistik/gudang/farmasi/bast/IndexPage.vue')
-        },
-        {
-          path: '/gudang/farmasi/pembayaran',
-          component: () => import('pages/simrs/logistik/gudang/farmasi/pembayaran/IndexPage.vue')
-        },
+        // {
+        //   path: '/gudang/farmasi/bast',
+        //   component: () => import('pages/simrs/logistik/gudang/farmasi/bast/IndexPage.vue')
+        // },
+        // {
+        //   path: '/gudang/farmasi/pembayaran',
+        //   component: () => import('pages/simrs/logistik/gudang/farmasi/pembayaran/IndexPage.vue')
+        // },
         {
           path: '/gudang/farmasi/notfound',
           component: () => import('pages/MidlewareNotFound.vue')

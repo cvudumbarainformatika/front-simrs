@@ -42,11 +42,8 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       this.penerimaans = []
       this.tampilPenerimaans = []
       console.log('kontrak selected', val)
-      // const pes = this.pemesanans.filter(y => y.kontrak === val)
       const temp = val.split('SP')
-      // this.setParam('nomor', pes[0].nomor)
       this.setParam('kontrak', val)
-      // console.log('pemesanan temp', temp)
       this.getNoBast().then(data => {
         const anu = data > 0 ? '-' + data : ''
         if (temp.length > 1) {
@@ -54,11 +51,6 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
         } else {
           this.setForm('no_bast', val + ' (BAST)' + anu)
         }
-        // if (temp.length > 1) {
-        //   this.setForm('no_bast', temp[0] + 'BAST-' + temp[1] + anu)
-        // } else {
-        //   this.setForm('no_bast', pes[0].nomor + ' (BAST)' + anu)
-        // }
       })
 
       this.getDataPemesanan()
@@ -113,22 +105,6 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
           .catch(() => { this.loading = false })
       })
     },
-    // ambil data pemesanan
-    // KogetNomorKontrak() {
-    //   const param = { params: this.params }
-    //   this.loading = true
-    //   return new Promise(resolve => {
-    //     api.get('v1/transaksi/bast/nomor-pemesanan', param)
-    //       .then(resp => {
-    //         this.loading = false
-    //         // console.log('nomor pemesanan', resp.data)
-    //         this.pemesanans = resp.data
-    //         resolve(resp)
-    //       })
-    //       .catch(() => { this.loading = false })
-    //   })
-    // },
-    // ambil data pemesanan dan penerimaan
 
     getDataPemesanan() {
       const param = { params: this.params }
@@ -192,7 +168,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       console.log('simpan', this.form)
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/transaksi/bast/simpan-bast', this.form)
+        api.post('v1/transaksi/bast/', this.form)
           .then(resp => {
             this.loading = false
             this.form = {}

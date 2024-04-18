@@ -28,19 +28,23 @@ const ptk = {
             { path: '', redirect: '/ptk/farmasi/pemesanan/pesanan' },
             {
               path: '/ptk/farmasi/pemesanan/pesanan',
-              name: 'ptk.farmasi.pemesanan.pesanan',
+              // name: 'ptk.farmasi.pemesanan.pesanan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/ptk/farmasi/pemesanan/pemesanan/IndexPage.vue')
             },
             {
               path: '/ptk/farmasi/pemesanan/listpesanan',
-              name: 'ptk.farmasi.pemesanan.listpesanan',
+              // name: 'ptk.farmasi.pemesanan.listpesanan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/ptk/farmasi/pemesanan/listpesanan/IndexPage.vue')
             }
           ]
+        },
+        {
+          path: '/gudang/farmasi/bast',
+          component: () => import('pages/simrs/logistik/ptk/farmasi/bast/IndexPage.vue')
         }
       ]
     },

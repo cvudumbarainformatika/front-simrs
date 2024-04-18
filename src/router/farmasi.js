@@ -24,7 +24,10 @@ const farmasi = {
       name: 'farmasi.verif-rencana-pesanan',
       component: () => import('pages/simrs/farmasi/verifrencanapemesanan/IndexPage.vue')
     },
-
+    {
+      path: '/gudang/farmasi/pembayaran',
+      component: () => import('pages/simrs/farmasi/pembayaran/IndexPage.vue')
+    },
     {
       path: '/farmasi/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
