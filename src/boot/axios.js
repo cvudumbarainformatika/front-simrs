@@ -17,8 +17,8 @@ const SERV = 'http://192.168.101.80/api.laborat/public'
 // const SERV = 'http://localhost/api.laborat/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
 
-const WSHOST = '192.168.150.111'
-// const WSHOST = '192.168.101.80'
+// const WSHOST = '192.168.150.111'
+const WSHOST = '192.168.101.80'
 // const WSHOST = 'localhost'
 
 const WSPORT = 6003
