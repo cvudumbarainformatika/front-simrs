@@ -316,9 +316,9 @@
                 </div>
               </div>
             </div>
-            <div v-if="trm.details.length && trm.disp">
+            <div v-if="trm.penerimaanrinci.length && trm.disp">
               <div
-                v-for="(det,i) in trm.details"
+                v-for="(det,i) in trm.penerimaanrinci"
                 :key="i"
                 class="row no-wrap q-mb-xs anu"
               >
