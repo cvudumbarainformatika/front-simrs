@@ -168,7 +168,7 @@ function setSistembayar1(val) {
   if (store.form.sistembayar) { delete store.form.sistembayar }
   if (store.display.rs2) { delete store.display.rs2 }
   store.getSistemBayar2(val)
-  console.log('form', store.form)
+  // console.log('form', store.form)
 }
 function setSistembayar(val) {
   store.setForm('sistembayar', val)

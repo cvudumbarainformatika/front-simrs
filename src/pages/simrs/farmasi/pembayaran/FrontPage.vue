@@ -9,7 +9,8 @@
         v-if="!style.componentfull"
         :title="title"
         :subtitle="subtitle"
-        :path="page.path"
+        :path="menu.name"
+        @ganti="gantiHalaman"
       />
     </div>
     <q-card
@@ -22,25 +23,34 @@
         :thumb-style="thumbStyle"
         :bar-style="barStyle"
       >
-        <router-view v-slot="{ Component, route }">
-          <transition :name="route.meta.transition || 'fade'">
-            <component :is="Component" />
-          </transition>
-        </router-view>
+        <component :is="menu.comp" />
       </q-scroll-area>
     </q-card>
   </q-page>
 </template>
 <script setup>
 import PageHead from './PageHead.vue'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 
 const style = useStyledStore()
 
 const pageRef = ref()
 const h = ref(0)
+
+const menus = ref([
+  {
+    name: 'bayar',
+    label: 'Bast',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/PembayaranPage.vue')))
+  },
+  {
+    name: 'list',
+    label: 'List Bast',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/ListPembayaran.vue')))
+  }
+])
+const menu = ref(menus.value[0])
 
 const thumbStyle = ref({
   right: '0px',
@@ -56,35 +66,33 @@ const barStyle = ref({
   width: '5px',
   opacity: 0.2
 })
-const page = useRoute()
+
+function gantiHalaman(val) {
+  if (menu.value.name !== val) {
+    const anu = menus.value.find(a => a.name === val)
+    if (anu) menu.value = anu
+  }
+}
 const title = computed(() => {
-  if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
-    return 'LIST PEMESANAN'
-  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
-    return 'PENERIMAAN LANGSUNG'
-  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
-    return 'LIST PENERIMAAN'
-  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
-    return 'PEMFAKTURAN'
+  if (menu.value.name === 'bayar') {
+    return 'HALAMAN PEMBAYARAN'
+  } else if (menu.value.name === 'list') {
+    return 'LIST PEMBAYARAN'
   } else {
-    return 'Penerimaan'
+    return 'PEMBAYARAN'
   }
 })
 const subtitle = computed(() => {
-  if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
-    return 'Penerimaan Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
-    return 'Penerimaan Langsung Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
-    return 'List Penerimaan Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
-    return 'List Penerimaan Belum Ada Faktur'
+  if (menu.value.name === 'bayar') {
+    return 'Halaman Pembayaran'
+  } else if (menu.value.name === 'list') {
+    return 'Halaman List  Pembayaran'
   } else {
-    return 'Penerimaan Obat'
+    return 'Halaman Pembayaran'
   }
 })
+
 onMounted(() => {
-  console.log('page ', page.path)
   h.value = pageRef.value.$el.clientHeight
 })
 

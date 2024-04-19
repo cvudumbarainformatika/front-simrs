@@ -18,7 +18,7 @@
         <q-item class="bg-dark text-white">
           <q-item-section>
             <div class="text-weight-bold">
-              Nomor Pemesanan
+              Nomor Penerimaan
             </div>
           </q-item-section>
           <q-item-section>
@@ -28,7 +28,12 @@
           </q-item-section>
           <q-item-section>
             <div class="text-weight-bold">
-              Tanggal Pemesanan
+              Tanggal Penerimaan
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="text-weight-bold">
+              Jenis Surat
             </div>
           </q-item-section>
           <q-item-section>
@@ -46,7 +51,7 @@
         >
           <q-item-section>
             <div>
-              {{ item?.nopemesanan }}
+              {{ item?.nopenerimaan }}
             </div>
           </q-item-section>
           <q-item-section>
@@ -56,7 +61,12 @@
           </q-item-section>
           <q-item-section>
             <div class="text-cyan">
-              {{ dateFullFormat(item?.tgl_pemesanan) }}
+              {{ dateFullFormat(item?.tglpenerimaan) }}
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div class="">
+              {{ item?.jenissurat }}
             </div>
           </q-item-section>
           <q-item-section>
@@ -90,15 +100,15 @@
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
-import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
 import { defineAsyncComponent, watch } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { usePemfakturanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/pemfakturan'
 
 const style = useStyledStore()
-const store = usePenerimaanFarmasiStore()
+const store = usePemfakturanFarmasiStore()
 const HeaderComp = defineAsyncComponent(() => import('./comp/CompHeader.vue'))
-const DialogPenerimaan = defineAsyncComponent(() => import('./DialogPenerimaan.vue'))
+const DialogPenerimaan = defineAsyncComponent(() => import('./DialogFaktur.vue'))
 
 const apps = useAplikasiStore()
 store.setParam('gudang', apps?.user?.kdruangansim)

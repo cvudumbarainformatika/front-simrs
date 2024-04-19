@@ -29,6 +29,15 @@
           @click="goTo('/gudang/farmasi/penerimaan/penerimaan')"
         />
         <q-btn
+          :outline="path !== '/gudang/farmasi/penerimaan/pemfakturan'"
+          glossy
+          push
+          color="orange"
+          label="Pemfakturan"
+          size="md"
+          @click="goTo('/gudang/farmasi/penerimaan/pemfakturan')"
+        />
+        <q-btn
           :outline="path !== '/gudang/farmasi/penerimaan/penerimaanlangsung'"
           glossy
           push

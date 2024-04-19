@@ -99,30 +99,6 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       this.details = val?.rinci ?? []
       this.namaPenyedia = val?.pihakketiga
       console.log('pemesanan selected ', val)
-      // const pemesanan = this.pemesanans.filter(a => a.nopemesanan === val)
-      // if (pemesanan.length) {
-      //   this.items = pemesanan[0]
-      //   this.details = pemesanan[0].rinci
-      //   this.namaPenyedia = this.items.pihakketiga
-      //   console.log('tem ', this.items)
-      //   console.log('det ', this.details)
-      //   const terima = this.items.penerimaan ? this.items.penerimaan : []
-      //   const terRi = []
-      //   if (terima.length) {
-      //     terima.forEach(ter => {
-      //       const rinci = ter.penerimaanrinci ? ter.penerimaanrinci : []
-      //       if (rinci.length) {
-      //         const anu = rinci.map(a => {
-      //           const ai = {}
-      //           ai.jml_terima = parseFloat(a.jml_terima)
-      //           ai.kdobat = a.kdobat
-      //           return ai
-      //         })
-      //         terRi.push(anu)
-      //       }
-      //     })
-      //   }
-      //   console.log('terRi', terRi)
 
       //   this.metanirinci(terRi)
       if (this.namaPenyedia) {
