@@ -114,7 +114,8 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
                 det.adaPPN = false
                 if (parseFloat(det.ppn) > 0) det.adaPPN = true
                 det.checked = false
-                det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
+                const nilaiRetur = !parseFloat(det.nilai_retur) ? 0 : parseFloat(det.nilai_retur)
+                det.afterRetur = parseFloat(det.subtotal) - nilaiRetur
               })
               anu.subtotal_bast = anu.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
             })

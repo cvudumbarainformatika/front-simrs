@@ -595,7 +595,7 @@ import { formatRpDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const store = usePenerimaanFarmasiStore()
 
@@ -915,7 +915,23 @@ const gudang = computed(() => {
   }
   return gud
 })
-console.log('gudang', gudang.value)
+// console.log('gudang', gudang.value)
+onMounted(() => {
+  if (store.details.length) {
+    // console.log('detailnya', store.details)
+    const belumTsSmw = store.details.filter(a => parseFloat(a.jumlahdpesan) > parseFloat(a.jml_all_penerimaan))
+    if (belumTsSmw.length) {
+      belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
+      if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
+      if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
+      setTimeout(() => {
+        belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
+        if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
+        if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
+      }, 500)
+    }
+  }
+})
 // store.getInitialData()
 </script>
 <style lang="scss" scoped>
