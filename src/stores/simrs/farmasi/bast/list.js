@@ -50,7 +50,7 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
       this.loading = true
       const param = { params: this.param }
       return new Promise(resolve => {
-        api.get('v1/transaksi/bast/list-bast', param)
+        api.get('v1/simrs/farmasinew/bast/list-bast', param)
           .then(resp => {
             this.loading = false
             console.log('list bast', resp.data)
