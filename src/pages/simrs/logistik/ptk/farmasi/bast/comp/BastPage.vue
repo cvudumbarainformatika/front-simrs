@@ -410,16 +410,16 @@ function itemClicked(val, i) {
   const ind = findWithAttr(store.tampilPenerimaans, 'id', val.id)
   if (val.checked === true) {
     if (ind < 0) {
-      console.log('push')
+      // console.log('push')
       store.tampilPenerimaans.push(val)
     } else {
-      console.log('sama dengan')
+      // console.log('sama dengan')
       store.tampilPenerimaans[ind] = val
     }
   } else {
     if (ind >= 0) {
       store.tampilPenerimaans.splice(ind, 1)
-      console.log('slice', ind)
+      // console.log('slice', ind)
     }
   }
   store.form.jumlah_bast = 0
@@ -431,6 +431,9 @@ const refTaBast = ref(null)
 const refPemesanans = ref(null)
 const refDetails = ref(null)
 function simpanBast() {
+  store.newPenerimaans?.forEach(ter => {
+    ter.subtotal_retur = ter.penerimaanrinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
+  })
   const temp = store.newPenerimaans
   console.log('temp', temp)
   store.form.penerimaans = temp.filter(x => x !== false)
@@ -438,7 +441,7 @@ function simpanBast() {
   if (!store.form.penerimaans.length) notifErrVue('Belum ada Penerimaan dipilih')
   console.log('form', store.form)
   if (refTaBast.value.$refs.refInputDate.validate()) {
-    console.log('form', store.form)
+    // console.log('form', store.form)
     console.log('pemesanan', store.newPenerimaans)
     store.simpanBast().then(() => {
       refTaBast.value.$refs.refInputDate.resetValidation()

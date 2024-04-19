@@ -116,8 +116,10 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
                 det.checked = false
                 const nilaiRetur = !parseFloat(det.nilai_retur) ? 0 : parseFloat(det.nilai_retur)
                 det.afterRetur = parseFloat(det.subtotal) - nilaiRetur
+                det.nilai_retur = nilaiRetur
               })
               anu.subtotal_bast = anu.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
+              anu.subtotal_retur = anu.penerimaanrinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
             })
 
             this.newPenerimaans = temp
