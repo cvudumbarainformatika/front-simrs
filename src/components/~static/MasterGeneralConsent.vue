@@ -17,8 +17,68 @@
           <div class="q-mb-sm">
             Saya yang bertanda tangan dibawah ini :
           </div>
-          <div class="column">
-            <div class="row">
+          <table style="width: 100%;">
+            <tr>
+              <td width="20%">
+                Nama
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>  {{ pasien?.nama? pasien?.name:defaultForm }}</td>
+            </tr>
+            <tr>
+              <td width="20%">
+                Jenis Kelamin
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>  {{ pasien?.kelamin ? pasien?.kelamin:defaultForm }}</td>
+            </tr>
+            <tr>
+              <td width="20%">
+                Tanggal Lahir
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>  {{ pasien?.tgllahir? humanDate(pasien?.tgllahir):defaultForm }}</td>
+            </tr>
+            <tr>
+              <td width="20%">
+                Alamat
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>  {{ pasien?.alamat? pasien?.alamat:defaultForm }}</td>
+            </tr>
+            <tr>
+              <td width="20%">
+                No Telp / Hp
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>  {{ pasien?.nohp? pasien?.nohp:defaultForm }}</td>
+            </tr>
+            <tr>
+              <td width="20%">
+                Hubungan dg Pasien
+              </td>
+              <td width="1%">
+                :
+              </td>
+              <td>
+                {{ pasien?.generalcons?.hubunganpasien ?
+                  pasien?.generalcons?.hubunganpasien: store.form.hubunganpasien
+                }}
+              </td>
+            </tr>
+          </table>
+          <!-- <div class="column q-col-gutter-xs">
+            <div class="row no-wrap">
               <div class="col-2">
                 Nama
               </div>
@@ -46,7 +106,6 @@
 
             <div
               class="row no-wrap"
-              style="margin-top:-10px;"
             >
               <div class="col-2">
                 Tgl Lahir
@@ -96,7 +155,7 @@
                 : {{ pasien?.generalcons?.hubunganpasien? pasien?.generalcons?.hubunganpasien:defaultForm }}
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div>
           <div
@@ -207,9 +266,11 @@ import { ref, watch } from 'vue'
 import { jsPDF } from 'jspdf'
 // eslint-disable-next-line no-unused-vars
 import html2canvas from 'html2canvas'
+import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalconsent'
 const app = useAplikasiStore()
 
 const rePdfDoc = ref(null)
+const store = useGeneralConsentStore()
 
 const saveWork = () => {
   changeIsi('irja')
@@ -351,4 +412,11 @@ watch(() => isOk.value, (n, old) => {
 // .pt12 {
 //   font-size: 12pt !important;
 // }
+
+table {
+  width: 100%;
+  td {
+    vertical-align: top;
+  }
+}
 </style>

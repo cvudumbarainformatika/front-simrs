@@ -75,7 +75,20 @@ const menus = ref([
     label: 'Pediatri',
     icon: 'icon-my-stethoscope',
     comp: shallowRef(defineAsyncComponent(() => import('./compBayiAnak/PediatriPage.vue')))
-  }])
+  },
+  {
+    name: 'KandunganPage',
+    label: 'Kandungan / Kebidanan',
+    icon: 'icon-my-stethoscope',
+    comp: shallowRef(defineAsyncComponent(() => import('./compBayiAnak/KandunganPage.vue')))
+  },
+  {
+    name: 'SkriningKehamilanPage',
+    label: 'Skrining Kehamilan',
+    icon: 'icon-my-stethoscope',
+    comp: shallowRef(defineAsyncComponent(() => import('./compBayiAnak/SkriningKehamilanPage.vue')))
+  }
+])
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class="fit">
     <div class="row full-height">
-      <div class="col-8 full-height">
+      <div class="col-7 full-height">
         <q-form
           class="fit"
           @submit="onSubmit"
@@ -24,38 +24,36 @@
           </div>
         </q-form>
       </div>
-      <div class="col-4 full-height bg-grey-4">
+      <div class="col-5 full-height bg-grey-4">
         <div
-          v-if="!pasien?.pediatri?.length"
-          class="full-height column flex-center"
+          v-if="!pasien.kandungan.length"
+          class="column full-height flex-center"
         >
           <div>Belum Ada Data Tersimpan ... 📋</div>
         </div>
         <div
           v-else
-          class="full-height scroll"
+          class="full-height q-pa-sm scroll"
         >
-          <div class="q-pa-sm">
-            <ListsComp
-              :items="pasien?.pediatri"
-              @hapus="hapusItem"
-            />
-          </div>
+          <ListsComp
+            :items="pasien.kandungan"
+            @hapus="hapusItem"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
-import FormComp from './compPediatri/FormComp.vue'
-import ListsComp from './compPediatri/ListsComp.vue'
-import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
 import { onMounted } from 'vue'
-import { useQuasar } from 'quasar'
-const store = usePediatriStore()
-const $q = useQuasar()
+import FormComp from './compKandungan/FormComp.vue'
+import ListsComp from './compKandungan/ListsComp.vue'
 
+import { useKandunganStore } from 'src/stores/simrs/pelayanan/poli/kandungan'
+import { useQuasar } from 'quasar'
+
+const store = useKandunganStore()
+const $q = useQuasar()
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   pasien: {
@@ -69,7 +67,7 @@ onMounted(() => {
 })
 
 function onSubmit() {
-  store.saveData(props?.pasien)
+  store.saveData(props.pasien)
 }
 
 function hapusItem(item) {
@@ -87,4 +85,5 @@ function hapusItem(item) {
     // console.log('I am triggered on both OK and Cancel')
   })
 }
+
 </script>

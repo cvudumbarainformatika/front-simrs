@@ -6,6 +6,7 @@
     standout="bg-yellow-3"
     :class="`q-mb-xs ${classTambahan}`"
     :autofocus="autofocus"
+    :type="type"
   />
 </template>
 
@@ -22,6 +23,10 @@ defineProps({
   classTambahan: {
     type: String,
     default: ''
+  },
+  type: {
+    type: String,
+    default: 'text'
   }
 })
 </script>

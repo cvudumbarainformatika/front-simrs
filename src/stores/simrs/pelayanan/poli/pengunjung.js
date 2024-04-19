@@ -263,6 +263,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             findPasien[0].neonatusmedis = resp?.data?.neonatusmedis
             findPasien[0].neonatuskeperawatan = resp?.data?.neonatuskeperawatan
             findPasien[0].pediatri = resp?.data?.pediatri
+            findPasien[0].kandungan = resp?.data?.kandungan
           }
           this.loadingTerima = false
           this.noreg = null

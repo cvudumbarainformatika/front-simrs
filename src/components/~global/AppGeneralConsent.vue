@@ -29,7 +29,7 @@
           </q-btn>
         </q-bar>
       </div>
-      <q-card-section class="q-mt-xl">
+      <q-card-section class="q-mt-lg">
         <div class="text-center text-weight-bold text-subtitle2">
           PERSETUJUAN UMUM / GENERAL CONSENT RAWAT JALAN & IGD
         </div>
@@ -108,8 +108,22 @@
       </q-card-section>
       <q-separator />
 
-      <q-card-section class="q-pb-xl">
-        <div class="row q-px-xl q-col-gutter-xl">
+      <q-card-section>
+        <div class="column flex-center">
+          <q-checkbox
+            v-model="pernyataan"
+            label="Saya
+                    menjamin bahwa pasien sudah membaca dan menandatangani form consent
+                    pembukaan data dari SATUSEHAT"
+          />
+        </div>
+      </q-card-section>
+      <q-separator />
+
+      <q-card-section
+        class="q-pb-xl"
+      >
+        <div class="row q-px-md q-col-gutter-xl">
           <div class="col-6">
             <div class="text-center">
               <div>Petugas RS</div>
@@ -147,8 +161,11 @@
           </div>
         </div>
       </q-card-section>
-      <q-separator />
-      <q-card-section class="q-mb-xl text-center">
+      <q-card-section
+        class="q-mb-xl text-center"
+        style="margin-top: -20px;"
+      >
+        <q-separator class="q-mb-md" />
         <q-btn
           color="primary"
           label="Simpan General Consent Pasien"
@@ -165,6 +182,7 @@ import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalcons
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const maximizedToggle = ref(true)
+const pernyataan = ref(false)
 const app = useAplikasiStore()
 const emits = defineEmits(['close', 'openPreviewGc'])
 

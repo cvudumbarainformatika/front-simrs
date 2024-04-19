@@ -3,40 +3,42 @@
     persistent
     transition-show="slide-up"
     transition-hide="slide-down"
+    maximized
   >
     <q-card
       flat
-      style="min-width:90vw; "
     >
-      <q-bar class="bg-secondary">
-        <div>📝 Preview General Consent Pasien</div>
-        <q-space />
+      <div class="column fit">
+        <q-bar class="col-auto bg-secondary">
+          <div>📝 Preview General Consent Pasien</div>
+          <q-space />
 
-        <q-btn
-          dense
-          flat
-          icon="icon-mat-close"
-          @click="emits('close')"
-        >
-          <q-tooltip
-            class="bg-white text-primary"
+          <q-btn
+            dense
+            flat
+            icon="icon-mat-close"
+            @click="emits('close')"
           >
-            close
-          </q-tooltip>
-        </q-btn>
-      </q-bar>
+            <q-tooltip
+              class="bg-white text-primary"
+            >
+              close
+            </q-tooltip>
+          </q-btn>
+        </q-bar>
 
-      <q-card-section
-        style="max-height: 90vh"
-        class="scroll bg-grey-4"
-      >
-        <master-general-consent
-          :editable-master="false"
-          :isi-pasien="pasien"
-          :cetak="cetak"
-        />
+        <q-card-section
+          style="max-height: 100vh"
+          class="col full-height scroll bg-grey-4"
+        >
+          <master-general-consent
+            :editable-master="false"
+            :isi-pasien="pasien"
+            :cetak="cetak"
+          />
         <!-- </div> -->
-      </q-card-section>
+        </q-card-section>
+      </div>
     </q-card>
   </q-dialog>
 </template>
@@ -53,4 +55,5 @@ defineProps({
   }
 })
 const emits = defineEmits(['close'])
+
 </script>

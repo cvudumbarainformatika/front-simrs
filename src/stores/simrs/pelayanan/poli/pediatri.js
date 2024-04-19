@@ -105,22 +105,22 @@ export const usePediatriStore = defineStore('pediatri-poli', {
     },
 
     deleteData(pasien, id) {
-      // const payload = { id }
-      // return new Promise((resolve, reject) => {
-      //   api.post('v1/simrs/pelayanan/neonatuskeperawatan/deletedata', payload)
-      //     .then((resp) => {
-      //       // console.log('del', resp)
-      //       if (resp.status === 200) {
-      //         const storePasien = usePengunjungPoliStore()
-      //         storePasien.hapusDataNeonatusKeperawatan(pasien, id)
-      //         notifSuccess(resp)
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.log(err)
-      //       reject(err)
-      //     })
-      // })
+      const payload = { id }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/pediatri/deletedata', payload)
+          .then((resp) => {
+            // console.log('del', resp)
+            if (resp.status === 200) {
+              const storePasien = usePengunjungPoliStore()
+              storePasien.hapusDataInjectan(pasien, id, 'pediatri')
+              notifSuccess(resp)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
     },
 
     previewData(item) {
