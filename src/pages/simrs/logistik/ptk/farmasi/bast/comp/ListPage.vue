@@ -206,7 +206,7 @@
         </div>
       </template>
       <template #cell-total="{ row }">
-        <div class="text-right">
+        <div class="text-right text-weight-bold">
           {{ formatRp( row.totalSemua) }}
         </div>
         <div
@@ -245,36 +245,36 @@
       </template>
       <template #cell-oleh="{ row }">
         <div
-          v-if="row.dibuat"
+          v-if="row.terima"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
           <div class="q-mr-xs">
-            Penerimaan
+            Diterima
           </div>
           <div class="box2 text-right text-weight-bold text-primary">
-            {{ row.dibuat.nama }}
+            {{ row.terima.nama }}
           </div>
         </div>
         <div
-          v-if="row.dibast"
+          v-if="row.bast"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
           <div class="q-mr-xs">
             BAST
           </div>
           <div class="box2 text-right text-weight-bold text-deep-orange">
-            {{ row.dibast.nama }}
+            {{ row.bast.nama }}
           </div>
         </div>
         <div
-          v-if="row.dibayar"
+          v-if="row.bayar"
           class="row no-wrap justify-between items-center q-mb-xs"
         >
           <div class="q-mr-xs">
             Pembayaran
           </div>
           <div class="box text-right text-weight-bold text-green">
-            {{ row.dibayar.nama }}
+            {{ row.bayar.nama }}
           </div>
         </div>
       </template>
@@ -295,7 +295,7 @@
                     No Penerimaan
                   </div>
                   <div class="text-weight-bold">
-                    {{ trm.no_penerimaan }}
+                    {{ trm.nopenerimaan }}
                   </div>
                 </div>
                 <div class="row no-wrap q-mt-xs">
@@ -303,15 +303,33 @@
                     Tanggal Penerimaan
                   </div>
                   <div class="text-weight-bold">
-                    {{ dateFullFormat(trm.tanggal) }}
+                    {{ dateFullFormat(trm.tglpenerimaan) }}
                   </div>
                 </div>
                 <div class="row no-wrap q-mt-xs">
                   <div class="col-2">
-                    Subtotal
+                    Subtotal Penerimaan
+                  </div>
+                  <div
+                    class="text-weight-bold"
+                  >
+                    {{ formatRp(trm?.subtotal_terima) }}
+                  </div>
+                </div>
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    Nilai Retur
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp(trm.total) }}
+                    {{ formatRp(trm?.nilai_retur) }}
+                  </div>
+                </div>
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    Subtotal Setelah Retur
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ formatRp(trm?.subtotal_bast) }}
                   </div>
                 </div>
               </div>

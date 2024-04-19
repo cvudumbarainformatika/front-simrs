@@ -56,6 +56,15 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
             console.log('list bast', resp.data)
             this.items = resp.data.data
             this.meta = resp.data.meta
+            this.items.forEach(item => {
+              item?.penerimaan?.forEach(trm => {
+                trm.subtotal_bast = 0
+                trm.subtotal_terima = 0
+                if (trm?.jenissurat === 'Faktur') trm.subtotal_terima = trm.total_faktur_pbf
+                else trm.subtotal_terima = trm?.faktur?.total_faktur ?? 0
+                trm.subtotal_bast = parseFloat(trm.subtotal_terima) - parseFloat(trm?.nilai_retur)
+              })
+            })
             resolve(resp)
           })
           .catch(() => { this.loading = false })
