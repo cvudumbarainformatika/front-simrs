@@ -207,6 +207,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/SharingBpjsPage.vue')))
   },
   {
+    name: 'upload-dok-page',
+    label: 'Upload Dokumen',
+    icon: 'icon-mat-cloud_upload',
+    comp: shallowRef(defineAsyncComponent(() => import('./comptindakan/pagemenu/UploadDokPage.vue')))
+  },
+  {
     name: 'penerbitan-surat-page',
     label: 'Dokumen',
     icon: 'icon-mat-email',
