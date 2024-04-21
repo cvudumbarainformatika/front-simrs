@@ -30,6 +30,10 @@
       </q-card-actions>
     </q-card>
   </div>
+  <gelang-pasien-page
+    v-model="cetakdialog"
+    :patien="patien"
+  />
 </template>
 <script setup>
 import DataPasien from 'src/pages/simrs/pendaftaran/form/pasien/DataPasien.vue'
@@ -39,6 +43,9 @@ import { usePendaftaranPasienStore } from 'src/stores/simrs/pendaftaran/form/pas
 import { useRegistrasiPasienIgdStore } from 'src/stores/simrs/pendaftaran/form/igd/registrasi'
 import { Dialog } from 'quasar'
 import { useStyledStore } from 'src/stores/app/styled'
+import GelangPasienPage from '../../cetak/GelangPasienPage.vue'
+
+const cetakdialog = ref(false)
 const pasien = usePendaftaranPasienStore()
 const register = useRegistrasiPasienIgdStore()
 const pelayanan = 'igd'
@@ -65,13 +72,20 @@ function simpanData(val) {
     }
     console.log('form registrasi ', register.form)
     register.simpanRegistrasi().then(resp => {
-      console.log(resp)
-      // dialogCetak()
+      // console.log(dataPasien)
+      // cetakgelang(dataPasien.form)
     })
   }
   // console.log('simpan value', refDataPasien.value)
   // console.log('form pasien ', pasien.form)
 }
+const patien = ref(null)
+
+// function cetakgelang(val) {
+//   patien.value = val
+//   console.log('wewx', val)
+//   cetakdialog.value = true
+// }
 // function dialogCetak() {
 //   Dialog.create({
 //     title: 'Konfirmasi.',
