@@ -65,7 +65,26 @@
               </div>
             </div>
           </q-item-section>
-          <q-item-section side>
+          <q-item-section
+            v-if="item?.flagpelayanan === ''"
+            side
+          >
+            <q-btn
+              dense
+              size="sm"
+              no-caps
+              color="red"
+              label="TERIMA"
+              class="q-mb-sm"
+              icon-right="all_match"
+              style="min-width: 120px;"
+              @click="bukaLayanan(item)"
+            />
+          </q-item-section>
+          <q-item-section
+            v-else
+            side
+          >
             <q-btn
               dense
               outline

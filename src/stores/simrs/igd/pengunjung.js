@@ -13,9 +13,10 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       page: 1,
       per_page: 10,
       to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date())
+      from: dateDbFormat(new Date()),
+      status: ''
     },
-    periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini'],
+    periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini', 'Tahun Ini'],
     periode: 'Hari Ini',
     pageLayanan: false
   }),
@@ -80,7 +81,21 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.params.from = from
       this.params.status = status
       console.log('periodik', to)
+      this.getData()
+    },
+    setQ(payload) {
+      this.params.page = 1
+      this.params.q = payload
       this.getLists()
+    },
+    setPerPage(payload) {
+      console.log('sasa', payload)
+      this.params.page = 1
+      this.params.per_page = payload
+      this.getLists()
+    },
+    setFilters() {
+      this.filters = !this.filters
     }
   }
 })

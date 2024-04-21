@@ -113,27 +113,27 @@ function gantiStatus(val) {
 
 function hariIni() {
   const cDate = new Date()
-  store.setParams('to', dateDbFormat(cDate))
-  store.setParams('from', dateDbFormat(cDate))
-  store.getData()
+  to.value = dateDbFormat(cDate)
+  from.value = dateDbFormat(cDate)
+  // store.getData()
 }
 function mingguIni() {
   const curr = new Date()
   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
 
-  store.setParams('from', dateDbFormat(firstday))
-  store.setParams('to', dateDbFormat(lastday))
-  store.getData()
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+  // store.getData()
 }
 function bulanIni() {
   const curr = new Date()
   const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
   const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
 
-  store.setParams('from', dateDbFormat(firstday))
-  store.setParams('to', dateDbFormat(lastday))
-  store.getData()
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+  // store.getData()
 }
 
 function tahunIni() {
@@ -141,9 +141,9 @@ function tahunIni() {
   const firstday = date.formatDate(curr, 'YYYY') + '-01' + '-01'
   const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
 
-  store.setParams('from', dateDbFormat(firstday))
-  store.setParams('to', dateDbFormat(lastday))
-  store.getData()
+  to.value = dateDbFormat(firstday)
+  from.value = dateDbFormat(lastday)
+  // store.getData()
 }
 
 function gantiTxt() {
@@ -151,6 +151,6 @@ function gantiTxt() {
 }
 
 onMounted(() => {
-  hariIni()
+  store.getData()
 })
 </script>

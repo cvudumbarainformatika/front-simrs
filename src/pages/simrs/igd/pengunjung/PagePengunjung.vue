@@ -5,9 +5,12 @@
   >
     <div class="header bg-primary text-white">
       <header-page
-        @set-tanggal="(val)=>store.setDate(val)"
+        @fullscreen="style.setComponentFull"
         @set-periode="(val)=>store.setPeriodik(val)"
-        @refresh="store.getLists"
+        @set-search="store.setQ"
+        @set-row="store.setPerPage"
+        @refresh="store.getData"
+        @filter="store.setFilters"
       />
     </div>
 
