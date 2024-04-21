@@ -207,7 +207,7 @@
       </template>
       <template #cell-total="{ row }">
         <div class="text-right text-weight-bold">
-          {{ formatRp( row.totalSemua) }}
+          {{ formatRpDouble( row.totalSemua,2) }}
         </div>
         <div
           v-if="row.total"
@@ -217,7 +217,7 @@
             Total
           </div>
           <div class="text-weight-bold text-primary">
-            {{ formatRp( row.total) }}
+            {{ formatRpDouble( row.total,2) }}
           </div>
         </div>
         <div
@@ -228,7 +228,7 @@
             Tagihan
           </div>
           <div class="text-weight-bold text-deep-orange">
-            {{ formatRp( row.nilai_tagihan) }}
+            {{ formatRpDouble( row.nilai_tagihan,2) }}
           </div>
         </div>
         <div
@@ -239,7 +239,7 @@
             Pembayaran
           </div>
           <div class="text-weight-bold text-green">
-            {{ formatRp( row.nilai_pembayaran) }}
+            {{ formatRpDouble( row.nilai_pembayaran,2) }}
           </div>
         </div>
       </template>
@@ -313,7 +313,7 @@
                   <div
                     class="text-weight-bold"
                   >
-                    {{ formatRp(trm?.subtotal_terima) }}
+                    {{ formatRpDouble(trm?.subtotal_terima,2) }}
                   </div>
                 </div>
                 <div class="row no-wrap q-mt-xs">
@@ -321,7 +321,7 @@
                     Nilai Retur
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp(trm?.nilai_retur) }}
+                    {{ formatRpDouble(trm?.nilai_retur,2) }}
                   </div>
                 </div>
                 <div class="row no-wrap q-mt-xs">
@@ -329,7 +329,7 @@
                     Subtotal Setelah Retur
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp(trm?.subtotal_bast) }}
+                    {{ formatRpDouble(trm?.subtotal_bast,2) }}
                   </div>
                 </div>
               </div>
@@ -438,7 +438,7 @@
                       Harga
                     </div>
                     <div class="text-weight-bold">
-                      {{ formatRp(det.harga) }}
+                      {{ formatRpDouble(det.harga,2) }}
                     </div>
                   </div>
                   <div class="row no-wrap justify-between items-center q-mt-xs anudua">
@@ -466,7 +466,7 @@
                       Harga Kontrak
                     </div>
                     <div class="text-weight-bold">
-                      {{ formatRp(det.harga_kontrak) }}
+                      {{ formatRpDouble(det.harga_kontrak,2) }}
                     </div>
                   </div>
                   <div class="row no-wrap justify-between items-center q-mt-xs anudua">
@@ -474,7 +474,7 @@
                       Harga Jadi
                     </div>
                     <div class="text-weight-bold text-right">
-                      {{ formatRp(det.harga_jadi) }}
+                      {{ formatRpDouble(det.harga_jadi,2) }}
                     </div>
                   </div>
                   <div
@@ -484,7 +484,7 @@
                       Subtotal
                     </div>
                     <div class="text-weight-bold text-right">
-                      {{ formatRp(det.sub_total) }}
+                      {{ formatRpDouble(det.sub_total,2) }}
                     </div>
                   </div>
                 </div>
@@ -497,7 +497,7 @@
   </div>
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { useListBastPenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/bast/list'
 
 const store = useListBastPenerimaanFarmasiStore()
