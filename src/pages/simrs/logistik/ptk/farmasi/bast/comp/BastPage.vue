@@ -78,7 +78,7 @@
                   label="Tanggal BAST"
                   outlined
                   @set-display="setTanggalDisp"
-                  @set-model="setTanggal"
+                  @db-model="setTanggal"
                 />
               </div>
             </div>

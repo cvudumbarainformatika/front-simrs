@@ -35,10 +35,10 @@
         </div>
         <div class="col-9">
           <app-input
-            ref="refNoBast"
             v-model="store.form.nopemesanan"
             label="nomor Pemesanan"
             outlined
+            valid
             readonly
           />
         </div>
@@ -75,7 +75,7 @@
             label="Tanggal Pembayaran"
             outlined
             @set-display="setTanggalByrDisp"
-            @set-model="setTanggalByr"
+            @db-model="setTanggalByr"
           />
         </div>
       </div>
@@ -111,9 +111,36 @@
             label="Tanggal Pencairan"
             outlined
             @set-display="setTanggalCairDisp"
-            @set-model="setTanggalCair"
+            @db-model="setTanggalCair"
           />
         </div>
+      </div>
+      <!-- jumlah pembayaran -->
+      <div class="row q-col-gutter-sm items-center q-mb-sm">
+        <div class="col-2">
+          Jumlah Pembayaran
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          <app-input
+            ref="refJmlBayar"
+            v-model="store.form.total_pembayaran"
+            label="jumlah pembayaran"
+            outlined
+            @update:model-value="setJmBayar($event)"
+          />
+        </div>
+      </div>
+      <!-- tombol simpan -->
+      <div class="row items-center q-my-sm justify-end">
+        <app-btn
+          label="Simpan Pembayaran"
+          :disable=" store.loading || !store.form.nobast "
+          :loading="store.loading"
+          @click="simpanPembayaran"
+        />
       </div>
     </div>
     <div class="bg-grey q-pa-sm text-white f-16 q-mb-md">
@@ -228,6 +255,7 @@
 </template>
 <script setup>
 import { formatRpDouble } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useFarmasiPembayaranPenerimaanStore } from 'src/stores/simrs/farmasi/pembayaran/pembayaran'
 import { onBeforeMount, ref } from 'vue'
 const store = useFarmasiPembayaranPenerimaanStore()
@@ -236,11 +264,13 @@ const refNoKwitansi = ref(null)
 const refTglBayar = ref(null)
 const refNpd = ref(null)
 const refTglCair = ref(null)
+const refJmlBayar = ref(null)
 
 function setTanggalByrDisp(val) {
   store.setForm('tanggalByr', val)
 }
 function setTanggalByr(val) {
+  console.log('tgl_pembayaran', val)
   store.setForm('tgl_pembayaran', val)
 }
 function setTanggalCairDisp(val) {
@@ -248,6 +278,41 @@ function setTanggalCairDisp(val) {
 }
 function setTanggalCair(val) {
   store.setForm('tgl_pencairan_npk', val)
+}
+function setJmBayar(evt) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  store.setForm('total_pembayaran', nilai)
+}
+function resetValidation() {
+  refTglBayar.value.$refs.refInputDate.resetValidation()
+  refTglCair.value.$refs.refInputDate.resetValidation()
+
+  refNoKwitansi.value.$refs.refInput.resetValidation()
+  refNpd.value.$refs.refInput.resetValidation()
+  refJmlBayar.value.$refs.refInput.resetValidation()
+}
+function validate() {
+  console.log(refNoKwitansi.value.$refs.refInput)
+  console.log(refTglBayar.value.$refs.refInputDate)
+  const tglByr = refTglBayar.value.$refs.refInputDate.validate()
+  const tglCair = refTglCair.value.$refs.refInputDate.validate()
+
+  const noKwitansi = refNoKwitansi.value.$refs.refInput.validate()
+  const noNpd = refNpd.value.$refs.refInput.validate()
+  const noJmlBayar = refJmlBayar.value.$refs.refInput.validate()
+  if (tglByr && tglCair && noKwitansi && noNpd && noJmlBayar) return true
+  else return false
+}
+function simpanPembayaran() {
+  if (!validate()) return notifErrVue('Periksa Kembali Input Anda')
+  store.setForm('penerimaans', store.penerimaans)
+  console.log(store.form)
+  store.simpanPembayaran().then(() => {
+    resetValidation()
+  })
 }
 onBeforeMount(() => {
   store.getInitialData()

@@ -26,7 +26,7 @@
         <div>Penyedia</div>
       </template>
       <template #col-tanggal>
-        <div>Tanggal BAST</div>
+        <div>Tanggal Pembayaran</div>
       </template>
       <template #col-total>
         <div>Total</div>
@@ -62,7 +62,7 @@
           class="row no-wrap justify-between items-center q-mb-xs"
         >
           <div class="q-mr-xs text-teal">
-            BAST
+            Kwitansi
           </div>
           <div class="box text-right">
             {{ row.no_bast }}
@@ -330,6 +330,14 @@
                   </div>
                   <div class="text-weight-bold">
                     {{ formatRp(trm?.subtotal_bast) }}
+                  </div>
+                </div>
+                <div class="row no-wrap q-mt-xs">
+                  <div class="col-2">
+                    Nilai Tagihan
+                  </div>
+                  <div class="text-weight-bold">
+                    {{ formatRp(trm?.nilai_pembayaran) }}
                   </div>
                 </div>
               </div>

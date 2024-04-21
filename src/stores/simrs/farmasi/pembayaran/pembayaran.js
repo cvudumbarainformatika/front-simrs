@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useFarmasiPembayaranPenerimaanStore = defineStore('farmasi_pembayaran_penerimaan', {
   state: () => ({
@@ -20,6 +21,12 @@ export const useFarmasiPembayaranPenerimaanStore = defineStore('farmasi_pembayar
     },
 
     bastSelected(val) {
+      console.log('bast selected', val)
+      if (val === null) {
+        this.form = {}
+        this.penerimaans = []
+        return
+      }
       this.setParams('nobast', val)
       this.ambilBast()
     },
@@ -49,6 +56,7 @@ export const useFarmasiPembayaranPenerimaanStore = defineStore('farmasi_pembayar
           // nilia_penerimaan, nilai_tagihan, total pembayaran
           if (this.penerimaans?.length) {
             this.setForm('total_pembayaran', this?.penerimaans[0].jumlah_bast)
+            this.setForm('nopemesanan', this?.penerimaans[0].nopemesanan)
             this.penerimaans?.forEach(trm => {
               trm.nilai_tagihan = 0
               trm.nilai_pembayaran = 0
@@ -57,7 +65,7 @@ export const useFarmasiPembayaranPenerimaanStore = defineStore('farmasi_pembayar
               const tagihan = trm?.penerimaanrinci?.map(c => parseFloat(c.subtotal)).reduce((a, b) => a + b, 0)
               trm.nilai_tagihan = (tagihan - trm.nilai_retur)
               trm.nilai_pembayaran = trm.nilai_tagihan
-              console.log('foreach', trm.nilai_pembayaran)
+              // console.log('foreach', trm.nilai_pembayaran)
             })
           }
         })
@@ -65,6 +73,21 @@ export const useFarmasiPembayaranPenerimaanStore = defineStore('farmasi_pembayar
           this.loadingAmbil = false
         })
     },
-    simpanPembayaran() {}
+    simpanPembayaran() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/pembayaran/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan', resp?.data)
+            notifSuccess(resp)
+            this.form = {}
+            this.penerimaans = []
+            this.cariBast()
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    }
   }
 })
