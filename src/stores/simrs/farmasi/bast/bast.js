@@ -75,7 +75,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
     getPerusahaan() {
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/bast/perusahaan')
+        api.get('v1/simrs/penunjang/farmasinew/bast/perusahaan')
           .then(resp => {
             // console.log('resp perusahaan', resp.data)
             this.loading = false
@@ -90,7 +90,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       const param = { params: this.params }
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/bast/pemesanan', param)
+        api.get('v1/simrs/penunjang/farmasinew/bast/pemesanan', param)
           .then(resp => {
             this.loading = false
             this.kontraks = resp.data
@@ -104,7 +104,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       const param = { params: this.params }
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/bast/penerimaan', param)
+        api.get('v1/simrs/penunjang/farmasinew/bast/penerimaan', param)
           .then(resp => {
             this.loading = false
             const temp = resp.data
@@ -138,7 +138,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       console.log('simpan', this.form)
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/bast/simpan', this.form)
+        api.post('v1/simrs/penunjang/farmasinew/bast/simpan', this.form)
           .then(resp => {
             this.loading = false
             notifSuccess(resp)

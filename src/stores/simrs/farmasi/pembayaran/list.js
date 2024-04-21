@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 
-export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerimaan_farmasi', {
+export const useListPembayaranPenerimaanFarmasiStore = defineStore('list_pembayaran_penerimaan_farmasi', {
   state: () => ({
     loading: false,
     items: [],
@@ -50,7 +50,7 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
       this.loading = true
       const param = { params: this.param }
       return new Promise(resolve => {
-        api.get('v1/simrs/penunjang/farmasinew/bast/list-bast', param)
+        api.get('v1/simrs/penunjang/farmasinew/pembayaran/list-pembayaran', param)
           .then(resp => {
             this.loading = false
             console.log('list bast', resp.data)
