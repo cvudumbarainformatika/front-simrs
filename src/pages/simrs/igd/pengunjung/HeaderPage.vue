@@ -33,6 +33,20 @@
         style="min-width: 150px;"
         @update:model-value="gantiPeriode"
       />
+      <q-select
+        v-model="txt"
+        dense
+        outlined
+        dark
+        color="white"
+        :options="txts"
+        label="status pasien"
+        class="q-ml-sm"
+        emit-value
+        map-options
+        style="min-width: 150px;"
+        @update:model-value="gantiTxt"
+      />
     </div>
     <div>
       <q-btn
@@ -58,16 +72,45 @@
 <script setup>
 import { date } from 'quasar'
 import { dateDbFormat } from 'src/modules/formatter'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 const store = usePengunjungIgdStore()
+const txt = ref('BELUM TERLAYANI')
+const txts = ref(['SEMUA', 'BELUM TERLAYANI', 'MASIH DILAYANI', 'SUDAH TERLAYANI'])
+const periode = ref('Hari Ini')
+const to = ref(dateDbFormat(new Date()))
+const from = ref(dateDbFormat(new Date()))
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'setPeriode', 'refresh', 'filter'])
 
 function gantiPeriode(val) {
   console.log('val', val)
   if (val === 'Hari Ini') hariIni()
   if (val === 'Minggu Ini') mingguIni()
   if (val === 'Bulan Ini') bulanIni()
+  if (val === 'Tahun Ini') tahunIni()
+
+  console.log('asasa', txt.value)
+  console.log(from.value)
+  const per = {
+    to: to.value,
+    from: from.value,
+    status: gantiStatus(txt.value)
+  }
+  emits('setPeriode', per)
 }
+
+function gantiStatus(val) {
+  if (val === 'BELUM TERLAYANI') {
+    return ''
+  } else if (val === 'SUDAH TERLAYANI') {
+    return '1'
+  } else if (val === 'MASIH DILAYANI') {
+    return '2'
+  } else {
+    return 'all'
+  }
+}
+
 function hariIni() {
   const cDate = new Date()
   store.setParams('to', dateDbFormat(cDate))
@@ -92,6 +135,21 @@ function bulanIni() {
   store.setParams('to', dateDbFormat(lastday))
   store.getData()
 }
+
+function tahunIni() {
+  const curr = new Date()
+  const firstday = date.formatDate(curr, 'YYYY') + '-01' + '-01'
+  const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'
+
+  store.setParams('from', dateDbFormat(firstday))
+  store.setParams('to', dateDbFormat(lastday))
+  store.getData()
+}
+
+function gantiTxt() {
+  gantiPeriode(periode.value)
+}
+
 onMounted(() => {
   hariIni()
 })

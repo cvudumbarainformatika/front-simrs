@@ -4,7 +4,11 @@
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs'"
   >
     <div class="header bg-primary text-white">
-      <header-page />
+      <header-page
+        @set-tanggal="(val)=>store.setDate(val)"
+        @set-periode="(val)=>store.setPeriodik(val)"
+        @refresh="store.getLists"
+      />
     </div>
 
     <q-card

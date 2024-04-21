@@ -19,18 +19,37 @@
           </q-item-section>
 
           <q-item-section class="q-col-gutter-xs">
-            <div><b>{{ item?.nama }}</b></div>
-            <div>Norm|Reg : <span class="text-primary">{{ item?.norm }}</span> | <span class="text-orange">{{ item.noreg }}</span></div>
-            <div>Usia : {{ item?.usia }} | <em class="text-grey">{{ item.kelamin }}</em></div>
-            <div class="f-10">
-              {{ item?.alamat }}
-            </div>
+            <q-item-label>
+              <span class="text-weight-bold">{{ item.nama }}</span> | <span class="text-primary text-weight-bold">{{ item.norm }}</span>
+            </q-item-label>
+            <q-item-label>
+              <span class="text-weight-bold">{{ item.noreg }} </span> | <span v-if="item?.noka"> Noka : </span> <span class="text-cyan text-weight-bold">{{ item?.noka ?? '-' }}</span>
+            </q-item-label>
+            <q-item-label>
+              NIK : <span class="text-negative text-weight-bold">{{ item?.nktp ?? '-' }}</span> | Telp : <span class="text-teal text-weight-bold"> {{ item?.nohp ?? '-' }}</span>
+            </q-item-label>
+            <q-item-label caption>
+              USIA : <span class="text-weight-bold">{{ item.usia }}</span>  | Kelamin : <span class="text-weight-bold">{{ item.kelamin }}</span>
+            </q-item-label>
+            <q-item-label>
+              <span class="text-grey">alamat :</span> {{ item?.alamat }}
+            </q-item-label>
           </q-item-section>
+          <q-separator
+            vertical
+            class="q-mx-md"
+          />
           <q-item-section class="q-col-gutter-xs">
-            <div class="text-pink">
-              DPJP : <b>{{ item?.dokter ?? '-' }}</b>
-            </div>
-            <div>Penjamin : <span class="text-primary">{{ item?.sistembayar }}</span></div>
+            <q-item-label>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span>
+            </q-item-label>
+            <q-item-label>
+              RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
+            </q-item-label>
+            <q-item-label>
+              Tanggal : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? dateFullFormat(item.tgl_kunjungan) : '-' }}</i>  | Jam : <i class="text-weight-bold text-negative">{{ item.tgl_kunjungan? formatJam(item.tgl_kunjungan) : '-' }}</i>
+            </q-item-label>
+            <div>Penjamin : <span class="text-primary text-weight-bold">{{ item?.sistembayar }}</span></div>
             <div class="text-primary">
               <q-badge
                 v-if="item?.sep"
@@ -74,6 +93,7 @@
 <script setup>
 import { defineAsyncComponent, ref } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
+import { dateFullFormat, formatJam } from 'src/modules/formatter'
 const store = usePengunjungIgdStore()
 
 const PageLayananIgd = defineAsyncComponent(() => import('src/pages/simrs/igd/layanan/PageLayananIgd.vue'))
