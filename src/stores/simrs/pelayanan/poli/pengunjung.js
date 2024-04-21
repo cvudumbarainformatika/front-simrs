@@ -264,6 +264,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             findPasien[0].neonatuskeperawatan = resp?.data?.neonatuskeperawatan
             findPasien[0].pediatri = resp?.data?.pediatri
             findPasien[0].kandungan = resp?.data?.kandungan
+            findPasien[0].dokumenluar = resp?.data?.dokumenluar
           }
           this.loadingTerima = false
           this.noreg = null
@@ -318,7 +319,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
       })
     },
 
-    injectDataPasien(pasien, val, kode) {
+    injectDataPasien(pasien, val, kode, arr) {
       const findPasien = this.items.filter(x => x === pasien)
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
@@ -327,11 +328,18 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         // console.log('inject target pasien', target)
         // console.log('inject kode pasien', kode)
         // console.log('inject isi pasien', val)
+
         if (target) {
           Object.assign(target, val)
         } else {
           if (kode === 'diagnosa') {
             data[kode]?.push(val)
+          } else if (kode === 'dokumenluar') {
+            const trg = data[kode]
+            if (trg) {
+              data[kode] = []
+              data[kode] = val
+            }
           } else {
             data[kode]?.splice(0, 0, val)
           }

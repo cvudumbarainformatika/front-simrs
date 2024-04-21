@@ -40,7 +40,7 @@
       </div>
       <q-separator dark />
       <div
-        style="height: 65px;"
+        style="height: 35px;"
         class="column flex-center text-white"
         :class="minus ? 'bg-negative' : 'bg-primary'"
       >
