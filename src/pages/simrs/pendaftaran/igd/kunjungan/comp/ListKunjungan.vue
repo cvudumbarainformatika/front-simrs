@@ -254,6 +254,7 @@ import { useListKunjunganIgd } from 'src/stores/simrs/pendaftaran/kunjungan/igd/
 import GelangPasienPage from '../../cetak/GelangPasienPage.vue'
 // eslint-disable-next-line no-unused-vars
 import { onMounted, ref } from 'vue'
+import { Dialog } from 'quasar'
 
 defineProps({
   loading: { type: Boolean, default: false },
@@ -287,44 +288,74 @@ function tidak() {
   emits('hapus', tempData.value)
   confirm.value = false
 }
+
 function hapus(item) {
-  temp.value = item.noka
-  if (item.sep) {
-    emits('hapus', item)
-  } else {
-    console.log('anu')
-    confirm.value = true
-    tempData.value = item
-    // Dialog.create({
-    //   title: 'Tidak Ada SEP',
-    //   message: 'Nomor SEP Belum Tercatat di data Rumah Sakit',
-    //   ok: {
-    //     label: 'Tidak Dibuatkan SEP',
-    //     'no-caps': true,
-    //     color: 'primary'
-    //   },
-    //   cancel: {
-    //     label: 'Ambil Data SEP',
-    //     'no-caps': true,
-    //     color: 'primary'
-    //   }
-    // })
-    //   .onOk(() => {
-    //     console.log('OK')
-    //     emits('hapus', item)
-    //   })
-    //   .onCancel(() => {
-    //     loadingReSep.value = item.noreg
-    //     sepStore.getSep(item).then(resp => {
-    //       console.log('resp sep', resp)
-    //       loadingReSep.value = ''
-    //       // emits('hapus', item)
-    //       console.log('Cancel dalem', loadingReSep.value)
-    //     })
-    //     console.log('Cancel', loadingReSep.value)
-    //   })
-  }
+  Dialog.create({
+    title: 'KONFIRMASI',
+    message: 'Yakin Data Pasien Akan Dihapus...???',
+    ok: {
+      label: 'Iya',
+      color: 'red'
+    },
+    cancel: {
+      label: 'Tidak',
+      color: 'warning'
+    }
+  })
+    .onOk(() => {
+      console.log('OK', item)
+      emits('hapus', item)
+    })
+    .onCancel(() => {
+      console.log('cancel')
+      // loadingReSep.value = item.noreg
+      // sepStore.getSep(item).then(resp => {
+      //   console.log('resp sep', resp)
+      //   loadingReSep.value = ''
+      //   // emits('hapus', item)
+      //   console.log('Cancel dalem', loadingReSep.value)
+      // })
+      // console.log('Cancel', loadingReSep.value)
+    })
 }
+// function hapus(item) {
+//   temp.value = item.noka
+//   if (item.sep) {
+//     emits('hapus', item)
+//   } else {
+//     console.log('anu')
+//     confirm.value = true
+//     tempData.value = item
+// Dialog.create({
+//   title: 'Tidak Ada SEP',
+//   message: 'Nomor SEP Belum Tercatat di data Rumah Sakit',
+//   ok: {
+//     label: 'Tidak Dibuatkan SEP',
+//     'no-caps': true,
+//     color: 'primary'
+//   },
+//   cancel: {
+//     label: 'Ambil Data SEP',
+//     'no-caps': true,
+//     color: 'primary'
+//   }
+// })
+//   .onOk(() => {
+//     console.log('OK')
+//     emits('hapus', item)
+//   })
+//   .onCancel(() => {
+//     loadingReSep.value = item.noreg
+//     sepStore.getSep(item).then(resp => {
+//       console.log('resp sep', resp)
+//       loadingReSep.value = ''
+//       // emits('hapus', item)
+//       console.log('Cancel dalem', loadingReSep.value)
+//     })
+//     console.log('Cancel', loadingReSep.value)
+//   })
+// }
+// }
 
 const pasien = ref(null)
 const openGen = ref(false)

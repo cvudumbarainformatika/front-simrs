@@ -97,7 +97,7 @@
                   label="Nomor RM"
                   autofocus
                   outlined
-                  :disable="store.form.barulama!=='baru'&&!store.edit"
+                  :disable="store.form.barulama!=='baru'"
                   :loading="store.loading || store.loadingNorm"
                   :rules="[
                     val => (!!val) || 'Harap diisi',
