@@ -43,7 +43,7 @@
           color="deep-orange"
           label="Master  Pasien"
           size="md"
-          @click="goTo('/pendaftaran/bpjs/pasien')"
+          @click="goTo('/pendaftaran/igd/pasien')"
         />
         <!-- <q-btn
           :outline="path!=='/pendaftaran/bpjs/listmjkn'"

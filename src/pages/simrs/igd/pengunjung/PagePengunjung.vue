@@ -4,7 +4,14 @@
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs'"
   >
     <div class="header bg-primary text-white">
-      <header-page />
+      <header-page
+        @fullscreen="style.setComponentFull"
+        @set-periode="(val)=>store.setPeriodik(val)"
+        @set-search="store.setQ"
+        @set-row="store.setPerPage"
+        @refresh="store.getData"
+        @filter="store.setFilters"
+      />
     </div>
 
     <q-card

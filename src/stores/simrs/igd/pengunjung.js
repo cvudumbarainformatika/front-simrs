@@ -11,11 +11,12 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     params: {
       q: '',
       page: 1,
-      per_page: 50,
+      per_page: 10,
       to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date())
+      from: dateDbFormat(new Date()),
+      status: ''
     },
-    periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini'],
+    periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini', 'Tahun Ini'],
     periode: 'Hari Ini',
     pageLayanan: false
   }),
@@ -39,7 +40,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     async getData() {
       this.loading = true
       const params = { params: this.params }
-      await api.get('v1/simrs/pendaftaran/igd/daftarkunjunganpasienbpjs', params)
+      await api.get('v1/simrs/pendaftaran/igd/kunjunganpasienigd', params)
         .then(resp => {
           console.log('kunjungan igd', resp?.data?.data)
           this.loading = false
@@ -71,6 +72,30 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         console.log(error)
         this.loadingSaveGantiDpjp = false
       }
+    },
+    setPeriodik(val) {
+      console.log('wew', val)
+      this.params.page = 1
+      const { to, from, status } = val
+      this.params.to = to
+      this.params.from = from
+      this.params.status = status
+      console.log('periodik', to)
+      this.getData()
+    },
+    setQ(payload) {
+      this.params.page = 1
+      this.params.q = payload
+      this.getLists()
+    },
+    setPerPage(payload) {
+      console.log('sasa', payload)
+      this.params.page = 1
+      this.params.per_page = payload
+      this.getLists()
+    },
+    setFilters() {
+      this.filters = !this.filters
     }
   }
 })

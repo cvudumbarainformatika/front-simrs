@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { dateDbFormat } from 'src/modules/formatter'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListKunjunganIgd = defineStore('list_kunjungan_igd_pendaftaran', {
   state: () => ({
@@ -61,6 +62,25 @@ export const useListKunjunganIgd = defineStore('list_kunjungan_igd_pendaftaran',
     setPage(payload) {
       this.params.page = payload
       this.getLists()
+    },
+    hapusPasien(pasien) {
+      console.log('hapus', pasien)
+      this.loadingH = true
+      const form = {
+        noreg: pasien.noreg
+      }
+      return new Promise(resolve => {
+        api.post('/v1/simrs/pendaftaran/igd/hapuspasien', form)
+          .then(resp => {
+            this.loadingH = false
+            notifSuccess(resp)
+            this.getLists()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingH = false
+          })
+      })
     }
   }
 })
