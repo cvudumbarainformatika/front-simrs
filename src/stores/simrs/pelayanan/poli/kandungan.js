@@ -29,7 +29,15 @@ export const useKandunganStore = defineStore('kandungan-poli', {
     points1: [{ value: 1, label: 'Ya' }, { value: 0, label: 'Tidak' }],
     points2: [{ value: 2, label: 'Ya' }, { value: 0, label: 'Tidak' }],
     points3: [{ value: 1, label: 'Ya' }, { value: 0, label: 'Tidak' }],
-    points4: [{ value: 2, label: 'Ya' }, { value: 0, label: 'Tidak' }]
+    points4: [{ value: 2, label: 'Ya' }, { value: 0, label: 'Tidak' }],
+
+    masterSkrining: [],
+    skriningAllFromServer: [],
+    addEdited: false,
+    formSkrining: {
+      kehamilanNo: 1,
+      skriningKehamilan: []
+    }
   }),
   actions: {
 
@@ -179,12 +187,95 @@ export const useKandunganStore = defineStore('kandungan-poli', {
             reject(err)
           })
       })
-    }
+    },
 
     // previewData(item) {
     //   this.preview = true
     //   this.form = item
     // }
+
+    getMasterSkreening() {
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/kandungan/masterskrining')
+          .then((resp) => {
+            // console.log('del', resp)
+            if (resp.status === 200) {
+              this.masterSkrining = resp.data
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+
+    getskrining(pasien) {
+      const params = {
+        params: {
+          norm: pasien?.norm
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/kandungan/skrining', params)
+          .then((resp) => {
+            // console.log('skrining', resp)
+            if (resp.status === 200) {
+              this.skriningAllFromServer = resp.data
+              this.filterFormSkrining(resp.data)
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+
+    filterFormSkrining(data) {
+      const arr = this.skriningAllFromServer
+      const res = arr.length ? arr.filter(x => x.kehamilanNo === this.formSkrining.kehamilanNo).map(x => x.valueSingkat) : []
+      this.formSkrining.skriningKehamilan = res
+    },
+
+    saveSkrining(pasien) {
+      this.formSkrining.noreg = pasien?.noreg
+      this.formSkrining.norm = pasien?.norm
+      this.loadingSave = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/kandungan/storeSkrining', this.formSkrining)
+          .then((resp) => {
+            // console.log('save skrining', resp)
+            if (resp.status === 200) {
+              this.getskrining(pasien)
+              notifSuccess(resp)
+              this.loadingSave = false
+            }
+            this.loadingSave = false
+          })
+          .catch((err) => {
+            console.log(err)
+            this.loadingSave = false
+            reject(err)
+          })
+      })
+    },
+
+    setUpdateSkrining(val) {
+      if (this.formSkrining.skriningKehamilan.length) {
+        const arr = this.formSkrining.skriningKehamilan
+        if (arr.includes(val)) {
+          this.addEdited = false
+        } else {
+          this.addEdited = true
+        }
+      } else {
+        this.addEdited = false
+      }
+      // console.log('val', val)
+      // console.log('edited', this.addEdited)
+    }
 
   }
 })

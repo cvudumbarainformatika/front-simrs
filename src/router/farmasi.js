@@ -25,7 +25,7 @@ const farmasi = {
       component: () => import('pages/simrs/farmasi/verifrencanapemesanan/IndexPage.vue')
     },
     {
-      path: '/gudang/farmasi/pembayaran',
+      path: '/farmasi/pembayaran',
       component: () => import('pages/simrs/farmasi/pembayaran/IndexPage.vue')
     },
     {

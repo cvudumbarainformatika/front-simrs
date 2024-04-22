@@ -43,7 +43,7 @@ const ptk = {
           ]
         },
         {
-          path: '/gudang/farmasi/bast',
+          path: '/ptk/farmasi/bast',
           component: () => import('pages/simrs/logistik/ptk/farmasi/bast/IndexPage.vue')
         }
       ]

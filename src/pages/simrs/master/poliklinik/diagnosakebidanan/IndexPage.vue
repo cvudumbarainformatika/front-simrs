@@ -10,13 +10,14 @@
           <FormDiagnosa v-if="!store.isIntervensi" />
           <FormIntevensi v-else />
         </div>
-        <div class="col-6 full-height q-px-md bg-grey-4">
+        <div class="col-6 full-height scroll q-px-md bg-grey-4">
           <ListDiagnosa
             :items="store.items"
             @add-intervensi="store.setIntervensi"
             @edit="(val)=> store.editForm(val)"
             @delete="(val) =>hapusDiagnosa(val)"
           />
+          <div style="margin-bottom: 100px;" />
         </div>
       </div>
     </q-card>
