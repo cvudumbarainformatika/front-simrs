@@ -1,20 +1,20 @@
 <template>
   <div>
-    <div style="margin-bottom: 100px;">
+    <div class="q-pb-xl">
+      <ListLoading v-if="loading" />
+      <empty-data v-else-if="!items.length && !loading" />
       <q-list
-        square
+        v-else
         separator
       >
+        {{ items }}
         <q-item
-          v-for="item in store.pasiens"
-          :key="item"
-          v-ripple
-          clickable
+          v-for="(item, i) in items"
+          :key="i"
         >
           <q-item-section avatar>
             <app-avatar-pasien
               :pasien="item"
-              width="50px"
             />
           </q-item-section>
 
@@ -76,9 +76,11 @@
               color="red"
               label="TERIMA"
               class="q-mb-sm"
-              icon-right="all_match"
+              icon-right="icon-mat-transfer_within_a_station"
               style="min-width: 120px;"
-              @click="bukaLayanan(item)"
+              :disable="loadingTerima"
+              :loading="loadingTerima && store.noreg === item?.noreg"
+              @click="emits('terimapasien', item)"
             />
           </q-item-section>
           <q-item-section
@@ -90,10 +92,11 @@
               outline
               size="sm"
               no-caps
+              loading
               color="primary"
               label="LIHAT LAYANAN"
               class="q-mb-sm"
-              icon-right="icon-mat-eye"
+              icon-right="icon-mat-edit"
               style="min-width: 120px;"
               @click="bukaLayanan(item)"
             />
@@ -110,9 +113,14 @@
 </template>
 
 <script setup>
+// eslint-disable-next-line no-unused-vars
+import ListLoading from './ListLoading.vue'
+import EmptyData from './EmptyData.vue'
 import { defineAsyncComponent, ref } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
+
+const emits = defineEmits(['terimapasien'])
 const store = usePengunjungIgdStore()
 
 const PageLayananIgd = defineAsyncComponent(() => import('src/pages/simrs/igd/layanan/PageLayananIgd.vue'))
@@ -121,4 +129,27 @@ function bukaLayanan(item) {
   pasien.value = item
   store.pageLayanan = true
 }
+
+defineProps({
+  items: {
+    type: Array,
+    default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  loadingTerima: {
+    type: Boolean,
+    default: false
+  },
+  loadingCall: {
+    type: Boolean,
+    default: false
+  },
+  loadingTidakhadir: {
+    type: Boolean,
+    default: false
+  }
+})
 </script>

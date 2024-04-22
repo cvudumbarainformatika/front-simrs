@@ -8,6 +8,11 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     loadingSaveGantiDpjp: false,
     pasiens: [],
     meta: null,
+    loadingIcare: false,
+    loadingTerima: false,
+    loadingTidakhadir: false,
+    loadingCall: false,
+    noreg: null,
     params: {
       q: '',
       page: 1,
@@ -96,6 +101,9 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     },
     setFilters() {
       this.filters = !this.filters
+    },
+    terimapasien(val) {
+      console.log('wew', val.rs1)
     }
   }
 })
