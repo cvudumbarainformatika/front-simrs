@@ -30,10 +30,13 @@
 </template>
 <script setup>
 import PageHead from './PageHead.vue'
-import { computed, defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
+import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watch } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/retur'
 
 const style = useStyledStore()
+const store = useReturPenyediaStore()
 
 const pageRef = ref()
 const h = ref(0)
@@ -72,6 +75,7 @@ function gantiHalaman(val) {
     const anu = menus.value.find(a => a.name === val)
     if (anu) menu.value = anu
   }
+  if (val === 'bast') store.getInitialData()
 }
 const title = computed(() => {
   if (menu.value.name === 'bast') {
@@ -92,8 +96,20 @@ const subtitle = computed(() => {
   }
 })
 
+const apps = useAplikasiStore()
 onMounted(() => {
   h.value = pageRef.value.$el.clientHeight
+  if (apps?.user?.kdruangansim !== '') {
+    store.setForm('kd_ruang', apps?.user?.kdruangansim)
+    store.setParams('kd_ruang', apps?.user?.kdruangansim)
+    store.getInitialData()
+  }
+})
+watch(() => apps?.user?.kdruangansim, (obj) => {
+  store.setForm('kd_ruang', obj)
+  store.setParams('kd_ruang', obj)
+  store.getPerusahan()
+  store.getObat()
 })
 
 </script>
