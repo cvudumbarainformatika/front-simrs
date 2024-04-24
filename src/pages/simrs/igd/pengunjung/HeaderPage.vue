@@ -20,12 +20,12 @@
         </q-input>
       </div>
       <q-select
-        v-model="store.periode"
+        v-model="periode"
         dense
         outlined
         dark
         color="white"
-        :options="store.periods"
+        :options="periods"
         label="Periode"
         class="q-ml-sm"
         emit-value
@@ -77,17 +77,24 @@ import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 const store = usePengunjungIgdStore()
 const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'BELUM TERLAYANI', 'MASIH DILAYANI', 'SUDAH TERLAYANI'])
-const periode = ref('Hari Ini')
+const periode = ref(1)
 const to = ref(dateDbFormat(new Date()))
 const from = ref(dateDbFormat(new Date()))
 const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'setPeriode', 'refresh', 'filter'])
 
+const periods = ref([
+  { value: 1, label: 'Hari ini' },
+  { value: 2, label: 'Minggu Ini' },
+  { value: 3, label: 'Bulan Ini' },
+  { value: 4, label: 'Tahun Ini' }
+])
+
 function gantiPeriode(val) {
   console.log('val', val)
-  if (val === 'Hari Ini') hariIni()
-  if (val === 'Minggu Ini') mingguIni()
-  if (val === 'Bulan Ini') bulanIni()
-  if (val === 'Tahun Ini') tahunIni()
+  if (val === 1) hariIni()
+  if (val === 2) mingguIni()
+  if (val === 3) bulanIni()
+  if (val === 4) tahunIni()
 
   console.log('asasa', txt.value)
   console.log(from.value)
@@ -148,6 +155,7 @@ function tahunIni() {
 
 function gantiTxt() {
   gantiPeriode(periode.value)
+  console.log('dadada', periode.value)
 }
 
 onMounted(() => {

@@ -6,6 +6,7 @@
     <div class="header bg-primary text-white">
       <header-page
         @fullscreen="style.setComponentFull"
+        @set-tanggal="(val)=>store.setDate(val)"
         @set-periode="(val)=>store.setPeriodik(val)"
         @set-search="store.setQ"
         @set-row="store.setPerPage"

@@ -82,20 +82,35 @@
             />
           </q-item-section>
           <q-item-section
-            v-else
+            v-if="item?.flagpelayanan === '2'"
             side
           >
             <q-btn
               dense
-              outline
               size="sm"
               no-caps
               :loading="loadingTerima && store.noreg === item?.noreg"
-              :disable="loadingTerima"
               color="primary"
               label="LIHAT LAYANAN"
               class="q-mb-sm"
               icon-right="icon-mat-edit"
+              style="min-width: 120px;"
+              @click="bukaLayanan(item)"
+            />
+          </q-item-section>
+          <q-item-section
+            v-if="item?.flagpelayanan === '1'"
+            side
+          >
+            <q-btn
+              dense
+              size="sm"
+              no-caps
+              :loading="loadingTerima && store.noreg === item?.noreg"
+              color="green"
+              label="SUDAH DILAYANANI"
+              class="q-mb-sm"
+              icon-right="icon-mat-key"
               style="min-width: 120px;"
               @click="bukaLayanan(item)"
             />

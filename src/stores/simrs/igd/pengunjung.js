@@ -91,6 +91,9 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       console.log('periodik', to)
       this.getData()
     },
+    setDate(val) {
+      this.params.tgl = val
+    },
     setQ(payload) {
       this.params.page = 1
       this.params.q = payload
@@ -116,7 +119,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           const wew = this.items.filter(x => x === pasien)
           console.log('wew', wew)
           if (wew.length) {
-            wew[0].flagpelayanan = '1'
+            wew[0].flagpelayanan = '2'
           }
           this.loadingTerima = false
           this.noreg = null
