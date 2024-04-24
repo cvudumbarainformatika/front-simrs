@@ -9,10 +9,22 @@
       flat
     >
       <div class="column fit">
-        <q-bar class="col-auto bg-secondary">
+        <q-bar class="col-auto bg-secondary q-pa-xs">
           <div>📝 Preview General Consent Pasien</div>
           <q-space />
 
+          <q-btn
+            dense
+            flat
+            icon="icon-mat-refresh"
+            @click="refresh=true"
+          >
+            <q-tooltip
+              class="bg-white text-primary"
+            >
+              Refresh / Cancel Seluruh Perubahan
+            </q-tooltip>
+          </q-btn>
           <q-btn
             dense
             flat
@@ -35,6 +47,8 @@
             :editable-master="false"
             :isi-pasien="pasien"
             :cetak="cetak"
+            :refresh="refresh"
+            @after-refresh="refresh=false"
           />
         <!-- </div> -->
         </q-card-section>
@@ -44,6 +58,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
+const refresh = ref(false)
 defineProps({
   pasien: {
     type: Object,

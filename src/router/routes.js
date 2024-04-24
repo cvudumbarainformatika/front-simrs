@@ -87,10 +87,12 @@ const routes = [
     children: [
       // { path: '', component: () => import('pages/auth/LoginPage.vue') }
 
-      { path: '', redirect: '/login/mode/qr' },
-      { path: '/login/mode', redirect: '/login/mode/qr' },
+      // { path: '', redirect: '/login/mode/qr' },
+      // { path: '/login/mode', redirect: '/login/mode/qr' },
+      { path: '', redirect: '/login/mode/login-model-jadul' },
+      { path: '/login/mode', redirect: '/login/mode/login-model-jadul' },
 
-      { path: '/login/mode/:mode', component: () => import('pages/auth/LoginPageV2.vue') }
+      { path: '/login/mode/:mode', name: 'login-mode', component: () => import('pages/auth/LoginPageV2.vue') }
     ]
   },
 

@@ -103,7 +103,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       this.getDataTable()
     },
     setPage (payload) {
-      console.log('setPage', payload)
+      // console.log('setPage', payload)
       this.params.page = payload
       this.getDataTable()
     },
@@ -117,7 +117,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       //   const thumb = payload.map(x => Object.keys(x))
       //   this.columns = thumb[0]
       // }
-      console.log('column change :', payload)
+      // console.log('column change :', payload)
       if (payload === 'default') {
         this.columns = []
         this.columns = this.defaultColumn
@@ -139,7 +139,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     //   this.loading = true
     //   const params = { params: this.params }
     //   const resp = await api.get('/v1/pegawai/absensi/report', params)
-    //   console.log('items', resp)
+    //   // console.log('items', resp)
     //   if (resp.status === 200) {
     //     this.items = resp.data.data
     //     this.meta = resp.data
@@ -155,7 +155,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         api.get('/v1/pegawai/absensi/report', params)
           .then((resp) => {
             if (resp.status === 200) {
-              console.log('items', resp)
+              // console.log('items', resp)
               this.items = resp.data.data
               this.meta = resp.data
               this.loading = false
@@ -166,7 +166,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     },
     async autocomplete () {
       const resp = await api.get('/v1/pegawai/absensi/autocomplete')
-      console.log('autocomplete', resp)
+      // console.log('autocomplete', resp)
       if (resp.status === 200) {
         this.jenis_pegawai = resp.data.jenis_pegawai
         this.jenis_pegawai.unshift({
@@ -192,7 +192,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
         }
       }
       const resp = await api.get('/v1/pegawai/absensi/prota', params)
-      console.log('prota', resp)
+      // console.log('prota', resp)
       if (resp.status === 200) {
         this.jumlahProta = resp.data.length
         this.protas = resp.data
@@ -202,7 +202,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
       this.loadingDialog = true
       const params = { params: this.params }
       const resp = await api.get('/v1/pegawai/absensi/print', params)
-      console.log('prints', resp)
+      // console.log('prints', resp)
       if (resp.status === 200) {
         this.prints = resp.data
         this.loadingDialog = false
@@ -215,7 +215,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
     },
 
     setSorting(val) {
-      console.log(val)
+      // console.log(val)
       this.sorting.head = val
       this.sorting.sortBy === 'desc'
         ? this.sorting.sortBy = 'asc'
@@ -253,7 +253,7 @@ export const useReportAbsensiStore = defineStore('report_absensi', {
           ? this.items = this.items.sort((a, b) => a.DISPEN - b.DISPEN) : this.items = this.items.sort((a, b) => b.DISPEN - a.DISPEN)
       }
 
-      // console.log('sorting', this.items)
+      // // console.log('sorting', this.items)
     },
 
     pushAlpha(id, jml) {

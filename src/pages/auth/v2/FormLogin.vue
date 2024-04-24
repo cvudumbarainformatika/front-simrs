@@ -1,11 +1,11 @@
 <template>
   <div class="login-form full-height column flex-center text-white q-pa-lg">
-    <div class="form q-mb-md">
+    <div class="form q-mb-sm">
       <div class="text-h6 judul-form">
         LOGIN FORM
       </div>
     </div>
-    <div class="q-my-lg full-width">
+    <div class="q-my-md full-width">
       <q-form
         ref="myForm"
         class="q-pa-md"
@@ -57,7 +57,7 @@
             />
           </template>
         </q-input>
-        <div class="row q-mt-lg">
+        <div class="row justify-between q-mt-lg">
           <q-btn
             push
             color="white"
@@ -71,11 +71,25 @@
               Loading...
             </template>
           </q-btn>
+          <div
+            class="column flex-center cursor-pointer f-12"
+            :class="hoverred?'text-red':'text-grey-4'"
+            @mouseover="hoverred=true"
+            @mouseleave="hoverred=false"
+            @click="goToQr()"
+          >
+            <q-icon
+              name="icon-mat-qr_code_2"
+              size="lg"
+            />
+            <div>Login Qr ?</div>
+            <div>Klik disini</div>
+          </div>
         </div>
       </q-form>
     </div>
     <div class="app-v text-grey-4">
-      app versi v2.0
+      app versi v2.21
     </div>
   </div>
 </template>
@@ -84,9 +98,12 @@
 import { ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 const $q = useQuasar()
+const router = useRouter()
 
 const isPasw = ref(true)
+const hoverred = ref(false)
 const myForm = ref(null)
 const form = ref({
   email: '',
@@ -120,6 +137,11 @@ function onSubmit () {
   //   }
   //   // window.location.reload()
   // })
+}
+
+function goToQr() {
+  router.push({ name: 'login-mode', params: { mode: 'qr' }, replace: true })
+  // location.reload()
 }
 </script>
 

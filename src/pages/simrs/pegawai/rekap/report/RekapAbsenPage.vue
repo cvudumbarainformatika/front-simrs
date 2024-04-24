@@ -770,12 +770,13 @@ function getAlpha(row) {
 }
 
 function getImage(kelamin, row) {
-  if (row.foto === null || row.foto === '' || row.foto === 'undefined') {
+  if (row.foto_pegawai === null || row.foto_pegawai === '') {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
   } else {
-    return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+    // return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
+    return row.foto_pegawai
   }
 }
 
@@ -987,7 +988,7 @@ function lihatDetailAbsensi(num, row) {
 
   detailAbsensi.value = obj.length ? obj[0] : null
   detailOrang.value = row
-  console.log('num/row', detailOrang.value)
+  // console.log('num/row', detailOrang.value)
 }
 
 const printObj = {

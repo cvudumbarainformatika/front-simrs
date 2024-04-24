@@ -153,6 +153,26 @@
                     </tr>
                   </template>
                 </template>
+                <tr>
+                  <td
+                    class="text-center v-mid"
+                    colspan="4"
+                  >
+                    JUMLAH SKOR
+                  </td>
+                  <td class="text-center v-mid">
+                    {{ jmlSkorI }}
+                  </td>
+                  <td class="text-center v-mid">
+                    {{ jmlSkorII }}
+                  </td>
+                  <td class="text-center v-mid">
+                    {{ jmlSkorIII1 }}
+                  </td>
+                  <td class="text-center v-mid">
+                    {{ jmlSkorIII2 }}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </q-card-section>
@@ -207,21 +227,26 @@ const filterSkriningByKehamilanNo = computed(() => {
   return res
 })
 
-// onBeforeUnmount(() => {
-//   if (store.addEdited) {
-//     $q.dialog({
-//       title: 'Peringatan',
-//       message: 'Simpan Skrining Dini Kehamilan?',
-//       cancel: true
-//     // persistent: true
-//     }).onOk(() => {
-//     }).onCancel(() => {
-//       console.log('Cancel')
-//     }).onDismiss(() => {
-//     // console.log('I am triggered on both OK and Cancel')
-//     })
-//   }
-// })
+const jmlSkorI = computed(() => {
+  const arr = store.formSkrining.skriningKehamilan
+  const isi = arr.filter(x => x.includes('--I--')).map(x => parseInt(x.substring(x.length - 1))).reduce((x, y) => x + y, 0) + 2
+  return arr.length ? isi : 2
+})
+const jmlSkorII = computed(() => {
+  const arr = store.formSkrining.skriningKehamilan
+  const isi = arr.filter(x => x.includes('--II--')).map(x => parseInt(x.substring(x.length - 1))).reduce((x, y) => x + y, 0) + 2
+  return arr.length ? isi : 2
+})
+const jmlSkorIII1 = computed(() => {
+  const arr = store.formSkrining.skriningKehamilan
+  const isi = arr.filter(x => x.includes('--III.1--')).map(x => parseInt(x.substring(x.length - 1))).reduce((x, y) => x + y, 0) + 2
+  return arr.length ? isi : 2
+})
+const jmlSkorIII2 = computed(() => {
+  const arr = store.formSkrining.skriningKehamilan
+  const isi = arr.filter(x => x.includes('--III.2--')).map(x => parseInt(x.substring(x.length - 1))).reduce((x, y) => x + y, 0) + 2
+  return arr.length ? isi : 2
+})
 
 function setSkrining() {
   store.getskrining(props.pasien)
