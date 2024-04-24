@@ -13,6 +13,7 @@
       :ada-tambah="false"
       :ada-filter="false"
       row-no
+      use-full
       @find="store.setSearch"
       @goto="store.setPage"
       @set-row="store.setPerPage"
