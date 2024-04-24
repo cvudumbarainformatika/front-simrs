@@ -26,6 +26,47 @@
           />
         </div>
       </div>
+      <!-- Obat -->
+      <div class="row q-col-gutter-sm items-center q-mb-sm">
+        <div class="col-2">
+          Obat
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          <app-autocomplete-new
+            ref="refObat"
+            v-model="store.form.kd_obat"
+            label="Pilih Obat"
+            autocomplete="nama_obat"
+            option-label="nama_obat"
+            option-value="kd_obat"
+            outlined
+            valid
+            :loading="store.loadingObat"
+            :source="store.obats"
+            @on-select="store.obatSelected"
+          />
+        </div>
+      </div>
+      <!-- Satuan -->
+      <div class="row q-col-gutter-sm items-center q-mb-sm">
+        <div class="col-2">
+          Satuan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          <app-input
+            v-model="store.form.satuan_k"
+            label="Satuan"
+            outlined
+            readonly
+          />
+        </div>
+      </div>
       <!-- No Retur -->
       <div class="row q-col-gutter-sm items-center q-mb-sm">
         <div class="col-2">
@@ -75,6 +116,7 @@
             ref="refNoFakRet"
             v-model="store.form.no_faktur_retur_pbf"
             label="Nomor Faktur Retur"
+            valid
             outlined
           />
         </div>
@@ -82,7 +124,7 @@
       <!-- tgl Faktur Retur -->
       <div class="row q-col-gutter-sm items-center q-mb-sm">
         <div class="col-2">
-          Tanggal Faktur Retur RS
+          Tanggal Faktur Retur PBF
         </div>
         <div class="col-1">
           :
@@ -93,6 +135,7 @@
             :model="store.form.tanggalFak"
             label="Tanggal Faktur Retur"
             outlined
+            valid
             @set-display="setTanggalFakDisp"
             @db-model="setTanggalFak"
           />
@@ -133,55 +176,158 @@
           />
         </div>
       </div>
-      <!-- Perusahaan -->
-      <div class="row q-col-gutter-sm items-center q-mb-sm">
-        <div class="col-2">
-          Obat
-        </div>
-        <div class="col-1">
-          :
-        </div>
-        <div class="col-9">
-          <app-autocomplete-new
-            v-model="store.form.kd_obat"
-            label="Pilih Obat"
-            autocomplete="nama_obat"
-            option-label="nama_obat"
-            option-value="kd_obat"
-            outlined
-            valid
-            :loading="store.loadingObat"
-            :source="store.obats"
-            @on-select="store.obatSelected"
-          />
-        </div>
-      </div>
     </div>
     <!-- detail form -->
     <app-loading v-if="store?.loadingDataMauRet" />
     <!-- Daftar barang baik -->
-    <div>
+    <div v-if="!store?.loadingDataMauRet">
       <div class="bg-grey q-pa-sm text-white f-14 q-mb-md">
-        Daftar Barang Baik
+        Barang Diterima
       </div>
-      <div><app-no-data-small /></div>
-    </div>
-    <!-- Daftar Rusak -->
-    <div>
-      <div class="bg-grey q-pa-sm text-white f-14 q-mb-md">
-        Daftar Barang Rusak
+      <div v-if="!store?.dataMauReturs?.length">
+        <app-no-data-small />
       </div>
-      <div><app-no-data-small /></div>
-    </div>
-    <!-- Daftar barang Kadalwarsa -->
-    <div>
-      <div class="bg-grey q-pa-sm text-white f-14 q-mb-md">
-        Daftar Barang Kadalwarsa
+      <!-- <div> -->
+      <div v-if="store?.dataMauReturs?.length">
+        <div class="row bg-dark text-white q-col-gutter-sm q-mb-sm">
+          <div
+            class="col-auto"
+            style="width:5%"
+          >
+            No
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Kondisi Barang
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Nomor Penerimaan
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Nomor Batch
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Tanggal Penerimaan
+          </div>
+          <div
+            class="col-auto anak"
+          >
+            Tanggal Kadalwarsa
+          </div>
+          <div
+            class="col-auto anak text-right"
+          >
+            Jumlah Diterima
+          </div>
+          <div
+            class="col-auto anak text-right"
+          >
+            Stok Penerimaan
+          </div>
+
+          <div
+            class="col-auto anak text-right"
+          >
+            Jumlah Retur
+          </div>
+        </div>
+        <div
+          v-for="(item,i) in store?.dataMauReturs"
+          :key="i"
+        >
+          <div class="row items-center q-col-gutter-sm q-mb-sm">
+            <div
+              class="col-auto"
+              style="width:5%"
+            >
+              {{ i+1 }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              <app-autocomplete
+                ref="refKondisi"
+                v-model="item.kondisi_barang"
+                label="Kondisi Barang"
+                outlined
+                :source="store.kondisis"
+              />
+            </div>
+            <div
+              class="col-auto anak"
+            >
+              {{ item?.nopenerimaan }}
+            </div>
+            <div
+              class="col-auto anak"
+            >
+              {{ item?.no_batch }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              {{ humanDate(item?.tglpenerimaan) }}
+            </div>
+            <div
+              class="col-auto anak "
+            >
+              {{ humanDate(item?.tgl_exp) }}
+            </div>
+            <div
+              class="col-auto anak text-right"
+            >
+              {{ item?.jumlah }}
+            </div>
+            <div
+              class="col-auto anak text-right"
+            >
+              {{ item?.stok }}
+            </div>
+
+            <div
+              class="col-auto anak text-right"
+            >
+              <app-input
+                ref="refJumlah"
+                v-model="item.jumlah_retur"
+                outlined
+                label="Jumlah Dikembalikan"
+                @update:model-value="updateJum($event,item,'jumlah_retur')"
+              />
+            </div>
+            <div
+              class="col-auto anak text-right"
+            >
+              <q-btn
+                class="q-mr-md"
+                flat
+                icon="icon-mat-save"
+                color="primary"
+                round
+                :loading="store.loading"
+                @click="simpan(i, item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Simpan Obat
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+        </div>
       </div>
-      <div><app-no-data-small /></div>
     </div>
     <!-- Daftar barang Dikembalikan -->
-    <div>
+    <div v-if="!store?.loadingDataMauRet">
       <div class="bg-grey q-pa-sm text-white f-14 q-mb-md">
         Daftar Barang Dikembalikan
       </div>
@@ -190,8 +336,11 @@
   </div>
 </template>
 <script setup>
+import { humanDate } from 'src/modules/formatter'
 import { date } from 'quasar'
 import { useReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/retur'
+import { ref } from 'vue'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useReturPenyediaStore()
 
@@ -217,4 +366,79 @@ function setTanggalKwiDisp(val) {
   console.log('form ', store.form)
 }
 
+function updateJum(evt, det, key) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  if (key === 'jumlah_retur') {
+    const jumlah = parseFloat(det.jumlah)
+    if (nilai > jumlah) {
+      det[key] = jumlah
+      notifErrVue('Jumlah Retur Tidak Boleh Melebihi Jumlah diterima')
+    }
+    det.subtotal = parseFloat(nilai) * parseFloat(det.harga_neto)
+  }
+}
+// inp
+const refTaRetur = ref(null)
+const refNoFakRet = ref(null)
+const refTaFakRetur = ref(null)
+const refTaKwiRetur = ref(null)
+const refNoKwiRet = ref(null)
+const refJumlah = ref(null)
+// autocol
+const refObat = ref(null)
+const refKondisi = ref(null)
+
+function validasi(index, dibayar) {
+  // console.log(refKondisi.value)
+  const taRetur = refTaRetur.value.$refs.refInputDate.validate()
+  // const TaFakRetur = refTaFakRetur.value.$refs.refInputDate.validate()
+  // const noFakRet = refNoFakRet.value.$refs.refInput.validate()
+  let taKwiRetur = false
+  let noKwiRet = false
+  if (!dibayar) {
+    refTaKwiRetur.value.$refs.refInputDate.resetValidation()
+    refNoKwiRet.value.$refs.refInput.resetValidation()
+    taKwiRetur = true
+    noKwiRet = true
+  } else {
+    taKwiRetur = refTaKwiRetur.value.$refs.refInputDate.validate()
+    noKwiRet = refNoKwiRet.value.$refs.refInput.validate()
+  }
+
+  const obat = refObat.value.$refs.refAuto.validate()
+
+  const jumlah = refJumlah.value[index].$refs.refInput.validate()
+  const kondisi = refKondisi.value[index].$refs.refAuto.validate()
+
+  if (
+    taRetur &&
+      // noFakRet &&
+      // TaFakRetur &&
+      taKwiRetur &&
+      noKwiRet &&
+      jumlah &&
+      obat &&
+      kondisi
+  ) return true
+  else return false
+}
+function simpan(index, item) {
+  const dibayar = !!item.tgl_pembayaran
+  console.log(validasi(index, dibayar))
+  if (validasi(index, dibayar)) {
+    if (!item?.kondisi_barang || item?.kondisi_barang === '') return notifErrVue('Kondisi barang belum di isi')
+    store.setForm('item', item)
+    store.simpanRetur()
+  }
+}
 </script>
+<style lang="scss" scoped>
+.anak{
+  width:calc(95% / 9);
+  overflow-wrap: anywhere;
+}
+</style>

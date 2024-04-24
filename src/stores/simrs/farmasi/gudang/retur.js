@@ -10,9 +10,8 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     params: {
       per_page: 10
     },
-    form: {
-      nopemesanan: ''
-    },
+    form: {},
+    kondisis: ['Rusak', 'Kadalwarsa'],
     perusahaans: [],
     obats: [],
     dataMauReturs: []
@@ -29,8 +28,14 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
       this.getObat()
     },
     obatSelected(val) {
+      this.setForm('satuan_k', null)
       this.setForm('kd_obat', val)
       this.setParams('kd_obat', val)
+      if (!val) return
+      const obat = this.obats.find(ob => ob.kd_obat === val)
+      if (obat) {
+        this.setForm('satuan_k', obat?.satuan_k)
+      }
       this.getDataMauRet()
     },
     getInitialData() {
@@ -67,8 +72,16 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         .then(resp => {
           this.loadingDataMauRet = false
           this.dataMauReturs = resp?.data
+          if (this.dataMauReturs.length > 0) {
+            this.dataMauReturs.forEach(da => {
+              da.stok = da.stokterima.map(s => parseFloat(s.jumlah)).reduce((a, b) => a + b, 0)
+            })
+          }
         })
         .catch(() => { this.loadingDataMauRet = false })
+    },
+    simpanRetur() {
+      console.log('form', this.form)
     }
   }
 })
