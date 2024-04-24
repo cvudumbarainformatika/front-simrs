@@ -8,7 +8,7 @@
       />
     </div>
     <div
-      class="flex items-center justify-between q-mb-md print-hide"
+      class="flex items-center justify-between q-py-sm print-hide"
       :class="useFull?'bg-primary round-edge':''"
     >
       <!-- title -->

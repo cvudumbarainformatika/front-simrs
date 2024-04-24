@@ -163,10 +163,11 @@
             v-html="isi"
           />
           <q-popup-edit
-            v-if="editableMaster"
             v-model="isi"
+            max-width="750px"
           >
             <q-editor
+              ref="editorRef"
               v-model="isi"
               min-height="5rem"
               paragraph-tag="div"
@@ -179,12 +180,13 @@
                   handler: saveWork
                 }
               }"
-              :toolbar="[
+              :toolbar="editableMaster? [
                 ['save'],
                 ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
                 ['left', 'center', 'right', 'justify'],
-                ['quote', 'unordered', 'ordered', 'outdent', 'indent']
-              ]"
+                ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+                ['viewsource']
+              ]:[]"
             />
           </q-popup-edit>
         </div>
@@ -261,7 +263,7 @@ import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
 // eslint-disable-next-line no-unused-vars
 import { api, pathImg } from 'src/boot/axios'
-import { ref, watch } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { jsPDF } from 'jspdf'
 // eslint-disable-next-line no-unused-vars
@@ -270,6 +272,7 @@ import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalcons
 const app = useAplikasiStore()
 
 const rePdfDoc = ref(null)
+const editorRef = ref(null)
 const store = useGeneralConsentStore()
 
 const saveWork = () => {
@@ -279,9 +282,20 @@ const saveWork = () => {
 const props = defineProps({
   editableMaster: { type: Boolean, default: false },
   cetak: { type: Boolean, default: false },
-  isiPasien: { type: Object, default: null }
+  isiPasien: { type: Object, default: null },
+  wali1: { type: String, default: null },
+  refresh: { type: Boolean, default: false }
 })
-const { isi, pasien, defaultForm, changeIsi, isOk } = useContent(props?.isiPasien)
+const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(props?.isiPasien)
+
+const emits = defineEmits(['afterRefresh'])
+watchEffect(() => {
+  if (props.refresh) {
+    getDataIrja().then(() => {
+      emits('afterRefresh')
+    })
+  }
+})
 
 // eslint-disable-next-line no-unused-vars
 function createPdf() {
@@ -321,36 +335,6 @@ function createPdf() {
 }
 
 // eslint-disable-next-line no-unused-vars
-// const imageUrlToBase64 = async (url) => {
-//   await fetch(url, {
-//     mode: 'no-cors'
-//   })
-
-//     .then(data => data.blob())
-//     .then(blob => {
-//       console.log('blob', blob) // log the blob and check its size;
-//       const blobUrl = URL.createObjectURL(blob)
-//       console.log('blobUrl', blobUrl)
-//       const a = document.createElement('a')
-//       console.log('a', a)
-//     })
-//     .catch(err => {
-//       console.log('base64Err', err)
-//     })
-// const blob = await data.blob()
-// return new Promise((resolve, reject) => {
-//   const reader = new FileReader()
-//   reader.readAsDataURL(blob)
-//   reader.onloadend = () => {
-//     const base64data = reader.result
-//     console.log('base64', base64data)
-//     resolve(base64data)
-//   }
-//   reader.onerror = reject
-// })
-// }
-
-// eslint-disable-next-line no-unused-vars
 function blob2file(blobData) {
   const fd = new FormData()
   fd.set('a', blobData, pasien?.value?.norm + '.pdf')
@@ -384,15 +368,10 @@ watch(() => isOk.value, (n, old) => {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  //margin-top: 5vh;
-  //padding-bottom: 5vh;
-  // margin-bottom: 0.5cm;
-  //box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-  // width: 21cm;
-  // width: 595pt;
-  // height: auto;
-  width: 21cm;
-  height: 29.7cm;
+
+  //width: 21cm;
+  width: 21.59cm;
+  height: 33cm;
   // margin: 30mm 45mm
   .contentx{
     padding: 5mm 5mm

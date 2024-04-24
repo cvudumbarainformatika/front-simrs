@@ -19,16 +19,36 @@
         alt="Chen Fengyuan"
       >
     </figure>
+
+    <div
+      class="column flex-center cursor-pointer f-12 q-pa-md"
+      :class="hoverred?'text-red':'text-grey-4'"
+      @mouseover="hoverred=true"
+      @mouseleave="hoverred=false"
+      @click="goToQr()"
+    >
+      <div>Login Default ? Klik disini</div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 defineProps({
   qr: {
     type: String,
     default: 'RSUD MOH SALEH'
   }
 })
+const hoverred = ref(false)
+
+function goToQr() {
+  router.push({ name: 'login-mode', params: { mode: 'login-model-jadul' }, replace: true })
+  // location.reload()
+}
 </script>
 
 <style scoped>

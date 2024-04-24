@@ -8,6 +8,9 @@ export function useContent(isiPasien) {
   const petugas = ref(null)
   const isi = ref('What you see is <b>what</b> you get.')
   const defaultForm = ref('..........................')
+  const defWali1 = ref('1 ) ..............................')
+  const defWali2 = ref('2) ..............................')
+  const hubPasien = ref('2) (Hubungan dengan pasien)')
   const isOk = ref(false)
 
   async function changeIsi(kelompok) {
@@ -22,21 +25,43 @@ export function useContent(isiPasien) {
       })
   }
 
-  async function getDataIrja() {
+  function updateIsi(key, val) {
+    console.log('content', isi.value)
+    console.log(key)
+  }
+
+  function getDataIrja() {
     const params = {
       params: {
         kelompok: 'irja'
       }
     }
 
-    await api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent', params)
-      .then(resp => {
+    return new Promise((resolve, reject) => {
+      api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent', params)
+        .then(resp => {
         // console.log(resp)
-        if (resp.status === 200) {
-          isi.value = resp.data[0].pernyataan
-          isOk.value = true
-        }
-      })
+          if (resp.status === 200) {
+            isi.value = resp.data[0].pernyataan
+            isOk.value = true
+          }
+
+          resolve(resp)
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err)
+        })
+    })
+
+    // api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent', params)
+    //   .then(resp => {
+    //     // console.log(resp)
+    //     if (resp.status === 200) {
+    //       isi.value = resp.data[0].pernyataan
+    //       isOk.value = true
+    //     }
+    //   })
   }
 
   function getPasien() {
@@ -46,6 +71,7 @@ export function useContent(isiPasien) {
   onMounted(() => {
     getDataIrja()
     getPasien()
+    updateIsi()
   })
   return {
     items,
@@ -54,6 +80,11 @@ export function useContent(isiPasien) {
     isi,
     defaultForm,
     isOk,
-    changeIsi
+    defWali1,
+    defWali2,
+    hubPasien,
+    changeIsi,
+    updateIsi,
+    getDataIrja
   }
 }

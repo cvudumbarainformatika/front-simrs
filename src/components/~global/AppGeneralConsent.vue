@@ -40,44 +40,180 @@
         <div class="text-weight-bold text-center">
           IDENTITAS YANG BERTANDATANGAN
         </div>
-        <div class="text-caption text-center">
-          (Abaikan Jika yang mengisi pasiennya sendiri)
-        </div>
-        <div class="row justify-between q-mt-md q-col-gutter-md">
-          <div class="col-6">
-            <q-select
-              v-model="store.form.hubunganpasien"
-              outlined
-              :options="store.options"
-              dense
-              label="Outlined"
-              class="q-mb-sm"
-              @update:model-value="changeHubunganPasien"
-            />
-            <app-input
-              v-model="store.form.nama"
-              label="nama"
-              class="q-mb-sm"
-              outlined
-            />
-            <app-input
-              v-model="store.form.nohp"
-              label="No Telp / Hp"
-              class="q-mb-sm"
-              outlined
-            />
+
+        <div class="row justify-between q-mt-md q-col-gutter-md bg-grey-3">
+          <div class="col-6 q-pa-md">
+            <q-card class="q-pa-md">
+              <div class="text-caption text-center">
+                (Abaikan Jika yang mengisi pasiennya sendiri)
+              </div>
+              <!-- <q-select
+                v-model="store.form.hubunganpasien"
+                outlined
+                :options="store.options"
+                dense
+                label="Outlined"
+                class="q-mb-xs"
+                @update:model-value="changeHubunganPasien"
+              /> -->
+              <app-input
+                v-model="store.form.nama"
+                label="Nama"
+                class="q-mb-xs"
+                outlined
+              />
+              <app-input
+                v-model="store.form.nohp"
+                label="No Telp / Hp"
+                class="q-mb-xs"
+                outlined
+              />
+              <q-input
+                v-model="store.form.alamat"
+                outlined
+                type="textarea"
+                rows="2"
+                class="q-mb-xs"
+                label="Alamat"
+              />
+              <q-select
+                v-model="store.form.hubunganpasien"
+                outlined
+                :options="store.options"
+                dense
+                label="Hubungan Dengan Pasien"
+                class="q-mb-xs"
+                @update:model-value="changeHubunganPasien"
+              />
+            </q-card>
           </div>
-          <div class="col-6">
-            <q-input
-              v-model="store.form.alamat"
-              outlined
-              type="textarea"
-            />
+
+          <div class="col-6 q-pa-md">
+            <q-card class="q-pa-md">
+              <!-- <div>Memberikan kuasa/ wewenang terhadap informasi kesehatan dan pengambilan keputusan kepada pihak yang di tunjuk pasien</div>
+              <q-separator />
+              <q-card-section>
+                <div class="row">
+                  <div class="col-auto">
+                    <q-avatar
+                      color="primary"
+                      text-color="white"
+                      size="30px"
+                      class="q-mr-md"
+                    >
+                      1
+                    </q-avatar>
+                  </div>
+                  <div class="col full-width">
+                    <div class="full-width">
+                      <app-input
+                        v-model="store.form.wali1"
+                        label="Yang diberi Kuasa"
+                        class="q-mb-xs"
+                        outlined
+                        valid
+                      />
+                    </div>
+                    <div class="full-width q-gutter-sm">
+                      <q-radio
+                        v-for="item in store.wali"
+                        :key="item"
+                        v-model="store.form.hubunganWali1"
+                        :val="item"
+                        :label="item"
+                        color="teal"
+                        dense
+                      />
+
+                      <q-btn
+                        flat
+                        round
+                        color="red"
+                        icon="icon-mat-refresh"
+                        dense
+                        @click="store.form.hubunganWali1=null"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <q-separator class="q-my-sm" />
+                <div class="row">
+                  <div class="col-auto">
+                    <q-avatar
+                      color="primary"
+                      text-color="white"
+                      size="30px"
+                      class="q-mr-md"
+                    >
+                      2
+                    </q-avatar>
+                  </div>
+                  <div class="col full-width">
+                    <div class="full-width">
+                      <app-input
+                        v-model="store.form.wali2"
+                        label="Yang diberi Kuasa"
+                        class="q-mb-xs"
+                        outlined
+                        valid
+                      />
+                    </div>
+                    <div class="full-width q-gutter-sm">
+                      <q-radio
+                        v-for="item in store.wali"
+                        :key="item"
+                        v-model="store.form.hubunganWali2"
+                        :val="item"
+                        :label="item"
+                        color="teal"
+                        dense
+                      />
+
+                      <q-btn
+                        flat
+                        round
+                        color="red"
+                        icon="icon-mat-refresh"
+                        dense
+                        @click="store.form.hubunganWali2=null"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </q-card-section> -->
+              <q-card-section>
+                <div class="text-center ">
+                  <div class="text-weight-bold text-subtitle1 q-mb-md">
+                    PASIEN DAN/ ATAU WALI HUKUM MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
+                  </div>
+                  <q-btn
+                    color="teal"
+                    class="q-my-md"
+                    @click="emits('openPreviewGc')"
+                  >
+                    <q-icon
+                      left
+                      size="sm"
+                      name="icon-mat-menu_book"
+                    />
+                    <div>Informasi General Consent</div>
+                  </q-btn>
+                </div>
+                <div class="column flex-center q-mt-lg">
+                  <q-checkbox
+                    v-model="pernyataan"
+                    label="Saya
+                    menjamin bahwa pasien sudah membaca dan menandatangani form consent
+                    pembukaan data dari SATUSEHAT"
+                  />
+                </div>
+              </q-card-section>
+            </q-card>
           </div>
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
+      <!-- <q-card-section>
         <div class="text-center ">
           <div class="text-weight-bold text-subtitle1 q-mb-md">
             PASIEN DAN/ ATAU WALI HUKUM MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
@@ -92,8 +228,8 @@
               name="icon-mat-menu_book"
             />
             <div>Informasi General Consent</div>
-          </q-btn>
-          <!-- <q-btn
+          </q-btn> -->
+      <!-- <q-btn
             color="primary q-ma-md"
             @click="emits('openPreviewGc')"
           >
@@ -104,11 +240,11 @@
             />
             <div>Hak Dan Kewajiban Pasien</div>
           </q-btn> -->
-        </div>
-      </q-card-section>
+      <!-- </div>
+      </q-card-section> -->
       <q-separator />
 
-      <q-card-section>
+      <!-- <q-card-section>
         <div class="column flex-center">
           <q-checkbox
             v-model="pernyataan"
@@ -117,7 +253,7 @@
                     pembukaan data dari SATUSEHAT"
           />
         </div>
-      </q-card-section>
+      </q-card-section> -->
       <q-separator />
 
       <q-card-section

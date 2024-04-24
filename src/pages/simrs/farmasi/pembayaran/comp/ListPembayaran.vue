@@ -12,6 +12,7 @@
       :default-btn="false"
       :ada-tambah="false"
       :ada-filter="false"
+      use-full
       row-no
       @find="store.setSearch"
       @goto="store.setPage"

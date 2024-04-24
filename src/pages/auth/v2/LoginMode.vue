@@ -47,22 +47,27 @@
         </div>
         <!-- <div class="col-6 min-h"> -->
         <div
-          v-if="routeForm && !isMobile"
+          v-if="mode==='login-model-jadul' && !isMobile"
           class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
-          <FormLogin />
+          <FormLogin
+            :key="mode"
+          />
         </div>
         <div
-          v-else-if="routeQr && isMobile"
+          v-else-if="mode==='qr' && isMobile"
           class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
-          <FormLogin />
+          <FormLogin
+            :key="isMobile"
+          />
         </div>
         <div
           v-else
           class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
         >
           <FormQr
+            :key="mode"
             :qr="store.qrCode"
           />
         </div>
@@ -80,16 +85,23 @@ import FormLogin from './FormLogin.vue'
 import FormQr from './FormQr.vue'
 
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 
 // const store = useAuthStore()
-const route = useRoute()
+// const route = useRoute()
 const store = useIdentityStore()
 const $q = useQuasar()
 
 const isMobile = ref($q.platform.is.mobile)
-const routeForm = ref(route.params.mode === 'login-model-jadul')
-const routeQr = ref(route.params.mode === 'qr')
+// const routeForm = ref(route.params.mode === 'login-model-jadul')
+// const routeQr = ref(route.params.mode === 'qr')
+
+defineProps({
+  mode: {
+    type: String,
+    default: 'login-model-jadul'
+  }
+})
 
 const img = computed(() => {
   return new URL('../../../assets/images/Xenter_fix.svg', import.meta.url).href

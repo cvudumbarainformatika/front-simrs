@@ -8,7 +8,10 @@
       <BoxAnimation class="absolute" />
       <BgAnimation class="z--" />
       <div class="inner-top-page column flex-center">
-        <LoginMode class="login-form" />
+        <LoginMode
+          class="login-form"
+          :mode="route.params.mode"
+        />
       </div>
 
       <!-- <bgAnimation /> -->
@@ -28,9 +31,11 @@ import LoginMode from './v2/LoginMode.vue'
 import { useIdentityStore } from 'src/stores/auth/identity'
 import { useAuthStore } from 'src/stores/auth'
 import { channelLogin } from 'src/modules/sockets'
+import { useRoute } from 'vue-router'
 
 const ids = useIdentityStore()
 const store = useAuthStore()
+const route = useRoute()
 
 channelLogin.subscribed(() => {
   // console.log('subscribed login!!!')
