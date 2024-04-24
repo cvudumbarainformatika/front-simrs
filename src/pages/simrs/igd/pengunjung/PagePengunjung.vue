@@ -21,18 +21,16 @@
       class="my-flex-1"
       style="overflow: hidden;"
     >
-      <!-- <q-scroll-area style="height: calc(100% - 1px);">
-        <list-loading v-if="store.loading" />
-        <list-pengunjung v-else />
-      </q-scroll-area> -->
-      <list-pengunjung
-        v-if="store.meta!==null"
-        :key="store.items"
-        :items="store.items"
-        :loading="store.loading"
-        :loading-terima="store.loadingTerima"
-        @terimapasien="terimapasien"
-      />
+      <q-scroll-area style="height: calc(100% - 1px);">
+        <list-pengunjung
+          v-if="store.meta!==null"
+          :key="store.items"
+          :items="store.items"
+          :loading="store.loading"
+          :loading-terima="store.loadingTerima"
+          @terimapasien="terimapasien"
+        />
+      </q-scroll-area>
       <div
         class=" absolute-bottom bg-primary text-white z-top"
       >
@@ -52,10 +50,16 @@ import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
+import { onMounted } from 'vue'
 const store = usePengunjungIgdStore()
 const style = useStyledStore()
 
-function terimapasien() {
-  console.log('sasasa')
+function terimapasien(val) {
+  store.setTerima(val)
+  store.items.flagpelayanan = '1'
 }
+
+onMounted(() => {
+  store.getData()
+})
 </script>

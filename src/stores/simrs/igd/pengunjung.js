@@ -4,15 +4,17 @@ import { dateDbFormat } from 'src/modules/formatter'
 
 export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
   state: () => ({
+    items: [],
     loading: false,
     loadingSaveGantiDpjp: false,
     pasiens: [],
     meta: null,
     loadingIcare: false,
-    loadingTerima: false,
+    loadingTerima: true,
     loadingTidakhadir: false,
     loadingCall: false,
     noreg: null,
+    flagpelayanan: null,
     params: {
       q: '',
       page: 1,
@@ -50,6 +52,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           console.log('kunjungan igd', resp?.data?.data)
           this.loading = false
           this.pasiens = resp?.data?.data
+          this.items = resp?.data?.data
           this.meta = resp?.data
         })
         .catch(() => { this.loading = false })
@@ -102,8 +105,28 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     setFilters() {
       this.filters = !this.filters
     },
-    terimapasien(val) {
-      console.log('wew', val.rs1)
+    async setTerima(pasien) {
+      this.loadingTerima = true
+      const form = { noreg: pasien?.noreg }
+      this.noreg = pasien?.noreg
+      try {
+        const resp = await api.post('v1/simrs/pelayanan/igd/terimapasien', form)
+        console.log('terima', resp)
+        if (resp.status === 200) {
+          const wew = this.items.filter(x => x === pasien)
+          console.log('wew', wew)
+          if (wew.length) {
+            wew[0].flagpelayanan = '1'
+          }
+          this.loadingTerima = false
+          this.noreg = null
+        }
+      } catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.noreg = null
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
     }
   }
 })

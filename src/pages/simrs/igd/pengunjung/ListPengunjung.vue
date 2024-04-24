@@ -7,7 +7,6 @@
         v-else
         separator
       >
-        {{ items }}
         <q-item
           v-for="(item, i) in items"
           :key="i"
@@ -41,7 +40,7 @@
           />
           <q-item-section class="q-col-gutter-xs">
             <q-item-label>
-              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.kodedokter ? item.dokter: '-' }}</span>
             </q-item-label>
             <q-item-label>
               RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
@@ -78,7 +77,6 @@
               class="q-mb-sm"
               icon-right="icon-mat-transfer_within_a_station"
               style="min-width: 120px;"
-              :disable="loadingTerima"
               :loading="loadingTerima && store.noreg === item?.noreg"
               @click="emits('terimapasien', item)"
             />
@@ -92,7 +90,8 @@
               outline
               size="sm"
               no-caps
-              loading
+              :loading="loadingTerima && store.noreg === item?.noreg"
+              :disable="loadingTerima"
               color="primary"
               label="LIHAT LAYANAN"
               class="q-mb-sm"
