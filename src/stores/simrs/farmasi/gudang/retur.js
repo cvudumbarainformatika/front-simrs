@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
+import { Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useReturPenyediaStore = defineStore('retur_penyedia', {
   state: () => ({
@@ -14,7 +16,8 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     kondisis: ['Rusak', 'Kadalwarsa'],
     perusahaans: [],
     obats: [],
-    dataMauReturs: []
+    dataMauReturs: [],
+    dataReturs: []
   }),
   actions: {
     setParams(key, val) {
@@ -24,8 +27,35 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
       this.form[key] = val
     },
     perusahaanSelected(val) {
-      this.setParams('kdpbf', val)
-      this.getObat()
+      if (this.dataReturs.length) {
+        Dialog.create({
+          title: 'Konfirmasi',
+          message: 'Sudah Ada Data yang diretur, jika mengganti perusahaan maka akan mengganti nomor retur, apakah akan dilanjutkan?',
+          ok: {
+            push: true,
+            label: 'Ganti PBF',
+            'no-caps': true,
+            color: 'negative'
+          },
+          cancel: {
+            push: true,
+            label: 'Batal',
+            'no-caps': true,
+            color: 'dark'
+          }
+        }).onOk(() => {
+          this.dataReturs = []
+          this.form = {}
+          this.setParams('kdpbf', val)
+          this.setForm('kdpbf', val)
+          this.getObat()
+        }).onCancel(() => {
+          this.setForm('kdpbf', this.params.kdpbf)
+        })
+      } else {
+        this.setParams('kdpbf', val)
+        this.getObat()
+      }
     },
     obatSelected(val) {
       this.setForm('satuan_k', null)
@@ -55,6 +85,8 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     async getObat() {
       if (!this.params.kdpbf) return
       this.obats = []
+      this.dataMauReturs = []
+      this.setForm('kd_obat', null)
       this.loadingObat = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/retur/obat', param)
@@ -77,11 +109,38 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
               da.stok = da.stokterima.map(s => parseFloat(s.jumlah)).reduce((a, b) => a + b, 0)
             })
           }
+
+          return Promise.resolve(resp?.data)
         })
         .catch(() => { this.loadingDataMauRet = false })
     },
-    simpanRetur() {
-      console.log('form', this.form)
+    simpanRetur(item) {
+      console.log('sebelum simpan', item)
+      this.loading = true
+      item.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/retur/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            item.loading = false
+            console.log('simpan', resp.data)
+            if (!this.form.no_retur) {
+              this.setForm('no_retur', resp?.data?.no_retur)
+            }
+            const rinci = resp?.data?.rinci
+            const index = this.dataReturs.findIndex(da => da.no_retur === rinci.no_retur && da.kd_obat === rinci.kd_obat && da.nopenerimaan === rinci.nopenerimaan && da.no_batch === rinci.no_batch)
+            if (index >= 0) this.dataReturs[index] = rinci
+            else this.dataReturs.push(rinci)
+            item.stok = resp?.data?.jumlahStok
+            // masukkan nilai stok baru ke data yang sudah ada
+            notifSuccess(resp)
+            resolve(resp.data)
+          })
+          .catch(() => {
+            this.loading = false
+            item.loading = false
+          })
+      })
     }
   }
 })

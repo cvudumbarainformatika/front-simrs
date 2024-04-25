@@ -7,7 +7,6 @@
         v-else
         separator
       >
-        {{ items }}
         <q-item
           v-for="(item, i) in items"
           :key="i"
@@ -41,7 +40,7 @@
           />
           <q-item-section class="q-col-gutter-xs">
             <q-item-label>
-              DPJP : <span class="text-negative text-weight-bold">{{ item.dokter }}</span>
+              DPJP : <span class="text-negative text-weight-bold">{{ item.kodedokter ? item.dokter: '-' }}</span>
             </q-item-label>
             <q-item-label>
               RUANGAN : <span class="text-teal text-weight-bold"> {{ item.poli }}</span>
@@ -78,25 +77,40 @@
               class="q-mb-sm"
               icon-right="icon-mat-transfer_within_a_station"
               style="min-width: 120px;"
-              :disable="loadingTerima"
               :loading="loadingTerima && store.noreg === item?.noreg"
               @click="emits('terimapasien', item)"
             />
           </q-item-section>
           <q-item-section
-            v-else
+            v-if="item?.flagpelayanan === '2'"
             side
           >
             <q-btn
               dense
-              outline
               size="sm"
               no-caps
-              loading
+              :loading="loadingTerima && store.noreg === item?.noreg"
               color="primary"
               label="LIHAT LAYANAN"
               class="q-mb-sm"
               icon-right="icon-mat-edit"
+              style="min-width: 120px;"
+              @click="bukaLayanan(item)"
+            />
+          </q-item-section>
+          <q-item-section
+            v-if="item?.flagpelayanan === '1'"
+            side
+          >
+            <q-btn
+              dense
+              size="sm"
+              no-caps
+              :loading="loadingTerima && store.noreg === item?.noreg"
+              color="green"
+              label="SUDAH DILAYANANI"
+              class="q-mb-sm"
+              icon-right="icon-mat-key"
               style="min-width: 120px;"
               @click="bukaLayanan(item)"
             />

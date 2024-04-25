@@ -34,9 +34,11 @@ import { computed, defineAsyncComponent, onMounted, ref, shallowRef, watch } fro
 import { useStyledStore } from 'src/stores/app/styled'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/retur'
+import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
 
 const style = useStyledStore()
 const store = useReturPenyediaStore()
+const list = useListReturPenyediaStore()
 
 const pageRef = ref()
 const h = ref(0)
@@ -102,12 +104,16 @@ onMounted(() => {
   if (apps?.user?.kdruangansim !== '') {
     store.setForm('kd_ruang', apps?.user?.kdruangansim)
     store.setParams('kd_ruang', apps?.user?.kdruangansim)
+    list.setParam('kd_ruang', apps?.user?.kdruangansim)
     store.getInitialData()
+    // list.getInitialData()
   }
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kd_ruang', obj)
   store.setParams('kd_ruang', obj)
+  list.setParam('kd_ruang', obj)
+  list.getInitialData()
   store.getPerusahan()
   store.getObat()
 })
