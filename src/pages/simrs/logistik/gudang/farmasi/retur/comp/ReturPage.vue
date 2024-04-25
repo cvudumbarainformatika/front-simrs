@@ -251,7 +251,7 @@
           <div
             class="col-auto anak text-right"
           >
-            Stok Penerimaan
+            Sisa Stok
           </div>
 
           <div
