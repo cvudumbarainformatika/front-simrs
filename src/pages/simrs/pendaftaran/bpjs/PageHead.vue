@@ -33,7 +33,7 @@
           glossy
           push
           color="deep-orange"
-          label="Master  Pasien"
+          label="Master Pasien"
           size="md"
           @click="goTo('/pendaftaran/bpjs/pasien')"
         />

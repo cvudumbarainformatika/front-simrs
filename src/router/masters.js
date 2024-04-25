@@ -157,6 +157,10 @@ const masters = {
         }
       ]
     },
+    // {
+    //   path: '/master/pasien',
+    //   component: () => import('src/pages/simrs/master/pasien/IndexPage.vue')
+    // },
     {
       path: '/master/notfound',
       component: () => import('pages/MidlewareNotFound.vue')

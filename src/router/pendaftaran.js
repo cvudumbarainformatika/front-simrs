@@ -132,8 +132,9 @@ const pendaftaran = {
       ]
     },
     {
-      path: '/pendaftaran/pasien',
-      component: () => import('pages/simrs/pendaftaran/pasien/IndexPage.vue')
+      path: '/pendaftaran/data-pasien',
+      name: 'pendaftaran.data-pasien',
+      component: () => import('pages/simrs/pendaftaran/masterpasien/IndexPage.vue')
       // children: [
       //   {
       //     path: '/pendaftaran/pasien/daftar',
@@ -146,6 +147,10 @@ const pendaftaran = {
     {
       path: '/pendaftaran/general-consent',
       component: () => import('pages/simrs/pendaftaran/generalconsent/IndexPage.vue')
+    },
+    {
+      path: '/pendaftaran/master-pasien',
+      component: () => import('pages/simrs/pendaftaran/masterpasien/IndexPage.vue')
     },
 
     {
