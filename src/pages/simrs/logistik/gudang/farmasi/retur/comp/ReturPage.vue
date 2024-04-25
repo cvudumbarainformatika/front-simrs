@@ -48,38 +48,7 @@
               />
             </div>
           </div>
-          <!-- Satuan -->
-          <div class="row q-col-gutter-sm items-center q-mb-sm">
-            <div class="col-3">
-              Satuan
-            </div>
 
-            <div class="col-9">
-              <app-input
-                v-model="store.form.satuan_k"
-                label="Satuan"
-                outlined
-                valid
-                readonly
-              />
-            </div>
-          </div>
-          <!-- No Retur -->
-          <div class="row q-col-gutter-sm items-center q-mb-sm">
-            <div class="col-3">
-              Nomor Retur RS
-            </div>
-
-            <div class="col-9">
-              <app-input
-                v-model="store.form.no_retur"
-                label="Nomor Retur"
-                outlined
-                valid
-                readonly
-              />
-            </div>
-          </div>
           <!-- tgl Retur -->
           <div class="row q-col-gutter-sm items-center q-mb-sm">
             <div class="col-3">
@@ -97,8 +66,57 @@
               />
             </div>
           </div>
+          <!-- tgl Rusak -->
+          <div class="row q-col-gutter-sm items-center q-mb-sm">
+            <div class="col-3">
+              Tanggal Rusak
+            </div>
+
+            <div class="col-9">
+              <app-input-date-human
+                ref="refTaRusak"
+                :model="store.form.tanggalRusak"
+                label="Tanggal Rusak"
+                outlined
+                @set-display="setTanggalRusakDisp"
+                @db-model="setTanggalRusak"
+              />
+            </div>
+          </div>
         </div>
         <div class="col-6">
+          <!-- No Retur -->
+          <div class="row q-col-gutter-sm items-center q-mb-sm">
+            <div class="col-3">
+              Nomor Retur RS
+            </div>
+
+            <div class="col-9">
+              <app-input
+                v-model="store.form.no_retur"
+                label="Nomor Retur"
+                outlined
+                valid
+                readonly
+              />
+            </div>
+          </div>
+          <!-- Satuan -->
+          <div class="row q-col-gutter-sm items-center q-mb-sm">
+            <div class="col-3">
+              Satuan
+            </div>
+
+            <div class="col-9">
+              <app-input
+                v-model="store.form.satuan_k"
+                label="Satuan"
+                outlined
+                valid
+                readonly
+              />
+            </div>
+          </div>
           <!-- No Faktur Retur -->
           <div class="row q-col-gutter-sm items-center q-mb-sm">
             <div class="col-3">
@@ -419,7 +437,7 @@
 import { humanDate, formatRpDouble } from 'src/modules/formatter'
 import { date } from 'quasar'
 import { useReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/retur'
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { notifErrVue } from 'src/modules/utils'
 
 const store = useReturPenyediaStore()
@@ -428,6 +446,12 @@ function getData() {
   store.getDataMauRet().then(() => {
     refCariNoPenerimaan.value.$refs.refInput.focus()
   })
+}
+function setTanggalRusak(val) {
+  store.setForm('tgl_rusak', date.formatDate(val, 'YYYY-MM-DD'))
+}
+function setTanggalRusakDisp(val) {
+  store.setForm('tanggalRusak', val)
 }
 function setTanggal(val) {
   store.setForm('tgl_retur', date.formatDate(val, 'YYYY-MM-DD'))
@@ -459,9 +483,14 @@ function updateJum(evt, det, key) {
   det[key] = nilai
   if (key === 'jumlah_retur') {
     const jumlah = parseFloat(det.jumlah)
+    const stok = parseFloat(det.stok)
     if (nilai > jumlah) {
       det[key] = jumlah
       notifErrVue('Jumlah Retur Tidak Boleh Melebihi Jumlah diterima')
+    }
+    if (nilai > stok) {
+      det[key] = stok
+      notifErrVue('Jumlah Retur Tidak Boleh Melebihi Jumlah stok')
     }
     det.subtotal = parseFloat(nilai) * parseFloat(det.harga_neto)
   }
@@ -470,6 +499,7 @@ function updateJum(evt, det, key) {
 const refTaRetur = ref(null)
 const refNoFakRet = ref(null)
 const refTaFakRetur = ref(null)
+const refTaRusak = ref(null)
 const refTaKwiRetur = ref(null)
 const refNoKwiRet = ref(null)
 const refJumlah = ref(null)
@@ -480,6 +510,7 @@ const refKondisi = ref(null)
 function validasi(index, dibayar) {
   // console.log(refKondisi.value)
   const taRetur = refTaRetur.value.$refs.refInputDate.validate()
+  const taRusak = refTaRusak.value.$refs.refInputDate.validate()
   // const TaFakRetur = refTaFakRetur.value.$refs.refInputDate.validate()
   // const noFakRet = refNoFakRet.value.$refs.refInput.validate()
   let taKwiRetur = false
@@ -501,8 +532,9 @@ function validasi(index, dibayar) {
 
   if (
     taRetur &&
-      // noFakRet &&
-      // TaFakRetur &&
+    // noFakRet &&
+    // TaFakRetur &&
+      taRusak &&
       taKwiRetur &&
       noKwiRet &&
       jumlah &&
@@ -522,6 +554,13 @@ function simpan(index, item) {
     notifErrVue('Cek kembali input anda')
   }
 }
+onUnmounted(() => {
+  store.form = {}
+  store.perusahaans = []
+  store.obats = []
+  store.dataMauReturs = []
+  store.dataReturs = []
+})
 </script>
 <style lang="scss" scoped>
 .anak{

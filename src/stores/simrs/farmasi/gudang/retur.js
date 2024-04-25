@@ -85,6 +85,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     async getObat() {
       if (!this.params.kdpbf) return
       this.obats = []
+      this.dataMauReturs = []
       this.setForm('kd_obat', null)
       this.loadingObat = true
       const param = { params: this.params }
@@ -114,7 +115,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
         .catch(() => { this.loadingDataMauRet = false })
     },
     simpanRetur(item) {
-      console.log('sebelum simpan')
+      console.log('sebelum simpan', item)
       this.loading = true
       item.loading = true
       return new Promise(resolve => {
@@ -126,7 +127,12 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
             if (!this.form.no_retur) {
               this.setForm('no_retur', resp?.data?.no_retur)
             }
-            this.dataReturs.push(resp?.data?.rinci)
+            const rinci = resp?.data?.rinci
+            const index = this.dataReturs.findIndex(da => da.no_retur === rinci.no_retur && da.kd_obat === rinci.kd_obat && da.nopenerimaan === rinci.nopenerimaan && da.no_batch === rinci.no_batch)
+            if (index >= 0) this.dataReturs[index] = rinci
+            else this.dataReturs.push(rinci)
+            item.stok = resp?.data?.jumlahStok
+            // masukkan nilai stok baru ke data yang sudah ada
             notifSuccess(resp)
             resolve(resp.data)
           })
