@@ -147,6 +147,10 @@ const gudang = {
           path: '/gudang/farmasi/listkonsinyasi',
           component: () => import('pages/simrs/logistik/gudang/farmasi/listkonsinyasi/IndexPage.vue')
         },
+        {
+          path: '/gudang/farmasi/barangrusak',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/barangrusak/IndexPage.vue')
+        },
         // {
         //   path: '/gudang/farmasi/bast',
         //   component: () => import('pages/simrs/logistik/gudang/farmasi/bast/IndexPage.vue')

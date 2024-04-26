@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
+export const useListBarangRusakStore = defineStore('list_barang_rusak', {
   state: () => ({
     loading: false,
     items: [],

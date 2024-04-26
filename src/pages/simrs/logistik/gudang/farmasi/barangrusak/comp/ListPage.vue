@@ -302,9 +302,9 @@
 <script setup>
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
+import { useListBarangRusakStore } from 'src/stores/simrs/farmasi/barangrusak/list'
 
-const store = useListReturPenyediaStore()
+const store = useListBarangRusakStore()
 // click
 function onClick (val) {
   console.log('click', val)
