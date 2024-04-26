@@ -95,7 +95,7 @@
               class="q-mb-sm"
               icon-right="icon-mat-edit"
               style="min-width: 120px;"
-              @click="bukaLayanan(item)"
+              @click="emits('bukalayanan', item)"
             />
           </q-item-section>
           <q-item-section
@@ -112,17 +112,17 @@
               class="q-mb-sm"
               icon-right="icon-mat-key"
               style="min-width: 120px;"
-              @click="bukaLayanan(item)"
+              @click="emits('bukalayanan', item)"
             />
           </q-item-section>
         </q-item>
       </q-list>
     </div>
     <!-- layanan -->
-    <page-layanan-igd
+    <!-- <page-layanan-igd
       v-model="store.pageLayanan"
       :pasien="pasien"
-    />
+    /> -->
   </div>
 </template>
 
@@ -130,19 +130,20 @@
 // eslint-disable-next-line no-unused-vars
 import ListLoading from './ListLoading.vue'
 import EmptyData from './EmptyData.vue'
-import { defineAsyncComponent, ref } from 'vue'
+// import { defineAsyncComponent, ref } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 
-const emits = defineEmits(['terimapasien'])
+const emits = defineEmits(['terimapasien', 'bukalayanan'])
 const store = usePengunjungIgdStore()
 
-const PageLayananIgd = defineAsyncComponent(() => import('src/pages/simrs/igd/layanan/PageLayananIgd.vue'))
-const pasien = ref(null)
-function bukaLayanan(item) {
-  pasien.value = item
-  store.pageLayanan = true
-}
+// const PageLayananIgd = defineAsyncComponent(() => import('src/pages/simrs/igd/layanan/PageLayananIgd.vue'))
+// const pasien = ref(null)
+// function bukaLayanan(item) {
+//   pasien.value = item
+//   store.pageLayanan = true
+//   // store.setTerima(item)
+// }
 
 defineProps({
   items: {

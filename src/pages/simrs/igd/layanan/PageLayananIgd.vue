@@ -92,6 +92,12 @@ defineProps({
 
 const menus = ref([
   {
+    name: 'AnamnesisPage',
+    label: 'Anamnesis',
+    icon: 'icon-mat-medical_information',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/anamnesis/AnamnesisPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
