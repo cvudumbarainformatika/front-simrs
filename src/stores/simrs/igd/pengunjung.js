@@ -118,8 +118,61 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (resp.status === 200) {
           const wew = this.items.filter(x => x === pasien)
           console.log('wew', wew)
-          if (wew.length) {
-            wew[0].flagpelayanan = '2'
+          // if (wew.length) {
+          //   wew[0].flagpelayanan = '2'
+          // }
+          this.loadingTerima = false
+          this.noreg = null
+        }
+      } catch (error) {
+        console.log(error)
+        this.loadingTerima = false
+        this.noreg = null
+        this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
+      }
+    },
+    async bukaLayanan(pasien) {
+      // this.loadingCall = false
+      this.loadingTerima = true
+      const form = { noreg: pasien?.noreg }
+      this.noreg = pasien?.noreg
+      this.togglePageTindakan()
+      try {
+        const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
+        // console.log('terima', resp)
+        if (resp.status === 200) {
+          const findPasien = this.items.filter(x => x?.rs1 === pasien?.noreg)
+          if (findPasien.length) {
+            // findPasien[0].status = findPasien[0].status === '' ? '2' : findPasien[0].status
+
+            // BARU
+            findPasien[0].anamnesis = resp?.data?.anamnesis
+            // findPasien[0].datasimpeg = resp?.data?.datasimpeg
+            // findPasien[0].diagnosa = resp?.data?.diagnosa
+            // findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
+            // findPasien[0].diagnosakebidanan = resp?.data?.diagnosakebidanan
+            // findPasien[0].diet = resp?.data?.diet
+            // findPasien[0].edukasi = resp?.data?.edukasi
+            // findPasien[0].fisio = resp?.data?.fisio
+            // findPasien[0].gambars = resp?.data?.gambars
+            // findPasien[0].laborats = resp?.data?.laborats
+            // findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
+            // findPasien[0].ok = resp?.data?.ok
+            // findPasien[0].pemeriksaanfisik = resp?.data?.pemeriksaanfisik
+            // findPasien[0].penunjanglain = resp?.data?.penunjanglain
+            // findPasien[0].planning = resp?.data?.planning
+            // findPasien[0].radiologi = resp?.data?.radiologi
+            // findPasien[0].sharing = resp?.data?.sharing
+            // findPasien[0].taskid = resp?.data?.taskid
+            // findPasien[0].tindakan = resp?.data?.tindakan
+            // BARU
+            // findPasien[0].laporantindakan = resp?.data?.laporantindakan
+            // findPasien[0].psikiatri = resp?.data?.psikiatri
+            // findPasien[0].neonatusmedis = resp?.data?.neonatusmedis
+            // findPasien[0].neonatuskeperawatan = resp?.data?.neonatuskeperawatan
+            // findPasien[0].pediatri = resp?.data?.pediatri
+            // findPasien[0].kandungan = resp?.data?.kandungan
+            // findPasien[0].dokumenluar = resp?.data?.dokumenluar
           }
           this.loadingTerima = false
           this.noreg = null
@@ -130,6 +183,9 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
+    },
+    togglePageTindakan() {
+      this.pageLayanan = !this.pageLayanan
     }
   }
 })

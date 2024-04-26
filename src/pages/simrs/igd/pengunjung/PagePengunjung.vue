@@ -30,6 +30,7 @@
           :loading="store.loading"
           :loading-terima="store.loadingTerima"
           @terimapasien="terimapasien"
+          @bukalayanan="bukaTindakan"
         />
       </q-scroll-area>
       <div
@@ -41,6 +42,12 @@
         />
       </div>
     </q-card>
+    <page-layanan-igd
+      :key="pasien"
+      v-model="store.pageLayanan"
+      :pasien="pasien"
+      :loading-terima="store?.loadingTerima"
+    />
   </q-page>
 </template>
 
@@ -49,15 +56,23 @@
 import ListPengunjung from './ListPengunjung.vue'
 import HeaderPage from './HeaderPage.vue'
 import FooterPage from './FooterPage.vue'
+import PageLayananIgd from '../layanan/PageLayananIgd.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 const store = usePengunjungIgdStore()
 const style = useStyledStore()
+const pasien = ref(null)
 
 function terimapasien(val) {
   store.setTerima(val)
   store.items.flagpelayanan = '1'
+}
+
+function bukaTindakan(val) {
+  console.log('buka tindakan', val)
+  pasien.value = val
+  store.bukaLayanan(val)
 }
 
 onMounted(() => {
