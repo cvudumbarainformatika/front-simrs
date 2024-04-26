@@ -10,7 +10,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     pasiens: [],
     meta: null,
     loadingIcare: false,
-    loadingTerima: true,
+    loadingTerima: false,
     loadingTidakhadir: false,
     loadingCall: false,
     noreg: null,
@@ -134,6 +134,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     async bukaLayanan(pasien) {
       // this.loadingCall = false
       this.loadingTerima = true
+      console.log('load1', this.loadingTerima)
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
       this.togglePageTindakan()
@@ -175,6 +176,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             // findPasien[0].dokumenluar = resp?.data?.dokumenluar
           }
           this.loadingTerima = false
+          console.log('load2', this.loadingTerima)
           this.noreg = null
         }
       } catch (error) {
@@ -186,6 +188,41 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     },
     togglePageTindakan() {
       this.pageLayanan = !this.pageLayanan
+    },
+    injectDataPasien(pasien, val, kode, arr) {
+      const findPasien = this.items.filter(x => x === pasien)
+      // console.log('inject pasien', findPasien)
+      if (findPasien.length) {
+        const data = findPasien[0]
+        const target = data[kode]?.find(x => x.id === val.id)
+        // console.log('inject target pasien', target)
+        // console.log('inject kode pasien', kode)
+        // console.log('inject isi pasien', val)
+
+        if (target) {
+          Object.assign(target, val)
+        } else {
+          if (kode === 'diagnosa') {
+            data[kode]?.push(val)
+          } else if (kode === 'dokumenluar') {
+            const trg = data[kode]
+            if (trg) {
+              data[kode] = []
+              data[kode] = val
+            }
+          } else {
+            data[kode]?.splice(0, 0, val)
+          }
+        }
+      }
+    },
+    hapusDataAnamnesis(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].anamnesis
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
     }
   }
 })

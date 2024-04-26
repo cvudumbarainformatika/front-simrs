@@ -89,7 +89,6 @@
               dense
               size="sm"
               no-caps
-              :loading="loadingTerima && store.noreg === item?.noreg"
               color="primary"
               label="LIHAT LAYANAN"
               class="q-mb-sm"
@@ -106,7 +105,6 @@
               dense
               size="sm"
               no-caps
-              :loading="loadingTerima && store.noreg === item?.noreg"
               color="green"
               label="SUDAH DILAYANANI"
               class="q-mb-sm"

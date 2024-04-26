@@ -15,7 +15,7 @@
         <ListAnamnesis
           :key="props.pasien"
           :pasien="props.pasien"
-          :loading-terima="loadingTerima"
+          :loadingaja="loadingaja"
         />
       </div>
     </div>
@@ -63,7 +63,7 @@ const props = defineProps({
     type: Object,
     default: null
   },
-  loadingTerima: {
+  loadingaja: {
     type: Boolean,
     default: false
   }

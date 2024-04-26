@@ -46,7 +46,7 @@
       :key="pasien"
       v-model="store.pageLayanan"
       :pasien="pasien"
-      :loading-terima="store?.loadingTerima"
+      :loadingaja="store.loadingTerima"
     />
   </q-page>
 </template>
@@ -70,7 +70,7 @@ function terimapasien(val) {
 }
 
 function bukaTindakan(val) {
-  console.log('buka tindakan', val)
+  console.log('load', store?.loadingTerima)
   pasien.value = val
   store.bukaLayanan(val)
 }
