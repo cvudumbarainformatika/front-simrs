@@ -547,7 +547,14 @@ function simpan(index, item) {
   const dibayar = !!item.tgl_pembayaran
   if (validasi(index, dibayar)) {
     if (!item?.kondisi_barang || item?.kondisi_barang === '') return notifErrVue('Kondisi barang belum di isi')
-    store.setForm('item', item)
+    // store.setForm('item', item)
+    store.setForm('nopenerimaan', item.nopenerimaan)
+    store.setForm('no_batch', item.no_batch)
+    store.setForm('jumlah_retur', item.jumlah_retur)
+    store.setForm('kondisi_barang', item.kondisi_barang)
+    store.setForm('harga_neto', item.harga_neto)
+    store.setForm('subtotal', item.subtotal)
+    store.setForm('tgl_exp', item.tgl_exp)
     store.simpanRetur(item)
     // console.log('form', store.form)
   } else {
