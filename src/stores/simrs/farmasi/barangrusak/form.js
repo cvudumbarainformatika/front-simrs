@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
   state: () => ({
@@ -7,6 +8,7 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
     loadingObat: false,
     loadingBatch: false,
     loadingPenerimaan: false,
+    items: [],
     params: {
       per_page: 10
     },
@@ -25,11 +27,16 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
     setForm(key, val) {
       this.form[key] = val
     },
+    resetForm() {
+      const gudang = this.form.kd_ruang
+      this.form = {}
+      this.penerimaan = {}
+      this.setForm('kd_ruang', gudang)
+    },
     obatSelected(val) {
       this.setParams('kdobat', val)
       this.setParams('nobatch', null)
-      this.form = {}
-      this.penerimaan = {}
+      this.resetForm()
       const obat = this.obats.find(a => a.kd_obat === val)
       if (obat) {
         this.setForm('satuan_kcl', obat?.satuan_k)
@@ -57,6 +64,9 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
       if (trm) {
         this.penerimaan = trm
         this.setForm('isi', trm?.penerimaan?.penerimaanrinci[0]?.isi ?? 0)
+        this.setForm('harga_net', trm?.harga?.harga)
+        this.setForm('kdpbf', trm?.penerimaan?.kdpbf)
+        this.setForm('nopenerimaan', trm?.nopenerimaan)
         this.setForm('stok', parseFloat(trm.total))
       }
       // this.cariPenerimaan()
@@ -64,6 +74,19 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
 
     getInitialData() {
       this.cariObat()
+      this.listBelum()
+    },
+    async listBelum() {
+      this.items = []
+      this.loading = true
+      await api.get('v1/simrs/penunjang/farmasinew/barangrusak/list-belum')
+        .then(resp => {
+          this.loading = false
+          this.items = resp?.data
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     async cariObat() {
       this.obats = []
@@ -105,7 +128,9 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
             })
           }
           if (this.penerimaans?.length === 1) {
-            this.setForm('isi', this.penerimaans[0]?.penerimaan?.penerimaanrinci[0]?.isi ?? 0)
+            this.setForm('isi', this.penerimaans[0]?.penerimaan?.penerimaanrinci[0]?.isi)
+            this.setForm('harga_net', this.penerimaans[0]?.harga?.harga)
+            this.setForm('kdpbf', this.penerimaans[0]?.penerimaan?.kdpbf)
             this.setForm('nopenerimaan', this.penerimaans[0]?.nopenerimaan)
             this.setForm('stok', parseFloat(this.penerimaans[0]?.total))
             this.setParams('penerimaan', this.penerimaans[0]?.nopenerimaan)
@@ -114,6 +139,50 @@ export const useFormBarangRusakStore = defineStore('form_barang_rusak', {
         })
         .catch(() => {
           this.loadingPenerimaan = false
+        })
+    },
+    simpan() {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/barangrusak/simpan', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan', resp?.data)
+            notifSuccess(resp)
+            const data = resp?.data?.data
+            const form = this.form
+            const index = this.items.findIndex(it => it.kd_obat === form.kd_obat && it.nopenerimaan === form.nopenerimaan && it.nobatch === form.no_batch)
+            if (index >= 0) this.items[index] = data
+            else this.items.push(data)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    async deleteRinci(item) {
+      item.loading = true
+      await api.post('v1/simrs/penunjang/farmasinew/barangrusak/hapus', item)
+        .then(resp => {
+          item.loading = false
+          const index = this.items.findIndex(it => it.kd_obat === item.kd_obat && it.nopenerimaan === item.nopenerimaan && it.nobatch === item.nobatch)
+          if (index >= 0) this.items.splice(index, 1)
+          console.log('hapus', resp?.data)
+        })
+        .catch(() => {
+          item.loading = false
+        })
+    },
+    async kunci(item) {
+      item.loadingKunci = true
+      item.kd_ruang = this.form.kd_ruang
+      await api.post('v1/simrs/penunjang/farmasinew/barangrusak/kunci', item)
+        .then(resp => {
+          item.loadingKunci = false
+          item.kunci = '1'
+          console.log('kunci', resp?.data)
+        })
+        .catch(() => {
+          item.loadingKunci = false
         })
     }
   }
