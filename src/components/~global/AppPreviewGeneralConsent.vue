@@ -59,6 +59,7 @@
 
 <script setup>
 import { ref } from 'vue'
+// import { useContent } from '../~static/generalconsent/content'
 
 const refresh = ref(false)
 defineProps({
@@ -72,5 +73,6 @@ defineProps({
   }
 })
 const emits = defineEmits(['close'])
+// const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(props?.isiPasien, true)
 
 </script>

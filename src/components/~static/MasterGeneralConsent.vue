@@ -159,10 +159,13 @@
         </div>
         <div>
           <div
+            id="htmlC"
+            ref="refGencon"
             class="mirror-editor"
-            v-html="isi"
+            v-html="parse(isi)"
           />
           <q-popup-edit
+            v-if="editableMaster"
             v-model="isi"
             max-width="750px"
           >
@@ -263,7 +266,7 @@ import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
 // eslint-disable-next-line no-unused-vars
 import { api, pathImg } from 'src/boot/axios'
-import { ref, watch, watchEffect } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { jsPDF } from 'jspdf'
 // eslint-disable-next-line no-unused-vars
@@ -273,6 +276,7 @@ const app = useAplikasiStore()
 
 const rePdfDoc = ref(null)
 const editorRef = ref(null)
+const refGencon = ref()
 const store = useGeneralConsentStore()
 
 const saveWork = () => {
@@ -283,10 +287,14 @@ const props = defineProps({
   editableMaster: { type: Boolean, default: false },
   cetak: { type: Boolean, default: false },
   isiPasien: { type: Object, default: null },
-  wali1: { type: String, default: null },
   refresh: { type: Boolean, default: false }
 })
 const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(props?.isiPasien)
+
+onMounted(() => {
+  const xx = document.getElementById('htmlC')
+  console.log('refGencon.value', xx)
+})
 
 const emits = defineEmits(['afterRefresh'])
 watchEffect(() => {
@@ -297,6 +305,22 @@ watchEffect(() => {
   }
 })
 
+function parse(val) {
+  // console.log('store.form.wali1', val)
+  // const word = val
+  // if (store.form.wali1) {
+  const word = val?.replace(' 1 ) ..............................  (Hubungan dengan pasien: ..... )',
+      ` 1 ) ${store.form.wali1 ? '<b>' + store.form.wali1 + '</b>' : '..............................'}</b> 
+      (Hubungan dengan pasien: ${store.form.hubunganWali1 ? '<b>' + store.form.hubunganWali1 + '</b>' : '.....'} )`)
+  // }
+  // if (store.form.wali2) {
+  const str = word?.replace('2 ) .............................. (Hubungan dengan pasien: ...... )',
+  `2 ) ${store.form.wali2 ? '<b>' + store.form.wali2 + '</b>' : '..............................'}</b> 
+      (Hubungan dengan pasien: ${store.form.hubunganWali2 ? '<b>' + store.form.hubunganWali2 + '</b>' : '.....'} )`)
+  // }
+  return str
+}
+
 // eslint-disable-next-line no-unused-vars
 function createPdf() {
   // console.log(rePdfDoc.value.innerHTML)
@@ -304,7 +328,7 @@ function createPdf() {
   const doc = new jsPDF({
     orientation: 'p',
     unit: 'px',
-    format: 'a4',
+    format: 'legal',
     hotfixes: ['px_scaling']
   })
   const source = rePdfDoc.value
@@ -330,6 +354,7 @@ function createPdf() {
     // doc.save(pasien?.value?.norm + '.pdf')
 
     const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.pdf', { type: 'application/pdf' })
+    // const pdf = new File([doc.output('arraybuffer')], pasien?.value?.norm + '.jpg', { type: 'application/jpg' })
     simpanPdf(pdf)
   })
 }
@@ -349,13 +374,15 @@ async function simpanPdf(pdf) {
 
   const resp = await api.post('/v1/simrs/pendaftaran/generalconscent/simpanpdf', formData)
   console.log('simpan pdf', resp)
+  store.openPreviewGc = false
 }
 
 watch(() => isOk.value, (n, old) => {
-  console.log(n)
+  console.log('watcher', n)
   if (n === true) {
     if (props.cetak === true) {
-      setTimeout(createPdf, 1000)
+      // setTimeout(createPdf, 1000)
+      setTimeout(createPdf, 500)
     }
   }
 })

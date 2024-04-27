@@ -90,7 +90,7 @@
 
           <div class="col-6 q-pa-md">
             <q-card class="q-pa-md">
-              <!-- <div>Memberikan kuasa/ wewenang terhadap informasi kesehatan dan pengambilan keputusan kepada pihak yang di tunjuk pasien</div>
+              <div>Memberikan kuasa/ wewenang terhadap informasi kesehatan dan pengambilan keputusan kepada pihak yang di tunjuk pasien</div>
               <q-separator />
               <q-card-section>
                 <div class="row">
@@ -98,7 +98,7 @@
                     <q-avatar
                       color="primary"
                       text-color="white"
-                      size="30px"
+                      size="25px"
                       class="q-mr-md"
                     >
                       1
@@ -114,7 +114,8 @@
                         valid
                       />
                     </div>
-                    <div class="full-width q-gutter-sm">
+                    <div class="full-width q-gutter-xs q-mt-sm">
+                      <div>Hubungan dengan Pasien ?</div>
                       <q-radio
                         v-for="item in store.wali"
                         :key="item"
@@ -123,6 +124,7 @@
                         :label="item"
                         color="teal"
                         dense
+                        size="xs"
                       />
 
                       <q-btn
@@ -142,7 +144,7 @@
                     <q-avatar
                       color="primary"
                       text-color="white"
-                      size="30px"
+                      size="25px"
                       class="q-mr-md"
                     >
                       2
@@ -158,7 +160,8 @@
                         valid
                       />
                     </div>
-                    <div class="full-width q-gutter-sm">
+                    <div class="full-width q-gutter-xs q-mt-sm">
+                      <div>Hubungan dengan Pasien ?</div>
                       <q-radio
                         v-for="item in store.wali"
                         :key="item"
@@ -167,6 +170,7 @@
                         :label="item"
                         color="teal"
                         dense
+                        size="xs"
                       />
 
                       <q-btn
@@ -180,46 +184,20 @@
                     </div>
                   </div>
                 </div>
-              </q-card-section> -->
-              <q-card-section>
-                <div class="text-center ">
-                  <div class="text-weight-bold text-subtitle1 q-mb-md">
-                    PASIEN DAN/ ATAU WALI HUKUM MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
-                  </div>
-                  <q-btn
-                    color="teal"
-                    class="q-my-md"
-                    @click="emits('openPreviewGc')"
-                  >
-                    <q-icon
-                      left
-                      size="sm"
-                      name="icon-mat-menu_book"
-                    />
-                    <div>Informasi General Consent</div>
-                  </q-btn>
-                </div>
-                <div class="column flex-center q-mt-lg">
-                  <q-checkbox
-                    v-model="pernyataan"
-                    label="Saya
-                    menjamin bahwa pasien sudah membaca dan menandatangani form consent
-                    pembukaan data dari SATUSEHAT"
-                  />
-                </div>
               </q-card-section>
             </q-card>
           </div>
         </div>
       </q-card-section>
       <q-separator />
-      <!-- <q-card-section>
+      <q-card-section>
         <div class="text-center ">
           <div class="text-weight-bold text-subtitle1 q-mb-md">
             PASIEN DAN/ ATAU WALI HUKUM MEMBACA, MEMAHAMI DAN MENGISI INFORMASI BERIKUT
           </div>
           <q-btn
             color="teal"
+            class="q-my-md"
             @click="emits('openPreviewGc')"
           >
             <q-icon
@@ -228,20 +206,17 @@
               name="icon-mat-menu_book"
             />
             <div>Informasi General Consent</div>
-          </q-btn> -->
-      <!-- <q-btn
-            color="primary q-ma-md"
-            @click="emits('openPreviewGc')"
-          >
-            <q-icon
-              left
-              size="sm"
-              name="icon-mat-menu_book"
-            />
-            <div>Hak Dan Kewajiban Pasien</div>
-          </q-btn> -->
-      <!-- </div>
-      </q-card-section> -->
+          </q-btn>
+        </div>
+        <div class="column flex-center q-mt-lg">
+          <q-checkbox
+            v-model="pernyataan"
+            label="Saya
+                    menjamin bahwa pasien sudah membaca dan menandatangani form consent
+                    pembukaan data dari SATUSEHAT"
+          />
+        </div>
+      </q-card-section>
       <q-separator />
 
       <!-- <q-card-section>
