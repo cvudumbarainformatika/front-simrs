@@ -64,7 +64,7 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
     kunci(item) {
       item.loadingKunci = true
       return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/retur/', item)
+        api.post('v1/simrs/penunjang/farmasinew/retur/kunci', item)
           .then(resp => {
             item.loadingKunci = false
             console.log('kuci', resp?.data)

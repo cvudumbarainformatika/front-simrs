@@ -17,6 +17,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     perusahaans: [],
     obats: [],
     dataMauReturs: [],
+    dataRusaks: [],
     dataReturs: []
   }),
   actions: {
@@ -25,6 +26,11 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     },
     setForm(key, val) {
       this.form[key] = val
+    },
+    resetForm(key, val) {
+      const gudang = this.form.kd_ruang
+      this.form = {}
+      this.setForm('kd_ruang', gudang)
     },
     perusahaanSelected(val) {
       if (this.dataReturs.length) {
@@ -86,6 +92,7 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
       if (!this.params.kdpbf) return
       this.obats = []
       this.dataMauReturs = []
+      this.dataRusaks = []
       this.setForm('kd_obat', null)
       this.loadingObat = true
       const param = { params: this.params }
@@ -98,12 +105,14 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
     },
     async getDataMauRet() {
       this.dataMauReturs = []
+      this.dataRusaks = []
       this.loadingDataMauRet = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/retur/ambil-data', param)
         .then(resp => {
           this.loadingDataMauRet = false
-          this.dataMauReturs = resp?.data
+          this.dataRusaks = resp?.data?.rusak
+          this.dataMauReturs = resp?.data?.penerimaan
           if (this.dataMauReturs.length > 0) {
             this.dataMauReturs.forEach(da => {
               da.stok = da.stokterima.map(s => parseFloat(s.jumlah)).reduce((a, b) => a + b, 0)
