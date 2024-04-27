@@ -127,12 +127,12 @@ export const useReturPenyediaStore = defineStore('retur_penyedia', {
             if (!this.form.no_retur) {
               this.setForm('no_retur', resp?.data?.no_retur)
             }
+
             const rinci = resp?.data?.rinci
             const index = this.dataReturs.findIndex(da => da.no_retur === rinci.no_retur && da.kd_obat === rinci.kd_obat && da.nopenerimaan === rinci.nopenerimaan && da.no_batch === rinci.no_batch)
             if (index >= 0) this.dataReturs[index] = rinci
             else this.dataReturs.push(rinci)
-            item.stok = resp?.data?.jumlahStok
-            // masukkan nilai stok baru ke data yang sudah ada
+
             notifSuccess(resp)
             resolve(resp.data)
           })

@@ -61,6 +61,21 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
           .catch(() => { this.loading = false })
       })
     },
+    kunci(item) {
+      item.loadingKunci = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/retur/', item)
+          .then(resp => {
+            item.loadingKunci = false
+            console.log('kuci', resp?.data)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            item.loadingKunci = false
+          })
+      })
+    },
     async deleteHeader(val) {
       val.loading = true
       val.expand = !val.expand

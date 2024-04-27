@@ -60,6 +60,7 @@
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
+                  :loadingaja="loadingaja"
                   depo="igd"
                 />
               </template>
@@ -87,10 +88,20 @@ defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loadingaja: {
+    type: Boolean,
+    default: false
   }
 })
 
 const menus = ref([
+  {
+    name: 'AnamnesisPage',
+    label: 'Anamnesis',
+    icon: 'icon-mat-medical_information',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/anamnesis/AnamnesisPage.vue')))
+  },
   {
     name: 'e-resep-page',
     label: 'EResep',

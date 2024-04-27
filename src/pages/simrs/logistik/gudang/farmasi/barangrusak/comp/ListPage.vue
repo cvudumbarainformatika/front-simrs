@@ -18,8 +18,11 @@
       @goto="store.setPage"
       @set-row="store.setPerPage"
       @refresh="store.refreshTable"
-      @on-click="onClick"
     >
+      <!-- @on-click="onClick" -->
+      <template #col-obat>
+        <div>Obat</div>
+      </template>
       <template #col-nomor>
         <div>Nomor</div>
       </template>
@@ -29,52 +32,76 @@
       <template #col-tanggal>
         <div>Tanggal</div>
       </template>
-      <template #col-gud>
-        <div>Gudang</div>
+      <template #col-jumlah>
+        <div>Jumlah</div>
+      </template>
+      <template #col-harga>
+        <div>Harga</div>
+      </template>
+      <template #col-nilai>
+        <div>Nilai</div>
+      </template>
+      <template #cell-obat="{ row }">
+        <div
+          class="row no-wrap items-center q-mb-xs"
+          style="white-space: normal !important;"
+        >
+          <div class="box text-weight-bold">
+            {{ row?.masterobat?.nama_obat }}
+          </div>
+        </div>
+        <div
+          class="row no-wrap q-col-gutter-sm items-center q-mb-xs"
+          style="white-space: normal !important;"
+        >
+          <div class="text-italic f-10">
+            {{ row?.masterobat?.kd_obat }}
+          </div>
+        </div>
       </template>
       <template #cell-nomor="{ row }">
         <div
-          v-if="!!row.no_retur"
+          v-if="!!row.nopenerimaan"
           class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
+          style="white-space: normal;"
         >
-          <div class="q-mr-xs ">
-            Nomor Retur
+          <div class="">
+            Nomor Penerimaan
           </div>
           <div class="box text-right text-italic ">
-            {{ row.no_retur }}
+            {{ row.nopenerimaan }}
           </div>
         </div>
         <div
-          v-if="!!row.no_faktur_retur_pbf"
+          v-if="!!row.nobatch"
           class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
+          style="white-space: normal !important;"
         >
-          <div class="q-mr-xs ">
-            Nomor Faktur Retur PBF
+          <div class="">
+            Nomor Batch
           </div>
-          <div class="box text-right text-italic">
-            {{ row.no_faktur_retur_pbf }}
-          </div>
-        </div>
-        <div
-          v-if="!!row.no_kwitansi_pembayaran"
-          class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
-        >
-          <div class="q-mr-xs ">
-            Nomor Kwitansi Pembayaran
-          </div>
-          <div class="box text-right text-italic">
-            {{ row.no_kwitansi_pembayaran }}
+          <div class="text-right text-italic ">
+            {{ row.nobatch }}
           </div>
         </div>
       </template>
       <template #cell-tanggal="{ row }">
         <div
+          v-if="row.tgl_entry"
+          class="row no-wrap justify-between items-center q-mb-xs"
+          style="white-space: normal !important;"
+        >
+          <div class="q-mr-xs">
+            Entry
+          </div>
+          <div class="text-weight-bold">
+            {{ dateFullFormat(row.tgl_entry) }}
+          </div>
+        </div>
+        <div
           v-if="row.tgl_retur"
           class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
+          style="white-space: normal !important;"
         >
           <div class="q-mr-xs">
             Retur
@@ -84,35 +111,38 @@
           </div>
         </div>
         <div
-          v-if="row.tgl_faktur_retur_pbf"
+          v-if="row.tgl_pemusnahan"
           class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
+          style="white-space: normal !important;"
         >
           <div class="q-mr-xs">
-            Faktur Retur PBF
+            Dimusnahkan
           </div>
           <div class="text-weight-bold">
-            {{ dateFullFormat(row.tgl_faktur_retur_pbf) }}
+            {{ dateFullFormat(row.tgl_pemusnahan) }}
           </div>
         </div>
-        <div
-          v-if="row.tgl_kwitansi_pembayaran"
-          class="row no-wrap justify-between items-center q-mb-xs"
-          style="white-space: none;"
-        >
-          <div class="q-mr-xs">
-            Kwitansi Pembayaran
-          </div>
-          <div class="text-weight-bold">
-            {{ dateFullFormat(row.tgl_kwitansi_pembayaran) }}
-          </div>
-        </div>
-      </template>
-      <template #cell-gud="{ row }">
-        {{ row?.gudang?.nama }}
       </template>
       <template #cell-penyedia="{ row }">
-        {{ row?.penyedia?.nama }}
+        {{ row?.pihakketiga?.nama ?? 'Penyedia Tidak Ditemukan' }}
+      </template>
+      <template #cell-jumlah="{ row }">
+        <div class="row justify-end items-end q-col-gutter-sm">
+          {{ row?.jumlah }}
+          <div class="text-italic f-10">
+            ({{ row?.masterobat?.satuan_k }})
+          </div>
+        </div>
+      </template>
+      <template #cell-harga="{ row }">
+        <div class="text-right">
+          {{ formatRpDouble(row?.harga_net,2) }}
+        </div>
+      </template>
+      <template #cell-nilai="{ row }">
+        <div class="text-right">
+          {{ formatRpDouble(parseFloat(row?.harga_net)*parseFloat(row?.jumlah),2) }}
+        </div>
       </template>
       <template #left-acttion="{ row }">
         <div
@@ -170,7 +200,7 @@
           </q-btn>
         </div>
       </template>
-      <template #expand="{ row }">
+      <!-- <template #expand="{ row }">
         <div v-if="!row.rinci.length">
           <app-no-data-small />
         </div>
@@ -295,22 +325,23 @@
             </div>
           </div>
         </div>
-      </template>
+      </template> -->
     </app-table-extend>
   </div>
 </template>
 <script setup>
+// eslint-disable-next-line no-unused-vars
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
-import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
+import { useListBarangRusakStore } from 'src/stores/simrs/farmasi/barangrusak/list'
 
-const store = useListReturPenyediaStore()
+const store = useListBarangRusakStore()
 // click
-function onClick (val) {
-  console.log('click', val)
-  val.item.expand = !val.item.expand
-  val.item.highlight = !val.item.highlight
-}
+// function onClick (val) {
+//   console.log('click', val)
+//   val.item.expand = !val.item.expand
+//   val.item.highlight = !val.item.highlight
+// }
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
