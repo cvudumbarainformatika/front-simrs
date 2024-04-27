@@ -60,6 +60,7 @@
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
+                  :loadingaja="loadingaja"
                   depo="igd"
                 />
               </template>
@@ -87,6 +88,10 @@ defineProps({
   pasien: {
     type: Object,
     default: null
+  },
+  loadingaja: {
+    type: Boolean,
+    default: false
   }
 })
 

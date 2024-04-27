@@ -20,7 +20,7 @@
       class="full-height bg-grey"
     >
       <div
-        v-if="loadingTerima"
+        v-if="loadingaja"
         class="column full-height flex-center"
       >
         <div class="text-white">
@@ -146,7 +146,7 @@ const props = defineProps({
     type: Object,
     default: null
   },
-  loadingTerima: {
+  loadingaja: {
     type: Boolean,
     default: false
   }
