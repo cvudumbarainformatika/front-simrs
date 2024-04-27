@@ -77,18 +77,18 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       this.setForm('tanggal', dateDbFormat(new Date()))
     },
     saveGeneralConsentPasien(pegawai) {
-      // if (!this.form.ttdpasien) {
-      //   notifErrVue('Maaf tanda tangan pasien Belum Ada')
-      //   return
-      // }
-      // if (!this.form.norm) {
-      //   notifErrVue('Maaf NORM pasien KOSONG !!!')
-      //   return
-      // }
-      // if (!pegawai.nik) {
-      //   notifErrVue('Maaf !, NIK Petugas Tidak Boleh KOSONG !!!')
-      //   return
-      // }
+      if (!this.form.ttdpasien) {
+        notifErrVue('Maaf tanda tangan pasien Belum Ada')
+        return
+      }
+      if (!this.form.norm) {
+        notifErrVue('Maaf NORM pasien KOSONG !!!')
+        return
+      }
+      if (!pegawai.nik) {
+        notifErrVue('Maaf !, NIK Petugas Tidak Boleh KOSONG !!!')
+        return
+      }
       // console.log('save general cons', pegawai)
       this.form.nikpetugas = pegawai?.nik
       console.log('save general cons', this.form)
