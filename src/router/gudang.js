@@ -15,7 +15,7 @@ const gudang = {
         { path: '', name: 'gudang.farmasi', redirect: '/gudang/farmasi/dashboard' },
         {
           path: '/gudang/farmasi/dashboard',
-          name: 'gudang.farmasi.dashboard',
+          // name: 'gudang.farmasi.dashboard',
           component: () => import('pages/simrs/logistik/gudang/IndexPage.vue')
         },
         {
@@ -26,14 +26,14 @@ const gudang = {
             { path: '', redirect: '/gudang/farmasi/rencanapemesanan/rencana' },
             {
               path: '/gudang/farmasi/rencanapemesanan/rencana',
-              name: 'gudang.farmasi.rencanapemesanan.rencana',
+              // name: 'gudang.farmasi.rencanapemesanan.rencana',
               // meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/rencanapemesanan/rencana/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/rencanapemesanan/listrencanapesanan',
-              name: 'gudang.farmasi.rencanapemesanan.listrencanapesanan',
+              // name: 'gudang.farmasi.rencanapemesanan.listrencanapesanan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/rencanapemesanan/listrencanan/IndexPage.vue')
@@ -44,7 +44,7 @@ const gudang = {
           path: '/gudang/farmasi/penerimaan',
           component: () => import('src/pages/simrs/logistik/gudang/farmasi/penerimaan/IndexPage.vue'),
           children: [
-            { path: '', redirect: '/gudang/farmasi/penerimaan/penerimaan' },
+            { path: '/gudang/farmasi/penerimaan', redirect: '/gudang/farmasi/penerimaan/penerimaan' },
             {
               path: '/gudang/farmasi/penerimaan/penerimaan',
               // name: 'gudang/farmasi.penerimaan.penerimaan',
@@ -80,14 +80,14 @@ const gudang = {
             // { path: '', redirect: '/gudang/farmasi/verifpermintaandepo/verifpermintaan' },
             {
               path: '/gudang/farmasi/verifpermintaandepo/verifpermintaan',
-              name: 'gudang.farmasi.verifpermintaandepo.verifpermintaan',
+              // name: 'gudang.farmasi.verifpermintaandepo.verifpermintaan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/verifpermintaandepo/listverif',
-              name: 'gudang.farmasi.verifpermintaandepo.listverif',
+              // name: 'gudang.farmasi.verifpermintaandepo.listverif',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/verifpermintaandepo/listverif/IndexPage.vue')
@@ -104,14 +104,14 @@ const gudang = {
             { path: '', redirect: '/gudang/farmasi/distribusipermintaandepo/distribusipermintaan' },
             {
               path: '/gudang/farmasi/distribusipermintaandepo/distribusipermintaan',
-              name: 'gudang.farmasi.distribusipermintaandepo.distribusipermintaan',
+              // name: 'gudang.farmasi.distribusipermintaandepo.distribusipermintaan',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/distribusi/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/distribusipermintaandepo/listdistribusi',
-              name: 'gudang.farmasi.distribusipermintaandepo.listdistribusi',
+              // name: 'gudang.farmasi.distribusipermintaandepo.listdistribusi',
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/listdistribusi/IndexPage.vue')
