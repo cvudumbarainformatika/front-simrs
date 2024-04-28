@@ -138,7 +138,7 @@
       <div class="row justify-between no-wrap items-center q-mb-xs">
         <div class="col-12">
           <app-input
-            ref="refJmlDiterima"
+            ref="refJmlDiterimaB"
             v-model="store.details[i].jml_terima_b"
             :label="'Diterima ('+ det.satuan_bsr+')'"
             outlined
@@ -280,7 +280,7 @@
         color="primary"
         round
         :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
-        :loading="store.loading && i===ind"
+        :loading="det.loading"
         @click="simpan(i)"
       >
         <q-tooltip
@@ -307,6 +307,7 @@ defineProps({
 })
 
 const emits = defineEmits(['simpanObat'])
+const refJmlDiterimaB = ref(null)
 const refJmlDiterima = ref(null)
 const refBatch = ref(null)
 const refIsi = ref(null)
@@ -314,51 +315,39 @@ const refExp = ref(null)
 const refHarga = ref(null)
 const refHargaKcl = ref(null)
 
-function validasi(index) {
-  // console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
-
-  // const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
-  // const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
-  // const noSurat = refNoSurat.value.$refs.refInput.validate()
-  // const pengirim = refPengirim.value.$refs.refInput.validate()
-  // const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
-
-  // const ppn = refPpn.value[index].refInput.validate()
-  const diterima = refJmlDiterima.value.refInput.validate()
-  const batch = refBatch.value.refInput.validate()
-  const isi = refIsi.value.refInput.validate()
+function resetValidasi() {
+  // console.log('reset', refJmlDiterimaB.value.$refs.refInput)
+  refJmlDiterimaB.value.$refs.refInput.resetValidation()
+  refJmlDiterima.value.$refs.refInput.resetValidation()
+  refBatch.value.$refs.refInput.resetValidation()
+  refIsi.value.$refs.refInput.resetValidation()
+  refExp.value.$refs.refInputDate.resetValidation()
+  refHarga.value.$refs.refInput.resetValidation()
+  refHargaKcl.value.$refs.refInput.resetValidation()
+}
+function validasi() {
+  const diterimaB = refJmlDiterimaB.value.$refs.refInput.validate()
+  const diterima = refJmlDiterima.value.$refs.refInput.validate()
+  const batch = refBatch.value.$refs.refInput.validate()
+  const isi = refIsi.value.$refs.refInput.validate()
   const exp = refExp.value.$refs.refInputDate.validate()
-  const harga = refHarga.value.refInput.validate()
-  const hargaKcl = refHargaKcl.value.refInput.validate()
-  // const diterima = refJmlDiterima.value[index].refInput.validate()
-  // const batch = refBatch.value[index].refInput.validate()
-  // const isi = refIsi.value[index].refInput.validate()
-  // const exp = refExp.value[index].$refs.refInputDate.validate()
-  // const harga = refHarga.value[index].refInput.validate()
-  // const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  // console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
-  // if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  // if (jenisSurat && Gudang && noSurat && pengirim && diterima && batch && isi && exp && harga && hargaKcl) return true
-  // if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (diterima && batch && isi && exp && harga && hargaKcl) return true
+  const harga = refHarga.value.$refs.refInput.validate()
+  const hargaKcl = refHargaKcl.value.$refs.refInput.validate()
+  if (diterimaB && diterima && batch && isi && exp && harga && hargaKcl) return true
   else return false
 }
-const ind = ref(null)
+
 function simpan(index) {
-  // store.details[index].forEach(a => {
-  //   console.log('each', a)
-  // })
-  if (validasi(index)) {
-    ind.value = index
+  if (validasi()) {
     const deta = store.details[index]
     deta.jml_all_penerimaan += deta.jumlah
     const key = Object.keys(deta)
     key.forEach(a => {
       if (a !== 'masterobat') store.setForm(a, deta[a])
     })
-    console.log('aa', store.form)
-    console.log('simpan valid', store.details[index])
-    emits('simpanObat')
+    // console.log('aa', store.form)
+    // console.log('simpan valid', store.details[index])
+    emits('simpanObat', index)
     // store.simpanPenerimaan().then(() => { ind.value = null })
   }
 }
@@ -448,4 +437,5 @@ function setHargaNetNew(evt, det, key) {
 function detKadal(evt, val) {
   val.tgl_exp = evt
 }
+defineExpose({ resetValidasi })
 </script>
