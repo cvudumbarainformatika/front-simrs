@@ -14,7 +14,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
     gudangs: [],
     columns: [
       'obat',
-      'penerimaan',
+      // 'penerimaan',
       'stok'
     ],
     columnHide: []

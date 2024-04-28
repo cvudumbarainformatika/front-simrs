@@ -22,9 +22,6 @@
       <template #col-obat>
         <div>Obat</div>
       </template>
-      <template #col-penerimaan>
-        <div>Penerimaan</div>
-      </template>
       <template #col-stok>
         <div>Stok</div>
       </template>
@@ -68,14 +65,6 @@
           </div>
         </div>
       </template>
-      <template #cell-penerimaan="{row}">
-        <div class="row no-wrap">
-          {{ row.nopenerimaan }}
-        </div>
-        <div class="row no-wrap">
-          {{ dateFullFormat( row.tglpenerimaan ) }}
-        </div>
-      </template>
       <template #cell-stok="{row}">
         <div class="row no-wrap text-italic">
           {{ cariGudang(row.kdruang) }}
@@ -83,17 +72,17 @@
         </div>
         <div class="row no-wrap text-weight-bold  items-end">
           <div>
-            {{ row.jumlah }}
+            {{ row.total }}
           </div>
           <div class="q-ml-sm f-10 text-italic">
             ( {{ row.satuan_k ? row.satuan_k :'-' }} )
           </div>
         </div>
         <div class="row no-wrap text-italic f-10">
-          Rp  {{ formatRp( row.harga ) }}
+          {{ row.harga? 'Rp ' + formatRp( row.harga ): 'Harga tidak ditemukan' }}
         </div>
         <div class="row no-wrap text-italic f-10">
-          exp : {{ dateFullFormat( row.tglexp ) }}
+          {{ row.tglexp ?'exp : ' + dateFullFormat( row.tglexp ):'tanggal expired tidak ditemukan' }}
         </div>
       </template>
       <template #left-acttion="{row}">
