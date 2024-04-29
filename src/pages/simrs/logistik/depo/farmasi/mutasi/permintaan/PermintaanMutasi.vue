@@ -205,7 +205,7 @@
               />
             </div>
           </div>
-          <div class="row q-mb-xs q-ml-xs items-center">
+          <!-- <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
               Status :
             </div>
@@ -227,7 +227,7 @@
                 label="Konsinyasi"
               />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="col-6">
           <div class="row q-mb-xs">

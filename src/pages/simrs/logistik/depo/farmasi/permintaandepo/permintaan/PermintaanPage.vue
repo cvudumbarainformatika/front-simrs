@@ -467,11 +467,12 @@ const user = computed(() => {
       }
       // store.getListObat()
     }
-    if (!store.form.tujuan) {
-      store.setForm('tujuan', 'Gd-05010100')
-      store.setParam('kdgudang', 'Gd-05010100')
-      store.getListObat()
-    }
+    // if (!store.form.tujuan) {
+    //   store.setForm('tujuan', 'Gd-05010100')
+    //   store.setParam('kdgudang', 'Gd-05010100')
+    //   console.log('computed')
+    //   store.getListObat()
+    // }
   }
   return apps.user
 })
@@ -479,6 +480,7 @@ const user = computed(() => {
 function gudangSelected(val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
+  store.getListObat()
 }
 function depoSelected (val) {
   console.log('depo', val)
@@ -554,6 +556,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   const depo = store.depos.filter(a => a.value === obj)
   if (depo.length) {
     store.disp.depo = depo[0]?.nama
+    console.log('watch', dpFl, gd)
     store.getListObat()
   }
   // if (depo.length) store.getDataTable()
@@ -567,6 +570,7 @@ onMounted(() => {
   store.setForm('dari', apps?.user?.kdruangansim)
   const dpFl = floor.find(a => a === apps?.user?.kdruangansim)
   const gd = gud.find(a => a === apps?.user?.kdruangansim)
+
   if (dpFl) {
     store.setForm('tujuan', 'Gd-03010100')
     store.setParam('kdgudang', 'Gd-03010100')
@@ -579,9 +583,10 @@ onMounted(() => {
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {
     store.disp.depo = depo[0]?.nama
+    // console.log('onmounted', dpFl, gd)
     store.getListObat()
   }
-  store.getInitialData()
+  // store.getInitialData()
 })
 
 onUnmounted(() => {
