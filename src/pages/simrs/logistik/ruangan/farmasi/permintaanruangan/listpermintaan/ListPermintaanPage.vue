@@ -227,6 +227,8 @@
                 icon="icon-mat-move_to_inbox"
                 dense
                 color="primary"
+                :loading="row.loading"
+                :disable="row.loading"
                 @click="terima(row)"
               >
                 <q-tooltip
@@ -341,7 +343,7 @@ function terima (val) {
   }
   console.log('val', val, form)
 
-  store.simpanDetail(form)
+  store.simpanDetail(form, val)
 }
 const toloadBeli = ref('')
 function kunci (val) {

@@ -125,6 +125,7 @@
             dense
             color="negative"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
           >
             <!-- @click="kunci(row)" -->
             <q-tooltip
@@ -142,6 +143,7 @@
             dense
             color="primary"
             :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
+            :disable="store.loadingSimpan && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
             <q-tooltip

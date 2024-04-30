@@ -35,7 +35,7 @@
       <template #header-left-after-search>
         <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
-            <div class="q-mr-sm">
+            <!-- <div class="q-mr-sm">
               <app-autocomplete
                 v-model="store.params.jenisdistribusi"
                 label="Status Obat"
@@ -46,7 +46,7 @@
                 dark
                 @selected="jenisDistSelected"
               />
-            </div>
+            </div> -->
             <div class="q-mx-sm">
               <app-autocomplete
                 :key="gudangs"
@@ -141,6 +141,7 @@
             dense
             color="negative"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
           >
             <!-- @click="kirim(row)" -->
             <q-tooltip
@@ -158,6 +159,7 @@
             dense
             color="primary"
             :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
+            :disable="store.loadingSimpan && row.no_permintaan === toloadBeli"
             @click="terima(row)"
           >
             <q-tooltip
@@ -175,6 +177,7 @@
             dense
             color="primary"
             :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kirim(row)"
           >
             <q-tooltip
@@ -325,10 +328,10 @@ import { onMounted, ref, watch } from 'vue'
 
 const store = useMutasiMasukDepoStore()
 const apps = useAplikasiStore()
-const statOptions = ref([
-  { label: 'Non-Konsinyasi', value: 'non-konsinyasi' },
-  { label: 'Konsinyasi', value: 'konsinyasi' }
-])
+// const statOptions = ref([
+//   { label: 'Non-Konsinyasi', value: 'non-konsinyasi' },
+//   { label: 'Konsinyasi', value: 'konsinyasi' }
+// ])
 const flagOptions = ref([
   { label: 'Draft', value: '0' },
   { label: 'Pemintaan Dikirim', value: '1' },
@@ -350,11 +353,11 @@ function selectFlag(val) {
   // store.setParams('kdgudang', val)
   store.getPermintaanDepo()
 }
-function jenisDistSelected(val) {
-  console.log('jenis dist', val)
-  // store.setParams('kdgudang', val)
-  store.getPermintaanDepo()
-}
+// function jenisDistSelected(val) {
+//   console.log('jenis dist', val)
+//   // store.setParams('kdgudang', val)
+//   store.getPermintaanDepo()
+// }
 onMounted(() => {
   gd.forEach(a => {
     a.label = a.nama

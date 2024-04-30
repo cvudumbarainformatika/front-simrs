@@ -166,6 +166,7 @@
             dense
             color="primary"
             :loading="store.loadingDistribusi && row.loading"
+            :disable="store.loadingDistribusi && row.loading"
             @click="distribusi(row)"
           >
             <q-tooltip
@@ -199,6 +200,7 @@
             dense
             color="primary"
             :loading="store.loadingSimpan && row.loading"
+            :disable="store.loadingSimpan && row.loading"
             @click="teimaPengembalian(row)"
           >
             <q-tooltip
