@@ -11,6 +11,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
     loadingObat: false,
     loadingMax: false,
     loadingRuang: false,
+    loadingHapus: false,
     params: {
       kdgudang: '',
       kddepo: '',
@@ -18,7 +19,6 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
     },
     form: {
       tgl_permintaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
-      status_obat: 'non-konsinyasi',
       no_permintaan: '',
       dari: '',
       tujuan: ''
@@ -69,29 +69,32 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
         dari,
         tujuan
       }
+      this.details = []
     },
     obatSelected(val) {
       this.setForm('kdobat', val)
       this.setForm('jumlah_minta', 0)
       console.log('obat ', val)
-      const anu = this.obats.filter(a => a.kd_obat === val)
+      console.log('obats ', this.obats)
+      const anu = this.obats.filter(a => a.kdobat === val)
       if (anu.length) {
         const obat = anu[0]
         console.log('obat ketemu', obat)
         this.setForm('stok_alokasi', obat.stokalokasi)
         console.log('form', this.form)
         if (this.form.dari) {
-          const aMax = obat.minmax.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
-          if (aMax.length) {
-            const max = aMax[0]
-            this.setForm('mak_stok', max.max)
-          } else {
-            this.setForm('mak_stok', null)
-          }
+          // const aMax = obat?.minmax?.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
+          // if (aMax.length) {
+          //   const max = aMax[0]
+          //   this.setForm('mak_stok', max.max)
+          // } else {
+          //   this.setForm('mak_stok', null)
+          // }
+          this.setForm('mak_stok', obat?.minmax?.max ?? null)
         }
       }
       if (this.form.dari) {
-        const dar = this.stokDewe.filter(a => a.kdobat === val && a.kdruang === this.form.dari)
+        const dar = this?.stokDewe?.filter(a => a.kdobat === val && a.kdruang === this.form.dari)
         if (dar.length) {
           const stok = dar[0]
           this.setForm('stok', stok.jumlah)
@@ -228,6 +231,49 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
             resolve(resp)
           }).catch(() => { this.loadingMax = false })
       })
+    },
+    hapusHead(val) {
+      this.loadingHapus = true
+      const data = {
+        id: val.id
+
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-head', data)
+          .then(resp => {
+            this.loadingHapus = false
+
+            notifSuccess(resp)
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingHapus = false
+          })
+      })
+    },
+    hapusRinci(val) {
+      this.loadingHapus = true
+      val.loading = true
+      const data = {
+        id: val.id
+
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-rinci', data)
+          .then(resp => {
+            this.loadingHapus = false
+            val.loading = false
+            notifSuccess(resp)
+
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingHapus = false
+            val.loading = false
+          })
+      })
     }
+
   }
 })

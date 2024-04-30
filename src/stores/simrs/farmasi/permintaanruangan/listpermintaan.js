@@ -57,8 +57,8 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
           .then(resp => {
             this.loading = false
             console.log('list permintaan', resp.data)
-            this.items = resp.data
-            // this.meta = resp.data
+            this.items = resp.data?.data
+            this.meta = resp.data
             resolve(resp)
           })
           .catch(() => {

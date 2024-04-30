@@ -184,11 +184,11 @@
               class="col-12"
             >
               <CompSelect
-                ref="refGudang"
+                ref="refObat"
                 :model="store.form.kdobat"
                 autocomplete="nama_obat"
                 option-label="nama_obat"
-                option-value="kd_obat"
+                option-value="kdobat"
                 label="Cari Obat"
                 outlined
                 :debounce="700"
@@ -203,7 +203,7 @@
           <div class="row q-mb-xs">
             <div class="col-12">
               <app-input
-                ref="JumlahMinta"
+                ref="refJumlahMinta"
                 v-model="store.form.jumlah_minta"
                 label="Jumlah Minta"
                 outlined
@@ -214,29 +214,6 @@
               />
             </div>
           </div>
-          <!-- <div class="row q-mb-xs q-ml-xs items-center">
-            <div class="q-mr-sm">
-              Status :
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.form.status_obat"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="non-konsinyasi"
-                label="Non-Konsinyasi"
-              />
-            </div>
-            <div class="q-mr-sm">
-              <q-radio
-                v-model="store.form.status_obat"
-                checked-icon="icon-mat-task_alt"
-                unchecked-icon="icon-mat-panorama_fish_eye"
-                val="konsinyasi"
-                label="Konsinyasi"
-              />
-            </div>
-          </div> -->
         </div>
         <div class="col-6">
           <div class="row q-mb-xs">
@@ -359,31 +336,49 @@
                 </div>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-5">
               <div class="row no-wrap justify-between q-mr-md det">
                 <div>Jumlah Minta</div>
                 <div class="text-weight-bold">
                   {{ det.jumlah_minta ? det.jumlah_minta : '-' }}
                 </div>
               </div>
-              <div class="row no-wrap justify-between q-mr-md det">
+              <!-- <div class="row no-wrap justify-between q-mr-md det">
                 <div>Stok Alokasi</div>
                 <div class="text-weight-bold">
                   {{ det.stok_alokasi ? det.stok_alokasi : '-' }}
                 </div>
-              </div>
+              </div> -->
               <div class="row no-wrap justify-between q-mr-md det">
                 <div>Stok Maksimal</div>
                 <div class="text-weight-bold">
                   {{ det.mak_stok ? det.mak_stok : '-' }}
                 </div>
               </div>
-              <div class="row no-wrap justify-between q-mr-md det">
+              <!-- <div class="row no-wrap justify-between q-mr-md det">
                 <div>Status obat</div>
                 <div class="text-weight-bold">
                   {{ det.status_obat ? det.status_obat : '-' }}
                 </div>
-              </div>
+              </div> -->
+            </div>
+            <div class="col-1 text-right">
+              <q-btn
+                flat
+                icon="icon-mat-delete"
+                dense
+                color="negative"
+                size="sm"
+                :loading="det.loading"
+                @click="hapus(det)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Hapus Obat
+                </q-tooltip>
+              </q-btn>
             </div>
           </div>
         </div>
@@ -399,9 +394,10 @@ import { notifErrVue, notifInfVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, onUnmounted } from 'vue'
 
 import CompSelect from './comp/CompSelect.vue'
+import { Dialog } from 'quasar'
 
 const style = useStyledStore()
 const store = useFarmasiPermintaanRuanganStore()
@@ -465,6 +461,7 @@ const user = computed(() => {
 
         store.setForm('tujuan', 'Gd-03010101')
         store.setParam('kdgudang', 'Gd-03010101')
+        store.setParam('kddepo', peg[0].kode)
         store.setDisp('gudang', 'Floor Stock 1 (AKHP)')
         store.getListObat()
       }
@@ -499,11 +496,18 @@ function setJumlahMinta(evt) {
     store.setForm('jumlah_minta', jumlah)
   }
 }
+
+const refObat = ref(null)
+const refJumlahMinta = ref(null)
 function validasi() {
+  const obat = refObat.value?.$refs?.refAuto.validate()
+  const jumlah = refJumlahMinta.value?.$refs?.refInput.validate()
+  // console.log(jumlah)
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
   const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
   const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
-  if (adaMax && adaAlokasi && adaJumlahMinta) {
+  if (obat && jumlah && adaMax && adaAlokasi && adaJumlahMinta) return true
+  else if (adaMax && adaAlokasi && adaJumlahMinta) {
     return true
   } else {
     if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
@@ -519,8 +523,41 @@ function simpan() {
     store.simpan()
   }
 }
+
+function hapus(det) {
+  console.log('det', det)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Ingin Menghapus ' + det?.nama_obat + ' ?',
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Hapus',
+      color: 'negative'
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      label: 'Batal',
+      color: 'dark'
+    }
+  }).onOk(() => {
+    store.hapusRinci(det).then(() => {
+      store.getListObat()
+      const index = store.details.findIndex(it => it.id === det.id)
+      if (index >= 0) {
+        store.details.splice(index, 1)
+      }
+
+      // if (!val.flag) val.flag = 1
+    })
+  })
+}
 onMounted(() => {
   store.getInitialData()
+})
+onUnmounted(() => {
+  store.clearForm()
 })
 </script>
 <style lang="scss" scoped>

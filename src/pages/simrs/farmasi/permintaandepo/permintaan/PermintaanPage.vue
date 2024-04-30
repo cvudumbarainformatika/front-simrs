@@ -188,7 +188,7 @@
                 :model="store.form.kdobat"
                 autocomplete="nama_obat"
                 option-label="nama_obat"
-                option-value="kd_obat"
+                option-value="kdobat"
                 label="Cari Obat"
                 outlined
                 :debounce="700"
