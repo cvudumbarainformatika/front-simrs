@@ -196,7 +196,7 @@ export const useFarmasiPermintaanRuanganStore = defineStore('farmasi_permintaan_
             if (resp.data.rinci) {
               const rinc = resp.data.rinci
               if (rinc.kdobat) {
-                const anu = this.obats.filter(a => a.kd_obat === rinc.kdobat)
+                const anu = this.obats.filter(a => a.kdobat === rinc.kdobat)
                 if (anu.length) {
                   const obat = anu[0]
                   rinc.nama_obat = obat.nama_obat
