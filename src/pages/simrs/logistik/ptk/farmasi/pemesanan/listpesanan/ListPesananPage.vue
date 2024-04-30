@@ -179,6 +179,22 @@
           <q-btn
             class="q-mr-md"
             flat
+            icon="icon-mat-add_circle"
+            dense
+            no-caps
+            color="primary"
+            @click="tambah(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tambah Pesanan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            class="q-mr-md"
+            flat
             icon="icon-mat-delete"
             dense
             no-caps
@@ -227,6 +243,14 @@
         </div>
       </template>
     </app-table-extend>
+    <app-fullscreen-blue
+      v-model="pemesanan.isOpen"
+      @close="pemesanan.setClose"
+    >
+      <template #default>
+        <CompDialog />
+      </template>
+    </app-fullscreen-blue>
   </div>
 </template>
 <script setup>
@@ -235,11 +259,15 @@ import { notifSuccessVue } from 'src/modules/utils'
 // import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpesanan'
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
-import { ref } from 'vue'
+import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
+import { ref, defineAsyncComponent } from 'vue'
 
 // const style = useStyledStore()
 const store = useListPemesananStore()
 const pemesanan = usePemesananObatStore()
+const table = useTabelPemesananObatStore()
+
+const CompDialog = defineAsyncComponent(() => import('../pemesanan/comp/CompDialog.vue'))
 // click
 function onClick (val) {
   console.log('click', val)
@@ -253,6 +281,14 @@ function info (val) {
   notifSuccessVue('Pembelian nomor ' + val.nopemesanan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
 const toloadBeli = ref('')
+function tambah(val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  pemesanan.setForm('nopemesanan', val.nopemesanan)
+  pemesanan.setForm('kdpbf', val.kdpbf)
+  table.rencanaSelected(val?.rinci[0]?.noperencanaan, 'list')
+  console.log(val)
+}
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight

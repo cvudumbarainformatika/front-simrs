@@ -3,14 +3,32 @@
     <!-- {{ table.rencanas }} -->
     <div v-if="table.rencanas.length && !table.loadingList">
       <q-list
-        bordered
+
         separator
       >
+        <q-item class="bg-dark text-white">
+          <q-item-section>
+            <div>
+              Nomor Rencana Beli
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div>
+              Gudang
+            </div>
+          </q-item-section>
+          <q-item-section>
+            <div>
+              Tanggal Perencananaan
+            </div>
+          </q-item-section>
+        </q-item>
         <q-item
           v-for="(item,i) in table.rencanas"
           :key="i"
           v-ripple
           clickable
+          :class="i%2===1?'bg-grey-4':''"
           @click="table.rencanaSelected(item?.no_rencbeliobat)"
         >
           <q-item-section>
@@ -25,7 +43,7 @@
           </q-item-section>
           <q-item-section>
             <div class="text-cyan">
-              {{ dateFullFormat(item?.tglperencanaan) }}
+              {{ dateFullFormat(item?.tgl) }}
             </div>
           </q-item-section>
         </q-item>
