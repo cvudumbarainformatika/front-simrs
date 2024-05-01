@@ -25,6 +25,9 @@
       <template #col-stok>
         <div>Stok</div>
       </template>
+      <template #col-stokalokasi>
+        <div>Stok Alokasi</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -85,7 +88,20 @@
           {{ row.tglexp ?'exp : ' + dateFullFormat( row.tglexp ):'tanggal expired tidak ditemukan' }}
         </div>
       </template>
-      <template #left-acttion="{row}">
+      <template #cell-stokalokasi="{row}">
+        <div
+          class="row no-wrap text-weight-bold  items-end cursor-pointer"
+          @click="rinciAlokasi(row)"
+        >
+          <div>
+            {{ row.stokalokasi }}
+          </div>
+          <div class="q-ml-sm f-10 text-italic">
+            ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+          </div>
+        </div>
+      </template>
+      <!-- <template #left-acttion="{row}">
         <div class="q-mr-md">
           <q-btn
             flat
@@ -104,19 +120,23 @@
             </q-tooltip>
           </q-btn>
         </div>
-      </template>
+      </template> -->
     </app-table>
+    <DetailAlokasi v-model="table.isOpen" />
   </div>
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { defineAsyncComponent } from 'vue'
 import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
 import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 
 const table = UseFarmasiStokSekarangTable()
 const store = UseFarmasiStokSekarangStore()
 const apps = useAplikasiStore()
+
+const DetailAlokasi = defineAsyncComponent(() => import('./DetailAlokasi.vue'))
 
 function cariGudang(val) {
   if (table.gudangs.length) {
@@ -131,6 +151,12 @@ function cariGudang(val) {
   } else {
     return 'menunggu data Gudang / Depo'
   }
+}
+
+function rinciAlokasi(row) {
+  console.log('rinci alokasi', row)
+  table.isOpen = true
+  table.getDataAlokasi(row)
 }
 
 // watch(() => apps?.user?.kdruangansim, (obj) => {
