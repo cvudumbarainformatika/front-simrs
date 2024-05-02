@@ -60,9 +60,11 @@ import PageLayananIgd from '../layanan/PageLayananIgd.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
 import { onMounted, ref } from 'vue'
+import { useDiagnosaDokter } from 'src/stores/simrs/igd/diagnosadokter'
 const store = usePengunjungIgdStore()
 const style = useStyledStore()
 const pasien = ref(null)
+const diagnosa = useDiagnosaDokter()
 
 function terimapasien(val) {
   store.setTerima(val)
@@ -70,12 +72,14 @@ function terimapasien(val) {
 }
 
 function bukaTindakan(val) {
-  console.log('load', store?.loadingTerima)
+  // console.log('load', store?.loadingTerima)
   pasien.value = val
   store.bukaLayanan(val)
 }
 
 onMounted(() => {
+  diagnosa.getDiagnosaDropdown()
+  diagnosa.getTindakanDropdown()
   store.getData()
 })
 </script>

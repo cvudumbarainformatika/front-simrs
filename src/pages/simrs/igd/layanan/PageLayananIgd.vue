@@ -103,6 +103,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/anamnesis/AnamnesisPage.vue')))
   },
   {
+    name: 'AssesmentPage',
+    label: 'Assesment',
+    icon: 'icon-mat-analytics',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/assesment/AssesmentPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
