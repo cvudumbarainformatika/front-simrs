@@ -202,7 +202,7 @@
           <app-input
             ref="refCariNoPenerimaan"
             v-model="store.params.nopenerimaan"
-            label="Cari Nomor Penerimaan (klik enter untuk cari)"
+            label="Cari Nomor Penerimaan (tekan enter untuk cari)"
             outlined
             valid
             class="col-4"
@@ -258,6 +258,12 @@
             class="col-auto anak text-right"
           >
             Jumlah Retur
+          </div>
+          <div
+            class="col-auto text-right"
+            style="width:5%"
+          >
+            #
           </div>
         </div>
         <div
@@ -326,7 +332,8 @@
               />
             </div>
             <div
-              class="col-auto anak text-right"
+              class="col-auto text-right"
+              style="width:5%"
             >
               <q-btn
                 class="q-mr-md"
@@ -336,6 +343,117 @@
                 round
                 :loading="store.loading && item.loading"
                 @click="simpan(i, item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Simpan Obat
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Daftar barang Rusak -->
+    <div v-if="!store?.loadingDataMauRet">
+      <div class="row bg-grey q-pa-sm text-white f-14 q-mb-sm">
+        Barang Rusak
+      </div>
+      <div v-if="!store?.dataRusaks?.length">
+        <app-no-data-small />
+      </div>
+      <!-- <div> -->
+      <div v-if="store?.dataRusaks?.length">
+        <div class="row bg-dark text-white q-pa-xs q-mb-sm">
+          <div
+            class="col-auto"
+            style="width:5%"
+          >
+            No
+          </div>
+          <div
+            class="col-auto rusak"
+          >
+            Kondisi Barang
+          </div>
+          <div
+            class="col-auto rusak"
+          >
+            Nomor Penerimaan
+          </div>
+          <div
+            class="col-auto rusak"
+          >
+            Nomor Batch
+          </div>
+          <div
+            class="col-auto rusak"
+          >
+            Tanggal Rusak
+          </div>
+          <div
+            class="col-auto rusak text-right"
+          >
+            Jumlah Rusak
+          </div>
+          <div
+            class="col-auto text-right"
+            style="width:5%"
+          >
+            #
+          </div>
+        </div>
+        <div
+          v-for="(item,i) in store?.dataRusaks"
+          :key="i"
+        >
+          <div class="row items-center q-col-gutter-sm q-mb-sm">
+            <div
+              class="col-auto"
+              style="width:5%"
+            >
+              {{ i+1 }}
+            </div>
+            <div
+              class="col-auto rusak "
+            >
+              {{ item?.status }}
+            </div>
+            <div
+              class="col-auto rusak"
+            >
+              {{ item?.nopenerimaan }}
+            </div>
+            <div
+              class="col-auto rusak"
+            >
+              {{ item?.nobatch }}
+            </div>
+            <div
+              class="col-auto rusak "
+            >
+              {{ humanDate(item?.tgl_entry) }}
+            </div>
+            <div
+              class="col-auto rusak text-right"
+            >
+              {{ item?.jumlah }}
+            </div>
+
+            <div
+              class="col-auto text-right"
+              style="width:5%"
+            >
+              <q-btn
+                class="q-mr-md"
+                flat
+                icon="icon-mat-save"
+                color="primary"
+                round
+                :loading="store.loading && item.loading"
+                @click="simpanRusak(i, item)"
               >
                 <q-tooltip
                   class="primary"
@@ -555,23 +673,47 @@ function simpan(index, item) {
     store.setForm('harga_neto', item.harga_neto)
     store.setForm('subtotal', item.subtotal)
     store.setForm('tgl_exp', item.tgl_exp)
+    store.setForm('flag_tbl_rusak', null)
     store.simpanRetur(item)
     // console.log('form', store.form)
   } else {
     notifErrVue('Cek kembali input anda')
   }
 }
+function simpanRusak(index, item) {
+  if (refTaRetur.value.$refs.refInputDate.validate()) {
+    // console.log('item', item)
+    const subtotal = parseFloat(item.jumlah) * parseFloat(item.harga_net)
+    store.setForm('nopenerimaan', item.nopenerimaan)
+    store.setForm('no_batch', item.nobatch)
+    store.setForm('jumlah_retur', item.jumlah)
+    store.setForm('kondisi_barang', item.status)
+    store.setForm('harga_neto', item.harga_net)
+    store.setForm('subtotal', subtotal)
+    store.setForm('tgl_rusak', item.tgl_rusak)
+    store.setForm('flag_tbl_rusak', '1')
+    store.simpanRetur(item)
+    // console.log('form', store.form)
+  } else {
+    notifErrVue('periksa kembali input')
+  }
+}
 onUnmounted(() => {
-  store.form = {}
+  store.resetForm()
   store.perusahaans = []
   store.obats = []
   store.dataMauReturs = []
   store.dataReturs = []
+  store.dataRusaks = []
 })
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(95% / 9);
+  width:calc(90% / 8);
+  overflow-wrap: anywhere;
+}
+.rusak{
+  width:calc(90% / 5);
   overflow-wrap: anywhere;
 }
 .rinci{

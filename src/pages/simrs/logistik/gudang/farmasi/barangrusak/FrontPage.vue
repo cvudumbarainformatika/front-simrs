@@ -114,8 +114,8 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kd_ruang', obj)
   list.setParam('kd_ruang', obj)
   list.getInitialData()
-  store.getPerusahan()
-  store.getObat()
+  // store.getPerusahan()
+  // store.getObat()
 })
 
 </script>

@@ -8,7 +8,7 @@ export function useContent(isiPasien) {
   const petugas = ref(null)
   const isi = ref('What you see is <b>what</b> you get.')
   const defaultForm = ref('..........................')
-  const defWali1 = ref('1 ) ..............................')
+  const defWali1 = ref(' 1 ) .............................. ')
   const defWali2 = ref('2) ..............................')
   const hubPasien = ref('2) (Hubungan dengan pasien)')
   const isOk = ref(false)
@@ -36,14 +36,18 @@ export function useContent(isiPasien) {
         kelompok: 'irja'
       }
     }
-
+    isi.value = null
     return new Promise((resolve, reject) => {
       api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent', params)
         .then(resp => {
-        // console.log(resp)
+          // console.log(resp)
           if (resp.status === 200) {
             isi.value = resp.data[0].pernyataan
             isOk.value = true
+            // isi.value.replace('RSUD Dr.Mohamad Saleh', 'W3Schools')
+
+            // console.log('resp', isi.value)
+            // console.log('resp', isi.value.indexOf(defWali1.value))
           }
 
           resolve(resp)

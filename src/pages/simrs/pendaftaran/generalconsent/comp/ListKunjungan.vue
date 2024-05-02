@@ -77,12 +77,23 @@
               </div>
               <div class="row q-mt-sm justify-end">
                 <q-btn
+                  v-if="!item.generalcons"
                   outline
                   size="sm"
                   class="q-px-md"
-                  :color="item.generalconsent?'teal':'negative'"
-                  :label="item.generalconsent?'Lihat General Consent':'General Consent Belum Ada'"
+                  :color="item.generalcons?'teal':'negative'"
+                  :label="item.generalcons?'Lihat General Consent':'General Consent Belum Ada'"
                   @click="genCon(item)"
+                />
+                <q-btn
+                  v-else
+                  outline
+                  size="sm"
+                  class="q-px-md"
+                  :color="item.generalcons?'teal':'negative'"
+                  :label="item.generalcons?'Lihat General Consent':'General Consent Belum Ada'"
+                  :href="pathImg + item.generalcons.pdf"
+                  target="_blank"
                 />
               </div>
               <!-- <div class="row q-mt-sm justify-end">
@@ -128,10 +139,10 @@
     />
     <app-preview-general-consent
       :key="pasien"
-      v-model="openPrevGc"
+      v-model="store.openPreviewGc"
       :pasien="pasien"
       :cetak="cetak"
-      @close="openPrevGc = !openPrevGc"
+      @close="store.openPreviewGc = !store.openPreviewGc"
     />
 
     <!-- dialog hapus -->
@@ -139,11 +150,12 @@
 </template>
 
 <script setup>
-// import { api } from 'src/boot/axios'
+import { pathImg } from 'src/boot/axios'
 import { dateFullFormat, formatJam } from 'src/modules/formatter'
 // import { notifCenterVue } from 'src/modules/utils'
 // import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
+import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalconsent'
 
 defineProps({
   loading: { type: Boolean, default: false },
@@ -153,8 +165,9 @@ defineProps({
 
 const pasien = ref(null)
 const openGen = ref(false)
-const openPrevGc = ref(false)
+// const openPrevGc = ref(false)
 const cetak = ref(false)
+const store = useGeneralConsentStore()
 
 // eslint-disable-next-line no-unused-vars
 function genCon(row) {
@@ -169,7 +182,7 @@ function openPreviewGc(val) {
   } else {
     cetak.value = false
   }
-  openPrevGc.value = !openPrevGc.value
+  store.openPreviewGc = !store.openPreviewGc
 }
 
 function getStatus(arr) {

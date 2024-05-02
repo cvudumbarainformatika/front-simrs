@@ -5,11 +5,26 @@
     transition-hide="slide-down"
     maximized
   >
+    <div
+      v-if="cetak"
+      class="fit column flex-center absolute-top z-top dimmed"
+    >
+      <q-spinner-dots
+        color="negative"
+        size="4em"
+      />
+      <div class="text-negative">
+        Harap Tunggu ...
+      </div>
+    </div>
     <q-card
       flat
     >
       <div class="column fit">
-        <q-bar class="col-auto bg-secondary q-pa-xs">
+        <q-bar
+          class="col-auto text-white q-pa-xs"
+          :class="cetak? 'bg-primary':'bg-secondary'"
+        >
           <div>📝 Preview General Consent Pasien</div>
           <q-space />
 
@@ -59,6 +74,7 @@
 
 <script setup>
 import { ref } from 'vue'
+// import { useContent } from '../~static/generalconsent/content'
 
 const refresh = ref(false)
 defineProps({
@@ -72,5 +88,6 @@ defineProps({
   }
 })
 const emits = defineEmits(['close'])
+// const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(props?.isiPasien, true)
 
 </script>

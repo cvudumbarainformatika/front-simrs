@@ -10,6 +10,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
   state: () => ({
     items: [],
     loading: false,
+    openPreviewGc: false,
 
     form: {
       tanggal: dateDbFormat(new Date()),
@@ -39,7 +40,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       this.loading = true
       try {
         const resp = await api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent')
-        console.log('master general consent', resp)
+        // console.log('master general consent', resp)
         if (resp.status === 200) {
           this.items = resp.data
           this.loading = false
@@ -90,7 +91,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       }
       // console.log('save general cons', pegawai)
       this.form.nikpetugas = pegawai?.nik
-      // console.log('save general cons', this.form)
+      console.log('save general cons', this.form)
       return new Promise((resolve, reject) => {
         api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
           .then(resp => {

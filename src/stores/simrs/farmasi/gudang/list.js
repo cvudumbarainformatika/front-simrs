@@ -64,7 +64,7 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
     kunci(item) {
       item.loadingKunci = true
       return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/retur/', item)
+        api.post('v1/simrs/penunjang/farmasinew/retur/kunci', item)
           .then(resp => {
             item.loadingKunci = false
             console.log('kuci', resp?.data)
@@ -101,7 +101,8 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
       const kirim = {
         no_retur: val.no_retur,
         kd_obat: val.kd_obat,
-        nopenerimaan: val.nopenerimaan
+        nopenerimaan: val.nopenerimaan,
+        no_batch: val.no_batch
       }
       api.post('v1/simrs/penunjang/farmasinew/retur/delete-rinci', kirim)
         .then(resp => {

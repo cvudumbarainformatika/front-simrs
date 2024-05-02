@@ -242,7 +242,13 @@
         v-for="(det, i) in store.details"
         :key="i"
       >
-        <div class="row items-center q-mt-md justify-between no-wrap">
+        <CompDetail
+          ref="refComDetail"
+          :i="i"
+          :det="det"
+          @simpan-obat="simpanObat(det)"
+        />
+        <!-- <div class="row items-center q-mt-md justify-between no-wrap">
           <div class="anu q-mr-sm">
             <div
               v-if="det?.masterobat?.nama_obat"
@@ -334,23 +340,6 @@
                 {{ det.satuan_kcl ? det.satuan_kcl : '-' }}
               </div>
             </div>
-            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
-              <div class="col-12">
-                <app-input
-                  ref="refJmlDiterima"
-                  v-model="det.inpJumlah"
-                  label="Diterima"
-                  outlined
-                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor',
-                    val => !!val || 'Harap di isi',
-                    val => parseFloat(det.jumlahdpesan)>=det.jml_all_penerimaan || 'Tidak Boleh Melebihi Pemesanan',
-                  ]"
-                  @update:model-value="setDiterima($event, det)"
-                />
-              </div>
-            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs text-primary">
               <div class="q-mr-sm">
                 Diterima Sekarang
@@ -383,14 +372,6 @@
             </div>
           </div>
           <div class="anu q-mr-sm">
-            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
-              <div class="q-mr-sm">
-                Satuan Besar
-              </div>
-              <div class="text-weight-bold">
-                {{ det.satuan_bsr }}
-              </div>
-            </div> -->
             <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -436,14 +417,6 @@
                 />
               </div>
             </div>
-            <!-- <div class="row justify-between no-wrap items-center q-mb-xs">
-              <div class="q-mr-sm">
-                Satuan Kecil
-              </div>
-              <div class="text-weight-bold">
-                {{ det.satuan_kcl }}
-              </div>
-            </div> -->
             <div class="row no-wrap items-center q-mb-xs">
               <div class="col-12">
                 <app-input
@@ -516,17 +489,6 @@
             </div>
             <div class="row justify-between no-wrap items-center q-mb-xs">
               <div class="col-12">
-                <!-- <app-input
-                  ref="refPpn"
-                  v-model="det.ppn"
-                  label="Ppn (%)"
-                  outlined
-                  :readonly="det.jml_all_penerimaan >= det.jumlahdpesan"
-                  :rules="[
-                    val => !isNaN(val) || 'Harus pakai Nomor'
-                  ]"
-                  @update:model-value="setHargaNetNew($event, det,'ppn')"
-                /> -->
                 <q-checkbox
                   v-model="det.adaPPN"
                   label="PPN 11%"
@@ -570,7 +532,7 @@
               </q-tooltip>
             </q-btn>
           </div>
-        </div>
+        </div> -->
         <q-separator class="q-mt-sm" />
       </div>
     </div>
@@ -591,295 +553,54 @@
   setelah simpan detail, belum terupdate data sudah diterima.
   cara cek, jika data sudah masuk, readonly aktif.
 */
-import { formatRpDouble } from 'src/modules/formatter'
+// import { formatRpDouble } from 'src/modules/formatter'
+// import { notifErrVue } from 'src/modules/utils'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, defineAsyncComponent } from 'vue'
 
 const store = usePenerimaanFarmasiStore()
 
+const CompDetail = defineAsyncComponent(() => import('./comp/CompDetailDialog.vue'))
 // head
 const refJenisSurat = ref(null) // inp
 const refNoSurat = ref(null) // inp
 const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
-// const refTotalFaktur = ref(null) // inp
-// det
-// const refPpn = ref(null)
-const refJmlDiterima = ref(null)
-const refBatch = ref(null)
-const refIsi = ref(null)
-const refExp = ref(null)
-const refHarga = ref(null)
-const refHargaKcl = ref(null)
-function validasi(index) {
-  // console.log('index', index)
-  console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
-  // console.log('ref ppn', refPpn.value[index].refInput.validate())
-  // console.log('ref diterima', refJmlDiterima.value[index].refInput.validate())
-  // console.log('ref isi', refIsi.value[index].refInput.validate())
-  // console.log('ref exp', refExp.value[index].$refs.refInputDate.validate())
-  // console.log('ref harga', refHarga.value[index].refInput.validate())
+const refComDetail = ref(null) // detail
 
+function validasi() {
   const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
   const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
   const pengirim = refPengirim.value.$refs.refInput.validate()
-  // const totalFaktur = refTotalFaktur.value.$refs.refInput.validate()
 
-  // const ppn = refPpn.value[index].refInput.validate()
-  const diterima = refJmlDiterima.value[index].refInput.validate()
-  const batch = refBatch.value[index].refInput.validate()
-  const isi = refIsi.value[index].refInput.validate()
-  const exp = refExp.value[index].$refs.refInputDate.validate()
-  const harga = refHarga.value[index].refInput.validate()
-  const hargaKcl = refHargaKcl.value[index].refInput.validate()
-  console.log('validasi', jenisSurat, Gudang, noSurat, pengirim, diterima, isi, exp, harga, hargaKcl, !!store.form.gudang)
   if (!Gudang && !store.form.gudang) notifErrVue('Gudang Tujuan tidak ditemukan, Apakah Anda memiliki Akses Penerimaan Gudang?')
-  if (jenisSurat && Gudang && noSurat && pengirim && diterima && batch && isi && exp && harga && hargaKcl) return true
-  else return false
+  if (jenisSurat && Gudang && noSurat && pengirim) return true
+  else {
+    notifErrVue('Periksa Kembali input anda')
+    return false
+  }
 }
-const ind = ref(null)
-function simpan(index) {
-  // store.details[index].forEach(a => {
-  //   console.log('each', a)
-  // })
-  if (validasi(index)) {
-    ind.value = index
-    const deta = store.details[index]
-    deta.jml_all_penerimaan += deta.jumlah
-    const key = Object.keys(deta)
-    key.forEach(a => {
-      if (a !== 'masterobat') store.setForm(a, deta[a])
+
+function simpanObat(det) {
+  if (validasi()) {
+    // console.log('bisa disimpan', det)
+    store.simpanPenerimaan(det).then(() => {
+      store.ambilPemesanan(true).then(() => {
+        const pes = store.pemesanans.find(a => a.nopemesanan === store.form.nopemesanan)
+        if (pes) store.pemesananSelected(pes)
+        setTimeout(() => {
+          refComDetail.value.forEach(com => {
+          // console.log('ambil obat', com)
+          // console.log('ambil obat2', com.$refs)
+            com.resetValidasi()
+          })
+        }, 100)
+      })
     })
-    console.log('aa', store.form)
-    console.log('simpan valid', store.details[index])
-    store.simpanPenerimaan().then(() => { ind.value = null })
   }
-}
-function adaPPN(evt, det) {
-  // console.log('ada ppn', evt, det)
-  if (evt) setHargaNetNew('11', det, 'ppn')
-  if (!evt) setHargaNetNew('0', det, 'ppn')
-}
-let isiPrev = 0
-function setHargaNetNew(evt, det, key) {
-  const inc = evt.includes('.')
-  const ind = evt.indexOf('.')
-  const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
-  det[key] = nilai
-  if (key === 'isi' && nilai <= 0) return
-
-  const isi = det.isi ?? 1
-  let harga = det.harga ?? 0
-  let hargaKcl = det.harga_kcl ?? 0
-  const diskon = det.diskon ?? 0
-  const ppn = det.ppn ?? 11
-  let jmlTerimaB = det.jml_terima_b ?? 0
-  let jmlTerimaK = det.jml_terima_k ?? 0
-  const diskonRp = harga * (diskon / 100)
-  const hargaSetelahDiskon = harga - diskonRp
-  const ppnRp = isNaN(hargaSetelahDiskon * (ppn / 100)) ? 0 : hargaSetelahDiskon * (ppn / 100)
-  const hargaPembelian = hargaSetelahDiskon + ppnRp
-  const subtotal = hargaPembelian * jmlTerimaB
-  if (key === 'isi') {
-    if (nilai > 0) {
-      if (parseFloat(jmlTerimaK) > 0 && det.isi > 0) {
-        // console.log('isi if', parseFloat(evt), isiPrev)
-        if (isiPrev > det.isi) {
-          if (parseFloat(jmlTerimaK) < 1) {
-            const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
-            det.jumlah = jml
-            jmlTerimaK = jml
-            jmlTerimaB = jml / det.isi
-          }
-          if (parseFloat(det.isi) <= 1) {
-            const jml = parseFloat(det.jml_pesan) - det.jml_terima_lalu
-            det.jumlah = jml
-            jmlTerimaK = jml
-            jmlTerimaB = jml / det.isi
-          }
-        } else {
-          det.jumlah = parseFloat(jmlTerimaK)
-          jmlTerimaB = det.jumlah / det.isi
-        }
-      }
-      isiPrev = det.isi
-    }
-  }
-
-  if (key === 'jml_terima_b' || key === 'isi') jmlTerimaK = jmlTerimaB * isi
-  if (key === 'jml_terima_k' || key === 'isi') jmlTerimaB = jmlTerimaK / isi
-  if (key === 'harga_kcl' || key === 'isi') harga = hargaKcl * isi
-  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
-  const jmlAll = jmlTerimaK + det.jml_terima_laluK
-  // console.log('terima ', jmlAll, jmlTerimaK)
-  // console.log('lebih', det)
-  if (jmlAll > parseFloat(det.jumlahdpesan)) {
-    notifErrVue('Jumlah Maksimal diterima ' + det.jumlahdpesan + ' ' + det?.satuan_kcl)
-    jmlTerimaK = (parseFloat(det.jumlahdpesan) - det.jml_terima_laluK)
-    jmlTerimaB = (parseFloat(det.jumlahdpesan) - det.jml_terima_laluK) / isi
-  }
-  det.isi = isi
-  det.harga = harga
-  det.harga_kcl = hargaKcl
-  det.diskon = diskon
-  det.ppn = ppn
-  det.jml_terima_b = jmlTerimaB
-  det.jml_terima_k = jmlTerimaK
-  det.diskon_rp = diskonRp
-  det.diskon_rp_kecil = diskonRp / isi
-  det.ppn_rp = ppnRp
-  det.ppn_rp_kecil = ppnRp / isi
-  det.harga_netto = hargaPembelian
-  det.harga_netto_kecil = hargaPembelian / isi
-  det.subtotal = subtotal
-  // console.log('evt', evt)
-  // console.log('nilai', nilai)
-  // console.log('det', det)
-  // console.log('key', key)
-}
-function setHargaNet(val) {
-  val.harga_netto = 0
-  if (val.harga > 0 && val.diskon > 0) {
-    val.diskon_rp = val.diskon / 100 * val.harga
-    val.harga_netto = val.harga - val.diskon_rp
-  }
-  if (val.harga > 0 && val.ppn > 0) {
-    if (val.harga_netto > 0) {
-      const harga = val.harga_netto
-      val.ppn_rp = val.ppn / 100 * harga
-      val.harga_netto = harga + val.ppn_rp
-    } else {
-      const harga = val.harga
-      val.ppn_rp = val.ppn / 100 * harga
-      val.harga_netto = harga + val.ppn_rp
-    }
-  }
-  if (val.harga_netto > 0) {
-    val.subtotal = val.harga_netto * parseFloat(val.jumlah)
-  } else {
-    val.harga_netto = val.harga
-    val.subtotal = val.harga * parseFloat(val.jumlah)
-  }
-  const total = store.details.map(a => a.subtotal).reduce((a, b) => a + b, 0)
-  if (store.form.total_faktur_pbf) {
-    if (parseFloat(store.form.total_faktur_pbf) < total) {
-      store.setForm('total_faktur_pbf', total)
-    }
-  } else {
-    store.setForm('total_faktur_pbf', total)
-  }
-  console.log(val)
-}
-// eslint-disable-next-line no-unused-vars
-function setHarga(evt, val, index) {
-  val.harga = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  const diterima = refJmlDiterima.value[index].refInput.validate()
-  const isi = refIsi.value[index].refInput.validate()
-  if (isi && diterima) {
-    const isi = parseFloat(val.isi)
-    val.isi = isi
-    val.harga_kcl = (val.harga / isi)
-    setHargaNet(val)
-  } else {
-    val.harga = 0
-  }
-  // console.log('harga', val)
-}
-// eslint-disable-next-line no-unused-vars
-function setHargaKcl (evt, val, index) {
-  val.harga_kcl = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  const diterima = refJmlDiterima.value[index].refInput.validate()
-  const isi = refIsi.value[index].refInput.validate()
-  if (isi && diterima) {
-    const isi = parseFloat(val.isi)
-    val.isi = isi
-    val.harga = (val.harga_kcl * isi)
-    setHargaNet(val)
-  } else {
-    val.harga_kcl = 0
-  }
-}
-// eslint-disable-next-line no-unused-vars
-function setDiskon(evt, val) {
-  val.diskon = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  setHargaNet(val)
-}
-// eslint-disable-next-line no-unused-vars
-function setPpn(evt, val) {
-  val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  setHargaNet(val)
-}
-// eslint-disable-next-line no-unused-vars
-function setDiterima(evt, val) {
-  val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
-  if (!val.isi) val.isi = 1
-  val.jumlah = val.inpJumlah
-  const jmlAll = val.jumlah + val.jml_terima_lalu
-  if (jmlAll > val.jumlahdpesan / val.isi) {
-    console.log('lebih')
-    val.inpJumlah = (val.jumlahdpesan - val.jml_terima_lalu)
-    val.jumlah = val.inpJumlah
-    val.jml_terima_b = val.jumlah
-    val.jml_terima_k = val.jumlah / val.isi
-  }
-}
-// eslint-disable-next-line no-unused-vars
-function setDiterimaKcl(evt, val) {
-  val.inpJumlahKcl = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
-  if (!val.isi) val.isi = 1
-  val.jumlah = val.inpJumlahKcl * val.isi
-  const jmlAll = val.jumlah + val.jml_terima_lalu
-  if (jmlAll > val.jumlahdpesan) {
-    console.log('lebih')
-    val.inpJumlahKcl = (val.jumlahdpesan - val.jml_terima_lalu) / val.isi
-    val.jumlah = val.inpJumlahKcl * val.isi
-    val.jml_terima_b = val.jumlah
-    val.jml_terima_k = val.inpJumlahKcl
-  }
-}
-
-// eslint-disable-next-line no-unused-vars
-function setIsi(evt, val) {
-  console.log('val', val)
-  console.log('isi', parseFloat(evt))
-  val.isi = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  if (!val.inpJumlah) val.inpJumlah = 1
-  if (parseFloat(val.inpJumlah) > 0 && val.isi > 0) {
-    console.log('isi if', parseFloat(evt), isiPrev)
-    if (isiPrev > val.isi) {
-      if (parseFloat(val.inpJumlah) < 1) {
-        const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
-        val.jumlah = jml
-        val.inpJumlah = jml
-        val.inpJumlahKcl = jml / val.isi
-      }
-      if (parseFloat(val.isi) <= 1) {
-        const jml = parseFloat(val.jml_pesan) - val.jml_terima_lalu
-        val.jumlah = jml
-        val.inpJumlah = jml
-        val.inpJumlahKcl = jml / val.isi
-      }
-    } else {
-      val.jumlah = parseFloat(val.inpJumlah)
-      val.inpJumlahKcl = val.jumlah / val.isi
-    }
-
-    const jmlAll = val.jumlah + val.jml_terima_lalu
-    if (jmlAll > val.jumlahdpesan) {
-      console.log('lebih')
-      val.inpJumlah = ((val.jumlahdpesan / val.isi) - val.jml_terima_lalu)
-      val.jumlah = val.inpJumlah
-      val.inpJumlahKcl = val.jumlah * val.isi
-    }
-    isiPrev = val.isi
-  }
-}
-function detKadal(evt, val) {
-  val.tgl_exp = evt
 }
 function setTanggal(val) {
   store.setForm('tglpenerimaan', val)
@@ -917,20 +638,20 @@ const gudang = computed(() => {
 })
 // console.log('gudang', gudang.value)
 onMounted(() => {
-  if (store.details.length) {
-    // console.log('detailnya', store.details)
-    const belumTsSmw = store.details.filter(a => parseFloat(a.jumlahdpesan) > parseFloat(a.jml_all_penerimaan))
-    if (belumTsSmw.length) {
-      belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
-      if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
-      if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
-      setTimeout(() => {
-        belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
-        if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
-        if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
-      }, 500)
-    }
-  }
+  // if (store.details.length) {
+  //   // console.log('detailnya', store.details)
+  //   const belumTsSmw = store.details.filter(a => parseFloat(a.jumlahdpesan) > parseFloat(a.jml_all_penerimaan))
+  //   if (belumTsSmw.length) {
+  //     belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
+  //     if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
+  //     if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
+  //     setTimeout(() => {
+  //       belumTsSmw[0].adaPPN = !belumTsSmw[0].adaPPN
+  //       if (belumTsSmw[0].adaPPN) setHargaNetNew('11', belumTsSmw[0], 'ppn')
+  //       if (!belumTsSmw[0].adaPPN) setHargaNetNew('0', belumTsSmw[0], 'ppn')
+  //     }, 500)
+  //   }
+  // }
 })
 // store.getInitialData()
 </script>

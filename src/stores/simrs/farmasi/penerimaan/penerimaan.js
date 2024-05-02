@@ -76,6 +76,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
     setClose() {
       this.isOpen = false
       this.resetForm()
+      this.ambilPemesanan()
     },
     resetForm() {
       this.form = {
@@ -203,60 +204,8 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           }
         })
       }
-      // console.log('pen bawah', pen)
       this.pemesanans = pen
       this.filteredPemesanans = pen
-      // if (this.details.length) {
-      //   const kod = this.details.map(a => a.kdobat) // ambil kode obat
-      //   const ter = []
-      //   if (kod.length) {
-      //     const filtKod = filterDuplicateArrays(kod) // pastikan tidak ada duplikasi kode obat
-      //     filtKod.forEach(a => {
-      //       let temp = 0
-      //       pen.forEach(apem => {
-      //         const tam = apem.filter(anu => anu.kdobat === a).map(b => b.jml_terima_b).reduce((c, d) => c + d, 0)
-      //         temp += tam
-      //       })
-      //       console.log('temp', temp)
-      //       const temp2 = {
-      //         kode: a,
-      //         jml: temp
-      //       }
-      //       ter.push(temp2)
-      //     })
-      //     // console.log('kod', kod)
-      //     // console.log('filtkod', filtKod)
-      //     // console.log('ter', ter)
-      //   }
-
-      //   this.details.forEach(a => {
-      //     // console.log('det', a)
-      //     a.diskon = 0
-      //     a.isi = 1
-      //     a.ppn = 0
-      //     a.diskon_rp = 0
-      //     a.ppn_rp = 0
-      //     a.jumlah = ''
-      //     a.jml_pesan = a.jumlahdpesan
-      //     a.harga_netto = 0
-      //     a.subtotal = 0
-      //     a.satuan_bsr = a.masterobat ? a.masterobat.satuan_b : '-'
-      //     a.satuan_kcl = a.masterobat ? a.masterobat.satuan_k : '-'
-      //     if (ter.length) {
-      //       const temp = ter.filter(b => b.kode === a.kdobat)
-      //       if (temp.length) {
-      //         a.jml_terima_lalu = temp[0].jml
-      //       } else {
-      //         a.jml_terima_lalu = 0
-      //       }
-      //       a.jml_all_penerimaan = a.jml_terima_lalu
-      //       // console.log('det temp', temp)
-      //     } else {
-      //       if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
-      //       a.jml_all_penerimaan = a.jml_terima_lalu
-      //     }
-      //   })
-      // }
     },
     gudangSelected(val) {
       this.setForm('gudang', val)
@@ -332,7 +281,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         api.get('v1/simrs/farmasinew/penerimaan/dialogpemesananobat', param)
           .then(resp => {
             this.loading = false
-            console.log('ambil pemesanan', resp)
+            // console.log('ambil pemesanan', resp)
             const data = resp?.data?.data ?? resp?.data
             this.metanirinci(data)
             // this.pemesanans = resp.data
@@ -356,7 +305,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
         api.post('v1/simrs/farmasinew/penerimaan/kuncipenerimaan', data)
           .then(resp => {
             this.loadingKunci = false
-            console.log('kunci penerimaan ', resp)
+            // console.log('kunci penerimaan ', resp)
             notifSuccess(resp)
             const list = useListPenerimaanStore()
             list.cariRencanaBeli()
@@ -368,14 +317,15 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
           .catch(() => { this.loadingKunci = false })
       })
     },
-    simpanPenerimaan() {
-      this.loading = true
+    simpanPenerimaan(val) {
+      // console.log('simpan', val)
+      val.loading = true
       const tgl = this.form.tglpenerimaan
       this.form.tglpenerimaan = tgl + date.formatDate(Date.now(), ' HH:mm:ss')
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/penerimaan/simpan', this.form)
           .then(resp => {
-            this.loading = false
+            val.loading = false
             console.log('sudah simpan', resp.data)
             notifSuccess(resp)
             if (resp.data.heder) {
@@ -384,31 +334,32 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
               }
             }
             this.form.tglpenerimaan = tgl
-            const det = this.details.find(ob => ob.kdobat === this.form.kdobat)
-            this.ambilPemesanan(true).then(() => {
-              const pes = this.pemesanans.find(a => a.nopemesanan === this.form.nopemesanan)
-              // console.log('pemesanannya', pes)
-              // console.log('dea', det)
-              if (pes) this.pemesananSelected(pes)
-              const detSud = this.details.find(ob => ob.kdobat === this.form.kdobat)
-              if (det && detSud) {
-                detSud.isi = det.isi
-                detSud.jml_terima_b = det.jml_terima_b
-                detSud.jml_terima_k = det.jml_terima_k
-                detSud.no_batch = det.no_batch
-                detSud.tgl_exp = det.tgl_exp
-                detSud.harga = det.harga
-                detSud.harga_kcl = det.harga_kcl
-                detSud.diskon = det.diskon
-                detSud.adaPPN = det.adaPPN
-                detSud.harga_netto = det.harga_netto
-                detSud.subtotal = det.subtotal
-              }
-            })
+            // const det = this.details.find(ob => ob.kdobat === this.form.kdobat)
+            // this.ambilPemesanan(true).then(() => {
+            //   const pes = this.pemesanans.find(a => a.nopemesanan === this.form.nopemesanan)
+            // console.log('pemesanannya', pes)
+            // console.log('dea', det)
+            // if (pes) this.pemesananSelected(pes)
+            // const detSud = this.details.find(ob => ob.kdobat === this.form.kdobat)
+            // if (det && detSud) {
+            //   detSud.isi = det.isi
+            //   detSud.jml_terima_b = det.jml_terima_b
+            //   detSud.jml_terima_k = det.jml_terima_k
+            //   detSud.no_batch = det.no_batch
+            //   detSud.tgl_exp = det.tgl_exp
+            //   detSud.harga = det.harga
+            //   detSud.harga_kcl = det.harga_kcl
+            //   detSud.diskon = det.diskon
+            //   detSud.adaPPN = det.adaPPN
+            //   detSud.harga_netto = det.harga_netto
+            //   detSud.subtotal = det.subtotal
+            // }
+            // resolve('ambilPesanan')
+            // })
             resolve(resp)
           })
           .catch(() => {
-            this.loading = false
+            val.loading = false
           })
       })
     },

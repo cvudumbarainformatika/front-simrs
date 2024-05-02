@@ -146,6 +146,7 @@
               </div>
               <div class="col-6 text-right">
                 <q-btn
+                  v-if="!row.flag"
                   flat
                   icon="icon-mat-delete"
                   size="sm"

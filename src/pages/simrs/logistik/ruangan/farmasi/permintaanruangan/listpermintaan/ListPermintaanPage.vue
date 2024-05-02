@@ -81,6 +81,9 @@
             <div class="col-2">
               Jumlah
             </div>
+            <div class="col-6 text-right">
+              #
+            </div>
           </div>
           <div
             v-for="(rin, i) in row.permintaanrinci"
@@ -122,14 +125,14 @@
                     {{ rin.jumlah_minta }}
                   </div>
                 </div>
-                <div class="row justify-between no-wrap">
+                <!-- <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
                     Disetujui
                   </div>
                   <div class="text-weight-bold">
                     {{ rin.jumlah_disetujui ? rin.jumlah_disetujui : '-' }}
                   </div>
-                </div>
+                </div> -->
                 <div class="row justify-between no-wrap">
                   <div class="q-mr-sm">
                     Maks Stok
@@ -138,6 +141,25 @@
                     {{ rin.mak_stok ? rin.mak_stok : '-' }}
                   </div>
                 </div>
+              </div>
+              <div class="col-6 text-right">
+                <q-btn
+                  v-if="!row.flag"
+                  flat
+                  icon="icon-mat-delete"
+                  dense
+                  color="negative"
+                  size="sm"
+                  :loading="rin.loading"
+                  @click="hapusRinci(row,rin)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Hapus Obat
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
           </div>
@@ -150,9 +172,38 @@
         <div v-if="!row.flag">
           <q-btn
             flat
-            icon="icon-mat-lock_open"
+            icon="icon-mat-add_circle"
+            dense
+            color="primary"
+            @click="tambah(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tambah Obat
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            icon="icon-mat-delete"
             dense
             color="negative"
+            :loading="permintaan.loadingHapus && row.no_permintaan === toloadBeli"
+            @click="hapusHead(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Hapus Permintaan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            flat
+            icon="icon-mat-lock_open"
+            dense
+            color="green"
             :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
             @click="kunci(row)"
           >
@@ -176,6 +227,8 @@
                 icon="icon-mat-move_to_inbox"
                 dense
                 color="primary"
+                :loading="row.loading"
+                :disable="row.loading"
                 @click="terima(row)"
               >
                 <q-tooltip
@@ -235,6 +288,7 @@
   </div>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
@@ -242,11 +296,29 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { useListPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/listpermintaan'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const style = useStyledStore()
 const store = useListPermintaanRuanganStore()
 const permintaan = useFarmasiPermintaanRuanganStore()
 const apps = useAplikasiStore()
+
+function tambah(val) {
+  console.log('tambah', val)
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  permintaan.setForm('no_permintaan', val?.no_permintaan)
+  permintaan.details = val?.permintaanrinci
+  if (permintaan.details?.length) {
+    permintaan.details.forEach(det => {
+      det.nama_obat = det?.masterobat?.nama_obat
+    })
+  }
+
+  console.log('form', permintaan.form)
+  router.push({ path: '/ruangan/farmasi/permintaanruangan/permintaanruangan', replace: true })
+}
 // click
 function onClick (val) {
   // console.log('click', val)
@@ -271,7 +343,7 @@ function terima (val) {
   }
   console.log('val', val, form)
 
-  store.simpanDetail(form)
+  store.simpanDetail(form, val)
 }
 const toloadBeli = ref('')
 function kunci (val) {
@@ -281,6 +353,74 @@ function kunci (val) {
   permintaan.kunci(val.no_permintaan).then(() => {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
+  })
+}
+function hapusHead (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  toloadBeli.value = val.no_permintaan
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Ingin Menghapus Permintaan Ini Beserta Isinya?',
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Hapus',
+      color: 'negative'
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      label: 'Batal',
+      color: 'dark'
+    }
+  }).onOk(() => {
+    permintaan.hapusHead(val).then(() => {
+      toloadBeli.value = ''
+      const index = store.items.findIndex(it => it.id === val.id)
+      if (index >= 0) {
+        store.items.splice(index, 1)
+      }
+      // if (!val.flag) val.flag = 1
+    })
+  }).onCancel(() => {
+    toloadBeli.value = ''
+  })
+}
+function hapusRinci (row, val) {
+  // console.log(row, val)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Anda Ingin Menghapus ' + val?.masterobat?.nama_obat + ' ?',
+    ok: {
+      push: true,
+      'no-caps': true,
+      label: 'Hapus',
+      color: 'negative'
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      label: 'Batal',
+      color: 'dark'
+    }
+  }).onOk(() => {
+    permintaan.hapusRinci(val).then(() => {
+      toloadBeli.value = ''
+      const index = row.permintaanrinci.findIndex(it => it.id === val.id)
+      if (index >= 0) {
+        row.permintaanrinci.splice(index, 1)
+      }
+      if (row.permintaanrinci.length < 1) {
+        const index = store.items.findIndex(it => it.id === row.id)
+        if (index >= 0) {
+          store.items.splice(index, 1)
+        }
+      }
+      // if (!val.flag) val.flag = 1
+    })
+  }).onCancel(() => {
+    toloadBeli.value = ''
   })
 }
 function dari(val) {

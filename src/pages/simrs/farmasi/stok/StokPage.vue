@@ -18,7 +18,7 @@
     </div>
     <div
       class="col full-height"
-      style="padding-bottom: 60px; padding-top:60px"
+      style="padding-bottom: 60px; padding-top:36px"
     >
       <listForm />
     </div>

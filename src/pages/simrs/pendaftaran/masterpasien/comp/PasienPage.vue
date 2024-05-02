@@ -116,7 +116,7 @@
                         icon="icon-mat-edit"
                         color="grey-8"
                         size="xs"
-                        @click="editPasien(row)"
+                        @click="editPasien(item)"
                       >
                         <q-tooltip>
                           Edit Data Pasien
@@ -128,7 +128,7 @@
                         icon="icon-mat-visibility"
                         color="grey-8"
                         size="xs"
-                        @click="previewDetail(row)"
+                        @click="previewDetail(item)"
                       >
                         <q-tooltip>
                           Lihat Detail Pasien

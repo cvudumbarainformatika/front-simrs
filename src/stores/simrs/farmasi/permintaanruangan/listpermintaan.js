@@ -57,8 +57,8 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
           .then(resp => {
             this.loading = false
             console.log('list permintaan', resp.data)
-            this.items = resp.data
-            // this.meta = resp.data
+            this.items = resp.data?.data
+            this.meta = resp.data
             resolve(resp)
           })
           .catch(() => {
@@ -66,18 +66,23 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
           })
       })
     },
-    simpanDetail(val) {
+    simpanDetail(val, item) {
       this.loadingSimpan = true
+      item.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/terimadistribusi', val)
           .then(resp => {
             this.loadingSimpan = false
+            item.loading = false
             console.log('terima', resp)
             notifSuccess(resp)
             this.ambilPermintaan()
             resolve(resp)
           })
-          .catch(() => { this.loadingSimpan = false })
+          .catch(() => {
+            this.loadingSimpan = false
+            item.loading = false
+          })
       })
     }
   }
