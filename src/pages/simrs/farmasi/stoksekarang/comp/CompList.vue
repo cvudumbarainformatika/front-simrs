@@ -36,9 +36,9 @@
         <div class="row text-weight-bold text-amber-10 box text-right no-wrap items-center">
           {{ row.nama_obat }}
         </div>
-        <div class="row text-weight-bold no-wrap text-italic f-10">
+        <!-- <div class="row text-weight-bold no-wrap text-italic f-10">
           ( {{ row.satuan_k ? row.satuan_k :'-' }} )
-        </div>
+        </div> -->
         <div class="row justify-start no-wrap q-my-xs">
           <div
             class="text-weight-bold"
@@ -91,6 +91,7 @@
       <template #cell-stokalokasi="{row}">
         <div
           class="row no-wrap text-weight-bold  items-end cursor-pointer"
+          :class="parseFloat(row.stokalokasi)!==parseFloat(row.total)?'bg-orange text-white q-pa-sm':''"
           @click="rinciAlokasi(row)"
         >
           <div>
