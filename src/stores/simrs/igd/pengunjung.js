@@ -4,6 +4,8 @@ import { dateDbFormat } from 'src/modules/formatter'
 
 export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
   state: () => ({
+    tab: 'Diagnosa Medik',
+    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)'],
     items: [],
     loading: false,
     loadingSaveGantiDpjp: false,
@@ -23,6 +25,8 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       from: dateDbFormat(new Date()),
       status: ''
     },
+    notaTindakans: [],
+    notaTindakan: 'BARU',
     periods: ['Hari Ini', 'Minggu Ini', 'Bulan Ini', 'Tahun Ini'],
     periode: 'Hari Ini',
     pageLayanan: false
@@ -49,7 +53,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const params = { params: this.params }
       await api.get('v1/simrs/pendaftaran/igd/kunjunganpasienigd', params)
         .then(resp => {
-          console.log('kunjungan igd', resp?.data?.data)
+          // console.log('kunjungan igd', resp?.data?.data)
           this.loading = false
           this.pasiens = resp?.data?.data
           this.items = resp?.data?.data
@@ -62,7 +66,6 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.loadingSaveGantiDpjp = true
       try {
         const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
-        console.log(resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x === pasien)
           if (findPasien.length) {
@@ -82,13 +85,13 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       }
     },
     setPeriodik(val) {
-      console.log('wew', val)
+      // console.log('wew', val)
       this.params.page = 1
       const { to, from, status } = val
       this.params.to = to
       this.params.from = from
       this.params.status = status
-      console.log('periodik', to)
+      // console.log('periodik', to)
       this.getData()
     },
     setDate(val) {
@@ -117,10 +120,10 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         console.log('terima', resp)
         if (resp.status === 200) {
           const wew = this.items.filter(x => x === pasien)
-          console.log('wew', wew)
-          // if (wew.length) {
-          //   wew[0].flagpelayanan = '2'
-          // }
+          // console.log('wew', wew)
+          if (wew.length) {
+            wew[0].flagpelayanan = '2'
+          }
           this.loadingTerima = false
           this.noreg = null
         }
@@ -148,8 +151,8 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
 
             // BARU
             findPasien[0].anamnesis = resp?.data?.anamnesis
-            // findPasien[0].datasimpeg = resp?.data?.datasimpeg
-            // findPasien[0].diagnosa = resp?.data?.diagnosa
+            findPasien[0].datasimpeg = resp?.data?.datasimpeg
+            findPasien[0].diagnosa = resp?.data?.diagnosa
             // findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
             // findPasien[0].diagnosakebidanan = resp?.data?.diagnosakebidanan
             // findPasien[0].diet = resp?.data?.diet
@@ -165,7 +168,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             // findPasien[0].radiologi = resp?.data?.radiologi
             // findPasien[0].sharing = resp?.data?.sharing
             // findPasien[0].taskid = resp?.data?.taskid
-            // findPasien[0].tindakan = resp?.data?.tindakan
+            findPasien[0].tindakan = resp?.data?.tindakan
             // BARU
             // findPasien[0].laporantindakan = resp?.data?.laporantindakan
             // findPasien[0].psikiatri = resp?.data?.psikiatri
@@ -176,7 +179,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             // findPasien[0].dokumenluar = resp?.data?.dokumenluar
           }
           this.loadingTerima = false
-          console.log('load2', this.loadingTerima)
+          // console.log('load2', this.loadingTerima)
           this.noreg = null
         }
       } catch (error) {
@@ -222,6 +225,22 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         const data = findPasien[0].anamnesis
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    async getNota(pasien) {
+      const params = {
+        params: {
+          noreg: pasien?.noreg
+        }
+      }
+
+      const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
+      if (resp.status === 200) {
+        const arr = resp.data.map(x => x.nota)
+        this.notaTindakans = arr.length ? arr : []
+        console.log('notas', this.notaTindakans)
+        this.notaTindakans.push('BARU')
+        this.notaTindakan = this.notaTindakans[0]
       }
     }
   }

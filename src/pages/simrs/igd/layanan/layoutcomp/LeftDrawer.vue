@@ -8,12 +8,12 @@
     />
   </q-scroll-area>
 
-  <!-- <div
+  <div
     class="absolute-bottom"
     :style="`height: ${tinggiDetailPas}px`"
   >
     <SimulasiPageTwo :pasien="pasien" />
-  </div> -->
+  </div>
 
   <div
     class="absolute-top bg-dark text-white"
@@ -60,7 +60,7 @@
       </div>
       <q-bar>
         <q-space />
-        <!-- <q-btn
+        <q-btn
           dense
           flat
           icon="icon-mat-attach_money"
@@ -70,8 +70,8 @@
           <q-tooltip class="bg-dark text-white">
             Billing Pasien
           </q-tooltip>
-        </q-btn> -->
-        <!-- <q-btn
+        </q-btn>
+        <q-btn
           dense
           flat
           icon="icon-mat-menu_book"
@@ -81,7 +81,7 @@
           <q-tooltip class="bg-dark text-white">
             i-care
           </q-tooltip>
-        </q-btn> -->
+        </q-btn>
         <q-btn
           dense
           flat
@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-// import SimulasiPageTwo from '../comptindakan/pagemenu/complayanan/SimulasiPageTwo.vue'
+import SimulasiPageTwo from './SimulasiPageTwo.vue'
 import ListMenu from './ListMenu.vue'
 
 // import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'

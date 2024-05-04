@@ -154,7 +154,7 @@ const props = defineProps({
 
 const lists = computed(() => {
   const arr = props.pasien?.anamnesis
-  console.log('sasa', props.pasien)
+  // console.log('sasa', props.pasien)
   return arr?.sort((a, b) => { return b.id - a.id })
 })
 
