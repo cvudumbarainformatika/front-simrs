@@ -239,12 +239,18 @@
                         {{ rinc?.jumlah }}
                       </div>
                     </div>
-                    <div class="row">
+                    <div class="row items-center">
                       <div class="col-4">
                         Konsumsi
                       </div>
                       <div class="col-8">
-                        {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari
+                        <!-- {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari -->
+                        <app-input
+                          v-model="rinc.konsumsi"
+                          outlined
+                          valid
+                          label="Konsumsi (hari)"
+                        />
                       </div>
                     </div>
                   </div>
@@ -265,12 +271,18 @@
                         {{ formatDouble( parseFloat(rinc?.harga),2) }}
                       </div>
                     </div>
-                    <div class="row">
+                    <div class="row items-center">
                       <div class="col-4">
                         Keterangan
                       </div>
                       <div class="col-8">
-                        {{ rinc?.keterangan }}
+                        <!-- {{ rinc?.keterangan }} -->
+                        <app-input
+                          v-model="rinc.keterangan"
+                          outlined
+                          valid
+                          label="Keterangan"
+                        />
                       </div>
                     </div>
                   </div>
@@ -355,10 +367,22 @@
                 ({{ item?.satuan_racik }})
               </div>
               <div class="col-shrink q-mr-xs">
-                {{ item?.keterangan }}
+                <!-- {{ item?.keterangan }} -->
+                <app-input
+                  v-model="item.keterangan"
+                  outlined
+                  valid
+                  label="Keterangan"
+                />
               </div>
-              <div class="col-shrink q-mr-xs text-italic f-10">
-                ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
+              <div class="col-shrink q-mr-xs ">
+                <!-- ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari) -->
+                <app-input
+                  v-model="item.konsumsi"
+                  outlined
+                  valid
+                  label="Konsumsi (hari)"
+                />
               </div>
               <div class="col-grow">
                 <q-separator
