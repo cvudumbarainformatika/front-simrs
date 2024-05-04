@@ -91,7 +91,7 @@
       <template #cell-stokalokasi="{row}">
         <div
           class="row no-wrap text-weight-bold  items-end cursor-pointer"
-          :class="parseFloat(row.stokalokasi)!==parseFloat(row.total)?'bg-orange text-white q-pa-sm':''"
+          :class="parseFloat(row.stokalokasi) !== parseFloat(row.total) ? (parseFloat(row.stokalokasi) < 0 ? 'bg-negative text-white q-pa-sm' :'bg-orange text-white q-pa-sm'):''"
           @click="rinciAlokasi(row)"
         >
           <div>
@@ -102,7 +102,7 @@
           </div>
         </div>
       </template>
-      <!-- <template #left-acttion="{row}">
+      <template #left-acttion="{row}">
         <div class="q-mr-md">
           <q-btn
             flat
@@ -111,17 +111,19 @@
             round
             color="grey"
             icon="icon-mat-edit"
+            :loading="row.loading"
+            :disable="row.loading"
             @click="editData(row)"
           >
             <q-tooltip
               anchor="top middle"
               self="center middle"
             >
-              Edit Data
+              Penyesuaian Stok Awal
             </q-tooltip>
           </q-btn>
         </div>
-      </template> -->
+      </template>
     </app-table>
     <DetailAlokasi v-model="table.isOpen" />
   </div>

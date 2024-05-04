@@ -33,22 +33,31 @@
   </div>
   <app-dialog-not-full
     v-model="store.isOpen"
-    label="Form Stok"
+    label="Form Stok Penyesuaian Stok Awal"
     label-btn-ok="Simpan"
     label-btn-close="Batal"
-    :loading="store.loading"
+    :loading="store.loading || store.loadingAmbil"
     @on-ok="simpan"
     @on-cancel="batal"
   >
     <template #default>
-      <headerForm />
+      <div
+        v-if="store.loadingAmbil"
+        style="height: 180px; width: 80vw;"
+      >
+        <app-loading />
+      </div>
+      <headerForm
+        v-if="!store.loadingAmbil"
+        ref="refForm"
+      />
     </template>
   </app-dialog-not-full>
 </template>
 
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { defineAsyncComponent, onMounted, watch } from 'vue'
+import { defineAsyncComponent, onMounted, watch, ref } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokSekarangStore } from 'src/stores/simrs/farmasi/stoksekarang/form'
 import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekarang/tabel'
@@ -84,14 +93,17 @@ onMounted(() => {
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setForm('kdruang', obj)
   table.setParam('kdruang', obj)
+  table.setParam('page', 1)
   table.getDataTable()
   const dep = apps.depos.find(x => x.value === apps?.user?.kdruangansim)
   if (dep)store.setDisp('kdruang', dep.nama)
   // console.log(dep)
 })
+const refForm = ref(null)
 function simpan() {
-  console.log('form', store.form)
-  store.simpanForm()
+  // console.log('form', store.form)
+  console.log('ref form', refForm.value.validasi())
+  if (refForm.value.validasi()) store.simpanForm()
 }
 function batal() {
   store.resetForm()
