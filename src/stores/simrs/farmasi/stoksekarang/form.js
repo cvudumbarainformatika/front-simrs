@@ -8,6 +8,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
   state: () => ({
     loading: false,
     loadingObat: false,
+    loadingAmbil: false,
     isOpen: false,
     edit: false,
     params: {
@@ -31,7 +32,9 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
 
     },
     obats: [],
-    allObats: []
+    allObats: [],
+    nopenerimaans: [],
+    stokByNopenerimaans: []
   }),
   actions: {
     setForm(key, val) {
@@ -75,21 +78,60 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
         this.getDataObat()
       }
     },
-    editData(val) {
-      this.edit = true
-      this.cariObat(val.nama_obat)
-      if (this.form.kdruang !== val.kdruang) return notifErrVue('Tidak bisa melakukan edit karena bukan stok milik Ruangan Anda')
-      this.setDisp('tglpenerimaan', date.formatDate(val.tglpenerimaan, 'DD MMMM YYYY'))
-      this.setDisp('tglexp', date.formatDate(val.tglpenerimaan, 'DD MMMM YYYY'))
+    penerimaanSelected(val) {
+      console.log('val', val)
+      console.log('form', this.form)
+      const penerimaan = this.stokByNopenerimaans.find(nop => nop.nopenerimaan === val)
+      if (penerimaan) {
+        this.setDisp('tglpenerimaan', date.formatDate(penerimaan.tglpenerimaan, 'DD MMMM YYYY'))
+        this.setDisp('tglexp', date.formatDate(penerimaan.tglexp, 'DD MMMM YYYY'))
+        // this.setDisp('obat', val.nama_obat)
 
-      this.setForm('tglpenerimaan', val.tglpenerimaan)
-      this.setForm('tglexp', val.tglexp)
-      this.setForm('kdobat', val.kdobat)
-      this.setForm('jumlah', val.jumlah)
-      this.setForm('harga', val.harga)
-      this.setForm('nobatch', val.nobatch)
-      this.setForm('id', val?.idx)
+        this.setForm('tglpenerimaan', penerimaan.tglpenerimaan)
+        this.setForm('tglexp', penerimaan.tglexp)
+        // this.setForm('kdobat', penerimaan.kdobat)
+        this.setForm('awal', penerimaan.jumlah)
+        this.setForm('harga', penerimaan.harga)
+        this.setForm('nobatch', penerimaan.nobatch)
+        this.setForm('id', penerimaan?.id)
+        this.setForm('nopenerimaan', penerimaan?.nopenerimaan)
+        if (parseFloat(this.form?.akhir) >= 0) {
+          const akhir = parseFloat(this.form.akhir)
+          const awal = parseFloat(this.form.awal)
+          this.setForm('penyesuaian', akhir - awal)
+        }
+      }
+      console.log('penerimaan', penerimaan)
+    },
+    editData(val) {
+      this.nopenerimaans = []
+      this.edit = true
+      // console.log('obat sebelum', val)
+      // this.cariObat(val.nama_obat)
+      // console.log('obat sesudah', val)
+      if (this.form.kdruang !== val.kdruang) return notifErrVue('Tidak bisa melakukan edit karena bukan stok milik Ruangan Anda')
       this.setOpen()
+      this.getObatMauDisesuaikan(val).then(resp => {
+        console.log('obatnya', resp)
+        this.stokByNopenerimaans = resp?.data
+        resp?.data.forEach(st => {
+          this.nopenerimaans.push(st?.nopenerimaan)
+        })
+        const stoknya = resp?.data[0]
+        console.log('stoknya', stoknya)
+        this.setDisp('tglpenerimaan', date.formatDate(stoknya.tglpenerimaan, 'DD MMMM YYYY'))
+        this.setDisp('tglexp', date.formatDate(stoknya.tglexp, 'DD MMMM YYYY'))
+        this.setDisp('obat', val.nama_obat)
+
+        this.setForm('tglpenerimaan', stoknya.tglpenerimaan)
+        this.setForm('tglexp', stoknya.tglexp)
+        this.setForm('kdobat', stoknya.kdobat)
+        this.setForm('awal', stoknya.jumlah)
+        this.setForm('harga', stoknya.harga)
+        this.setForm('nobatch', stoknya.nobatch)
+        this.setForm('id', stoknya?.id)
+        this.setForm('nopenerimaan', stoknya?.nopenerimaan)
+      })
     },
     getInitialData() {
       this.getDataObat()
@@ -105,6 +147,24 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
           this.allObats = resp?.data
         })
         .catch(() => { this.loadingObat = false })
+    },
+    getObatMauDisesuaikan(val) {
+      val.loading = true
+      this.loadingAmbil = true
+      const param = { params: val }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/penerimaan/obat-mau-disesuaikan', param)
+          .then(resp => {
+            console.log('obat', resp?.data)
+            val.loading = false
+            this.loadingAmbil = false
+            resolve(resp?.data)
+          })
+          .catch(() => {
+            val.loading = false
+            this.loadingAmbil = false
+          })
+      })
     },
     simpanForm() {
       this.loading = true
