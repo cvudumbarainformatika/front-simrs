@@ -4,6 +4,8 @@ import { api } from 'src/boot/axios'
 export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
   state: () => ({
     loading: false,
+    loadingAlokasi: false,
+    isOpen: false,
     params: {
       per_page: 10,
       q: '',
@@ -14,12 +16,21 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
     gudangs: [],
     columns: [
       'obat',
-      'penerimaan',
-      'stok'
+      // 'penerimaan',
+      'stok',
+      'stokalokasi'
+
     ],
-    columnHide: []
+    columnHide: [],
+    rincis: [],
+    mutasis: [],
+    reseps: [],
+    obat: {}
   }),
   actions: {
+    setClose() {
+      this.isOpen = false
+    },
     setParam(key, val) {
       this.params[key] = val
     },
@@ -77,10 +88,34 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
             this.loading = false
             console.log('setok ', resp.data)
             this.items = resp?.data?.data ?? resp?.data
-            this.meta = resp.data
+            this.meta = resp.data?.meta
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    getDataAlokasi(row) {
+      this.obat = row
+      this.loadingAlokasi = true
+      const data = row
+      data.kdruang = this.params.kdruang
+      const param = { params: data }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/penerimaan/data-alokasi', param)
+          .then(resp => {
+            this.loadingAlokasi = false
+            console.log('setok ', resp.data)
+            this.mutasis = resp?.data?.permintaan
+            this.reseps = resp?.data?.transRacikan ?? []
+            if (resp?.data?.transNonRacikan?.length) {
+              resp?.data?.transNonRacikan.forEach(racik => {
+                this.reseps.push(racik)
+              })
+            }
+
+            resolve(resp)
+          })
+          .catch(() => { this.loadingAlokasi = false })
       })
     }
   }

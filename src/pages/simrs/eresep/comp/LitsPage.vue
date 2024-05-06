@@ -24,16 +24,21 @@
         v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
         class=""
       >
-        <div class="q-my-md q-ml-md">
-          <q-chip
-            square
-            class="f-10"
-            :color="color(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)"
-            text-color="white"
-          >
-            {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
-          </q-chip>
-          <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
+        <div class="row items-center q-my-md q-ml-md">
+          <div>
+            <q-chip
+              square
+              class="f-10"
+              :color="color(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag)"
+              text-color="white"
+            >
+              {{ status(store?.pasien?.newapotekrajal[store.indexRacikan]?.flag) }}
+            </q-chip>
+            <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.flag }} -->
+          </div>
+          <div v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.iter_expired">
+            Iter s/d : {{ dateFullFormat( store?.pasien?.newapotekrajal[store.indexRacikan]?.iter_expired) }}
+          </div>
         </div>
         <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
         <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
@@ -56,24 +61,16 @@
               style="width:70%"
             >
               <div class="row items-center q-col-gutter-sm full-width">
-                <div
-                  class="text-right col-2"
-                >
+                <div class="text-right col-2">
                   {{ item?.jumlah }}
                 </div>
-                <div
-                  class="col-2 text-right"
-                >
+                <div class="col-2 text-right">
                   {{ item?.aturan }}
                 </div>
-                <div
-                  class="col-5 text-right"
-                >
+                <div class="col-5 text-right">
                   {{ formatDouble(item?.harga) }}
                 </div>
-                <div
-                  class="col text-right"
-                >
+                <div class="col text-right">
                   {{ item?.keterangan }}
                 </div>
               </div>
@@ -92,9 +89,7 @@
             class="q-pl-none"
           >
             <template #header>
-              <q-item-section
-                style="width: 30%;"
-              >
+              <q-item-section style="width: 30%;">
                 <div class="row">
                   {{ item?.namaracikan }}
                 </div>
@@ -104,29 +99,19 @@
                 style="width:70%"
               >
                 <div class="row items-center q-col-gutter-sm full-width">
-                  <div
-                    class="text-right col-2"
-                  >
+                  <div class="text-right col-2">
                     {{ item?.tiperacikan }}
                   </div>
-                  <div
-                    class="text-right col-2"
-                  >
+                  <div class="text-right col-2">
                     {{ item?.jumlahracikan }}
                   </div>
-                  <div
-                    class="col-2 text-right"
-                  >
+                  <div class="col-2 text-right">
                     {{ item?.aturan }}
                   </div>
-                  <div
-                    class="col-3 text-right"
-                  >
+                  <div class="col-3 text-right">
                     {{ formatDouble(item?.harga) }}
                   </div>
-                  <div
-                    class="col text-right"
-                  >
+                  <div class="col text-right">
                     {{ item?.keterangan }}
                   </div>
                 </div>
@@ -151,15 +136,11 @@
                 style="width:50%"
               >
                 <div class="row items-center q-col-gutter-sm full-width">
-                  <div
-                    class="text-right col-2"
-                  >
+                  <div class="text-right col-2">
                     {{ obat?.jumlah }}
                   </div>
 
-                  <div
-                    class="col text-right"
-                  >
+                  <div class="col text-right">
                     {{ obat?.keteranganx }}
                   </div>
                 </div>
@@ -179,7 +160,7 @@
 </template>
 
 <script setup>
-import { formatDouble } from 'src/modules/formatter'
+import { formatDouble, dateFullFormat } from 'src/modules/formatter'
 // import { laravelEcho } from 'src/modules/newsockets'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 

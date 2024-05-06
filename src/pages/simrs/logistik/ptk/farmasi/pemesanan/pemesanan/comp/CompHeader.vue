@@ -1,6 +1,6 @@
 <template>
   <div
-    class="row items-center justify-between q-pa-sm"
+    class="row items-center justify-between q-pa-sm "
     :class="`${color} text-${textColor}`"
   >
     <div>

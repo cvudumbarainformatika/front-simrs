@@ -90,14 +90,14 @@ const periods = ref([
 ])
 
 function gantiPeriode(val) {
-  console.log('val', val)
+  // console.log('val', val)
   if (val === 1) hariIni()
   if (val === 2) mingguIni()
   if (val === 3) bulanIni()
   if (val === 4) tahunIni()
 
-  console.log('asasa', txt.value)
-  console.log(from.value)
+  // console.log('asasa', txt.value)
+  // console.log(from.value)
   const per = {
     to: to.value,
     from: from.value,
@@ -155,7 +155,7 @@ function tahunIni() {
 
 function gantiTxt() {
   gantiPeriode(periode.value)
-  console.log('dadada', periode.value)
+  // console.log('dadada', periode.value)
 }
 
 onMounted(() => {

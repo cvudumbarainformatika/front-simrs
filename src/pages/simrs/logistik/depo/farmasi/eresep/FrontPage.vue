@@ -95,6 +95,7 @@ onMounted(() => {
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)
+  store.setParams('tipe', 'normal')
   const depo = store.depos.filter(a => a.value === obj)
   if (depo.length) store.getDataTable()
   else {

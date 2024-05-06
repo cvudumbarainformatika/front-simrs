@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 import { usePemesananObatStore } from './pesanan'
 import { filterDuplicateArrays } from 'src/modules/utils'
 import { date } from 'quasar'
+import { useListPemesananStore } from './listpesanan'
 
 export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
   state: () => ({
@@ -57,33 +58,54 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.columns = thumb[0]
       // console.log('columns', this.columns)
     },
-    rencanaSelected(val) {
-      // const gudangs = [
-      //   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-      //   { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
-      // ]
+    rencanaSelected(val, from) {
+      // eslint-disable-next-line no-unused-vars
+      const gudangs = [
+        { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+        { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+      ]
       this.pesan.isOpen = true
       this.pesan.setForm('no_rencbeliobat', val)
-      const item = this.rencanaAlls.filter(a => a.noperencanaan === val)
-      if (item.length) {
-        this.pesan.setForm('gudang', item[0].gudang)
-        const gud = this.gudangs.filter(a => a.value === item[0].gudang)
-        if (gud.length) this.gudang = gud[0].nama
-        this.tglRencana = date.formatDate(item[0].tglperencanaan, 'DD MMMM YYYY')
-        this.items = item
+      console.log('renc se', from, val)
+      this.getRencanaRinci(val).then(() => {
+        if (!this.items.length) {
+          this.pesan.setClose()
+          this.getObatMauBeli()
 
-        this.items.forEach(a => {
-          const dipesan = !isNaN(parseFloat(a.jumlah_diverif)) ? parseFloat(a.jumlah_diverif) : 0
-          const dpesan = !isNaN(parseFloat(a.jumlahallpesan)) ? parseFloat(a.jumlahallpesan) : 0
-          // const bolehDipesan = ((parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan) > 0 ? (parseFloat(a.stomaxkrs) - parseFloat(a.stokrs)) - dpesan : 0
+          const list = useListPemesananStore()
+          list.refreshTable()
+          return
+        }
+        // const item = this.rencanaAlls.filter(a => a.noperencanaan === val)
+        // if (item.length) {
+        this.pesan.setForm('gudang', this.items[0].gudang)
+        const gud = this.gudangs.filter(a => a.value === this.items[0].gudang)
+        if (gud.length) this.gudang = gud[0].nama
+        this.tglRencana = date.formatDate(this.items[0].tglperencanaan, 'DD MMMM YYYY')
+        //   this.items = item
+
+        this.items.forEach(item => {
+          if (item?.rincian.length) {
+            const rinc = item.rincian.filter(a => a.kdobat === item.kdobat)
+            if (rinc.length) {
+              const trm = rinc[0].penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+              const stok = rinc[0].stok.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+              console.log('trm', trm, 'stok', stok)
+              item.harga = trm > 0 ? trm : stok
+            }
+          }
+          const dipesan = !isNaN(parseFloat(item.jumlah_diverif)) ? parseFloat(item.jumlah_diverif) : 0
+          const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) ? parseFloat(item.jumlahallpesan) : 0
+          // const bolehDipesan = ((parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan) > 0 ? (parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan : 0
           const bolehDipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
           console.log('boleh dipesan', bolehDipesan)
-          a.jumlahdipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
-          a.jumlahdirencanakan = dipesan
-          a.bolehdipesan = bolehDipesan
+          item.jumlahdipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
+          item.jumlahdirencanakan = dipesan
+          item.bolehdipesan = bolehDipesan
         })
-      }
-      console.log('pesanan', item)
+        // }
+        // console.log('pesanan', item)
+      })
     },
     clearRencana(val) {
       this.pesan.setForm('no_rencbeliobat', null)
@@ -132,41 +154,43 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             this.loadingList = false
             console.log('obat direncakan', resp.data)
             const rencana = resp?.data?.data ?? resp?.data
-            if (rencana.length) {
-              this.rencanaAlls = rencana
-              const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
-              if (noren.length) {
-                noren.forEach(a => {
-                  const anu = { no_rencbeliobat: a }
-                  const head = this.rencanaAlls.filter(kep => kep.noperencanaan === a)
-                  if (head.length) {
-                    head.forEach(he => {
-                      if (he?.rincian.length) {
-                        const rinc = he.rincian.filter(a => a.kdobat === he.kdobat)
-                        if (rinc.length) {
-                          const trm = rinc[0].penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
-                          const stok = rinc[0].stok.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
-                          console.log('trm', trm, 'stok', stok)
-                          he.harga = trm > 0 ? trm : stok
-                        }
-                      }
-                    })
-                    const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
-                    const gud = gudA[0] ?? {}
-                    // console.log('gu', gud)
-                    const temp = {
-                      no_rencbeliobat: a,
-                      gudang: gud,
-                      tglperencanaan: head[0]?.tglperencanaan,
-                      detail: head
-                    }
-                    this.rencanas.push(temp)
-                  }
-                  this.norencanas.push(anu)
-                })
-              }
-              console.log('rencanas', this.rencanas)
-            }
+            this.rencanas = rencana
+            this.rencanaAlls = rencana
+            // if (rencana.length) {
+            //   this.rencanaAlls = rencana
+            //   const noren = filterDuplicateArrays(rencana.map(a => a.noperencanaan))
+            //   if (noren.length) {
+            //     noren.forEach(a => {
+            //       const anu = { no_rencbeliobat: a }
+            //       const head = this.rencanaAlls.filter(kep => kep.noperencanaan === a)
+            //       if (head.length) {
+            //         head.forEach(he => {
+            //           if (he?.rincian.length) {
+            //             const rinc = he.rincian.filter(a => a.kdobat === he.kdobat)
+            //             if (rinc.length) {
+            //               const trm = rinc[0].penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+            //               const stok = rinc[0].stok.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+            //               console.log('trm', trm, 'stok', stok)
+            //               he.harga = trm > 0 ? trm : stok
+            //             }
+            //           }
+            //         })
+            //         const gudA = this.gudangs.filter(gu => gu.value === head[0]?.gudang)
+            //         const gud = gudA[0] ?? {}
+            //         // console.log('gu', gud)
+            //         const temp = {
+            //           no_rencbeliobat: a,
+            //           gudang: gud,
+            //           tglperencanaan: head[0]?.tglperencanaan,
+            //           detail: head
+            //         }
+            //         this.rencanas.push(temp)
+            //       }
+            //       this.norencanas.push(anu)
+            //     })
+            //   }
+            //   console.log('rencanas', this.rencanas)
+            // }
 
             // this.rencanas = resp.data
             // const temp = resp.data
@@ -186,6 +210,23 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
           })
           .catch(() => {
             this.loadingList = false
+          })
+      })
+    },
+    getRencanaRinci(val) {
+      this.loading = true
+      const param = { params: { no_rencbeliobat: val } }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli_rinci', param)
+          .then(resp => {
+            this.loading = false
+            console.log(resp?.data)
+            this.items = resp?.data
+
+            resolve(this.items)
+          })
+          .catch(() => {
+            this.loading = false
           })
       })
     }

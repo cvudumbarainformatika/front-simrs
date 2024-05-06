@@ -202,7 +202,7 @@
           <app-input
             ref="refCariNoPenerimaan"
             v-model="store.params.nopenerimaan"
-            label="Cari Nomor Penerimaan (klik enter untuk cari)"
+            label="Cari Nomor Penerimaan (tekan enter untuk cari)"
             outlined
             valid
             class="col-4"

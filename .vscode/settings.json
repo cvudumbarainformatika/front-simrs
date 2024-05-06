@@ -23,5 +23,8 @@
   "files.autoSave": "onWindowChange",
   "beautify.config": "",
   "workbench.colorTheme": "GitHub Dark",
-  "vue.codeActions.enabled": false
+  "vue.codeActions.enabled": false,
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

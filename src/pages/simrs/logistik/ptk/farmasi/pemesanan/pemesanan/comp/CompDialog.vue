@@ -123,7 +123,7 @@
           :per-page="table.params.per_page"
           :order-by="table.params.order_by"
           :sort="table.params.sort"
-          :loading="table.loadingList"
+          :loading="table.loadingList || table.loading"
           :default-btn="false"
           :ada-refresh="false"
           :ada-filter="false"
@@ -446,11 +446,11 @@ const refPbf = ref(null)
 function kirimRencana(val) {
   if (refPbf.value.$refs.refAuto.validate()) {
     store.kirimRencana(val).then(() => {
-      table.getObatMauBeli().then(resp => {
-        console.log('get obat setelah kirim', resp)
-        table.rencanaSelected(store.form.no_rencbeliobat)
-        if (!resp.length) store.setClose()
-      })
+      // table.getObatMauBeli().then(resp => {
+      //   console.log('get obat setelah kirim', resp)
+      table.rencanaSelected(store.form.no_rencbeliobat, 'form')
+      // if (!resp.length) store.setClose()
+      // })
     })
   }
 }

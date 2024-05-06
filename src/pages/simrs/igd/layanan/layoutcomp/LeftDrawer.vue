@@ -8,12 +8,12 @@
     />
   </q-scroll-area>
 
-  <!-- <div
+  <div
     class="absolute-bottom"
     :style="`height: ${tinggiDetailPas}px`"
   >
     <SimulasiPageTwo :pasien="pasien" />
-  </div> -->
+  </div>
 
   <div
     class="absolute-top bg-dark text-white"
@@ -60,7 +60,7 @@
       </div>
       <q-bar>
         <q-space />
-        <!-- <q-btn
+        <q-btn
           dense
           flat
           icon="icon-mat-attach_money"
@@ -70,8 +70,8 @@
           <q-tooltip class="bg-dark text-white">
             Billing Pasien
           </q-tooltip>
-        </q-btn> -->
-        <!-- <q-btn
+        </q-btn>
+        <q-btn
           dense
           flat
           icon="icon-mat-menu_book"
@@ -81,7 +81,7 @@
           <q-tooltip class="bg-dark text-white">
             i-care
           </q-tooltip>
-        </q-btn> -->
+        </q-btn>
         <q-btn
           dense
           flat
@@ -96,16 +96,23 @@
       </q-bar>
     </div>
   </div>
+  <CetakRekapBilling
+    ref="refBilling"
+    v-model="printRekap"
+    :pasien="pasien"
+    style="z-index: 19000;"
+    @tutup="actPrintRekap"
+  />
 </template>
 
 <script setup>
-// import SimulasiPageTwo from '../comptindakan/pagemenu/complayanan/SimulasiPageTwo.vue'
+import SimulasiPageTwo from './SimulasiPageTwo.vue'
 import ListMenu from './ListMenu.vue'
 
-// import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
+import CetakRekapBilling from 'src/pages/simrs/kasir/igd/comp/CetakRekapBilling.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
-// const printRekap = ref(false)
+const printRekap = ref(false)
 // const tinggiBot = ref(180)
 const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare'])
 defineProps({
@@ -122,12 +129,13 @@ defineProps({
     default: null
   }
 })
-// const refBilling = ref(null)
-// function bukaBill() {
-//   refBilling.value.openFaktur()
-//   printRekap.value = true
-// }
-// function actPrintRekap() {
-//   printRekap.value = false
-// }
+
+const refBilling = ref(null)
+function bukaBill() {
+  refBilling.value.openFaktur()
+  printRekap.value = true
+}
+function actPrintRekap() {
+  printRekap.value = false
+}
 </script>

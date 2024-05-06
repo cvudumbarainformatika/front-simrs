@@ -91,7 +91,7 @@
         </q-menu>
       </q-btn>
       <!-- add -->
-      <q-btn
+      <!-- <q-btn
         push
         color="green"
         icon="icon-mat-add"
@@ -105,7 +105,7 @@
         >
           Tambah Data
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
       <!-- refresh -->
       <q-btn
         class="q-ml-sm"
