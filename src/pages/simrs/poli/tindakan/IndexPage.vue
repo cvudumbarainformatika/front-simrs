@@ -57,7 +57,7 @@
           show-if-above
           overlay
           bordered
-          :width="700"
+          :width="845"
           :breakpoint="500"
         >
           <RightDrawer

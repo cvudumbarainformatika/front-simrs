@@ -132,6 +132,27 @@
     </q-toolbar-title>
 
     <div v-if="pasien?.dokter !== '' ">
+      <!-- <q-btn
+        dense
+        outline
+        color="white"
+        label="Poli Konsulan"
+        class="q-mr-md q-px-lg glow-on-hover"
+      >
+        <q-menu
+          style="width: 460px;"
+          :offset="[0, 5]"
+        >
+          <div class="fit column">
+            <div class="col-auto bg-secondary text-white q-px-md q-py-sm">
+              Permintaan Konsul dari poli ...
+            </div>
+            <div class="col-auto q-pa-md">
+              Poli Konsulan
+            </div>
+          </div>
+        </q-menu>
+      </q-btn> -->
       <q-btn
         v-if="pasien?.status==='' || pasien?.status==='2'"
         label="selesaikan layanan"
@@ -264,3 +285,13 @@ function selesaikanLayanan() {
   emits('layananSelesai')
 }
 </script>
+
+<style lang="scss" scoped>
+.glow-on-hover {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow-on-hover:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+</style>

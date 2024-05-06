@@ -14,7 +14,7 @@
   ],
   "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
   "[vue]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "Vue.volar"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
@@ -25,6 +25,6 @@
   "workbench.colorTheme": "GitHub Dark",
   "vue.codeActions.enabled": false,
   "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

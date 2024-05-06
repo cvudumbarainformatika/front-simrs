@@ -1,11 +1,31 @@
 <template>
   <div class="q-pa-xs bg-white">
-    <div class="row bg-primary text-white q-pa-sm q-mb-sm rouded-border">
+    <div v-if="apps?.user?.kdruangansim !== 'Gd-04010103'">
+      <div
+        class="bg-yellow-2 wrap columns content-center"
+        style="height: 90vh; width: 100%;"
+      >
+        <div class="text-negative text-center">
+          <q-icon
+            name="icon-mat-warning"
+            size="100px"
+          />
+        </div>
+        <div class="text-negative f-20  text-center">
+          Hanya untuk Depo OK
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="apps?.user?.kdruangansim === 'Gd-04010103'"
+      class="row bg-primary text-white q-pa-sm q-mb-sm rouded-border"
+    >
       <div class="f-16 text-weight-bold">
         Halaman Distribusi Permintaan Ruangan Untuk Persiapan Operasi
       </div>
     </div>
     <app-table-extend
+      v-if="apps?.user?.kdruangansim === 'Gd-04010103'"
       :columns="store.columns"
       :items="store.items"
       :meta="store.meta"
@@ -408,13 +428,21 @@ import { notifErrVue } from 'src/modules/utils'
 const store = useDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
 onMounted(() => {
+  if (apps?.user?.kdruangansim !== 'Gd-04010103') {
+    return notifErrVue('Distribusi persiapan operasi hanya untuk depo OK')
+    // apps.user.kdruangansim = 'Gd-04010103'
+  }
   store.setForm('kddepo', apps?.user?.kdruangansim)
   store.setParams('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  store.setForm('kddepo', obj)
-  store.setParams('kddepo', obj)
+  if (obj !== 'Gd-04010103') {
+    // apps.user.kdruangansim = 'Gd-04010103'
+    return notifErrVue('Distribusi persiapan operasi hanya untuk depo OK')
+  }
+  store.setForm('kddepo', 'Gd-04010103')
+  store.setParams('kddepo', 'Gd-04010103')
   store.getInitialData()
 })
 

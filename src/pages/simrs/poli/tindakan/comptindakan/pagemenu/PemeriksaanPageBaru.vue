@@ -32,6 +32,8 @@
           :key="pasien"
           :pasien="pasien"
           :filter-shapes="filterShapes"
+          tooltip="History Pasien (Shift + H)"
+          @open-history="seamless = !seamless"
         />
       </div>
       <div
@@ -53,6 +55,21 @@
           @open-template="store.setDialogTemplate"
         />
       </div>
+      
+      <app-drawer-right-new style="width:60%;"
+      :key="pasien"
+      :seamless="seamless"
+      :pasien="pasien"
+      @click-btn="clickslideRight"
+    >
+      <template #content>
+        <HistoryPemeriksaan
+          :key="pasien"
+          :pasien="pasien"
+          title="HISTORY PEMERIKSAAN FISIK LALU"
+        />
+      </template>
+    </app-drawer-right-new>
     </div>
   </q-card>
 </template>
@@ -65,11 +82,13 @@ import ListPemeriksaan from './comppemeriksaanbaru/ListPemeriksaan.vue'
 import CanvasComp from './comppemeriksaanbaru/CanvasComp.vue'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
-import { computed, onBeforeUnmount } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
+import HistoryPemeriksaan from './comppemeriksaanbaru/HistoryPemeriksaan.vue'
 // import { ref } from 'vue'
 
 const { enter, leave } = useSlideFromLeft()
 const store = usePemeriksaanFisik()
+const seamless = ref(false)
 
 const props = defineProps({
   pasien: {
@@ -85,4 +104,9 @@ const filterShapes = computed(() => {
 onBeforeUnmount(() => {
   console.log('pemeriksaan fisik ditutup')
 })
+
+const clickslideRight = () => {
+  // console.log('ok')
+  seamless.value = !seamless.value
+}
 </script>
