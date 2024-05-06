@@ -5,13 +5,33 @@
       v-if="!canvasFull"
       class="col-8"
     >
-      <div class="bg-primary text-white q-pa-md">
+      <!-- <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
-          Pemeriksaan (Vital Sign) <div class="text-white">
+          Pemeriksaan (Vital Sign) <div class="text-white"> -->
             <!-- {{ store.templateActive }} -->
+          <!-- </div>
+        </div>
+      </div> -->
+      <q-card-section class="q-px-md q-py-xs bg-primary text-white">
+        <div class="row items-center justify-between">
+          <div class="f-12">
+            Pemeriksaan (Vital Sign)
+          </div>
+          <div>
+            <q-btn
+              flat
+              dense
+              size="md"
+              icon="icon-mat-history"
+              @click="historyOpen"
+            >
+              <q-tooltip class="bg-dark text-white">
+                {{ tooltip }}
+              </q-tooltip>
+            </q-btn>
           </div>
         </div>
-      </div>
+      </q-card-section>
       <q-separator />
       <q-scroll-area
         style="height: calc(100% - 52px);"
@@ -416,6 +436,7 @@ import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaan
 import { onMounted, ref } from 'vue'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 
+const emits = defineEmits(['openHistory'])
 const store = usePemeriksaanFisik()
 
 const { menus } = useMenuPemeriksaan()
@@ -456,6 +477,10 @@ const props = defineProps({
   filterShapes: {
     type: Array,
     default: () => []
+  },
+  tooltip: {
+    type: String,
+    default: 'History Pemeriksaan'
   }
 })
 
@@ -489,6 +514,11 @@ async function onSubmit() {
       if (formRef.value) formRef.value.resetValidation()
     })
   }
+}
+
+function historyOpen() {
+  emits('openHistory')
+  // store.getHistory(props.pasien?.norm)
 }
 
 // function keteranganSkorNyeri(val) {

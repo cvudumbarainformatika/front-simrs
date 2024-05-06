@@ -53,6 +53,7 @@
             :key="pasien"
             :pasien="pasien"
             :filter-shapes="filterShapes"
+            @open-history="seamless = !seamless"
           />
         </div>
         <div
@@ -61,6 +62,13 @@
           <ListPemeriksaan
             :key="pasien"
             :pasien="pasien"
+          />
+
+          <HistoryPemeriksaan
+            :key="pasien"
+            :seamless="seamless"
+            :pasien="pasien"
+            @close="seamless =!seamless"
           />
         </div>
       </div>
@@ -74,12 +82,14 @@ import CanvasPage from './CanvasPage.vue'
 import TemplateGambar from './TemplateGambar.vue'
 import FormPemeriksaan from './FormPemeriksaan.vue'
 import ListPemeriksaan from './ListPemeriksaan.vue'
+import HistoryPemeriksaan from './HistoryPemeriksaan.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { usePemeriksaanFisik } from 'src/stores/simrs/pelayanan/poli/pemeriksaanfisik'
 import { useMenuPemeriksaan } from '../../forjs/menupemeriksaan'
 import { useSlideFromLeft } from 'src/composable/gsap/slidefromleft'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
+const seamless = ref(false)
 const store = usePemeriksaanFisik()
 // const storageApps = useAplikasiStore()
 const { getImage } = useMenuPemeriksaan()

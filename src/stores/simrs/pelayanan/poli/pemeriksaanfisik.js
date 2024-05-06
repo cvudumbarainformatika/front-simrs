@@ -107,7 +107,8 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
     ],
     loadingform: false,
     edited: false,
-    deleteShapes: []
+    deleteShapes: [],
+    historys: []
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2
@@ -609,7 +610,31 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
 
     setNotEdit() {
       this.edited = false
-    }
+    },
+
+    //update new
+    async getHistory(norm) {
+      console.log(norm)
+      this.loadingHistory = true
+      const params = { params: { norm } }
+      try {
+        const resp = await api.get('v1/simrs/pelayanan/historypemeriksaanfisik', params)
+        console.log('history', resp)
+        if (resp.status === 200) {
+          if (resp.data?.length) {
+            const arr = resp.data
+            this.historyMeta = null
+            this.historys = arr
+          } else {
+            this.historys = []
+          }
+        }
+        this.loadingHistory = false
+      } catch (error) {
+        this.loadingHistory = false
+        // notifErr(error)
+      }
+    },
 
   }
 })
