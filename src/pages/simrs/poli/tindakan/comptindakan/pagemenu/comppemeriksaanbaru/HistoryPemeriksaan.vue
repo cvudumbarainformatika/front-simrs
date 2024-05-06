@@ -32,9 +32,9 @@
           </div>
           <table class="row full-width">
             <th class="th-center">
-              <div v-if="items && items.detailgambars && items.detailgambars.length > 0">
-                <div v-for="gambars in items?.gambars" :key="gambars.id">
-                  <q-img style="height: 8cm; max-width: 6cm" :src="pathImg + gambars.gambar" />
+              <div v-if="items && items?.detailgambars && items?.detailgambars.length > 0">
+                <div v-for="gambars in items?.gambars" :key="gambars?.id">
+                  <q-img fit="contain" :src="pathImg + gambars?.gambar" />
                 </div>
               </div>
               <div v-else class="text-center q-pa-md" style="color: gray;">
