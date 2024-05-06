@@ -96,16 +96,23 @@
       </q-bar>
     </div>
   </div>
+  <CetakRekapBilling
+    ref="refBilling"
+    v-model="printRekap"
+    :pasien="pasien"
+    style="z-index: 19000;"
+    @tutup="actPrintRekap"
+  />
 </template>
 
 <script setup>
 import SimulasiPageTwo from './SimulasiPageTwo.vue'
 import ListMenu from './ListMenu.vue'
 
-// import CetakRekapBilling from 'src/pages/simrs/kasir/rajal/listkunjungan/comp/CetakRekapBilling.vue'
+import CetakRekapBilling from 'src/pages/simrs/kasir/igd/comp/CetakRekapBilling.vue'
 import { ref } from 'vue'
 const tinggiDetailPas = ref(180)
-// const printRekap = ref(false)
+const printRekap = ref(false)
 // const tinggiBot = ref(180)
 const emits = defineEmits(['clickMenu', 'historyPasien', 'printRekap', 'icare'])
 defineProps({
@@ -122,12 +129,13 @@ defineProps({
     default: null
   }
 })
-// const refBilling = ref(null)
-// function bukaBill() {
-//   refBilling.value.openFaktur()
-//   printRekap.value = true
-// }
-// function actPrintRekap() {
-//   printRekap.value = false
-// }
+
+const refBilling = ref(null)
+function bukaBill() {
+  refBilling.value.openFaktur()
+  printRekap.value = true
+}
+function actPrintRekap() {
+  printRekap.value = false
+}
 </script>

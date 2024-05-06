@@ -18,7 +18,9 @@ export const useHistoryPasien = defineStore('history-pasien', {
       { value: 3, label: 'Pasien tidak sadar / Unresponsive' },
       { value: 4, label: 'Gelisah atau bingung' },
       { value: 5, label: 'Acute Confusional States' }
-    ]
+    ],
+    tab: 'Rawat Jalan',
+    tabs: ['Rawat Jalan', 'Rawat Inap', 'IGD'],
   }),
   // getters: {
   //   doubleCount: (state) => state.counter * 2

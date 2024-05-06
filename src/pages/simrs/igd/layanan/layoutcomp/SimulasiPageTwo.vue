@@ -54,13 +54,13 @@
 <script setup>
 // eslint-disable-next-line no-unused-vars
 import { formatRp } from 'src/modules/formatter'
-import { useInacbgPoli } from 'src/stores/simrs/pelayanan/poli/inacbg'
+import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
 import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
 import { computed, watch } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = useLayananPoli()
-const ina = useInacbgPoli()
+const ina = useInacbgIgd()
 const props = defineProps({
   pasien: {
     type: Object,
@@ -86,10 +86,10 @@ watch(() => ina.tarifIna, (obj) => {
 }, { deep: true })
 watch(() => props.pasien?.tindakan, (obj) => {
   // console.log('watch tindakan', obj)
-  ina.setTotalTindakan(props.pasien)
+  // ina.setTotalTindakan(props.pasien)
 }, { deep: true })
 watch(() => props.pasien?.laborats, (obj) => {
   // console.log('watch laborat', obj)
-  ina.setTotalLaborat(props.pasien)
+  // ina.setTotalLaborat(props.pasien)
 }, { deep: true })
 </script>
