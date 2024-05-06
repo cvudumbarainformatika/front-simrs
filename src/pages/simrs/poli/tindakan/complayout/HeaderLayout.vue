@@ -132,7 +132,7 @@
     </q-toolbar-title>
 
     <div v-if="pasien?.dokter !== '' ">
-      <q-btn
+      <!-- <q-btn
         dense
         outline
         color="white"
@@ -152,7 +152,7 @@
             </div>
           </div>
         </q-menu>
-      </q-btn>
+      </q-btn> -->
       <q-btn
         v-if="pasien?.status==='' || pasien?.status==='2'"
         label="selesaikan layanan"
