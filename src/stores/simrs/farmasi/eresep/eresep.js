@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Dialog } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { notifSuccess } from 'src/modules/utils'
@@ -6,10 +7,14 @@ import { notifSuccess } from 'src/modules/utils'
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
   state: () => ({
     isOpen: false,
+    isAdaCopy: false,
+    isHistory: false,
     loading: false,
     loadingTerima: false,
     loadingSelesai: false,
     loadingSimpan: false,
+    loadingCopy: false,
+    loadingHistory: false,
     items: [],
     meta: {},
     params: {
@@ -31,13 +36,21 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     ],
     resep: {},
     noresLoad: null,
-    removedItemId: []
+    removedItemId: [],
+    adaCopys: {},
+    historys: {}
   }),
   actions: {
     setOpen() { this.isOpen = true },
     setClose() {
       this.isOpen = false
       this.resep = {}
+    },
+    closeCopy() {
+      this.isAdaCopy = false
+    },
+    closeHistory() {
+      this.isHistory = false
     },
     setParams(key, val) { this.params[key] = val },
     setFlag(val) {
@@ -85,12 +98,85 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     },
     setResep(val) {
       const res = val
+      // console.log('set Resep', val)
+      if (res.flag === '3' && val.tiperesep === 'iter') {
+        res.rincian = []
+        res.rincianracik = []
+        this.getResepIter(val).then(resp => {
+          // console.log('resep iter', resp?.data)
+          const datanya = resp?.data?.head
+          res.rincian = datanya?.permintaanresep
+          if (res.rincian.length > 0) {
+            res.rincian.forEach(key => {
+              key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+
+              const stok = key.stok[0]
+              const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
+              const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
+              const transnonracikan = stok?.transnonracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
+              const transracikan = stok?.transracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
+              key.alokasi = totalStok - permintaan - transnonracikan - transracikan
+              // console.log('alokasi', totalStok, permintaan, transnonracikan, transracikan)
+            })
+          }
+          const racik = datanya?.permintaanracikan
+          if (racik.length > 0) {
+            racik.forEach(key => {
+              key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+              key.jumlahresep = key.jumlah
+              key.jumlahobat = Math.ceil(key.jumlah)
+              key.groupsistembayar = val?.sistembayar?.groups
+
+              const stok = key.stok[0]
+              const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
+              const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
+              const transnonracikan = stok?.transnonracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
+              const transracikan = stok?.transracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
+              key.alokasi = totalStok - permintaan - transnonracikan - transracikan
+              // console.log('alokasi', totalStok, permintaan, transnonracikan, transracikan)
+              let kosong = false
+              if (parseFloat(key.jumlah) > key.alokasi) {
+                kosong = true
+              }
+              const namaracikan = key?.namaracikan
+              const adaList = res.rincianracik.filter(list => list.namaracikan === namaracikan)
+              if (adaList.length) {
+                adaList[0].rincian.push(key)
+                const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+                adaList[0].harga = harga
+                if (kosong) {
+                  adaList[0].kosong = kosong
+                }
+              } else {
+                const temp = {
+                  namaracikan: key?.namaracikan,
+                  harga: key?.harga,
+                  aturan: key?.aturan,
+                  keterangan: key?.keterangan,
+                  tiperacikan: key?.tiperacikan,
+                  konsumsi: key?.konsumsi,
+                  satuan_racik: key?.satuan_racik,
+                  jumlahdibutuhkan: key?.jumlahdibutuhkan,
+                  rincian: [key]
+                }
+                if (kosong) {
+                  temp.kosong = kosong
+                }
+                res.rincianracik.push(temp)
+              }
+            })
+          }
+          console.log('rinc', res.rincian)
+          console.log('rac', res.rincianracik)
+        })
+      }
       res.listRacikan = []
       if (res?.permintaanracikan?.length) {
         res?.permintaanracikan.forEach(key => {
+          key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
           key.jumlahresep = key.jumlah
           key.jumlahobat = Math.ceil(key.jumlah)
-          key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+          key.groupsistembayar = val?.sistembayar?.groups
           const namaracikan = key?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
           if (adaList.length) {
@@ -115,6 +201,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       }
       if (res?.permintaanresep?.length) {
         res?.permintaanresep.forEach(key => {
+          key.groupsistembayar = val?.sistembayar?.groups
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
         })
       }
@@ -158,7 +245,70 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       }
       item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
-      console.log('item', item)
+      // console.log('item', item)
+    },
+    getResepIter(val) {
+      val.loadingGetIter = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/ambil-iter', val)
+          .then(resp => {
+            val.loadingGetIter = false
+
+            resolve(resp)
+          })
+          .catch(() => {
+            val.loadingGetIter = false
+          })
+      })
+    },
+    getHistory(val) {
+      val.loadingHistory = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/ambil-history', val)
+          .then(resp => {
+            val.loadingHistory = false
+            this.isHistory = true
+            console.log('his', resp?.data)
+            this.historys = resp?.data?.data
+            if (this.historys.length) {
+              this.historys.forEach(hi => {
+                hi.listRacikan = []
+                hi.show = false
+                if (hi?.asalpermintaanracikan?.length) {
+                  hi?.asalpermintaanracikan.forEach(key => {
+                    const obatKeluar = hi?.rincianracik.find(ra => ra.namaracikan === key.namaracikan && ra.kdobat === key.kdobat)
+                    key.jumlahKeluar = obatKeluar?.jumlah ?? 'Tidak Ditemukan'
+                    const namaracikan = key?.namaracikan
+                    const adaList = hi.listRacikan.find(list => list.namaracikan === namaracikan)
+                    if (adaList) {
+                      adaList.rincian.push(key)
+                      const harga = adaList.rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+                      adaList.harga = harga
+                    } else {
+                      const temp = {
+                        namaracikan: key?.namaracikan,
+                        harga: key?.harga,
+                        aturan: key?.aturan,
+                        keterangan: key?.keterangan,
+                        tiperacikan: key?.tiperacikan,
+                        konsumsi: key?.konsumsi,
+                        satuan_racik: key?.satuan_racik,
+                        jumlahdibutuhkan: key?.jumlahdibutuhkan,
+                        rincian: [key]
+                      }
+                      hi.listRacikan.push(temp)
+                    }
+                  })
+                }
+              })
+            }
+
+            resolve(resp)
+          })
+          .catch(() => {
+            val.loadingHistory = false
+          })
+      })
     },
     async getDataTable(val) {
       if (!val) this.loading = true
@@ -296,6 +446,76 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           })
           .catch(err => {
             this.loadingSimpan = false
+            reject(err)
+          })
+      })
+    },
+    dialog(val) {
+      Dialog.create({
+        title: 'Konfirmasi',
+        message: 'Obat Masih ada, Apakah Akan dilanjutkan?',
+        ok: {
+          push: true,
+          label: 'Lanjut',
+          color: 'negative',
+          'no-caps': true
+        },
+        cancel: {
+          push: true,
+          label: 'Batal',
+          color: 'dark',
+          'no-caps': true
+        }
+      })
+        .onOk(() => {
+          val.lanjut = '1'
+          console.log(val)
+          this.copyResep(val)
+        })
+    },
+    copyResep(val) {
+      this.loadingCopy = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/farmasinew/depo/copy-resep', val)
+          .then(resp => {
+            this.loadingCopy = false
+            console.log('copy', resp?.data)
+            if (resp?.status === 202) {
+              this.dialog(val)
+            }
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loadingCopy = false
+            this.isAdaCopy = true
+            console.log('copy err', err?.response)
+            this.adaCopys = err?.response?.data?.data
+            this.adaCopys.listRacikan = []
+            if (this.adaCopys?.rincianracik?.length) {
+              this.adaCopys?.rincianracik.forEach(key => {
+                const namaracikan = key?.namaracikan
+                const adaList = this.adaCopys.listRacikan.find(list => list.namaracikan === namaracikan)
+                if (adaList) {
+                  adaList.rincian.push(key)
+                  const harga = adaList.rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
+                  adaList.harga = harga
+                } else {
+                  const temp = {
+                    namaracikan: key?.namaracikan,
+                    harga: key?.harga,
+                    aturan: key?.aturan,
+                    keterangan: key?.keterangan,
+                    tiperacikan: key?.tiperacikan,
+                    konsumsi: key?.konsumsi,
+                    satuan_racik: key?.satuan_racik,
+                    jumlahdibutuhkan: key?.jumlahdibutuhkan,
+                    rincian: [key]
+                  }
+                  this.adaCopys.listRacikan.push(temp)
+                }
+              })
+            }
             reject(err)
           })
       })

@@ -312,7 +312,7 @@ function color(val) {
 function buka(val) {
   store.setOpen()
   store.setResep(val)
-  console.log('buka', val)
+  // console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }

@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="full-height"
-  >
+  <div class="full-height">
     <div
       ref="pageRef"
       class="row items-start bg-grey-8 text-white q-pr-sm"
       :style=" `height: ${tinggiDetailPas}px;`"
     >
-      <div
-        class="col-3"
-      >
+      <div class="col-3">
         <div class="row">
           <div
             class="absolute-top bg-dark text-white col-3"
@@ -152,15 +148,62 @@
         </q-tooltip>
       </q-btn>
     </div>
+
+    <div
+      v-if="store?.resep?.flag==='3' && store?.resep?.tiperesep==='iter'"
+      class="row justify-end q-mr-md q-my-sm"
+    >
+      <div class="col-auto">
+        <q-btn
+          rounded
+          push
+          label="History Resep Iter"
+          class="f-12 q-mr-sm"
+          color="green"
+          text-color="white"
+          icon="icon-mat-access_time"
+          :disable="store.loadingCopy || store?.resep?.loadingHistory || store?.resep?.loadingGetIter"
+          :loading="store.loadingCopy || store?.resep?.loadingHistory || store?.resep?.loadingGetIter"
+          @click="store.getHistory(store?.resep)"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            History Resep Iter
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto">
+        <q-btn
+          rounded
+          push
+          label="Copy resep Iter"
+          class="f-12 q-mr-sm"
+          color="green"
+          text-color="white"
+          icon="icon-mat-copy_all"
+          :disable="store.loadingCopy || store?.resep?.loadingGetIter"
+          :loading="store.loadingCopy || store?.resep?.loadingGetIter"
+          @click="copyResep(store?.resep)"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Copy resep iter
+          </q-tooltip>
+        </q-btn>
+      </div>
+    </div>
+
     <div
       class="column q-pa-sm "
-      :style="`height: calc(100vh - ${tinggiDetailPas+32}px);`"
+      :style="`height: calc(100vh - ${tinggiDetailPas+79}px);`"
     >
-      <q-scroll-area
-        style="height: 100%;"
-      >
+      <q-scroll-area style="height: 100%;">
         <div
-          v-if="store?.resep?.permintaanresep?.length"
+          v-if="store?.resep?.permintaanresep?.length && parseInt(store?.resep?.flag)<3"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -221,7 +264,7 @@
                 side
                 style="width:70%"
               >
-                <div class="row full-width">
+                <div class="row items-center full-width">
                   <div class="col-6">
                     <div class="row">
                       <div class="col-4">
@@ -286,7 +329,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-1">
+                  <div class="col-1 text-right">
                     <div v-if="store?.resep?.flag==='1'">
                       Resep Belum diterima
                     </div>
@@ -297,12 +340,12 @@
                       <q-btn
                         v-if="!rinc?.obatkeluar"
                         round
-                        class="f-10 q-mr-sm"
+                        class="f-10 q-my-sm"
                         color="primary"
                         text-color="white"
                         icon="icon-mat-save"
-                        :loading="store.loadingSimpan && rinc?.loading"
-                        :disable="store.loadingSimpan && rinc?.loading"
+                        :loading=" rinc?.loading"
+                        :disable=" rinc?.loading"
                         @click="store.simpanObat(rinc)"
                       >
                         <q-tooltip
@@ -323,7 +366,7 @@
           </q-list>
         </div>
         <div
-          v-if="store?.resep?.listRacikan?.length"
+          v-if="store?.resep?.listRacikan?.length && parseInt(store?.resep?.flag)<3"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -375,15 +418,14 @@
                   label="Keterangan"
                 />
               </div>
-              <div class="col-shrink q-mr-xs ">
-                <!-- ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari) -->
+              <!-- <div class="col-shrink q-mr-xs ">
                 <app-input
                   v-model="item.konsumsi"
                   outlined
                   valid
                   label="Konsumsi (hari)"
                 />
-              </div>
+              </div> -->
               <div class="col-grow">
                 <q-separator
                   size="1px"
@@ -522,8 +564,8 @@
                           color="primary"
                           text-color="white"
                           icon="icon-mat-save"
-                          :loading="store.loadingSimpan && rinc?.loading"
-                          :disable="store.loadingSimpan && rinc?.loading"
+                          :loading="rinc?.loading"
+                          :disable="rinc?.loading"
                           @click="store.simpanRacikan(rinc)"
                         >
                           <q-tooltip
@@ -544,17 +586,471 @@
             </q-list>
           </div>
         </div>
+        <div v-if="store?.resep?.flag==='3'">
+          <div v-if="store?.resep?.loadingGetIter || store.loadingCopy">
+            <app-loading />
+          </div>
+          <div v-if="!store?.resep?.loadingGetIter && !store.loadingCopy">
+            <div
+              v-if="store?.resep?.rincian?.length && parseInt(store?.resep?.flag)>=3"
+              class="q-mt-sm"
+            >
+              <div class="row items-center">
+                <div class="col-shrink text-weight-bold">
+                  Iter Non Racikan
+                </div>
+                <div class="col-grow">
+                  <q-separator
+                    size="2px"
+                    color="primary"
+                    inset
+                  />
+                </div>
+              </div>
+              <q-list
+                separator
+                bordered
+              >
+                <q-item
+                  v-for="(rinc,j) in store?.resep?.rincian"
+                  :key="j"
+                  :class="parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)?'bg-red-3':''"
+                >
+                  <q-item-section style="width: 30%;">
+                    <div class="row text-weight-bold text-deep-orange">
+                      {{ rinc?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row f-10">
+                      ( {{ rinc?.kandungan }} )
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ rinc?.kdobat }}
+                    </div>
+                    <div class="row text-weight-bold f-10">
+                      ( {{ rinc?.mobat?.satuan_k }} )
+                    </div>
+                    <div class="row q-col-gutter-sm text-weight-bold f-10">
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.fornas==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.forkit==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.generik==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                      </div>
+                    </div>
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:70%"
+                  >
+                    <div class="row items-center full-width q-col-gutter-xs">
+                      <div class="col-6">
+                        <div class="row q-mb-xs">
+                          <div class="col-4">
+                            Aturan
+                          </div>
+                          <div class="col-8">
+                            {{ rinc?.aturan }}
+                          </div>
+                        </div>
+                        <div class="row items-center q-mb-xs">
+                          <div class="col-4">
+                            Jumlah Obat
+                          </div>
+                          <div class="col-8">
+                            <!-- {{ rinc?.jumlah }} -->
+                            <app-input
+                              v-model="rinc.jumlah"
+                              outlined
+                              valid
+                              label="Jumlah "
+                            />
+                          </div>
+                        </div>
+                        <div class="row items-center q-mb-xs">
+                          <div class="col-4">
+                            Konsumsi
+                          </div>
+                          <div class="col-8">
+                            <!-- {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari -->
+                            <app-input
+                              v-model="rinc.konsumsi"
+                              outlined
+                              valid
+                              label="Konsumsi (hari)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <div class="row q-mb-xs">
+                          <div class="col-4">
+                            Stok Alokasi
+                          </div>
+                          <div class="col-8">
+                            {{ formatDouble( parseFloat(rinc?.alokasi),2) }}
+                          </div>
+                        </div>
+                        <div class="row q-mb-xs">
+                          <div class="col-4">
+                            Harga
+                          </div>
+                          <div class="col-8">
+                            {{ formatDouble( parseFloat(rinc?.hargajual),2) }}
+                          </div>
+                        </div>
+                        <div class="row q-mb-xs">
+                          <div class="col-4">
+                            Subtotal
+                          </div>
+                          <div class="col-8">
+                            {{ formatDouble( parseFloat(rinc?.harga),2) }}
+                          </div>
+                        </div>
+                        <div class="row items-center q-mb-xs">
+                          <div class="col-4">
+                            Keterangan
+                          </div>
+                          <div class="col-8">
+                            <!-- {{ rinc?.keterangan }} -->
+                            <app-input
+                              v-model="rinc.keterangan"
+                              outlined
+                              valid
+                              label="Keterangan"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-1 text-right">
+                        <div v-if="store?.resep?.flag==='1'">
+                          Resep Belum diterima
+                        </div>
+                        <div v-if="store?.resep?.flag==='3'">
+                          <div v-if="store?.resep?.tiperesep!=='iter'">
+                            Resep Sudah selesai
+                          </div>
+                          <div v-if="store?.resep?.tiperesep==='iter'">
+                            <div v-if="parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)">
+                              Klik Copy Resep
+                            </div>
+                            <div v-if="parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)">
+                              Tidak ada Alokasi
+                            </div>
+                          </div>
+                        </div>
+                        <div v-if="store?.resep?.flag==='2'">
+                          <q-btn
+                            v-if="!rinc?.obatkeluar"
+                            round
+                            class="f-10 q-my-sm"
+                            color="primary"
+                            text-color="white"
+                            icon="icon-mat-save"
+                            :loading=" rinc?.loading"
+                            :disable=" rinc?.loading"
+                            @click="store.simpanObat(rinc)"
+                          >
+                            <q-tooltip
+                              class="primary"
+                              :offset="[10, 10]"
+                            >
+                              Simpan Obat
+                            </q-tooltip>
+                          </q-btn>
+                          <div v-if="rinc?.obatkeluar">
+                            Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+            <div
+              v-if="store?.resep?.rincianracik?.length && parseInt(store?.resep?.flag)>=3"
+              class="q-mt-sm"
+            >
+              <div class="row items-center">
+                <div class="col-shrink text-weight-bold">
+                  Iter Racikan
+                </div>
+                <div class="col-grow">
+                  <q-separator
+                    size="2px"
+                    color="deep-orange"
+                    inset
+                  />
+                </div>
+              </div>
+              <div
+                v-for="(item,i) in store?.resep?.rincianracik"
+                :key="i"
+              >
+                <div
+                  class="row items-center"
+                  :class="item?.kosong?'bg-red-3':''"
+                >
+                  <div class="col-shrink q-mr-xs">
+                    {{ item?.namaracikan }}
+                  </div>
+                  <div class="col-shrink q-mr-xs">
+                    <q-chip
+                      square
+                      class="f-10"
+                      color="primary"
+                      text-color="white"
+                      outline
+                    >
+                      {{ item?.tiperacikan }}
+                    </q-chip>
+                  </div>
+                  <div class="col-shrink q-mr-xs text-green text-weight-bold">
+                    {{ item?.jumlahdibutuhkan }}
+                  </div>
+                  <div class="col-shrink q-mr-xs text-italic">
+                    {{ item?.aturan }}
+                  </div>
+                  <div class="col-shrink q-mr-xs">
+                    ({{ item?.satuan_racik }})
+                  </div>
+                  <div class="col-shrink q-mr-xs">
+                    <!-- {{ item?.keterangan }} -->
+                    <app-input
+                      v-model="item.keterangan"
+                      outlined
+                      valid
+                      label="Keterangan"
+                    />
+                  </div>
+                  <!-- <div class="col-shrink q-mr-xs ">
+                    <app-input
+                      v-model="item.konsumsi"
+                      outlined
+                      valid
+                      label="Konsumsi (hari)"
+                    />
+                  </div> -->
+                  <div class="col-grow">
+                    <q-separator
+                      size="1px"
+                      color="deep-orange"
+                      inset
+                    />
+                  </div>
+                </div>
+                <q-list
+                  separator
+                  bordered
+                >
+                  <q-item
+                    v-for="(rinc,j) in item?.rincian"
+                    :key="j"
+                    :class="parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)?'bg-red-3':''"
+                  >
+                    <q-item-section style="width: 30%;">
+                      <div class="row text-weight-bold text-deep-orange">
+                        {{ rinc?.mobat?.nama_obat }}
+                      </div>
+                      <div class="row f-10">
+                        ( {{ rinc?.kandungan }} )
+                      </div>
+                      <div class="row text-italic f-10">
+                        {{ rinc?.kdobat }}
+                      </div>
+                      <div class="row text-weight-bold f-10">
+                        ( {{ rinc?.mobat?.satuan_k }} )
+                      </div>
+                      <div class="row q-col-gutter-sm text-weight-bold f-10">
+                        <div
+                          class="col-shrink"
+                          :class="rinc?.fornas==='1'?'text-green':'text-red'"
+                        >
+                          {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                        </div>
+                        <div
+                          class="col-shrink"
+                          :class="rinc?.forkit==='1'?'text-green':'text-red'"
+                        >
+                          {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                        </div>
+                        <div
+                          class="col-shrink"
+                          :class="rinc?.generik==='1'?'text-green':'text-red'"
+                        >
+                          {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                        </div>
+                      </div>
+                    </q-item-section>
+                    <q-item-section
+                      side
+                      style="width:70%"
+                    >
+                      <div class="row full-width">
+                        <!-- {{ item?.tiperacikan }} -->
+                        <div class="col-6">
+                          <div
+                            v-if="item?.tiperacikan==='DTD'"
+                            class="row"
+                          >
+                            <div class="col-4">
+                              Dosis Resep
+                            </div>
+                            <div class="col-8">
+                              {{ rinc?.dosismaksimum }}
+                            </div>
+                          </div>
+                          <div
+                            v-if="item?.tiperacikan==='DTD'"
+                            class="row text-black"
+                          >
+                            <div class="col-4">
+                              Dosis Obat
+                            </div>
+                            <div class="col-8">
+                              {{ rinc?.dosisobat }}
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-4">
+                              Jumlah Resep
+                            </div>
+                            <div class="col-8">
+                              {{ rinc?.jumlahresep }}
+                            </div>
+                          </div>
+                          <div class="row  text-black">
+                            <div class="col-4">
+                              Jumlah Obat
+                            </div>
+                            <div class="col-8">
+                              {{ rinc?.jumlahobat }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-5">
+                          <div class="row">
+                            <div class="col-4">
+                              Stok Alokasi
+                            </div>
+                            <div class="col-8">
+                              {{ formatDouble(parseFloat(rinc?.alokasi),2) }}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                              Harga
+                            </div>
+                            <div class="col-8">
+                              {{ formatDouble(parseFloat(rinc?.hargajual),2) }}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                              Subtotal
+                            </div>
+                            <div class="col-8">
+                              {{ formatDouble(parseFloat(rinc?.harga),2) }}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4">
+                              Keterangan
+                            </div>
+                            <div class="col-8">
+                              {{ rinc?.keteranganx }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-1">
+                          <div v-if="store?.resep?.flag==='1'">
+                            Resep Belum diterima
+                          </div>
+                          <div v-if="store?.resep?.flag==='3'">
+                            <div v-if="store?.resep?.tiperesep!=='iter'">
+                              Resep Sudah selesai
+                            </div>
+                            <div v-if="store?.resep?.tiperesep==='iter'">
+                              <div v-if="parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)">
+                                <div v-if="!item?.kosong">
+                                  Klik Copy Resep
+                                </div>
+                                <div v-if="item?.kosong">
+                                  Tidak ada Alokasi Racikan
+                                </div>
+                              </div>
+                              <div v-if="parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)">
+                                Tidak ada Alokasi
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="store?.resep?.flag==='2'">
+                            <q-btn
+                              v-if="!rinc?.obatkeluar"
+                              round
+                              class="f-10 q-mr-sm"
+                              color="primary"
+                              text-color="white"
+                              icon="icon-mat-save"
+                              :loading="rinc?.loading"
+                              :disable="rinc?.loading"
+                              @click="store.simpanRacikan(rinc)"
+                            >
+                              <q-tooltip
+                                class="primary"
+                                :offset="[10, 10]"
+                              >
+                                Simpan Obat
+                              </q-tooltip>
+                            </q-btn>
+                            <div v-if="rinc?.obatkeluar">
+                              Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+            </div>
+            <div v-if="!store?.resep?.rincian?.length && !store?.resep?.rincianracik?.length">
+              <app-no-data-small />
+            </div>
+          </div>
+        </div>
       </q-scroll-area>
     </div>
   </div>
   <!-- {{ store.resep }} -->
+  <SudahAdaCopy v-model="store.isAdaCopy" />
+  <HistoryResepIter v-model="store.isHistory" />
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
+import { date } from 'quasar'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const store = useEResepDepoFarmasiStore()
+const apps = useAplikasiStore()
+
+const SudahAdaCopy = defineAsyncComponent(() => import('./SudahAdaCopy.vue'))
+const HistoryResepIter = defineAsyncComponent(() => import('./HistoryResepIter.vue'))
 
 const pageRef = ref()
 const tinggiDetailPas = ref(130)
@@ -562,6 +1058,95 @@ const h = computed(() => {
   // console.log('h', pageRef.value)
   return pageRef.value?.$el?.clientHeight + 5
 })
+
+function copyResep(val) {
+  // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
+  console.log('resep', val)
+  const resep = val?.rincian
+  const racik = val?.rincianracik
+  const kirimResep = []
+  const kirimRacik = []
+  // console.log('racikan', racik)
+  if (resep.length) {
+    resep.forEach(res => {
+      // console.log('non racikan', res)
+      // console.log('50', res?.uraian50)
+      // console.log('108', res?.uraian108)
+      if (parseFloat(res.alokasi) < parseFloat(res.jumlah)) return
+      const temp = {
+        noreg: res?.noreg,
+        kdobat: res?.kdobat,
+        kandungan: res?.kandungan,
+        fornas: res?.fornas,
+        forkit: res?.forkit,
+        generik: res?.generik,
+        kode108: res?.kode108,
+        uraian108: res?.uraian108,
+        kode50: res?.kode50,
+        uraian50: res?.uraian50,
+        jumlahMinta: res?.jumlah,
+        harga_beli: res?.hargapokok,
+        hpp: res?.hargapokok,
+        harga_jual: res?.hargajual,
+        nilai_r: res?.r,
+        aturan: res?.aturan,
+        konsumsi: res?.konsumsi,
+        keterangan: res?.keterangan,
+        user: apps?.user?.pegawai?.kdpegsimrs
+      }
+      kirimResep.push(temp)
+    })
+  }
+  if (racik.length) {
+    racik.forEach(rac => {
+      // console.log('racikan', rac)
+      if (!rac?.kosong) {
+        if (rac.rincian.length) {
+          rac.rincian.forEach(rinc => {
+            const temp = {
+              noreg: rinc?.noreg,
+              tiperacikan: rinc?.tiperacikan,
+              namaracikan: rinc?.namaracikan,
+              kdobat: rinc?.kdobat,
+              jumlahMinta: rinc?.jumlah,
+              satuan_racik: rinc?.satuan_racik,
+              harga_beli: rinc?.hargapokok,
+              hpp: rinc?.hargapokok,
+              harga_jual: rinc?.hargajual,
+              nilai_r: rinc?.r,
+              user: apps?.user?.pegawai?.kdpegsimrs
+            }
+            kirimRacik.push(temp)
+          })
+        }
+      }
+    })
+  }
+  const head = {
+    noreg: val?.noreg,
+    noresep_asal: val?.noresep,
+    tiperesep: 'iter',
+    iter_expired: val?.iter_expired,
+    norm: val?.norm,
+    tgl_permintaan: val?.tgl_permintaan,
+    tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+    ruangan: val?.ruangan,
+    dokter: val?.dokter?.kdpegsimrs,
+    depo: val?.depo,
+    sistembayar: val?.sistembayar?.rs1,
+    diagnosa: val?.diagnosa,
+    kodeincbg: val?.diagnosa,
+    uraianinacbg: val?.uraianinacbg,
+    tarifina: val?.tarifina,
+    tagihanrs: val?.tagihanrs,
+    flag: '3',
+    tgl_kirim: date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss')
+  }
+  const data = {
+    head, kirimResep, kirimRacik, groupsistembayar: val?.sistembayar?.groups, kddepo: val?.depo
+  }
+  store.copyResep(data)
+}
 onMounted(() => {
   // h.value = pageRef.value.$el.clientHeight
   // console.log('h', pageRef.value.$el.clientHeight)
