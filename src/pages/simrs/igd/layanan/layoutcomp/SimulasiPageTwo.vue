@@ -55,11 +55,12 @@
 // eslint-disable-next-line no-unused-vars
 import { formatRp } from 'src/modules/formatter'
 import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
-import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+// import { useLayananPoli } from 'src/stores/simrs/pelayanan/poli/layanan'
+// import { useDiagnosaDokter } from 'src/stores/simrs/igd/diagnosadokter'
 import { computed, watch } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
-const store = useLayananPoli()
+// const store = useDiagnosaDokter()
 const ina = useInacbgIgd()
 const props = defineProps({
   pasien: {
@@ -81,12 +82,12 @@ const minus = computed(() => {
 })
 
 watch(() => ina.tarifIna, (obj) => {
-  // console.log('watch tarifIna', obj)
+  console.log('watch tarifIna', obj)
   hitungSelisih()
 }, { deep: true })
 watch(() => props.pasien?.tindakan, (obj) => {
   // console.log('watch tindakan', obj)
-  // ina.setTotalTindakan(props.pasien)
+  ina.setTotalTindakan(props.pasien)
 }, { deep: true })
 watch(() => props.pasien?.laborats, (obj) => {
   // console.log('watch laborat', obj)
