@@ -1,4 +1,7 @@
 <template>
+  <!-- <div class="row q-mt-lg q-px-xs">
+    {{ table?.keterangan }}
+  </div> -->
   <div class="row">
     <app-table
       title="obat"
@@ -83,7 +86,7 @@
         </div>
         <div class="row no-wrap text-weight-bold  items-end">
           <div>
-            {{ row.jumlah }}
+            {{ row.total }}
           </div>
           <div class="q-ml-sm f-10 text-italic">
             ( {{ row.satuan_k ? row.satuan_k :'-' }} )

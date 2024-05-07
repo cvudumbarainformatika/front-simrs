@@ -980,6 +980,12 @@ function validate() {
     if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
     // console.log('at', store.signas, sign)
   }
+  if (store.form.tiperesep === 'iter') {
+    if (store.form.iter_expired === '' || !store.form.iter_expired) {
+      notifErrVue('Tanggal Berlaku Iter Belum di isi')
+      return false
+    }
+  }
 
   if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
   else return false

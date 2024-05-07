@@ -507,6 +507,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
     },
     async selesaiResep() {
+      console.log('selesai', this.form)
       this.loadingkirim = true
       if (!this.form.noresep || this.form.noresep === '') {
         if (this.noresep) this.setForm('noresep', this.noresep)

@@ -14,10 +14,11 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
     gudangs: [],
     columns: [
       'obat',
-      'penerimaan',
+      // 'penerimaan',
       'stok'
     ],
-    columnHide: []
+    columnHide: [],
+    keterangan: 'keterangan'
   }),
   actions: {
     setParam(key, val) {
@@ -77,7 +78,7 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             this.loading = false
             console.log('setok ', resp.data)
             this.items = resp?.data?.data ?? resp?.data
-            this.meta = resp.data
+            this.meta = resp.data?.meta
             resolve(resp)
           })
           .catch(() => { this.loading = false })
