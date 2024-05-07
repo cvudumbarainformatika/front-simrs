@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { useKasirRajalListKunjunganStore } from 'src/stores/simrs/kasir/rajal/kunjungan'
+import { useKasirIgdStore } from '../kasir/igd/kasirigd'
 
 export const useInacbgIgd = defineStore('inacbg-igd', {
   state: () => ({
@@ -27,7 +27,7 @@ export const useInacbgIgd = defineStore('inacbg-igd', {
     async getDataIna(pasien) {
       const adaIcd = pasien?.diagnosa?.length
       const noreg = pasien?.noreg
-      // console.log(adaIcd)
+      console.log('wew', adaIcd)
 
       // this.kodeIna = 'maintenance'
       // return
@@ -128,7 +128,7 @@ export const useInacbgIgd = defineStore('inacbg-igd', {
     },
 
     setTotalTindakan(pasien) {
-      const kasir = useKasirRajalListKunjunganStore()
+      const kasir = useKasirIgdStore()
       const par = { noreg: pasien?.noreg }
       kasir.getBill(par).then(() => {
         // console.log('bill', kasir.rekapBill)

@@ -295,14 +295,61 @@
             </div>
           </div>
           <div class="row items-center no-wrap ">
+            <div class="col-1" />
+            <div class="col-9">
+              OK IBS
+            </div>
+            <div class="col-2 garis-bawah-dablue text-right">
+              {{ formatRp(store.rekapBill.okranap) }}
+            </div>
+          </div>
+          <div class="row items-center no-wrap ">
+            <div class="col-1" />
+            <div class="col-9">
+              Tindakan Operasi IBS
+            </div>
+            <div class="col-2 garis-bawah-dablue text-right">
+              {{ formatRp(store.rekapBill.tindakanokranap) }}
+            </div>
+          </div>
+          <div class="row items-center no-wrap ">
+            <div class="col-1" />
+            <div class="col-9">
+              Perawatan Jenasah
+            </div>
+            <div class="col-2 garis-bawah-dablue text-right">
+              {{ formatRp(store.rekapBill.perawatanjenasah) }}
+            </div>
+          </div>
+          <div class="row items-center no-wrap ">
+            <div class="col-1" />
+            <div class="col-9">
+              Ambulan
+            </div>
+            <div class="col-2 garis-bawah-dablue text-right">
+              {{ formatRp(store.rekapBill.ambulan) }}
+            </div>
+          </div>
+          <div class="row items-center no-wrap ">
             <div class="col-1">
-              7.
+              4.
             </div>
             <div class="col-9">
               Biaya Farmasi / Obat
             </div>
             <div class="col-2 garis-bawah-dablue text-right">
-              {{ formatRp(store.rekapBill.obat) }}
+              {{ formatRp(store.rekapBill.farmasi) }}
+            </div>
+          </div>
+          <div class="row items-center no-wrap ">
+            <div class="col-1">
+              5.
+            </div>
+            <div class="col-9">
+              Biaya Pembuatan Dokumen dan Materai
+            </div>
+            <div class="col-2 garis-bawah-dablue text-right">
+              {{ formatRp(store.rekapBill.biayamatrei) }}
             </div>
           </div>
 
