@@ -342,7 +342,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           console.log('get single', resp.data)
           if (resp.status === 200) {
             // if (this.params.per_page <= this.items.length) this.items.splice(this.items.length - 1, 1)
-            this.items.push(resp.data)
+            const index = this.items.findIndex(it => it.noresep === resp.data.noresep)
+            if (index < 0) this.items.push(resp.data)
           }
         })
     },
