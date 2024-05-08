@@ -77,13 +77,14 @@ export const useFarmasiPermintaanMutasiDepoStore = defineStore('farmasi_perminta
         this.setForm('stok_alokasi', obat.stokalokasi)
         console.log('form', this.form)
         if (this.form.dari) {
-          const aMax = obat.minmax.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
-          if (aMax.length) {
-            const max = aMax[0]
-            this.setForm('mak_stok', max.max)
-          } else {
-            this.setForm('mak_stok', null)
-          }
+          // const aMax = obat?.minmax?.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
+          // if (aMax.length) {
+          //   const max = aMax[0]
+          //   this.setForm('mak_stok', max.max)
+          // } else {
+          //   this.setForm('mak_stok', null)
+          // }
+          this.setForm('mak_stok', obat?.minmax?.max ?? null)
         }
       }
       if (this.form.dari) {
