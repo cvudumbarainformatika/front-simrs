@@ -5,7 +5,10 @@
         {{ title }} ({{ pasien?.nama }})
       </div>
     </div>
-    <div v-if="store.historys.length && !store.loadingHistory" class="col full-height bg-grey-3 scroll">
+    <div
+      v-if="store.historys.length && !store.loadingHistory"
+      class="col full-height bg-grey-3 scroll"
+    >
       <!-- <q-infinite-scroll
         :offset="250"
         @load="onLoad"
@@ -15,41 +18,75 @@
           separator
           class="bg-grey-3"
         > -->
-      <q-card v-for="(items, index) in store.historys" :key="index" class="q-mb-lg q-pa-md">
+      <q-card
+        v-for="(items, index) in store.historys"
+        :key="index"
+        class="q-mb-lg q-pa-md"
+      >
         <!-- <q-item
             v-for="(item, index) in store.historys"
             :key="index"
             class="q-mb-md"
           > -->
         <div class="column">
-          <div v-for="(item, i) in items?.pemeriksaanfisik" :key="i">
+          <div
+            v-for="(item, i) in items?.pemeriksaanfisik"
+            :key="i"
+          >
             <q-item-label class="text-primary">
               <b>Riwayat Pemeriksaan Fisik Tanggal : <em>{{ humanDate(item?.rs3) }}</em></b>
             </q-item-label>
             <q-item-label class="q-mb-sm text-orange">
-              <span>Petugas : <em>{{ items?.datasimpeg?.nama }}</em></span>
+              <div v-if="items?.user?.length">
+                <span>Petugas : <em>{{ items?.datasimpeg?.nama }}</em></span>
+              </div>
+              <div v-else>
+                <span>Petugas : <em>-</em></span>
+              </div>
             </q-item-label>
           </div>
           <table class="row full-width">
             <th class="th-center">
               <div v-if="items && items?.detailgambars && items?.detailgambars.length > 0">
-                <div v-for="gambars in items?.gambars" :key="gambars?.id">
-                  <q-img fit="contain" :src="pathImg + gambars?.gambar" />
+                <div
+                  v-for="gambars in items?.gambars"
+                  :key="gambars?.id"
+                >
+                  <q-img
+                    fit="contain"
+                    :src="pathImg + gambars?.gambar"
+                  />
                 </div>
               </div>
-              <div v-else class="text-center q-pa-md" style="color: gray;">
+              <div
+                v-else
+                class="text-center q-pa-md"
+                style="color: gray;"
+              >
                 Tidak ada gambar anatomy
               </div>
             </th>
             <td>
-              <q-card flat bordered square dark>
+              <q-card
+                flat
+                bordered
+                square
+                dark
+              >
                 <q-list separator>
                   <transition-group name="list">
-                    <template v-for="(item, i) in items?.pemeriksaanfisik" :key="i">
+                    <template
+                      v-for="(item, i) in items?.pemeriksaanfisik"
+                      :key="i"
+                    >
                       <!-- NADI-->
                       <q-item class="q-pa-xs">
                         <q-item-section avatar>
-                          <q-icon :color="nadi(item?.rs4).color" name="icon-my-monitor_heart" size="lg" />
+                          <q-icon
+                            :color="nadi(item?.rs4).color"
+                            name="icon-my-monitor_heart"
+                            size="lg"
+                          />
                         </q-item-section>
                         <q-item-section class="q-pa-xs">
                           <q-item-label :class="`text-h4 text-${nadi(item?.rs4).color}`">
@@ -66,10 +103,20 @@
                         </q-item-section>
                       </q-item>
                       <!-- PERNAPASAN -->
-                      <q-separator dark inset />
-                      <q-item class="q-pa-xs list-move" dark>
+                      <q-separator
+                        dark
+                        inset
+                      />
+                      <q-item
+                        class="q-pa-xs list-move"
+                        dark
+                      >
                         <q-item-section avatar>
-                          <q-icon color="white" name="icon-my-local_hospital" size="lg" />
+                          <q-icon
+                            color="white"
+                            name="icon-my-local_hospital"
+                            size="lg"
+                          />
                         </q-item-section>
                         <q-item-section class="q-pa-xs">
                           <q-item-label :class="`text-h4 text-white`">
@@ -86,11 +133,20 @@
                         </q-item-section>
                       </q-item>
                       <!-- SUHU TUBUH -->
-                      <q-separator dark inset />
-                      <q-item class="q-pa-xs list-move" dark>
+                      <q-separator
+                        dark
+                        inset
+                      />
+                      <q-item
+                        class="q-pa-xs list-move"
+                        dark
+                      >
                         <q-item-section avatar>
-                          <q-icon :color="suhu(item?.suhutubuh).color"
-                            name="icon-my-standing-human-body-silhouette-svgrepo-com" size="lg" />
+                          <q-icon
+                            :color="suhu(item?.suhutubuh).color"
+                            name="icon-my-standing-human-body-silhouette-svgrepo-com"
+                            size="lg"
+                          />
                         </q-item-section>
                         <q-item-section class="q-pa-xs">
                           <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
@@ -107,8 +163,14 @@
                         </q-item-section>
                       </q-item>
                       <!-- TEKaNAN darah -->
-                      <q-separator dark inset />
-                      <q-item class="q-pa-xs list-move" dark>
+                      <q-separator
+                        dark
+                        inset
+                      />
+                      <q-item
+                        class="q-pa-xs list-move"
+                        dark
+                      >
                         <q-item-section class="q-pa-xs">
                           <q-item-label :class="`text-h5 `">
                             <span :class="`${tekananDarah(item?.sistole).color}`">{{ item?.sistole }}</span> /
@@ -116,7 +178,7 @@
                           </q-item-label>
                           <q-item-label class="f-10">
                             <span :class="`${tekananDarah(item?.sistole).color}`">{{ tekananDarah(item?.sistole).res
-                              }}</span> /
+                            }}</span> /
                             <span :class="`${tekananDarahDias(item?.diastole).color}`">{{
                               tekananDarahDias(item?.diastole).res }}</span>
                           </q-item-label>
@@ -128,12 +190,22 @@
                         </q-item-section>
                       </q-item>
                       <!-- STATUS -->
-                      <q-separator dark inset />
+                      <q-separator
+                        dark
+                        inset
+                      />
 
                       <q-item>
                         <q-item-section>
                           <div class="row full-width flex-center">
-                            <q-btn outline style="color: goldenrod;" no-caps dense size="sm" class="q-px-sm">
+                            <q-btn
+                              outline
+                              style="color: goldenrod;"
+                              no-caps
+                              dense
+                              size="sm"
+                              class="q-px-sm"
+                            >
                               <div class="column">
                                 <div class="f-14">
                                   {{ item?.tinggibadan }} cm
@@ -143,7 +215,14 @@
                                 </div>
                               </div>
                             </q-btn>
-                            <q-btn outline style="color: goldenrod;" no-caps dense size="sm" class="q-px-sm">
+                            <q-btn
+                              outline
+                              style="color: goldenrod;"
+                              no-caps
+                              dense
+                              size="sm"
+                              class="q-px-sm"
+                            >
                               <div class="column">
                                 <div class="f-14">
                                   {{ item?.beratbadan }} kg
@@ -153,7 +232,14 @@
                                 </div>
                               </div>
                             </q-btn>
-                            <q-btn outline style="color: goldenrod;" no-caps dense size="sm" class="q-px-sm">
+                            <q-btn
+                              outline
+                              style="color: goldenrod;"
+                              no-caps
+                              dense
+                              size="sm"
+                              class="q-px-sm"
+                            >
                               <div class="column">
                                 <div class="f-14">
                                   {{ item?.vas }}
@@ -166,8 +252,14 @@
                           </div>
                         </q-item-section>
                       </q-item>
-                      <q-separator dark inset />
-                      <q-item class="q-pa-xs list-move" dark>
+                      <q-separator
+                        dark
+                        inset
+                      />
+                      <q-item
+                        class="q-pa-xs list-move"
+                        dark
+                      >
                         <q-item-section class="q-pa-xs">
                           <q-item-label lines="2">
                             T Kesadaran : <em>{{ getKesadaran(item?.tingkatkesadaran) ?? '-' }}</em>
@@ -194,8 +286,15 @@
                       </q-item>
 
                       <!-- ========================================================================================== KHUSUS PARU POL018-->
-                      <q-separator dark inset />
-                      <q-item v-if="pasien?.kodepoli === 'POL018'" class="q-pa-xs list-move" dark>
+                      <q-separator
+                        dark
+                        inset
+                      />
+                      <q-item
+                        v-if="pasien?.kodepoli === 'POL018'"
+                        class="q-pa-xs list-move"
+                        dark
+                      >
                         <q-item-section class="q-pa-xs">
                           <q-item-label lines="2">
                             Inspeksi : <em>{{ item?.inspeksi ?? '-' }}</em>
@@ -221,15 +320,29 @@
                         </q-item-section>
                       </q-item>
 
-                      <q-card flat dark square>
+                      <q-card
+                        flat
+                        dark
+                        square
+                      >
                         <q-slide-transition>
                           <!-- <div v-show="expanded===i+1"> -->
                           <div>
                             <q-separator dark />
-                            <q-list v-if="items?.detailgambars.length" separator dark>
-                              <q-item v-for="(row, n) in items?.detailgambars" :key="n">
+                            <q-list
+                              v-if="items?.detailgambars.length"
+                              separator
+                              dark
+                            >
+                              <q-item
+                                v-for="(row, n) in items?.detailgambars"
+                                :key="n"
+                              >
                                 <q-item-section avatar>
-                                  <q-avatar size="24px" color="orange">
+                                  <q-avatar
+                                    size="24px"
+                                    color="orange"
+                                  >
                                     {{ n + 1 }}
                                   </q-avatar>
                                 </q-item-section>
@@ -241,17 +354,21 @@
                                       <div class="q-ml-sm">
                                         <div>- VOD AWAL : <b>{{ items?.pemeriksaankhususmata[n]?.rs4 ?? '-' }}</b></div>
                                         <div>- VOD REFR : <b>{{ items?.pemeriksaankhususmata[n]?.rs5 ?? '-' }}</b></div>
-                                        <div>- VOD AKHIR : <b>{{ items?.pemeriksaankhususmata[n]?.rs6 ?? '-' }}</b>
+                                        <div>
+                                          - VOD AKHIR : <b>{{ items?.pemeriksaankhususmata[n]?.rs6 ?? '-' }}</b>
                                         </div>
                                         <div>- TOD : <b>{{ items?.pemeriksaankhususmata[n]?.rs10 ?? '-' }}</b></div>
-                                        <div>- FONDOS OD : <b>{{ items?.pemeriksaankhususmata[n]?.rs12 ?? '-' }}</b>
+                                        <div>
+                                          - FONDOS OD : <b>{{ items?.pemeriksaankhususmata[n]?.rs12 ?? '-' }}</b>
                                         </div>
                                         <div>- VOS AWAL : <b>{{ items?.pemeriksaankhususmata[n]?.rs7 ?? '-' }}</b></div>
                                         <div>- VOS REFR : <b>{{ items?.pemeriksaankhususmata[n]?.rs8 ?? '-' }}</b></div>
-                                        <div>- VOS AKHIR : <b>{{ items?.pemeriksaankhususmata[n]?.rs9 ?? '-' }}</b>
+                                        <div>
+                                          - VOS AKHIR : <b>{{ items?.pemeriksaankhususmata[n]?.rs9 ?? '-' }}</b>
                                         </div>
                                         <div>- TOS : <b>{{ items?.pemeriksaankhususmata[n]?.rs11 ?? '-' }}</b></div>
-                                        <div>- FONDOS OS : <b>{{ items?.pemeriksaankhususmata[n]?.rs13 ?? '-' }}</b>
+                                        <div>
+                                          - FONDOS OS : <b>{{ items?.pemeriksaankhususmata[n]?.rs13 ?? '-' }}</b>
                                         </div>
                                       </div>
                                     </div>
@@ -262,13 +379,15 @@
                                 </q-item-section>
                               </q-item>
                             </q-list>
-                            <div v-else class="text-center q-pa-md">
+                            <div
+                              v-else
+                              class="text-center q-pa-md"
+                            >
                               Tidak ada detail anatomy
                             </div>
                           </div>
                         </q-slide-transition>
                       </q-card>
-
                     </template>
                   </transition-group>
                 </q-list>
@@ -278,7 +397,10 @@
         </div>
         <template #loading>
           <div class="row justify-center q-my-md">
-            <q-spinner-dots color="primary" size="40px" />
+            <q-spinner-dots
+              color="primary"
+              size="40px"
+            />
           </div>
         </template>
         <!-- </q-item> -->
@@ -286,14 +408,26 @@
       </q-card>
       <!-- </q-infinite-scroll> -->
     </div>
-    <div v-else class="col full-height">
-      <div v-if="store.loadingHistory" class="column full-height flex-center">
+    <div
+      v-else
+      class="col full-height"
+    >
+      <div
+        v-if="store.loadingHistory"
+        class="column full-height flex-center"
+      >
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
+          <q-spinner-dots
+            color="primary"
+            size="40px"
+          />
         </div>
         Harap Menunggu ..... Sinkron Data
       </div>
-      <div v-else class="column full-height flex-center">
+      <div
+        v-else
+        class="column full-height flex-center"
+      >
         MAAF ... DATA HISTORY ANAMNESIS BELUM ADA
       </div>
     </div>
