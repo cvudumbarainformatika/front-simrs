@@ -203,7 +203,7 @@
     >
       <q-scroll-area style="height: 100%;">
         <div
-          v-if="store?.resep?.permintaanresep?.length && parseInt(store?.resep?.flag)<3"
+          v-if="store?.resep?.permintaanresep?.length && store?.resep?.tiperesep !== 'iter'"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -366,7 +366,7 @@
           </q-list>
         </div>
         <div
-          v-if="store?.resep?.listRacikan?.length && parseInt(store?.resep?.flag)<3"
+          v-if="store?.resep?.listRacikan?.length && store?.resep?.tiperesep !== 'iter'"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -586,13 +586,13 @@
             </q-list>
           </div>
         </div>
-        <div v-if="store?.resep?.flag==='3'">
+        <div v-if="store?.resep?.flag === '3' && store?.resep?.tiperesep === 'iter'">
           <div v-if="store?.resep?.loadingGetIter || store.loadingCopy">
             <app-loading />
           </div>
           <div v-if="!store?.resep?.loadingGetIter && !store.loadingCopy">
             <div
-              v-if="store?.resep?.rincian?.length && parseInt(store?.resep?.flag)>=3"
+              v-if="store?.resep?.rincian?.length && parseInt(store?.resep?.flag) >= 3 && store?.resep?.tiperesep === 'iter'"
               class="q-mt-sm"
             >
               <div class="row items-center">

@@ -247,8 +247,10 @@ const periode = ref(1)
 const periods = ref([
   { value: 1, label: 'Hari ini' },
   { value: 2, label: 'Minggu Ini' },
-  { value: 3, label: 'Bulan Ini' }
-  // { value: 4, label: 'Tahun Ini' }
+  { value: 3, label: 'Bulan Ini' },
+  { value: 4, label: 'Bulan Lalu' },
+  { value: 5, label: 'Dua Bulan Lalu' }
+  // { value: 6, label: 'Tahun Ini' }
 ])
 
 function hariIni() {
@@ -265,10 +267,26 @@ function mingguIni() {
 }
 function bulanIni() {
   const curr = new Date()
-  const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
-  const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
-  from.value = dateDbFormat(firstday)
-  to.value = dateDbFormat(lastday)
+  const firstday = date.formatDate(curr, 'YYYY-MM-01')
+  const lastday = date.formatDate(curr, 'YYYY-MM-31')
+  from.value = firstday
+  to.value = lastday
+}
+function bulanLalu() {
+  const newDate = new Date()
+  const curr = date.subtractFromDate(newDate, { months: 1 })
+  const firstday = date.formatDate(curr, 'YYYY-MM-01')
+  const lastday = date.formatDate(curr, 'YYYY-MM-31')
+  from.value = firstday
+  to.value = lastday
+}
+function duaBulanLalu() {
+  const newDate = new Date()
+  const curr = date.subtractFromDate(newDate, { months: 2 })
+  const firstday = date.formatDate(curr, 'YYYY-MM-01')
+  const lastday = date.formatDate(curr, 'YYYY-MM-31')
+  from.value = firstday
+  to.value = lastday
 }
 
 function gantiPeriode(val) {
@@ -278,6 +296,10 @@ function gantiPeriode(val) {
     mingguIni()
   } else if (val === 3) {
     bulanIni()
+  } else if (val === 4) {
+    bulanLalu()
+  } else if (val === 5) {
+    duaBulanLalu()
   }
 
   const per = {

@@ -71,14 +71,15 @@ export const useFarmasiPermintaanDepoStore = defineStore('farmasi_permintaan_dep
       this.setForm('kdobat', val)
       this.setForm('jumlah_minta', 0)
       console.log('obat ', val)
-      const anu = this.obats.filter(a => a.kd_obat === val)
-      if (anu.length) {
-        const obat = anu[0]
+      const obat = this.obats.find(a => a.kdobat === val)
+      // console.log('obat ', obat)
+      if (obat) {
         console.log('obat ketemu', obat)
         this.setForm('stok_alokasi', obat.stokalokasi)
         console.log('form', this.form)
         if (this.form.dari) {
-          const aMax = obat.minmax.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
+          const aMax = obat?.minmax?.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
+          console.log('aMax ', aMax)
           if (aMax.length) {
             const max = aMax[0]
             this.setForm('mak_stok', max.max)
