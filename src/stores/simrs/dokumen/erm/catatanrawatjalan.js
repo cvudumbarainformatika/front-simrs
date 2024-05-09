@@ -6,6 +6,9 @@ export const useCatatanRawatJalanStore = defineStore('erm_catatanrawatjalan', {
   state: () => ({
     loading: false,
     items: {},
+    // $q: {
+    //   loading: {}
+    // },
     params: {
       tahunawal: {},
       tahunakhir: {},
@@ -19,13 +22,15 @@ export const useCatatanRawatJalanStore = defineStore('erm_catatanrawatjalan', {
     },
     async getDataCatatan() {
       this.loading = true
+      console.log('load', this.loading)
       const params = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/dokumen/rajal/catatanrawatjalan', params)
           .then(resp => {
             this.loading = false
+            console.log('loadx', this.loading)
             this.items = resp?.data
-          //  resolve(resp)
+            resolve(resp)
           })
           .catch(() => {
             notifErr()

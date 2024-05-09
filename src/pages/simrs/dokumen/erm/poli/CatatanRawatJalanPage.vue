@@ -1,10 +1,8 @@
 <!-- eslint-disable no-unused-vars -->
 <template>
-  <KopSurat />
-  <IdentitasPage :pasien="props.pasien" />
   <div
     class="row justify-end text-weight-bold q-gutter-sm"
-    style="margin-right: 20px;"
+    style="margin-right: 20px;margin-top: 10px;"
   >
     <div class="col-1">
       <q-select
@@ -15,10 +13,8 @@
         option-label="nama"
         emit-value
         map-options=""
-        @update:model-value="carikunjungan"
       />
     </div>
-
     <div class="col-1">
       <q-select
         v-model="store.params.tahunakhir"
@@ -28,309 +24,303 @@
         option-label="nama"
         emit-value
         map-options=""
-        @update:model-value="carikunjungan"
       />
     </div>
     <div class="col-1">
-      RM IRJA-2
+      <q-btn
+        unelevated
+        color="dark"
+        round
+        size="sm"
+        icon="icon-mat-search"
+        @click="carikunjungan"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Cari
+        </q-tooltip>
+      </q-btn>
+      <br>
+      <q-btn
+        ref="refPrint"
+        v-print="printObj"
+        unelevated
+        color="dark"
+        round
+        size="sm"
+        icon="icon-mat-print"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Print
+        </q-tooltip>
+      </q-btn>
     </div>
   </div>
-  <div
-    class="row justify-center f-20 text-weight-bold q-mb-md"
-  >
-    CATATAN RAWAT JALAN
-  </div>
 
-  <q-separator />
-  <div v-if="store.loading">
-    <app-loading />
-  </div>
-  <q-markup-table
-    separator="vertical"
-    flat
-    bordered
-    dense
-    wrap-cells
+  <div
+    id="printMe"
+    style="width: 17cm;"
+    class="q-pa-xs full-width"
   >
-    <thead>
-      <tr>
-        <th class="text-center">
-          TGL JAM
-        </th>
-        <th class="text-center">
-          PROFESI
-        </th>
-        <th class="text-center">
-          SUBYEKTIF
-        </th>
-        <th class="text-center">
-          OBYEKTIF
-        </th>
-        <th class="text-center">
-          ASESMEN
-        </th>
-        <th class="text-center">
-          PLANING
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(lasoapb, s) in store?.items"
-        :key="s"
+    <KopSurat />
+    <IdentitasPage :pasien="props.pasien" />
+    <div
+      class="row justify-end text-weight-bold q-gutter-sm"
+      style="margin-right: 20px;"
+    >
+      <div class="col-1">
+        RM IRJA-2
+      </div>
+    </div>
+    <div
+      class="row justify-center f-20 text-weight-bold q-mb-md"
+    >
+      CATATAN RAWAT JALAN
+    </div>
+
+    <q-separator />
+    <div v-if="store?.loading === false">
+      <q-markup-table
+        separator="vertical"
+        flat
+        bordered
+        dense
+        wrap-cells
       >
-        <td
-          class="text-left f-12"
-          width="7%"
-        >
-          <div>
-            <div>{{ lasoapb?.jampulangtaskid[0]?.created_at }} </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12"
-          width="7%"
-        >
-          <div>
-            <div>{{ lasoapb?.pegawai?.nama }} </div>
-            <br>
-            <div>{{ }} </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12 "
-          width="16%"
-        >
-          <div
-            v-for="(anamnese, anam) in lasoapb?.anamnesis"
-            :key="anam"
+        <thead>
+          <tr>
+            <th class="text-center">
+              TGL JAM
+            </th>
+            <th class="text-center">
+              PROFESI
+            </th>
+            <th class="text-center">
+              SUBYEKTIF
+            </th>
+            <th class="text-center">
+              OBYEKTIF
+            </th>
+            <th class="text-center">
+              ASESMEN
+            </th>
+            <th class="text-center">
+              PLANING
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(lasoapb, s) in store?.items"
+            :key="s"
           >
-            <div
-              v-if="anamnese?.rs4 !== ''"
+            <td
+              class="text-left f-12"
+              width="7%"
             >
-              *)  {{ anamnese?.rs4 }}
-            </div>
-            <div v-if="anamnese?.riwayatpenyakit !== ''">
-              *) {{ anamnese?.riwayatpenyakit }}
-            </div>
-            <div v-if="anamnese?.riwayatalergi !== ''">
-              *) {{ anamnese?.riwayatalergi }}
-            </div>
-            <div v-if="anamnese?.keteranganalergi !== ''">
-              *){{ anamnese?.keteranganalergi }}
-            </div>
-            <div v-if="anamnese?.riwayatpengobatan !== ''">
-              *) {{ anamnese?.riwayatpengobatan }}
-            </div>
-            <div
-              v-if="anamnese?.riwayatpenyakitsekarang !== ''"
+              <div>
+                <div>{{ lasoapb?.jampulangtaskid[0]?.created_at }} </div>
+              </div>
+            </td>
+            <td
+              class="text-left f-12"
+              width="7%"
             >
-              *) {{ anamnese?.riwayatpenyakitsekarang }}
-            </div>
-            <div v-if="anamnese?.riwayatpenyakitkeluarga !== ''">
-              *){{ anamnese?.riwayatpenyakitkeluarga }}
-            </div>
-            <div v-if="anamnese?.kondisikhusus !== ''">
-              *) {{ anamnese?.kondisikhusus }}
-            </div>
-            <div v-if="anamnese?.keteranganscorenyeri !== ''">
-              *) {{ anamnese?.keteranganscorenyeri }}
-            </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12"
-          width="25%"
-        >
-          <div
-            v-for="(pemeriksaanfisik, fisik) in lasoapb?.pemeriksaanfisik"
-            :key="fisik"
-          >
-            <div>*) Nadi: {{ pemeriksaanfisik?.rs4 }}, Pernapasan: {{ pemeriksaanfisik?.pernapasan }}, Sistole: {{ pemeriksaanfisik?.sistole }}, Diastole: {{ pemeriksaanfisik?.diastole }}</div>
-            <div>*) Suhu Tubuh: {{ pemeriksaanfisik?.suhutubuh }}, Tinggi Badan: {{ pemeriksaanfisik?.tinggibadan }}, Berat badan: {{ pemeriksaanfisik?.beratbadan }},Vas: {{ pemeriksaanfisik?.vas }}</div>
-            <div>*) Status Psikologi: {{ pemeriksaanfisik?.statuspsikologis }}, Sosial Ekonomi: {{ pemeriksaanfisik?.sosialekonomi }}</div>
-            <div>*) Spiritual: {{ pemeriksaanfisik?.spiritual }},Kesadaran {{ pemeriksaanfisik?.kesadaran }}</div>
-            <div>*) Status Neurologis: {{ pemeriksaanfisik?.statusneurologis }}</div>
-            <div>*) Muakuloskeletal: {{ pemeriksaanfisik?.muakuloskeletal }}   </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12"
-          width="20%"
-        >
-          <div
-            v-for="(diagnosa, diagx) in lasoapb?.diagnosa"
-            :key="diagx"
-          >
-            <div>*) {{ diagnosa?.masterdiagnosa?.rs1 }} {{ diagnosa?.masterdiagnosa?.rs4 }}</div>
-          </div>
+              <div>
+                <div>{{ lasoapb?.pegawai?.nama }} </div>
+                <br>
+                <div>
+                  {{ lasoapb?.diagnosakeperawatan[0]?.masterperawat?.nama }}
+                </div>
+              </div>
+            </td>
+            <td
+              class="text-left f-12 "
+              width="16%"
+            >
+              <div
+                v-for="(anamnese, anam) in lasoapb?.anamnesis"
+                :key="anam"
+              >
+                <div
+                  v-if="anamnese?.rs4 !== ''"
+                >
+                  *)  {{ anamnese?.rs4 }}
+                </div>
+                <div v-if="anamnese?.riwayatpenyakit !== ''">
+                  *) {{ anamnese?.riwayatpenyakit }}
+                </div>
+                <div v-if="anamnese?.riwayatalergi !== ''">
+                  *) {{ anamnese?.riwayatalergi }}
+                </div>
+                <div v-if="anamnese?.keteranganalergi !== ''">
+                  *){{ anamnese?.keteranganalergi }}
+                </div>
+                <div v-if="anamnese?.riwayatpengobatan !== ''">
+                  *) {{ anamnese?.riwayatpengobatan }}
+                </div>
+                <div
+                  v-if="anamnese?.riwayatpenyakitsekarang !== ''"
+                >
+                  *) {{ anamnese?.riwayatpenyakitsekarang }}
+                </div>
+                <div v-if="anamnese?.riwayatpenyakitkeluarga !== ''">
+                  *){{ anamnese?.riwayatpenyakitkeluarga }}
+                </div>
+                <div v-if="anamnese?.kondisikhusus !== ''">
+                  *) {{ anamnese?.kondisikhusus }}
+                </div>
+                <div v-if="anamnese?.keteranganscorenyeri !== ''">
+                  *) {{ anamnese?.keteranganscorenyeri }}
+                </div>
+              </div>
+            </td>
+            <td
+              class="text-left f-12"
+              width="25%"
+            >
+              <div
+                v-for="(pemeriksaanfisik, fisik) in lasoapb?.pemeriksaanfisik"
+                :key="fisik"
+              >
+                <div>*) Nadi: {{ pemeriksaanfisik?.rs4 }}, Pernapasan: {{ pemeriksaanfisik?.pernapasan }}, Sistole: {{ pemeriksaanfisik?.sistole }}, Diastole: {{ pemeriksaanfisik?.diastole }}</div>
+                <div>*) Suhu Tubuh: {{ pemeriksaanfisik?.suhutubuh }}, Tinggi Badan: {{ pemeriksaanfisik?.tinggibadan }}, Berat badan: {{ pemeriksaanfisik?.beratbadan }},Vas: {{ pemeriksaanfisik?.vas }}</div>
+                <div>*) Status Psikologi: {{ pemeriksaanfisik?.statuspsikologis }}, Sosial Ekonomi: {{ pemeriksaanfisik?.sosialekonomi }}</div>
+                <div>*) Spiritual: {{ pemeriksaanfisik?.spiritual }},Kesadaran {{ pemeriksaanfisik?.kesadaran }}</div>
+                <div>*) Status Neurologis: {{ pemeriksaanfisik?.statusneurologis }}</div>
+                <div>*) Muakuloskeletal: {{ pemeriksaanfisik?.muakuloskeletal }}   </div>
+              </div>
+            </td>
+            <td
+              class="text-left f-12"
+              width="20%"
+            >
+              <div
+                v-for="(diagnosa, diagx) in lasoapb?.diagnosa"
+                :key="diagx"
+              >
+                <div>*) {{ diagnosa?.masterdiagnosa?.rs1 }} {{ diagnosa?.masterdiagnosa?.rs4 }}</div>
+              </div>
+              <q-separator />
+              <br>
+              <div
+                v-for="(diagnosakeperawatan, kep) in lasoapb?.diagnosakeperawatan"
+                :key="kep"
+              >
+                <div>*) {{ diagnosakeperawatan?.kode }} {{ diagnosakeperawatan?.nama }}</div>
+              </div>
+            </td>
+            <td
+              class="text-left f-12"
+              width="25%"
+            >
+              <div v-if="lasoapb?.laborat?.length">
+                <u><b> Laborat </b></u>
+                <div
+                  v-for="(laborat, lab) in lasoapb?.laborat"
+                  :key="lab"
+                >
+                  <div>*) {{ laborat?.pemeriksaanlab?.rs2 }} : {{ laborat?.rs21 }}</div>
+                </div>
+              </div>
+              <div v-if="lasoapb?.pembacaanradiologi?.length">
+                <u><b> Radiologi </b></u>
+                <div
+                  v-for="(pembacaanradiologi, w) in lasoapb?.pembacaanradiologi"
+                  :key="w"
+                >
+                  <div>*) {{ pembacaanradiologi?.rs3 ? pembacaanradiologi?.rs3 : '-' }}</div>
+                </div>
+              </div>
+              <br>
+              <div
+                v-if="lasoapb?.apotekrajal?.length || lasoapb?.apotekrajalpolilalu?.length
+                  || lasoapb?.apotekracikanrajal?.length || lasoapb?.apotekracikanrajallalu?.length"
+              >
+                <u><b> Obat </b></u>
+                <div
+                  v-for="(obatlalu, o) in lasoapb?.apotekrajalpolilalu"
+                  :key="o"
+                >
+                  <div>*) {{ obatlalu?.obat }}</div>
+                </div>
+                <div
+                  v-for="(obat, o) in lasoapb?.apotekrajal"
+                  :key="o"
+                >
+                  <div>*) {{ obat?.obat }}</div>
+                </div>
+                <div
+                  v-for="(obatracikan, o) in lasoapb?.apotekracikanrajal"
+                  :key="o"
+                >
+                  <div>*) {{ obatracikan?.obat }}</div>
+                </div>
+                <div
+                  v-for="(obatracikanlalu, o) in lasoapb?.apotekracikanrajallalu"
+                  :key="o"
+                >
+                  <div>*) {{ obatracikanlalu?.obat }}</div>
+                </div>
+              </div>
+              <br>
+              <div v-if="lasoapb?.tindakan?.length">
+                <u><b> Tindakan </b></u>
+                <div
+                  v-for="(tindakan, o) in lasoapb?.tindakan"
+                  :key="o"
+                >
+                  <div>*) {{ tindakan?.tindakan }} {{ tindakan?.keterangan ?? '' }}</div>
+                </div>
+              </div>
+              <div v-if="lasoapb?.kamaroperasi?.length">
+                <u><b> Operasi </b></u>
+                <div
+                  v-for="(kamaroperasi, ok) in lasoapb?.kamaroperasi"
+                  :key="ok"
+                >
+                  <div>*) {{ kamaroperasi?.mastertindakanoperasi?.rs2 }}</div>
+                </div>
+              </div>
+              <br>
+              <div v-if="lasoapb?.usg?.length || lasoapb?.ecg?.length || lasoapb?.eeg">
+                <u><b> ParaKlinik </b></u>
+                <div
+                  v-for="(usg, ok) in lasoapb?.usg"
+                  :key="ok"
+                >
+                  <div>*) {{ usg?.nama }} {{ usg?.hasil }}</div>
+                </div>
+                <br>
+                <div
+                  v-for="(ecg, ec) in lasoapb?.ecg"
+                  :key="ec"
+                >
+                  <div>*) {{ ecg?.mastertindakan?.rs2 }} {{ ecg?.hasil }}</div>
+                </div>
+                <br>
+                <div
+                  v-for="(eeg, ec) in lasoapb?.eeg"
+                  :key="ec"
+                >
+                  <div>*) {{ eeg?.klasifikasi }} {{ eeg?.impresi }}</div>
+                </div>
+              </div>
+            </td>
+          </tr>
           <q-separator />
-          <br>
-          <div
-            v-for="(diagnosakeperawatan, kep) in lasoapb?.diagnosakeperawatan"
-            :key="kep"
-          >
-            <div>*) {{ diagnosakeperawatan?.kode }} {{ diagnosakeperawatan?.nama }}</div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12"
-          width="25%"
-        >
-          <div v-if="lasoapb?.laborat?.length">
-            <u><b> Laborat </b></u>
-            <div
-              v-for="(laborat, lab) in lasoapb?.laborat"
-              :key="lab"
-            >
-              <div>*) {{ laborat?.pemeriksaanlab?.rs2 }} : {{ laborat?.rs21 }}</div>
-            </div>
-          </div>
-          <div v-if="lasoapb?.pembacaanradiologi?.length">
-            <u><b> Radiologi </b></u>
-            <div
-              v-for="(pembacaanradiologi, w) in lasoapb?.pembacaanradiologi"
-              :key="w"
-            >
-              <div>*) {{ pembacaanradiologi?.rs3 ? pembacaanradiologi?.rs3 : '-' }}</div>
-            </div>
-          </div>
-          <br>
-          <div
-            v-if="lasoapb?.apotekrajal?.length || lasoapb?.apotekrajalpolilalu?.length
-              || lasoapb?.apotekracikanrajal?.length || lasoapb?.apotekracikanrajallalu?.length"
-          >
-            <u><b> Obat </b></u>
-            <div
-              v-for="(obatlalu, o) in lasoapb?.apotekrajalpolilalu"
-              :key="o"
-            >
-              <div>*) {{ obatlalu?.obat }}</div>
-            </div>
-            <div
-              v-for="(obat, o) in lasoapb?.apotekrajal"
-              :key="o"
-            >
-              <div>*) {{ obat?.obat }}</div>
-            </div>
-            <div
-              v-for="(obatracikan, o) in lasoapb?.apotekracikanrajal"
-              :key="o"
-            >
-              <div>*) {{ obatracikan?.obat }}</div>
-            </div>
-            <div
-              v-for="(obatracikanlalu, o) in lasoapb?.apotekracikanrajallalu"
-              :key="o"
-            >
-              <div>*) {{ obatracikanlalu?.obat }}</div>
-            </div>
-          </div>
-          <br>
-          <div v-if="lasoapb?.tindakan?.length">
-            <u><b> Tindakan </b></u>
-            <div
-              v-for="(tindakan, o) in lasoapb?.tindakan"
-              :key="o"
-            >
-              <div>*) {{ tindakan?.tindakan }} {{ tindakan?.keterangan ?? '' }}</div>
-            </div>
-          </div>
-          <div v-if="lasoapb?.kamaroperasi?.length">
-            <u><b> Operasi </b></u>
-            <div
-              v-for="(kamaroperasi, ok) in lasoapb?.kamaroperasi"
-              :key="ok"
-            >
-              <div>*) {{ kamaroperasi?.mastertindakanoperasi?.rs2 }}</div>
-            </div>
-          </div>
-          <br>
-          <div v-if="lasoapb?.usg?.length || lasoapb?.ecg?.length || lasoapb?.eeg">
-            <u><b> ParaKlinik </b></u>
-            <div
-              v-for="(usg, ok) in lasoapb?.usg"
-              :key="ok"
-            >
-              <div>*) {{ usg?.nama }} {{ usg?.hasil }}</div>
-            </div>
-            <br>
-            <div
-              v-for="(ecg, ec) in lasoapb?.ecg"
-              :key="ec"
-            >
-              <div>*) {{ ecg?.mastertindakan?.rs2 }} {{ ecg?.hasil }}</div>
-            </div>
-            <br>
-            <div
-              v-for="(eeg, ec) in lasoapb?.eeg"
-              :key="ec"
-            >
-              <div>*) {{ eeg?.klasifikasi }} {{ eeg?.impresi }}</div>
-            </div>
-          </div>
-        </td>
-      </tr>
-      <q-separator />
-      <!-- <tr
-        v-for="(lasoapb, s) in store?.items"
-        :key="s"
-      >
-        <td
-          class="text-left f-12"
-          width="7%"
-        >
-          <div
-            v-for="(diagnosa, diag) in lasoapb?.diagnosa"
-            :key="diag"
-          >
-            <div>{{ diagnosa?.rs12 }} </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12 ellipsis"
-          width="7%"
-        >
-          <div
-            v-for="(diagnosa, diag1) in lasoapb?.diagnosa"
-            :key="diag1"
-          >
-            <div>Perawat</div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12 "
-          width="16%"
-        />
-        <td
-          class="text-left f-12"
-          width="25%"
-        />
-        <td
-          class="text-left f-12"
-          width="20%"
-        >
-          <div
-            v-for="(diagnosakeperawatan, diagp) in lasoapb?.diagnosakeperawatan"
-            :key="diagp"
-          >
-            <div>*) Diagnosa Keperawatan: {{ diagnosakeperawatan?.nama }}</div>
-            <q-separator />
-            <div
-              v-for="(intervensi, int) in diagnosakeperawatan?.intervensi"
-              :key="int"
-            >
-              <div>-) Intervensi: {{ intervensi?.masterintervensi?.nama }}</div>
-            </div>
-          </div>
-        </td>
-        <td
-          class="text-left f-12"
-          width="25%"
-        />
-      </tr> -->
-    </tbody>
-  </q-markup-table>
+        </tbody>
+      </q-markup-table>
+    </div>
+    <div v-else>
+      <app-loading />
+    </div>
+  </div>
 </template>
 <script setup>
 import KopSurat from '../../comppoli/KopSurat.vue'
@@ -359,12 +349,17 @@ for (let i = tahun - 4; i <= tahun; i++) {
 }
 
 function carikunjungan() {
-  store.params.norm = props?.pasien?.norm
-  store.getDataCatatan()
+  store.init(props?.pasien?.norm)
+  // store.getDataCatatan()
+  // store.params.norm = props?.pasien?.norm
 }
 
 store.init(props?.pasien?.norm)
 
+const printObj = {
+  id: 'printMe',
+  popTitle: ' '
+}
 // eslint-disable-next-line no-undef
 // options.value = i
 // console.log('adsad', options)
