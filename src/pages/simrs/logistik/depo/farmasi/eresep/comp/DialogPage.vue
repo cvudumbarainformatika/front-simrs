@@ -150,7 +150,7 @@
     </div>
 
     <div
-      v-if="store?.resep?.flag==='3' && store?.resep?.tiperesep==='iter'"
+      v-if="store?.resep?.flag === '3' && store?.resep?.tiperesep === 'iter' && store?.resep?.noresep_asal===''"
       class="row justify-end q-mr-md q-my-sm"
     >
       <div class="col-auto">
@@ -335,6 +335,7 @@
                     </div>
                     <div v-if="store?.resep?.flag==='3'">
                       <q-btn
+                        v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
                         round
                         class="f-10 q-my-sm"
                         color="dark"
@@ -449,8 +450,9 @@
                   inset
                 />
               </div>
-              <div class="col-auto">
+              <div class="col-auto q-mr-lg">
                 <q-btn
+                  v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
                   round
                   class="f-10 q-my-sm"
                   color="dark"
@@ -774,12 +776,31 @@
                           <div v-if="store?.resep?.tiperesep!=='iter'">
                             Resep Sudah selesai
                           </div>
-                          <div v-if="store?.resep?.tiperesep==='iter'">
-                            <div v-if="parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)">
+                          <div v-if="store?.resep?.tiperesep==='iter' ">
+                            <div v-if="(parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)) && store?.resep?.noresep_asal===''">
                               Klik Copy Resep
                             </div>
-                            <div v-if="parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)">
+                            <div v-if="(parseFloat(rinc.jumlah) > parseFloat(rinc.alokasi)) && store?.resep?.noresep_asal===''">
                               Tidak ada Alokasi
+                            </div>
+
+                            <div>
+                              <q-btn
+                                v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                                round
+                                class="f-10 q-my-sm"
+                                color="dark"
+                                text-color="white"
+                                icon="icon-mat-print"
+                                @click="openRajal(rinc)"
+                              >
+                                <q-tooltip
+                                  class="primary"
+                                  :offset="[10, 10]"
+                                >
+                                  Print Etiket Rajal
+                                </q-tooltip>
+                              </q-btn>
                             </div>
                           </div>
                         </div>
@@ -882,6 +903,24 @@
                       color="deep-orange"
                       inset
                     />
+                  </div>
+                  <div class="col-auto q-mr-lg">
+                    <q-btn
+                      v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                      round
+                      class="f-10 q-my-sm"
+                      color="dark"
+                      text-color="white"
+                      icon="icon-mat-print"
+                      @click="openRajal(item)"
+                    >
+                      <q-tooltip
+                        class="primary"
+                        :offset="[10, 10]"
+                      >
+                        Print Etiket Rajal
+                      </q-tooltip>
+                    </q-btn>
                   </div>
                 </div>
                 <q-list
@@ -1016,7 +1055,7 @@
                             <div v-if="store?.resep?.tiperesep!=='iter'">
                               Resep Sudah selesai
                             </div>
-                            <div v-if="store?.resep?.tiperesep==='iter'">
+                            <div v-if="store?.resep?.tiperesep==='iter' && store?.resep?.noresep_asal===''">
                               <div v-if="parseFloat(rinc.jumlah) < parseFloat(rinc.alokasi)">
                                 <div v-if="!item?.kosong">
                                   Klik Copy Resep

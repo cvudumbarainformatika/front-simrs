@@ -1,7 +1,7 @@
 <template>
   <q-dialog maximized>
-    <div class="bg-white garis-luar">
-      <div class="column ">
+    <div class="bg-white ">
+      <div class="column garis-luar q-pb-sm">
         <div class="col text-center">
           <div class="row no-wrap justify-center content-center q-pt-xs">
             <div
@@ -17,7 +17,7 @@
               </div>
             </div>
             <div class="col-auto ">
-              <div class="row f-12">
+              <div class="row f-10">
                 Instalasi Farmasi
               </div>
               <div class="row">
@@ -37,10 +37,10 @@
           color="dark"
           size="1px"
         />
-        <div class="col text-center">
+        <div class="col text-center f-10">
           {{ resep?.datapasien?.rs1 }} / {{ resep?.datapasien?.nama }}
         </div>
-        <div class="col text-center">
+        <div class="col text-center f-10">
           {{ dateFullFormat(resep?.tgl_permintaan) }} / {{ resep?.noresep }}
         </div>
         <q-separator
@@ -54,8 +54,20 @@
         <div class="col text-center text-weight-bold">
           {{ rinci?.aturan }}
         </div>
-        <div class="col text-center">
+        <div class="col text-center f-10">
           {{ rinci?.keterangan }}
+        </div>
+        <div
+          v-if="rinci?.namaracikan && rinci?.rincian?.length"
+          class="col text-center"
+        >
+          <div
+            v-for="(racikan,i) in rinci?.rincian"
+            :key="i"
+            class="f-8 text-italic"
+          >
+            {{ racikan?.mobat?.nama_obat }} ({{ racikan?.jumlah }})
+          </div>
         </div>
         <div class="col text-center f-10 text-weight-bold text-italic q-mt-md">
           -. Semoga lekas sembuh .-

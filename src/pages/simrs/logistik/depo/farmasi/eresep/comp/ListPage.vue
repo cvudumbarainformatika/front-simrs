@@ -121,7 +121,15 @@
                 {{ item?.noresep }}
               </div>
               <div class="row text-grey f-10">
-                {{ dateFullFormat(item?.tgl_permintaan) }}
+                <div>
+                  {{ dateFullFormat(item?.tgl_permintaan) }}
+                </div>
+                <div
+                  v-if="item?.tiperesep==='iter' && item?.noresep_asal!==''"
+                  class="q-ml-sm"
+                >
+                  (copy - {{ dateFullFormat(item?.tgl) }}  )
+                </div>
               </div>
               <div
                 v-if="item?.tiperesep==='iter'"
@@ -135,7 +143,7 @@
                 {{ item?.datapasien?.nama }}
               </div>
               <div class="row">
-                {{ item?.noreg }}   ||   {{ item?.norm }}
+                {{ item?.noreg }} || {{ item?.norm }}
               </div>
             </td>
             <td>
@@ -222,7 +230,7 @@
                 Buka
               </q-btn>
             </td>
-          <!-- <td class="text-end">
+            <!-- <td class="text-end">
             <div>
               <q-btn
                 icon="icon-mat-send"
