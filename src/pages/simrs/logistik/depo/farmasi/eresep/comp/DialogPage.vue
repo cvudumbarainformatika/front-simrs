@@ -334,7 +334,23 @@
                       Resep Belum diterima
                     </div>
                     <div v-if="store?.resep?.flag==='3'">
-                      Resep Sudah selesai
+                      <q-btn
+                        round
+                        class="f-10 q-my-sm"
+                        color="dark"
+                        text-color="white"
+                        icon="icon-mat-print"
+                        :loading="rinc?.loading"
+                        :disable="rinc?.loading"
+                        @click="openRajal(rinc)"
+                      >
+                        <q-tooltip
+                          class="primary"
+                          :offset="[10, 10]"
+                        >
+                          Print Etiket Rajal
+                        </q-tooltip>
+                      </q-btn>
                     </div>
                     <div v-if="store?.resep?.flag==='2'">
                       <q-btn
@@ -432,6 +448,23 @@
                   color="deep-orange"
                   inset
                 />
+              </div>
+              <div class="col-auto">
+                <q-btn
+                  round
+                  class="f-10 q-my-sm"
+                  color="dark"
+                  text-color="white"
+                  icon="icon-mat-print"
+                  @click="openRajal(item)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print Etiket Rajal
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
             <q-list
@@ -1038,6 +1071,20 @@
   <!-- {{ store.resep }} -->
   <SudahAdaCopy v-model="store.isAdaCopy" />
   <HistoryResepIter v-model="store.isHistory" />
+  <EtiketRajal
+    ref="refEtiketRajal"
+    v-model="rajalOpen"
+    :rinci="rajalRinc"
+    :resep="store.resep"
+    @close="rajalOpen = false"
+  />
+  <EtiketRanap
+    ref="refEtiketRanap"
+    v-model="ranapOpen"
+    :rinci="ranapRinc"
+    :resep="store.resep"
+    @close="ranapOpen = false"
+  />
 </template>
 <script setup>
 import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
@@ -1049,9 +1096,26 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
 
+const rajalRinc = ref(null)
+const ranapRinc = ref(null)
+const rajalOpen = ref(false)
+const ranapOpen = ref(false)
+const refEtiketRajal = ref(null)
+const refEtiketRanap = ref(null)
+
 const SudahAdaCopy = defineAsyncComponent(() => import('./SudahAdaCopy.vue'))
 const HistoryResepIter = defineAsyncComponent(() => import('./HistoryResepIter.vue'))
+const EtiketRajal = defineAsyncComponent(() => import('./EtiketRajal.vue'))
+const EtiketRanap = defineAsyncComponent(() => import('./EtiketRanap.vue'))
 
+function openRajal(val) {
+  console.log('refEtiketRajal', refEtiketRajal.value)
+  rajalRinc.value = val
+  rajalOpen.value = true
+  setTimeout(() => {
+    refEtiketRajal.value.printPage()
+  }, 100)
+}
 const pageRef = ref()
 const tinggiDetailPas = ref(130)
 const h = computed(() => {
