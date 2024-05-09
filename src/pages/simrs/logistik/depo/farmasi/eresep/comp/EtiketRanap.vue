@@ -55,7 +55,7 @@
           {{ rinci?.aturan }}
         </div>
         <div class="col text-center f-10">
-          {{ rinci?.keterangan }}
+          Diminum {{ waktu }}
         </div>
         <div
           v-if="rinci?.namaracikan && rinci?.rincian?.length"
@@ -85,7 +85,8 @@ import { dateFullFormat } from 'src/modules/formatter'
 const emits = defineEmits(['close'])
 defineProps({
   rinci: { type: Object, default: () => {} },
-  resep: { type: Object, default: () => {} }
+  resep: { type: Object, default: () => {} },
+  waktu: { type: String, default: '' }
 })
 function printPage () {
   console.log('print ')

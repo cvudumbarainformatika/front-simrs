@@ -334,6 +334,9 @@
                       Resep Belum diterima
                     </div>
                     <div v-if="store?.resep?.flag==='3'">
+                      <div v-if="apps?.user?.kdruangansim !== 'Gd-05010101' && apps?.user?.kdruangansim !== 'Gd-04010102'">
+                        Resep Sudah Selesai
+                      </div>
                       <q-btn
                         v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
                         round
@@ -341,8 +344,6 @@
                         color="dark"
                         text-color="white"
                         icon="icon-mat-print"
-                        :loading="rinc?.loading"
-                        :disable="rinc?.loading"
                         @click="openRajal(rinc)"
                       >
                         <q-tooltip
@@ -352,6 +353,80 @@
                           Print Etiket Rajal
                         </q-tooltip>
                       </q-btn>
+                      <div v-if="apps?.user?.kdruangansim === 'Gd-04010102'">
+                        <div class="row justify-end">
+                          <q-btn
+                            no-caps
+                            dense
+                            class="f-10 q-mb-xs"
+                            color="dark"
+                            text-color="white"
+                            label="Etiket Pagi"
+                            @click="openRanap(rinc,'Pagi')"
+                          >
+                            <q-tooltip
+                              class="primary"
+                              :offset="[10, 10]"
+                            >
+                              Print Etiket Ranap
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
+                        <div class="row justify-end">
+                          <q-btn
+                            no-caps
+                            dense
+                            class="f-10 q-mb-xs"
+                            color="dark"
+                            text-color="white"
+                            label="Etiket Siang"
+                            @click="openRanap(rinc,'Siang')"
+                          >
+                            <q-tooltip
+                              class="primary"
+                              :offset="[10, 10]"
+                            >
+                              Print Etiket Ranap
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
+                        <div class="row justify-end">
+                          <q-btn
+                            no-caps
+                            dense
+                            class="f-10 q-mb-xs"
+                            color="dark"
+                            text-color="white"
+                            label="Etiket Sore"
+                            @click="openRanap(rinc,'Sore')"
+                          >
+                            <q-tooltip
+                              class="primary"
+                              :offset="[10, 10]"
+                            >
+                              Print Etiket Ranap
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
+                        <div class="row justify-end">
+                          <q-btn
+                            no-caps
+                            dense
+                            class="f-10 q-mb-xs"
+                            color="dark"
+                            text-color="white"
+                            label="Etiket Malam"
+                            @click="openRanap(rinc,'Malam')"
+                          >
+                            <q-tooltip
+                              class="primary"
+                              :offset="[10, 10]"
+                            >
+                              Print Etiket Ranap
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
+                      </div>
                     </div>
                     <div v-if="store?.resep?.flag==='2'">
                       <q-btn
@@ -467,6 +542,78 @@
                     Print Etiket Rajal
                   </q-tooltip>
                 </q-btn>
+                <div
+                  v-if="apps?.user?.kdruangansim === 'Gd-04010102'"
+                  class="row"
+                >
+                  <q-btn
+                    no-caps
+                    dense
+                    class="f-10 q-mr-xs"
+                    color="dark"
+                    text-color="white"
+                    label="Etiket Pagi"
+                    @click="openRanap(item,'Pagi')"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Print Etiket Ranap
+                    </q-tooltip>
+                  </q-btn>
+
+                  <q-btn
+                    no-caps
+                    dense
+                    class="f-10 q-mr-xs"
+                    color="dark"
+                    text-color="white"
+                    label="Etiket Siang"
+                    @click="openRanap(item,'Siang')"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Print Etiket Ranap
+                    </q-tooltip>
+                  </q-btn>
+
+                  <q-btn
+                    no-caps
+                    dense
+                    class="f-10 q-mr-xs"
+                    color="dark"
+                    text-color="white"
+                    label="Etiket Sore"
+                    @click="openRanap(item,'Sore')"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Print Etiket Ranap
+                    </q-tooltip>
+                  </q-btn>
+
+                  <q-btn
+                    no-caps
+                    dense
+                    class="f-10 q-mr-xs"
+                    color="dark"
+                    text-color="white"
+                    label="Etiket Malam"
+                    @click="openRanap(item,'Malam')"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Print Etiket Ranap
+                    </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
             </div>
             <q-list
@@ -691,7 +838,7 @@
                   >
                     <div class="row items-center full-width q-col-gutter-xs">
                       <div class="col-6">
-                        <div class="row q-mb-xs">
+                        <div class="row q-mr-xs">
                           <div class="col-4">
                             Aturan
                           </div>
@@ -1121,6 +1268,7 @@
     ref="refEtiketRanap"
     v-model="ranapOpen"
     :rinci="ranapRinc"
+    :waktu="ranapWaktu"
     :resep="store.resep"
     @close="ranapOpen = false"
   />
@@ -1137,6 +1285,7 @@ const apps = useAplikasiStore()
 
 const rajalRinc = ref(null)
 const ranapRinc = ref(null)
+const ranapWaktu = ref(null)
 const rajalOpen = ref(false)
 const ranapOpen = ref(false)
 const refEtiketRajal = ref(null)
@@ -1148,11 +1297,20 @@ const EtiketRajal = defineAsyncComponent(() => import('./EtiketRajal.vue'))
 const EtiketRanap = defineAsyncComponent(() => import('./EtiketRanap.vue'))
 
 function openRajal(val) {
-  console.log('refEtiketRajal', refEtiketRajal.value)
+  // console.log('refEtiketRajal', refEtiketRajal.value)
   rajalRinc.value = val
   rajalOpen.value = true
   setTimeout(() => {
     refEtiketRajal.value.printPage()
+  }, 100)
+}
+function openRanap(val, wkt) {
+  // console.log('refEtiketRanap', refEtiketRajal.value)
+  ranapRinc.value = val
+  ranapWaktu.value = wkt
+  ranapOpen.value = true
+  setTimeout(() => {
+    refEtiketRanap.value.printPage()
   }, 100)
 }
 const pageRef = ref()
