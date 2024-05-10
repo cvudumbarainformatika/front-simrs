@@ -52,6 +52,16 @@
         <DialogPage />
       </template>
     </app-fullscreen-blue>
+
+    <!-- InfoPage -->
+    <app-fullscreen-blue
+      v-model="store.isInfo"
+      @close="store.closeInfo"
+    >
+      <template #default>
+        <InfoPage />
+      </template>
+    </app-fullscreen-blue>
   </q-page>
 </template>
 
@@ -66,6 +76,7 @@ const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
 const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
+const InfoPage = defineAsyncComponent(() => import('./comp/InfoPage.vue'))
 
 const style = useStyledStore()
 const store = useEResepDepoFarmasiStore()
@@ -86,6 +97,7 @@ const kdruangansim = computed(() => {
   return apps?.user?.kdruangansim
 })
 onMounted(() => {
+  store.getApoteker()
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {
     store.setParams('kddepo', apps?.user?.kdruangansim)

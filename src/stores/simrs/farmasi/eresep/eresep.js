@@ -1,20 +1,23 @@
 import { defineStore } from 'pinia'
-import { Dialog } from 'quasar'
+import { Dialog, date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { notifSuccess } from 'src/modules/utils'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
   state: () => ({
     isOpen: false,
     isAdaCopy: false,
     isHistory: false,
+    isInfo: false,
     loading: false,
     loadingTerima: false,
     loadingSelesai: false,
     loadingSimpan: false,
     loadingCopy: false,
     loadingHistory: false,
+    loadingPelayananInfoObat: false,
     items: [],
     meta: {},
     params: {
@@ -38,7 +41,44 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     noresLoad: null,
     removedItemId: [],
     adaCopys: {},
-    historys: {}
+    historys: {},
+    formInfo: {},
+    metodes: [
+      { label: 'Lisan', value: '1' },
+      { label: 'Telepon', value: '2' },
+      { label: 'Tertulis', value: '3' }
+    ],
+    statuses: [
+      { label: 'Pasien', value: '1' },
+      { label: 'Keluarga Pasien', value: '2' },
+      { label: 'Tenaga Kesehatan', value: '3' }
+    ],
+    yns: [
+      { label: 'Ya', value: '1' },
+      { label: 'Tidak', value: '2' }
+    ],
+    kelamins: [
+      { label: 'Laki-Laki', value: 'Laki-Laki' },
+      { label: 'Perempuan', value: 'Perempuan' }
+    ],
+    apotekers: [],
+    jenisPertanyaans: [
+      { label: 'Penggunaan Terapetik', value: 'penggunaan_terapetik' },
+      { label: 'Identifikasi Obat', value: 'identifikasi_obat' },
+      { label: 'Interaksi Obat', value: 'interaksi_obat' },
+      { label: 'Kontra Indikasi', value: 'kontra_indikasi' },
+      { label: 'Cara Pemakaian', value: 'cara_pemakaian' },
+      { label: 'Stabilitas Obat', value: 'stabilitas_obat' },
+      { label: 'Dosis Obat', value: 'dosis_obat' },
+      { label: 'Keracunan / OD', value: 'keracunan_od' },
+      { label: 'ESO', value: 'eso' },
+      { label: 'Harga Obat', value: 'harga_obat' },
+      { label: 'Farmakokinetika / Farmakodinamika', value: 'farmako' },
+      { label: 'Ketersediaan Obat', value: 'ketersediaan' },
+      { label: 'Kompatibilitas', value: 'kompatibilitas' },
+      { label: 'Harga', value: 'harga' },
+      { label: 'Obat Alternatif', value: 'obat_alternatif' }
+    ]
   }),
   actions: {
     setOpen() { this.isOpen = true },
@@ -51,6 +91,53 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     },
     closeHistory() {
       this.isHistory = false
+    },
+    setFormInfo(key, val) {
+      this.formInfo[key] = val
+    },
+    openInfo() {
+      this.isInfo = true
+    },
+    closeInfo() {
+      this.isInfo = false
+    },
+    setInfo(val) {
+      console.log('set info', val)
+      const apps = useAplikasiStore()
+      console.log('set info', apps)
+      if (Object.keys(val?.info).length <= 0) {
+        this.setFormInfo('hari', date.formatDate(Date.now(), 'dddd'))
+        this.setFormInfo('waktu', date.formatDate(Date.now(), 'HH:mm:ss'))
+        this.setFormInfo('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
+        this.setFormInfo('tgl', date.formatDate(Date.now(), 'DD MMMM YYYY'))
+        this.setFormInfo('metode', '1')
+        this.setFormInfo('nama_penanya', '')
+        this.setFormInfo('status_penanya', '3')
+        this.setFormInfo('umur_pasien', val?.datapasien?.usia)
+        this.setFormInfo('kehamilan', '2')
+        this.setFormInfo('noreg', val?.noreg)
+        this.setFormInfo('norm', val?.norm)
+        this.setFormInfo('jenisPertanyaan', [])
+      } else {
+        const keys = Object.keys(val?.info)
+        keys.forEach(k => {
+          if (k === 'jenis_pertanyaan') {
+            const jen = val?.info[k].split('|')
+            this.setFormInfo('jenisPertanyaan', jen)
+          } else if (k === 'tanggal') {
+            this.setFormInfo(k, val?.info[k])
+            const tang = val?.info[k]
+            this.setFormInfo('hari', date.formatDate(tang, 'dddd'))
+            this.setFormInfo('waktu', date.formatDate(tang, 'HH:mm:ss'))
+            // this.setFormInfo('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
+            this.setFormInfo('tgl', date.formatDate(tang, 'DD MMMM YYYY'))
+          } else {
+            this.setFormInfo(k, val?.info[k])
+          }
+        })
+      }
+
+      this.setFormInfo('user_input', apps?.user?.pegawai?.kdpegsimrs)
     },
     setParams(key, val) { this.params[key] = val },
     setFlag(val) {
@@ -518,6 +605,27 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               })
             }
             reject(err)
+          })
+      })
+    },
+    async getApoteker() {
+      if (this.apotekers.length) return
+      await api.get('v1/simrs/farmasinew/depo/ambil-pegawai-farmasi')
+        .then(resp => {
+          this.apotekers = resp?.data
+        })
+    },
+    simpanPelayananInfoObat() {
+      this.loadingPelayananInfoObat = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/simpan-pelayanan-informasi-obat', this.formInfo)
+          .then(resp => {
+            this.loadingPelayananInfoObat = false
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingPelayananInfoObat = false
           })
       })
     }

@@ -224,10 +224,32 @@
                 class="f-10"
                 color="primary"
                 text-color="white"
+                label="Buka"
                 no-caps
                 @click="buka(item)"
               >
-                Buka
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Buka Resep Pasien
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                square
+                class="f-10"
+                color="yellow"
+                text-color="green"
+                label="Info"
+                no-caps
+                @click="info(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Pelayanan Informasi Obat
+                </q-tooltip>
               </q-btn>
             </td>
             <!-- <td class="text-end">
@@ -323,6 +345,10 @@ function buka(val) {
   // console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
+}
+function info(val) {
+  store.openInfo()
+  store.setInfo(val)
 }
 // function send(id) {
 //   indexId.value = id
