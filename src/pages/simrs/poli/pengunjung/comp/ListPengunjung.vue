@@ -125,6 +125,21 @@
               @click="emits('tindakan', item)"
             />
             <q-btn
+              v-if="item.status === '1'"
+              dense
+              size="sm"
+              no-caps
+              color="black"
+              label="KIRIM DATA KEPENJAMINAN"
+              class="q-mb-sm"
+              icon-right="icon-mat-attach_money"
+              style="min-width: 120px;"
+              :loading="loadingTerima && store.noreg === item?.noreg"
+              :disable="loadingTerima"
+              @click="emits('kirimkepenjaminan', item)"
+            />
+            <q-btn
+              v-if="item.status === ''"
               dense
               size="sm"
               no-caps
@@ -138,7 +153,7 @@
               @click="emits('panggilan', item)"
             />
             <q-btn
-              v-if="item.status === '' "
+              v-if="item.status === '' || item.status === '2'"
               dense
               size="sm"
               no-caps
@@ -149,6 +164,15 @@
               :loading="store.loadingTidakhadir && store.noreg === item?.noreg"
 
               @click="emits('tidakdatang', item)"
+            />
+            <q-btn
+              v-if="item.status === '3'"
+              dense
+              size="sm"
+              no-caps
+              color="red"
+              label="PASIEN TIDAK DATANG"
+              style="min-width: 120px;"
             />
           </q-item-section>
         </q-item>
@@ -167,7 +191,7 @@ import { notifErrVue } from 'src/modules/utils'
 import { useSepBpjsStore } from 'src/stores/simrs/pendaftaran/kunjungan/bpjs/sep'
 import { ref } from 'vue'
 import { usePengunjungPoliStore } from 'src/stores/simrs/pelayanan/poli/pengunjung'
-const emits = defineEmits(['tindakan', 'panggilan', 'tidakdatang'])
+const emits = defineEmits(['tindakan', 'panggilan', 'tidakdatang', 'kirimkepenjaminan'])
 defineProps({
   items: {
     type: Array,

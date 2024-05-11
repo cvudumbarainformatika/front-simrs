@@ -46,6 +46,7 @@
         @tindakan="bukaTindakan"
         @panggilan="panggil"
         @tidakdatang="tidakdatangs"
+        @kirimkepenjaminan="kirimkepenjaminan"
       />
     </q-card>
 
@@ -276,6 +277,22 @@ function subscribedChannel() {
 // function actPrintRekap() {
 //   printRekap.value = false
 // }
+
+function kirimkepenjaminan(val) {
+  // if (val?.groups === '1') {
+  //   if (!val?.sep) {
+  $q.notify({
+    type: 'negative',
+    title: 'Peringatan',
+    message: 'INFO WARNING <b/> MAAF,<em><b>Fitur Masih Dalam Proses Pengembangan</b></em>',
+    html: true,
+    timeout: 1000
+  })
+
+  //   }
+  // }
+  // store.settidakdatang(val)
+}
 
 watch(() => kdDisplay.value, (obj, old) => {
   // console.log('new', obj)

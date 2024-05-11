@@ -164,7 +164,7 @@ import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 import { computed, onMounted, ref } from 'vue'
 
 const txt = ref('BELUM TERLAYANI')
-const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
+const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI', 'TIDAK DATANG'])
 const poli = ref({
   kodepoli: 'SEMUA POLI',
   polirs: 'SEMUA POLI'
@@ -293,6 +293,8 @@ function gantiStatus(val) {
     return ''
   } else if (val === 'TERLAYANI') {
     return '1'
+  } else if (val === 'TIDAK DATANG') {
+    return '3'
   } else {
     return 'all'
   }
