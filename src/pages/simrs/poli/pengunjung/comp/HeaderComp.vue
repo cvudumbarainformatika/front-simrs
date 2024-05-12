@@ -328,7 +328,7 @@ function gantiPeriode(val) {
 function gantiPoli(val) {
   poli.value = val
   const sendt = poli.value?.kodepoli === 'SEMUA POLI' ? polis.value?.map(x => x?.kodepoli) : [poli.value?.kodepoli ?? '']
-  console.log(sendt)
+  // console.log(sendt)
   emits('setPoli', sendt)
 }
 

@@ -40,7 +40,7 @@
       <list-pengunjung
         :key="store.items"
         :items="store.items"
-        :loading="store.loading"
+        :loading="store.loading || setting.loading"
         :loading-terima="store.loadingTerima"
         :loading-call="speech.isLoading"
         @tindakan="bukaTindakan"

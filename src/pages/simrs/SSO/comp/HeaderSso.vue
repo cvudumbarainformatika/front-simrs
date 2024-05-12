@@ -28,7 +28,7 @@
           <q-skeleton
             v-if="loading"
             type="text"
-            width="200px"
+            width="100px"
           />
           <div
             v-else

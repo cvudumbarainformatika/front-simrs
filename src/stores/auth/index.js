@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
     kode_ruang: null,
     depo: {},
     mode: 'qr',
+    titleLoading: null,
 
     // baru
     onlineUsers: []
@@ -60,6 +61,7 @@ export const useAuthStore = defineStore('auth', {
     },
     login (payload) {
       this.loading = true
+      this.titleLoading = 'SEDANG SINKRON DATA'
       // waitLoad('show')
       return new Promise((resolve, reject) => {
         api.post('/v1/login', payload)
@@ -84,15 +86,26 @@ export const useAuthStore = defineStore('auth', {
     },
     SET_TOKEN_USER (token, auth) {
       storage.setHeaderToken(token)
-      this.token = token
-      this.user = auth
+        .then(() => {
+          this.token = token
+          this.user = auth
+          setTimeout(() => {
+            waitLoad('show')
+            routerInstance.push({ path: '/' })
+            this.loading = false
+            waitLoad('done')
+          }, 500)
+        })
+        .catch(error => {
+          console.log('error set token', error)
+          this.loading = false
+        })
+
       // send to channel
 
-      this.loading = false
-      routerInstance.push({ path: '/' })
-      setTimeout(() => {
-        this.loading = false
-      }, 2000)
+      // setTimeout(() => {
+      //   this.loading = false
+      // }, 1000)
     },
     REMOVE_LOKAL () {
       storage.clearStore()
@@ -124,18 +137,26 @@ export const useAuthStore = defineStore('auth', {
 
       await api.get('/v1/authuser').then(resp => {
         if (resp.status === 200) {
-          this.loading = false
-          const hdd = storage.setUser(resp?.data?.user)
-          if (hdd) {
-            this.currentUser = resp?.data?.user
-          }
-
-          const user = resp?.data?.user
-          const aplikasi = resp?.data?.apps
-          const akses = resp?.data?.akses
-          apps.setUser(user)
-          apps.setItems(aplikasi)
-          apps.setAksesApps(akses)
+          storage.setUser(resp?.data?.user)
+            .then(hdd => {
+              if (hdd) {
+                this.currentUser = resp?.data?.user
+                const user = resp?.data?.user
+                const aplikasi = resp?.data?.apps
+                const akses = resp?.data?.akses
+                apps.setUser(user)
+                apps.setItems(aplikasi)
+                apps.setAksesApps(akses)
+                setTimeout(() => { this.loading = false }, 200)
+              } else {
+                this.loading = false
+              }
+            })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+            })
+          // const hdd = storage.setUser(resp?.data?.user)
 
           // --- ada user yang tidak update datanya
           // const stringnya1 = localStorage.getItem('aplikasiX')
@@ -203,6 +224,7 @@ export const useAuthStore = defineStore('auth', {
 
     logout () {
       waitLoad('show')
+      this.titleLoading = 'LOGGING OUT'
       // try {
 
       this.REMOVE_LOKAL()

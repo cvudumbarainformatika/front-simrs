@@ -11,9 +11,13 @@
           v-for="(item, i) in items"
           :key="i"
         >
-          <q-item-section avatar>
+          <q-item-section
+            avatar
+            top
+          >
             <app-avatar-pasien
               :pasien="item"
+              width="80px"
             />
           </q-item-section>
           <q-item-section>

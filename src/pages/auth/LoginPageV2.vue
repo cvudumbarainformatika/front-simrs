@@ -1,9 +1,9 @@
 <template>
   <q-page class="fullscreen">
-    <app-loader
+    <!-- <app-loader
       v-if="store.loading"
       class="dimmed"
-    />
+    /> -->
     <div class="top-page">
       <BoxAnimation class="absolute" />
       <BgAnimation class="z--" />
@@ -11,6 +11,7 @@
         <LoginMode
           class="login-form"
           :mode="route.params.mode"
+          :loading="store.loading"
         />
       </div>
 
