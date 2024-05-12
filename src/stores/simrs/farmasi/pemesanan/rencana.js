@@ -34,8 +34,8 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
       min: 0,
       max: 0,
       stok: 0
-    }
-
+    },
+    cetaks: []
   }),
   actions: {
     setForm(key, val) {
@@ -225,6 +225,25 @@ export const useRencanaPemesananObatStore = defineStore('store_rencana_pemesanan
             tabel.getInitialData()
             notifSuccess(resp)
             resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getPesananBynomor(val) {
+      // console.log('no', val)
+      this.loading = true
+      const nomor = {
+        no_rencbeliobat: val
+      }
+      const params = { params: nomor }
+      console.log('no', params)
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/listrencanabeliBynomor', params)
+          .then(resp => {
+            this.loading = false
+            this.cetaks = resp?.data
           })
           .catch(() => {
             this.loading = false
