@@ -5,7 +5,7 @@
 
   <div class="full-height full-width column flex-center bg-primary">
     <q-spinner-box
-      color="secondary"
+      color="white"
       size="10em"
     />
 

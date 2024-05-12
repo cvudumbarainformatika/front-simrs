@@ -1,13 +1,13 @@
 <template>
   <div class="column flex-center full-height">
-    <!-- <Transition>
+    <Transition>
       <div
-        v-if="store.loading"
+        v-if="store.loading || loading"
         class="fullscreen column flex-center dimmed"
       >
         <app-loader />
       </div>
-    </Transition> -->
+    </Transition>
     <div class="box">
       <div
         class="square"
