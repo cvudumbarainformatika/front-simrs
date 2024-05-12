@@ -910,11 +910,14 @@ function lihatTab(val) {
 function tabDiNullkan() {
   const canvas = cvn.value
   console.log('baruuuuuuuuuuuuuuuuu')
-  canvas.defaultCursor = 'crosshair'
-  canvas.selectionBorderColor = 'red'
-  canvas.selectionLineWidth = 3
-  canvas.eventBound = true
-  canvas.selectable = true
+  if (canvas) {
+    canvas.defaultCursor = 'crosshair'
+    canvas.selectionBorderColor = 'red'
+    canvas.selectionLineWidth = 3
+    canvas.eventBound = true
+    canvas.selectable = true
+  }
+
   tab.value = null
   openTab.value = false
 
