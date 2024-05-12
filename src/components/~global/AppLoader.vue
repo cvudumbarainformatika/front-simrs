@@ -1,5 +1,5 @@
 <template>
-  <div class="full-height full-width column flex-center hitam">
+  <div class="full-height full-width column flex-center dimmed">
     <div class="loader" />
   </div>
 </template>

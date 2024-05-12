@@ -24,7 +24,7 @@
       <div class="row q-pa-sm">
         <div
           v-if="!isMobile"
-          class="col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 bg-x min-h"
+          class="col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 bg-x min-h z-top"
         >
           <div class="column flex-center full-height  text-white">
             <div class="text-subtitle1">
@@ -45,33 +45,55 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-6 min-h"> -->
-        <div
-          v-if="mode==='login-model-jadul' && !isMobile"
-          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
-        >
-          <FormLogin
-            :key="mode"
-          />
-        </div>
-        <div
-          v-else-if="mode==='qr' && isMobile"
-          class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
-        >
-          <FormLogin
-            :key="isMobile"
-          />
-        </div>
-        <div
-          v-else
-          class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
-        >
-          <FormQr
-            :key="mode"
-            :qr="store.qrCode"
-          />
-        </div>
-        <!-- </div> -->
+        <template v-if="!loading">
+          <div
+            v-if="mode==='login-model-jadul' && !isMobile"
+            class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
+          >
+            <FormLogin
+              :key="mode"
+            />
+          </div>
+          <div
+            v-else-if="mode==='qr' && isMobile"
+            class="login-form col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
+          >
+            <FormLogin
+              :key="isMobile"
+            />
+          </div>
+          <div
+            v-else
+            class="login-qr col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h"
+          >
+            <FormQr
+              :key="mode"
+              :qr="store.qrCode"
+            />
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="col-md-6 col-lg-6 col-xl-6 col-sm-6 col-xs-12 min-h bg-r slide-from-left">
+            <div class="fit column flex-center">
+              <q-spinner-box
+                color="secondary"
+                size="10em"
+              />
+
+              <div class="text-white">
+                Harap Tunggu
+                <q-spinner-comment
+                  color="primary"
+                  size="2em"
+                />
+              </div>
+              <div class="f-18 text-secondary">
+                {{ auth?.titleLoading }}
+              </div>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -85,9 +107,10 @@ import FormLogin from './FormLogin.vue'
 import FormQr from './FormQr.vue'
 
 import { computed, onMounted, ref } from 'vue'
+import { useAuthStore } from 'src/stores/auth'
 // import { useRoute } from 'vue-router'
 
-// const store = useAuthStore()
+const auth = useAuthStore()
 // const route = useRoute()
 const store = useIdentityStore()
 const $q = useQuasar()
@@ -100,6 +123,10 @@ defineProps({
   mode: {
     type: String,
     default: 'login-model-jadul'
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -205,6 +232,24 @@ onMounted(() => {
     background: linear-gradient(120deg, $primary 0%, $primary 100%);
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
+  }
+  .bg-r {
+    background: linear-gradient(120deg, $primary 0%, $primary 100%);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+}
+
+.slide-from-left {
+  animation: slideInFromLeft 0.5s forwards;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 </style>

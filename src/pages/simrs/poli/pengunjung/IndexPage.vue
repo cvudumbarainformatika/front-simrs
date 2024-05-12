@@ -1,13 +1,13 @@
 <template>
   <div>
-    <Suspense>
-      <!-- main content -->
-      <AsyncComp />
-      <!-- loading state -->
-      <template #fallback>
+    <!-- <Suspense> -->
+    <!-- main content -->
+    <AsyncComp />
+    <!-- loading state -->
+    <!-- <template #fallback>
         <app-loading />
-      </template>
-    </Suspense>
+      </template> -->
+    <!-- </Suspense> -->
   </div>
 </template>
 <script setup>

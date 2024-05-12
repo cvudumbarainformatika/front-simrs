@@ -1,13 +1,13 @@
 <template>
   <div class="column flex-center full-height">
-    <Transition>
+    <!-- <Transition>
       <div
-        v-if="loading || store.loading"
-        class="fullscreen column flex-center"
+        v-if="store.loading"
+        class="fullscreen column flex-center dimmed"
       >
         <app-loader />
       </div>
-    </Transition>
+    </Transition> -->
     <div class="box">
       <div
         class="square"
@@ -34,6 +34,7 @@
           <div class="col-grow">
             <KumpulanAplikasi
               :key="apps.aksesApps"
+              :loading="store.loading"
               :items="apps.items"
               :akses="apps.aksesApps"
               @go-to="(item)=>goTo(item)"
@@ -78,18 +79,32 @@ onMounted(() => {
   num.value = num.value + 1
 })
 
-const goTo = (item) => {
+// const goTo = (item) => {
+//   loading.value = true
+//   apps.setCurrentApp(item)
+//   const localAp = JSON.parse(localStorage.getItem('aplikasiX'))
+//   if (localAp?.currentApp === null) {
+//     localAp.currentApp = item
+//     localStorage.setItem('aplikasiX', JSON.stringify(localAp))
+//   }
+//   loading.value = false
+//   router.push({ path: item.url, replace: true })
+
+//   // setTimeout(() => {
+//   //   loading.value = false
+//   // }, 2000)
+// }
+
+const goTo = async (item) => {
   loading.value = true
-  apps.setCurrentApp(item)
+  await apps.setCurrentApp(item) // Asumsi bahwa ini adalah fungsi asynchronous
   const localAp = JSON.parse(localStorage.getItem('aplikasiX'))
   if (localAp?.currentApp === null) {
     localAp.currentApp = item
     localStorage.setItem('aplikasiX', JSON.stringify(localAp))
   }
+  loading.value = false
   router.push({ path: item.url, replace: true })
-  setTimeout(() => {
-    loading.value = false
-  }, 2000)
 }
 
 const signOut = () => {

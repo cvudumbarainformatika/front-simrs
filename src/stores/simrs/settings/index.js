@@ -160,14 +160,17 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         })
     },
     getHeaderPoli() {
+      this.loading = true
       return new Promise((resolve, reject) => {
         api.get('v1/settings/appakses/poli')
           .then(resp => {
-            // console.log('Poli', resp.data)
+            console.log('Poli', resp.data)
             this.polis = resp.data
+            this.loading = false
             resolve(resp)
           }).catch(err => {
             console.log(err)
+            this.loading = false
             reject(err)
           })
       })
