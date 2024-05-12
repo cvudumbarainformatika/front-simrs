@@ -8,7 +8,7 @@ import { notifErrVue, notifSuccess } from 'src/modules/utils'
 export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
   state: () => ({
     tab: 'Diagnosa Medik',
-    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)', 'Diagnosa Keperawatan', 'Diagnosa Kebidanan', 'Laporan Tindakan', 'Pra Anestesia'],
+    tabs: ['Diagnosa Medik', 'Tindakan Medik'],
     // diagnosa
     searchdiagnosa: '',
     listDiagnosa: [],
@@ -270,10 +270,10 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       }
 
       const resp = await api.get('v1/simrs/pelayanan/notatindakan', params)
-      console.log('notas', resp)
+      // console.log('notas', resp)
       if (resp.status === 200) {
         const arr = resp.data.map(x => x.nota)
-        console.log('wewew', arr)
+        // console.log('wewew', arr)
         this.notaTindakans = arr.length ? arr : []
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]

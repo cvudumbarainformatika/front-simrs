@@ -27,7 +27,7 @@ export const useInacbgIgd = defineStore('inacbg-igd', {
     async getDataIna(pasien) {
       const adaIcd = pasien?.diagnosa?.length
       const noreg = pasien?.noreg
-      console.log('wew', adaIcd)
+      // console.log('wew', adaIcd)
 
       // this.kodeIna = 'maintenance'
       // return
@@ -39,7 +39,7 @@ export const useInacbgIgd = defineStore('inacbg-igd', {
         }
         try {
           const resp = await api.get('v1/simrs/pelayanan/carisimulasi', params)
-          // console.log(resp)
+          // console.log('inabro', resp)
           if (resp.status === 200) {
             const ok = resp.data?.metadata?.code === 200
             if (ok) {

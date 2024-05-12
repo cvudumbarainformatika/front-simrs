@@ -159,7 +159,6 @@
       @hapus-dokumen="(val)=> hapusDokumen(val)"
     /> -->
   </q-card>
-  {{ props.pasien }}
 </template>
 
 <script setup>
@@ -187,7 +186,7 @@ const props = defineProps({
 const filterredTable = computed(() => {
   const val = store.notaTindakan
   const arr = props?.pasien?.tindakan
-  console.log('paa', props?.pasien?.tindakan)
+  // console.log('paa', props?.pasien?.tindakan)
   return arr?.filter(x => x.rs2 === val)
 })
 

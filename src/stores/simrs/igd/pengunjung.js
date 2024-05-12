@@ -5,7 +5,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
   state: () => ({
     tab: 'Diagnosa Medik',
-    tabs: ['Diagnosa Medik', 'Tindakan Medik', 'Prosedur (Icd 9)'],
+    tabs: ['Diagnosa Medik', 'Tindakan Medik'],
     items: [],
     loading: false,
     loadingSaveGantiDpjp: false,
@@ -137,7 +137,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     async bukaLayanan(pasien) {
       // this.loadingCall = false
       this.loadingTerima = true
-      console.log('load1', this.loadingTerima)
+      // console.log('load1', this.loadingTerima)
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
       this.togglePageTindakan()
@@ -241,6 +241,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         console.log('notas', this.notaTindakans)
         this.notaTindakans.push('BARU')
         this.notaTindakan = this.notaTindakans[0]
+      }
+    },
+    hapusDataTindakan(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0].tindakan
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
       }
     }
   }

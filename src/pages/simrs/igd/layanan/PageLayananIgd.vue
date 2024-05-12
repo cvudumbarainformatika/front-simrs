@@ -76,15 +76,16 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
 import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
+import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
 const store = usePengunjungIgdStore()
 
 const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
 const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
 const drawer = ref(false)
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -94,6 +95,17 @@ defineProps({
     default: false
   }
 })
+
+// defineProps({
+//   pasien: {
+//     type: Object,
+//     default: null
+//   },
+//   loadingaja: {
+//     type: Boolean,
+//     default: false
+//   }
+// })
 
 const menus = ref([
   {
@@ -117,9 +129,20 @@ const menus = ref([
 ])
 const menu = ref(menus.value[0])
 
+const inacbg = useInacbgIgd()
+
 function menuDiganti(val) {
   menu.value = val
 }
+
+watchEffect(() => {
+  // console.log('watch effect', store.loadingTerima)
+  if (store.loadingTerima === false) {
+    inacbg.getDataIna(props.pasien)
+    inacbg.setTotalTindakan(props.pasien)
+    inacbg.setTotalLaborat(props.pasien)
+  }
+})
 
 </script>
 <style lang="scss">

@@ -82,7 +82,7 @@ const minus = computed(() => {
 })
 
 watch(() => ina.tarifIna, (obj) => {
-  console.log('watch tarifIna', obj)
+  // console.log('watch tarifIna', obj)
   hitungSelisih()
 }, { deep: true })
 watch(() => props.pasien?.tindakan, (obj) => {
