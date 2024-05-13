@@ -5,6 +5,7 @@ import { api } from 'src/boot/axios'
 export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
   state: () => ({
     loading: false,
+    loadingcetak: false,
     items: [],
     meta: {},
     param: {
@@ -20,6 +21,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       'penyedia',
       'total'
     ],
+    cetaks: [],
     columnHide: []
   }),
   actions: {
@@ -62,6 +64,27 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
           })
           .catch(() => {
             this.loading = false
+          })
+      })
+    },
+    getPenerimaanBynomor(val) {
+      this.loadingcetak = true
+      const nomor = {
+        nomorpenerimaan: val
+      }
+      console.log('penerimaan ', nomor)
+      const params = { params: nomor }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/penerimaan/listepenerimaanBynomor', params)
+          .then(resp => {
+            this.loadingcetak = false
+            console.log('list penerimaan', resp)
+            this.cetaks = resp.data
+            // this.meta = resp.data
+            // resolve(resp)
+          })
+          .catch(() => {
+            this.loadingcetak = false
           })
       })
     }

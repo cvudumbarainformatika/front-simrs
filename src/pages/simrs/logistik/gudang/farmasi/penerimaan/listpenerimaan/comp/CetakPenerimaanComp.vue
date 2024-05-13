@@ -9,7 +9,7 @@
     >
       <q-card-section class="row items-center q-pb-none">
         <div class="text-h6 items-center">
-          RENCANA PEMESANAN OBAT
+          PENERIMAAN OBAT
         </div>
         <q-space />
         <q-btn
@@ -22,146 +22,207 @@
       </q-card-section>
       <q-separator />
       <div
+        v-if="store.loadingcetak === false"
         id="printMe"
         style="width: 17cm;"
         class="q-pa-xs full-width"
       >
         <KopSurat />
-        <div v-if="store.loading === false">
+        <div>
           <q-card-section>
             <div
               class="row justify-center"
             >
-              <em><b><u>  Nomor Rencana Beli : {{ store.cetaks[0]?.no_rencbeliobat }} </u></b></em>
+              <em><b><u>  Nomor Penerimaan Obat : {{ store.cetaks[0]?.nopenerimaan }} </u></b></em>
             </div>
 
-            <div class="row no-wrap q-mt-md bg-grey-3">
-              <div class="col-6">
-                <div class="row no-wrap">
-                  <div class="col-3">
-                    Gudang
-                  </div>
-                  <div class="col-1">
-                    :
-                  </div>
-                  <div class="col-9">
-                    {{ store.cetaks[0]?.gudang?.nama }}
-                  </div>
-                </div>
+            <div class="row no-wrap q-mt-md bg-grey-3 full-width">
+              <div class="col-2">
+                No. Pemesanan
               </div>
-              <div class="col-6">
-                <div class="row no-wrap">
-                  <div class="col-4">
-                    Tanggal
-                  </div>
-                  <div class="col-1">
-                    :
-                  </div>
-                  <div class="col-8">
-                    {{ store.cetaks[0]?.tgl }}
-                  </div>
-                </div>
+              <div class="col-1 text-left col-md-1">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.nopemesanan }}
+              </div>
+              <div class="col-2">
+                Tgl Penerimaan
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.tglpenerimaan }}
               </div>
             </div>
-            <br>
-            <q-separator />
-            <br>
-
-            <q-markup-table
-              separator="vertical"
-              flat
-              bordered
-              dense
-              wrap-cells
-            >
-              <thead>
-                <tr>
-                  <th class="text-center">
-                    NO.
-                  </th>
-                  <th class="text-center">
-                    OBAT
-                  </th>
-                  <th class="text-center">
-                    STOK RS
-                  </th>
-                  <th class="text-center">
-                    STOK MAX
-                  </th>
-                  <th class="text-center">
-                    RENCANA BELI
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(rincians, s) in store.cetaks[0]?.rincian"
-                  :key="s"
-                >
-                  <td>{{ s + 1 }}.</td>
-                  <td>
-                    {{ rincians?.mobat?.nama_obat }} <br>
-                    <div class="row text-italic f-8">
-                      {{ rincians?.kdobat }}
-                    </div>
-                  </td>
-                  <td style="text-align: right">
-                    {{ angka(Math.round(rincians?.stok_real_rs)) }} <br>
-                    <div
-                      class="row text-italic f-8 justify-end"
-                    >
-                      {{ rincians?.mobat?.satuan_k }}
-                    </div>
-                  </td>
-                  <td style="text-align: right">
-                    {{ angka(Math.round(rincians?.stok_max_rs)) }} <br>
-                    <div
-                      class="row text-italic f-8 justify-end"
-                    >
-                      {{ rincians?.mobat?.satuan_k }}
-                    </div>
-                  </td>
-                  <td style="text-align: right">
-                    {{ angka(rincians?.jumlahdirencanakan) }} <br>
-                    <div
-                      class="row text-italic f-8 justify-end"
-                    >
-                      {{ rincians?.mobat?.satuan_k }}
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </q-markup-table>
+            <div class="row no-wrap bg-grey-3">
+              <div class="col-2">
+                Jenis Surat
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.jenissurat }}
+              </div>
+              <div class="col-2">
+                No. Surat
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.nomorsurat }}
+              </div>
+            </div>
+            <div class="row no-wrap bg-grey-3">
+              <div class="col-2">
+                Tgl Surat
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.tglsurat }}
+              </div>
+              <div class="col-2">
+                Batas Bayar
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.batasbayar }}
+              </div>
+            </div>
+            <div class="row no-wrap bg-grey-3">
+              <div class="col-2">
+                PBF
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.pihakketiga?.nama }}
+              </div>
+              <div class="col-2">
+                Pengirim
+              </div>
+              <div class="col-1 text-left">
+                :
+              </div>
+              <div class="col-4 text-left">
+                {{ store.cetaks[0]?.pengirim }}
+              </div>
+            </div>
           </q-card-section>
-          <q-separator class="print-hide" />
+        </div>
+        <q-separator vertical />
 
-          <q-card-actions
-            align="right"
-          >
-            <q-btn
-              ref="refPrint"
-              v-print="printObj"
-              color="primary"
-              label="Cetak"
-              class="print-hide"
-              icon-right="icon-mat-print"
-            />
-          </q-card-actions>
+        <br>
+        <q-separator />
+        <br>
+        <q-markup-table
+          separator="vertical"
+          flat
+          bordered
+          dense
+          wrap-cells
+        >
+          <thead>
+            <tr>
+              <th class="text-center">
+                NO.
+              </th>
+              <th class="text-center">
+                OBAT
+              </th>
+              <th class="text-center">
+                JUMLAH
+              </th>
+              <th class="text-center">
+                SATUAN
+              </th>
+              <th class="text-center">
+                INFO
+              </th>
+              <th class="text-center">
+                HARGA
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(rincians, s) in store.cetaks[0]?.penerimaanrinci"
+              :key="s"
+            >
+              <td>{{ s + 1 }}.</td>
+              <td>
+                {{ rincians?.masterobat?.nama_obat }} <br>
+                <div class="row text-italic f-8">
+                  {{ rincians?.kdobat }}
+                </div>
+              </td>
+              <td class="f-8">
+                Pesan : {{ angka(rincians?.jml_pesan) }}<br>
+                Terima : {{ angka(rincians?.jml_terima_k) }} <br>
+                Seluruhnya : {{ angka(rincians?.jml_all_penerimaan) }}
+              </td>
+              <td class="f-8">
+                Satuan Besar : {{ rincians?.satuan }}<br>
+                Isi : {{ angka(rincians?.isi) }} <br>
+                Satuan Kecil : {{ rincians?.satuan_kcl }}
+              </td>
+              <td class="f-8">
+                Batch : {{ rincians?.no_batch }}<br>
+                Expired : {{ rincians?.tgl_exp }}
+              </td>
+              <td class="f-8">
+                Harga : {{ angka(rincians?.harga) }}<br>
+                Diskon : {{ angka(rincians?.diskon) }}% <br>
+                PPN : {{ angka(rincians?.ppn) }}% <br>
+                Netto : {{ angka(rincians?.harga_netto_kecil) }}
+              </td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+        <div class="row text-bold">
+          <div class="col-10 text-right">
+            Total
+          </div>
+          <div class="col text-center">
+            Rp.  {{ angka(Math.round(store.cetaks[0]?.total)) }}
+          </div>
         </div>
-        <div v-else>
-          <app-loading />
-        </div>
+        <q-separator class="print-hide" />
+
+        <q-card-actions
+          align="right"
+        >
+          <q-btn
+            ref="refPrint"
+            v-print="printObj"
+            color="primary"
+            label="Cetak"
+            class="print-hide"
+            icon-right="icon-mat-print"
+          />
+        </q-card-actions>
+      </div>
+      <div v-else>
+        <app-loading />
       </div>
     </q-card>
   </q-dialog>
 </template>
 <script setup>
 import KopSurat from 'src/pages/simrs/dokumen/comppoli/KopSurat.vue'
-import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
+import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { ref } from 'vue'
 
 const fixed = ref(false)
-const store = useRencanaPemesananObatStore()
+const store = useListPenerimaanStore()
 const angka = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }

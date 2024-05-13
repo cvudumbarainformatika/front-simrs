@@ -374,7 +374,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Cetak Rencana Pemesanan
+              Cetak Penerimaan
             </q-tooltip>
           </q-btn>
         </div>
@@ -409,13 +409,16 @@ function info (val) {
   notifSuccessVue('Penerimaan nomor ' + val.nopenerimaan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
 
+const printCetakPenerimaan = ref(false)
+const refCetakPenerimaan = ref(false)
+
 function viewcetak(val) {
-  // const nomor = val.no_rencbeliobat
+  const nomor = val.nopenerimaan
   val.expand = !val.expand
   val.highlight = !val.highlight
-  // printCetakPemesanan.value = true
-  // rencana.cetaks = []
-  // rencana.getPesananBynomor(nomor)
+  printCetakPenerimaan.value = true
+  store.cetaks = []
+  store.getPenerimaanBynomor(nomor)
 }
 
 const toloadBeli = ref('')
