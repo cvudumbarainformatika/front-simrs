@@ -108,14 +108,14 @@ const gudang = {
               meta: { transition: 'slide-up' },
               component: () =>
                 import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/IndexPage.vue')
-            },
-            {
-              path: '/gudang/farmasi/distribusipermintaandepo/listdistribusi',
-              // name: 'gudang.farmasi.distribusipermintaandepo.listdistribusi',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/listdistribusi/IndexPage.vue')
             }
+            // {
+            //   path: '/gudang/farmasi/distribusipermintaandepo/listdistribusi',
+            //   // name: 'gudang.farmasi.distribusipermintaandepo.listdistribusi',
+            //   meta: { transition: 'slide-up' },
+            //   component: () =>
+            //     import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/listdistribusi/IndexPage.vue')
+            // }
           ]
         },
         {
