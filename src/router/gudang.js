@@ -107,7 +107,7 @@ const gudang = {
               // name: 'gudang.farmasi.distribusipermintaandepo.distribusipermintaan',
               meta: { transition: 'slide-up' },
               component: () =>
-                import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/distribusi/IndexPage.vue')
+                import('pages/simrs/logistik/gudang/farmasi/distribusipermintaandepo/IndexPage.vue')
             },
             {
               path: '/gudang/farmasi/distribusipermintaandepo/listdistribusi',
