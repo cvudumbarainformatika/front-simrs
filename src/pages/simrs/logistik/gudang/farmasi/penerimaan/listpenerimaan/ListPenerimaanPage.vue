@@ -359,19 +359,39 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Rencana Pemesanan sudah di kunci
+              Cetak Penerimaan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            round
+            icon="icon-mat-print"
+            dense
+            color="dark"
+            size="sm"
+            @click="viewcetak(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Rencana Pemesanan
             </q-tooltip>
           </q-btn>
         </div>
       </template>
     </app-table-extend>
   </div>
+  <cetak-penerimaan-comp
+    ref="refCetakPenerimaan"
+    v-model="printCetakPenerimaan"
+  />
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { notifSuccessVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
+import CetakPenerimaanComp from './comp/CetakPenerimaanComp.vue'
 
 import { ref } from 'vue'
 const store = useListPenerimaanStore()
@@ -388,6 +408,16 @@ function info (val) {
   val.highlight = !val.highlight
   notifSuccessVue('Penerimaan nomor ' + val.nopenerimaan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
+
+function viewcetak(val) {
+  // const nomor = val.no_rencbeliobat
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  // printCetakPemesanan.value = true
+  // rencana.cetaks = []
+  // rencana.getPesananBynomor(nomor)
+}
+
 const toloadBeli = ref('')
 function kunci (val) {
   val.expand = !val.expand

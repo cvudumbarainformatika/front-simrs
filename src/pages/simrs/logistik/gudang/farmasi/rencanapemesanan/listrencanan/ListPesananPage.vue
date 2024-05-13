@@ -273,10 +273,11 @@
             </q-tooltip>
           </q-btn>
           <q-btn
-            flat
+            round
             icon="icon-mat-print"
             dense
-            color="primary"
+            color="dark"
+            size="sm"
             @click="viewcetak(row)"
           >
             <q-tooltip
