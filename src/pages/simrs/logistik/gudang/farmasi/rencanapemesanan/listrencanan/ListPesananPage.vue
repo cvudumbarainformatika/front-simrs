@@ -272,10 +272,28 @@
               Rencana Pemesanan sudah di kunci
             </q-tooltip>
           </q-btn>
+          <q-btn
+            flat
+            icon="icon-mat-print"
+            dense
+            color="primary"
+            @click="viewcetak(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Rencana Pemesanan
+            </q-tooltip>
+          </q-btn>
         </div>
       </template>
     </app-table-extend>
   </div>
+  <CetakPemesananComp
+    ref="refCetakPemesanan"
+    v-model="printCetakPemesanan"
+  />
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
@@ -285,10 +303,17 @@ import { useListRencanaPemesananStore } from 'src/stores/simrs/farmasi/pemesanan
 import { useRencanaPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/rencana'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import CetakPemesananComp from './comp/CetakPemesananComp.vue'
 
 // const style = useStyledStore()
 const store = useListRencanaPemesananStore()
 const rencana = useRencanaPemesananObatStore()
+
+// eslint-disable-next-line no-unused-vars
+const emits = defineEmits(['printCetakPemesanan'])
+
+const refCetakPemesanan = ref(null)
+const printCetakPemesanan = ref(false)
 // click
 function onClick (val) {
   console.log(val)
@@ -386,6 +411,15 @@ function tambahObat(val) {
   router.push({ path: '/gudang/farmasi/rencanapemesanan/rencana', replace: true })
   console.log('tambah obat', val)
   console.log('router', router)
+}
+
+function viewcetak(val) {
+  const nomor = val.no_rencbeliobat
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  printCetakPemesanan.value = true
+  rencana.cetaks = []
+  rencana.getPesananBynomor(nomor)
 }
 store.getInitialData()
 </script>

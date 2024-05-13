@@ -61,7 +61,14 @@ export const useAplikasiStore = defineStore('aplikasiX', {
       // console.log('set akses apps', val, this.user)
     },
     setCurrentApp(val) {
-      this.currentApp = val
+      return new Promise((resolve, reject) => {
+        try {
+          this.currentApp = val
+          resolve(true)
+        } catch (error) {
+          reject(error)
+        }
+      })
     }
   }
 

@@ -29,7 +29,7 @@
         :style="`height:${h}px;`"
       >
         <div
-          v-if="filterApps.length"
+          v-if="filterApps.length || !loading"
           class="wrapper"
           :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
         >
@@ -89,6 +89,38 @@
             </div>
           </div>
         </div>
+
+        <!-- JIKA LOADING -->
+        <div
+          v-else
+          class="wrapper"
+          :class="!isMobile? ' q-col-gutter-xl': 'q-col-gutter-md'"
+        >
+          <div
+            v-for="i in 18"
+            :key="i"
+            class="col-auto"
+          >
+            <div
+              v-if="!isMobile"
+              class="card cursor-pointer"
+            >
+              <q-skeleton
+                class="imgg full-height"
+                bordered
+              />
+            </div>
+            <div
+              v-else
+              class="card-mobile bg-white cursor-pointer justify-center"
+            >
+              <q-skeleton
+                class="imgg full-height"
+                bordered
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </q-scroll-area>
   </div>
@@ -124,6 +156,10 @@ const props = defineProps({
   akses: {
     type: [Array, String],
     default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 const emits = defineEmits(['goTo'])

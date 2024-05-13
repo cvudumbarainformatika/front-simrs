@@ -1,6 +1,24 @@
 <template>
-  <div class="full-height full-width column flex-center hitam">
+  <!-- <div class="full-height full-width column flex-center bg-black">
     <div class="loader" />
+  </div> -->
+
+  <div class="full-height full-width column flex-center bg-primary">
+    <q-spinner-box
+      color="white"
+      size="10em"
+    />
+
+    <div class="text-white">
+      Harap Tunggu
+      <q-spinner-comment
+        color="primary"
+        size="2em"
+      />
+    </div>
+    <div class="f-18 text-secondary">
+      SEDANG SINKRON DATA
+    </div>
   </div>
 </template>
 
