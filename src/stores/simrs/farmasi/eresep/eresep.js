@@ -104,8 +104,9 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     setInfo(val) {
       console.log('set info', val)
       const apps = useAplikasiStore()
-      console.log('set info', apps)
-      if (Object.keys(val?.info).length <= 0) {
+      // const info = Object.keys(val?.info).length <= 0 || !val?.info
+      // console.log('set info', info)
+      if (!val?.info) {
         this.setFormInfo('hari', date.formatDate(Date.now(), 'dddd'))
         this.setFormInfo('waktu', date.formatDate(Date.now(), 'HH:mm:ss'))
         this.setFormInfo('tanggal', date.formatDate(Date.now(), 'YYYY-MM-DD HH:mm:ss'))
