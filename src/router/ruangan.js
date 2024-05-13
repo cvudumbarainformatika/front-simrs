@@ -41,27 +41,27 @@ const ruangan = {
             }
           ]
         },
-        {
-          path: '/ruangan/farmasi/persiapanoperasi',
-          component: () => import('src/pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/IndexPage.vue'),
-          children: [
-            { path: '', redirect: '/ruangan/farmasi/persiapanoperasi/persiapanoperasi' },
-            {
-              path: '/ruangan/farmasi/persiapanoperasi/persiapanoperasi',
-              name: 'ruangan.farmasi.persiapanopersi.persiapanopersi',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/permintaan/IndexPage.vue')
-            },
-            {
-              path: '/ruangan/farmasi/persiapanoperasi/listpersiapanoperasi',
-              name: 'ruangan.farmasi.persiapanopersi.listpersiapanoperasi',
-              meta: { transition: 'slide-up' },
-              component: () =>
-                import('pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/listpermintaan/IndexPage.vue')
-            }
-          ]
-        },
+        // {
+        //   path: '/ruangan/farmasi/persiapanoperasi',
+        //   component: () => import('src/pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/IndexPage.vue'),
+        //   children: [
+        //     { path: '', redirect: '/ruangan/farmasi/persiapanoperasi/persiapanoperasi' },
+        //     {
+        //       path: '/ruangan/farmasi/persiapanoperasi/persiapanoperasi',
+        //       name: 'ruangan.farmasi.persiapanopersi.persiapanopersi',
+        //       meta: { transition: 'slide-up' },
+        //       component: () =>
+        //         import('pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/permintaan/IndexPage.vue')
+        //     },
+        //     {
+        //       path: '/ruangan/farmasi/persiapanoperasi/listpersiapanoperasi',
+        //       name: 'ruangan.farmasi.persiapanopersi.listpersiapanoperasi',
+        //       meta: { transition: 'slide-up' },
+        //       component: () =>
+        //         import('pages/simrs/logistik/ruangan/farmasi/persiapanoperasi/listpermintaan/IndexPage.vue')
+        //     }
+        //   ]
+        // },
         {
           path: '/ruangan/farmasi/penerimaanruangan',
           component: () => import('src/pages/simrs/logistik/ruangan/farmasi/penerimaanruangan/IndexPage.vue')
