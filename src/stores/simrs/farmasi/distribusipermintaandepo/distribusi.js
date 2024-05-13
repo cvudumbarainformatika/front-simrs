@@ -4,6 +4,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useDistribusiPermintaanDepoStore = defineStore('distribusi_permintaan_depo', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSimpan: false,
     loadingCariPermintaan: false,
@@ -49,7 +50,8 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
     ],
     paramStatus: {
       nama: 'Belum di filter', value: 99, color: 'cyan'
-    }
+    },
+    dataToPrint: null
   }),
   actions: {
     setForm(key, val) {
@@ -88,6 +90,9 @@ export const useDistribusiPermintaanDepoStore = defineStore('distribusi_perminta
         this.setParams('flag', val.value)
         this.getPermintaanDepo()
       }
+    },
+    setClose() {
+      this.isOpen = false
     },
     permintaanSelected(val) {
       this.disp.no_permintaan = val

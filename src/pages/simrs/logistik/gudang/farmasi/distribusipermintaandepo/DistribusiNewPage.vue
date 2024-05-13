@@ -118,23 +118,48 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="row.flag==='3'">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-          >
-            <!-- @click="kunci(row)" -->
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div
+          v-if="parseInt(row.flag)>=3"
+          class="row items-center"
+        >
+          <div class="col-auto">
+            <div v-if="row.flag==='3'">
+              <q-btn
+                flat
+                icon="icon-mat-lock"
+                dense
+                color="negative"
+                :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              >
+                <!-- @click="kunci(row)" -->
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Sudah di kirim ke depo
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+          <div class="col-auto">
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
             >
-              Sudah di kirim ke depo
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
+
         <div v-if="row.flag==='1'">
           <q-btn
             flat
@@ -467,6 +492,12 @@
       </template>
     </app-table-extend>
   </div>
+  <DialogPrintPage
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :item="store.dataToPrint"
+  />
+  <TandaTanganPage v-model="tandatangan.isOpen" />
 </template>
 
 <script setup>
@@ -474,9 +505,15 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
-import { ref, onMounted, watch } from 'vue'
+import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
+import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
 const store = useDistribusiPermintaanDepoStore()
 const apps = useAplikasiStore()
+const tandatangan = useTandaTanganStore()
+
+const DialogPrintPage = defineAsyncComponent(() => import('./DialogPrintPage.vue'))
+const TandaTanganPage = defineAsyncComponent(() => import('src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'))
+
 onMounted(() => {
   store.setForm('kdgudang', apps?.user?.kdruangansim)
   store.setParams('kdgudang', apps?.user?.kdruangansim)
@@ -490,6 +527,17 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   const gd = gud.find(a => a === obj)
   if (gd) store.refreshTable()
 })
+
+const dialogPrint = ref(null)
+// const data = ref({})
+// const isOpen = ref(false)
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+  console.log('val', val, dialogPrint.value)
+}
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)
   // console.log('temp', temp)
