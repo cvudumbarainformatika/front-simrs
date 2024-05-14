@@ -12,7 +12,9 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
       no_permintaan: '',
       per_page: 10,
       page: 1,
-      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD')
+      tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      nama: 'permintaan depo',
+      flag: ['1', '2']
     },
     columns: [
       'no_permintaan',

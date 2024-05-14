@@ -4,6 +4,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerimaan_depo', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSimpan: false,
     items: [],
@@ -15,7 +16,9 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
       jenisdistribusi: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: ''
+      // flag: '4',
+      flag: ['3', '4'],
+      nama: 'penerimaan depo'
     },
     form: {},
     columns: [
@@ -42,7 +45,8 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
       { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
       { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
     ],
-    columnsHide: []
+    columnsHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setForm(key, val) {
@@ -88,7 +92,21 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
             this.loading = false
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data
-
+            if (this.items?.length) {
+              this.items.forEach(it => {
+                if (it?.permintaanrinci.length) {
+                  it?.permintaanrinci.forEach(ri => {
+                    if (it?.mutasigudangkedepo.length) {
+                      const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
+                      // console.log('dist', dist)
+                      ri.distribusi = !isNaN(dist) ? dist : 0
+                    } else {
+                      ri.distribusi = 0
+                    }
+                  })
+                }
+              })
+            }
             console.log('list PErmintaan depo', resp?.data)
             if (this.items?.length) this.metaniRinci()
             resolve(resp)
