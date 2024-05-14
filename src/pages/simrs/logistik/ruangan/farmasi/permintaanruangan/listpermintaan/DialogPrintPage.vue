@@ -199,11 +199,11 @@
                 </div>
                 <div class="col-4 border-bottom border-left border-right">
                   <div class="print-only">
-                    {{ keterangan??'-' }}
+                    {{ det?.keterangan??'-' }}
                   </div>
                   <div class="print-hide">
                     <app-input
-                      v-model="keterangan"
+                      v-model="det.keterangan"
                       label="keterangan"
                       outlined
                       valid
@@ -414,7 +414,6 @@ const tandatangan = useTandaTanganStore()
 const freeTextKiri = ref('')
 const freeTextKanan = ref('')
 const freeTextBawah = ref('')
-const keterangan = ref('')
 
 const printObj = {
   id: 'printMe'
