@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruangan_store', {
   state: () => ({
+    isOpen: false,
     loading: false,
     items: [],
     meta: {},
@@ -21,7 +22,8 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
       'tujuan',
       'flag'
     ],
-    columnHide: []
+    columnHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setParam(key, val) {
