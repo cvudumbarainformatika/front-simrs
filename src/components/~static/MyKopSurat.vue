@@ -30,10 +30,23 @@
           class="text-weight-bold text-center"
           style="max-width: 150px;"
         >
-          PERSETUJUAN UMUM
-          <div>(GENERAL CONSENT)</div>
+          {{ title1 }}
+          <div>{{ title2 }}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  title1: {
+    type: String,
+    default: 'PERSETUJUAN UMUM'
+  },
+  title2: {
+    type: String,
+    default: '(GENERAL CONSENT)'
+  }
+})
+</script>

@@ -155,6 +155,13 @@ const documents = ref([
     jenis: 'RM IRJA-2',
     label: 'Catatan Rawat Jalan',
     value: 'Catatan'
+  },
+  {
+    icon: 'icon-mat-email',
+    color: 'primary',
+    jenis: 'PRA-ANES',
+    label: 'Asesmen Pra Anestesia',
+    value: 'AsesmenPraAnestesia'
   }
 ])
 // eslint-disable-next-line no-unused-vars
@@ -173,7 +180,8 @@ const comp = [
   { nama: 'rslain', page: defineAsyncComponent(() => import('../pengantar/comppengantar/PengantarRsLain.vue')) },
   { nama: 'AsesmenAwalMedis', page: defineAsyncComponent(() => import('../erm/poli/PengkajianAwalMedisRJPage.vue')) },
   { nama: 'Catatan', page: defineAsyncComponent(() => import('../erm/poli/CatatanRawatJalanPage.vue')) },
-  { nama: 'AsesmenAwalKeperawatan', page: defineAsyncComponent(() => import('../erm/poli/AsesmenAwalMedisRj.vue')) }
+  { nama: 'AsesmenAwalKeperawatan', page: defineAsyncComponent(() => import('../erm/poli/AsesmenAwalMedisRj.vue')) },
+  { nama: 'AsesmenPraAnestesia', page: defineAsyncComponent(() => import('../erm/poli/AsesmenPraAnestesia.vue')) }
 ]
 // eslint-disable-next-line no-unused-vars
 const cekPanel = () => {

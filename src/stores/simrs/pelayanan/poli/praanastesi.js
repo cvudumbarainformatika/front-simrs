@@ -70,7 +70,7 @@ export const usePraAnastesiStore = defineStore('pra-anastesi-store', {
       return new Promise((resolve, reject) => {
         api.get('/v1/simrs/pelayanan/praanastesi/master')
           .then(resp => {
-            console.log(resp)
+            // console.log(resp)
             if (resp.status === 200) {
               const m = resp.data
               this.reducerMaster(m)

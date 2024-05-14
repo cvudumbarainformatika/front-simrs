@@ -148,7 +148,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
         const resp = await api.post('/v1/simrs/pelayanan/gantidpjp', form)
         // console.log(resp)
         if (resp.status === 200) {
-          const findPasien = this.items.filter(x => x === pasien)
+          const findPasien = this.items.filter(x => x.rs1 === pasien?.rs1)
           if (findPasien.length) {
             const data = findPasien[0]
             data.datasimpeg = resp?.data?.result?.datasimpeg
@@ -265,6 +265,7 @@ export const usePengunjungPoliStore = defineStore('pengunjung-poli-store', {
             findPasien[0].pediatri = resp?.data?.pediatri
             findPasien[0].kandungan = resp?.data?.kandungan
             findPasien[0].dokumenluar = resp?.data?.dokumenluar
+            findPasien[0].rs19 = resp?.data?.rs19
           }
           this.loadingTerima = false
           this.noreg = null

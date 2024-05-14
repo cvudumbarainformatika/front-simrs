@@ -57,7 +57,7 @@
               <div class="text-h6 text-negative text-weight-bold">
                 {{ item.jenis }}
               </div>
-              <div class="text-subtitle">
+              <div class="f-10">
                 {{ item.label }}
               </div>
               <q-btn
