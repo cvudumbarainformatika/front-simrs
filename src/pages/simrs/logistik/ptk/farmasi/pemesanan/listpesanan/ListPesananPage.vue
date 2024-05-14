@@ -240,6 +240,21 @@
               Rencana Pemesanan sudah di kunci
             </q-tooltip>
           </q-btn>
+          <q-btn
+            round
+            icon="icon-mat-print"
+            dense
+            color="dark"
+            size="sm"
+            @click="viewcetak(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Cetak Pemesanan
+            </q-tooltip>
+          </q-btn>
         </div>
       </template>
     </app-table-extend>
@@ -251,6 +266,10 @@
         <CompDialog />
       </template>
     </app-fullscreen-blue>
+    <CetakPemesananPage
+      ref="refCetakPemesanan"
+      v-model="printCetakPemesanan"
+    />
   </div>
 </template>
 <script setup>
@@ -261,6 +280,7 @@ import { useListPemesananStore } from 'src/stores/simrs/farmasi/pemesanan/listpe
 import { usePemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/pesanan'
 import { useTabelPemesananObatStore } from 'src/stores/simrs/farmasi/pemesanan/tabelObat'
 import { ref, defineAsyncComponent } from 'vue'
+import CetakPemesananPage from './CetakPemesananPage.vue'
 
 // const style = useStyledStore()
 const store = useListPemesananStore()
@@ -316,6 +336,19 @@ function batalRinci (val) {
     // if (!val.flag) val.flag = 1
   })
 }
+
+const printCetakPemesanan = ref(false)
+const refCetakPemesanan = ref(false)
+
+function viewcetak(val) {
+  const nomor = val.nopemesanan
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  printCetakPemesanan.value = true
+  store.cetaks = []
+  store.getPemesananBynomor(nomor)
+}
+
 store.getInitialData()
 </script>
 <style lang="scss" scoped>

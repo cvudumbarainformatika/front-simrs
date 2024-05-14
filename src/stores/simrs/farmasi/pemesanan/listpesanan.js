@@ -5,7 +5,9 @@ import { api } from 'src/boot/axios'
 export const useListPemesananStore = defineStore('list_pemesanan_store', {
   state: () => ({
     loading: false,
+    loadingcetak: false,
     items: [],
+    cetaks: [],
     meta: {},
     param: {
       nopemesanan: '',
@@ -67,6 +69,25 @@ export const useListPemesananStore = defineStore('list_pemesanan_store', {
             this.items = resp.data.data
             this.meta = resp.data
             resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
+    },
+    getPemesananBynomor(val) {
+      this.loadingcetak = true
+      const nomor = {
+        nopemesanan: val
+      }
+      const params = { params: nomor }
+      return new Promise(resolve => {
+        api.get('v1/simrs/farmasinew/pemesananobat/listpemesananBynomor', params)
+          .then(resp => {
+            this.loadingcetak = false
+            this.cetaks = resp.data
+            // this.meta = resp.data
+            // resolve(resp)
           })
           .catch(() => {
             this.loading = false
