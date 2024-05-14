@@ -4,6 +4,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSimpan: false,
     loadingKunci: false,
@@ -43,7 +44,8 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
       { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
       { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
     ],
-    columnsHide: []
+    columnsHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setForm(key, val) {

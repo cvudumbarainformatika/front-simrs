@@ -134,59 +134,78 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="row.flag==='4'">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
-          >
-            <!-- @click="kirim(row)" -->
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div class="row">
+          <div v-if="row.flag==='3' || row.flag==='4'">
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
             >
-              Sudah diterima
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.flag==='3'">
-          <q-btn
-            flat
-            icon="icon-mat-move_to_inbox"
-            dense
-            color="primary"
-            :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
-            :disable="store.loadingSimpan && row.no_permintaan === toloadBeli"
-            @click="terima(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='4'">
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="negative"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
             >
-              Terima
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.flag===''">
-          <q-btn
-            flat
-            icon="icon-mat-send"
-            dense
-            color="primary"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="kirim(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <!-- @click="kirim(row)" -->
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Sudah diterima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='3'">
+            <q-btn
+              flat
+              icon="icon-mat-move_to_inbox"
+              dense
+              color="primary"
+              :loading="store.loadingSimpan && row.no_permintaan === toloadBeli"
+              :disable="store.loadingSimpan && row.no_permintaan === toloadBeli"
+              @click="terima(row)"
             >
-              Kirim Permintaan
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Terima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag===''">
+            <q-btn
+              flat
+              icon="icon-mat-send"
+              dense
+              color="primary"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="kirim(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Kirim Permintaan
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
       <template #expand="{ row }">
@@ -318,6 +337,117 @@
       </template>
     </app-table-extend>
   </div>
+  <app-print-surat
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :tanggal="store.dataToPrint?.flag==='1'?store.dataToPrint?.tgl_kirim:store.dataToPrint?.tgl_terima_depo"
+    @close="store.isOpen=false"
+  >
+    <template #isi>
+      <!-- Top words -->
+      <div
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA DISTRIBUSI
+      </div>
+
+      <div
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Dsitribusi
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_kirim_depo) }}
+        </div>
+      </div>
+      <div class="row justify-center q-mb-sm">
+        <div class="col-2">
+          No. Permintaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.no_permintaan }}
+        </div>
+      </div>
+      <div
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah dikirimkan ke
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.menuju?store.dataToPrint?.menuju.nama:'-' }}
+          </span> barang dalam list dibawah ini :
+        </p>
+      </div>
+
+      <!-- no details -->
+      <div v-if="!store.dataToPrint?.permintaanrinci">
+        <app-no-data />
+      </div>
+      <!-- details -->
+      <div v-if="store.dataToPrint?.permintaanrinci">
+        <!-- header detail -->
+        <div class="row justify-between q-col-gutter-sm">
+          <div class="col-5 text-weight-bold border-tb border-left">
+            Nama Barang
+          </div>
+          <div class="col-1 text-weight-bold border-tb border-left">
+            Jumlah
+          </div>
+          <div class="col-2 text-weight-bold border-tb border-left">
+            Satuan
+          </div>
+          <div class="col-4 text-weight-bold border-box">
+            Keterangan
+          </div>
+        </div>
+        <!-- body details -->
+        <div
+          v-for="(det, i) in store.dataToPrint?.permintaanrinci"
+          :key="i"
+        >
+          <div
+            class="row justify-between q-col-gutter-sm"
+          >
+            <div class="col-5 border-bottom border-left">
+              {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.distribusi===null?0:det.distribusi }}
+            </div>
+            <div
+              class="col-2 border-bottom border-left"
+            >
+              {{ det.masterobat?det.masterobat.satuan_k:'-' }}
+            </div>
+            <div class="col-4 border-bottom border-left border-right">
+              <div class="print-only">
+                {{ det?.keterangan??'-' }}
+              </div>
+              <div class="print-hide">
+                <app-input
+                  v-model="det.keterangan"
+                  label="keterangan"
+                  outlined
+                  valid
+                />
+              </div>
+            </div>
+          </div>
+          <q-separator />
+        </div>
+      </div>
+    </template>
+  </app-print-surat>
 </template>
 
 <script setup>
@@ -328,6 +458,13 @@ import { onMounted, ref, watch } from 'vue'
 
 const store = useMutasiMasukDepoStore()
 const apps = useAplikasiStore()
+
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 // const statOptions = ref([
 //   { label: 'Non-Konsinyasi', value: 'non-konsinyasi' },
 //   { label: 'Konsinyasi', value: 'konsinyasi' }
@@ -350,7 +487,7 @@ function selectGudang(val) {
 }
 function selectFlag(val) {
   // console.log('select gudang', val)
-  // store.setParams('kdgudang', val)
+  store.setParams('flag', val)
   store.getPermintaanDepo()
 }
 // function jenisDistSelected(val) {
