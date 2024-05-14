@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_farmasi', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSelesai: false,
     loadingHead: false,
@@ -19,7 +20,8 @@ export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_
       flag: ['', '1'],
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
-    }
+    },
+    dataToPrint: {}
   }),
   actions: {
     setParam(key, val) {

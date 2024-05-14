@@ -2,7 +2,7 @@
   <div
     class=""
     :class="style.componentfull?'':'q-pa-xs'"
-    :style="`max-height: ${!style.componentfull ? h : h + 40}px; overflow:hidden`"
+    :style="`max-height: ${!style.componentfull ? h : h + 105}px; overflow:scroll`"
   >
     <div class="header">
       <HeaderComp
@@ -28,7 +28,7 @@
       no-shadow
       square
       class="my-flex-1 scroll"
-      :style="`height: calc( 100vh - ${ pakai ? 172 : 172}px);`"
+      :style="`height: calc( 100vh - ${ style.componentfull ? 61 : 172}px);`"
     >
       <!-- style="`height:{props.tinggi}px`" -->
       <q-scroll-area
@@ -42,12 +42,19 @@
       >
         <BottomComp
           v-if="Object.keys(store.meta).length"
+          style="z-index: 5;"
           class="bg-primary text-white"
           :meta="store.meta"
           @go-to="store.setPage"
         />
       </div>
     </q-card>
+    <DialogPrintPage
+      ref="dialogPrint"
+      v-model="store.isOpen"
+      :item="store.dataToPrint"
+    />
+    <TandaTanganPage v-model="tandatangan.isOpen" />
   </div>
 </template>
 
@@ -56,16 +63,21 @@ import { notifCenterVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/listpemakaian'
+import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
 import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
-const h = ref(516)
+const h = ref(582)
 const style = useStyledStore()
 const store = useListPemakaianRuanganStore()
 const apps = useAplikasiStore()
+const tandatangan = useTandaTanganStore()
 
 const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/TableComp.vue'))
+
+const DialogPrintPage = defineAsyncComponent(() => import('./comp/DialogPrintPage.vue'))
+const TandaTanganPage = defineAsyncComponent(() => import('src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'))
 
 const pakai = computed(() => {
   const ada = store.items.filter(a => a.checked === true)

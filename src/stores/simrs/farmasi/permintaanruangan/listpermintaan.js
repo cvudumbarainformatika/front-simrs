@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruangan_store', {
   state: () => ({
+    isOpen: false,
     loading: false,
     items: [],
     meta: {},
@@ -21,7 +22,8 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
       'tujuan',
       'flag'
     ],
-    columnHide: []
+    columnHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setParam(key, val) {
@@ -59,6 +61,21 @@ export const useListPermintaanRuanganStore = defineStore('list_permintaan_ruanga
             console.log('list permintaan', resp.data)
             this.items = resp.data?.data
             this.meta = resp.data
+            if (this.items?.length) {
+              this.items.forEach(it => {
+                if (it?.permintaanrinci.length) {
+                  it?.permintaanrinci.forEach(ri => {
+                    if (it?.mutasigudangkedepo.length) {
+                      const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
+                      // console.log('dist', dist)
+                      ri.distribusi = !isNaN(dist) ? dist : 0
+                    } else {
+                      ri.distribusi = 0
+                    }
+                  })
+                }
+              })
+            }
             resolve(resp)
           })
           .catch(() => {

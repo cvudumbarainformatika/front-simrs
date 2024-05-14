@@ -259,6 +259,22 @@
                 </q-tooltip>
               </q-icon>
             </div>
+            <div class="q-mr-sm" />
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
           </div>
           <div
             v-else
@@ -281,11 +297,36 @@
                 </q-tooltip>
               </q-btn>
             </div>
+            <div
+              v-if="row.flag==='1'"
+            >
+              <q-btn
+                round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
         </div>
       </template>
     </app-table-extend>
   </div>
+  <DialogPrintPage
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :item="store.dataToPrint"
+  />
+  <TandaTanganPage v-model="tandatangan.isOpen" />
 </template>
 <script setup>
 import { Dialog } from 'quasar'
@@ -295,15 +336,26 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useListPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/listpermintaan'
 import { useFarmasiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/permintaanruangan/permintaan'
-import { onMounted, ref } from 'vue'
+import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
+import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 
+const DialogPrintPage = defineAsyncComponent(() => import('./DialogPrintPage.vue'))
+const TandaTanganPage = defineAsyncComponent(() => import('src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'))
+
+const tandatangan = useTandaTanganStore()
 const router = useRouter()
 const style = useStyledStore()
 const store = useListPermintaanRuanganStore()
 const permintaan = useFarmasiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 function tambah(val) {
   console.log('tambah', val)
   val.expand = !val.expand
