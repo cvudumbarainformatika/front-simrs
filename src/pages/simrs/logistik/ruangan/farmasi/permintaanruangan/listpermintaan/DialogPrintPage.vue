@@ -42,7 +42,8 @@
       >
         <!-- heder -->
         <q-card-section>
-          <div class="row garis-bawah">
+          <app-kop-surat />
+          <!-- <div class="row garis-bawah">
             <div class="col-2">
               <q-img
                 src="~assets/images/logo-kota-grey.png"
@@ -70,7 +71,7 @@
                 PROBOLINGGO  67219
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- Top words -->
           <div
             v-if="item?.flag==='1'"
@@ -197,7 +198,17 @@
                   {{ det.masterobat?det.masterobat.satuan_k:'-' }}
                 </div>
                 <div class="col-4 border-bottom border-left border-right">
-                  {{ det.merk?det.merk:'-' }}
+                  <div class="print-only">
+                    {{ keterangan??'-' }}
+                  </div>
+                  <div class="print-hide">
+                    <app-input
+                      v-model="keterangan"
+                      label="keterangan"
+                      outlined
+                      valid
+                    />
+                  </div>
                 </div>
               </div>
               <q-separator />
@@ -403,6 +414,7 @@ const tandatangan = useTandaTanganStore()
 const freeTextKiri = ref('')
 const freeTextKanan = ref('')
 const freeTextBawah = ref('')
+const keterangan = ref('')
 
 const printObj = {
   id: 'printMe'

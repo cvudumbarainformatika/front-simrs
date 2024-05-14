@@ -1,10 +1,7 @@
 <template>
   <q-dialog maximized>
-    <!-- <div class="bg-white "> -->
-    <!-- {{ data }} -->
-    <!-- </div> -->
-    <q-card style="width:75vw; max-width:90vw;">
-      <div class="print">
+    <div>
+      <div class="print print-hide absolute-top-right">
         <q-btn
           ref="refPrint"
           v-print="printObj"
@@ -35,108 +32,36 @@
             Pilih tanda tangan
           </q-tooltip>
         </q-btn>
+        <q-btn
+          color="primary"
+          round
+          size="sm"
+          icon="icon-mat-close"
+          @click="emits('close')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Pilih tanda tangan
+          </q-tooltip>
+        </q-btn>
       </div>
-      <div
+      <q-card
         id="printMe"
       >
         <!-- style="width:210mm; height:310mm; margin:10mm; " -->
         <!-- heder -->
         <q-card-section>
-          <KopSurat />
-          <!-- Top words -->
-          <div class="row justify-center q-mt-md f-16 text-weight-bold">
-            DATA DISTRIBUSI
-          </div>
-
-          <div class="row justify-center q-mb-sm">
-            <div class="col-2">
-              Tanggal Distribusi
-            </div>
-            <div class="col-10">
-              {{ dateFullFormat(item?.tgl_kirim_depo) }}
-            </div>
-          </div>
-          <div class="row justify-center q-mb-sm">
-            <div class="col-2">
-              No. Permintaan
-            </div>
-            <div class="col-10">
-              {{ item.no_permintaan }}
-            </div>
-          </div>
-          <div class="row justify-start q-mb-md">
-            <p>
-              Telah dikirimkan ke
-              <span class="text-weight-bold">
-                {{ item.asal?item.asal.nama:'-' }}
-              </span> barang dalam list dibawah ini :
-            </p>
-          </div>
-
-          <!-- no details -->
-          <div v-if="!item.permintaanrinci">
-            <app-no-data />
-          </div>
-          <!-- details -->
-          <div v-if="item.permintaanrinci">
-            <!-- header detail -->
-            <div class="row justify-between q-col-gutter-sm">
-              <div class="col-5 text-weight-bold border-tb border-left">
-                Nama Barang
-              </div>
-              <div class="col-1 text-weight-bold border-tb border-left">
-                Jumlah
-              </div>
-              <div class="col-2 text-weight-bold border-tb border-left">
-                Satuan
-              </div>
-              <div class="col-4 text-weight-bold border-box">
-                Keterangan
-              </div>
-            </div>
-            <!-- body details -->
-            <div
-              v-for="(det, i) in item.permintaanrinci"
-              :key="i"
-            >
-              <div
-                class="row justify-between q-col-gutter-sm"
-              >
-                <div class="col-5 border-bottom border-left">
-                  {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
-                </div>
-                <div class="col-1 border-bottom border-left">
-                  {{ det.distribusi===null?0:det.distribusi }}
-                </div>
-                <div
-                  class="col-2 border-bottom border-left"
-                >
-                  {{ det.masterobat?det.masterobat.satuan_k:'-' }}
-                </div>
-                <div class="col-4 border-bottom border-left border-right">
-                  <div class="print-only">
-                    {{ keterangan??'-' }}
-                  </div>
-                  <div class="print-hide">
-                    <app-input
-                      v-model="keterangan"
-                      label="keterangan"
-                      outlined
-                      valid
-                    />
-                  </div>
-                </div>
-              </div>
-              <q-separator />
-            </div>
-          </div>
+          <app-kop-surat />
+          <slot name="isi" />
         </q-card-section>
         <!-- tanda tangan -->
         <q-card-section>
           <div class="row justify-between q-col-gutter-sm ">
             <div class="col-6 text-center" />
             <div class="col-6 text-center">
-              Probolinggo, {{ dateFullFormat(item?.tanggal) }}
+              Probolinggo, {{ dateFullFormat(tanggal) }}
             </div>
           </div>
           <!-- options -->
@@ -312,27 +237,31 @@
             </div>
           </div>
         </q-card-section>
-      </div>
-    </q-card>
+      </q-card>
+    </div>
+    <TandaTanganPage v-model="tandatangan.isOpen" />
   </q-dialog>
 </template>
 <script setup>
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
 import { ref, defineAsyncComponent } from 'vue'
+import { date } from 'quasar'
 import { dateFullFormat } from 'src/modules/formatter'
 
-const KopSurat = defineAsyncComponent(() => import('src/components/KopSurat.vue'))
 defineProps({
-  item: { type: Object, default: () => {} }
+  // item: { type: Object, default: () => {} },
+  tanggal: { type: String, default: date.formatDate(Date.now(), 'YYYY-MM-DD') }
 })
 const emits = defineEmits(['close'])
 
 const tandatangan = useTandaTanganStore()
 
+const TandaTanganPage = defineAsyncComponent(() => import('src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'))
+
 const freeTextKiri = ref('')
 const freeTextKanan = ref('')
 const freeTextBawah = ref('')
-const keterangan = ref('')
+// const keterangan = ref('')
 
 const printObj = {
   id: 'printMe'
@@ -362,6 +291,7 @@ defineExpose({ printPage })
     right: 30px;
     top: 5px;
     z-index: 10;
+
 }
 .garis-bawah{
   border-bottom: 6px solid black;

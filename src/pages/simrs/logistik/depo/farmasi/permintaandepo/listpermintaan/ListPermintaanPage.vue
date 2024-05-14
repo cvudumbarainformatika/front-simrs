@@ -229,6 +229,23 @@
         </div>
         <div v-if="row.flag">
           <div class="row items-center">
+            <div v-if="row.flag==='1' || row.flag==='4'">
+              <q-btn
+                round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
             <div class="q-mr-sm" />
             <div>
               <q-btn
@@ -251,6 +268,157 @@
       </template>
     </app-table-extend>
   </div>
+  <app-print-surat
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :tanggal="store.dataToPrint?.flag==='1'?store.dataToPrint?.tgl_kirim:store.dataToPrint?.tgl_terima_depo"
+    @close="store.isOpen=false"
+  >
+    <template #isi>
+      <!-- Top words -->
+      <div
+        v-if="store.dataToPrint?.flag==='1'"
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA PERMINTAAN
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA PENERIMAAN
+      </div>
+
+      <div
+        v-if="store.dataToPrint?.flag==='1'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Permintaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_kirim) }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Penerimaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_terima_depo) }}
+        </div>
+      </div>
+      <div class="row justify-center q-mb-sm">
+        <div class="col-2">
+          No. Permintaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.no_permintaan }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='1'"
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah dikirimkan ke
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.menuju?store.dataToPrint?.menuju.nama:'-' }}
+          </span> permintaan barang dalam list dibawah ini :
+        </p>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah diterima dari
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.menuju?store.dataToPrint?.menuju.nama:'-' }}
+          </span> barang dalam list dibawah ini :
+        </p>
+      </div>
+
+      <!-- no details -->
+      <div v-if="!store.dataToPrint?.permintaanrinci">
+        <app-no-data />
+      </div>
+      <!-- details -->
+      <div v-if="store.dataToPrint?.permintaanrinci">
+        <!-- header detail -->
+        <div class="row justify-between q-col-gutter-sm">
+          <div class="col-5 text-weight-bold border-tb border-left">
+            Nama Barang
+          </div>
+          <div class="col-1 text-weight-bold border-tb border-left">
+            Jumlah
+          </div>
+          <div class="col-2 text-weight-bold border-tb border-left">
+            Satuan
+          </div>
+          <div class="col-4 text-weight-bold border-box">
+            Keterangan
+          </div>
+        </div>
+        <!-- body details -->
+        <div
+          v-for="(det, i) in store.dataToPrint?.permintaanrinci"
+          :key="i"
+        >
+          <div
+            class="row justify-between q-col-gutter-sm"
+          >
+            <div class="col-5 border-bottom border-left">
+              {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='1'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_minta===null?0:det.jumlah_minta }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='4'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.distribusi===null?0:det.distribusi }}
+            </div>
+            <div
+              class="col-2 border-bottom border-left"
+            >
+              {{ det.masterobat?det.masterobat.satuan_k:'-' }}
+            </div>
+            <div class="col-4 border-bottom border-left border-right">
+              <div class="print-only">
+                {{ keterangan??'-' }}
+              </div>
+              <div class="print-hide">
+                <app-input
+                  v-model="keterangan"
+                  label="keterangan"
+                  outlined
+                  valid
+                />
+              </div>
+            </div>
+          </div>
+          <q-separator />
+        </div>
+      </div>
+    </template>
+  </app-print-surat>
 </template>
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
@@ -264,6 +432,14 @@ import { useRouter } from 'vue-router'
 const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
 const apps = useAplikasiStore()
+
+const keterangan = ref('')
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 onMounted(() => {
   store.setParam('kddepo', apps?.user?.kdruangansim)
   store.getInitialData()
@@ -360,7 +536,7 @@ function label (val) {
       break
     case '2':
       // return 'grey'
-      return 'Sudah Diverif'
+      return 'Diterima gudang'
       // eslint-disable-next-line no-unreachable
       break
     case '3':

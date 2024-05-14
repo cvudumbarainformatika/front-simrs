@@ -38,11 +38,12 @@
       </div>
       <div
         id="printMe"
-        style="width:210mm; height:310mm; margin:10mm; "
       >
+        <!-- style="width:210mm; height:310mm; margin:10mm; " -->
         <!-- heder -->
         <q-card-section>
-          <div class="row garis-bawah">
+          <app-kop-surat />
+          <!-- <div class="row garis-bawah">
             <div class="col-2">
               <q-img
                 src="~assets/images/logo-kota-grey.png"
@@ -70,7 +71,7 @@
                 PROBOLINGGO  67219
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- Top words -->
           <div class="row justify-center q-mt-md f-16 text-weight-bold">
             DATA PEMAKAIAN RUANGAN
@@ -142,7 +143,17 @@
                   {{ det.obat?det.obat.satuan_k:'-' }}
                 </div>
                 <div class="col-4 border-bottom border-left border-right">
-                  {{ det.merk?det.merk:'-' }}
+                  <div class="print-only">
+                    {{ keterangan??'-' }}
+                  </div>
+                  <div class="print-hide">
+                    <app-input
+                      v-model="keterangan"
+                      label="keterangan"
+                      outlined
+                      valid
+                    />
+                  </div>
                 </div>
               </div>
               <q-separator />
@@ -348,6 +359,7 @@ const tandatangan = useTandaTanganStore()
 const freeTextKiri = ref('')
 const freeTextKanan = ref('')
 const freeTextBawah = ref('')
+const keterangan = ref('')
 
 const printObj = {
   id: 'printMe'

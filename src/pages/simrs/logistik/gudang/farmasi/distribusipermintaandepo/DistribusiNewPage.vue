@@ -536,7 +536,6 @@ function toPrint(val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
-  console.log('val', val, dialogPrint.value)
 }
 function depo (val) {
   const temp = store.depos.filter(a => a.value === val)
