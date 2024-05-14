@@ -4,6 +4,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_depo', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSimpan: false,
     loadingCariPermintaan: false,
@@ -48,7 +49,8 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
     ],
     paramStatus: {
       nama: 'Belum di filter', value: 99, color: 'cyan'
-    }
+    },
+    dataToPrint: {}
   }),
   actions: {
     setForm(key, val) {

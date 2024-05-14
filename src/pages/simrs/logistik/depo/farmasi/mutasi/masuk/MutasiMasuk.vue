@@ -135,7 +135,7 @@
       </template>
       <template #cell-act="{ row }">
         <div class="row">
-          <div v-if="row.flag==='3' || row.flag==='4'">
+          <div v-if="row.flag==='1' || row.flag==='4'">
             <q-btn
               round
               icon="icon-mat-print"
@@ -346,22 +346,44 @@
     <template #isi>
       <!-- Top words -->
       <div
+        v-if="store.dataToPrint?.flag==='1'"
         class="row justify-center q-mt-md f-16 text-weight-bold"
       >
-        DATA DISTRIBUSI
+        DATA PERMINTAAN
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA PENERIMAAN
       </div>
 
       <div
+        v-if="store.dataToPrint?.flag==='1'"
         class="row justify-center q-mb-sm"
       >
         <div class="col-2">
-          Tanggal Dsitribusi
+          Tanggal Permintaan
         </div>
         <div class="col-1">
           :
         </div>
         <div class="col-9">
-          {{ dateFullFormat(store.dataToPrint?.tgl_kirim_depo) }}
+          {{ dateFullFormat(store.dataToPrint?.tgl_kirim) }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Penerimaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_terima_depo) }}
         </div>
       </div>
       <div class="row justify-center q-mb-sm">
@@ -376,10 +398,22 @@
         </div>
       </div>
       <div
+        v-if="store.dataToPrint?.flag==='1'"
         class="row justify-start q-mb-md"
       >
         <p>
           Telah dikirimkan ke
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.menuju?store.dataToPrint?.menuju.nama:'-' }}
+          </span> permintaan barang dalam list dibawah ini :
+        </p>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah diterima dari
           <span class="text-weight-bold">
             {{ store.dataToPrint?.menuju?store.dataToPrint?.menuju.nama:'-' }}
           </span> barang dalam list dibawah ini :
@@ -419,7 +453,13 @@
               {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
-
+              v-if="store.dataToPrint?.flag==='1'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_minta===null?0:det.jumlah_minta }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='4'"
               class="col-1 border-bottom border-left"
             >
               {{ det.distribusi===null?0:det.distribusi }}

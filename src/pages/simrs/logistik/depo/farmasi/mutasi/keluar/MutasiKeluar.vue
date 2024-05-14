@@ -32,7 +32,7 @@
             @delete-ids="table.deletesData"
             -->
 
-      <template #header-left-after-search>
+      <!-- <template #header-left-after-search>
         <div class="q-ml-md text-white">
           <div class="row q-mb-xs q-ml-xs items-center">
             <div class="q-mr-sm">
@@ -66,7 +66,7 @@
             </div>
           </div>
         </div>
-      </template>
+      </template> -->
       <template #col-no_permintaan>
         <div>No Pemintaan</div>
       </template>
@@ -118,72 +118,91 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="row.flag==='3'">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+        <div class="row">
+          <div v-if="row.flag==='3' || row.flag==='4'">
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='3'">
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="negative"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+            >
+              <!-- @click="kunci(row)" -->
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Sudah di kirim ke depo
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='1'">
+            <q-btn
+              flat
+              icon="icon-mat-move_to_inbox"
+              dense
+              color="primary"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="kunci(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Terima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
+          <div
+            v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0"
+            :key="row"
           >
-            <!-- @click="kunci(row)" -->
+            <q-btn
+              flat
+              icon="icon-mat-done_all"
+              label="selesai"
+              dense
+              color="green"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="distribusikan(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Distribusikan
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div
+            v-else
+            class="text-primary text-weight-bold"
+          >
             <q-tooltip
               class="primary"
               :offset="[10, 10]"
             >
-              Sudah di kirim ke depo
+              Tidak Ada yang perlu dilakukan
             </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.flag==='1'">
-          <q-btn
-            flat
-            icon="icon-mat-move_to_inbox"
-            dense
-            color="primary"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Terima
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <!-- {{ row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) }} -->
-        <div
-          v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0"
-          :key="row"
-        >
-          <q-btn
-            flat
-            icon="icon-mat-done_all"
-            label="selesai"
-            dense
-            color="green"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="distribusikan(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
-            >
-              Distribusikan
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div
-          v-else
-          class="text-primary text-weight-bold"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
-          >
-            Tidak Ada yang perlu dilakukan
-          </q-tooltip>
+          </div>
         </div>
       </template>
       <template #expand="{ row }">
@@ -447,6 +466,116 @@
       </template>
     </app-table-extend>
   </div>
+  <app-print-surat
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :tanggal="store.dataToPrint?.flag==='1'?store.dataToPrint?.tgl_kirim:store.dataToPrint?.tgl_terima_depo"
+    @close="store.isOpen=false"
+  >
+    <template #isi>
+      <!-- Top words -->
+      <div
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA DISTRIBUSI
+      </div>
+
+      <div
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Distribusi
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_kirim_depo) }}
+        </div>
+      </div>
+      <div class="row justify-center q-mb-sm">
+        <div class="col-2">
+          No. Permintaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.no_permintaan }}
+        </div>
+      </div>
+      <div
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah di kirimkan ke
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.asal?store.dataToPrint?.asal.nama:'-' }}
+          </span> barang dalam list dibawah ini :
+        </p>
+      </div>
+
+      <!-- no details -->
+      <div v-if="!store.dataToPrint?.permintaanrinci">
+        <app-no-data />
+      </div>
+      <!-- details -->
+      <div v-if="store.dataToPrint?.permintaanrinci">
+        <!-- header detail -->
+        <div class="row justify-between q-col-gutter-sm">
+          <div class="col-5 text-weight-bold border-tb border-left">
+            Nama Barang
+          </div>
+          <div class="col-1 text-weight-bold border-tb border-left">
+            Jumlah
+          </div>
+          <div class="col-2 text-weight-bold border-tb border-left">
+            Satuan
+          </div>
+          <div class="col-4 text-weight-bold border-box">
+            Keterangan
+          </div>
+        </div>
+        <!-- body details -->
+        <div
+          v-for="(det, i) in store.dataToPrint?.permintaanrinci"
+          :key="i"
+        >
+          <div
+            class="row justify-between q-col-gutter-sm"
+          >
+            <div class="col-5 border-bottom border-left">
+              {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.distribusi===null?0:det.distribusi }}
+            </div>
+            <div
+              class="col-2 border-bottom border-left"
+            >
+              {{ det.masterobat?det.masterobat.satuan_k:'-' }}
+            </div>
+            <div class="col-4 border-bottom border-left border-right">
+              <div class="print-only">
+                {{ det?.keterangan??'-' }}
+              </div>
+              <div class="print-hide">
+                <app-input
+                  v-model="det.keterangan"
+                  label="keterangan"
+                  outlined
+                  valid
+                />
+              </div>
+            </div>
+          </div>
+          <q-separator />
+        </div>
+      </div>
+    </template>
+  </app-print-surat>
 </template>
 
 <script setup>
@@ -457,6 +586,13 @@ import { useMutasiKeluarAntarDepoStore } from 'src/stores/simrs/farmasi/mutasi/d
 import { ref, onMounted, watch } from 'vue'
 const store = useMutasiKeluarAntarDepoStore()
 const apps = useAplikasiStore()
+
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 onMounted(() => {
   store.setForm('kdgudang', apps?.user?.kdruangansim)
   store.setParams('kdgudang', apps?.user?.kdruangansim)
