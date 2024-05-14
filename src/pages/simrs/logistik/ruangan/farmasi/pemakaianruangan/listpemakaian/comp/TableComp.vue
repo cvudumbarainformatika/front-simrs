@@ -128,6 +128,22 @@
               <q-btn
                 v-if="item?.flag==='1'"
                 round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="item?.flag==='1'"
+                round
                 flat
                 class="f-10 q-mr-sm"
                 color="negative"
@@ -294,6 +310,14 @@ import { useListPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaian
 
 const store = useListPemakaianRuanganStore()
 // const router = useRouter()
+
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+  // console.log('val', val, dialogPrint.value)
+}
 function expand(item) {
   item.expand = !item.expand
   item.higlight = !item.higlight

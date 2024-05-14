@@ -2,7 +2,7 @@
   <div
     class=""
     :class="style.componentfull?'':'q-pa-xs'"
-    :style="`max-height: ${!style.componentfull ? h : h + 40}px; overflow:hidden`"
+    :style="`max-height: ${!style.componentfull ? h : h + 105}px; overflow:hidden`"
   >
     <div class="header">
       <HeaderComp
@@ -29,7 +29,7 @@
       no-shadow
       square
       class="my-flex-1 scroll"
-      :style="`height: calc( 100vh - ${ pakai ? 172 : 172}px);`"
+      :style="`height: calc( 100vh - ${ style.componentfull ? 61 : 172}px);`"
     >
       <!-- style="`height:{props.tinggi}px`" -->
       <q-scroll-area
@@ -123,7 +123,7 @@ import { useStyledStore } from 'src/stores/app/styled'
 import { useFarmasiPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaianruangan/pemakaianruangan'
 import { computed, defineAsyncComponent, onMounted, ref, onUnmounted } from 'vue'
 
-const h = ref(516)
+const h = ref(582)
 const style = useStyledStore()
 const store = useFarmasiPemakaianRuanganStore()
 const apps = useAplikasiStore()

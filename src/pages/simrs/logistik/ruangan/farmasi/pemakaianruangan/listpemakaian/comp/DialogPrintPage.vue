@@ -72,87 +72,41 @@
             </div>
           </div>
           <!-- Top words -->
-          <div
-            v-if="item?.flag==='1'"
-            class="row justify-center q-mt-md f-16 text-weight-bold"
-          >
-            DATA PERMINTAAN
-          </div>
-          <div
-            v-if="item?.flag==='4'"
-            class="row justify-center q-mt-md f-16 text-weight-bold"
-          >
-            DATA PENERIMAAN
+          <div class="row justify-center q-mt-md f-16 text-weight-bold">
+            DATA PEMAKAIAN RUANGAN
           </div>
 
-          <div
-            v-if="item?.flag==='1'"
-            class="row justify-center q-mb-sm"
-          >
+          <div class="row justify-center q-mb-sm">
             <div class="col-2">
-              Tanggal Permintaan
+              Tanggal Pemakaian
             </div>
-            <div class="col-1">
-              :
-            </div>
-            <div class="col-9">
-              {{ dateFullFormat(item?.tgl_kirim) }}
-            </div>
-          </div>
-          <div
-            v-if="item?.flag==='4'"
-            class="row justify-center q-mb-sm"
-          >
-            <div class="col-2">
-              Tanggal Penerimaan
-            </div>
-            <div class="col-1">
-              :
-            </div>
-            <div class="col-9">
-              {{ dateFullFormat(item?.tgl_terima_depo) }}
+            <div class="col-10">
+              {{ dateFullFormat(item?.tgl) }}
             </div>
           </div>
           <div class="row justify-center q-mb-sm">
             <div class="col-2">
-              No. Permintaan
+              No. Pemakaian
             </div>
-            <div class="col-1">
-              :
-            </div>
-            <div class="col-9">
-              {{ item.no_permintaan }}
+            <div class="col-10">
+              {{ item.nopemakaian }}
             </div>
           </div>
-          <div
-            v-if="item?.flag==='1'"
-            class="row justify-start q-mb-md"
-          >
+          <div class="row justify-start q-mb-md">
             <p>
-              Telah dikirimkan ke
+              Telah dipakai oleh Ruangan
               <span class="text-weight-bold">
-                {{ item.menuju?item.menuju.nama:'-' }}
-              </span> permintaan barang dalam list dibawah ini :
-            </p>
-          </div>
-          <div
-            v-if="item?.flag==='4'"
-            class="row justify-start q-mb-md"
-          >
-            <p>
-              Telah diterima dari
-              <span class="text-weight-bold">
-                {{ item.menuju?item.menuju.nama:'-' }}
+                {{ item.ruangan?item.ruangan.uraian:'-' }}
               </span> barang dalam list dibawah ini :
             </p>
           </div>
 
           <!-- no details -->
-          <div v-if="!item.permintaanrinci">
+          <div v-if="!item.rinci">
             <app-no-data />
           </div>
           <!-- details -->
-          <div v-if="item.permintaanrinci">
+          <div v-if="item.rinci">
             <!-- header detail -->
             <div class="row justify-between q-col-gutter-sm">
               <div class="col-5 text-weight-bold border-tb border-left">
@@ -170,31 +124,22 @@
             </div>
             <!-- body details -->
             <div
-              v-for="(det, i) in item.permintaanrinci"
+              v-for="(det, i) in item.rinci"
               :key="i"
             >
               <div
                 class="row justify-between q-col-gutter-sm"
               >
                 <div class="col-5 border-bottom border-left">
-                  {{ i+1 }}. {{ det.masterobat?det.masterobat.nama_obat:'Nama barang tidak ditemukan' }}
+                  {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
                 </div>
-                <div
-                  v-if="item?.flag==='1'"
-                  class="col-1 border-bottom border-left"
-                >
-                  {{ det.jumlah_minta===null?0:det.jumlah_minta }}
-                </div>
-                <div
-                  v-if="item?.flag==='4'"
-                  class="col-1 border-bottom border-left"
-                >
-                  {{ det.distribusi===null?0:det.distribusi }}
+                <div class="col-1 border-bottom border-left">
+                  {{ det.jumlah===null?0:det.jumlah }}
                 </div>
                 <div
                   class="col-2 border-bottom border-left"
                 >
-                  {{ det.masterobat?det.masterobat.satuan_k:'-' }}
+                  {{ det.obat?det.obat.satuan_k:'-' }}
                 </div>
                 <div class="col-4 border-bottom border-left border-right">
                   {{ det.merk?det.merk:'-' }}
