@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persiapan_operasi', {
   state: () => ({
+    isOpen: false,
     loading: false,
     loadingSimpan: false,
     loadingDistribusi: false,
@@ -45,7 +46,8 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
       { nama: 'Menunggu verifikasi', value: '1', color: 'cyan' },
       { nama: 'Telah di verifikasi', value: '2', color: 'blue' }
     ],
-    columnsHide: []
+    columnsHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setForm(key, val) {

@@ -179,69 +179,88 @@
         </div>
       </template>
       <template #cell-act="{ row }">
-        <div v-if="row.flag==='1'">
-          <q-btn
-            flat
-            icon="icon-mat-send"
-            dense
-            color="primary"
-            :loading="store.loadingDistribusi && row.loading"
-            :disable="store.loadingDistribusi && row.loading"
-            @click="distribusi(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div class="row">
+          <div v-if="row.flag==='2' || row.flag==='4'">
+            <q-btn
+              round
+              icon="icon-mat-print"
+              dense
+              color="dark"
+              size="sm"
+              @click="toPrint(row)"
             >
-              Distribusikan
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.flag==='4'">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-          >
-            <!-- @click="kunci(row)" -->
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Print
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='1'">
+            <q-btn
+              flat
+              icon="icon-mat-send"
+              dense
+              color="primary"
+              :loading="store.loadingDistribusi && row.loading"
+              :disable="store.loadingDistribusi && row.loading"
+              @click="distribusi(row)"
             >
-              Sudah diterima
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div v-if="row.flag==='3'">
-          <q-btn
-            flat
-            icon="icon-mat-move_to_inbox"
-            dense
-            color="primary"
-            :loading="store.loadingSimpan && row.loading"
-            :disable="store.loadingSimpan && row.loading"
-            @click="teimaPengembalian(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Distribusikan
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='4'">
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="negative"
             >
-              Terima Pengembalian
-            </q-tooltip>
-          </q-btn>
-        </div>
+              <!-- @click="kunci(row)" -->
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Sudah diterima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div v-if="row.flag==='3'">
+            <q-btn
+              flat
+              icon="icon-mat-move_to_inbox"
+              dense
+              color="primary"
+              :loading="store.loadingSimpan && row.loading"
+              :disable="store.loadingSimpan && row.loading"
+              @click="teimaPengembalian(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Terima Pengembalian
+              </q-tooltip>
+            </q-btn>
+          </div>
 
-        <div
-          v-else
-          class="text-primary text-weight-bold"
-        >
-          <q-tooltip
-            class="primary"
-            :offset="[10, 10]"
+          <div
+            v-else
+            class="text-primary text-weight-bold"
           >
-            Tidak Ada yang perlu dilakukan
-          </q-tooltip>
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tidak Ada yang perlu dilakukan
+            </q-tooltip>
+          </div>
         </div>
       </template>
       <template #expand="{ row }">
@@ -416,6 +435,210 @@
       </template>
     </app-table-extend>
   </div>
+  <app-print-surat
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :tanggal="store.dataToPrint?.flag==='2'?store.dataToPrint?.tgl_distribusi:store.dataToPrint?.tgl_retur"
+    @close="store.isOpen=false"
+  >
+    <template #isi>
+      <!-- Top words -->
+      <div
+        v-if="store.dataToPrint?.flag==='2'"
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA DISTRIBUSI
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA RESEP DAN RETUR
+      </div>
+
+      <div
+        v-if="store.dataToPrint?.flag==='2'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Distribusi
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_distribusi) }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Resep
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_resep) }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Retur
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_retur) }}
+        </div>
+      </div>
+      <div class="row justify-center q-mb-sm">
+        <div class="col-2">
+          No. Permintaan
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.nopermintaan }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='2'"
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah dikirimkan
+          <span class="text-weight-bold">
+            Obat untuk Operasi
+          </span> pada list dibawah ini :
+        </p>
+      </div>
+      <div
+        v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah diterima resep dan retur
+          <span class="text-weight-bold">
+            Obat untuk Operasi
+          </span> pada list dibawah ini :
+        </p>
+      </div>
+
+      <!-- no details -->
+      <div v-if="!store.dataToPrint?.rinci">
+        <app-no-data />
+      </div>
+      <!-- details -->
+      <div v-if="store.dataToPrint?.rinci">
+        <!-- header detail -->
+        <div class="row justify-between q-col-gutter-sm">
+          <div
+            v-if="store.dataToPrint?.flag==='2'"
+            class="col-5 text-weight-bold border-tb border-left"
+          >
+            Nama Barang
+          </div>
+          <div
+            v-if="store.dataToPrint?.flag==='4'"
+            class="col-4 text-weight-bold border-tb border-left"
+          >
+            Nama Barang
+          </div>
+          <div
+            v-if="store.dataToPrint?.flag==='2'"
+            class="col-1 text-weight-bold border-tb border-left"
+          >
+            Jumlah
+          </div>
+          <div
+            v-if="store.dataToPrint?.flag==='4'"
+            class="col-1 text-weight-bold border-tb border-left"
+          >
+            Jumlah Resep
+          </div>
+          <div
+            v-if="store.dataToPrint?.flag==='4'"
+            class="col-1 text-weight-bold border-tb border-left"
+          >
+            Jumlah Retur
+          </div>
+          <div class="col-2 text-weight-bold border-tb border-left">
+            Satuan
+          </div>
+          <div class="col-4 text-weight-bold border-box">
+            Keterangan
+          </div>
+        </div>
+        <!-- body details -->
+        <div
+          v-for="(det, i) in store.dataToPrint?.rinci"
+          :key="i"
+        >
+          <div
+            class="row justify-between q-col-gutter-sm"
+          >
+            <div
+              v-if="store.dataToPrint?.flag==='2'"
+              class="col-5 border-bottom border-left"
+            >
+              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='4'"
+              class="col-4 border-bottom border-left"
+            >
+              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='2'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_distribusi===null?0:det.jumlah_distribusi }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='4'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_resep===null?0:det.jumlah_resep }}
+            </div>
+            <div
+              v-if="store.dataToPrint?.flag==='4'"
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_kembali===null?0:det.jumlah_kembali }}
+            </div>
+            <div
+              class="col-2 border-bottom border-left"
+            >
+              {{ det.obat?det.obat.satuan_k:'-' }}
+            </div>
+            <div class="col-4 border-bottom border-left border-right">
+              <div class="print-only">
+                {{ det?.keterangan??'-' }}
+              </div>
+              <div class="print-hide">
+                <app-input
+                  v-model="det.keterangan"
+                  label="keterangan"
+                  outlined
+                  valid
+                />
+              </div>
+            </div>
+          </div>
+          <q-separator />
+        </div>
+      </div>
+    </template>
+  </app-print-surat>
 </template>
 
 <script setup>
@@ -427,6 +650,13 @@ import { notifErrVue } from 'src/modules/utils'
 
 const store = useDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
+
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 onMounted(() => {
   if (apps?.user?.kdruangansim !== 'Gd-04010103') {
     return notifErrVue('Distribusi persiapan operasi hanya untuk depo OK')

@@ -79,7 +79,7 @@
         v-if="store?.resep?.permintaanresep?.length"
         class="q-mt-sm full-width"
       >
-        <div class="row items-center">
+        <!-- <div class="row items-center">
           <div class="col-shrink text-weight-bold">
             Non Racikan
           </div>
@@ -90,7 +90,7 @@
               inset
             />
           </div>
-        </div>
+        </div> -->
         <q-list
           separator
           bordered
@@ -193,7 +193,7 @@
         v-if="store?.resep?.listRacikan?.length"
         class="q-mt-sm full-width"
       >
-        <div class="row items-center">
+        <!-- <div class="row items-center">
           <div class="col-shrink text-weight-bold">
             Racikan
           </div>
@@ -204,7 +204,7 @@
               inset
             />
           </div>
-        </div>
+        </div> -->
         <div
           v-for="(item,i) in store?.resep?.listRacikan"
           :key="i"
@@ -295,7 +295,7 @@
               >
                 <div class="row full-width">
                   <div class="col-6">
-                    <div class="row q-mt-xs">
+                    <!-- <div class="row q-mt-xs">
                       <div class="col-5">
                         Ds Obat
                       </div>
@@ -318,7 +318,7 @@
                       <div class="col-7">
                         {{ rinc?.jumlahresep }}
                       </div>
-                    </div>
+                    </div> -->
                     <div class="row q-mt-xs">
                       <div class="col-5">
                         Jml Obat
