@@ -154,20 +154,39 @@
           </q-btn>
         </div>
         <div v-if="row.kunci">
-          <q-btn
-            flat
-            icon="icon-mat-lock"
-            dense
-            color="negative"
-            @click="info(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+          <div class="row items-center">
+            <div>
+              <q-btn
+                round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <q-btn
+              flat
+              icon="icon-mat-lock"
+              dense
+              color="negative"
+              @click="info(row)"
             >
-              Retur sudah di kunci
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Retur sudah di kunci
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
       <template #expand="{ row }">
@@ -298,6 +317,145 @@
       </template>
     </app-table-extend>
   </div>
+  <app-print-surat
+    ref="dialogPrint"
+    v-model="store.isOpen"
+    :tanggal="store.dataToPrint?.flag==='1'?store.dataToPrint?.tgl_retur:store.dataToPrint?.tgl_retur"
+    @close="store.isOpen=false"
+  >
+    <template #isi>
+      <!-- Top words -->
+      <div
+        class="row justify-center q-mt-md f-16 text-weight-bold"
+      >
+        DATA RETUR
+      </div>
+
+      <div
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Retur
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_retur) }}
+        </div>
+      </div>
+      <div class="row justify-center q-mb-sm">
+        <div class="col-2">
+          No. Retur
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.no_retur }}
+        </div>
+      </div>
+      <div
+        v-if="store.dataToPrint?.tgl_kwitansi_pembayaran"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          Tanggal Kwitansi Pembayaran
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ dateFullFormat(store.dataToPrint?.tgl_kwitansi_pembayaran) }}
+        </div>
+      </div>
+      <div
+        v-if="!!store.dataToPrint?.no_kwitansi_pembayaran"
+        class="row justify-center q-mb-sm"
+      >
+        <div class="col-2">
+          No. Kwitansi Pembayaran
+        </div>
+        <div class="col-1">
+          :
+        </div>
+        <div class="col-9">
+          {{ store.dataToPrint?.no_kwitansi_pembayaran }}
+        </div>
+      </div>
+
+      <div
+        class="row justify-start q-mb-md"
+      >
+        <p>
+          Telah dikembalikan ke
+          <span class="text-weight-bold">
+            {{ store.dataToPrint?.penyedia?store.dataToPrint?.penyedia.nama:'-' }}
+          </span> barang dalam list dibawah ini :
+        </p>
+      </div>
+
+      <!-- no details -->
+      <div v-if="!store.dataToPrint?.rinci">
+        <app-no-data />
+      </div>
+      <!-- details -->
+      <div v-if="store.dataToPrint?.rinci">
+        <!-- header detail -->
+        <div class="row justify-between q-col-gutter-sm">
+          <div class="col-5 text-weight-bold border-tb border-left">
+            Nama Barang
+          </div>
+          <div class="col-1 text-weight-bold border-tb border-left">
+            Jumlah
+          </div>
+          <div class="col-2 text-weight-bold border-tb border-left">
+            Satuan
+          </div>
+          <div class="col-4 text-weight-bold border-box">
+            Keterangan
+          </div>
+        </div>
+        <!-- body details -->
+        <div
+          v-for="(det, i) in store.dataToPrint?.rinci"
+          :key="i"
+        >
+          <div
+            class="row justify-between q-col-gutter-sm"
+          >
+            <div class="col-5 border-bottom border-left">
+              {{ i+1 }}. {{ det.mobatnew?det.mobatnew.nama_obat:'Nama barang tidak ditemukan' }}
+            </div>
+            <div
+              class="col-1 border-bottom border-left"
+            >
+              {{ det.jumlah_retur===null?0:det.jumlah_retur }}
+            </div>
+            <div
+              class="col-2 border-bottom border-left"
+            >
+              {{ det.mobatnew?det.mobatnew.satuan_k:'-' }}
+            </div>
+            <div class="col-4 border-bottom border-left border-right">
+              <div class="print-only">
+                {{ det?.keterangan??'-' }}
+              </div>
+              <div class="print-hide">
+                <app-input
+                  v-model="det.keterangan"
+                  label="keterangan"
+                  outlined
+                  valid
+                />
+              </div>
+            </div>
+          </div>
+          <q-separator />
+        </div>
+      </div>
+    </template>
+  </app-print-surat>
 </template>
 <script setup>
 import { dateFullFormat, formatRpDouble } from 'src/modules/formatter'
@@ -305,6 +463,13 @@ import { notifSuccessVue } from 'src/modules/utils'
 import { useListReturPenyediaStore } from 'src/stores/simrs/farmasi/gudang/list'
 
 const store = useListReturPenyediaStore()
+
+function toPrint(val) {
+  store.dataToPrint = val
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.isOpen = true
+}
 // click
 function onClick (val) {
   console.log('click', val)

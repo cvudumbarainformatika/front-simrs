@@ -4,6 +4,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
   state: () => ({
+    isOpen: false,
     loading: false,
     items: [],
     meta: {},
@@ -18,7 +19,8 @@ export const useListReturPenyediaStore = defineStore('list_retur_penyedia', {
       'tanggal',
       'gud'
     ],
-    columnHide: []
+    columnHide: [],
+    dataToPrint: {}
   }),
   actions: {
     setParam(key, val) {
