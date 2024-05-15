@@ -32,7 +32,7 @@
         <q-img
           src="~assets/logos/logo-rsud.png"
           spinner-color="white"
-          style="max-height: 3.56cm; max-width: 2.86cm"
+          style="height: 2.9cm; max-width: 2.9cm"
         />
       </div>
     </div>

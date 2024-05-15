@@ -42,7 +42,7 @@
         <!-- style="width:210mm; height:310mm; margin:10mm; " -->
         <!-- heder -->
         <q-card-section>
-          <KopSurat />
+          <app-kop-surat />
           <!-- Top words -->
           <div class="row justify-center q-mt-md f-16 text-weight-bold">
             DATA DISTRIBUSI
@@ -318,10 +318,10 @@
 </template>
 <script setup>
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
-import { ref, defineAsyncComponent } from 'vue'
+import { ref } from 'vue'
 import { dateFullFormat } from 'src/modules/formatter'
 
-const KopSurat = defineAsyncComponent(() => import('src/components/KopSurat.vue'))
+// const KopSurat = defineAsyncComponent(() => import('src/components/KopSurat.vue'))
 defineProps({
   item: { type: Object, default: () => {} }
 })

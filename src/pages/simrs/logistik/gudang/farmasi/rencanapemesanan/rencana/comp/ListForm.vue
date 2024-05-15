@@ -159,7 +159,7 @@
                 label="Jumlah Direncanakan"
                 color="green"
                 outlined
-                :disable="row.bisaBeli<=0"
+                :disable="row.bisaBeli<=0 "
                 :rules="[
                   val=> (val <= row.bisaBeli) || 'Tidak Boleh Lebih dari Jumlah maksimal dibeli'
                 ]"
@@ -168,7 +168,7 @@
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.bisaBeli>0 ">
+            <div v-if="row.bisaBeli>0 && row.sudahDirencanakan<=0">
               <!-- <q-checkbox
                 v-model="row.checked"
                 dense
@@ -185,7 +185,12 @@
               />
             </div>
             <div v-else>
-              Tidak bisa melakukan perencanaan
+              <div v-if="row.bisaBeli<=0">
+                Tidak bisa melakukan perencanaan
+              </div>
+              <div v-else>
+                Tidak bisa melakukan perencanaan, Sedang dalam Proses
+              </div>
             </div>
           </template>
         </app-table>
