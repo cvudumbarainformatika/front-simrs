@@ -44,6 +44,18 @@
                     <em class="">diagnosa</em> : <span class="text-weight-bold">{{ item.masterdiagnosa?.rs4 }}</span>
                   </q-item-label>
                   <q-item-label
+                    lines="3"
+                  >
+                    <em class="">keterangan</em> : <span
+                      v-if="item?.rs6 && item?.rs6?.length > 0 "
+                      class="text-weight-bold"
+                    >{{ item?.rs6 }}</span>
+                    <span
+                      v-else
+                      class="text-weight-bold"
+                    >{{ '-' }}</span>
+                  </q-item-label>
+                  <q-item-label
                     lines="2"
                   >
                     <!-- <em class="">Kasus</em>  <span class="text-weight-bold">{{ item.rs7 }}</span> -->

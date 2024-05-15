@@ -401,6 +401,7 @@
                             </q-item>
                           </q-list>
                         </q-card-section>
+
                         <q-separator />
                         <q-card-section
                           v-if="item?.tindakan?.length"
@@ -429,6 +430,37 @@
                                   lines="2"
                                 />
                                 {{ tin + 1 }}. {{ tindakan?.mastertindakan?.rs2 }}
+                                <div
+                                  v-if="tindakan?.gambardokumens.length > 0"
+                                  class="image-row"
+                                >
+                                  <div
+                                    v-for="(image, index) in tindakan?.gambardokumens"
+                                    :key="index"
+                                    class="image-container"
+                                  >
+                                    <q-img
+                                      :src="pathImg + image.url"
+                                      class="image"
+                                    >
+                                      <div class="absolute-bottom">
+                                        <div class="column items-center justify-between">
+                                          <q-btn
+                                            class="gt-xs"
+                                            size="md"
+                                            color="yellow"
+                                            flat
+                                            dense
+                                            round
+                                            icon="icon-mat-visibility"
+                                            :href="pathImg + image?.url"
+                                            target="_blank"
+                                          />
+                                        </div>
+                                      </div>
+                                    </q-img>
+                                  </div>
+                                </div>
                               </q-item-section>
                             </q-item>
                           </q-list>
@@ -514,6 +546,65 @@
 
                         <q-separator />
                         <q-card-section
+                          v-if="item?.kamaroperasi?.length"
+                          class="q-pa-none"
+                        >
+                          <q-bar class="bg-accent">
+                            TINDAKAN OPERASI
+                          </q-bar>
+                          <q-markup-table
+                            separator="vertical"
+                            flat
+                            bordered
+                            dense
+                            dark
+                          >
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                  Tanggal
+                                </th>
+                                <th class="text-right">
+                                  Diagnosa
+                                </th>
+                                <th class="text-right">
+                                  Tindakan Operasi
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(operasi, l) in item?.kamaroperasi"
+                                :key="l"
+                                v-ripple
+                                clickable
+                              >
+                                <td
+                                  class="text-left ellipsis"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ operasi?.rs3 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs2 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs4 }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </q-markup-table>
+                          <q-separator />
+                        </q-card-section>
+
+                        <q-separator />
+                        <q-card-section
                           v-if="item?.apotekrajal?.length
                             || item?.apotekrajalpolilalu?.length
                             || item?.apotekracikanrajal?.length
@@ -543,6 +634,9 @@
                                   Obat
                                 </th>
                                 <th class="text-right">
+                                  Signa
+                                </th>
+                                <th class="text-right">
                                   Jumlah
                                 </th>
                               </tr>
@@ -563,6 +657,20 @@
                                   style="max-width: 150px;"
                                 >
                                   {{ apotekrajal.masterobat?.rs2 }}
+                                </td>
+                                <td
+                                  v-if="apotekrajal?.rs27.length > 0 && apotekrajal?.rs28.length > 0"
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ getInteger(apotekrajal?.rs27) + ' X ' + getInteger(apotekrajal?.rs28) }}
+                                </td>
+                                <td
+                                  v-else
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
                                 </td>
                                 <td
                                   class="text-right"
@@ -588,6 +696,20 @@
                                   {{ apotekrajalpolilalu.masterobat?.rs2 }}
                                 </td>
                                 <td
+                                  v-if="apotekrajalpolilalu?.rs27.length > 0 && apotekrajalpolilalu?.rs28.length > 0"
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ getInteger(apotekrajalpolilalu?.rs27) + ' X ' + getInteger(apotekrajalpolilalu?.rs28) }}
+                                </td>
+                                <td
+                                  v-else
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
+                                </td>
+                                <td
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
@@ -611,10 +733,16 @@
                                   {{ apotekracikanrajal.masterobat?.rs2 }}
                                 </td>
                                 <td
+                                  class="text-left ellipsis"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
+                                </td>
+                                <td
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
-                                  {{ apotekracikanrajal?.rs8 }}
+                                  {{ apotekracikanrajal?.rs5 }}
                                 </td>
                               </tr>
                               <tr
@@ -637,99 +765,13 @@
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
-                                  {{ apotekracikanrajallalu?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranap, lxx) in item?.apotekranap"
-                                :key="lxx"
-                              >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranap?.rs3 }}
+                                  {{ '-' }}
                                 </td>
                                 <td
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
-                                  {{ apotekranap.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranap?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranaplalu, lx) in item?.apotekranaplalu"
-                                :key="lx"
-                              >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranaplalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranaplalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranaplalu?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranapracikanheder, lxx) in item?.apotekranapracikanheder"
-                                :key="lxx"
-                              >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranapracikanheder?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranapracikanhederlalu, lxxx) in item?.apotekranapracikanhederlalu"
-                                :key="lxxx"
-                              >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranapracikanhederlalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs8 }}
+                                  {{ apotekracikanrajallalu?.rs5 }}
                                 </td>
                               </tr>
                             </tbody>
@@ -1154,6 +1196,7 @@
                             </q-item>
                           </q-list>
                         </q-card-section>
+
                         <q-separator />
                         <q-card-section
                           v-if="item?.tindakan?.length"
@@ -1182,6 +1225,37 @@
                                   lines="2"
                                 />
                                 {{ tin + 1 }}. {{ tindakan?.mastertindakan?.rs2 }}
+                                <div
+                                  v-if="tindakan?.gambardokumens.length > 0"
+                                  class="image-row"
+                                >
+                                  <div
+                                    v-for="(image, index) in tindakan?.gambardokumens"
+                                    :key="index"
+                                    class="image-container"
+                                  >
+                                    <q-img
+                                      :src="pathImg + image.url"
+                                      class="image"
+                                    >
+                                      <div class="absolute-bottom">
+                                        <div class="column items-center justify-between">
+                                          <q-btn
+                                            class="gt-xs"
+                                            size="md"
+                                            color="yellow"
+                                            flat
+                                            dense
+                                            round
+                                            icon="icon-mat-visibility"
+                                            :href="pathImg + image?.url"
+                                            target="_blank"
+                                          />
+                                        </div>
+                                      </div>
+                                    </q-img>
+                                  </div>
+                                </div>
                               </q-item-section>
                             </q-item>
                           </q-list>
@@ -1267,6 +1341,65 @@
 
                         <q-separator />
                         <q-card-section
+                          v-if="item?.kamaroperasi?.length"
+                          class="q-pa-none"
+                        >
+                          <q-bar class="bg-accent">
+                            TINDAKAN OPERASI
+                          </q-bar>
+                          <q-markup-table
+                            separator="vertical"
+                            flat
+                            bordered
+                            dense
+                            dark
+                          >
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                  Tanggal
+                                </th>
+                                <th class="text-right">
+                                  Diagnosa
+                                </th>
+                                <th class="text-right">
+                                  Tindakan Operasi
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(operasi, l) in item?.kamaroperasi"
+                                :key="l"
+                                v-ripple
+                                clickable
+                              >
+                                <td
+                                  class="text-left ellipsis"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ operasi?.rs3 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs2 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs4 }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </q-markup-table>
+                          <q-separator />
+                        </q-card-section>
+
+                        <q-separator />
+                        <q-card-section
                           v-if="item?.apotekrajal?.length
                             || item?.apotekrajalpolilalu?.length
                             || item?.apotekracikanrajal?.length
@@ -1300,192 +1433,98 @@
                                 </th>
                               </tr>
                             </thead>
-                            <tbody>
-                              <tr
-                                v-for="(apotekrajal, wew) in item?.apotekrajal"
-                                :key="wew"
+                            <tr
+                              v-for="(apotekranap, lxx) in item?.apotekranap"
+                              :key="lxx"
+                            >
+                              <td
+                                class="text-left ellipsis"
+                                style="max-width: 250px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekrajal?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekrajal.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekrajal?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekrajalpolilalu, lll) in item?.apotekrajalpolilalu"
-                                :key="lll"
+                                {{ apotekranap?.rs3 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekrajalpolilalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekrajalpolilalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekrajalpolilalu?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekracikanrajal, llll) in item?.apotekracikanrajal"
-                                :key="llll"
+                                {{ apotekranap.masterobat?.rs2 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekracikanrajal?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekracikanrajal.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekracikanrajal?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekracikanrajallalu, llll) in item?.apotekracikanrajallalu"
-                                :key="llll"
+                                {{ apotekranap?.rs8 }}
+                              </td>
+                            </tr>
+                            <tr
+                              v-for="(apotekranaplalu, lx) in item?.apotekranaplalu"
+                              :key="lx"
+                            >
+                              <td
+                                class="text-left ellipsis"
+                                style="max-width: 250px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekracikanrajallalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekracikanrajallalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekracikanrajallalu?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranap, lxx) in item?.apotekranap"
-                                :key="lxx"
+                                {{ apotekranaplalu?.rs3 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranap?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranap.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranap?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranaplalu, lx) in item?.apotekranaplalu"
-                                :key="lx"
+                                {{ apotekranaplalu.masterobat?.rs2 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranaplalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranaplalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranaplalu?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranapracikanheder, lxx) in item?.apotekranapracikanheder"
-                                :key="lxx"
+                                {{ apotekranaplalu?.rs8 }}
+                              </td>
+                            </tr>
+                            <tr
+                              v-for="(apotekranapracikanheder, lxx) in item?.apotekranapracikanheder"
+                              :key="lxx"
+                            >
+                              <td
+                                class="text-left ellipsis"
+                                style="max-width: 250px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranapracikanheder?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs8 }}
-                                </td>
-                              </tr>
-                              <tr
-                                v-for="(apotekranapracikanhederlalu, lxxx) in item?.apotekranapracikanhederlalu"
-                                :key="lxxx"
+                                {{ apotekranapracikanheder?.rs3 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
                               >
-                                <td
-                                  class="text-left ellipsis"
-                                  style="max-width: 250px;"
-                                >
-                                  {{ apotekranapracikanhederlalu?.rs3 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs2 }}
-                                </td>
-                                <td
-                                  class="text-right"
-                                  style="max-width: 150px;"
-                                >
-                                  {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs8 }}
-                                </td>
-                              </tr>
-                            </tbody>
+                                {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs2 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
+                              >
+                                {{ apotekranapracikanheder.apotekranapracikanrinci.masterobat?.rs8 }}
+                              </td>
+                            </tr>
+                            <tr
+                              v-for="(apotekranapracikanhederlalu, lxxx) in item?.apotekranapracikanhederlalu"
+                              :key="lxxx"
+                            >
+                              <td
+                                class="text-left ellipsis"
+                                style="max-width: 250px;"
+                              >
+                                {{ apotekranapracikanhederlalu?.rs3 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
+                              >
+                                {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs2 }}
+                              </td>
+                              <td
+                                class="text-right"
+                                style="max-width: 150px;"
+                              >
+                                {{ apotekranapracikanhederlalu.apotekranapracikanrincilalu.masterobat?.rs8 }}
+                              </td>
+                            </tr>
                           </q-markup-table>
                         </q-card-section>
                         <q-card-section
@@ -1908,6 +1947,7 @@
                           </q-list>
                         </q-card-section>
                         <q-separator />
+
                         <q-card-section
                           v-if="item?.tindakan?.length"
                           class="q-pa-none"
@@ -1935,6 +1975,37 @@
                                   lines="2"
                                 />
                                 {{ tin + 1 }}. {{ tindakan?.mastertindakan?.rs2 }}
+                                <div
+                                  v-if="tindakan?.gambardokumens.length > 0"
+                                  class="image-row"
+                                >
+                                  <div
+                                    v-for="(image, index) in tindakan?.gambardokumens"
+                                    :key="index"
+                                    class="image-container"
+                                  >
+                                    <q-img
+                                      :src="pathImg + image.url"
+                                      class="image"
+                                    >
+                                      <div class="absolute-bottom">
+                                        <div class="column items-center justify-between">
+                                          <q-btn
+                                            class="gt-xs"
+                                            size="md"
+                                            color="yellow"
+                                            flat
+                                            dense
+                                            round
+                                            icon="icon-mat-visibility"
+                                            :href="pathImg + image?.url"
+                                            target="_blank"
+                                          />
+                                        </div>
+                                      </div>
+                                    </q-img>
+                                  </div>
+                                </div>
                               </q-item-section>
                             </q-item>
                           </q-list>
@@ -2020,6 +2091,65 @@
 
                         <q-separator />
                         <q-card-section
+                          v-if="item?.kamaroperasi?.length"
+                          class="q-pa-none"
+                        >
+                          <q-bar class="bg-accent">
+                            TINDAKAN OPERASI
+                          </q-bar>
+                          <q-markup-table
+                            separator="vertical"
+                            flat
+                            bordered
+                            dense
+                            dark
+                          >
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                  Tanggal
+                                </th>
+                                <th class="text-right">
+                                  Diagnosa
+                                </th>
+                                <th class="text-right">
+                                  Tindakan Operasi
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="(operasi, l) in item?.kamaroperasi"
+                                :key="l"
+                                v-ripple
+                                clickable
+                              >
+                                <td
+                                  class="text-left ellipsis"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ operasi?.rs3 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs2 }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ operasi?.mastertindakanoperasi?.rs4 }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </q-markup-table>
+                          <q-separator />
+                        </q-card-section>
+
+                        <q-separator />
+                        <q-card-section
                           v-if="item?.apotekrajal?.length
                             || item?.apotekrajalpolilalu?.length
                             || item?.apotekracikanrajal?.length
@@ -2071,6 +2201,20 @@
                                   {{ apotekrajal.masterobat?.rs2 }}
                                 </td>
                                 <td
+                                  v-if="apotekrajal?.rs27.length > 0 && apotekrajal?.rs28.length > 0"
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ getInteger(apotekrajal?.rs27) + ' X ' + getInteger(apotekrajal?.rs28) }}
+                                </td>
+                                <td
+                                  v-else
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
+                                </td>
+                                <td
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
@@ -2092,6 +2236,20 @@
                                   style="max-width: 150px;"
                                 >
                                   {{ apotekrajalpolilalu.masterobat?.rs2 }}
+                                </td>
+                                <td
+                                  v-if="apotekrajalpolilalu?.rs27.length > 0 && apotekrajalpolilalu?.rs28.length > 0"
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ getInteger(apotekrajalpolilalu?.rs27) + ' X ' + getInteger(apotekrajalpolilalu?.rs28) }}
+                                </td>
+                                <td
+                                  v-else
+                                  class="text-right"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
                                 </td>
                                 <td
                                   class="text-right"
@@ -2117,10 +2275,16 @@
                                   {{ apotekracikanrajal.masterobat?.rs2 }}
                                 </td>
                                 <td
+                                  class="text-left ellipsis"
+                                  style="max-width: 250px;"
+                                >
+                                  {{ '-' }}
+                                </td>
+                                <td
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
-                                  {{ apotekracikanrajal?.rs8 }}
+                                  {{ apotekracikanrajal?.rs5 }}
                                 </td>
                               </tr>
                               <tr
@@ -2143,7 +2307,13 @@
                                   class="text-right"
                                   style="max-width: 150px;"
                                 >
-                                  {{ apotekracikanrajallalu?.rs8 }}
+                                  {{ '-' }}
+                                </td>
+                                <td
+                                  class="text-right"
+                                  style="max-width: 150px;"
+                                >
+                                  {{ apotekracikanrajallalu?.rs5 }}
                                 </td>
                               </tr>
                               <tr
@@ -2445,6 +2615,16 @@ function tekananDarahDias(val) {
   }
 
   return obj
+}
+
+function getInteger(str) {
+  const parts = str.split('.')
+
+  if (parts.length > 1 && parseInt(parts[1]) === 0) {
+    return parts[0]
+  }
+
+  return str
 }
 
 </script>

@@ -55,21 +55,22 @@
           @open-template="store.setDialogTemplate"
         />
       </div>
-      
-      <app-drawer-right-new style="width:60%;"
-      :key="pasien"
-      :seamless="seamless"
-      :pasien="pasien"
-      @click-btn="clickslideRight"
-    >
-      <template #content>
-        <HistoryPemeriksaan
-          :key="pasien"
-          :pasien="pasien"
-          title="HISTORY PEMERIKSAAN FISIK LALU"
-        />
-      </template>
-    </app-drawer-right-new>
+
+      <app-drawer-right-new
+        :key="pasien"
+        style="width:60%;"
+        :seamless="seamless"
+        :pasien="pasien"
+        @click-btn="clickslideRight"
+      >
+        <template #content>
+          <HistoryPemeriksaan
+            :key="pasien"
+            :pasien="pasien"
+            title="HISTORY PEMERIKSAAN FISIK LALU"
+          />
+        </template>
+      </app-drawer-right-new>
     </div>
   </q-card>
 </template>

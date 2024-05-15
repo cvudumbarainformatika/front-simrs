@@ -20,7 +20,7 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   // "typescript.tsdk": "node_modules/typescript/lib",
-  "files.autoSave": "onWindowChange",
+  "files.autoSave": "off",
   "beautify.config": "",
   "workbench.colorTheme": "GitHub Dark",
   "vue.codeActions.enabled": false,
