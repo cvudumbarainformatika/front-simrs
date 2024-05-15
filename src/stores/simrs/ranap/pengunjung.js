@@ -50,6 +50,10 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       this.params.page = val
       this.getData()
     },
+    refresh() {
+      this.params.page = 1
+      this.getData()
+    },
     bukaLayanan(val) {
       this.pageLayanan = val
     },
@@ -88,6 +92,7 @@ export const usePengunjungRanapStore = defineStore('pengunjung-ranap', {
       } else if (val === 'Bulan Ini') {
         this.bulanIni()
       }
+      this.getData()
     },
     hariIni() {
       const cDate = new Date()
