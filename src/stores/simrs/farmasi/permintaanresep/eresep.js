@@ -57,8 +57,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       dosismaksimum: 1 // dosis resep
     },
     tipeRacikan: [
-      { label: 'DTD', value: 'DTD' },
-      { label: 'non-DTD', value: 'non-DTD' }
+      { label: 'DTD', value: 'DTD', disable: false },
+      { label: 'non-DTD', value: 'non-DTD', disable: false }
+    ],
+    tipeRacikanT: [
+      { label: 'DTD', value: 'DTD', disable: true },
+      { label: 'non-DTD', value: 'non-DTD', disable: true }
     ],
     satuanRaciks: ['Bungkus', 'Kapsul', 'Pot'],
     counterRacikan: 1,
@@ -259,10 +263,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       // console.log('list rincian racikan', this.listRincianRacikan)
       const rac = this.listRacikan.find(x => x.namaracikan === this.form.namaracikan)
       this.listRincianRacikan = rac?.rincian ?? []
-      this.tipeRacikan = [
-        { label: 'DTD', value: 'DTD', disable: true },
-        { label: 'non-DTD', value: 'non-DTD', disable: true }
-      ]
+      // this.tipeRacikan = [
+      //   { label: 'DTD', value: 'DTD', disable: true },
+      //   { label: 'non-DTD', value: 'non-DTD', disable: true }
+      // ]
     },
     setListRacikanArray(array) {
       array.forEach(arr => {
@@ -530,10 +534,10 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           }
           this.listPemintaanSementara = []
           this.listRacikan = []
-          this.tipeRacikan = [
-            { label: 'DTD', value: 'DTD', disable: false },
-            { label: 'non-DTD', value: 'non-DTD', disable: false }
-          ]
+          // this.tipeRacikan = [
+          //   { label: 'DTD', value: 'DTD', disable: false },
+          //   { label: 'non-DTD', value: 'non-DTD', disable: false }
+          // ]
           // if (this.pasien?.newapotekrajal) {
           //   this.setListResep(this.pasien?.newapotekrajal)
           //   this.pasien.newapotekrajal.flag = '1'

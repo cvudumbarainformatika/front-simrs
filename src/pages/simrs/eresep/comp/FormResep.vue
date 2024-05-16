@@ -798,6 +798,7 @@ function racikan() {
     { label: 'DTD', value: 'DTD', disable: false },
     { label: 'non-DTD', value: 'non-DTD', disable: false }
   ]
+  // store.tipeRacikan = []
 }
 function racikanTambah(val) {
   // console.log('ok', val)

@@ -77,9 +77,10 @@
                 <div
                   class="col-2"
                 >
+                  <!-- {{ store.tipeRacikan }} -->
                   <q-option-group
                     v-model="store.form.tiperacikan"
-                    :options="store.tipeRacikan"
+                    :options="store.tipeRacikan "
                     color="primary"
                     class="q-ml-sm"
                     dense
