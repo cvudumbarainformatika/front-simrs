@@ -8,10 +8,14 @@
         ada-per-page
         ada-refresh
         use-full
+        label-cari="Cari noreg / norm"
+        label-cari-dua="Cari nama obat"
         :search="store.params.q"
+        :search-dua="store.params.nama"
         :per-page="store.params.per_page"
         :flag="store.params.flag"
         @cari="store.setSearch"
+        @cari-dua="store.setSearchDua"
         @refresh="store.refresh"
         @set-per-page="store.setPerPage"
         @set-flag="store.setFlag"

@@ -426,7 +426,7 @@
   <!-- {{ store.resep }} -->
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { dateFull, formatRpDouble } from 'src/modules/formatter'
 import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
 import { notifErrVue } from 'src/modules/utils'
@@ -434,11 +434,12 @@ import { notifErrVue } from 'src/modules/utils'
 const store = useReturDepoStore()
 
 const tinggiDetailPas = ref(130)
-const pageRef = ref()
-const h = computed(() => {
-  // console.log('h', pageRef.value)
-  return pageRef.value?.$el?.clientHeight + 5
-})
+const pageRef = ref(0)
+const h = ref(0)
+// const h = computed(() => {
+//   console.log('h', pageRef.value?.clientHeight)
+//   return pageRef.value?.clientHeight + 5
+// })
 
 function kirim() {
   console.log(store.resep)
@@ -476,8 +477,8 @@ function racik(evt, det, key) {
   // console.log(evt, det, key)
 }
 onMounted(() => {
-  // h.value = pageRef.value.$el.clientHeight
-  // console.log('h', pageRef.value.$el.clientHeight)
+  h.value = pageRef.value?.clientHeight
+  console.log('h on moun', pageRef.value?.clientHeight)
   // store.setForm('kodedepo', apps?.user?.kdruangansim)
   // store.getSigna()
 })

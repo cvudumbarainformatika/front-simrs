@@ -31,19 +31,43 @@
             />
           </template>
         </q-input>
-        <q-select
-          v-model="periode"
-          dense
+        <q-input
+          v-model="searchDua"
           outlined
           dark
           color="white"
-          :options="periods"
-          label="Periode"
-          class="q-ml-sm"
-          emit-value
-          map-options
-          style="min-width: 150px;"
-          @update:model-value="gantiPeriode"
+          dense
+          :label="labelCariDua"
+          debounce="500"
+          style="min-width: 250px;"
+          @keyup.enter="enterSearchObat"
+        >
+          <template
+            v-if="props?.search"
+            #append
+          >
+            <q-icon
+              name="icon-mat-close"
+              size="xs"
+              class="cursor-pointer"
+              @click.stop.prevent="enterSearchObat('')"
+            />
+          </template>
+          <template #prepend>
+            <q-icon
+              size="sm"
+              name="icon-mat-search"
+            />
+          </template>
+        </q-input>
+
+        <app-input-date-human
+          :model="from"
+          dark
+          outlined
+          label="resep dari tanggal"
+          @set-model="setDari"
+          @db-model="setDbDari"
         />
         <q-option-group
           v-model="toFlag"
@@ -142,14 +166,16 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useStyledStore } from 'src/stores/app/styled'
-import { dateDbFormat } from 'src/modules/formatter'
-import { date } from 'quasar'
+// import { dateDbFormat } from 'src/modules/formatter'
+// import { date } from 'quasar'
 
 const style = useStyledStore()
-const emits = defineEmits(['cari', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
+const emits = defineEmits(['cari', 'cariDua', 'refresh', 'setPerPage', 'setFlag', 'setPeriode'])
 const props = defineProps({
   search: { type: String, default: '' },
+  searchDua: { type: String, default: '' },
   labelCari: { type: String, default: 'Cari ...' },
+  labelCariDua: { type: String, default: 'Cari ...' },
   adaPerPage: { type: Boolean, default: false },
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
@@ -175,9 +201,21 @@ const search = computed({
     emits('cari', newVal)
   }
 })
+const searchDua = computed({
+  get () {
+    return props.searchDua
+  },
+  set (newVal) {
+    emits('cariDua', newVal)
+  }
+})
 function enterSearch(evt) {
   const val = evt?.target?.value
   emits('cari', val)
+}
+function enterSearchObat(evt) {
+  const val = evt?.target?.value
+  emits('cariDua', val)
 }
 // flag
 const flagOptions = ref([
@@ -194,52 +232,60 @@ const toFlag = computed({
 })
 
 // periode
-const to = ref(dateDbFormat(new Date()))
-const from = ref(dateDbFormat(new Date()))
-const periode = ref(1)
-const periods = ref([
-  { value: 1, label: 'Hari ini' },
-  { value: 2, label: 'Minggu Ini' },
-  { value: 3, label: 'Bulan Ini' }
-  // { value: 4, label: 'Tahun Ini' }
-])
+// const to = ref(dateDbFormat(new Date()))
+// const from = ref(date.formatDate(Date.now(), 'DD MMMM YYYY'))
+const from = ref(null)
 
-function hariIni() {
-  const cDate = new Date()
-  to.value = dateDbFormat(cDate)
-  from.value = dateDbFormat(cDate)
+function setDari(val) {
+  from.value = val
 }
-function mingguIni() {
-  const curr = new Date()
-  const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
-  const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
-  from.value = dateDbFormat(firstday)
-  to.value = dateDbFormat(lastday)
+function setDbDari(val) {
+  emits('setPeriode', val)
 }
-function bulanIni() {
-  const curr = new Date()
-  const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
-  const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
-  from.value = dateDbFormat(firstday)
-  to.value = dateDbFormat(lastday)
-}
+// const periode = ref(1)
+// const periods = ref([
+//   { value: 1, label: 'Hari ini' },
+//   { value: 2, label: 'Minggu Ini' },
+//   { value: 3, label: 'Bulan Ini' }
+//   // { value: 4, label: 'Tahun Ini' }
+// ])
 
-function gantiPeriode(val) {
-  if (val === 1) {
-    hariIni()
-  } else if (val === 2) {
-    mingguIni()
-  } else if (val === 3) {
-    bulanIni()
-  }
+// function hariIni() {
+//   const cDate = new Date()
+//   to.value = dateDbFormat(cDate)
+//   from.value = dateDbFormat(cDate)
+// }
+// function mingguIni() {
+//   const curr = new Date()
+//   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+//   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
+//   from.value = dateDbFormat(firstday)
+//   to.value = dateDbFormat(lastday)
+// }
+// function bulanIni() {
+//   const curr = new Date()
+//   const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
+//   const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
+//   from.value = dateDbFormat(firstday)
+//   to.value = dateDbFormat(lastday)
+// }
 
-  const per = {
-    to: to.value,
-    from: from.value
-  }
-  emits('setPeriode', per)
-}
+// function gantiPeriode(val) {
+//   if (val === 1) {
+//     hariIni()
+//   } else if (val === 2) {
+//     mingguIni()
+//   } else if (val === 3) {
+//     bulanIni()
+//   }
+
+//   const per = {
+//     to: to.value,
+//     from: from.value
+//   }
+//   emits('setPeriode', per)
+// }
 onMounted(() => {
-  hariIni()
+  // hariIni()
 })
 </script>

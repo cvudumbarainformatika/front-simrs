@@ -203,7 +203,7 @@
     >
       <q-scroll-area style="height: 100%;">
         <div
-          v-if="store?.resep?.permintaanresep?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=3) || parseInt(store?.resep?.flag)<=3"
+          v-if="store?.resep?.permintaanresep?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=5) || parseInt(store?.resep?.flag)<=3"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -492,7 +492,7 @@
                   {{ item?.tiperacikan }}
                 </q-chip>
               </div>
-              <div class="col-shrink q-mr-xs text-green text-weight-bold">
+              <div class="col-shrink q-mr-xs text-purple text-weight-bold">
                 {{ item?.jumlahdibutuhkan }}
               </div>
               <div class="col-shrink q-mr-xs">
@@ -684,8 +684,11 @@
                         <div class="col-4">
                           Dosis Obat
                         </div>
-                        <div class="col-8">
-                          {{ rinc?.dosisobat }}
+                        <div class="col-8 ">
+                          <span class="text-weight-bold text-deep-orange">{{ rinc?.dosisobat }}</span> <span
+                            v-if="rinc?.mobat?.kekuatan_dosis"
+                            class="text-italic text-deep-orange f-10"
+                          >({{ rinc?.mobat?.kekuatan_dosis }})</span>
                         </div>
                       </div>
 
@@ -699,10 +702,10 @@
                       </div>
                       <div class="row  text-black">
                         <div class="col-4">
-                          Jumlah Obat (keluar dari depo)
+                          Jumlah Obat <span class="text-italic f-10">(keluar dari depo)</span>
                         </div>
                         <div class="col-8">
-                          {{ rinc?.jumlahobat }}
+                          {{ rinc?.jumlahobat }} <span class="text-italic f-10">( {{ rinc?.mobat?.satuan_k }} )</span>
                         </div>
                       </div>
                     </div>

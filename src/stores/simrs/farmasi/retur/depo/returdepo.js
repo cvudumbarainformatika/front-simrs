@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-import { dateDbFormat } from 'src/modules/formatter'
+// import { dateDbFormat } from 'src/modules/formatter'
 import { filterDuplicateArrays, notifSuccess } from 'src/modules/utils'
 
 export const useReturDepoStore = defineStore('retur_dari_depo', {
@@ -12,12 +12,13 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
     items: [],
     params: {
       q: '',
+      nama: '',
       per_page: 10,
       page: 1,
       kddepo: '',
       flag: ['3'],
-      to: dateDbFormat(new Date()),
-      from: dateDbFormat(new Date())
+      // to: dateDbFormat(new Date()),
+      from: null
     },
     resep: {}
 
@@ -42,6 +43,11 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
       this.setParams('page', 1)
       this.getDataTable()
     },
+    setSearchDua(val) {
+      this.setParams('nama', val)
+      this.setParams('page', 1)
+      this.getDataTable()
+    },
     setPerPage(val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
@@ -57,9 +63,10 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
     },
     setPeriodik(val) {
       this.params.page = 1
-      const { to, from } = val
-      this.params.to = to
-      this.params.from = from
+      // const { to, from } = val
+      // this.params.to = to
+      // this.params.from = from
+      this.params.from = val
       this.getDataTable()
     },
     setResep(val) {
