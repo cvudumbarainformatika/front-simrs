@@ -228,10 +228,14 @@ export const useFarmasiPermintaanDepoStore = defineStore('farmasi_permintaan_dep
             if (resp.data.rinci) {
               const rinc = resp.data.rinci
               if (rinc.kdobat) {
-                const anu = this.obats.filter(a => a.kd_obat === rinc.kdobat)
-                if (anu.length) {
-                  const obat = anu[0]
-                  rinc.nama_obat = obat.nama_obat
+                const anu = this.obats.find(a => a.kd_obat === rinc.kdobat)
+                if (anu) {
+                  rinc.nama_obat = anu.nama_obat
+                } else {
+                  const anu2 = this.obats.find(a => a.kdobat === rinc.kdobat)
+                  if (anu2) {
+                    rinc.nama_obat = anu2.nama_obat
+                  }
                 }
                 const adaDetail = this.details.filter(ob => ob.kdobat === rinc.kdobat)
                 if (adaDetail.length) {

@@ -352,6 +352,7 @@
         </div>
       </div>
       <div v-if="store.details.length">
+        <!-- {{ store.details }} -->
         <div
           v-for="(det,i) in store.details"
           :key="i"
