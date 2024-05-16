@@ -636,6 +636,17 @@
         </div>
       </div>
     </div>
+    <q-btn
+      ref="refPrint"
+      v-print="printObj"
+      fab
+      icon="icon-mat-print"
+      color="primary"
+      class="fixed-bottom-right"
+      style="margin: 16px;"
+    >
+      <q-tooltip>Print</q-tooltip>
+    </q-btn>
   </div>
 </template>
 
@@ -651,7 +662,7 @@ const props = defineProps({
 })
 
 const store = usePraAnastesiStore()
-// const rawatkhusus = ref([])
+const refPrint = ref()
 const rawatkhususLainlain = ref(false)
 
 onMounted(async() => {
@@ -663,10 +674,20 @@ onMounted(async() => {
 const qrUrl = computed(() => {
   const noreg = props?.pasien?.noreg
   const dok = 'DOKUMEN PRA-ANESTESI.png'
-  return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}`
+  const asal = 'RAWAT JALAN'
+  const enc = btoa(`${noreg}|${dok}|${asal}`)
+  return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
 })
 
-console.log(props.pasien)
+// console.log(props.pasien)
+
+const printObj = {
+  id: 'pdfDoc',
+  previewTitle: 'PRA-ANESTESI', // The title of the preview window. The default is 打印预览
+  popTitle: 'PRA-ANESTESI'
+
+}
 </script>
 
 <style lang="scss" scoped>
@@ -695,10 +716,6 @@ console.log(props.pasien)
   }
 }
 
-// .pt12 {
-//   font-size: 12pt !important;
-// }
-
 .page-legal {
   display: block;
   margin-left: auto;
@@ -709,7 +726,7 @@ console.log(props.pasien)
   // page-break-after: always; // Membuat halaman baru jika konten tidak muat
 
   .contentx {
-    padding: 5mm 5mm;
+    padding:5mm;
   }
 
   .b-a {
@@ -733,5 +750,34 @@ table {
 .dotted-line {
   border-bottom: 1px dotted black;
   width: 100%;
+}
+
+@media print {
+  .page-legal {
+    width: 21.59cm; // Sesuaikan lebar kertas yang diinginkan
+    height: auto; // Tinggi otomatis berdasarkan konten
+    // height: 33cm;
+    // padding: 0mm;
+
+    .contentx {
+      padding:0; // Padding untuk konten saat print
+    }
+
+    .b-a, .b-l, .b-r {
+      border: 1px solid black; // Border untuk elemen tertentu
+    }
+  }
+
+  .hide-on-print {
+    display: none; // Sembunyikan elemen tertentu saat print
+  }
+
+  @page {
+    margin: 10mm; // Atur margin untuk setiap halaman baru
+  }
+  // .text-print {
+  //   font-size: 10pt; // Atur ukuran font saat print
+  //   color: black; // Atur warna teks saat print
+  // }
 }
 </style>

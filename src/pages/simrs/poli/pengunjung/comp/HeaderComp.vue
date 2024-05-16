@@ -102,7 +102,7 @@
     </div>
     <div>
       <q-btn
-        class="q-ml-sm"
+        class="q-ml-sm animated-button"
         unelevated
         color="orange"
         flat
@@ -343,3 +343,21 @@ onMounted(() => {
   hariIni()
 })
 </script>
+
+<style lang="scss" scoped>
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animated-button {
+  animation: pulseAnimation 2s infinite;
+}
+</style>
