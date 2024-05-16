@@ -458,7 +458,7 @@
           </q-list>
         </div>
         <div
-          v-if="store?.resep?.listRacikan?.length && store?.resep?.tiperesep !== 'iter'"
+          v-if="store?.resep?.listRacikan?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=3) || parseInt(store?.resep?.flag)<=3"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -668,7 +668,7 @@
                     <div class="col-6">
                       <div
                         v-if="item?.tiperacikan==='DTD'"
-                        class="row"
+                        class="row text-purple text-weight-bold"
                       >
                         <div class="col-4">
                           Dosis Resep
@@ -689,7 +689,7 @@
                         </div>
                       </div>
 
-                      <div class="row">
+                      <div class="row text-purple text-weight-bold">
                         <div class="col-4">
                           Jumlah Resep
                         </div>
@@ -699,7 +699,7 @@
                       </div>
                       <div class="row  text-black">
                         <div class="col-4">
-                          Jumlah Obat
+                          Jumlah Obat (keluar dari depo)
                         </div>
                         <div class="col-8">
                           {{ rinc?.jumlahobat }}
