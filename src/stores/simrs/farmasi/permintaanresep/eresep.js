@@ -97,6 +97,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       this.namaObat = null
       const tagihanrs = this.form?.tagihanrs ?? 0
       const iterExpired = this.form?.iter_expired ?? ''
+      const iterJml = this.form?.iter_jml ?? ''
       const kodeincbg = this.form?.kodeincbg ?? '-'
       const uraianinacbg = this.form?.uraianinacbg ?? '-'
       const tarifina = this.form?.tarifina ?? 0
@@ -124,6 +125,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         kdruangan
       }
       this.setForm('iter_expired', iterExpired)
+      this.setForm('iter_jml', iterJml)
       if (jenisresep === 'Racikan') {
         this.setForm('aturan', aturan)
         this.setForm('konsumsi', konsumsi)
@@ -294,6 +296,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       const resep = reseps.find(x => x.noresep === val)
       // console.log('resep', resep)
       this.setForm('iter_expired', resep?.iter_expired ?? '')
+      this.setForm('iter_jml', resep?.iter_jml ?? '')
       this.indexRacikan = reseps.findIndex(x => x.noresep === val)
       if (resep?.flag === '') {
         this.setForm('tiperesep', resep?.tiperesep ?? 'normal')

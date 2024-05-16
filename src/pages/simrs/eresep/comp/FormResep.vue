@@ -45,11 +45,17 @@
           </div>
         </div>
         <div v-if="store?.form?.tiperesep==='iter'">
-          <app-input-date
+          <!-- <app-input-date
             :model="store.form.iter_expired"
             label="Iter Berlaku Sampai"
             outlined
             @set-model="store.setForm('iter_expired',$event)"
+          /> -->
+          <app-input
+            v-model="store.form.iter_jml"
+            label="Jumlah Iter"
+            outlined
+            @update:model-value="setJumlahIter"
           />
         </div>
         <div v-else />
@@ -722,7 +728,7 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
 import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
-import { Dialog } from 'quasar'
+import { Dialog, date } from 'quasar'
 
 const props = defineProps({
   pasien: { type: Object, default: null },
@@ -739,6 +745,17 @@ const refKet = ref(null)
 function setTipe(val) {
   console.log('tipe resep', val)
   store.cariObat('')
+}
+function setJumlahIter(val) {
+  const kali = parseInt(val)
+  if (!kali) return
+  const sekarang = Date.now()
+  const exp = date.addToDate(sekarang, { month: kali })
+  const endOm = new Date(exp.getFullYear(), exp.getMonth() + 1, 0)
+  const hari = endOm.getDate()
+  const expJadi = date.formatDate(endOm, 'YYYY-MM-') + hari
+  console.log('val', expJadi)
+  store.setForm('iter_expired', expJadi)
 }
 function setPasien() {
   const val = props?.pasien
@@ -982,8 +999,8 @@ function validate() {
     // console.log('at', store.signas, sign)
   }
   if (store.form.tiperesep === 'iter') {
-    if (store.form.iter_expired === '' || !store.form.iter_expired) {
-      notifErrVue('Tanggal Berlaku Iter Belum di isi')
+    if (store.form.iter_jml === '' || !store.form.iter_jml) {
+      notifErrVue('Jumlah Iter belum di isi')
       return false
     }
   }
