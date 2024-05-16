@@ -111,10 +111,8 @@
               <!-- <div class="row text-italic f-10">
                 {{ rinc?.kdobat }}
               </div> -->
-              <div class="row  f-10">
-                ( {{ rinc?.mobat?.satuan_k }} )
-              </div>
-              <div class="row q-col-gutter-sm  f-10">
+
+              <!-- <div class="row q-col-gutter-sm  f-10">
                 <div
                   class="col-shrink"
                   :class="rinc?.fornas==='1'?'text-green':'text-red'"
@@ -133,7 +131,7 @@
                 >
                   {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
                 </div>
-              </div>
+              </div> -->
             </q-item-section>
             <q-item-section
               side
@@ -149,12 +147,15 @@
                       {{ rinc?.aturan }}
                     </div>
                   </div>
-                  <div class="row q-mt-xs">
+                  <div class="row q-mt-xs items-end">
                     <div class="col-4">
                       Jml Obat
                     </div>
-                    <div class="col-8">
+                    <div class="col-2 text-right">
                       {{ rinc?.jumlah }}
+                    </div>
+                    <div class="col-auto f-10">
+                      ( {{ rinc?.mobat?.satuan_k }} )
                     </div>
                   </div>
                   <div class="row q-mt-xs">
@@ -210,11 +211,11 @@
           :key="i"
           class="full-width"
         >
-          <div class="row items-center">
+          <div class="q-ml-md row items-center">
             <div class="col-shrink q-mr-xs">
               {{ item?.namaracikan }}
             </div>
-            <div class="col-shrink q-mr-xs">
+            <!-- <div class="col-shrink q-mr-xs">
               <q-chip
                 square
                 class="f-10"
@@ -224,9 +225,12 @@
               >
                 {{ item?.tiperacikan }}
               </q-chip>
-            </div>
+            </div> -->
             <div class="col-shrink q-mr-xs text-green text-weight-bold">
               {{ item?.jumlahdibutuhkan }}
+            </div>
+            <div class="col-shrink q-mr-xs">
+              ({{ item?.satuan_racik }})
             </div>
             <div class="col-shrink q-mr-xs text-italic">
               {{ item?.aturan }}
@@ -265,10 +269,8 @@
                 <!-- <div class="row text-italic f-10">
                   {{ rinc?.kdobat }}
                 </div> -->
-                <div class="row f-10">
-                  ( {{ rinc?.mobat?.satuan_k }} )
-                </div>
-                <div class="row q-col-gutter-sm  f-10">
+
+                <!-- <div class="row q-col-gutter-sm  f-10">
                   <div
                     class="col-shrink"
                     :class="rinc?.fornas==='1'?'text-green':'text-red'"
@@ -287,7 +289,7 @@
                   >
                     {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
                   </div>
-                </div>
+                </div> -->
               </q-item-section>
               <q-item-section
                 side
@@ -319,12 +321,15 @@
                         {{ rinc?.jumlahresep }}
                       </div>
                     </div> -->
-                    <div class="row q-mt-xs">
-                      <div class="col-5">
+                    <div class="row q-mt-xs items-end">
+                      <div class="col-4">
                         Jml Obat
                       </div>
-                      <div class="col-7">
+                      <div class="col-2 text-right">
                         {{ rinc?.jumlahobat }}
+                      </div>
+                      <div class="col-auto f-10">
+                        ( {{ rinc?.mobat?.satuan_k }} )
                       </div>
                     </div>
                   </div>

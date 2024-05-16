@@ -29,6 +29,7 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
               tiperacikan: key?.tiperacikan,
               konsumsi: key?.konsumsi,
               jumlahdibutuhkan: key?.jumlahdibutuhkan,
+              satuan_racik: key?.satuan_racik,
               rincian: [key]
             }
             res.listRacikan.push(temp)

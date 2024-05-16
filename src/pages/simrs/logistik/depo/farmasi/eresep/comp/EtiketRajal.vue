@@ -88,18 +88,18 @@ defineProps({
   resep: { type: Object, default: () => {} }
 })
 function printPage () {
-  console.log('print ')
+  // console.log('print ')
   window.print()
   setTimeout(function () {
     afterPrint()
-  }, 100)
+  }, 200)
 }
 
 function afterPrint () {
   // const r = confirm('Press a button!')
   // if (r === true) {
   // router.push({ path: store.prevUrl ? store.prevUrl : '/history' })
-  window.close()
+  // window.close()
   emits('close')
   // } else {
   //   window.close()
