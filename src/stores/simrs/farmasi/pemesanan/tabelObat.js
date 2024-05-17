@@ -220,7 +220,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli_rinci', param)
           .then(resp => {
             this.loading = false
-            console.log(resp?.data)
+            console.log('rencana r', resp?.data)
             this.items = resp?.data
 
             resolve(this.items)

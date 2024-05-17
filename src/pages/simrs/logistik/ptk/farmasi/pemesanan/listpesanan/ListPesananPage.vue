@@ -77,33 +77,19 @@
             <div class="col-4">
               Obat
             </div>
-            <!-- <div class="col-3">
-              <div class="row justify-center">
-                Stok
-              </div>
-              <q-separator />
-              <div class="row">
-                <div class="col-4">
-                  Gudang
-                </div>
-                <div class="col-4">
-                  Rs
-                </div>
-                <div class="col-4">
-                  Max
-                </div>
-              </div>
-            </div> -->
             <div class="col-2 text-right">
               Jumlah Bisa di beli
             </div>
             <div class="col-2 text-right">
+              Jumlah Diverif
+            </div>
+            <div class="col-2 text-right">
               Jumlah Dipesan
             </div>
-            <div class="col-2 text-right">
+            <div class="col-1 text-right">
               Harga
             </div>
-            <div class="col-2 text-right">
+            <div class="col-1 text-right">
               <div class="q-mr-md">
                 #
               </div>
@@ -125,29 +111,19 @@
                   {{ rin.kdobat }}
                 </div>
               </div>
-              <!-- <div class="col-3">
-                <div class="row">
-                  <div class="col-4">
-                    {{ rin.stok_real_gudang }}
-                  </div>
-                  <div class="col-4">
-                    {{ rin.stok_real_rs }}
-                  </div>
-                  <div class="col-4">
-                    {{ rin.stok_max_rs }}
-                  </div>
-                </div>
-              </div> -->
               <div class="col-2 text-right">
                 {{ rin.jumlah_bisa_dibeli }}
               </div>
               <div class="col-2 text-right">
+                {{ rin?.jumlah_diverif??'0' }}
+              </div>
+              <div class="col-2 text-right">
                 {{ rin.jumlahdpesan }}
               </div>
-              <div class="col-2 text-right">
+              <div class="col-1 text-right">
                 {{ formatRp( rin.harga) }}
               </div>
-              <div class="col-2 text-right">
+              <div class="col-1 text-right">
                 <q-btn
                   v-if="!row.flag"
                   class="q-mr-md"
