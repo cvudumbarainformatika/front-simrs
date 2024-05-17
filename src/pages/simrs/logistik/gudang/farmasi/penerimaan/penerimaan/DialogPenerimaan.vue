@@ -72,7 +72,7 @@
           <div class="col-12">
             <app-input
               v-model="store.form.nopemesanan"
-              label="Gudang"
+              label="Nomor Pemesanan"
               outlined
               readonly
             />
@@ -247,6 +247,7 @@
           :i="i"
           :det="det"
           @simpan-obat="simpanObat(det)"
+          @tolak="tolak(det)"
         />
         <!-- <div class="row items-center q-mt-md justify-between no-wrap">
           <div class="anu q-mr-sm">
@@ -583,7 +584,12 @@ function validasi() {
     return false
   }
 }
-
+function tolak(val) {
+  console.log('form', store.form)
+  console.log('tolak', val)
+  if (!val?.nopemesanan || !val?.kdobat) return notifErrVue('Nomor Pemesanan dan atau kode obat tidak ditemukan')
+  store.tolakRinciPesanan(val)
+}
 function simpanObat(det) {
   if (validasi()) {
     // console.log('bisa disimpan', det)

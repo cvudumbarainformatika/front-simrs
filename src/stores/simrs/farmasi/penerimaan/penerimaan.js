@@ -415,6 +415,20 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
             val.loading = false
           })
       })
+    },
+    tolakRinciPesanan(val) {
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/tolak-rinci-pesanan', val)
+          .then(resp => {
+            val.loading = false
+            console.log('resp', resp?.data)
+            val.flag = '2'
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => { val.loading = false })
+      })
     }
   }
 })

@@ -95,7 +95,8 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
             }
           }
           const dipesan = !isNaN(parseFloat(item.jumlah_diverif)) ? parseFloat(item.jumlah_diverif) : 0
-          const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) ? parseFloat(item.jumlahallpesan) : 0
+          // const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) ? parseFloat(item.jumlahallpesan) : 0
+          const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) && item?.flag_pesan === '' ? parseFloat(item.jumlahallpesan) : 0
           // const bolehDipesan = ((parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan) > 0 ? (parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan : 0
           const bolehDipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
           console.log('boleh dipesan', bolehDipesan)

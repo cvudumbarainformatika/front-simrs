@@ -1,6 +1,7 @@
 <template>
   <div class="row items-center q-mt-md justify-between no-wrap">
     <div class="anu q-mr-sm">
+      {{ 'flag '+det?.flag }}
       <div
         v-if="det?.masterobat?.nama_obat"
         class="row justify-between no-wrap items-center q-mb-xs"
@@ -79,7 +80,10 @@
         </div>
       </div>
     </div>
-    <div class="anu q-mr-sm">
+    <div
+      v-if="det?.flag===''||det?.flag==='1'"
+      class="anu q-mr-sm"
+    >
       <div class="row justify-between no-wrap items-center q-mb-xs text-green">
         <div class="q-mr-sm">
           Dipesan
@@ -122,7 +126,10 @@
         </div>
       </div>
     </div>
-    <div class="anu q-mr-sm">
+    <div
+      v-if="det?.flag===''||det?.flag==='1'"
+      class="anu q-mr-sm"
+    >
       <div class="row justify-between no-wrap items-center q-mb-xs">
         <div class="col-12">
           <app-input
@@ -201,7 +208,10 @@
       </div>
     </div>
 
-    <div class="anu q-mr-sm">
+    <div
+      v-if="det?.flag===''||det?.flag==='1'"
+      class="anu q-mr-sm"
+    >
       <div class="row justify-between no-wrap items-center q-mb-xs">
         <div class="col-12">
           <app-input
@@ -273,13 +283,16 @@
         </div>
       </div>
     </div>
-    <div class="anu q-mr-sm">
+    <div
+      v-if="det?.flag===''||det?.flag==='1'"
+      class="anu q-mr-sm"
+    >
       <q-btn
         flat
         icon="icon-mat-save"
         color="primary"
         round
-        :disable="det.jml_all_penerimaan >= det.jumlahdpesan"
+        :disable="det.jml_all_penerimaan >= det.jumlahdpesan || det.loading"
         :loading="det.loading"
         @click="simpan(i)"
       >
@@ -290,6 +303,28 @@
           Simpan Rincian Penerimaan
         </q-tooltip>
       </q-btn>
+      <q-btn
+        flat
+        icon="icon-mat-hand-front-left"
+        color="negative"
+        round
+        :disable="det.loading"
+        :loading="det.loading"
+        @click="tolak(i)"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Tidak diterima
+        </q-tooltip>
+      </q-btn>
+    </div>
+    <div
+      v-if="det?.flag==='2'"
+      class="anu q-mr-sm text-weight-bold f-18"
+    >
+      Sudah ditolak
     </div>
   </div>
 </template>
@@ -306,7 +341,7 @@ defineProps({
   i: { type: Number, default: 0 }
 })
 
-const emits = defineEmits(['simpanObat'])
+const emits = defineEmits(['simpanObat', 'tolak'])
 const refJmlDiterimaB = ref(null)
 const refJmlDiterima = ref(null)
 const refBatch = ref(null)
@@ -350,6 +385,9 @@ function simpan(index) {
     emits('simpanObat', index)
     // store.simpanPenerimaan().then(() => { ind.value = null })
   }
+}
+function tolak(index) {
+  emits('tolak', index)
 }
 function adaPPN(evt, det) {
   // console.log('ada ppn', evt, det)
