@@ -17,7 +17,7 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
       jenisdistribusi: 'non-konsinyasi',
       no_permintaan: '',
       kdgudang: '',
-      flag: '0'
+      flag: '5'
     },
     form: {},
     columns: [
@@ -83,6 +83,7 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
       })
     },
     getPermintaanDepo() {
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -131,6 +132,63 @@ export const useMutasiMasukDepoStore = defineStore('mutasi_masuk_depo', {
             resolve(resp)
           })
           .catch(() => { this.loadingKunci = false })
+      })
+    },
+    batalHead(val) {
+      const data = { id: val?.id }
+      this.loadingBatal = true
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-head', data)
+          .then(resp => {
+            this.loadingBatal = false
+            val.loading = false
+            console.log('hapus permintaan ', resp)
+            notifSuccess(resp)
+            // const list = useListPermintaanStore()
+            // list.ambilPermintaan()
+            this.getPermintaanDepo()
+            this.details = []
+            this.getListObat()
+            this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBatal = false
+            val.loading = false
+          })
+      })
+    },
+    batalRinci(val, row) {
+      const data = { id: val?.id }
+      this.loadingBatal = true
+      val.loading = true
+      row.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-rinci', data)
+          .then(resp => {
+            this.loadingBatal = false
+            val.loading = false
+            row.loading = false
+            console.log('hapus det permintaan ', resp)
+            notifSuccess(resp)
+            const index = row.permintaanrinci.findIndex(a => a.id === val.id)
+            if (index >= 0) row.permintaanrinci.splice(index, 1)
+            if (!row.permintaanrinci.length) {
+              // const list = useListPermintaanStore()
+              // list.ambilPermintaan()
+              this.getPermintaanDepo()
+            }
+            // this.details = []
+            // this.getListObat()
+            // this.clearForm()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBatal = false
+            val.loading = false
+            row.loading = false
+          })
       })
     }
   }

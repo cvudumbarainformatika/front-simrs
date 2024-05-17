@@ -189,22 +189,63 @@
             </q-btn>
           </div>
           <div v-if="row.flag===''">
-            <q-btn
-              flat
-              icon="icon-mat-send"
-              dense
-              color="primary"
-              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-              :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
-              @click="kirim(row)"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
-              >
-                Kirim Permintaan
-              </q-tooltip>
-            </q-btn>
+            <div class="row  items-center">
+              <div class="col">
+                <q-btn
+                  flat
+                  icon="icon-mat-add_circle"
+                  size="13px"
+                  color="primary"
+                  round
+                  :disable=" row.loading"
+                  @click="tambah(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Tambah Obat
+                  </q-tooltip>
+                </q-btn>
+              </div>
+              <div class="col">
+                <q-btn
+                  flat
+                  icon="icon-mat-delete"
+                  size="sm"
+                  color="red"
+                  round
+                  :loading=" row.loading"
+                  :disable=" row.loading"
+                  @click="batal(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Batal Pemintaan
+                  </q-tooltip>
+                </q-btn>
+              </div>
+              <div class="col-auto">
+                <q-btn
+                  flat
+                  icon="icon-mat-send"
+                  dense
+                  color="primary"
+                  :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+                  :disable="(store.loadingKunci && row.no_permintaan === toloadBeli )|| row.loading"
+                  @click="kirim(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Kirim Permintaan
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
           </div>
         </div>
       </template>
@@ -233,7 +274,7 @@
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs">
                   <div class="text-deep-purple text-weight-bold">
-                    {{ rin.kdobat }}
+                    {{ rin?.kdobat }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs">
@@ -241,46 +282,46 @@
                     class=" text-weight-bold"
                     style="white-space: normal;"
                   >
-                    {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
+                    {{ rin?.masterobat?.nama_obat ?? '-' }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
                   <div class=" text-weight-bold">
-                    ({{ rin.masterobat.satuan_k }})
+                    ({{ rin?.masterobat?.satuan_k }})
                   </div>
                 </div>
                 <div class="row no-wrap q-mt-xs anu f-10">
                   <div
                     class="text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin?.masterobat?.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin?.masterobat?.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
-                    :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin?.masterobat?.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin?.masterobat?.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
-                    :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin?.masterobat?.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin?.masterobat?.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
                   </div>
                 </div>
                 <div class="row f-10 no-wrap q-mt-xs anu">
                   <div
                     class=" text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_kronis === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin?.masterobat?.status_kronis === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
+                    {{ rin?.masterobat?.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
                   </div>
                   <div
                     class=" text-weight-bold q-mr-sm"
-                    :class="rin.masterobat.status_prb === '1' ? 'text-green' : 'text-negative'"
+                    :class="rin?.masterobat?.status_prb === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
+                    {{ rin?.masterobat?.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
                   </div>
                 </div>
               </div>
@@ -305,7 +346,7 @@
                     Max
                   </div>
                   <div class="">
-                    {{ parseFloat(rin.mak_stok) }}
+                    {{ parseFloat(rin?.mak_stok) }}
                   </div>
                 </div>
               </div>
@@ -326,6 +367,25 @@
                     {{ rin?.distribusi }}
                   </div>
                 </div>
+              </div>
+              <div class="col-3 text-right">
+                <q-btn
+                  v-if="!row.flag"
+                  flat
+                  icon="icon-mat-delete"
+                  size="sm"
+                  color="red"
+                  round
+                  :loading=" rin.loading"
+                  @click="batalRinci(rin,row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Hapus Obat
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
             <q-separator />
@@ -495,15 +555,42 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useMutasiMasukDepoStore } from 'src/stores/simrs/farmasi/mutasi/depo/masuk'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { onMounted, ref, watch } from 'vue'
+import { useFarmasiPermintaanMutasiDepoStore } from 'src/stores/simrs/farmasi/mutasi/depo/minta'
 
 const store = useMutasiMasukDepoStore()
+const minta = useFarmasiPermintaanMutasiDepoStore()
 const apps = useAplikasiStore()
-
+const emits = defineEmits(['ganti'])
 function toPrint(val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
+}
+
+function tambah (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  console.log(val)
+  minta.setForm('no_permintaan', val.no_permintaan)
+  minta.setForm('tujuan', val.tujuan)
+  minta.details = val?.permintaanrinci
+  minta.details.forEach(det => {
+    det.nama_obat = det?.masterobat?.nama_obat
+  })
+  minta.getListObat()
+  // router.push({ path: '/depo/farmasi/permintaandepo/permintaan', replace: true })
+  emits('ganti', 'minta')
+}
+function batal (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  store.batalHead(val)
+}
+function batalRinci (val, row) {
+  // val.expand = !val.expand
+  // val.highlight = !val.highlight
+  store.batalRinci(val, row)
 }
 // const statOptions = ref([
 //   { label: 'Non-Konsinyasi', value: 'non-konsinyasi' },
