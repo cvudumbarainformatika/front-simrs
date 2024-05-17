@@ -447,7 +447,29 @@ function depoSelected (val) {
 
 function setJumlahMinta(evt) {
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
-  store.setForm('jumlah_minta', jumlah)
+  const stok = parseFloat(store.form.stok) ?? 0
+  const maks = parseFloat(store.form.mak_stok) ?? 0
+  const bisaMinta = maks - stok
+  const alokasi = !isNaN(parseFloat(store.form.stok_alokasi)) ? parseFloat(store.form.stok_alokasi) : 0
+
+  if (parseFloat(store.form.mak_stok) <= 0 || isNaN(parseFloat(store.form.mak_stok))) {
+    store.setForm('jumlah_minta', 0)
+    notifErrVue('Tidak Ada maksimal stok, tidak bisa melanjutkan transaksi')
+    return
+  }
+
+  if (jumlah > alokasi) {
+    if (alokasi < bisaMinta) {
+      store.setForm('jumlah_minta', alokasi)
+      notifErrVue('Jumlah minta tidak boleh melebihi alokasi')
+    } else {
+      store.setForm('jumlah_minta', bisaMinta)
+      notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok ')
+    }
+  } else if (jumlah > bisaMinta) {
+    store.setForm('jumlah_minta', bisaMinta)
+    notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok')
+  } else store.setForm('jumlah_minta', jumlah)
 }
 function validasi() {
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
