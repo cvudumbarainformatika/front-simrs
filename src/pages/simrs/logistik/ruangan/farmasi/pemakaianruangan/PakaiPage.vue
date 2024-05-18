@@ -1,12 +1,16 @@
 <template>
   <q-page
     ref="pageRef"
-    class="column full-height full-width"
+    class="column full-width"
     :class="!style.componentfull ? '' : 'q-pa-xs'"
+    :style="`max-height: calc(100% - ${!style.componentfull? hHead : hHead+25 }px)`"
   >
+    <!-- {{ hHead }} -->
+    <!-- :style="`min-height: ${!style.componentfull ? h-head : h}px;`" -->
     <div class="col-auto ">
       <PageHead
         v-if="!style.componentfull"
+        ref="refHead"
         :title="title"
         :subtitle="subtitle"
         :path="page.path"
@@ -31,6 +35,7 @@
           <transition :name="route.meta.transition || 'fade'">
             <component
               :is="Component"
+              :head-high="hHead"
             />
           </transition>
         </router-view>
@@ -47,7 +52,9 @@ import { useStyledStore } from 'src/stores/app/styled'
 const style = useStyledStore()
 
 const pageRef = ref()
+const refHead = ref()
 const h = ref(0)
+const hHead = ref(0)
 
 // const thumbStyle = ref({
 //   right: '0px',
@@ -84,7 +91,9 @@ const subtitle = computed(() => {
 })
 onMounted(() => {
   h.value = pageRef.value.$el.clientHeight
-  console.log('page ', h.value, pageRef.value)
+  hHead.value = refHead.value.$el.clientHeight
+  // console.log('page ', h.value, pageRef.value)
+  console.log('head', hHead.value)
 })
 
 </script>
