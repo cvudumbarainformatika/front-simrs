@@ -367,7 +367,7 @@
                     dense
                     flat
                     icon="icon-mat-save"
-                    :disable="store.loading"
+                    :disable="store.loading || tidakBisaSimpan"
                     :loading="store.loading"
                     @click="simpanObat"
                   >
@@ -578,10 +578,11 @@ import { ref, onMounted } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = usePermintaanEResepStore()
-
+const tidakBisaSimpan = ref(false)
 onMounted(() => {
   store.namaObat = null
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
+  store.setForm('kodeobat', '')
   store.setForm('keteranganx', '-')
   store.setForm('jenisresep', 'Racikan')
   store.setForm('jumlah', 1)
@@ -685,10 +686,12 @@ function enterKetx() {
 
 // key up end---
 function setDosis(evt, key) {
+  console.log('alokasi', store.form.stokalokasi)
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+
   store.setForm(key, nilai)
 
   if (store.form.tiperacikan === 'DTD') {
@@ -698,6 +701,12 @@ function setDosis(evt, key) {
     const dosisResep = store.form?.dosismaksimum ?? 1
     const jumlahObat = dosisResep / dosisObat * jumlahDiminta
     store.setForm('jumlah', jumlahObat)
+  }
+  if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
+    tidakBisaSimpan.value = true
+    notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
+  } else {
+    tidakBisaSimpan.value = false
   }
 }
 function myDebounce(func, timeout = 800) {
@@ -729,7 +738,13 @@ function obatSelected(val) {
   store.setForm('uraian50', val?.uraian50 ?? '-')
   store.setForm('stokalokasi', val?.alokasi ?? '-')
   store.setForm('kodedepo', store.dpPar)
-  // console.log('form', store.form)
+  console.log('laokasi ', store.form.stokalokasi, ' jumlah ', store.form.jumlah)
+  if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
+    tidakBisaSimpan.value = true
+    notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
+  } else {
+    tidakBisaSimpan.value = false
+  }
 }
 function obatValid (val) {
   return (val !== null && val !== '') || ''
