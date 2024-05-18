@@ -305,6 +305,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     metaniItem(item) {
       if (item.permintaanresep.length) {
         item.permintaanresep.forEach(resep => {
+          resep.kronis = resep?.mobat?.status_kronis
           const rinci = item?.rincian.find(x => x.kdobat === resep.kdobat)
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
@@ -316,9 +317,12 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           }
           // console.log('rinci ', rinci)
         })
+        const adaKronis = item?.permintaanresep.filter(f => f.kronis === '1')
+        if (adaKronis.length) item.adaKronis = 'kronis'
       }
       if (item.permintaanracikan.length) {
         item.permintaanracikan.forEach(resep => {
+          resep.kronis = resep?.mobat?.status_kronis
           const rinci = item?.rincianracik.find(x => x.kdobat === resep.kdobat)
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
@@ -331,6 +335,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           // console.log('rinci rac', rinci)
         })
       }
+      const adaKronisR = item?.permintaanracikan.filter(f => f.kronis === '1')
+      if (adaKronisR.length) item.adaKronis = 'kronis'
       item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
       // console.log('item', item)
@@ -430,6 +436,21 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           console.log('get single', resp.data)
           if (resp.status === 200) {
             // if (this.params.per_page <= this.items.length) this.items.splice(this.items.length - 1, 1)
+            const data = resp.data
+            if (data.length) {
+              data.forEach(item => {
+                item.permintaanresep.forEach(resep => {
+                  resep.kronis = resep?.mobat?.status_kronis
+                })
+                const adaKronis = item?.permintaanresep.filter(f => f.kronis === '1')
+                if (adaKronis.length) item.adaKronis = 'kronis'
+                item.permintaanracikan.forEach(resep => {
+                  resep.kronis = resep?.mobat?.status_kronis
+                })
+                const adaKronisR = item?.permintaanracikan.filter(f => f.kronis === '1')
+                if (adaKronisR.length) item.adaKronis = 'kronis'
+              })
+            }
             const index = this.items.findIndex(it => it.noresep === resp.data.noresep)
             if (index < 0) this.items.push(resp.data)
           }
