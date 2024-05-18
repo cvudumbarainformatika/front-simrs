@@ -142,7 +142,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       this.noreg = pasien?.noreg
       this.togglePageTindakan()
       try {
-        const resp = await api.post('v1/simrs/rajal/poli/terimapasien', form)
+        const resp = await api.post('v1/simrs/pelayanan/igd/terimapasien', form)
         // console.log('terima', resp)
         if (resp.status === 200) {
           const findPasien = this.items.filter(x => x?.rs1 === pasien?.noreg)
@@ -153,7 +153,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].anamnesis = resp?.data?.anamnesis
             findPasien[0].datasimpeg = resp?.data?.datasimpeg
             findPasien[0].diagnosa = resp?.data?.diagnosa
-            // findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
+            findPasien[0].permintaanperawatanjenazah = resp?.data?.permintaanperawatanjenazah
             // findPasien[0].diagnosakebidanan = resp?.data?.diagnosakebidanan
             // findPasien[0].edukasi = resp?.data?.edukasi
             findPasien[0].fisio = resp?.data?.fisio

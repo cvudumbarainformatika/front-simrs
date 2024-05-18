@@ -28,9 +28,9 @@
 import FormOrder from './comp/FormOrder.vue'
 import ListOrder from './comp/ListOrder.vue'
 import { onMounted } from 'vue'
-import { useFisioIgd } from 'src/stores/simrs/igd/fisio'
+import { useJenazahIgd } from 'src/stores/simrs/igd/jenazah'
 
-const store = useFisioIgd()
+const store = useJenazahIgd()
 const props = defineProps({
   pasien: {
     type: Object,

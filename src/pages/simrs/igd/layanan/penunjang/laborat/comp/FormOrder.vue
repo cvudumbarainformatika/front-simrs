@@ -224,7 +224,6 @@ onMounted(() => {
 function saveOrderLaborat() {
   // INI diganti function baru
   store.saveOrderLaboratBaru(props.pasien).then(() => {
-    // console.log(formRef.value)
     formRef.value.resetValidation()
     // cariRef.value.focus()
   })

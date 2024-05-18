@@ -13,6 +13,7 @@ export const usePenunjangIgd = defineStore('penunjang-igd', {
       { name: 'Radiologi', page: 'Radiologi' },
       { name: 'Operasi', page: 'Operasi' },
       { name: 'Rehab Medik', page: 'Fisioterapi' },
+      { name: 'Perawatan Jenazah', page: 'Jenazah' },
       { name: 'Penunjang Lain', page: 'PenunjangLain' }
     ],
     // laborat

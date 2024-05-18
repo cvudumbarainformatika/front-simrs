@@ -194,6 +194,7 @@ export const useLaboratIgd = defineStore('laborat-igd', {
       this.form.norm = pasien?.norm
       this.form.noreg = pasien?.noreg
       this.form.kodedokter = pasien?.kodedokter
+      this.form.unit_pengirim = pasien?.kodepoli
       // this.form.waktu_pengambilan_spesimen = this.form.tanggalpengambilanspesimen + ' ' + this.form.jampengambilanspesimen
       // this.form.waktu_fiksasi_spesimen = this.form.tanggalfiksasi + ' ' + this.form.jamfiksasi
       this.form.nota = this.notalaborat === 'BARU' ? '' : this.notalaborat
