@@ -867,7 +867,7 @@ const inputObat = myDebounce((val) => {
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
 function obatSelected(val) {
-  // console.log('select obat', val)
+  console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -959,17 +959,24 @@ function signaEnter() {
 }
 // jumlah
 function setJumlah(val) {
-  // console.log('jumlah', val)
+  let jumlah = parseFloat(val)
+  console.log('jumlah', jumlah)
+  console.log('alokasi', store.form.stokalokasi)
+  if (jumlah > parseFloat(store.form.stokalokasi)) {
+    jumlah = parseFloat(store.form.stokalokasi)
+    store.setForm('jumlah_diminta', jumlah)
+    notifErrVue('jumlah tidak boleh melebihi jumlah alokasi')
+  }
   if (Object.keys(signa.value)?.length) {
-    if (parseFloat(val) > 0) {
-      const kons = val / parseFloat(signa.value?.jumlah)
+    if (parseFloat(jumlah) > 0) {
+      const kons = jumlah / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
     }
   } else if (store.form?.aturan !== '') {
     const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
     if (sign.length) {
-      if (parseFloat(val) > 0) {
-        const kons = val / parseFloat(signa.value?.jumlah)
+      if (parseFloat(jumlah) > 0) {
+        const kons = jumlah / parseFloat(signa.value?.jumlah)
         store.setForm('konsumsi', kons)
       }
     }
