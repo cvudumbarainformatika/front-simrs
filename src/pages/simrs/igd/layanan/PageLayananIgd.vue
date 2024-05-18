@@ -121,6 +121,12 @@ const menus = ref([
     comp: shallowRef(defineAsyncComponent(() => import('../layanan/assesment/AssesmentPage.vue')))
   },
   {
+    name: 'penunjang-page',
+    label: 'Penunjang',
+    icon: 'icon-my-local_hospital',
+    comp: shallowRef(defineAsyncComponent(() => import('../layanan/penunjang/PenunjangPage.vue')))
+  },
+  {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
