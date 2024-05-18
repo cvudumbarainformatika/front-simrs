@@ -43,7 +43,7 @@
         <app-avatar-pasien
           :key="pasien"
           :pasien="pasien"
-          width="50px"
+          width="45px"
         />
         <div class="text-weight-bold f-12 q-mt-sm">
           {{ pasien ? pasien.nama : '-' }}
