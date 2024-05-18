@@ -23,6 +23,7 @@
         >
           <component
             :is="cekPanel()"
+            @ganti="gantiHead"
           />
         </q-tab-panel>
       </q-tab-panels>

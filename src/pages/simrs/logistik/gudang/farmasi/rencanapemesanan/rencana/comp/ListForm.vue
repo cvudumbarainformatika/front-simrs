@@ -168,7 +168,7 @@
             </div>
           </template>
           <template #cell-centang="{row}">
-            <div v-if="row.bisaBeli>0 && row.sudahDirencanakan<=0">
+            <div v-if="row.bisaBeli>0">
               <!-- <q-checkbox
                 v-model="row.checked"
                 dense
@@ -185,12 +185,7 @@
               />
             </div>
             <div v-else>
-              <div v-if="row.bisaBeli<=0">
-                Tidak bisa melakukan perencanaan
-              </div>
-              <div v-else>
-                Tidak bisa melakukan perencanaan, Sedang dalam Proses
-              </div>
+              Tidak bisa melakukan perencanaan
             </div>
           </template>
         </app-table>

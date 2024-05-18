@@ -70,20 +70,22 @@ export const useFarmasiPermintaanMutasiDepoStore = defineStore('farmasi_perminta
       this.setForm('kdobat', val)
       this.setForm('jumlah_minta', 0)
       console.log('obat ', val)
-      const anu = this.obats.filter(a => a.kd_obat === val)
-      if (anu.length) {
-        const obat = anu[0]
+      const anu = this.obats.find(a => a.kdobat === val)
+      const anu2 = this.obats.find(a => a.kd_obat === val)
+      if (anu) {
+        const obat = anu
         console.log('obat ketemu', obat)
         this.setForm('stok_alokasi', obat.stokalokasi)
         console.log('form', this.form)
         if (this.form.dari) {
-          // const aMax = obat?.minmax?.filter(a => a.kd_obat === val && a.kd_ruang === this.form.dari)
-          // if (aMax.length) {
-          //   const max = aMax[0]
-          //   this.setForm('mak_stok', max.max)
-          // } else {
-          //   this.setForm('mak_stok', null)
-          // }
+          this.setForm('mak_stok', obat?.minmax?.max ?? null)
+        }
+      } else if (anu2) {
+        const obat = anu2
+        console.log('obat ketemu', obat)
+        this.setForm('stok_alokasi', obat.stokalokasi)
+        console.log('form', this.form)
+        if (this.form.dari) {
           this.setForm('mak_stok', obat?.minmax?.max ?? null)
         }
       }
@@ -104,6 +106,7 @@ export const useFarmasiPermintaanMutasiDepoStore = defineStore('farmasi_perminta
       this.setForm('stok_alokasi', 0)
       this.setForm('mak_stok', 0)
       this.setForm('jumlah_minta', 0)
+      this.cariObat('')
     },
     cariObat(val) {
       console.log('cari obat ', val)
@@ -174,7 +177,7 @@ export const useFarmasiPermintaanMutasiDepoStore = defineStore('farmasi_perminta
             if (resp.data.rinci) {
               const rinc = resp.data.rinci
               if (rinc.kdobat) {
-                const anu = this.obats.filter(a => a.kd_obat === rinc.kdobat)
+                const anu = this.obats.filter(a => a.kdobat === rinc.kdobat)
                 if (anu.length) {
                   const obat = anu[0]
                   rinc.nama_obat = obat.nama_obat

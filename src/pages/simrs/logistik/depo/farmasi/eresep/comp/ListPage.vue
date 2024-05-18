@@ -137,6 +137,24 @@
               >
                 iter s/d {{ dateFullFormat(item?.iter_expired) }}
               </div>
+              <div
+                v-if="item?.tiperesep==='prb'"
+                class="row text-blue text-weight-bold f-10"
+              >
+                PRB
+              </div>
+              <div
+                v-if="item?.adaKronis"
+                class="row text-negative text-weight-bold f-10"
+              >
+                {{ item?.adaKronis }}
+              </div>
+              <div
+                v-if="item?.adaKronisR"
+                class="row text-negative text-weight-bold f-10"
+              >
+                {{ item?.adaKronisR }}
+              </div>
             </td>
             <td>
               <div class="row text-weight-bold">
