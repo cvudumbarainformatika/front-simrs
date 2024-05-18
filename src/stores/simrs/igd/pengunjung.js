@@ -161,7 +161,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             // findPasien[0].gambars = resp?.data?.gambars
             findPasien[0].laborats = resp?.data?.laborats
             // findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
-            // findPasien[0].ok = resp?.data?.ok
+            findPasien[0].ok = resp?.data?.ok
             // findPasien[0].pemeriksaanfisik = resp?.data?.pemeriksaanfisik
             // findPasien[0].penunjanglain = resp?.data?.penunjanglain
             // findPasien[0].planning = resp?.data?.planning
@@ -261,6 +261,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.radiologi
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataOk(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.ok
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }

@@ -11,7 +11,7 @@ export const usePenunjangIgd = defineStore('penunjang-igd', {
     tabs: [
       { name: 'Laborat', page: 'Laborat' },
       { name: 'Radiologi', page: 'Radiologi' },
-      { name: 'ODC', page: 'Operasi' },
+      { name: 'Operasi', page: 'Operasi' },
       { name: 'Rehab Medik', page: 'Fisio' },
       { name: 'Diet', page: 'Diet' },
       { name: 'Penunjang Lain', page: 'PenunjangLain' }
