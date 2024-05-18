@@ -155,15 +155,14 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].diagnosa = resp?.data?.diagnosa
             // findPasien[0].diagnosakeperawatan = resp?.data?.diagnosakeperawatan
             // findPasien[0].diagnosakebidanan = resp?.data?.diagnosakebidanan
-            // findPasien[0].diet = resp?.data?.diet
             // findPasien[0].edukasi = resp?.data?.edukasi
-            // findPasien[0].fisio = resp?.data?.fisio
+            findPasien[0].fisio = resp?.data?.fisio
             // findPasien[0].gambars = resp?.data?.gambars
             findPasien[0].laborats = resp?.data?.laborats
             // findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
             findPasien[0].ok = resp?.data?.ok
             // findPasien[0].pemeriksaanfisik = resp?.data?.pemeriksaanfisik
-            // findPasien[0].penunjanglain = resp?.data?.penunjanglain
+            findPasien[0].penunjanglain = resp?.data?.penunjanglain
             // findPasien[0].planning = resp?.data?.planning
             findPasien[0].radiologi = resp?.data?.radiologi
             // findPasien[0].sharing = resp?.data?.sharing
@@ -269,6 +268,22 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.ok
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataFisio(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.fisio
+        const pos = data.findIndex(el => el.id === id)
+        if (pos >= 0) { data.splice(pos, 1) }
+      }
+    },
+    hapusDataPenunjangLain(pasien, id) {
+      const findPasien = this.items.filter(x => x === pasien)
+      if (findPasien.length) {
+        const data = findPasien[0]?.penunjanglain
         const pos = data.findIndex(el => el.id === id)
         if (pos >= 0) { data.splice(pos, 1) }
       }
