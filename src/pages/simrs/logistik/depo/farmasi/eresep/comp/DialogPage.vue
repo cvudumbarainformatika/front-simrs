@@ -9,7 +9,7 @@
         <div class="row">
           <div
             class="absolute-top bg-dark text-white col-3"
-            :style=" `height: ${tinggiDetailPas}px; margin-top: ${h}px`"
+            :style=" `height: ${tinggiDetailPas}px; margin-top: ${25+16}px`"
           >
             <div class="absolute-top-right">
               <div class="row">
@@ -1278,7 +1278,7 @@
   />
 </template>
 <script setup>
-import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { date } from 'quasar'
@@ -1319,10 +1319,11 @@ function openRanap(val, wkt) {
 }
 const pageRef = ref()
 const tinggiDetailPas = ref(130)
-const h = computed(() => {
-  // console.log('h', pageRef.value)
-  return pageRef.value?.$el?.clientHeight + 5
-})
+const h = ref(0)
+// const h = computed(() => {
+//   // console.log('h', pageRef.value)
+//   return pageRef.value?.$el?.clientHeight + 5
+// })
 
 function copyResep(val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
@@ -1413,6 +1414,7 @@ function copyResep(val) {
   store.copyResep(data)
 }
 onMounted(() => {
+  h.value = pageRef.value?.clientHeight
   // h.value = pageRef.value.$el.clientHeight
   // console.log('h', pageRef.value.$el.clientHeight)
   // store.setForm('kodedepo', apps?.user?.kdruangansim)

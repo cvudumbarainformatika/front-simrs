@@ -13,7 +13,7 @@
         <div class="row">
           <div
             class="absolute-top bg-dark text-white col-3"
-            :style=" `height: ${tinggiDetailPas}px; margin-top: ${h}px`"
+            :style=" `height: ${tinggiDetailPas}px; margin-top: ${25+16}px`"
           >
             <div class="absolute-top-right">
               <div class="row">
