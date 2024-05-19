@@ -148,6 +148,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
             this.newPenerimaans = []
             this.penerimaans = []
             this.tampilPenerimaans = []
+            this.kontraks = []
             this.penerimaan = {}
             this.getPerusahaan()
             resolve(resp)
