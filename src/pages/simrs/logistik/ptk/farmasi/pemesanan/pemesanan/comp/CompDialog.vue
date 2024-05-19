@@ -408,17 +408,17 @@ function setTanggal(val) {
 }
 
 function setHarga(evt, val) {
-  const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  // const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
 
-  val.harga = dipesan
+  val.harga = nilai
 }
 function setJumlah(evt, val) {
   const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
-  // console.log('direncanaka ', val.jumlahdirencanakan)
-  // console.log('all dipesan', val.jumlahallpesan)
-  // console.log('boleh dipesan', val.bolehdipesan)
-  // console.log('jumlah dipesan', val.jumlahdipesan)
-  // console.log('dipesan', dipesan)
+
   if (dipesan > val.bolehdipesan) {
     if (val.bolehdipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan
