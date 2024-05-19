@@ -316,6 +316,22 @@
           class="row items-center"
         >
           <q-btn
+            class="q-mr-md"
+            flat
+            icon="icon-mat-add_circle"
+            dense
+            color="primary"
+            :loading=" row.loading || penerimaan.loading"
+            @click="tambahPenerimaan(row)"
+          >
+            <q-tooltip
+              class="primary"
+              :offset="[10, 10]"
+            >
+              Tambah Penerimaan
+            </q-tooltip>
+          </q-btn>
+          <q-btn
             flat
             icon="icon-mat-delete"
             dense
@@ -388,17 +404,50 @@
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
-import { notifSuccessVue } from 'src/modules/utils'
+import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
 import CetakPenerimaanComp from './comp/CetakPenerimaanComp.vue'
 
+import { useRouter } from 'vue-router'
+
 import { ref } from 'vue'
 const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
+const router = useRouter()
+function tambahPenerimaan(val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  console.log('val', val)
+  // val.rinci = val?.penerimaanrinci
+  penerimaan.ambilPemesanan().then(resp => {
+    // setTimeout(()=>{
+
+    // },200)
+    console.log('list resolve', resp)
+    console.log('filt pes', penerimaan.filteredPemesanans)
+    const gue = penerimaan.filteredPemesanans?.find(fil => fil.nopemesanan === val.nopemesanan)
+    if (gue) {
+      penerimaan.pemesananSelected(gue)
+      penerimaan.setForm('nopenerimaan', val?.nopenerimaan)
+      penerimaan.setForm('jenissurat', val?.jenissurat)
+      penerimaan.setForm('nomorsurat', val?.nomorsurat)
+      penerimaan.setForm('pengirim', val?.pengirim)
+      penerimaan.setForm('batasbayar', val?.batasbayar)
+      penerimaan.setForm('tglpenerimaan', val?.tglpenerimaan)
+      penerimaan.setForm('tglsurat', val?.tglsurat)
+      penerimaan.setDisp('batasbayar', val?.batasbayar)
+      penerimaan.setDisp('tanggal', val?.tglpenerimaan)
+      penerimaan.setDisp('surat', val?.tglsurat)
+
+      console.log('penerimaan', penerimaan.form)
+      router.push({ path: '/gudang/farmasi/penerimaan/penerimaan', replace: true })
+    } else return notifErrVue('Pesanan tidak ditemukan')
+  })
+}
 // click
 function onClick (val) {
-  console.log('click', val)
+  // console.log('click', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }

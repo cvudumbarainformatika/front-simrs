@@ -206,6 +206,7 @@ export const usePenerimaanFarmasiStore = defineStore('farmasi_penerimaan', {
       }
       this.pemesanans = pen
       this.filteredPemesanans = pen
+      Promise.resolve('mari')
     },
     gudangSelected(val) {
       this.setForm('gudang', val)
