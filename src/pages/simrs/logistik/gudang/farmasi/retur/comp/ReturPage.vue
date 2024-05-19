@@ -83,6 +83,25 @@
               />
             </div>
           </div>
+          <!-- opsi rertur -->
+          <div class="row q-col-gutter-sm items-center q-mb-sm">
+            <div class="col-3">
+              Opsi Retur
+            </div>
+
+            <div class="col-9">
+              <app-autocomplete
+                ref="refOpsiRetur"
+                v-model="store.form.opsiretur"
+                label="Opsi Retur"
+                autocomplete="label"
+                option-label="label"
+                option-value="value"
+                outlined
+                :source="opsiRetur"
+              />
+            </div>
+          </div>
         </div>
         <div class="col-6">
           <!-- No Retur -->
@@ -560,6 +579,12 @@ import { notifErrVue } from 'src/modules/utils'
 
 const store = useReturPenyediaStore()
 const refCariNoPenerimaan = ref(null)
+
+const opsiRetur = ref([
+  { label: 'Retur Barang', value: 'barang' },
+  { label: 'Retur Uang', value: 'uang' }
+])
+
 function getData() {
   store.getDataMauRet().then(() => {
     refCariNoPenerimaan.value.$refs.refInput.focus()
@@ -624,6 +649,7 @@ const refJumlah = ref(null)
 // autocol
 const refObat = ref(null)
 const refKondisi = ref(null)
+const refOpsiRetur = ref(null)
 
 function validasi(index, dibayar) {
   // console.log(refKondisi.value)
@@ -644,6 +670,7 @@ function validasi(index, dibayar) {
   }
 
   const obat = refObat.value.$refs.refAuto.validate()
+  const opsi = refOpsiRetur.value.$refs.refAuto.validate()
 
   const jumlah = refJumlah.value[index].$refs.refInput.validate()
   const kondisi = refKondisi.value[index].$refs.refAuto.validate()
@@ -657,12 +684,14 @@ function validasi(index, dibayar) {
       noKwiRet &&
       jumlah &&
       obat &&
+      opsi &&
       kondisi
   ) return true
   else return false
 }
 function simpan(index, item) {
   const dibayar = !!item.tgl_pembayaran
+  console.log('form', store.form)
   if (validasi(index, dibayar)) {
     if (!item?.kondisi_barang || item?.kondisi_barang === '') return notifErrVue('Kondisi barang belum di isi')
     // store.setForm('item', item)
@@ -675,7 +704,6 @@ function simpan(index, item) {
     store.setForm('tgl_exp', item.tgl_exp)
     store.setForm('flag_tbl_rusak', null)
     store.simpanRetur(item)
-    // console.log('form', store.form)
   } else {
     notifErrVue('Cek kembali input anda')
   }
