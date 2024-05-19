@@ -819,6 +819,12 @@ function satValid (val) {
 //   })
 // }
 function simpanObat() {
+  if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
+    tidakBisaSimpan.value = true
+    return notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
+  } else {
+    tidakBisaSimpan.value = false
+  }
   // const form = []
   // mergeObj(store.form, store.form)
   // mergeObj(store.form, form)
