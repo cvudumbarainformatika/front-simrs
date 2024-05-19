@@ -1,5 +1,8 @@
 <template>
-  <div class="row items-center q-mt-md justify-between no-wrap">
+  <div
+    class="row items-center q-mt-md justify-between no-wrap"
+    :class="parseFloat(det.jml_all_penerimaan)>0?(parseFloat(det.jml_all_penerimaan) < parseFloat(det.jumlahdpesan)?'bg-green-2':'bg-green'):''"
+  >
     <div class="anu q-mr-sm">
       {{ 'flag '+det?.flag }}
       <div
@@ -84,7 +87,7 @@
       v-if="det?.flag===''||det?.flag==='1'"
       class="anu q-mr-sm"
     >
-      <div class="row justify-between no-wrap items-center q-mb-xs text-green">
+      <div class="row justify-between no-wrap items-center q-mb-xs text-green-10">
         <div class="q-mr-sm">
           Dipesan
         </div>
@@ -116,7 +119,7 @@
       </div>
       <div
         class="row justify-between no-wrap items-center q-mb-xs"
-        :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green':'text-negative'"
+        :class="det.jml_all_penerimaan <= parseFloat(det.jumlahdpesan) ?'text-green-10':'text-negative'"
       >
         <div class="q-mr-sm">
           Seluruh Penerimaan
@@ -352,22 +355,22 @@ const refHargaKcl = ref(null)
 
 function resetValidasi() {
   // console.log('reset', refJmlDiterimaB.value.$refs.refInput)
-  refJmlDiterimaB.value.$refs.refInput.resetValidation()
-  refJmlDiterima.value.$refs.refInput.resetValidation()
-  refBatch.value.$refs.refInput.resetValidation()
-  refIsi.value.$refs.refInput.resetValidation()
-  refExp.value.$refs.refInputDate.resetValidation()
-  refHarga.value.$refs.refInput.resetValidation()
-  refHargaKcl.value.$refs.refInput.resetValidation()
+  refJmlDiterimaB.value?.$refs?.refInput?.resetValidation()
+  refJmlDiterima.value?.$refs?.refInput?.resetValidation()
+  refBatch.value?.$refs?.refInput?.resetValidation()
+  refIsi.value?.$refs?.refInput?.resetValidation()
+  refExp.value?.$refs?.refInputDate?.resetValidation()
+  refHarga.value?.$refs?.refInput?.resetValidation()
+  refHargaKcl.value?.$refs?.refInput?.resetValidation()
 }
 function validasi() {
-  const diterimaB = refJmlDiterimaB.value.$refs.refInput.validate()
-  const diterima = refJmlDiterima.value.$refs.refInput.validate()
-  const batch = refBatch.value.$refs.refInput.validate()
-  const isi = refIsi.value.$refs.refInput.validate()
-  const exp = refExp.value.$refs.refInputDate.validate()
-  const harga = refHarga.value.$refs.refInput.validate()
-  const hargaKcl = refHargaKcl.value.$refs.refInput.validate()
+  const diterimaB = refJmlDiterimaB.value?.$refs?.refInput?.validate()
+  const diterima = refJmlDiterima.value?.$refs?.refInput?.validate()
+  const batch = refBatch.value?.$refs?.refInput?.validate()
+  const isi = refIsi.value?.$refs?.refInput?.validate()
+  const exp = refExp.value?.$refs?.refInputDate?.validate()
+  const harga = refHarga.value?.$refs?.refInput?.validate()
+  const hargaKcl = refHargaKcl.value?.$refs?.refInput?.validate()
   if (diterimaB && diterima && batch && isi && exp && harga && hargaKcl) return true
   else return false
 }
