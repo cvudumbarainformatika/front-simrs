@@ -281,6 +281,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               konsumsi: key?.konsumsi,
               satuan_racik: key?.satuan_racik,
               jumlahdibutuhkan: key?.jumlahdibutuhkan,
+              etiket: false,
               rincian: [key]
             }
             res.listRacikan.push(temp)
@@ -291,6 +292,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         res?.permintaanresep.forEach(key => {
           key.groupsistembayar = val?.sistembayar?.groups
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+          key.etiket = false
         })
       }
       this.resep = res

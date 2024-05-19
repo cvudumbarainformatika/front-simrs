@@ -198,6 +198,83 @@
     </div>
 
     <div
+      v-if="apps?.user?.kdruangansim === 'Gd-04010102'"
+      class="row justify-end q-ma-sm"
+    >
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Pagi"
+          @click="openRanap('Pagi')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Pagi
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Siang"
+          @click="openRanap('Siang')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Siang
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Sore"
+          @click="openRanap('Sore')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Sore
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Malam"
+          @click="openRanap('Malam')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Malam
+          </q-tooltip>
+        </q-btn>
+      </div>
+    </div>
+    <div
       class="column q-pa-sm "
       :style="`height: calc(100vh - ${tinggiDetailPas+79}px);`"
     >
@@ -355,77 +432,33 @@
                       </q-btn>
                       <div v-if="apps?.user?.kdruangansim === 'Gd-04010102'">
                         <div class="row justify-end">
-                          <q-btn
-                            no-caps
-                            dense
-                            class="f-10 q-mb-xs"
-                            color="dark"
-                            text-color="white"
-                            label="Etiket Pagi"
-                            @click="openRanap(rinc,'Pagi')"
-                          >
-                            <q-tooltip
-                              class="primary"
-                              :offset="[10, 10]"
-                            >
-                              Print Etiket Ranap
-                            </q-tooltip>
-                          </q-btn>
+                          <q-checkbox
+                            v-model="rinc.etiket"
+                            size="xs"
+                            @update:model-value="setRincRanap(rinc,$event)"
+                          />
+                        </div>
+                        <!-- <div class="row justify-end">
+                          <q-checkbox
+                            v-model="rinc.etiket"
+                            size="xs"
+                            @update:model-value="setRincRanap(rinc,$event)"
+                          />
                         </div>
                         <div class="row justify-end">
-                          <q-btn
-                            no-caps
-                            dense
-                            class="f-10 q-mb-xs"
-                            color="dark"
-                            text-color="white"
-                            label="Etiket Siang"
-                            @click="openRanap(rinc,'Siang')"
-                          >
-                            <q-tooltip
-                              class="primary"
-                              :offset="[10, 10]"
-                            >
-                              Print Etiket Ranap
-                            </q-tooltip>
-                          </q-btn>
+                          <q-checkbox
+                            v-model="rinc.etiket"
+                            size="xs"
+                            @update:model-value="setRincRanap(rinc,$event)"
+                          />
                         </div>
                         <div class="row justify-end">
-                          <q-btn
-                            no-caps
-                            dense
-                            class="f-10 q-mb-xs"
-                            color="dark"
-                            text-color="white"
-                            label="Etiket Sore"
-                            @click="openRanap(rinc,'Sore')"
-                          >
-                            <q-tooltip
-                              class="primary"
-                              :offset="[10, 10]"
-                            >
-                              Print Etiket Ranap
-                            </q-tooltip>
-                          </q-btn>
-                        </div>
-                        <div class="row justify-end">
-                          <q-btn
-                            no-caps
-                            dense
-                            class="f-10 q-mb-xs"
-                            color="dark"
-                            text-color="white"
-                            label="Etiket Malam"
-                            @click="openRanap(rinc,'Malam')"
-                          >
-                            <q-tooltip
-                              class="primary"
-                              :offset="[10, 10]"
-                            >
-                              Print Etiket Ranap
-                            </q-tooltip>
-                          </q-btn>
-                        </div>
+                          <q-checkbox
+                            v-model="rinc.etiket"
+                            size="xs"
+                            @update:model-value="setRincRanap(rinc,$event)"
+                          />
+                        </div> -->
                       </div>
                     </div>
                     <div v-if="store?.resep?.flag==='2'">
@@ -511,14 +544,7 @@
                   label="Keterangan"
                 />
               </div>
-              <!-- <div class="col-shrink q-mr-xs ">
-                <app-input
-                  v-model="item.konsumsi"
-                  outlined
-                  valid
-                  label="Konsumsi (hari)"
-                />
-              </div> -->
+
               <div class="col-grow">
                 <q-separator
                   size="1px"
@@ -547,73 +573,11 @@
                   v-if="apps?.user?.kdruangansim === 'Gd-04010102'"
                   class="row"
                 >
-                  <q-btn
-                    no-caps
-                    dense
-                    class="f-10 q-mr-xs"
-                    color="dark"
-                    text-color="white"
-                    label="Etiket Pagi"
-                    @click="openRanap(item,'Pagi')"
-                  >
-                    <q-tooltip
-                      class="primary"
-                      :offset="[10, 10]"
-                    >
-                      Print Etiket Ranap
-                    </q-tooltip>
-                  </q-btn>
-
-                  <q-btn
-                    no-caps
-                    dense
-                    class="f-10 q-mr-xs"
-                    color="dark"
-                    text-color="white"
-                    label="Etiket Siang"
-                    @click="openRanap(item,'Siang')"
-                  >
-                    <q-tooltip
-                      class="primary"
-                      :offset="[10, 10]"
-                    >
-                      Print Etiket Ranap
-                    </q-tooltip>
-                  </q-btn>
-
-                  <q-btn
-                    no-caps
-                    dense
-                    class="f-10 q-mr-xs"
-                    color="dark"
-                    text-color="white"
-                    label="Etiket Sore"
-                    @click="openRanap(item,'Sore')"
-                  >
-                    <q-tooltip
-                      class="primary"
-                      :offset="[10, 10]"
-                    >
-                      Print Etiket Ranap
-                    </q-tooltip>
-                  </q-btn>
-
-                  <q-btn
-                    no-caps
-                    dense
-                    class="f-10 q-mr-xs"
-                    color="dark"
-                    text-color="white"
-                    label="Etiket Malam"
-                    @click="openRanap(item,'Malam')"
-                  >
-                    <q-tooltip
-                      class="primary"
-                      :offset="[10, 10]"
-                    >
-                      Print Etiket Ranap
-                    </q-tooltip>
-                  </q-btn>
+                  <q-checkbox
+                    v-model="item.etiket"
+                    size="xs"
+                    @update:model-value="setRincRanap(item,$event)"
+                  />
                 </div>
               </div>
             </div>
@@ -1288,7 +1252,7 @@ const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
 
 const rajalRinc = ref(null)
-const ranapRinc = ref(null)
+const ranapRinc = ref([])
 const ranapWaktu = ref(null)
 const rajalOpen = ref(false)
 const ranapOpen = ref(false)
@@ -1308,9 +1272,23 @@ function openRajal(val) {
     refEtiketRajal.value.printPage()
   }, 100)
 }
-function openRanap(val, wkt) {
+function setRincRanap(val, evt) {
+  // console.log('set rinc ranap', val, evt)
+  if (evt === true) {
+    // console.log('push', val)
+    ranapRinc.value.push(val)
+  } else {
+    const index = ranapRinc.value?.findIndex(ri => ri?.kdobat === val?.kdobat)
+    // console.log('splice', index)
+    if (index >= 0) {
+      ranapRinc.value.splice(index, 1)
+    }
+  }
+  // console.log('ranapRinc', ranapRinc.value)
+}
+function openRanap(wkt) {
   // console.log('refEtiketRanap', refEtiketRajal.value)
-  ranapRinc.value = val
+  // ranapRinc.value = val
   ranapWaktu.value = wkt
   ranapOpen.value = true
   setTimeout(() => {

@@ -48,26 +48,30 @@
           color="dark"
           size="1px"
         />
-        <div class="col text-center f-10 q-mt-sm">
-          {{ rinci?.mobat?.nama_obat??rinci?.namaracikan }}
-        </div>
-        <div class="col text-center text-weight-bold">
-          {{ rinci?.aturan }}
-        </div>
-        <div class="col text-center f-10">
-          Diminum {{ waktu }}
-        </div>
+        <!-- {{ rinci }} -->
         <div
-          v-if="rinci?.namaracikan && rinci?.rincian?.length"
-          class="col text-center"
+          v-for="(rinc,n) in rinci"
+          :key="n"
         >
-          <div
-            v-for="(racikan,i) in rinci?.rincian"
-            :key="i"
-            class="f-8 text-italic"
-          >
-            {{ racikan?.mobat?.nama_obat }} ({{ racikan?.jumlah }})
+          <div class="col text-center f-10 q-mt-sm">
+            {{ rinc?.mobat?.nama_obat??rinc?.namaracikan }}
           </div>
+
+          <div
+            v-if="rinc?.namaracikan && rinc?.rincian?.length"
+            class="col text-center"
+          >
+            <div
+              v-for="(racikan,i) in rinc?.rincian"
+              :key="i"
+              class="f-8 text-italic"
+            >
+              {{ racikan?.mobat?.nama_obat }} ({{ racikan?.jumlah }})
+            </div>
+          </div>
+        </div>
+        <div class="col text-center f-10 q-mt-md text-weight-bold">
+          Diminum {{ waktu }}
         </div>
         <div class="col text-center f-10 text-weight-bold text-italic q-mt-md">
           -. Semoga lekas sembuh .-
@@ -84,7 +88,7 @@
 import { dateFullFormat } from 'src/modules/formatter'
 const emits = defineEmits(['close'])
 defineProps({
-  rinci: { type: Object, default: () => {} },
+  rinci: { type: Array, default: () => [] },
   resep: { type: Object, default: () => {} },
   waktu: { type: String, default: '' }
 })
