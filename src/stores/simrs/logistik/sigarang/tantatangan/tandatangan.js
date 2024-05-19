@@ -33,13 +33,19 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
     tt: {
       kanan: null,
       kiri: null,
+      kanan1: null,
+      kiri1: null,
       tengah: null
     },
     kanan: '',
     kiri: '',
+    kanan1: '',
+    kiri1: '',
     tengah: '',
     onKanan: {},
     onKiri: {},
+    onKanan1: {},
+    onKiri1: {},
     onTengah: {}
   }),
   actions: {
@@ -85,6 +91,42 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         this.onKiri = {}
       }
     },
+    kanan1Selected(val) {
+      if (val !== null) {
+        let data = {}
+        if (val !== 'text') {
+          data = this.data[val]
+          const anu = this.optionTT.filter(tt => tt.value === val)
+          data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejabat Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
+          data.ada = true
+        } else {
+          data.ada = false
+          data.acr = this.data[val]
+        }
+        this.onKanan1 = data
+        // console.log('kanan', data)
+      } else {
+        this.onKanan1 = {}
+      }
+    },
+    kiri1Selected(val) {
+      if (val !== null) {
+        let data = {}
+        if (val !== 'text') {
+          data = this.data[val]
+          const anu = this.optionTT.filter(tt => tt.value === val)
+          data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejaban Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
+          data.ada = true
+        } else {
+          data.ada = false
+          data.acr = this.data[val]
+        }
+        this.onKiri1 = data
+        // console.log('kiri', data)
+      } else {
+        this.onKiri1 = {}
+      }
+    },
     tengahSelected(val) {
       if (val !== null) {
         let data = {}
@@ -117,12 +159,14 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
     },
     // initial data
     getInitialData() {
-      this.getDataPtk()
-      this.getDataPpk()
-      this.getDataGudang()
-      this.getDataMengetahui().then(() => {
-        this.getDataIndex()
-      })
+      if (this.optionPTK.length <= 0) this.getDataPtk()
+      if (this.optionPPK.length <= 0) this.getDataPpk()
+      if (this.optionGudang.length <= 0) this.getDataGudang()
+      if (this.optionMengetahui.length <= 0) {
+        this.getDataMengetahui().then(() => {
+          this.getDataIndex()
+        })
+      }
     },
     getDataIndex() {
       this.loading = false
