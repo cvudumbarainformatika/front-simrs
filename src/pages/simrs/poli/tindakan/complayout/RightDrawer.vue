@@ -543,6 +543,37 @@
                           </q-markup-table>
                           <q-separator />
                         </q-card-section>
+                        <q-separator />
+
+                        <q-card-section
+                          v-if="item?.transradiologi?.length && item?.hasilradiologi?.length"
+                          class="q-pa-none"
+                          flat
+                          bordered
+                          square
+                          dark
+                        >
+                          <q-bar class="bg-accent">
+                            <div>RADIOLOGI</div>
+                          </q-bar>
+                          <q-list
+                            dark
+                            separator
+                          >
+                            <q-item
+                              v-for="(radiologi, r) in item?.transradiologi"
+                              :key="r"
+                              v-ripple
+                              clickable
+                            >
+                              <q-item-section>
+                                <q-item-label>Pemeriksaan = {{ radiologi?.relmasterpemeriksaan?.rs2 }}</q-item-label>
+                                <q-item-label>Jenis Pemeriksaan Radiologi = {{ radiologi?.relmasterpemeriksaan?.rs3 }}</q-item-label>
+                                <q-item-label>Hasil Pemeriksaan Radiologi = {{ item?.hasilradiologi[r]?.rs3 }}</q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-card-section>
 
                         <q-separator />
                         <q-card-section
@@ -1338,6 +1369,37 @@
                           </q-markup-table>
                           <q-separator />
                         </q-card-section>
+                        <q-separator />
+
+                        <q-card-section
+                          v-if="item?.transradiologi?.length && item?.hasilradiologi?.length"
+                          class="q-pa-none"
+                          flat
+                          bordered
+                          square
+                          dark
+                        >
+                          <q-bar class="bg-accent">
+                            <div>RADIOLOGI</div>
+                          </q-bar>
+                          <q-list
+                            dark
+                            separator
+                          >
+                            <q-item
+                              v-for="(radiologi, r) in item?.transradiologi"
+                              :key="r"
+                              v-ripple
+                              clickable
+                            >
+                              <q-item-section>
+                                <q-item-label>Pemeriksaan = {{ radiologi?.relmasterpemeriksaan?.rs2 }}</q-item-label>
+                                <q-item-label>Jenis Pemeriksaan Radiologi = {{ radiologi?.relmasterpemeriksaan?.rs3 }}</q-item-label>
+                                <q-item-label>Hasil Pemeriksaan Radiologi = {{ item.hasilradiologi[r]?.rs3 }}</q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-card-section>
 
                         <q-separator />
                         <q-card-section
@@ -2090,6 +2152,38 @@
                         </q-card-section>
 
                         <q-separator />
+
+                        <q-card-section
+                          v-if="item?.transradiologi?.length && item?.hasilradiologi?.length"
+                          class="q-pa-none"
+                          flat
+                          bordered
+                          square
+                          dark
+                        >
+                          <q-bar class="bg-accent">
+                            <div>RADIOLOGI</div>
+                          </q-bar>
+                          <q-list
+                            dark
+                            separator
+                          >
+                            <q-item
+                              v-for="(radiologi, r) in item?.transradiologi"
+                              :key="r"
+                              v-ripple
+                              clickable
+                            >
+                              <q-item-section>
+                                <q-item-label>Pemeriksaan = {{ radiologi?.relmasterpemeriksaan?.rs2 }}</q-item-label>
+                                <q-item-label>Jenis Pemeriksaan Radiologi = {{ radiologi?.relmasterpemeriksaan?.rs3 }}</q-item-label>
+                                <q-item-label>Hasil Pemeriksaan Radiologi = {{ item.hasilradiologi[r]?.rs3 }}</q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-card-section>
+
+                        <q-separator />
                         <q-card-section
                           v-if="item?.kamaroperasi?.length"
                           class="q-pa-none"
@@ -2626,7 +2720,6 @@ function getInteger(str) {
 
   return str
 }
-
 </script>
 
 <style>
