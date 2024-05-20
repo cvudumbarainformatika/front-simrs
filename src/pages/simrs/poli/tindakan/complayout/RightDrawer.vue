@@ -165,201 +165,201 @@
                         <q-bar class="bg-accent">
                           <div>PEMERIKSAAN FISIK</div>
                         </q-bar>
-                        <transition-group name="list">
-                          <template
-                            v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
-                            :key="f"
+                        <!-- <transition-group name="list"> -->
+                        <div
+                          v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
+                          :key="f"
+                        >
+                          <!-- NADI-->
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
                           >
-                            <!-- NADI-->
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="nadi(pemeriksaanfisik?.rs4).color"
-                                  name="icon-my-monitor_heart"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
-                                  {{ pemeriksaanfisik?.rs4 }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  N (HR)
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ nadi(pemeriksaanfisik?.rs4).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  color="white"
-                                  name="icon-my-local_hospital"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-white`">
-                                  {{ pemeriksaanfisik?.pernapasan }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  RR
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  -
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="suhu(pemeriksaanfisik?.suhutubuh).color"
-                                  name="icon-my-standing-human-body-silhouette-svgrepo-com"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
-                                  {{ pemeriksaanfisik?.suhutubuh }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  SUHU TUBUH
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h5 `">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    pemeriksaanfisik?.sistole }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
-                                    pemeriksaanfisik?.diastole }}</span>
-                                </q-item-label>
-                                <q-item-label class="f-10">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
-                                    tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  TD sys / dias
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <!-- STATUS -->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="nadi(pemeriksaanfisik?.rs4).color"
+                                name="icon-my-monitor_heart"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
+                                {{ pemeriksaanfisik?.rs4 }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                N (HR)
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ nadi(pemeriksaanfisik?.rs4).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                color="white"
+                                name="icon-my-local_hospital"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-white`">
+                                {{ pemeriksaanfisik?.pernapasan }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                RR
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                -
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="suhu(pemeriksaanfisik?.suhutubuh).color"
+                                name="icon-my-standing-human-body-silhouette-svgrepo-com"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
+                                {{ pemeriksaanfisik?.suhutubuh }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                SUHU TUBUH
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h5 `">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  pemeriksaanfisik?.sistole }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
+                                  pemeriksaanfisik?.diastole }}</span>
+                              </q-item-label>
+                              <q-item-label class="f-10">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
+                                  tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                TD sys / dias
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <!-- STATUS -->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
 
-                            <!-- KHUSUS PARU POL018-->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kanan) : <em>{{
-                                    pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
-                                    '-'
-                                  }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                          </template>
-                        </transition-group>
+                          <!-- KHUSUS PARU POL018-->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kanan) : <em>{{
+                                  pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
+                                  '-'
+                                }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                        </div>
+                        <!-- </transition-group> -->
                         <q-card-section
                           v-if="item?.diagnosa?.length"
                           class="q-pa-none"
@@ -436,7 +436,7 @@
                                 />
                                 keterangan = {{ tindakan?.rs20 }}
                                 <div
-                                  v-if="tindakan?.gambardokumens.length > 0"
+                                  v-if="tindakan?.gambardokumens?.length > 0"
                                   class="image-row"
                                 >
                                   <div
@@ -996,201 +996,201 @@
                         <q-bar class="bg-accent">
                           <div>PEMERIKSAAN FISIK</div>
                         </q-bar>
-                        <transition-group name="list">
-                          <template
-                            v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
-                            :key="f"
+                        <!-- <transition-group name="list"> -->
+                        <div
+                          v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
+                          :key="f"
+                        >
+                          <!-- NADI-->
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
                           >
-                            <!-- NADI-->
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="nadi(pemeriksaanfisik?.rs4).color"
-                                  name="icon-my-monitor_heart"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
-                                  {{ pemeriksaanfisik?.rs4 }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  N (HR)
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ nadi(pemeriksaanfisik?.rs4).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  color="white"
-                                  name="icon-my-local_hospital"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-white`">
-                                  {{ pemeriksaanfisik?.pernapasan }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  RR
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  -
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="suhu(pemeriksaanfisik?.suhutubuh).color"
-                                  name="icon-my-standing-human-body-silhouette-svgrepo-com"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
-                                  {{ pemeriksaanfisik?.suhutubuh }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  SUHU TUBUH
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h5 `">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    pemeriksaanfisik?.sistole }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
-                                    pemeriksaanfisik?.diastole }}</span>
-                                </q-item-label>
-                                <q-item-label class="f-10">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
-                                    tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  TD sys / dias
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <!-- STATUS -->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="nadi(pemeriksaanfisik?.rs4).color"
+                                name="icon-my-monitor_heart"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
+                                {{ pemeriksaanfisik?.rs4 }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                N (HR)
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ nadi(pemeriksaanfisik?.rs4).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                color="white"
+                                name="icon-my-local_hospital"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-white`">
+                                {{ pemeriksaanfisik?.pernapasan }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                RR
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                -
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="suhu(pemeriksaanfisik?.suhutubuh).color"
+                                name="icon-my-standing-human-body-silhouette-svgrepo-com"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
+                                {{ pemeriksaanfisik?.suhutubuh }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                SUHU TUBUH
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h5 `">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  pemeriksaanfisik?.sistole }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
+                                  pemeriksaanfisik?.diastole }}</span>
+                              </q-item-label>
+                              <q-item-label class="f-10">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
+                                  tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                TD sys / dias
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <!-- STATUS -->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
 
-                            <!-- KHUSUS PARU POL018-->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kanan) : <em>{{
-                                    pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
-                                    '-'
-                                  }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                          </template>
-                        </transition-group>
+                          <!-- KHUSUS PARU POL018-->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kanan) : <em>{{
+                                  pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
+                                  '-'
+                                }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                        </div>
+                        <!-- </transition-group> -->
                         <q-card-section
                           v-if="item?.diagnosa?.length"
                           class="q-pa-none"
@@ -1782,201 +1782,201 @@
                         <q-bar class="bg-accent">
                           <div>PEMERIKSAAN FISIK</div>
                         </q-bar>
-                        <transition-group name="list">
-                          <template
-                            v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
-                            :key="f"
+                        <!-- <transition-group name="list"> -->
+                        <div
+                          v-for="(pemeriksaanfisik, f) in item?.pemeriksaanfisik"
+                          :key="f"
+                        >
+                          <!-- NADI-->
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
                           >
-                            <!-- NADI-->
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="nadi(pemeriksaanfisik?.rs4).color"
-                                  name="icon-my-monitor_heart"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
-                                  {{ pemeriksaanfisik?.rs4 }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  N (HR)
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ nadi(pemeriksaanfisik?.rs4).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  color="white"
-                                  name="icon-my-local_hospital"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-white`">
-                                  {{ pemeriksaanfisik?.pernapasan }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  RR
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  -
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section avatar>
-                                <q-icon
-                                  :color="suhu(pemeriksaanfisik?.suhutubuh).color"
-                                  name="icon-my-standing-human-body-silhouette-svgrepo-com"
-                                  size="lg"
-                                />
-                              </q-item-section>
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
-                                  {{ pemeriksaanfisik?.suhutubuh }}
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  SUHU TUBUH
-                                </q-item-label>
-                                <q-item-label class="text-right f-10">
-                                  {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label :class="`text-h5 `">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    pemeriksaanfisik?.sistole }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
-                                    pemeriksaanfisik?.diastole }}</span>
-                                </q-item-label>
-                                <q-item-label class="f-10">
-                                  <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
-                                    tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
-                                  <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
-                                    tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
-                                </q-item-label>
-                              </q-item-section>
-                              <q-item-section side>
-                                <q-item-label class="text-right f-10">
-                                  TD sys / dias
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                            <!-- STATUS -->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="nadi(pemeriksaanfisik?.rs4).color"
+                                name="icon-my-monitor_heart"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${nadi(pemeriksaanfisik?.rs4).color}`">
+                                {{ pemeriksaanfisik?.rs4 }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                N (HR)
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ nadi(pemeriksaanfisik?.rs4).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                color="white"
+                                name="icon-my-local_hospital"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-white`">
+                                {{ pemeriksaanfisik?.pernapasan }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                RR
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                -
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section avatar>
+                              <q-icon
+                                :color="suhu(pemeriksaanfisik?.suhutubuh).color"
+                                name="icon-my-standing-human-body-silhouette-svgrepo-com"
+                                size="lg"
+                              />
+                            </q-item-section>
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h4 text-${suhu(item?.suhutubuh).color}`">
+                                {{ pemeriksaanfisik?.suhutubuh }}
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                SUHU TUBUH
+                              </q-item-label>
+                              <q-item-label class="text-right f-10">
+                                {{ suhu(pemeriksaanfisik?.suhutubuh).res }}
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label :class="`text-h5 `">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  pemeriksaanfisik?.sistole }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diatole).color}`">{{
+                                  pemeriksaanfisik?.diastole }}</span>
+                              </q-item-label>
+                              <q-item-label class="f-10">
+                                <span :class="`${tekananDarah(pemeriksaanfisik?.sistole).color}`">{{
+                                  tekananDarah(pemeriksaanfisik?.sistole).res }}</span> /
+                                <span :class="`${tekananDarahDias(pemeriksaanfisik?.diastole).color}`">{{
+                                  tekananDarahDias(pemeriksaanfisik?.diastole).res }}</span>
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side>
+                              <q-item-label class="text-right f-10">
+                                TD sys / dias
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                          <!-- STATUS -->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                T Kesadaran : <em>{{ getKesadaran(pemeriksaanfisik?.tingkatkesadaran) ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Status Psikologis : <em>{{ pemeriksaanfisik?.statuspsikologis ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Ekonomi : <em>{{ pemeriksaanfisik?.sosialekonomi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Spiritual : <em>{{ pemeriksaanfisik?.spiritual ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                kesadaran : <em>{{ pemeriksaanfisik?.kesadaran ?? '-' }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
 
-                            <!-- KHUSUS PARU POL018-->
-                            <q-separator
-                              dark
-                              inset
-                            />
-                            <q-item
-                              v-ripple
-                              class="q-pa-xs list-move"
-                              dark
-                              clickable
-                            >
-                              <q-item-section class="q-pa-xs">
-                                <q-item-label lines="2">
-                                  Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kanan) : <em>{{
-                                    pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
-                                </q-item-label>
-                                <q-item-label lines="2">
-                                  Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
-                                    '-'
-                                  }}</em>
-                                </q-item-label>
-                              </q-item-section>
-                            </q-item>
-                          </template>
-                        </transition-group>
+                          <!-- KHUSUS PARU POL018-->
+                          <q-separator
+                            dark
+                            inset
+                          />
+                          <q-item
+                            v-ripple
+                            class="q-pa-xs list-move"
+                            dark
+                            clickable
+                          >
+                            <q-item-section class="q-pa-xs">
+                              <q-item-label lines="2">
+                                Inspeksi : <em>{{ pemeriksaanfisik?.inspeksi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Palpasi : <em>{{ pemeriksaanfisik?.palpasi ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kanan : <em>{{ pemeriksaanfisik?.perkusidadakanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Perkusi Dada Kiri : <em>{{ pemeriksaanfisik?.perkusidadakiri ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Dasar : <em>{{ pemeriksaanfisik?.auskultasisuaradasar ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kanan) : <em>{{
+                                  pemeriksaanfisik?.auskultasisuaratambahankanan ?? '-' }}</em>
+                              </q-item-label>
+                              <q-item-label lines="2">
+                                Suara Nafas Tambahan (Kiri) : <em>{{ pemeriksaanfisik?.auskultasisuaratambahankiri ??
+                                  '-'
+                                }}</em>
+                              </q-item-label>
+                            </q-item-section>
+                          </q-item>
+                        </div>
+                        <!-- </transition-group> -->
                         <q-card-section
                           v-if="item?.diagnosa?.length"
                           class="q-pa-none"
