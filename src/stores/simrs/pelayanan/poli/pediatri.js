@@ -28,7 +28,14 @@ export const usePediatriStore = defineStore('pediatri-poli', {
   }),
   actions: {
 
-    initForm() {
+    initForm(pasien) {
+      // ini baru
+      this.form.bb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.beratbadan : null
+      this.form.pb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.tinggibadan : null
+      this.form.lk = null
+      this.form.lila = null
+      this.form.bbi = null
+      this.form.bmi = null
       // anamnesis tambahan
       this.form.riwayatPerinatal = null
       this.form.imunisasiDasar = []

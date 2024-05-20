@@ -1,6 +1,47 @@
 <template>
   <div class="q-pa-lg">
     <div class="f-12 text-weight-bold">
+      Keadaan Umum
+    </div>
+    <q-separator class="q-my-sm" />
+    <div class="row q-col-gutter-xs q-mb-sm">
+      <app-input-simrs
+        v-model="store.form.bb"
+        label="BB / kg"
+        class-tambahan="col-2"
+        disable
+      />
+      <app-input-simrs
+        v-model="store.form.pb"
+        label="PB / cm"
+        class-tambahan="col-2"
+        disable
+      />
+      <app-input-simrs
+        v-model="store.form.lk"
+        label="LK / cm"
+        class-tambahan="col-2"
+      />
+      <app-input-simrs
+        v-model="store.form.lila"
+        label="LILA / cm"
+        class-tambahan="col-2"
+      />
+      <app-input-simrs
+        v-model="store.form.bbi"
+        label="BBI"
+        class-tambahan="col-2"
+        append
+        append-icon="icon-mat-visibility"
+        @append-click="coba"
+      />
+      <app-input-simrs
+        v-model="store.form.bmi"
+        label="BMI"
+        class-tambahan="col-2"
+      />
+    </div>
+    <div class="f-12 text-weight-bold">
       Anamnesis (Tambahan)
     </div>
     <q-separator class="q-my-sm" />
@@ -348,6 +389,10 @@
 <script setup>
 import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
 const store = usePediatriStore()
+
+const coba = () => {
+  console.log('ok')
+}
 </script>
 
 <style lang="scss" scoped>
