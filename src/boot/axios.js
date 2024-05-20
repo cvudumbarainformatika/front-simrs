@@ -16,8 +16,12 @@ console.log('from env', process.env)
 // const SERV = 'http://192.168.150.103:3501' // gawe laborat
 // const SERV = 'http://192.168.101.80/api.laborat/public'
 // const SERV = 'http://localhost:8080/api.laborat/public' // ari
-const SERV = 'http://localhost/api.laborat/public'
+// const SERV = 'http://localhost/api.laborat/public'
 // const SERV = 'https://rsudmochsaleh.my.id'
+
+// INI SUDAH OTOMATIS .... JIKA Dibuild atau di development ....  lihat di console
+// Jadi jika ingin merubah API untuk development? ... harap di quasar.config.js dibagian build
+const SERV = process.env.API
 
 // const WSHOST = '192.168.150.111'
 // const WSHOST = '192.168.101.80'
