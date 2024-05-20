@@ -3,7 +3,7 @@
     <div class="loader" />
   </div> -->
 
-  <div class="full-height full-width column flex-center bg-primary">
+  <div class="fit absolute column flex-center bg-primary">
     <q-spinner-box
       color="white"
       size="10em"

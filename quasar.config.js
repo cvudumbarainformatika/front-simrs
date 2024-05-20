@@ -12,7 +12,6 @@ const { configure } = require('quasar/wrappers')
 
 module.exports = configure(function (ctx) {
   // console.log('module', ctx)
-  // console.log('process', process.env)
   return {
     eslint: {
       fix: true,
@@ -52,6 +51,17 @@ module.exports = configure(function (ctx) {
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node16'
+      },
+
+      env: {
+        API: ctx.dev
+          ? 'http://localhost/api.laborat/public'
+          : 'http://192.168.150.111:3507',
+
+        WSHOST: ctx.dev
+          ? 'localhost'
+          : '192.168.150.111'
+
       },
 
       vueRouterMode: 'history' // available values: 'hash', 'history'

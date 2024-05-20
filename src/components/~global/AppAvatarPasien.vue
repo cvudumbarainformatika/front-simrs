@@ -4,7 +4,9 @@
     :ratio="withRatio ? ratio : null"
     :width="width"
     style="max-width: 100%;"
-  />
+  >
+    <slot />
+  </q-img>
 </template>
 
 <script setup>

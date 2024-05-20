@@ -5,6 +5,8 @@ import { notifErr } from 'src/modules/utils'
 // import { WacomGSS } from 'src/modules/wacom/sdkstu'
 // import { setCssVar } from 'quasar'
 
+console.log('from env', process.env)
+
 // const SERV = 'http://192.168.101.79/api.laborat/public'
 // const SERV = 'http://api.laborat.test'
 // const SERV = 'http://api.laborat.test:8080'
@@ -19,7 +21,9 @@ const SERV = 'http://localhost/api.laborat/public'
 
 // const WSHOST = '192.168.150.111'
 // const WSHOST = '192.168.101.80'
-const WSHOST = 'localhost'
+// const WSHOST = 'localhost'
+
+const WSHOST = process.env.WSHOST
 
 const WSPORT = 6003
 

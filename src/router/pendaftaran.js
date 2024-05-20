@@ -131,6 +131,22 @@ const pendaftaran = {
         }
       ]
     },
+    // INI BARU tgl 2024-05-16
+
+    {
+      path: '/pendaftaran/rawat-inap',
+      name: 'pendaftaran.rawat-inap',
+      component: () => import('pages/simrs/pendaftaran/rawatinap/IndexPage.vue')
+      // children: [
+      //   {
+      //     path: '/pendaftaran/pasien/daftar',
+      //     name: 'pendaftaran.pasien.daftar',
+      //     component: () =>
+      //       import('pages/simrs/pendaftaran/pasien/daftar/IndexPage.vue')
+      //   }
+      // ]
+    },
+
     {
       path: '/pendaftaran/data-pasien',
       name: 'pendaftaran.data-pasien',
