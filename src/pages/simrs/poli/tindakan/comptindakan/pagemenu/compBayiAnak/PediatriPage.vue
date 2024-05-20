@@ -51,7 +51,7 @@
 import FormComp from './compPediatri/FormComp.vue'
 import ListsComp from './compPediatri/ListsComp.vue'
 import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
-import { onMounted } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 import { useQuasar } from 'quasar'
 const store = usePediatriStore()
 const $q = useQuasar()
@@ -65,7 +65,17 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  store.initForm()
+  console.log('pediatri', props?.pasien)
+  store.initForm(props.pasien)
+})
+
+watchEffect(() => {
+  // console.log('watch effect', props.pasien)
+  const pFisik = props?.pasien?.pemeriksaanfisik
+  if (pFisik?.length) {
+    store.form.bb = pFisik[0]?.beratbadan ?? null
+    store.form.pb = pFisik[0]?.tinggibadan ?? null
+  }
 })
 
 function onSubmit() {

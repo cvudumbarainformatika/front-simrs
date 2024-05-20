@@ -612,7 +612,6 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
       this.edited = false
     },
 
-    //update new
     async getHistory(norm) {
       console.log(norm)
       this.loadingHistory = true
@@ -634,7 +633,7 @@ export const usePemeriksaanFisik = defineStore('pemeriksaan-fisik', {
         this.loadingHistory = false
         // notifErr(error)
       }
-    },
+    }
 
   }
 })
