@@ -1,7 +1,7 @@
 <template>
   <div class="fit">
     <div class="row full-height">
-      <div class="col-8 full-height">
+      <div :class="`col-${store.bukaCdc ? '12' : '8'} full-height`">
         <q-form
           class="fit"
           @submit="onSubmit"
@@ -11,7 +11,7 @@
             <div style="margin-bottom:150px;" />
           </div>
           <div class="absolute-bottom bg-primary q-pa-md">
-            <div class="row justify-end">
+            <div v-if="!store.bukaCdc" class="row justify-end">
               <q-btn
                 label="Simpan"
                 type="submit"
@@ -21,10 +21,18 @@
                 dense
               />
             </div>
+            <div v-else class="row justify-end">
+              <q-btn
+                label="Kembali"
+                class="bg-dark text-white q-px-lg"
+                dense
+                @click="store.bukaCdc = false"
+              />
+            </div>
           </div>
         </q-form>
       </div>
-      <div class="col-4 full-height bg-grey-4">
+      <div v-if="!store.bukaCdc" class="col-4 full-height bg-grey-4">
         <div
           v-if="!pasien?.pediatri?.length"
           class="full-height column flex-center"
@@ -64,9 +72,11 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
+onMounted(async () => {
   console.log('pediatri', props?.pasien)
   store.initForm(props.pasien)
+  await store.getMasterCdc()
+  // store.getJsonData()
 })
 
 watchEffect(() => {
@@ -78,11 +88,11 @@ watchEffect(() => {
   }
 })
 
-function onSubmit() {
+function onSubmit () {
   store.saveData(props?.pasien)
 }
 
-function hapusItem(item) {
+function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({
     title: 'Peringatan',

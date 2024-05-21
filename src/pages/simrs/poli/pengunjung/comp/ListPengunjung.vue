@@ -143,7 +143,6 @@
               @click="emits('kirimkepenjaminan', item)"
             />
             <q-btn
-              v-if="item.status === ''"
               dense
               size="sm"
               no-caps
@@ -219,30 +218,36 @@ defineProps({
   }
 })
 
-function getStatus(val) {
+function getStatus (val) {
   // '' : 'Belum Terlayanani'
   // '1': 'Terlayani'
   // '2': 'Sudah diterima'
   // '3': Batal
   if (val === '') {
     return 'BELUM TERLAYANI'
-  } else if (val === '1') {
+  }
+  else if (val === '1') {
     return 'TERLAYANI'
-  } else if (val === '2') {
+  }
+  else if (val === '2') {
     return 'SUDAH DITERIMA'
-  } else {
+  }
+  else {
     return 'Tidak Hadir'
   }
 }
 
-function labelLayanan(val) {
+function labelLayanan (val) {
   if (val === '') {
     return 'TERIMA'
-  } else if (val === '1') {
+  }
+  else if (val === '1') {
     return 'LIHAT LAYANAN'
-  } else if (val === '2') {
+  }
+  else if (val === '2') {
     return 'SUDAH DITERIMA'
-  } else if (val === '3') {
+  }
+  else if (val === '3') {
     return 'Tidak Hadir'
   }
 }
@@ -250,22 +255,25 @@ function labelLayanan(val) {
 const store = usePengunjungPoliStore()
 const storeSep = useSepBpjsStore()
 const reg = ref(null)
-function getSep(val) {
+function getSep (val) {
   reg.value = val.noreg
   console.log('pasien', val)
   if (val.groups === '1') {
     if (!val.noka) {
       notifErrVue('Nomor Kartu BPJS paien tidak ada, tidak bisa mengambil data Sep')
       reg.value = null
-    } else {
+    }
+    else {
       storeSep.getSep(val).then(() => {
         reg.value = null
       })
     }
-  } else if (val.groups === '2') {
+  }
+  else if (val.groups === '2') {
     notifErrVue('Pasien Umum tidak perlu nomor SEP')
     reg.value = null
-  } else {
+  }
+  else {
     notifErrVue('SEP hanya untuk pasien BPJS')
     reg.value = null
   }

@@ -24,11 +24,13 @@ export const usePediatriStore = defineStore('pediatri-poli', {
     kesimpulanSkreeningGizi: 'Tidak Beresiko mal nutrisi',
     form: {},
     loadingSave: false,
-    preview: false
+    preview: false,
+    bukaCdc: false,
+    masterCdc: []
   }),
   actions: {
 
-    initForm(pasien) {
+    initForm (pasien) {
       // ini baru
       this.form.bb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.beratbadan : null
       this.form.pb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.tinggibadan : null
@@ -72,19 +74,20 @@ export const usePediatriStore = defineStore('pediatri-poli', {
       this.setSkorGizi()
     },
 
-    setSkorGizi() {
+    setSkorGizi () {
       const jml = parseInt(this.form.poin1) + parseInt(this.form.poin2) + parseInt(this.form.poin3) +
       parseInt(this.form.poin4)
       this.form.skorGizi = jml
 
       if (jml < 2) {
         this.kesimpulanSkreeningGizi = 'Tidak Beresiko mal nutrisi'
-      } else {
+      }
+      else {
         this.kesimpulanSkreeningGizi = 'Beresiko mal nutrisi'
       }
     },
 
-    saveData(pasien) {
+    saveData (pasien) {
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
 
@@ -111,7 +114,7 @@ export const usePediatriStore = defineStore('pediatri-poli', {
       })
     },
 
-    deleteData(pasien, id) {
+    deleteData (pasien, id) {
       const payload = { id }
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/pediatri/deletedata', payload)
@@ -130,9 +133,38 @@ export const usePediatriStore = defineStore('pediatri-poli', {
       })
     },
 
-    previewData(item) {
+    previewData (item) {
       this.preview = true
       this.form = item
+    },
+
+    getMasterCdc () {
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/pediatri/master-who-cdc')
+          .then((resp) => {
+            console.log('master', resp)
+            if (resp.status === 200) {
+              this.masterCdc = resp.data
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+
+    getJsonData () {
+      fetch('https://echarts.apache.org/examples/data/asset/data/life-expectancy-table.json')
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          console.log('json', data)
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error(error)
+        })
     }
 
   }
