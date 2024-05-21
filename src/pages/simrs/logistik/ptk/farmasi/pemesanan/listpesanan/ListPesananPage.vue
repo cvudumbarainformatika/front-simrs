@@ -98,6 +98,7 @@
           <div
             v-for="(rin, i) in row.rinci"
             :key="i"
+            :class="rin.flag==='2'?'bg-red-2':''"
           >
             <div class="row items-center anu">
               <div class="col-4">
@@ -142,6 +143,12 @@
                     Batalkan Rincian Pesanan
                   </q-tooltip>
                 </q-btn>
+                <div
+                  v-if="rin.flag==='2'"
+                  class="text-weight-bold f-18 text-negative"
+                >
+                  DITOLAK
+                </div>
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     loadingList: false,
     loading: false,
     items: [],
+    terima: [],
     meta: {},
     params: {
       per_page: 50,
@@ -85,22 +86,29 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         //   this.items = item
 
         this.items.forEach(item => {
+          item.diterima = 0
+          if (this.terima?.length) {
+            const dterima = this.terima?.find(a => a.kdobat === item.kdobat)
+            if (dterima) item.diterima = dterima?.jumlah
+          }
           if (item?.rincian.length) {
-            const rinc = item.rincian.filter(a => a.kdobat === item.kdobat)
-            if (rinc.length) {
-              const trm = rinc[0].penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
-              const stok = rinc[0].stok.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
-              console.log('trm', trm, 'stok', stok)
+            const rinc = item.rincian.find(a => a.kdobat === item.kdobat)
+            if (rinc) {
+              const trm = rinc.penerimaan.map(ha => parseFloat(ha.harga)).reduce((a, b) => a + b, 0)
+              const stok = rinc?.harga?.harga ?? 0
+
+              // console.log('trm', trm, 'stok', stok)
               item.harga = trm > 0 ? trm : stok
             }
           }
           const dipesan = !isNaN(parseFloat(item.jumlah_diverif)) ? parseFloat(item.jumlah_diverif) : 0
           // const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) ? parseFloat(item.jumlahallpesan) : 0
-          const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) && item?.flag_pesan === '' ? parseFloat(item.jumlahallpesan) : 0
+          const dpesan = !isNaN(parseFloat(item.jumlahallpesan)) ? parseFloat(item.jumlahallpesan) : 0
+          // const ditolak = !isNaN(parseFloat(item.jumlahallpesan)) && item?.flag_pesan === '2' ? parseFloat(item.jumlahallpesan) : 0
           // const bolehDipesan = ((parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan) > 0 ? (parseFloat(item.stomaxkrs) - parseFloat(item.stokrs)) - dpesan : 0
-          const bolehDipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
-          console.log('boleh dipesan', bolehDipesan)
-          item.jumlahdipesan = (dipesan - dpesan) > 0 ? (dipesan - dpesan) : 0
+          const bolehDipesan = (dipesan - dpesan + parseFloat(item?.ditolak)) > 0 ? (dipesan - dpesan + parseFloat(item?.ditolak)) : 0
+          // console.log('boleh dipesan', bolehDipesan)
+          item.jumlahdipesan = (dipesan - dpesan + parseFloat(item?.ditolak)) > 0 ? (dipesan - dpesan + parseFloat(item?.ditolak)) : 0
           item.jumlahdirencanakan = dipesan
           item.bolehdipesan = bolehDipesan
         })
@@ -146,6 +154,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     getObatMauBeli() {
       this.norencanas = []
       this.rencanas = []
+      this.terima = []
       this.loadingList = true
 
       const param = { params: this.params }
@@ -216,13 +225,15 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     },
     getRencanaRinci(val) {
       this.loading = true
+      this.terima = []
       const param = { params: { no_rencbeliobat: val } }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/pemesananobat/dialogrencanabeli_rinci', param)
           .then(resp => {
             this.loading = false
             console.log('rencana r', resp?.data)
-            this.items = resp?.data
+            this.items = resp?.data?.data ?? resp?.data
+            // this.terima = resp?.data?.terima
 
             resolve(this.items)
           })

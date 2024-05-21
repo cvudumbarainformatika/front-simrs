@@ -271,7 +271,15 @@
                 sudah dipesan
               </div>
               <div class="text-weight-bold">
-                {{ row.jumlahallpesan && row?.flag_pesan === ''? row.jumlahallpesan : 0 }}
+                {{ row.jumlahallpesan ? row.jumlahallpesan : 0 }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap text-negative">
+              <div class="q-mr-xs">
+                Ditolak
+              </div>
+              <div class="text-weight-bold">
+                {{ row.ditolak ? row.ditolak : 0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
