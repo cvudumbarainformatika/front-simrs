@@ -31,7 +31,7 @@
         <div class="column">
           <div>
             <q-item-label class="text-primary">
-              <b>Riwayat Pemeriksaan Fisik Tanggal : <em>{{ humanDate(items?.rs3) }}</em></b>
+              <b>Riwayat Pemeriksaan Fisik Tanggal : <em>{{ humanDate(items?.tgl) }}</em></b>
             </q-item-label>
             <q-item-label class="q-mb-sm text-orange">
               <div v-if="items?.user?.length">
