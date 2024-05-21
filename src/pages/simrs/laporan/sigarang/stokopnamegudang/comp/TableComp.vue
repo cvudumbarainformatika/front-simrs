@@ -4,60 +4,41 @@
       <tr>
         <th
           width="5%"
-          style="border-top: 1px solid black; border-left: 1px solid black;  border-right: 1px solid black;"
+          rowspan="2"
         >
           No
         </th>
-        <th
-          style="border-top: 1px solid black; border-right: 1px solid black;"
-        >
+        <th rowspan="2">
           Nama
         </th>
-        <th style="border-top: 1px solid black; border-right: 1px solid black;">
+        <th rowspan="2">
           Satuan
         </th>
-        <th style="border-top: 1px solid black; border-right: 1px solid black;">
+        <th rowspan="2">
           Stok Awal
         </th>
-        <th style="border-top: 1px solid black; border-right: 1px solid black;">
+        <th rowspan="2">
           Penerimaan
         </th>
         <th
           colspan="3"
-          style="border-top: 1px solid black; border-right: 1px solid black;"
         >
           Pengeluaran
         </th>
-        <th style="border-top: 1px solid black; border-right: 1px solid black;">
+        <th rowspan="2">
           Sisa
         </th>
       </tr>
       <tr>
-        <th
-          style="border-right: 1px solid black;  border-left: 1px solid black; "
-        />
-        <th
-          style="border-right: 1px solid black; "
-        />
-        <th
-          style="border-right: 1px solid black; "
-        />
-        <th
-          style="border-right: 1px solid black; "
-        />
-        <th
-          style="border-right: 1px solid black; "
-        />
-        <th style="border-right: 1px solid black; border-top: 1px solid black;">
+        <th>
           Depo PNM
         </th>
-        <th style="border-right: 1px solid black; border-top: 1px solid black;">
+        <th>
           Depo Habis Pakai
         </th>
-        <th style="border-right: 1px solid black; border-top: 1px solid black;">
+        <th>
           Depo Gizi
         </th>
-        <th style="border-right: 1px solid black; " />
       </tr>
     </thead>
     <tbody>
@@ -182,13 +163,19 @@
               </div>
             </td>
             <td>
-              {{ item?.pnm }}
+              <div class="text-right">
+                {{ item?.pnm }}
+              </div>
             </td>
             <td>
-              {{ item?.hbs }}
+              <div class="text-right">
+                {{ item?.hbs }}
+              </div>
             </td>
             <td>
-              {{ item?.gizi }}
+              <div class="text-right">
+                {{ item?.gizi }}
+              </div>
             </td>
             <td>
               <div class="text-right">
@@ -249,7 +236,17 @@ table {
   width: 100%;
   margin-bottom: 50px;
 }
-
+thead{
+  border: 1px solid black;
+  tr{
+    th{
+      border: 1px solid black;
+      vertical-align: text-center !important;
+      background-color: white;
+      color: black;
+    }
+  }
+}
 // th,
 td {
 
@@ -263,13 +260,11 @@ td {
 //   // padding: 0.5em 0.5em 0.5em 1.5em;
 // padding: 0.5em 0.5em 0.5em 1em;
 // }
-th {
-  vertical-align: text-top !important;
-  background-color: white;
-  color: black;
-  border: inherit;
+// th {
+
+  // border: inherit;
   // border: 1px solid black;
-}
+// }
 // tr{
 //   border: 1px solid black;
 // }

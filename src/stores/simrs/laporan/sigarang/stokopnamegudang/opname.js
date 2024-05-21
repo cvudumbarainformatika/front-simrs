@@ -90,7 +90,7 @@ export const useLaporanStokOpnameGudangStore = defineStore('laporan_sigarang_sto
     mapingItem(val) {
       if (val.length) {
         val.forEach(item => {
-          console.log('item', item)
+          // console.log('item', item)
           const month = item.monthly.length ? item.monthly.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
           const recen = item.recent.length ? item.recent.map(a => a.totalStok).reduce((a, b) => a + b, 0).toFixed(2) : null
           const hmonth = item.monthly.length ? item.monthly.map(a => a.totalRp).reduce((a, b) => a + b, 0).toFixed(2) : null
@@ -225,7 +225,7 @@ export const useLaporanStokOpnameGudangStore = defineStore('laporan_sigarang_sto
         this.tTotal = val.map(a => parseFloat(a.tAkhir)).reduce((a, b) => a + b, 0)
         this.htotal = val.map(a => a.hAkhir).reduce((a, b) => a + b, 0)
         this.htTotal = val.map(a => parseFloat(a.htAkhir)).reduce((a, b) => a + b, 0)
-        console.log('items', val)
+        // console.log('items', val)
       }
     },
     getInitialData() {

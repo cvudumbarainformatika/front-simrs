@@ -5,7 +5,7 @@ import { notifErr } from 'src/modules/utils'
 // import { WacomGSS } from 'src/modules/wacom/sdkstu'
 // import { setCssVar } from 'quasar'
 
-console.log('from env', process.env)
+// console.log('from env', process?.env)
 
 // const SERV = 'http://192.168.101.79/api.laborat/public'
 // const SERV = 'http://api.laborat.test'
