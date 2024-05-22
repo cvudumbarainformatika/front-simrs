@@ -114,6 +114,7 @@
                     label="Satuan Racikan"
                     use-input
                     dense
+                    clearable
                     standout="bg-yellow-3"
                     outlined
                     :rules="[satValid]"
@@ -134,6 +135,7 @@
                     label="Aturan Pakai"
                     use-input
                     dense
+                    clearable
                     standout="bg-yellow-3"
                     option-label="signa"
                     outlined
@@ -227,6 +229,7 @@
                 option-value="kodeobat"
                 standout="bg-yellow-3"
                 outlined
+                clearable
                 input-debounce="800"
                 class="full-width"
                 hide-dropdown-icon
@@ -593,7 +596,8 @@ onMounted(() => {
     store.setForm('jumlahdibutuhkan', 1)
     store.setForm('keterangan', '-')
     store.getNomor()
-  } else {
+  }
+  else {
     const sig = store.signas.filter(s => s.signa === store?.form?.aturan)
     if (sig?.length) signa.value = sig[0]
     enterKet()
@@ -619,50 +623,51 @@ const refDosisMax = ref(null)
 const refJumlah = ref(null)
 
 // ket enter
-function focusJmlButuh() {
+function focusJmlButuh () {
   refJmlButuh.value.select()
 }
-function enterJmlButuh() {
+function enterJmlButuh () {
   refSat.value.focus()
   refSat.value.showPopup()
 }
-function enterSat() {
+function enterSat () {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
-function enterSigna() {
+function enterSigna () {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
   }
 }
-function enterKet() {
+function enterKet () {
   refObat.value.focus()
   // refObat.value.showPopup()
 }
-function enterObat() {
+function enterObat () {
   if (store.form.tiperacikan === 'DTD') {
     refDosis.value.focus()
     refDosis.value.select()
-  } else {
+  }
+  else {
     refJumlah.value.focus()
     refJumlah.value.select()
   }
 }
 
-function enterDosis() {
+function enterDosis () {
   refDosisMax.value.focus()
   refDosisMax.value.select()
 }
-function enterDosisMax() {
+function enterDosisMax () {
   refKetx.value.focus()
   refKetx.value.select()
 }
-function enterJumlah() {
+function enterJumlah () {
   refKetx.value.focus()
   refKetx.value.select()
 }
-function enterKetx() {
+function enterKetx () {
   Dialog.create({
     title: 'Konfirmasi',
     message: 'Apakah Akan dilanjutkan untuk di simpan?',
@@ -685,7 +690,7 @@ function enterKetx() {
 }
 
 // key up end---
-function setDosis(evt, key) {
+function setDosis (evt, key) {
   console.log('alokasi', store.form.stokalokasi)
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
@@ -705,11 +710,12 @@ function setDosis(evt, key) {
   if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
     tidakBisaSimpan.value = true
     notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
-  } else {
+  }
+  else {
     tidakBisaSimpan.value = false
   }
 }
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -720,7 +726,7 @@ const inputObat = myDebounce((val) => {
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 })
-function obatSelected(val) {
+function obatSelected (val) {
   if (val?.alokasi <= 0) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
@@ -742,7 +748,8 @@ function obatSelected(val) {
   if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
     tidakBisaSimpan.value = true
     notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
-  } else {
+  }
+  else {
     tidakBisaSimpan.value = false
   }
 }
@@ -755,7 +762,7 @@ const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
 
-function signaSelected(val) {
+function signaSelected (val) {
   store.setForm('aturan', val?.signa)
   store.setForm('jumlahdosis', parseFloat(val?.jumlah))
   if (parseFloat(store.form.jumlahdibutuhkan) > 0) {
@@ -763,7 +770,7 @@ function signaSelected(val) {
     store.setForm('konsumsi', kons)
   }
 }
-function signaCreateValue(val, done) {
+function signaCreateValue (val, done) {
   signaNewVal.value = true
   let newSigna = ''
   if (val.includes('x')) {
@@ -777,27 +784,29 @@ function signaCreateValue(val, done) {
       const depan = anu[0] + ' x ' + anu[1]
       if (anu?.length === 2) {
         newSigna = depan
-      } else {
+      }
+      else {
         const temp = anu
         const belakang = temp.slice(2).join(' x ')
         // console.log('dep', temp, '--->', depan, ' -- ', belakang)
         newSigna = depan + belakang
       }
     }
-  } else newSigna = val
+  }
+  else newSigna = val
   store.fromSigna.signa = newSigna
   done(store.fromSigna)
 
   console.log('signa new val', signa.value)
 }
-function getFocus() {
+function getFocus () {
   refJmlHarSig.value?.focus()
   refJmlHarSig.value?.select()
 }
-function lostFocus() {
+function lostFocus () {
   signaNewVal.value = false
 }
-function simpan() {
+function simpan () {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
     signaSelected(resp.signa)
@@ -818,11 +827,12 @@ function satValid (val) {
 //     to[a] = from[a]
 //   })
 // }
-function simpanObat() {
+function simpanObat () {
   if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
     tidakBisaSimpan.value = true
     return notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
-  } else {
+  }
+  else {
     tidakBisaSimpan.value = false
   }
   // const form = []

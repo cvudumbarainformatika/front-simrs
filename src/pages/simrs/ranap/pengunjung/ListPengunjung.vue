@@ -76,7 +76,7 @@ const store = usePengunjungRanapStore()
 const currTime = ref(new Date())
 const pasien = ref(null)
 
-function rangeDate(val) {
+function rangeDate (val) {
   // console.log('lama', val)
   const d1 = currTime.value
 
@@ -86,7 +86,7 @@ function rangeDate(val) {
   return toHoursAndMinutes(res)
 }
 
-function toHoursAndMinutes(totalMinutes) {
+function toHoursAndMinutes (totalMinutes) {
   const secs = Math.floor(Math.abs(totalMinutes))
   const mins = Math.floor(secs / 60)
   const hours = Math.floor(mins / 60)
@@ -103,7 +103,7 @@ const timerJam = setInterval(() => {
   currTime.value = new Date()
 }, 1000)
 
-function bukaLayanan(item) {
+function bukaLayanan (item) {
   pasien.value = item
   store.bukaLayanan(true)
 }

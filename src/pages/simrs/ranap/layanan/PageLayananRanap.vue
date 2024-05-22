@@ -103,7 +103,7 @@ const menus = ref([
 ])
 const menu = ref(menus.value[0])
 
-function menuDiganti(val) {
+function menuDiganti (val) {
   menu.value = val
 }
 </script>
