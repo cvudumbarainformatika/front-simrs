@@ -284,7 +284,7 @@ function info (val) {
   notifSuccessVue('Pembelian nomor ' + val.nopemesanan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
 const toloadBeli = ref('')
-function tambah(val) {
+function tambah (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   pemesanan.setForm('nopemesanan', val.nopemesanan)
@@ -323,7 +323,7 @@ function batalRinci (val) {
 const printCetakPemesanan = ref(false)
 const refCetakPemesanan = ref(false)
 
-function viewcetak(val) {
+function viewcetak (val) {
   const nomor = val.nopemesanan
   val.expand = !val.expand
   val.highlight = !val.highlight

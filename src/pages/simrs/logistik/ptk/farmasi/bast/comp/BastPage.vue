@@ -344,20 +344,20 @@ const store = useTransaksiBastFarmasiStore()
 
 store.getInitialData()
 
-function setTanggal(val) {
+function setTanggal (val) {
   store.setForm('tgl_bast', date.formatDate(val, 'YYYY-MM-DD'))
 }
-function setTanggalDisp(val) {
+function setTanggalDisp (val) {
   store.setForm('tanggal', val)
   console.log('form ', store.form)
 }
 
-function adaPPN(evt, det, pesan) {
+function adaPPN (evt, det, pesan) {
   // console.log('ada ppn', evt, det)
   if (evt) updateHargaAll('11', det, pesan, 'ppn')
   if (!evt) updateHargaAll('0', det, pesan, 'ppn')
 }
-function updateHargaAll(evt, det, trm, key) {
+function updateHargaAll (evt, det, trm, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -404,7 +404,7 @@ function updateHargaAll(evt, det, trm, key) {
   if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
 }
 
-function itemClicked(val, i) {
+function itemClicked (val, i) {
   console.log('item clicked', val)
   // val.checked = !val.checked
   const ind = findWithAttr(store.tampilPenerimaans, 'id', val.id)
@@ -412,11 +412,13 @@ function itemClicked(val, i) {
     if (ind < 0) {
       // console.log('push')
       store.tampilPenerimaans.push(val)
-    } else {
+    }
+    else {
       // console.log('sama dengan')
       store.tampilPenerimaans[ind] = val
     }
-  } else {
+  }
+  else {
     if (ind >= 0) {
       store.tampilPenerimaans.splice(ind, 1)
       // console.log('slice', ind)
@@ -430,7 +432,7 @@ const refTaBast = ref(null)
 // const refNoBast = ref(null)
 const refPemesanans = ref(null)
 const refDetails = ref(null)
-function simpanBast() {
+function simpanBast () {
   store.newPenerimaans?.forEach(ter => {
     ter.subtotal_retur = ter.penerimaanrinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
   })
@@ -446,7 +448,8 @@ function simpanBast() {
     store.simpanBast().then(() => {
       refTaBast.value.$refs.refInputDate.resetValidation()
     })
-  } else {
+  }
+  else {
     notifErrVue('Tanggal BAST Belum di isi')
   }
 }

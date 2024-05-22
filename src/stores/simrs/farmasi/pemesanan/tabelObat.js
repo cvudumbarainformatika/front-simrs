@@ -37,19 +37,19 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
     ]
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.getObatMauBeli()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.getObatMauBeli()
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('namaobat', payload)
       this.setParam('page', 1)
       this.getObatMauBeli()
@@ -59,7 +59,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
       this.columns = thumb[0]
       // console.log('columns', this.columns)
     },
-    rencanaSelected(val, from) {
+    rencanaSelected (val, from) {
       // eslint-disable-next-line no-unused-vars
       const gudangs = [
         { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
@@ -116,10 +116,10 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
         // console.log('pesanan', item)
       })
     },
-    clearRencana(val) {
+    clearRencana (val) {
       this.pesan.setForm('no_rencbeliobat', null)
     },
-    cariRencana(val) {
+    cariRencana (val) {
       this.setParam('no_rencbeliobat', '')
       this.rencanas = []
       const ren = this.rencanaAlls.filter(a => a.noperencanaan.includes(val))
@@ -143,15 +143,16 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
           })
         }
         // this.rencanas = ren
-      } else {
+      }
+      else {
         this.setParam('no_rencbeliobat', val)
         this.getObatMauBeli()
       }
     },
-    getInitialData() {
+    getInitialData () {
       this.getObatMauBeli()
     },
-    getObatMauBeli() {
+    getObatMauBeli () {
       this.norencanas = []
       this.rencanas = []
       this.terima = []
@@ -223,7 +224,7 @@ export const useTabelPemesananObatStore = defineStore('tabel_pemesanan_obat', {
           })
       })
     },
-    getRencanaRinci(val) {
+    getRencanaRinci (val) {
       this.loading = true
       this.terima = []
       const param = { params: { no_rencbeliobat: val } }

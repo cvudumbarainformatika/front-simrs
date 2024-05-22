@@ -571,7 +571,7 @@ const refPengirim = ref(null) // inp
 const refGudang = ref(null) // auto
 const refComDetail = ref(null) // detail
 
-function validasi() {
+function validasi () {
   const jenisSurat = refJenisSurat.value.$refs.refAuto.validate()
   const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
@@ -584,13 +584,13 @@ function validasi() {
     return false
   }
 }
-function tolak(val) {
+function tolak (val) {
   console.log('form', store.form)
   console.log('tolak', val)
   if (!val?.nopemesanan || !val?.kdobat) return notifErrVue('Nomor Pemesanan dan atau kode obat tidak ditemukan')
   store.tolakRinciPesanan(val)
 }
-function simpanObat(det) {
+function simpanObat (det) {
   if (validasi()) {
     // console.log('bisa disimpan', det)
     store.simpanPenerimaan(det).then(() => {
@@ -608,24 +608,24 @@ function simpanObat(det) {
     })
   }
 }
-function setTanggal(val) {
+function setTanggal (val) {
   store.setForm('tglpenerimaan', val)
 }
-function dispTanggal(val) {
+function dispTanggal (val) {
   store.setDisp('tanggal', val)
 }
 
-function setSurat(val) {
+function setSurat (val) {
   store.setForm('tglsurat', val)
 }
-function dispSurat(val) {
+function dispSurat (val) {
   store.setDisp('surat', val)
 }
 
-function setTempo(val) {
+function setTempo (val) {
   store.setForm('batasbayar', val)
 }
-function dispTempo(val) {
+function dispTempo (val) {
   store.setDisp('batasbayar', val)
 }
 const apps = useAplikasiStore()
