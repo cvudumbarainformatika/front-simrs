@@ -786,39 +786,39 @@ import { ref } from 'vue'
 const refKelasTerapi = ref(null)
 const store = useMasterObatForm()
 // simpan cepat start --
-function scKelompokPenyimpanan(val) {
+function scKelompokPenyimpanan (val) {
   myDialog(store.simpanCepatKelompokPenyimpanan, val, 'Kelompok Penyimpanan')
 }
-function scSatuanKec(val) {
+function scSatuanKec (val) {
   myDialog(store.simpanCepatSatuanKec, val, 'Satuan Kecil')
 }
-function scSatuanBes(val) {
+function scSatuanBes (val) {
   myDialog(store.simpanCepatSatuanBes, val, 'Satuan Besar')
 }
-function scBentukSediaan(val) {
+function scBentukSediaan (val) {
   myDialog(store.simpanCepatBentukSediaan, val, 'Bentuk Sediaan')
 }
-function scJenisPerbekalan(val) {
+function scJenisPerbekalan (val) {
   myDialog(store.simpanCepatJenisPerbekalan, val, 'Jenis Perbekalan')
 }
-function scKandungan(val) {
+function scKandungan (val) {
   myDialog(store.simpanCepatKandungan, val, 'Kandungan / Nama Generik')
 }
-function scMerk(val) {
+function scMerk (val) {
   myDialog(store.simpanCepatMerk, val, 'Merk')
 }
-function scVolumeSediaan(val) {
+function scVolumeSediaan (val) {
   myDialog(store.simpanCepatVolumeSediaan, val, 'Volume Sediaan')
 }
-function scKelasTerapi(val) {
+function scKelasTerapi (val) {
   myDialog(store.simpanCepatKelasTerapi, val, 'Kelas Terapi')
 }
-function scJenisProduk(val) {
+function scJenisProduk (val) {
   myDialog(store.simpanCepatJenisProduk, val, 'Jenis Produk')
 }
 // simpan cepat end --
 // set label obat start---
-function setNama(val) {
+function setNama (val) {
   if (!val.length) {
     store.deleteNamaObat('nama')
     store.setFormNamaObat()
@@ -827,53 +827,53 @@ function setNama(val) {
   store.setNamaObat('nama', val)
   store.setFormNamaObat()
 }
-function jenisPerbekalanSelected(val) {
+function jenisPerbekalanSelected (val) {
   store.setForm('jenis_perbekalan', val)
   store.setFormNamaObat()
 }
-function jenisPerbekalanCleared() {
+function jenisPerbekalanCleared () {
   store.setFormNamaObat()
   store.deleteForm('jenis_perbekalan')
 }
-function merkSelected(val) {
+function merkSelected (val) {
   store.setForm('merk', val)
   store.setNamaObat('merk', val)
   store.setFormNamaObat()
 }
-function merkCleared() {
+function merkCleared () {
   // console.log('merk cleared', val)
   store.deleteForm('merk')
   store.deleteNamaObat('merk')
   store.setFormNamaObat()
 }
-function bentukSediaanSelected(val) {
+function bentukSediaanSelected (val) {
   store.setForm('bentuk_sediaan', val)
   store.setNamaObat('bentukSediaan', val)
   store.setFormNamaObat()
 }
-function bentukSediaanCleared() {
+function bentukSediaanCleared () {
   // console.log('bentukSediaan cleared', val)
   store.deleteNamaObat('bentukSediaan')
   store.deleteForm('bentuk_sediaan')
   store.setFormNamaObat()
 }
-function kekuatanDosisSelected(val) {
+function kekuatanDosisSelected (val) {
   // console.log('kekuatan dosis', val)
   store.setForm('kekuatan_dosis', val)
   store.setNamaObat('kekuatanDosis', val)
   store.setFormNamaObat()
 }
-function kekuatanDosisCleared() {
+function kekuatanDosisCleared () {
   store.deleteNamaObat('kekuatanDosis')
   store.deleteForm('kekuatan_dosis')
   store.setFormNamaObat()
 }
-function volumeSediaanSelected(val) {
+function volumeSediaanSelected (val) {
   store.setForm('volumesediaan', val)
   store.setNamaObat('volumeSediaan', val)
   store.setFormNamaObat()
 }
-function volumeSediaanCleared() {
+function volumeSediaanCleared () {
   store.deleteNamaObat('volumeSediaan')
   store.deleteForm('volumesediaan')
   store.setFormNamaObat()
@@ -881,85 +881,85 @@ function volumeSediaanCleared() {
 // set nama obat end---
 // cari start----
 // cari jenis Produk
-function cariJenisProduk(val) {
+function cariJenisProduk (val) {
   // console.log('cari kandungan ', val)
   store.getJenisProduk(val)
 }
 // cari kandungan
-function cariKandungan(val) {
+function cariKandungan (val) {
   // console.log('cari kandungan ', val)
   store.getKandungan(val)
 }
 
 // cari jenis perbekalan
-function cariJenisPerbekalan(val) {
+function cariJenisPerbekalan (val) {
   // console.log('cari kandungan ', val)
   store.getJenisPerbekalan(val)
 }
 
 // cari bentuk Sediaan
-function cariBentukSediaan(val) {
+function cariBentukSediaan (val) {
   // console.log('cari kandungan ', val)
   store.getBetukSediaan(val)
 }
 
 // cari kekuatan dosis
-function cariKekuatanDosis(val) {
+function cariKekuatanDosis (val) {
   // console.log('cari kandungan ', val)
   store.getKekuatanDosis(val)
 }
 
 // cari Volume Sediaan
-function cariVolumeSediaan(val) {
+function cariVolumeSediaan (val) {
   // console.log('cari kandungan ', val)
   store.getVolumeSediaan(val)
 }
 
 // cari Satuan Besar
-function cariSatuanB(val) {
+function cariSatuanB (val) {
   // console.log('cari kandungan ', val)
   store.getSatuanBes(val)
 }
 
 // cari Satuan Kecil
-function cariSatuanK(val) {
+function cariSatuanK (val) {
   // console.log('cari kandungan ', val)
   store.getSatuanKec(val)
 }
 
 // cari Satuan Merk
-function cariMerk(val) {
+function cariMerk (val) {
   // console.log('cari kandungan ', val)
   // store.getMerk(val)
 }
 
 // cari Satuan kelompok penyimpanan
-function cariKelompokPenyimpanan(val) {
+function cariKelompokPenyimpanan (val) {
   // console.log('cari kandungan ', val)
   // store.getMerk(val)
 }
 
 // cari Satuan kelompok RKO
-function cariKelompokRKO(val) {
+function cariKelompokRKO (val) {
   // console.log('cari kandungan ', val)
   store.getKelompokRKO(val)
 }
 
 // cari Kelas Terapi
-function cariKelasTerapi(val) {
+function cariKelasTerapi (val) {
   // console.log('cari kandungan ', val)
   // store.getKelompokRKO(val)
 }
 
 // cari Kode Belanja
-function cariKodeBelanja(val) {
+function cariKodeBelanja (val) {
   // console.log('cari kandungan ', val)
   // store.getMerk(val)
 }
 // cari end----
 
 // Kelas terapi Dipilih
-function kelasTerapiSelected(val) {
+function kelasTerapiSelected (val) {
   console.log('kelas terapi dipilih val ', val)
   console.log('kelas terapi dipilih ', refKelasTerapi.value.$refs.refAuto)
   if (val !== null) {
@@ -969,7 +969,7 @@ function kelasTerapiSelected(val) {
   refKelasTerapi.value.$refs.refAuto.updateInputValue('')
 }
 // Satuan Belanja Dipilih
-function kodeBelanjaDipilih(val) {
+function kodeBelanjaDipilih (val) {
   // console.log('kode belanja dipilih ', val)
   const index = findWithAttr(store.kodeBelanjas, 'kode', val)
   // console.log('kode belanja dipilih ', index)
@@ -984,13 +984,13 @@ function kodeBelanjaDipilih(val) {
 }
 
 // hapus Kelas terapi
-function hapusTerapi(val) {
+function hapusTerapi (val) {
   console.log('hapus', val)
   store.removeKelasTerapi(val)
 }
 
 // dialog
-function myDialog(func, val, anu) {
+function myDialog (func, val, anu) {
   Dialog.create({
     title: 'Konfirmasi',
     message: `apakah anda akan menyimpan <strong>${anu} : <span style="color: red;" >${val}</span></strong> ?`,
@@ -1030,5 +1030,6 @@ const onReset = () => {
 .lebar{
   max-width:80vw;
   width:60vw;
+  // height: 40vh;
 }
 </style>

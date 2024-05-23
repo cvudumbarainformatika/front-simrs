@@ -349,7 +349,7 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Nilai KDN
+                  Nilai TKDN
                 </div>
                 <div class="text-right">
                   {{ row.nilai_kdn }}
@@ -406,7 +406,7 @@ const table = useMasterObatTable()
 const store = useMasterObatForm()
 table.getDataTable()
 store.getInitialData()
-function sisBay(val) {
+function sisBay (val) {
   switch (val) {
     case 'UMUM':
       return 'text-indigo'
@@ -418,7 +418,7 @@ function sisBay(val) {
       return ''
   }
 }
-function gudang(val) {
+function gudang (val) {
   const gud = store.optionGudangs.find(x => x.value === val)
 
   return gud?.label ?? '-'
