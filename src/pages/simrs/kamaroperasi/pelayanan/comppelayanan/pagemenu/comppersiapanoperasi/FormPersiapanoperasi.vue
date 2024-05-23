@@ -112,7 +112,7 @@ f<template>
                       {{ scope.opt.satuankecil }}
                     </div>
                     <div
-                      v-if="scope.opt.status_konsinyasi!==''"
+                      v-if="scope.opt.status_konsinyasi==='1'"
                       class="q-ml-xs text-italic f-10 text-weight-bold text-deep-purple"
                     >
                       ( Konsinyasi )
@@ -511,7 +511,7 @@ const refKet = ref(null)
 //   console.log('tipe resep', 'Normal')
 //   store.cariObat('')
 // }
-function setPasien() {
+function setPasien () {
   const val = props?.pasien
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   // eslint-disable-next-line no-unused-vars
@@ -534,13 +534,13 @@ function setPasien() {
   // store.listPemintaanSementara = []
 }
 
-function resetFormRacik() {
+function resetFormRacik () {
   store.setForm('jenisresep', '')
   store.resetForm()
 }
 /// / set Racikan end ------
 
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -557,7 +557,7 @@ const inputObat = myDebounce((val) => {
 //   if (val !== '') store.cariObat(val)
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
-function obatSelected(val) {
+function obatSelected (val) {
   // console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
@@ -579,7 +579,7 @@ function obatSelected(val) {
   store.setForm('kodedepo', 'Gd-04010103')
 }
 
-function obatEnter() {
+function obatEnter () {
   refQty.value.focus()
   refQty.value.select()
 }
@@ -587,7 +587,7 @@ function obatEnter() {
 const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
-function signaSelected(val) {
+function signaSelected (val) {
   // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
@@ -627,14 +627,14 @@ function signaSelected(val) {
 
 //   console.log('signa new val', signa.value)
 // }
-function getFocus() {
+function getFocus () {
   refJmlHarSig.value?.focus()
   refJmlHarSig.value?.select()
 }
-function lostFocus() {
+function lostFocus () {
   signaNewVal.value = false
 }
-function simpan() {
+function simpan () {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
     signaSelected(resp.data)
@@ -650,14 +650,15 @@ function simpan() {
 //   }
 // }
 // jumlah
-function setJumlah(val) {
+function setJumlah (val) {
   console.log('jumlah', val)
   if (Object.keys(signa.value)?.length) {
     if (parseFloat(val) > 0) {
       const kons = val / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
     }
-  } else if (store.form?.aturan !== '') {
+  }
+  else if (store.form?.aturan !== '') {
     const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
     if (sign.length) {
       if (parseFloat(val) > 0) {
@@ -679,7 +680,7 @@ function obatValid (val) {
 // function sigaValid (val) {
 //   return (val !== null && val !== '') || ''
 // }
-function validate() {
+function validate () {
   if (store?.form?.kodeobat !== '') {
     const ob = store?.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
     if (ob.length && !Object?.keys(store?.namaObat)?.length) store.namaObat = ob[0]
@@ -715,7 +716,7 @@ function validate() {
 //       simpanObat()
 //     })
 // }
-function simpanObat() {
+function simpanObat () {
   console.log('simpan', store.form)
   if (validate()) {
     store.simpanObat()

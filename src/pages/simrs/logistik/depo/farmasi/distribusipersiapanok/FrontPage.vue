@@ -38,6 +38,7 @@
       :ada-filter="false"
       :ada-cari="false"
       row-no
+      simple-paginasi
       use-full
       text-cari="Cari ..."
       @find="store.setSearch"
@@ -180,22 +181,41 @@
       </template>
       <template #cell-act="{ row }">
         <div class="row">
-          <div v-if="row.flag==='2' || row.flag==='4'">
-            <q-btn
-              round
-              icon="icon-mat-print"
-              dense
-              color="dark"
-              size="sm"
-              @click="toPrint(row)"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
+          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center">
+            <div class="col-auto">
+              <q-btn
+                round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(row)"
               >
-                Print
-              </q-tooltip>
-            </q-btn>
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-if="row.flag==='2'" class="col-auto q-ml-sm">
+              <q-btn
+                round
+                icon="icon-mat-add"
+                dense
+                color="primary"
+                size="sm"
+                @click="toAdd(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Tambahkan Obat susulan
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
           <div v-if="row.flag==='1'">
             <q-btn
@@ -425,6 +445,9 @@
                   </div>
                 </div>
               </div>
+              <div v-if="rin?.susulan" class="col-3">
+                {{ rin?.susulan?.nama }}
+              </div>
             </div>
             <q-separator />
           </div>
@@ -639,23 +662,36 @@
       </div>
     </template>
   </app-print-surat>
+  <add-surat v-model="tambah.isOpen" @close="tambah.isOpen = false" />
 </template>
 
 <script setup>
 import { dateFull, dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, defineAsyncComponent } from 'vue'
 import { useDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/distribusi'
 import { notifErrVue } from 'src/modules/utils'
+import { useTambahObatDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/tambah'
 
 const store = useDistribusiPersiapanOperasiStore()
+const tambah = useTambahObatDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+const addSurat = defineAsyncComponent(() => import('./comp/DialogAddObat.vue'))
+
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
+}
+function toAdd (val) {
+  console.log('val', val)
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  tambah.isOpen = true
+  tambah.groups = val?.list?.sistembayar?.groups
+  tambah.setForm('nopermintaan', val?.nopermintaan)
 }
 onMounted(() => {
   if (apps?.user?.kdruangansim !== 'Gd-04010103') {
@@ -679,12 +715,12 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 // menu hide and show
 let prevFrom = null
 let prevTo = null
-function menuShow() {
+function menuShow () {
   prevFrom = store.params.from
   prevTo = store.params.to
   // console.log('show', prevFrom, prevTo)
 }
-function menuHide() {
+function menuHide () {
   const samaFrom = store.params.from === prevFrom
   const samaTo = store.params.to === prevTo
   // console.log('hide', samaFrom, samaTo)
@@ -708,7 +744,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }
@@ -738,7 +775,8 @@ function teimaPengembalian (val) {
       console.log('valid', valid.length)
       if (valid.length <= 0) store.terimaPengembalian(val)
       else notifErrVue('periksa kembali jumlah kembali')
-    } else {
+    }
+    else {
       // console.log('else', val?.rinci)
       val?.rinci.forEach(rin => { rin.sisa = parseFloat(rin.jumlah_distribusi - rin.jumlah_resep) })
       const ada = val?.rinci.filter(a => a.sisa !== a.jumlah_kembali)
@@ -763,7 +801,8 @@ function distribusi (val) {
       console.log('valid', valid.length)
       if (valid.length <= 0) store.simpanDistribusi(val)
       else notifErrVue('periksa kembali jumlah distribusi')
-    } else {
+    }
+    else {
       // console.log('else', val?.rinci)
       const ada = val?.rinci.filter(a => a.jumlah_distribusi <= 0)
       // console.log('ada', ada)
