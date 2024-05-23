@@ -596,7 +596,7 @@
               <div class="row q-mb-xs items-center">
                 Status Forkit:
                 <q-option-group
-                  v-model="store.form.keterangan_kronis"
+                  v-model="store.form.status_forkid"
                   :options="store.optionStatusForkits"
                   color="primary"
                   class="q-ml-sm"
