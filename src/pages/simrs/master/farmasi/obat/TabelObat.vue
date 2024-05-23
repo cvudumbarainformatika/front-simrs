@@ -360,7 +360,7 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Sertifikat KDN
+                  Sertifikat TKDN
                 </div>
                 <div class="text-right">
                   {{ row.sertifikatkdn }}
