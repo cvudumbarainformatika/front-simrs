@@ -7,7 +7,7 @@
           @submit="onSubmit"
         >
           <div class="full-height scroll">
-            <FormComp />
+            <FormComp :pasien="pasien" />
             <div style="margin-bottom:150px;" />
           </div>
           <div class="absolute-bottom bg-primary q-pa-md">
@@ -73,7 +73,8 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  console.log('pediatri', props?.pasien)
+  // console.log('pediatri', props?.pasien)
+  store.bukaCdc = false
   store.initForm(props.pasien)
   await store.getMasterCdc()
   // store.getJsonData()

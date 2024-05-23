@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CdcPage v-if="store.bukaCdc" />
+    <CdcPage v-if="store.bukaCdc" :pasien="pasien" :draft="draft" :key="draft" />
     <div v-else class="q-pa-lg">
       <div class="f-12 text-weight-bold">
         Keadaan Umum
@@ -387,10 +387,92 @@
 </template>
 
 <script setup>
+import { onMounted, ref, watchEffect } from 'vue'
 import CdcPage from './CdcPage.vue'
 import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
 // import { ref } from 'vue'
 const store = usePediatriStore()
+const draft = ref(null)
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
+onMounted(() => {
+  cariGrafikChart()
+  const age = calculateAge(props?.pasien?.tgllahir ?? null)
+  console.log(age)
+})
+
+const cariGrafikChart = () => {
+  const ageInMonths = calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
+
+  const bb = parseFloat(store?.form?.bb ?? 0)
+  const pb = parseFloat(store?.form?.pb ?? 0)
+
+  const x = props?.pasien?.kelamin ?? null
+  const kelamin = x === 'Perempuan' ? 2 : 1
+
+  const masterTb = store?.masterCdc.length ? store.masterCdc.filter(x => x.gender === kelamin && x?.jns === 1) : []
+  const masterWeight = store?.masterCdc.length ? store.masterCdc.filter(x => x.gender === kelamin && x?.jns === 2) : []
+  const dataTb = masterTb?.filter(x => x['50rd'] >= Math.floor(pb) && x['50rd'] < Math.round(pb) + 0.5)
+  const titkA = [ageInMonths, pb]
+  const titikB = [dataTb.length ? dataTb.reduce((x, y) => x + y.age_m, 0) / dataTb.length ?? 0 : 0, dataTb.length ? Math.floor(dataTb.reduce((x, y) => x + y['50rd'], 0) / dataTb.length) ?? 0 : 0]
+  const dataWeight = masterWeight?.filter(x => x.age_m >= Math.floor(titikB[0] ?? 0) && x.age_m < Math.round(titikB[0] ?? 0) + 0.5)
+  const titikC = [titikB[0], dataWeight.length ? Math.floor(dataWeight.reduce((x, y) => x + y['50rd'], 0) / dataWeight.length) ?? 0 : 0]
+  const bmi = calculateBMI(bb, pb)
+
+  const result = { ageInMonths, kelamin, bb, pb, masterTb, masterWeight, dataTb, titkA, titikB, dataWeight, titikC, bmi }
+  console.log('coba', result)
+
+  store.form.bbi = titikC[1]
+  store.form.bmi = bmi
+  draft.value = result
+}
+
+function calculateAgeInMonths (birthdate) {
+  if (!birthdate) return 0 // !birthdate return null
+  const today = new Date()
+  const birthdateObj = new Date(birthdate)
+
+  // Menghitung jumlah bulan antara tanggal lahir dan tanggal saat ini
+  const months = today.getFullYear() * 12 + today.getMonth() -
+    birthdateObj.getFullYear() * 12 - birthdateObj.getMonth()
+  return months
+}
+
+function calculateAge (birthdate) {
+  const today = new Date()
+  const birthdateObj = new Date(birthdate)
+
+  // Menghitung selisih waktu dalam milidetik
+  const millisecondsDiff = today.getTime() - birthdateObj.getTime()
+
+  // Menghitung selisih waktu dalam hari
+  const daysDiff = Math.floor(millisecondsDiff / (1000 * 60 * 60 * 24))
+
+  // Menghitung usia dalam tahun, bulan, dan hari
+  const years = Math.floor(daysDiff / 365)
+  const months = Math.floor((daysDiff % 365) / 30)
+  const days = Math.floor(daysDiff % 30)
+
+  return { years, months, days }
+}
+
+function calculateBMI (weight, height) {
+  // const h = (height / 100) * (height / 100)
+  const bmi = weight / (height / 100) ** 2
+  // console.log('bmi', h)
+  return bmi.toFixed(2)
+}
+
+watchEffect(() => {
+  if (store.masterCdc.length) {
+    cariGrafikChart()
+  }
+})
 
 </script>
 
