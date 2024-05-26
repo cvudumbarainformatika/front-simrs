@@ -62,6 +62,24 @@
             width="40%"
             class="text-weight-bold"
           >
+            Usia Pernikahan
+          </td>
+          <td>{{ item?.usiaPernikahan ?? '-' }}</td>
+        </tr>
+        <tr>
+          <td
+            width="40%"
+            class="text-weight-bold"
+          >
+            Usia Awal Pernikahan
+          </td>
+          <td>{{ item?.usiaAwalPernikahan ?? '-' }}</td>
+        </tr>
+        <tr>
+          <td
+            width="40%"
+            class="text-weight-bold"
+          >
             Kontrasepsi yg prn dignakan
           </td>
           <td>{{ item?.kontrasepsi ?? '-' }}</td>

@@ -77,6 +77,16 @@
           type="number"
         />
         <app-input-simrs
+          v-model="store.form.usiaPernikahan"
+          label="Usia Pernikahan"
+          class-tambahan="col-6"
+        />
+        <app-input-simrs
+          v-model="store.form.usiaAwalPernikahan"
+          label="Usia Awal Pernikahan"
+          class-tambahan="col-6"
+        />
+        <app-input-simrs
           v-model="store.form.kontrasepsi"
           label="Kontrasepsi yang pernah digunakan"
           class-tambahan="col-12"
