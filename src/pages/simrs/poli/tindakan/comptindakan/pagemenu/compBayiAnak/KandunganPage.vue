@@ -7,15 +7,15 @@
           @submit="onSubmit"
         >
           <div class="full-height scroll">
-            <FormComp />
+            <FormComp :pasien="pasien" />
             <div style="margin-bottom:150px;" />
           </div>
           <div class="absolute-bottom bg-primary q-pa-md">
             <div class="row justify-end">
               <q-btn
-                label="Simpan"
+                :label="store.kandungan ? 'Simpan' : 'Simpan'"
                 type="submit"
-                class="bg-white text-dark q-px-lg"
+                :class="store.kandungan ? `bg-white text-dark q-px-lg` : `bg-white text-dark q-px-lg`"
                 :loading="store.loadingSave"
                 :disable="store.loadingSave"
                 dense
@@ -26,19 +26,27 @@
       </div>
       <div class="col-5 full-height bg-grey-4">
         <div
-          v-if="!pasien.kandungan.length"
+          v-if="!store?.kandungans?.length"
           class="column full-height flex-center"
         >
           <div>Belum Ada Data Tersimpan ... 📋</div>
         </div>
         <div
           v-else
-          class="full-height q-pa-sm scroll"
+          class="full-height column q-pa-sm"
         >
-          <ListsComp
-            :items="pasien.kandungan"
-            @hapus="hapusItem"
-          />
+          <div class="col-auto">
+            <div class="q-pb-sm">
+              <b>History Kunjungan</b>
+            </div>
+          </div>
+          <div class="col full-height scroll">
+            <ListsComp
+              :items="store?.kandungans"
+              @hapus="hapusItem"
+              @edit="editItem"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -63,14 +71,17 @@ const props = defineProps({
 })
 
 onMounted(() => {
+  store.getData(props.pasien)
+  store.getRiwayatObsetri(props.pasien)
   store.initForm()
+  store.initFormRiwayatObsetri()
 })
 
-function onSubmit() {
+function onSubmit () {
   store.saveData(props.pasien)
 }
 
-function hapusItem(item) {
+function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({
     title: 'Peringatan',
@@ -84,6 +95,13 @@ function hapusItem(item) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function editItem (item) {
+  console.log(item)
+  store.kandungan = null
+  store.kandungan = item
+  store.initForm()
 }
 
 </script>

@@ -4,16 +4,16 @@
       <app-input-simrs
         v-model="store.form.operasi"
         label="Operasi yang pernah dialami"
-        style="width:80%"
+        style="width:90%"
       />
       <app-input-simrs
         v-model="store.form.gemeli"
         label="Faktor Keturunan Gemeli"
-        style="width:80%"
+        style="width:90%"
       />
-      <div><b>Riwayat Obsetri</b></div>
+      <div><b>Riwayat Obsetri</b>  <span class="q-ml-lg"><q-btn color="primary" outline size="sm" @click="store.openDialogRiwayatObsetri=true">Tambah Riwayat Obsetri</q-btn></span></div>
       <q-separator />
-      <table>
+      <table class="q-mb-md bg-yellow-3">
         <thead>
           <tr>
             <th width="3%">
@@ -28,16 +28,33 @@
             <th>K/U Anak</th>
             <th>BBL</th>
             <th>Riwayat Kehamilan</th>
+            <th class="text-right">
+              #
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="store.riwayatObsetri.length">
+          <tr v-for="(item, i) in store.riwayatObsetri" :key="i">
+            <td>{{ i+1 }}</td>
+            <td>{{ item?.pl }}</td>
+            <td>{{ item?.umurAnak }}</td>
+            <td>{{ item?.kuAnak }}</td>
+            <td>{{ item?.bbl }}</td>
+            <td>{{ item?.riwayatKehamilan }}</td>
+            <td class="text-right">
+              <q-btn flat size="xs" icon="icon-mat-delete" round color="negative" @click="deleteData(item?.id)">
+                <q-tooltip>Hapus Data</q-tooltip>
+              </q-btn>
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
           <tr>
-            <td>a</td>
-            <td>aa</td>
-            <td>aa</td>
-            <td>aa</td>
-            <td>aa</td>
-            <td>aa</td>
+            <td colspan="7">
+              <div class="flex flex-center">
+                Belum ada riwayat obsetri
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -62,7 +79,7 @@
         <app-input-simrs
           v-model="store.form.kontrasepsi"
           label="Kontrasepsi yang pernah digunakan"
-          class-tambahan="col-8"
+          class-tambahan="col-12"
         />
       </div>
       <div><b>Data Kehamilan Sekarang</b></div>
@@ -99,12 +116,12 @@
         <app-input-simrs
           v-model="store.form.keluhan"
           label="Keluhan Selama Hamil"
-          class-tambahan="col-8"
+          class-tambahan="col-12"
         />
         <app-input-simrs
           v-model="store.form.pemeriksaanDalam"
           label="Pemeriksaan Dalam"
-          class-tambahan="col-8"
+          class-tambahan="col-12"
         />
       </div>
 
@@ -282,14 +299,94 @@
         />
       </div>
     </div>
+
+    <!-- dialog form riwayat -->
+    <q-dialog v-model="store.openDialogRiwayatObsetri">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">
+            Tambah Riwayat Obsetri
+          </div>
+        </q-card-section>
+
+        <q-form @submit="onSubmit">
+          <q-separator />
+
+          <q-card-section style="width:400px; max-height: 50vh" class="scroll">
+            <div class="row q-mb-sm">
+              <div v-for="n in store.pls" :key="n">
+                <q-radio v-model="store.formRiwayatObsetri.pl" :val="n" :label="n" />
+              </div>
+              <app-input-simrs
+                v-model="store.formRiwayatObsetri.umurAnak"
+                label="Umur Anak"
+                class-tambahan="col-12"
+              />
+              <app-input-simrs
+                v-model="store.formRiwayatObsetri.kuAnak"
+                label="K/U Anak"
+                class-tambahan="col-12"
+              />
+              <app-input-simrs
+                v-model="store.formRiwayatObsetri.bbl"
+                label="BBL"
+                class-tambahan="col-12"
+              />
+              <app-input-simrs
+                v-model="store.formRiwayatObsetri.riwayatKehamilan"
+                label="Riwayat Kehamilan"
+                class-tambahan="col-12"
+              />
+            </div>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-actions align="right">
+            <q-btn flat label="Batal" color="primary" v-close-popup />
+            <q-btn type="submit" flat label="Simpan" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script setup>
 
+import { useQuasar } from 'quasar'
 import { useKandunganStore } from 'src/stores/simrs/pelayanan/poli/kandungan'
 
 const store = useKandunganStore()
+
+const $q = useQuasar()
+
+const props = defineProps({
+  pasien: {
+    type: Object,
+    default: null
+  }
+})
+
+function onSubmit () {
+  store.saveRiwayatObsetri(props.pasien)
+}
+
+function deleteData (id) {
+  // console.log('hi', item)
+  $q.dialog({
+    title: 'Peringatan',
+    message: 'Apakah Data ini akan dihapus?',
+    cancel: true
+    // persistent: true
+  }).onOk(() => {
+    store.deleteRiwayatObsetri(props?.pasien, id)
+  }).onCancel(() => {
+    console.log('Cancel')
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
 </script>
 
 <style lang="scss" scoped>

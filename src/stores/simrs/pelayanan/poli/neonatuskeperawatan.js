@@ -257,6 +257,7 @@ export const useNeonatusKeperawatanStore = defineStore('neonatus-keperawatan', {
           .then((resp) => {
             // console.log(resp)
             if (resp.status === 200) {
+              this.neonatuskeperawatan = null
               // const storePasien = usePengunjungPoliStore()
               // const isi = resp.data
               // storePasien.injectDataPasien(pasien, isi, 'neonatuskeperawatan')
