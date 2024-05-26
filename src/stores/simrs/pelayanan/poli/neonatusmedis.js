@@ -7,6 +7,8 @@ import { notifErr, notifSuccess } from 'src/modules/utils'
 
 export const useNeonatusMedisStore = defineStore('neonatus-medis', {
   state: () => ({
+    neonatusmedis: null,
+
     anteNatalCares: ['Tidak', 'Puskesmas', 'RSUD', 'Bidan', 'Dokter Umum', 'Dokter Sp.A', 'Lain-lain'],
     rujukans: ['Datang sendiri', 'Puskesmas', 'Bidan', 'Dokter Umum', 'Dokter Sp.A', 'Lain-lain'],
     riwayatPenyakitIbus: ['Tidak ada', 'Ada'],
@@ -32,55 +34,55 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
   }),
   actions: {
 
-    initForm() {
-      this.form.usiaKehamilanIbu = null
-      this.form.anc = null
-      this.form.ancLain = null
-      this.form.rujukan = null
-      this.form.rujukanLain = null
-      this.form.riwayatPenyakitIbu = null
-      this.form.riwayatPenyakitIbuAda = null
-      this.form.riwayatKehamilan = []
-      this.form.riwayatKehamilanSekarangG = null
-      this.form.riwayatKehamilanSekarangP = null
-      this.form.riwayatKehamilanSekarangAb = null
-      this.form.riwayatPersalinan = null
-      this.form.riwayatPersalinanFebris = null
-      this.form.riwayatPersalinanLain = null
-      this.form.induksiPersalinan = null
-      this.form.anestesi = null
-      this.form.caraKelahiran = null
-      this.form.caraKelahiranLain = null
-      this.form.indikasiPartus = null
-      this.form.tempatPersalinan = null
-      this.form.penolongPersalinan = null
-      this.form.penolongPersalinanLain = null
-      this.form.ketubanPecahDini = null
-      this.form.ketubanPecahDiniJam = null
-      this.form.jumlahKetuban = null
-      this.form.warnaKetuban = null
-      this.form.kekeruhan = null
-      this.form.bau = null
-      this.form.placenta = null
-      this.form.obatSebelumBersalin = null
-      this.form.obatSebelumBersalinYa = null
+    initForm (pasien) {
+      this.form.usiaKehamilanIbu = this.neonatusmedis?.usiaKehamilanIbu ?? null
+      this.form.anc = this.neonatusmedis?.anc ?? null
+      this.form.ancLain = this.neonatusmedis?.ancLain ?? null
+      this.form.rujukan = this.neonatusmedis?.rujukan ?? null
+      this.form.rujukanLain = this.neonatusmedis?.rujukanLain ?? null
+      this.form.riwayatPenyakitIbu = this.neonatusmedis?.riwayatPenyakitIbu ?? null
+      this.form.riwayatPenyakitIbuAda = this.neonatusmedis?.riwayatPenyakitIbuAda ?? null
+      this.form.riwayatKehamilan = this.riwayatKehamilan ?? []
+      this.form.riwayatKehamilanSekarangG = this.neonatusmedis?.riwayatKehamilanSekarangG ?? null
+      this.form.riwayatKehamilanSekarangP = this.neonatusmedis?.riwayatKehamilanSekarangP ?? null
+      this.form.riwayatKehamilanSekarangAb = this.neonatusmedis?.riwayatKehamilanSekarangAb ?? null
+      this.form.riwayatPersalinan = this.neonatusmedis?.riwayatPersalinan ?? null
+      this.form.riwayatPersalinanFebris = this.neonatusmedis?.riwayatPersalinanFebris ?? null
+      this.form.riwayatPersalinanLain = this.neonatusmedis?.riwayatPersalinanLain ?? null
+      this.form.induksiPersalinan = this.neonatusmedis?.induksiPersalinan ?? null
+      this.form.anestesi = this.neonatusmedis?.anestesi ?? null
+      this.form.caraKelahiran = this.neonatusmedis?.caraKelahiran ?? null
+      this.form.caraKelahiranLain = this.neonatusmedis?.caraKelahiranLain ?? null
+      this.form.indikasiPartus = this.neonatusmedis?.indikasiPartus ?? null
+      this.form.tempatPersalinan = this.neonatusmedis?.tempatPersalinan ?? null
+      this.form.penolongPersalinan = this.neonatusmedis?.penolongPersalinan ?? null
+      this.form.penolongPersalinanLain = this.neonatusmedis?.penolongPersalinanLain ?? null
+      this.form.ketubanPecahDini = this.neonatusmedis?.ketubanPecahDini ?? null
+      this.form.ketubanPecahDiniJam = this.neonatusmedis?.ketubanPecahDiniJam ?? null
+      this.form.jumlahKetuban = this.neonatusmedis?.jumlahKetuban ?? null
+      this.form.warnaKetuban = this.neonatusmedis?.warnaKetuban ?? null
+      this.form.kekeruhan = this.neonatusmedis?.kekeruhan ?? null
+      this.form.bau = this.neonatusmedis?.bau ?? null
+      this.form.placenta = this.neonatusmedis?.placenta ?? null
+      this.form.obatSebelumBersalin = this.neonatusmedis?.obatSebelumBersalin ?? null
+      this.form.obatSebelumBersalinYa = this.neonatusmedis?.obatSebelumBersalinYa ?? null
       // objective
-      this.form.lahirTgl = null
-      this.form.lahirJam = null
-      this.form.resusitasi = null
-      this.form.resusitasiJamMulai = null
-      this.form.resusitasiJamSelesai = null
-      this.form.skorApgar = null
-      this.form.beratBadan = null
-      this.form.beratBadanKat = null
-      this.form.panjangBadan = null
-      this.form.lingkarKepala = null
-      this.form.lingkarKepalaKat = null
-      this.form.usiaKehamilanBayi = null
-      this.form.usiaKehamilanBayiKat = null
+      this.form.lahirTgl = this.neonatusmedis?.lahirTgl ?? null
+      this.form.lahirJam = this.neonatusmedis?.lahirJam ?? null
+      this.form.resusitasi = this.neonatusmedis?.resusitasi ?? null
+      this.form.resusitasiJamMulai = this.neonatusmedis?.resusitasiJamMulai ?? null
+      this.form.resusitasiJamSelesai = this.neonatusmedis?.resusitasiJamSelesai ?? null
+      this.form.skorApgar = this.neonatusmedis?.skorApgar ?? null
+      this.form.beratBadan = this.neonatusmedis?.beratBadan ?? null
+      this.form.beratBadanKat = this.neonatusmedis?.beratBadanKat ?? null
+      this.form.panjangBadan = this.neonatusmedis?.panjangBadan ?? null
+      this.form.lingkarKepala = this.neonatusmedis?.lingkarKepala ?? null
+      this.form.lingkarKepalaKat = this.neonatusmedis?.lingkarKepalaKat ?? null
+      this.form.usiaKehamilanBayi = this.neonatusmedis?.usiaKehamilanBayi ?? null
+      this.form.usiaKehamilanBayiKat = this.neonatusmedis?.usiaKehamilanBayiKat ?? null
     },
 
-    initFormRiwayat() {
+    initFormRiwayat () {
       this.formRiwayat.kehamilanNo = null
       this.formRiwayat.penyulitKehamilan = null
       this.formRiwayat.macamPersalinan = null
@@ -90,7 +92,27 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
       this.formRiwayat.sebabKematian = null
     },
 
-    saveData(pasien) {
+    getData (pasien) {
+      const params = { params: { norm: pasien?.norm } }
+
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/neonatusmedis/neonatusmedis-by-norm', params)
+          .then((resp) => {
+            if (resp.status === 200) {
+              console.log('neonatusmedis :', resp.data)
+              this.neonatusmedis = resp.data ?? null
+              this.initForm(pasien)
+            }
+            resolve(resp)
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+
+    saveData (pasien) {
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
       this.loadingSave = true
@@ -100,9 +122,10 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
           .then((resp) => {
             // console.log(resp)
             if (resp.status === 200) {
-              const storePasien = usePengunjungPoliStore()
-              const isi = resp.data
-              storePasien.injectDataPasien(pasien, isi, 'neonatusmedis')
+              // const storePasien = usePengunjungPoliStore()
+              // const isi = resp.data
+              // storePasien.injectDataPasien(pasien, isi, 'neonatusmedis')
+              this.neonatusmedis = resp.data ?? null
               notifSuccess(resp)
               this.initForm()
               this.loadingSave = false
@@ -117,7 +140,7 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
       })
     },
 
-    deleteData(pasien, id) {
+    deleteData (pasien, id) {
       const payload = { id }
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/neonatusmedis/deletedata', payload)
@@ -135,7 +158,7 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
           })
       })
     },
-    getRiwayatKehamilan(pasien) {
+    getRiwayatKehamilan (pasien) {
       const params = { params: { norm: pasien?.norm } }
       return new Promise((resolve, reject) => {
         api.get('v1/simrs/pelayanan/neonatusmedis/riwayatKehamilan', params)
@@ -151,7 +174,7 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
           })
       })
     },
-    saveRiwayat(pasien) {
+    saveRiwayat (pasien) {
       this.formRiwayat.noreg = pasien?.noreg
       this.formRiwayat.norm = pasien?.norm
       this.loadingSave = true
@@ -175,7 +198,7 @@ export const useNeonatusMedisStore = defineStore('neonatus-medis', {
           })
       })
     },
-    deleteRiwayat(id) {
+    deleteRiwayat (id) {
       const payload = { id }
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/pelayanan/neonatusmedis/deleteRiwayatKehamilan', payload)

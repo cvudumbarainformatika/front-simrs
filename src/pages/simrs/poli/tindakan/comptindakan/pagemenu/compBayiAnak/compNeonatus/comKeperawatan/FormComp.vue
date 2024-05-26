@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-sm">
+  <div class="q-pa-lg">
     <div><b>I. ANAMNESIS (Tambahan) </b></div>
     <q-separator class="q-my-sm" />
     <div class="row  items-center q-mb-xs">

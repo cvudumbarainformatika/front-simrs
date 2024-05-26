@@ -6,7 +6,7 @@
         Kunjungan ke : {{ store?.pediatris?.length + 1 }}
       </q-badge> -->
       <div class="f-12 text-weight-bold">
-        Keadaan Umum
+        Riwayat cdc growth who
       </div>
       <q-separator class="q-my-sm" />
 
@@ -60,13 +60,15 @@
         <template v-else>
           <tr>
             <td colspan="10">
-              Belum Ada Data
+              <div class="flex full-width flex-center" style="min-height:100px;">
+                Belum Ada Data
+              </div>
             </td>
           </tr>
         </template>
       </table>
 
-      <div class="row q-col-gutter-xs q-mb-sm item-center">
+      <div v-if="!store.isEdited" class="row q-col-gutter-xs q-mb-sm item-center">
         <app-input-simrs
           v-model="store.form.bb"
           label="BB / kg"
