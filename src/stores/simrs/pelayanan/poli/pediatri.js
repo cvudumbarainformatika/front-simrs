@@ -22,54 +22,70 @@ export const usePediatriStore = defineStore('pediatri-poli', {
     points4: [{ value: 2, label: 'Ya' }, { value: 0, label: 'Tidak' }],
 
     kesimpulanSkreeningGizi: 'Tidak Beresiko mal nutrisi',
+    pediatris: [],
+    pediatri: null,
+
     form: {},
     loadingSave: false,
     preview: false,
     bukaCdc: false,
-    masterCdc: []
+    masterCdc: [],
+    isEdited: false
   }),
   actions: {
 
     initForm (pasien) {
-      // ini baru
-      this.form.bb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.beratbadan : null
-      this.form.pb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.tinggibadan : null
-      this.form.lk = null
-      this.form.lila = null
-      this.form.bbi = null
-      this.form.bmi = null
+      const riwayatPediatri = this.pediatris
+
+      const data = riwayatPediatri.length ? riwayatPediatri[riwayatPediatri.length - 1] : null
+
+      this.isEdited = data?.noreg === pasien?.noreg
+
+      // ini baru hanya untuk simpan data
+      if (!this.isEdited) {
+        this.form.bb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.beratbadan : null
+        this.form.pb = pasien?.pemeriksaanfisik?.length ? pasien.pemeriksaanfisik[0]?.tinggibadan : null
+        this.form.age_m = 0
+        this.form.lk = null
+        this.form.lila = null
+        this.form.bbi = null
+        this.form.bmi = null
+        this.form.catatanBmi = null
+        this.form.keteranganBmi = null
+      }
+
       // anamnesis tambahan
-      this.form.riwayatPerinatal = null
-      this.form.imunisasiDasar = []
-      this.form.imunisasiUlang = []
+      this.form.riwayatPerinatal = data?.riwayatPerinatal ?? null
+      this.form.imunisasiDasar = data?.imunisasiDasar ?? []
+      this.form.imunisasiUlang = data?.imunisasiUlang ?? []
 
       // kebiasaan Pasien Saat Sakit
-      this.form.polaKomunikasi = 'Normal'
-      this.form.polaKomunikasiLain = null
-      this.form.makananPokok = 'Nasi'
-      this.form.makananPokokLain = null
+      this.form.polaKomunikasi = data?.polaKomunikasi ?? 'Normal'
+      this.form.polaKomunikasiLain = data?.polaKomunikasiLain ?? null
+      this.form.makananPokok = data?.makananPokok ?? 'Nasi'
+      this.form.makananPokokLain = data?.makananPokokLain ?? null
 
       // asesmen jatuh
-      this.form.skorMethodeHumpty = null
-      this.form.resikoMethodeHumpty = null
-      this.form.skorMorsefallScale = null
-      this.form.resikoMorsefallScale = null
+      this.form.skorMethodeHumpty = data?.skorMethodeHumpty ?? null
+      this.form.resikoMethodeHumpty = data?.resikoMethodeHumpty ?? null
+      this.form.skorMorsefallScale = data?.skorMorsefallScale ?? null
+      this.form.resikoMorsefallScale = data?.resikoMorsefallScale ?? null
 
-      this.form.mobilisasi = null
-      this.form.perluBantuan = null
-      this.form.alatBantu = null
+      this.form.mobilisasi = data?.mobilisasi ?? null
+      this.form.perluBantuan = data?.perluBantuan ?? null
+      this.form.alatBantu = data?.alatBantu ?? null
 
-      this.form.kriteriaHasil = null
-      this.form.implementasi = null
-      this.form.evaluasi = null
-      this.form.catatanKie = null
+      this.form.kriteriaHasil = data?.kriteriaHasil ?? null
+      this.form.implementasi = data?.implementasi ?? null
+      this.form.evaluasi = data?.evaluasi ?? null
+      this.form.catatanKie = data?.catatanKie ?? null
 
       // skreening Gizi
-      this.form.poin1 = 0
-      this.form.poin2 = 0
-      this.form.poin3 = 0
-      this.form.poin4 = 0
-      this.form.skorGizi = 0
+      this.form.poin1 = data?.poin1 ?? 0
+      this.form.poin2 = data?.poin2 ?? 0
+      this.form.poin3 = data?.poin3 ?? 0
+      this.form.poin4 = data?.poin4 ?? 0
+      this.form.skorGizi = data?.skorGizi ?? 0
 
       this.setSkorGizi()
     },
@@ -87,6 +103,25 @@ export const usePediatriStore = defineStore('pediatri-poli', {
       }
     },
 
+    getData (pasien) {
+      const params = { params: { norm: pasien?.norm } }
+
+      return new Promise((resolve, reject) => {
+        api.get('v1/simrs/pelayanan/pediatri/get-pediatri-by-norm', params)
+          .then((resp) => {
+            if (resp.status === 200) {
+              console.log('pediatri-all :', resp.data)
+              this.pediatris = resp.data
+            }
+            resolve(resp)
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+
     saveData (pasien) {
       this.form.noreg = pasien?.noreg
       this.form.norm = pasien?.norm
@@ -97,11 +132,12 @@ export const usePediatriStore = defineStore('pediatri-poli', {
           .then((resp) => {
             // console.log(resp)
             if (resp.status === 200) {
-              const storePasien = usePengunjungPoliStore()
-              const isi = resp.data
-              storePasien.injectDataPasien(pasien, isi, 'pediatri')
+              // const storePasien = usePengunjungPoliStore()
+              // const isi = resp.data
+              // storePasien.injectDataPasien(pasien, isi, 'pediatri')
               notifSuccess(resp)
-              this.initForm()
+              this.pediatris = resp.data
+              this.initForm(pasien)
               this.loadingSave = false
             }
             this.loadingSave = false
@@ -121,8 +157,8 @@ export const usePediatriStore = defineStore('pediatri-poli', {
           .then((resp) => {
             // console.log('del', resp)
             if (resp.status === 200) {
-              const storePasien = usePengunjungPoliStore()
-              storePasien.hapusDataInjectan(pasien, id, 'pediatri')
+              // const storePasien = usePengunjungPoliStore()
+              // storePasien.hapusDataInjectan(pasien, id, 'pediatri')
               notifSuccess(resp)
             }
           })
@@ -152,19 +188,6 @@ export const usePediatriStore = defineStore('pediatri-poli', {
             reject(err)
           })
       })
-    },
-
-    getJsonData () {
-      fetch('https://echarts.apache.org/examples/data/asset/data/life-expectancy-table.json')
-        .then(response => response.json())
-        .then(data => {
-          // Handle the response data
-          console.log('json', data)
-        })
-        .catch(error => {
-          // Handle any errors
-          console.error(error)
-        })
     }
 
   }
