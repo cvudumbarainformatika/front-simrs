@@ -1,7 +1,8 @@
 <template>
   <div class="fit">
     <div class="row full-height">
-      <div :class="`col-${store.bukaCdc ? '12' : '8'} full-height`">
+      <!-- <div :class="`col-${store.bukaCdc ? '12' : '8'} full-height`"> -->
+      <div :class="`col-12 full-height`">
         <q-form
           class="fit"
           @submit="onSubmit"
@@ -11,28 +12,28 @@
             <div style="margin-bottom:150px;" />
           </div>
           <div class="absolute-bottom bg-primary q-pa-md">
-            <div v-if="!store.bukaCdc" class="row justify-end">
+            <div class="row justify-end">
               <q-btn
-                label="Simpan"
+                :label="store.isEdited ? 'Update Data' : 'Simpan Data'"
                 type="submit"
-                class="bg-white text-dark q-px-lg"
+                :class="store.isEdited ? `bg-dark text-white q-px-lg` : `bg-white text-dark q-px-lg`"
                 :loading="store.loadingSave"
                 :disable="store.loadingSave"
                 dense
               />
             </div>
-            <div v-else class="row justify-end">
+            <!-- <div v-else class="row justify-end">
               <q-btn
                 label="Kembali"
                 class="bg-dark text-white q-px-lg"
                 dense
                 @click="store.bukaCdc = false"
               />
-            </div>
+            </div> -->
           </div>
         </q-form>
       </div>
-      <div v-if="!store.bukaCdc" class="col-4 full-height bg-grey-4">
+      <!-- <div v-if="!store.bukaCdc" class="col-4 full-height bg-grey-4">
         <div
           v-if="!pasien?.pediatri?.length"
           class="full-height column flex-center"
@@ -50,14 +51,14 @@
             />
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import FormComp from './compPediatri/FormComp.vue'
-import ListsComp from './compPediatri/ListsComp.vue'
+// import ListsComp from './compPediatri/ListsComp.vue'
 import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
 import { onMounted, watchEffect } from 'vue'
 import { useQuasar } from 'quasar'
@@ -75,7 +76,7 @@ const props = defineProps({
 onMounted(async () => {
   // console.log('pediatri', props?.pasien)
   store.bukaCdc = false
-  store.initForm(props.pasien)
+  // store.initForm(props.pasien)
   await store.getMasterCdc()
   // store.getJsonData()
 })
@@ -93,6 +94,7 @@ function onSubmit () {
   store.saveData(props?.pasien)
 }
 
+// eslint-disable-next-line no-unused-vars
 function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({

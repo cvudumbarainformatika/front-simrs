@@ -75,6 +75,19 @@ const formatDouble = (value, dg) => {
   } else { return 0 }
 }
 
+const formattanpaRp = (value) => {
+  if (value !== null) {
+    return (
+      Number(value)
+        .toFixed(2)
+        // titik
+        // .replace(/\d(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
+
+        // koma
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    )
+  }
+}
 const dateFullFormat = (val) => {
   return date.formatDate(val, 'DD MMMM YYYY')
 }
@@ -142,5 +155,6 @@ export {
   dateLIS,
   timeDiff,
   formatDouble,
-  dayName
+  dayName,
+  formattanpaRp
 }

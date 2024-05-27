@@ -105,6 +105,31 @@ const laporan = {
       // name: 'laporan.sigarang.stokopnamegudang',
       component: () => import('pages/simrs/laporan/sigarang/stokopnamegudang/IndexPage.vue')
     },
+    {
+      path: '/laporan/bkukeuangan/pengeluaran',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/bkukeuangan/bkupengeluaran/IndexPage.vue')
+    },
+    {
+      path: '/laporan/bkukeuangan/bukubank',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/bkukeuangan/bukubank/IndexPage.vue')
+    },
+    {
+      path: '/laporan/bkukeuangan/bukutunai',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/bkukeuangan/bukutunai/IndexPage.vue')
+    },
+    {
+      path: '/laporan/bkukeuangan/ppk',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/bkukeuangan/bkuppk/IndexPage.vue')
+    },
+    {
+      path: '/laporan/bkuptk',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/bkupptk/IndexPage.vue')
+    },
 
     {
       path: '/laporan/notfound',

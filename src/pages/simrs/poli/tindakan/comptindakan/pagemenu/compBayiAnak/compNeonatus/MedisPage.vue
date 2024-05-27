@@ -1,6 +1,6 @@
 <template>
   <div class="fit row">
-    <div class="col-8 full-height">
+    <div class="col-12 full-height">
       <q-form
         class="full-height"
         @submit="onSubmit"
@@ -11,8 +11,8 @@
         <div class="absolute-bottom bg-primary q-pa-md">
           <div class="text-right">
             <q-btn
-              label="Simpan Data"
-              class="bg-white text-dark"
+              :label="store.neonatusmedis ? 'Update Data' : 'Simpan Data'"
+              :class="store.neonatusmedis?`bg-dark text-white`:`bg-white text-dark`"
               type="submit"
               :loading="store.loadingSave"
               :disable="store.loadingSave"
@@ -21,7 +21,7 @@
         </div>
       </q-form>
     </div>
-    <div class="col-4 full-height bg-grey-4">
+    <!-- <div class="col-4 full-height bg-grey-4">
       <div
         v-if="!pasien?.neonatusmedis?.length"
         class="full-height column flex-center"
@@ -39,14 +39,14 @@
           />
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup>
 // import { onMounted } from 'vue'
 import FormMedis from './compMedis/FormMedis.vue'
-import ListsMedis from './compMedis/ListsMedis.vue'
+// import ListsMedis from './compMedis/ListsMedis.vue'
 
 import { useNeonatusMedisStore } from 'src/stores/simrs/pelayanan/poli/neonatusmedis'
 import { useQuasar } from 'quasar'
@@ -64,14 +64,16 @@ const props = defineProps({
 })
 
 onMounted(() => {
+  store.getData(props.pasien)
   store.getRiwayatKehamilan(props.pasien)
 })
 
-function onSubmit() {
+function onSubmit () {
   store.saveData(props.pasien)
 }
 
-function hapusItem(item) {
+// eslint-disable-next-line no-unused-vars
+function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({
     title: 'Peringatan',

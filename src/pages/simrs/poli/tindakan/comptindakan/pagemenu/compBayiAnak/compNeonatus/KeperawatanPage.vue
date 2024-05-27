@@ -5,14 +5,14 @@
       class="col-12 full-height scroll bg-grey-4"
     >
       <div class="row justify-center">
-        <div class="col-10 q-pa-lg">
+        <div class="col-12 q-pa-lg">
           <preview-page />
         </div>
       </div>
     </div>
     <div
       v-if="!store.preview"
-      class="col-9 full-height"
+      class="col-12 full-height"
     >
       <q-card
         flat
@@ -32,18 +32,18 @@
               <q-btn
                 dense
                 type="submit"
-                class="bg-white q-px-sm"
+                :class="store.neonatuskeperawatan ? 'bg-dark text-white q-px-md' : 'bg-white q-px-md text-dark' "
                 :loading="store.loadingSave"
                 :disable="store.loadingSave"
               >
-                Simpan Data
+                {{ store.neonatuskeperawatan ? 'Update Data' : 'Simpan Data' }}
               </q-btn>
             </div>
           </div>
         </q-form>
       </q-card>
     </div>
-    <div
+    <!-- <div
       v-if="!store.preview"
       class="col-3 full-height bg-grey-4"
     >
@@ -65,14 +65,14 @@
           />
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup>
 import FormComp from './comKeperawatan/FormComp.vue'
 import PreviewPage from './comKeperawatan/PreviewPage.vue'
-import ListsComp from './comKeperawatan/ListsComp.vue'
+// import ListsComp from './comKeperawatan/ListsComp.vue'
 import { useNeonatusKeperawatanStore } from 'src/stores/simrs/pelayanan/poli/neonatuskeperawatan'
 import { onMounted } from 'vue'
 import { useQuasar } from 'quasar'
@@ -89,14 +89,16 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  store.initForm()
+  // store.initForm()
+  store.getData(props.pasien)
 })
 
-function onSubmit() {
+function onSubmit () {
   store.saveData(props.pasien)
 }
 
-function hapusItem(item) {
+// eslint-disable-next-line no-unused-vars
+function hapusItem (item) {
   // console.log('hi', item)
   $q.dialog({
     title: 'Peringatan',

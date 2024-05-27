@@ -1,26 +1,28 @@
 <template>
-  <div class="relative-position">
+  <q-card class="relative-position" :style="{ height: height, width: width }">
     <div
       v-if="calculateAgeInMonths(props?.pasien?.tgllahir ?? null) < 24 || calculateAgeInMonths(props?.pasien?.tgllahir ?? null) > 240"
-      class="fit full-height column flex-center" style="width: 100%; min-height: 400px;"
+      class="fit full-height column flex-center" style="width: 100%; min-height: 600px;"
     >
       <div class="f-14 text-weight-bold">
         Maaf ... Halaman ini Hanya Untuk Pasien Usia 2 - 20 Tahun
       </div>
     </div>
-    <div v-else class="relative-position">
+    <div v-else class="fit relative-position">
       <div
-        ref="line" style="width:100%; height: 950px;"
+        class="fit"
+        ref="line"
+        style="min-width:500px; min-height:600px;"
       />
       <!-- <div style="margin-bottom: 300px;" /> -->
     </div>
-  </div>
+  </q-card>
 </template>
 
 <script setup>
 import * as echarts from 'echarts'
-import { ref, onMounted, computed, watchEffect } from 'vue'
-import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
+import { ref, onMounted, watchEffect } from 'vue'
+// import { usePediatriStore } from 'src/stores/simrs/pelayanan/poli/pediatri'
 
 // import mboh from './mboh.json'
 // import { ref } from 'vue'
@@ -31,24 +33,27 @@ const props = defineProps({
   },
   draft: {
     type: Object, default: null
+  },
+  width: {
+    type: String,
+    default: '544px'
+  },
+  height: {
+    type: String,
+    default: '644px'
   }
 })
-const store = usePediatriStore()
+// const store = usePediatriStore()
 
-const gender = computed(() => {
-  const x = props.pasien?.kelamin ?? null
-  return x === 'Perempuan' ? 'Girl' : 'Boy'
-})
+// const gender = computed(() => {
+//   const x = props.pasien?.kelamin ?? null
+//   return x === 'Perempuan' ? 'Girl' : 'Boy'
+// })
 
 const line = ref(null)
 
 onMounted(() => {
-  console.log('store', store)
-  // console.log('props', props?.draft)
-  // console.log('coba', getChartResult())
-
-  // const ageInMonths = calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
-  console.log('gender', gender)
+  console.log(props.pasien)
   setTimeout(() => {
     chartInit()
   }, 100)
@@ -60,33 +65,128 @@ function chartInit () {
     const option = {
       // color: ['red', 'orange', 'brown', 'black', 'green', 'purple', 'yellow', 'blue'],
       // color: ['#DEAC80', '#006699', '#4cabce', '#8c564b', '#000', '#2f4554', '#61a0a8', '#d48265'],
+      toolbox: {
+        show: true,
+        top: '3%',
+        right: '3%',
+        feature: {
+          // dataZoom: {
+          //   yAxisIndex: 'none'
+          // },
+          dataView: {
+            readOnly: false
+          },
+          // magicType: {
+          //   type: ['line', 'bar']
+          // },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      dataZoom: {
+        start: 0,
+        type: 'slider',
+        disabled: false,
+        bottom: '4%'
+      },
+
+      // dataZomm: [
+      //   { xAxisIndex: [0], type: 'slider', start: 0, bottom: '4%', disable: false },
+      //   { yAxisIndex: 0 }
+      // ],
       title: [
         {
-          text: `2 - 20 years for ${gender.value}`,
-          right: '3%',
+          text: `Nama : ${props?.pasien?.nama_panggil ?? 'Pasien'}`,
+          subtext: `Record : ${props?.pasien?.noreg ?? '-'}`,
+          left: '2%',
           top: 10,
+          itemGap: 1,
           textStyle: {
-            fontSize: 20,
+            fontSize: 14,
+            fontWeight: 'bolder'
+          },
+          subtextStyle: {
+            fontSize: 12,
             fontWeight: 'bold'
           },
-          gridIndex: 2
+          gridIndex: 0
+        },
+        {
+          text: `Usia : ${props?.pasien?.usia ?? 0}`,
+          left: '2%',
+          top: 38,
+          itemGap: 1,
+          textStyle: {
+            fontSize: 12,
+            fontWeight: 'normal'
+          },
+          gridIndex: 0
+        },
+        {
+          text: `PB : ${props?.draft?.pb ?? 0} cm`,
+          left: '2%',
+          top: 52,
+          itemGap: 1,
+          textStyle: {
+            fontSize: 12,
+            fontWeight: 'normal'
+          },
+          gridIndex: 0
+        },
+        {
+          text: `BB : ${props?.draft?.bb ?? 0} kg`,
+          left: '2%',
+          top: 65,
+          itemGap: 1,
+          textStyle: {
+            fontSize: 12,
+            fontWeight: 'normal'
+          },
+          gridIndex: 0
+        },
+        {
+          text: `BBI : ${props?.draft?.titikC[1] ?? 0}`,
+          left: '2%',
+          top: 79,
+          itemGap: 1,
+          textStyle: {
+            fontSize: 12,
+            fontWeight: 'normal'
+          },
+          gridIndex: 0
+        },
+
+        {
+          text: `BMI : ${props?.draft?.bmi ?? 0}`,
+          left: '2%',
+          top: 92,
+          itemGap: 1,
+          textStyle: {
+            fontSize: 12,
+            fontWeight: 'normal'
+          },
+          gridIndex: 0
         }
         // {
-        //   text: 'Stature-for-age and Weight-for-age percentiles',
-        //   left: 10,
-        //   top: 33,
+        //   text: 'Nama : ' + props?.pasien?.nama_panggil ?? '',
+        //   right: '3%',
+        //   left: 'auto',
+        //   top: '5%',
+        //   itemGap: 1,
         //   textStyle: {
-        //     fontSize: 14
-        //   }
-        // },
-        // {
-        //   text: `Nama : ${props?.pasien?.nama_panggil ?? ''}`,
-        //   left: 10,
-        //   top: 55,
-        //   textStyle: {
+        //     align: 'right',
         //     fontSize: 12
         //   }
         // },
+        // {
+        //   text: `Record : ${props?.pasien?.noreg ?? ''}`,
+        //   right: '3%',
+        //   top: '7%',
+        //   textStyle: {
+        //     fontSize: 12,
+        //     fontWeight: 'normal'
+        //   }
+        // }
         // {
         //   text: `BB : ${props?.draft?.bb ?? 0} cm, PB : ${props?.draft?.pb ?? 0} kg`,
         //   left: 10,
@@ -120,13 +220,17 @@ function chartInit () {
           type: 'plain',
           show: true,
           width: 0,
-          left: '6%',
-          top: '8%',
+          left: '2%',
+          bottom: '40%',
           height: 10,
           orient: 'horizontal',
           align: 'auto',
-          padding: [0, 0, 0, 0],
+          itemGap: 8,
           gridIndex: 0,
+          textStyle: { fontSize: 10 },
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          borederRadius: 5,
+          padding: 8,
           data: [
             { name: 'P 97rd' },
             { name: 'P 90rd' },
@@ -141,13 +245,17 @@ function chartInit () {
           type: 'plain',
           show: true,
           width: 0,
-          left: '6%',
-          top: '62%',
+          left: '2%',
+          bottom: '8%',
           height: 10,
           orient: 'horizontal',
           align: 'auto',
-          padding: [0, 0, 0, 0],
+          itemGap: 8,
           gridIndex: 0,
+          textStyle: { fontSize: 10 },
+          backgroundColor: 'rgba(0,0,0,0.2)',
+          borederRadius: 5,
+          padding: 8,
           data: [
             { name: 'W97' },
             { name: 'W90' },
@@ -156,28 +264,6 @@ function chartInit () {
             { name: 'W25' },
             { name: 'W10' },
             { name: 'W3' }
-          ]
-        },
-        {
-          type: 'plain',
-          show: true,
-          width: 0,
-          right: '37%',
-          top: '42%',
-          height: 10,
-          orient: 'horizontal',
-          align: 'auto',
-          padding: [0, 0, 0, 0],
-          gridIndex: 1,
-          data: [
-            { name: 'bmi97' },
-            { name: 'bmi95' },
-            { name: 'bmi90' },
-            { name: 'bmi75' },
-            { name: 'bmi50' },
-            { name: 'bmi25' },
-            { name: 'bmi10' },
-            { name: 'bmi3' }
           ]
         }
 
@@ -221,40 +307,13 @@ function chartInit () {
       grid: [
         {
           id: 'bbi',
-          left: '3%',
-          right: 'auto',
+          left: '17%',
+          right: '5%',
           bottom: '5%',
-          top: '5%',
-
-          width: '50%',
+          top: '11%',
+          width: 'auto',
           height: 'auto',
           borderWidth: 2,
-
-          containLabel: true
-        },
-        {
-          id: 'bmi',
-          right: '3%',
-          left: 'auto',
-          bottom: '5%',
-          top: 'auto',
-
-          width: '42%',
-          height: '55%',
-          show: true,
-          containLabel: true
-        },
-        {
-          id: 'title-text',
-          right: '3%',
-          left: 'auto',
-          // bottom: 'auto',
-          top: '5%',
-          // top: 555,
-
-          width: '40%',
-          height: '25%',
-          show: true,
           containLabel: true
         }
 
@@ -317,32 +376,8 @@ function chartInit () {
             }
           },
           gridIndex: 0,
-          position: 'top'
+          position: 'bottom'
           // show: false
-        },
-        {
-          type: 'value',
-          min: 24,
-          max: 240,
-          interval: 12,
-          axisLabel: {
-            formatter: function (value, index) {
-              return value / 12
-            }
-          },
-          gridIndex: 1
-        },
-        {
-          type: 'value',
-          min: 24,
-          max: 240,
-          interval: 12,
-          axisLabel: {
-            formatter: function (value, index) {
-              return value / 12
-            }
-          },
-          gridIndex: 0
         }
 
       ],
@@ -356,28 +391,12 @@ function chartInit () {
         },
         {
           type: 'value',
-          min: 10,
-          // max: 40,
-          interval: 2,
-          position: 'left',
-          gridIndex: 1
-        },
-        {
-          type: 'value',
           min: 0,
           max: 200,
           interval: 10,
           position: 'right',
           gridIndex: 0,
           show: true
-        },
-        {
-          type: 'value',
-          min: 10,
-          // max: 40,
-          interval: 2,
-          position: 'right',
-          gridIndex: 1
         }
       ],
       series: [
@@ -492,20 +511,6 @@ function chartInit () {
           gridIndex: 0
         },
 
-        // {
-        //   name: 'P 5rd',
-        //   data: cariPanduan('5rd'),
-        //   type: 'line',
-        //   smooth: true,
-        //   showSymbol: false,
-        //   colorBy: 'series',
-        //   lineStyle: { color: 'green', width: 1 },
-        //   itemStyle: { color: 'green' },
-        //   xAxisIndex: 0,
-        //   yAxisIndex: 0,
-        //   gridIndex: 0
-        // },
-
         {
           name: 'P 3rd',
           data: cariPanduan('3rd'),
@@ -617,150 +622,6 @@ function chartInit () {
           xAxisIndex: 0,
           yAxisIndex: 0,
           gridIndex: 0
-        },
-
-        // FOR BMI
-
-        {
-          name: 'bmi97',
-          data: cariPanduanBmi('97rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'red', width: 1 },
-          itemStyle: { color: 'red' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi95',
-          data: cariPanduanBmi('95rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'orange', width: 1 },
-          itemStyle: { color: 'orange' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi90',
-          data: cariPanduanBmi('90rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'gold', width: 1 },
-          itemStyle: { color: 'gold' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi85',
-          data: cariPanduanBmi('85rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'purple', width: 1 },
-          itemStyle: { color: 'purple' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-
-        {
-          name: 'bmi75',
-          data: cariPanduanBmi('75rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'blue', width: 1 },
-          itemStyle: { color: 'blue' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-
-        {
-          name: 'bmi50',
-          data: cariPanduanBmi('50rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'black', width: 3 },
-          itemStyle: { color: 'black' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi25',
-          data: cariPanduanBmi('25rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'navy', width: 1 },
-          itemStyle: { color: 'navy' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi10',
-          data: cariPanduanBmi('10rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          colorBy: 'series',
-          lineStyle: { color: 'green', width: 1 },
-          itemStyle: { color: 'green' },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          name: 'bmi3',
-          data: cariPanduanBmi('3rd'),
-          type: 'line',
-          smooth: true,
-          showSymbol: true,
-          colorBy: 'series',
-          lineStyle: { color: 'purple', width: 1 },
-          itemStyle: { color: 'purple' },
-          symbolSize: 0.1,
-          markPoint: {
-            data: [{ name: '周最低', value: [168, 15.66], xAxis: 0, yAxis: 15.71 }]
-          },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
-        },
-        {
-          type: 'scatter',
-          name: 'BMI',
-          data: getScatterBmi(),
-          showSymbol: true,
-          symbol: 'circle',
-          color: '#000',
-          symbolSize: 8,
-          cursor: 'pointer',
-          markPoint: {
-            data: [
-              { type: 'max', name: 'BMI', symbolSize: 80 }
-            ]
-          },
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          gridIndex: 1
         }
 
       ]
@@ -795,19 +656,6 @@ const cariPanduanWeight = (val) => {
   return arr
 }
 
-const cariPanduanBmi = (val) => {
-  // const masterTb = store?.masterCdc.length ? store.masterCdc.filter(x => x.gender === 1 && x?.jns === 2) : []
-  const masterTb = props?.draft?.masterBmi ?? []
-  // console.log(masterTb)
-  const arr = []
-  // if (val === '3rd') {
-  for (let i = 0; i < masterTb.length; i++) {
-    arr[i] = [masterTb[i].age_m, masterTb[i][val]]
-  }
-
-  return arr
-}
-
 const getChartResult = () => {
   // const titikA = props?.draft
   const { titkA, titikB, titikC } = props?.draft
@@ -815,12 +663,6 @@ const getChartResult = () => {
   return [titkA, titikB, titikC]
 }
 
-const getScatterBmi = () => {
-  // const titikA = props?.draft
-  const { titikD } = props?.draft
-  // console.log('titikD', titikD)
-  return [titikD]
-}
 // eslint-disable-next-line no-unused-vars
 const getMaxBmi = (val) => {
   const masterTb = props?.draft?.masterBmi ?? []
