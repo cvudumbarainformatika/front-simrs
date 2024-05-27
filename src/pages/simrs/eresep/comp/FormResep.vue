@@ -106,6 +106,7 @@
                         option-value="kodeobat"
                         standout="bg-yellow-3"
                         outlined
+                        clearable
                         input-debounce="800"
                         class="full-width"
                         hide-dropdown-icon
@@ -182,6 +183,7 @@
                         label="Aturan Pakai"
                         use-input
                         dense
+                        clearable
                         standout="bg-yellow-3"
                         option-label="signa"
                         outlined
@@ -742,11 +744,11 @@ const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
 
-function setTipe(val) {
+function setTipe (val) {
   console.log('tipe resep', val)
   store.cariObat('')
 }
-function setJumlahIter(val) {
+function setJumlahIter (val) {
   const kali = parseInt(val)
   if (!kali) return
   const sekarang = Date.now()
@@ -757,7 +759,7 @@ function setJumlahIter(val) {
   console.log('val', expJadi)
   store.setForm('iter_expired', expJadi)
 }
-function setPasien() {
+function setPasien () {
   const val = props?.pasien
   if (!val) return
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
@@ -788,7 +790,8 @@ function setPasien() {
 
         // store.listPemintaanSementara = resep?.permintaanresep ?? []
         // store.listRacikan = resep?.permintaanracikan ?? []
-      } else if (resep) {
+      }
+      else if (resep) {
         if (resep?.flag !== '') store.setListResep(resep)
       }
     }
@@ -803,7 +806,7 @@ function setPasien() {
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
-function racikan() {
+function racikan () {
   // console.log('ok')
   // alert('oooi')
   store.racikanOpen = true
@@ -817,7 +820,7 @@ function racikan() {
   ]
   // store.tipeRacikan = []
 }
-function racikanTambah(val) {
+function racikanTambah (val) {
   // console.log('ok', val)
   if (!store?.signas?.length) return notifCenterVue('mohon tunggu sebentar, masih menunggu data Signa dari server')
   // alert('oooi')
@@ -836,20 +839,20 @@ function racikanTambah(val) {
     { label: 'non-DTD', value: 'non-DTD', disable: true }
   ]
 }
-function resetFormRacik() {
+function resetFormRacik () {
   store.setForm('jenisresep', '')
   store.resetForm()
 }
 /// / set Racikan end ------
 // perispan Operasi -----
 const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOperasi.vue')))
-function openPersiapanOperasi() {
+function openPersiapanOperasi () {
   permintaan.isOpen = true
   permintaan.setPasien(props.pasien)
   // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -866,7 +869,7 @@ const inputObat = myDebounce((val) => {
 //   if (val !== '') store.cariObat(val)
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
-function obatSelected(val) {
+function obatSelected (val) {
   console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
@@ -887,7 +890,7 @@ function obatSelected(val) {
   store.setForm('kodedepo', store.dpPar)
 }
 
-function obatEnter() {
+function obatEnter () {
   refQty.value.focus()
   refQty.value.select()
 }
@@ -895,7 +898,7 @@ function obatEnter() {
 const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
-function signaSelected(val) {
+function signaSelected (val) {
   // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
@@ -907,7 +910,7 @@ function signaSelected(val) {
   }
   // }
 }
-function signaCreateValue(val, done) {
+function signaCreateValue (val, done) {
   signaNewVal.value = true
   let newSigna = ''
   if (val.includes('x')) {
@@ -922,27 +925,29 @@ function signaCreateValue(val, done) {
       const depan = anu[0] + ' x ' + anu[1]
       if (anu?.length === 2) {
         newSigna = depan
-      } else {
+      }
+      else {
         const temp = anu
         const belakang = temp.slice(2).join(' x ')
         // console.log('dep', temp, '--->', depan, ' -- ', belakang)
         newSigna = depan + belakang
       }
     }
-  } else newSigna = val
+  }
+  else newSigna = val
   store.fromSigna.signa = newSigna
   done(store.fromSigna)
 
   // console.log('signa new val', signa.value)
 }
-function getFocus() {
+function getFocus () {
   refJmlHarSig.value?.focus()
   refJmlHarSig.value?.select()
 }
-function lostFocus() {
+function lostFocus () {
   signaNewVal.value = false
 }
-function simpan() {
+function simpan () {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
     signaSelected(resp.data)
@@ -950,7 +955,7 @@ function simpan() {
     refKet.value.select()
   })
 }
-function signaEnter() {
+function signaEnter () {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
@@ -958,7 +963,7 @@ function signaEnter() {
   }
 }
 // jumlah
-function setJumlah(val) {
+function setJumlah (val) {
   let jumlah = parseFloat(val)
   console.log('jumlah', jumlah)
   console.log('alokasi', store.form.stokalokasi)
@@ -972,7 +977,8 @@ function setJumlah(val) {
       const kons = jumlah / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
     }
-  } else if (store.form?.aturan !== '') {
+  }
+  else if (store.form?.aturan !== '') {
     const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
     if (sign.length) {
       if (parseFloat(jumlah) > 0) {
@@ -983,7 +989,7 @@ function setJumlah(val) {
   }
 }
 // eslint-disable-next-line no-unused-vars
-function qtyEnter() {
+function qtyEnter () {
   // if (parseFloat(store.form.jumlah_diminta) > 1)
   refSigna.value.focus()
   refSigna.value.showPopup()
@@ -994,7 +1000,7 @@ function obatValid (val) {
 function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
-function validate() {
+function validate () {
   if (store?.form?.kodeobat !== '') {
     const ob = store.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
     if (ob.length && !Object.keys(store.namaObat)?.length) store.namaObat = ob[0]
@@ -1005,7 +1011,7 @@ function validate() {
     if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
     // console.log('at', store.signas, sign)
   }
-  if (store.form.tiperesep === 'iter') {
+  if (store.form.tiperesep === 'iter' && store.dpPar === 'Gd-05010101') {
     if (store.form.iter_jml === '' || !store.form.iter_jml) {
       notifErrVue('Jumlah Iter belum di isi')
       return false
@@ -1015,7 +1021,7 @@ function validate() {
   if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
-function ketEnter() {
+function ketEnter () {
   Dialog.create({
     title: 'Konfirmasi',
     message: 'Apakah Akan dilanjutkan untuk di simpan?',
@@ -1036,7 +1042,7 @@ function ketEnter() {
       simpanObat()
     })
 }
-function simpanObat() {
+function simpanObat () {
   if (validate()) {
     const form = store.form
     store.simpanObat(form)?.then(() => {

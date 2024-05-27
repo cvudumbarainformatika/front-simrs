@@ -465,7 +465,7 @@
     </div>
     <!-- Pagination -->
     <AppPaginationTable
-      v-if="items.length > 0 && adaPaginasi"
+      v-if="items.length > 0 && adaPaginasi && !simplePaginasi"
       class="print-hide"
       :meta="meta"
       @first="emits('goto', 1)"
@@ -473,6 +473,75 @@
       @next="emits('goto', meta.current_page + 1)"
       @prev="emits('goto', meta.current_page - 1)"
     />
+    <!-- simle paginate -->
+    <div
+      v-if="simplePaginasi"
+      class="row items-center justify-between q-pa-sm"
+      :class="`${color} text-${textColor}`"
+    >
+      <div>
+        <div class="row items-center">
+          <q-btn
+            flat
+            :color="textColor"
+            icon="icon-mat-skip_previous"
+            size="sm"
+            round
+            :disable="meta.current_page===1"
+            @click="emits('goTo',1)"
+          />
+          <q-btn
+            flat
+            :color="textColor"
+            icon="icon-mat-chevron_left"
+            size="sm"
+            round
+            :disable="meta.current_page===1"
+            @click="emits('goTo',meta.current_page-1)"
+          />
+          <div class="q-px-sm">
+            <div
+              v-if="meta.total !==0"
+              classs="row items-center"
+            >
+              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }} </span> data ke -  {{ meta.from }} sampai data ke -  <span class="text-weight-bold">{{ meta.to }}</span> </span> |
+            </div>
+            <div v-else>
+              Tidak Ada Data
+            </div>
+          </div>
+          <q-btn
+            flat
+            :color="textColor"
+            icon="icon-mat-chevron_right"
+            size="sm"
+            round
+            :disable="!meta.next_page_url"
+            @click="emits('goTo',meta.current_page+1)"
+          />
+          <!-- <q-btn
+            flat
+            :color="textColor"
+            icon="icon-mat-skip_next"
+            size="sm"
+            round
+            :disable="meta.current_page===lastPage"
+            @click="emits('goTo',meta.last_page)"
+          /> -->
+        </div>
+      </div>
+      <!-- <div class="q-pr-xl">
+        <q-badge
+          outline
+          align="middle"
+          color="orange"
+          class="q-mr-xs f-20 text-weight-bold"
+        >
+          {{ meta.total }}
+        </q-badge> TOTAL DATA DITEMUKAN
+      </div> -->
+    </div>
+    <!-- tanda tangan -->
     <div v-if="tandaTangan">
       <div class="q-my-md">
         <div class="row q-mb-md">
@@ -725,6 +794,7 @@ const props = defineProps({
   rowNo: { type: Boolean, default: false },
   topRow: { type: Boolean, default: false },
   adaPaginasi: { type: Boolean, default: true },
+  simplePaginasi: { type: Boolean, default: false },
   bottomRow: { type: Boolean, default: false },
   perPage: { type: Number, default: 12 },
   orderBy: { type: String, default: 'id' },
@@ -742,7 +812,15 @@ const props = defineProps({
   clickAble: { type: Boolean, default: false },
   enableHead: { type: Boolean, default: true },
   useFull: { type: Boolean, default: false },
-  textSize: { type: Number, default: 12 }
+  textSize: { type: Number, default: 12 },
+  color: {
+    type: String,
+    default: 'bg-primary'
+  },
+  textColor: {
+    type: String,
+    default: 'white'
+  }
 })
 const emits = defineEmits(['onClick', 'newData', 'editData', 'goto', 'deleteIds', 'setRow', 'setColumns', 'setOrder', 'find', 'search', 'delete', 'refresh'])
 // text tanda tangan start
@@ -830,7 +908,7 @@ watch(() => props.items, (obj) => {
   selected.value = []
 })
 
-function searchEnter(evt) {
+function searchEnter (evt) {
   emits('search', evt.target.value)
 }
 
@@ -841,7 +919,8 @@ const setCheck = (x) => {
       arr.push(props.items[i].id)
     }
     selected.value = arr
-  } else {
+  }
+  else {
     selected.value = []
   }
 }

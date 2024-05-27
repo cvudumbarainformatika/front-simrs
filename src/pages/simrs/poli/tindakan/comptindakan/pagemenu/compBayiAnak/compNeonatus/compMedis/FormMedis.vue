@@ -778,7 +778,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  store.initForm()
+  // store.initForm()
 })
 
 </script>

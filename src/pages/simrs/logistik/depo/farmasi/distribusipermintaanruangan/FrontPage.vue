@@ -535,7 +535,7 @@ const apps = useAplikasiStore()
 
 const depos = ['Gd-03010101', 'Gd-04010102', 'Gd-04010103', 'Gd-05010101', 'Gd-02010104']
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -564,11 +564,12 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].uraian
-  } else {
+  }
+  else {
     return val
   }
 }
-function mutasi(row, rin) {
+function mutasi (row, rin) {
   console.log('row', row)
   console.log('rin', rin)
 }
@@ -648,7 +649,7 @@ function setJumlah (evt, val) {
   val.jumlah_minta = beli
   console.log('beli', beli)
 }
-function sudah(evt, val) {
+function sudah (evt, val) {
   const anu = val.jumlah_minta
   val.jumlah_minta = anu
 }

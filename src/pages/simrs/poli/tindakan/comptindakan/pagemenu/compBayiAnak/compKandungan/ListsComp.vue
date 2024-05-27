@@ -7,7 +7,10 @@
     class="q-mb-sm"
   >
     <q-card-section>
-      <div>Diinput Oleh : {{ item?.pegawai?.nama }}</div>
+      <div class="q-my-sm">
+        <div>Diinput Oleh : <b>{{ item?.pegawai?.nama }}</b></div>
+        <div>NOREG : <b>{{ item?.noreg }} </b></div>
+      </div>
       <table>
         <tr>
           <td
@@ -53,6 +56,24 @@
             menikah yg Ke
           </td>
           <td>{{ item?.menikahKe ?? '-' }}</td>
+        </tr>
+        <tr>
+          <td
+            width="40%"
+            class="text-weight-bold"
+          >
+            Usia Pernikahan
+          </td>
+          <td>{{ item?.usiaPernikahan ?? '-' }}</td>
+        </tr>
+        <tr>
+          <td
+            width="40%"
+            class="text-weight-bold"
+          >
+            Usia Awal Pernikahan
+          </td>
+          <td>{{ item?.usiaAwalPernikahan ?? '-' }}</td>
         </tr>
         <tr>
           <td
@@ -116,7 +137,18 @@
     </q-card-section>
     <q-separator />
     <q-card-section class="q-pa-sm row justify-between">
-      <div />
+      <div>
+        <q-btn
+          icon="icon-mat-edit"
+          size="sm"
+          flat
+          color="primary"
+          label="Copy & Edit Data"
+          @click="emits('edit', item)"
+        >
+          <q-tooltip>Edit Data</q-tooltip>
+        </q-btn>
+      </div>
       <div>
         <q-btn
           icon="icon-mat-delete"

@@ -54,7 +54,8 @@ const interceptResErrors = (err) => {
     console.log('axios', err)
     notifErr(err.response)
     // notifErr(err)
-  } catch (e) {
+  }
+  catch (e) {
     // check for response code 123 and redirect to login
     // Will return err if something goes wrong
     console.log('1. catch', e)
@@ -67,7 +68,8 @@ const interceptResponse = (res) => {
     // check for response code 123 and redirect to login
     // console.log('2. interceptResponse', res)
     return Promise.resolve(res)
-  } catch (e) {
+  }
+  catch (e) {
     // check for response code 123 and redirect to login
     console.log('2. catch interceptResponse', res)
     return Promise.resolve(res)

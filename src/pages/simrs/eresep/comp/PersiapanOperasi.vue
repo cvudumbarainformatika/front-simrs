@@ -117,9 +117,11 @@ const SudahPage = shallowRef(defineAsyncComponent(() => import('./comppersiapan/
 // end of defined components
 
 // define the functions
-function simpan() {
+function simpan () {
   console.log('form', store.form)
-  store.simpan()
+  setTimeout(() => {
+    store.simpan()
+  }, 100)
 }
 // eslint-disable-next-line no-unused-vars
 // function selesai() {

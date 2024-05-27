@@ -131,7 +131,7 @@ onMounted(() => {
   // console.log('setting', kdDisplay.value)
 })
 
-function getListVoices() {
+function getListVoices () {
   return new Promise(
     function (resolve, reject) {
       const synth = speech.synth
@@ -148,7 +148,7 @@ function getListVoices() {
   )
 }
 
-function settingsVoice() {
+function settingsVoice () {
   const voices = speech.voiceList
   if (voices.length) {
     const lang = voices?.map(x => x.lang)
@@ -165,7 +165,7 @@ function settingsVoice() {
   listenForSpeechEvents()
 }
 
-function listenForSpeechEvents() {
+function listenForSpeechEvents () {
   speech.utterance.onstart = () => {
     console.log('start...')
     speech.isLoading = true
@@ -176,7 +176,7 @@ function listenForSpeechEvents() {
   }
 }
 
-function setSpeech(txt) {
+function setSpeech (txt) {
   // console.log(speech.voiceList[indexVoices.value])
   const voice = speech.utterance
   voice.text = txt
@@ -189,7 +189,7 @@ function setSpeech(txt) {
   return voice
 }
 
-function panggil(row) {
+function panggil (row) {
   // console.log(row)
   const nama = (row?.nama_panggil) ? (row?.nama_panggil)?.toLowerCase() : ''
   const unit = row?.panggil_antrian
@@ -206,7 +206,7 @@ function panggil(row) {
   store.sendPanggil(row, `display${kdDisplay.value}`)
 }
 
-function bukaTindakan(val) {
+function bukaTindakan (val) {
   // console.log('buka tindakan', val)
   if (val?.groups === '1') {
     if (!val?.sep) {
@@ -225,7 +225,7 @@ function bukaTindakan(val) {
   store.setTerima(val)
 }
 
-function tidakdatangs(val) {
+function tidakdatangs (val) {
   if (val?.groups === '1') {
     if (!val?.sep) {
       $q.notify({
@@ -241,7 +241,7 @@ function tidakdatangs(val) {
   store.settidakdatang(val)
 }
 
-function subscribedChannel() {
+function subscribedChannel () {
   if (kdDisplay.value) {
     // ok persiiip
     // const channel = laravelEcho.join('presence.chat.display' + kdDisplay.value)
@@ -278,7 +278,7 @@ function subscribedChannel() {
 //   printRekap.value = false
 // }
 
-function kirimkepenjaminan(val) {
+function kirimkepenjaminan (val) {
   // if (val?.groups === '1') {
   //   if (!val?.sep) {
   $q.notify({

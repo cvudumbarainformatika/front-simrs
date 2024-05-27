@@ -89,7 +89,7 @@ const store = usePermintaanOperasistore()
 // const pasien = ref(null)
 // const indexVoices = ref(0)
 
-function bukaPelayanan(val) {
+function bukaPelayanan (val) {
   pasien.value = val
   store.pagePelayanan = true
   // store.setTerima(val)

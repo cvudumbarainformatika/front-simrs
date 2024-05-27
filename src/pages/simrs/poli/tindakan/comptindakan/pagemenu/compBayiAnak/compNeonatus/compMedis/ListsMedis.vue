@@ -11,7 +11,7 @@
         <table>
           <tr>
             <td width="35%">
-              Usia Kehamiln Ibu
+              Usia Kehamilan Ibu
             </td>
             <td>{{ item?.usiaKehamilanIbu }}</td>
           </tr>

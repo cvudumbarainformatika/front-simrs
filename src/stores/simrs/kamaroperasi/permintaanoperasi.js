@@ -35,7 +35,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    getUsia(x, y) {
+    getUsia (x, y) {
       const xx = new Date(x)
       const yy = new Date(y)
       const unit = 'years'
@@ -44,12 +44,12 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       return diff.toString()
     },
 
-    init(val) {
+    init (val) {
       // console.log('')
       this.params = val
       this.getData()
     },
-    async getData() {
+    async getData () {
       this.loading = true
       const params = { params: this.params }
       await api.get('/v1/simrs/penunjang/ok/listkamaroperasi', params)
@@ -75,24 +75,24 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
           this.loading = false
         })
     },
-    togglePageTindakan() {
+    togglePageTindakan () {
       this.pageTindakan = !this.pageTindakan
     },
-    setDate(val) {
+    setDate (val) {
       this.params.tgl = val
     },
-    setQ(val) {
+    setQ (val) {
       this.params.page = 1
       this.params.q = val
       this.getData()
     },
-    setTo(val) {
+    setTo (val) {
       this.params.to = val
     },
-    setFrom(val) {
+    setFrom (val) {
       this.params.from = val
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       this.params.page = 1
       const { to, from, status } = val
       this.params.to = to
@@ -101,7 +101,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       // console.log('periodik', this.params)
       this.getData()
     },
-    filterData(val) {
+    filterData (val) {
       this.params.page = 1
       const { to, from, q, status } = val // status
       this.params.to = to
@@ -112,25 +112,25 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       this.getData()
       // console.log(val)
     },
-    setPage(payload) {
+    setPage (payload) {
       this.params.page = payload
       this.getData()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.params.per_page = payload
       this.getData()
     },
-    setFilters() {
+    setFilters () {
       this.filters = !this.filters
     },
-    setCustom() {
+    setCustom () {
       this.custom = true
     },
-    notCustom() {
+    notCustom () {
       this.custom = false
     },
 
-    async gantiDpjp(form, pasien) {
+    async gantiDpjp (form, pasien) {
       // console.log(form)
       this.loadingSaveGantiDpjp = true
       try {
@@ -149,12 +149,13 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
           this.loadingSaveGantiDpjp = false
         }
         this.loadingSaveGantiDpjp = false
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingSaveGantiDpjp = false
       }
     },
-    gantiMemo(form, pasien) {
+    gantiMemo (form, pasien) {
       // console.log(form)
       return new Promise((resolve, reject) => {
         api.post('/v1/simrs/pelayanan/gantimemo', form)
@@ -175,7 +176,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
     },
 
     // inject pasien
-    async setLayananSelesai(pasien) {
+    async setLayananSelesai (pasien) {
       this.loadingTerima = true
       // '' : 'Belum Terlayanani'
       // '1': 'Terlayani'
@@ -205,14 +206,15 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
           }
           this.loadingTerima = false
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingTerima = false
         // this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },
 
-    async setTerima(pasien) {
+    async setTerima (pasien) {
       this.loadingCall = false
       this.loadingTerima = true
       const form = { noreg: pasien?.noreg }
@@ -229,7 +231,8 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
           this.noreg = null
           this.togglePageTindakan()
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingTerima = false
         this.noreg = null
@@ -237,7 +240,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       }
     },
 
-    async settidakdatang(pasien) {
+    async settidakdatang (pasien) {
       this.loadingTidakhadir = true
       this.loadingCall = false
       const form = { noreg: pasien?.noreg }
@@ -248,7 +251,8 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
 
         this.loadingTidakhadir = false
         this.setinject(pasien?.noreg)
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingTidakhadir = false
         this.hidden = false
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
@@ -264,7 +268,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       }
     },
 
-    notifikasiError(msg) {
+    notifikasiError (msg) {
       Notify.create({
         message: msg,
         // icon: 'icon-eva-message-circle-outline',
@@ -277,7 +281,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       })
     },
 
-    injectDataPasien(pasien, val, kode) {
+    injectDataPasien (pasien, val, kode) {
       const findPasien = this.items.filter(x => x === pasien)
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
@@ -288,16 +292,18 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         // console.log('inject isi pasien', val)
         if (target) {
           Object.assign(target, val)
-        } else {
+        }
+        else {
           if (kode === 'diagnosa') {
             data[kode]?.push(val)
-          } else {
+          }
+          else {
             data[kode]?.splice(0, 0, val)
           }
         }
       }
     },
-    hapusDataAnamnesis(pasien, id) {
+    hapusDataAnamnesis (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].anamnesis
@@ -305,7 +311,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataPemeriksaanfisik(pasien, id) {
+    hapusDataPemeriksaanfisik (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].pemeriksaanfisik
@@ -313,7 +319,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusGambars(pasien, nama) {
+    hapusGambars (pasien, nama) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].gambars
@@ -321,7 +327,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataDiagnosa(pasien, id) {
+    hapusDataDiagnosa (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].diagnosa
@@ -329,7 +335,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataTindakan(pasien, id) {
+    hapusDataTindakan (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].tindakan
@@ -337,7 +343,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataProsedur(pasien, id) {
+    hapusDataProsedur (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].prosedur
@@ -345,7 +351,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataLaborat(pasien, id) {
+    hapusDataLaborat (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].laborats
@@ -353,13 +359,13 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataLaboratBaru(pasien, id, databaru) {
+    hapusDataLaboratBaru (pasien, id, databaru) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         findPasien[0].laborats = databaru
       }
     },
-    hapusDataRadiologi(pasien, id) {
+    hapusDataRadiologi (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.radiologi
@@ -367,7 +373,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataPenunjangLain(pasien, id) {
+    hapusDataPenunjangLain (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.penunjanglain
@@ -375,7 +381,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataOk(pasien, id) {
+    hapusDataOk (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.ok
@@ -383,7 +389,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataFisio(pasien, id) {
+    hapusDataFisio (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.fisio
@@ -391,7 +397,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataPlanning(pasien, id) {
+    hapusDataPlanning (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.planning
@@ -399,7 +405,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataDiet(pasien, id) {
+    hapusDataDiet (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.diet
@@ -407,7 +413,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataEdukasi(pasien, id) {
+    hapusDataEdukasi (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.edukasi
@@ -415,7 +421,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataDiagnosaKeperawatan(pasien, id) {
+    hapusDataDiagnosaKeperawatan (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].diagnosakeperawatan
@@ -424,7 +430,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
       }
     },
 
-    injectDokumenTindakan(pasien, res) {
+    injectDokumenTindakan (pasien, res) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien?.length) {
         const tindakan = findPasien[0]?.tindakan
@@ -435,7 +441,7 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
         }
       }
     },
-    getDataIcare(pasien) {
+    getDataIcare (pasien) {
       this.loadingIcare = true
       console.log('get data icare', pasien)
       const param = {
@@ -451,7 +457,8 @@ export const usePermintaanOperasistore = defineStore('permintaan-operasi-store',
             console.log('resp icare', resp)
             if (resp?.data?.metadata?.code === '200' || resp?.data?.metadata?.code === 200) {
               resolve(resp.data)
-            } else {
+            }
+            else {
               notifErrVue(resp?.data?.metadata?.message)
               resolve(false)
             }
