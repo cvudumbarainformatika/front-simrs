@@ -93,7 +93,7 @@ import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/
 
 import { onMounted } from 'vue'
 const store = usePersiapanOperasiStore()
-function status(val) {
+function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
@@ -117,7 +117,7 @@ function status(val) {
   }
   return balik
 }
-function color(val) {
+function color (val) {
   let balik = 'grey'
   switch (val) {
     case '':

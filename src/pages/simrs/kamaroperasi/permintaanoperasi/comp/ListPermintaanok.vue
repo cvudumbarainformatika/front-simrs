@@ -158,17 +158,18 @@ defineProps({
 //   }
 // }
 
-function labelLayanan(val) {
+function labelLayanan (val) {
   if (val === '1') {
     return 'BELUM TERLAYANI'
-  } else {
+  }
+  else {
     return 'TERLAYANI'
   }
 }
 
 const store = usePermintaanOperasistore()
 
-function getUsia(x, y) {
+function getUsia (x, y) {
   const xx = new Date(x)
   const yy = new Date(y)
   const unit = 'years'

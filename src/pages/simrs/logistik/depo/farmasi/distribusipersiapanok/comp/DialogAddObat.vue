@@ -153,6 +153,7 @@
   </q-dialog>
 </template>
 <script setup>
+import { Dialog } from 'quasar'
 import { notifErrVue } from 'src/modules/utils'
 import { useTambahObatDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/tambah'
 import { ref } from 'vue'
@@ -222,8 +223,43 @@ function getWhenShow () {
 }
 const refObat = ref(null)
 const refQty = ref(null)
+function validasi () {
+  const obat = refObat.value?.validate()
+  const qty = refQty.value?.validate()
+  console.log('validasi', obat, qty)
+  if (obat && qty) return true
+  else return false
+}
 function simpanObat () {
   console.log('form', store.form)
-  store.simpanDistribusi()
+  if (validasi()) {
+    if (!store.form.susulan || store.form?.susulan === '') {
+      openDialog()
+    }
+    else {
+      store.simpanDistribusi()
+    }
+  }
+}
+function openDialog () {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah tidak akan dicatat Perawat yang meminta Obat?',
+    ok: {
+      push: true,
+      'no-caps': true,
+      color: 'negative',
+      label: 'Tidak Perlu Dicatat'
+    },
+    cancel: {
+      push: true,
+      'no-caps': true,
+      color: 'dark',
+      label: 'Tutup'
+    }
+  })
+    .onOk(() => {
+      store.simpanDistribusi()
+    })
 }
 </script>

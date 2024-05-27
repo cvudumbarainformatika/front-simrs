@@ -164,7 +164,8 @@ function filterFn (val, update) {
       const arr = refAuto.value.autocomplete
       if (arr === '') {
         optionx.value = props.source.filter((v) => v.toLowerCase().indexOf(needle) > -1)
-      } else {
+      }
+      else {
         const splits = arr.split('-')
         const multiFilter = (data = [], filterKeys = [], value = '') =>
           data.filter((item) =>
@@ -198,7 +199,7 @@ function filterFn (val, update) {
 //   }
 // }
 // debounce function
-function myDebounce(func, timeout = 800) {
+function myDebounce (func, timeout = 800) {
   let timer
   return (...arg) => {
     clearTimeout(timer)

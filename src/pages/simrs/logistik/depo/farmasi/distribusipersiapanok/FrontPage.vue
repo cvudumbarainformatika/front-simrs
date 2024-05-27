@@ -438,7 +438,7 @@
                       standout="bg-yellow-3"
                       :rules="[
                         val => (parseFloat(val) <= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Tidak Boleh Lebih dari Jumlah distribusi dikurangi jumlah diresepkan dokter',
-                        val => (parseFloat(val) >= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Apakah ada obat yang hilang?'
+                        // val => (parseFloat(val) >= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Apakah ada obat yang hilang?'
                       ]"
                       @update:model-value="setJumlah($event,rin,'jumlah_kembali')"
                     />
