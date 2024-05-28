@@ -132,6 +132,12 @@ const laporan = {
     },
 
     {
+      path: '/laporan/farmasi/stok',
+      // name: 'laporan.farmasi.stok',
+      component: () => import('pages/simrs/laporan/farmasi/stok/IndexPage.vue')
+    },
+
+    {
       path: '/laporan/notfound',
       component: () => import('pages/MidlewareNotFound.vue')
     }
