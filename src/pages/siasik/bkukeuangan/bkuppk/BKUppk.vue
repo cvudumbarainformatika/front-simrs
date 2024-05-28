@@ -336,16 +336,16 @@ const store = useLaporanBkuPpkStore()
 onMounted(() => {
   store.getDataTable()
 })
-function bulan(val) {
+function bulan (val) {
   const bulan = store.bulans.find((x) => x.value === val)
   return bulan?.nama ?? '-'
 }
 
-function ambilData() {
+function ambilData () {
   // store.hitungharidalamBulan();
   store.getDataTable()
 }
-function totaldebit() {
+function totaldebit () {
   const debit = store.hasilArray
   // console.log("njaaias", debit);
   const totaldebit = debit?.length
@@ -354,7 +354,7 @@ function totaldebit() {
   // console.log("debit", totaldebit);
   return totaldebit
 }
-function totalkredit() {
+function totalkredit () {
   const kredit = store.hasilArray
   // console.log("njaaias", debit);
   const totalkredit = kredit?.length
@@ -364,7 +364,7 @@ function totalkredit() {
   return totalkredit
 }
 
-function totalsaldo() {
+function totalsaldo () {
   const saldo = store.hasilArray
   // console.log("njaaias", debit);
   const totalsaldo = saldo?.length
