@@ -385,7 +385,7 @@ const JumlahMintaMin = ref(10)
 // function setMinta() {
 //   mintaMax.value = true
 // }
-function simpanMintaAlokasi() {
+function simpanMintaAlokasi () {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
   const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0
   if (mintamax > 0) {
@@ -399,7 +399,8 @@ function simpanMintaAlokasi() {
       mintaMax.value = false
       store.setForm('mak_stok', mintamax)
     })
-  } else {
+  }
+  else {
     notifErrVue('Jumlah Minta Max harus lebih besar dari 0')
   }
 }
@@ -427,7 +428,7 @@ const user = computed(() => {
   return apps.user
 })
 
-function gudangSelected(val) {
+function gudangSelected (val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
   store.setForm('tujuan', val)
@@ -438,7 +439,7 @@ function depoSelected (val) {
   store.setParam('kddepo', val)
 }
 
-function setJumlahMinta(evt) {
+function setJumlahMinta (evt) {
   const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const stok = parseFloat(store.form.stok) ?? 0
   const maks = parseFloat(store.form.mak_stok) ?? 0
@@ -455,29 +456,33 @@ function setJumlahMinta(evt) {
     if (alokasi < bisaMinta) {
       store.setForm('jumlah_minta', alokasi)
       notifErrVue('Jumlah minta tidak boleh melebihi alokasi')
-    } else {
+    }
+    else {
       store.setForm('jumlah_minta', bisaMinta)
       notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok ')
     }
-  } else if (jumlah > bisaMinta) {
+  }
+  else if (jumlah > bisaMinta) {
     store.setForm('jumlah_minta', bisaMinta)
     notifErrVue('Jumlah minta tidak boleh melebihi jumlah maksimal stok')
-  } else store.setForm('jumlah_minta', jumlah)
+  }
+  else store.setForm('jumlah_minta', jumlah)
 }
-function validasi() {
+function validasi () {
   const adaMax = store.form.mak_stok ? (parseFloat(store.form.mak_stok) > 0) : false
   const adaAlokasi = store.form.stok_alokasi ? (parseFloat(store.form.stok_alokasi) >= 0) : false
   const adaJumlahMinta = store.form.jumlah_minta ? (parseFloat(store.form.jumlah_minta) > 0) : false
   if (adaMax && adaAlokasi && adaJumlahMinta) {
     return true
-  } else {
+  }
+  else {
     if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
     if (!adaAlokasi) notifErrVue('Tidak Ada Jumlah Stok Alokasi, Pastikan ada Stok di gudang dan pastikan tidak ada transaksi permintaan yang belum selesai')
     if (!adaJumlahMinta) notifErrVue('Tidak Ada Jumlah Minta, Silahkan Isi Jumlah Minta')
     return false
   }
 }
-function simpan() {
+function simpan () {
   console.log('form', store.form)
   if (validasi()) {
     console.log('disp', store.disp)

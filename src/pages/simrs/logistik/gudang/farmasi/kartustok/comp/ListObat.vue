@@ -91,15 +91,15 @@ import { useKartuStokFarmasiStore } from '../../../../../../../stores/simrs/farm
 
 const store = useKartuStokFarmasiStore()
 
-function hitungSaldoAwal(arr) {
+function hitungSaldoAwal (arr) {
   return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 
-function hitungPenerimaan(arr) {
+function hitungPenerimaan (arr) {
   return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
 }
 
-function hitungMutasi(arr) {
+function hitungMutasi (arr) {
   return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
 }
 </script>

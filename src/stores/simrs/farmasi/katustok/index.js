@@ -19,7 +19,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     item: null
   }),
   actions: {
-    async getData() {
+    async getData () {
       const app = useAplikasiStore()
       const user = app?.user
       this.params.koderuangan = user?.kdruangansim
@@ -32,23 +32,24 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.items = resp.data.data
         // console.log('kjkjsdfs', this.items)
         console.log('kjkjsdfs', resp)
-      } else {
+      }
+      else {
         this.loading = false
       }
     },
-    setTahun(val) {
+    setTahun (val) {
       this.params.tahun = val
     },
 
-    goToPage(val) {
+    goToPage (val) {
       this.params.page = val
       this.getData()
     },
 
-    setDialogRinci() {
+    setDialogRinci () {
       this.dialogRinci = !this.dialogRinci
     },
-    setItem(val) {
+    setItem (val) {
       this.item = val
       this.dialogRinci = true
     }

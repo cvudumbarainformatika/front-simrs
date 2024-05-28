@@ -353,7 +353,7 @@ const refExp = ref(null)
 const refHarga = ref(null)
 const refHargaKcl = ref(null)
 
-function resetValidasi() {
+function resetValidasi () {
   // console.log('reset', refJmlDiterimaB.value.$refs.refInput)
   refJmlDiterimaB.value?.$refs?.refInput?.resetValidation()
   refJmlDiterima.value?.$refs?.refInput?.resetValidation()
@@ -363,7 +363,7 @@ function resetValidasi() {
   refHarga.value?.$refs?.refInput?.resetValidation()
   refHargaKcl.value?.$refs?.refInput?.resetValidation()
 }
-function validasi() {
+function validasi () {
   const diterimaB = refJmlDiterimaB.value?.$refs?.refInput?.validate()
   const diterima = refJmlDiterima.value?.$refs?.refInput?.validate()
   const batch = refBatch.value?.$refs?.refInput?.validate()
@@ -375,7 +375,7 @@ function validasi() {
   else return false
 }
 
-function simpan(index) {
+function simpan (index) {
   if (validasi()) {
     const deta = store.details[index]
     deta.jml_all_penerimaan += deta.jumlah
@@ -389,16 +389,16 @@ function simpan(index) {
     // store.simpanPenerimaan().then(() => { ind.value = null })
   }
 }
-function tolak(index) {
+function tolak (index) {
   emits('tolak', index)
 }
-function adaPPN(evt, det) {
+function adaPPN (evt, det) {
   // console.log('ada ppn', evt, det)
   if (evt) setHargaNetNew('11', det, 'ppn')
   if (!evt) setHargaNetNew('0', det, 'ppn')
 }
 let isiPrev = 0
-function setHargaNetNew(evt, det, key) {
+function setHargaNetNew (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -435,7 +435,8 @@ function setHargaNetNew(evt, det, key) {
             jmlTerimaK = jml
             jmlTerimaB = jml / det.isi
           }
-        } else {
+        }
+        else {
           det.jumlah = parseFloat(jmlTerimaK)
           jmlTerimaB = det.jumlah / det.isi
         }
@@ -475,7 +476,7 @@ function setHargaNetNew(evt, det, key) {
   // console.log('det', det)
   // console.log('key', key)
 }
-function detKadal(evt, val) {
+function detKadal (evt, val) {
   val.tgl_exp = evt
 }
 defineExpose({ resetValidasi })

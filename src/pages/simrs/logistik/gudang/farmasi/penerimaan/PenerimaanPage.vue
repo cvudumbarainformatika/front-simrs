@@ -60,26 +60,34 @@ const page = useRoute()
 const title = computed(() => {
   if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
     return 'LIST PEMESANAN'
-  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
     return 'PENERIMAAN LANGSUNG'
-  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'LIST PENERIMAAN'
-  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
     return 'PEMFAKTURAN'
-  } else {
+  }
+  else {
     return 'Penerimaan'
   }
 })
 const subtitle = computed(() => {
   if (page.path === '/gudang/farmasi/penerimaan/penerimaan') {
     return 'Penerimaan Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/penerimaanlangsung') {
     return 'Penerimaan Langsung Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/listpenerimaan') {
     return 'List Penerimaan Obat'
-  } else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
+  }
+  else if (page.path === '/gudang/farmasi/penerimaan/pemfakturan') {
     return 'List Penerimaan Belum Ada Faktur'
-  } else {
+  }
+  else {
     return 'Penerimaan Obat'
   }
 })
