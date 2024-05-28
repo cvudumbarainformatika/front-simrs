@@ -50,14 +50,14 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
   }),
 
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
 
-    getInitialData() {
+    getInitialData () {
       this.getDataTable()
     },
-    async getDataTable() {
+    async getDataTable () {
       this.loading = true
       const params = { params: this.params }
       await api
@@ -76,7 +76,7 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
           this.loading = false
         })
     },
-    getPtks() {
+    getPtks () {
       this.loading = true
       return new Promise((resolve) => {
         api.get('v1/laporan/laporan_bku/ptk').then((resp) => {
@@ -89,7 +89,7 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
       })
     },
 
-    hitungharidalamBulan() {
+    hitungharidalamBulan () {
       const cariBulan = new Date(
         this.params.tahun,
         this.params.bulan,
@@ -106,13 +106,13 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
       this.loading = false
       // return cariBulan;
     },
-    buatTanggal(n) {
+    buatTanggal (n) {
       const tgl = n > 9 ? n : '0' + n
       const thn = this.params.tahun
       const bln = this.params.bulan
       return thn + '-' + bln + '-' + tgl
     },
-    mapingData() {
+    mapingData () {
       // ===================================================NPKPanjar
       // eslint-disable-next-line camelcase
       const npk_Panjar = []
@@ -414,14 +414,15 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
       console.log('hasil gabung', this.hasilArray)
     },
 
-    cariHasilAkhirArray(arr) {
+    cariHasilAkhirArray (arr) {
       let total = 0
       if (arr.length) {
         for (let i = 0; i < arr.length; i++) {
           if (i === 0) {
             total = arr[0]?.penerimaan - arr[0]?.pengeluaran
             arr[0].total = total
-          } else {
+          }
+          else {
             const hinggaKeIndex = i + 1
             const arrBaru = arr.slice(1, hinggaKeIndex)
             const awal = arr[0]?.penerimaan - arr[0]?.pengeluaran
@@ -434,33 +435,33 @@ export const useLaporanBkuPtkStore = defineStore('laporan_bkuptk', {
       }
       return arr
     },
-    ambilDataUnik(x, f) {
+    ambilDataUnik (x, f) {
       // eslint-disable-next-line no-sequences
       const unique = Object.values(x.reduce((a, b) => ((a[f(b)] = b), a), {}))
       return unique
     },
 
-    hitungNpdpanjar(arr) {
+    hitungNpdpanjar (arr) {
       return arr
         .map((x) => x.total)
         .reduce((x, y) => parseInt(x) + parseInt(y), 0)
     },
-    hitungspjpanjar(arr) {
+    hitungspjpanjar (arr) {
       return arr
         .map((x) => x.jumlahbelanjapanjar)
         .reduce((x, y) => parseInt(x) + parseInt(y), 0)
     },
-    hitungpengembalianpjr(arr) {
+    hitungpengembalianpjr (arr) {
       return arr
         .map((x) => x.sisapanjar)
         .reduce((x, y) => parseInt(x) + parseInt(y), 0)
     },
-    hitungTotalNpd(arr) {
+    hitungTotalNpd (arr) {
       return arr
         .map((x) => x.nominalpembayaran)
         .reduce((x, y) => parseInt(x) + parseInt(y), 0)
     },
-    hitungpjr(arr) {
+    hitungpjr (arr) {
       return arr
         .map((x) => x.totalpermintaanpanjar)
         .reduce((x, y) => parseInt(x) + parseInt(y), 0)
