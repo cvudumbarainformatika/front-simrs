@@ -765,7 +765,7 @@
               class="row items-center justify-between q-mb-xs"
             >
               <app-input
-                ref="refKelasTerapi"
+                ref="refIndikasi"
                 v-model="store.temp.indikasi"
                 style="width:90%"
                 outlined
@@ -859,6 +859,7 @@ import { useMasterObatForm } from 'src/stores/simrs/master/farmasi/obat/form'
 import { ref } from 'vue'
 
 const refKelasTerapi = ref(null)
+const refIndikasi = ref(null)
 const store = useMasterObatForm()
 // simpan cepat start --
 function scKelompokPenyimpanan (val) {
