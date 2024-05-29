@@ -331,7 +331,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       if (item.permintaanracikan.length) {
         item.permintaanracikan.forEach(resep => {
           resep.kronis = resep?.mobat?.status_kronis
-          const rinci = item?.rincianracik.find(x => x.kdobat === resep.kdobat)
+          const rinci = item?.rincianracik.find(x => x.kdobat === resep.kdobat && x.namaracikan === resep.namaracikan)
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
             resep.harga_jual = rinci.harga_jual
@@ -350,7 +350,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length > 0
       // item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
       // item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
-      // console.log('item', item)
+      console.log('item', item)
     },
     getResepIter (val) {
       val.loadingGetIter = true

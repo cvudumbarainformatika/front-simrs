@@ -136,7 +136,7 @@
       </div>
     </div>
     <div
-      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep && store?.resep?.doneracik"
+      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep || store?.resep?.doneracik"
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
