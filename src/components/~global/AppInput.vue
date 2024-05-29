@@ -138,7 +138,8 @@ function changeType () {
   let type = typeInput.value
   if (type === 'text') {
     type = 'password'
-  } else {
+  }
+  else {
     type = 'text'
   }
   typeInput.value = type

@@ -143,6 +143,30 @@
                 </div>
               </div>
               <div
+                v-if="row.indikasi.length"
+                class="row items-center box justify-between no-wrap q-mb-sm"
+              >
+                <div>
+                  Indikasi
+                </div>
+                <div>
+                  <div
+                    v-for="(te,i) in row.indikasi"
+                    :key="i"
+                    class="text-italic text-right q-mb-xs"
+                  >
+                    <!-- {{ i+1 }}. -->
+                    {{ te.indikasi }}
+                    <!-- <app-chip
+                      outline
+                      square
+                      color="dark"
+                      :label="te.kelas_terapi "
+                    /> -->
+                  </div>
+                </div>
+              </div>
+              <div
                 v-if="row.mkelasterapi.length"
                 class="row items-center box justify-between no-wrap q-mb-sm"
               >
