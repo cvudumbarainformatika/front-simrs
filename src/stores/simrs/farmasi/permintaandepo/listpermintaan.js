@@ -14,7 +14,7 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
       page: 1,
       tanggal: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       nama: 'permintaan depo',
-      flag: ['1', '2']
+      flag: ['1', '2', '3', '4']
     },
     columns: [
       'no_permintaan',
@@ -27,31 +27,31 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
     dataToPrint: {}
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.param[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('no_permintaan', payload)
       this.setParam('page', 1)
       this.ambilPermintaan()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.ambilPermintaan()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.ambilPermintaan()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.ambilPermintaan()
     },
-    getInitialData() {
+    getInitialData () {
       this.ambilPermintaan()
     },
-    ambilPermintaan() {
+    ambilPermintaan () {
       this.loading = true
       console.log('penerimaan ', this.param)
       const params = { params: this.param }
@@ -70,7 +70,8 @@ export const useListPermintaanStore = defineStore('list_permintaan_store', {
                       const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
                       // console.log('dist', dist)
                       ri.distribusi = !isNaN(dist) ? dist : 0
-                    } else {
+                    }
+                    else {
                       ri.distribusi = 0
                     }
                   })

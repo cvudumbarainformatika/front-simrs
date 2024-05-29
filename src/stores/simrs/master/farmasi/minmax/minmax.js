@@ -66,7 +66,11 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       this.setForm('koderuang', val.kd_ruang)
       const obatnya = findWithAttr(this.obats, 'kd_obat', val.kd_obat)
       if (obatnya < 0) {
-        const obt = { kodeobat: val.obat.rs1, namaobat: val.obat.namaobat }
+        const obt = {
+          kodeobat: val.obat.kd_obat,
+          kd_obat: val.obat.kd_obat,
+          namaobat: val.obat.namaobat
+        }
         this.obats.push(obt)
       }
       const ruangnya = findWithAttr(this.ruangs, 'kode', val.kd_ruang)
@@ -113,24 +117,25 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
     },
     // local function
 
-    obatSelected(val) {
+    obatSelected (val) {
       console.log('obat', val)
       this.form.kd_obat = val
       this.form.kodeobat = val
     },
-    ruangSelected(val) {
+    ruangSelected (val) {
       console.log('ruang', val)
       this.form.kd_ruang = val
       this.form.koderuang = val
       this.getDataObatByRuang()
     },
-    mapingFilteredObat(data) {
+    mapingFilteredObat (data) {
       console.log('filterd data', data)
       data.forEach(anu => {
         if (anu.stokmaxrs.length) {
           anu.min = anu.stokmaxrs[0].min
           anu.max = anu.stokmaxrs[0].max
-        } else {
+        }
+        else {
           anu.min = 0
           anu.max = 0
         }
@@ -186,7 +191,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       })
     },
     // cari obat
-    getDataObat() {
+    getDataObat () {
       this.loading = true
       const params = { params: { q: this.filterObat } }
       return new Promise(resolve => {
@@ -201,7 +206,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
           .catch(() => { this.loading = false })
       })
     },
-    getDataObatByRuang() {
+    getDataObatByRuang () {
       this.loading = true
       const params = { params: { kd_ruang: this.form.kd_ruang, q: this.filterObat } }
       return new Promise(resolve => {
@@ -218,7 +223,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       })
     },
     // cari ruang
-    getDataRuang() {
+    getDataRuang () {
       this.loading = true
       const params = { params: { q: this.filterRuang } }
       return new Promise(resolve => {
@@ -236,7 +241,7 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
       })
     },
     // simpan
-    simpanData(val) {
+    simpanData (val) {
       const form = {
         kd_ruang: this.form.kd_ruang,
         kd_obat: val.kd_obat,
@@ -256,7 +261,8 @@ export const useMasterFarmasiMinMaxObatStore = defineStore('master_farmasi_minma
             })
             .catch(() => { val.loading = false })
         })
-      } else {
+      }
+      else {
         notifErrVue('nilai minimal todak boleh lebih besar dari maksimal')
       }
     }

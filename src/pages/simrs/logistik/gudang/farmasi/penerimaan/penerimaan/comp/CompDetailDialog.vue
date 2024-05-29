@@ -311,7 +311,7 @@
         icon="icon-mat-hand-front-left"
         color="negative"
         round
-        :disable="det.loading"
+        :disable="det.jml_all_penerimaan >= det.jumlahdpesan || det.loading"
         :loading="det.loading"
         @click="tolak(i)"
       >

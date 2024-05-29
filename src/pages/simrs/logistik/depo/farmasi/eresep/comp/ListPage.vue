@@ -163,6 +163,9 @@
               <div class="row">
                 {{ item?.noreg }} || {{ item?.norm }}
               </div>
+              <div class="row text-italic f-10">
+                {{ item?.datapasien?.noka }}
+              </div>
             </td>
             <td>
               {{ item?.dokter?.nama }}
@@ -308,7 +311,7 @@ const store = useEResepDepoFarmasiStore()
 const router = useRouter()
 
 // const indexId = ref(0)
-function status(val) {
+function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
@@ -332,7 +335,7 @@ function status(val) {
   }
   return balik
 }
-function color(val) {
+function color (val) {
   let balik = 'grey'
   switch (val) {
     case '':
@@ -357,14 +360,14 @@ function color(val) {
   return balik
 }
 
-function buka(val) {
+function buka (val) {
   store.setOpen()
   store.setResep(val)
   // console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }
-function info(val) {
+function info (val) {
   store.openInfo()
   store.setInfo(val)
 }
@@ -373,7 +376,7 @@ function info(val) {
 //   store.sendToSatset(id)
 // }
 const print = usePrintEresepStore()
-function toPrint(row) {
+function toPrint (row) {
   print.setResep(row)
   console.log('row', row)
   const noresep = row?.noresep

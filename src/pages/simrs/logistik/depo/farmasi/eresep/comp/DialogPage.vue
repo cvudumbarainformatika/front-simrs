@@ -25,11 +25,13 @@
             </div>
             <div class="absolute-top">
               <div class="q-pa-sm">
-                <q-badge
-                  outline
-                  color="orange"
-                  :label="`${store.resep?.sistembayar?.rs2?? '-'}`"
-                />
+                <div>
+                  <q-badge
+                    outline
+                    color="orange"
+                    :label="`${store.resep?.sistembayar?.rs2?? '-'}`"
+                  />
+                </div>
               </div>
             </div>
             <div class="absolute-bottom">
@@ -40,8 +42,17 @@
                 <div class="text-teal">
                   {{ store.resep ? store.resep.noreg : '-' }} || {{ store.resep?.norm??'-' }}
                 </div>
+                <div class="text-italic f-10">
+                  {{ store.resep?.datapasien?.noka?? '-' }}
+                </div>
+                <div class="text-blue f-10">
+                  {{ store.resep?.sep?.rs8 ?? '-' }}
+                </div>
                 <div class="text-yellow text-italic f-10">
                   {{ store.resep?.datapasien?.usia?? '-' }}
+                </div>
+                <div class=" text-italic f-10">
+                  {{ store.resep?.datapasien?.alamat?? '-' }}
                 </div>
               </div>
             </div>
@@ -1264,7 +1275,7 @@ const HistoryResepIter = defineAsyncComponent(() => import('./HistoryResepIter.v
 const EtiketRajal = defineAsyncComponent(() => import('./EtiketRajal.vue'))
 const EtiketRanap = defineAsyncComponent(() => import('./EtiketRanap.vue'))
 
-function openRajal(val) {
+function openRajal (val) {
   // console.log('refEtiketRajal', refEtiketRajal.value)
   rajalRinc.value = val
   rajalOpen.value = true
@@ -1272,12 +1283,13 @@ function openRajal(val) {
     refEtiketRajal.value.printPage()
   }, 100)
 }
-function setRincRanap(val, evt) {
+function setRincRanap (val, evt) {
   // console.log('set rinc ranap', val, evt)
   if (evt === true) {
     // console.log('push', val)
     ranapRinc.value.push(val)
-  } else {
+  }
+  else {
     const index = ranapRinc.value?.findIndex(ri => ri?.kdobat === val?.kdobat)
     // console.log('splice', index)
     if (index >= 0) {
@@ -1286,7 +1298,7 @@ function setRincRanap(val, evt) {
   }
   // console.log('ranapRinc', ranapRinc.value)
 }
-function openRanap(wkt) {
+function openRanap (wkt) {
   // console.log('refEtiketRanap', refEtiketRajal.value)
   // ranapRinc.value = val
   ranapWaktu.value = wkt
@@ -1296,14 +1308,14 @@ function openRanap(wkt) {
   }, 100)
 }
 const pageRef = ref()
-const tinggiDetailPas = ref(130)
+const tinggiDetailPas = ref(160)
 const h = ref(0)
 // const h = computed(() => {
 //   // console.log('h', pageRef.value)
 //   return pageRef.value?.$el?.clientHeight + 5
 // })
 
-function copyResep(val) {
+function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
   console.log('resep', val)
   const resep = val?.rincian

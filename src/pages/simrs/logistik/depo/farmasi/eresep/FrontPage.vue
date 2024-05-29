@@ -81,7 +81,7 @@ const InfoPage = defineAsyncComponent(() => import('./comp/InfoPage.vue'))
 const style = useStyledStore()
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
-function subscribedChannel() {
+function subscribedChannel () {
   const channel = laravelEcho.private('private.notif.depo-farmasi')
   channel.subscribed(() => {
     console.log('subscribed private.notif.depo-farmasi channel !!!')

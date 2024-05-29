@@ -433,7 +433,7 @@ const store = useListPermintaanStore()
 const permintaan = useFarmasiPermintaanDepoStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -491,7 +491,7 @@ function batalRinci (val, row) {
   permintaan.batalRinci(val, row)
 }
 
-function color(val) {
+function color (val) {
   switch (val) {
     case '':
       return 'grey'
