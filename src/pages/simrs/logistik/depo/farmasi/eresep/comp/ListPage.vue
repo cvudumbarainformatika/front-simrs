@@ -241,6 +241,24 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
+                round
+                class="f-10 q-mr-sm"
+                color="negative"
+                text-color="white"
+                icon="icon-mat-hand-front-left"
+                :disable="store.loadingTolak && item?.loading"
+                :loading="store.loadingTolak && item?.loading"
+                @click="store.tolakResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Selesai
+                </q-tooltip>
+              </q-btn>
+              <q-btn
                 square
                 class="f-10"
                 color="primary"
@@ -329,6 +347,9 @@ function status (val) {
     case '4':
       balik = 'Returned'
       break
+    case '5':
+      balik = 'Ditolak'
+      break
 
     default:
       break
@@ -348,10 +369,13 @@ function color (val) {
       balik = 'green'
       break
     case '3':
-      balik = 'negative'
+      balik = 'dark'
       break
     case '4':
       balik = 'orange'
+      break
+    case '5':
+      balik = 'negative'
       break
 
     default:

@@ -18,6 +18,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loadingCopy: false,
     loadingHistory: false,
     loadingPelayananInfoObat: false,
+    loadingTolak: false,
     items: [],
     meta: {},
     params: {
@@ -187,6 +188,20 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       this.removedItemId = []
       this.getDataTable()
     },
+    customRound (num) {
+      // Pisahkan bagian integer dan bagian desimal
+      const integerPart = Math.floor(num)
+      const decimalPart = num - integerPart
+
+      if (decimalPart <= 0.5) {
+        // Jika bagian desimal kurang dari atau sama dengan 0.5
+        return integerPart + 0.5
+      }
+      else {
+        // Jika bagian desimal lebih dari 0.5
+        return Math.ceil(num)
+      }
+    },
     setResep (val) {
       const res = val
       // console.log('set Resep', val)
@@ -258,8 +273,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               }
             })
           }
-          console.log('rinc', res.rincian)
-          console.log('rac', res.rincianracik)
+          // console.log('rinc', res.rincian)
+          // console.log('rac', res.rincianracik)
         })
       }
       res.listRacikan = []
@@ -267,7 +282,11 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         res?.permintaanracikan.forEach(key => {
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
           key.jumlahresep = key.jumlah
-          key.jumlahobat = Math.ceil(key.jumlah)
+          if (parseInt(key?.mobat?.kelompok_psikotropika) === 1) {
+            // console.log('mobat', key?.mobat)
+            key.jumlahobat = this.customRound(key.jumlah)
+          }
+          else key.jumlahobat = Math.ceil(key.jumlah)
           key.groupsistembayar = val?.sistembayar?.groups
           const namaracikan = key?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
@@ -317,6 +336,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
             resep.hargajual = rinci.harga_jual
+            resep.jumlahAwal = parseFloat(resep?.jumlah)
             resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
             resep.done = true
           }
@@ -325,7 +345,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           }
           // console.log('rinci ', rinci)
         })
-        const adaKronis = item?.permintaanresep.filter(f => f.kronis === '1')
+        const adaKronis = item?.permintaanresep.filter(f => f.kronis === '1' && parseInt(f.konsumsi) >= 28)
         if (adaKronis.length) item.adaKronis = 'kronis'
       }
       if (item.permintaanracikan.length) {
@@ -350,7 +370,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length > 0
       // item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
       // item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
-      console.log('item', item)
+      // console.log('item', item)
     },
     getResepIter (val) {
       val.loadingGetIter = true
@@ -571,6 +591,28 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           })
           .catch(err => {
             this.loadingSimpan = false
+            reject(err)
+          })
+      })
+    },
+    tolakResep (val) {
+      this.loadingTolak = true
+      val.loading = true
+      const data = {
+        noresep: val.noresep,
+        id: val.id
+      }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/farmasinew/depo/tolak-resep', data)
+          .then(resp => {
+            this.loadingTolak = false
+            val.loading = false
+            val.flag = '5'
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loadingTolak = false
+            val.loading = false
             reject(err)
           })
       })

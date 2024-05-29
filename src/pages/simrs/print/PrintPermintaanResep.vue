@@ -37,7 +37,7 @@
       <div class="garis" />
       <div class="garis" />
       <div class=" q-mt-xs f-10">
-        {{ store?.resep?.noresep }} / {{ dateFull(store?.resep?.tgl_kirim) }}
+        <span class="f-12 text-weight-bold">{{ store?.resep?.noresep }}</span> / {{ dateFull(store?.resep?.tgl_kirim) }}
       </div>
       <div class="f-12">
         {{ store.resep?.norm }} - {{ store.resep?.datapasien?.nama }}
@@ -158,14 +158,14 @@
                       ( {{ rinc?.mobat?.satuan_k }} )
                     </div>
                   </div>
-                  <div class="row q-mt-xs">
+                  <!-- <div class="row q-mt-xs">
                     <div class="col-4">
                       Konsumsi
                     </div>
                     <div class="col-8">
                       {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-6">
                   <div class="row q-mt-xs">

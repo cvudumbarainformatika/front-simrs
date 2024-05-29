@@ -367,7 +367,14 @@
                         Jumlah Obat
                       </div>
                       <div class="col-8">
-                        {{ rinc?.jumlah }}
+                        <!-- {{ rinc?.jumlah }} -->
+                        <app-input
+                          v-model="rinc.jumlah"
+                          outlined
+                          valid
+                          label="Jumlah"
+                          @update:model-value="setJumlah($event,rinc,'jumlah')"
+                        />
                       </div>
                     </div>
                     <div class="row items-center">
@@ -631,6 +638,13 @@
                       :class="rinc?.generik==='1'?'text-green':'text-red'"
                     >
                       {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                    </div>
+
+                    <div
+                      class="col-shrink"
+                      :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
+                    >
+                      {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
                     </div>
                   </div>
                 </q-item-section>
@@ -1258,6 +1272,7 @@ import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { date } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
@@ -1314,7 +1329,29 @@ const h = ref(0)
 //   // console.log('h', pageRef.value)
 //   return pageRef.value?.$el?.clientHeight + 5
 // })
-
+// let jumlah = 0
+// function jmlAwal (det, key) {
+//   jumlah = parseFloat(det[key])
+//   console.log('juma ', jumlah)
+// }
+// function jmlAkhir (det, key) {
+//   // det[key] = jumlah
+//   console.log('jumh ', jumlah)
+// }
+function setJumlah (evt, det, key) {
+  console.log('jumh ', det)
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  if (nilai > det?.jumlahAwal) {
+    // console.log('det?.jumlahAwal', det?.jumlahAwal)
+    det[key] = det?.jumlahAwal
+    return notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
+  }
+  // else jumlah = nilai
+}
 function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
   console.log('resep', val)

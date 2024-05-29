@@ -6,8 +6,9 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
   }),
   persist: true,
   actions: {
-    setResep(val) {
+    setResep (val) {
       const res = val
+      console.log(res)
       res.listRacikan = []
       if (res?.permintaanracikan?.length) {
         res?.permintaanracikan.forEach(key => {
@@ -20,7 +21,8 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
             adaList[0].rincian.push(key)
             const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
             adaList[0].harga = harga
-          } else {
+          }
+          else {
             const temp = {
               namaracikan: key?.namaracikan,
               harga: key?.harga,
