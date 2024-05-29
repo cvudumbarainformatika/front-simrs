@@ -223,7 +223,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="item?.flag==='2' && item?.doneresep || item?.doneracik"
+                v-if="item?.flag==='2' && (item?.doneresep || item?.doneracik)"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
