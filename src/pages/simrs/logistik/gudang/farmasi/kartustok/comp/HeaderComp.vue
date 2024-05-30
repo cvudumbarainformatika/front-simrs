@@ -21,7 +21,7 @@
               name="icon-mat-close"
               size="xs"
               class="cursor-pointer"
-              @click.stop.prevent="store.params.q = ''"
+              @click.stop.prevent="clearSearch"
             />
           </template>
           <template #prepend>
@@ -51,7 +51,7 @@
           style="width:100px"
         />
       </div>
-      <div>kanan</div>
+      <div />
     </div>
 
     <div>
@@ -129,5 +129,10 @@ function changeMonth (val) {
   const serial = cariIndexBulans <= 9 ? '0' + cariIndexBulans : cariIndexBulans
   store.params.bulan = serial
   store.getData()
+}
+
+const clearSearch = () => {
+  store.params.q = ''
+  store.goToPage(1)
 }
 </script>

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
-// import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
   state: () => ({
@@ -12,8 +12,9 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       tahun: 2024,
       per_page: 50,
       page: 1,
+      koderuangan: null
       // koderuangan: 'Gd-05010100' // ini gudang
-      koderuangan: 'Gd-05010101' // ini depo rajal
+      // koderuangan: 'Gd-05010101' // ini depo rajal
       // koderuangan: 'R-0301009' // ini poli dalam
     },
     loading: false,
@@ -22,9 +23,9 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
   }),
   actions: {
     async getData () {
-      // const app = useAplikasiStore()
-      // const user = app?.user
-      // this.params.koderuangan = user?.kdruangansim
+      const app = useAplikasiStore()
+      const user = app?.user
+      this.params.koderuangan = user?.kdruangansim
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('v1/simrs/farmasinew/kartustok/listobat', params)
@@ -41,7 +42,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       }
     },
     setTahun (val) {
-      // this.params.tahun = val
+      this.params.tahun = val
     },
 
     goToPage (val) {
