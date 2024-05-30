@@ -72,7 +72,8 @@ const formatDouble = (value, dg) => {
       .replace('.', ',')
       .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
       // .replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, '$1.')
-  } else { return 0 }
+  }
+  else { return 0 }
 }
 
 const formattanpaRp = (value) => {
@@ -113,7 +114,7 @@ const dayName = (val) => {
   return date.formatDate(val, 'dddd')
 }
 
-function titleCase(str) {
+function titleCase (str) {
   const splitStr = str.toLowerCase().split(' ')
   for (let i = 0; i < splitStr.length; i++) {
     // You do not need to check if i is larger than splitStr length, as your for does that for you
@@ -134,7 +135,8 @@ const olahUang = (val) => {
     }
     // console.log('olah uang return', parseFloat(data))
     return parseFloat(data)
-  } else {
+  }
+  else {
     return val
   }
 }
