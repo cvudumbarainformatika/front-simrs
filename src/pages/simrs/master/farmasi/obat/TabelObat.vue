@@ -334,9 +334,9 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Ket. Kronis
+                  Restriksi Fornas
                 </div>
-                <div style="white-space: normal;">
+                <div class="text-right text-italic" style="white-space: normal;">
                   {{ row.keterangan_kronis }}
                 </div>
               </div>

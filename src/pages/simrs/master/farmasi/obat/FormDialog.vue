@@ -415,7 +415,7 @@
                 <q-input
                   v-model="store.form.keterangan_kronis"
                   dense
-                  label="Keterangan Kronis"
+                  label="Restriksi Fornas"
                   standout="bg-yellow-3"
                   outlined
                 />
