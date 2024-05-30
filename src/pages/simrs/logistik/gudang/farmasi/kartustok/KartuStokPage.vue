@@ -13,6 +13,7 @@
     >
       <q-scroll-area style="height:calc( 100% - 40px)">
         <ListObat />
+        <div style="margin-bottom: 100px;" />
       </q-scroll-area>
       <div
         v-if="store.meta"

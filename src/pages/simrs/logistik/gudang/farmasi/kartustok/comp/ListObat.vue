@@ -71,13 +71,14 @@
               {{ hitungSaldoAwal(item?.saldoawal) ?? 0 }}
             </div>
             <div class="col-3 text-right text-primary">
-              {{ hitungPenerimaan(item?.penerimaanrinci) ?? 0 }}
+              {{ hitungPenerimaan(item?.penerimaanrinci) + hitungMutasiMasuk(item?.mutasimasuk) }}
             </div>
             <div class="col-3 text-right text-negative">
-              {{ hitungMutasi(item?.mutasi) ?? 0 }}
+              {{ hitungMutasiKeluar(item?.mutasikeluar) + hitungResepKeluar(item?.resepkeluar) }}
             </div>
+
             <div class="col-3 text-right text-teal text-weight-bold">
-              {{ hitungSaldoAwal(item?.saldoawal) + hitungPenerimaan(item?.penerimaanrinci) - hitungMutasi(item?.mutasi) }}
+              {{ (hitungSaldoAwal(item?.saldoawal) ?? 0) + (hitungPenerimaan(item?.penerimaanrinci)?? 0) + (hitungMutasiMasuk(item?.mutasimasuk) ?? 0) - (hitungMutasiKeluar(item?.mutasikeluar) ?? 0) - hitungResepKeluar(item?.resepkeluar) }}
             </div>
           </div>
         </q-item-section>
@@ -87,19 +88,25 @@
 </template>
 
 <script setup>
-import { useKartuStokFarmasiStore } from '../../../../../../../stores/simrs/farmasi/katustok'
+import { useKartuStokFarmasiStore } from 'src/stores/simrs/farmasi/katustok'
 
 const store = useKartuStokFarmasiStore()
 
 function hitungSaldoAwal (arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 
+// ini khusus gudang
 function hitungPenerimaan (arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
 }
-
-function hitungMutasi (arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+function hitungMutasiKeluar (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+function hitungMutasiMasuk (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+function hitungResepKeluar (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 </script>

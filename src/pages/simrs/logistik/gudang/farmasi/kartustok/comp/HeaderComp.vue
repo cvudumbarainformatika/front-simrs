@@ -11,6 +11,7 @@
           placeholder="Cari Obat ..."
           debounce="500"
           style="min-width: 200px;"
+          @keyup.enter="store.goToPage(1)"
         >
           <template
             v-if="store.params.q"
@@ -102,7 +103,7 @@ onMounted(() => {
   init()
 })
 
-function init() {
+function init () {
   const d = new Date()
   const b = d.getMonth()
   bulan.value = bulans.value[b]
@@ -112,7 +113,7 @@ function init() {
   changeMonth(bulan.value)
 }
 
-function generateArrayOfYears() {
+function generateArrayOfYears () {
   const max = new Date().getFullYear()
   const min = max - 5
   const years = []
@@ -123,7 +124,7 @@ function generateArrayOfYears() {
   tahuns.value = years
 }
 
-function changeMonth(val) {
+function changeMonth (val) {
   const cariIndexBulans = bulans.value.findIndex((x) => x === val) + 1
   const serial = cariIndexBulans <= 9 ? '0' + cariIndexBulans : cariIndexBulans
   store.params.bulan = serial
