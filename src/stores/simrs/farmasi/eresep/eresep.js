@@ -278,15 +278,19 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         })
       }
       res.listRacikan = []
+      let nilaiR = 0
       if (res?.permintaanracikan?.length) {
         res?.permintaanracikan.forEach(key => {
-          key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
+          nilaiR = parseFloat(key?.r)
           key.jumlahresep = key.jumlah
           if (parseInt(key?.mobat?.kelompok_psikotropika) === 1) {
             // console.log('mobat', key?.mobat)
             key.jumlahobat = this.customRound(key.jumlah)
           }
           else key.jumlahobat = Math.ceil(key.jumlah)
+          key.harga = (parseFloat(key?.jumlahobat) * parseFloat(key?.harga_jual))// + parseFloat(key?.r)
+          key.jumlahobatAwal = parseFloat(key?.jumlahobat)
+          key.jumlahresepAwal = parseFloat(key?.jumlahresep)
           key.groupsistembayar = val?.sistembayar?.groups
           const namaracikan = key?.namaracikan
           const adaList = res.listRacikan.filter(list => list.namaracikan === namaracikan)
@@ -305,6 +309,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               konsumsi: key?.konsumsi,
               satuan_racik: key?.satuan_racik,
               jumlahdibutuhkan: key?.jumlahdibutuhkan,
+              jumlahdibutuhkanAwal: key?.jumlahdibutuhkan,
               etiket: false,
               rincian: [key]
             }
@@ -312,10 +317,16 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           }
         })
       }
+      if (res.listRacikan.length) {
+        res.listRacikan.forEach(a => {
+          a.harga += nilaiR
+        })
+      }
       if (res?.permintaanresep?.length) {
         res?.permintaanresep.forEach(key => {
           key.groupsistembayar = val?.sistembayar?.groups
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
+          key.jumlahAwal = parseFloat(key?.jumlah)
           key.etiket = false
         })
       }
@@ -355,7 +366,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
             resep.harga_jual = rinci.harga_jual
-            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
+            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual))
             resep.done = true
           }
           else {

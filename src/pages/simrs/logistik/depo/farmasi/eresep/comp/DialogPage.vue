@@ -332,19 +332,19 @@
                     class="col-shrink"
                     :class="rinc?.fornas==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                    {{ rinc?.fornas==='1'?'Fornas':'' }}
                   </div>
                   <div
                     class="col-shrink"
                     :class="rinc?.forkit==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                    {{ rinc?.forkit==='1'?'Forkit':'' }}
                   </div>
                   <div
                     class="col-shrink"
                     :class="rinc?.generik==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                    {{ rinc?.generik==='1'?'Generik':'' }}
                   </div>
                 </div>
               </q-item-section>
@@ -544,7 +544,14 @@
                 </q-chip>
               </div>
               <div class="col-shrink q-mr-xs text-purple text-weight-bold">
-                {{ item?.jumlahdibutuhkan }}
+                <!-- {{ item?.jumlahdibutuhkan }} -->
+                <app-input
+                  v-model="item.jumlahdibutuhkan"
+                  outlined
+                  valid
+                  label="Jumlah"
+                  @update:model-value="setJumlahRacik($event,item,'jumlahdibutuhkan')"
+                />
               </div>
               <div class="col-shrink q-mr-xs">
                 ({{ item?.satuan_racik }})
@@ -562,7 +569,9 @@
                   label="Keterangan"
                 />
               </div>
-
+              <div class="col-shrink q-ml-md q-mr-xs text-weight-bold">
+                Rp. {{ formatDouble(parseFloat(item?.harga),2) }}
+              </div>
               <div class="col-grow">
                 <q-separator
                   size="1px"
@@ -604,8 +613,8 @@
               bordered
             >
               <q-item
-                v-for="(rinc,j) in item?.rincian"
-                :key="j"
+                v-for="(rinc) in item?.rincian"
+                :key="rinc"
               >
                 <q-item-section style="width: 30%;">
                   <div class="row text-weight-bold text-deep-orange">
@@ -625,19 +634,19 @@
                       class="col-shrink"
                       :class="rinc?.fornas==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                      {{ rinc?.fornas==='1'?'Fornas':'' }}
                     </div>
                     <div
                       class="col-shrink"
                       :class="rinc?.forkit==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                      {{ rinc?.forkit==='1'?'Forkit':'' }}
                     </div>
                     <div
                       class="col-shrink"
                       :class="rinc?.generik==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                      {{ rinc?.generik==='1'?'Generik':'' }}
                     </div>
 
                     <div
@@ -1350,7 +1359,55 @@ function setJumlah (evt, det, key) {
     det[key] = det?.jumlahAwal
     return notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
   }
+  det.harga = (parseFloat(det?.jumlah) * parseFloat(det.hargajual)) + parseFloat(det?.r)
+
   // else jumlah = nilai
+}
+function setJumlahRacik (evt, det, key) {
+  // console.log('jumh ', det)
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  const awal = parseFloat(det?.jumlahdibutuhkanAwal)
+  if (nilai > awal) {
+    // console.log('awal', awal)
+    det[key] = awal
+    notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
+  }
+  if (det.rincian.length) {
+    det.rincian.forEach(rinc => {
+      // console.log('mobat', rinc)
+      if (det?.tiperacikan === 'DTD') {
+        const jumlahDiminta = det[key] ?? 1
+        const dosisObat = rinc.dosisobat ?? 1
+        const dosisResep = rinc.dosismaksimum ?? 1
+        const jumlahObat = dosisResep / dosisObat * jumlahDiminta
+        rinc.jumlahresep = jumlahObat.toFixed(2)
+        if (parseInt(rinc?.mobat?.kelompok_psikotropika) === 1) {
+          rinc.jumlahobat = store.customRound(jumlahObat)
+        }
+        else rinc.jumlahobat = Math.ceil(jumlahObat)
+      }
+      else {
+        const bagi = awal / det[key]
+        console.log('bagi', bagi, rinc?.jumlahresepAwal, parseFloat(rinc?.jumlahresepAwal))
+        const jumlahObat = parseFloat(rinc?.jumlahresepAwal) / bagi
+        rinc.jumlahresep = jumlahObat
+        if (parseInt(rinc?.mobat?.kelompok_psikotropika) === 1) {
+          rinc.jumlahobat = store.customRound(jumlahObat)
+        }
+        else rinc.jumlahobat = Math.ceil(jumlahObat)
+      }
+      rinc.harga = parseFloat(rinc.harga_jual) * parseFloat(rinc.jumlahobat)
+    })
+    const r = det.rincian.map(c => c.r)
+    const har = det.rincian.map(c => c.harga).reduce((a, b) => a + b, 0)
+    det.harga = har + (r[0] ?? 0)
+    console.log('r ', r)
+  }
+  console.log('jumh ', det)
 }
 function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
