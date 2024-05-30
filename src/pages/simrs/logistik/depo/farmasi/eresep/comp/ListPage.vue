@@ -259,6 +259,32 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
+                v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep))|| parseInt(item?.flag) === 5 ) "
+                round
+                class="f-10 q-mr-sm"
+                color="primary"
+                text-color="white"
+                icon="icon-mat-edit"
+                :disable="store.loadingTolak && item?.loading"
+                :loading="store.loadingTolak && item?.loading"
+                @click="alasan(item)"
+              >
+                <q-tooltip
+                  v-if="parseInt(item?.flag) === 3"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Alasan Resep tidak diberikan semua
+                </q-tooltip>
+                <q-tooltip
+                  v-if="parseInt(item?.flag) === 5"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Alasan Resep Ditolak
+                </q-tooltip>
+              </q-btn>
+              <q-btn
                 square
                 class="f-10"
                 color="primary"
@@ -394,6 +420,9 @@ function buka (val) {
 function info (val) {
   store.openInfo()
   store.setInfo(val)
+}
+function alasan (val) {
+  console.log(val)
 }
 // function send(id) {
 //   indexId.value = id

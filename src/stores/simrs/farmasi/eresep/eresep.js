@@ -103,7 +103,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       this.isInfo = false
     },
     setInfo (val) {
-      console.log('set info', val)
+      // console.log('set info', val)
       const apps = useAplikasiStore()
       // const info = Object.keys(val?.info).length <= 0 || !val?.info
       // console.log('set info', info)
@@ -347,7 +347,6 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
             resep.hargajual = rinci.harga_jual
-            resep.jumlahAwal = parseFloat(resep?.jumlah)
             resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
             resep.done = true
           }
@@ -381,6 +380,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length > 0
       // item.doneresep = item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length
       // item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length
+      item.semuaresep = item?.permintaanresep.length ? item?.permintaanresep.length && item?.permintaanresep.filter(x => x.done === true).length === item?.permintaanresep?.length : true
+      item.semuaracik = item?.permintaanracikan.length ? item?.permintaanracikan.length && item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length : true
       // console.log('item', item)
     },
     getResepIter (val) {
@@ -404,7 +405,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           .then(resp => {
             val.loadingHistory = false
             this.isHistory = true
-            console.log('his', resp?.data)
+            // console.log('his', resp?.data)
             this.historys = resp?.data?.data
             if (this.historys.length) {
               this.historys.forEach(hi => {
@@ -501,12 +502,12 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         })
     },
     async terimaResep (val) {
-      console.log('terima resep', val)
+      // console.log('terima resep', val)
       this.loadingTerima = true
       val.loading = true
       await api.post('v1/simrs/farmasinew/depo/terima-resep', val)
         .then(resp => {
-          console.log('resp', resp)
+          // console.log('resp', resp)
           this.loadingTerima = false
           delete val.loading
           const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
@@ -528,12 +529,12 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       // this.loadingTerima = true
     },
     async resepSelesai (val) {
-      console.log('resep selesai', val)
+      // console.log('resep selesai', val)
       this.loadingSelesai = true
       val.loading = true
       await api.post('v1/simrs/farmasinew/depo/resep-selesai', val)
         .then(resp => {
-          console.log('resp', resp)
+          // console.log('resp', resp)
           this.loadingSelesai = false
           delete val.loading
           const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
@@ -647,7 +648,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       })
         .onOk(() => {
           val.lanjut = '1'
-          console.log(val)
+          // console.log(val)
           this.copyResep(val)
         })
     },
@@ -657,7 +658,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         api.post('v1/simrs/farmasinew/depo/copy-resep', val)
           .then(resp => {
             this.loadingCopy = false
-            console.log('copy', resp?.data)
+            // console.log('copy', resp?.data)
             if (resp?.status === 202) {
               this.dialog(val)
             }
@@ -667,7 +668,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           .catch(err => {
             this.loadingCopy = false
             this.isAdaCopy = true
-            console.log('copy err', err?.response)
+            // console.log('copy err', err?.response)
             this.adaCopys = err?.response?.data?.data
             this.adaCopys.listRacikan = []
             if (this.adaCopys?.rincianracik?.length) {
