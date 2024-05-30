@@ -98,7 +98,21 @@ function hitungSaldoAwal (arr) {
 
 // ini khusus gudang
 function hitungPenerimaan (arr) {
-  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+  // jika jenis penerimaan = 'Pembelian Langsung' maka langsung jadi stok .... asal kunci =1
+  // jika jenis penerimaan bukan 'Pembelian Langsung' maka harus jadi Faktur dulu,  jadi stok .... asal kunci = 1
+  // const filt = arr?.filter((x) => x.jenissurat !== 'Surat Jalan')
+
+  const terimalangsung = arr?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')
+  const jmlterimalangsung = terimalangsung?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+
+  const terimafaktur = arr?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')
+  const jmlterimafaktur = terimafaktur?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+
+  // eslint-disable-next-line no-unused-vars
+  const totalJml = jmlterimalangsung + jmlterimafaktur
+
+  // return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+  return totalJml
 }
 function hitungMutasiKeluar (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)

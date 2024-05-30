@@ -70,16 +70,16 @@
           >
             <div class="row items-center full-width q-col-gutter-xs">
               <div class="col-3 text-right">
-                Saldo Awal
+                Stok Awal
               </div>
               <div class="col-3 text-right">
-                Trans In
+                Stok Masuk
               </div>
               <div class="col-3 text-right">
-                Trans Out
+                Stok Keluar
               </div>
               <div class="col-3 text-right">
-                Sld Saatini
+                Stok Akhir
               </div>
             </div>
           </q-item-section>

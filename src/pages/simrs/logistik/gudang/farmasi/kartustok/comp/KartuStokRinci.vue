@@ -68,33 +68,55 @@
                   <th>Tanggal</th>
                   <th>Keterangan</th>
                   <th class="text-end">
-                    Debet
+                    Masuk
                   </th>
                   <th class="text-end">
-                    Kredit
+                    Keluar
                   </th>
                   <th class="text-end">
-                    Saldo
+                    Stok
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="n in 100"
-                  :key="n"
-                >
-                  <td>Miguel De Cervantes</td>
-                  <td>The Ingenious Gentleman Don Quixote of La Mancha</td>
-                  <td class="text-end">
-                    1605
+                <tr>
+                  <td
+                    colspan="4"
+                  >
+                    <b>Saldo Awal</b>
                   </td>
-                  <td class="text-end">
-                    9783125798502
-                  </td>
-                  <td class="text-end">
-                    9783125798502
+                  <td class="text-end ">
+                    <b>{{ saldoAwal }}</b>
                   </td>
                 </tr>
+                <template v-if="bentukArrBaru.length">
+                  <tr
+                    v-for="(item, n) in bentukArrBaru"
+                    :key="item"
+                  >
+                    <td>{{ item?.tanggal }}</td>
+                    <td>
+                      {{ item?.keterangan }}
+                    </td>
+                    <td class="text-end">
+                      {{ formatRp(item?.masuk ?? 0) }}
+                    </td>
+                    <td class="text-end">
+                      {{ formatRp(item?.keluar ?? 0) }}
+                    </td>
+                    <td class="text-end">
+                      {{ formatRp(cariHasilAkhirArray(n) ?? 0) }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="4">
+                      <b>Saldo Akhir</b>
+                    </td>
+                    <td class="text-end">
+                      <b>{{ formatRp(cariHasilAkhirArray(bentukArrBaru.length)?? 0) }}</b>
+                    </td>
+                  </tr>
+                </template>
               </tbody>
             </table>
           </q-scroll-area>
@@ -105,7 +127,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { date } from 'quasar'
+import { formatRp } from 'src/modules/formatter'
 
 const props = defineProps({
   item: {
@@ -120,7 +144,96 @@ const props = defineProps({
 
 const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
 
-console.log('props', props.item)
+const bentukArrBaru = computed(() => {
+  const terimalangsung = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')?.map(x => {
+    return {
+      tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
+      keterangan: 'Penerimaan Langsung',
+      masuk: parseFloat(x?.jml_terima_k),
+      keluar: 0,
+      total: 0
+    }
+  })
+
+  const terimapesan = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')?.map(x => {
+    return {
+      tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
+      keterangan: x?.jenis_penerimaan === 'Pembelian langsung' ? 'Penerimaan langsung' : 'Penerimaan By Pesan',
+      masuk: parseFloat(x?.jml_terima_k),
+      keluar: 0,
+      total: 0
+    }
+  })
+
+  const mutasikeluar = props?.item?.mutasikeluar?.map(x => {
+    return {
+      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      keterangan: 'Mutasi Keluar',
+      masuk: 0,
+      keluar: parseFloat(x?.jml),
+      total: 0
+    }
+  })
+
+  const mutasimasuk = props?.item?.mutasimasuk?.map(x => {
+    return {
+      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      keterangan: 'Mutasi Masuk',
+      masuk: parseFloat(x?.jml),
+      keluar: 0,
+      total: 0
+    }
+  })
+
+  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk]
+
+  const hasil = gabung.flat(Infinity)
+
+  return hasil
+})
+
+const saldoAwal = computed(() => {
+  const awal = props?.item?.saldoawal
+  const saldoAwal = awal?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+
+  return saldoAwal
+})
+
+// eslint-disable-next-line no-unused-vars
+function cariHasilAkhirArray (i) {
+  // const total = 0
+  const arr = bentukArrBaru.value ?? []
+  if (arr.length) {
+    // for (let i = 0; i < arr.length; i++) {
+    // if (i === 0) {
+    //   total = arr[0]?.penerimaan - arr[0]?.pengeluaran
+    //   arr[0].total = total
+    // }
+    // else {
+    const hinggaKeIndex = i + 1
+    const arrBaru = arr.slice(0, hinggaKeIndex)
+    // const awal = arr[0]?.penerimaan - arr[0]?.pengeluaran
+    // const subT = arr[i]?.penerimaan - arr[i]?.pengeluaran;
+    const obj = arrBaru.map((x) => x?.masuk - x?.keluar)
+    const skrg = obj?.reduce((x, y) => x + y, 0)
+
+    const total = skrg + saldoAwal.value
+    // }
+    // }
+    return total
+  }
+  return 0
+}
+
+onMounted(() => {
+  console.log('props', props?.item)
+  console.log('computed', bentukArrBaru.value)
+  console.log('saldoAwal', saldoAwal.value)
+})
 </script>
 
 <style lang="scss" scoped>

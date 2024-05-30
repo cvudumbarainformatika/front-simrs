@@ -14,6 +14,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       page: 1,
       // koderuangan: 'Gd-05010100' // ini gudang
       koderuangan: 'Gd-05010101' // ini depo rajal
+      // koderuangan: 'R-0301009' // ini poli dalam
     },
     loading: false,
     dialogRinci: false,
@@ -33,6 +34,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.items = resp.data.data
         // console.log('kjkjsdfs', this.items)
         console.log('kjkjsdfs', resp)
+        this.loading = false
       }
       else {
         this.loading = false

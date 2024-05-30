@@ -30,6 +30,7 @@
       v-model="store.dialogRinci"
       :item="store.item"
       :params="store.params"
+      :key="store.item"
     />
   </q-page>
 </template>
