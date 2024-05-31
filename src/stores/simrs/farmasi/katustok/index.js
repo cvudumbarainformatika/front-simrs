@@ -23,9 +23,6 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
   }),
   actions: {
     async getData () {
-      const app = useAplikasiStore()
-      const user = app?.user
-      this.params.koderuangan = user?.kdruangansim
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('v1/simrs/farmasinew/kartustok/listobat', params)
@@ -40,6 +37,15 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       else {
         this.loading = false
       }
+    },
+
+    getInitialData () {
+      const app = useAplikasiStore()
+      const user = app?.user
+      return new Promise((resolve, reject) => {
+        this.params.koderuangan = user?.kdruangansim
+        resolve(user)
+      })
     },
     setTahun (val) {
       this.params.tahun = val

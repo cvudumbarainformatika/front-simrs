@@ -128,7 +128,7 @@ function changeMonth (val) {
   const cariIndexBulans = bulans.value.findIndex((x) => x === val) + 1
   const serial = cariIndexBulans <= 9 ? '0' + cariIndexBulans : cariIndexBulans
   store.params.bulan = serial
-  store.getData()
+  // store.getData()
 }
 
 const clearSearch = () => {
