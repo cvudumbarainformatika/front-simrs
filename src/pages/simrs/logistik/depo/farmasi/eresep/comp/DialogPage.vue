@@ -1423,11 +1423,13 @@ function setJumlahRacik (evt, det, key) {
         else rinc.jumlahobat = Math.ceil(jumlahObat)
       }
       rinc.harga = parseFloat(rinc.harga_jual) * parseFloat(rinc.jumlahobat)
+      rinc.jumlahdibutuhkan = det.jumlahdibutuhkan
     })
+
     const r = det.rincian.map(c => c.r)
     const har = det.rincian.map(c => c.harga).reduce((a, b) => a + b, 0)
     det.harga = har + (r[0] ?? 0)
-    console.log('r ', r)
+    // console.log('r ', r)
   }
   console.log('jumh ', det)
 }

@@ -31,7 +31,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       per_page: 10,
       kddepo: '',
       tipe: '',
-      flag: ['1', '2'],
+      flag: '1',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
     },
@@ -313,6 +313,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
               konsumsi: key?.konsumsi,
               satuan_racik: key?.satuan_racik,
               jumlahdibutuhkan: key?.jumlahdibutuhkan,
+
               jumlahdibutuhkanAwal: key?.jumlahdibutuhkan,
               etiket: false,
               rincian: [key]

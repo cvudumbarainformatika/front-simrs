@@ -50,7 +50,6 @@
           dense
           outlined
           dark
-          multiple
           color="white"
           :options="flagOptions"
           label="Status"
@@ -184,7 +183,7 @@ const props = defineProps({
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
   perPage: { type: Number, default: 5 },
-  flag: { type: Array, default: () => ['1'] },
+  flag: { type: String, default: '1' },
   tipe: { type: String, default: '' }
 })
 
@@ -215,7 +214,8 @@ const flagOptions = ref([
   { label: 'Siap Dikerjakan', value: '2' },
   { label: 'Selesai', value: '3' },
   { label: 'Returned', value: '4' },
-  { label: 'Ditolak', value: '5' }
+  { label: 'Ditolak', value: '5' },
+  { label: 'Semua', value: 'semua' }
 ])
 const toFlag = computed({
   get () {

@@ -453,7 +453,7 @@ function tolakResep (val) {
 const print = usePrintEresepStore()
 function toPrint (row) {
   print.setResep(row)
-  console.log('row', row)
+  // console.log('row', row)
   const noresep = row?.noresep
   const routeData = router.resolve({
     path: '/print/eresep',

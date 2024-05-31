@@ -23,78 +23,6 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
     setResep (val) {
       const res = val
 
-      // if (res.flag === '3' && val.tiperesep === 'iter') {
-      //   res.rincian = []
-      //   res.rincianracik = []
-      //   this.getResepIter(val).then(resp => {
-      //     // console.log('resep iter', resp?.data)
-      //     const datanya = resp?.data?.head
-      //     res.rincian = datanya?.permintaanresep
-      //     if (res.rincian.length > 0) {
-      //       res.rincian.forEach(key => {
-      //         key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
-
-      //         const stok = key.stok[0]
-      //         const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
-      //         const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
-      //         const transnonracikan = stok?.transnonracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
-      //         const transracikan = stok?.transracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
-      //         key.alokasi = totalStok - permintaan - transnonracikan - transracikan
-      //         // console.log('alokasi', totalStok, permintaan, transnonracikan, transracikan)
-      //       })
-      //     }
-      //     const racik = datanya?.permintaanracikan
-      //     if (racik.length > 0) {
-      //       racik.forEach(key => {
-      //         key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
-      //         key.jumlahresep = key.jumlah
-      //         key.jumlahobat = Math.ceil(key.jumlah)
-      //         key.groupsistembayar = val?.sistembayar?.groups
-
-      //         const stok = key.stok[0]
-      //         const totalStok = isNaN(parseFloat(stok?.total)) ? 0 : parseFloat(stok?.total)
-      //         const permintaan = stok?.permintaanobatrinci?.map(per => parseFloat(per.allpermintaan)).reduce((a, b) => a + b, 0) ?? 0
-      //         const transnonracikan = stok?.transnonracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
-      //         const transracikan = stok?.transracikan?.map(per => parseFloat(per.jumlah)).reduce((a, b) => a + b, 0) ?? 0
-      //         key.alokasi = totalStok - permintaan - transnonracikan - transracikan
-      //         // console.log('alokasi', totalStok, permintaan, transnonracikan, transracikan)
-      //         let kosong = false
-      //         if (parseFloat(key.jumlah) > key.alokasi) {
-      //           kosong = true
-      //         }
-      //         const namaracikan = key?.namaracikan
-      //         const adaList = res.rincianracik.filter(list => list.namaracikan === namaracikan)
-      //         if (adaList.length) {
-      //           adaList[0].rincian.push(key)
-      //           const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
-      //           adaList[0].harga = harga
-      //           if (kosong) {
-      //             adaList[0].kosong = kosong
-      //           }
-      //         }
-      //         else {
-      //           const temp = {
-      //             namaracikan: key?.namaracikan,
-      //             harga: key?.harga,
-      //             aturan: key?.aturan,
-      //             keterangan: key?.keterangan,
-      //             tiperacikan: key?.tiperacikan,
-      //             konsumsi: key?.konsumsi,
-      //             satuan_racik: key?.satuan_racik,
-      //             jumlahdibutuhkan: key?.jumlahdibutuhkan,
-      //             rincian: [key]
-      //           }
-      //           if (kosong) {
-      //             temp.kosong = kosong
-      //           }
-      //           res.rincianracik.push(temp)
-      //         }
-      //       })
-      //     }
-      //     // console.log('rinc', res.rincian)
-      //     // console.log('rac', res.rincianracik)
-      //   })
-      // }
       res.listRacikan = []
       let nilaiR = 0
       if (res?.permintaanracikan?.length) {
@@ -105,7 +33,7 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           key.jumlahdibutuhkanAwal = key?.jumlahdibutuhkan
 
           const racikankeluar = res?.rincianracik?.find(rac => rac?.namaracikan === key?.namaracikan && rac?.kdobat === key?.kdobat)
-          console.log('racik', racikankeluar)
+          // console.log('racik', racikankeluar)
           if (racikankeluar) {
             key.jumlah = parseFloat(racikankeluar.jumlah)
             key.harga_jual = parseFloat(racikankeluar?.harga_jual)
@@ -165,6 +93,11 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           key.etiket = false
         })
       }
+      let obat = 0
+      if (parseInt(res.flag) <= 2) obat = res?.permintaanresep?.map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+      else obat = res?.permintaanresep?.filter(f => f.done).map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+      const rac = res?.listRacikan?.map(m => m.harga).reduce((a, b) => a + b, 0) ?? 0
+      res.subtotal = obat + rac
       this.resep = res
       // console.log('print', res)
     }

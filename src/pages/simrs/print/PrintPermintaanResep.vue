@@ -48,9 +48,7 @@
       <div class="q-mt-xs">
         Alamat : {{ store.resep?.datapasien?.alamat ?? '-' }}
       </div>
-      <!-- <div class="row justify-end text-italic">
-        {{ store.resep?.datapasien?.usia }}
-      </div> -->
+
       <div class="garis q-py-xs" />
 
       <div class="row justify-between" style="margin-top: -2mm;">
@@ -72,224 +70,70 @@
           {{ store?.resep?.ruanganranap?.rs2 }}
         </div>
       </div>
-      <!-- <div
-        v-if="store?.resep?.diagnosa"
-        class="row q-mb-xs"
-      >
-        <div class="row">
-          <i>{{ store?.resep?.diagnosa }}</i>
-        </div>
-      </div> -->
+
       <div class="garis" />
       <div class="garis" />
       <div
         v-if="store?.resep?.permintaanresep?.length"
         class="q-mt-sm full-width"
       >
-        <!-- <div class="row items-center">
-          <div class="col-shrink text-weight-bold">
-            Non Racikan
-          </div>
-          <div class="col-grow">
-            <q-separator
-              size="2px"
-              color="primary"
-              inset
-            />
-          </div>
-        </div> -->
-
         <div class="untuk-isi-resep">
           <div v-for="(rinc,i) in store?.resep?.permintaanresep" :key="i">
-            <div class="row ">
-              <div>{{ rinc?.mobat?.nama_obat }} </div>
+            <div v-if="(store?.resep?.flag==='3'&&rinc?.done)||parseInt(store?.resep?.flag)<=2">
+              <div class="row ">
+                <div>{{ rinc?.mobat?.nama_obat }} </div>
+              </div>
+              <!-- <div class="row q-ml-lg f-8 ">
+                <div>* <i>{{ rinc?.aturan }}  </i></div>
+              </div> -->
+              <div class="row q-ml-lg f-8 justify-between">
+                <div>* <i>{{ rinc?.jumlah }}  {{ rinc?.mobat?.satuan_k }}</i></div>
+                <div> <i>{{ formatDouble(rinc?.harga,2) }}</i></div>
+              </div>
             </div>
-            <div class="row q-ml-lg f-8 ">
-              <div>* <i>{{ rinc?.aturan }} / {{ rinc?.mobat?.satuan_k }} :: {{ rinc?.keterangan }}</i></div>
-            </div>
-            <!-- <div class="garis" /> -->
+
             <q-separator class="q-ml-lg q-my-xs" />
           </div>
         </div>
-
-        <!-- <q-list
-          separator
-          bordered
-          class="full-width"
-        >
-          <q-item
-            v-for="(rinc,j) in store?.resep?.permintaanresep"
-            :key="j"
-            class="full-width"
-          >
-            <q-item-section style="width: 40%;">
-              <div class="row ">
-                {{ rinc?.mobat?.nama_obat }}
-              </div>
-              <div class="row f-10">
-                ( {{ rinc?.kandungan }} )
-              </div>
-            </q-item-section>
-            <q-item-section
-              side
-              style="width:60%"
-            >
-              <div class="row full-width">
-                <div class="col-6">
-                  <div class="row q-mt-xs">
-                    <div class="col-4">
-                      Aturan
-                    </div>
-                    <div class="col-8">
-                      {{ rinc?.aturan }}
-                    </div>
-                  </div>
-                  <div class="row q-mt-xs items-end">
-                    <div class="col-4">
-                      Jml Obat
-                    </div>
-                    <div class="col-2 text-right">
-                      {{ rinc?.jumlah }}
-                    </div>
-                    <div class="col-auto f-10">
-                      ( {{ rinc?.mobat?.satuan_k }} )
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="row q-mt-xs">
-                    <div class="col-4">
-                      Harga
-                    </div>
-                    <div class="col-8">
-                      {{ formatDouble(parseFloat(rinc?.hargajual),2) }}
-                    </div>
-                  </div>
-                  <div class="row q-mt-xs">
-                    <div class="col-4">
-                      Ket
-                    </div>
-                    <div class="col-8">
-                      {{ rinc?.keterangan }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-item-section>
-          </q-item>
-        </q-list> -->
       </div>
       <div
         v-if="store?.resep?.listRacikan?.length"
         class="full-width"
       >
-        <!-- <div class="row items-center">
-          <div class="col-shrink text-weight-bold">
-            Racikan
-          </div>
-          <div class="col-grow">
-            <q-separator
-              size="2px"
-              color="deep-orange"
-              inset
-            />
-          </div>
-        </div> -->
         <div
           v-for="(item,i) in store?.resep?.listRacikan"
           :key="i"
           class="full-width"
         >
+          <!-- <div v-if="item?.done"> -->
           <div class="row items-center">
             <div class="col-shrink q-mr-xs">
               {{ item?.namaracikan }}
             </div>
           </div>
-          <div class="row q-ml-lg f-8">
-            <div>*  <i>{{ item?.aturan }} / {{ item?.satuan_racik }} :: {{ item?.keterangan }}</i></div>
-          </div>
-          <q-separator class="q-ml-lg q-my-xs" />
-          <!-- <div class="col-shrink q-mr-xs">
-            ({{ item?.satuan_racik }})
-          </div>
-          <div class="col-shrink q-mr-xs text-italic">
-            {{ item?.aturan }}
-          </div>
-          <div class="col-shrink q-mr-xs">
-            {{ item?.keterangan }}
-          </div>
-          <div class="col-shrink q-mr-xs text-italic f-10">
-            ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
+          <!-- <div class="row q-ml-lg f-8">
+            <div>*  <i>{{ item?.aturan }}  </i></div>
           </div> -->
-          <!-- <div class="col-grow">
-              <q-separator
-                size="1px"
-                color="deep-orange"
-                inset
-              />
-            </div> -->
+          <div class="row q-ml-lg f-8 justify-between">
+            <div>* <i>{{ item?.jumlahdibutuhkan }}  {{ item?.satuan_racik }}</i></div>
+            <div> <i>{{ formatDouble(item?.harga,2) }}</i></div>
+          </div>
+          <div v-for="(rac,n) in item?.rincian" :key="n">
+            <div class="row f-8 q-ml-lg items-end">
+              <div>* <i>{{ rac?.mobat?.nama_obat }} - <span class="f-8">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
+            </div>
+          </div>
           <!-- </div> -->
-          <!-- <q-list
-            separator
-            bordered
-            class="full-width"
-          >
-            <q-item
-              v-for="(rinc,j) in item?.rincian"
-              :key="j"
-              class="full-width"
-            >
-              <q-item-section style="width: 40%;">
-                <div class="row ">
-                  {{ rinc?.mobat?.nama_obat }}
-                </div>
-                <div class="row f-10">
-                  ( {{ rinc?.kandungan }} )
-                </div>
-              </q-item-section>
-              <q-item-section
-                side
-                style="width:60%"
-              >
-                <div class="row full-width">
-                  <div class="col-6">
-                    <div class="row q-mt-xs items-end">
-                      <div class="col-4">
-                        Jml Obat
-                      </div>
-                      <div class="col-2 text-right">
-                        {{ rinc?.jumlahobat }}
-                      </div>
-                      <div class="col-auto f-10">
-                        ( {{ rinc?.mobat?.satuan_k }} )
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="row q-mt-xs">
-                      <div class="col-4">
-                        Harga
-                      </div>
-                      <div class="col-8">
-                        {{ formatDouble(parseFloat(rinc?.harga),2) }}
-                      </div>
-                    </div>
-                    <div class="row q-mt-xs">
-                      <div class="col-4">
-                        Ket
-                      </div>
-                      <div class="col-8">
-                        {{ rinc?.keteranganx }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </q-item-section>
-            </q-item>
-          </q-list> -->
+          <q-separator class="q-ml-lg q-my-xs" />
         </div>
       </div>
 
+      <div class="garis q-mt-xs" />
+      <div class="garis" />
+      <div class="row justify-between f-10 text-weight-bold">
+        <div>Subtotal</div>
+        <div>{{ formatDouble(store?.resep?.subtotal,2) }}</div>
+      </div>
       <div class="garis q-mt-xs" />
       <div class="garis" />
       <div class="row justify-between q-my-sm">
@@ -322,16 +166,16 @@
 </template>
 
 <script setup>
-import { dateFullFormat, formatJam, dateFull } from 'src/modules/formatter'
+import { dateFullFormat, formatJam, dateFull, formatDouble } from 'src/modules/formatter'
 import { computed, onMounted } from 'vue'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 
 const store = usePrintEresepStore()
 
 const qrUrl = computed(() => {
-  const noreg = 'props?.pasien?.noreg'
+  const noreg = store.resep?.noresep// noresep
   const dok = 'E-RESEP.png'
-  const asal = 'RAWAT JALAN'
+  const asal = 'E-RESEP'
   const enc = btoa(`${noreg}|${dok}|${asal}`)
   return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
   // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
