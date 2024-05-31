@@ -372,8 +372,9 @@ import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 const store = usePrintEresepStore()
 
 onMounted(() => {
-  myPrinting() //
+  // myPrinting() //
 })
+// eslint-disable-next-line no-unused-vars
 function myPrinting () {
   console.log('print ')
   setTimeout(function () {

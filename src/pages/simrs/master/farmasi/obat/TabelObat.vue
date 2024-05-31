@@ -55,6 +55,9 @@
                 <div class="col-12 text-weight-bold">
                   {{ row.nama_obat }}
                 </div>
+                <div class="col-12 text-italic f-10">
+                  {{ row.kd_obat }}
+                </div>
               </div>
             </template>
             <template #cell-nama="{row}">

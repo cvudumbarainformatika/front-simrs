@@ -202,6 +202,7 @@
             </td>
             <td class="text-end q-mr-sm">
               <q-btn
+                v-if="parseInt(item?.flag)<= 4"
                 round
                 class="f-10 q-mr-sm"
                 color="dark"

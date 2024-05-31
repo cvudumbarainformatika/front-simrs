@@ -453,6 +453,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       })
     },
     async getDataTable (val) {
+      this.items = []
       if (!val) this.loading = true
       const param = { params: this.params }
       // console.log('loading', val, this.loading)

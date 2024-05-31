@@ -136,7 +136,7 @@
       </div>
     </div>
     <div
-      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep || store?.resep?.doneracik"
+      v-if="store?.resep?.flag==='2' && (store?.resep?.doneresep || store?.resep?.doneracik)"
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
@@ -346,6 +346,18 @@
                   >
                     {{ rinc?.generik==='1'?'Generik':'' }}
                   </div>
+                  <div
+                    class="col-shrink"
+                    :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
+                  >
+                    {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
+                  </div>
+                  <div
+                    class="col-shrink"
+                    :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
+                  >
+                    {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
+                  </div>
                 </div>
               </q-item-section>
               <q-item-section
@@ -429,6 +441,9 @@
                       Resep Belum diterima
                     </div>
                     <div v-if="store?.resep?.flag==='3'">
+                      <div v-if="!rinc.done" class="text-negative">
+                        Tidak diberikan
+                      </div>
                       <div v-if="apps?.user?.kdruangansim !== 'Gd-05010101' && apps?.user?.kdruangansim !== 'Gd-04010102'">
                         Resep Sudah Selesai
                       </div>
@@ -649,6 +664,12 @@
                       {{ rinc?.generik==='1'?'Generik':'' }}
                     </div>
 
+                    <div
+                      class="col-shrink"
+                      :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
+                    >
+                      {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
+                    </div>
                     <div
                       class="col-shrink"
                       :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
@@ -1348,7 +1369,8 @@ const h = ref(0)
 //   console.log('jumh ', jumlah)
 // }
 function setJumlah (evt, det, key) {
-  console.log('jumh ', det)
+  const jumlahsigna = isNaN(parseFloat(det?.aturansigna?.jumlah)) ? 1 : parseFloat(det?.aturansigna?.jumlah)
+  console.log('jumh ', jumlahsigna, det, (parseFloat(det?.aturansigna?.jumlah)))
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -1360,7 +1382,7 @@ function setJumlah (evt, det, key) {
     return notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
   }
   det.harga = (parseFloat(det?.jumlah) * parseFloat(det.hargajual)) + parseFloat(det?.r)
-
+  det.konsumsi = det.jumlah / jumlahsigna
   // else jumlah = nilai
 }
 function setJumlahRacik (evt, det, key) {

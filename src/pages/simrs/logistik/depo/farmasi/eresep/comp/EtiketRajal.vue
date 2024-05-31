@@ -55,6 +55,9 @@
           {{ rinci?.aturan }}
         </div>
         <div class="col text-center f-10">
+          Sebelum / Saat / Sesudah Makan
+        </div>
+        <div class="col text-center f-10">
           {{ rinci?.keterangan }}
         </div>
         <div
