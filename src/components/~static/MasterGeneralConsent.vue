@@ -305,7 +305,7 @@ watchEffect(() => {
   }
 })
 
-function parse(val) {
+function parse (val) {
   // console.log('store.form.wali1', val)
   // const word = val
   // if (store.form.wali1) {
@@ -322,7 +322,7 @@ function parse(val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function createPdf() {
+function createPdf () {
   // console.log(rePdfDoc.value.innerHTML)
   // eslint-disable-next-line new-cap
   const doc = new jsPDF({
@@ -360,14 +360,14 @@ function createPdf() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function blob2file(blobData) {
+function blob2file (blobData) {
   const fd = new FormData()
   fd.set('a', blobData, pasien?.value?.norm + '.pdf')
   return fd.get('a')
 }
 
 // eslint-disable-next-line no-unused-vars
-async function simpanPdf(pdf) {
+async function simpanPdf (pdf) {
   const formData = new FormData()
   formData.append('pdf', pdf)
   formData.append('norm', pasien?.value?.norm)
