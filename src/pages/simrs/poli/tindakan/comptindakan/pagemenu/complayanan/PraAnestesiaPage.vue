@@ -38,7 +38,7 @@ onMounted(() => {
     .then(() => store.initForm())
 })
 
-function lihat(val) {
+function lihat (val) {
   console.log(val)
   store.initForm(val)
 }

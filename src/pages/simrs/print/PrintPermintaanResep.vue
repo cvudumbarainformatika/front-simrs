@@ -1,26 +1,25 @@
 <template>
-  <div>
+  <div class="fullscreen bg-grey-4 column q-pa-lg q-pb-xl scroll">
     <div
       id="printMe"
-      class="column items-center"
+      class="column items-center bg-white page-x "
     >
       <div
-        class="col no-wrap garis2 text-center"
+        class="col no-wrap garis2 text-center relative-position"
       >
         <div class="row no-wrap justify-center">
           <div
-            class="q-mr-sm"
-            style="min-width: 1cm;"
+            class="absolute"
+            style="width: 8mm; left: 5mm; top:2mm;"
           >
             <q-img
               src="~assets/logos/logo-rsud.png"
-              spinner-color="white"
-              style="height: 0.9cm; max-width: 0.9cm"
+              :ratio="1"
             />
           </div>
-          <div class="">
-            <div class="f-12">
-              Instalasi Farmasi
+          <div class="ini-header-nya q-ml-lg">
+            <div>
+              <b>Instalasi Farmasi</b>
             </div>
             <div class="">
               RSUD dr.Moh Saleh
@@ -36,43 +35,46 @@
       </div>
       <div class="garis" />
       <div class="garis" />
-      <div class=" q-mt-xs f-10">
-        <span class="f-12 text-weight-bold">{{ store?.resep?.noresep }}</span> / {{ dateFull(store?.resep?.tgl_kirim) }}
+      <div class="row justify-between q-mt-xs">
+        <div class="text-weight-bold">
+          {{ store?.resep?.noresep }}
+        </div> <div>{{ dateFull(store?.resep?.tgl_kirim) }}</div>
       </div>
-      <div class="f-12">
-        {{ store.resep?.norm }} - {{ store.resep?.datapasien?.nama }}
+      <div class="row justify-between">
+        <div>{{ store.resep?.norm }}</div> <div>{{ store.resep?.datapasien?.nama }}</div>
       </div>
-      <div class="text-italic f-10">
+      <!-- <div class="row justify-end text-italic">
         {{ store.resep?.datapasien?.usia }}
-      </div>
-      <div class="row ">
-        <div class="col-shrink q-mr-xs">
+      </div> -->
+      <div class="garis q-py-xs" />
+
+      <div class="row justify-between" style="margin-top: -2mm;">
+        <div class="">
           {{ store?.resep?.dokter?.nama }}
         </div>
+      </div>
+      <div>
         <div
           v-if="store?.resep?.poli"
-          class="col-shrink "
+          class=" "
         >
-          - {{ store?.resep?.poli?.rs2 }}
+          {{ store?.resep?.poli?.rs2 }}
         </div>
         <div
           v-if="store?.resep?.ruanganranap"
-          class="col-shrink "
+          class=" "
         >
-          - {{ store?.resep?.ruanganranap?.rs2 }}
+          {{ store?.resep?.ruanganranap?.rs2 }}
         </div>
       </div>
-      <div
+      <!-- <div
         v-if="store?.resep?.diagnosa"
         class="row q-mb-xs"
       >
-        <div class="col-shrink q-mr-xs">
-          diagnosa :
+        <div class="row">
+          <i>{{ store?.resep?.diagnosa }}</i>
         </div>
-        <div class="col-grow">
-          {{ store?.resep?.diagnosa }}
-        </div>
-      </div>
+      </div> -->
       <div class="garis" />
       <div class="garis" />
       <div
@@ -91,7 +93,20 @@
             />
           </div>
         </div> -->
-        <q-list
+
+        <div class="untuk-isi-resep">
+          <div v-for="(rinc,i) in store?.resep?.permintaanresep" :key="i">
+            <div class="row ">
+              <div>{{ rinc?.mobat?.nama_obat }} </div>
+            </div>
+            <div class="row q-ml-lg">
+              <div>* {{ rinc?.aturan }}  {{ rinc?.mobat?.satuan_k }} === {{ rinc?.keterangan }}</div>
+            </div>
+            <!-- <div class="garis" /> -->
+          </div>
+        </div>
+
+        <!-- <q-list
           separator
           bordered
           class="full-width"
@@ -108,30 +123,6 @@
               <div class="row f-10">
                 ( {{ rinc?.kandungan }} )
               </div>
-              <!-- <div class="row text-italic f-10">
-                {{ rinc?.kdobat }}
-              </div> -->
-
-              <!-- <div class="row q-col-gutter-sm  f-10">
-                <div
-                  class="col-shrink"
-                  :class="rinc?.fornas==='1'?'text-green':'text-red'"
-                >
-                  {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
-                </div>
-                <div
-                  class="col-shrink"
-                  :class="rinc?.forkit==='1'?'text-green':'text-red'"
-                >
-                  {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
-                </div>
-                <div
-                  class="col-shrink"
-                  :class="rinc?.generik==='1'?'text-green':'text-red'"
-                >
-                  {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
-                </div>
-              </div> -->
             </q-item-section>
             <q-item-section
               side
@@ -158,14 +149,6 @@
                       ( {{ rinc?.mobat?.satuan_k }} )
                     </div>
                   </div>
-                  <!-- <div class="row q-mt-xs">
-                    <div class="col-4">
-                      Konsumsi
-                    </div>
-                    <div class="col-8">
-                      {{ formatDouble( parseFloat(rinc?.konsumsi),1) }} hari
-                    </div>
-                  </div> -->
                 </div>
                 <div class="col-6">
                   <div class="row q-mt-xs">
@@ -188,7 +171,7 @@
               </div>
             </q-item-section>
           </q-item>
-        </q-list>
+        </q-list> -->
       </div>
       <div
         v-if="store?.resep?.listRacikan?.length"
@@ -357,7 +340,10 @@
           </q-list>
         </div>
       </div>
-      <div class="f-10 text-italic q-my-md">
+
+      <div class="garis q-mt-xs" />
+      <div class="garis" />
+      <div class="row justify-end text-italic q-my-sm">
         {{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}
       </div>
     </div>
@@ -398,8 +384,22 @@ function afterPrint () {
 </script>
 
 <style lang="scss" scoped>
+
+.fnt-10{
+  font-size: 10px !important;}
+
+.page-x{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 78mm;
+  height: auto;
+  padding: 1mm;
+  font-size: 10px !important;
+}
+
 .garis {
-  width: 90%;
+  width: 100%;
   border-top: 1px dashed black;
   margin-bottom: 2px;
 }
