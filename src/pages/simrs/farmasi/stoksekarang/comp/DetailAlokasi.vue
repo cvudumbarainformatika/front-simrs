@@ -164,7 +164,7 @@ import { UseFarmasiStokSekarangTable } from 'src/stores/simrs/farmasi/stoksekara
 // eslint-disable-next-line no-unused-vars
 const store = UseFarmasiStokSekarangTable()
 const apps = useAplikasiStore()
-function ruangan(ruang) {
+function ruangan (ruang) {
   const poli = apps.polis.find(pol => pol.kodepoli === ruang)
   if (poli) return poli?.polirs
   const ruangan = apps.ruangs.find(pol => pol.kode === ruang)

@@ -202,7 +202,7 @@
                       <q-input
                         ref="refKonsumsi"
                         v-model="store.form.konsumsi"
-                        label="Disonsumsi selama (hari)"
+                        label="Dikonsumsi selama (hari)"
                         dense
                         lazy-rules
                         no-error-icon

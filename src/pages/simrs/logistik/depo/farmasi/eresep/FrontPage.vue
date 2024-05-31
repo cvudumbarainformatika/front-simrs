@@ -62,6 +62,7 @@
         <InfoPage />
       </template>
     </app-fullscreen-blue>
+    <DialogAlasan v-model="store.isAlasan" @close="alasanClose" />
   </q-page>
 </template>
 
@@ -77,10 +78,15 @@ const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
 const ListPage = defineAsyncComponent(() => import('./comp/ListPage.vue'))
 const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 const InfoPage = defineAsyncComponent(() => import('./comp/InfoPage.vue'))
+const DialogAlasan = defineAsyncComponent(() => import('./comp/DialogAlasan.vue'))
 
 const style = useStyledStore()
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
+function alasanClose () {
+  store.isAlasan = false
+  store.isTolak = false
+}
 function subscribedChannel () {
   const channel = laravelEcho.private('private.notif.depo-farmasi')
   channel.subscribed(() => {

@@ -155,6 +155,18 @@
               >
                 {{ item?.adaKronisR }}
               </div>
+              <div
+                v-if="item?.flag==='5'"
+                class="row  text-weight-bold f-10"
+              >
+                Diolak karena : {{ item?.alasan }}
+              </div>
+              <div
+                v-if="(parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep))"
+                class="row text-weight-bold f-10"
+              >
+                Tidak diberikan semua karena : {{ item?.alasan }}
+              </div>
             </td>
             <td>
               <div class="row text-weight-bold">
@@ -249,7 +261,7 @@
                 icon="icon-mat-hand-front-left"
                 :disable="store.loadingTolak && item?.loading"
                 :loading="store.loadingTolak && item?.loading"
-                @click="store.tolakResep(item)"
+                @click="tolakResep(item)"
               >
                 <q-tooltip
                   class="primary"
@@ -259,7 +271,7 @@
                 </q-tooltip>
               </q-btn>
               <q-btn
-                v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep))|| parseInt(item?.flag) === 5 ) "
+                v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep)) || parseInt(item?.flag) === 5 ) "
                 round
                 class="f-10 q-mr-sm"
                 color="primary"
@@ -422,7 +434,16 @@ function info (val) {
   store.setInfo(val)
 }
 function alasan (val) {
+  store.isAlasan = true
+  if (val.flag === '5')store.isTolak = true
+  store.toAlasan = val
   console.log(val)
+}
+function tolakResep (val) {
+  store.isAlasan = true
+  store.isTolak = true
+  store.toAlasan = val
+  // store.tolakResep(val)
 }
 // function send(id) {
 //   indexId.value = id

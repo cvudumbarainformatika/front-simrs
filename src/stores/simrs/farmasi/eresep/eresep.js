@@ -11,6 +11,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     isAdaCopy: false,
     isHistory: false,
     isInfo: false,
+    isAlasan: false,
+    isTolak: false,
     loading: false,
     loadingTerima: false,
     loadingSelesai: false,
@@ -19,6 +21,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loadingHistory: false,
     loadingPelayananInfoObat: false,
     loadingTolak: false,
+    loadingAlasan: false,
+    toAlasan: {},
     items: [],
     meta: {},
     params: {
@@ -612,7 +616,8 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       val.loading = true
       const data = {
         noresep: val.noresep,
-        id: val.id
+        id: val.id,
+        alasan: val.alasan
       }
       return new Promise((resolve, reject) => {
         api.post('v1/simrs/farmasinew/depo/tolak-resep', data)
@@ -620,10 +625,37 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
             this.loadingTolak = false
             val.loading = false
             val.flag = '5'
+            this.isAlasan = false
+            this.isTolak = false
             resolve(resp)
           })
           .catch(err => {
             this.loadingTolak = false
+            val.loading = false
+            reject(err)
+          })
+      })
+    },
+    isiAlasan (val) {
+      this.loadingAlasan = true
+      val.loading = true
+      const data = {
+        noresep: val.noresep,
+        id: val.id,
+        alasan: val.alasan
+      }
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/farmasinew/depo/isi-alasan', data)
+          .then(resp => {
+            this.loadingAlasan = false
+            val.loading = false
+            val.alasan = resp?.data?.data?.alasan
+
+            this.isAlasan = false
+            resolve(resp)
+          })
+          .catch(err => {
+            this.loadingAlasan = false
             val.loading = false
             reject(err)
           })
