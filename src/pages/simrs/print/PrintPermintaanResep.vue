@@ -83,9 +83,9 @@
               <div class="row ">
                 <div>{{ rinc?.mobat?.nama_obat }} </div>
               </div>
-              <!-- <div class="row q-ml-lg f-8 ">
+              <div v-if="parseInt(store?.resep?.flag)<=2" class="row q-ml-lg f-8 ">
                 <div>* <i>{{ rinc?.aturan }}  </i></div>
-              </div> -->
+              </div>
               <div class="row q-ml-lg f-8 justify-between">
                 <div>* <i>{{ rinc?.jumlah }}  {{ rinc?.mobat?.satuan_k }}</i></div>
                 <div> <i>{{ formatDouble(rinc?.harga,2) }}</i></div>
@@ -111,16 +111,16 @@
               {{ item?.namaracikan }}
             </div>
           </div>
-          <!-- <div class="row q-ml-lg f-8">
+          <div v-if="parseInt(store?.resep?.flag)<=2" class="row q-ml-lg f-8">
             <div>*  <i>{{ item?.aturan }}  </i></div>
-          </div> -->
+          </div>
           <div class="row q-ml-lg f-8 justify-between">
             <div>* <i>{{ item?.jumlahdibutuhkan }}  {{ item?.satuan_racik }}</i></div>
             <div> <i>{{ formatDouble(item?.harga,2) }}</i></div>
           </div>
           <div v-for="(rac,n) in item?.rincian" :key="n">
             <div class="row f-8 q-ml-lg items-end">
-              <div>* <i>{{ rac?.mobat?.nama_obat }} - <span class="f-8">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
+              <div>* <i>{{ rac?.mobat?.nama_obat }} - <span v-if="parseInt(store?.resep?.flag)<=2" class="f-8">(rsp : {{ rac?.jumlahresep }}) - </span> <span class="f-8">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
             </div>
           </div>
           <!-- </div> -->

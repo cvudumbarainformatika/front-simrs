@@ -379,7 +379,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           // console.log('rinci rac', rinci)
         })
       }
-      const adaKronisR = item?.permintaanracikan.filter(f => f.kronis === '1')
+      const adaKronisR = item?.permintaanracikan.filter(f => f.kronis === '1' && parseInt(f.konsumsi) >= 28)
       if (adaKronisR.length) item.adaKronis = 'kronis'
       item.doneresep = item?.permintaanresep.filter(x => x.done === true).length > 0
       item.doneracik = item?.permintaanracikan.filter(x => x.done === true).length > 0

@@ -33,7 +33,7 @@ export const usePrintEresepStore = defineStore('print_e_resep', {
           key.jumlahdibutuhkanAwal = key?.jumlahdibutuhkan
 
           const racikankeluar = res?.rincianracik?.find(rac => rac?.namaracikan === key?.namaracikan && rac?.kdobat === key?.kdobat)
-          // console.log('racik', racikankeluar)
+          console.log('racik', key, racikankeluar)
           if (racikankeluar) {
             key.jumlah = parseFloat(racikankeluar.jumlah)
             key.harga_jual = parseFloat(racikankeluar?.harga_jual)
