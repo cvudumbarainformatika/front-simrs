@@ -27,45 +27,46 @@ export const useAplikasiStore = defineStore('aplikasiX', {
   getters: {
   },
   actions: {
-    getItems() {
+    getItems () {
       this.loading = true
       this.items = storage.getApps('apps') ? storage.getApps('apps') : []
       this.loading = false
     },
 
-    setItems(val) {
+    setItems (val) {
       // console.log('set items', val)
       this.items = val
     },
-    setGudang(val) {
+    setGudang (val) {
       // console.log('set gudang', val)
       this.gudangs = val
     },
-    setPoli(val) {
+    setPoli (val) {
       // console.log('set poli', val)
       this.polis = val
     },
-    setRuang(val) {
+    setRuang (val) {
       // console.log('set poli', val)
       this.ruangs = val
     },
-    setUser(val) {
+    setUser (val) {
       this.user = val
     },
-    setUserKey(key, val) {
+    setUserKey (key, val) {
       // console.log('set user key', val)
       this.user[key] = val
     },
-    setAksesApps(val) {
+    setAksesApps (val) {
       this.aksesApps = val
       // console.log('set akses apps', val, this.user)
     },
-    setCurrentApp(val) {
+    setCurrentApp (val) {
       return new Promise((resolve, reject) => {
         try {
           this.currentApp = val
           resolve(true)
-        } catch (error) {
+        }
+        catch (error) {
           reject(error)
         }
       })
