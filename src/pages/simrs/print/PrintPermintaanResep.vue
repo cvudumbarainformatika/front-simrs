@@ -2,7 +2,7 @@
   <div class="fullscreen bg-grey-4 column q-pa-lg q-pb-xl scroll">
     <div
       id="printMe"
-      class="column items-center bg-white page-x "
+      class="column items-center bg-white page-x f-10"
     >
       <div
         class="col no-wrap garis2 text-center relative-position"
@@ -41,7 +41,12 @@
         </div> <div>{{ dateFull(store?.resep?.tgl_kirim) }}</div>
       </div>
       <div class="row justify-between">
-        <div>{{ store.resep?.norm }}</div> <div>{{ store.resep?.datapasien?.nama }}</div>
+        <div>{{ store.resep?.norm }}</div> <div class="text-weight-bold">
+          {{ store.resep?.datapasien?.nama }}
+        </div>
+      </div>
+      <div class="q-mt-xs">
+        Alamat : {{ store.resep?.datapasien?.alamat ?? '-' }}
       </div>
       <!-- <div class="row justify-end text-italic">
         {{ store.resep?.datapasien?.usia }}
@@ -99,10 +104,11 @@
             <div class="row ">
               <div>{{ rinc?.mobat?.nama_obat }} </div>
             </div>
-            <div class="row q-ml-lg">
-              <div>* {{ rinc?.aturan }}  {{ rinc?.mobat?.satuan_k }} === {{ rinc?.keterangan }}</div>
+            <div class="row q-ml-lg f-8 ">
+              <div>* <i>{{ rinc?.aturan }} / {{ rinc?.mobat?.satuan_k }} :: {{ rinc?.keterangan }}</i></div>
             </div>
             <!-- <div class="garis" /> -->
+            <q-separator class="q-ml-lg q-my-xs" />
           </div>
         </div>
 
@@ -175,7 +181,7 @@
       </div>
       <div
         v-if="store?.resep?.listRacikan?.length"
-        class="q-mt-sm full-width"
+        class="full-width"
       >
         <!-- <div class="row items-center">
           <div class="col-shrink text-weight-bold">
@@ -194,45 +200,36 @@
           :key="i"
           class="full-width"
         >
-          <div class="q-ml-md row items-center">
+          <div class="row items-center">
             <div class="col-shrink q-mr-xs">
               {{ item?.namaracikan }}
             </div>
-            <!-- <div class="col-shrink q-mr-xs">
-              <q-chip
-                square
-                class="f-10"
-                color="primary"
-                text-color="white"
-                outline
-              >
-                {{ item?.tiperacikan }}
-              </q-chip>
-            </div> -->
-            <div class="col-shrink q-mr-xs text-green text-weight-bold">
-              {{ item?.jumlahdibutuhkan }}
-            </div>
-            <div class="col-shrink q-mr-xs">
-              ({{ item?.satuan_racik }})
-            </div>
-            <div class="col-shrink q-mr-xs text-italic">
-              {{ item?.aturan }}
-            </div>
-            <div class="col-shrink q-mr-xs">
-              {{ item?.keterangan }}
-            </div>
-            <div class="col-shrink q-mr-xs text-italic f-10">
-              ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
-            </div>
-            <div class="col-grow">
+          </div>
+          <div class="row q-ml-lg f-8">
+            <div>*  <i>{{ item?.aturan }} / {{ item?.satuan_racik }} :: {{ item?.keterangan }}</i></div>
+          </div>
+          <q-separator class="q-ml-lg q-my-xs" />
+          <!-- <div class="col-shrink q-mr-xs">
+            ({{ item?.satuan_racik }})
+          </div>
+          <div class="col-shrink q-mr-xs text-italic">
+            {{ item?.aturan }}
+          </div>
+          <div class="col-shrink q-mr-xs">
+            {{ item?.keterangan }}
+          </div>
+          <div class="col-shrink q-mr-xs text-italic f-10">
+            ( {{ formatDouble( parseFloat(item?.konsumsi),1) }} hari)
+          </div> -->
+          <!-- <div class="col-grow">
               <q-separator
                 size="1px"
                 color="deep-orange"
                 inset
               />
-            </div>
-          </div>
-          <q-list
+            </div> -->
+          <!-- </div> -->
+          <!-- <q-list
             separator
             bordered
             class="full-width"
@@ -249,30 +246,6 @@
                 <div class="row f-10">
                   ( {{ rinc?.kandungan }} )
                 </div>
-                <!-- <div class="row text-italic f-10">
-                  {{ rinc?.kdobat }}
-                </div> -->
-
-                <!-- <div class="row q-col-gutter-sm  f-10">
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.fornas==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.forkit==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.generik==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
-                  </div>
-                </div> -->
               </q-item-section>
               <q-item-section
                 side
@@ -280,30 +253,6 @@
               >
                 <div class="row full-width">
                   <div class="col-6">
-                    <!-- <div class="row q-mt-xs">
-                      <div class="col-5">
-                        Ds Obat
-                      </div>
-                      <div class="col-7">
-                        {{ rinc?.dosisobat }}
-                      </div>
-                    </div>
-                    <div class="row q-mt-xs">
-                      <div class="col-5">
-                        Ds Resep
-                      </div>
-                      <div class="col-7">
-                        {{ rinc?.dosismaksimum }}
-                      </div>
-                    </div>
-                    <div class="row q-mt-xs">
-                      <div class="col-5">
-                        Jml Resep
-                      </div>
-                      <div class="col-7">
-                        {{ rinc?.jumlahresep }}
-                      </div>
-                    </div> -->
                     <div class="row q-mt-xs items-end">
                       <div class="col-4">
                         Jml Obat
@@ -337,33 +286,69 @@
                 </div>
               </q-item-section>
             </q-item>
-          </q-list>
+          </q-list> -->
         </div>
       </div>
 
       <div class="garis q-mt-xs" />
       <div class="garis" />
-      <div class="row justify-end text-italic q-my-sm">
-        {{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}
+      <div class="row justify-between q-my-sm">
+        <div class="ttd-pasien">
+          <div>Penerima Resep</div>
+        </div>
+        <div class="ttd-petugas">
+          <div>{{ dateFullFormat(new Date()) }} : {{ formatJam(new Date()) }}</div>
+          <div>
+            <vue-qrcode
+              :value="qrUrl"
+              tag="svg"
+              :options="{
+                errorCorrectionLevel: 'Q',
+                color: {
+                  dark: '#000000',
+                  light: '#ffffff',
+                },
+                margin:2
+              }"
+            />
+          </div>
+          <div class="text-center">
+            Petugas RS
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { dateFullFormat, formatJam, dateFull, formatDouble } from 'src/modules/formatter'
-import { onMounted } from 'vue'
+import { dateFullFormat, formatJam, dateFull } from 'src/modules/formatter'
+import { computed, onMounted } from 'vue'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 
 const store = usePrintEresepStore()
 
+const qrUrl = computed(() => {
+  const noreg = 'props?.pasien?.noreg'
+  const dok = 'E-RESEP.png'
+  const asal = 'RAWAT JALAN'
+  const enc = btoa(`${noreg}|${dok}|${asal}`)
+  return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
+})
+
 onMounted(() => {
-  // myPrinting() //
+  myPrinting()
 })
 // eslint-disable-next-line no-unused-vars
 function myPrinting () {
   console.log('print ')
   setTimeout(function () {
+    const printContents = document.getElementById('printMe').innerHTML
+    // const originalContents = document.body.innerHTML
+
+    document.body.innerHTML = printContents
+
     window.print()
   }, 500)
   setTimeout(function () {
