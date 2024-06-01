@@ -8,7 +8,7 @@
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
       <div class="row justify-between items-center">
-        <div v-if="depo==='rjl'">
+        <div v-if="depo==='rjl'" class="q-px-xs">
           <div
             v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
             class="row q-my-xs items-center"
