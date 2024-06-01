@@ -1,0 +1,107 @@
+<template>
+  <q-select
+    outlined
+    dense
+    use-input
+    hide-selected
+    fill-input
+    input-debounce="200"
+    clearable
+    :options="options"
+    @filter="filterFn"
+    hint="Minimal 3 character untuk pencarian obat"
+    style="width: 100%; padding-bottom: 32px"
+    option-label="namaobat"
+    option-value="kodeobat"
+    class="q-mt-sm"
+  >
+    <template #prepend>
+      <q-icon name="icon-mat-search" />
+    </template>
+    <template #option="scope">
+      <q-item v-bind="scope.itemProps" class="row items-end">
+        <div
+          v-if="scope.opt.namaobat"
+          :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
+        >
+          {{ scope.opt.namaobat }}
+        </div>
+        <div
+          v-if="scope.opt.kandungan"
+          :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
+        >
+          ({{ scope.opt.kandungan }})
+        </div>
+        <div
+          v-if="scope.opt.alokasi >0"
+          class="q-ml-xs text-weight-bold text-green"
+        >
+          {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
+        </div>
+        <div
+          v-if="scope.opt.alokasi <=0"
+          class="q-ml-xs text-weight-bold text-negative f-14"
+        >
+          {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
+        </div>
+        <div
+          v-if="scope.opt.satuankecil"
+          :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-primary'"
+        >
+          {{ scope.opt.satuankecil }}
+        </div>
+      </q-item>
+    </template>
+    <template #no-option>
+      <q-item>
+        <q-item-section class="text-grey">
+          No results
+        </q-item-section>
+      </q-item>
+    </template>
+  </q-select>
+</template>
+
+<script setup>
+import { api } from 'src/boot/axios'
+import { notifErrVue } from 'src/modules/utils'
+import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
+
+import { ref } from 'vue'
+
+const store = usePermintaanEResepStore()
+
+const options = ref([])
+async function filterFn (val, update, abort) {
+  if (val.length < 3) {
+    abort()
+    return
+  }
+
+  const depo = store.depos.filter(pa => pa.jenis === store.depo)
+  // console.log('depo', store?.depo, depo)
+  if (depo.length) {
+    store.dpPar = depo[0]?.value
+  }
+  else return notifErrVue('depo tujuan tidak ditemukan')
+
+  const param = {
+    groups: store?.pasien?.groups,
+    kdruang: store.dpPar,
+    q: val,
+    tiperesep: store.form.tiperesep
+  }
+
+  const params = { params: param }
+
+  const resp = await api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
+  console.log('resp', resp)
+  const data = resp.data?.dataobat ?? []
+
+  update(() => {
+    const needle = val?.toLowerCase()
+    options.value = data.length ? data?.filter(v => v?.namaobat.toLowerCase().indexOf(needle) > -1) : []
+  })
+}
+
+</script>
