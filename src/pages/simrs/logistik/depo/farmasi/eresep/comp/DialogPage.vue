@@ -448,7 +448,7 @@
                         Resep Sudah Selesai
                       </div>
                       <q-btn
-                        v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                        v-if="apps?.user?.kdruangansim === 'Gd-05010101' || apps?.user?.kdruangansim === 'Gd-04010102'"
                         round
                         class="f-10 q-my-sm"
                         color="dark"
