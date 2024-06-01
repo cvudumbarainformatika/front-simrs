@@ -867,11 +867,11 @@ function myDebounce (func, timeout = 500) {
   }
 }
 const inputObat = myDebounce((val) => {
+  refObat.value.showPopup()
   // console.log('input obat', val, typeof val)
   if ((typeof val) !== 'string') val = ''
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-  refObat.value.showPopup()
 })
 // function inputObat(val) {
 //   if (val !== '') store.cariObat(val)
