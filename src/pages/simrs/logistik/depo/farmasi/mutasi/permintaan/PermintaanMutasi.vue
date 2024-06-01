@@ -132,7 +132,7 @@
           </div>
           <div class="row no-wrap q-mb-xs">
             <div class="col-4 ">
-              Depo Tujuan :
+              Depo Asal :
             </div>
             <div
               v-if="store.disp.depo"
