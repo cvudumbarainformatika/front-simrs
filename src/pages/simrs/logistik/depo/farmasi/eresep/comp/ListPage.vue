@@ -201,22 +201,7 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
-                v-if="parseInt(item?.flag)<= 4"
-                round
-                class="f-10 q-mr-sm"
-                color="dark"
-                text-color="white"
-                icon="icon-mat-print"
-                @click="toPrint(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Print resep
-                </q-tooltip>
-              </q-btn>
+              <!-- terima -->
               <q-btn
                 v-if="item?.flag==='1'"
                 round
@@ -235,6 +220,25 @@
                   Terima
                 </q-tooltip>
               </q-btn>
+              <!-- print -->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
+                color="dark"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="toPrint(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print resep
+                </q-tooltip>
+              </q-btn>
+
+              <!-- selesai -->
               <q-btn
                 v-if="item?.flag==='2' && (item?.doneresep || item?.doneracik)"
                 round
@@ -253,24 +257,8 @@
                   Selesai
                 </q-tooltip>
               </q-btn>
-              <q-btn
-                v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
-                round
-                class="f-10 q-mr-sm"
-                color="negative"
-                text-color="white"
-                icon="icon-mat-hand-front-left"
-                :disable="store.loadingTolak && item?.loading"
-                :loading="store.loadingTolak && item?.loading"
-                @click="tolakResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Selesai
-                </q-tooltip>
-              </q-btn>
+
+              <!-- alasan -->
               <q-btn
                 v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep)) || parseInt(item?.flag) === 5 ) "
                 round
@@ -297,6 +285,7 @@
                   Alasan Resep Ditolak
                 </q-tooltip>
               </q-btn>
+              <!-- buka -->
               <q-btn
                 square
                 class="f-10"
@@ -313,6 +302,7 @@
                   Buka Resep Pasien
                 </q-tooltip>
               </q-btn>
+              <!-- info -->
               <q-btn
                 square
                 class="f-10"
@@ -327,6 +317,25 @@
                   :offset="[10, 10]"
                 >
                   Pelayanan Informasi Obat
+                </q-tooltip>
+              </q-btn>
+              <!-- tolak -->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
+                round
+                class="f-10 q-mx-sm"
+                color="negative"
+                text-color="white"
+                icon="icon-mat-hand-front-left"
+                :disable="store.loadingTolak && item?.loading"
+                :loading="store.loadingTolak && item?.loading"
+                @click="tolakResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Selesai
                 </q-tooltip>
               </q-btn>
             </td>

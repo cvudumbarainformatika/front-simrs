@@ -596,7 +596,7 @@
               </div>
               <div class="col-auto q-mr-lg">
                 <q-btn
-                  v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                  v-if="apps?.user?.kdruangansim === 'Gd-05010101' || apps?.user?.kdruangansim === 'Gd-04010102'"
                   round
                   class="f-10 q-my-sm"
                   color="dark"
@@ -1326,7 +1326,7 @@ function openRajal (val) {
   rajalOpen.value = true
   setTimeout(() => {
     refEtiketRajal.value.printPage()
-  }, 100)
+  }, 200)
 }
 function setRincRanap (val, evt) {
   // console.log('set rinc ranap', val, evt)
@@ -1350,7 +1350,7 @@ function openRanap (wkt) {
   ranapOpen.value = true
   setTimeout(() => {
     refEtiketRanap.value.printPage()
-  }, 100)
+  }, 200)
 }
 const pageRef = ref()
 const tinggiDetailPas = ref(160)
