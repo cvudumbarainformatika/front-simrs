@@ -250,6 +250,8 @@
                   </q-btn>
                 </div>
               </div>
+
+              <nyobak-select v-model="store.namaObat" />
             </q-item-section>
           </q-item>
           <!-- <q-item>
@@ -738,6 +740,8 @@ import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permint
 import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
+
+const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
 
 const props = defineProps({
   pasien: { type: Object, default: null },
