@@ -107,7 +107,7 @@ import { useRouter } from 'vue-router'
 import { useStyledStore } from 'src/stores/app/styled'
 import * as storage from 'src/modules/storage'
 import { useSettingsAplikasi } from 'src/stores/simrs/settings'
-// import { laravelEcho } from 'src/modules/newsockets'
+import { qchannel } from 'src/modules/newsockets'
 
 const tanggal = ref(date.formatDate(Date.now(), 'YYYY-MM-DD'))
 const router = useRouter()
@@ -132,7 +132,7 @@ const dark = computed(() => {
   return $q.dark.isActive
 })
 
-function setDark(val) {
+function setDark (val) {
   const x = !val
   $q.dark.set(x)
 }
@@ -148,11 +148,11 @@ function setDark(val) {
 const angka = ref(0)
 document.addEventListener('keypress', intrupt)
 document.addEventListener('mouseover', intrupt)
-function intrupt() {
+function intrupt () {
   localStorage.setItem('activeTime', new Date())
   // console.log('interup')
 }
-function timer() {
+function timer () {
   const lgTime = storage.getActiveTime()
   const skr = new Date()
   angka.value = date.getDateDiff(skr, lgTime, 'minutes')
@@ -183,6 +183,32 @@ onBeforeMount(() => {
 //       console.log('listen private notif', e)
 //     })
 // }
+
+const gambar = computed(() => {
+  return new URL('../../assets/images/mad_saleh_minum.png', import.meta.url).href
+})
+
+qchannel.subscribed(() => {
+  console.log('subscribed qchannel!!!')
+}).listen('.playground', (e) => {
+  console.log('listen', e)
+  if (e.message.menu === 'refresh-page') {
+    $q.notify({
+      type: 'my-notif',
+      avatar: gambar,
+      message: e?.message?.data,
+      multiLine: true,
+      caption: 'Klik Refresh Untuk Memuat Ulang Halaman Ini',
+      color: 'primary',
+      position: 'bottom-right',
+      timeout: 0,
+      actions: [
+        { label: 'Refresh', color: 'yellow', handler: () => { window.location.reload() } }
+      ]
+
+    })
+  }
+})
 
 </script>
 

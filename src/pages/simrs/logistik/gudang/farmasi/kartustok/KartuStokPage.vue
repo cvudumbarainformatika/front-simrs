@@ -62,7 +62,10 @@ onMounted(() => {
 
 watch(() => app?.user?.kdruangansim, (newVal, oldVal) => {
   if (newVal !== oldVal) {
-    store.getData()
+    store.getInitialData()
+      .then(() => {
+        store.getData()
+      })
   }
 }, { deep: true })
 watch(() => store?.params.bulan, (newVal, oldVal) => {

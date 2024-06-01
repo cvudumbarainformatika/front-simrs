@@ -30,4 +30,6 @@ window.Echo = new Echo({
 
 const laravelEcho = window.Echo
 
-export { laravelEcho }
+const qchannel = window.Echo.channel('public.playground.1')
+
+export { laravelEcho, qchannel }

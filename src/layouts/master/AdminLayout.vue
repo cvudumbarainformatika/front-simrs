@@ -86,9 +86,11 @@ const ruang = computed(() => {
   const depo = store.depo ? 'Depo : ' + store.depo.nama : false
   if (ruangan) {
     return ruangan
-  } else if (depo) {
+  }
+  else if (depo) {
     return depo
-  } else {
+  }
+  else {
     return '-'
   }
 })
@@ -108,7 +110,8 @@ const menus = computed(() => {
   })
   if (apem.length) {
     return apem[0].menus
-  } else {
+  }
+  else {
     return []
   }
 })

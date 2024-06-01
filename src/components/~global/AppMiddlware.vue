@@ -67,7 +67,7 @@ onMounted(() => {
   // btnPrint.value.click()
 })
 
-function linkClick() {
+function linkClick () {
   const routeData = router.resolve({ path: '/print/antrian', query: { nomor: 'B-006', poli: 'poli MATA', norm: '789609' } })
   window.open(routeData.href, '_blank')
 }
