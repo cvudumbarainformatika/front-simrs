@@ -125,27 +125,34 @@
                           <q-icon name="icon-mat-search" />
                         </template>
                         <template #option="scope">
-                          <q-item v-bind="scope.itemProps">
+                          <q-item v-bind="scope.itemProps" class="row items-end">
                             <div
                               v-if="scope.opt.namaobat"
+                              :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
                             >
                               {{ scope.opt.namaobat }}
                             </div>
                             <div
                               v-if="scope.opt.kandungan"
-                              class="q-ml-xs q-mr-xs text-deep-orange"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
                             >
                               ({{ scope.opt.kandungan }})
                             </div>
                             <div
-                              v-if="scope.opt.alokasi"
-                              class="q-ml-xs text-weight-bold tetx-green"
+                              v-if="scope.opt.alokasi >0"
+                              class="q-ml-xs text-weight-bold text-green"
                             >
-                              {{ scope.opt.alokasi }}
+                              {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
+                            </div>
+                            <div
+                              v-if="scope.opt.alokasi <=0"
+                              class="q-ml-xs text-weight-bold text-negative f-14"
+                            >
+                              {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
                             </div>
                             <div
                               v-if="scope.opt.satuankecil"
-                              class="q-ml-xs text-primary"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-primary'"
                             >
                               {{ scope.opt.satuankecil }}
                             </div>
@@ -852,7 +859,7 @@ function openPersiapanOperasi () {
   // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
-function myDebounce (func, timeout = 800) {
+function myDebounce (func, timeout = 500) {
   let timer
   return (...arg) => {
     clearTimeout(timer)
@@ -864,6 +871,7 @@ const inputObat = myDebounce((val) => {
   if ((typeof val) !== 'string') val = ''
   if (val !== '') store.cariObat(val)
   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+  refObat.value.showPopup()
 })
 // function inputObat(val) {
 //   if (val !== '') store.cariObat(val)
@@ -875,6 +883,7 @@ function obatSelected (val) {
     store.namaObat = null
     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
   }
+  refObat.value.validate()
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
   store.setForm('kodeobat', val?.kdobat ?? '-')
@@ -908,6 +917,7 @@ function signaSelected (val) {
     const kons = store.form.jumlah_diminta / parseFloat(val?.jumlah)
     store.setForm('konsumsi', kons)
   }
+  refSigna.value.validate()
   // }
 }
 function signaCreateValue (val, done) {
@@ -1048,6 +1058,7 @@ function simpanObat () {
     store.simpanObat(form)?.then(() => {
       signa.value = null
       refObat.value.focus()
+      refObat.value.showPopup()
       // refObat.value.showPopup()
     })
   }
@@ -1059,6 +1070,7 @@ onMounted(() => {
   store.getSigna()
   store.cariObat()
   refObat.value.focus()
+  refObat.value.showPopup()
 })
 watchEffect(() => {
   store.pasien = props?.pasien
@@ -1068,3 +1080,8 @@ watchEffect(() => {
 })
 
 </script>
+<style scoped>
+.line-through{
+  text-decoration: line-through
+}
+</style>
