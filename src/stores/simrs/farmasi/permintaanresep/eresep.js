@@ -722,7 +722,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
           .then(resp => {
             this.loadingObat = false
-            // this.nonFilteredObat = resp.data?.dataobat
+            this.nonFilteredObat = resp.data?.dataobat
             this.Obats = val?.length ? this.nonFilteredObat.filter(nfil => nfil?.namaobat.toLowerCase().includes(val?.toLowerCase())) : this.nonFilteredObat
             // console.log('hasil', this.nonFilteredObat, this.Obats)
 
