@@ -7,15 +7,18 @@
     hide-selected
     fill-input
     input-debounce="200"
-    clearable
     :rules="[obatValid]"
     :options="options"
     @filter="filterFn"
-    hint="Minimal 3 character untuk pencarian obat"
-    style="width: 100%; padding-bottom: 32px"
+    placeholder="Min 3 character untuk pencarian obat"
     option-label="namaobat"
     option-value="kodeobat"
-    class="q-mt-sm"
+    autocomplete="namaobat"
+    autofocus
+    class="full-width"
+    hide-bottom-space
+    hide-dropdown-icon
+    no-error-icon
     @update:model-value="obatSelected"
   >
     <template #prepend>
@@ -25,7 +28,6 @@
       <q-item v-bind="scope.itemProps" class="row items-end">
         <div
           v-if="scope.opt.namaobat"
-          :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
         >
           {{ scope.opt.namaobat }}
         </div>
@@ -127,9 +129,16 @@ async function filterFn (val, update, abort) {
   const data = resp.data?.dataobat ?? []
 
   update(() => {
-    const needle = val?.toLowerCase()
-    options.value = data.length ? data?.filter(v => v?.namaobat.toLowerCase().indexOf(needle) > -1) : []
+    // const needle = val?.toLowerCase()
+    // options.value = data.length ? data?.filter(v => v?.namaobat.toLowerCase().indexOf(needle) > -1) : []
+    options.value = data
   })
+}
+
+// eslint-disable-next-line no-unused-vars
+function highlightSearchTerm (label) {
+  const regex = new RegExp(store.namaObat, 'gi')
+  return label?.replace(regex, '<span class="txt-highlight">$&</span>')
 }
 
 </script>
