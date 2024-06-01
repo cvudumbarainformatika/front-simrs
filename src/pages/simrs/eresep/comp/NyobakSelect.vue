@@ -1,5 +1,6 @@
 <template>
   <q-select
+    ref="refObat"
     outlined
     dense
     use-input
@@ -7,6 +8,7 @@
     fill-input
     input-debounce="200"
     clearable
+    :rules="[obatValid]"
     :options="options"
     @filter="filterFn"
     hint="Minimal 3 character untuk pencarian obat"
@@ -14,6 +16,7 @@
     option-label="namaobat"
     option-value="kodeobat"
     class="q-mt-sm"
+    @update:model-value="obatSelected"
   >
     <template #prepend>
       <q-icon name="icon-mat-search" />
@@ -70,7 +73,32 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { ref } from 'vue'
 
 const store = usePermintaanEResepStore()
-
+// ngisi form
+const refObat = ref(null)
+function obatSelected (val) {
+  console.log('select obat', val)
+  if (val?.alokasi <= 0) {
+    store.namaObat = null
+    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+  }
+  refObat.value.validate()
+  // console.log('obat selected', val)
+  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+  store.setForm('kodeobat', val?.kdobat ?? '-')
+  store.setForm('kandungan', val?.kandungan ?? '-')
+  store.setForm('fornas', val?.fornas ?? '-')
+  store.setForm('forkit', val?.forkit ?? '-')
+  store.setForm('generik', val?.generik ?? '-')
+  store.setForm('kode108', val?.kode108 ?? '-')
+  store.setForm('uraian108', val?.uraian108 ?? '-')
+  store.setForm('kode50', val?.kode50 ?? '-')
+  store.setForm('uraian50', val?.uraian50 ?? '-')
+  store.setForm('stokalokasi', val?.alokasi ?? '-')
+  store.setForm('kodedepo', store.dpPar)
+}
+function obatValid (val) {
+  return (val !== null && val !== '') || ''
+}
 const options = ref([])
 async function filterFn (val, update, abort) {
   if (val.length < 3) {

@@ -96,7 +96,7 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <q-select
+                      <!-- <q-select
                         ref="refObat"
                         v-model="store.namaObat"
                         use-input
@@ -165,7 +165,8 @@
                             </q-item-section>
                           </q-item>
                         </template>
-                      </q-select>
+                      </q-select> -->
+                      <nyobak-select v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
                       <q-input
@@ -250,8 +251,6 @@
                   </q-btn>
                 </div>
               </div>
-
-              <nyobak-select v-model="store.namaObat" />
             </q-item-section>
           </q-item>
           <!-- <q-item>
@@ -750,7 +749,7 @@ const props = defineProps({
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
 
-const refObat = ref(null)
+// const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
@@ -863,50 +862,50 @@ function openPersiapanOperasi () {
   // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
-function myDebounce (func, timeout = 500) {
-  let timer
-  return (...arg) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
-  }
-}
-const inputObat = myDebounce((val) => {
-  refObat.value.showPopup()
-  // console.log('input obat', val, typeof val)
-  if ((typeof val) !== 'string') val = ''
-  if (val !== '') store.cariObat(val)
-  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-})
+// function myDebounce (func, timeout = 500) {
+//   let timer
+//   return (...arg) => {
+//     clearTimeout(timer)
+//     timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+//   }
+// }
+// const inputObat = myDebounce((val) => {
+//   refObat.value.showPopup()
+//   // console.log('input obat', val, typeof val)
+//   if ((typeof val) !== 'string') val = ''
+//   if (val !== '') store.cariObat(val)
+//   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+// })
 // function inputObat(val) {
 //   if (val !== '') store.cariObat(val)
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
-function obatSelected (val) {
-  console.log('select obat', val)
-  if (val?.alokasi <= 0) {
-    store.namaObat = null
-    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
-  }
-  refObat.value.validate()
-  // console.log('obat selected', val)
-  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kdobat ?? '-')
-  store.setForm('kandungan', val?.kandungan ?? '-')
-  store.setForm('fornas', val?.fornas ?? '-')
-  store.setForm('forkit', val?.forkit ?? '-')
-  store.setForm('generik', val?.generik ?? '-')
-  store.setForm('kode108', val?.kode108 ?? '-')
-  store.setForm('uraian108', val?.uraian108 ?? '-')
-  store.setForm('kode50', val?.kode50 ?? '-')
-  store.setForm('uraian50', val?.uraian50 ?? '-')
-  store.setForm('stokalokasi', val?.alokasi ?? '-')
-  store.setForm('kodedepo', store.dpPar)
-}
+// function obatSelected (val) {
+//   console.log('select obat', val)
+//   if (val?.alokasi <= 0) {
+//     store.namaObat = null
+//     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+//   }
+//   refObat.value.validate()
+//   // console.log('obat selected', val)
+//   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+//   store.setForm('kodeobat', val?.kdobat ?? '-')
+//   store.setForm('kandungan', val?.kandungan ?? '-')
+//   store.setForm('fornas', val?.fornas ?? '-')
+//   store.setForm('forkit', val?.forkit ?? '-')
+//   store.setForm('generik', val?.generik ?? '-')
+//   store.setForm('kode108', val?.kode108 ?? '-')
+//   store.setForm('uraian108', val?.uraian108 ?? '-')
+//   store.setForm('kode50', val?.kode50 ?? '-')
+//   store.setForm('uraian50', val?.uraian50 ?? '-')
+//   store.setForm('stokalokasi', val?.alokasi ?? '-')
+//   store.setForm('kodedepo', store.dpPar)
+// }
 
-function obatEnter () {
-  refQty.value.focus()
-  refQty.value.select()
-}
+// function obatEnter () {
+//   refQty.value.focus()
+//   refQty.value.select()
+// }
 // signa
 const signa = ref('')
 const refJmlHarSig = ref(null)
@@ -1008,9 +1007,9 @@ function qtyEnter () {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
-function obatValid (val) {
-  return (val !== null && val !== '') || ''
-}
+// function obatValid (val) {
+//   return (val !== null && val !== '') || ''
+// }
 function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
@@ -1032,7 +1031,7 @@ function validate () {
     }
   }
 
-  if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
+  if (refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
 function ketEnter () {
@@ -1061,8 +1060,8 @@ function simpanObat () {
     const form = store.form
     store.simpanObat(form)?.then(() => {
       signa.value = null
-      refObat.value.focus()
-      refObat.value.showPopup()
+      // refObat.value.focus()
+      // refObat.value.showPopup()
       // refObat.value.showPopup()
     })
   }
@@ -1073,8 +1072,8 @@ onMounted(() => {
   // refObat.value.showPopup()
   store.getSigna()
   store.cariObat()
-  refObat.value.focus()
-  refObat.value.showPopup()
+  // refObat.value.focus()
+  // refObat.value.showPopup()
 })
 watchEffect(() => {
   store.pasien = props?.pasien
