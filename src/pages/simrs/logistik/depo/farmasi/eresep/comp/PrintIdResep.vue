@@ -41,10 +41,13 @@
           <span class="text-weight-bold f-12">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
         </div>
         <div class="f-12">
-          {{ item?.norm }} - {{ item?.datapasien?.nama }}
+          {{ item?.norm }} - {{ item?.datapasien?.noka??'tidak ada no BPJs' }} - {{ item?.datapasien?.nama }}
         </div>
         <div class="text-italic f-10">
           {{ item?.datapasien?.usia }}
+        </div>
+        <div class="text-italic f-10">
+          {{ item?.datapasien?.alamat }}
         </div>
         <div class="row ">
           <div class="col-shrink q-mr-xs">
@@ -252,7 +255,7 @@ defineExpose({ printPage })
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 24.13cm;
+  max-width: 24.13cm;
   height: auto;
   padding: 1mm;
   // font-size: 10px !important;
