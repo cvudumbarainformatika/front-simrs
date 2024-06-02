@@ -16,10 +16,10 @@
           />
           <div class="q-ml-sm">
             <div class="f-18">
-              <b class="text-grey-8">{{ store.pasien? 'DETAILS PASIEN':'RAWAT INAP' }}</b>
+              <b class="text-grey-8">REHABILITASI MEDIK</b>
             </div>
             <div class="f-10">
-              List Tunggu Pasien
+              List Kunjungan Pasien
             </div>
           </div>
         </div>
@@ -331,7 +331,7 @@
   </div>
 </template>
 <script setup>
-import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
+import { useKunjunganRehabmediStore } from 'src/stores/simrs/pelayanan/rehabmedik/kunjungan'
 import { ref } from 'vue'
 
 // const search = ref('')
@@ -339,10 +339,10 @@ import { ref } from 'vue'
 const showMenuPeriode = ref(false)
 // const showMenuStatus = ref(false)
 
-const store = useListPendaftaranRanapStore()
+const store = useKunjunganRehabmediStore()
 // console.log(store)
 
-function clearQ() {
+function clearQ () {
   store.params.q = ''
   store.setPage(1)
 }

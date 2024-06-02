@@ -11,26 +11,24 @@
         </div>
         <div class="col full-height">
           <template v-if="store.items?.length > 0">
-            <transition-group
+            <!-- <transition-group
               appear
 
               enter-active-class="animated fadeIn faster"
               leave-active-class="animated fadeOut faster"
-            >
-              <list-pasien
-                v-if="!store.isViewList"
-                key="list-pasien"
-                :items="store.items"
-                :loading="store.loading"
-                @details="(val)=>store.pasien=val"
-              />
-              <thumbnail-view
-                v-else
-                key="thumbnail-view"
-                :items="store.items"
-                @details="(val)=>store.pasien=val"
-              />
-            </transition-group>
+            > -->
+            <list-pasien
+              v-if="!store.isViewList"
+              :items="store.items"
+              :loading="store.loading"
+              @details="(val)=>store.pasien=val"
+            />
+            <thumbnail-view
+              v-else
+              :items="store.items"
+              @details="(val)=>store.pasien=val"
+            />
+            <!-- </transition-group> -->
           </template>
           <div
             v-else
@@ -63,12 +61,13 @@
 import HeaderComp from './comp/HeaderComp.vue'
 import ThumbnailView from './comp/ThumbnailView.vue'
 
-import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
+// import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
 import { onMounted } from 'vue'
 import ListPasien from './comp/ListPasien.vue'
 import DetailsPasien from './comp/DetailsPasien.vue'
+import { useKunjunganRehabmediStore } from 'src/stores/simrs/pelayanan/rehabmedik/kunjungan'
 
-const store = useListPendaftaranRanapStore()
+const store = useKunjunganRehabmediStore()
 
 onMounted(() => {
   store.getDataTable()

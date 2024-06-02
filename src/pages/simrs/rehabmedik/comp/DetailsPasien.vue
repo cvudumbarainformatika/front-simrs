@@ -11,9 +11,10 @@
 <script setup>
 import { onMounted } from 'vue'
 import HeaderComp from './HeaderComp.vue'
-import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
+import { useKunjunganRehabmediStore } from 'src/stores/simrs/pelayanan/rehabmedik/kunjungan'
+// import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
 
-const store = useListPendaftaranRanapStore()
+const store = useKunjunganRehabmediStore()
 
 onMounted(() => {
   const thumb = []

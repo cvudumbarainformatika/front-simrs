@@ -6,11 +6,11 @@
     @click="emits('details', item)"
   >
     <q-card
-      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status_masuk === item.norm? 'bg-teal' : 'bg-deep-orange-8'}`"
+      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status === '1'? 'bg-teal' : 'bg-deep-orange-8'}`"
       style="top:-15px; left: 0;"
     >
       <div class="f-10">
-        {{ item?.status_masuk === item.norm? 'Terlayani' : 'Menunggu ...' }}
+        {{ item?.status === '1'? 'Terlayani' : 'Belum terlayani' }}
       </div>
     </q-card>
     <div class="row items-center full-width">

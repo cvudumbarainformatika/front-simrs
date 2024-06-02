@@ -3,11 +3,11 @@ const rehabmedik = {
   component: () => import('layouts/V2/IndexLayout.vue'),
   meta: { requireAuth: true },
   children: [
-    { path: '', redirect: '/remed/middleware' },
+    { path: '', redirect: '/remed/pengunjung' },
 
     {
-      path: '/remed/kunjungan',
-      name: 'remed.kunjungan',
+      path: '/remed/pengunjung',
+      name: 'remed.pengunjung',
       component: () => import('pages/simrs/rehabmedik/IndexPage.vue')
       // children: [
       //   {

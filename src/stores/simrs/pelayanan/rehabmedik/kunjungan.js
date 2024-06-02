@@ -3,7 +3,7 @@ import { api } from 'boot/axios'
 import { dateDbFormat } from 'src/modules/formatter'
 import { date } from 'quasar'
 
-export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap', {
+export const useKunjunganRehabmediStore = defineStore('kunjungan-rehabmedik-store', {
   state: () => ({
     items: [],
     meta: null,
@@ -33,7 +33,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
     getDataTable () {
       this.loading = true
       return new Promise((resolve, reject) => {
-        api.get('/v1/simrs/pendaftaran/ranap/list-pendaftararan-ranap', {
+        api.get('/v1/simrs/rehabmedik/kunjunganpasien', {
           params: this.params
         }).then(res => {
           // console.log('res list tggu ranap', res)
@@ -45,8 +45,8 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
             this.meta.total = total
             this.items = obj?.data ?? []
 
-            console.log('this.meta', this.meta)
-            console.log('this.items', this.items)
+            // console.log('this.meta', this.meta)
+            // console.log('this.items', this.items)
           }
           this.loading = false
           resolve(res)
