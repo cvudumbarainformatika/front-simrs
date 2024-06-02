@@ -219,7 +219,7 @@
             class=""
           >
             <q-item-section style="width: 30%;">
-              <q-select
+              <!-- <q-select
                 ref="refObat"
                 v-model="store.namaObat"
                 use-input
@@ -285,7 +285,8 @@
                     </q-item-section>
                   </q-item>
                 </template>
-              </q-select>
+              </q-select> -->
+              <SelectRacikan v-model="store.namaObat" @tidak-bisa-simpan="noSimp" />
             </q-item-section>
             <q-item-section
               side
@@ -577,11 +578,16 @@ import { Dialog } from 'quasar'
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const store = usePermintaanEResepStore()
 const tidakBisaSimpan = ref(false)
+function noSimp (val) {
+  // console.log('tidakBisaSimpan', val)
+  tidakBisaSimpan.value = val
+}
+const SelectRacikan = defineAsyncComponent(() => import('./SelectRacikan.vue'))
 onMounted(() => {
   store.namaObat = null
   // store.setForm('namaracikan', 'racikan-' + store.counterRacikan)
@@ -644,16 +650,16 @@ function enterKet () {
   refObat.value.focus()
   // refObat.value.showPopup()
 }
-function enterObat () {
-  if (store.form.tiperacikan === 'DTD') {
-    refDosis.value.focus()
-    refDosis.value.select()
-  }
-  else {
-    refJumlah.value.focus()
-    refJumlah.value.select()
-  }
-}
+// function enterObat () {
+//   if (store.form.tiperacikan === 'DTD') {
+//     refDosis.value.focus()
+//     refDosis.value.select()
+//   }
+//   else {
+//     refJumlah.value.focus()
+//     refJumlah.value.select()
+//   }
+// }
 
 function enterDosis () {
   refDosisMax.value.focus()
@@ -715,47 +721,47 @@ function setDosis (evt, key) {
     tidakBisaSimpan.value = false
   }
 }
-function myDebounce (func, timeout = 800) {
-  let timer
-  return (...arg) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
-  }
-}
-const inputObat = myDebounce((val) => {
-  if (val !== '') store.cariObat(val)
-  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-})
-function obatSelected (val) {
-  if (val?.alokasi <= 0) {
-    store.namaObat = null
-    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
-  }
-  // console.log('obat selected', val)
-  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kdobat ?? '-')
-  store.setForm('kandungan', val?.kandungan ?? '-')
-  store.setForm('fornas', val?.fornas ?? '-')
-  store.setForm('forkit', val?.forkit ?? '-')
-  store.setForm('generik', val?.generik ?? '-')
-  store.setForm('kode108', val?.kode108 ?? '-')
-  store.setForm('uraian108', val?.uraian108 ?? '-')
-  store.setForm('kode50', val?.kode50 ?? '-')
-  store.setForm('uraian50', val?.uraian50 ?? '-')
-  store.setForm('stokalokasi', val?.alokasi ?? '-')
-  store.setForm('kodedepo', store.dpPar)
-  console.log('laokasi ', store.form.stokalokasi, ' jumlah ', store.form.jumlah)
-  if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
-    tidakBisaSimpan.value = true
-    notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
-  }
-  else {
-    tidakBisaSimpan.value = false
-  }
-}
-function obatValid (val) {
-  return (val !== null && val !== '') || ''
-}
+// function myDebounce (func, timeout = 800) {
+//   let timer
+//   return (...arg) => {
+//     clearTimeout(timer)
+//     timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+//   }
+// }
+// const inputObat = myDebounce((val) => {
+//   if (val !== '') store.cariObat(val)
+//   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+// })
+// function obatSelected (val) {
+//   if (val?.alokasi <= 0) {
+//     store.namaObat = null
+//     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+//   }
+//   // console.log('obat selected', val)
+//   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+//   store.setForm('kodeobat', val?.kdobat ?? '-')
+//   store.setForm('kandungan', val?.kandungan ?? '-')
+//   store.setForm('fornas', val?.fornas ?? '-')
+//   store.setForm('forkit', val?.forkit ?? '-')
+//   store.setForm('generik', val?.generik ?? '-')
+//   store.setForm('kode108', val?.kode108 ?? '-')
+//   store.setForm('uraian108', val?.uraian108 ?? '-')
+//   store.setForm('kode50', val?.kode50 ?? '-')
+//   store.setForm('uraian50', val?.uraian50 ?? '-')
+//   store.setForm('stokalokasi', val?.alokasi ?? '-')
+//   store.setForm('kodedepo', store.dpPar)
+//   console.log('laokasi ', store.form.stokalokasi, ' jumlah ', store.form.jumlah)
+//   if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
+//     tidakBisaSimpan.value = true
+//     notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
+//   }
+//   else {
+//     tidakBisaSimpan.value = false
+//   }
+// }
+// function obatValid (val) {
+//   return (val !== null && val !== '') || ''
+// }
 // Signa
 
 const signa = ref('')

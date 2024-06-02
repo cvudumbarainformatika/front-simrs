@@ -73,17 +73,15 @@ import { notifErrVue } from 'src/modules/utils'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
 import { ref } from 'vue'
-
+const emits = defineEmits(['tidakBisaSimpan'])
 const store = usePermintaanEResepStore()
 // ngisi form
 const refObat = ref(null)
 function obatSelected (val) {
-  console.log('select obat', val)
   if (val?.alokasi <= 0) {
     store.namaObat = null
-    notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+    // notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
   }
-  refObat.value.validate()
   // console.log('obat selected', val)
   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
   store.setForm('kodeobat', val?.kdobat ?? '-')
@@ -97,6 +95,14 @@ function obatSelected (val) {
   store.setForm('uraian50', val?.uraian50 ?? '-')
   store.setForm('stokalokasi', val?.alokasi ?? '-')
   store.setForm('kodedepo', store.dpPar)
+  // console.log('laokasi ', store.form.stokalokasi, ' jumlah ', store.form.jumlah)
+  if ((parseFloat(store.form.jumlah) > parseFloat(store.form.stokalokasi)) && store.form.kodeobat !== '') {
+    emits('tidakBisaSimpan', true)
+    notifErrVue('Stok Alokasi tidak mencukupi silahkan cari obat alternatif')
+  }
+  else {
+    emits('tidakBisaSimpan', false)
+  }
 }
 function obatValid (val) {
   return (val !== null && val !== '') || ''
