@@ -440,8 +440,8 @@
                     <div v-if="store?.resep?.flag==='1'">
                       Resep Belum diterima
                     </div>
-                    <div v-if="store?.resep?.flag==='3'">
-                      <div v-if="!rinc.done" class="text-negative">
+                    <div v-if="parseFloat(store?.resep?.flag)<='3'">
+                      <div v-if="!rinc.done && store?.resep?.flag==='3'" class="text-negative">
                         Tidak diberikan
                       </div>
                       <div v-if="apps?.user?.kdruangansim !== 'Gd-05010101' && apps?.user?.kdruangansim !== 'Gd-04010102'">
