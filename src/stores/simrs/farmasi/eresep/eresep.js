@@ -7,6 +7,7 @@ import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
   state: () => ({
+    printIdOpen: false,
     isOpen: false,
     isAdaCopy: false,
     isHistory: false,
@@ -31,7 +32,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       per_page: 10,
       kddepo: '',
       tipe: '',
-      flag: '1',
+      flag: 'semua',
       to: dateDbFormat(new Date()),
       from: dateDbFormat(new Date())
     },

@@ -37,7 +37,7 @@
       <div class="garis" />
       <div class="row justify-between q-mt-xs">
         <div class="text-weight-bold">
-          {{ store?.resep?.noresep }}
+          {{ store?.resep?.noresep }} ({{ store.resep?.sistembayar?.rs2 }})
         </div> <div>{{ dateFull(store?.resep?.tgl_kirim) }}</div>
       </div>
       <div class="row justify-between">

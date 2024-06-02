@@ -112,7 +112,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
+          <tr :class="item?.flag===''?'bg-red-2':(item?.flag==='1'?'bg-light-blue-2':'')">
             <td width="5%">
               {{ n+1 }}
             </td>
@@ -220,7 +220,24 @@
                   Terima
                 </q-tooltip>
               </q-btn>
-              <!-- print -->
+              <!-- print id resep-->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
+                color="yellow"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="printIdResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print Identitas Resep
+                </q-tooltip>
+              </q-btn>
+              <!-- print resep-->
               <q-btn
                 v-if="parseInt(item?.flag)<= 4"
                 round
@@ -364,6 +381,7 @@
       </template>
     </tbody>
   </table>
+  <commpIdResep v-model="store.printIdOpen" :item="itemPrintId" @close="store.printIdOpen = false" />
 </template>
 
 <script setup>
@@ -372,6 +390,7 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
+import { defineAsyncComponent, ref } from 'vue'
 
 const store = useEResepDepoFarmasiStore()
 const router = useRouter()
@@ -381,7 +400,7 @@ function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
-      balik = ' draft'
+      balik = ' draft (belum dikirimkan)'
       break
     case '1':
       balik = 'Belum diterima'
@@ -471,6 +490,14 @@ function toPrint (row) {
     }
   })
   window.open(routeData.href, '_blank')
+}
+const commpIdResep = defineAsyncComponent(() => import('./PrintIdResep.vue'))
+const itemPrintId = ref(null)
+function printIdResep (val) {
+  console.log(val)
+  print.setResep(val)
+  itemPrintId.value = print.resep
+  store.printIdOpen = true
 }
 </script>
 
