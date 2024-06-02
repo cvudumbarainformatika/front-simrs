@@ -10,7 +10,13 @@
           <HeaderComp />
         </div>
         <div class="col full-height">
-          <template v-if="store.items?.length > 0">
+          <!-- <template v-if="store.lloading">
+            <LoadingList
+              v-for="i in 20"
+              :key="i"
+            />
+          </template> -->
+          <template v-if="store.items?.length > 0 || store.loading">
             <!-- <transition-group
               appear
 
