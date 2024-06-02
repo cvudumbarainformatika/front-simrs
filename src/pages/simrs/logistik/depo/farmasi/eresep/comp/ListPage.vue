@@ -225,6 +225,23 @@
                 v-if="parseInt(item?.flag)<= 4"
                 round
                 class="f-10 q-mr-sm"
+                color="green"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="printHeadResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print Id Resep
+                </q-tooltip>
+              </q-btn>
+              <!-- print  resep besar-->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
                 color="yellow"
                 text-color="white"
                 icon="icon-mat-print"
@@ -234,7 +251,7 @@
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Print Identitas Resep
+                  Print Resep Besar
                 </q-tooltip>
               </q-btn>
               <!-- print resep-->
@@ -381,7 +398,13 @@
       </template>
     </tbody>
   </table>
-  <commpIdResep v-model="store.printIdOpen" :item="itemPrintId" @close="store.printIdOpen = false" />
+  <commpIdResep
+    ref="idResp"
+    v-model="openIdPrint"
+    :item="itemPrintId"
+    :head="printHeadOnly"
+    @close="openIdPrint=false"
+  />
 </template>
 
 <script setup>
@@ -493,12 +516,34 @@ function toPrint (row) {
 }
 const commpIdResep = defineAsyncComponent(() => import('./PrintIdResep.vue'))
 const itemPrintId = ref(null)
+const idResp = ref(null)
+const openIdPrint = ref(false)
+const printHeadOnly = ref(false)
+
 function printIdResep (val) {
   console.log(val)
   print.setResep(val)
+  printHeadOnly.value = false
   itemPrintId.value = print.resep
-  store.printIdOpen = true
+  openIdPrint.value = true
+  setTimeout(() => {
+    idResp.value.printPage()
+  }, 200)
 }
+function printHeadResep (val) {
+  console.log(val)
+  print.setResep(val)
+  printHeadOnly.value = true
+  itemPrintId.value = print.resep
+  openIdPrint.value = true
+  setTimeout(() => {
+    idResp.value.printPage()
+  }, 200)
+}
+// function closePrintId () {
+//   console.log('print id close')
+//   openIdPrint.value = false
+// }
 </script>
 
 <style lang="scss" scoped>

@@ -1,8 +1,8 @@
 <template>
-  <q-dialog maximized>
+  <q-dialog id="endas" maximized>
     <div class="bg-white ">
       <div
-        id="printMe"
+        id="printGueeee"
         class="column items-center bg-white page-x f-10"
       >
         <div
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div
-          v-if="item?.diagnosa"
+          v-if="item?.diagnosa && !head"
           class="row q-mb-xs"
         >
           <div class="col-shrink q-mr-xs">
@@ -77,7 +77,7 @@
         <div class="garis" />
         <div class="garis" />
         <div
-          v-if="item?.permintaanresep?.length"
+          v-if="item?.permintaanresep?.length && !head"
           class="q-mt-sm full-width"
         >
           <div class="">
@@ -112,7 +112,7 @@
         </div>
 
         <div
-          v-if="item?.listRacikan?.length"
+          v-if="item?.listRacikan?.length && !head"
           class="full-width"
         >
           <div
@@ -152,15 +152,15 @@
           </div>
         </div>
 
-        <div class="garis q-mt-xs" />
-        <div class="garis" />
-        <div class="row justify-between  text-weight-bold">
+        <div class="garis q-mt-xs" v-if="!head" />
+        <div class="garis" v-if="!head" />
+        <div v-if="!head" class="row justify-between  text-weight-bold">
           <div>Subtotal</div>
           <div>{{ formatDouble(item?.subtotal,2) }}</div>
         </div>
-        <div class="garis q-mt-xs" />
-        <div class="garis" />
-        <div class="row justify-between q-my-sm">
+        <div v-if="!head" class="garis q-mt-xs" />
+        <div v-if="!head" class="garis" />
+        <div v-if="!head" class="row justify-between q-my-sm">
           <div class="ttd-pasien">
             <div>Penerima Resep</div>
           </div>
@@ -195,7 +195,8 @@ import { dateFullFormat, formatJam, dateFull, formatDouble } from 'src/modules/f
 import { computed, onMounted } from 'vue'
 const emits = defineEmits(['close'])
 const props = defineProps({
-  item: { type: Object, default: () => {} }
+  item: { type: Object, default: () => {} },
+  head: { type: Boolean, default: false }
 })
 const qrUrl = computed(() => {
   const noreg = props?.item?.noresep// noresep
@@ -206,26 +207,30 @@ const qrUrl = computed(() => {
   // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
 })
 
-onMounted(() => {
-  myPrinting()
-})
+// onMounted(() => {
+//   myPrinting()
+// })
 // eslint-disable-next-line no-unused-vars
-function myPrinting () {
+// const cont = document.getElementById('endas')?.innerHTML
+function printPage () {
   console.log('print ')
-  setTimeout(function () {
-    const printContents = document.getElementById('printMe').innerHTML
-    // const originalContents = document.body.innerHTML
+  // setTimeout(function () {
+  //   // const printContents = document.getElementById('printGueeee')?.innerHTML
+  //   // const originalContents = document.body.innerHTML
 
-    document.body.innerHTML = printContents
+  //   // document.body.innerHTML = printContents
 
-    window.print()
-  }, 500)
+  // }, 200)
+  window.print()
   setTimeout(function () {
     afterPrint()
   }, 500)
 }
 
 function afterPrint () {
+  // const originalContents = document.body.innerHTML
+
+  // document.body.innerHTML = cont
   emits('close')
   // const r = confirm('Press a button!')
   // if (r === true) {
@@ -235,6 +240,7 @@ function afterPrint () {
   //   window.close()
   // }
 }
+defineExpose({ printPage })
 </script>
 <style lang="scss" scoped>
 
