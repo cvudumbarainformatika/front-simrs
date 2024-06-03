@@ -258,7 +258,7 @@ defineExpose({ printPage })
   display: block;
   margin-left: auto;
   margin-right: auto;
-  max-width: 24.13cm;
+  max-width: 27.94cm;
   height: auto;
   padding: 1mm;
   // font-size: 10px !important;
