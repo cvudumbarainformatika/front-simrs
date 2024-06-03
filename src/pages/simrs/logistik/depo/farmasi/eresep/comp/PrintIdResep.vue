@@ -38,7 +38,7 @@
         <div class="garis" />
         <div class="garis" />
         <div class=" q-mt-xs ">
-          <span class="text-weight-bolder f-12">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
+          <span class="text-weight-bolder f-14">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
         </div>
         <div class="f-12">
           {{ item?.norm }} - {{ item?.datapasien?.noka??'tidak ada no BPJs' }} - {{ item?.datapasien?.nama }}
@@ -90,7 +90,7 @@
             <div v-for="(rinc,i) in item?.permintaanresep" :key="i">
               <div v-if="(item?.flag==='3'&&rinc?.done)||parseInt(item?.flag)<=2">
                 <div class="row justify-between">
-                  <div class="col-6">
+                  <div class="col-6 ">
                     {{ rinc?.mobat?.nama_obat }}
                   </div>
                   <div class="col-2">
@@ -112,7 +112,7 @@
                 </div> -->
               </div>
 
-              <q-separator class="q-ml-lg q-my-xs" />
+              <!-- <q-separator class="q-ml-lg q-my-xs" /> -->
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@
               <div> <i>{{ formatDouble(lirac?.harga,2) }}</i></div>
             </div> -->
             <div v-for="(rac,n) in lirac?.rincian" :key="n">
-              <div class="row q-ml-lg items-end">
+              <div class="row q-ml-lg f-10 items-end">
                 <div>* <i>{{ rac?.mobat?.nama_obat }} - <span v-if="parseInt(lirac?.flag)<=2" class="">(rsp : {{ rac?.jumlahresep }}) - </span> <span class="">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
               </div>
             </div>
