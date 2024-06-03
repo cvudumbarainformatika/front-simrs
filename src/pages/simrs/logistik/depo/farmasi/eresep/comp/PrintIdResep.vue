@@ -3,7 +3,7 @@
     <div class="bg-white batang">
       <div
         id="printGueeee"
-        class="column items-center bg-white page-x f-14"
+        class="column items-center bg-white page-x f-12"
       >
         <div
           class="col no-wrap garis2 text-center"
