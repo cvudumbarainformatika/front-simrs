@@ -103,49 +103,68 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
         saldo.push(obj)
       }
       // =====================================================
-      // ===================================================STS
-      const sts = []
-      for (let i = 0; i < this.items.sts.length; i++) {
-        const el = this.items?.sts
-        const tbp = el[i].tbp?.length ? this.hitungTBP(el[i].tbp) : 0
-        const plain = el[i].pendpatanlain?.length
-          ? this.hitungPlain(el[i].pendpatanlain)
-          : 0
-        const jumlah = tbp + plain
+      // ===================================================Setor
+      const setor = []
+      for (let i = 0; i < this.items.setor.length; i++) {
+        const el = this.items?.setor
         const obj = {
-          tgl: el[i].tgl,
-          notrans: el[i].noSetor,
+          tgl: el[i].tgltrans,
+          notrans: el[i].idtrans,
           nonpd: null,
-          category: 'sts',
+          category: 'setoranpendapatan',
           uraian: el[i].ket,
           uraianNPD: null,
           urutan: 1,
-          penerimaan: jumlah,
+          penerimaan: parseInt(el[i].nilai),
           pengeluaran: 0
         }
-        sts.push(obj)
+        setor.push(obj)
       }
       // =====================================================
 
-      // ===================================================STS
+      // // ===================================================STS
+      // const sts = []
+      // for (let i = 0; i < this.items.sts.length; i++) {
+      //   const el = this.items?.sts
+      //   const tbp = el[i].tbp?.length ? this.hitungTBP(el[i].tbp) : 0
+      //   const plain = el[i].pendpatanlain?.length
+      //     ? this.hitungPlain(el[i].pendpatanlain)
+      //     : 0
+      //   const jumlah = tbp + plain
+      //   const obj = {
+      //     tgl: el[i].tgl,
+      //     notrans: el[i].noSetor,
+      //     nonpd: null,
+      //     category: 'sts',
+      //     uraian: el[i].ket,
+      //     uraianNPD: null,
+      //     urutan: 1,
+      //     penerimaan: jumlah,
+      //     pengeluaran: 0
+      //   }
+      //   sts.push(obj)
+      // }
+      // // =====================================================
 
-      const pendapatanlain = []
-      for (let i = 0; i < this.items.pendapatan.length; i++) {
-        const el = this.items?.pendapatan
-        const obj = {
-          tgl: el[i].pendapatanlain.rs2,
-          notrans: el[i].rs1,
-          nonpd: null,
-          category: 'pendapatan',
-          uraian: 'Pendapatan dari ' + el[i].ket,
-          uraianNPD: null,
-          urutan: 1,
-          penerimaan: el[i].rs4,
-          pengeluaran: 0
-        }
-        pendapatanlain.push(obj)
-      }
-      // =====================================================
+      // // ===================================================STS
+
+      // const pendapatanlain = []
+      // for (let i = 0; i < this.items.pendapatan.length; i++) {
+      //   const el = this.items?.pendapatan
+      //   const obj = {
+      //     tgl: el[i].pendapatanlain.rs2,
+      //     notrans: el[i].rs1,
+      //     nonpd: null,
+      //     category: 'pendapatan',
+      //     uraian: 'Pendapatan dari ' + el[i].ket,
+      //     uraianNPD: null,
+      //     urutan: 1,
+      //     penerimaan: el[i].rs4,
+      //     pengeluaran: 0
+      //   }
+      //   pendapatanlain.push(obj)
+      // }
+      // // =====================================================
 
       // ===================================================SPM
       const spm = []
@@ -262,7 +281,7 @@ export const useLaporanBkuPpkStore = defineStore('laporan_bkuppk', {
       // this.hasilArray = temp;
 
       // menggabungkan array
-      const gabungArray = saldo?.concat(sts, pendapatanlain, spm, spmgu, npkls, nihil)
+      const gabungArray = saldo?.concat(setor, spm, spmgu, npkls, nihil)
       // urutan by tanggal
       const sortByDate = (gabungArray) =>
         gabungArray.sort(({ tgl: a }, { tgl: b }) =>
