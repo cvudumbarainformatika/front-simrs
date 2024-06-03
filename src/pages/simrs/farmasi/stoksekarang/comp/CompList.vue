@@ -44,19 +44,19 @@
             class="text-weight-bold"
             :class="row.status_fornas === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_fornas==='1' ?'Fornas':'Non-Fornas' }}
+            {{ row.status_fornas==='1' ?'Fornas':'' }}
           </div>
           <div
             class="text-weight-bold q-ml-sm"
             :class="row.status_forkid === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_forkid==='1' ?'Forkit':'Non-Forkit' }}
+            {{ row.status_forkid==='1' ?'Forkit':'' }}
           </div>
           <div
             class="text-weight-bold q-ml-sm"
             :class="row.status_generik === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
+            {{ row.status_generik==='1' ?'Generik':'' }}
           </div>
         </div>
         <div class="row justify-start no-wrap q-my-xs">
@@ -141,7 +141,7 @@ const apps = useAplikasiStore()
 
 const DetailAlokasi = defineAsyncComponent(() => import('./DetailAlokasi.vue'))
 
-function cariGudang(val) {
+function cariGudang (val) {
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)
     if (apps?.user?.kdruangansim !== '') {
@@ -150,13 +150,15 @@ function cariGudang(val) {
     }
     if (gudang.length) {
       return gudang[0]?.nama
-    } else return 'Gudang / Depo tidak ditemukan'
-  } else {
+    }
+    else return 'Gudang / Depo tidak ditemukan'
+  }
+  else {
     return 'menunggu data Gudang / Depo'
   }
 }
 
-function rinciAlokasi(row) {
+function rinciAlokasi (row) {
   console.log('rinci alokasi', row)
   table.isOpen = true
   table.getDataAlokasi(row)
@@ -166,7 +168,7 @@ function rinciAlokasi(row) {
 
 // })
 // eslint-disable-next-line no-unused-vars
-function editData(val) {
+function editData (val) {
   store.editData(val)
   console.log('edit', val)
 }

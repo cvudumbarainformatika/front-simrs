@@ -1,6 +1,6 @@
 <template>
   <q-dialog id="endas" maximized>
-    <div class="bg-white ">
+    <div class="bg-white batang">
       <div
         id="printGueeee"
         class="column items-center bg-white page-x f-10"
@@ -42,6 +42,9 @@
         </div>
         <div class="f-12">
           {{ item?.norm }} - {{ item?.datapasien?.noka??'tidak ada no BPJs' }} - {{ item?.datapasien?.nama }}
+        </div>
+        <div class="f-12">
+          {{ item?.sep?.rs8 ?? '-' }}
         </div>
         <div class="text-italic f-10">
           {{ item?.datapasien?.usia }}

@@ -26,3 +26,10 @@
   src: url('./fonts/Poppins-Thin.woff2')format('woff2'),
   url('./fonts/Poppins-Thin.woff')format('woff');
   }
+  @font-face {
+  font-family: 'Batang';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./fonts/Batang.woff2')format('woff2'),
+  url('./fonts/Batang.woff')format('woff');
+  }

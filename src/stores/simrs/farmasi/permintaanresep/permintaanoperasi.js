@@ -29,18 +29,18 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
     noresep: ''
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
       console.log('params', key, val)
     },
-    refresh() {
+    refresh () {
       // console.log('params', this.params)
       this.getData()
     },
-    resetParams() {
+    resetParams () {
       this.params = {
         noreg: '',
         from: date.formatDate(Date.now(), 'YYYY-MM-DD'),
@@ -48,7 +48,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
 
       }
     },
-    setPasien(val) {
+    setPasien (val) {
       console.log('pasien', val)
       this.setForm('noreg', val?.rs1)
       this.setForm('norm', val?.kunjunganrajal?.masterpasien?.rs1 ?? val?.kunjunganranap.masterpasien?.rs1)
@@ -56,18 +56,19 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       this.setForm('sistembayar', val?.kodesistembayar ?? val?.sistembayar?.rs1)
       this.setParams('noreg', val?.rs1)
     },
-    setResep(val) {
+    setResep (val) {
       if (val === 'BARU') {
         this.setForm('noresep', '')
         // this.setParams('noresep', '')
         this.filteredSudahs = []
-      } else {
+      }
+      else {
         this.setForm('noresep', val)
         // this.setParams('noresep', val)
         this.filteredSudahs = this.sudahs.filter(a => a.noresep === val)
       }
     },
-    setValues() {
+    setValues () {
       this.rincBelId = []
       this.rincSudId = []
       const noreseps = []
@@ -90,14 +91,15 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
       if (!this.sudahs?.length) {
         this.noresep = 'BARU'
         this.setForm('noresep', '')
-      } else {
+      }
+      else {
         this.noresep = this.noreseps[0] ?? 'BARU'
       }
       this.noreseps.unshift('BARU')
       this.setResep(this.noresep)
       // console.log('belum', this.rincBelId, 'sudah', this.rincSudId)
     },
-    async getData(val) {
+    async getData (val) {
       if (!val) this.loading = true
       this.belums = []
       const param = { params: this.params }
@@ -111,7 +113,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
         })
         .catch(() => { this.loading = false })
     },
-    async simpan() {
+    async simpan () {
       this.loadingSimpan = true
       this.form.param = this.params
       await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-resep', this.form)
@@ -125,7 +127,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
         })
         .catch(() => { this.loadingSimpan = false })
     },
-    async selesai(item) {
+    async selesai (item) {
       this.loadingSelesai = true
       item.loading = true
       await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/selesai-resep', item)
@@ -141,7 +143,7 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
           item.loading = false
         })
     },
-    async hapusObat(item) {
+    async hapusObat (item) {
       item.loading = true
       this.loadingHapus = true
       await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/batal-obat-resep', item)
