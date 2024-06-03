@@ -3,7 +3,7 @@
     <div class="bg-white batang">
       <div
         id="printGueeee"
-        class="column items-center bg-white page-x f-10"
+        class="column items-center bg-white page-x f-14"
       >
         <div
           class="col no-wrap garis2 text-center"
@@ -26,10 +26,10 @@
               <div class="">
                 RSUD dr.Moh Saleh
               </div>
-              <div class="f-8">
+              <div class="f-10">
                 (0335) 433478,433119,421118
               </div>
-              <div class="f-8 q-mb-xs">
+              <div class="f-10 q-mb-xs">
                 Fax. (0335) 432702
               </div>
             </div>
@@ -38,7 +38,7 @@
         <div class="garis" />
         <div class="garis" />
         <div class=" q-mt-xs ">
-          <span class="text-weight-bold f-12">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
+          <span class="text-weight-bolder f-12">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
         </div>
         <div class="f-12">
           {{ item?.norm }} - {{ item?.datapasien?.noka??'tidak ada no BPJs' }} - {{ item?.datapasien?.nama }}
