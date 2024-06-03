@@ -112,7 +112,7 @@
           v-for="(item, n) in store.items"
           :key="n"
         >
-          <tr :class="item?.flag==='1'?'bg-light-blue-2':''">
+          <tr :class="item?.flag===''?'bg-red-2':(item?.flag==='1'?'bg-light-blue-2':'')">
             <td width="5%">
               {{ n+1 }}
             </td>
@@ -155,6 +155,18 @@
               >
                 {{ item?.adaKronisR }}
               </div>
+              <div
+                v-if="item?.flag==='5'"
+                class="row  text-weight-bold f-10"
+              >
+                Diolak karena : {{ item?.alasan }}
+              </div>
+              <div
+                v-if="(parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep))"
+                class="row text-weight-bold f-10"
+              >
+                Tidak diberikan semua karena : {{ item?.alasan }}
+              </div>
             </td>
             <td>
               <div class="row text-weight-bold">
@@ -162,6 +174,9 @@
               </div>
               <div class="row">
                 {{ item?.noreg }} || {{ item?.norm }}
+              </div>
+              <div class="row text-italic f-10">
+                {{ item?.datapasien?.noka }}
               </div>
             </td>
             <td>
@@ -186,21 +201,7 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <q-btn
-                round
-                class="f-10 q-mr-sm"
-                color="dark"
-                text-color="white"
-                icon="icon-mat-print"
-                @click="toPrint(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Print resep
-                </q-tooltip>
-              </q-btn>
+              <!-- terima -->
               <q-btn
                 v-if="item?.flag==='1'"
                 round
@@ -219,8 +220,61 @@
                   Terima
                 </q-tooltip>
               </q-btn>
+              <!-- print id resep-->
               <q-btn
-                v-if="item?.flag==='2' && item?.doneresep && item?.doneracik"
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
+                color="green"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="printHeadResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print Id Resep
+                </q-tooltip>
+              </q-btn>
+              <!-- print  resep besar-->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
+                color="yellow"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="printIdResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print Resep Besar
+                </q-tooltip>
+              </q-btn>
+              <!-- print resep-->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 4"
+                round
+                class="f-10 q-mr-sm"
+                color="dark"
+                text-color="white"
+                icon="icon-mat-print"
+                @click="toPrint(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print resep
+                </q-tooltip>
+              </q-btn>
+
+              <!-- selesai -->
+              <q-btn
+                v-if="item?.flag==='2' && (item?.doneresep || item?.doneracik)"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
@@ -237,6 +291,35 @@
                   Selesai
                 </q-tooltip>
               </q-btn>
+
+              <!-- alasan -->
+              <q-btn
+                v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep)) || parseInt(item?.flag) === 5 ) "
+                round
+                class="f-10 q-mr-sm"
+                color="primary"
+                text-color="white"
+                icon="icon-mat-edit"
+                :disable="store.loadingTolak && item?.loading"
+                :loading="store.loadingTolak && item?.loading"
+                @click="alasan(item)"
+              >
+                <q-tooltip
+                  v-if="parseInt(item?.flag) === 3"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Alasan Resep tidak diberikan semua
+                </q-tooltip>
+                <q-tooltip
+                  v-if="parseInt(item?.flag) === 5"
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Alasan Resep Ditolak
+                </q-tooltip>
+              </q-btn>
+              <!-- buka -->
               <q-btn
                 square
                 class="f-10"
@@ -253,6 +336,7 @@
                   Buka Resep Pasien
                 </q-tooltip>
               </q-btn>
+              <!-- info -->
               <q-btn
                 square
                 class="f-10"
@@ -267,6 +351,25 @@
                   :offset="[10, 10]"
                 >
                   Pelayanan Informasi Obat
+                </q-tooltip>
+              </q-btn>
+              <!-- tolak -->
+              <q-btn
+                v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
+                round
+                class="f-10 q-mx-sm"
+                color="negative"
+                text-color="white"
+                icon="icon-mat-hand-front-left"
+                :disable="store.loadingTolak && item?.loading"
+                :loading="store.loadingTolak && item?.loading"
+                @click="tolakResep(item)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Selesai
                 </q-tooltip>
               </q-btn>
             </td>
@@ -295,6 +398,13 @@
       </template>
     </tbody>
   </table>
+  <commpIdResep
+    ref="idResp"
+    v-model="openIdPrint"
+    :item="itemPrintId"
+    :head="printHeadOnly"
+    @close="openIdPrint=false"
+  />
 </template>
 
 <script setup>
@@ -303,16 +413,17 @@ import { dateFullFormat } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { usePrintEresepStore } from 'src/stores/simrs/farmasi/eresep/printesep'
 import { useRouter } from 'vue-router'
+import { defineAsyncComponent, ref } from 'vue'
 
 const store = useEResepDepoFarmasiStore()
 const router = useRouter()
 
 // const indexId = ref(0)
-function status(val) {
+function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
-      balik = ' draft'
+      balik = ' draft (belum dikirimkan)'
       break
     case '1':
       balik = 'Belum diterima'
@@ -326,13 +437,16 @@ function status(val) {
     case '4':
       balik = 'Returned'
       break
+    case '5':
+      balik = 'Ditolak'
+      break
 
     default:
       break
   }
   return balik
 }
-function color(val) {
+function color (val) {
   let balik = 'grey'
   switch (val) {
     case '':
@@ -345,10 +459,13 @@ function color(val) {
       balik = 'green'
       break
     case '3':
-      balik = 'negative'
+      balik = 'dark'
       break
     case '4':
       balik = 'orange'
+      break
+    case '5':
+      balik = 'negative'
       break
 
     default:
@@ -357,25 +474,37 @@ function color(val) {
   return balik
 }
 
-function buka(val) {
+function buka (val) {
   store.setOpen()
   store.setResep(val)
   // console.log('buka', val)
   // if (val?.expand === undefined) val.expand = true
   // else val.expand = !val.expand
 }
-function info(val) {
+function info (val) {
   store.openInfo()
   store.setInfo(val)
+}
+function alasan (val) {
+  store.isAlasan = true
+  if (val.flag === '5')store.isTolak = true
+  store.toAlasan = val
+  console.log(val)
+}
+function tolakResep (val) {
+  store.isAlasan = true
+  store.isTolak = true
+  store.toAlasan = val
+  // store.tolakResep(val)
 }
 // function send(id) {
 //   indexId.value = id
 //   store.sendToSatset(id)
 // }
 const print = usePrintEresepStore()
-function toPrint(row) {
+function toPrint (row) {
   print.setResep(row)
-  console.log('row', row)
+  // console.log('row', row)
   const noresep = row?.noresep
   const routeData = router.resolve({
     path: '/print/eresep',
@@ -385,6 +514,36 @@ function toPrint(row) {
   })
   window.open(routeData.href, '_blank')
 }
+const commpIdResep = defineAsyncComponent(() => import('./PrintIdResep.vue'))
+const itemPrintId = ref(null)
+const idResp = ref(null)
+const openIdPrint = ref(false)
+const printHeadOnly = ref(false)
+
+function printIdResep (val) {
+  console.log(val)
+  print.setResep(val)
+  printHeadOnly.value = false
+  itemPrintId.value = print.resep
+  openIdPrint.value = true
+  setTimeout(() => {
+    idResp.value.printPage()
+  }, 200)
+}
+function printHeadResep (val) {
+  console.log(val)
+  print.setResep(val)
+  printHeadOnly.value = true
+  itemPrintId.value = print.resep
+  openIdPrint.value = true
+  setTimeout(() => {
+    idResp.value.printPage()
+  }, 200)
+}
+// function closePrintId () {
+//   console.log('print id close')
+//   openIdPrint.value = false
+// }
 </script>
 
 <style lang="scss" scoped>

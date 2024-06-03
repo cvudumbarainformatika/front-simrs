@@ -8,11 +8,14 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     items: [],
     params: {
       q: '',
-      bulan: '01',
+      bulan: '05',
       tahun: 2024,
       per_page: 50,
       page: 1,
       koderuangan: null
+      // koderuangan: 'Gd-05010100' // ini gudang
+      // koderuangan: 'Gd-05010101' // ini depo rajal
+      // koderuangan: 'R-0301009' // ini poli dalam
     },
     loading: false,
     dialogRinci: false,
@@ -20,9 +23,6 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
   }),
   actions: {
     async getData () {
-      const app = useAplikasiStore()
-      const user = app?.user
-      this.params.koderuangan = user?.kdruangansim
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('v1/simrs/farmasinew/kartustok/listobat', params)
@@ -32,10 +32,20 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.items = resp.data.data
         // console.log('kjkjsdfs', this.items)
         console.log('kjkjsdfs', resp)
+        this.loading = false
       }
       else {
         this.loading = false
       }
+    },
+
+    getInitialData () {
+      const app = useAplikasiStore()
+      const user = app?.user
+      return new Promise((resolve, reject) => {
+        this.params.koderuangan = user?.kdruangansim
+        resolve(user)
+      })
     },
     setTahun (val) {
       this.params.tahun = val

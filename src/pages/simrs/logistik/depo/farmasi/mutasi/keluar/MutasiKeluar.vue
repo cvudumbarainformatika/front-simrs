@@ -243,19 +243,19 @@
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : '' }}
                   </div>
                 </div>
 
@@ -310,7 +310,6 @@
                     class="col-12"
                   >
                     <app-input
-                      ref="refInputVerif"
                       v-model="rin.jumlah_minta"
                       label="Jumlah Didistribusikan"
                       outlined
@@ -349,7 +348,6 @@
                   >
                     <!-- v-model="rin.jumlah_minta" -->
                     <app-input
-                      ref="refInputVerif"
                       v-model="rin.distribusi"
                       label="Jumlah Didistribusikan"
                       outlined
@@ -587,7 +585,7 @@ import { ref, onMounted, watch } from 'vue'
 const store = useMutasiKeluarAntarDepoStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -611,11 +609,12 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }
-function mutasi(row, rin) {
+function mutasi (row, rin) {
   console.log('row', row)
   console.log('rin', rin)
 }
@@ -655,8 +654,12 @@ function distribusikan (val) {
 // }
 const refInputVerif = ref(null)
 function kirim (val, i, row) {
-  console.log('ref', refInputVerif.value, i)
-  const valid = refInputVerif.value[i].$refs.refInput.validate()
+  // console.log('ref', refInputVerif.value, i)
+  // console.log('val', val, i, row)
+  const index = row?.permintaanrinci?.findIndex(rw => rw?.id === val?.id)
+  const indexnya = index >= 0 ? index : i
+  console.log('index', index, i, 'indexnya', indexnya)
+  const valid = refInputVerif.value[indexnya].$refs.refInput.validate()
   console.log('kirim', val)
   // console.log('kirim row', row)
   if (valid) {
@@ -701,12 +704,13 @@ function setJumlah (evt, val) {
   if (totalStok > max) {
     notifErrVue('Jumlah Stok Depo tidak boleh melebihi jumlah stok maksimal')
     val.jumlah_minta = 0
-  } else {
+  }
+  else {
     val.jumlah_minta = beli
   }
   console.log('beli', beli, evt, max, stok, totalStok)
 }
-function sudah(evt, val) {
+function sudah (evt, val) {
   const anu = val.jumlah_minta
   val.jumlah_minta = anu
 }

@@ -8,7 +8,7 @@
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
       <div class="row justify-between items-center">
-        <div v-if="depo==='rjl'">
+        <div v-if="depo==='rjl'" class="q-px-xs">
           <div
             v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
             class="row q-my-xs items-center"
@@ -96,7 +96,7 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <q-select
+                      <!-- <q-select
                         ref="refObat"
                         v-model="store.namaObat"
                         use-input
@@ -125,27 +125,34 @@
                           <q-icon name="icon-mat-search" />
                         </template>
                         <template #option="scope">
-                          <q-item v-bind="scope.itemProps">
+                          <q-item v-bind="scope.itemProps" class="row items-end">
                             <div
                               v-if="scope.opt.namaobat"
+                              :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
                             >
                               {{ scope.opt.namaobat }}
                             </div>
                             <div
                               v-if="scope.opt.kandungan"
-                              class="q-ml-xs q-mr-xs text-deep-orange"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
                             >
                               ({{ scope.opt.kandungan }})
                             </div>
                             <div
-                              v-if="scope.opt.alokasi"
-                              class="q-ml-xs text-weight-bold tetx-green"
+                              v-if="scope.opt.alokasi >0"
+                              class="q-ml-xs text-weight-bold text-green"
                             >
-                              {{ scope.opt.alokasi }}
+                              {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
+                            </div>
+                            <div
+                              v-if="scope.opt.alokasi <=0"
+                              class="q-ml-xs text-weight-bold text-negative f-14"
+                            >
+                              {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
                             </div>
                             <div
                               v-if="scope.opt.satuankecil"
-                              class="q-ml-xs text-primary"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-primary'"
                             >
                               {{ scope.opt.satuankecil }}
                             </div>
@@ -158,7 +165,8 @@
                             </q-item-section>
                           </q-item>
                         </template>
-                      </q-select>
+                      </q-select> -->
+                      <nyobak-select v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
                       <q-input
@@ -202,7 +210,7 @@
                       <q-input
                         ref="refKonsumsi"
                         v-model="store.form.konsumsi"
-                        label="Disonsumsi selama (hari)"
+                        label="Dikonsumsi selama (hari)"
                         dense
                         lazy-rules
                         no-error-icon
@@ -732,6 +740,8 @@ import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
 
+const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
+
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
@@ -739,7 +749,7 @@ const props = defineProps({
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
 
-const refObat = ref(null)
+// const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
@@ -852,48 +862,50 @@ function openPersiapanOperasi () {
   // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
-function myDebounce (func, timeout = 800) {
-  let timer
-  return (...arg) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
-  }
-}
-const inputObat = myDebounce((val) => {
-  // console.log('input obat', val, typeof val)
-  if ((typeof val) !== 'string') val = ''
-  if (val !== '') store.cariObat(val)
-  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-})
+// function myDebounce (func, timeout = 500) {
+//   let timer
+//   return (...arg) => {
+//     clearTimeout(timer)
+//     timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+//   }
+// }
+// const inputObat = myDebounce((val) => {
+//   refObat.value.showPopup()
+//   // console.log('input obat', val, typeof val)
+//   if ((typeof val) !== 'string') val = ''
+//   if (val !== '') store.cariObat(val)
+//   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+// })
 // function inputObat(val) {
 //   if (val !== '') store.cariObat(val)
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
-function obatSelected (val) {
-  console.log('select obat', val)
-  if (val?.alokasi <= 0) {
-    store.namaObat = null
-    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
-  }
-  // console.log('obat selected', val)
-  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kdobat ?? '-')
-  store.setForm('kandungan', val?.kandungan ?? '-')
-  store.setForm('fornas', val?.fornas ?? '-')
-  store.setForm('forkit', val?.forkit ?? '-')
-  store.setForm('generik', val?.generik ?? '-')
-  store.setForm('kode108', val?.kode108 ?? '-')
-  store.setForm('uraian108', val?.uraian108 ?? '-')
-  store.setForm('kode50', val?.kode50 ?? '-')
-  store.setForm('uraian50', val?.uraian50 ?? '-')
-  store.setForm('stokalokasi', val?.alokasi ?? '-')
-  store.setForm('kodedepo', store.dpPar)
-}
+// function obatSelected (val) {
+//   console.log('select obat', val)
+//   if (val?.alokasi <= 0) {
+//     store.namaObat = null
+//     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+//   }
+//   refObat.value.validate()
+//   // console.log('obat selected', val)
+//   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+//   store.setForm('kodeobat', val?.kdobat ?? '-')
+//   store.setForm('kandungan', val?.kandungan ?? '-')
+//   store.setForm('fornas', val?.fornas ?? '-')
+//   store.setForm('forkit', val?.forkit ?? '-')
+//   store.setForm('generik', val?.generik ?? '-')
+//   store.setForm('kode108', val?.kode108 ?? '-')
+//   store.setForm('uraian108', val?.uraian108 ?? '-')
+//   store.setForm('kode50', val?.kode50 ?? '-')
+//   store.setForm('uraian50', val?.uraian50 ?? '-')
+//   store.setForm('stokalokasi', val?.alokasi ?? '-')
+//   store.setForm('kodedepo', store.dpPar)
+// }
 
-function obatEnter () {
-  refQty.value.focus()
-  refQty.value.select()
-}
+// function obatEnter () {
+//   refQty.value.focus()
+//   refQty.value.select()
+// }
 // signa
 const signa = ref('')
 const refJmlHarSig = ref(null)
@@ -908,6 +920,7 @@ function signaSelected (val) {
     const kons = store.form.jumlah_diminta / parseFloat(val?.jumlah)
     store.setForm('konsumsi', kons)
   }
+  refSigna.value.validate()
   // }
 }
 function signaCreateValue (val, done) {
@@ -994,9 +1007,9 @@ function qtyEnter () {
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
-function obatValid (val) {
-  return (val !== null && val !== '') || ''
-}
+// function obatValid (val) {
+//   return (val !== null && val !== '') || ''
+// }
 function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
@@ -1018,7 +1031,7 @@ function validate () {
     }
   }
 
-  if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
+  if (refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
 function ketEnter () {
@@ -1047,7 +1060,8 @@ function simpanObat () {
     const form = store.form
     store.simpanObat(form)?.then(() => {
       signa.value = null
-      refObat.value.focus()
+      // refObat.value.focus()
+      // refObat.value.showPopup()
       // refObat.value.showPopup()
     })
   }
@@ -1058,7 +1072,8 @@ onMounted(() => {
   // refObat.value.showPopup()
   store.getSigna()
   store.cariObat()
-  refObat.value.focus()
+  // refObat.value.focus()
+  // refObat.value.showPopup()
 })
 watchEffect(() => {
   store.pasien = props?.pasien
@@ -1068,3 +1083,8 @@ watchEffect(() => {
 })
 
 </script>
+<style scoped>
+.line-through{
+  text-decoration: line-through
+}
+</style>

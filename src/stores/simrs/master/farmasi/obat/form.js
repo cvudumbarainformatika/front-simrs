@@ -10,7 +10,8 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       kd_obat: 'sdadasdasdasd',
       gudang: '',
       jenis_perbekalan: null,
-      kelasterapis: []
+      kelasterapis: [],
+      indikasis: []
     },
     namaObat: {
       nama: null,
@@ -19,7 +20,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       volumeSediaan: null,
       merk: null
     },
-    temp: { kelas_terapi: '' },
+    temp: { kelas_terapi: '', indikasi: '' },
     gedungs: [],
     loading: false,
     loadingJenisPerbekalan: false,
@@ -35,6 +36,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     loadingSatuanB: false,
     loadingSatuanK: false,
     loadingMerk: false,
+    loadingIndikasi: false,
 
     optionNapzas: [
       { label: 'YA', value: '1' },
@@ -95,7 +97,7 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     // local related actions
     resetFORM () {
       console.log('reset form')
-      this.form = { kelasterapis: [] }
+      this.form = { kelasterapis: [], indikasis: [] }
       this.namaObat = {
         nama: null,
         bentukSediaan: null,
@@ -118,6 +120,14 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
     },
     pushKelasTerapi (val) {
       this.form.kelasterapis.push({ kelasterapi: val })
+    },
+    removeIndikasi (i) {
+      const ter = this.form.indikasis[i]
+      if (this.edited && Object.keys(ter).length) {
+        // console.log('ter ', ter)
+        this.hapusIndikasi(ter.id)
+      }
+      this.form.indikasis.splice(i, 1)
     },
     removeKelasTerapi (i) {
       const ter = this.form.kelasterapis[i]
@@ -167,6 +177,16 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       }
       else {
         this.form.kelasterapis = []
+      }
+      if (val.indikasi.length) {
+        this.form.indikasis = []
+        console.log('indikasi ', val.indikasi)
+        val.indikasi.forEach(ter => {
+          this.form.indikasis.push(ter)
+        })
+      }
+      else {
+        this.form.indikasis = []
       }
       // nama: null,
       //   bentukSediaan: bentuk_sediaan,
@@ -590,6 +610,18 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
           notifSuccess(resp)
           this.loadingKelasTerapi = false
         }).catch(() => { this.loadingKelasTerapi = false })
+    },
+    async hapusIndikasi (val) {
+      console.log('hapus maping', val)
+      this.loadingIndikasi = true
+      const form = { id: val }
+      await api.post('v1/simrs/farmasi/master/hapus-maping-indikasi', form)
+        .then(resp => {
+          const table = useMasterObatTable()
+          table.getDataTable()
+          notifSuccess(resp)
+          this.loadingIndikasi = false
+        }).catch(() => { this.loadingIndikasi = false })
     }
 
   }

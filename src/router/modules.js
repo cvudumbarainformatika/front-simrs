@@ -20,10 +20,11 @@ import igd from './igd'
 import ranap from './ranap'
 import satset from './satset'
 import kamaroperasi from './kamaroperasi'
+import rehabmedik from './rehabmedik'
 
 export {
   pegawai, sigarang, antrian, laborat, laporan, settings,
   masters, pendaftaran, percobaan, farmasi, poli, monitoring,
   kasir, dokumen, gudang, ptk, depo, ruangan, igd, ranap, satset,
-  kamaroperasi
+  kamaroperasi, rehabmedik
 }

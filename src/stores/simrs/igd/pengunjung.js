@@ -32,23 +32,23 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
     pageLayanan: false
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    goToPage(val) {
+    goToPage (val) {
       this.params.page = val
       this.getData()
     },
-    search(val) {
+    search (val) {
       this.params.q = val
       this.params.page = 1
       this.getData()
     },
-    refresh(val) {
+    refresh (val) {
       this.params.page = 1
       this.getData()
     },
-    async getData() {
+    async getData () {
       this.loading = true
       const params = { params: this.params }
       await api.get('v1/simrs/pendaftaran/igd/kunjunganpasienigd', params)
@@ -61,7 +61,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         })
         .catch(() => { this.loading = false })
     },
-    async gantiDpjp(form, pasien) {
+    async gantiDpjp (form, pasien) {
       // console.log(form)
       this.loadingSaveGantiDpjp = true
       try {
@@ -79,12 +79,13 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           this.loadingSaveGantiDpjp = false
         }
         this.loadingSaveGantiDpjp = false
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingSaveGantiDpjp = false
       }
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       // console.log('wew', val)
       this.params.page = 1
       const { to, from, status } = val
@@ -94,24 +95,24 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
       // console.log('periodik', to)
       this.getData()
     },
-    setDate(val) {
+    setDate (val) {
       this.params.tgl = val
     },
-    setQ(payload) {
+    setQ (payload) {
       this.params.page = 1
       this.params.q = payload
       this.getLists()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       console.log('sasa', payload)
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
     },
-    setFilters() {
+    setFilters () {
       this.filters = !this.filters
     },
-    async setTerima(pasien) {
+    async setTerima (pasien) {
       this.loadingTerima = true
       const form = { noreg: pasien?.noreg }
       this.noreg = pasien?.noreg
@@ -127,14 +128,15 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           this.loadingTerima = false
           this.noreg = null
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingTerima = false
         this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },
-    async bukaLayanan(pasien) {
+    async bukaLayanan (pasien) {
       // this.loadingCall = false
       this.loadingTerima = true
       // console.log('load1', this.loadingTerima)
@@ -159,7 +161,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
             findPasien[0].fisio = resp?.data?.fisio
             // findPasien[0].gambars = resp?.data?.gambars
             findPasien[0].laborats = resp?.data?.laborats
-            // findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
+            findPasien[0].newapotekrajal = resp?.data?.newapotekrajal
             findPasien[0].ok = resp?.data?.ok
             // findPasien[0].pemeriksaanfisik = resp?.data?.pemeriksaanfisik
             findPasien[0].penunjanglain = resp?.data?.penunjanglain
@@ -181,17 +183,18 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
           // console.log('load2', this.loadingTerima)
           this.noreg = null
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log(error)
         this.loadingTerima = false
         this.noreg = null
         this.notifikasiError('Maaf.. Harap ulangi, Ada Kesalahan ')
       }
     },
-    togglePageTindakan() {
+    togglePageTindakan () {
       this.pageLayanan = !this.pageLayanan
     },
-    injectDataPasien(pasien, val, kode, arr) {
+    injectDataPasien (pasien, val, kode, arr) {
       const findPasien = this.items.filter(x => x === pasien)
       // console.log('inject pasien', findPasien)
       if (findPasien.length) {
@@ -203,22 +206,25 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
 
         if (target) {
           Object.assign(target, val)
-        } else {
+        }
+        else {
           if (kode === 'diagnosa') {
             data[kode]?.push(val)
-          } else if (kode === 'dokumenluar') {
+          }
+          else if (kode === 'dokumenluar') {
             const trg = data[kode]
             if (trg) {
               data[kode] = []
               data[kode] = val
             }
-          } else {
+          }
+          else {
             data[kode]?.splice(0, 0, val)
           }
         }
       }
     },
-    hapusDataAnamnesis(pasien, id) {
+    hapusDataAnamnesis (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].anamnesis
@@ -226,7 +232,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    async getNota(pasien) {
+    async getNota (pasien) {
       const params = {
         params: {
           noreg: pasien?.noreg
@@ -242,7 +248,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         this.notaTindakan = this.notaTindakans[0]
       }
     },
-    hapusDataTindakan(pasien, id) {
+    hapusDataTindakan (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0].tindakan
@@ -250,13 +256,13 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataLaboratBaru(pasien, id, databaru) {
+    hapusDataLaboratBaru (pasien, id, databaru) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         findPasien[0].laborats = databaru
       }
     },
-    hapusDataRadiologi(pasien, id) {
+    hapusDataRadiologi (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.radiologi
@@ -264,7 +270,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataOk(pasien, id) {
+    hapusDataOk (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.ok
@@ -272,7 +278,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataFisio(pasien, id) {
+    hapusDataFisio (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.fisio
@@ -280,7 +286,7 @@ export const usePengunjungIgdStore = defineStore('pengunjung-igd', {
         if (pos >= 0) { data.splice(pos, 1) }
       }
     },
-    hapusDataPenunjangLain(pasien, id) {
+    hapusDataPenunjangLain (pasien, id) {
       const findPasien = this.items.filter(x => x === pasien)
       if (findPasien.length) {
         const data = findPasien[0]?.penunjanglain

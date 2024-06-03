@@ -10,7 +10,7 @@ import { usePublicChannel } from 'src/forapp/publicchannel'
 
 import customIcons from 'src/custom-icons/custom-icons'
 // import { useAplikasiStore } from './stores/app/aplikasi'
-// import { anjunganChannel, channel } from 'src/modules/sockets'
+// import { qchannel } from 'src/modules/newsockets'
 // import { channel } from 'src/modules/sockets'
 // import { notifChannel } from 'src/modules/localsocket'
 // import { useAplikasiStore } from './stores/app/aplikasi'
@@ -30,6 +30,7 @@ document.body.setAttribute(['data-theme'], 'custom')
 // const auth = useAplikasiStore()
 // onMounted(() => {
 publicChannel()
+
 // notifChannel.subscribed(() => {
 //   console.log('subscribed notif channel!!!')
 // })
@@ -65,4 +66,5 @@ publicChannel()
 // PRESENCE CHANNEL
 
 // anu()
+
 </script>

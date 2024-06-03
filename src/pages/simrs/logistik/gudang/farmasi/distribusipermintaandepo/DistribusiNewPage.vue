@@ -317,7 +317,7 @@
                       debounce="100"
                       readonly
                       :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
+                        // val => parseFloat(val) >= 0 || 'Harus lebih lebih besar dari 0',
                         val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
                       ]"
                       @keyup.enter="kirim(rin, i,row)"
@@ -531,7 +531,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 const dialogPrint = ref(null)
 // const data = ref({})
 // const isOpen = ref(false)
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -542,11 +542,12 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }
-function mutasi(row, rin) {
+function mutasi (row, rin) {
   console.log('row', row)
   console.log('rin', rin)
 }
@@ -630,12 +631,13 @@ function setJumlah (evt, val) {
   if (totalStok > max) {
     notifErrVue('Jumlah Stok Depo tidak boleh melebihi jumlah stok maksimal')
     val.jumlah_minta = 0
-  } else {
+  }
+  else {
     val.jumlah_minta = beli
   }
   console.log('beli', beli, evt, max, stok, totalStok)
 }
-function sudah(evt, val) {
+function sudah (evt, val) {
   const anu = val.jumlah_minta
   val.jumlah_minta = anu
 }

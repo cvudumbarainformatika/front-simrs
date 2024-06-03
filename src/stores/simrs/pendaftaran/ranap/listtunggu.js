@@ -13,7 +13,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
     },
     params: {
       page: 1,
-      per_page: 50,
+      per_page: 20,
       q: '',
       status: 'Semua',
       to: dateDbFormat(new Date()),

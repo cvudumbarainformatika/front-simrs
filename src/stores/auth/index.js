@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
     userGetter: () => storage.getUser() !== null || storage.getUser() !== undefined
   },
   actions: {
-    loginQr(payload) {
+    loginQr (payload) {
       this.loading = true
       return new Promise((resolve, reject) => {
         api.post('/v1/login-qr', payload).then(resp => {
@@ -128,14 +128,16 @@ export const useAuthStore = defineStore('auth', {
           this.user = resp.data.result
           this.mapingMenu2(resp.data)
         })
-      } catch (error) {
+      }
+      catch (error) {
         removeToken()
       }
     },
-    async getUserNew() {
+    async getUserNew () {
       this.loading = true
 
       await api.get('/v1/authuser').then(resp => {
+        console.log('resp', resp)
         if (resp.status === 200) {
           storage.setUser(resp?.data?.user)
             .then(hdd => {
@@ -148,7 +150,8 @@ export const useAuthStore = defineStore('auth', {
                 apps.setItems(aplikasi)
                 apps.setAksesApps(akses)
                 setTimeout(() => { this.loading = false }, 200)
-              } else {
+              }
+              else {
                 this.loading = false
               }
             })

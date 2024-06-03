@@ -13,6 +13,7 @@
     >
       <q-scroll-area style="height:calc( 100% - 40px)">
         <ListObat />
+        <div style="margin-bottom: 100px;" />
       </q-scroll-area>
       <div
         v-if="store.meta"
@@ -29,6 +30,7 @@
       v-model="store.dialogRinci"
       :item="store.item"
       :params="store.params"
+      :key="store.item"
     />
   </q-page>
 </template>
@@ -40,8 +42,41 @@ import BottomComp from './comp/BottomCompPage.vue'
 import KartuStokRinci from './comp/KartuStokRinci.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useKartuStokFarmasiStore } from '../../../../../../stores/simrs/farmasi/katustok'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { onMounted, watch } from 'vue'
 
 const style = useStyledStore()
 const store = useKartuStokFarmasiStore()
+const app = useAplikasiStore()
+
+onMounted(() => {
+  store.getInitialData()
+    .then(() => {
+      store.getData()
+    })
+})
+
+// watchEffect(() => {
+//   console.log('app', app?.user?.kdruangansim)
+// })
+
+watch(() => app?.user?.kdruangansim, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    store.getInitialData()
+      .then(() => {
+        store.getData()
+      })
+  }
+}, { deep: true })
+watch(() => store?.params.bulan, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    store.getData()
+  }
+}, { deep: true })
+watch(() => store?.params.tahun, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    store.getData()
+  }
+}, { deep: true })
 
 </script>

@@ -78,6 +78,11 @@ const depo = {
                 import('pages/simrs/logistik/depo/farmasi/retur/IndexPage.vue')
             }
           ]
+        },
+
+        {
+          path: '/depo/farmasi/kartustok',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/kartustok/IndexPage.vue')
         }
       ]
     },

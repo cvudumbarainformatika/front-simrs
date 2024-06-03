@@ -153,7 +153,7 @@
 import { notifErrVue } from 'src/modules/utils'
 import { useMasterFarmasiMinMaxObatStore } from 'src/stores/simrs/master/farmasi/minmax/minmax.js'
 const store = useMasterFarmasiMinMaxObatStore()
-function onSubmit(val) {
+function onSubmit (val) {
   console.log('on Submit', val)
   if (val.max > 0 && val.min > 0) {
     store.simpanData(val) // .then(() => {
@@ -161,13 +161,13 @@ function onSubmit(val) {
   //   store.setOpen()
   // })
 }
-function setMin(evt, val) {
+function setMin (evt, val) {
   const min = isNaN(parseInt(evt)) ? 0 : parseInt(evt)
   val.min = min
   console.log('evt', evt)
   console.log('val', val)
 }
-function setMax(evt, val) {
+function setMax (evt, val) {
   const max = isNaN(parseInt(evt)) ? 0 : parseInt(evt)
   val.max = max
   console.log('evt', evt)
@@ -188,7 +188,7 @@ function setMax(evt, val) {
 //   store.filterObat = val
 //   store.getDataObat()
 // }
-function obatInput(val) {
+function obatInput (val) {
   store.filterObat = val
   const needle = val.toLowerCase()
   const splits = ['namaobat', 'kd_obat']
@@ -204,21 +204,22 @@ function obatInput(val) {
   store.filteredObats = filteredData
   if (!filteredData.length && store.form.kd_ruang) {
     store.getDataObatByRuang()
-  } else {
+  }
+  else {
     if (!store.form.kd_ruang) {
       notifErrVue('ruangan belum dipilih')
     }
   }
   console.log('obat input', val, store.obats, store.filteredObats)
 }
-function clearRuang() {
+function clearRuang () {
   store.setForm('koderuang', '')
 }
-function ruangSet(val) {
+function ruangSet (val) {
   store.filterRuang = val
   store.getDataRuang()
 }
-function ruangInput(val) {
+function ruangInput (val) {
   store.filterRuang = val
   if (val.length % 2 === 0) {
     store.getDataRuang()

@@ -50,7 +50,6 @@
           dense
           outlined
           dark
-          multiple
           color="white"
           :options="flagOptions"
           label="Status"
@@ -184,11 +183,11 @@ const props = defineProps({
   adaRefresh: { type: Boolean, default: false },
   useFull: { type: Boolean, default: false },
   perPage: { type: Number, default: 5 },
-  flag: { type: Array, default: () => ['1'] },
+  flag: { type: String, default: '1' },
   tipe: { type: String, default: '' }
 })
 
-function enterSearch(evt) {
+function enterSearch (evt) {
   const val = evt?.target?.value
   emits('cari', val)
 }
@@ -211,10 +210,13 @@ const search = computed({
 })
 // flag
 const flagOptions = ref([
+  { label: 'Belum Dikirimkan', value: '' },
   { label: 'Belum Diterima', value: '1' },
   { label: 'Siap Dikerjakan', value: '2' },
   { label: 'Selesai', value: '3' },
-  { label: 'Returned', value: '4' }
+  { label: 'Returned', value: '4' },
+  { label: 'Ditolak', value: '5' },
+  { label: 'Semua', value: 'semua' }
 ])
 const toFlag = computed({
   get () {
@@ -253,26 +255,26 @@ const periods = ref([
   // { value: 6, label: 'Tahun Ini' }
 ])
 
-function hariIni() {
+function hariIni () {
   const cDate = new Date()
   to.value = dateDbFormat(cDate)
   from.value = dateDbFormat(cDate)
 }
-function mingguIni() {
+function mingguIni () {
   const curr = new Date()
   const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
   const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
   from.value = dateDbFormat(firstday)
   to.value = dateDbFormat(lastday)
 }
-function bulanIni() {
+function bulanIni () {
   const curr = new Date()
   const firstday = date.formatDate(curr, 'YYYY-MM-01')
   const lastday = date.formatDate(curr, 'YYYY-MM-31')
   from.value = firstday
   to.value = lastday
 }
-function bulanLalu() {
+function bulanLalu () {
   const newDate = new Date()
   const curr = date.subtractFromDate(newDate, { months: 1 })
   const firstday = date.formatDate(curr, 'YYYY-MM-01')
@@ -280,7 +282,7 @@ function bulanLalu() {
   from.value = firstday
   to.value = lastday
 }
-function duaBulanLalu() {
+function duaBulanLalu () {
   const newDate = new Date()
   const curr = date.subtractFromDate(newDate, { months: 2 })
   const firstday = date.formatDate(curr, 'YYYY-MM-01')
@@ -289,16 +291,20 @@ function duaBulanLalu() {
   to.value = lastday
 }
 
-function gantiPeriode(val) {
+function gantiPeriode (val) {
   if (val === 1) {
     hariIni()
-  } else if (val === 2) {
+  }
+  else if (val === 2) {
     mingguIni()
-  } else if (val === 3) {
+  }
+  else if (val === 3) {
     bulanIni()
-  } else if (val === 4) {
+  }
+  else if (val === 4) {
     bulanLalu()
-  } else if (val === 5) {
+  }
+  else if (val === 5) {
     duaBulanLalu()
   }
 

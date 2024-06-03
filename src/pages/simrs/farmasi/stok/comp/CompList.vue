@@ -132,7 +132,7 @@ const table = UseFarmasiStokTable()
 const store = UseFarmasiStokStore()
 const apps = useAplikasiStore()
 
-function cariGudang(val) {
+function cariGudang (val) {
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)
     if (apps?.user?.kdruangansim !== '') {
@@ -141,8 +141,10 @@ function cariGudang(val) {
     }
     if (gudang.length) {
       return gudang[0]?.nama
-    } else return 'Gudang / Depo tidak ditemukan'
-  } else {
+    }
+    else return 'Gudang / Depo tidak ditemukan'
+  }
+  else {
     return 'menunggu data Gudang / Depo'
   }
 }
