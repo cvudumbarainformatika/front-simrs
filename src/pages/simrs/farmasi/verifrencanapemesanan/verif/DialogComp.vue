@@ -310,9 +310,9 @@ const rencana = useRencanaPemesananObatStore()
 const DetailMinMax = defineAsyncComponent(() => import('src/pages/simrs/logistik/gudang/farmasi/rencanapemesanan/rencana/comp/DetailMinMax.vue'))
 
 const tinggiDetailPas = ref(60)
-const h = ref(0)
+const h = ref(25 + 16)
 const refVerif = ref(null)
-function setNumber(evt, det) {
+function setNumber (evt, det) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -322,13 +322,15 @@ function setNumber(evt, det) {
     else det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)
 
     notifErrVue('Tidak Boleh Lebih dari jumlah Stok Maksimal Rumah Sakit')
-  } else if (nilai > parseFloat(det.jumlahdirencanakan)) {
+  }
+  else if (nilai > parseFloat(det.jumlahdirencanakan)) {
     det.jumlah_diverif = parseFloat(det.jumlahdirencanakan)
     notifErrVue('Tidak Boleh Lebih dari jumlah direncanakan')
-  } else det.jumlah_diverif = nilai
+  }
+  else det.jumlah_diverif = nilai
 }
 
-function simpanObat(rinc) {
+function simpanObat (rinc) {
   if (parseFloat(rinc?.jumlah_diverif) <= 0) {
     Dialog.create({
       title: 'Konfirmasi',
@@ -348,11 +350,12 @@ function simpanObat(rinc) {
     }).onOk(() => {
       store.simpanObat(rinc)
     })
-  } else {
+  }
+  else {
     store.simpanObat(rinc)
   }
 }
-function selesaiVerif(rinc) {
+function selesaiVerif (rinc) {
   console.log('rinc', refVerif.value)
   let valid = true
   refVerif.value?.forEach(ver => {
@@ -361,7 +364,7 @@ function selesaiVerif(rinc) {
   })
   if (valid) store.selesaiVerif(rinc)
 }
-function icon(val) {
+function icon (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
