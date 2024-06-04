@@ -1,6 +1,6 @@
 <template>
   <q-dialog maximized>
-    <div class="bg-white ">
+    <div class="bg-white " style="height: auto">
       <div class="column garis-luar q-pb-sm">
         <div class="col text-center">
           <div class="row no-wrap justify-center content-center q-pt-xs">

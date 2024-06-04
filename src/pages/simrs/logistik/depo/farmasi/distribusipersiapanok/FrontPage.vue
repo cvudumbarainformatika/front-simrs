@@ -99,7 +99,7 @@
                 dense
                 type="checkbox"
                 inline
-                @update:model-value="store.getPermintaan()"
+                @update:model-value="gantiFlag"
               />
             </div>
           </div>
@@ -678,7 +678,10 @@ const tambah = useTambahObatDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
 
 const addSurat = defineAsyncComponent(() => import('./comp/DialogAddObat.vue'))
-
+function gantiFlag () {
+  store.setParams('page', 1)
+  store.getPermintaan()
+}
 function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand

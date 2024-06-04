@@ -17,8 +17,13 @@
       >
         <q-item class="bg-dark text-white">
           <q-item-section>
-            <div class="text-weight-bold">
-              Nomor Pemesanan
+            <div class="row">
+              <div class="col-auto text-weight-bold q-mr-md">
+                No
+              </div>
+              <div class="col-auto text-weight-bold">
+                Nomor Pemesanan
+              </div>
             </div>
           </q-item-section>
           <q-item-section>
@@ -45,8 +50,13 @@
           @click="store.pemesananSelected(item)"
         >
           <q-item-section>
-            <div>
-              {{ item?.nopemesanan }}
+            <div class="row">
+              <div class="col-auto q-mr-md">
+                {{ i+1 }}
+              </div>
+              <div class="col-auto ">
+                {{ item?.nopemesanan }}
+              </div>
             </div>
           </q-item-section>
           <q-item-section>

@@ -488,7 +488,7 @@
             size="sm"
             round
             :disable="meta.current_page===1"
-            @click="emits('goTo',1)"
+            @click="emits('goto',1)"
           />
           <q-btn
             flat
@@ -497,14 +497,14 @@
             size="sm"
             round
             :disable="meta.current_page===1"
-            @click="emits('goTo',meta.current_page-1)"
+            @click="emits('goto',meta.current_page-1)"
           />
           <div class="q-px-sm">
             <div
               v-if="meta.total !==0"
               classs="row items-center"
             >
-              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }} </span> data ke -  {{ meta.from }} sampai data ke -  <span class="text-weight-bold">{{ meta.to }}</span> </span> |
+              | <span class="q-px-sm">Halaman <span class="f-18 text-orange text-weight-bold">{{ meta.current_page }}  </span> data ke -  {{ meta.from }} sampai data ke -  <span class="text-weight-bold">{{ meta.to }}</span> </span> |
             </div>
             <div v-else>
               Tidak Ada Data
@@ -517,7 +517,7 @@
             size="sm"
             round
             :disable="!meta.next_page_url"
-            @click="emits('goTo',meta.current_page+1)"
+            @click="emits('goto',meta.current_page+1)"
           />
           <!-- <q-btn
             flat

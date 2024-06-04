@@ -1,27 +1,29 @@
 <template>
-  <div class="bg-white full-height column">
-    <q-bar class="col-auto bg-teal text-white">
-      <div class="q-py-sm f-14 ">
-        List Nomor Permintaan Obat Persiapan Operasi
-      </div>
-      <q-space />
-      <div class="q-py-xs">
-        <q-select
-          v-model="store.nopermintaan"
-          outlined
-          standout="bg-yellow-3"
-          bg-color="white"
-          dense
-          :options="store.nopermintaans"
-          :display-value="`${store.nopermintaan === null || store.nopermintaan === '' || store.nopermintaan === 'BARU' ? 'BARU' : store.nopermintaan}`"
-          style="min-width: 200px;"
-          @update:model-value="store.setResep"
-        />
-      </div>
-    </q-bar>
+  <div class="bg-white full-height" style="width: 100%;">
+    <div class="col-grow bg-teal text-white q-pa-sm">
+      <q-bar class=" bg-teal text-white">
+        <div class="q-ma-sm f-14 ">
+          List Nomor Permintaan Obat Persiapan Operasi
+        </div>
+        <q-space />
+        <div class="q-my-sm">
+          <q-select
+            v-model="store.nopermintaan"
+            outlined
+            standout="bg-yellow-3"
+            bg-color="white"
+            dense
+            :options="store.nopermintaans"
+            :display-value="`${store.nopermintaan === null || store.nopermintaan === '' || store.nopermintaan === 'BARU' ? 'BARU' : store.nopermintaan}`"
+            style="min-width: 200px;"
+            @update:model-value="store.setResep"
+          />
+        </div>
+      </q-bar>
+    </div>
 
     <div
-      class=""
+      class="col-12"
     >
       <!-- {{ store.listSudah }} -->
       <div
@@ -40,40 +42,42 @@
       </div>
       <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
       <template v-if="store.listSudah?.rinci?.length">
-        <q-item
-          v-for="(item, i) in store.listSudah?.rinci"
-          :key="i"
-          class="q-pl-sm"
-          bordered
-        >
-          <!-- {{ item }} -->
-          <q-item-section style="width: 50%;">
-            <div class="row">
-              {{ item?.obat?.nama_obat }}
-            </div>
-            <div class="row text-italic f-10">
-              {{ item?.kd_obat }}
-            </div>
-          </q-item-section>
-          <q-item-section
-            side
-            style="width:50%"
+        <q-list class="full-height scroll">
+          <q-item
+            v-for="(item, i) in store.listSudah?.rinci"
+            :key="i"
+            class="q-pl-sm row"
+            bordered
           >
-            <div class="row items-center q-col-gutter-sm full-width">
-              <div
-                class="text-right col-5"
-              >
-                {{ item?.jumlah_minta }}
+            <!-- {{ item }} -->
+            <q-item-section style="width: 50%;">
+              <div class="row">
+                {{ item?.obat?.nama_obat }}
               </div>
+              <div class="row text-italic f-10">
+                {{ item?.kd_obat }}
+              </div>
+            </q-item-section>
+            <q-item-section
+              side
+              style="width:50%"
+            >
+              <div class="row items-center q-col-gutter-sm full-width">
+                <div
+                  class="text-right col-5"
+                >
+                  {{ item?.jumlah_minta }}
+                </div>
 
-              <div
-                class="col text-right"
-              >
-                <!-- {{ item?.keterangan }} -->
+                <div
+                  class="col text-right"
+                >
+                  <!-- {{ item?.keterangan }} -->
+                </div>
               </div>
-            </div>
-          </q-item-section>
-        </q-item>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </template>
       <!-- {{ store.listRacikan }} -->
     </div>

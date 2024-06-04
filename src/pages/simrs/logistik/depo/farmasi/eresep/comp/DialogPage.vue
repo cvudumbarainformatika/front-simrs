@@ -220,7 +220,7 @@
           color="dark"
           text-color="white"
           label="Etiket Pagi"
-          @click="openRanap('Pagi')"
+          @click="openRanap('Diminum Pagi')"
         >
           <q-tooltip
             class="primary"
@@ -238,7 +238,7 @@
           color="dark"
           text-color="white"
           label="Etiket Siang"
-          @click="openRanap('Siang')"
+          @click="openRanap('Diminum Siang')"
         >
           <q-tooltip
             class="primary"
@@ -256,7 +256,7 @@
           color="dark"
           text-color="white"
           label="Etiket Sore"
-          @click="openRanap('Sore')"
+          @click="openRanap('Diminum Sore')"
         >
           <q-tooltip
             class="primary"
@@ -274,7 +274,25 @@
           color="dark"
           text-color="white"
           label="Etiket Malam"
-          @click="openRanap('Malam')"
+          @click="openRanap('Diminum Malam')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Malam
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Serahkan Dokter"
+          @click="openRanap('Serahkan Dokter')"
         >
           <q-tooltip
             class="primary"
