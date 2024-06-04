@@ -19,7 +19,7 @@
             </q-avatar>
             <div class="column f-12">
               <div>
-                DPJP | {{ pasien?.dokterdpjp === null || pasien?.dokterdpjp==='' ? '----': pasien?.dokterdpjp }}
+                DPJP | {{ pasien?.dokter === null || pasien?.dokter==='' ? '----': pasien?.dokter }}
               </div>
             </div>
           </div>
@@ -199,13 +199,13 @@ const props = defineProps({
   }
 })
 
-function updateKodeDpjp(val) {
+function updateKodeDpjp (val) {
   // console.log(props?.pasien?.groups)
   kodedpjp.value = val?.kddpjp ?? ''
   kdpegsimrs.value = val?.kdpegsimrs
 }
 
-function gantiDpjp() {
+function gantiDpjp () {
   // console.log('ok')
   const form = {
     kodedpjp: kodedpjp.value ?? '',
@@ -216,21 +216,23 @@ function gantiDpjp() {
   emits('gantidpjp', form)
 }
 
-function getImage(kelamin, row) {
+function getImage (kelamin, row) {
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
-  } else {
+  }
+  else {
     return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
   }
 }
-function getImageDokter(kelamin, row) {
+function getImageDokter (kelamin, row) {
   if (row?.foto === null || row?.foto === '' || row?.foto === 'undefined' || row?.foto === undefined || row.kddpjp === null) {
     return kelamin === 'Perempuan'
       ? new URL('../../../../../assets/images/actress.svg', import.meta.url).href
       : new URL('../../../../../assets/images/user-avatar.svg', import.meta.url).href
-  } else {
+  }
+  else {
     return 'http://192.168.100.100/simpeg/foto/' + row.nip + '/' + row.foto
   }
 }

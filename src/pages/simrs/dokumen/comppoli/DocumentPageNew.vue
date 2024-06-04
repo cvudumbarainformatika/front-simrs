@@ -165,7 +165,7 @@ const documents = ref([
   }
 ])
 // eslint-disable-next-line no-unused-vars
-function getLabel(val) {
+function getLabel (val) {
   const anu = documents.value.filter(a => a.value === val)
   // console.log('anu ', anu)
   return anu.length ? anu[0].label : '-'
@@ -191,7 +191,7 @@ const cekPanel = () => {
 
   return arr >= 0 ? comp[arr].page : ''
 }
-function goTo(val) {
+function goTo (val) {
   console.log('got', val)
   doc.value = val.value
   open.value = true

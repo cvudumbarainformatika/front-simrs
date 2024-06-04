@@ -130,11 +130,11 @@ const laporan = {
       // name: 'laporan.rekap.datapasien',
       component: () => import('pages/siasik/bkupptk/IndexPage.vue')
     },
-    // {
-    //   path: '/laporan/lrasiasik',
-    //   // name: 'laporan.rekap.datapasien',
-    //   component: () => import('pages/siasik/laporanrealisasi/lra/IndexPage.vue')
-    // },
+    {
+      path: '/laporan/lrasiasik',
+      // name: 'laporan.rekap.datapasien',
+      component: () => import('pages/siasik/laporanrealisasi/lra/IndexPage.vue')
+    },
 
     {
       path: '/laporan/farmasi/stok',

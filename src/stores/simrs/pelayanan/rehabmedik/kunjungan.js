@@ -36,7 +36,7 @@ export const useKunjunganRehabmediStore = defineStore('kunjungan-rehabmedik-stor
         api.get('/v1/simrs/rehabmedik/kunjunganpasien', {
           params: this.params
         }).then(res => {
-          // console.log('res list tggu ranap', res)
+          console.log('res list tggu remed', res)
           if (res.status === 200) {
             const total = res.data?.total
             const obj = res.data?.data

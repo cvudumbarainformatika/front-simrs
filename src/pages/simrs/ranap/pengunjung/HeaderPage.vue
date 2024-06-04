@@ -104,7 +104,7 @@ import { usePengunjungRanapStore } from 'src/stores/simrs/ranap/pengunjung'
 import { onMounted } from 'vue'
 const store = usePengunjungRanapStore()
 
-function adaInput(val) {
+function adaInput (val) {
   console.log('ada input ', val)
   store.params.q = val
   if (!store.loading) store.getData()
