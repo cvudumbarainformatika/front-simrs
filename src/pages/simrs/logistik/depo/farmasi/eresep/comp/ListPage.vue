@@ -118,7 +118,7 @@
             </td>
             <td>
               <div class="row ">
-                {{ item?.noresep }}
+                {{ item?.noresep }} ({{ item?.sistembayar?.rs2?? '-' }})
               </div>
               <div class="row text-grey f-10">
                 <div>
