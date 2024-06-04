@@ -52,7 +52,7 @@
           {{ rinci?.mobat?.nama_obat??rinci?.namaracikan }}
         </div>
         <div class="col text-center text-weight-bold">
-          {{ rinci?.aturan }}
+          Sehari {{ rinci?.aturan }}
         </div>
         <div class="col text-center f-10">
           Sebelum / Saat / Sesudah Makan

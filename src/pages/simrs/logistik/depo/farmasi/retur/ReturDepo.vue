@@ -57,7 +57,6 @@
 </template>
 
 <script setup>
-import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
@@ -83,16 +82,17 @@ onMounted(() => {
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)
-  const depoRet = ['Gd-04010102']
-  const depos = apps.depos.filter(a => depoRet.includes(a.value))
-  const depo = depos.filter(a => a.value === obj)
-  console.log('depos', depos)
-  if (depo.length) store.getDataTable()
-  else {
-    notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap')
-    store.items = []
-    store.meta = {}
-  }
+  store.getDataTable()
+  // const depoRet = [apps?.user?.kdruangansim]
+  // const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  // const depo = depos.filter(a => a.value === obj)
+  // console.log('depos', depos)
+  // if (depo.length)
+  // else {
+  //   notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap')
+  //   store.items = []
+  //   store.meta = {}
+  // }
 })
 </script>
 
