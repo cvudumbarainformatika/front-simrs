@@ -22,9 +22,10 @@ export const useKunjunganRehabmediStore = defineStore('kunjungan-rehabmedik-stor
     },
     periods: ['Hari ini', 'Minggu ini', 'Bulan ini', 'Custom'],
     sorting: ['terbaru', 'terlama'],
-    statuses: ['Semua', 'Terlayani', 'Menunggu'],
+    statuses: ['Semua', 'Terlayani', 'Belum terlayani'],
     isViewList: false,
-    pasien: null
+    pasien: null,
+    bukaLayanan: false
   }),
   getters: {
     // doubleCount: (state) => state.counter * 2

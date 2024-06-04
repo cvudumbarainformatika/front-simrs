@@ -5,6 +5,7 @@
     :maximized="true"
     transition-show="slide-left"
     transition-hide="slide-right"
+    @hide="emits('tutup')"
   >
     <q-card
       square
@@ -22,12 +23,9 @@
         >
           <HeaderLayout
             :pasien="pasien"
-            :loading-save-dpjp="store.loadingSaveGantiDpjp"
             @toggle-left-drawer="()=> drawer = !drawer"
-            @gantidpjp="(val)=>store.gantiDpjp(val, pasien)"
           />
         </q-header>
-
         <!-- LEFT DRAWER ======================================================================================-->
         <q-drawer
           v-model="drawer"
@@ -56,12 +54,20 @@
               timeout="0"
             >
               <template #default>
+                <!-- <div
+                  v-if="pasien?.dokter==='' || pasien?.dokter === null"
+                  class="column full-height flex-center absolute-center z-top full-width"
+                  style="background-color: black; opacity: .9;"
+                >
+                  <div class="text-white">
+                    Maaf, DPJP Pasien Ini Belum Ada ... Harap Input DPJP Terlebih dahulu
+                  </div>
+                </div> -->
                 <component
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
-                  :loadingaja="loadingaja"
-                  depo="igd"
+                  depo="rjl"
                 />
               </template>
               <template #fallback>
@@ -76,81 +82,35 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef, watchEffect } from 'vue'
-import { usePengunjungIgdStore } from 'src/stores/simrs/igd/pengunjung'
-import { useInacbgIgd } from 'src/stores/simrs/igd/inacbg'
-const store = usePengunjungIgdStore()
+import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import HeaderLayout from './layoutcomp/HeaderLayout.vue'
+import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 
-const HeaderLayout = defineAsyncComponent(() => import('./layoutcomp/HeaderLayout.vue'))
-const LeftDrawer = defineAsyncComponent(() => import('./layoutcomp/LeftDrawer.vue'))
 const drawer = ref(false)
-
-const props = defineProps({
+defineProps({
   pasien: {
     type: Object,
     default: null
-  },
-  loadingaja: {
-    type: Boolean,
-    default: false
   }
 })
 
-// defineProps({
-//   pasien: {
-//     type: Object,
-//     default: null
-//   },
-//   loadingaja: {
-//     type: Boolean,
-//     default: false
-//   }
-// })
+const emits = defineEmits(['tutup'])
 
 const menus = ref([
-  {
-    name: 'AnamnesisPage',
-    label: 'Anamnesis',
-    icon: 'icon-mat-medical_information',
-    comp: shallowRef(defineAsyncComponent(() => import('../layanan/anamnesis/AnamnesisPage.vue')))
-  },
-  {
-    name: 'AssesmentPage',
-    label: 'Assesment',
-    icon: 'icon-mat-analytics',
-    comp: shallowRef(defineAsyncComponent(() => import('../layanan/assesment/AssesmentPage.vue')))
-  },
-  {
-    name: 'penunjang-page',
-    label: 'Penunjang',
-    icon: 'icon-my-local_hospital',
-    comp: shallowRef(defineAsyncComponent(() => import('../layanan/penunjang/PenunjangPage.vue')))
-  },
   {
     name: 'e-resep-page',
     label: 'EResep',
     icon: 'icon-mat-receipt',
-    comp: shallowRef(defineAsyncComponent(() => import('../../eresep/EresepPage.vue')))
+    comp: shallowRef(defineAsyncComponent(() => import('src/pages/simrs/eresep/EresepPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])
 
-const inacbg = useInacbgIgd()
-
 function menuDiganti (val) {
   menu.value = val
 }
-
-watchEffect(() => {
-  // console.log('watch effect', store.loadingTerima)
-  if (store.loadingTerima === false) {
-    inacbg.getDataIna(props.pasien)
-    inacbg.setTotalTindakan(props.pasien)
-    inacbg.setTotalLaborat(props.pasien)
-  }
-})
-
 </script>
+
 <style lang="scss">
 .contain{
     display: flex;
