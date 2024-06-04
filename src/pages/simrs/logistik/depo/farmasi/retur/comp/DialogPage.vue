@@ -202,19 +202,19 @@
                     class="col-shrink"
                     :class="rinc?.fornas==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                    {{ rinc?.fornas==='1'?'Fornas':'' }}
                   </div>
                   <div
                     class="col-shrink"
                     :class="rinc?.forkit==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                    {{ rinc?.forkit==='1'?'Forkit':'' }}
                   </div>
                   <div
                     class="col-shrink"
                     :class="rinc?.generik==='1'?'text-green':'text-red'"
                   >
-                    {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                    {{ rinc?.generik==='1'?'Generik':'' }}
                   </div>
                 </div>
               </q-item-section>
@@ -441,12 +441,12 @@ const h = ref(0)
 //   return pageRef.value?.clientHeight + 5
 // })
 
-function kirim() {
+function kirim () {
   console.log(store.resep)
   store.kirim()
 }
 
-function reguler(evt, det, key) {
+function reguler (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -459,7 +459,7 @@ function reguler(evt, det, key) {
   det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
   // console.log(evt, det, key)
 }
-function racik(evt, det, key) {
+function racik (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length

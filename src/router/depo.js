@@ -83,6 +83,12 @@ const depo = {
         {
           path: '/depo/farmasi/kartustok',
           component: () => import('pages/simrs/logistik/gudang/farmasi/kartustok/IndexPage.vue')
+        },
+
+        {
+          path: '/depo/farmasi/stoksekarang',
+          // name: 'farmasi.stoksekarang',
+          component: () => import('pages/simrs/farmasi/stoksekarang/IndexPage.vue')
         }
       ]
     },
