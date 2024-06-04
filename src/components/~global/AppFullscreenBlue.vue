@@ -33,7 +33,7 @@
         </q-bar>
 
         <div class="col fit column">
-          <div class="col full-height ">
+          <div class="col full-height scroll">
             <slot />
           </div>
         </div>

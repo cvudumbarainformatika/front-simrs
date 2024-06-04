@@ -928,26 +928,29 @@ const fisik = usePemeriksaanFisik()
 store.setParams('noreg', props.pasien?.noreg)
 store.getData()
 // eslint-disable-next-line no-unused-vars
-function getYT(val) {
+function getYT (val) {
   if (val === 1 || val === '1') {
     return 'Ya'
-  } else if (val === 0 || val === '0') {
+  }
+  else if (val === 0 || val === '0') {
     return 'Tidak'
-  } else {
+  }
+  else {
     return '-'
   }
 }
 // eslint-disable-next-line no-unused-vars
-function getKesadaran(val) {
+function getKesadaran (val) {
   const temp = fisik.optionsTingkatkesadaran.filter(a => a.value === val)
   if (temp.length) {
     return temp[0].label
-  } else {
+  }
+  else {
     return '-'
   }
 }
 // eslint-disable-next-line no-unused-vars
-function tekananDarah(val) {
+function tekananDarah (val) {
   const normal = val >= 100 && val <= 120
   const prahipertensi = val >= 121 && val <= 139
   const hipertensiderajat1 = val >= 140 && val <= 159
@@ -959,20 +962,24 @@ function tekananDarah(val) {
   }
   if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
-  } else if (prahipertensi) {
+  }
+  else if (prahipertensi) {
     obj = { color: 'text-red', res: 'Prahipertensi' }
-  } else if (hipertensiderajat1) {
+  }
+  else if (hipertensiderajat1) {
     obj = { color: 'text-red', res: 'Hipertensi Derajat 1' }
-  } else if (hipertensiderajat2) {
+  }
+  else if (hipertensiderajat2) {
     obj = { color: 'text-red', res: 'Hipertensi Derajat 2' }
-  } else {
+  }
+  else {
     obj = { color: 'text-red', res: 'Not Valid' }
   }
 
   return obj
 }
 // eslint-disable-next-line no-unused-vars
-function tekananDarahDias(val) {
+function tekananDarahDias (val) {
   const normal = val >= 60 && val <= 79
   const prahipertensi = val >= 80 && val <= 89
   const hipertensiderajat1 = val >= 90 && val <= 99
@@ -984,20 +991,24 @@ function tekananDarahDias(val) {
   }
   if (normal) {
     obj = { color: 'text-teal', res: 'Normal' }
-  } else if (prahipertensi) {
+  }
+  else if (prahipertensi) {
     obj = { color: 'text-red', res: 'Prahipertensi' }
-  } else if (hipertensiderajat1) {
+  }
+  else if (hipertensiderajat1) {
     obj = { color: 'text-red', res: 'Hipertensi Derajat 1' }
-  } else if (hipertensiderajat2) {
+  }
+  else if (hipertensiderajat2) {
     obj = { color: 'text-red', res: 'Hipertensi Derajat 2' }
-  } else {
+  }
+  else {
     obj = { color: 'text-red', res: 'LOW' }
   }
 
   return obj
 }
 // eslint-disable-next-line no-unused-vars
-function suhu(val) {
+function suhu (val) {
   const hipotermia = val < 35
   const normal = val >= 35 && val < 37
   const pireksia = val >= 37 && val <= 41.1
@@ -1009,18 +1020,21 @@ function suhu(val) {
   }
   if (hipotermia) {
     obj = { color: 'red', res: 'Hipotermia' }
-  } else if (normal) {
+  }
+  else if (normal) {
     obj = { color: 'teal', res: 'Normal' }
-  } else if (pireksia) {
+  }
+  else if (pireksia) {
     obj = { color: 'red', res: 'Pireksia/febris' }
-  } else if (hipertermia) {
+  }
+  else if (hipertermia) {
     obj = { color: 'red', res: 'Hipertermia' }
   }
 
   return obj
 }
 // eslint-disable-next-line no-unused-vars
-function nadi(val) {
+function nadi (val) {
   const bradikardi = val < 60
   const normal = val >= 61 && val <= 100
   const takikardi = val > 100
@@ -1031,9 +1045,11 @@ function nadi(val) {
   }
   if (bradikardi) {
     obj = { color: 'red', res: 'Brakikardi' }
-  } else if (normal) {
+  }
+  else if (normal) {
     obj = { color: 'teal', res: 'Normal' }
-  } else if (takikardi) {
+  }
+  else if (takikardi) {
     obj = { color: 'red', res: 'Takikardi' }
   }
 

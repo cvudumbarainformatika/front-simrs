@@ -28,7 +28,7 @@
           </q-item-section>
           <q-item-section class="q-col-gutter-xs">
             <div class="text-pink">
-              DPJP : <b>{{ item?.dokterdpjp ?? '-' }}</b>
+              DPJP : <b>{{ item?.dokter ?? '-' }}</b>
             </div>
             <div><b>{{ item?.ruangan }}</b> | <b class="text-primary">{{ item?.ketruangan }}</b> | bed : <b>{{ item.nomorbed }}</b></div>
             <div>Penjamin : <span class="text-primary">{{ item?.sistembayar }}</span></div>
