@@ -241,23 +241,42 @@
                 side
                 style="width:5%"
               >
-                <q-btn
-                  v-if="store?.rencana?.flag==='1'"
-                  icon="icon-mat-send"
-                  flat
-                  color="primary"
-                  dense
-                  :loading="store.loadingSimpan && rinc.loading"
-                  :disable="store.loadingSimpan && rinc.loading"
-                  @click="simpanObat(rinc)"
-                >
-                  <q-tooltip
-                    class="primary"
-                    :offset="[10, 10]"
+                <div v-if="store?.rencana?.flag==='1'">
+                  <q-btn
+                    v-if=" !rinc?.waktu_verif"
+                    icon="icon-mat-send"
+                    flat
+                    color="primary"
+                    dense
+                    :loading="store.loadingSimpan && rinc.loading"
+                    :disable="store.loadingSimpan && rinc.loading"
+                    @click="simpanObat(rinc)"
                   >
-                    Kirim
-                  </q-tooltip>
-                </q-btn>
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Kirim
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    v-if="rinc?.waktu_verif"
+                    icon="icon-mat-done"
+                    flat
+                    color="primary"
+                    dense
+                    :loading="store.loadingSimpan && rinc.loading"
+                    :disable="store.loadingSimpan && rinc.loading"
+                    @click="simpanObat(rinc)"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                    >
+                      Kirim
+                    </q-tooltip>
+                  </q-btn>
+                </div>
                 <q-icon
                   v-else-if="store?.rencana?.flag==='3'"
                   name="icon-mat-done_all"
