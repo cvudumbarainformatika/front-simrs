@@ -771,6 +771,7 @@ function setJumlahIter (val) {
 }
 function setPasien () {
   const val = props?.pasien
+  console.log('setPasien', val, props?.depo)
   if (!val) return
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   const diag = temp?.length ? temp.join(', ') : '-'
