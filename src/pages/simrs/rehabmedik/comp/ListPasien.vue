@@ -44,7 +44,7 @@ defineProps({
   }
 })
 
-const emits = defineEmits('details')
+const emits = defineEmits(['details'])
 </script>
 
 <style lang="scss" scoped>

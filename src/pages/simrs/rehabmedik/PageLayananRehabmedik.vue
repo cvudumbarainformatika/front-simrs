@@ -82,16 +82,20 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, shallowRef } from 'vue'
+import { defineAsyncComponent, onMounted, ref, shallowRef } from 'vue'
 import HeaderLayout from './layoutcomp/HeaderLayout.vue'
 import LeftDrawer from './layoutcomp/LeftDrawer.vue'
 
 const drawer = ref(false)
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
   }
+})
+
+onMounted(() => {
+  console.log('pasien', props.pasien)
 })
 
 const emits = defineEmits(['tutup'])

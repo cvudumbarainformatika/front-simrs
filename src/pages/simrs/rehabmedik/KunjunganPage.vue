@@ -33,7 +33,7 @@
             <thumbnail-view
               v-else
               :items="store.items"
-              @details="(val)=>store.pasien=val"
+              @details="(val)=>bukaLayanan(val)"
             />
             <!-- </transition-group> -->
           </template>
