@@ -274,7 +274,7 @@
 
               <!-- selesai -->
               <q-btn
-                v-if="item?.flag==='2' && (item?.doneresep || item?.doneracik)"
+                v-if="item?.flag==='2' && (item?.semuaresep && item?.semuaracik)"
                 round
                 class="f-10 q-mr-sm"
                 :color="color(item?.flag)"
@@ -369,7 +369,7 @@
                   class="primary"
                   :offset="[10, 10]"
                 >
-                  Selesai
+                  Tolak Resep
                 </q-tooltip>
               </q-btn>
             </td>

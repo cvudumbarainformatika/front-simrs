@@ -41,7 +41,7 @@
           <span class="text-weight-bolder f-14">{{ item?.noresep }}</span> ({{ item?.sistembayar?.rs2 }}) / {{ dateFull(item?.tgl_kirim) }}
         </div>
         <div class="f-12">
-          {{ item?.norm }} - {{ item?.datapasien?.noka??'tidak ada no BPJs' }} - {{ item?.datapasien?.nama }}
+          {{ item?.norm }}  -  {{ item?.datapasien?.noka??'tidak ada no BPJs' }}  -  {{ item?.datapasien?.nama }}
         </div>
         <div class="f-12">
           {{ item?.sep?.rs8 ?? '-' }}
@@ -149,7 +149,7 @@
               <div> <i>{{ formatDouble(lirac?.harga,2) }}</i></div>
             </div> -->
             <div v-for="(rac,n) in lirac?.rincian" :key="n">
-              <div class="row q-ml-lg f-10 items-end">
+              <div class="row q-ml-lg f-12 items-end">
                 <div>* <i>{{ rac?.mobat?.nama_obat }} - <span v-if="parseInt(lirac?.flag)<=2" class="">(rsp : {{ rac?.jumlahresep }}) - </span> <span class="">{{ rac?.jumlahobat }} ({{ rac?.mobat?.satuan_k }})</span></i></div>
               </div>
             </div>

@@ -350,6 +350,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         item.permintaanresep.forEach(resep => {
           resep.kronis = resep?.mobat?.status_kronis
           const rinci = item?.rincian.find(x => x.kdobat === resep.kdobat)
+          // console.log('rinc', rinci, resep)
           if (rinci) {
             resep.obatkeluar = rinci.jumlah
             resep.hargajual = rinci.harga_jual
@@ -517,23 +518,31 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           // console.log('resp', resp)
           this.loadingTerima = false
           delete val.loading
-          const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
-          if (this.params.flag.includes('2')) {
-            if (index >= 0) this.items[index].flag = '2'
-            this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
-          }
-          else {
-            if (index >= 0) this.items.splice(index, 1)
-            this.removedItemId.push(resp?.data?.data.id)
-          }
-          this.getDataTable(true)
+          this.afterTerima(resp?.data?.data)
           notifSuccess(resp)
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('err', err?.response?.data?.message, 'val', val)
+          if (err?.response?.data?.message?.includes('https://apijkn.bpjs-kesehatan.go.id/antreanrs/antrean/updatewaktu') || err?.response?.data?.message?.includes('simrs/events?auth_key=simrs_key_harry141312&auth_')) {
+            // notifErrVue('Error Update Waktu BPJS')
+            this.afterTerima(val)
+          }
           this.loadingTerima = false
           delete val.loading
         })
       // this.loadingTerima = true
+    },
+    afterTerima (val) {
+      const index = this.items.findIndex(x => x.id === val.id)
+      if (this.params.flag.includes('2')) {
+        if (index >= 0) this.items[index].flag = '2'
+        this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+      }
+      else {
+        if (index >= 0) this.items.splice(index, 1)
+        this.removedItemId.push(val.id)
+      }
+      this.getDataTable(true)
     },
     async resepSelesai (val) {
       // console.log('resep selesai', val)
@@ -544,24 +553,32 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           // console.log('resp', resp)
           this.loadingSelesai = false
           delete val.loading
-          const index = this.items.findIndex(x => x.id === resp?.data?.data.id)
-          if (this.params.flag.includes('3')) {
-            if (index >= 0) this.items[index].flag = '3'
-            this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
-          }
-          else {
-            if (index >= 0) this.items.splice(index, 1)
-            this.removedItemId.push(resp?.data?.data.id)
-          }
-          this.getDataTable(true)
+          this.afterSelesai(resp?.data?.data)
           this.setClose()
           notifSuccess(resp)
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('err', err, 'val', val)
+          if (err?.response?.data?.message?.includes('https://apijkn.bpjs-kesehatan.go.id') || err?.response?.data?.message?.includes('simrs/events?auth_key=simrs_key_harry141312&auth_')) {
+            // notifErrVue('Error Update Waktu BPJS')
+            this.afterSelesai(val)
+          }
           this.loadingSelesai = false
           delete val.loading
         })
       // this.loadingTerima = true
+    },
+    afterSelesai (val) {
+      const index = this.items.findIndex(x => x.id === val.id)
+      if (this.params.flag.includes('3')) {
+        if (index >= 0) this.items[index].flag = '3'
+        this.items.sort((firstItem, secondItem) => parseInt(firstItem.flag) - parseInt(secondItem.flag) || new Date(firstItem.tgl_permintaan) - new Date(secondItem.tgl_permintaan))
+      }
+      else {
+        if (index >= 0) this.items.splice(index, 1)
+        this.removedItemId.push(val.id)
+      }
+      this.getDataTable(true)
     },
     simpanObat (val) {
       val.nilai_r = val?.r
@@ -571,6 +588,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         console.log('obat', resp)
         const item = this.items.find(x => x.noresep === resp?.data?.rinci?.noresep)
         if (item) {
+          console.log('item', item)
           item?.rincian.push(resp?.data?.rinci)
           this.metaniItem(item)
         }
@@ -606,6 +624,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
         api.post('v1/simrs/farmasinew/depo/eresepobatkeluar', val)
           .then(resp => {
             this.loadingSimpan = false
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(err => {
@@ -630,6 +649,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
             val.flag = '5'
             this.isAlasan = false
             this.isTolak = false
+            notifSuccess(resp)
             resolve(resp)
           })
           .catch(err => {

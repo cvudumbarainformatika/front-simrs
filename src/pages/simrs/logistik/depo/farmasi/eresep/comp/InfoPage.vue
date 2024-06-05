@@ -496,39 +496,39 @@ import { date } from 'quasar'
 
 const store = useEResepDepoFarmasiStore()
 
-function setTanggal(val) {
+function setTanggal (val) {
   store.setFormInfo('hari', date.formatDate(val, 'dddd'))
   store.setFormInfo('waktu', date.formatDate(Date.now(), 'HH:mm:ss'))
   store.setFormInfo('tanggal', date.formatDate(val, 'YYYY-MM-DD') + ' ' + store.formInfo.waktu)
   store.setFormInfo('tanggal', val + ' ' + store.formInfo?.waktu)
 }
-function dispTanggal(val) {
+function dispTanggal (val) {
   store.setFormInfo('tgl', val)
 }
-function cariStatus(val) {
+function cariStatus (val) {
   const stat = store.statuses.find(st => st.value === val)
   if (stat) return stat.label
   else return '-'
 }
-function cariYN(val) {
+function cariYN (val) {
   const stat = store.yns.find(st => st.value === val)
   if (stat) return stat.label
   else return '-'
 }
-function cariKelamin(val) {
+function cariKelamin (val) {
   const stat = store.kelamins.find(st => st.value === val)
   if (stat) return stat.label
   else return '-'
 }
-function cariApoteker(val) {
+function cariApoteker (val) {
   const stat = store.apotekers.find(st => st.kdpegsimrs === val)
   if (stat) return stat.nama
   else return '-'
 }
-function toPrint() {
+function toPrint () {
   window.print()
 }
-function simpan() {
+function simpan () {
   const jenper = store.formInfo.jenisPertanyaan.join('|')
   store.setFormInfo('jenis_pertanyaan', jenper)
   console.log('form', store.formInfo)

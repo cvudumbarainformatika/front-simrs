@@ -136,7 +136,7 @@
       </div>
     </div>
     <div
-      v-if="store?.resep?.flag==='2' && (store?.resep?.doneresep || store?.resep?.doneracik)"
+      v-if="store?.resep?.flag==='2' && (store?.resep?.semuaresep && store?.resep?.semuaracik)"
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
@@ -330,57 +330,64 @@
           >
             <q-item
               v-for="(rinc,j) in store?.resep?.permintaanresep"
-              :key="j"
+              :key="rinc"
             >
               <q-item-section style="width: 30%;">
-                <div class="row text-weight-bold text-deep-orange">
-                  {{ rinc?.mobat?.nama_obat }}
-                </div>
-                <div class="row f-10">
-                  ( {{ rinc?.kandungan }} )
-                </div>
-                <div class="row text-italic f-10">
-                  {{ rinc?.kdobat }}
-                </div>
-                <div class="row text-weight-bold f-10">
-                  ( {{ rinc?.mobat?.satuan_k }} )
-                </div>
-                <div class="row q-col-gutter-sm text-weight-bold f-10">
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.fornas==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.fornas==='1'?'Fornas':'' }}
+                <div class="row">
+                  <div class="col-1">
+                    {{ j+1 }}
                   </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.forkit==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.forkit==='1'?'Forkit':'' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.generik==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.generik==='1'?'Generik':'' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
-                  >
-                    {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
-                  >
-                    {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
+                  <div class="col-11">
+                    <div class="row text-weight-bold text-deep-orange">
+                      {{ rinc?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row f-10">
+                      ( {{ rinc?.kandungan }} )
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ rinc?.kdobat }}
+                    </div>
+                    <div class="row text-weight-bold f-10">
+                      ( {{ rinc?.mobat?.satuan_k }} )
+                    </div>
+                    <div class="row q-col-gutter-sm text-weight-bold f-10">
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.fornas==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.fornas==='1'?'Fornas':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.forkit==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.forkit==='1'?'Forkit':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.generik==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.generik==='1'?'Generik':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
+                      >
+                        {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
+                      >
+                        {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </q-item-section>
               <q-item-section
                 side
-                style="width:70%"
+                style="width:65%"
               >
                 <div class="row items-center full-width">
                   <div class="col-6">
@@ -514,7 +521,7 @@
                     </div>
                     <div v-if="store?.resep?.flag==='2'">
                       <q-btn
-                        v-if="!rinc?.obatkeluar"
+                        v-if="(!rinc?.obatkeluar) && !rinc?.done"
                         round
                         class="f-10 q-my-sm"
                         color="primary"
@@ -531,7 +538,7 @@
                           Simpan Obat
                         </q-tooltip>
                       </q-btn>
-                      <div v-if="rinc?.obatkeluar">
+                      <div v-if="rinc?.obatkeluar>=0">
                         Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                       </div>
                     </div>

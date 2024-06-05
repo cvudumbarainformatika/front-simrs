@@ -841,30 +841,16 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             }
             else {
               notifSuccess(resp)
-              // this.pasien.newapotekrajal = resp?.data?.heder
+
               if (!this.form.noresep || this.form.noresep === '' || this.noresep !== resp?.data?.nota) {
                 this.noreseps.push(resp?.data?.nota)
                 this.noresep = resp?.data?.nota
               }
               this.pasien.newapotekrajal = resp?.data?.newapotekrajal
               this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
-              // const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
-              // if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
-              // else {
-              //   const indexOb = this.pasien.newapotekrajal.findIndex(a => a.noresep === resp?.data?.nota)
-              //   if (indexOb >= 0) this.pasien.newapotekrajal[indexOb] = resp?.data?.heder
-              // }
+
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
-              // if (resp?.data?.rinci !== 0) {
-              //   this.setList(resp?.data?.rinci)
-              // }
-              // if (resp?.data?.rincidtd !== 0) {
-              //   this.setListRacikan(resp?.data?.rincidtd)
-              // }
-              // if (resp?.data?.rincinondtd !== 0) {
-              //   this.setListRacikan(resp?.data?.rincinondtd)
-              // }
 
               this.setForm('lanjuTr', '')
               resolve(resp)
@@ -900,17 +886,21 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           }
           this.listPemintaanSementara = []
           this.listRacikan = []
-          // this.tipeRacikan = [
-          //   { label: 'DTD', value: 'DTD', disable: false },
-          //   { label: 'non-DTD', value: 'non-DTD', disable: false }
-          // ]
-          // if (this.pasien?.newapotekrajal) {
-          //   this.setListResep(this.pasien?.newapotekrajal)
-          //   this.pasien.newapotekrajal.flag = '1'
-          // } else {
-          // }
         })
-        .catch(() => { this.loadingkirim = false })
+        .catch((err) => {
+          if (err?.response?.data?.message?.includes('simrs/events?auth_key=simrs_key_harry141312&auth_') || err?.response?.data?.message?.includes('https://apijkn.bpjs-kesehatan.go.id')) {
+            const reseps = this.pasien?.newapotekrajal
+            const index = reseps.findIndex(x => x.noresep === this.form.noresep)
+            if (index >= 0) {
+              this.pasien.newapotekrajal[index] = []
+              this.indexRacikan = index
+            }
+            this.listPemintaanSementara = []
+            this.listRacikan = []
+          }
+          this.form.noresep = ''
+          this.loadingkirim = false
+        })
     },
     async hapusObat (val) {
       // console.log('hapusObat', val)

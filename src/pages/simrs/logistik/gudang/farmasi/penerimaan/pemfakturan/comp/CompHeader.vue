@@ -182,7 +182,7 @@ const props = defineProps({
 
 const popup = ref()
 
-function lihatRef() {
+function lihatRef () {
   console.log(popup.value)
   popup.value.hide()
 }
@@ -191,18 +191,18 @@ const selectPerPage = computed({
   set (val) { emits('setRow', val) }
 })
 const date = computed({
-  get() {
+  get () {
     return props.tanggal
   },
-  set(newVal) {
+  set (newVal) {
     emits('setTanggal', newVal)
   }
 })
 const q = computed({
-  get() {
+  get () {
     return props.search
   },
-  set(newVal) {
+  set (newVal) {
     emits('setSearch', newVal)
   }
 })

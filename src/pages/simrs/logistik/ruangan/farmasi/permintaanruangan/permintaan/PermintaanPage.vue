@@ -405,14 +405,14 @@ const store = useFarmasiPermintaanRuanganStore()
 const mintaMax = ref(false)
 const JumlahMintaMax = ref(0)
 const JumlahMintaMin = ref(5)
-function setMinta() {
+function setMinta () {
   mintaMax.value = true
 }
-function numberMax(val) {
+function numberMax (val) {
   const temp = !isNaN(parseFloat(val)) ? parseFloat(val) : 0
   JumlahMintaMax.value = temp
 }
-function simpanMintaAlokasi() {
+function simpanMintaAlokasi () {
   const mintamax = !isNaN(parseFloat(JumlahMintaMax.value)) ? parseFloat(JumlahMintaMax.value) : 0
   const mintamin = !isNaN(parseFloat(JumlahMintaMin.value)) ? parseFloat(JumlahMintaMin.value) : 0
   if (mintamax > 0) {
@@ -426,7 +426,8 @@ function simpanMintaAlokasi() {
       mintaMax.value = false
       store.setForm('mak_stok', mintamax)
     })
-  } else {
+  }
+  else {
     notifErrVue('Jumlah Minta Max harus lebih besar dari 0')
   }
 }
@@ -451,7 +452,8 @@ const user = computed(() => {
         store.setParam('kdgudang', 'Gd-03010101')
         store.getListObat()
       }
-    } else if (apps.user?.kdruangansim) {
+    }
+    else if (apps.user?.kdruangansim) {
       const peg = store.ruangans.filter(val => val.kode === apps.user?.kdruangansim)
       if (peg.length) {
         store.setForm('dari', peg[0].kode)
@@ -470,7 +472,7 @@ const user = computed(() => {
   return apps.user
 })
 
-function gudangSelected(val) {
+function gudangSelected (val) {
   console.log('gudang', val)
   store.setParam('kdgudang', val)
 }
@@ -479,8 +481,12 @@ function depoSelected (val) {
   store.setParam('kddepo', val)
 }
 
-function setJumlahMinta(evt) {
-  const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
+function setJumlahMinta (evt) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const jumlah = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  // const jumlah = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   store.setForm('jumlah_minta', jumlah)
   const max = parseFloat(store.form.mak_stok) ?? 0
   const stok = parseFloat(store.form.stok) ?? 0
@@ -489,17 +495,19 @@ function setJumlahMinta(evt) {
   if (bisaMinta < jumlah) {
     store.setForm('jumlah_minta', bisaMinta)
     notifInfVue('Jumlah minta tidak boleh melebihi stok maksimal user')
-  } else if (alokasi < jumlah) {
+  }
+  else if (alokasi < jumlah) {
     store.setForm('jumlah_minta', alokasi)
     notifInfVue('Jumlah minta tidak boleh melebihi alokasi')
-  } else {
+  }
+  else {
     store.setForm('jumlah_minta', jumlah)
   }
 }
 
 const refObat = ref(null)
 const refJumlahMinta = ref(null)
-function validasi() {
+function validasi () {
   const obat = refObat.value?.$refs?.refAuto.validate()
   const jumlah = refJumlahMinta.value?.$refs?.refInput.validate()
   // console.log(jumlah)
@@ -509,14 +517,15 @@ function validasi() {
   if (obat && jumlah && adaMax && adaAlokasi && adaJumlahMinta) return true
   else if (adaMax && adaAlokasi && adaJumlahMinta) {
     return true
-  } else {
+  }
+  else {
     if (!adaMax) notifErrVue('Tidak Ada Jumlah Stok Maksimal Depo, Silahkan Minta Stok Maksimal Terlebih dahulu')
     if (!adaAlokasi) notifErrVue('Tidak Ada Jumlah Stok Alokasi, Pastikan ada Stok di gudang dan pastikan tidak ada transaksi permintaan yang belum selesai')
     if (!adaJumlahMinta) notifErrVue('Tidak Ada Jumlah Minta, Silahkan Isi Jumlah Minta')
     return false
   }
 }
-function simpan() {
+function simpan () {
   console.log('form', store.form)
   if (validasi()) {
     console.log('disp', store.disp)
@@ -524,7 +533,7 @@ function simpan() {
   }
 }
 
-function hapus(det) {
+function hapus (det) {
   console.log('det', det)
   Dialog.create({
     title: 'Konfirmasi',
