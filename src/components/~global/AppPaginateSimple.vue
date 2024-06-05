@@ -50,7 +50,7 @@
           size="sm"
           round
           :disable="meta.current_page===lastPage"
-          @click="emits('goTo',meta.last_page)"
+          @click="emits('goTo',lastPage)"
         />
       </div>
     </div>

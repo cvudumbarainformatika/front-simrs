@@ -6,11 +6,11 @@
     @click="emits('details', item)"
   >
     <q-card
-      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status === '1'? 'bg-teal' : 'bg-deep-orange-8'}`"
+      :class="`absolute text-grey-3 q-py-xs q-px-sm ${item?.status !== ''? 'bg-teal' : 'bg-deep-orange-8'}`"
       style="top:-15px; left: 0;"
     >
       <div class="f-10">
-        {{ item?.status === '1'? 'Terlayani' : 'Belum terlayani' }}
+        {{ item?.status !== ''? 'Terlayani' : 'Belum terlayani' }}
       </div>
     </q-card>
     <div class="row items-center full-width">
@@ -26,7 +26,7 @@
           </div>
           <div class="col full-width flex wrap ellipsis">
             <div class="full-width ellipsis">
-              {{ item?.nama }} <span class="text-italic text-teal">({{ item?.usia }})</span>
+              {{ item?.nama }} <span class="text-italic text-teal f-10">({{ item?.usia }})</span>
             </div>
             <div class="flex q-gutter-sm q-pt-xs">
               <div> <b>No. RM :</b> <span class="text-primary">{{ item?.norm }}</span></div>
@@ -44,18 +44,18 @@
             <!-- <div class="text-grey-8 f-12">
               {{ date.formatDate(item?.tgl_kunjungan, 'MMM DD, YYYY') }}
             </div> -->
-            <div class="q-pt-sm">
+            <div class="f-12">
               {{ item?.sistembayar }}
             </div>
           </div>
-          <div class="col-2">
+          <!-- <div class="col-2">
             <div class="f-10 text-grey-8">
               d
             </div>
             <div>
               <span class="text-primary">{{ item?.poli }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="col full-width flex wrap ellipsis">
             <div class="f-10">
               {{ item.nota_permintaan ? 'Perminttan / Konsul dari' : 'Pendaftaran' }}

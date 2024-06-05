@@ -2,7 +2,8 @@
   <!-- <q-page> -->
   <q-page class="fit q-pa-md absolute">
     <template v-if="store.pasien">
-      <DetailsPasien />
+      <!-- <DetailsPasien /> -->
+      <page-layanan-rehabmedik :pasien="store.pasien" :key="store.pasien" v-model="store.bukaLayanan" @tutup="store.pasien=null" />
     </template>
     <template v-else>
       <div class="fit column relative-position">
@@ -27,12 +28,12 @@
               v-if="!store.isViewList"
               :items="store.items"
               :loading="store.loading"
-              @details="(val)=>store.pasien=val"
+              @details="(val)=>bukaLayanan(val)"
             />
             <thumbnail-view
               v-else
               :items="store.items"
-              @details="(val)=>store.pasien=val"
+              @details="(val)=>bukaLayanan(val)"
             />
             <!-- </transition-group> -->
           </template>
@@ -68,16 +69,23 @@ import HeaderComp from './comp/HeaderComp.vue'
 import ThumbnailView from './comp/ThumbnailView.vue'
 
 // import { useListPendaftaranRanapStore } from 'src/stores/simrs/pendaftaran/ranap/listtunggu'
-import { onMounted } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import ListPasien from './comp/ListPasien.vue'
-import DetailsPasien from './comp/DetailsPasien.vue'
+// import DetailsPasien from './comp/DetailsPasien.vue'
 import { useKunjunganRehabmediStore } from 'src/stores/simrs/pelayanan/rehabmedik/kunjungan'
 
 const store = useKunjunganRehabmediStore()
 
+const PageLayananRehabmedik = defineAsyncComponent(() => import('./PageLayananRehabmedik.vue'))
+
 onMounted(() => {
   store.getDataTable()
 })
+
+function bukaLayanan (val) {
+  store.pasien = val
+  store.bukaLayanan = true
+}
 
 </script>
 

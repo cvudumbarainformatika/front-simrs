@@ -30,6 +30,7 @@ export const usePediatriStore = defineStore('pediatri-poli', {
     preview: false,
     bukaCdc: false,
     masterCdc: [],
+    masterCdcv2: [],
     isEdited: false
   }),
   actions: {
@@ -50,6 +51,8 @@ export const usePediatriStore = defineStore('pediatri-poli', {
         this.form.lila = null
         this.form.bbi = null
         this.form.bmi = null
+        this.form.sg = null
+        this.form.ketsg = null
         this.form.catatanBmi = null
         this.form.keteranganBmi = null
       }
@@ -180,7 +183,8 @@ export const usePediatriStore = defineStore('pediatri-poli', {
           .then((resp) => {
             console.log('master', resp)
             if (resp.status === 200) {
-              this.masterCdc = resp.data
+              this.masterCdc = resp.data?.v1
+              this.masterCdcv2 = resp.data?.v2
             }
           })
           .catch((err) => {
