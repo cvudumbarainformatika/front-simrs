@@ -25,10 +25,10 @@
             LK
           </th>
           <th>
-            LILA
+            BBI
           </th>
           <th>
-            BBI
+            status gizi
           </th>
           <th>
             BMI
@@ -39,7 +39,7 @@
           <th>
             KETERANGAN
           </th>
-          <th class="text-right" width="3%">
+          <th v-if="draft" class="text-right" width="3%">
             #
           </th>
         </tr>
@@ -47,11 +47,11 @@
           <tr v-for="(item, i) in store.pediatris" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ item.bb }}</td><td>{{ item.pb }}</td>
-            <td>{{ item.lk }}</td><td>{{ item.lila }}</td>
-            <td>{{ item.bbi }}</td><td>{{ item.bmi }}</td>
+            <td>{{ item.lk }}</td><td>{{ item.bbi }}</td>
+            <td>{{ item.sg }} % = {{ item?.ketsg }}</td><td>{{ item.bmi }}</td>
             <td>{{ item.catatanBmi??'-' }}</td><td>{{ item.keteranganBmi??'-' }}</td>
-            <td class="text-right">
-              <q-btn class="sel-end" flat icon="icon-mat-assessment" size="sm" padding="sm" rounded @click="lihatGrafik(item)">
+            <td v-if="draft" class="text-right">
+              <q-btn class="sel-end" flat icon="icon-mat-assessment" size="xs" padding="xs" rounded @click="lihatGrafik(item)">
                 <q-tooltip>Lihat Grafik CDC</q-tooltip>
               </q-btn>
             </td>
@@ -86,15 +86,25 @@
           label="LK / cm"
           class-tambahan="col-1"
         />
-        <app-input-simrs
+        <!-- <app-input-simrs
           v-model="store.form.lila"
           label="LILA / cm"
           class-tambahan="col-1"
-        />
+        /> -->
         <app-input-simrs
           v-model="store.form.bbi"
           label="BBI"
           class-tambahan="col-1"
+        />
+        <app-input-simrs
+          v-model="store.form.sg"
+          label="Stat.GZ %"
+          class-tambahan="col-1"
+        />
+        <app-input-simrs
+          v-model="store.form.ketsg"
+          label="Keterangan Status Gizi"
+          class-tambahan="col-3"
         />
         <app-input-simrs
           v-model="store.form.bmi"
@@ -109,7 +119,7 @@
         <app-input-simrs
           v-model="store.form.keteranganBmi"
           label="Keterangan"
-          class-tambahan="col-2"
+          class-tambahan="col-4"
         />
         <div class="col-1 ">
           <q-btn class="sel-end" flat icon="icon-mat-assessment" size="md" rounded @click="lihatGrafik(null)">
@@ -492,17 +502,80 @@ const props = defineProps({
 
 onMounted(() => {
   // const age = calculateAge(props?.pasien?.tgllahir ?? null)
-  const ageInMonths = calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
+
   // console.log('onMounted', age)
   store.getData(props.pasien)
     .then(() => {
       store.initForm(props.pasien)
     })
 
-  if (ageInMonths > 24 && ageInMonths <= 240) {
+  updateFormCdc()
+})
+
+const updateFormCdc = () => {
+  const ageInMonths = calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
+  if (ageInMonths > 60 && ageInMonths <= 240) {
     cariGrafikChart()
   }
-})
+  else if (ageInMonths >= 0 && ageInMonths <= 60) {
+    cariTabelv2()
+  }
+}
+
+const cariTabelv2 = () => {
+  const ageInMonths = store.pediatri ? store.pediatri.age_m : calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
+  const bb = store.pediatri ? store.pediatri.bb ?? 0 : parseFloat(store?.form?.bb ?? 0)
+  // const pb = store.pediatri ? store.pediatri.pb ?? 0 : parseFloat(store?.form?.pb ?? 0)
+
+  const x = props?.pasien?.kelamin ?? null
+  const kelamin = x === 'Perempuan' ? 2 : 1
+  const masterTb = store?.masterCdcv2.length ? store.masterCdcv2.filter(x => x.gender === kelamin && x?.jns === 'bb/u' && x.age_m === ageInMonths) : []
+
+  const obj = masterTb.length
+    ? masterTb.map(x => {
+      return {
+        min3sd: x.min3sd,
+        min2sd: x.min2sd,
+        min1sd: x.min1sd,
+        median: x.median,
+        plus1sd: x.plus1sd,
+        plus2sd: x.plus2sd,
+        plus3sd: x.plus3sd
+      }
+    })[0]
+    : {}
+  const arr = Object.values(obj)
+  const key = Object.keys(obj)
+
+  // eslint-disable-next-line no-unused-vars
+  const nilaiTerdekat = findClosestValue(bb, arr)?.value
+  const bbi = obj?.median
+  // console.log('masterTb', nilaiTerdekat)
+  console.log('key', key[findClosestValue(bb, arr)?.index])
+  // console.log('bbi', bbi)
+  if (store.pediatri === null) {
+    store.form.bbi = bbi
+    store.form.sg = cariStatusGizi(bb, bbi)
+    store.form.ketsg = ketSg(store.form.sg)
+  }
+  else {
+    store.form.age_m = ageInMonths
+  }
+}
+
+function findClosestValue (target, range) {
+  let closestValue = Infinity
+  let closestIndex = -1
+
+  for (let i = 0; i < range.length; i++) {
+    if (Math.abs(target - range[i]) < closestValue) {
+      closestValue = Math.abs(target - range[i])
+      closestIndex = i
+    }
+  }
+
+  return { value: range[closestIndex], index: closestIndex }
+}
 
 const cariGrafikChart = () => {
   const ageInMonths = store.pediatri ? store.pediatri.age_m : calculateAgeInMonths(props?.pasien?.tgllahir ?? null)
@@ -528,16 +601,22 @@ const cariGrafikChart = () => {
 
   const rangeBmi = cariRangeBmi(masterBmi, bmi, ageInMonths)
   const result = { ageInMonths, kelamin, bb, pb, masterTb, masterWeight, dataTb, titkA, titikB, dataWeight, titikC, bmi, masterBmi, titikD, rangeBmi }
-  console.log('coba', dataWeight)
 
   if (store.pediatri === null) {
     store.form.bbi = titikC[1]
-    store.form.bmi = bmi
-    store.form.catatanBmi = rangeBmi?.keterangan
+    store.form.sg = cariStatusGizi(bb, titikC[1])
+    store.form.ketsg = ketSg(store.form.sg)
+    // console.log('status gizi', store.form.sg)
+    // console.log('keterangan', store.form.ketsg)
+    if (cariStatusGizi(bb, titikC[1]) > 110) {
+      store.form.bmi = bmi
+      store.form.catatanBmi = rangeBmi?.keterangan
+    }
+    else {
+      store.form.bmi = 0
+      store.form.catatanBmi = null
+    }
   }
-  // else {
-  //   store.form.bmi = 0
-  // }
   store.form.age_m = ageInMonths
   draft.value = result
 }
@@ -551,6 +630,20 @@ function calculateAgeInMonths (birthdate, day) {
   const months = today.getFullYear() * 12 + today.getMonth() -
     birthdateObj.getFullYear() * 12 - birthdateObj.getMonth()
   return months
+}
+
+function cariStatusGizi (bb, bbi) {
+  const sg = (bb / bbi) * 100
+  return parseInt(sg) ?? 0
+}
+
+function ketSg (sg) {
+  if (sg > 120) return 'obesitas'
+  if (sg >= 110 && sg < 120) return 'overweight'
+  if (sg >= 90 && sg < 110) return 'normal'
+  // if (sg >= 80 && sg < 90) return 'mild malnutrition'
+  if (sg >= 70 && sg < 90) return 'gizi kurang'
+  if (sg < 70) return 'gizi buruk'
 }
 
 // function calculateAge (birthdate) {
@@ -700,8 +793,8 @@ function lihatGrafik (item) {
 }
 
 watchEffect(() => {
-  if (store.masterCdc.length || store.pediatri) {
-    cariGrafikChart()
+  if (store.masterCdc.length || store.masterCdcv2.length) {
+    updateFormCdc()
   }
 })
 
@@ -714,7 +807,7 @@ table {
 }
 table, th, td {
   border: 1px solid $grey;
-  padding: 2px 5px;
+  padding: 2px;
 }
 
 </style>
