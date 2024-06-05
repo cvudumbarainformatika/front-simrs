@@ -81,7 +81,12 @@
           <div v-for="(rinc,i) in store?.resep?.permintaanresep" :key="i">
             <div v-if="(store?.resep?.flag==='3'&&rinc?.done)||parseInt(store?.resep?.flag)<=2">
               <div class="row ">
-                <div>{{ rinc?.mobat?.nama_obat }} </div>
+                <div class="col-1 ">
+                  {{ i+1 }}
+                </div>
+                <div class="col-11">
+                  {{ rinc?.mobat?.nama_obat }}
+                </div>
               </div>
               <div v-if="parseInt(store?.resep?.flag)<=2" class="row q-ml-lg f-8 ">
                 <div>* <i>{{ rinc?.aturan }}  </i></div>
@@ -107,7 +112,10 @@
         >
           <!-- <div v-if="item?.done"> -->
           <div class="row items-center">
-            <div class="col-shrink q-mr-xs">
+            <div class="col-1">
+              {{ store?.resep?.permintaanresep?.length+i+1 }}
+            </div>
+            <div class="col-11 ">
               {{ item?.namaracikan }}
             </div>
           </div>
