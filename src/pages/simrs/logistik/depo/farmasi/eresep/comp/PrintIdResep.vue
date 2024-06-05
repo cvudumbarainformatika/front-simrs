@@ -89,8 +89,11 @@
           <div class="">
             <div v-for="(rinc,i) in item?.permintaanresep" :key="i">
               <div v-if="(item?.flag==='3'&&rinc?.done)||parseInt(item?.flag)<=2">
-                <div class="row justify-between">
-                  <div class="col-6 ">
+                <div class="row justify-between q-mb-xs">
+                  <div class="col-shrink">
+                    {{ i+1 }}
+                  </div>
+                  <div class="col-5 ">
                     {{ rinc?.mobat?.nama_obat }}
                   </div>
                   <div class="col-2">
@@ -124,11 +127,14 @@
           <div
             v-for="(lirac,i) in item?.listRacikan"
             :key="i"
-            class="full-width"
+            class="full-width q-mb-xs"
           >
             <!-- <div v-if="lirac?.done"> -->
-            <div class="row items-center justify-between">
-              <div class="col-6 ">
+            <div class="row items-center justify-between ">
+              <div class="col-shrink ">
+                {{ item?.permintaanresep?.length+i+1 }}
+              </div>
+              <div class="col-5 ">
                 {{ lirac?.namaracikan }}
               </div>
               <div class="col-2 ">
