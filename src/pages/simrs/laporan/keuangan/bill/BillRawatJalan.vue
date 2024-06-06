@@ -527,10 +527,10 @@ const store = useSimrsLaporanKeuanganBillRajalStore()
 
 // data for print --start--
 const loading = ref(false)
-function startDownload() {
+function startDownload () {
   loading.value = true
 }
-function finishDownload() {
+function finishDownload () {
   loading.value = false
 }
 const jsonFields = {
@@ -545,7 +545,7 @@ const jsonFields = {
   'Sistem Bayar': 'bayar',
   'Sub Total': 'subtotal'
 }
-function fetchData() {
+function fetchData () {
   loading.value = true
   const data = []
   store.items.forEach((item, i) => {
@@ -569,22 +569,22 @@ function fetchData() {
 }
 // data for print --end--
 
-function ambilData() {
+function ambilData () {
   store.getDataTable()
 }
 
-function setFrom(val) {
+function setFrom (val) {
   store.params.tgldari = val
 }
-function setFromDisp(val) {
+function setFromDisp (val) {
   store.tanggal.from = val
   // console.log('params ', store.params)
   // console.log('tanggal', store.tanggal)
 }
-function setTo(val) {
+function setTo (val) {
   store.params.tglsampai = val
 }
-function setToDisp(val) {
+function setToDisp (val) {
   store.tanggal.to = val
   // console.log('params ', store.params)
   // console.log('tanggal', store.tanggal)
@@ -596,7 +596,7 @@ const printObj = {
   popTitle: 'Laporan Rekap',
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...')
   },

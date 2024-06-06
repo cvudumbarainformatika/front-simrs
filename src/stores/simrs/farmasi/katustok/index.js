@@ -19,7 +19,8 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     },
     loading: false,
     dialogRinci: false,
-    item: null
+    item: null,
+    exportExcel: false
   }),
   actions: {
     async getData () {
