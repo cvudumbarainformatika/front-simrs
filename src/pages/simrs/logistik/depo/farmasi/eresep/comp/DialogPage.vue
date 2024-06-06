@@ -220,7 +220,7 @@
           color="dark"
           text-color="white"
           label="Etiket Pagi"
-          @click="openRanap('Diminum Pagi')"
+          @click="openRanap('Diminum Pagi (06.00) ')"
         >
           <q-tooltip
             class="primary"
@@ -238,7 +238,7 @@
           color="dark"
           text-color="white"
           label="Etiket Siang"
-          @click="openRanap('Diminum Siang')"
+          @click="openRanap('Diminum Siang (12.00)')"
         >
           <q-tooltip
             class="primary"
@@ -274,7 +274,7 @@
           color="dark"
           text-color="white"
           label="Etiket Malam"
-          @click="openRanap('Diminum Malam')"
+          @click="openRanap('Diminum Malam (20.00)')"
         >
           <q-tooltip
             class="primary"
