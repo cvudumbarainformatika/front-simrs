@@ -265,7 +265,7 @@ defineExpose({ printPage })
   margin-left: auto;
   margin-right: auto;
   max-width: 27.94cm;
-  height: auto;
+  height: fit-content;
   padding: 1mm;
   // font-size: 10px !important;
 }
