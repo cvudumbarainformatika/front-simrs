@@ -481,7 +481,7 @@
 
       <div
         v-if="store.dataToPrint?.flag==='2'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Distribusi
@@ -495,7 +495,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Resep
@@ -509,7 +509,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Retur
@@ -521,7 +521,7 @@
           {{ dateFullFormat(store.dataToPrint?.tgl_retur) }}
         </div>
       </div>
-      <div class="row justify-center q-mb-sm">
+      <div class="row justify-center q-mb-sm default-font">
         <div class="col-2">
           No. Permintaan
         </div>
@@ -534,7 +534,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='2'"
-        class="row justify-start q-mb-md"
+        class="row justify-start q-mb-md default-font"
       >
         <p>
           Telah dikirimkan
@@ -545,7 +545,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-start q-mb-md"
+        class="row justify-start q-mb-md default-font"
       >
         <p>
           Telah diterima resep dan retur
@@ -562,22 +562,22 @@
       <!-- details -->
       <div v-if="store.dataToPrint?.rinci">
         <!-- header detail -->
-        <div class="row justify-between q-col-gutter-sm">
+        <div class="row justify-between q-col-gutter-sm default-font">
           <div
             v-if="store.dataToPrint?.flag==='2'"
-            class="col-5 text-weight-bold border-tb border-left"
+            class="col-8 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
           <div
             v-if="store.dataToPrint?.flag==='4'"
-            class="col-4 text-weight-bold border-tb border-left"
+            class="col-8 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
           <div
             v-if="store.dataToPrint?.flag==='2'"
-            class="col-1 text-weight-bold border-tb border-left"
+            class="col-2 text-weight-bold border-tb border-left"
           >
             Jumlah
           </div>
@@ -596,9 +596,9 @@
           <div class="col-2 text-weight-bold border-tb border-left">
             Satuan
           </div>
-          <div class="col-4 text-weight-bold border-box">
+          <!-- <div class="col-4 text-weight-bold border-box">
             Keterangan
-          </div>
+          </div> -->
         </div>
         <!-- body details -->
         <div
@@ -606,23 +606,23 @@
           :key="i"
         >
           <div
-            class="row justify-between q-col-gutter-sm"
+            class="row justify-between q-col-gutter-sm default-font"
           >
             <div
               v-if="store.dataToPrint?.flag==='2'"
-              class="col-5 border-bottom border-left"
+              class="col-8 border-bottom border-left"
             >
               {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='4'"
-              class="col-4 border-bottom border-left"
+              class="col-8 border-bottom border-left"
             >
               {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='2'"
-              class="col-1 border-bottom border-left"
+              class="col-2 border-bottom border-left"
             >
               {{ det.jumlah_distribusi===null?0:det.jumlah_distribusi }}
             </div>
@@ -643,7 +643,7 @@
             >
               {{ det.obat?det.obat.satuan_k:'-' }}
             </div>
-            <div class="col-4 border-bottom border-left border-right">
+            <!-- <div class="col-4 border-bottom border-left border-right">
               <div class="print-only">
                 {{ det?.keterangan??'-' }}
               </div>
@@ -655,7 +655,7 @@
                   valid
                 />
               </div>
-            </div>
+            </div> -->
           </div>
           <q-separator />
         </div>
@@ -908,6 +908,10 @@ const label = (status) => {
 </script>
 
 <style>
+.default-font{
+  font-size: 14px;
+  font-weight: bold;
+}
 .box {
   white-space: normal !important;
   inline-size: 170px;
