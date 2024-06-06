@@ -26,11 +26,11 @@
             </div>
             <div class="absolute bg-transparent q-mt-md">
               <q-card
-                :class="`q-pa-sm ${item?.status_masuk === item.norm? 'bg-teal' : 'bg-deep-orange-8'}`"
+                :class="`q-pa-sm ${item?.status === '1' || item?.status === '2' ? 'bg-teal' : 'bg-deep-orange-8'}`"
                 style="top:-15px; left: 0;"
               >
                 <div class="f-12">
-                  {{ item?.status_masuk === item.norm? 'Terlayani' : 'Menunggu ...' }}
+                  {{ item?.status === "1" || item?.status === "2" ? 'Terlayani' : 'Menunggu ...' }}
                 </div>
               </q-card>
             </div>

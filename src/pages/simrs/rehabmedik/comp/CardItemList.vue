@@ -58,7 +58,7 @@
           </div> -->
           <div class="col full-width flex wrap ellipsis">
             <div class="f-10">
-              {{ item.nota_permintaan ? 'Perminttan / Konsul dari' : 'Pendaftaran' }}
+              {{ item.nota_permintaan ? 'Permintaan / Konsul dari' : 'Pendaftaran' }}
             </div>
             <div class="full-width ellipsis">
               <span class="text-primary">{{ item?.ruangan }}</span>
