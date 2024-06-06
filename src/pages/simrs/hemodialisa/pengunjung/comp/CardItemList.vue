@@ -58,10 +58,10 @@
           </div> -->
           <div class="col full-width flex wrap ellipsis">
             <div class="f-10">
-              {{ item?.poli === 'Hemodialisa' ? 'Pendaftaran' : 'Permintaan / Konsul dari' }}
+              {{ item.nota_permintaan ? 'Permintaan / Konsul dari' : 'Pendaftaran' }}
             </div>
             <div class="full-width ellipsis">
-              <span class="text-primary">{{ item?.poli === 'Hemodialisa' ? 'Hemodialisa' : item?.ruangan !== null ? item?.ruangan : item?.poli }}</span>
+              <span class="text-primary">{{ item?.ruangan }}</span>
             </div>
           </div>
           <div class="col-2 flex justify-end">
