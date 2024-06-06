@@ -77,16 +77,16 @@
       </template>
       <template #cell-total="{ row }">
         <div
-          v-if="row.total_faktur_pbf"
-          class="text-weight-bold"
-        >
-          {{ row.total_faktur_pbf? formatRp(row.total_faktur_pbf) :(row.total?formatRp(row.total):'-') }}
-        </div>
-        <div
           v-if="row?.faktur && row?.jenissurat==='Surat Jalan'"
           class="text-weight-bold"
         >
-          {{ formatRp(row?.faktur?.total_faktur) ??'-' }}
+          {{ formatDouble(parseFloat(row?.faktur?.total_faktur),2) ??'-' }}
+        </div>
+        <div
+          v-else
+          class="text-weight-bold"
+        >
+          {{ row.total_faktur_pbf? formatDouble(parseFloat(row.total_faktur_pbf),2) : (row.total?formatDouble(parseFloat(row.total),2):'-') }}
         </div>
       </template>
       <template #cell-surat="{ row }">
@@ -234,7 +234,7 @@
                     Harga
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp( rin.harga) }}
+                    {{ formatDouble( rin.harga,2) }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">
@@ -258,7 +258,7 @@
                     Netto
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp( rin.harga_netto) }}
+                    {{ formatDouble( rin.harga_netto,2) }}
                   </div>
                 </div>
               </div>
@@ -425,7 +425,7 @@
   />
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
