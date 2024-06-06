@@ -659,7 +659,7 @@ function kirim (val, i, row) {
   const index = row?.permintaanrinci?.findIndex(rw => rw?.id === val?.id)
   const indexnya = index >= 0 ? index : i
   console.log('index', index, i, 'indexnya', indexnya)
-  const valid = refInputVerif.value[indexnya].$refs.refInput.validate()
+  const valid = refInputVerif.value[indexnya]?.$refs?.refInput.validate() ?? true
   console.log('kirim', val)
   // console.log('kirim row', row)
   if (valid) {
