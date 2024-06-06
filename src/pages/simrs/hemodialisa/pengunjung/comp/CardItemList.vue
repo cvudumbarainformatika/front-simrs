@@ -48,20 +48,20 @@
               {{ item?.sistembayar }}
             </div>
           </div>
-          <div class="col-2">
+          <!-- <div class="col-2">
             <div class="f-10 text-grey-8">
               dari
             </div>
             <div>
               <span class="text-primary">{{ item?.poli }}</span>
             </div>
-          </div>
+          </div> -->
           <div class="col full-width flex wrap ellipsis">
-            <div class="f-10 text-grey-8">
-              Rencana ke ..
+            <div class="f-10">
+              {{ item?.poli === 'Hemodialisa' ? 'Pendaftaran' : 'Permintaan / Konsul dari' }}
             </div>
             <div class="full-width ellipsis">
-              <span class="text-primary">{{ item?.ruangan }}</span>
+              <span class="text-primary">{{ item?.poli === 'Hemodialisa' ? 'Hemodialisa' : item?.ruangan !== null ? item?.ruangan : item?.poli }}</span>
             </div>
           </div>
           <div class="col-2 flex justify-end">
