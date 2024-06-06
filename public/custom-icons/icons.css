@@ -1,7 +1,7 @@
 @font-face {
     font-family: "icons";
-    src: url("./icons.woff?ba2e2161574a3b634f2eeae4257c0877") format("woff"),
-url("./icons.woff2?ba2e2161574a3b634f2eeae4257c0877") format("woff2");
+    src: url("./icons.woff?5220ab90cb91e0f4236a7dd3b1000551") format("woff"),
+url("./icons.woff2?5220ab90cb91e0f4236a7dd3b1000551") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {
@@ -15,1008 +15,1014 @@ i[class^="icon-"]:before, i[class*=" icon-"]:before {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-cus-group_work:before {
+.icon-my-word:before {
     content: "\f101";
 }
-.icon-cus-groups:before {
+.icon-my-women-eyelashes-svgrepo-com:before {
     content: "\f102";
 }
-.icon-eva-bell-outline:before {
+.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
     content: "\f103";
 }
-.icon-eva-facebook:before {
+.icon-my-triangle-outline:before {
     content: "\f104";
 }
-.icon-eva-google:before {
+.icon-my-trapezoid:before {
     content: "\f105";
 }
-.icon-eva-home-outline:before {
+.icon-my-tooth-shape-outline-svgrepo-com:before {
     content: "\f106";
 }
-.icon-eva-home:before {
+.icon-my-tooth-outline-svgrepo-com:before {
     content: "\f107";
 }
-.icon-eva-message-circle-outline:before {
+.icon-my-tonsil-svgrepo-com:before {
     content: "\f108";
 }
-.icon-eva-person-outline:before {
+.icon-my-tongue-svgrepo-com:before {
     content: "\f109";
 }
-.icon-eva-person:before {
+.icon-my-tongue-and-mouth-svgrepo-com:before {
     content: "\f10a";
 }
-.icon-fa-arrows-down-to-line-solid:before {
+.icon-my-thin-lips-outline-svgrepo-com:before {
     content: "\f10b";
 }
-.icon-fa-arrows-down-to-people-solid:before {
+.icon-my-stomach-svgrepo-com:before {
     content: "\f10c";
 }
-.icon-fa-biohazard-solid:before {
+.icon-my-stethoscope:before {
     content: "\f10d";
 }
-.icon-fa-book-medical-solid:before {
+.icon-my-standing-human-body-silhouette-svgrepo-com:before {
     content: "\f10e";
 }
-.icon-fa-boxes-packing-solid:before {
+.icon-my-spine-svgrepo-com:before {
     content: "\f10f";
 }
-.icon-fa-capsules-solid:before {
+.icon-my-small-intestine-svgrepo-com:before {
     content: "\f110";
 }
-.icon-fa-check-double-solid:before {
+.icon-my-shape-rectangle-plus:before {
     content: "\f111";
 }
-.icon-fa-check-to-slot-solid:before {
+.icon-my-ribs-svgrepo-com:before {
     content: "\f112";
 }
-.icon-fa-circle-check-regular:before {
+.icon-my-print_setting:before {
     content: "\f113";
 }
-.icon-fa-dumpster-solid:before {
+.icon-my-point_of_sale:before {
     content: "\f114";
 }
-.icon-fa-file-invoice-solid:before {
+.icon-my-pill:before {
     content: "\f115";
 }
-.icon-fa-file-prescription-solid:before {
+.icon-my-personal_injury:before {
     content: "\f116";
 }
-.icon-fa-file-regular:before {
+.icon-my-penis-svgrepo-com:before {
     content: "\f117";
 }
-.icon-fa-folder-tree-solid:before {
+.icon-my-pelvis-svgrepo-com:before {
     content: "\f118";
 }
-.icon-fa-house-flag-solid:before {
+.icon-my-nose-svgrepo-com:before {
     content: "\f119";
 }
-.icon-fa-kit-medical-solid:before {
+.icon-my-nose-outline-svgrepo-com:before {
     content: "\f11a";
 }
-.icon-fa-laptop-medical-solid:before {
+.icon-my-monitor_heart:before {
     content: "\f11b";
 }
-.icon-fa-mask-face-solid:before {
+.icon-my-men-shoulder-svgrepo-com:before {
     content: "\f11c";
 }
-.icon-fa-mortar-pestle-solid:before {
+.icon-my-men-leg-svgrepo-com:before {
     content: "\f11d";
 }
-.icon-fa-pills-solid:before {
+.icon-my-men-elbow-svgrepo-com:before {
     content: "\f11e";
 }
-.icon-fa-prescription-solid:before {
+.icon-my-medication_liquid:before {
     content: "\f11f";
 }
-.icon-fa-spoon-solid:before {
+.icon-my-medication:before {
     content: "\f120";
 }
-.icon-fa-staff-snake-solid:before {
+.icon-my-medical_services:before {
     content: "\f121";
 }
-.icon-fa-tablets-solid:before {
+.icon-my-medical_information:before {
     content: "\f122";
 }
-.icon-fa-vials-solid:before {
+.icon-my-male-hair-variant-svgrepo-com:before {
     content: "\f123";
 }
-.icon-fa-warehouse-solid:before {
+.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
     content: "\f124";
 }
-.icon-fa-xmark-solid:before {
+.icon-my-lungs-svgrepo-com:before {
     content: "\f125";
 }
-.icon-ion-bell-outline:before {
+.icon-my-local_pharmacy:before {
     content: "\f126";
 }
-.icon-ion-home-outline:before {
+.icon-my-local_hospital:before {
     content: "\f127";
 }
-.icon-ion-home:before {
+.icon-my-key:before {
     content: "\f128";
 }
-.icon-ion-person:before {
+.icon-my-human-trachea-svgrepo-com:before {
     content: "\f129";
 }
-.icon-ion-timer:before {
+.icon-my-human-teeth-svgrepo-com:before {
     content: "\f12a";
 }
-.icon-mat-abc:before {
+.icon-my-human-skull-side-view-svgrepo-com:before {
     content: "\f12b";
 }
-.icon-mat-access_time:before {
+.icon-my-human-ribs-svgrepo-com:before {
     content: "\f12c";
 }
-.icon-mat-account_circle:before {
+.icon-my-human-neck-svgrepo-com:before {
     content: "\f12d";
 }
-.icon-mat-add_box:before {
+.icon-my-human-hand-bones-svgrepo-com:before {
     content: "\f12e";
 }
-.icon-mat-add_circle:before {
+.icon-my-human-footprints-svgrepo-com:before {
     content: "\f12f";
 }
-.icon-mat-add_shopping_cart:before {
+.icon-my-human-finger-svgrepo-com:before {
     content: "\f130";
 }
-.icon-mat-add:before {
+.icon-my-human-fetus-svgrepo-com:before {
     content: "\f131";
 }
-.icon-mat-allergy:before {
+.icon-my-human-ear-svgrepo-com:before {
     content: "\f132";
 }
-.icon-mat-analytics:before {
+.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
     content: "\f133";
 }
-.icon-mat-app_registration:before {
+.icon-my-human-back-svgrepo-com:before {
     content: "\f134";
 }
-.icon-mat-architecture:before {
+.icon-my-human-back-svgrepo-com-1:before {
     content: "\f135";
 }
-.icon-mat-arrow_back:before {
+.icon-my-how_to_reg:before {
     content: "\f136";
 }
-.icon-mat-arrow_downward:before {
+.icon-my-hand_pencil:before {
     content: "\f137";
 }
-.icon-mat-arrow_drop_down:before {
+.icon-my-google:before {
     content: "\f138";
 }
-.icon-mat-arrow_forward:before {
+.icon-my-footprints-outline-variant-svgrepo-com:before {
     content: "\f139";
 }
-.icon-mat-arrow_upward:before {
+.icon-my-foot-side-view-outline-svgrepo-com:before {
     content: "\f13a";
 }
-.icon-mat-assessment:before {
+.icon-my-foot-bones-svgrepo-com:before {
     content: "\f13b";
 }
-.icon-mat-assignment_ind:before {
+.icon-my-foot-bones-svgrepo-com-1:before {
     content: "\f13c";
 }
-.icon-mat-assignment_return:before {
+.icon-my-finger-svgrepo-com:before {
     content: "\f13d";
 }
-.icon-mat-atr:before {
+.icon-my-file_sign:before {
     content: "\f13e";
 }
-.icon-mat-attach_money:before {
+.icon-my-file-excel:before {
     content: "\f13f";
 }
-.icon-mat-auto_awesome_mosaic:before {
+.icon-my-female-torso-svgrepo-com:before {
     content: "\f140";
 }
-.icon-mat-baby_changing_station:before {
+.icon-my-facebook:before {
     content: "\f141";
 }
-.icon-mat-backup_table:before {
+.icon-my-eyebrow-svgrepo-com:before {
     content: "\f142";
 }
-.icon-mat-bedroom_parent:before {
+.icon-my-excel:before {
     content: "\f143";
 }
-.icon-mat-call_made:before {
+.icon-my-emoticon-sad-outline:before {
     content: "\f144";
 }
-.icon-mat-campaign:before {
+.icon-my-emoticon-outline:before {
     content: "\f145";
 }
-.icon-mat-cancel:before {
+.icon-my-emoticon-neutral-outline:before {
     content: "\f146";
 }
-.icon-mat-change_history:before {
+.icon-my-emoticon-excited-outline:before {
     content: "\f147";
 }
-.icon-mat-check_box_outline:before {
+.icon-my-emoticon-cry-outline:before {
     content: "\f148";
 }
-.icon-mat-check_circle:before {
+.icon-my-emoticon-confused-outline:before {
     content: "\f149";
 }
-.icon-mat-check:before {
+.icon-my-emoticon-angry-outline:before {
     content: "\f14a";
 }
-.icon-mat-chevron_left:before {
+.icon-my-ear-outline-svgrepo-com:before {
     content: "\f14b";
 }
-.icon-mat-chevron_right:before {
+.icon-my-draw:before {
     content: "\f14c";
 }
-.icon-mat-child_care:before {
+.icon-my-color_lens:before {
     content: "\f14d";
 }
-.icon-mat-circle:before {
+.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
     content: "\f14e";
 }
-.icon-mat-clear_all:before {
+.icon-my-brain-upper-view-outline-svgrepo-com:before {
     content: "\f14f";
 }
-.icon-mat-clear:before {
+.icon-my-bpjs:before {
     content: "\f150";
 }
-.icon-mat-close_fullscreen:before {
+.icon-my-bones-joint-svgrepo-com:before {
     content: "\f151";
 }
-.icon-mat-close:before {
+.icon-my-big-nose-svgrepo-com:before {
     content: "\f152";
 }
-.icon-mat-cloud_upload:before {
+.icon-my-baby:before {
     content: "\f153";
 }
-.icon-mat-code:before {
+.icon-my-baby-head:before {
     content: "\f154";
 }
-.icon-mat-comment:before {
+.icon-my-articulation-bones-svgrepo-com:before {
     content: "\f155";
 }
-.icon-mat-construction:before {
+.icon-my-artboard:before {
     content: "\f156";
 }
-.icon-mat-copy_all:before {
+.icon-my-arm-svgrepo-com:before {
     content: "\f157";
 }
-.icon-mat-crop_square:before {
+.icon-ion-timer:before {
     content: "\f158";
 }
-.icon-mat-crop:before {
+.icon-ion-person:before {
     content: "\f159";
 }
-.icon-mat-dashboard:before {
+.icon-ion-home:before {
     content: "\f15a";
 }
-.icon-mat-dataset:before {
+.icon-ion-home-outline:before {
     content: "\f15b";
 }
-.icon-mat-delete_sweep:before {
+.icon-ion-bell-outline:before {
     content: "\f15c";
 }
-.icon-mat-delete:before {
+.icon-mat-warning:before {
     content: "\f15d";
 }
-.icon-mat-description:before {
+.icon-mat-vpn_key:before {
     content: "\f15e";
 }
-.icon-mat-dining:before {
+.icon-mat-volume_up:before {
     content: "\f15f";
 }
-.icon-mat-display_settings:before {
+.icon-mat-visibility_off:before {
     content: "\f160";
 }
-.icon-mat-done_all:before {
+.icon-mat-visibility:before {
     content: "\f161";
 }
-.icon-mat-done:before {
+.icon-mat-vertical_align_top:before {
     content: "\f162";
 }
-.icon-mat-download:before {
+.icon-mat-vertical_align_bottom:before {
     content: "\f163";
 }
-.icon-mat-dvr:before {
+.icon-mat-verified_user:before {
     content: "\f164";
 }
-.icon-mat-ear-hearing:before {
+.icon-mat-undo:before {
     content: "\f165";
 }
-.icon-mat-edit_document:before {
+.icon-mat-tungsten:before {
     content: "\f166";
 }
-.icon-mat-edit:before {
+.icon-mat-tune:before {
     content: "\f167";
 }
-.icon-mat-elderly:before {
+.icon-mat-transfer_within_a_station:before {
     content: "\f168";
 }
-.icon-mat-email:before {
+.icon-mat-today:before {
     content: "\f169";
 }
-.icon-mat-emergency:before {
+.icon-mat-thumb_up_off_alt:before {
     content: "\f16a";
 }
-.icon-mat-error:before {
+.icon-mat-textsms:before {
     content: "\f16b";
 }
-.icon-mat-event:before {
+.icon-mat-text_format:before {
     content: "\f16c";
 }
-.icon-mat-exit_to_app:before {
+.icon-mat-task_alt:before {
     content: "\f16d";
 }
-.icon-mat-expand_less:before {
+.icon-mat-table_view:before {
     content: "\f16e";
 }
-.icon-mat-expand_more:before {
+.icon-mat-sync_alt:before {
     content: "\f16f";
 }
-.icon-mat-file_download:before {
+.icon-mat-swap_horiz:before {
     content: "\f170";
 }
-.icon-mat-fingerprint:before {
+.icon-mat-supervisor_account:before {
     content: "\f171";
 }
-.icon-mat-first_page:before {
+.icon-mat-superscript:before {
     content: "\f172";
 }
-.icon-mat-font_download:before {
+.icon-mat-summarize:before {
     content: "\f173";
 }
-.icon-mat-foot-print:before {
+.icon-mat-subscript:before {
     content: "\f174";
 }
-.icon-mat-format_align_center:before {
+.icon-mat-style:before {
     content: "\f175";
 }
-.icon-mat-format_align_justify:before {
+.icon-mat-strikethrough_s:before {
     content: "\f176";
 }
-.icon-mat-format_align_left:before {
+.icon-mat-spatial_audio:before {
     content: "\f177";
 }
-.icon-mat-format_align_right:before {
+.icon-mat-sound_detection_loud:before {
     content: "\f178";
 }
-.icon-mat-format_bold:before {
+.icon-mat-sort:before {
     content: "\f179";
 }
-.icon-mat-format_clear:before {
+.icon-mat-sms_failed:before {
     content: "\f17a";
 }
-.icon-mat-format_indent_decrease:before {
+.icon-mat-sms_black:before {
     content: "\f17b";
 }
-.icon-mat-format_indent_increase:before {
+.icon-mat-skip_previous:before {
     content: "\f17c";
 }
-.icon-mat-format_italic:before {
+.icon-mat-skip_next:before {
     content: "\f17d";
 }
-.icon-mat-format_list_bulleted:before {
+.icon-mat-shopping_cart_checkout:before {
     content: "\f17e";
 }
-.icon-mat-format_list_numbered:before {
+.icon-mat-shopping_cart:before {
     content: "\f17f";
 }
-.icon-mat-format_quote:before {
+.icon-mat-settings:before {
     content: "\f180";
 }
-.icon-mat-format_size:before {
+.icon-mat-send_time_extension:before {
     content: "\f181";
 }
-.icon-mat-format_underlined:before {
+.icon-mat-send:before {
     content: "\f182";
 }
-.icon-mat-forward_to_inbox:before {
+.icon-mat-segment:before {
     content: "\f183";
 }
-.icon-mat-fullscreen:before {
+.icon-mat-search:before {
     content: "\f184";
 }
-.icon-mat-functions:before {
+.icon-mat-save_alt:before {
     content: "\f185";
 }
-.icon-mat-gpp_maybe:before {
+.icon-mat-save:before {
     content: "\f186";
 }
-.icon-mat-grade:before {
+.icon-mat-restart_alt:before {
     content: "\f187";
 }
-.icon-mat-gradient:before {
+.icon-mat-report:before {
     content: "\f188";
 }
-.icon-mat-group_work:before {
+.icon-mat-remove:before {
     content: "\f189";
 }
-.icon-mat-group:before {
+.icon-mat-refresh:before {
     content: "\f18a";
 }
-.icon-mat-groups:before {
+.icon-mat-redo:before {
     content: "\f18b";
 }
-.icon-mat-hand-front-left:before {
+.icon-mat-recycling:before {
     content: "\f18c";
 }
-.icon-mat-handshake:before {
+.icon-mat-receipt_long:before {
     content: "\f18d";
 }
-.icon-mat-head:before {
+.icon-mat-receipt:before {
     content: "\f18e";
 }
-.icon-mat-health_and_safety:before {
+.icon-mat-radio_button_unchecked:before {
     content: "\f18f";
 }
-.icon-mat-heart_broken:before {
+.icon-mat-qr_code_2:before {
     content: "\f190";
 }
-.icon-mat-help_outline:before {
+.icon-mat-push_pin:before {
     content: "\f191";
 }
-.icon-mat-history:before {
+.icon-mat-published_with_changes:before {
     content: "\f192";
 }
-.icon-mat-horizontal_rule:before {
+.icon-mat-priority_high:before {
     content: "\f193";
 }
-.icon-mat-info:before {
+.icon-mat-print:before {
     content: "\f194";
 }
-.icon-mat-insert_photo:before {
+.icon-mat-pregnant_woman:before {
     content: "\f195";
 }
-.icon-mat-insights:before {
+.icon-mat-post_add:before {
     content: "\f196";
 }
-.icon-mat-integration_instructions:before {
+.icon-mat-poll:before {
     content: "\f197";
 }
-.icon-mat-inventory_2:before {
+.icon-mat-play_arrow:before {
     content: "\f198";
 }
-.icon-mat-key:before {
+.icon-mat-personal_injury:before {
     content: "\f199";
 }
-.icon-mat-keyboard_arrow_down:before {
+.icon-mat-person_3:before {
     content: "\f19a";
 }
-.icon-mat-keyboard_arrow_left:before {
+.icon-mat-person_2:before {
     content: "\f19b";
 }
-.icon-mat-keyboard_arrow_right:before {
+.icon-mat-person:before {
     content: "\f19c";
 }
-.icon-mat-keyboard_arrow_up:before {
+.icon-mat-people_alt:before {
     content: "\f19d";
 }
-.icon-mat-laptop_chromebook:before {
+.icon-mat-panorama_fish_eye:before {
     content: "\f19e";
 }
-.icon-mat-last_page:before {
+.icon-mat-palette:before {
     content: "\f19f";
 }
-.icon-mat-launch:before {
+.icon-mat-open_in_full:before {
     content: "\f1a0";
 }
-.icon-mat-layers:before {
+.icon-mat-note_alt:before {
     content: "\f1a1";
 }
-.icon-mat-lens:before {
+.icon-mat-next_plan:before {
     content: "\f1a2";
 }
-.icon-mat-link:before {
+.icon-mat-near_me:before {
     content: "\f1a3";
 }
-.icon-mat-local_pharmacy:before {
+.icon-mat-move_to_inbox:before {
     content: "\f1a4";
 }
-.icon-mat-local_shipping:before {
+.icon-mat-minimize:before {
     content: "\f1a5";
 }
-.icon-mat-lock_open:before {
+.icon-mat-mic_external_on:before {
     content: "\f1a6";
 }
-.icon-mat-lock:before {
+.icon-mat-mic_external:before {
     content: "\f1a7";
 }
-.icon-mat-logout:before {
+.icon-mat-message:before {
     content: "\f1a8";
 }
-.icon-mat-manage_accounts:before {
+.icon-mat-menu_book:before {
     content: "\f1a9";
 }
-.icon-mat-mark_email_read:before {
+.icon-mat-menu:before {
     content: "\f1aa";
 }
-.icon-mat-medical_information:before {
+.icon-mat-medication_liquid:before {
     content: "\f1ab";
 }
-.icon-mat-medication_liquid:before {
+.icon-mat-medical_information:before {
     content: "\f1ac";
 }
-.icon-mat-menu_book:before {
+.icon-mat-mark_email_read:before {
     content: "\f1ad";
 }
-.icon-mat-menu:before {
+.icon-mat-manage_accounts:before {
     content: "\f1ae";
 }
-.icon-mat-message:before {
+.icon-mat-logout:before {
     content: "\f1af";
 }
-.icon-mat-mic_external_on:before {
+.icon-mat-lock_open:before {
     content: "\f1b0";
 }
-.icon-mat-mic_external:before {
+.icon-mat-lock:before {
     content: "\f1b1";
 }
-.icon-mat-minimize:before {
+.icon-mat-local_shipping:before {
     content: "\f1b2";
 }
-.icon-mat-move_to_inbox:before {
+.icon-mat-local_pharmacy:before {
     content: "\f1b3";
 }
-.icon-mat-near_me:before {
+.icon-mat-link:before {
     content: "\f1b4";
 }
-.icon-mat-next_plan:before {
+.icon-mat-lens:before {
     content: "\f1b5";
 }
-.icon-mat-note_alt:before {
+.icon-mat-layers:before {
     content: "\f1b6";
 }
-.icon-mat-open_in_full:before {
+.icon-mat-launch:before {
     content: "\f1b7";
 }
-.icon-mat-palette:before {
+.icon-mat-last_page:before {
     content: "\f1b8";
 }
-.icon-mat-panorama_fish_eye:before {
+.icon-mat-laptop_chromebook:before {
     content: "\f1b9";
 }
-.icon-mat-people_alt:before {
+.icon-mat-keyboard_arrow_up:before {
     content: "\f1ba";
 }
-.icon-mat-person_2:before {
+.icon-mat-keyboard_arrow_right:before {
     content: "\f1bb";
 }
-.icon-mat-person_3:before {
+.icon-mat-keyboard_arrow_left:before {
     content: "\f1bc";
 }
-.icon-mat-person:before {
+.icon-mat-keyboard_arrow_down:before {
     content: "\f1bd";
 }
-.icon-mat-personal_injury:before {
+.icon-mat-key:before {
     content: "\f1be";
 }
-.icon-mat-play_arrow:before {
+.icon-mat-inventory_2:before {
     content: "\f1bf";
 }
-.icon-mat-poll:before {
+.icon-mat-integration_instructions:before {
     content: "\f1c0";
 }
-.icon-mat-post_add:before {
+.icon-mat-insights:before {
     content: "\f1c1";
 }
-.icon-mat-pregnant_woman:before {
+.icon-mat-insert_photo:before {
     content: "\f1c2";
 }
-.icon-mat-print:before {
+.icon-mat-info:before {
     content: "\f1c3";
 }
-.icon-mat-priority_high:before {
+.icon-mat-horizontal_rule:before {
     content: "\f1c4";
 }
-.icon-mat-published_with_changes:before {
+.icon-mat-history:before {
     content: "\f1c5";
 }
-.icon-mat-push_pin:before {
+.icon-mat-help_outline:before {
     content: "\f1c6";
 }
-.icon-mat-qr_code_2:before {
+.icon-mat-heart_broken:before {
     content: "\f1c7";
 }
-.icon-mat-radio_button_unchecked:before {
+.icon-mat-health_and_safety:before {
     content: "\f1c8";
 }
-.icon-mat-receipt_long:before {
+.icon-mat-head:before {
     content: "\f1c9";
 }
-.icon-mat-receipt:before {
+.icon-mat-handshake:before {
     content: "\f1ca";
 }
-.icon-mat-recycling:before {
+.icon-mat-hand-front-left:before {
     content: "\f1cb";
 }
-.icon-mat-redo:before {
+.icon-mat-groups:before {
     content: "\f1cc";
 }
-.icon-mat-refresh:before {
+.icon-mat-group_work:before {
     content: "\f1cd";
 }
-.icon-mat-remove:before {
+.icon-mat-group:before {
     content: "\f1ce";
 }
-.icon-mat-report:before {
+.icon-mat-gradient:before {
     content: "\f1cf";
 }
-.icon-mat-restart_alt:before {
+.icon-mat-grade:before {
     content: "\f1d0";
 }
-.icon-mat-save_alt:before {
+.icon-mat-gpp_maybe:before {
     content: "\f1d1";
 }
-.icon-mat-save:before {
+.icon-mat-functions:before {
     content: "\f1d2";
 }
-.icon-mat-search:before {
+.icon-mat-fullscreen:before {
     content: "\f1d3";
 }
-.icon-mat-segment:before {
+.icon-mat-forward_to_inbox:before {
     content: "\f1d4";
 }
-.icon-mat-send_time_extension:before {
+.icon-mat-format_underlined:before {
     content: "\f1d5";
 }
-.icon-mat-send:before {
+.icon-mat-format_size:before {
     content: "\f1d6";
 }
-.icon-mat-settings:before {
+.icon-mat-format_quote:before {
     content: "\f1d7";
 }
-.icon-mat-shopping_cart_checkout:before {
+.icon-mat-format_list_numbered:before {
     content: "\f1d8";
 }
-.icon-mat-shopping_cart:before {
+.icon-mat-format_list_bulleted:before {
     content: "\f1d9";
 }
-.icon-mat-skip_next:before {
+.icon-mat-format_italic:before {
     content: "\f1da";
 }
-.icon-mat-skip_previous:before {
+.icon-mat-format_indent_increase:before {
     content: "\f1db";
 }
-.icon-mat-sms_black:before {
+.icon-mat-format_indent_decrease:before {
     content: "\f1dc";
 }
-.icon-mat-sms_failed:before {
+.icon-mat-format_clear:before {
     content: "\f1dd";
 }
-.icon-mat-sort:before {
+.icon-mat-format_bold:before {
     content: "\f1de";
 }
-.icon-mat-sound_detection_loud:before {
+.icon-mat-format_align_right:before {
     content: "\f1df";
 }
-.icon-mat-spatial_audio:before {
+.icon-mat-format_align_left:before {
     content: "\f1e0";
 }
-.icon-mat-strikethrough_s:before {
+.icon-mat-format_align_justify:before {
     content: "\f1e1";
 }
-.icon-mat-style:before {
+.icon-mat-format_align_center:before {
     content: "\f1e2";
 }
-.icon-mat-subscript:before {
+.icon-mat-foot-print:before {
     content: "\f1e3";
 }
-.icon-mat-summarize:before {
+.icon-mat-font_download:before {
     content: "\f1e4";
 }
-.icon-mat-superscript:before {
+.icon-mat-first_page:before {
     content: "\f1e5";
 }
-.icon-mat-supervisor_account:before {
+.icon-mat-fingerprint:before {
     content: "\f1e6";
 }
-.icon-mat-swap_horiz:before {
+.icon-mat-file_download:before {
     content: "\f1e7";
 }
-.icon-mat-sync_alt:before {
+.icon-mat-expand_more:before {
     content: "\f1e8";
 }
-.icon-mat-table_view:before {
+.icon-mat-expand_less:before {
     content: "\f1e9";
 }
-.icon-mat-task_alt:before {
+.icon-mat-exit_to_app:before {
     content: "\f1ea";
 }
-.icon-mat-text_format:before {
+.icon-mat-event:before {
     content: "\f1eb";
 }
-.icon-mat-textsms:before {
+.icon-mat-error:before {
     content: "\f1ec";
 }
-.icon-mat-thumb_up_off_alt:before {
+.icon-mat-emergency:before {
     content: "\f1ed";
 }
-.icon-mat-today:before {
+.icon-mat-email:before {
     content: "\f1ee";
 }
-.icon-mat-transfer_within_a_station:before {
+.icon-mat-elderly:before {
     content: "\f1ef";
 }
-.icon-mat-tune:before {
+.icon-mat-edit_document:before {
     content: "\f1f0";
 }
-.icon-mat-tungsten:before {
+.icon-mat-edit:before {
     content: "\f1f1";
 }
-.icon-mat-undo:before {
+.icon-mat-ear-hearing:before {
     content: "\f1f2";
 }
-.icon-mat-verified_user:before {
+.icon-mat-dvr:before {
     content: "\f1f3";
 }
-.icon-mat-vertical_align_bottom:before {
+.icon-mat-download:before {
     content: "\f1f4";
 }
-.icon-mat-vertical_align_top:before {
+.icon-mat-done_all:before {
     content: "\f1f5";
 }
-.icon-mat-visibility_off:before {
+.icon-mat-done:before {
     content: "\f1f6";
 }
-.icon-mat-visibility:before {
+.icon-mat-display_settings:before {
     content: "\f1f7";
 }
-.icon-mat-volume_up:before {
+.icon-mat-dining:before {
     content: "\f1f8";
 }
-.icon-mat-vpn_key:before {
+.icon-mat-description:before {
     content: "\f1f9";
 }
-.icon-mat-warning:before {
+.icon-mat-delete_sweep:before {
     content: "\f1fa";
 }
-.icon-my-arm-svgrepo-com:before {
+.icon-mat-delete:before {
     content: "\f1fb";
 }
-.icon-my-artboard:before {
+.icon-mat-dataset:before {
     content: "\f1fc";
 }
-.icon-my-articulation-bones-svgrepo-com:before {
+.icon-mat-dashboard:before {
     content: "\f1fd";
 }
-.icon-my-baby-head:before {
+.icon-mat-crop_square:before {
     content: "\f1fe";
 }
-.icon-my-baby:before {
+.icon-mat-crop:before {
     content: "\f1ff";
 }
-.icon-my-big-nose-svgrepo-com:before {
+.icon-mat-copy_all:before {
     content: "\f200";
 }
-.icon-my-bones-joint-svgrepo-com:before {
+.icon-mat-construction:before {
     content: "\f201";
 }
-.icon-my-bpjs:before {
+.icon-mat-comment:before {
     content: "\f202";
 }
-.icon-my-brain-upper-view-outline-svgrepo-com:before {
+.icon-mat-code:before {
     content: "\f203";
 }
-.icon-my-brunette-female-woman-long-hair-svgrepo-com:before {
+.icon-mat-cloud_upload:before {
     content: "\f204";
 }
-.icon-my-color_lens:before {
+.icon-mat-close_fullscreen:before {
     content: "\f205";
 }
-.icon-my-draw:before {
+.icon-mat-close:before {
     content: "\f206";
 }
-.icon-my-ear-outline-svgrepo-com:before {
+.icon-mat-clear_all:before {
     content: "\f207";
 }
-.icon-my-emoticon-angry-outline:before {
+.icon-mat-clear:before {
     content: "\f208";
 }
-.icon-my-emoticon-confused-outline:before {
+.icon-mat-circle:before {
     content: "\f209";
 }
-.icon-my-emoticon-cry-outline:before {
+.icon-mat-child_care:before {
     content: "\f20a";
 }
-.icon-my-emoticon-excited-outline:before {
+.icon-mat-chevron_right:before {
     content: "\f20b";
 }
-.icon-my-emoticon-neutral-outline:before {
+.icon-mat-chevron_left:before {
     content: "\f20c";
 }
-.icon-my-emoticon-outline:before {
+.icon-mat-check_circle:before {
     content: "\f20d";
 }
-.icon-my-emoticon-sad-outline:before {
+.icon-mat-check_box_outline:before {
     content: "\f20e";
 }
-.icon-my-eyebrow-svgrepo-com:before {
+.icon-mat-check:before {
     content: "\f20f";
 }
-.icon-my-facebook:before {
+.icon-mat-change_history:before {
     content: "\f210";
 }
-.icon-my-female-torso-svgrepo-com:before {
+.icon-mat-cancel:before {
     content: "\f211";
 }
-.icon-my-file_sign:before {
+.icon-mat-campaign:before {
     content: "\f212";
 }
-.icon-my-finger-svgrepo-com:before {
+.icon-mat-call_made:before {
     content: "\f213";
 }
-.icon-my-foot-bones-svgrepo-com-1:before {
+.icon-mat-bedroom_parent:before {
     content: "\f214";
 }
-.icon-my-foot-bones-svgrepo-com:before {
+.icon-mat-backup_table:before {
     content: "\f215";
 }
-.icon-my-foot-side-view-outline-svgrepo-com:before {
+.icon-mat-baby_changing_station:before {
     content: "\f216";
 }
-.icon-my-footprints-outline-variant-svgrepo-com:before {
+.icon-mat-auto_awesome_mosaic:before {
     content: "\f217";
 }
-.icon-my-google:before {
+.icon-mat-attach_money:before {
     content: "\f218";
 }
-.icon-my-hand_pencil:before {
+.icon-mat-atr:before {
     content: "\f219";
 }
-.icon-my-how_to_reg:before {
+.icon-mat-assignment_return:before {
     content: "\f21a";
 }
-.icon-my-human-back-svgrepo-com-1:before {
+.icon-mat-assignment_ind:before {
     content: "\f21b";
 }
-.icon-my-human-back-svgrepo-com:before {
+.icon-mat-assessment:before {
     content: "\f21c";
 }
-.icon-my-human-body-silhouette-with-focus-on-respiratory-system-svgrepo-com:before {
+.icon-mat-arrow_upward:before {
     content: "\f21d";
 }
-.icon-my-human-ear-svgrepo-com:before {
+.icon-mat-arrow_forward:before {
     content: "\f21e";
 }
-.icon-my-human-fetus-svgrepo-com:before {
+.icon-mat-arrow_drop_down:before {
     content: "\f21f";
 }
-.icon-my-human-finger-svgrepo-com:before {
+.icon-mat-arrow_downward:before {
     content: "\f220";
 }
-.icon-my-human-footprints-svgrepo-com:before {
+.icon-mat-arrow_back:before {
     content: "\f221";
 }
-.icon-my-human-hand-bones-svgrepo-com:before {
+.icon-mat-architecture:before {
     content: "\f222";
 }
-.icon-my-human-neck-svgrepo-com:before {
+.icon-mat-app_registration:before {
     content: "\f223";
 }
-.icon-my-human-ribs-svgrepo-com:before {
+.icon-mat-analytics:before {
     content: "\f224";
 }
-.icon-my-human-skull-side-view-svgrepo-com:before {
+.icon-mat-allergy:before {
     content: "\f225";
 }
-.icon-my-human-teeth-svgrepo-com:before {
+.icon-mat-add_shopping_cart:before {
     content: "\f226";
 }
-.icon-my-human-trachea-svgrepo-com:before {
+.icon-mat-add_circle:before {
     content: "\f227";
 }
-.icon-my-key:before {
+.icon-mat-add_box:before {
     content: "\f228";
 }
-.icon-my-local_hospital:before {
+.icon-mat-add:before {
     content: "\f229";
 }
-.icon-my-local_pharmacy:before {
+.icon-mat-account_circle:before {
     content: "\f22a";
 }
-.icon-my-lungs-svgrepo-com:before {
+.icon-mat-access_time:before {
     content: "\f22b";
 }
-.icon-my-male-black-short-hair-shape-silhouette-svgrepo-com:before {
+.icon-mat-abc:before {
     content: "\f22c";
 }
-.icon-my-male-hair-variant-svgrepo-com:before {
+.icon-fa-xmark-solid:before {
     content: "\f22d";
 }
-.icon-my-medical_information:before {
+.icon-fa-warehouse-solid:before {
     content: "\f22e";
 }
-.icon-my-medical_services:before {
+.icon-fa-vials-solid:before {
     content: "\f22f";
 }
-.icon-my-medication_liquid:before {
+.icon-fa-tablets-solid:before {
     content: "\f230";
 }
-.icon-my-medication:before {
+.icon-fa-staff-snake-solid:before {
     content: "\f231";
 }
-.icon-my-men-elbow-svgrepo-com:before {
+.icon-fa-spoon-solid:before {
     content: "\f232";
 }
-.icon-my-men-leg-svgrepo-com:before {
+.icon-fa-prescription-solid:before {
     content: "\f233";
 }
-.icon-my-men-shoulder-svgrepo-com:before {
+.icon-fa-pills-solid:before {
     content: "\f234";
 }
-.icon-my-monitor_heart:before {
+.icon-fa-mortar-pestle-solid:before {
     content: "\f235";
 }
-.icon-my-nose-outline-svgrepo-com:before {
+.icon-fa-mask-face-solid:before {
     content: "\f236";
 }
-.icon-my-nose-svgrepo-com:before {
+.icon-fa-laptop-medical-solid:before {
     content: "\f237";
 }
-.icon-my-pelvis-svgrepo-com:before {
+.icon-fa-kit-medical-solid:before {
     content: "\f238";
 }
-.icon-my-penis-svgrepo-com:before {
+.icon-fa-house-flag-solid:before {
     content: "\f239";
 }
-.icon-my-personal_injury:before {
+.icon-fa-folder-tree-solid:before {
     content: "\f23a";
 }
-.icon-my-pill:before {
+.icon-fa-file-regular:before {
     content: "\f23b";
 }
-.icon-my-point_of_sale:before {
+.icon-fa-file-prescription-solid:before {
     content: "\f23c";
 }
-.icon-my-print_setting:before {
+.icon-fa-file-invoice-solid:before {
     content: "\f23d";
 }
-.icon-my-ribs-svgrepo-com:before {
+.icon-fa-dumpster-solid:before {
     content: "\f23e";
 }
-.icon-my-shape-rectangle-plus:before {
+.icon-fa-circle-check-regular:before {
     content: "\f23f";
 }
-.icon-my-small-intestine-svgrepo-com:before {
+.icon-fa-check-to-slot-solid:before {
     content: "\f240";
 }
-.icon-my-spine-svgrepo-com:before {
+.icon-fa-check-double-solid:before {
     content: "\f241";
 }
-.icon-my-standing-human-body-silhouette-svgrepo-com:before {
+.icon-fa-capsules-solid:before {
     content: "\f242";
 }
-.icon-my-stethoscope:before {
+.icon-fa-boxes-packing-solid:before {
     content: "\f243";
 }
-.icon-my-stomach-svgrepo-com:before {
+.icon-fa-book-medical-solid:before {
     content: "\f244";
 }
-.icon-my-thin-lips-outline-svgrepo-com:before {
+.icon-fa-biohazard-solid:before {
     content: "\f245";
 }
-.icon-my-tongue-and-mouth-svgrepo-com:before {
+.icon-fa-arrows-down-to-people-solid:before {
     content: "\f246";
 }
-.icon-my-tongue-svgrepo-com:before {
+.icon-fa-arrows-down-to-line-solid:before {
     content: "\f247";
 }
-.icon-my-tonsil-svgrepo-com:before {
+.icon-eva-person:before {
     content: "\f248";
 }
-.icon-my-tooth-outline-svgrepo-com:before {
+.icon-eva-person-outline:before {
     content: "\f249";
 }
-.icon-my-tooth-shape-outline-svgrepo-com:before {
+.icon-eva-message-circle-outline:before {
     content: "\f24a";
 }
-.icon-my-trapezoid:before {
+.icon-eva-home:before {
     content: "\f24b";
 }
-.icon-my-triangle-outline:before {
+.icon-eva-home-outline:before {
     content: "\f24c";
 }
-.icon-my-upper-torso-of-a-woman-svgrepo-com:before {
+.icon-eva-google:before {
     content: "\f24d";
 }
-.icon-my-women-eyelashes-svgrepo-com:before {
+.icon-eva-facebook:before {
     content: "\f24e";
 }
-.icon-my-word:before {
+.icon-eva-bell-outline:before {
     content: "\f24f";
+}
+.icon-cus-groups:before {
+    content: "\f250";
+}
+.icon-cus-group_work:before {
+    content: "\f251";
 }

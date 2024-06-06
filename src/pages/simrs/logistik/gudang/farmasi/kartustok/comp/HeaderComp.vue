@@ -51,7 +51,14 @@
           style="width:100px"
         />
       </div>
-      <div />
+      <div class="kanan">
+        <q-btn flat round icon="icon-my-file-excel" size="sm" padding="sm" @click="store.exportExcel= !store.exportExcel">
+          <q-tooltip>export to excel</q-tooltip>
+        </q-btn>
+        <!-- <q-btn flat round icon="icon-mat-print" size="sm" padding="sm">
+          <q-tooltip>print</q-tooltip>
+        </q-btn> -->
+      </div>
     </div>
 
     <div>
@@ -135,4 +142,5 @@ const clearSearch = () => {
   store.params.q = ''
   store.goToPage(1)
 }
+
 </script>
