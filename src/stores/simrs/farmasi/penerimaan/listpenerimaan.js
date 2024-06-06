@@ -22,34 +22,38 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
       'total'
     ],
     cetaks: [],
-    columnHide: []
+    columnHide: [],
+    gudangs: [
+      { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+      { nama: 'Gudang Farmasi (Floor Stok)', value: 'Gd-03010100' }
+    ]
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.param[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('cari', payload)
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.cariRencanaBeli()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.cariRencanaBeli()
     },
-    getInitialData() {
+    getInitialData () {
       this.cariRencanaBeli()
     },
-    cariRencanaBeli() {
+    cariRencanaBeli () {
       this.loading = true
       console.log('penerimaan ', this.param)
       const params = { params: this.param }
@@ -58,8 +62,8 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
           .then(resp => {
             this.loading = false
             console.log('list penerimaan', resp)
-            this.items = resp.data.data
-            this.meta = resp.data
+            this.items = resp.data.data.data
+            this.meta = resp.data.data
             resolve(resp)
           })
           .catch(() => {
@@ -67,7 +71,7 @@ export const useListPenerimaanStore = defineStore('list_penerimaan_store', {
           })
       })
     },
-    getPenerimaanBynomor(val) {
+    getPenerimaanBynomor (val) {
       this.loadingcetak = true
       const nomor = {
         nomorpenerimaan: val
