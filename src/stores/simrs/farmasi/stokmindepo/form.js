@@ -2,9 +2,9 @@ import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 import { notifErrVue, notifSuccess } from 'src/modules/utils'
-import { UseFarmasiStokSekarangTable } from './tabel'
+import { UseFarmasiStokMinDepoTable } from './tabel'
 
-export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
+export const UseFarmasiStokMinDepoStore = defineStore('form_stok_min_depo', {
   state: () => ({
     loading: false,
     loadingObat: false,
@@ -179,7 +179,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
             console.log('simpan', resp.data)
             this.resetForm()
             this.setClose()
-            const table = UseFarmasiStokSekarangTable()
+            const table = UseFarmasiStokMinDepoTable()
             table.getDataTable()
             notifSuccess(resp)
             resolve(resp)

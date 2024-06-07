@@ -89,6 +89,11 @@ const depo = {
           path: '/depo/farmasi/stoksekarang',
           // name: 'farmasi.stoksekarang',
           component: () => import('pages/simrs/farmasi/stoksekarang/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/stokmindepo',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/farmasi/stokmindepo/IndexPage.vue')
         }
       ]
     },

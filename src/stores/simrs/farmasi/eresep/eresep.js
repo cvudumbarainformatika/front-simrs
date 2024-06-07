@@ -317,6 +317,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
 
               jumlahdibutuhkanAwal: key?.jumlahdibutuhkan,
               etiket: false,
+              nilaiR,
               rincian: [key]
             }
             res.listRacikan.push(temp)

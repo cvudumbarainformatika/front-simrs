@@ -744,12 +744,26 @@
                           {{ rinc?.jumlahresep }}
                         </div>
                       </div>
-                      <div class="row  text-black">
-                        <div class="col-4">
+                      <div class="row items-center text-black">
+                        <!-- <div class="col-4">
                           Jumlah Obat <span class="text-italic f-10">(keluar dari depo)</span>
-                        </div>
-                        <div class="col-8">
+                        </div> -->
+                        <!-- <div class="col-8">
                           {{ rinc?.jumlahobat }} <span class="text-italic f-10">( {{ rinc?.mobat?.satuan_k }} )</span>
+                        </div> -->
+                        <div class="col-10">
+                          <q-input
+                            ref="inputJumlahObat"
+                            v-model="rinc.jumlahobat"
+                            label="jumlah obat (Keluar dari depo)"
+                            dense
+                            standout="bg-yellow-3"
+                            outlined
+                            @update:model-value="updateJumlahObat($event,rinc,item)"
+                          />
+                        </div>
+                        <div class="col-2">
+                          <span class="text-italic f-10">( {{ rinc?.mobat?.satuan_k }} )</span>
                         </div>
                       </div>
                     </div>
@@ -1457,6 +1471,20 @@ function setJumlahRacik (evt, det, key) {
     // console.log('r ', r)
   }
   console.log('jumh ', det)
+}
+function updateJumlahObat (evt, rinc, item) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  rinc.jumlahobat = nilai
+  // yang ikut berubah rinc?.harga item?.harga
+  // rinc.harga =harga_jual * jumlahobat
+  // item.harga adalah jumlah dari rinc.harga
+  rinc.harga = rinc.harga_jual * rinc.jumlahobat
+  const tot = item?.rincian?.map(m => m.harga).reduce((a, b) => a + b, 0)
+  item.harga = tot + item?.nilaiR
+  console.log('item', item)
 }
 function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
