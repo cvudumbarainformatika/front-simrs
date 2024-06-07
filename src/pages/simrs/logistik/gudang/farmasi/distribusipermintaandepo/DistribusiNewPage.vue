@@ -229,7 +229,15 @@
             v-for="(rin, i) in row.permintaanrinci"
             :key="i"
           >
-            <div class="row items-center q-col-gutter-sm anu">
+            <CompDistribusi
+              :row="row" :rin="rin"
+              @minta="setMinta($event,rin)"
+              @distribusi="setDist($event,rin)"
+              @editable="setEdit($event,rin)"
+            />
+            <!-- <div class="row items-center q-col-gutter-sm anu">
+            </div> -->
+            <!-- <div class="row items-center q-col-gutter-sm anu">
               <div class="col-3">
                 <div class="row justify-between no-wrap q-mt-xs">
                   <div class="text-deep-purple text-weight-bold">
@@ -246,19 +254,19 @@
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold"
                     :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : '' }}
                   </div>
                 </div>
 
@@ -276,7 +284,6 @@
                   <div class="">
                     <div v-if="rin.stokreal">
                       <div v-if="rin.stokreal.length">
-                        <!-- {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.jumlah)).reduce((a,b) => a + b, 0) }} -->
                         {{ rin.stok }}
                       </div>
                       <div v-if="!rin.stokreal.length">
@@ -347,9 +354,7 @@
                     v-else
                     class="col-12"
                   >
-                    <!-- v-model="rin.jumlah_minta" -->
                     <app-input
-                      ref="refInputVerif"
                       v-model="rin.distribusi"
                       label="Jumlah Didistribusikan"
                       outlined
@@ -454,35 +459,9 @@
                   >
                     Terima Terlebih dahulu
                   </div>
-                  <!-- <div
-                    v-if="rin.user_verif !== '' && !rin.editable && row.flag === '2'"
-                    class="row justify-end text-weight-bold text-green q-py-xs"
-                  >
-                    <div class="row justify-end">
-                      <q-btn
-                        dense
-                        glossy
-                        no-caps
-                        icon="icon-mat-edit"
-                        label="Edit"
-                        color="primary"
-                        :loading="store.loading && (store.form.id === rin.id)"
-                        @click="setEdit(rin)"
-                      >
-                        <q-tooltip
-                          anchor="top middle"
-                          self="center middle"
-                        >
-                          <div>
-                            edit
-                          </div>
-                        </q-tooltip>
-                      </q-btn>
-                    </div>
-                  </div> -->
                 </div>
               </div>
-            </div>
+            </div> -->
             <q-separator />
           </div>
         </div>
@@ -502,7 +481,7 @@
 
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
-import { notifErrVue } from 'src/modules/utils'
+// import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanDepoStore } from 'src/stores/simrs/farmasi/distribusipermintaandepo/distribusi'
 import { useTandaTanganStore } from 'src/stores/simrs/logistik/sigarang/tantatangan/tandatangan'
@@ -511,6 +490,7 @@ const store = useDistribusiPermintaanDepoStore()
 const apps = useAplikasiStore()
 const tandatangan = useTandaTanganStore()
 
+const CompDistribusi = defineAsyncComponent(() => import('./CompDistribusi.vue'))
 const DialogPrintPage = defineAsyncComponent(() => import('./DialogPrintPage.vue'))
 const TandaTanganPage = defineAsyncComponent(() => import('src/pages/simrs/sigarang/tandatangan/TandaTanganPage.vue'))
 
@@ -547,10 +527,10 @@ function depo (val) {
     return val
   }
 }
-function mutasi (row, rin) {
-  console.log('row', row)
-  console.log('rin', rin)
-}
+// function mutasi (row, rin) {
+//   console.log('row', row)
+//   console.log('rin', rin)
+// }
 // click
 function onClick (val) {
   // console.log('click', val)
@@ -580,67 +560,78 @@ function distribusikan (val) {
 
   store.distribusi(form)
 }
-
+function setMinta (evt, rin) {
+  console.log('set minta', evt)
+  rin.jumlah_minta = evt
+}
+function setDist (evt, rin) {
+  console.log('set dist', evt)
+  rin.distribusi = evt
+}
+function setEdit (evt, rin) {
+  console.log('set edit', evt)
+  rin.editable = evt
+}
 // function setEdit(val) {
 //   console.log('edit ', val)
 //   val.editable = true
 // }
-const refInputVerif = ref(null)
-function kirim (val, i, row) {
-  console.log('ref', refInputVerif.value, i)
-  const valid = refInputVerif.value[i].$refs.refInput.validate()
-  console.log('kirim', val)
-  console.log('kirim row', row)
-  if (valid) {
-    store.setForm('id', val.id)
-    const form = {
-      id: val.id,
-      jumlahdiminta: val.jumlahdiminta,
-      jumlah_minta: val.jumlah_minta,
-      kodeobat: val.kdobat,
-      kdgudang: row.tujuan,
-      nopermintaan: row.no_permintaan
+// const refInputVerif = ref(null)
+// function kirim (val, i, row) {
+//   console.log('ref', refInputVerif.value, i)
+//   const valid = refInputVerif.value[i].$refs.refInput.validate()
+//   console.log('kirim', val)
+//   console.log('kirim row', row)
+//   if (valid) {
+//     store.setForm('id', val.id)
+//     const form = {
+//       id: val.id,
+//       jumlahdiminta: val.jumlahdiminta,
+//       jumlah_minta: val.jumlah_minta,
+//       kodeobat: val.kdobat,
+//       kdgudang: row.tujuan,
+//       nopermintaan: row.no_permintaan
 
-    }
-    console.log('form', form)
-    store.simpanDetail(form).then(() => {
-      val.editable = false
-      val.distribusi = form.distribusi
-    })
-  }
-  val.editable = false
-}
-function gaKirim (val, i) {
-  console.log('ref', refInputVerif.value, i)
-}
+//     }
+//     console.log('form', form)
+//     store.simpanDetail(form).then(() => {
+//       val.editable = false
+//       val.distribusi = form.distribusi
+//     })
+//   }
+//   val.editable = false
+// }
+// function gaKirim (val, i) {
+//   console.log('ref', refInputVerif.value, i)
+// }
 
-function setNol (val) {
-  const beli = !isNaN(parseFloat(val.jumlah_minta)) ? (parseFloat(val.jumlah_minta) <= 0 ? 0 : parseFloat(val.jumlah_minta)) : 0
-  val.jumlah_minta = beli
-}
-function setJumlah (evt, val) {
-  const inc = evt.includes('.')
-  const ind = evt.indexOf('.')
-  const panj = evt.length
-  const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
-  // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
-  const max = parseFloat(val?.mak_stok)
-  const stok = parseFloat(val?.stok)
-  // jumlah total stok tidak boleh melebihi jumlah stok maksimal
-  const totalStok = stok + beli
-  if (totalStok > max) {
-    notifErrVue('Jumlah Stok Depo tidak boleh melebihi jumlah stok maksimal')
-    val.jumlah_minta = 0
-  }
-  else {
-    val.jumlah_minta = beli
-  }
-  console.log('beli', beli, evt, max, stok, totalStok)
-}
-function sudah (evt, val) {
-  const anu = val.jumlah_minta
-  val.jumlah_minta = anu
-}
+// function setNol (val) {
+//   const beli = !isNaN(parseFloat(val.jumlah_minta)) ? (parseFloat(val.jumlah_minta) <= 0 ? 0 : parseFloat(val.jumlah_minta)) : 0
+//   val.jumlah_minta = beli
+// }
+// function setJumlah (evt, val) {
+//   const inc = evt.includes('.')
+//   const ind = evt.indexOf('.')
+//   const panj = evt.length
+//   const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+//   // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
+//   const max = parseFloat(val?.mak_stok)
+//   const stok = parseFloat(val?.stok)
+//   // jumlah total stok tidak boleh melebihi jumlah stok maksimal
+//   const totalStok = stok + beli
+//   if (totalStok > max) {
+//     notifErrVue('Jumlah Stok Depo tidak boleh melebihi jumlah stok maksimal')
+//     val.jumlah_minta = 0
+//   }
+//   else {
+//     val.jumlah_minta = beli
+//   }
+//   console.log('beli', beli, evt, max, stok, totalStok)
+// }
+// function sudah (evt, val) {
+//   const anu = val.jumlah_minta
+//   val.jumlah_minta = anu
+// }
 
 const color = val => {
   switch (val) {
