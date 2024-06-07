@@ -22,7 +22,7 @@ export const useListPasienHemodialisaStore = defineStore('list-pasien-hemodialis
     },
     periods: ['Hari ini', 'Minggu ini', 'Bulan ini', 'Custom'],
     sorting: ['terbaru', 'terlama'],
-    statuses: ['Semua', 'Terlayani', 'Menunggu'],
+    statuses: ['Semua', 'Terlayani', 'Belum terlayani'],
     isViewList: false,
     pasien: null,
     pageTindakan: false,
