@@ -229,7 +229,7 @@
 </template>
 <script setup>
 import { notifErrVue } from 'src/modules/utils'
-import { useDistribusiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/distribusipermintaanruangan/distribusi'
+import { useMutasiKeluarAntarDepoStore } from 'src/stores/simrs/farmasi/mutasi/depo/keluar'
 import { computed, ref } from 'vue'
 const emits = defineEmits(['minta', 'distribusi', 'gausah', 'editable'])
 const props = defineProps({
@@ -237,7 +237,7 @@ const props = defineProps({
   rin: { type: Object, default: () => {} }
 })
 
-const store = useDistribusiPermintaanRuanganStore()
+const store = useMutasiKeluarAntarDepoStore()
 
 const jmlMinta = computed({
   get () { return props.rin.jumlah_minta },
