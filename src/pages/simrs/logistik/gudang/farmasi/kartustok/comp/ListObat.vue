@@ -54,6 +54,7 @@
         :key="i"
         clickable
         @click="store.setItem(item)"
+        id="tableItem"
       >
         <q-item-section style="width:40%">
           <div class="row">
@@ -88,9 +89,14 @@
 </template>
 
 <script setup>
+import { useQuasar } from 'quasar'
 import { useKartuStokFarmasiStore } from 'src/stores/simrs/farmasi/katustok'
+import { watchEffect } from 'vue'
 
 const store = useKartuStokFarmasiStore()
+
+// const tableItem = ref(null)
+const $q = useQuasar()
 
 function hitungSaldoAwal (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
@@ -123,4 +129,38 @@ function hitungMutasiMasuk (arr) {
 function hitungResepKeluar (arr) {
   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
+
+function exportToExcel (tableId, filename) {
+  // const el = document.getElementById(tableId)
+  // const filenames = filename ? filename + '.xls' : 'KartuStokFarmasi.xls'
+  // const columns = store.items
+  // const content = [columns.map(col => wrapCsvValue(col.label))].concat(
+  //   rows.map(row => columns.map(col => wrapCsvValue(
+  //     typeof col.field === 'function'
+  //       ? col.field(row)
+  //       : row[col.field === void 0 ? col.name : col.field],
+  //     col.format,
+  //     row
+  //   )).join(','))
+  // ).join('\r\n')
+
+  // const status = exportFile(
+  //   'table-export.csv',
+  //   content,
+  //   'text/csv'
+  // )
+  // console.log('mulai export', el?.parentElement)
+  $q.notify({
+    message: 'Masih dibuatkan ... harap tunggu',
+    color: 'negative',
+    icon: 'icon-mat-warning'
+  })
+}
+
+watchEffect(() => {
+  if (store.exportExcel) {
+    // console.log('store.exportExcel', store.exportExcel)
+    exportToExcel('tableItem', 'KartuStokFarmasi')
+  }
+})
 </script>

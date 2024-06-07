@@ -100,10 +100,16 @@ f<template>
                       ({{ scope.opt.kandungan }})
                     </div>
                     <div
-                      v-if="scope.opt.alokasi"
-                      class="q-ml-xs text-weight-bold tetx-green"
+                      v-if="scope.opt.alokasi >0"
+                      class="q-ml-xs text-weight-bold text-green"
                     >
-                      {{ scope.opt.alokasi }}
+                      {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
+                    </div>
+                    <div
+                      v-if="scope.opt.alokasi <=0"
+                      class="q-ml-xs text-weight-bold text-negative f-14"
+                    >
+                      {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
                     </div>
                     <div
                       v-if="scope.opt.satuankecil"

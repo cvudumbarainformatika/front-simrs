@@ -189,7 +189,18 @@ const bentukArrBaru = computed(() => {
     }
   })
 
-  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk]
+  const resepkeluar = props?.item?.resepkeluar?.map(x => {
+    return {
+      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      keterangan: 'Resep Keluar',
+      masuk: 0,
+      keluar: parseFloat(x?.jumlah),
+      total: 0
+    }
+  })
+
+  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar]
 
   const hasil = gabung.flat(Infinity)
 

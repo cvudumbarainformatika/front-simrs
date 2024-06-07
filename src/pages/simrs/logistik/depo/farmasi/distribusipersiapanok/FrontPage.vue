@@ -461,6 +461,7 @@
   <app-print-surat
     ref="dialogPrint"
     v-model="store.isOpen"
+    class="page-x"
     :tanggal="store.dataToPrint?.flag==='2'?store.dataToPrint?.tgl_distribusi:store.dataToPrint?.tgl_retur"
     @close="store.isOpen=false"
   >
@@ -534,21 +535,30 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='2'"
-        class="row justify-start q-mb-md default-font"
+        class="row justify-start  default-font"
       >
         <p>
-          Telah dikirimkan
-          <span class="text-weight-bold">
-            Obat untuk Operasi
-          </span> pada list dibawah ini :
+          Telah dikirimkan Kepada
         </p>
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
+        class="row justify-start  default-font"
+      >
+        <p>
+          Telah diterima resep dan retur dari:
+        </p>
+      </div>
+      <div class="row justify-start default-font q-ml-md">
+        {{ store.dataToPrint?.pasien?.rs2 }} -  {{ store.dataToPrint?.pasien?.rs1 }} - {{ store.dataToPrint?.list?.sistembayar?.rs2 }}
+      </div>
+      <div class="row justify-start default-font q-ml-md">
+        {{ store.dataToPrint?.list.rs4 }} -  {{ store.dataToPrint?.list?.kunjunganranap?.relmasterruangranap?.rs2 ?? store.dataToPrint?.list?.kunjunganrajal?.relmpoli?.rs2 }}
+      </div>
+      <div
         class="row justify-start q-mb-md default-font"
       >
         <p>
-          Telah diterima resep dan retur
           <span class="text-weight-bold">
             Obat untuk Operasi
           </span> pada list dibawah ini :
@@ -563,15 +573,18 @@
       <div v-if="store.dataToPrint?.rinci">
         <!-- header detail -->
         <div class="row justify-between q-col-gutter-sm default-font">
+          <div class="col-1 border-tb border-left">
+            No
+          </div>
           <div
             v-if="store.dataToPrint?.flag==='2'"
-            class="col-8 text-weight-bold border-tb border-left"
+            class="col-7 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
           <div
             v-if="store.dataToPrint?.flag==='4'"
-            class="col-8 text-weight-bold border-tb border-left"
+            class="col-7 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
@@ -608,17 +621,20 @@
           <div
             class="row justify-between q-col-gutter-sm default-font"
           >
+            <div class="col-1 border-bottom border-left">
+              {{ i+1 }}.
+            </div>
             <div
               v-if="store.dataToPrint?.flag==='2'"
-              class="col-8 border-bottom border-left"
+              class="col-7 border-bottom border-left"
             >
-              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+              {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='4'"
-              class="col-8 border-bottom border-left"
+              class="col-7 border-bottom border-left"
             >
-              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+              {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='2'"
@@ -907,7 +923,16 @@ const label = (status) => {
 
 </script>
 
-<style>
+<style lang="scss" scoped>
+.page-x{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 27.94cm;
+  height: fit-content;
+  padding: 1mm;
+  // font-size: 10px !important;
+}
 .default-font{
   font-size: 14px;
   font-weight: bold;
@@ -924,5 +949,28 @@ const label = (status) => {
   border: 1px solid rgb(255, 255, 255);
   border-radius: 5px;
   background-color: rgb(84, 139, 188);
+}
+.garis-bawah{
+  border-bottom: 6px solid black;
+  border-bottom-style: double;
+}
+.border-box{
+  border: 1px solid black;
+}
+.border-tb{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.border-left{
+  border-left: 1px solid black;
+}
+.border-right{
+  border-right: 1px solid black;
+}
+.border-bottom{
+  border-bottom: 1px solid black;
+}
+.border-top{
+  border-top: 1px solid black;
 }
 </style>
