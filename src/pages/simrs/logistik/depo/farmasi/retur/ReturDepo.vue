@@ -72,13 +72,13 @@ const ListComp = defineAsyncComponent(() => import('./comp/ListComp.vue'))
 const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 
 onMounted(() => {
-  const depoRet = ['Gd-04010102']
-  const depos = apps.depos.filter(a => depoRet.includes(a.value))
-  const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
-  if (depo.length) {
-    store.setParams('kddepo', apps?.user?.kdruangansim)
-    store.getDataTable()
-  }
+  store.setParams('kddepo', apps?.user?.kdruangansim)
+  store.getDataTable()
+  // const depoRet = ['Gd-04010102']
+  // const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  // const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
+  // if (depo.length) {
+  // }
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)
