@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
   state: () => ({
@@ -19,7 +20,8 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
       // 'penerimaan',
       'stok',
       'stokalokasi',
-      'lain'
+      'lain',
+      'peny'
 
     ],
     columnHide: [],
@@ -131,6 +133,24 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
             resolve(resp)
           })
           .catch(() => { this.loadingAlokasi = false })
+      })
+    },
+    cekStok (val) {
+      val.loading = true
+      const form = {
+        kdruang: this.params.kdruang,
+        kdobat: val?.kdobat
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/stok/perbaikan-stok', form)
+          .then(resp => {
+            val.loading = false
+            console.log('penye ', resp?.data)
+            notifSuccess(resp)
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch(() => { val.loading = false })
       })
     }
   }

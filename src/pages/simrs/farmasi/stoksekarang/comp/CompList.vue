@@ -31,6 +31,9 @@
       <template #col-lain>
         <div>Stok Alokasi Gudang / Depo Lain</div>
       </template>
+      <template #col-peny>
+        <div>Cek Stok</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -141,6 +144,19 @@
           </div>
         </div>
         <!-- {{ row?.lain??anu }} -->
+      </template>
+      <!-- eslint-disable-next-line vue/no-unused-vars -->
+      <template #cell-peny="{row}">
+        <q-btn
+          label="Cek Stok"
+          dense
+          no-caps
+          color="negative"
+          push
+          :loading="row.loading"
+          :disable="row.loading"
+          @click="table.cekStok(row)"
+        />
       </template>
       <template #left-acttion="{row}">
         <div class="q-mr-md">
