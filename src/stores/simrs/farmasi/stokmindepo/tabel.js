@@ -18,7 +18,8 @@ export const UseFarmasiStokMinDepoTable = defineStore('tabel_stok_min_depo', {
       'obat',
       // 'penerimaan',
       'stok',
-      'stokalokasi'
+      'stokalokasi',
+      'minta'
 
     ],
     columnHide: [],

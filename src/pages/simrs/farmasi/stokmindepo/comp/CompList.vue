@@ -28,6 +28,9 @@
       <template #col-stokalokasi>
         <div>Stok Min</div>
       </template>
+      <template #col-minta>
+        <div>Sedang Proses</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -90,7 +93,7 @@
       </template>
       <template #cell-stokalokasi="{row}">
         <div
-          class="row no-wrap text-weight-bold  items-end cursor-pointer"
+          class="row no-wrap text-weight-bold  items-end"
         >
           <div>
             {{ row?.minvalue }}
@@ -100,31 +103,29 @@
           </div>
         </div>
       </template>
-
-      <!--
-      <template #left-acttion="{row}">
-        <div class="q-mr-md">
-          <q-btn
-            flat
-            class=""
-            size="sm"
-            round
-            color="grey"
-            icon="icon-mat-edit"
-            :loading="row.loading"
-            :disable="row.loading"
-            @click="editData(row)"
-          >
-            <q-tooltip
-              anchor="top middle"
-              self="center middle"
-            >
-              Penyesuaian Stok Awal
-            </q-tooltip>
-          </q-btn>
+      <template #cell-minta="{row}">
+        <div
+          v-if="row?.permintaanobatrinci.length"
+          class="row no-wrap text-weight-bold  items-end"
+        >
+          <div v-for="(minta) in row?.permintaanobatrinci" :key="minta">
+            <div class="row items-end no-wrap">
+              <div v-if="minta?.flag!=='3'" class="col-auto">
+                {{ minta?.jumlah_minta }}
+              </div>
+              <div v-if="minta?.flag==='3'" class="col-auto">
+                {{ minta?.jml }}
+              </div>
+              <div class="col-auto q-ml-sm f-10 text-italic">
+                ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+              </div>
+              <div :class="'col-auto q-ml-sm text-' + color(minta?.flag) ">
+                {{ status(minta?.flag) }}
+              </div>
+            </div>
+          </div>
         </div>
-        </template>
-      -->
+      </template>
     </app-table>
     <DetailAlokasi v-model="table.isOpen" />
   </div>
@@ -158,51 +159,71 @@ function cariGudang (val) {
     return 'menunggu data Gudang / Depo'
   }
 }
+const status = (status) => {
+  switch (status) {
+    case '':
+      return 'Draft'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'Permintaan dikirim ke Gudang'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'Diterima Gudang'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'Telah di distribusikan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'Diterima Depo'
+      // eslint-disable-next-line no-unreachable
+      break
+    case 99:
+      return 'Status belum di filter'
+      // eslint-disable-next-line no-unreachable
+      break
 
-// function rinciAlokasi (row) {
-//   console.log('rinci alokasi', row)
-//   table.isOpen = true
-//   table.getDataAlokasi(row)
-// }
-
-// watch(() => apps?.user?.kdruangansim, (obj) => {
-
-// })
-// eslint-disable-next-line no-unused-vars
-function editData (val) {
-  store.editData(val)
-  console.log('edit', val)
+    default:
+      return 'Belum di definisikan'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
 }
-// const gudang = [
-//   { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
-//   { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
-//   { nama: 'Depo OK', value: 'Gd-04010103' },
-//   { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
-//   { nama: 'Depo IGD', value: 'Gd-02010104' },
-//   { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
-//   { nama: 'Gudang Farmasi ( Floor Stok )', value: 'Gd-03010100' }
-// ]
-// function namaGudang () {
-//   const me = apps?.user?.kdruangansim
-//   const gud = gudang.filter(f => f.value !== me)
-//   return gud ?? []
-// }
+const color = val => {
+  switch (val) {
+    case 99:
+      return 'white'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '':
+      return 'negative'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '1':
+      return 'cyan'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '2':
+      return 'blue'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '3':
+      return 'orange'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '4':
+      return 'grey'
+      // eslint-disable-next-line no-unreachable
+      break
 
-// function ambilDataJumlah (gud, row) {
-//   // console.log('ambil jumlah', gud, row)
-//   const masuk = {
-//     kdobat: row?.kdobat,
-//     kdruang: gud?.value,
-//     stokalokasi: row?.stokalokasi
-//   }
-//   const index = row.lain.findIndex(r => r.kdruang === gud?.value)
-//   if (index >= 0) row.lain[index] = masuk
-//   else row.lain.push(masuk)
-// }
-// function ambilJumlah (gud, row) {
-//   const obatnya = row.lain.find(r => r.kdruang === gud.value)
-//   if (obatnya) return obatnya.stokalokasi ?? 0
-//   else return '-'
-//   // console.log('ambil jumlah', gud, row)
-// }
+    default:
+      return 'red'
+      // eslint-disable-next-line no-unreachable
+      break
+  }
+}
+
 </script>
