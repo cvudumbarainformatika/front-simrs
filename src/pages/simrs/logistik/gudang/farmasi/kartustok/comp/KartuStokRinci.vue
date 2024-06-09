@@ -33,7 +33,7 @@
                     <div style="width:100px">
                       Ruangan
                     </div>
-                    <div> : {{ params.koderuangan }}</div>
+                    <div> : {{ carigudang(params.koderuangan) }}</div>
                   </div>
                   <div class="row">
                     <div style="width:100px">
@@ -94,8 +94,10 @@
                     v-for="(item, n) in bentukArrBaru"
                     :key="item"
                   >
-                    <td>{{ item?.tanggal }}</td>
-                    <td>
+                    <td :class="item?.masuk === 0 ? 'text-negative' : 'text-primary'">
+                      {{ item?.tanggal }} <span class="">  {{ item?.jam }}</span>
+                    </td>
+                    <td :class="item?.masuk === 0 ? 'text-negative' : 'text-primary'">
                       {{ item?.keterangan }}
                     </td>
                     <td class="text-end">
@@ -130,6 +132,9 @@
 import { computed, onMounted, ref } from 'vue'
 import { date } from 'quasar'
 import { formatRp } from 'src/modules/formatter'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
+
+const app = useAplikasiStore()
 
 const props = defineProps({
   item: {
@@ -147,6 +152,7 @@ const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Jul
 const bentukArrBaru = computed(() => {
   const terimalangsung = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')?.map(x => {
     return {
+      tgl: x?.tglpenerimaan,
       tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
       keterangan: 'Penerimaan Langsung',
@@ -158,6 +164,7 @@ const bentukArrBaru = computed(() => {
 
   const terimapesan = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')?.map(x => {
     return {
+      tgl: x?.tglpenerimaan,
       tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
       keterangan: x?.jenis_penerimaan === 'Pembelian langsung' ? 'Penerimaan langsung' : 'Penerimaan By Pesan',
@@ -169,9 +176,10 @@ const bentukArrBaru = computed(() => {
 
   const mutasikeluar = props?.item?.mutasikeluar?.map(x => {
     return {
+      tgl: x?.tgl_permintaan,
       tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Mutasi Keluar',
+      keterangan: 'Mutasi Keluar ke ' + carigudang(x?.dari),
       masuk: 0,
       keluar: parseFloat(x?.jml),
       total: 0
@@ -180,9 +188,10 @@ const bentukArrBaru = computed(() => {
 
   const mutasimasuk = props?.item?.mutasimasuk?.map(x => {
     return {
+      tgl: x?.tgl_permintaan,
       tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Mutasi Masuk',
+      keterangan: 'Mutasi Masuk dari ' + carigudang(x?.dari),
       masuk: parseFloat(x?.jml),
       keluar: 0,
       total: 0
@@ -191,18 +200,36 @@ const bentukArrBaru = computed(() => {
 
   const resepkeluar = props?.item?.resepkeluar?.map(x => {
     return {
+      tgl: x?.tgl_permintaan,
       tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Resep Keluar',
+      keterangan: 'Nomor resep ' + x?.noresep,
       masuk: 0,
       keluar: parseFloat(x?.jumlah),
       total: 0
     }
   })
+  const returresep = props?.item?.resepkeluar?.map(x => {
+    const arr = x.retur
+    return arr.map(x => {
+      return {
+        tgl: x?.tgl_retur,
+        tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
+        jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
+        keterangan: 'Retur Resep ' + x?.noresep,
+        masuk: x?.rinci?.length ? x.rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0) : 0,
+        keluar: 0,
+        total: 0
+      }
+    })
+    // const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
+  })
 
-  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar]
+  console.log('ret', app)
 
-  const hasil = gabung.flat(Infinity)
+  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar, returresep].flat(Infinity)
+
+  const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []
 
   return hasil
 })
@@ -213,6 +240,13 @@ const saldoAwal = computed(() => {
 
   return saldoAwal
 })
+
+// eslint-disable-next-line no-unused-vars
+function carigudang (val) {
+  // console.log(app)
+  const gud = app?.gudangs?.find(a => a.kode === val)
+  return gud.nama
+}
 
 // eslint-disable-next-line no-unused-vars
 function cariHasilAkhirArray (i) {

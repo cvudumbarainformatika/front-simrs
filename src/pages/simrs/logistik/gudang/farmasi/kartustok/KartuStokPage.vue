@@ -2,20 +2,22 @@
   <q-page
     :class="style.componentfull?'container-no-header':'container--q-header q-pa-xs relative-position'"
   >
-    <div class="header">
+    <!-- <div class="header">
       <HeaderComp />
-    </div>
+    </div> -->
     <q-card
       flat
       no-shadow
       square
-      class="my-flex-1 scroll"
+      class="my-flex-1 scroll hide-scroll"
+      ref="refCardStok"
     >
-      <q-scroll-area style="height:calc( 100% - 40px)">
+      <!-- <q-scroll-area style="height:calc( 100% - 40px)">
         <ListObat />
         <div style="margin-bottom: 100px;" />
-      </q-scroll-area>
-      <div
+      </q-scroll-area> -->
+      <TableObat />
+      <!-- <div
         v-if="store.meta"
         class="absolute-bottom bg-primary text-white"
       >
@@ -23,7 +25,7 @@
           :meta="store.meta"
           @go-to="store.goToPage"
         />
-      </div>
+      </div> -->
     </q-card>
 
     <KartuStokRinci
@@ -36,24 +38,29 @@
 </template>
 
 <script setup>
-import HeaderComp from './comp/HeaderComp.vue'
-import ListObat from './comp/ListObat.vue'
-import BottomComp from './comp/BottomCompPage.vue'
+// import HeaderComp from './comp/HeaderComp.vue'
+// import ListObat from './comp/ListObat.vue'
+import TableObat from './comp/TableObat.vue'
+// import BottomComp from './comp/BottomCompPage.vue'
 import KartuStokRinci from './comp/KartuStokRinci.vue'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useKartuStokFarmasiStore } from '../../../../../../stores/simrs/farmasi/katustok'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const style = useStyledStore()
 const store = useKartuStokFarmasiStore()
 const app = useAplikasiStore()
+
+const refCardStok = ref(null)
 
 onMounted(() => {
   store.getInitialData()
     .then(() => {
       store.getData()
     })
+
+  console.log('refCardStok', refCardStok.value)
 })
 
 // watchEffect(() => {
