@@ -110,11 +110,8 @@
         >
           <div v-for="(minta) in row?.permintaanobatrinci" :key="minta">
             <div class="row items-end no-wrap">
-              <div v-if="minta?.flag!=='3'" class="col-auto">
-                {{ minta?.jumlah_minta }}
-              </div>
-              <div v-if="minta?.flag==='3'" class="col-auto">
-                {{ minta?.jml }}
+              <div class="col-auto">
+                {{ parseFloat(minta?.jml) > 0 ? minta?.jml : minta?.jumlah_minta }}
               </div>
               <div class="col-auto q-ml-sm f-10 text-italic">
                 ( {{ row.satuan_k ? row.satuan_k :'-' }} )
@@ -133,15 +130,72 @@
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 import { UseFarmasiStokMinDepoTable } from 'src/stores/simrs/farmasi/stokmindepo/tabel'
 import { UseFarmasiStokMinDepoStore } from 'src/stores/simrs/farmasi/stokmindepo/form'
+import { laravelEcho } from 'src/modules/newsockets'
 
 const table = UseFarmasiStokMinDepoTable()
 const store = UseFarmasiStokMinDepoStore()
 const apps = useAplikasiStore()
 
 const DetailAlokasi = defineAsyncComponent(() => import('./DetailAlokasi.vue'))
+
+function subscribedChannel () {
+  const channel = laravelEcho.private('private.notif.depo-farmasi')
+  channel.subscribed(() => {
+    console.log('subscribed private.notif.depo-farmasi channel !!!')
+  }).listen('.notif-message', (e) => {
+    console.log('listen notif', e)
+    if (apps?.user?.kdruangansim === e?.message?.data?.depo) {
+      const kdobat = e?.message?.data?.kdobat
+      if (e?.message?.data?.aksi === 'simpan') {
+        const item = table.items?.find(it => it.kdobat === kdobat)
+        if (item) {
+          const datanya = {
+            kdobat,
+            jumlah_minta: e?.message?.data?.jumlah_minta,
+            no_permintaan: e?.message?.data?.no_permintaan,
+            dari: e?.message?.data?.dari,
+            flag: e?.message?.data?.flag ?? '',
+            jml: e?.message?.data?.jml ?? 0
+          }
+          const index = item?.permintaanobatrinci.findIndex(ind => ind.kdobat === kdobat && ind.no_permintaan === e?.message?.data?.no_permintaan)
+          if (index >= 0) {
+            item.permintaanobatrinci[index] = datanya
+          }
+          else item.permintaanobatrinci.push(datanya)
+        }
+        console.log('simp', item)
+      }
+      if (e?.message?.data?.aksi === 'distribusi') {
+        const item = table.items?.find(it => it.kdobat === kdobat)
+        // console.log('dist', item)
+        if (item) {
+          const index = item?.permintaanobatrinci.findIndex(ind => ind.kdobat === kdobat && ind.no_permintaan === e?.message?.data?.no_permintaan)
+          if (index >= 0) { item.permintaanobatrinci[index].jml = e?.message?.data?.jml }
+        }
+        console.log('dist', item)
+      }
+      if (e?.message?.data?.aksi === 'kunci') {
+        if (parseInt(e?.message?.data?.flag) >= 4) table.getDataTable()
+        const kodeobats = e?.message?.data?.kodeobats
+        if (kodeobats.length) {
+          kodeobats?.forEach(kd => {
+            const kdobat = kd?.kdobat
+            const item = table.items?.find(it => it.kdobat === kdobat)
+            // console.log(item)
+            if (item) {
+              const index = item?.permintaanobatrinci.findIndex(ind => ind.kdobat === kdobat && ind.no_permintaan === e?.message?.data?.no_permintaan)
+              if (index >= 0) item.permintaanobatrinci[index].flag = e?.message?.data?.flag
+            }
+            // console.log('kun', item)
+          })
+        }
+      }
+    }
+  })
+}
 
 function cariGudang (val) {
   if (table.gudangs.length) {
@@ -179,6 +233,10 @@ const status = (status) => {
       break
     case '4':
       return 'Diterima Depo'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '5':
+      return 'Ditolak'
       // eslint-disable-next-line no-unreachable
       break
     case 99:
@@ -225,5 +283,7 @@ const color = val => {
       break
   }
 }
-
+onMounted(() => {
+  subscribedChannel()
+})
 </script>

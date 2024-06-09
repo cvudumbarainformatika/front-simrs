@@ -291,6 +291,7 @@ function kirim (val, row) {
       jumlah_minta: val.jumlah_minta,
       kodeobat: val.kdobat,
       kdgudang: row.tujuan,
+      dari: row.dari,
       nopermintaan: row.no_permintaan
 
     }
