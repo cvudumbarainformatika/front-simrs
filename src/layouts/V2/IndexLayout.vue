@@ -119,7 +119,7 @@ function goToSSO () {
   router.push({ path: '/admin/sso', replace: true })
   setTimeout(() => {
     window.location.reload()
-  }, 100)
+  }, 200)
 }
 const setting = useSettingsAplikasi()
 if (!apps.gudangs?.length) setting.getGudang().then(resp => { apps.setGudang(setting?.gudangs) })

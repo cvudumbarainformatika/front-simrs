@@ -18,8 +18,7 @@ export const UseFarmasiStokMinDepoTable = defineStore('tabel_stok_min_depo', {
       'obat',
       // 'penerimaan',
       'stok',
-      'stokalokasi',
-      'lain'
+      'stokalokasi'
 
     ],
     columnHide: [],
@@ -72,15 +71,15 @@ export const UseFarmasiStokMinDepoTable = defineStore('tabel_stok_min_depo', {
       this.getRuangRanap()
     },
     async getDataGudang () {
-      this.loading = true
+      // this.loading = true
       const param = { params: { q: '' } }
       await api.get('v1/gudang/gudang', param)
         .then(resp => {
-          this.loading = false
+          // this.loading = false
           console.log('gudang ', resp.data)
           this.gudangs = resp?.data
         })
-        .catch(() => { this.loading = false })
+        // .catch(() => { this.loading = false })
     },
     getRuangRanap () {
       if (this.ruangRanaps.length) return
@@ -91,46 +90,22 @@ export const UseFarmasiStokMinDepoTable = defineStore('tabel_stok_min_depo', {
             console.log(this.ruangRanaps)
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          // .catch(() => { this.loading = false })
       })
     },
     getDataTable () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/penerimaan/list-stok-sekarang', param)
+        api.get('v1/simrs/farmasinew/penerimaan/list-stok-min-depo', param)
           .then(resp => {
             this.loading = false
-            console.log('setok ', resp.data)
+            console.log('setok ', resp.data.data)
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
             resolve(resp)
           })
           .catch(() => { this.loading = false })
-      })
-    },
-    getDataAlokasi (row) {
-      this.obat = row
-      this.loadingAlokasi = true
-      const data = row
-      data.kdruang = this.params.kdruang
-      const param = { params: data }
-      return new Promise(resolve => {
-        api.get('v1/simrs/farmasinew/penerimaan/data-alokasi', param)
-          .then(resp => {
-            this.loadingAlokasi = false
-            console.log('setok ', resp.data)
-            this.mutasis = resp?.data?.permintaan
-            this.reseps = resp?.data?.transRacikan ?? []
-            if (resp?.data?.transNonRacikan?.length) {
-              resp?.data?.transNonRacikan.forEach(racik => {
-                this.reseps.push(racik)
-              })
-            }
-
-            resolve(resp)
-          })
-          .catch(() => { this.loadingAlokasi = false })
       })
     }
   }

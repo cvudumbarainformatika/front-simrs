@@ -166,7 +166,7 @@ import { notifErrVue } from 'src/modules/utils'
 
 const store = useFarmasiPemakaianRuanganStore()
 const refInput = ref(null)
-function setNumber(evt, det, key) {
+function setNumber (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -179,7 +179,7 @@ function setNumber(evt, det, key) {
     }
   }
 }
-function setCheck(evt, item, n) {
+function setCheck (evt, item, n) {
   console.log('ref', refInput.value, n)
   // console.log('evt', evt)
   // console.log('item', item)
@@ -187,13 +187,14 @@ function setCheck(evt, item, n) {
     item.dipakai = item.dipakai ?? 0
     refInput.value[n].focus()
     refInput.value[n].select()
-  } else {
+  }
+  else {
     console.log('not checked', store.form)
     const index = store.form.obats.findIndex(a => a.id === item.id)
     if (index >= 0) store.form.obats.splice(index, 1)
   }
 }
-function addToForm(item) {
+function addToForm (item) {
   if (item.checked) {
     const ada = store.form.obats.find(a => a.id === item.id)
     if (!ada && item.dipakai > 0) store.form.obats.push(item)

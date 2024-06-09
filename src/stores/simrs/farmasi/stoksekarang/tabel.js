@@ -74,15 +74,15 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
       this.getRuangRanap()
     },
     async getDataGudang () {
-      this.loading = true
+      // this.loading = true
       const param = { params: { q: '' } }
       await api.get('v1/gudang/gudang', param)
         .then(resp => {
-          this.loading = false
+          // this.loading = false
           console.log('gudang ', resp.data)
           this.gudangs = resp?.data
         })
-        .catch(() => { this.loading = false })
+        // .catch(() => { this.loading = false })
     },
     getRuangRanap () {
       if (this.ruangRanaps.length) return
@@ -93,7 +93,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
             console.log(this.ruangRanaps)
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          // .catch(() => { this.loading = false })
       })
     },
     getDataTable () {
