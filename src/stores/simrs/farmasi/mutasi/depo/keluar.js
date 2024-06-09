@@ -210,6 +210,23 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
           })
       })
     },
+
+    tolak (val) {
+      console.log('store.tolak')
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/tolak', val)
+          .then(resp => {
+            delete val.loading
+            this.getPermintaanDepo()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete val.loading
+          })
+      })
+    },
     distribusi (val) {
       console.log('store.kunci')
       this.loadingKunci = true

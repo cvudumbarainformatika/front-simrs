@@ -135,23 +135,44 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag==='1'">
-          <q-btn
-            flat
-            icon="icon-mat-move_to_inbox"
-            dense
-            color="primary"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div v-if="row.flag==='1'" class="row justify-between items-center" style="min-width: 150px;">
+          <div class="col-auto">
+            <q-btn
+              flat
+              icon="icon-mat-move_to_inbox"
+              dense
+              color="primary"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="kunci(row)"
             >
-              Terima
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Terima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="col-auto">
+            <q-btn
+              flat
+              icon="icon-mat-hand-front-left"
+              size="sm"
+              dense
+              color="negative"
+              :loading="row?.loading"
+              :disable="row?.loading"
+              @click="tolak(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Tolak
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
         <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
           <q-btn
@@ -360,6 +381,12 @@ const apps = useAplikasiStore()
 const depos = ['Gd-03010101', 'Gd-04010102', 'Gd-04010103', 'Gd-05010101', 'Gd-02010104']
 
 const CompDistribusi = defineAsyncComponent(() => import('./CompDistribusi.vue'))
+function tolak (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+
+  store.tolak(val)
+}
 function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
