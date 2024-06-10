@@ -513,7 +513,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }

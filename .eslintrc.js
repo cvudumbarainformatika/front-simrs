@@ -23,8 +23,8 @@ module.exports = {
     // but leave only one uncommented!
     // See https://eslint.vuejs.org/rules/#available-rules
     // 'plugin:vue/vue3-essential', // Priority A: Essential (Error Prevention)
-    // 'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
-    'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
+    'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
+    // 'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
 
     'standard'
 
@@ -51,29 +51,55 @@ module.exports = {
   },
 
   // add your custom rules here
-  rules: {
+  // rules: {
 
+  //   // allow async-await
+  //   'generator-star-spacing': 'off',
+  //   'space-before-function-paren': 'off',
+  //   // allow paren-less arrow functions
+  //   'arrow-parens': 'off',
+  //   'one-var': 'off',
+  //   'no-void': 'off',
+  //   'multiline-ternary': 'off',
+
+  //   'import/first': 'off',
+  //   'import/named': 'error',
+  //   'import/namespace': 'error',
+  //   'import/default': 'error',
+  //   'import/export': 'error',
+  //   'import/extensions': 'off',
+  //   'import/no-unresolved': 'off',
+  //   'import/no-extraneous-dependencies': 'off',
+
+  //   'prefer-promise-reject-errors': 'off',
+
+  //   // allow debugger during development only
+  //   'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+  // }
+
+  'rules': {
+    'brace-style': [2, 'stroustrup', { 'allowSingleLine': true }],
+  
+    'vue/max-attributes-per-line': 0,
+    'vue/valid-v-for': 0,
+  
     // allow async-await
     'generator-star-spacing': 'off',
-    'space-before-function-paren': 'off',
+  
     // allow paren-less arrow functions
-    'arrow-parens': 'off',
-    'one-var': 'off',
-    'no-void': 'off',
-    'multiline-ternary': 'off',
-
-    'import/first': 'off',
-    'import/named': 'error',
-    'import/namespace': 'error',
-    'import/default': 'error',
-    'import/export': 'error',
-    'import/extensions': 'off',
-    'import/no-unresolved': 'off',
-    'import/no-extraneous-dependencies': 'off',
-
-    'prefer-promise-reject-errors': 'off',
-
-    // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'arrow-parens': 0,
+    'one-var': 0,
+  
+    'import/first': 0,
+    'import/named': 2,
+    'import/namespace': 2,
+    'import/default': 2,
+    'import/export': 2,
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
+    'import/no-extraneous-dependencies': 0,
+  
+    // allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }
 }

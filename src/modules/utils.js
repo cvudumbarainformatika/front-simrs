@@ -53,7 +53,8 @@ const notifErr = (resp) => {
         ]
       })
     };
-  } else if (status === 422) {
+  }
+  else if (status === 422) {
     const keys = Object.keys(resp.data)
     // const msgs = resp.data.message
     console.log('keys', keys)
@@ -76,7 +77,8 @@ const notifErr = (resp) => {
             })
           })
         })
-      } else {
+      }
+      else {
         if (msgkeys !== 'nomor') {
           Notify.create({
             message: resp.data[msgkeys],
@@ -92,7 +94,8 @@ const notifErr = (resp) => {
         }
       }
     })
-  } else if (status === 409) {
+  }
+  else if (status === 409) {
     const msgs = resp.data.message
     Notify.create({
       message: msgs,
@@ -103,7 +106,8 @@ const notifErr = (resp) => {
         { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
       ]
     })
-  } else if (status === 417) {
+  }
+  else if (status === 417) {
     const keys = Object.keys(resp.data)
     // const msgs = resp.data.message
     console.log('keys', keys)
@@ -126,7 +130,8 @@ const notifErr = (resp) => {
             })
           })
         })
-      } else {
+      }
+      else {
         if (msgkeys !== 'nomor') {
           Notify.create({
             message: resp.data[msgkeys],
@@ -142,10 +147,14 @@ const notifErr = (resp) => {
         }
       }
     })
-  } else if (status === 500) {
+  }
+  else if (status === 500) {
     let msgs = 'Ada Kesalahan Harap ulangi'
     if (resp.data) {
-      msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
+      console.log('rsp data msg', resp?.data?.message)
+      if (resp?.data?.message?.includes('https://apijkn.bpjs-kesehatan.go.id')) msgs = 'Error Bridging BPJS'
+      else if (resp?.data?.message?.includes('simrs/events?auth_key=simrs_key_harry141312&auth_')) msgs = 'Error Event Notifikasi Simrs'
+      else msgs = resp.data.message ? resp.data.message : 'Ada Kesalahan Harap ulangi'
     }
     Notify.create({
       message: msgs,
@@ -156,7 +165,8 @@ const notifErr = (resp) => {
         { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
       ]
     })
-  } else {
+  }
+  else {
     const msgs = resp.data ? resp.data.message : 'NETWOR ERROR SERVER TIDAK MERESPON'
     Notify.create({
       message: msgs,
@@ -222,7 +232,8 @@ const waitLoad = (cond) => {
       // spinnerColor: 'yellow',
       spinnerSize: 30
     })
-  } else {
+  }
+  else {
     Loading.hide()
   }
 }
@@ -325,7 +336,8 @@ const loadingBlock = (cond) => {
       // spinnerColor: 'yellow',
       spinnerSize: 50
     })
-  } else {
+  }
+  else {
     Loading.hide()
   }
 }
@@ -438,7 +450,8 @@ const loadingRes = (cond) => {
       // spinnerColor: 'yellow',
       spinnerSize: 50
     })
-  } else {
+  }
+  else {
     Loading.hide()
   }
 }

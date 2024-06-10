@@ -476,7 +476,7 @@ import { onMounted, ref, watch } from 'vue'
 const store = useDistribusiPenerimaanDepoStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -504,7 +504,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }

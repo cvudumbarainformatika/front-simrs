@@ -78,6 +78,22 @@ const depo = {
                 import('pages/simrs/logistik/depo/farmasi/retur/IndexPage.vue')
             }
           ]
+        },
+
+        {
+          path: '/depo/farmasi/kartustok',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/kartustok/IndexPage.vue')
+        },
+
+        {
+          path: '/depo/farmasi/stoksekarang',
+          // name: 'farmasi.stoksekarang',
+          component: () => import('pages/simrs/farmasi/stoksekarang/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/stokmindepo',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/farmasi/stokmindepo/IndexPage.vue')
         }
       ]
     },

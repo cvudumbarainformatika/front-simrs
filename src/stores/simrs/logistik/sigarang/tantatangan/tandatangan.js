@@ -49,13 +49,13 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
     onTengah: {}
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setOpen() {
+    setOpen () {
       this.isOpen = !this.isOpen
     },
-    kananSelected(val) {
+    kananSelected (val) {
       if (val !== null) {
         let data = {}
         if (val !== 'text') {
@@ -63,17 +63,19 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           const anu = this.optionTT.filter(tt => tt.value === val)
           data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejabat Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
           data.ada = true
-        } else {
+        }
+        else {
           data.ada = false
           data.acr = this.data[val]
         }
         this.onKanan = data
         // console.log('kanan', data)
-      } else {
+      }
+      else {
         this.onKanan = {}
       }
     },
-    kiriSelected(val) {
+    kiriSelected (val) {
       if (val !== null) {
         let data = {}
         if (val !== 'text') {
@@ -81,17 +83,19 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           const anu = this.optionTT.filter(tt => tt.value === val)
           data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejaban Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
           data.ada = true
-        } else {
+        }
+        else {
           data.ada = false
           data.acr = this.data[val]
         }
         this.onKiri = data
         // console.log('kiri', data)
-      } else {
+      }
+      else {
         this.onKiri = {}
       }
     },
-    kanan1Selected(val) {
+    kanan1Selected (val) {
       if (val !== null) {
         let data = {}
         if (val !== 'text') {
@@ -99,17 +103,19 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           const anu = this.optionTT.filter(tt => tt.value === val)
           data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejabat Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
           data.ada = true
-        } else {
+        }
+        else {
           data.ada = false
           data.acr = this.data[val]
         }
         this.onKanan1 = data
         // console.log('kanan', data)
-      } else {
+      }
+      else {
         this.onKanan1 = {}
       }
     },
-    kiri1Selected(val) {
+    kiri1Selected (val) {
       if (val !== null) {
         let data = {}
         if (val !== 'text') {
@@ -117,17 +123,19 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           const anu = this.optionTT.filter(tt => tt.value === val)
           data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejaban Penandatangan Kontrak' : (val === 'mengetahui' ? '' : anu[0].nama))
           data.ada = true
-        } else {
+        }
+        else {
           data.ada = false
           data.acr = this.data[val]
         }
         this.onKiri1 = data
         // console.log('kiri', data)
-      } else {
+      }
+      else {
         this.onKiri1 = {}
       }
     },
-    tengahSelected(val) {
+    tengahSelected (val) {
       if (val !== null) {
         let data = {}
         if (val !== 'text') {
@@ -135,30 +143,32 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           const anu = this.optionTT.filter(tt => tt.value === val)
           data.acr = val === 'ptk' ? 'Pejabat Teknis Kegiatan' : (val === 'ppk' ? 'Pejaban Penandatangan Kontrak' : anu[0].nama)
           data.ada = true
-        } else {
+        }
+        else {
           data.ada = false
           data.acr = this.data[val]
         }
         this.onTengah = data
         // console.log('kiri', data)
-      } else {
+      }
+      else {
         this.onTengah = {}
       }
     },
-    ptkSelected(val) {
+    ptkSelected (val) {
       this.setForm('ptk', val)
     },
-    ppkSelected(val) {
+    ppkSelected (val) {
       this.setForm('ppk', val)
     },
-    gudangSelected(val) {
+    gudangSelected (val) {
       this.setForm('gudang', val)
     },
-    mengetahuiSelected(val) {
+    mengetahuiSelected (val) {
       this.setForm('mengetahui', val)
     },
     // initial data
-    getInitialData() {
+    getInitialData () {
       if (this.optionPTK.length <= 0) this.getDataPtk()
       if (this.optionPPK.length <= 0) this.getDataPpk()
       if (this.optionGudang.length <= 0) this.getDataGudang()
@@ -168,7 +178,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
         })
       }
     },
-    getDataIndex() {
+    getDataIndex () {
       this.loading = false
       return new Promise(resolve => {
         api.get('v1/tandatangan/index')
@@ -224,7 +234,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           })
       })
     },
-    getDataPtk(val) {
+    getDataPtk (val) {
       // console.log('cari ptk', val)
       this.loadingPtk = true
       const params = {
@@ -245,7 +255,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           })
       })
     },
-    getDataPpk(val) {
+    getDataPpk (val) {
       // console.log('cari ptk', val)
       this.loadingPpk = true
       const params = {
@@ -266,7 +276,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           })
       })
     },
-    getDataGudang(val) {
+    getDataGudang (val) {
       // console.log('cari gudang', val)
       this.loadingGudang = true
       const params = {
@@ -287,7 +297,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           })
       })
     },
-    getDataMengetahui(val) {
+    getDataMengetahui (val) {
       // console.log('cari mengetahui', val)
       this.loadingMengetahui = true
       const params = {
@@ -308,7 +318,7 @@ export const useTandaTanganStore = defineStore('tanda_tangan_store_form', {
           })
       })
     },
-    saveForm() {
+    saveForm () {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/tandatangan/store', this.form)

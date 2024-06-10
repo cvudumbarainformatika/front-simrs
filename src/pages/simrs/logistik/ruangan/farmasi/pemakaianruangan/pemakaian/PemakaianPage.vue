@@ -148,12 +148,12 @@ const pakai = computed(() => {
   if (ada.length || !!store.form.nopemakaian) return true
   else return false
 })
-function simpan() {
+function simpan () {
   console.log('simpan')
 
   store.simpanPemakaian()
 }
-function selesai() {
+function selesai () {
   console.log('selesai')
   store.selesaiPemakaian()
 }
@@ -168,7 +168,8 @@ onMounted(() => {
   if (apps?.user?.kdruangansim) {
     store.setParam('kdruang', apps?.user?.kdruangansim)
     store.setForm('kdruang', apps?.user?.kdruangansim)
-  } else {
+  }
+  else {
     const adaRu = apps?.user?.pegawai?.kdruangansim.split('|')
     const ruNya = adaRu.filter(x => x.includes('R-'))
     if (ruNya.length > 1) notifCenterVue('ada lebih dari satu akses ruangan')

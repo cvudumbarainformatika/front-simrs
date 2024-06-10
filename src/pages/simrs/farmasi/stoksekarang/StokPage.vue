@@ -73,7 +73,7 @@ const HeaderComp = defineAsyncComponent(() => import('./comp/CompHeader.vue'))
 const headerForm = defineAsyncComponent(() => import('./comp/CompHeaderForm.vue'))
 const listForm = defineAsyncComponent(() => import('./comp/CompList.vue'))
 
-function openDialog() {
+function openDialog () {
   store.edit = false
   store.setOpen()
 }
@@ -100,12 +100,12 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
   // console.log(dep)
 })
 const refForm = ref(null)
-function simpan() {
+function simpan () {
   // console.log('form', store.form)
   console.log('ref form', refForm.value.validasi())
   if (refForm.value.validasi()) store.simpanForm()
 }
-function batal() {
+function batal () {
   store.resetForm()
   console.log('form', store.form)
 }

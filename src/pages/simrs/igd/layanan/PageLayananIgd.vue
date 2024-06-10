@@ -137,7 +137,7 @@ const menu = ref(menus.value[0])
 
 const inacbg = useInacbgIgd()
 
-function menuDiganti(val) {
+function menuDiganti (val) {
   menu.value = val
 }
 

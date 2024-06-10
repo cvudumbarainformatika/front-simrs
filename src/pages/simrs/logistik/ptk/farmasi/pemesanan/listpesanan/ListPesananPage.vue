@@ -98,6 +98,7 @@
           <div
             v-for="(rin, i) in row.rinci"
             :key="i"
+            :class="rin.flag==='2'?'bg-red-2':''"
           >
             <div class="row items-center anu">
               <div class="col-4">
@@ -142,6 +143,12 @@
                     Batalkan Rincian Pesanan
                   </q-tooltip>
                 </q-btn>
+                <div
+                  v-if="rin.flag==='2'"
+                  class="text-weight-bold f-18 text-negative"
+                >
+                  DITOLAK
+                </div>
               </div>
             </div>
           </div>
@@ -277,7 +284,7 @@ function info (val) {
   notifSuccessVue('Pembelian nomor ' + val.nopemesanan + ' Sudah dikunci dan dapat dilakukan Penerimaan')
 }
 const toloadBeli = ref('')
-function tambah(val) {
+function tambah (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   pemesanan.setForm('nopemesanan', val.nopemesanan)
@@ -316,7 +323,7 @@ function batalRinci (val) {
 const printCetakPemesanan = ref(false)
 const refCetakPemesanan = ref(false)
 
-function viewcetak(val) {
+function viewcetak (val) {
   const nomor = val.nopemesanan
   val.expand = !val.expand
   val.highlight = !val.highlight

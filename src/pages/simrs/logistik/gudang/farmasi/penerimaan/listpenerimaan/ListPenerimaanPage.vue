@@ -15,7 +15,7 @@
       />
     </div>
   </div> -->
-  <div class="q-mr-sm">
+  <div class="q-mr-sm" style="white-space: normal !important;">
     <app-table-extend
       :columns="store.columns"
       :column-hide="store.columnHide"
@@ -37,7 +37,7 @@
       @on-click="onClick"
     >
       <template #col-nopenerimaan>
-        <div>Nomor Penerimaan</div>
+        <div>Nomor</div>
       </template>
       <template #col-tgl>
         <div>Tanggal</div>
@@ -51,21 +51,42 @@
       <template #col-total>
         <div>Total</div>
       </template>
+      <template #cell-nopenerimaan="{ row }">
+        <div class="row justify-between" style="min-width: 300px;">
+          <div class="col-4">
+            Penerimaan
+          </div>
+          <div class="col-8">
+            {{ row.nopenerimaan ?? '-' }}
+          </div>
+        </div>
+        <div class="row justify-between">
+          <div class="col-4">
+            Pesanan
+          </div>
+          <div class="col-8">
+            {{ row.nopemesanan ? row.nopemesanan : '-' }}
+          </div>
+        </div>
+        <div class="row text-italic f-10">
+          {{ getGudang(row.gudang) }}
+        </div>
+      </template>
       <template #cell-penyedia="{ row }">
         <div>{{ row.pihakketiga?.nama ? row.pihakketiga?.nama : '-' }}</div>
       </template>
       <template #cell-total="{ row }">
         <div
-          v-if="row.total_faktur_pbf"
-          class="text-weight-bold"
-        >
-          {{ row.total_faktur_pbf? formatRp(row.total_faktur_pbf) :(row.total?formatRp(row.total):'-') }}
-        </div>
-        <div
           v-if="row?.faktur && row?.jenissurat==='Surat Jalan'"
           class="text-weight-bold"
         >
-          {{ formatRp(row?.faktur?.total_faktur) ??'-' }}
+          {{ formatDouble(parseFloat(row?.faktur?.total_faktur),2) ??'-' }}
+        </div>
+        <div
+          v-else
+          class="text-weight-bold"
+        >
+          {{ row.total_faktur_pbf? formatDouble(parseFloat(row.total_faktur_pbf),2) : (row.total?formatDouble(parseFloat(row.total),2):'-') }}
         </div>
       </template>
       <template #cell-surat="{ row }">
@@ -213,7 +234,7 @@
                     Harga
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp( rin.harga) }}
+                    {{ formatDouble( rin.harga,2) }}
                   </div>
                 </div>
                 <div class="row justify-between no-wrap">
@@ -237,7 +258,7 @@
                     Netto
                   </div>
                   <div class="text-weight-bold">
-                    {{ formatRp( rin.harga_netto) }}
+                    {{ formatDouble( rin.harga_netto,2) }}
                   </div>
                 </div>
               </div>
@@ -287,6 +308,7 @@
               </div>
               <div class="col-1 text-right">
                 <q-btn
+                  v-if="!row.kunci"
                   flat
                   icon="icon-mat-delete"
                   dense
@@ -403,7 +425,7 @@
   />
 </template>
 <script setup>
-import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { notifErrVue, notifSuccessVue } from 'src/modules/utils'
 import { useListPenerimaanStore } from 'src/stores/simrs/farmasi/penerimaan/listpenerimaan'
 import { usePenerimaanFarmasiStore } from 'src/stores/simrs/farmasi/penerimaan/penerimaan'
@@ -411,11 +433,12 @@ import CetakPenerimaanComp from './comp/CetakPenerimaanComp.vue'
 
 import { useRouter } from 'vue-router'
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useAplikasiStore } from 'src/stores/app/aplikasi'
 const store = useListPenerimaanStore()
 const penerimaan = usePenerimaanFarmasiStore()
 const router = useRouter()
-function tambahPenerimaan(val) {
+function tambahPenerimaan (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   console.log('val', val)
@@ -442,7 +465,8 @@ function tambahPenerimaan(val) {
 
       console.log('penerimaan', penerimaan.form)
       router.push({ path: '/gudang/farmasi/penerimaan/penerimaan', replace: true })
-    } else return notifErrVue('Pesanan tidak ditemukan')
+    }
+    else return notifErrVue('Pesanan tidak ditemukan')
   })
 }
 // click
@@ -461,7 +485,7 @@ function info (val) {
 const printCetakPenerimaan = ref(false)
 const refCetakPenerimaan = ref(false)
 
-function viewcetak(val) {
+function viewcetak (val) {
   const nomor = val.nopenerimaan
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -480,7 +504,21 @@ function kunci (val) {
     if (!val.flag) val.flag = 1
   })
 }
+const apps = useAplikasiStore()
+function getGudang (val) {
+  const gud = store.gudangs?.find(a => a.value === val)
+  return gud?.nama ?? '-'
+}
+store.setParam('gudang', apps?.user?.kdruangansim)
 store.getInitialData()
+watch(() => apps?.user?.kdruangansim, (kod) => {
+  const gud = store.gudangs.find(a => a.value === kod)
+  if (gud) {
+    store.setParam('gudang', gud?.value)
+    store.cariRencanaBeli()
+  }
+  // console.log('kode', gud)
+})
 </script>
 <style lang="scss" scoped>
 .anu {

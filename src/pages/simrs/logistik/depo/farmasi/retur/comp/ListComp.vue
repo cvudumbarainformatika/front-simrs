@@ -219,7 +219,7 @@ const store = useReturDepoStore()
 // const router = useRouter()
 
 // const indexId = ref(0)
-function status(val) {
+function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
@@ -237,7 +237,7 @@ function status(val) {
   }
   return balik
 }
-function color(val) {
+function color (val) {
   let balik = 'grey'
   switch (val) {
     case '':
@@ -256,7 +256,7 @@ function color(val) {
   return balik
 }
 
-function buka(val) {
+function buka (val) {
   store.setOpen()
   store.setResep(val)
   console.log('buka', val)

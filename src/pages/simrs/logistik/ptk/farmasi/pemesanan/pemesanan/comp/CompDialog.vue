@@ -271,7 +271,15 @@
                 sudah dipesan
               </div>
               <div class="text-weight-bold">
-                {{ row.jumlahallpesan && row?.flag_pesan === ''? row.jumlahallpesan : 0 }}
+                {{ row.jumlahallpesan ? row.jumlahallpesan : 0 }}
+              </div>
+            </div>
+            <div class="row justify-between no-wrap text-negative">
+              <div class="q-mr-xs">
+                Ditolak
+              </div>
+              <div class="text-weight-bold">
+                {{ row.ditolak ? row.ditolak : 0 }}
               </div>
             </div>
             <div class="row justify-between no-wrap">
@@ -367,7 +375,7 @@ import { ref } from 'vue'
 const store = usePemesananObatStore()
 const table = useTabelPemesananObatStore()
 
-function selected(val) {
+function selected (val) {
   const current = store?.form?.kdpbf
   console.log(store?.form?.kdpbf)
   console.log(val)
@@ -399,15 +407,15 @@ function selected(val) {
       })
   }
 }
-function setDispTanggal(val) {
+function setDispTanggal (val) {
   store.disp.tanggal = val
 }
-function setTanggal(val) {
+function setTanggal (val) {
   store.setParam('tanggal', val)
   console.log('param ', store.param)
 }
 
-function setHarga(evt, val) {
+function setHarga (evt, val) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -416,34 +424,37 @@ function setHarga(evt, val) {
 
   val.harga = nilai
 }
-function setJumlah(evt, val) {
+function setJumlah (evt, val) {
   const dipesan = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
 
   if (dipesan > val.bolehdipesan) {
     if (val.bolehdipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan
       notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.jumlahdirencanakan)
-    } else {
+    }
+    else {
       notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.bolehdipesan)
       val.jumlahdipesan = val.bolehdipesan
     }
-  } else {
+  }
+  else {
     if (dipesan > val.jumlahdirencanakan) {
       val.jumlahdipesan = val.jumlahdirencanakan
       notifErrVue('Jumlah Maksimal yang boleh dipesan adalah ' + val.jumlahdirencanakan)
-    } else {
+    }
+    else {
       val.jumlahdipesan = dipesan
     }
   }
 }
 
-function cariPihakTiga(val) {
+function cariPihakTiga (val) {
   console.log('cari pihak tiga', val)
   store.namaPihakKetiga = val
   store.getPihakKetiga()
 }
 const refPbf = ref(null)
-function kirimRencana(val) {
+function kirimRencana (val) {
   if (refPbf.value.$refs.refAuto.validate()) {
     store.kirimRencana(val).then(() => {
       // table.getObatMauBeli().then(resp => {

@@ -437,7 +437,7 @@ function afterPrint () {
 
 defineExpose({ printPage })
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .print{
   position: absolute;
     right: 30px;

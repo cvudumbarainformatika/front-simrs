@@ -135,7 +135,8 @@ function cariObat (val) {
   }
   if (store.obats.length) {
     options.value = store.obats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))
-  } else {
+  }
+  else {
     store.getDataObat(param).then(() => {
       options.value = store.obats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))
     })
@@ -145,7 +146,7 @@ function cariObat (val) {
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
 // })
-function setJumlah(evt, key) {
+function setJumlah (evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length

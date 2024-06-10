@@ -33,6 +33,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     nonFilteredObat: [],
     dpPar: '',
     Obats: [],
+    filtObats: [],
     namaObat: null,
     pasien: null,
     indexRacikan: -1,
@@ -72,13 +73,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     // section racikan end---
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setRacikan(key, val) {
+    setRacikan (key, val) {
       this.racikan[key] = val
     },
-    setPasien() {
+    setPasien () {
       const val = this?.pasien
       const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
       const diag = temp?.length ? temp.join(', ') : '-'
@@ -93,7 +94,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       // if (this?.depo === 'rnp') this.getBillRanap(val)
       // if (this?.depo === 'igd') this.getBillIgd(val)
     },
-    resetForm() {
+    resetForm () {
       this.namaObat = null
       const tagihanrs = this.form?.tagihanrs ?? 0
       const iterExpired = this.form?.iter_expired ?? ''
@@ -139,13 +140,14 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.setForm('jumlah', 1)
           this.setForm('dosisobat', 1)
           this.setForm('dosismaksimum', 1)
-        } else {
+        }
+        else {
           this.setForm('jumlah', 1)
         }
       }
       this.setPasien()
     },
-    resetObat() {
+    resetObat () {
       const tagihanrs = this.form?.tagihanrs ?? 0
       const kodeincbg = this.form?.kodeincbg ?? '-'
       const uraianinacbg = this.form?.uraianinacbg ?? '-'
@@ -163,7 +165,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
       this.setPasien()
     },
-    resetRacikan() {
+    resetRacikan () {
       const jen = this.racikan?.tiperacikan ?? '-'
       const nam = this.racikan?.namaracikan ?? '-'
       this.racikan = {
@@ -176,7 +178,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         dosismaksimum: 1 // dosis resep
       }
     },
-    hapusList(obat) {
+    hapusList (obat) {
       const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === obat?.noresep)
       if (obat?.namaracikan) {
         // const racikan = this?.listRacikan?.filter(a => a.namaracikan === obat?.namaracikan)
@@ -190,7 +192,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           if (racikan?.rincian?.length > 1) {
             const index = racikan?.rincian?.findIndex(x => x.id === obat?.id)
             if (index >= 0)racikan?.rincian?.splice(index, 1)
-          } else {
+          }
+          else {
             const index = this?.listRacikan?.findIndex(x => x.namaracikan === obat?.namaracikan)
             if (index >= 0) this?.listRacikan?.splice(index, 1)
           }
@@ -203,7 +206,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         const index = resep?.permintaanracikan?.findIndex(x => x.id === obat?.id)
         if (index >= 0) resep?.permintaanracikan?.splice(index, 1)
         // console.log('new', index)
-      } else {
+      }
+      else {
         const index = this?.listPemintaanSementara?.findIndex(x => x.id === obat?.id)
         if (index >= 0) this?.listPemintaanSementara?.splice(index, 1)
         const indexp = resep?.permintaanresep?.findIndex(x => x.id === obat?.id)
@@ -217,16 +221,16 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       }
       console.log('pasien hapus obat', resep)
     },
-    setList(key) {
+    setList (key) {
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
       this.listPemintaanSementara.push(key)
     },
-    setListArray(array) {
+    setListArray (array) {
       array.forEach(arr => {
         this.setList(arr)
       })
     },
-    setListRacikan(key) {
+    setListRacikan (key) {
       // console.log('set list racikan', key)
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
       // const adaRin = this.listRincianRacikan?.find(ri => ri.id === key.id && ri.namaracikan === this.form.namaracikan)
@@ -245,7 +249,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
 
         const harga = adaList.rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
         adaList.harga = harga
-      } else {
+      }
+      else {
         const temp = {
           namaracikan: key?.namaracikan,
           harga: key?.harga,
@@ -270,19 +275,19 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       //   { label: 'non-DTD', value: 'non-DTD', disable: true }
       // ]
     },
-    setListRacikanArray(array) {
+    setListRacikanArray (array) {
       array.forEach(arr => {
         this.setListRacikan(arr)
       })
     },
-    setNoreseps(reseps) {
+    setNoreseps (reseps) {
       this.noreseps = []
       reseps?.forEach(resep => {
         this.noreseps.unshift(resep?.noresep)
       })
       this.noreseps.unshift('BARU')
     },
-    setResep(val) {
+    setResep (val) {
       this.setForm('noresep', '')
       this.listRacikan = []
       this.listPemintaanSementara = []
@@ -303,12 +308,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.setForm('noresep', val)
         if (resep?.permintaanresep?.length) this.setListArray(resep?.permintaanresep)
         if (resep?.permintaanracikan?.length) this.setListRacikanArray(resep?.permintaanracikan)
-      } else {
+      }
+      else {
         if (resep?.flag !== '') this.setListResep(resep)
       }
       // console.log('set resep', val, resep, this.form)
     },
-    setListResep(resep) {
+    setListResep (resep) {
       resep.listRacikan = []
       if (resep?.permintaanracikan?.length) {
         const rac = resep?.permintaanracikan
@@ -320,7 +326,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             adaList[0].rincian.push(arr)
             const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
             adaList[0].harga = harga
-          } else {
+          }
+          else {
             const temp = {
               namaracikan: arr?.namaracikan,
               harga: arr?.harga,
@@ -341,12 +348,13 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         })
       }
     },
-    cariObat(val) {
+    cariObat (val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
       // console.log('depo', this?.depo, depo)
       if (depo.length) {
         this.dpPar = depo[0]?.value
-      } else return notifErrVue('depo tujuan tidak ditemukan')
+      }
+      else return notifErrVue('depo tujuan tidak ditemukan')
       const param = {
         groups: this?.pasien?.groups,
         kdruang: this.dpPar,
@@ -354,6 +362,360 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         tiperesep: this.form.tiperesep
       }
       // console.log('obat', val, filtObat)
+      // this.nonFilteredObat = [
+      //   {
+      //     kdobat: '0000046-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2025-08-30',
+      //     namaobat: 'SERTRALINE HYDROCHLORIDE 50 MG TABLET SALUT SELAPUT',
+      //     kandungan: 'Sertralin',
+      //     bentuk_sediaan: 'TABLET SALUT SELAPUT',
+      //     satuankecil: 'TABLET',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '1',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '50 MG',
+      //     volumesediaan: '',
+      //     total: 2,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 1438,
+      //       kd_obat: '0000046-FAR',
+      //       kd_ruang: 'Gd-05010100',
+      //       min: '101',
+      //       max: '868',
+      //       created_at: '2023-12-31T19:58:12.000000Z',
+      //       updated_at: '2023-12-31T19:58:12.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000054-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2025-11-01',
+      //     namaobat: 'FLUNARIZINE HCL 5 MG TABLET',
+      //     kandungan: 'Flunarizin',
+      //     bentuk_sediaan: 'TABLET',
+      //     satuankecil: 'TABLET',
+      //     fornas: '0',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '5 MG',
+      //     volumesediaan: '',
+      //     total: 121,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 498,
+      //       kd_obat: '0000054-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '647',
+      //       max: '5544',
+      //       created_at: '2023-12-31T08:34:12.000000Z',
+      //       updated_at: '2023-12-31T08:34:12.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000057-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2025-08-01',
+      //     namaobat: 'DICLOFENAC POTASSIUM 25 MG TABLET SALUT SELAPUT',
+      //     kandungan: 'Kalium diklofenak',
+      //     bentuk_sediaan: 'TABLET SALUT SELAPUT',
+      //     satuankecil: 'TABLET',
+      //     fornas: '0',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '25 MG',
+      //     volumesediaan: '',
+      //     total: 262,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 93,
+      //       kd_obat: '0000057-FAR',
+      //       kd_ruang: 'Gd-02010104',
+      //       min: '30',
+      //       max: '90',
+      //       created_at: '2023-12-31T04:11:12.000000Z',
+      //       updated_at: '2023-12-31T04:11:12.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000061-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2025-08-30',
+      //     namaobat: 'CENFRESH  5 MG/ML 0,6 ML @ 5 MINIDOSE TETES MATA',
+      //     kandungan: 'Karboksimetilselulose',
+      //     bentuk_sediaan: 'TETES MATA',
+      //     satuankecil: 'MINIDOSE',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '0',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.001',
+      //     uraian108: 'Obat Cair',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '5 MG/ML',
+      //     volumesediaan: '0,6 ML @ 5 MINIDOSE',
+      //     total: 1,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 189,
+      //       kd_obat: '0000061-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '43',
+      //       max: '368',
+      //       created_at: '2023-12-31T05:13:36.000000Z',
+      //       updated_at: '2023-12-31T05:13:36.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000062-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2026-04-30',
+      //     namaobat: 'TOBROSON 0,6 ML @ 5 MINIDOSE TETES MATA',
+      //     kandungan: 'Kombinasi: Tobramisin + Deksametason',
+      //     bentuk_sediaan: 'TETES MATA',
+      //     satuankecil: 'MINIDOSE',
+      //     fornas: '0',
+      //     forkit: '1',
+      //     generik: '0',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.001',
+      //     uraian108: 'Obat Cair',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '',
+      //     volumesediaan: '0,6 ML @ 5 MINIDOSE',
+      //     total: 6,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 203,
+      //       kd_obat: '0000062-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '21',
+      //       max: '180',
+      //       created_at: '2023-12-31T05:23:59.000000Z',
+      //       updated_at: '2023-12-31T05:23:59.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000063-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2026-11-30',
+      //     namaobat: 'NONCORT 1 MG/ML 0,6 ML @ 5 MINIDOSE TETES MATA',
+      //     kandungan: 'Natrium diklofenak',
+      //     bentuk_sediaan: 'TETES MATA',
+      //     satuankecil: 'MINIDOSE',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '0',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.001',
+      //     uraian108: 'Obat Cair',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '1 MG/ML',
+      //     volumesediaan: '0,6 ML @ 5 MINIDOSE',
+      //     total: 4,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 199,
+      //       kd_obat: '0000063-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '18',
+      //       max: '156',
+      //       created_at: '2023-12-31T05:21:59.000000Z',
+      //       updated_at: '2023-12-31T05:21:59.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000071-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '0000-00-00',
+      //     namaobat: 'NOSIRAX KAPSUL',
+      //     kandungan: 'Kombinasi: Polygoni Hydropiperis Herba 30%, Cyperi Rhizoma 30%, Croptophylli Folium 40% (dalam bentuk ekstrak, setara dengan 0 - (B Hidroksietil) - Rutosidum 300 mg)',
+      //     bentuk_sediaan: 'KAPSUL',
+      //     satuankecil: 'Kapsul',
+      //     fornas: '0',
+      //     forkit: '1',
+      //     generik: '0',
+      //     kronis: '',
+      //     prb: '',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '',
+      //     volumesediaan: '',
+      //     total: 155,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 1375,
+      //       kd_obat: '0000071-FAR',
+      //       kd_ruang: 'Gd-05010101',
+      //       min: '50',
+      //       max: '100',
+      //       created_at: '2023-12-31T18:29:11.000000Z',
+      //       updated_at: '2023-12-31T18:29:11.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000085-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2026-09-01',
+      //     namaobat: 'GLIMEPIRIDE 1 MG TABLET',
+      //     kandungan: 'Glimepirid',
+      //     bentuk_sediaan: 'TABLET',
+      //     satuankecil: 'TABLET',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '1',
+      //     prb: '1',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '1 MG',
+      //     volumesediaan: '',
+      //     total: 67,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 521,
+      //       kd_obat: '0000085-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '422',
+      //       max: '3620',
+      //       created_at: '2023-12-31T08:50:19.000000Z',
+      //       updated_at: '2023-12-31T08:50:19.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000086-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2027-08-01',
+      //     namaobat: 'GLIMEPIRIDE 2 MG TABLET',
+      //     kandungan: 'Glimepirid',
+      //     bentuk_sediaan: 'TABLET',
+      //     satuankecil: 'TABLET',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '1',
+      //     prb: '1',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '2 MG',
+      //     volumesediaan: '',
+      //     total: 88,
+      //     alokasi: 0,
+      //     minmax: {
+      //       id: 90,
+      //       kd_obat: '0000086-FAR',
+      //       kd_ruang: 'Gd-02010104',
+      //       min: '5',
+      //       max: '15',
+      //       created_at: '2023-12-31T04:07:53.000000Z',
+      //       updated_at: '2023-12-31T04:07:53.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   },
+      //   {
+      //     kdobat: '0000087-FAR',
+      //     kdruang: 'Gd-05010101',
+      //     tglexp: '2026-10-01',
+      //     namaobat: 'GLIMEPIRIDE 3 MG TABLET',
+      //     kandungan: 'Glimepirid',
+      //     bentuk_sediaan: 'TABLET',
+      //     satuankecil: 'TABLET',
+      //     fornas: '1',
+      //     forkit: '1',
+      //     generik: '1',
+      //     kronis: '1',
+      //     prb: '1',
+      //     psikotropika: '1',
+      //     kode108: '1.1.7.01.04.01.002',
+      //     uraian108: 'Obat Padat',
+      //     kode50: '5.1.02.01.01.037',
+      //     uraian50: 'BELANJA OBAT-OBATAN',
+      //     kekuatandosis: '3 MG',
+      //     volumesediaan: '',
+      //     total: 392,
+      //     alokasi: 2,
+      //     minmax: {
+      //       id: 523,
+      //       kd_obat: '0000087-FAR',
+      //       kd_ruang: 'R-0901001',
+      //       min: '358',
+      //       max: '3068',
+      //       created_at: '2023-12-31T08:50:44.000000Z',
+      //       updated_at: '2023-12-31T08:50:44.000000Z'
+      //     },
+      //     transnonracikan: [],
+      //     transracikan: [],
+      //     permintaanobatrinci: [],
+      //     persiapanrinci: []
+      //   }
+      // ]
+
       this.loadingObat = true
       const params = { params: param }
       return new Promise(resolve => {
@@ -373,7 +735,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       })
       // }
     },
-    async getSigna() {
+    async getSigna () {
       this.loadingSigna = true
       await api.get('v1/simrs/farmasinew/depo/get-signa')
         .then(resp => {
@@ -383,7 +745,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         })
         .catch(() => { this.loadingSigna = false })
     },
-    seveSigna() {
+    seveSigna () {
       this.loadingSaveSigna = true
       return new Promise(resolve => {
         api.post('v1/simrs/master/signa/store-signa', this.fromSigna)
@@ -400,7 +762,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           })
       })
     },
-    getBillRajal(val) {
+    getBillRajal (val) {
       this.setForm('kdruangan', val?.kodepoli)
       const kunjRajal = useKasirRajalListKunjunganStore()
       const param = { noreg: val?.noreg }
@@ -410,19 +772,19 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         // console.log('form', this.form)
       })
     },
-    getBillRanap(val) {
+    getBillRanap (val) {
       this.setForm('kdruangan', val?.kdruangan)
       // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
-    getBillIgd(val) {
+    getBillIgd (val) {
       this.setForm('kdruangan', val?.kodepoli)
       // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
-    getBillOk(val) {
+    getBillOk (val) {
       this.setForm('kdruangan', val?.kdruangan)
       // if (!!this.form?.dokter && !this.dokters?.length) this.cariDokter(this.form?.dokter)
     },
-    cariSimulasi(val) {
+    cariSimulasi (val) {
       this.setForm('kodeincbg', '-')
       this.setForm('uraianinacbg', '-')
       this.setForm('tarifina', 0)
@@ -447,7 +809,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       //     })
       // })
     },
-    async getNomor() {
+    async getNomor () {
       const param = {
         params: {
           noresep: this.form?.noresep
@@ -459,7 +821,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.setForm('namaracikan', resp?.data)
         })
     },
-    simpanObat(payload) {
+    simpanObat (payload) {
       // const form = payload
       console.log('payload', this.form)
       const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === this.form?.noresep)
@@ -476,32 +838,19 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             console.log('simpan ', resp?.data)
             if (resp.status === 202) {
               this.openDialog(resp?.data)
-            } else {
+            }
+            else {
               notifSuccess(resp)
-              // this.pasien.newapotekrajal = resp?.data?.heder
+
               if (!this.form.noresep || this.form.noresep === '' || this.noresep !== resp?.data?.nota) {
                 this.noreseps.push(resp?.data?.nota)
                 this.noresep = resp?.data?.nota
               }
               this.pasien.newapotekrajal = resp?.data?.newapotekrajal
               this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
-              // const pasResRac = this.pasien.newapotekrajal.find(a => a.noresep === resp?.data?.nota)
-              // if (!pasResRac) this.pasien.newapotekrajal.push(resp?.data?.heder)
-              // else {
-              //   const indexOb = this.pasien.newapotekrajal.findIndex(a => a.noresep === resp?.data?.nota)
-              //   if (indexOb >= 0) this.pasien.newapotekrajal[indexOb] = resp?.data?.heder
-              // }
+
               this.resetForm()
               this.setForm('noresep', resp?.data?.nota)
-              // if (resp?.data?.rinci !== 0) {
-              //   this.setList(resp?.data?.rinci)
-              // }
-              // if (resp?.data?.rincidtd !== 0) {
-              //   this.setListRacikan(resp?.data?.rincidtd)
-              // }
-              // if (resp?.data?.rincinondtd !== 0) {
-              //   this.setListRacikan(resp?.data?.rincinondtd)
-              // }
 
               this.setForm('lanjuTr', '')
               resolve(resp)
@@ -513,7 +862,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           })
       })
     },
-    async selesaiResep() {
+    async selesaiResep () {
       console.log('selesai', this.form)
       this.loadingkirim = true
       if (!this.form.noresep || this.form.noresep === '') {
@@ -537,19 +886,23 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           }
           this.listPemintaanSementara = []
           this.listRacikan = []
-          // this.tipeRacikan = [
-          //   { label: 'DTD', value: 'DTD', disable: false },
-          //   { label: 'non-DTD', value: 'non-DTD', disable: false }
-          // ]
-          // if (this.pasien?.newapotekrajal) {
-          //   this.setListResep(this.pasien?.newapotekrajal)
-          //   this.pasien.newapotekrajal.flag = '1'
-          // } else {
-          // }
         })
-        .catch(() => { this.loadingkirim = false })
+        .catch((err) => {
+          if (err?.response?.data?.message?.includes('simrs/events?auth_key=simrs_key_harry141312&auth_') || err?.response?.data?.message?.includes('https://apijkn.bpjs-kesehatan.go.id')) {
+            const reseps = this.pasien?.newapotekrajal
+            const index = reseps.findIndex(x => x.noresep === this.form.noresep)
+            if (index >= 0) {
+              this.pasien.newapotekrajal[index] = []
+              this.indexRacikan = index
+            }
+            this.listPemintaanSementara = []
+            this.listRacikan = []
+          }
+          this.form.noresep = ''
+          this.loadingkirim = false
+        })
     },
-    async hapusObat(val) {
+    async hapusObat (val) {
       // console.log('hapusObat', val)
       this.loadingHapus = true
       this.obatId = val?.id
@@ -572,7 +925,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.obatId = null
         })
     },
-    openDialog(val) {
+    openDialog (val) {
       Dialog.create({
         title: 'Konfirmasi',
         message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,

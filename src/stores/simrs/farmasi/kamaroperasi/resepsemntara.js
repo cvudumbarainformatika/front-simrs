@@ -70,13 +70,13 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
     // section racikan end---
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setRacikan(key, val) {
+    setRacikan (key, val) {
       this.racikan[key] = val
     },
-    setPasien() {
+    setPasien () {
       const val = this?.pasien
       //  console.log('xxx', val)
       this.setForm('noreg', val?.kunjunganranap?.rs1 ?? val?.kunjunganrajal?.rs1)
@@ -85,7 +85,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       this.setForm('sistembayar', val?.sistembayar?.rs1)
       this.setForm('dokter', val?.dokter?.kdpegsimrs)
     },
-    resetForm() {
+    resetForm () {
       this.namaObat = null
       const tagihanrs = this.form?.tagihanrs ?? 0
       const kodeincbg = this.form?.kodeincbg ?? '-'
@@ -129,13 +129,14 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
           this.setForm('jumlah', 1)
           this.setForm('dosisobat', 1)
           this.setForm('dosismaksimum', 1)
-        } else {
+        }
+        else {
           this.setForm('jumlah', 1)
         }
       }
       this.setPasien()
     },
-    resetObat() {
+    resetObat () {
       const tagihanrs = this.form?.tagihanrs ?? 0
       const kodeincbg = this.form?.kodeincbg ?? '-'
       const uraianinacbg = this.form?.uraianinacbg ?? '-'
@@ -153,7 +154,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
 
       this.setPasien()
     },
-    resetRacikan() {
+    resetRacikan () {
       const jen = this.racikan?.tiperacikan ?? '-'
       const nam = this.racikan?.namaracikan ?? '-'
       this.racikan = {
@@ -166,7 +167,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         dosismaksimum: 1 // dosis resep
       }
     },
-    hapusList(data) {
+    hapusList (data) {
       console.log('data', data)
       if (!data?.head) {
         console.log('not data head')
@@ -175,7 +176,8 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         const indexp = this?.pasien?.permintaanobatoperasi?.rinci.findIndex(x => x.id === data?.obat?.id)
         if (indexp >= 0) this?.pasien?.permintaanobatoperasi?.rinci.splice(indexp, 1)
         console.log('new', indexp)
-      } else {
+      }
+      else {
         const indehead = this?.pasien?.permintaanobatoperasi?.findIndex(x => x.nopermintaan === data?.head?.nopermintaan)
         if (indehead >= 1) this?.pasien?.permintaanobatoperasi.splice(indehead, 1)
         const indexper = this.nopermintaans.findIndex(noper => noper === data?.head?.nopermintaan)
@@ -190,19 +192,19 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
 
       console.log('pasien', this?.pasien?.permintaanobatoperasi)
     },
-    setList(key) {
+    setList (key) {
       // key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.hargajual)) + parseFloat(key?.r)
       if (this.listBelum) {
         this.listBelum?.rinci.push(key)
         console.log('set list', key, this.listBelum?.rinci)
       }
     },
-    setListArray(array) {
+    setListArray (array) {
       array.forEach(arr => {
         this.setList(arr)
       })
     },
-    setListRacikan(key) {
+    setListRacikan (key) {
       key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.r)
       const namaracikan = key?.namaracikan
       const adaList = this.listRacikan.filter(list => list.namaracikan === namaracikan)
@@ -210,7 +212,8 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         adaList[0].rincian.push(key)
         const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
         adaList[0].harga = harga
-      } else {
+      }
+      else {
         const temp = {
           namaracikan: key?.namaracikan,
           harga: key?.harga,
@@ -231,19 +234,19 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         { label: 'non-DTD', value: 'non-DTD', disable: true }
       ]
     },
-    setListRacikanArray(array) {
+    setListRacikanArray (array) {
       array.forEach(arr => {
         this.setListRacikan(arr)
       })
     },
-    setNopermintaan(reseps) {
+    setNopermintaan (reseps) {
       this.nopermintaans = []
       reseps?.forEach(resep => {
         this.nopermintaans.unshift(resep?.nopermintaan)
       })
       this.nopermintaans.unshift('BARU')
     },
-    setResep(val) {
+    setResep (val) {
       this.setForm('nopermintaan', '')
       this.listSudah = null
       this.listBelum = null
@@ -256,17 +259,19 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       if (resep?.flag === '') {
         this.setForm('nopermintaan', val)
         this.listBelum = resep
-      } else {
+      }
+      else {
         if (resep?.flag !== '') this.listSudah = resep
       }
       console.log('set resep', val, resep)
     },
-    cariObat(val) {
+    cariObat (val) {
       const depo = this.depos.filter(pa => pa.jenis === this.depo)
       // console.log('depo', this?.depo, depo)
       if (depo.length) {
         this.dpPar = depo[0]?.value
-      } else return notifErrVue('depo tujuan tidak ditemukan')
+      }
+      else return notifErrVue('depo tujuan tidak ditemukan')
       const param = {
         groups: this?.pasien?.sistembayar?.groups,
         kdruang: this.dpPar,
@@ -293,7 +298,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       })
       // }
     },
-    simpanObat(payload) {
+    simpanObat (payload) {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/penunjang/farmasinew/obatoperasi/simpan-permintaan', this.form)
@@ -303,7 +308,8 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
             this.cariObat()
             if (resp.status === 202) {
               this.openDialog(resp?.data)
-            } else {
+            }
+            else {
               notifSuccess(resp)
               if (!this.form.nopermintaan || this.form.nopermintaan === '') {
                 this.nopermintaans.splice(0, 1)
@@ -328,7 +334,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
           })
       })
     },
-    async selesaiResep() {
+    async selesaiResep () {
       this.loadingkirim = true
       await api.post('v1/simrs/penunjang/farmasinew/obatoperasi/selesai-obat-permintaan', this.form)
         .then(resp => {
@@ -342,7 +348,8 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
           const index = reseps.findIndex(x => x.nopermintaan === res?.nopermintaan)
           if (index >= 0) {
             this.pasien.permintaanobatoperasi[index] = res
-          } else {
+          }
+          else {
             this.pasien.permintaanobatoperasi.push(res)
           }
           this.listBelum = null
@@ -350,7 +357,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
         })
         .catch(() => { this.loadingkirim = false })
     },
-    async hapusObat(val) {
+    async hapusObat (val) {
       console.log('hapusObat', val)
       this.loadingHapus = true
       this.obatId = val?.id
@@ -371,7 +378,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
           this.obatId = null
         })
     },
-    openDialog(val) {
+    openDialog (val) {
       Dialog.create({
         title: 'Konfirmasi',
         message: `Obat yang diberikan tgl ${dateFullFormat(val?.cek?.hasil[0]?.tgl)} yang direncakan untuk konsumsi selama ${val?.cek?.total} hari, baru dikonsumsi ${val?.cek?.selisih} hari. Apakah Akan tetal dilanjutkan?`,

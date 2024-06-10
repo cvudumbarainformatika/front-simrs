@@ -21,6 +21,7 @@ window.Echo = new Echo({
   enabledTransports: ['ws', 'wss']
 })
 const channel = window.Echo.channel('public.playground.1')
+const refreshCh = window.Echo.channel('public.refresh-page')
 const channelLogin = window.Echo.channel('public.login.qr')
 // const qrcodeChannel = window.Echo.channel('qrcode')
 
@@ -31,5 +32,6 @@ export {
   channel,
   // qrcodeChannel,
   channelLogin,
-  antreanChannel
+  antreanChannel,
+  refreshCh
 }

@@ -41,7 +41,7 @@ const heads = ref([
   { page: 'terima', label: 'Permintaan Mutasi dari Depo lain', color: 'primary' },
   { page: 'list', label: 'List Permintaan Mutasi ', color: 'green' }
 ])
-function gantiHead(val) {
+function gantiHead (val) {
   head.value = val
 }
 

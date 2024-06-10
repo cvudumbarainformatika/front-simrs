@@ -28,6 +28,12 @@
       <template #col-stokalokasi>
         <div>Stok Alokasi</div>
       </template>
+      <template #col-lain>
+        <div>Stok Alokasi Gudang / Depo Lain</div>
+      </template>
+      <template #col-peny>
+        <div>Cek Stok</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -44,19 +50,19 @@
             class="text-weight-bold"
             :class="row.status_fornas === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_fornas==='1' ?'Fornas':'Non-Fornas' }}
+            {{ row.status_fornas==='1' ?'Fornas':'' }}
           </div>
           <div
             class="text-weight-bold q-ml-sm"
             :class="row.status_forkid === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_forkid==='1' ?'Forkit':'Non-Forkit' }}
+            {{ row.status_forkid==='1' ?'Forkit':'' }}
           </div>
           <div
             class="text-weight-bold q-ml-sm"
             :class="row.status_generik === '1'?'text-green':'text-negative'"
           >
-            {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
+            {{ row.status_generik==='1' ?'Generik':'' }}
           </div>
         </div>
         <div class="row justify-start no-wrap q-my-xs">
@@ -102,6 +108,56 @@
           </div>
         </div>
       </template>
+      <!-- eslint-disable-next-line vue/no-unused-vars -->
+      <template #cell-lain="{row}">
+        <div v-if="true">
+          belum
+        </div>
+        <div v-else>
+          <div v-for="(gud,i) in namaGudang()" :key="i" style="min-width: 300px;">
+            <div class="row items-center">
+              <div class="col-9">
+                {{ gud?.nama }}
+              </div>
+              <div class="col-2">
+                {{ ambilJumlah(gud, row) }}
+              </div>
+              <div class="col-1">
+                <q-btn
+                  unelevated
+                  round
+                  flat
+                  size="xs"
+                  color="teal"
+                  icon="icon-mat-refresh"
+                  @click="ambilDataJumlah(gud,row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Refresh / ambil Jumlah
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- {{ row?.lain??anu }} -->
+      </template>
+      <!-- eslint-disable-next-line vue/no-unused-vars -->
+      <template #cell-peny="{row}">
+        <q-btn
+          label="Cek Stok"
+          dense
+          no-caps
+          color="negative"
+          push
+          :loading="row.loading"
+          :disable="row.loading"
+          @click="table.cekStok(row)"
+        />
+      </template>
       <template #left-acttion="{row}">
         <div class="q-mr-md">
           <q-btn
@@ -141,7 +197,7 @@ const apps = useAplikasiStore()
 
 const DetailAlokasi = defineAsyncComponent(() => import('./DetailAlokasi.vue'))
 
-function cariGudang(val) {
+function cariGudang (val) {
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)
     if (apps?.user?.kdruangansim !== '') {
@@ -150,13 +206,15 @@ function cariGudang(val) {
     }
     if (gudang.length) {
       return gudang[0]?.nama
-    } else return 'Gudang / Depo tidak ditemukan'
-  } else {
+    }
+    else return 'Gudang / Depo tidak ditemukan'
+  }
+  else {
     return 'menunggu data Gudang / Depo'
   }
 }
 
-function rinciAlokasi(row) {
+function rinciAlokasi (row) {
   console.log('rinci alokasi', row)
   table.isOpen = true
   table.getDataAlokasi(row)
@@ -166,8 +224,40 @@ function rinciAlokasi(row) {
 
 // })
 // eslint-disable-next-line no-unused-vars
-function editData(val) {
+function editData (val) {
   store.editData(val)
   console.log('edit', val)
+}
+const gudang = [
+  { nama: 'Floor Stock 1 (AKHP)', value: 'Gd-03010101' },
+  { nama: 'Depo Rawat inap', value: 'Gd-04010102' },
+  { nama: 'Depo OK', value: 'Gd-04010103' },
+  { nama: 'Depo Rawat Jalan', value: 'Gd-05010101' },
+  { nama: 'Depo IGD', value: 'Gd-02010104' },
+  { nama: 'Gudang Farmasi ( Kamar Obat )', value: 'Gd-05010100' },
+  { nama: 'Gudang Farmasi ( Floor Stok )', value: 'Gd-03010100' }
+]
+function namaGudang () {
+  const me = apps?.user?.kdruangansim
+  const gud = gudang.filter(f => f.value !== me)
+  return gud ?? []
+}
+
+function ambilDataJumlah (gud, row) {
+  // console.log('ambil jumlah', gud, row)
+  const masuk = {
+    kdobat: row?.kdobat,
+    kdruang: gud?.value,
+    stokalokasi: row?.stokalokasi
+  }
+  const index = row.lain.findIndex(r => r.kdruang === gud?.value)
+  if (index >= 0) row.lain[index] = masuk
+  else row.lain.push(masuk)
+}
+function ambilJumlah (gud, row) {
+  const obatnya = row.lain.find(r => r.kdruang === gud.value)
+  if (obatnya) return obatnya.stokalokasi ?? 0
+  else return '-'
+  // console.log('ambil jumlah', gud, row)
 }
 </script>

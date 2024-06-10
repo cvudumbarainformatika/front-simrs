@@ -11,10 +11,10 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
     }
   }),
   actions: {
-    getInitialData() {
+    getInitialData () {
       this.getData()
     },
-    async getData() {
+    async getData () {
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/gudang/list-pemakaian-konsinyasi', param)

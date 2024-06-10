@@ -55,6 +55,9 @@
                 <div class="col-12 text-weight-bold">
                   {{ row.nama_obat }}
                 </div>
+                <div class="col-12 text-italic f-10">
+                  {{ row.kd_obat }}
+                </div>
               </div>
             </template>
             <template #cell-nama="{row}">
@@ -140,6 +143,30 @@
                 </div>
                 <div class=" q-ml-xs text-weight-bold text-right">
                   {{ row.kandungan }}
+                </div>
+              </div>
+              <div
+                v-if="row.indikasi.length"
+                class="row items-center box justify-between no-wrap q-mb-sm"
+              >
+                <div>
+                  Indikasi
+                </div>
+                <div>
+                  <div
+                    v-for="(te,i) in row.indikasi"
+                    :key="i"
+                    class="text-italic text-right q-mb-xs"
+                  >
+                    <!-- {{ i+1 }}. -->
+                    {{ te.indikasi }}
+                    <!-- <app-chip
+                      outline
+                      square
+                      color="dark"
+                      :label="te.kelas_terapi "
+                    /> -->
+                  </div>
                 </div>
               </div>
               <div
@@ -310,9 +337,9 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Ket. Kronis
+                  Restriksi Fornas
                 </div>
-                <div style="white-space: normal;">
+                <div class="text-right text-italic" style="white-space: normal;">
                   {{ row.keterangan_kronis }}
                 </div>
               </div>
@@ -349,7 +376,7 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Nilai KDN
+                  Nilai TKDN
                 </div>
                 <div class="text-right">
                   {{ row.nilai_kdn }}
@@ -360,7 +387,7 @@
                 class="row box-tiga justify-between items-center no-wrap q-mb-sm"
               >
                 <div class="">
-                  Sertifikat KDN
+                  Sertifikat TKDN
                 </div>
                 <div class="text-right">
                   {{ row.sertifikatkdn }}
@@ -406,7 +433,7 @@ const table = useMasterObatTable()
 const store = useMasterObatForm()
 table.getDataTable()
 store.getInitialData()
-function sisBay(val) {
+function sisBay (val) {
   switch (val) {
     case 'UMUM':
       return 'text-indigo'
@@ -418,7 +445,7 @@ function sisBay(val) {
       return ''
   }
 }
-function gudang(val) {
+function gudang (val) {
   const gud = store.optionGudangs.find(x => x.value === val)
 
   return gud?.label ?? '-'

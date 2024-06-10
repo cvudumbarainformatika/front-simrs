@@ -221,17 +221,17 @@ const store = useResepPermintaanOperasiStore()
 const refInput = ref(null)
 const isOpen = ref(false)
 // functions in here
-function nomor(item, val) {
+function nomor (item, val) {
   const filtered = item?.rinci.filter(a => a.noresep === '')
   const index = filtered.findIndex(a => val?.id === a.id)
   return index + 1 ?? '-'
 }
-function adaResep(item) {
+function adaResep (item) {
   const filtered = item?.rinci.filter(a => a.noresep !== '')
   console.log('adaresep', filtered?.length >= 1, item?.rinci?.length === 1)
   return filtered?.length >= 1 || item?.rinci?.length === 1
 }
-function setNumber(evt, det, key) {
+function setNumber (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -243,8 +243,10 @@ function setNumber(evt, det, key) {
       det.jumlah_resep = det.jumlah_distribusi
     }
   }
+  if (nilai > 0) det.checked = true
+  else det.checked = false
 }
-function setCheck(evt, item, n) {
+function setCheck (evt, item, n) {
   if (item.checked) {
     const ind = store.rincBelId.findIndex(a => a === item?.id)
     console.log('index', ind, store.rincBelId)
@@ -253,12 +255,13 @@ function setCheck(evt, item, n) {
       refInput.value[ind]?.focus()
       refInput.value[ind]?.select()
     }
-  } else {
+  }
+  else {
     const index = store.form.obats.findIndex(a => a.id === item.id)
     if (index >= 0) store.form.obats.splice(index, 1)
   }
 }
-function addToForm(item) {
+function addToForm (item) {
   if (item.checked) {
     const ada = store.form.obats.find(a => a.id === item.id)
     if (!ada && item.jumlah_resep > 0) store.form.obats.push(item)
@@ -267,13 +270,13 @@ function addToForm(item) {
 
 const noresepObats = ref([])
 let itemnya = null
-function openDialog(item) {
+function openDialog (item) {
   itemnya = item
   noresepObats.value = item?.rinci?.filter(a => a.noresep === '')
   console.log('obat', noresepObats.value)
   if (noresepObats.value?.length) isOpen.value = true
 }
-function selesai() {
+function selesai () {
   // cek ada yang belum di buatkan resep atau tidak, popup tanyakan apakah obat2 tsb tidak akan dibuatkan resep
   // console.log('item', item)
 

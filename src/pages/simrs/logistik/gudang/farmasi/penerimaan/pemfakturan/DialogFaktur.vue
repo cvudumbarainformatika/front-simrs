@@ -1,7 +1,7 @@
 <template>
   <div class="row f-24 bg-primary text-white rounded">
     <div class="col-12 q-ma-sm text-weight-bold">
-      Form Penerimaan
+      Form Pemfakturan
     </div>
   </div>
   <div
@@ -606,7 +606,7 @@ const refIsi = ref(null)
 const refExp = ref(null)
 const refHarga = ref(null)
 const refHargaKcl = ref(null)
-function validasi(index) {
+function validasi (index) {
   // console.log('index', index)
   console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
   // console.log('ref ppn', refPpn.value[index].refInput.validate())
@@ -634,7 +634,7 @@ function validasi(index) {
   else return false
 }
 const ind = ref(null)
-function simpan(index) {
+function simpan (index) {
   // store.details[index].forEach(a => {
   //   console.log('each', a)
   // })
@@ -651,7 +651,7 @@ function simpan(index) {
     store.simpanPenerimaan().then(() => { ind.value = null })
   }
 }
-function validasiHeader() {
+function validasiHeader () {
   // console.log('ref noSurat', refNoSurat.value.$refs.refInput.validate())
   const Gudang = refGudang.value ? refGudang.value.$refs.refAuto.validate() : !!store.form.gudang
   const noSurat = refNoSurat.value.$refs.refInput.validate()
@@ -660,7 +660,7 @@ function validasiHeader() {
   if (Gudang && noSurat && pengirim) return true
   else return false
 }
-function simpanHeader() {
+function simpanHeader () {
   if (validasiHeader()) {
     console.log('simpan header', store.form)
     // kasih warning dulu sebelum simpan
@@ -684,13 +684,13 @@ function simpanHeader() {
     })
   }
 }
-function adaPPN(evt, det) {
+function adaPPN (evt, det) {
   // console.log('ada ppn', evt, det)
   if (evt) setHargaNetNew('11', det, 'ppn')
   if (!evt) setHargaNetNew('0', det, 'ppn')
 }
 let isiPrev = 0
-function setHargaNetNew(evt, det, key) {
+function setHargaNetNew (evt, det, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -727,7 +727,8 @@ function setHargaNetNew(evt, det, key) {
             jmlTerimaK = jml
             jmlTerimaB = jml / det.isi
           }
-        } else {
+        }
+        else {
           det.jumlah = parseFloat(jmlTerimaK)
           jmlTerimaB = det.jumlah / det.isi
         }
@@ -767,7 +768,7 @@ function setHargaNetNew(evt, det, key) {
   // console.log('det', det)
   // console.log('key', key)
 }
-function setHargaNet(val) {
+function setHargaNet (val) {
   val.harga_netto = 0
   if (val.harga > 0 && val.diskon > 0) {
     val.diskon_rp = val.diskon / 100 * val.harga
@@ -778,7 +779,8 @@ function setHargaNet(val) {
       const harga = val.harga_netto
       val.ppn_rp = val.ppn / 100 * harga
       val.harga_netto = harga + val.ppn_rp
-    } else {
+    }
+    else {
       const harga = val.harga
       val.ppn_rp = val.ppn / 100 * harga
       val.harga_netto = harga + val.ppn_rp
@@ -786,7 +788,8 @@ function setHargaNet(val) {
   }
   if (val.harga_netto > 0) {
     val.subtotal = val.harga_netto * parseFloat(val.jumlah)
-  } else {
+  }
+  else {
     val.harga_netto = val.harga
     val.subtotal = val.harga * parseFloat(val.jumlah)
   }
@@ -795,13 +798,14 @@ function setHargaNet(val) {
     if (parseFloat(store.form.total_faktur_pbf) < total) {
       store.setForm('total_faktur_pbf', total)
     }
-  } else {
+  }
+  else {
     store.setForm('total_faktur_pbf', total)
   }
   console.log(val)
 }
 // eslint-disable-next-line no-unused-vars
-function setHarga(evt, val, index) {
+function setHarga (evt, val, index) {
   val.harga = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   const diterima = refJmlDiterima.value[index].refInput.validate()
   const isi = refIsi.value[index].refInput.validate()
@@ -810,7 +814,8 @@ function setHarga(evt, val, index) {
     val.isi = isi
     val.harga_kcl = (val.harga / isi)
     setHargaNet(val)
-  } else {
+  }
+  else {
     val.harga = 0
   }
   // console.log('harga', val)
@@ -825,22 +830,23 @@ function setHargaKcl (evt, val, index) {
     val.isi = isi
     val.harga = (val.harga_kcl * isi)
     setHargaNet(val)
-  } else {
+  }
+  else {
     val.harga_kcl = 0
   }
 }
 // eslint-disable-next-line no-unused-vars
-function setDiskon(evt, val) {
+function setDiskon (evt, val) {
   val.diskon = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
 // eslint-disable-next-line no-unused-vars
-function setPpn(evt, val) {
+function setPpn (evt, val) {
   val.ppn = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
   setHargaNet(val)
 }
 // eslint-disable-next-line no-unused-vars
-function setDiterima(evt, val) {
+function setDiterima (evt, val) {
   val.inpJumlah = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
   val.jumlah = val.inpJumlah
@@ -854,7 +860,7 @@ function setDiterima(evt, val) {
   }
 }
 // eslint-disable-next-line no-unused-vars
-function setDiterimaKcl(evt, val) {
+function setDiterimaKcl (evt, val) {
   val.inpJumlahKcl = !isNaN(parseFloat(evt)) ? (parseFloat(evt) < 0 ? 0 : parseFloat(evt)) : 0
   if (!val.isi) val.isi = 1
   val.jumlah = val.inpJumlahKcl * val.isi
@@ -869,7 +875,7 @@ function setDiterimaKcl(evt, val) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function setIsi(evt, val) {
+function setIsi (evt, val) {
   console.log('val', val)
   console.log('isi', parseFloat(evt))
   val.isi = !isNaN(parseFloat(evt)) ? parseFloat(evt) : 0
@@ -889,7 +895,8 @@ function setIsi(evt, val) {
         val.inpJumlah = jml
         val.inpJumlahKcl = jml / val.isi
       }
-    } else {
+    }
+    else {
       val.jumlah = parseFloat(val.inpJumlah)
       val.inpJumlahKcl = val.jumlah / val.isi
     }
@@ -904,7 +911,7 @@ function setIsi(evt, val) {
     isiPrev = val.isi
   }
 }
-function detKadal(evt, val) {
+function detKadal (evt, val) {
   val.tgl_exp = evt
 }
 // function setTanggal(val) {
@@ -914,17 +921,17 @@ function detKadal(evt, val) {
 //   store.setDisp('tanggal', val)
 // }
 
-function setSurat(val) {
+function setSurat (val) {
   store.setForm('tglsurat', val)
 }
-function dispSurat(val) {
+function dispSurat (val) {
   store.setDisp('surat', val)
 }
 
-function setTempo(val) {
+function setTempo (val) {
   store.setForm('batasbayar', val)
 }
-function dispTempo(val) {
+function dispTempo (val) {
   store.setDisp('batasbayar', val)
 }
 const apps = useAplikasiStore()

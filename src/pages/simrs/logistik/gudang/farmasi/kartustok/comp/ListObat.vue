@@ -54,6 +54,7 @@
         :key="i"
         clickable
         @click="store.setItem(item)"
+        id="tableItem"
       >
         <q-item-section style="width:40%">
           <div class="row">
@@ -71,13 +72,14 @@
               {{ hitungSaldoAwal(item?.saldoawal) ?? 0 }}
             </div>
             <div class="col-3 text-right text-primary">
-              {{ hitungPenerimaan(item?.penerimaanrinci) ?? 0 }}
+              {{ hitungPenerimaan(item?.penerimaanrinci) + hitungMutasiMasuk(item?.mutasimasuk) }}
             </div>
             <div class="col-3 text-right text-negative">
-              {{ hitungMutasi(item?.mutasi) ?? 0 }}
+              {{ hitungMutasiKeluar(item?.mutasikeluar) + hitungResepKeluar(item?.resepkeluar) }}
             </div>
+
             <div class="col-3 text-right text-teal text-weight-bold">
-              {{ hitungSaldoAwal(item?.saldoawal) + hitungPenerimaan(item?.penerimaanrinci) - hitungMutasi(item?.mutasi) }}
+              {{ (hitungSaldoAwal(item?.saldoawal) ?? 0) + (hitungPenerimaan(item?.penerimaanrinci)?? 0) + (hitungMutasiMasuk(item?.mutasimasuk) ?? 0) - (hitungMutasiKeluar(item?.mutasikeluar) ?? 0) - hitungResepKeluar(item?.resepkeluar) }}
             </div>
           </div>
         </q-item-section>
@@ -87,19 +89,78 @@
 </template>
 
 <script setup>
-import { useKartuStokFarmasiStore } from '../../../../../../../stores/simrs/farmasi/katustok'
+import { useQuasar } from 'quasar'
+import { useKartuStokFarmasiStore } from 'src/stores/simrs/farmasi/katustok'
+import { watchEffect } from 'vue'
 
 const store = useKartuStokFarmasiStore()
 
-function hitungSaldoAwal(arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+// const tableItem = ref(null)
+const $q = useQuasar()
+
+function hitungSaldoAwal (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 
-function hitungPenerimaan(arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+// ini khusus gudang
+function hitungPenerimaan (arr) {
+  // jika jenis penerimaan = 'Pembelian Langsung' maka langsung jadi stok .... asal kunci =1
+  // jika jenis penerimaan bukan 'Pembelian Langsung' maka harus jadi Faktur dulu,  jadi stok .... asal kunci = 1
+  // const filt = arr?.filter((x) => x.jenissurat !== 'Surat Jalan')
+
+  const terimalangsung = arr?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')
+  const jmlterimalangsung = terimalangsung?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+
+  const terimafaktur = arr?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')
+  const jmlterimafaktur = terimafaktur?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+
+  // eslint-disable-next-line no-unused-vars
+  const totalJml = jmlterimalangsung + jmlterimafaktur
+
+  // return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
+  return totalJml
+}
+function hitungMutasiKeluar (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+function hitungMutasiMasuk (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+}
+function hitungResepKeluar (arr) {
+  return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
 }
 
-function hitungMutasi(arr) {
-  return arr.reduce((x, y) => parseFloat(x) + parseFloat(y.jml), 0)
+function exportToExcel (tableId, filename) {
+  // const el = document.getElementById(tableId)
+  // const filenames = filename ? filename + '.xls' : 'KartuStokFarmasi.xls'
+  // const columns = store.items
+  // const content = [columns.map(col => wrapCsvValue(col.label))].concat(
+  //   rows.map(row => columns.map(col => wrapCsvValue(
+  //     typeof col.field === 'function'
+  //       ? col.field(row)
+  //       : row[col.field === void 0 ? col.name : col.field],
+  //     col.format,
+  //     row
+  //   )).join(','))
+  // ).join('\r\n')
+
+  // const status = exportFile(
+  //   'table-export.csv',
+  //   content,
+  //   'text/csv'
+  // )
+  // console.log('mulai export', el?.parentElement)
+  $q.notify({
+    message: 'Masih dibuatkan ... harap tunggu',
+    color: 'negative',
+    icon: 'icon-mat-warning'
+  })
 }
+
+watchEffect(() => {
+  if (store.exportExcel) {
+    // console.log('store.exportExcel', store.exportExcel)
+    exportToExcel('tableItem', 'KartuStokFarmasi')
+  }
+})
 </script>

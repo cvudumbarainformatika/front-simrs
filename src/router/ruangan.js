@@ -104,6 +104,10 @@ const ruangan = {
           //       import('pages/simrs/logistik/ruangan/farmasi/retur/IndexPage.vue')
           //   }
           // ]
+        },
+        {
+          path: '/ruangan/farmasi/kartustok',
+          component: () => import('pages/simrs/logistik/gudang/farmasi/kartustok/IndexPage.vue')
         }
       ]
     },

@@ -295,19 +295,19 @@
                     class="text-weight-bold q-mr-sm"
                     :class="rin?.masterobat?.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin?.masterobat?.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin?.masterobat?.status_fornas === '1' ? 'Fronas' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
                     :class="rin?.masterobat?.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin?.masterobat?.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin?.masterobat?.status_forkid === '1' ? 'Forkit' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
                     :class="rin?.masterobat?.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin?.masterobat?.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin?.masterobat?.status_generik === '1' ? 'Generik' : '' }}
                   </div>
                 </div>
                 <div class="row f-10 no-wrap q-mt-xs anu">
@@ -315,13 +315,13 @@
                     class=" text-weight-bold q-mr-sm"
                     :class="rin?.masterobat?.status_kronis === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin?.masterobat?.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
+                    {{ rin?.masterobat?.status_kronis === '1' ? 'Kronis' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold q-mr-sm"
                     :class="rin?.masterobat?.status_prb === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin?.masterobat?.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
+                    {{ rin?.masterobat?.status_prb === '1' ? 'PRB' : '' }}
                   </div>
                 </div>
               </div>
@@ -561,7 +561,7 @@ const store = useMutasiMasukDepoStore()
 const minta = useFarmasiPermintaanMutasiDepoStore()
 const apps = useAplikasiStore()
 const emits = defineEmits(['ganti'])
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -607,12 +607,12 @@ const flagOptions = ref([
 const gudangs = ref([])
 const gd = apps.depos
 // const gud = ref([])
-function selectGudang(val) {
+function selectGudang (val) {
   console.log('select gudang', val)
   store.setParams('kdgudang', val)
   store.getPermintaanDepo()
 }
-function selectFlag(val) {
+function selectFlag (val) {
   // console.log('select gudang', val)
   store.setParams('flag', val)
   store.getPermintaanDepo()
@@ -672,7 +672,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }

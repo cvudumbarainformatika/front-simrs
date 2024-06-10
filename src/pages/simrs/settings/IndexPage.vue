@@ -192,23 +192,24 @@ onMounted(() => {
   store.getRuanganSim()
 })
 
-function newData() {
+function newData () {
   console.log(store.items)
   const ada = store.items.filter(anu => anu.itemId === 0)
   if (ada.length) {
     notifErrVue('isi dulu yang ada')
-  } else {
+  }
+  else {
     store.addNew(newValue.value)
   }
 }
 
-function saveNew(val) {
+function saveNew (val) {
   store.saveNew(val).then(() => {
     edited.value = null
     indexApp.value = null
   })
 }
-function editApp(val) {
+function editApp (val) {
   console.log(val)
   store.editApp(val).then(() => {
     edited.value = null
@@ -217,7 +218,7 @@ function editApp(val) {
   })
 }
 
-function saveNewMenu(val) {
+function saveNewMenu (val) {
   console.log('new Menu', val)
   store.saveNewMenu(val)
     .then(() => {
@@ -225,7 +226,7 @@ function saveNewMenu(val) {
       indexApp.value = null
     })
 }
-function saveEditMenu(val) {
+function saveEditMenu (val) {
   console.log('edit Menu', val)
   store.saveEditMenu(val)
     .then(() => {
@@ -234,7 +235,7 @@ function saveEditMenu(val) {
     })
 }
 
-function saveNewSubMenu(val) {
+function saveNewSubMenu (val) {
   console.log('new Menu', val)
   store.saveNewSubMenu(val)
     .then(() => {
@@ -242,7 +243,7 @@ function saveNewSubMenu(val) {
       indexApp.value = null
     })
 }
-function saveEditSubMenu(val) {
+function saveEditSubMenu (val) {
   console.log('edit Menu', val)
   store.saveEditSubMenu(val)
     .then(() => {
@@ -251,13 +252,13 @@ function saveEditSubMenu(val) {
     })
 }
 
-function iconAppClick(index) {
+function iconAppClick (index) {
   modalIcon.value = true
   indexApp.value = index
   console.log('index app', index)
 }
 
-function changeIconApp(val) {
+function changeIconApp (val) {
   modalIcon.value = false
   console.log(val)
   store.changeAppIcon(indexApp.value, val).then(() => {
@@ -266,14 +267,14 @@ function changeIconApp(val) {
   })
 }
 const indexMenu = ref(null)
-function iconMenuClick(index) {
+function iconMenuClick (index) {
   console.log('icon menu', index)
   modalMenuIcon.value = true
   indexApp.value = index.app
   indexMenu.value = index.menu
   console.log('index app', index)
 }
-function changeIconMenu(val) {
+function changeIconMenu (val) {
   console.log('change icon', val)
   modalMenuIcon.value = false
   console.log(val)
@@ -283,7 +284,7 @@ function changeIconMenu(val) {
   })
 }
 
-function setPegawai(val) {
+function setPegawai (val) {
   console.log('items', store?.items)
   console.log('set', val)
   if (val !== null) {
@@ -305,7 +306,7 @@ function setPegawai(val) {
       return it
     })
     const userMenu = val?.user?.akses
-    if (userMenu.length) {
+    if (userMenu?.length) {
     // const anu = []
       const menu = menus
       userMenu.forEach(dat => {
@@ -319,7 +320,8 @@ function setPegawai(val) {
       })
       // console.log('user menu', userMenu, menu)
       val.menus = menu
-    } else {
+    }
+    else {
       val.menus = menus
     }
     modalSearch.value = false
@@ -328,7 +330,7 @@ function setPegawai(val) {
   store.setPegawai(val)
 }
 
-function onSimpanUserMenu(val) {
+function onSimpanUserMenu (val) {
   const app = val.filter(app => app.checked)
   const menu = app.map(app => {
     const men = app.menus.filter(men => men.checked)
@@ -345,7 +347,7 @@ function onSimpanUserMenu(val) {
   store.simpanAksesMenu(menu)
 }
 
-function allCheck(val) {
+function allCheck (val) {
   const all = store.pegawai.menus
   let data = []
   if (val === true) {
@@ -364,7 +366,8 @@ function allCheck(val) {
         })
       }
     })
-  } else {
+  }
+  else {
     data = []
     all.forEach(app => {
       app.checked = false
@@ -384,7 +387,7 @@ function allCheck(val) {
   store.simpanAksesMenu('all', val, data)
   // console.log('all menus', val, all)
 }
-function appCheck(val) {
+function appCheck (val) {
   const app = store.pegawai.menus[val.i]
   const menus = app.menus
   let data = []
@@ -398,11 +401,13 @@ function appCheck(val) {
           sub.checked = true
           data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
-      } else {
+      }
+      else {
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: null })
       }
     })
-  } else {
+  }
+  else {
     data = []
     const temp = menus.filter(m => m.checked)
     temp.forEach(men => {
@@ -413,14 +418,15 @@ function appCheck(val) {
           sub.checked = false
           data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: sub.id })
         })
-      } else {
+      }
+      else {
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: men.id, submenu_id: null })
       }
     })
   }
   store.simpanAksesMenu('app', app.checked, data)
 }
-function menuCheck(val) {
+function menuCheck (val) {
   const app = store.pegawai.menus[val.i]
   const sub = val.menu.submenus
   let data = []
@@ -435,11 +441,13 @@ function menuCheck(val) {
         s.checked = true
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
-    } else {
+    }
+    else {
       data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: null })
       // store.simpanAksesMenuOnly('menu', val.menu.checked, data)
     }
-  } else {
+  }
+  else {
     data = []
     const menu = app.menus.filter(a => a.checked === true)
     if (!menu.length) {
@@ -451,14 +459,15 @@ function menuCheck(val) {
         s.checked = false
         data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: s.id })
       })
-    } else {
+    }
+    else {
       data.push({ user_id: store.pegawai.user.id, aplikasi_id: app.id, menu_id: val.menu.id, submenu_id: null })
       // store.simpanAksesMenuOnly('menu', val.menu.checked, data)
     }
   }
   store.simpanAksesMenu('menu', val.menu.checked, data)
 }
-function submenuCheck(val) {
+function submenuCheck (val) {
   const app = store.pegawai.menus[val.i]
   const menu = app.menus[val.n]
   console.log('app ', app)
@@ -467,7 +476,8 @@ function submenuCheck(val) {
   if (val.sub.checked === true) {
     app.checked = true
     menu.checked = true
-  } else {
+  }
+  else {
     const subs = menu.submenus.filter(a => a.checked === true)
     if (!subs.length) {
       menu.checked = false

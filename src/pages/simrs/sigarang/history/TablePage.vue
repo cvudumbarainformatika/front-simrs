@@ -1317,7 +1317,7 @@ const freeTextKiri = ref('')
 const freeTextKanan = ref('')
 const freeTextBawah = ref('')
 // tanggal terbilang
-function tanggalTerbilang(val) {
+function tanggalTerbilang (val) {
   console.log(val)
   switch (val) {
     case '01':
@@ -1418,18 +1418,20 @@ function tanggalTerbilang(val) {
   }
 }
 // tahun terbilang
-function tahunTerbilang(val) {
+function tahunTerbilang (val) {
   const temp = val.split('')
   let satuan = ''
   let puluhan = ''
   if (temp[2] === '1') {
     if (temp[3] === '1') {
       puluhan = 'Sebelas'
-    } else {
+    }
+    else {
       puluhan = bilangan(temp[3])
       satuan = 'belas'
     }
-  } else {
+  }
+  else {
     puluhan = bilangan(temp[2]) + ' puluh'
     satuan = bilangan(temp[3])
   }
@@ -1439,7 +1441,7 @@ function tahunTerbilang(val) {
   return ribuan + ' ' + ratusan + ' ' + puluhan + ' ' + satuan
 }
 // bilangan
-function bilangan(val) {
+function bilangan (val) {
   switch (val) {
     case '1':
       return 'Satu'
@@ -1480,17 +1482,17 @@ const role = computed(() => {
   return apps.user.pegawai ? apps.user.pegawai.role.nama : ''
 })
 // set tanggal print
-function setTanggal(val) {
+function setTanggal (val) {
   table.dispPrint.tanggal = val
   console.log('tanggal ', val)
 }
-function setTanggalDisp(val) {
+function setTanggalDisp (val) {
   table.dispPrint.tanggalDisp = val
   console.log('tanggal disp', val)
 }
 /// ////////
 // kembalikan status ke verif (akses gudang)
-function backToVerif(val, index) {
+function backToVerif (val, index) {
   // console.log('back to', val, index)
   table.setForm('id', val.id)
   table.setForm('status', 4)
@@ -1502,13 +1504,15 @@ function backToVerif(val, index) {
     table.getItBackToVerif(index)
   })
 }
-function reqQ(val) {
+function reqQ (val) {
   let x = ''
   if (val === 'Pemesanan' || val === 'Penerimaan' || val === 'Gudang') {
     x = 'Nomor Pemesanan'
-  } else if (val === 'Permintaan Ruangan') {
+  }
+  else if (val === 'Permintaan Ruangan') {
     x = 'Nomor Permintaan'
-  } else if (val === 'Penerimaan Ruangan') {
+  }
+  else if (val === 'Penerimaan Ruangan') {
     x = 'Nomor Distribusi'
   }
   return x
@@ -1518,7 +1522,7 @@ const openPrint = ref(false)
 // let title = ''
 const printed = ref(false)
 const item = ref({})
-function toPrint(val) {
+function toPrint (val) {
   // console.log('print', val)
   item.value = val
   // title = 'Print ' + val.nama
@@ -1529,7 +1533,7 @@ const printObj = {
   // popTitle: title,
   // extraCss: 'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.compat.css, https://cdn.bootcdn.net/ajax/libs/hover.css/2.3.1/css/hover-min.css',
   // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
-  beforeOpenCallback(vue) {
+  beforeOpenCallback (vue) {
     printed.value = true
     console.log('wait...', vue)
   },
@@ -1549,13 +1553,17 @@ const goTo = val => {
 
   if (val.nama === 'PEMESANAN') {
     routerInstance.replace({ name: 'sigarang.transaksi.pemesanan', params: { slug: Slug } })
-  } else if (val.nama === 'PERMINTAAN RUANGAN') {
+  }
+  else if (val.nama === 'PERMINTAAN RUANGAN') {
     routerInstance.replace({ name: 'sigarang.transaksi.permintaan', params: { slug: Slug } })
-  } else if (val.nama === 'PENERIMAAN') {
+  }
+  else if (val.nama === 'PENERIMAAN') {
     routerInstance.replace({ name: 'sigarang.transaksi.penerimaan', params: { slug: Slug } })
-  } else if (val.nama === 'PEMAKAIAN RUANGAN') {
+  }
+  else if (val.nama === 'PEMAKAIAN RUANGAN') {
     routerInstance.replace({ name: 'sigarang.transaksi.pemakaianruangan', params: { slug: Slug } })
-  } else if (val.nama === 'DISTRIBUSI DEPO') {
+  }
+  else if (val.nama === 'DISTRIBUSI DEPO') {
     routerInstance.replace({ name: 'sigarang.transaksi.distribusidepo', params: { slug: Slug } })
   }
   // console.log(val)
@@ -1587,7 +1595,7 @@ const hapus = val => {
 // ------------ edit pemesanan -------
 const editPemesanan = useEditPemesananStore()
 const kontrakStore = useKontrakPemensananStore()
-function editRow(val, i) {
+function editRow (val, i) {
   // console.log(val)
   kontrakStore.setSearch(val.kontrak)
   editPemesanan.assignForm(val, i)
@@ -1599,14 +1607,14 @@ const ladingPemesanan = computed(() => {
 const ladingPenerimaan = computed(() => {
   return editPenerimaan.loading
 })
-function loadingEdit(index) {
+function loadingEdit (index) {
   return (editPemesanan.index === index || editPenerimaan.index === index) && (ladingPemesanan.value === true || ladingPenerimaan.value === true)
 }
 // ------------------------------------
 
 // --------edit penerimaan -----------
 const editPenerimaan = useEditPenerimaanStore()
-function editRowTerima(val, i) {
+function editRowTerima (val, i) {
   console.log('edit penerimaan', val)
   editPenerimaan.assignForm(val, i)
   editPenerimaan.setOpen()
@@ -1687,7 +1695,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PENERIMAAN') {
+  }
+  else if (nama === 'PENERIMAAN') {
     switch (status) {
       case 1:
         return 'Draft'
@@ -1707,7 +1716,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'DISTRIBUSI DEPO') {
+  }
+  else if (nama === 'DISTRIBUSI DEPO') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Depo'
@@ -1723,7 +1733,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PENERIMAAN RUANGAN') {
+  }
+  else if (nama === 'PENERIMAAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Ruangan'
@@ -1739,7 +1750,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'BARANG RUSAK') {
+  }
+  else if (nama === 'BARANG RUSAK') {
     switch (status) {
       case 1:
         return 'Rusak'
@@ -1755,7 +1767,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PEMAKAIAN RUANGAN') {
+  }
+  else if (nama === 'PEMAKAIAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Ruangan'
@@ -1775,7 +1788,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PERMINTAAN RUANGAN') {
+  }
+  else if (nama === 'PERMINTAAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Draft'
@@ -1823,7 +1837,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else { // if (nama === 'PEMESANAN') {
+  }
+  else { // if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:
         return 'Draft'

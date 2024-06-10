@@ -67,7 +67,7 @@
             </div>
           </div>
         </div>
-        <div
+        <!-- <div
           class="col-shrink q-mr-xs"
           style="width:10%"
         >
@@ -90,7 +90,7 @@
               Batalkan resep untuk obat ini
             </q-tooltip>
           </q-btn>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

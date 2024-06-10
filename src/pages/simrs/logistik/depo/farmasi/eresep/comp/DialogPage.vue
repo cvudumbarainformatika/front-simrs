@@ -25,11 +25,13 @@
             </div>
             <div class="absolute-top">
               <div class="q-pa-sm">
-                <q-badge
-                  outline
-                  color="orange"
-                  :label="`${store.resep?.sistembayar?.rs2?? '-'}`"
-                />
+                <div>
+                  <q-badge
+                    outline
+                    color="orange"
+                    :label="`${store.resep?.sistembayar?.rs2?? '-'}`"
+                  />
+                </div>
               </div>
             </div>
             <div class="absolute-bottom">
@@ -40,8 +42,17 @@
                 <div class="text-teal">
                   {{ store.resep ? store.resep.noreg : '-' }} || {{ store.resep?.norm??'-' }}
                 </div>
+                <div class="text-italic f-10">
+                  {{ store.resep?.datapasien?.noka?? '-' }}
+                </div>
+                <div class="text-blue f-10">
+                  {{ store.resep?.sep?.rs8 ?? '-' }}
+                </div>
                 <div class="text-yellow text-italic f-10">
                   {{ store.resep?.datapasien?.usia?? '-' }}
+                </div>
+                <div class=" text-italic f-10">
+                  {{ store.resep?.datapasien?.alamat?? '-' }}
                 </div>
               </div>
             </div>
@@ -125,7 +136,7 @@
       </div>
     </div>
     <div
-      v-if="store?.resep?.flag==='2' && store?.resep?.doneresep && store?.resep?.doneracik"
+      v-if="store?.resep?.flag==='2' && (store?.resep?.semuaresep && store?.resep?.semuaracik)"
       class="text-right q-mr-md q-my-sm"
     >
       <q-btn
@@ -209,7 +220,7 @@
           color="dark"
           text-color="white"
           label="Etiket Pagi"
-          @click="openRanap('Pagi')"
+          @click="openRanap('Diminum Pagi (06.00) ')"
         >
           <q-tooltip
             class="primary"
@@ -227,7 +238,7 @@
           color="dark"
           text-color="white"
           label="Etiket Siang"
-          @click="openRanap('Siang')"
+          @click="openRanap('Diminum Siang (12.00)')"
         >
           <q-tooltip
             class="primary"
@@ -245,7 +256,7 @@
           color="dark"
           text-color="white"
           label="Etiket Sore"
-          @click="openRanap('Sore')"
+          @click="openRanap('Diminum Sore')"
         >
           <q-tooltip
             class="primary"
@@ -263,7 +274,25 @@
           color="dark"
           text-color="white"
           label="Etiket Malam"
-          @click="openRanap('Malam')"
+          @click="openRanap('Diminum Malam (20.00)')"
+        >
+          <q-tooltip
+            class="primary"
+            :offset="[10, 10]"
+          >
+            Print Etiket Malam
+          </q-tooltip>
+        </q-btn>
+      </div>
+      <div class="col-auto q-px-sm">
+        <q-btn
+          no-caps
+          dense
+          class="f-10 q-mb-xs"
+          color="dark"
+          text-color="white"
+          label="Etiket Serahkan Dokter"
+          @click="openRanap('Serahkan Dokter')"
         >
           <q-tooltip
             class="primary"
@@ -301,45 +330,64 @@
           >
             <q-item
               v-for="(rinc,j) in store?.resep?.permintaanresep"
-              :key="j"
+              :key="rinc"
             >
               <q-item-section style="width: 30%;">
-                <div class="row text-weight-bold text-deep-orange">
-                  {{ rinc?.mobat?.nama_obat }}
-                </div>
-                <div class="row f-10">
-                  ( {{ rinc?.kandungan }} )
-                </div>
-                <div class="row text-italic f-10">
-                  {{ rinc?.kdobat }}
-                </div>
-                <div class="row text-weight-bold f-10">
-                  ( {{ rinc?.mobat?.satuan_k }} )
-                </div>
-                <div class="row q-col-gutter-sm text-weight-bold f-10">
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.fornas==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                <div class="row">
+                  <div class="col-1">
+                    {{ j+1 }}
                   </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.forkit==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
-                  </div>
-                  <div
-                    class="col-shrink"
-                    :class="rinc?.generik==='1'?'text-green':'text-red'"
-                  >
-                    {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                  <div class="col-11">
+                    <div class="row text-weight-bold text-deep-orange">
+                      {{ rinc?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row f-10">
+                      ( {{ rinc?.kandungan }} )
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ rinc?.kdobat }}
+                    </div>
+                    <div class="row text-weight-bold f-10">
+                      ( {{ rinc?.mobat?.satuan_k }} )
+                    </div>
+                    <div class="row q-col-gutter-sm text-weight-bold f-10">
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.fornas==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.fornas==='1'?'Fornas':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.forkit==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.forkit==='1'?'Forkit':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.generik==='1'?'text-green':'text-red'"
+                      >
+                        {{ rinc?.generik==='1'?'Generik':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
+                      >
+                        {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
+                      </div>
+                      <div
+                        class="col-shrink"
+                        :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
+                      >
+                        {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </q-item-section>
               <q-item-section
                 side
-                style="width:70%"
+                style="width:65%"
               >
                 <div class="row items-center full-width">
                   <div class="col-6">
@@ -356,7 +404,14 @@
                         Jumlah Obat
                       </div>
                       <div class="col-8">
-                        {{ rinc?.jumlah }}
+                        <!-- {{ rinc?.jumlah }} -->
+                        <app-input
+                          v-model="rinc.jumlah"
+                          outlined
+                          valid
+                          label="Jumlah"
+                          @update:model-value="setJumlah($event,rinc,'jumlah')"
+                        />
                       </div>
                     </div>
                     <div class="row items-center">
@@ -410,12 +465,15 @@
                     <div v-if="store?.resep?.flag==='1'">
                       Resep Belum diterima
                     </div>
-                    <div v-if="store?.resep?.flag==='3'">
+                    <div v-if="parseFloat(store?.resep?.flag)<='3'">
+                      <div v-if="!rinc.done && store?.resep?.flag==='3'" class="text-negative">
+                        Tidak diberikan
+                      </div>
                       <div v-if="apps?.user?.kdruangansim !== 'Gd-05010101' && apps?.user?.kdruangansim !== 'Gd-04010102'">
                         Resep Sudah Selesai
                       </div>
                       <q-btn
-                        v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                        v-if="apps?.user?.kdruangansim === 'Gd-05010101' || apps?.user?.kdruangansim === 'Gd-04010102'"
                         round
                         class="f-10 q-my-sm"
                         color="dark"
@@ -463,7 +521,7 @@
                     </div>
                     <div v-if="store?.resep?.flag==='2'">
                       <q-btn
-                        v-if="!rinc?.obatkeluar"
+                        v-if="(!rinc?.obatkeluar) && !rinc?.done"
                         round
                         class="f-10 q-my-sm"
                         color="primary"
@@ -480,7 +538,7 @@
                           Simpan Obat
                         </q-tooltip>
                       </q-btn>
-                      <div v-if="rinc?.obatkeluar">
+                      <div v-if="rinc?.obatkeluar>=0">
                         Sudah dikeluarkan obat sebanyak {{ rinc?.obatkeluar }} ({{ rinc?.mobat?.satuan_k }})
                       </div>
                     </div>
@@ -526,7 +584,14 @@
                 </q-chip>
               </div>
               <div class="col-shrink q-mr-xs text-purple text-weight-bold">
-                {{ item?.jumlahdibutuhkan }}
+                <!-- {{ item?.jumlahdibutuhkan }} -->
+                <app-input
+                  v-model="item.jumlahdibutuhkan"
+                  outlined
+                  valid
+                  label="Jumlah"
+                  @update:model-value="setJumlahRacik($event,item,'jumlahdibutuhkan')"
+                />
               </div>
               <div class="col-shrink q-mr-xs">
                 ({{ item?.satuan_racik }})
@@ -544,7 +609,9 @@
                   label="Keterangan"
                 />
               </div>
-
+              <div class="col-shrink q-ml-md q-mr-xs text-weight-bold">
+                Rp. {{ formatDouble(parseFloat(item?.harga),2) }}
+              </div>
               <div class="col-grow">
                 <q-separator
                   size="1px"
@@ -554,7 +621,7 @@
               </div>
               <div class="col-auto q-mr-lg">
                 <q-btn
-                  v-if="apps?.user?.kdruangansim === 'Gd-05010101'"
+                  v-if="apps?.user?.kdruangansim === 'Gd-05010101' || apps?.user?.kdruangansim === 'Gd-04010102'"
                   round
                   class="f-10 q-my-sm"
                   color="dark"
@@ -586,8 +653,8 @@
               bordered
             >
               <q-item
-                v-for="(rinc,j) in item?.rincian"
-                :key="j"
+                v-for="(rinc) in item?.rincian"
+                :key="rinc"
               >
                 <q-item-section style="width: 30%;">
                   <div class="row text-weight-bold text-deep-orange">
@@ -607,19 +674,32 @@
                       class="col-shrink"
                       :class="rinc?.fornas==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.fornas==='1'?'Fornas':'Non-Fornas' }}
+                      {{ rinc?.fornas==='1'?'Fornas':'' }}
                     </div>
                     <div
                       class="col-shrink"
                       :class="rinc?.forkit==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.forkit==='1'?'Forkit':'Non-Forkit' }}
+                      {{ rinc?.forkit==='1'?'Forkit':'' }}
                     </div>
                     <div
                       class="col-shrink"
                       :class="rinc?.generik==='1'?'text-green':'text-red'"
                     >
-                      {{ rinc?.generik==='1'?'Generik':'Non-Generik' }}
+                      {{ rinc?.generik==='1'?'Generik':'' }}
+                    </div>
+
+                    <div
+                      class="col-shrink"
+                      :class="rinc?.mobat?.status_kronis==='1'?'text-red':'text-green'"
+                    >
+                      {{ rinc?.mobat?.status_kronis==='1'?'Kronis':'' }}
+                    </div>
+                    <div
+                      class="col-shrink"
+                      :class="rinc?.mobat?.kelompok_psikotropika==='1'?'text-red':'text-green'"
+                    >
+                      {{ rinc?.mobat?.kelompok_psikotropika==='1'?'Psikotropika':'' }}
                     </div>
                   </div>
                 </q-item-section>
@@ -664,12 +744,26 @@
                           {{ rinc?.jumlahresep }}
                         </div>
                       </div>
-                      <div class="row  text-black">
-                        <div class="col-4">
+                      <div class="row items-center text-black">
+                        <!-- <div class="col-4">
                           Jumlah Obat <span class="text-italic f-10">(keluar dari depo)</span>
-                        </div>
-                        <div class="col-8">
+                        </div> -->
+                        <!-- <div class="col-8">
                           {{ rinc?.jumlahobat }} <span class="text-italic f-10">( {{ rinc?.mobat?.satuan_k }} )</span>
+                        </div> -->
+                        <div class="col-10">
+                          <q-input
+                            ref="inputJumlahObat"
+                            v-model="rinc.jumlahobat"
+                            label="jumlah obat (Keluar dari depo)"
+                            dense
+                            standout="bg-yellow-3"
+                            outlined
+                            @update:model-value="updateJumlahObat($event,rinc,item)"
+                          />
+                        </div>
+                        <div class="col-2">
+                          <span class="text-italic f-10">( {{ rinc?.mobat?.satuan_k }} )</span>
                         </div>
                       </div>
                     </div>
@@ -1247,6 +1341,7 @@ import { dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { date } from 'quasar'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { notifErrVue } from 'src/modules/utils'
 
 const store = useEResepDepoFarmasiStore()
 const apps = useAplikasiStore()
@@ -1264,20 +1359,21 @@ const HistoryResepIter = defineAsyncComponent(() => import('./HistoryResepIter.v
 const EtiketRajal = defineAsyncComponent(() => import('./EtiketRajal.vue'))
 const EtiketRanap = defineAsyncComponent(() => import('./EtiketRanap.vue'))
 
-function openRajal(val) {
+function openRajal (val) {
   // console.log('refEtiketRajal', refEtiketRajal.value)
   rajalRinc.value = val
   rajalOpen.value = true
   setTimeout(() => {
     refEtiketRajal.value.printPage()
-  }, 100)
+  }, 200)
 }
-function setRincRanap(val, evt) {
+function setRincRanap (val, evt) {
   // console.log('set rinc ranap', val, evt)
   if (evt === true) {
     // console.log('push', val)
     ranapRinc.value.push(val)
-  } else {
+  }
+  else {
     const index = ranapRinc.value?.findIndex(ri => ri?.kdobat === val?.kdobat)
     // console.log('splice', index)
     if (index >= 0) {
@@ -1286,24 +1382,111 @@ function setRincRanap(val, evt) {
   }
   // console.log('ranapRinc', ranapRinc.value)
 }
-function openRanap(wkt) {
+function openRanap (wkt) {
   // console.log('refEtiketRanap', refEtiketRajal.value)
   // ranapRinc.value = val
   ranapWaktu.value = wkt
   ranapOpen.value = true
   setTimeout(() => {
     refEtiketRanap.value.printPage()
-  }, 100)
+  }, 200)
 }
 const pageRef = ref()
-const tinggiDetailPas = ref(130)
+const tinggiDetailPas = ref(160)
 const h = ref(0)
 // const h = computed(() => {
 //   // console.log('h', pageRef.value)
 //   return pageRef.value?.$el?.clientHeight + 5
 // })
+// let jumlah = 0
+// function jmlAwal (det, key) {
+//   jumlah = parseFloat(det[key])
+//   console.log('juma ', jumlah)
+// }
+// function jmlAkhir (det, key) {
+//   // det[key] = jumlah
+//   console.log('jumh ', jumlah)
+// }
+function setJumlah (evt, det, key) {
+  const jumlahsigna = isNaN(parseFloat(det?.aturansigna?.jumlah)) ? 1 : parseFloat(det?.aturansigna?.jumlah)
+  console.log('jumh ', jumlahsigna, det, (parseFloat(det?.aturansigna?.jumlah)))
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  if (nilai > det?.jumlahAwal) {
+    // console.log('det?.jumlahAwal', det?.jumlahAwal)
+    det[key] = det?.jumlahAwal
+    return notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
+  }
+  det.harga = (parseFloat(det?.jumlah) * parseFloat(det.hargajual)) + parseFloat(det?.r)
+  det.konsumsi = det.jumlah / jumlahsigna
+  // else jumlah = nilai
+}
+function setJumlahRacik (evt, det, key) {
+  // console.log('jumh ', det)
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  det[key] = nilai
+  const awal = parseFloat(det?.jumlahdibutuhkanAwal)
+  if (nilai > awal) {
+    // console.log('awal', awal)
+    det[key] = awal
+    notifErrVue('Tidak boleh lebih dari jumlah permintaan resep')
+  }
+  if (det.rincian.length) {
+    det.rincian.forEach(rinc => {
+      // console.log('mobat', rinc)
+      if (det?.tiperacikan === 'DTD') {
+        const jumlahDiminta = det[key] ?? 1
+        const dosisObat = rinc.dosisobat ?? 1
+        const dosisResep = rinc.dosismaksimum ?? 1
+        const jumlahObat = dosisResep / dosisObat * jumlahDiminta
+        rinc.jumlahresep = jumlahObat.toFixed(2)
+        if (parseInt(rinc?.mobat?.kelompok_psikotropika) === 1) {
+          rinc.jumlahobat = store.customRound(jumlahObat)
+        }
+        else rinc.jumlahobat = Math.ceil(jumlahObat)
+      }
+      else {
+        const bagi = awal / det[key]
+        console.log('bagi', bagi, rinc?.jumlahresepAwal, parseFloat(rinc?.jumlahresepAwal))
+        const jumlahObat = parseFloat(rinc?.jumlahresepAwal) / bagi
+        rinc.jumlahresep = jumlahObat
+        if (parseInt(rinc?.mobat?.kelompok_psikotropika) === 1) {
+          rinc.jumlahobat = store.customRound(jumlahObat)
+        }
+        else rinc.jumlahobat = Math.ceil(jumlahObat)
+      }
+      rinc.harga = parseFloat(rinc.harga_jual) * parseFloat(rinc.jumlahobat)
+      rinc.jumlahdibutuhkan = det.jumlahdibutuhkan
+    })
 
-function copyResep(val) {
+    const r = det.rincian.map(c => c.r)
+    const har = det.rincian.map(c => c.harga).reduce((a, b) => a + b, 0)
+    det.harga = har + (r[0] ?? 0)
+    // console.log('r ', r)
+  }
+  console.log('jumh ', det)
+}
+function updateJumlahObat (evt, rinc, item) {
+  const inc = evt.includes('.')
+  const ind = evt.indexOf('.')
+  const panj = evt.length
+  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+  rinc.jumlahobat = nilai
+  // yang ikut berubah rinc?.harga item?.harga
+  // rinc.harga =harga_jual * jumlahobat
+  // item.harga adalah jumlah dari rinc.harga
+  rinc.harga = rinc.harga_jual * rinc.jumlahobat
+  const tot = item?.rincian?.map(m => m.harga).reduce((a, b) => a + b, 0)
+  item.harga = tot + item?.nilaiR
+  console.log('item', item)
+}
+function copyResep (val) {
   // console.log('apps', apps?.user?.pegawai?.kdpegsimrs)
   console.log('resep', val)
   const resep = val?.rincian

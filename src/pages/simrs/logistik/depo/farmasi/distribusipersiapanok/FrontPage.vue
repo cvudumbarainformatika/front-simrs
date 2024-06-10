@@ -38,6 +38,7 @@
       :ada-filter="false"
       :ada-cari="false"
       row-no
+      simple-paginasi
       use-full
       text-cari="Cari ..."
       @find="store.setSearch"
@@ -98,7 +99,7 @@
                 dense
                 type="checkbox"
                 inline
-                @update:model-value="store.getPermintaan()"
+                @update:model-value="gantiFlag"
               />
             </div>
           </div>
@@ -180,22 +181,41 @@
       </template>
       <template #cell-act="{ row }">
         <div class="row">
-          <div v-if="row.flag==='2' || row.flag==='4'">
-            <q-btn
-              round
-              icon="icon-mat-print"
-              dense
-              color="dark"
-              size="sm"
-              @click="toPrint(row)"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
+          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center">
+            <div class="col-auto">
+              <q-btn
+                round
+                icon="icon-mat-print"
+                dense
+                color="dark"
+                size="sm"
+                @click="toPrint(row)"
               >
-                Print
-              </q-tooltip>
-            </q-btn>
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Print
+                </q-tooltip>
+              </q-btn>
+            </div>
+            <div v-if="row.flag==='2'" class="col-auto q-ml-sm">
+              <q-btn
+                round
+                icon="icon-mat-add"
+                dense
+                color="primary"
+                size="sm"
+                @click="toAdd(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Tambahkan Obat susulan
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
           <div v-if="row.flag==='1'">
             <q-btn
@@ -418,12 +438,15 @@
                       standout="bg-yellow-3"
                       :rules="[
                         val => (parseFloat(val) <= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Tidak Boleh Lebih dari Jumlah distribusi dikurangi jumlah diresepkan dokter',
-                        val => (parseFloat(val) >= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Apakah ada obat yang hilang?'
+                        // val => (parseFloat(val) >= (parseFloat(rin.jumlah_distribusi) - parseFloat(rin.jumlah_resep))) || 'Apakah ada obat yang hilang?'
                       ]"
                       @update:model-value="setJumlah($event,rin,'jumlah_kembali')"
                     />
                   </div>
                 </div>
+              </div>
+              <div v-if="rin?.susulan" class="col-3">
+                {{ rin?.susulan?.nama }}
               </div>
             </div>
             <q-separator />
@@ -438,6 +461,7 @@
   <app-print-surat
     ref="dialogPrint"
     v-model="store.isOpen"
+    class="page-x"
     :tanggal="store.dataToPrint?.flag==='2'?store.dataToPrint?.tgl_distribusi:store.dataToPrint?.tgl_retur"
     @close="store.isOpen=false"
   >
@@ -458,7 +482,7 @@
 
       <div
         v-if="store.dataToPrint?.flag==='2'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Distribusi
@@ -472,7 +496,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Resep
@@ -486,7 +510,7 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-center q-mb-sm"
+        class="row justify-center q-mb-sm default-font"
       >
         <div class="col-2">
           Tanggal Retur
@@ -498,7 +522,7 @@
           {{ dateFullFormat(store.dataToPrint?.tgl_retur) }}
         </div>
       </div>
-      <div class="row justify-center q-mb-sm">
+      <div class="row justify-center q-mb-sm default-font">
         <div class="col-2">
           No. Permintaan
         </div>
@@ -511,21 +535,30 @@
       </div>
       <div
         v-if="store.dataToPrint?.flag==='2'"
-        class="row justify-start q-mb-md"
+        class="row justify-start  default-font"
       >
         <p>
-          Telah dikirimkan
-          <span class="text-weight-bold">
-            Obat untuk Operasi
-          </span> pada list dibawah ini :
+          Telah dikirimkan Kepada
         </p>
       </div>
       <div
         v-if="store.dataToPrint?.flag==='4'"
-        class="row justify-start q-mb-md"
+        class="row justify-start  default-font"
       >
         <p>
-          Telah diterima resep dan retur
+          Telah diterima resep dan retur dari:
+        </p>
+      </div>
+      <div class="row justify-start default-font q-ml-md">
+        {{ store.dataToPrint?.pasien?.rs2 }} -  {{ store.dataToPrint?.pasien?.rs1 }} - {{ store.dataToPrint?.list?.sistembayar?.rs2 }}
+      </div>
+      <div class="row justify-start default-font q-ml-md">
+        {{ store.dataToPrint?.list.rs4 }} -  {{ store.dataToPrint?.list?.kunjunganranap?.relmasterruangranap?.rs2 ?? store.dataToPrint?.list?.kunjunganrajal?.relmpoli?.rs2 }}
+      </div>
+      <div
+        class="row justify-start q-mb-md default-font"
+      >
+        <p>
           <span class="text-weight-bold">
             Obat untuk Operasi
           </span> pada list dibawah ini :
@@ -539,22 +572,25 @@
       <!-- details -->
       <div v-if="store.dataToPrint?.rinci">
         <!-- header detail -->
-        <div class="row justify-between q-col-gutter-sm">
+        <div class="row justify-between q-col-gutter-sm default-font">
+          <div class="col-1 border-tb border-left">
+            No
+          </div>
           <div
             v-if="store.dataToPrint?.flag==='2'"
-            class="col-5 text-weight-bold border-tb border-left"
+            class="col-7 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
           <div
             v-if="store.dataToPrint?.flag==='4'"
-            class="col-4 text-weight-bold border-tb border-left"
+            class="col-7 text-weight-bold border-tb border-left"
           >
             Nama Barang
           </div>
           <div
             v-if="store.dataToPrint?.flag==='2'"
-            class="col-1 text-weight-bold border-tb border-left"
+            class="col-2 text-weight-bold border-tb border-left"
           >
             Jumlah
           </div>
@@ -573,9 +609,9 @@
           <div class="col-2 text-weight-bold border-tb border-left">
             Satuan
           </div>
-          <div class="col-4 text-weight-bold border-box">
+          <!-- <div class="col-4 text-weight-bold border-box">
             Keterangan
-          </div>
+          </div> -->
         </div>
         <!-- body details -->
         <div
@@ -583,23 +619,26 @@
           :key="i"
         >
           <div
-            class="row justify-between q-col-gutter-sm"
+            class="row justify-between q-col-gutter-sm default-font"
           >
+            <div class="col-1 border-bottom border-left">
+              {{ i+1 }}.
+            </div>
             <div
               v-if="store.dataToPrint?.flag==='2'"
-              class="col-5 border-bottom border-left"
+              class="col-7 border-bottom border-left"
             >
-              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+              {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='4'"
-              class="col-4 border-bottom border-left"
+              class="col-7 border-bottom border-left"
             >
-              {{ i+1 }}. {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
+              {{ det.obat?det.obat.nama_obat:'Nama barang tidak ditemukan' }}
             </div>
             <div
               v-if="store.dataToPrint?.flag==='2'"
-              class="col-1 border-bottom border-left"
+              class="col-2 border-bottom border-left"
             >
               {{ det.jumlah_distribusi===null?0:det.jumlah_distribusi }}
             </div>
@@ -620,7 +659,7 @@
             >
               {{ det.obat?det.obat.satuan_k:'-' }}
             </div>
-            <div class="col-4 border-bottom border-left border-right">
+            <!-- <div class="col-4 border-bottom border-left border-right">
               <div class="print-only">
                 {{ det?.keterangan??'-' }}
               </div>
@@ -632,30 +671,46 @@
                   valid
                 />
               </div>
-            </div>
+            </div> -->
           </div>
           <q-separator />
         </div>
       </div>
     </template>
   </app-print-surat>
+  <add-surat v-model="tambah.isOpen" @close="tambah.isOpen = false" />
 </template>
 
 <script setup>
 import { dateFull, dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, defineAsyncComponent } from 'vue'
 import { useDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/distribusi'
 import { notifErrVue } from 'src/modules/utils'
+import { useTambahObatDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/tambah'
 
 const store = useDistribusiPersiapanOperasiStore()
+const tambah = useTambahObatDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+const addSurat = defineAsyncComponent(() => import('./comp/DialogAddObat.vue'))
+function gantiFlag () {
+  store.setParams('page', 1)
+  store.getPermintaan()
+}
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
+}
+function toAdd (val) {
+  console.log('val', val)
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  tambah.isOpen = true
+  tambah.groups = val?.list?.sistembayar?.groups
+  tambah.setForm('nopermintaan', val?.nopermintaan)
 }
 onMounted(() => {
   if (apps?.user?.kdruangansim !== 'Gd-04010103') {
@@ -679,12 +734,12 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 // menu hide and show
 let prevFrom = null
 let prevTo = null
-function menuShow() {
+function menuShow () {
   prevFrom = store.params.from
   prevTo = store.params.to
   // console.log('show', prevFrom, prevTo)
 }
-function menuHide() {
+function menuHide () {
   const samaFrom = store.params.from === prevFrom
   const samaTo = store.params.to === prevTo
   // console.log('hide', samaFrom, samaTo)
@@ -708,7 +763,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].nama
-  } else {
+  }
+  else {
     return val
   }
 }
@@ -738,7 +794,8 @@ function teimaPengembalian (val) {
       console.log('valid', valid.length)
       if (valid.length <= 0) store.terimaPengembalian(val)
       else notifErrVue('periksa kembali jumlah kembali')
-    } else {
+    }
+    else {
       // console.log('else', val?.rinci)
       val?.rinci.forEach(rin => { rin.sisa = parseFloat(rin.jumlah_distribusi - rin.jumlah_resep) })
       const ada = val?.rinci.filter(a => a.sisa !== a.jumlah_kembali)
@@ -763,7 +820,8 @@ function distribusi (val) {
       console.log('valid', valid.length)
       if (valid.length <= 0) store.simpanDistribusi(val)
       else notifErrVue('periksa kembali jumlah distribusi')
-    } else {
+    }
+    else {
       // console.log('else', val?.rinci)
       const ada = val?.rinci.filter(a => a.jumlah_distribusi <= 0)
       // console.log('ada', ada)
@@ -865,7 +923,20 @@ const label = (status) => {
 
 </script>
 
-<style>
+<style lang="scss" scoped>
+.page-x{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 27.94cm;
+  height: fit-content;
+  padding: 1mm;
+  // font-size: 10px !important;
+}
+.default-font{
+  font-size: 14px;
+  font-weight: bold;
+}
 .box {
   white-space: normal !important;
   inline-size: 170px;
@@ -878,5 +949,28 @@ const label = (status) => {
   border: 1px solid rgb(255, 255, 255);
   border-radius: 5px;
   background-color: rgb(84, 139, 188);
+}
+.garis-bawah{
+  border-bottom: 6px solid black;
+  border-bottom-style: double;
+}
+.border-box{
+  border: 1px solid black;
+}
+.border-tb{
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.border-left{
+  border-left: 1px solid black;
+}
+.border-right{
+  border-right: 1px solid black;
+}
+.border-bottom{
+  border-bottom: 1px solid black;
+}
+.border-top{
+  border-top: 1px solid black;
 }
 </style>

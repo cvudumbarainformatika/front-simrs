@@ -534,7 +534,7 @@ watch(() => props.items, (obj) => {
   selected.value = []
 })
 
-function searchEnter(evt) {
+function searchEnter (evt) {
   emits('search', evt.target.value)
 }
 
@@ -545,7 +545,8 @@ const setCheck = (x) => {
       arr.push(props.items[i].id)
     }
     selected.value = arr
-  } else {
+  }
+  else {
     selected.value = []
   }
 }

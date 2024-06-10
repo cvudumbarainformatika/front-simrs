@@ -180,10 +180,10 @@ onUnmounted(() => {
   fisik.setFullCanvasFalse()
 })
 
-function historyPasien() {
+function historyPasien () {
   drawerRight.value = !drawerRight.value
 }
-function getIcare() {
+function getIcare () {
   store.getDataIcare(props.pasien).then(resp => {
     if (resp) {
       console.log('anu', resp?.response?.url)
@@ -192,7 +192,7 @@ function getIcare() {
   })
 }
 
-function menuDiganti(val) {
+function menuDiganti (val) {
   menu.value = val
 }
 

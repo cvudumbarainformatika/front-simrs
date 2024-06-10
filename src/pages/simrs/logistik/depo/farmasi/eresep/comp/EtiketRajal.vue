@@ -1,6 +1,6 @@
 <template>
   <q-dialog maximized>
-    <div class="bg-white ">
+    <div class="bg-white " style="height: fit-content">
       <div class="column garis-luar q-pb-sm">
         <div class="col text-center">
           <div class="row no-wrap justify-center content-center q-pt-xs">
@@ -52,7 +52,10 @@
           {{ rinci?.mobat?.nama_obat??rinci?.namaracikan }}
         </div>
         <div class="col text-center text-weight-bold">
-          {{ rinci?.aturan }}
+          Sehari {{ rinci?.aturan }}
+        </div>
+        <div class="col text-center f-10">
+          Sebelum / Saat / Sesudah Makan
         </div>
         <div class="col text-center f-10">
           {{ rinci?.keterangan }}

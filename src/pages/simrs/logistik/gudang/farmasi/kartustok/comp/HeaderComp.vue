@@ -11,6 +11,7 @@
           placeholder="Cari Obat ..."
           debounce="500"
           style="min-width: 200px;"
+          @keyup.enter="store.goToPage(1)"
         >
           <template
             v-if="store.params.q"
@@ -20,7 +21,7 @@
               name="icon-mat-close"
               size="xs"
               class="cursor-pointer"
-              @click.stop.prevent="store.params.q = ''"
+              @click.stop.prevent="clearSearch"
             />
           </template>
           <template #prepend>
@@ -50,7 +51,14 @@
           style="width:100px"
         />
       </div>
-      <div>kanan</div>
+      <div class="kanan">
+        <q-btn flat round icon="icon-my-file-excel" size="sm" padding="sm" @click="store.exportExcel= !store.exportExcel">
+          <q-tooltip>export to excel</q-tooltip>
+        </q-btn>
+        <!-- <q-btn flat round icon="icon-mat-print" size="sm" padding="sm">
+          <q-tooltip>print</q-tooltip>
+        </q-btn> -->
+      </div>
     </div>
 
     <div>
@@ -69,16 +77,16 @@
           >
             <div class="row items-center full-width q-col-gutter-xs">
               <div class="col-3 text-right">
-                Saldo Awal
+                Stok Awal
               </div>
               <div class="col-3 text-right">
-                Trans In
+                Stok Masuk
               </div>
               <div class="col-3 text-right">
-                Trans Out
+                Stok Keluar
               </div>
               <div class="col-3 text-right">
-                Sld Saatini
+                Stok Akhir
               </div>
             </div>
           </q-item-section>
@@ -102,7 +110,7 @@ onMounted(() => {
   init()
 })
 
-function init() {
+function init () {
   const d = new Date()
   const b = d.getMonth()
   bulan.value = bulans.value[b]
@@ -112,7 +120,7 @@ function init() {
   changeMonth(bulan.value)
 }
 
-function generateArrayOfYears() {
+function generateArrayOfYears () {
   const max = new Date().getFullYear()
   const min = max - 5
   const years = []
@@ -123,10 +131,16 @@ function generateArrayOfYears() {
   tahuns.value = years
 }
 
-function changeMonth(val) {
+function changeMonth (val) {
   const cariIndexBulans = bulans.value.findIndex((x) => x === val) + 1
   const serial = cariIndexBulans <= 9 ? '0' + cariIndexBulans : cariIndexBulans
   store.params.bulan = serial
-  store.getData()
+  // store.getData()
 }
+
+const clearSearch = () => {
+  store.params.q = ''
+  store.goToPage(1)
+}
+
 </script>

@@ -5,6 +5,7 @@ import { notifSuccess } from 'src/modules/utils'
 
 export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persiapan_operasi', {
   state: () => ({
+    addOpen: false,
     isOpen: false,
     loading: false,
     loadingSimpan: false,
@@ -50,41 +51,41 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
     dataToPrint: {}
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParams('no_permintaan', val)
       this.setParams('page', 1)
       this.getPermintaan()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParams('page', val)
       this.getPermintaan()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
       this.getPermintaan()
     },
-    refreshTable(val) {
+    refreshTable (val) {
       this.setParams('page', 1)
       this.getPermintaan()
     },
-    getInitialData() {
+    getInitialData () {
       this.getPermintaan()
     },
-    metaniRinci() {
+    metaniRinci () {
       this.items.forEach(item => {
         item?.permintaanrinci?.forEach(rinc => {
           rinc.distribusi = item?.mutasigudangkedepo?.filter(x => x.kd_obat === rinc.kdobat).map(m => parseFloat(m.jml)).reduce((a, b) => a + b, 0) ?? 0
         })
       })
     },
-    getPermintaan() {
+    getPermintaan () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -101,7 +102,7 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
           .catch(() => { this.loading = false })
       })
     },
-    simpanDistribusi(val) {
+    simpanDistribusi (val) {
       this.loadingDistribusi = true
       val.loading = true
       return new Promise(resolve => {
@@ -120,7 +121,7 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
           })
       })
     },
-    terimaPengembalian(val) {
+    terimaPengembalian (val) {
       this.loadingSimpan = true
       val.loading = true
       return new Promise(resolve => {

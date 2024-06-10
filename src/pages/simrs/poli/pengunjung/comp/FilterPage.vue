@@ -123,7 +123,7 @@ const txt = ref('BELUM TERLAYANI')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
 const q = ref('')
 
-function sendData() {
+function sendData () {
   const params = {
     q: q.value,
     to: to.value,
@@ -134,19 +134,21 @@ function sendData() {
   emits('filterData', params)
 }
 
-function resetFilter() {
+function resetFilter () {
   to.value = dateDbFormat(new Date())
   from.value = dateDbFormat(new Date())
   txt.value = 'BELUM TERLAYANI'
   q.value = ''
 }
 
-function gantiStatus(val) {
+function gantiStatus (val) {
   if (val === 'BELUM TERLAYANI') {
     return ''
-  } else if (val === 'TERLAYANI') {
+  }
+  else if (val === 'TERLAYANI') {
     return '1'
-  } else {
+  }
+  else {
     return 'all'
   }
 }

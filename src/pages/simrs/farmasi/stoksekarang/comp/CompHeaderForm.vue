@@ -105,7 +105,7 @@ import { computed, ref } from 'vue'
 
 const store = UseFarmasiStokSekarangStore()
 
-function numberOnly(evt, key) {
+function numberOnly (evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length
@@ -129,7 +129,7 @@ const satuan = computed(() => {
   else return ''
 })
 const refPenyesuaian = ref(null)
-function validasi() {
+function validasi () {
   console.log(refPenyesuaian.value?.$refs?.refInput.validate())
   if (refPenyesuaian.value?.$refs?.refInput.validate()) return true
   else return false

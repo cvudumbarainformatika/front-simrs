@@ -24,44 +24,44 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
 
   }),
   actions: {
-    setOpen() { this.isOpen = true },
-    setClose() {
+    setOpen () { this.isOpen = true },
+    setClose () {
       this.isOpen = false
       this.resep = {}
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setFlag(val) {
+    setFlag (val) {
       // console.log('flag', val)
       this.setParams('flag', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParams('q', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setSearchDua(val) {
+    setSearchDua (val) {
       this.setParams('nama', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParams('page', val)
       this.getDataTable()
     },
-    refresh() {
+    refresh () {
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       this.params.page = 1
       // const { to, from } = val
       // this.params.to = to
@@ -69,7 +69,7 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
       this.params.from = val
       this.getDataTable()
     },
-    setResep(val) {
+    setResep (val) {
       const res = val
       res.listRacikan = []
       res.listObat = []
@@ -98,7 +98,8 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
             adaList[0].rincian.push(obat)
             const harga = adaList[0].rincian.map(a => a?.harga).reduce((a, b) => a + b, 0) ?? 0
             adaList[0].harga = harga
-          } else {
+          }
+          else {
             const temp = {
               namaracikan: obat?.namaracikan,
               harga: obat?.harga,
@@ -115,6 +116,10 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
           key.harga_jual = parseFloat(key.harga_jual)
           key.harga = (parseFloat(key?.jumlah) * parseFloat(key?.harga_jual)) + parseFloat(key?.nilai_r)
           key.jumlah_retur = 0
+          const adaRet = res?.rincianwret.find(ret => ret.kdobat === key.kdobat)
+          if (adaRet) {
+            if (adaRet.jumlah_retur) key.jumlah_retur = adaRet.jumlah_retur
+          }
         })
       }
       const obats = filterDuplicateArrays(res?.rincian.map(x => x.kdobat))
@@ -128,8 +133,8 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
       }
       this.resep = res
     },
-    getInitalData() {},
-    async getDataTable() {
+    getInitalData () {},
+    async getDataTable () {
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/farmasinew/depo/caribynoresep', param)
@@ -142,7 +147,7 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
         })
         .catch(() => { this.loading = false })
     },
-    kirim() {
+    kirim () {
       console.log('kirim', this.resep)
       this.loadingKirim = true
       this.resep.loading = true

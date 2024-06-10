@@ -1,6 +1,6 @@
 <template>
   <q-dialog maximized>
-    <div class="bg-white ">
+    <div class="bg-white " style="height: fit-content">
       <div class="column garis-luar q-pb-sm">
         <div class="col text-center">
           <div class="row no-wrap justify-center content-center q-pt-xs">
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="col text-center f-10 q-mt-md text-weight-bold">
-          Diminum {{ waktu }}
+          {{ waktu }}
         </div>
         <div class="col text-center f-10 text-weight-bold text-italic q-mt-md">
           -. Semoga lekas sembuh .-

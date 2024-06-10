@@ -2,14 +2,14 @@ import { channel } from 'src/modules/sockets'
 import { usePermintaanLuarLaboratTable } from 'src/stores/simrs/penunjang/laborat/permintaanluar/table'
 import { useTransaksiLaboratTable } from 'src/stores/simrs/penunjang/laborat/transaksi_laborat'
 
-export function usePublicChannel() {
+export function usePublicChannel () {
   const labLuar = usePermintaanLuarLaboratTable()
   const labDalam = useTransaksiLaboratTable()
   const publicChannel = () => {
     return channel.subscribed(() => {
       console.log('subscribed!!!')
     }).listen('.playground', (e) => {
-    // console.log('listen', e)
+      console.log('listen', e)
       if (e.message.menu === 'laborat-luar') {
         const items = labLuar.items
         if (items.length > 0) {
@@ -18,7 +18,8 @@ export function usePublicChannel() {
             item[0].akhirx = '1'
           }
         }
-      } else {
+      }
+      else {
         const items = labDalam.items
         if (items.length > 0) {
           const item = items.filter(x => x.rs2 === e.message.__key)

@@ -19,49 +19,49 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
     rencana: {}
   }),
   actions: {
-    setOpen() {
+    setOpen () {
       this.isOpen = true
     },
-    setClose() {
+    setClose () {
       this.isOpen = false
     },
-    setRencana(val) {
+    setRencana (val) {
       this.rencana = val
     },
-    delRencanan() {
+    delRencanan () {
       this.rencana = {}
     },
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setFlag(val) {
+    setFlag (val) {
       // console.log('flag', val)
       this.setParams('flag', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParams('q', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParams('page', val)
       this.getDataTable()
     },
-    refresh() {
+    refresh () {
       this.setParams('page', 1)
       this.getDataTable()
     },
-    metaniItem() {
+    metaniItem () {
       this.items.forEach(item => {
         item?.rincian.forEach(rinci => {
           rinci.kd_obat = rinci.kdobat
@@ -92,7 +92,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
         })
       })
     },
-    async getDataTable(val) {
+    async getDataTable (val) {
       const param = { params: this.params }
       this.loading = !val
       await api.get('v1/simrs/farmasinew/list-verif', param)
@@ -105,7 +105,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
         })
         .catch(() => { this.loading = false })
     },
-    simpanObat(val) {
+    simpanObat (val) {
       console.log('Simpan Obat', val)
 
       this.loadingSimpan = true
@@ -113,9 +113,23 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/verif/verifpemesananrinci', val)
           .then(resp => {
-            console.log('simpan obat', resp.data)
+            // console.log('simpan obat', resp.data)
+            const ver = resp?.data?.data
             this.loadingSimpan = false
             val.loading = false
+            console.log('ver', ver)
+            if (ver) {
+              const item = this.items.find(it => it.no_rencbeliobat === ver.no_rencbeliobat)
+              if (item) {
+                console.log('item', item)
+                const rinci = item.rincian.find(ri => ri.kdobat === ver.kdobat)
+                if (rinci) {
+                  rinci.user_verif = ver.user_verif
+                  rinci.waktu_verif = ver.waktu_verif
+                  console.log('rinc', rinci)
+                }
+              }
+            }
 
             notifSuccess(resp)
             resolve(resp)
@@ -126,7 +140,7 @@ export const useVerifikasiRencanaPesanStore = defineStore('verifikasi_rencana_pe
           })
       })
     },
-    selesaiVerif(val) {
+    selesaiVerif (val) {
       console.log('selesai verif', val)
       this.loadingVerif = true
       val.loading = true

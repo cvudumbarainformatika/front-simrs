@@ -13,7 +13,7 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
     },
     params: {
       page: 1,
-      per_page: 50,
+      per_page: 20,
       q: '',
       status: 'Semua',
       to: dateDbFormat(new Date()),
@@ -58,39 +58,41 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       })
     },
 
-    setPeriode(val) {
+    setPeriode (val) {
       this.header.periode = val
       if (val === 'Hari ini') {
         this.hariIni()
-      } else if (val === 'Minggu ini') {
+      }
+      else if (val === 'Minggu ini') {
         this.mingguIni()
-      } else if (val === 'Bulan ini') {
+      }
+      else if (val === 'Bulan ini') {
         this.bulanIni()
       }
     },
 
-    setUrutan(val) {
+    setUrutan (val) {
       this.params.sort = val
       this.getDataTable()
     },
 
-    setPage(val) {
+    setPage (val) {
       this.params.page = val
       this.getDataTable()
     },
 
-    setStatus(val) {
+    setStatus (val) {
       this.params.page = 1
       this.params.status = val
       this.getDataTable()
     },
 
-    hariIni() {
+    hariIni () {
       const cDate = new Date()
       this.params.to = dateDbFormat(cDate)
       this.params.from = dateDbFormat(cDate)
     },
-    bulanIni() {
+    bulanIni () {
       const curr = new Date(), y = curr.getFullYear(), m = curr.getMonth()
       // const firstday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-01'
       // const lastday = date.formatDate(curr, 'YYYY') + '-' + date.formatDate(curr, 'MM') + '-31'
@@ -99,14 +101,14 @@ export const useListPendaftaranRanapStore = defineStore('list-pendaftaran-ranap'
       this.params.to = dateDbFormat(firstday)
       this.params.from = dateDbFormat(lastday)
     },
-    mingguIni() {
+    mingguIni () {
       const curr = new Date()
       const firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()))
       const lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6))
       this.params.to = dateDbFormat(firstday)
       this.params.from = dateDbFormat(lastday)
     },
-    tahunIni() {
+    tahunIni () {
       const curr = new Date()
       const firstday = date.formatDate(curr, 'YYYY') + '-01' + '-01'
       const lastday = date.formatDate(curr, 'YYYY') + '-12' + '-31'

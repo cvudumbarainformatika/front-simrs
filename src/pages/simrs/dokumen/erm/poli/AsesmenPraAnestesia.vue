@@ -665,7 +665,7 @@ const store = usePraAnastesiStore()
 const refPrint = ref()
 const rawatkhususLainlain = ref(false)
 
-onMounted(async() => {
+onMounted(async () => {
   await store.getMaster()
   await store.getData(props.pasien)
     .then(() => store.initForm(store.resultPraAnastesi.length ? store.resultPraAnastesi[0] : null))

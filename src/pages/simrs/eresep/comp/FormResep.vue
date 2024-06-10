@@ -2,13 +2,14 @@
   <div class="bg-white full-height column">
     <div class="col-auto bg-primary text-white">
       <div class="q-pa-sm">
-        Form Resep Dokter
+        <span>Form Resep Dokter</span>
+        <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
       </div>
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
       <div class="row justify-between items-center">
-        <div v-if="depo==='rjl'">
+        <div v-if="depo==='rjl'" class="q-px-xs">
           <div
             v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
             class="row q-my-xs items-center"
@@ -96,7 +97,7 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <q-select
+                      <!-- <q-select
                         ref="refObat"
                         v-model="store.namaObat"
                         use-input
@@ -106,6 +107,7 @@
                         option-value="kodeobat"
                         standout="bg-yellow-3"
                         outlined
+                        clearable
                         input-debounce="800"
                         class="full-width"
                         hide-dropdown-icon
@@ -124,27 +126,34 @@
                           <q-icon name="icon-mat-search" />
                         </template>
                         <template #option="scope">
-                          <q-item v-bind="scope.itemProps">
+                          <q-item v-bind="scope.itemProps" class="row items-end">
                             <div
                               v-if="scope.opt.namaobat"
+                              :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
                             >
                               {{ scope.opt.namaobat }}
                             </div>
                             <div
                               v-if="scope.opt.kandungan"
-                              class="q-ml-xs q-mr-xs text-deep-orange"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
                             >
                               ({{ scope.opt.kandungan }})
                             </div>
                             <div
-                              v-if="scope.opt.alokasi"
-                              class="q-ml-xs text-weight-bold tetx-green"
+                              v-if="scope.opt.alokasi >0"
+                              class="q-ml-xs text-weight-bold text-green"
                             >
-                              {{ scope.opt.alokasi }}
+                              {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
+                            </div>
+                            <div
+                              v-if="scope.opt.alokasi <=0"
+                              class="q-ml-xs text-weight-bold text-negative f-14"
+                            >
+                              {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
                             </div>
                             <div
                               v-if="scope.opt.satuankecil"
-                              class="q-ml-xs text-primary"
+                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-primary'"
                             >
                               {{ scope.opt.satuankecil }}
                             </div>
@@ -157,7 +166,8 @@
                             </q-item-section>
                           </q-item>
                         </template>
-                      </q-select>
+                      </q-select> -->
+                      <nyobak-select v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
                       <q-input
@@ -182,6 +192,7 @@
                         label="Aturan Pakai"
                         use-input
                         dense
+                        clearable
                         standout="bg-yellow-3"
                         option-label="signa"
                         outlined
@@ -200,7 +211,7 @@
                       <q-input
                         ref="refKonsumsi"
                         v-model="store.form.konsumsi"
-                        label="Disonsumsi selama (hari)"
+                        label="Dikonsumsi selama (hari)"
                         dense
                         lazy-rules
                         no-error-icon
@@ -730,6 +741,8 @@ import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
 
+const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
+
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
@@ -737,16 +750,16 @@ const props = defineProps({
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
 
-const refObat = ref(null)
+// const refObat = ref(null)
 const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
 
-function setTipe(val) {
+function setTipe (val) {
   console.log('tipe resep', val)
   store.cariObat('')
 }
-function setJumlahIter(val) {
+function setJumlahIter (val) {
   const kali = parseInt(val)
   if (!kali) return
   const sekarang = Date.now()
@@ -757,8 +770,9 @@ function setJumlahIter(val) {
   console.log('val', expJadi)
   store.setForm('iter_expired', expJadi)
 }
-function setPasien() {
+function setPasien () {
   const val = props?.pasien
+  console.log('setPasien', val, props?.depo)
   if (!val) return
   const temp = val?.diagnosa?.map(x => x?.rs3 + ' - ' + x?.masterdiagnosa?.rs4)
   const diag = temp?.length ? temp.join(', ') : '-'
@@ -788,7 +802,8 @@ function setPasien() {
 
         // store.listPemintaanSementara = resep?.permintaanresep ?? []
         // store.listRacikan = resep?.permintaanracikan ?? []
-      } else if (resep) {
+      }
+      else if (resep) {
         if (resep?.flag !== '') store.setListResep(resep)
       }
     }
@@ -803,7 +818,7 @@ function setPasien() {
 }
 /// / set Racikan ------
 const racikanpage = shallowRef(defineAsyncComponent(() => import('./RacikanPage.vue')))
-function racikan() {
+function racikan () {
   // console.log('ok')
   // alert('oooi')
   store.racikanOpen = true
@@ -817,7 +832,7 @@ function racikan() {
   ]
   // store.tipeRacikan = []
 }
-function racikanTambah(val) {
+function racikanTambah (val) {
   // console.log('ok', val)
   if (!store?.signas?.length) return notifCenterVue('mohon tunggu sebentar, masih menunggu data Signa dari server')
   // alert('oooi')
@@ -836,66 +851,68 @@ function racikanTambah(val) {
     { label: 'non-DTD', value: 'non-DTD', disable: true }
   ]
 }
-function resetFormRacik() {
+function resetFormRacik () {
   store.setForm('jenisresep', '')
   store.resetForm()
 }
 /// / set Racikan end ------
 // perispan Operasi -----
 const persiapan = shallowRef(defineAsyncComponent(() => import('./PersiapanOperasi.vue')))
-function openPersiapanOperasi() {
+function openPersiapanOperasi () {
   permintaan.isOpen = true
   permintaan.setPasien(props.pasien)
   // console.log('props pasien', props.pasien)
 }
 // perispan Operasi end -----
-function myDebounce(func, timeout = 800) {
-  let timer
-  return (...arg) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => { func.apply(this, arg) }, timeout)
-  }
-}
-const inputObat = myDebounce((val) => {
-  // console.log('input obat', val, typeof val)
-  if ((typeof val) !== 'string') val = ''
-  if (val !== '') store.cariObat(val)
-  if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
-})
+// function myDebounce (func, timeout = 500) {
+//   let timer
+//   return (...arg) => {
+//     clearTimeout(timer)
+//     timer = setTimeout(() => { func.apply(this, arg) }, timeout)
+//   }
+// }
+// const inputObat = myDebounce((val) => {
+//   refObat.value.showPopup()
+//   // console.log('input obat', val, typeof val)
+//   if ((typeof val) !== 'string') val = ''
+//   if (val !== '') store.cariObat(val)
+//   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
+// })
 // function inputObat(val) {
 //   if (val !== '') store.cariObat(val)
 //   if (val === '' && store.nonFilteredObat.length) store.Obats = store.nonFilteredObat
 // }
-function obatSelected(val) {
-  console.log('select obat', val)
-  if (val?.alokasi <= 0) {
-    store.namaObat = null
-    return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
-  }
-  // console.log('obat selected', val)
-  store.setForm('satuan_kcl', val?.satuankecil ?? '-')
-  store.setForm('kodeobat', val?.kdobat ?? '-')
-  store.setForm('kandungan', val?.kandungan ?? '-')
-  store.setForm('fornas', val?.fornas ?? '-')
-  store.setForm('forkit', val?.forkit ?? '-')
-  store.setForm('generik', val?.generik ?? '-')
-  store.setForm('kode108', val?.kode108 ?? '-')
-  store.setForm('uraian108', val?.uraian108 ?? '-')
-  store.setForm('kode50', val?.kode50 ?? '-')
-  store.setForm('uraian50', val?.uraian50 ?? '-')
-  store.setForm('stokalokasi', val?.alokasi ?? '-')
-  store.setForm('kodedepo', store.dpPar)
-}
+// function obatSelected (val) {
+//   console.log('select obat', val)
+//   if (val?.alokasi <= 0) {
+//     store.namaObat = null
+//     return notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
+//   }
+//   refObat.value.validate()
+//   // console.log('obat selected', val)
+//   store.setForm('satuan_kcl', val?.satuankecil ?? '-')
+//   store.setForm('kodeobat', val?.kdobat ?? '-')
+//   store.setForm('kandungan', val?.kandungan ?? '-')
+//   store.setForm('fornas', val?.fornas ?? '-')
+//   store.setForm('forkit', val?.forkit ?? '-')
+//   store.setForm('generik', val?.generik ?? '-')
+//   store.setForm('kode108', val?.kode108 ?? '-')
+//   store.setForm('uraian108', val?.uraian108 ?? '-')
+//   store.setForm('kode50', val?.kode50 ?? '-')
+//   store.setForm('uraian50', val?.uraian50 ?? '-')
+//   store.setForm('stokalokasi', val?.alokasi ?? '-')
+//   store.setForm('kodedepo', store.dpPar)
+// }
 
-function obatEnter() {
-  refQty.value.focus()
-  refQty.value.select()
-}
+// function obatEnter () {
+//   refQty.value.focus()
+//   refQty.value.select()
+// }
 // signa
 const signa = ref('')
 const refJmlHarSig = ref(null)
 const signaNewVal = ref(false)
-function signaSelected(val) {
+function signaSelected (val) {
   // console.log('signa', val)
   store.setForm('aturan', val?.signa)
   // const sign = store.signas.filter(sig => sig.signa === val?.signa)
@@ -905,9 +922,10 @@ function signaSelected(val) {
     const kons = store.form.jumlah_diminta / parseFloat(val?.jumlah)
     store.setForm('konsumsi', kons)
   }
+  refSigna.value.validate()
   // }
 }
-function signaCreateValue(val, done) {
+function signaCreateValue (val, done) {
   signaNewVal.value = true
   let newSigna = ''
   if (val.includes('x')) {
@@ -922,27 +940,29 @@ function signaCreateValue(val, done) {
       const depan = anu[0] + ' x ' + anu[1]
       if (anu?.length === 2) {
         newSigna = depan
-      } else {
+      }
+      else {
         const temp = anu
         const belakang = temp.slice(2).join(' x ')
         // console.log('dep', temp, '--->', depan, ' -- ', belakang)
         newSigna = depan + belakang
       }
     }
-  } else newSigna = val
+  }
+  else newSigna = val
   store.fromSigna.signa = newSigna
   done(store.fromSigna)
 
   // console.log('signa new val', signa.value)
 }
-function getFocus() {
+function getFocus () {
   refJmlHarSig.value?.focus()
   refJmlHarSig.value?.select()
 }
-function lostFocus() {
+function lostFocus () {
   signaNewVal.value = false
 }
-function simpan() {
+function simpan () {
   store.seveSigna().then((resp) => {
     signaNewVal.value = false
     signaSelected(resp.data)
@@ -950,7 +970,7 @@ function simpan() {
     refKet.value.select()
   })
 }
-function signaEnter() {
+function signaEnter () {
   if (!signaNewVal.value) {
     refKet.value.focus()
     refKet.value.select()
@@ -958,7 +978,7 @@ function signaEnter() {
   }
 }
 // jumlah
-function setJumlah(val) {
+function setJumlah (val) {
   let jumlah = parseFloat(val)
   console.log('jumlah', jumlah)
   console.log('alokasi', store.form.stokalokasi)
@@ -972,7 +992,8 @@ function setJumlah(val) {
       const kons = jumlah / parseFloat(signa.value?.jumlah)
       store.setForm('konsumsi', kons)
     }
-  } else if (store.form?.aturan !== '') {
+  }
+  else if (store.form?.aturan !== '') {
     const sign = store.signas.filter(sig => sig.signa === store?.form?.aturan)
     if (sign.length) {
       if (parseFloat(jumlah) > 0) {
@@ -983,18 +1004,18 @@ function setJumlah(val) {
   }
 }
 // eslint-disable-next-line no-unused-vars
-function qtyEnter() {
+function qtyEnter () {
   // if (parseFloat(store.form.jumlah_diminta) > 1)
   refSigna.value.focus()
   refSigna.value.showPopup()
 }
-function obatValid (val) {
-  return (val !== null && val !== '') || ''
-}
+// function obatValid (val) {
+//   return (val !== null && val !== '') || ''
+// }
 function sigaValid (val) {
   return (val !== null && val !== '') || ''
 }
-function validate() {
+function validate () {
   if (store?.form?.kodeobat !== '') {
     const ob = store.nonFilteredObat.filter(o => o.kodeobat === store?.form?.kodeobat)
     if (ob.length && !Object.keys(store.namaObat)?.length) store.namaObat = ob[0]
@@ -1005,17 +1026,17 @@ function validate() {
     if (sign.length && !Object.keys(signa.value)?.length) signa.value = sign[0]
     // console.log('at', store.signas, sign)
   }
-  if (store.form.tiperesep === 'iter') {
+  if (store.form.tiperesep === 'iter' && store.dpPar === 'Gd-05010101') {
     if (store.form.iter_jml === '' || !store.form.iter_jml) {
       notifErrVue('Jumlah Iter belum di isi')
       return false
     }
   }
 
-  if (refObat.value.validate() && refQty.value.validate() && refSigna.value.validate()) return true
+  if (refQty.value.validate() && refSigna.value.validate()) return true
   else return false
 }
-function ketEnter() {
+function ketEnter () {
   Dialog.create({
     title: 'Konfirmasi',
     message: 'Apakah Akan dilanjutkan untuk di simpan?',
@@ -1036,12 +1057,13 @@ function ketEnter() {
       simpanObat()
     })
 }
-function simpanObat() {
+function simpanObat () {
   if (validate()) {
     const form = store.form
     store.simpanObat(form)?.then(() => {
       signa.value = null
-      refObat.value.focus()
+      // refObat.value.focus()
+      // refObat.value.showPopup()
       // refObat.value.showPopup()
     })
   }
@@ -1052,7 +1074,8 @@ onMounted(() => {
   // refObat.value.showPopup()
   store.getSigna()
   store.cariObat()
-  refObat.value.focus()
+  // refObat.value.focus()
+  // refObat.value.showPopup()
 })
 watchEffect(() => {
   store.pasien = props?.pasien
@@ -1062,3 +1085,8 @@ watchEffect(() => {
 })
 
 </script>
+<style scoped>
+.line-through{
+  text-decoration: line-through
+}
+</style>

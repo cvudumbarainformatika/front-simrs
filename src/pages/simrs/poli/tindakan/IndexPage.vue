@@ -248,10 +248,10 @@ onUnmounted(() => {
   fisik.setFullCanvasFalse()
 })
 
-function historyPasien() {
+function historyPasien () {
   drawerRight.value = !drawerRight.value
 }
-function getIcare() {
+function getIcare () {
   store.getDataIcare(props.pasien).then(resp => {
     if (resp) {
       console.log('anu', resp?.response?.url)
@@ -260,25 +260,27 @@ function getIcare() {
   })
 }
 
-function lihatSebelumTertutup() {
+function lihatSebelumTertutup () {
   // console.log('ini sebelum halama di close')
   anamnesis.initReset()
 }
 
-function menuDiganti(val) {
+function menuDiganti (val) {
   if (menu.value.name === 'PemeriksaanPage') {
     if (fisik.edited) {
       // console.log('ada yg blm diupdate')
       harapSimpanPerubahanPemeriksaanFisik(val)
-    } else {
+    }
+    else {
       menu.value = val
     }
-  } else {
+  }
+  else {
     menu.value = val
   }
 }
 
-function harapSimpanPerubahanPemeriksaanFisik(val) {
+function harapSimpanPerubahanPemeriksaanFisik (val) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
