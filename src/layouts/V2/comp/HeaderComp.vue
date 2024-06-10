@@ -49,7 +49,7 @@
         <div class="row items-center">
           <div class="text-right">
             <div class="q-mr-sm text-weight-bold">
-              {{ user?.nama }}
+              {{ user?.pegawai?.nama ?? '-' }}
             </div>
 
             <div
@@ -208,6 +208,8 @@ const props = defineProps({
   }
 })
 
+// console.log('props', props?.user)
+
 // eslint-disable-next-line no-unused-vars
 const setting = useSettingsAplikasi()
 const rsim = computed(() => {
@@ -227,36 +229,39 @@ onMounted(() => {
   if (!props.user?.kdruangansim && temp?.length) emit('setGudang', temp[0])
   // rsim.value = temp
 })
-function labelGd() {
+function labelGd () {
   const anu = props?.gudangs.filter(gud => gud.kode === props.user?.kdruangansim)
   if (anu.length) return anu[0]?.nama
   else return 'Tidak ada ruangan'
 }
-function labelRu() {
+function labelRu () {
   const anu = props?.ruangs?.filter(gud => gud.kode === props.user?.kdruangansim)
   if (anu.length) return anu[0]?.uraian
   else return 'Tidak ada ruangan'
 }
-function poli(val) {
+function poli (val) {
   let fin = null
   let ruang = ''
   const temp = val.kdruangansim.split('|')
   if (temp.length) {
     if (optionsPolis.value.length) {
       fin = optionsPolis.value.map(x => x.polirs).join(', ')
-    } else if (optionsGudang.value?.length) {
+    }
+    else if (optionsGudang.value?.length) {
       fin = optionsGudang.value.map(x => x.nama).join(', ')
-    } else if (optionsRuangans.value?.length) {
+    }
+    else if (optionsRuangans.value?.length) {
       fin = optionsRuangans.value.map(x => x.uraian).join(', ')
     }
     ruang = fin ?? 'Tidak ada Akses Ruangan'
-  } else {
+  }
+  else {
     ruang = 'data ruangan tidak ditemukan'
   }
   return ruang
 }
 
-function namaPath(val) {
+function namaPath (val) {
   const stringdepan = val[0]
   let res = val
   if (stringdepan === '/') {
