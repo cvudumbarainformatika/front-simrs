@@ -24,44 +24,44 @@ export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_
     dataToPrint: {}
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParam('q', val)
       this.setParam('page', 1)
       this.getData()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParam('per_page', val)
       this.setParam('page', 1)
       this.getData()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParam('page', val)
       this.getData()
     },
-    refresh() {
+    refresh () {
       this.setParam('page', 1)
       this.getData()
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       this.params.page = 1
       const { to, from } = val
       this.params.to = to
       this.params.from = from
       this.getData()
     },
-    setFlag(val) {
+    setFlag (val) {
       // console.log('flag', val)
       this.setParam('flag', val)
       this.setParam('page', 1)
       this.getData()
     },
-    getInitialData() {
+    getInitialData () {
       this.getData()
     },
-    async getData() {
+    async getData () {
       const param = { params: this.params }
       this.loading = true
       await api.get('v1/simrs/penunjang/farmasinew/ruangan/get-pemakaian-ruangan', param)
@@ -74,7 +74,7 @@ export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_
         })
         .catch(() => { this.loading = false })
     },
-    selesaiPemakaian(val) {
+    selesaiPemakaian (val) {
       const formData = new FormData()
       formData.append('nopemakaian', val?.nopemakaian)
       val.loading = true
@@ -95,7 +95,7 @@ export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_
           })
       })
     },
-    hapusHead(item) {
+    hapusHead (item) {
       this.loadingHead = true
       item.loading = true
       return new Promise(resolve => {
@@ -114,7 +114,7 @@ export const useListPemakaianRuanganStore = defineStore('list_pemakaian_ruangan_
           })
       })
     },
-    hapusRinci(item) {
+    hapusRinci (item) {
       console.log('hapus rinci', item)
       this.loadingRinci = true
       item.loading = true

@@ -16,11 +16,12 @@ const AsyncComp = defineAsyncComponent({
   loadingComponent: 'app-loading',
   delay: 200,
   timeout: 3000,
-  onError(error, retry, fail, attempts) {
+  onError (error, retry, fail, attempts) {
     console.log(error)
     if (attempts <= 2) {
       retry()
-    } else {
+    }
+    else {
       fail()
     }
   }

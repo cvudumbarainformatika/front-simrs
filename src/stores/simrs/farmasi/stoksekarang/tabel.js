@@ -28,6 +28,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
     rincis: [],
     mutasis: [],
     reseps: [],
+    operasis: [],
     obat: {},
     ruangRanaps: []
   }),
@@ -122,11 +123,19 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
           .then(resp => {
             this.loadingAlokasi = false
             console.log('setok ', resp.data)
+            this.operasis = resp?.data?.operasi
             this.mutasis = resp?.data?.permintaan
             this.reseps = resp?.data?.transRacikan ?? []
             if (resp?.data?.transNonRacikan?.length) {
               resp?.data?.transNonRacikan.forEach(racik => {
                 this.reseps.push(racik)
+              })
+            }
+            if (this.operasis.length) {
+              this.operasis.forEach(op => {
+                const rajal = op?.list?.kunjunganrajal?.rs8
+                const ranap = op?.list?.kunjunganranap?.rs5
+                op.dari = ranap ?? rajal
               })
             }
 

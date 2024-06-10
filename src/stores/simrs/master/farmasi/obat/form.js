@@ -76,6 +76,10 @@ export const useMasterObatForm = defineStore('master_Obat_form', {
       { label: 'YA', value: '1' },
       { label: 'TIDAK', value: '' }
     ],
+    optionYN: [
+      { label: 'YA', value: '1' },
+      { label: 'TIDAK', value: '' }
+    ],
 
     kelasTerapis: [],
     kelompokPenyimpanans: [],

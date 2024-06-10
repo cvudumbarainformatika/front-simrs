@@ -8,6 +8,9 @@
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
+      <!-- <div class="row justify-between items-center">
+        sistem bayar
+      </div> -->
       <div class="row justify-between items-center">
         <div v-if="depo==='rjl'" class="q-px-xs">
           <div
