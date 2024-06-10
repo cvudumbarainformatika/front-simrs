@@ -179,7 +179,7 @@ const bentukArrBaru = computed(() => {
       tgl: x?.tgl_permintaan,
       tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Mutasi Keluar ke ' + carigudang(x?.dari),
+      keterangan: 'Mutasi Keluar ke ' + carigudang(x?.dari) + ' nomor: ' + x?.no_permintaan,
       masuk: 0,
       keluar: parseFloat(x?.jml),
       total: 0
@@ -191,7 +191,7 @@ const bentukArrBaru = computed(() => {
       tgl: x?.tgl_permintaan,
       tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
-      keterangan: 'Mutasi Masuk dari ' + carigudang(x?.dari),
+      keterangan: 'Mutasi Masuk dari ' + carigudang(x?.tujuan) + ' nomor: ' + x?.no_permintaan,
       masuk: parseFloat(x?.jml),
       keluar: 0,
       total: 0
@@ -245,7 +245,8 @@ const saldoAwal = computed(() => {
 function carigudang (val) {
   // console.log(app)
   const gud = app?.gudangs?.find(a => a.kode === val)
-  return gud.nama
+  const ruang = app?.ruangs?.find(a => a.kode === val)
+  return gud ? gud?.nama ?? '-' : ruang?.uraian ?? '-'
 }
 
 // eslint-disable-next-line no-unused-vars

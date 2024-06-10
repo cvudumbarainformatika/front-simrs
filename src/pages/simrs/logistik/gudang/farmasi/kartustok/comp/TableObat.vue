@@ -10,7 +10,7 @@
     v-model:pagination="store.params"
     :filter="store.params.q"
     :loading="store.loading"
-    :rows-per-page-options="[10,20,50,100]"
+    :rows-per-page-options="[10,20,50,100,500,1000]"
   >
     <template #top-left>
       <div class="flex q-qutter-sm z-top">
@@ -202,6 +202,10 @@ function returResep (arr) {
   const jmlRetur = rincianReturResep?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
   return jmlRetur
 }
+
+// function persiapanOperasiKeluar (arr) {
+//   return arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_distribusi), 0)
+// }
 
 function hitungTotal (row) {
   return (hitungSaldoAwal(row?.saldoawal) ?? 0) + (hitungPenerimaan(row?.penerimaanrinci) ?? 0) + (hitungMutasiMasuk(row?.mutasimasuk) ?? 0) + (returResep(row?.resepkeluar) ?? 0) -

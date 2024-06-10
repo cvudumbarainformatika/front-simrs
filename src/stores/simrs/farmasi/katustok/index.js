@@ -47,6 +47,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
     async onRequest (props) {
       console.log('props', props)
       this.params.page = props?.pagination?.page ?? 1
+      this.params.rowsPerPage = props?.pagination?.rowsPerPage ?? 20
       await this.getData()
     },
 
