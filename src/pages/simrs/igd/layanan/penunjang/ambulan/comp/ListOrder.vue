@@ -92,11 +92,11 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+// import { useQuasar } from 'quasar'
 import { useFisioIgd } from 'src/stores/simrs/igd/fisio'
 import { computed } from 'vue'
 
-const $q = useQuasar()
+// const $q = useQuasar()
 const store = useFisioIgd()
 const props = defineProps({
   pasien: {
@@ -113,20 +113,20 @@ const filterredTable = computed(() => {
   return arr?.length ? arr?.filter(x => x?.rs2 === val) : []
 })
 
-function hapusItem(id) {
-  $q.dialog({
-    dark: true,
-    title: 'Peringatan',
-    message: 'Apakah Data ini akan dihapus?',
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    // console.log('HAPUS', id)
-    store.hapusPermintaan(props.pasien, id)
-  }).onCancel(() => {
-    // console.log('Cancel')
-  }).onDismiss(() => {
-    // console.log('I am triggered on both OK and Cancel')
-  })
-}
+// function hapusItem(id) {
+//   $q.dialog({
+//     dark: true,
+//     title: 'Peringatan',
+//     message: 'Apakah Data ini akan dihapus?',
+//     cancel: true,
+//     persistent: true
+//   }).onOk(() => {
+//     // console.log('HAPUS', id)
+//     store.hapusPermintaan(props.pasien, id)
+//   }).onCancel(() => {
+//     // console.log('Cancel')
+//   }).onDismiss(() => {
+//     // console.log('I am triggered on both OK and Cancel')
+//   })
+// }
 </script>

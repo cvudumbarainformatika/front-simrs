@@ -167,31 +167,31 @@ const listperawat = ref([])
 const pelsupir = ref(['Rujukan', 'Jenazah', 'Emergency'])
 const pelperawat = ref(['Rujukan', 'Emergency', 'Privat'])
 
-function filterFn(val, update, abort) {
-  if (val.length < 1) {
-    abort()
-    return
-  }
+// function filterFn(val, update, abort) {
+//   if (val.length < 1) {
+//     abort()
+//     return
+//   }
 
-  update(() => {
-    const needle = val.toLowerCase()
-    // const arr = store.listDiagnosa
-    const arr = listperawat.value
-    console.log('sasa', arr)
-    const filter = ['rs2']
-    const multiFilter = (data = [], filterKeys = [], value = '') =>
-      data.filter((item) => filterKeys.some(
-        (key) =>
-          item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
-            item[key]
-      )
-      )
-    const filteredData = multiFilter(arr, filter, needle)
-    options.value = filteredData
-  })
-}
+//   update(() => {
+//     const needle = val.toLowerCase()
+//     // const arr = store.listDiagnosa
+//     const arr = listperawat.value
+//     console.log('sasa', arr)
+//     const filter = ['rs2']
+//     const multiFilter = (data = [], filterKeys = [], value = '') =>
+//       data.filter((item) => filterKeys.some(
+//         (key) =>
+//           item[key].toString().toLowerCase().includes(value.toLowerCase()) &&
+//             item[key]
+//       )
+//       )
+//     const filteredData = multiFilter(arr, filter, needle)
+//     options.value = filteredData
+//   })
+// }
 
-function saveOrder() {
+function saveOrder () {
   store.saveOrder(props.pasien).then(() => {
     formRef.value.resetValidation()
   })
