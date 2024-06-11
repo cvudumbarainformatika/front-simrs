@@ -148,7 +148,7 @@
             >
               <thead class="align-middle text-center display-block">
                 <tr style="font-size: 14px">
-                  <th width="200px">
+                  <th width="150px">
                     Kode Rekening
                   </th>
                   <th width="500px">
@@ -164,15 +164,21 @@
               <tbody class="align-middle">
                 <tr v-for="item in store.items" :key="item">
                   <td class="text-center">
+                    <div> {{ item.kodeakun }} </div>
                     <div> {{ item.kodeall3 }} </div>
                   </td>
-                  <td> <div> {{ item.uraian }} </div></td>
                   <td>
-                    <div v-for="rinci in item?.npdls_rinci" :key="rinci">
-                      {{ rinci.nonpdls }}
-                    </div>
-                    <div v-for="rinci in item?.spjpanjar" :key="rinci">
-                      {{ rinci.nospjpanjar }}
+                    <div> {{ item.uraian }} </div>
+                  </td>
+                  <td class="text-right">
+                    <div>{{ formattanpaRp(item.totalPagu) }} </div>
+                  </td>
+                  <td class="text-right">
+                    <div>Belum Dicari</div>
+                  </td>
+                  <td class="text-right">
+                    <div>
+                      {{ formattanpaRp(item.totalRealisasi) }}
                     </div>
                   </td>
                 </tr>
@@ -188,15 +194,28 @@
 
 <script setup>
 // import { date } from 'quasar'
+import { formattanpaRp } from 'src/modules/formatter'
 import { useLaporanLraLaprealisasianggaranStore } from 'src/stores/siasik/laporan/lra/laprealisasianggaran'
 import { onMounted } from 'vue'
 // import { ref } from 'vue'
 const store = useLaporanLraLaprealisasianggaranStore()
 store.getDataRealisasi()
-
 onMounted(() => {
   store.getDataBidang()
+  // store.paguAnggaran()
+  // store.realisasiAnggaran()
+  // store.getBidang()
 })
+
+// function anggaran (val) {
+//   const Anggaran = []
+//   for (let i = 0; i < store.items?.length; i++) {
+//     const el = store.items[i].anggaran
+//     const pagu = el.map((x) => parseInt(x.pagu)).reduce((a, b) => a + b, 0)
+//     console.log('gogoggo', pagu)
+//     Anggaran.push(pagu)
+//   }
+// }
 
 function ambilData () {
   // store.hitungharidalamBulan();
@@ -204,6 +223,7 @@ function ambilData () {
     store.emptyForm()
   })
 }
+
 </script>
 
 <style>
