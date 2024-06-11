@@ -24,6 +24,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loadingTolak: false,
     loadingAlasan: false,
     toAlasan: {},
+    noreg: '',
     items: [],
     meta: {},
     params: {

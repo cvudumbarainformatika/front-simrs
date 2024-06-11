@@ -131,6 +131,11 @@
                   (copy - {{ dateFullFormat(item?.tgl) }}  )
                 </div>
               </div>
+              <div class="row text-green f-12 text-weight-bold">
+                <div>
+                  {{ item?.antrian?.nomor }}
+                </div>
+              </div>
               <div
                 v-if="item?.tiperesep==='iter'"
                 class="row text-purple text-weight-bold f-10"
@@ -374,6 +379,21 @@
                   </q-tooltip>
                 </q-btn>
               </div>
+              <div v-if="ruangan==='Gd-05010101'" class="row no-wrap q-mt-sm">
+                <q-btn
+                  dense
+                  size="sm"
+                  no-caps
+                  color="accent"
+                  label="PANGGIL"
+                  class="q-mb-lg"
+                  icon-right="icon-mat-volume_up"
+                  style="min-width: 120px;"
+                  :loading="loadingCall && store.noreg === item?.noreg"
+                  :disable="loadingCall && store.noreg === item?.noreg"
+                  @click="panggil( item)"
+                />
+              </div>
             </td>
             <!-- <td class="text-end">
             <div>
@@ -419,7 +439,21 @@ import { defineAsyncComponent, ref } from 'vue'
 
 const store = useEResepDepoFarmasiStore()
 const router = useRouter()
-
+defineProps({
+  ruangan: {
+    type: String,
+    default: ''
+  },
+  loadingCall: {
+    type: Boolean,
+    default: false
+  }
+})
+const emits = defineEmits(['panggilan'])
+function panggil (item) {
+  emits('panggilan', item)
+  store.noreg = item?.noreg
+}
 // const indexId = ref(0)
 function status (val) {
   let balik = ' Belum ada status'
