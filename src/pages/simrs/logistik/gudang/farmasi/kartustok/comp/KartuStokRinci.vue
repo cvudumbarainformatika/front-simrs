@@ -94,10 +94,10 @@
                     v-for="(item, n) in bentukArrBaru"
                     :key="item"
                   >
-                    <td :class="item?.masuk === 0 ? 'text-negative' : 'text-primary'">
+                    <td :class="item?.masuk === 0 ? item?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
                       {{ item?.tanggal }} <span class="">  {{ item?.jam }}</span>
                     </td>
-                    <td :class="item?.masuk === 0 ? 'text-negative' : 'text-primary'">
+                    <td :class="item?.masuk === 0 ? item?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
                       {{ item?.keterangan }}
                     </td>
                     <td class="text-end">
@@ -217,7 +217,9 @@ const bentukArrBaru = computed(() => {
         tanggal: date.formatDate(x?.tgl_retur, 'DD, MMM YYYY'),
         jam: date.formatDate(x?.tgl_retur, 'HH:mm'),
         keterangan: 'Retur Resep ' + x?.noresep,
-        masuk: x?.rinci?.length ? x.rinci.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0) : 0,
+        masuk: x?.rinci?.length
+          ? x.rinci.filter(y => y.kdobat === props.item?.kd_obat).reduce((a, b) => parseFloat(a) + parseFloat(b.jumlah_retur), 0)
+          : 0,
         keluar: 0,
         total: 0
       }
@@ -229,6 +231,7 @@ const bentukArrBaru = computed(() => {
 
   const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar, returresep].flat(Infinity)
 
+  // const hasil = gabung.length ? gabung?.filter(x => x.masuk !== x.keluar)?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : [] // ini jika yg aneh tdk dimasukkan
   const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []
 
   return hasil

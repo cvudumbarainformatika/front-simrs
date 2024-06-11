@@ -116,7 +116,7 @@ const columnsx = [
     key: 'nama_obat'
   },
   { name: 'saldo_awal', label: 'Saldo Awal', align: 'right', field: (row) => hitungSaldoAwal(row?.saldoawal), key: 'saldo_awal' },
-  { name: 'masuk', label: 'Stok Masuk', align: 'right', field: (row) => (hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar)) },
+  { name: 'masuk', label: 'Stok Masuk', align: 'right', field: (row) => (hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row.kd_obat)) },
   { name: 'keluar', label: 'Stok Keluar', field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar)), align: 'right' },
   {
     name: 'stok_akhir',
@@ -196,10 +196,11 @@ function hitungResepKeluar (arr) {
   return resepkeluar
 }
 
-function returResep (arr) {
+function returResep (arr, kodeObat) {
   const arrreturResep = arr?.length ? arr.map(x => x.retur)?.reduce((a, b) => a.concat(b), []) : []
   const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
-  const jmlRetur = rincianReturResep?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
+  const rinciWhereKode = rincianReturResep.length ? rincianReturResep?.filter(x => x.kdobat === kodeObat) : []
+  const jmlRetur = rinciWhereKode?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah_retur), 0)
   return jmlRetur
 }
 
