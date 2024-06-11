@@ -462,7 +462,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       })
     },
     async getDataTable (val) {
-      this.items = []
+      // this.items = []
       if (!val) this.loading = true
       const param = { params: this.params }
       // console.log('loading', val, this.loading)
@@ -477,10 +477,13 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           else {
             this.items = data
           }
+          if (!data.length) this.items = []
           this.meta = resp?.data?.data ? resp?.data : {}
           this.metanirinci()
         })
-        .catch(() => { this.loading = false })
+        .catch(() => {
+          this.loading = false
+        })
     },
     async getSatuResep (val) {
       const param = {
