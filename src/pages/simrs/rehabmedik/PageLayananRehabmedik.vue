@@ -67,7 +67,7 @@
                   :is="menu.comp"
                   :key="pasien"
                   :pasien="pasien"
-                  depo="rjl"
+                  :depo="pasien?.flagdepo"
                 />
               </template>
               <template #fallback>

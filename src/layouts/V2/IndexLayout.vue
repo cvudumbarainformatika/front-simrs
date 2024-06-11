@@ -13,7 +13,7 @@
       :gudangs="apps.gudangs"
       :polis="apps.polis"
       :ruangs="apps.ruangs"
-      @go-to-sso="()=>router.push({path:'/admin/sso', replace:true})"
+      @go-to-sso="goToSSO"
       @set-gudang="apps.setUserKey('kdruangansim',$event)"
     />
     <LeftDrawer
@@ -115,7 +115,12 @@ const transition = useTransitionStore()
 const store = useAuthStore()
 const style = useStyledStore()
 const apps = useAplikasiStore()
-
+function goToSSO () {
+  router.push({ path: '/admin/sso', replace: true })
+  setTimeout(() => {
+    window.location.reload()
+  }, 200)
+}
 const setting = useSettingsAplikasi()
 if (!apps.gudangs?.length) setting.getGudang().then(resp => { apps.setGudang(setting?.gudangs) })
 if (!apps.polis?.length) setting.getPoli().then(resp => { apps.setPoli(setting?.polis) })

@@ -553,19 +553,6 @@
                 dense
                 inline
               />
-              <!-- <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.status_generik"
-                    autocomplete="label"
-                    option-label="label"
-                    option-value="value"
-                    valid
-                    outlined
-                    label="Status Generik"
-                    autofocus
-                    :source="store.optionStatusGeneriks"
-                  />
-                </div> -->
             </div>
             <!-- Status Fornas -->
             <div class="row q-mb-xs items-center">
@@ -578,19 +565,7 @@
                 dense
                 inline
               />
-              <!-- <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.status_fornas"
-                    autocomplete="label"
-                    option-label="label"
-                    option-value="value"
-                    valid
-                    outlined
-                    label="Status Fornas"
-                    autofocus
-                    :source="store.optionStatusFornases"
-                  />
-                </div> -->
+              >
             </div>
             <!-- Status forkit -->
             <div class="row q-mb-xs items-center">
@@ -603,19 +578,18 @@
                 dense
                 inline
               />
-              <!-- <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.status_forkid"
-                    autocomplete="label"
-                    option-label="label"
-                    option-value="value"
-                    valid
-                    outlined
-                    label="Status Forkit"
-                    autofocus
-                    :source="store.optionStatusForkits"
-                  />
-                </div> -->
+            </div>
+            <!-- obat Progran -->
+            <div class="row q-mb-xs items-center">
+              Obat Program:
+              <q-option-group
+                v-model="store.form.obat_program"
+                :options="store.optionYN"
+                color="primary"
+                class="q-ml-sm"
+                dense
+                inline
+              />
             </div>
             <div class="row q-mb-xs items-center">
               Status Konsinyasi:
@@ -638,19 +612,6 @@
                 class="q-ml-sm"
                 dense
               />
-              <!-- <div class="col-12">
-                  <app-autocomplete-debounce-input
-                    v-model="store.form.gudang"
-                    autocomplete="label"
-                    option-label="label"
-                    option-value="value"
-                    valid
-                    outlined
-                    label="Pilih Gudang"
-                    autofocus
-                    :source="store.optionGudangs"
-                  />
-                </div> -->
             </div>
             <!-- Nilai TKDN -->
             <div class="row q-mb-xs">

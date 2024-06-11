@@ -328,16 +328,16 @@ const modelSet = val => {
   }, 700)
 }
 //
-function setModel(val) {
+function setModel (val) {
   store.setForm('tanggal', val)
 }
-function tambahRow() {
+function tambahRow () {
   store.newDetail = true
   store.isEditDetail = false
   store.openForm()
   console.log('form', store.form)
 }
-function editRow(val, i) {
+function editRow (val, i) {
   console.log('edit', i, val)
   val.barangrs.satuan = val.satuan
   store.barangs.push(val.barangrs)
@@ -349,7 +349,7 @@ function editRow(val, i) {
   store.openForm()
   console.log('form', store.form)
 }
-function hapus(val, i) {
+function hapus (val, i) {
   console.log('hapus', val)
   Dialog.create({
     title: 'Konfirmasi',
@@ -379,7 +379,8 @@ function hapus(val, i) {
       const habisUdah = store.item.details.filter(y => y.diterima <= 0)
       if (!habisUdah.length) {
         kirim.status = 4
-      } else {
+      }
+      else {
         delete kirim.status
       }
 
@@ -465,7 +466,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'DISTRIBUSI DEPO') {
+  }
+  else if (nama === 'DISTRIBUSI DEPO') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Depo'
@@ -481,7 +483,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PENERIMAAN RUANGAN') {
+  }
+  else if (nama === 'PENERIMAAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Ruangan'
@@ -497,7 +500,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'BARANG RUSAK') {
+  }
+  else if (nama === 'BARANG RUSAK') {
     switch (status) {
       case 1:
         return 'Rusak'
@@ -513,7 +517,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PEMAKAIAN RUANGAN') {
+  }
+  else if (nama === 'PEMAKAIAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Menunggu diterima Ruangan'
@@ -533,7 +538,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else if (nama === 'PERMINTAAN RUANGAN') {
+  }
+  else if (nama === 'PERMINTAAN RUANGAN') {
     switch (status) {
       case 1:
         return 'Draft'
@@ -581,7 +587,8 @@ const label = (status, nama) => {
         // eslint-disable-next-line no-unreachable
         break
     }
-  } else { // if (nama === 'PEMESANAN') {
+  }
+  else { // if (nama === 'PEMESANAN') {
     switch (status) {
       case 1:
         return 'Draft'

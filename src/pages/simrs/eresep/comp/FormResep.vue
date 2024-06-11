@@ -2,11 +2,15 @@
   <div class="bg-white full-height column">
     <div class="col-auto bg-primary text-white">
       <div class="q-pa-sm">
-        Form Resep Dokter
+        <span>Form Resep Dokter</span>
+        <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
       </div>
     </div>
     <div class="col full-height relative-position">
       <!-- Option tipe Resep -->
+      <!-- <div class="row justify-between items-center">
+        sistem bayar
+      </div> -->
       <div class="row justify-between items-center">
         <div v-if="depo==='rjl'" class="q-px-xs">
           <div

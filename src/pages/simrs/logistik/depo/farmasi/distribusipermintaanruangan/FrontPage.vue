@@ -135,23 +135,44 @@
             </q-tooltip>
           </q-btn>
         </div>
-        <div v-if="row.flag==='1'">
-          <q-btn
-            flat
-            icon="icon-mat-move_to_inbox"
-            dense
-            color="primary"
-            :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
-            :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
-            @click="kunci(row)"
-          >
-            <q-tooltip
-              class="primary"
-              :offset="[10, 10]"
+        <div v-if="row.flag==='1'" class="row justify-between items-center" style="min-width: 150px;">
+          <div class="col-auto">
+            <q-btn
+              flat
+              icon="icon-mat-move_to_inbox"
+              dense
+              color="primary"
+              :loading="store.loadingKunci && row.no_permintaan === toloadBeli"
+              :disable="store.loadingKunci && row.no_permintaan === toloadBeli"
+              @click="kunci(row)"
             >
-              Terima
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Terima
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="col-auto">
+            <q-btn
+              flat
+              icon="icon-mat-hand-front-left"
+              size="sm"
+              dense
+              color="negative"
+              :loading="row?.loading"
+              :disable="row?.loading"
+              @click="tolak(row)"
+            >
+              <q-tooltip
+                class="primary"
+                :offset="[10, 10]"
+              >
+                Tolak
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
         <div v-if="row.flag==='2' && row?.permintaanrinci?.map(x=>x.distribusi).reduce((a,b)=>a+b,0) > 0">
           <q-btn
@@ -222,189 +243,13 @@
             v-for="(rin, i) in row.permintaanrinci"
             :key="i"
           >
-            <div class="row items-center q-col-gutter-sm anu">
-              <div class="col-3">
-                <div class="row justify-between no-wrap q-mt-xs">
-                  <div class="text-deep-purple text-weight-bold">
-                    {{ rin.kdobat }}
-                  </div>
-                </div>
-                <div class="row wrap q-mt-xs">
-                  <div
-                    class="col full-width text-weight-bold"
-                    style="white-space: wrap;"
-                  >
-                    {{ rin.masterobat ? rin.masterobat.nama_obat : '-' }}
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs anu f-10 text-italic">
-                  <div class=" text-weight-bold">
-                    ({{ rin.masterobat.satuan_k }})
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs anu">
-                  <div
-                    class=" text-weight-bold"
-                    :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
-                  >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
-                  </div>
-                  <div
-                    class=" text-weight-bold"
-                    :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
-                  >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
-                  </div>
-                  <div
-                    class=" text-weight-bold"
-                    :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
-                  >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="row justify-between no-wrap q-mt-xs text-purple">
-                  <div class="q-mr-xs">
-                    Ruangan
-                  </div>
-                  <div class="">
-                    <div v-if="rin.stokreal">
-                      <div v-if="rin.stokreal.length">
-                        {{ rin.stokreal.filter(x => x.kdruang === row.dari).map(a => parseFloat(a.stokdendiri)).reduce((a, b) => a + b, 0) }}
-                      </div>
-                      <div v-if="!rin.stokreal.length">
-                        0
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row justify-between no-wrap q-mt-xs text-cyan">
-                  <div class="q-mr-xs">
-                    Max
-                  </div>
-                  <div class="">
-                    {{ parseFloat(rin.mak_stok) }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="row justify-between no-wrap q-mt-xs text-green">
-                  <div class="q-mr-xs">
-                    Permintaan
-                  </div>
-                  <div class="text-weight-bold">
-                    {{ rin.jumlahdiminta }}
-                  </div>
-                </div>
+            <CompDistribusi
+              :row="row" :rin="rin"
+              @minta="setMinta($event,rin)"
+              @distribusi="setDist($event,rin)"
+              @editable="setEdit($event,rin)"
+            />
 
-                <div class="row justify-between no-wrap q-mt-xs">
-                  <div
-                    v-if="row.flag === '2' && rin.distribusi===0"
-                    class="col-12"
-                  >
-                    <app-input
-                      ref="refInputVerif"
-                      v-model="rin.jumlah_minta"
-                      label="Jumlah Didistribusikan"
-                      outlined
-                      debounce="100"
-                      :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
-                        val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
-                      ]"
-                      @focus="setNol(rin)"
-                      @keyup.enter="kirim(rin, i,row)"
-                      @update:model-value="setJumlah($event, rin)"
-                    />
-                  </div>
-                  <div
-                    v-else
-                    class="col-12"
-                  >
-                    <!-- v-model="rin.jumlah_minta" -->
-                    <app-input
-                      ref="refInputVerif"
-                      v-model="rin.distribusi"
-                      label="Jumlah Didistribusikan"
-                      outlined
-                      debounce="800"
-                      readonly
-                      :rules="[
-                        val => parseFloat(val) > 0 || 'Harus lebih lebih besar dari 0',
-                        val => ((parseFloat(val) <= parseFloat(rin.jumlahdiminta))) || 'Tidak Boleh Lebih dari Jumlah minta'
-                      ]"
-                      @keyup.enter="gaKirim(rin, i)"
-                      @update:model-value="sudah($event, rin)"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-3 ">
-                <div v-if="parseFloat(rin.jumlah_minta) > 0 && row.flag==='2'">
-                  <div
-                    v-if="parseFloat(rin.jumlah_minta) <= parseFloat(rin.jumlahdiminta) && row.flag==='2'"
-                    class="row justify-end"
-                  >
-                    <q-icon
-                      v-if="rin.distribusi>0"
-                      class="q-mr-md"
-                      name="icon-mat-done"
-                      color="green"
-                      size="sm"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="center middle"
-                      >
-                        <div class="row justify-end">
-                          Sudah Di distribusikan
-                        </div>
-                      </q-tooltip>
-                    </q-icon>
-                    <q-btn
-                      v-else
-                      flat
-                      no-caps
-                      icon-right="icon-mat-send"
-                      label="Distribusikan"
-                      color="green"
-                      :loading="store.loadingSimpan && (store.form.id === rin.id)"
-                      @click="kirim(rin, i,row)"
-                    >
-                      <q-tooltip
-                        anchor="top middle"
-                        self="center middle"
-                      >
-                        <div class="row justify-end">
-                          Distribusikan Obat ini
-                        </div>
-                      </q-tooltip>
-                    </q-btn>
-                  </div>
-                </div>
-                <div v-else>
-                  <div
-                    v-if="(parseFloat(rin.jumlah_minta) <= 0 || mutasi(row,rin)) && row.flag==='2'"
-                    class="row justify-end text-weight-bold"
-                  >
-                    Jumlah Distribusi salah
-                  </div>
-                  <div
-                    v-if="row.flag==='3'"
-                    class="row justify-end text-weight-bold text-green"
-                  >
-                    Sudah Di Distribusikan
-                  </div>
-                  <div
-                    v-if="row.flag==='1'"
-                    class="row justify-end text-weight-bold text-red"
-                  >
-                    Terima Terlebih dahulu
-                  </div>
-                </div>
-              </div>
-            </div>
             <q-separator />
           </div>
         </div>
@@ -529,12 +374,19 @@
 import { dateFullFormat } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useDistribusiPermintaanRuanganStore } from 'src/stores/simrs/farmasi/distribusipermintaanruangan/distribusi'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
 const store = useDistribusiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 
 const depos = ['Gd-03010101', 'Gd-04010102', 'Gd-04010103', 'Gd-05010101', 'Gd-02010104']
 
+const CompDistribusi = defineAsyncComponent(() => import('./CompDistribusi.vue'))
+function tolak (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+
+  store.tolak(val)
+}
 function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
@@ -569,10 +421,10 @@ function depo (val) {
     return val
   }
 }
-function mutasi (row, rin) {
-  console.log('row', row)
-  console.log('rin', rin)
-}
+// function mutasi (row, rin) {
+//   console.log('row', row)
+//   console.log('rin', rin)
+// }
 // click
 function onClick (val) {
   // console.log('click', val)
@@ -603,56 +455,68 @@ function distribusikan (val) {
   store.distribusi(form)
 }
 
+function setMinta (evt, rin) {
+  console.log('set minta', evt)
+  rin.jumlah_minta = evt
+}
+function setDist (evt, rin) {
+  console.log('set dist', evt)
+  rin.distribusi = evt
+}
+function setEdit (evt, rin) {
+  console.log('set edit', evt)
+  rin.editable = evt
+}
 // function setEdit(val) {
 //   console.log('edit ', val)
 //   val.editable = true
 // }
-const refInputVerif = ref(null)
-function kirim (val, i, row) {
-  console.log('ref', refInputVerif.value, i)
-  const valid = refInputVerif.value[i].$refs.refInput.validate()
-  console.log('kirim', val)
-  console.log('kirim row', row)
-  if (valid) {
-    store.setForm('id', val.id)
-    const form = {
-      id: val.id,
-      jumlahdiminta: val.jumlahdiminta,
-      jumlah_minta: val.jumlah_minta,
-      kodeobat: val.kdobat,
-      kdgudang: row.tujuan,
-      nopermintaan: row.no_permintaan
+// const refInputVerif = ref(null)
+// function kirim (val, i, row) {
+//   console.log('ref', refInputVerif.value, i)
+//   const valid = refInputVerif.value[i].$refs.refInput.validate()
+//   console.log('kirim', val)
+//   console.log('kirim row', row)
+//   if (valid) {
+//     store.setForm('id', val.id)
+//     const form = {
+//       id: val.id,
+//       jumlahdiminta: val.jumlahdiminta,
+//       jumlah_minta: val.jumlah_minta,
+//       kodeobat: val.kdobat,
+//       kdgudang: row.tujuan,
+//       nopermintaan: row.no_permintaan
 
-    }
-    console.log('form', form)
-    store.simpanDetail(form).then(() => {
-      val.editable = false
-      val.distribusi = form.distribusi
-    })
-  }
-  val.editable = false
-}
-function gaKirim (val, i) {
-  console.log('ref', refInputVerif.value, i)
-}
+//     }
+//     console.log('form', form)
+//     store.simpanDetail(form).then(() => {
+//       val.editable = false
+//       val.distribusi = form.distribusi
+//     })
+//   }
+//   val.editable = false
+// }
+// function gaKirim (val, i) {
+//   console.log('ref', refInputVerif.value, i)
+// }
 
-function setNol (val) {
-  const beli = !isNaN(parseFloat(val.jumlah_minta)) ? (parseFloat(val.jumlah_minta) <= 0 ? 0 : parseFloat(val.jumlah_minta)) : 0
-  val.jumlah_minta = beli
-}
-function setJumlah (evt, val) {
-  const inc = evt.includes('.')
-  const ind = evt.indexOf('.')
-  const panj = evt.length
-  const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
-  // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
-  val.jumlah_minta = beli
-  console.log('beli', beli)
-}
-function sudah (evt, val) {
-  const anu = val.jumlah_minta
-  val.jumlah_minta = anu
-}
+// function setNol (val) {
+//   const beli = !isNaN(parseFloat(val.jumlah_minta)) ? (parseFloat(val.jumlah_minta) <= 0 ? 0 : parseFloat(val.jumlah_minta)) : 0
+//   val.jumlah_minta = beli
+// }
+// function setJumlah (evt, val) {
+//   const inc = evt.includes('.')
+//   const ind = evt.indexOf('.')
+//   const panj = evt.length
+//   const beli = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+//   // const beli = !isNaN(parseFloat(evt)) ? (parseFloat(evt) <= 0 ? 0 : parseFloat(evt)) : 0
+//   val.jumlah_minta = beli
+//   console.log('beli', beli)
+// }
+// function sudah (evt, val) {
+//   const anu = val.jumlah_minta
+//   val.jumlah_minta = anu
+// }
 
 const color = val => {
   switch (val) {

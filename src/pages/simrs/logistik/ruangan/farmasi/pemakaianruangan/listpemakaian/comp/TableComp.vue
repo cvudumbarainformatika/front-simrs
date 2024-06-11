@@ -311,37 +311,37 @@ import { useListPemakaianRuanganStore } from 'src/stores/simrs/farmasi/pemakaian
 const store = useListPemakaianRuanganStore()
 // const router = useRouter()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
   // console.log('val', val, dialogPrint.value)
 }
-function expand(item) {
+function expand (item) {
   item.expand = !item.expand
   item.higlight = !item.higlight
 }
-function selesai(item) {
+function selesai (item) {
   item.expand = !item.expand
   item.higlight = !item.higlight
   store.selesaiPemakaian(item)
 }
-function hapusHead(item) {
+function hapusHead (item) {
   item.expand = !item.expand
   item.higlight = !item.higlight
   store.hapusHead(item)
 }
-function hapusRinci(item) {
+function hapusRinci (item) {
   store.hapusRinci(item)
 }
-function rincLoading(val) {
+function rincLoading (val) {
   const ada = val?.rinci.filter(rin => rin.loading)
   if (ada.length) return true
   else return false
 }
 // const indexId = ref(0)
-function status(val) {
+function status (val) {
   let balik = ' Belum ada status'
   switch (val) {
     case '':
@@ -365,7 +365,7 @@ function status(val) {
   }
   return balik
 }
-function color(val) {
+function color (val) {
   let balik = 'grey'
   switch (val) {
     case '':

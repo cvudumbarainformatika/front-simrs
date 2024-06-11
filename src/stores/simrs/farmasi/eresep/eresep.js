@@ -317,6 +317,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
 
               jumlahdibutuhkanAwal: key?.jumlahdibutuhkan,
               etiket: false,
+              nilaiR,
               rincian: [key]
             }
             res.listRacikan.push(temp)
@@ -349,12 +350,14 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       if (item.permintaanresep.length) {
         item.permintaanresep.forEach(resep => {
           resep.kronis = resep?.mobat?.status_kronis
-          const rinci = item?.rincian.find(x => x.kdobat === resep.kdobat)
+          const rinci = item?.rincian.filter(x => x.kdobat === resep.kdobat)
           // console.log('rinc', rinci, resep)
-          if (rinci) {
-            resep.obatkeluar = rinci.jumlah
-            resep.hargajual = rinci.harga_jual
-            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual)) + parseFloat(rinci?.nilai_r)
+          if (rinci.length) {
+            const obatkeluar = rinci.map(m => parseFloat(m.jumlah)).reduce((a, b) => a + b, 0)
+            resep.obatkeluar = obatkeluar
+            resep.hargajual = rinci[0].harga_jual
+            resep.harga = (parseFloat(obatkeluar) * parseFloat(rinci[0]?.harga_jual)) + parseFloat(rinci[0]?.nilai_r)
+
             resep.done = true
           }
           else {
@@ -368,11 +371,13 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       if (item.permintaanracikan.length) {
         item.permintaanracikan.forEach(resep => {
           resep.kronis = resep?.mobat?.status_kronis
-          const rinci = item?.rincianracik.find(x => x.kdobat === resep.kdobat && x.namaracikan === resep.namaracikan)
-          if (rinci) {
-            resep.obatkeluar = rinci.jumlah
-            resep.harga_jual = rinci.harga_jual
-            resep.harga = (parseFloat(rinci?.jumlah) * parseFloat(rinci?.harga_jual))
+          const rinci = item?.rincianracik.filter(x => x.kdobat === resep.kdobat && x.namaracikan === resep.namaracikan)
+          // console.log('rinc', rinci, resep)
+          if (rinci.length) {
+            const obatkeluar = rinci.map(m => parseFloat(m.jumlah)).reduce((a, b) => a + b, 0)
+            resep.obatkeluar = obatkeluar
+            resep.hargajual = rinci[0].harga_jual
+            resep.harga = (parseFloat(obatkeluar) * parseFloat(rinci[0]?.harga_jual)) + parseFloat(rinci[0]?.nilai_r)
             resep.done = true
           }
           else {

@@ -53,44 +53,45 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
     dataToPrint: {}
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParams('no_permintaan', val)
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParams('page', val)
       this.getPermintaanDepo()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    refreshTable(val) {
+    refreshTable (val) {
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    setParamStatus(val) {
+    setParamStatus (val) {
       console.log('status ', val)
       if (val.value === 99) {
         this.paramStatus = val
         delete this.params.status
         this.setParams('flag', '')
         this.getPermintaanDepo()
-      } else {
+      }
+      else {
         this.paramStatus = val
         this.setParams('flag', val.value)
         this.getPermintaanDepo()
       }
     },
-    permintaanSelected(val) {
+    permintaanSelected (val) {
       this.disp.no_permintaan = val
       const temp = this.items.filter(a => a.no_permintaan === val)
       if (temp.length) {
@@ -99,12 +100,12 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
         console.log('item', item)
       }
     },
-    gantiJenisDistribusi(val) {
+    gantiJenisDistribusi (val) {
       console.log('jenis dist', val)
       this.setParams('jenisdistribusi', val)
       this.getPermintaanDepo()
     },
-    cariPermintaan(val) {
+    cariPermintaan (val) {
       const needle = val.toLowerCase()
       const arr = 'no_permintaan'
       let opt = []
@@ -129,10 +130,10 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
       // console.log('val', val)
     },
 
-    getInitialData() {
+    getInitialData () {
       this.getPermintaanDepo()
     },
-    getPermintaanDepo() {
+    getPermintaanDepo () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -153,14 +154,16 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
                       const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
                       // console.log('dist', dist)
                       ri.distribusi = !isNaN(dist) ? dist : 0
-                    } else {
+                    }
+                    else {
                       ri.distribusi = 0
                     }
                     if (ri?.stokreal.length) {
                       const tempStok = ri?.stokreal.filter(x => x.kdruang === it?.dari)
                       if (tempStok.length) {
                         ri.stok = tempStok.map(m => m.jumlah).reduce((a, b) => a + b, 0)
-                      } else { ri.stok = 0 }
+                      }
+                      else { ri.stok = 0 }
                       // console.log('dari', it?.dari)
                       // console.log('stok', tempStok)
                     }
@@ -174,7 +177,7 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
           .catch(() => { this.loading = false })
       })
     },
-    simpanDetail(val) {
+    simpanDetail (val) {
       this.loadingSimpan = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/gudang/distribusi/simpandistribusidepo', val)
@@ -191,7 +194,7 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
           .catch(() => { this.loadingSimpan = false })
       })
     },
-    kunci(val) {
+    kunci (val) {
       console.log('store.kunci')
       this.loadingKunci = true
       return new Promise(resolve => {
@@ -207,7 +210,24 @@ export const useMutasiKeluarAntarDepoStore = defineStore('mutasi_keluar_antar_de
           })
       })
     },
-    distribusi(val) {
+
+    tolak (val) {
+      console.log('store.tolak')
+      val.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/gudang/distribusi/tolak', val)
+          .then(resp => {
+            delete val.loading
+            this.getPermintaanDepo()
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete val.loading
+          })
+      })
+    },
+    distribusi (val) {
       console.log('store.kunci')
       this.loadingKunci = true
       return new Promise(resolve => {

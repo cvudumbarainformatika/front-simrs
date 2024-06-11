@@ -77,7 +77,7 @@
               </div>
               <div class="row q-mt-sm justify-end">
                 <q-btn
-                  v-if="!item.generalcons"
+                  v-if="!item.ttdpasien"
                   outline
                   size="sm"
                   class="q-px-md"
@@ -90,9 +90,9 @@
                   outline
                   size="sm"
                   class="q-px-md"
-                  :color="item.generalcons?'teal':'negative'"
+                  :color="item.ttdpasien?'teal':'negative'"
                   :label="item.generalcons?'Lihat General Consent':'General Consent Belum Ada'"
-                  :href="pathImg + item.generalcons.pdf"
+                  :href="pathImg + item?.generalcons?.pdf"
                   target="_blank"
                 />
               </div>
@@ -170,22 +170,23 @@ const cetak = ref(false)
 const store = useGeneralConsentStore()
 
 // eslint-disable-next-line no-unused-vars
-function genCon(row) {
+function genCon (row) {
   // console.log(row)
   pasien.value = row
   openGen.value = !openGen.value
 }
 
-function openPreviewGc(val) {
+function openPreviewGc (val) {
   if (val === 'cetak') {
     cetak.value = true
-  } else {
+  }
+  else {
     cetak.value = false
   }
   store.openPreviewGc = !store.openPreviewGc
 }
 
-function getStatus(arr) {
+function getStatus (arr) {
   if (arr.length === 0) {
     return '-'
   }

@@ -135,12 +135,12 @@ defineProps({
   }
 })
 const refBilling = ref(null)
-function bukaBill() {
+function bukaBill () {
   refBilling.value.openFaktur()
   // console.log('ref bill', refBilling.value)
   printRekap.value = true
 }
-function actPrintRekap() {
+function actPrintRekap () {
   printRekap.value = false
 }
 </script>

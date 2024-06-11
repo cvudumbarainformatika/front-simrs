@@ -201,177 +201,179 @@
               </q-chip>
             </td>
             <td class="text-end q-mr-sm">
-              <!-- terima -->
-              <q-btn
-                v-if="item?.flag==='1'"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-move_to_inbox"
-                :disable="store.loadingTerima && item?.loading"
-                :loading="store.loadingTerima && item?.loading"
-                @click="store.terimaResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+              <div class="row no-wrap">
+                <!-- terima -->
+                <q-btn
+                  v-if="item?.flag==='1'"
+                  round
+                  class="f-10 q-mr-sm"
+                  :color="color(item?.flag)"
+                  text-color="white"
+                  icon="icon-mat-move_to_inbox"
+                  :disable="store.loadingTerima && item?.loading"
+                  :loading="store.loadingTerima && item?.loading"
+                  @click="store.terimaResep(item)"
                 >
-                  Terima
-                </q-tooltip>
-              </q-btn>
-              <!-- print id resep-->
-              <q-btn
-                v-if="parseInt(item?.flag)<= 4"
-                round
-                class="f-10 q-mr-sm"
-                color="green"
-                text-color="white"
-                icon="icon-mat-print"
-                @click="printHeadResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Terima
+                  </q-tooltip>
+                </q-btn>
+                <!-- print id resep-->
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 4"
+                  round
+                  class="f-10 q-mr-sm"
+                  color="green"
+                  text-color="white"
+                  icon="icon-mat-print"
+                  @click="printHeadResep(item)"
                 >
-                  Print Id Resep
-                </q-tooltip>
-              </q-btn>
-              <!-- print  resep besar-->
-              <q-btn
-                v-if="parseInt(item?.flag)<= 4"
-                round
-                class="f-10 q-mr-sm"
-                color="yellow"
-                text-color="white"
-                icon="icon-mat-print"
-                @click="printIdResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print Id Resep
+                  </q-tooltip>
+                </q-btn>
+                <!-- print  resep besar-->
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 4"
+                  round
+                  class="f-10 q-mr-sm"
+                  color="yellow"
+                  text-color="white"
+                  icon="icon-mat-print"
+                  @click="printIdResep(item)"
                 >
-                  Print Resep Besar
-                </q-tooltip>
-              </q-btn>
-              <!-- print resep-->
-              <q-btn
-                v-if="parseInt(item?.flag)<= 4"
-                round
-                class="f-10 q-mr-sm"
-                color="dark"
-                text-color="white"
-                icon="icon-mat-print"
-                @click="toPrint(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print Resep Besar
+                  </q-tooltip>
+                </q-btn>
+                <!-- print resep-->
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 4"
+                  round
+                  class="f-10 q-mr-sm"
+                  color="dark"
+                  text-color="white"
+                  icon="icon-mat-print"
+                  @click="toPrint(item)"
                 >
-                  Print resep
-                </q-tooltip>
-              </q-btn>
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Print resep
+                  </q-tooltip>
+                </q-btn>
 
-              <!-- selesai -->
-              <q-btn
-                v-if="item?.flag==='2' && (item?.semuaresep && item?.semuaracik)"
-                round
-                class="f-10 q-mr-sm"
-                :color="color(item?.flag)"
-                text-color="white"
-                icon="icon-mat-done_all"
-                :disable="store.loadingSelesai && item?.loading"
-                :loading="store.loadingSelesai && item?.loading"
-                @click="store.resepSelesai(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                <!-- selesai -->
+                <q-btn
+                  v-if="item?.flag==='2' && (item?.semuaresep && item?.semuaracik)"
+                  round
+                  class="f-10 q-mr-sm"
+                  :color="color(item?.flag)"
+                  text-color="white"
+                  icon="icon-mat-done_all"
+                  :disable="store.loadingSelesai && item?.loading"
+                  :loading="store.loadingSelesai && item?.loading"
+                  @click="store.resepSelesai(item)"
                 >
-                  Selesai
-                </q-tooltip>
-              </q-btn>
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Selesai
+                  </q-tooltip>
+                </q-btn>
 
-              <!-- alasan -->
-              <q-btn
-                v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep)) || parseInt(item?.flag) === 5 ) "
-                round
-                class="f-10 q-mr-sm"
-                color="primary"
-                text-color="white"
-                icon="icon-mat-edit"
-                :disable="store.loadingTolak && item?.loading"
-                :loading="store.loadingTolak && item?.loading"
-                @click="alasan(item)"
-              >
-                <q-tooltip
-                  v-if="parseInt(item?.flag) === 3"
-                  class="primary"
-                  :offset="[10, 10]"
+                <!-- alasan -->
+                <q-btn
+                  v-if="((parseInt(item?.flag) === 3 && (!item?.semuaracik || !item?.semuaresep)) || parseInt(item?.flag) === 5 ) "
+                  round
+                  class="f-10 q-mr-sm"
+                  color="primary"
+                  text-color="white"
+                  icon="icon-mat-edit"
+                  :disable="store.loadingTolak && item?.loading"
+                  :loading="store.loadingTolak && item?.loading"
+                  @click="alasan(item)"
                 >
-                  Alasan Resep tidak diberikan semua
-                </q-tooltip>
-                <q-tooltip
-                  v-if="parseInt(item?.flag) === 5"
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    v-if="parseInt(item?.flag) === 3"
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Alasan Resep tidak diberikan semua
+                  </q-tooltip>
+                  <q-tooltip
+                    v-if="parseInt(item?.flag) === 5"
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Alasan Resep Ditolak
+                  </q-tooltip>
+                </q-btn>
+                <!-- buka -->
+                <q-btn
+                  square
+                  class="f-10"
+                  color="primary"
+                  text-color="white"
+                  label="Buka"
+                  no-caps
+                  @click="buka(item)"
                 >
-                  Alasan Resep Ditolak
-                </q-tooltip>
-              </q-btn>
-              <!-- buka -->
-              <q-btn
-                square
-                class="f-10"
-                color="primary"
-                text-color="white"
-                label="Buka"
-                no-caps
-                @click="buka(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Buka Resep Pasien
+                  </q-tooltip>
+                </q-btn>
+                <!-- info -->
+                <q-btn
+                  square
+                  class="f-10"
+                  color="yellow"
+                  text-color="green"
+                  label="Info"
+                  no-caps
+                  @click="info(item)"
                 >
-                  Buka Resep Pasien
-                </q-tooltip>
-              </q-btn>
-              <!-- info -->
-              <q-btn
-                square
-                class="f-10"
-                color="yellow"
-                text-color="green"
-                label="Info"
-                no-caps
-                @click="info(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Pelayanan Informasi Obat
+                  </q-tooltip>
+                </q-btn>
+                <!-- tolak -->
+                <q-btn
+                  v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
+                  round
+                  class="f-10 q-mx-sm"
+                  color="negative"
+                  text-color="white"
+                  icon="icon-mat-hand-front-left"
+                  :disable="store.loadingTolak && item?.loading"
+                  :loading="store.loadingTolak && item?.loading"
+                  @click="tolakResep(item)"
                 >
-                  Pelayanan Informasi Obat
-                </q-tooltip>
-              </q-btn>
-              <!-- tolak -->
-              <q-btn
-                v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
-                round
-                class="f-10 q-mx-sm"
-                color="negative"
-                text-color="white"
-                icon="icon-mat-hand-front-left"
-                :disable="store.loadingTolak && item?.loading"
-                :loading="store.loadingTolak && item?.loading"
-                @click="tolakResep(item)"
-              >
-                <q-tooltip
-                  class="primary"
-                  :offset="[10, 10]"
-                >
-                  Tolak Resep
-                </q-tooltip>
-              </q-btn>
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Tolak Resep
+                  </q-tooltip>
+                </q-btn>
+              </div>
             </td>
             <!-- <td class="text-end">
             <div>

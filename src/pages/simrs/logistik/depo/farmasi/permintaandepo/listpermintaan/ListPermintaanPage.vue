@@ -214,7 +214,8 @@
                 icon="icon-mat-lock_open"
                 dense
                 color="green"
-                :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
+                :loading="permintaan.loadingKunci && row.loading"
+                :disable="permintaan.loadingKunci && row.loading"
                 @click="kunci(row)"
               >
                 <q-tooltip
@@ -463,7 +464,7 @@ const toloadBeli = ref('')
 function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
-  permintaan.kunci(val.no_permintaan).then(() => {
+  permintaan.kunci(val).then(() => {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
   })

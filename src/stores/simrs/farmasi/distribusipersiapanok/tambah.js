@@ -29,7 +29,7 @@ export const useTambahObatDistribusiPersiapanOperasiStore = defineStore('tambah_
     loadingObat.value = true
     const params = { params: param }
     return new Promise(resolve => {
-      api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
+      api.get('v1/simrs/penunjang/farmasinew/obatoperasi/get-obat-persiapan', params)
         .then(resp => {
           loadingObat.value = false
           nonFilteredObat.value = resp.data?.dataobat

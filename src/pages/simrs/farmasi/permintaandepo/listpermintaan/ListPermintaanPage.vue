@@ -142,12 +142,14 @@
       </template>
       <template #left-acttion="{ row }">
         <div v-if="!row.flag">
+          anu
           <q-btn
             flat
             icon="icon-mat-lock_open"
             dense
             color="negative"
-            :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
+            :loading="permintaan.loadingKunci && row?.loading"
+            :disable="permintaan.loadingKunci && row?.loading"
             @click="kunci(row)"
           >
             <q-tooltip
@@ -211,13 +213,13 @@ function kunci (val) {
   val.expand = !val.expand
   val.highlight = !val.highlight
   toloadBeli.value = val.no_permintaan
-  permintaan.kunci(val.no_permintaan).then(() => {
+  permintaan.kunci(val).then(() => {
     toloadBeli.value = ''
     if (!val.flag) val.flag = 1
   })
 }
 
-function color(val) {
+function color (val) {
   switch (val) {
     case '':
       return 'grey'

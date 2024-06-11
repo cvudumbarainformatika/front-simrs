@@ -242,7 +242,7 @@ const store = useDistribusiDepoNewStore()
 store.getInitialData()
 
 // tanggal
-function setTanggal(val) {
+function setTanggal (val) {
   // const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
   store.setForm('tanggal', val)
   console.log('set tanggal ', val)
@@ -251,18 +251,18 @@ function setTanggal(val) {
   //   console.log('set tanggal tr', date.formatDate(store.display.tanggal, ' YYYY'))
   // }
 }
-function setTanggalDisp(val) {
+function setTanggalDisp (val) {
   store.display.tanggal = val
   // console.log('set display ', val)
 }
 // click
-function onClick(val) {
+function onClick (val) {
   // console.log('click ', val)
   val.item.expand = !val.item.expand
   val.item.highlight = !val.item.highlight
 }
 // kirim pesanan
-function kirimPenerimaan(val) {
+function kirimPenerimaan (val) {
   const oldreff = val.reff.split('-')
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
@@ -284,7 +284,7 @@ function kirimPenerimaan(val) {
   store.saveForm(data)
 }
 // kirim detail pemesanan
-function kirimDetailPenerimaan(val, detail) {
+function kirimDetailPenerimaan (val, detail) {
   const oldreff = val.reff.split('-')
   const newreff = oldreff.length ? 'DDP-' + oldreff[1] : 'DDP-' + uniqueId()
   const jamIni = date.formatDate(Date.now(), ' HH:mm:ss')
@@ -313,7 +313,7 @@ function kirimDetailPenerimaan(val, detail) {
   // console.log('kirim detail', data)
 }
 // ganti status penerimaan
-function sudahDiDistribusikan(val) {
+function sudahDiDistribusikan (val) {
   // console.log('sudah di distribusikan semua', val)
   val.loading = true
   const data = { id: val.id }

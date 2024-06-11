@@ -8,8 +8,8 @@
       <!-- <div class="bg-primary text-white q-pa-md">
         <div class="f-12">
           Pemeriksaan (Vital Sign) <div class="text-white"> -->
-            <!-- {{ store.templateActive }} -->
-          <!-- </div>
+      <!-- {{ store.templateActive }} -->
+      <!-- </div>
         </div>
       </div> -->
       <q-card-section class="q-px-md q-py-xs bg-primary text-white">
@@ -484,7 +484,7 @@ const props = defineProps({
   }
 })
 
-function setNumber(evt, key) {
+function setNumber (evt, key) {
   // console.log(evt, 'includes', evt.includes('.'), 'indexOf', evt.indexOf('.'), 'length', evt.length)
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
@@ -493,7 +493,7 @@ function setNumber(evt, key) {
   // console.log('evt', evt, 'key', key)
   store.setFormVital(key, nilai)
 }
-function sumKesadaran() {
+function sumKesadaran () {
   const jml = parseInt(store.formVital.kesadarane) + parseInt(store.formVital.kesadaranm) + parseInt(store.formVital.kesadaranv)
   store.setTingkatKesadaran(jml)
 }
@@ -507,7 +507,7 @@ onMounted(() => {
   })
 })
 
-async function onSubmit() {
+async function onSubmit () {
   const valid = await formRef.value?.validate()
   if (valid) {
     store.savePemeriksaan(props.pasien, menus.value).then(() => {
@@ -516,7 +516,7 @@ async function onSubmit() {
   }
 }
 
-function historyOpen() {
+function historyOpen () {
   emits('openHistory')
   // store.getHistory(props.pasien?.norm)
 }

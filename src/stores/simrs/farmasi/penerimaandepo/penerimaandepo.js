@@ -49,41 +49,41 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
     dataToPrint: {}
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(val) {
+    setSearch (val) {
       this.setParams('no_permintaan', val)
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    setPage(val) {
+    setPage (val) {
       this.setParams('page', val)
       this.getPermintaanDepo()
     },
-    setPerPage(val) {
+    setPerPage (val) {
       this.setParams('per_page', val)
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    refreshTable(val) {
+    refreshTable (val) {
       this.setParams('page', 1)
       this.getPermintaanDepo()
     },
-    getInitialData() {
+    getInitialData () {
       this.getPermintaanDepo()
     },
-    metaniRinci() {
+    metaniRinci () {
       this.items.forEach(item => {
         item?.permintaanrinci?.forEach(rinc => {
           rinc.distribusi = item?.mutasigudangkedepo?.filter(x => x.kd_obat === rinc.kdobat).map(m => parseFloat(m.jml)).reduce((a, b) => a + b, 0) ?? 0
         })
       })
     },
-    getPermintaanDepo() {
+    getPermintaanDepo () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {
@@ -100,7 +100,8 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
                       const dist = it?.mutasigudangkedepo.filter(mu => mu.kd_obat === ri.kdobat).map(ma => parseFloat(ma.jml)).reduce((a, b) => a + b, 0)
                       // console.log('dist', dist)
                       ri.distribusi = !isNaN(dist) ? dist : 0
-                    } else {
+                    }
+                    else {
                       ri.distribusi = 0
                     }
                   })
@@ -114,7 +115,7 @@ export const useDistribusiPenerimaanDepoStore = defineStore('distribusi_penerima
           .catch(() => { this.loading = false })
       })
     },
-    simpanDetail(val) {
+    simpanDetail (val) {
       this.loadingSimpan = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/depo/terimadistribusi', val)

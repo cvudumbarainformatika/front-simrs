@@ -10,16 +10,20 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       q: '',
       bulan: '05',
       tahun: 2024,
-      per_page: 50,
+      rowsPerPage: 20,
       page: 1,
-      koderuangan: null
+      koderuangan: null,
       // koderuangan: 'Gd-05010100' // ini gudang
       // koderuangan: 'Gd-05010101' // ini depo rajal
       // koderuangan: 'R-0301009' // ini poli dalam
+      // sortBy: 'nama_onbat',
+      // descending: false
+      rowsNumber: 0
     },
     loading: false,
     dialogRinci: false,
-    item: null
+    item: null,
+    exportExcel: false
   }),
   actions: {
     async getData () {
@@ -30,6 +34,7 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
         this.loading = false
         this.meta = resp.data
         this.items = resp.data.data
+        this.params.rowsNumber = resp.data.total
         // console.log('kjkjsdfs', this.items)
         console.log('kjkjsdfs', resp)
         this.loading = false
@@ -37,6 +42,13 @@ export const useKartuStokFarmasiStore = defineStore('kartu_stok_farmasi', {
       else {
         this.loading = false
       }
+    },
+
+    async onRequest (props) {
+      console.log('props', props)
+      this.params.page = props?.pagination?.page ?? 1
+      this.params.rowsPerPage = props?.pagination?.rowsPerPage ?? 20
+      await this.getData()
     },
 
     getInitialData () {

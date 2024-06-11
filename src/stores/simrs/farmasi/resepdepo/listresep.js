@@ -22,34 +22,34 @@ export const useListResepDepoStore = defineStore('list_resep_depo', {
     ]
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('q', payload)
       this.setParam('page', 1)
       this.getData()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.getData()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.getData()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.getData()
     },
-    getInitialData() {
+    getInitialData () {
       this.getData()
     },
-    getData() {
+    getData () {
       this.loading = true
       const param = {
         params: this.params
@@ -67,7 +67,7 @@ export const useListResepDepoStore = defineStore('list_resep_depo', {
           .catch(() => { this.loading = false })
       })
     },
-    hapusResep(row, rin) {
+    hapusResep (row, rin) {
       console.log('hpus', row, rin)
       this.loadingHapus = true
       const form = {

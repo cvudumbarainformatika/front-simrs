@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
   state: () => ({
@@ -19,13 +20,15 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
       // 'penerimaan',
       'stok',
       'stokalokasi',
-      'lain'
+      'lain',
+      'peny'
 
     ],
     columnHide: [],
     rincis: [],
     mutasis: [],
     reseps: [],
+    operasis: [],
     obat: {},
     ruangRanaps: []
   }),
@@ -72,15 +75,15 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
       this.getRuangRanap()
     },
     async getDataGudang () {
-      this.loading = true
+      // this.loading = true
       const param = { params: { q: '' } }
       await api.get('v1/gudang/gudang', param)
         .then(resp => {
-          this.loading = false
+          // this.loading = false
           console.log('gudang ', resp.data)
           this.gudangs = resp?.data
         })
-        .catch(() => { this.loading = false })
+        // .catch(() => { this.loading = false })
     },
     getRuangRanap () {
       if (this.ruangRanaps.length) return
@@ -91,7 +94,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
             console.log(this.ruangRanaps)
             resolve(resp)
           })
-          .catch(() => { this.loading = false })
+          // .catch(() => { this.loading = false })
       })
     },
     getDataTable () {
@@ -120,6 +123,7 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
           .then(resp => {
             this.loadingAlokasi = false
             console.log('setok ', resp.data)
+            this.operasis = resp?.data?.operasi
             this.mutasis = resp?.data?.permintaan
             this.reseps = resp?.data?.transRacikan ?? []
             if (resp?.data?.transNonRacikan?.length) {
@@ -127,10 +131,35 @@ export const UseFarmasiStokSekarangTable = defineStore('tabel_stok_sekarang', {
                 this.reseps.push(racik)
               })
             }
+            if (this.operasis.length) {
+              this.operasis.forEach(op => {
+                const rajal = op?.list?.kunjunganrajal?.rs8
+                const ranap = op?.list?.kunjunganranap?.rs5
+                op.dari = ranap ?? rajal
+              })
+            }
 
             resolve(resp)
           })
           .catch(() => { this.loadingAlokasi = false })
+      })
+    },
+    cekStok (val) {
+      val.loading = true
+      const form = {
+        kdruang: this.params.kdruang,
+        kdobat: val?.kdobat
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/stok/perbaikan-stok', form)
+          .then(resp => {
+            val.loading = false
+            console.log('penye ', resp?.data)
+            notifSuccess(resp)
+            this.getDataTable()
+            resolve(resp)
+          })
+          .catch(() => { val.loading = false })
       })
     }
   }

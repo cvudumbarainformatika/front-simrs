@@ -308,7 +308,7 @@
               Biaya Farmasi / Obat
             </div>
             <div class="col-2 garis-bawah-dablue text-right">
-              {{ formatRp(store.rekapBill.obat) }}
+              {{ formatRp(parseInt(store.rekapBill.obat)+parseInt(store.rekapBill.farmasinew)) }}
             </div>
           </div>
 
@@ -396,7 +396,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['tutup'])
 
-function openFaktur() {
+function openFaktur () {
   const par = { noreg: props.pasien?.noreg }
   store.getBill(par)
   // console.log('par', par)

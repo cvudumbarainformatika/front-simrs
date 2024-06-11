@@ -200,14 +200,14 @@
             <div class="q-mt-xs">
               Petugas Tpp Rawat Jalan
             </div>
-            <div
-              v-if="!app?.user?.pegawai?.ttdpegawai"
+            <!-- <div
+              v-if="!store?.form?.ttdpegawai"
               style="min-height: 50px;"
               class="column flex-center"
             >
               Ttd
-            </div>
-            <div v-else>
+            </div> -->
+            <div class="row full-width text-center justify-center">
               <!-- <embed
                 type="image/png"
                 :src="pathImg + app?.user?.pegawai?.ttdpegawai"
@@ -217,11 +217,20 @@
                 :src="pathImg + app?.user?.pegawai?.ttdpegawai"
                 width="150px"
               /> -->
-              <img
-                :src="app?.user?.pegawai?.ttdpegawai_url"
-                alt="ttd-pegawai-rsudmohsaleh"
-                width="150"
-              >
+              <div style="width: 100px;">
+                <vue-qrcode
+                  :value="qrUrl"
+                  tag="svg"
+                  :options="{
+                    errorCorrectionLevel: 'Q',
+                    color: {
+                      dark: '#000000',
+                      light: '#ffffff',
+                    },
+                    margin:2
+                  }"
+                />
+              </div>
               <!-- {{ pasien?.ttdpasien }} -->
             </div>
             <div>{{ app?.user?.pegawai?.nama || 'Nama' }}</div>
@@ -235,7 +244,7 @@
               style="min-height: 50px;"
               class="column flex-center"
             >
-              <div v-if="!pasien?.ttdpasien">
+              <div v-if="!store?.form?.ttdpasien">
                 Ttd
               </div>
               <div v-else>
@@ -245,7 +254,7 @@
                 /> -->
                 <!-- {{ pasien?.ttdpasien }} -->
                 <img
-                  :src="pasien?.generalcons?.ttdpasien_url"
+                  :src="store?.form?.ttdpasien"
                   alt="ttd-pasien-rsudmohsaleh"
                   width="150"
                 >
@@ -266,7 +275,7 @@ import { useContent } from '../~static/generalconsent/content'
 import { humanDate } from 'src/modules/formatter'
 // eslint-disable-next-line no-unused-vars
 import { api, pathImg } from 'src/boot/axios'
-import { onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 // eslint-disable-next-line no-unused-vars
 import { jsPDF } from 'jspdf'
 // eslint-disable-next-line no-unused-vars
@@ -294,6 +303,15 @@ const { isi, pasien, defaultForm, changeIsi, isOk, getDataIrja } = useContent(pr
 onMounted(() => {
   const xx = document.getElementById('htmlC')
   console.log('refGencon.value', xx)
+})
+
+const qrUrl = computed(() => {
+  const noreg = pasien?.norm// noreg
+  const dok = 'GENERAL-CONSENT.png'
+  const asal = 'GENERAL-CONSENT'
+  const enc = btoa(`${noreg}|${dok}|${asal}`)
+  return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
 })
 
 const emits = defineEmits(['afterRefresh'])

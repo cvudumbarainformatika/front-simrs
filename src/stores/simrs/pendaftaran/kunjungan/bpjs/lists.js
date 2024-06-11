@@ -26,7 +26,7 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getLists() {
+    async getLists () {
       this.loading = true
       const params = { params: this.params }
       const resp = await api.get('/v1/simrs/pendaftaran/kunjunganpasienbpjs', params)
@@ -38,7 +38,7 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
       }
       this.loading = false
     },
-    hapusPasien(pasien) {
+    hapusPasien (pasien) {
       console.log('hapus', pasien)
       this.loadingH = true
       const form = {
@@ -58,45 +58,45 @@ export const useListKunjunganBpjsStore = defineStore('list_kunjungan_bpjs', {
           })
       })
     },
-    setDate(payload) {
+    setDate (payload) {
       this.params.page = 1
       // this.params.tgl = payload
       this.getLists()
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       const { to, from } = val
       this.params.to = to
       this.params.from = from
       console.log('periodik', to)
       this.getLists()
     },
-    setTo(val) {
+    setTo (val) {
       this.params.to = val
     },
-    setFrom(val) {
+    setFrom (val) {
       this.params.from = val
     },
-    setQ(payload) {
+    setQ (payload) {
       this.params.page = 1
       this.params.q = payload
       this.getLists()
     },
-    setTglAwal() {
+    setTglAwal () {
       this.params.tgl = dateDbFormat(new Date())
     },
-    setPage(payload) {
+    setPage (payload) {
       this.params.page = payload
       this.getLists()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
     },
-    setFilters() {
+    setFilters () {
       this.filters = !this.filters
     },
-    filterData(val) {
+    filterData (val) {
       const { to, from, q } = val // status
       this.params.to = to
       this.params.from = from

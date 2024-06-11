@@ -37,13 +37,13 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
     stokByNopenerimaans: []
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setDisp(key, val) {
+    setDisp (key, val) {
       this.disp[key] = val
     },
-    resetForm() {
+    resetForm () {
       const ruang = this.form.kdruang
       const ruang2 = this.disp.kdruang
       this.disp = {
@@ -62,23 +62,24 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
         nobatch: ''
       }
     },
-    setOpen() {
+    setOpen () {
       this.isOpen = true
     },
-    setClose() {
+    setClose () {
       this.isOpen = false
     },
-    cariObat(val) {
+    cariObat (val) {
       const obat = this.allObats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))
       console.log('filter obat', obat)
       if (obat.length) {
         this.obats = obat
-      } else {
+      }
+      else {
         this.params.q = val
         this.getDataObat()
       }
     },
-    penerimaanSelected(val) {
+    penerimaanSelected (val) {
       console.log('val', val)
       console.log('form', this.form)
       const penerimaan = this.stokByNopenerimaans.find(nop => nop.nopenerimaan === val)
@@ -103,7 +104,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
       }
       console.log('penerimaan', penerimaan)
     },
-    editData(val) {
+    editData (val) {
       this.nopenerimaans = []
       this.edit = true
       // console.log('obat sebelum', val)
@@ -133,10 +134,10 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
         this.setForm('nopenerimaan', stoknya?.nopenerimaan)
       })
     },
-    getInitialData() {
+    getInitialData () {
       this.getDataObat()
     },
-    async getDataObat() {
+    async getDataObat () {
       this.loadingObat = true
       const param = { params: this.params }
       await api.get('v1/simrs/master/cariObat', param)
@@ -148,7 +149,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
         })
         .catch(() => { this.loadingObat = false })
     },
-    getObatMauDisesuaikan(val) {
+    getObatMauDisesuaikan (val) {
       val.loading = true
       this.loadingAmbil = true
       const param = { params: val }
@@ -166,7 +167,7 @@ export const UseFarmasiStokSekarangStore = defineStore('form_stok_sekarang', {
           })
       })
     },
-    simpanForm() {
+    simpanForm () {
       this.loading = true
       const form = this.form
       form.tglpenerimaan = this.form.tglpenerimaan + date.formatDate(Date.now(), ' HH:mm:ss')
