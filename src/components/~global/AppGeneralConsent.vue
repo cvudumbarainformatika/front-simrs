@@ -247,11 +247,27 @@
                 @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
               /> -->
               <!-- <div class="q-py-lg" /> -->
-              <app-ttd-wacom
+              <!-- <app-ttd-wacom
                 :key="pasien"
                 :ttd="store.form.ttdpetugas"
                 @save-ttd="(val)=> store.setForm('ttdpetugas',val)"
-              />
+              /> -->
+              <div class="row full-width text-center justify-center">
+                <div style="width: 200px;">
+                  <vue-qrcode
+                    :value="qrUrl"
+                    tag="svg"
+                    :options="{
+                      errorCorrectionLevel: 'Q',
+                      color: {
+                        dark: '#000000',
+                        light: '#ffffff',
+                      },
+                      margin:2
+                    }"
+                  />
+                </div>
+              </div>
               <div>{{ app?.user?.pegawai?.nama }}</div>
             </div>
           </div>
@@ -288,7 +304,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useGeneralConsentStore } from 'src/stores/simrs/pendaftaran/generalconsent/index'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
@@ -308,18 +324,20 @@ const store = useGeneralConsentStore()
 
 onMounted(() => {
   // store.getData()
-  console.log(props.pasien)
+  // console.log(props.pasien)
   // store.resetFORM()
+  cekTtdPasien()
   changeHubunganPasien()
 })
 
-function changeHubunganPasien() {
+function changeHubunganPasien () {
   if (store.form.hubunganpasien === 'Diri Sendiri') {
     store.setForm('nama', props.pasien ? props.pasien.nama : '-')
     store.setForm('norm', props.pasien ? props.pasien.norm : '-')
     store.setForm('alamat', props.pasien ? props.pasien.alamat : '-')
     store.setForm('nohp', props.pasien ? props.pasien.nohp : '-')
-  } else {
+  }
+  else {
     store.setForm('nama', null)
     store.setForm('norm', props.pasien ? props.pasien.norm : '-')
     store.setForm('alamat', null)
@@ -327,15 +345,26 @@ function changeHubunganPasien() {
   }
 }
 
-function cekTtdPasien() {
-  const ttdpasien = props?.pasien?.ttdpasien
+function cekTtdPasien () {
+  // const ttdPas = props?.pasien?.generalcons?.ttdpasien_url
+  // store.form.ttdpasien = ttdPas
   const ttdpetugas = app?.user?.pegawai?.ttdpegawai
+  const ttdpasien = props?.pasien?.generalcons?.ttdpasien_url ?? props?.pasien?.ttdpasien
   store.setForm('ttdpasien', ttdpasien)
   store.setForm('ttdpetugas', ttdpetugas)
   console.log('cekttd', ttdpasien)
 }
 
-function saveGeneralConsent() {
+const qrUrl = computed(() => {
+  const noreg = props?.pasien?.norm// noreg
+  const dok = 'GENERAL-CONSENT.png'
+  const asal = 'GENERAL-CONSENT'
+  const enc = btoa(`${noreg}|${dok}|${asal}`)
+  return `https://rsud.probolinggokota.go.id/dokumen-simrs/legalitas/${enc}`
+  // return `https://xenter.my.id/qr-document?noreg=${noreg}&dokumen=${dok}&asal=${asal}`
+})
+
+function saveGeneralConsent () {
   store.saveGeneralConsentPasien(app?.user?.pegawai)
     .then(() => {
       // ini buat pdf

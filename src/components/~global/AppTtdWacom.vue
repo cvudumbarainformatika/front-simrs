@@ -127,22 +127,24 @@ onBeforeUnmount(() => {
   disconnect()
 })
 
-function checkForSigCaptX() {
+function checkForSigCaptX () {
   retry = retry + 1
   if (WacomGSS.STU?.isServiceReady()) {
     retry = 0
     // console.log('SigCaptX Web Service: ready')
-  } else {
+  }
+  else {
     // console.log('SigCaptX Web Service: not connected')
     if (retry < MAXRETRIES) {
       setTimeout(checkForSigCaptX, TIMEOUT_LONG)
-    } else {
+    }
+    else {
       alert('Unable to establish connection to SigCaptX')
     }
   }
 }
 
-function onDCAtimeout() {
+function onDCAtimeout () {
   // Device Control App has timed-out and shut down
   // For this sample, we just closedown tabletDemo (assuming it's running)
   // console.log('DCA disconnected')
@@ -150,12 +152,12 @@ function onDCAtimeout() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function Point(x, y) {
+function Point (x, y) {
   this.x = x
   this.y = y
 }
 
-function getImage() {
+function getImage () {
   // if (!imgTtd.value) {
   //   return SIGNATUREIMAGE.value
   // }
@@ -163,12 +165,12 @@ function getImage() {
   //   return SIGNATUREIMAGE.value
   // }
   // SIGNATUREIMAGE.value = pathImg + imgTtd.value
-  return pathImg + imgTtd.value
-  // return SIGNATUREIMAGE.value
+  // return pathImg + imgTtd.value
+  return imgTtd.value
 }
 
 // eslint-disable-next-line no-unused-vars
-function disconnect() {
+function disconnect () {
   const deferred = Q.defer()
 
   if (!(undefined === tablet || tablet === null)) {
@@ -182,7 +184,8 @@ function disconnect() {
         // console.log('received: ' + JSON.stringify(message))
         if (MIMGDATA.value !== null) {
           return MIMGDATA.value.remove()
-        } else {
+        }
+        else {
           return message
         }
       })
@@ -207,16 +210,17 @@ function disconnect() {
         // console.log('disconnect error: ' + message)
         deferred.resolve()
       })
-  } else {
+  }
+  else {
     deferred.resolve()
   }
   return deferred.promise
 }
 
-function DCANotReady() { }
+function DCANotReady () { }
 DCANotReady.prototype = new Error()
 
-function tabletDemo() {
+function tabletDemo () {
   clearPad()
   const p = new WacomGSS.STU.Protocol()
   let intf
@@ -306,12 +310,14 @@ function tabletDemo() {
           .then(function (message) {
             ENCODINGMODE.value = message ? p?.EncodingMode?.EncodingMode_24bit_Bulk : p?.EncodingMode?.EncodingMode_24bit
           })
-      } else if ((encodingFlag & p?.EncodingFlag?.EncodingFlag_16bit) !== 0) {
+      }
+      else if ((encodingFlag & p?.EncodingFlag?.EncodingFlag_16bit) !== 0) {
         return tablet.supportsWrite()
           .then(function (message) {
             ENCODINGMODE.value = message ? p?.EncodingMode?.EncodingMode_16bit_Bulk : p?.EncodingMode?.EncodingMode_16bit
           })
-      } else { // assumes 1bit is available
+      }
+      else { // assumes 1bit is available
         ENCODINGMODE.value = p?.EncodingMode?.EncodingMode_1bit
       }
     })
@@ -349,7 +355,8 @@ function tabletDemo() {
             };
             return tablet.setPenDataOptionMode(penDataOptionMode)
           })
-      } else {
+      }
+      else {
         ENCODINGMODE.value = p.EncodingMode.EncodingMode_1bit
         return ENCODINGMODE.value
       }
@@ -379,12 +386,12 @@ function tabletDemo() {
       ISDOWN.value = false
       ctx.value.lineWidth = 1
 
-      const penData = function(report) {
+      const penData = function (report) {
         processButtons(report, canvasRef.value)
         processPoint(report, canvasRef.value, ctx.value)
         MPENDATA.value.push(report)
       }
-      const penDataEncryptedOption = function(report) {
+      const penDataEncryptedOption = function (report) {
         // console.log("reportOp: " + JSON.stringify(report));
         processButtons(report.penData[0], canvasRef.value)
         processPoint(report.penData[0], canvasRef.value, ctx.value)
@@ -393,7 +400,7 @@ function tabletDemo() {
         MPENDATA.value.push(report.penData[0], report.penData[1])
       }
 
-      const log = function(report) {
+      const log = function (report) {
         // console.log('report 20: ', report)
       }
       const decrypted = function (report) {
@@ -424,7 +431,8 @@ function tabletDemo() {
         // Reinitialize and re-try
         WacomGSS.STU.Reinitialize()
         setTimeout(tabletDemo, TIMEOUT_LONG)
-      } else {
+      }
+      else {
         // Some other error - Inform the user and closedown
         alert('tabletDemo failed:\n' + ex)
         setTimeout(close(), 0)
@@ -432,7 +440,7 @@ function tabletDemo() {
     })
 }
 
-function Button() {
+function Button () {
   // eslint-disable-next-line no-unused-expressions
   this.Bounds // in Screen coordinates
   // eslint-disable-next-line no-unused-expressions
@@ -441,7 +449,7 @@ function Button() {
   this.Click
 };
 
-function addButtons() {
+function addButtons () {
   // // console.log('addButtons', MBTNS.value)
   MBTNS.value = new Array(3)
   MBTNS.value[0] = new Button()
@@ -462,7 +470,8 @@ function addButtons() {
     MBTNS.value[1].Bounds = new Rectangle(w1, y, w2, h)
     MBTNS.value[2].Bounds = new Rectangle(w1 + w2, y, w3, h)
     // console.log('if idProduct !== WagomGss ', MBTNS.value)
-  } else {
+  }
+  else {
     // The STU-300 is very shallow, so it is better to utilise
     // the buttons to the side of the display instead.
 
@@ -489,7 +498,7 @@ function addButtons() {
   drawButtons()
 }
 
-function drawButtons() {
+function drawButtons () {
   // This application uses the same bitmap for both the screen and client (window).
 
   ctx.value.save()
@@ -514,7 +523,9 @@ function drawButtons() {
     ctx.value.rect(MBTNS.value[i].Bounds.x, MBTNS.value[i].Bounds.y, MBTNS.value[i].Bounds.width, MBTNS.value[i].Bounds.height)
     const xPos = MBTNS.value[i].Bounds.x + ((MBTNS.value[i].Bounds.width / 2) - (ctx.value.measureText(MBTNS.value[i].Text).width / 2))
     let yOffset
-    if (USBDEVICES.value[0].idProduct === WacomGSS.STU.ProductId.ProductId_300) { yOffset = 28 } else if (USBDEVICES.value[0].idProduct === WacomGSS.STU.ProductId.ProductId_430) { yOffset = 26 } else { yOffset = 40 }
+    if (USBDEVICES.value[0].idProduct === WacomGSS.STU.ProductId.ProductId_300) { yOffset = 28 }
+    else if (USBDEVICES.value[0].idProduct === WacomGSS.STU.ProductId.ProductId_430) { yOffset = 26 }
+    else { yOffset = 40 }
     ctx.value.fillText(MBTNS.value[i].Text, xPos, MBTNS.value[i].Bounds.y + yOffset)
     // // console.log('yOffset', yOffset)
   }
@@ -526,26 +537,26 @@ function drawButtons() {
   // console.log(canvasRef.value)
 }
 
-function btnOkClick() {
+function btnOkClick () {
   // You probably want to add additional processing here.
   generateImage()
   // console.log('ok')
   setTimeout(close, 0)
 }
 
-function btnCancelClick() {
+function btnCancelClick () {
   // You probably want to add additional processing here.
   // console.log('cancel')
   setTimeout(close, 0)
 }
 
-function btnClearClick() {
+function btnClearClick () {
   // You probably want to add additional processing here.
   // console.log('clear!')
   clearScreen()
 }
 
-function clearScreen() {
+function clearScreen () {
   clearCanvas(canvasRef.value, ctx.value)
   drawButtons()
   // eslint-disable-next-line no-array-constructor
@@ -555,13 +566,15 @@ function clearScreen() {
   emits('saveTtd', null)
 }
 
-function createModalWindow(w, h) {
+function createModalWindow (w, h) {
   const canvas = canvasRef.value
   if (canvas.addEventListener) {
     canvas.addEventListener('click', onCanvasClick, false)
-  } else if (canvas.attachEvent) {
+  }
+  else if (canvas.attachEvent) {
     canvas.attachEvent('onClick', onCanvasClick)
-  } else {
+  }
+  else {
     canvas.onClick = onCanvasClick
   }
 
@@ -570,7 +583,7 @@ function createModalWindow(w, h) {
   FORMLEFT.value = (window.innerWidth / 2) - (parseInt(w) / 2) + 'px'
 }
 
-function clearCanvas(canvas, cx) {
+function clearCanvas (canvas, cx) {
   // console.log('clearCanvasCx', cx)
   // console.log('clearCanvasCanvas', canvas)
   cx.save()
@@ -586,7 +599,7 @@ const clearPad = () => {
   setTimeout(close, 0)
 }
 
-function processButtons(point, inCanvas) {
+function processButtons (point, inCanvas) {
   // // console.log('processButton', point)
   // // console.log('processButtonCanvas', inCanvas)
   const nextPoint = {}
@@ -607,13 +620,14 @@ function processButtons(point, inCanvas) {
       MBTNS.value[btn].Click()
     }
     MCLICKBTN.value = -1
-  } else if (btn !== -1 && !ISDOWN.value && isDown2) {
+  }
+  else if (btn !== -1 && !ISDOWN.value && isDown2) {
     MCLICKBTN.value = btn
   }
   return (btn === -1)
 }
 
-function processPoint(point, inCanvas, cx) {
+function processPoint (point, inCanvas, cx) {
   const nextPoint = {}
   nextPoint.x = Math.round(inCanvas.width * point.x / CAPABILITY.value.tabletMaxX)
   nextPoint.y = Math.round(inCanvas.height * point.y / CAPABILITY.value.tabletMaxY)
@@ -635,11 +649,11 @@ function processPoint(point, inCanvas, cx) {
   ISDOWN.value = isDown2
 }
 
-function distance(a, b) {
+function distance (a, b) {
   return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)
 }
 
-function generateImage() {
+function generateImage () {
   const signatureCanvas = canvasRef.value
   const signatureCtx = ctx.value
 
@@ -658,12 +672,12 @@ function generateImage() {
   emits('saveTtd', imageUrl)
 }
 
-function close() {
+function close () {
   WacomGSS.STU.onDCAtimeout = null
   disconnect()
 }
 
-function Rectangle(x, y, width, height) {
+function Rectangle (x, y, width, height) {
   this.x = x
   this.y = y
   this.width = width
@@ -673,13 +687,14 @@ function Rectangle(x, y, width, height) {
     if (((pt.x >= this.x) && (pt.x <= (this.x + this.width))) &&
           ((pt.y >= this.y) && (pt.y <= (this.y + this.height)))) {
       return true
-    } else {
+    }
+    else {
       return false
     }
   }
 }
 
-function onCanvasClick(event) {
+function onCanvasClick (event) {
   const posX = event.layerX
   const posY = event.layerY
 

@@ -36,7 +36,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
   //   doubleCount: (state) => state.counter * 2
   // },
   actions: {
-    async getData() {
+    async getData () {
       this.loading = true
       try {
         const resp = await api.get('/v1/simrs/pendaftaran/generalconscent/mastergeneralconsent')
@@ -46,15 +46,17 @@ export const useGeneralConsentStore = defineStore('general_consent', {
           this.loading = false
         }
         this.loading = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loading = false
       }
     },
 
-    setForm(frm, val) {
+    setForm (frm, val) {
       this.form[frm] = val
+      console.log('ttd', val, frm)
     },
-    resetFORM() {
+    resetFORM () {
       this.form = {}
       const columns = [
         'tanggal',
@@ -76,7 +78,7 @@ export const useGeneralConsentStore = defineStore('general_consent', {
       }
       this.setForm('tanggal', dateDbFormat(new Date()))
     },
-    saveGeneralConsentPasien(pegawai) {
+    saveGeneralConsentPasien (pegawai) {
       if (!this.form.ttdpasien) {
         notifErrVue('Maaf tanda tangan pasien Belum Ada')
         return
@@ -96,15 +98,19 @@ export const useGeneralConsentStore = defineStore('general_consent', {
         api.post('/v1/simrs/pendaftaran/generalconscent/simpangeneralcontent', this.form)
           .then(resp => {
             console.log(resp)
-            this.form.ttdpasien = resp.data?.ttdpasien
+            this.form.ttdpasien = resp.data?.ttdpasien_url
             this.form.ttdpetugas = resp.data?.ttdpetugas
 
             // inject data pasien
             const listpasien = useListKunjunganBpjsStore()
-            const target = listpasien.items?.filter(x => x.norm === resp?.data?.norm)
-            if (target.length) {
-              target[0].ttdpasien = resp.data?.ttdpasien
+            const target = listpasien.items?.find(x => x.norm === resp?.data?.norm)
+            if (target) {
+              target.ttdpasien = resp.data?.ttdpasien
+              target.generalcons = resp.data
+              target.generalcons.pdf = 'generalconsent/' + resp?.data?.norm + '.pdf'
             }
+
+            console.log('inject', target)
 
             // inject data pegawai
             const app = useAplikasiStore()
