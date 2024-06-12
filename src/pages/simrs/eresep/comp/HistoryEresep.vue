@@ -43,236 +43,233 @@
             </q-item-label>
           </div>
           <div
-            class="column q-pa-sm "
-            :style="`height: calc(100vh - ${tinggiDetailPas+79}px);`"
+            class="column q-pa-sm"
           >
-            <q-scroll-area style="height: 100%;">
-              <div
-                v-if="items?.permintaanresep?.length"
-                class="q-mt-sm"
-              >
-                <div class="row items-center">
-                  <div class="col-shrink text-weight-bold">
-                    Non Racikan | {{ items?.noresep }}
-                  </div>
-                  <div class="col-grow">
-                    <q-separator
-                      size="2px"
-                      color="primary"
-                      inset
-                    />
-                  </div>
+            <div
+              v-if="items?.permintaanresep?.length"
+              class="q-mt-sm"
+            >
+              <div class="row items-center">
+                <div class="col-shrink text-weight-bold">
+                  Non Racikan | {{ items?.noresep }}
                 </div>
-                <q-list
-                  separator
-                  bordered
+                <div class="col-grow">
+                  <q-separator
+                    size="2px"
+                    color="primary"
+                    inset
+                  />
+                </div>
+              </div>
+              <q-list
+                separator
+                bordered
+              >
+                <q-item
+                  v-for="(rinc,j) in items?.permintaanresep"
+                  :key="rinc"
                 >
-                  <q-item
-                    v-for="(rinc,j) in items?.permintaanresep"
-                    :key="rinc"
-                  >
-                    <q-item-section style="width: 30%;">
-                      <div class="row">
-                        <div class="col-1">
-                          {{ j+1 }}
+                  <q-item-section style="width: 30%;">
+                    <div class="row">
+                      <div class="col-1">
+                        {{ j+1 }}
+                      </div>
+                      <div class="col-11">
+                        <div class="row text-weight-bold">
+                          {{ rinc?.mobat?.nama_obat }}
                         </div>
-                        <div class="col-11">
-                          <div class="row text-weight-bold">
-                            {{ rinc?.mobat?.nama_obat }}
-                          </div>
-                          <div class="row text-italic f-10">
-                            {{ rinc?.kdobat }}
-                          </div>
-                          <div class="row text-weight-bold f-10">
-                            ( {{ rinc?.mobat?.satuan_k }} )
-                          </div>
+                        <div class="row text-italic f-10">
+                          {{ rinc?.kdobat }}
+                        </div>
+                        <div class="row text-weight-bold f-10">
+                          ( {{ rinc?.mobat?.satuan_k }} )
                         </div>
                       </div>
-                    </q-item-section>
-                    <q-item-section
-                      side
-                      style="width:40%"
-                    >
-                      <div class="row items-center full-width">
-                        <div class="col-8">
-                          <div class="row">
-                            <div class="col-6">
-                              Aturan :
-                            </div>
-                            <div class="col-4">
-                              {{ rinc?.aturan }}
-                            </div>
+                    </div>
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:40%"
+                  >
+                    <div class="row items-center full-width">
+                      <div class="col-8">
+                        <div class="row">
+                          <div class="col-6">
+                            Aturan :
                           </div>
-                          <div class="row q-mt-sm">
-                            <div class="col-6">
-                              Jumlah Obat :
-                            </div>
-                            <div class="col-4">
-                              {{ rinc?.jumlah }}
-                              <!-- <app-input
+                          <div class="col-4">
+                            {{ rinc?.aturan }}
+                          </div>
+                        </div>
+                        <div class="row q-mt-sm">
+                          <div class="col-6">
+                            Jumlah Obat :
+                          </div>
+                          <div class="col-4">
+                            {{ rinc?.jumlah }}
+                            <!-- <app-input
                                 v-model="rinc.jumlah"
                                 outlined
                                 valid
                                 label="Jumlah"
                                 @update:model-value="setJumlah($event,rinc,'jumlah')"
                               /> -->
-                            </div>
                           </div>
-                          <div class="row q-mt-sm">
-                            <div class="col-6">
-                              Konsumsi :
-                            </div>
-                            <div class="col-4">
-                              {{ rinc?.konsumsi }} hari
-                            </div>
+                        </div>
+                        <div class="row q-mt-sm">
+                          <div class="col-6">
+                            Konsumsi :
                           </div>
-                          <div class="row q-mt-sm">
-                            <div class="col-6">
-                              Keterangan :
-                            </div>
-                            <div class="col-4">
-                              {{ rinc?.keterangan }}
-                            </div>
+                          <div class="col-4">
+                            {{ rinc?.konsumsi }} hari
+                          </div>
+                        </div>
+                        <div class="row q-mt-sm">
+                          <div class="col-6">
+                            Keterangan :
+                          </div>
+                          <div class="col-4">
+                            {{ rinc?.keterangan }}
                           </div>
                         </div>
                       </div>
-                    </q-item-section>
-                    <q-item-section
-                      side
-                      style="width:20%"
-                    />
-                  </q-item>
-                </q-list>
-              </div>
+                    </div>
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:20%"
+                  />
+                </q-item>
+              </q-list>
+            </div>
 
-              <div
-                v-if="items?.permintaanracikan?.length"
-                class="q-mt-sm"
-              >
-                <div class="row items-center">
-                  <div class="col-shrink text-weight-bold">
-                    Racikan | {{ items?.noresep }}
-                  </div>
-                  <div class="col-grow">
-                    <q-separator
-                      size="2px"
-                      color="deep-orange"
-                      inset
-                    />
-                  </div>
+            <div
+              v-if="items?.permintaanracikan?.length"
+              class="q-mt-sm"
+            >
+              <div class="row items-center">
+                <div class="col-shrink text-weight-bold">
+                  Racikan | {{ items?.noresep }}
                 </div>
-                <div
-                  v-for="(item,i) in items?.permintaanracikan"
-                  :key="i"
-                >
-                  <div v-if="i === 0">
-                    <div class="row items-center">
-                      <div class="col-shrink q-mr-xs">
-                        {{ item?.namaracikan }}
-                      </div>
-                      <div class="col-shrink q-mr-xs">
-                        <q-chip
-                          square
-                          class="f-10"
-                          color="primary"
-                          text-color="white"
-                          outline
-                        >
-                          {{ item?.tiperacikan }}
-                        </q-chip>
-                      </div>
-                      <div class="col-shrink q-mr-xs text-purple text-weight-bold">
-                        Jumlah {{ item?.jumlahdibutuhkan }}
-                      </div>
-                      <div class="col-shrink q-mr-xs">
-                        ({{ item?.satuan_racik }})
-                      </div>
-                      <div class="col-shrink q-mr-xs text-italic">
-                        {{ item?.aturan }}
-                      </div>
+                <div class="col-grow">
+                  <q-separator
+                    size="2px"
+                    color="deep-orange"
+                    inset
+                  />
+                </div>
+              </div>
+              <div
+                v-for="(item,i) in items?.permintaanracikan"
+                :key="i"
+              >
+                <div v-if="i === 0">
+                  <div class="row items-center">
+                    <div class="col-shrink q-mr-xs">
+                      {{ item?.namaracikan }}
+                    </div>
+                    <div class="col-shrink q-mr-xs">
+                      <q-chip
+                        square
+                        class="f-10"
+                        color="primary"
+                        text-color="white"
+                        outline
+                      >
+                        {{ item?.tiperacikan }}
+                      </q-chip>
+                    </div>
+                    <div class="col-shrink q-mr-xs text-purple text-weight-bold">
+                      Jumlah {{ item?.jumlahdibutuhkan }}
+                    </div>
+                    <div class="col-shrink q-mr-xs">
+                      ({{ item?.satuan_racik }})
+                    </div>
+                    <div class="col-shrink q-mr-xs text-italic">
+                      {{ item?.aturan }}
+                    </div>
 
-                      <div class="col-shrink q-mr-xs">
-                        | Keterangan : {{ item?.keterangan }}
-                      </div>
+                    <div class="col-shrink q-mr-xs">
+                      | Keterangan : {{ item?.keterangan }}
                     </div>
                   </div>
                 </div>
-                <q-list
-                  separator
-                  bordered
+              </div>
+              <q-list
+                separator
+                bordered
+              >
+                <q-item
+                  v-for="(rinc, i) in items?.rincianracik"
+                  :key="i"
                 >
-                  <q-item
-                    v-for="(rinc, i) in items?.rincianracik"
-                    :key="i"
+                  <q-item-section style="width: 40%;">
+                    <div class="row text-weight-bold">
+                      {{ rinc?.mobat?.nama_obat }}
+                    </div>
+                    <div class="row text-italic f-10">
+                      {{ rinc?.kdobat }}
+                    </div>
+                    <div class="row text-weight-bold f-10">
+                      ( {{ rinc?.mobat?.satuan_k }} )
+                    </div>
+                  </q-item-section>
+                  <q-item-section
+                    side
+                    style="width:60%"
                   >
-                    <q-item-section style="width: 40%;">
-                      <div class="row text-weight-bold">
-                        {{ rinc?.mobat?.nama_obat }}
-                      </div>
-                      <div class="row text-italic f-10">
-                        {{ rinc?.kdobat }}
-                      </div>
-                      <div class="row text-weight-bold f-10">
-                        ( {{ rinc?.mobat?.satuan_k }} )
-                      </div>
-                    </q-item-section>
-                    <q-item-section
-                      side
-                      style="width:60%"
-                    >
-                      <div class="row full-width">
-                        <div class="col-8">
-                          <div
-                            v-if="rinc?.tiperacikan==='DTD'"
-                            class="row"
-                          >
-                            <div class="col-6">
-                              Dosis Resep :
-                            </div>
-                            <div class="col-4">
-                              {{ items?.permintaanracikan[i]?.dosismaksimum }}
-                            </div>
+                    <div class="row full-width">
+                      <div class="col-8">
+                        <div
+                          v-if="rinc?.tiperacikan==='DTD'"
+                          class="row"
+                        >
+                          <div class="col-6">
+                            Dosis Resep :
                           </div>
-                          <div
-                            v-if="rinc?.tiperacikan==='DTD'"
-                            class="row q-mt-sm"
-                          >
-                            <div class="col-6">
-                              Dosis Obat :
-                            </div>
-                            <div class="col-4">
-                              {{ items?.permintaanracikan[i]?.mobat?.kekuatan_dosis }}
-                            </div>
+                          <div class="col-4">
+                            {{ items?.permintaanracikan[i]?.dosismaksimum }}
                           </div>
+                        </div>
+                        <div
+                          v-if="rinc?.tiperacikan==='DTD'"
+                          class="row q-mt-sm"
+                        >
+                          <div class="col-6">
+                            Dosis Obat :
+                          </div>
+                          <div class="col-4">
+                            {{ items?.permintaanracikan[i]?.mobat?.kekuatan_dosis }}
+                          </div>
+                        </div>
 
-                          <div class="row q-mt-sm">
-                            <div class="col-6">
-                              Jumlah Resep :
-                            </div>
-                            <div class="col-4">
-                              {{ items?.permintaanracikan[i]?.jumlah }}
-                            </div>
+                        <div class="row q-mt-sm">
+                          <div class="col-6">
+                            Jumlah Resep :
                           </div>
-                          <div class="row q-mt-sm">
-                            <div class="col-6">
-                              Keterangan :
-                            </div>
-                            <div class="col-4">
-                              {{ items?.permintaanracikan[i]?.keteranganx }}
-                            </div>
+                          <div class="col-4">
+                            {{ items?.permintaanracikan[i]?.jumlah }}
+                          </div>
+                        </div>
+                        <div class="row q-mt-sm">
+                          <div class="col-6">
+                            Keterangan :
+                          </div>
+                          <div class="col-4">
+                            {{ items?.permintaanracikan[i]?.keteranganx }}
                           </div>
                         </div>
                       </div>
-                    </q-item-section>
-                    <!-- <q-item-section
+                    </div>
+                  </q-item-section>
+                  <!-- <q-item-section
                           side
                           style="width:20%"
                         />
                       </div> -->
-                  </q-item>
-                </q-list>
-              </div>
-            </q-scroll-area>
+                </q-item>
+              </q-list>
+            </div>
           </div>
           <!-- <template #loading>
             <div class="row justify-center q-my-md">
@@ -336,7 +333,7 @@ const props = defineProps({
 
 // eslint-disable-next-line no-unused-vars
 const emits = defineEmits(['clickBtn'])
-const tinggiDetailPas = ref(160)
+// const tinggiDetailPas = ref(160)
 
 // eslint-disable-next-line no-unused-vars
 function pilihData (row) {
