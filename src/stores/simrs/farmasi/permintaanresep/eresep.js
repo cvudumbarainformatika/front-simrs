@@ -69,7 +69,8 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     counterRacikan: 1,
     listRacikan: [],
     listRincianRacikan: [],
-    resepPasien: []
+    resepPasien: [],
+    historys: []
     // section racikan end---
   }),
   actions: {
@@ -924,6 +925,30 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
           this.loadingHapus = false
           this.obatId = null
         })
+    },
+    async getHistory (norm) {
+      console.log(norm)
+      this.loadingHistory = true
+      const params = { params: { norm } }
+      try {
+        const resp = await api.get('v1/simrs/pelayanan/listresepbynorm', params)
+        console.log('history', resp)
+        if (resp.status === 200) {
+          if (resp.data?.length) {
+            const arr = resp.data
+            this.historyMeta = null
+            this.historys = arr
+          }
+          else {
+            this.historys = []
+          }
+        }
+        this.loadingHistory = false
+      }
+      catch (error) {
+        this.loadingHistory = false
+        // notifErr(error)
+      }
     },
     openDialog (val) {
       Dialog.create({

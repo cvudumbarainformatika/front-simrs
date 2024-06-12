@@ -6,22 +6,44 @@
       <form-resep
         :pasien="props?.pasien"
         :depo="props?.depo"
+        tooltip="History EResep"
+        @open-history="seamless = !seamless"
       />
     </div>
     <div class="col-4 full-height q-pa-xs">
       <listpage />
     </div>
+
+    <app-drawer-right-new
+      :key="props?.pasien"
+      style="width:60%;"
+      :seamless="seamless"
+      :pasien="props?.pasien"
+      @click-btn="clickslideRight"
+    >
+      <template #content>
+        <HistoryEresep
+          :key="props?.pasien"
+          :pasien="props?.pasien"
+          title="HISTORY E-RESEP"
+        />
+      </template>
+    </app-drawer-right-new>
   </div>
 </template>
 
 <script setup>
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
-import { defineAsyncComponent, shallowRef, onUnmounted } from 'vue'
+import { defineAsyncComponent, shallowRef, onUnmounted, ref } from 'vue'
 import FormResep from './comp/FormResep.vue'
+import HistoryEresep from './comp/HistoryEresep.vue'
+
 const props = defineProps({
   pasien: { type: Object, default: null },
   depo: { type: String, default: '' }
 })
+
+const seamless = ref(false)
 
 const listpage = shallowRef(defineAsyncComponent(() => import('./comp/LitsPage.vue')))
 
@@ -35,4 +57,9 @@ onUnmounted(() => {
   store.setForm('jenisresep', '')
   store.resetForm()
 })
+
+const clickslideRight = () => {
+  console.log('ok')
+  seamless.value = !seamless.value
+}
 </script>
