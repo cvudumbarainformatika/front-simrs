@@ -164,7 +164,7 @@ import { formatDouble, dateFullFormat } from 'src/modules/formatter'
 // import { laravelEcho } from 'src/modules/newsockets'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
-import { onMounted } from 'vue'
+import { onUnmounted } from 'vue'
 const store = usePermintaanEResepStore()
 function status (val) {
   let balik = ' Belum ada status'
@@ -216,7 +216,7 @@ function color (val) {
 //     console.log('listen notif', e)
 //   })
 // }
-onMounted(() => {
-  // subscribedChannel()
+onUnmounted(() => {
+  store.noresep = ''
 })
 </script>

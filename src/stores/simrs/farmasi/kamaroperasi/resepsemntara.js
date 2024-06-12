@@ -257,7 +257,7 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
       const reseps = this.pasien?.permintaanobatoperasi
       const resep = reseps.find(x => x.nopermintaan === val)
       if (resep?.flag === '') {
-        this.setForm('nopermintaan', val)
+        // this.setForm('nopermintaan', val)
         this.listBelum = resep
       }
       else {

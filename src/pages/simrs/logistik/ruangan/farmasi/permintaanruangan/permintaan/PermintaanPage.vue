@@ -24,7 +24,7 @@
           <q-btn
             v-if="store.form.no_permintaan"
             flat
-            icon="icon-mat-done"
+            icon="icon-mat-send"
             dense
             color="primary"
             :loading="store.loadingKunci"
@@ -34,7 +34,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Selesai dan Kunci Penerimaan
+              Kirim Permmintaan Ke Depo
             </q-tooltip>
           </q-btn>
         </div>
