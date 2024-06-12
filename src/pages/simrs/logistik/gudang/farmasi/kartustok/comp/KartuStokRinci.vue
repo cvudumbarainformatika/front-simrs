@@ -101,13 +101,13 @@
                       {{ item?.keterangan }}
                     </td>
                     <td class="text-end">
-                      {{ formatRp(item?.masuk ?? 0) }}
+                      {{ formatDouble((item?.masuk ?? 0), 1) }}
                     </td>
                     <td class="text-end">
-                      {{ formatRp(item?.keluar ?? 0) }}
+                      {{ formatDouble((item?.keluar ?? 0),1) }}
                     </td>
                     <td class="text-end">
-                      {{ formatRp(cariHasilAkhirArray(n) ?? 0) }}
+                      {{ formatDouble((cariHasilAkhirArray(n) ?? 0), 1) }}
                     </td>
                   </tr>
                   <tr>
@@ -115,12 +115,15 @@
                       <b>Saldo Akhir</b>
                     </td>
                     <td class="text-end">
-                      <b>{{ formatRp(cariHasilAkhirArray(bentukArrBaru.length)?? 0) }}</b>
+                      <div style="min-height: 30px;" class="f-14">
+                        <b>{{ formatDouble((cariHasilAkhirArray(bentukArrBaru.length)?? 0), 1) }}</b>
+                      </div>
                     </td>
                   </tr>
                 </template>
               </tbody>
             </table>
+            <div style="margin-bottom: 100px;" />
           </q-scroll-area>
         </div>
       </div>
@@ -131,10 +134,11 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { date } from 'quasar'
-import { formatRp } from 'src/modules/formatter'
+import { formatDouble } from 'src/modules/formatter'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
 const app = useAplikasiStore()
+// const index = ref(-1)
 
 const props = defineProps({
   item: {
@@ -209,6 +213,18 @@ const bentukArrBaru = computed(() => {
       total: 0
     }
   })
+
+  const resepracikankeluar = props?.item?.resepkeluarracikan?.map(x => {
+    return {
+      tgl: x?.tgl_permintaan,
+      tanggal: date.formatDate(x?.tgl_permintaan, 'DD, MMM YYYY'),
+      jam: date.formatDate(x?.tgl_permintaan, 'HH:mm'),
+      keterangan: 'Nomor resep ' + x?.noresep + ' (Racikan)',
+      masuk: 0,
+      keluar: parseFloat(x?.jumlah),
+      total: 0
+    }
+  })
   const returresep = props?.item?.resepkeluar?.map(x => {
     const arr = x.retur
     return arr.map(x => {
@@ -229,7 +245,7 @@ const bentukArrBaru = computed(() => {
 
   console.log('ret', app)
 
-  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar, returresep].flat(Infinity)
+  const gabung = [terimalangsung, terimapesan, mutasikeluar, mutasimasuk, resepkeluar, resepracikankeluar, returresep].flat(Infinity)
 
   // const hasil = gabung.length ? gabung?.filter(x => x.masuk !== x.keluar)?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : [] // ini jika yg aneh tdk dimasukkan
   const hasil = gabung.length ? gabung?.sort((a, b) => new Date(a.tgl) - new Date(b.tgl)) : []
@@ -341,6 +357,12 @@ tr:nth-child(odd) {
 
 td:nth-of-type(2) {
   font-style: italic;
+}
+
+tr:hover {
+  background-color: #ffff99;
+  color: $dark;
+  font-weight: bold;
 }
 
 // th:nth-of-type(3),

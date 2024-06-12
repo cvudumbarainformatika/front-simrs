@@ -117,7 +117,14 @@ const columnsx = [
   },
   { name: 'saldo_awal', label: 'Saldo Awal', align: 'right', field: (row) => hitungSaldoAwal(row?.saldoawal), key: 'saldo_awal' },
   { name: 'masuk', label: 'Stok Masuk', align: 'right', field: (row) => (hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row.kd_obat)) },
-  { name: 'keluar', label: 'Stok Keluar', field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar)), align: 'right' },
+  {
+    name: 'keluar',
+    label: 'Stok Keluar',
+    align: 'right',
+    field: (row) => (hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar) +
+      hitungResepRacikanKeluar(row?.resepkeluarracikan)
+    )
+  },
   {
     name: 'stok_akhir',
     label: 'Stok Akhir',
@@ -196,6 +203,12 @@ function hitungResepKeluar (arr) {
   return resepkeluar
 }
 
+function hitungResepRacikanKeluar (arr) {
+  const resepkeluar = arr?.reduce((x, y) => parseFloat(x) + parseFloat(y.jumlah), 0)
+  // console.log('racikan', resepkeluar)
+  return resepkeluar
+}
+
 function returResep (arr, kodeObat) {
   const arrreturResep = arr?.length ? arr.map(x => x.retur)?.reduce((a, b) => a.concat(b), []) : []
   const rincianReturResep = arrreturResep?.length ? arrreturResep?.map(x => x.rinci)?.reduce((a, b) => a.concat(b), []) : []
@@ -209,8 +222,17 @@ function returResep (arr, kodeObat) {
 // }
 
 function hitungTotal (row) {
-  return (hitungSaldoAwal(row?.saldoawal) ?? 0) + (hitungPenerimaan(row?.penerimaanrinci) ?? 0) + (hitungMutasiMasuk(row?.mutasimasuk) ?? 0) + (returResep(row?.resepkeluar) ?? 0) -
-  (hitungMutasiKeluar(row?.mutasikeluar) ?? 0) - hitungResepKeluar(row?.resepkeluar)
+  // const total = hitungSaldoAwal(row?.saldoawal) + (hitungPenerimaan(row?.penerimaanrinci) ?? 0) + (hitungMutasiMasuk(row?.mutasimasuk) ?? 0) + (returResep(row?.resepkeluar) ?? 0) -
+  // (hitungMutasiKeluar(row?.mutasikeluar) ?? 0) - hitungResepKeluar(row?.resepkeluar) - (hitungResepRacikanKeluar(row?.resepkeluarracikan) ?? 0)
+  // eslint-disable-next-line no-unused-vars
+  const awal = hitungSaldoAwal(row?.saldoawal)
+  // eslint-disable-next-line no-unused-vars
+  const masuk = hitungPenerimaan(row?.penerimaanrinci) + hitungMutasiMasuk(row?.mutasimasuk) + returResep(row?.resepkeluar, row?.kd_obat)
+  // eslint-disable-next-line no-unused-vars
+  const keluar = hitungMutasiKeluar(row?.mutasikeluar) + hitungResepKeluar(row?.resepkeluar) + hitungResepRacikanKeluar(row?.resepkeluarracikan)
+  // eslint-disable-next-line no-unused-vars
+  const total = awal + masuk - keluar
+  return total
 }
 
 function exportTable () {
