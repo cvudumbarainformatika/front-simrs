@@ -660,9 +660,9 @@
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
-          <!-- <q-btn color="negative">
-            Reset Resep
-          </q-btn> -->
+          <q-btn color="teal" @click="emits('openTemplate')">
+            Pembuatan Template
+          </q-btn>
         </div>
         <div>
           <q-btn
@@ -762,7 +762,7 @@ import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
 
-const emits = defineEmits(['openHistory'])
+const emits = defineEmits(['openHistory', 'openTemplate'])
 
 const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
 

@@ -56,6 +56,7 @@
           {{ scope.opt.satuankecil }}
         </div>
       </q-item>
+      <q-separator />
     </template>
     <template #no-option>
       <q-item>
