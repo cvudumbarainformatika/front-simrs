@@ -88,13 +88,13 @@ export const useResepPermintaanOperasiStore = defineStore('resep_permintaan_oper
         })
       }
       this.noreseps = filterDuplicateArrays(noreseps)
-      if (!this.sudahs?.length) {
-        this.noresep = 'BARU'
-        this.setForm('noresep', '')
-      }
-      else {
-        this.noresep = this.noreseps[0] ?? 'BARU'
-      }
+      // if (!this.sudahs?.length) {
+      //   this.noresep = 'BARU'
+      //   this.setForm('noresep', '')
+      // }
+      // else {
+      //   this.noresep = this.noreseps[0] ?? 'BARU'
+      // }
       this.noreseps.unshift('BARU')
       this.setResep(this.noresep)
       // console.log('belum', this.rincBelId, 'sudah', this.rincSudId)

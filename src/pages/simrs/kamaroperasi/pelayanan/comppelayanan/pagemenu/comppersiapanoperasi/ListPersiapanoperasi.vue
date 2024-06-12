@@ -154,6 +154,7 @@ function color (val) {
 // }
 onUnmounted(() => {
   store.nopermintaan = ''
+  store.listSudah = null
   // subscribedChannel()
 })
 </script>
