@@ -139,7 +139,7 @@ const props = defineProps({
 const emits = defineEmits(['clickBtn'])
 
 // eslint-disable-next-line no-unused-vars
-function pilihData(row) {
+function pilihData (row) {
   // console.log(row)
   store.pilihHistory(row)
 }
@@ -169,48 +169,58 @@ onMounted(() => {
 //   // }
 // }
 
-function getYT(val) {
+function getYT (val) {
   if (val === 1 || val === '1') {
     return 'Ya'
-  } else if (val === 0 || val === '0') {
+  }
+  else if (val === 0 || val === '0') {
     return 'Tidak'
-  } else {
+  }
+  else {
     return '-'
   }
 }
 
-function iconNyeri(it) {
+function iconNyeri (it) {
   const val = typeof it === 'string' ? (isNaN(parseInt(it)) ? 0 : parseInt(it)) : 0
   // console.log('val nyeri', val)
   // console.log('anu nyeri', anu)
   let icon = 'icon-my-emoticon-excited-outline'
   if (val < 2) {
     icon = 'icon-my-emoticon-excited-outline'
-  } else if (val >= 2 && val < 4) {
+  }
+  else if (val >= 2 && val < 4) {
     icon = 'icon-my-emoticon-outline'
-  } else if (val >= 4 && val < 6) {
+  }
+  else if (val >= 4 && val < 6) {
     icon = 'icon-my-emoticon-neutral-outline'
-  } else if (val >= 6 && val < 8) {
+  }
+  else if (val >= 6 && val < 8) {
     icon = 'icon-my-emoticon-confused-outline'
-  } else if (val >= 8 && val < 10) {
+  }
+  else if (val >= 8 && val < 10) {
     icon = 'icon-my-emoticon-angry-outline'
-  } else if (val === 10) {
+  }
+  else if (val === 10) {
     icon = 'icon-my-emoticon-cry-outline'
   }
 
   return icon
 }
 
-function setKeteranganSkornyeri(it) {
+function setKeteranganSkornyeri (it) {
   const val = typeof it === 'string' ? (isNaN(parseInt(it)) ? 0 : parseInt(it)) : 0
   let result = 'tidak ada nyeri'
   if (val === 0) {
     result = 'tidak ada nyeri'
-  } else if (val > 0 && val <= 3) {
+  }
+  else if (val > 0 && val <= 3) {
     result = 'nyeri ringan'
-  } else if (val > 3 && val <= 6) {
+  }
+  else if (val > 3 && val <= 6) {
     result = 'nyeri sedang'
-  } else if (val > 6 && val <= 10) {
+  }
+  else if (val > 6 && val <= 10) {
     result = 'nyeri berat'
   }
 
