@@ -22,8 +22,10 @@
       <div class="col-auto" :style="`width: calc(90% / 5);`">
         Subtotal
       </div>
-      <div class="col-auto" style="width: 5%;">
-        Aksi
+      <div class="col-auto text-right" style="width: 5%;">
+        <div class="q-mr-sm">
+          #
+        </div>
       </div>
     </div>
     <div v-for="(item,i) in store.items" :key="item">
@@ -82,11 +84,18 @@
         <div class="col-auto" style="width: 5%;">
           <div class="row justify-end">
             <div class="q-pr-xs">
-              Aksi
+              <q-checkbox
+                v-model="item.checked"
+                size="xs"
+                @update:model-value="setCheck($event, item)"
+              />
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="row justify-end q-mr-md q-mt-md">
+      <q-btn label="Simpan" no-caps dense color="primary" @click="simpan" />
     </div>
   </div>
 </template>
@@ -94,6 +103,23 @@
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPemakaianObatKonsinyasiStore } from 'src/stores/simrs/farmasi/konsinyasi/listkonsinyasi'
 const store = useListPemakaianObatKonsinyasiStore()
+function setCheck (evt, item) {
+  // console.log('ref')
+  // console.log('evt', evt)
+  // console.log('item', item)
+  if (item.checked) {
+    // item.dipakai = item.dipakai ?? 0
+    store.form.items.push(item)
+  }
+  else {
+    console.log('not checked', store.form)
+    const index = store.form.items.findIndex(a => a.id === item.id)
+    if (index >= 0) store.form.items.splice(index, 1)
+  }
+}
+function simpan () {
+  console.log('simpan', store.form)
+}
 </script>
 <style lang="scss" scoped>
 .tlr{

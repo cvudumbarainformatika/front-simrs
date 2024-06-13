@@ -30,6 +30,7 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
     },
     metaniItem () {
       this.items.forEach(item => {
+        item.checked = false
         if (item.header) {
           const resep = item?.resep?.find(x => x.noreg === item.header.noreg)
           if (resep) item.header.resep = resep

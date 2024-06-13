@@ -341,7 +341,7 @@
                     <div class="row text-weight-bold text-deep-orange">
                       {{ rinc?.mobat?.nama_obat }}
                     </div>
-                    <div class="row f-10">
+                    <div v-if="rinc?.kandungan" class="row f-10">
                       ( {{ rinc?.kandungan }} )
                     </div>
                     <div class="row text-italic f-10">

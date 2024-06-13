@@ -231,19 +231,19 @@
                     class="text-weight-bold q-mr-sm"
                     :class="rin.masterobat.status_fornas === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : 'Non-Fornas' }}
+                    {{ rin.masterobat.status_fornas === '1' ? 'Fronas' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
                     :class="rin.masterobat.status_forkid === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : 'Non-Forkit' }}
+                    {{ rin.masterobat.status_forkid === '1' ? 'Forkit' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold  q-mr-sm"
                     :class="rin.masterobat.status_generik === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : 'Non-Generik' }}
+                    {{ rin.masterobat.status_generik === '1' ? 'Generik' : '' }}
                   </div>
                 </div>
                 <div class="row f-10 no-wrap q-mt-xs anu">
@@ -251,13 +251,13 @@
                     class=" text-weight-bold q-mr-sm"
                     :class="rin.masterobat.status_kronis === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_kronis === '1' ? 'Kronis' : 'Non-Kronis' }}
+                    {{ rin.masterobat.status_kronis === '1' ? 'Kronis' : '' }}
                   </div>
                   <div
                     class=" text-weight-bold q-mr-sm"
                     :class="rin.masterobat.status_prb === '1' ? 'text-green' : 'text-negative'"
                   >
-                    {{ rin.masterobat.status_prb === '1' ? 'PRB' : 'Non-PRB' }}
+                    {{ rin.masterobat.status_prb === '1' ? 'PRB' : '' }}
                   </div>
                 </div>
               </div>

@@ -40,6 +40,14 @@
             Iter s/d : {{ dateFullFormat( store?.pasien?.newapotekrajal[store.indexRacikan]?.iter_expired) }}
           </div>
         </div>
+        <div class="row items-center q-ml-md justify-between">
+          <div class="f-10">
+            Tgl Kirim
+          </div>
+          <div class="text-italic f-10">
+            {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
+          </div>
+        </div>
         <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
         <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
           <q-item
@@ -160,7 +168,7 @@
 </template>
 
 <script setup>
-import { formatDouble, dateFullFormat } from 'src/modules/formatter'
+import { formatDouble, dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { laravelEcho } from 'src/modules/newsockets'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
@@ -218,5 +226,6 @@ function color (val) {
 // }
 onUnmounted(() => {
   store.noresep = ''
+  store.indexRacikan = -1
 })
 </script>
