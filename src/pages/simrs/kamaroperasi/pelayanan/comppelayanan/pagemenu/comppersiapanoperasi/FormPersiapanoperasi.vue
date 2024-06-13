@@ -1,4 +1,4 @@
-f<template>
+<template>
   <div class="bg-white full-height column">
     <div class="col-auto bg-primary text-white">
       <div class="q-pa-sm">
@@ -156,44 +156,6 @@ f<template>
                     @update:model-value="setJumlah"
                   />
                 </div>
-                <!--
-                <div
-                  class="col-4 text-right"
-                >
-                  <q-select
-                    ref="refSigna"
-                    v-model="signa"
-                    label="Aturan Pakai"
-                    use-input
-                    dense
-                    standout="bg-yellow-3"
-                    option-label="signa"
-                    outlined
-                    :rules="[sigaValid]"
-                    lazy-rules
-                    no-error-icon
-                    hide-bottom-space
-                    hide-dropdown-icon
-                    :options="store.signas"
-                    @new-value="signaCreateValue"
-                    @update:model-value="signaSelected"
-                    @keyup.enter.stop="signaEnter"
-                  />
-                </div>
-                <div
-                  class="col text-right"
-                >
-                  <q-input
-                    ref="refKet"
-                    v-model="store.form.keterangan"
-                    label="Keterangan"
-                    dense
-                    standout="bg-yellow-3"
-                    outlined
-                    class="full-width"
-                    @keyup.enter="ketEnter"
-                  />
-                </div> -->
                 <div
                   class="col-shrink text-right"
                 >
@@ -240,17 +202,6 @@ f<template>
                   >
                     {{ item?.jumlah_minta }}
                   </div>
-                  <!-- <div
-                    class="col-2 text-right"
-                  >
-                    {{ item?.aturan }}
-                  </div> -->
-                  <!-- <div
-                    class="col-3 text-right"
-                  >
-                    {{ formatDouble( item?.harga) }}
-                  </div>
-                -->
                   <div
                     class="col text-right"
                   >
@@ -338,22 +289,7 @@ f<template>
                   </div>
                 </q-item-section>
               </template>
-              <!-- <q-item>
-                <q-item-section />
-                <q-item-section>
-                  <div class="text-right q-mr-sm">
-                    <q-btn
-                      color="primary"
-                      dense
-                      no-caps
-                      :disable="store.loading || store.loadingkirim"
-                      @click="racikanTambah(item)"
-                    >
-                      Tambah
-                    </q-btn>
-                  </div>
-                </q-item-section>
-              </q-item> -->
+
               <q-item
                 v-for="(obat, j) in item?.rincian"
                 :key="j"

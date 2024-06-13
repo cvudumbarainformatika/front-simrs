@@ -214,7 +214,7 @@
 <script setup>
 import { dateFullFormat } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
 
 const store = useResepPermintaanOperasiStore()
@@ -283,4 +283,7 @@ function selesai () {
   store.selesai(itemnya)
   isOpen.value = false
 }
+onUnmounted(() => {
+  store.noresep = 'BARU'
+})
 </script>

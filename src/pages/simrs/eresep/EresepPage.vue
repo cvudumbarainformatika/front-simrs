@@ -2,17 +2,26 @@
   <div
     class="row full-height full-width bg-grey-4 shadow-1"
   >
-    <div class="col-8 full-height q-pa-xs">
-      <form-resep
-        :pasien="props?.pasien"
-        :depo="props?.depo"
-        tooltip="History EResep"
-        @open-history="seamless = !seamless"
-      />
-    </div>
-    <div class="col-4 full-height q-pa-xs">
-      <listpage />
-    </div>
+    <Transition>
+      <div v-if="!temp" class="fit row">
+        <div class="col-8 full-height q-pa-xs">
+          <form-resep
+            :pasien="props?.pasien"
+            :depo="props?.depo"
+            tooltip="History EResep"
+            @open-history="seamless = !seamless"
+            @open-template="temp = !temp"
+          />
+        </div>
+        <div class="col-4 full-height q-pa-xs">
+          <listpage />
+        </div>
+      </div>
+
+      <div v-else class="fit">
+        <EresepTemplatePage :pasien="props?.pasien" :depo="props?.depo" :key="pasien" @back="temp = !temp" />
+      </div>
+    </Transition>
 
     <app-drawer-right-new
       :key="props?.pasien"
@@ -44,8 +53,10 @@ const props = defineProps({
 })
 
 const seamless = ref(false)
+const temp = ref(false)
 
 const listpage = shallowRef(defineAsyncComponent(() => import('./comp/LitsPage.vue')))
+const EresepTemplatePage = defineAsyncComponent(() => import('./EresepTemplatePage.vue'))
 
 const store = usePermintaanEResepStore()
 onUnmounted(() => {
@@ -59,7 +70,7 @@ onUnmounted(() => {
 })
 
 const clickslideRight = () => {
-  console.log('ok')
+  // console.log('ok')
   seamless.value = !seamless.value
 }
 </script>

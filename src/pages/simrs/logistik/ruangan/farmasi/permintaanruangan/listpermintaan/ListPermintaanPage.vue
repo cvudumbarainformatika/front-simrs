@@ -201,7 +201,7 @@
           </q-btn>
           <q-btn
             flat
-            icon="icon-mat-lock_open"
+            icon="icon-mat-send"
             dense
             color="green"
             :loading="permintaan.loadingKunci && row.no_permintaan === toloadBeli"
@@ -211,7 +211,7 @@
               class="primary"
               :offset="[10, 10]"
             >
-              Permintaan Depo sudah selesai dan siap di kunci
+              Permintaan sudah selesai dan siap di kirim ke Depo
             </q-tooltip>
           </q-btn>
         </div>
@@ -350,13 +350,13 @@ const store = useListPermintaanRuanganStore()
 const permintaan = useFarmasiPermintaanRuanganStore()
 const apps = useAplikasiStore()
 
-function toPrint(val) {
+function toPrint (val) {
   store.dataToPrint = val
   val.expand = !val.expand
   val.highlight = !val.highlight
   store.isOpen = true
 }
-function tambah(val) {
+function tambah (val) {
   console.log('tambah', val)
   val.expand = !val.expand
   val.highlight = !val.highlight
@@ -475,17 +475,19 @@ function hapusRinci (row, val) {
     toloadBeli.value = ''
   })
 }
-function dari(val) {
+function dari (val) {
   const rua = apps.ruangs.find(x => x.kode === val)
   if (rua) {
     return rua?.uraian
-  } else return val
+  }
+  else return val
 }
-function tujuan(val) {
+function tujuan (val) {
   const gud = apps.gudangs.find(x => x.kode === val)
   if (gud) {
     return gud?.nama
-  } else return val
+  }
+  else return val
 }
 function color (val) {
   switch (val) {
@@ -554,7 +556,8 @@ function label (val) {
 onMounted(() => {
   if (apps?.user?.kdruangansim) {
     store.setParam('kddepo', apps?.user?.kdruangansim)
-  } else if (apps?.user?.pegawai?.kdruangansim) {
+  }
+  else if (apps?.user?.pegawai?.kdruangansim) {
     const ru = apps?.user?.pegawai?.kdruangansim.split('|')
     if (ru.length === 1) {
       store.setParam('kddepo', apps?.user?.pegawai?.kdruangansim)
