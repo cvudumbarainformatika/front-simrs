@@ -1,24 +1,29 @@
 <template>
-  <div class="bg-white full-height column">
-    <q-bar class="col-auto bg-teal text-white">
-      <div class="q-py-sm f-14 ">
-        List Nomor Resep
-      </div>
-      <q-space />
-      <div class="q-py-xs">
-        <q-select
-          v-model="store.noresep"
-          outlined
-          standout="bg-yellow-3"
-          bg-color="white"
-          dense
-          :options="store.noreseps"
-          :display-value="`${store.noresep === null || store.noresep === '' || store.noresep === 'BARU' ? 'BARU' : store.noresep}`"
-          style="min-width: 200px;"
-          @update:model-value="store.setResep"
-        />
-      </div>
-    </q-bar>
+  <div
+    class="bg-white full-height"
+    style="overflow: scroll;"
+  >
+    <div class="row bg-teal text-white">
+      <q-bar class=" col-12 bg-teal text-white">
+        <div class="q-py-sm f-14 ">
+          List Nomor Resep
+        </div>
+        <q-space />
+        <div class="q-py-xs">
+          <q-select
+            v-model="store.noresep"
+            outlined
+            standout="bg-yellow-3"
+            bg-color="white"
+            dense
+            :options="store.noreseps"
+            :display-value="`${store.noresep === null || store.noresep === '' || store.noresep === 'BARU' ? 'BARU' : store.noresep}`"
+            style="min-width: 200px;"
+            @update:model-value="store.setResep"
+          />
+        </div>
+      </q-bar>
+    </div>
     <template v-if="store?.indexRacikan>=0 && store?.pasien?.newapotekrajal">
       <div
         v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
@@ -226,6 +231,6 @@ function color (val) {
 // }
 onUnmounted(() => {
   store.noresep = ''
-  store.indexRacikan = -1
+  this.indexRacikan = -1
 })
 </script>
