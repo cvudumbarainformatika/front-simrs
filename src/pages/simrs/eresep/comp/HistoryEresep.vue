@@ -49,17 +49,36 @@
               v-if="items?.permintaanresep?.length"
               class="q-mt-sm"
             >
-              <div class="row items-center">
-                <div class="col-shrink text-weight-bold">
-                  Non Racikan | {{ items?.noresep }}
+              <div class="row items-center q-mb-sm">
+                <div class="col">
+                  <div class="text-weight-bold" v-if="items?.poli">
+                    Non Racikan | {{ items?.noresep }} ({{ items?.poli?.rs2 }})
+                  </div>
+                  <div class="text-weight-bold" v-else>
+                    Non Racikan | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }})
+                  </div>
                 </div>
-                <div class="col-grow">
-                  <q-separator
-                    size="2px"
-                    color="primary"
-                    inset
-                  />
-                </div>
+                <!-- <div class="col-auto">
+                  <q-btn
+                    rounded
+                    push
+                    label="Copy resep"
+                    class="f-12 q-mr-sm"
+                    color="green"
+                    text-color="white"
+                    icon="icon-mat-copy_all"
+                    @click="copyResep(store?.historys[index])"
+                  >
+                    <q-tooltip
+                      class="primary"
+                      :offset="[10, 10]"
+                      anchor="top right"
+                      self="top left"
+                    >
+                      Copy resep
+                    </q-tooltip>
+                  </q-btn>
+                </div> -->
               </div>
               <q-list
                 separator
@@ -318,7 +337,9 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 // eslint-disable-next-line no-unused-vars
 import { humanDate } from 'src/modules/formatter'
 // import { pathImg } from 'src/boot/axios'
+// import { useAplikasiStore } from 'src/stores/app/aplikasi'
 
+// const apps = useAplikasiStore()
 const store = usePermintaanEResepStore()
 const props = defineProps({
   pasien: {
@@ -340,6 +361,47 @@ function pilihData (row) {
   // console.log(row)
   store.pilihHistory(row)
 }
+
+// function copyResep (val) {
+//   console.log(val)
+//   const resep = val?.rincian
+//   if (resep.length) {
+//     resep.forEach(async res => {
+//       store.setForm('aturan', res?.aturan)
+//       store.setForm('diagnosa', val?.diagnosa)
+//       store.setForm('dokter', val?.dokter?.kdpegsimrs)
+//       store.setForm('forkit', res?.forkit)
+//       store.setForm('fornas', res?.fornas)
+//       store.setForm('generik', res?.generik)
+//       store.setForm('groupsistembayar', val?.sistembayar?.groups)
+//       store.setForm('jumlah_diminta', res?.jumlah)
+//       store.setForm('jumlahdosis', res?.jumlah)
+//       store.setForm('kandungan', res?.kandungan)
+//       store.setForm('kdruangan', val?.ruangan)
+//       store.setForm('keterangan', res?.keterangan)
+//       store.setForm('kode50', res?.kode50)
+//       store.setForm('kode108', res?.kode108)
+//       store.setForm('kodedepo', val?.depo)
+//       store.setForm('kodeincbg', val?.diagnosa)
+//       store.setForm('kodeobat', res?.kdobat)
+//       store.setForm('konsumsi', res?.konsumsi)
+//       store.setForm('noreg', res?.noreg)
+//       store.setForm('norm', val?.norm)
+//       store.setForm('satuan_kcl', res?.mobat?.satuan_k)
+//       store.setForm('sistembayar', val?.sistembayar?.rs1)
+//       store.setForm('stokalokasi', val?.norm)
+//       store.setForm('tagihanrs', val?.tagihanrs)
+//       store.setForm('tarifina', val?.tarifina)
+//       store.setForm('tiperesep', 'normal')
+//       store.setForm('uraian50', res?.uraian50)
+//       store.setForm('uraian108', res?.uraian108)
+//       store.setForm('uraianinacbg', val?.uraianinacbg)
+
+//       const form = store.form
+//       await store.simpanObat(form)
+//     })
+//   }
+// }
 
 onMounted(() => {
   // console.log('onMounted')
