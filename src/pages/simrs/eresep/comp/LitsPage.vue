@@ -29,7 +29,15 @@
         v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
         class=""
       >
-        <div class="row items-center q-my-md q-ml-md">
+        <div class="row items-center  q-mt-md q-mx-md justify-between">
+          <div class="f-10">
+            {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama }}
+          </div>
+          <div class="text-italic f-10">
+            {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
+          </div>
+        </div>
+        <div class="row items-center q-mb-md q-ml-md">
           <div>
             <q-chip
               square
@@ -45,14 +53,7 @@
             Iter s/d : {{ dateFullFormat( store?.pasien?.newapotekrajal[store.indexRacikan]?.iter_expired) }}
           </div>
         </div>
-        <div class="row items-center q-ml-md justify-between">
-          <div class="f-10">
-            {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama }}
-          </div>
-          <div class="text-italic f-10">
-            {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
-          </div>
-        </div>
+
         <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
         <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
           <q-item
