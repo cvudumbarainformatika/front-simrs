@@ -47,7 +47,7 @@
         </div>
         <div class="row items-center q-ml-md justify-between">
           <div class="f-10">
-            Tgl Kirim
+            {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama }}
           </div>
           <div class="text-italic f-10">
             {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
