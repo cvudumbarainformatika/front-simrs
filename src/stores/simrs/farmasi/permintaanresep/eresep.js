@@ -70,7 +70,9 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     listRacikan: [],
     listRincianRacikan: [],
     resepPasien: [],
-    historys: []
+    historys: [],
+    statusCopied: [],
+    messageCopied: []
     // section racikan end---
   }),
   actions: {
@@ -949,6 +951,64 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
         this.loadingHistory = false
         // notifErr(error)
       }
+    },
+
+    // BARU
+    simpanCopyResep (payload, indexform, indexlist) {
+      const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === this.form?.noresep)
+      if (resep) {
+        if (resep?.flag !== '') this.form.noresep = ''
+      }
+
+      console.log('obat', this?.pasien?.newapotekrajal)
+
+      this.loading = true
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/pelayanan/copiresep', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan ', resp?.data)
+            notifSuccess(resp)
+
+            if (!this.form.noresep || this.form.noresep === '' || this.noresep !== resp?.data?.nota) {
+              this.noreseps.push(resp?.data?.nota)
+              this.noresep = resp?.data?.nota
+            }
+            this.pasien.newapotekrajal = resp?.data?.newapotekrajal
+            this.indexRacikan = this.pasien.newapotekrajal.findIndex(x => x.noresep === resp?.data?.nota)
+
+            this.resetForm()
+            this.setForm('noresep', resp?.data?.nota)
+
+            this.setForm('lanjuTr', '')
+            resolve(resp)
+            this.cariObat()
+            const key = `${indexlist}-${indexform}`
+            // Update the status for each combination of index and j
+            this.statusCopied[key] = true //
+            setTimeout(() => {
+              // Delete the status after timeout
+              delete this.statusCopied[key]
+              // To trigger reactivity in Vue 2, you might also need to force an update
+              // this.$forceUpdate(); // Uncomment this line if necessary
+            }, 30000)
+          })
+          .catch(error => {
+            console.error('Error in simpanCopyResep:', error)
+            this.loading = false
+            const key = `${indexlist}-${indexform}`
+            // Update the status for each combination of index and j
+            this.statusCopied[key] = false //
+            this.messageCopied[key] = error?.response?.data?.message
+            setTimeout(() => {
+              // Delete the status after timeout
+              delete this.statusCopied[key]
+              // To trigger reactivity in Vue 2, you might also need to force an update
+              // this.$forceUpdate(); // Uncomment this line if necessary
+            }, 30000)
+            reject(error)
+          })
+      })
     },
     openDialog (val) {
       Dialog.create({

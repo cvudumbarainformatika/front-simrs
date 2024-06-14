@@ -52,13 +52,13 @@
               <div class="row items-center q-mb-sm">
                 <div class="col">
                   <div class="text-weight-bold" v-if="items?.poli">
-                    Non Racikan | {{ items?.noresep }} ({{ items?.poli?.rs2 }})
+                    Non Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.poli?.rs2 }})
                   </div>
                   <div class="text-weight-bold" v-else>
-                    Non Racikan | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }})
+                    Non Racikan | {{ items?.tiperesep }} | {{ items?.noresep }} ({{ items?.ruanganranap?.rs2 }})
                   </div>
                 </div>
-                <!-- <div class="col-auto">
+                <div class="col-auto">
                   <q-btn
                     rounded
                     push
@@ -67,7 +67,7 @@
                     color="green"
                     text-color="white"
                     icon="icon-mat-copy_all"
-                    @click="copyResep(store?.historys[index])"
+                    @click="copyResep(store?.historys[index], index)"
                   >
                     <q-tooltip
                       class="primary"
@@ -78,7 +78,7 @@
                       Copy resep
                     </q-tooltip>
                   </q-btn>
-                </div> -->
+                </div>
               </div>
               <q-list
                 separator
@@ -108,7 +108,7 @@
                   </q-item-section>
                   <q-item-section
                     side
-                    style="width:40%"
+                    style="width:30%"
                   >
                     <div class="row items-center full-width">
                       <div class="col-8">
@@ -154,10 +154,14 @@
                       </div>
                     </div>
                   </q-item-section>
-                  <q-item-section
-                    side
-                    style="width:20%"
-                  />
+                  <q-item-section side style="width:10%">
+                    <div v-if="store.statusCopied[`${index}-${j}`] === true" class="row col-6 items-center text-green">
+                      Copy resep berhasil!
+                    </div>
+                    <div v-if="store.statusCopied[`${index}-${j}`] === false" class="row col-6 items-center text-red">
+                      Copy resep gagal! ({{ store.messageCopied[`${index}-${j}`] }})
+                    </div>
+                  </q-item-section>
                 </q-item>
               </q-list>
             </div>
@@ -338,6 +342,7 @@ import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanres
 import { humanDate } from 'src/modules/formatter'
 // import { pathImg } from 'src/boot/axios'
 // import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { notifErrVue } from 'src/modules/utils'
 
 // const apps = useAplikasiStore()
 const store = usePermintaanEResepStore()
@@ -351,7 +356,7 @@ const props = defineProps({
     default: 'History'
   }
 })
-
+// const signa = ref('')
 // eslint-disable-next-line no-unused-vars
 const emits = defineEmits(['clickBtn'])
 // const tinggiDetailPas = ref(160)
@@ -362,46 +367,74 @@ function pilihData (row) {
   store.pilihHistory(row)
 }
 
-// function copyResep (val) {
-//   console.log(val)
-//   const resep = val?.rincian
-//   if (resep.length) {
-//     resep.forEach(async res => {
-//       store.setForm('aturan', res?.aturan)
-//       store.setForm('diagnosa', val?.diagnosa)
-//       store.setForm('dokter', val?.dokter?.kdpegsimrs)
-//       store.setForm('forkit', res?.forkit)
-//       store.setForm('fornas', res?.fornas)
-//       store.setForm('generik', res?.generik)
-//       store.setForm('groupsistembayar', val?.sistembayar?.groups)
-//       store.setForm('jumlah_diminta', res?.jumlah)
-//       store.setForm('jumlahdosis', res?.jumlah)
-//       store.setForm('kandungan', res?.kandungan)
-//       store.setForm('kdruangan', val?.ruangan)
-//       store.setForm('keterangan', res?.keterangan)
-//       store.setForm('kode50', res?.kode50)
-//       store.setForm('kode108', res?.kode108)
-//       store.setForm('kodedepo', val?.depo)
-//       store.setForm('kodeincbg', val?.diagnosa)
-//       store.setForm('kodeobat', res?.kdobat)
-//       store.setForm('konsumsi', res?.konsumsi)
-//       store.setForm('noreg', res?.noreg)
-//       store.setForm('norm', val?.norm)
-//       store.setForm('satuan_kcl', res?.mobat?.satuan_k)
-//       store.setForm('sistembayar', val?.sistembayar?.rs1)
-//       store.setForm('stokalokasi', val?.norm)
-//       store.setForm('tagihanrs', val?.tagihanrs)
-//       store.setForm('tarifina', val?.tarifina)
-//       store.setForm('tiperesep', 'normal')
-//       store.setForm('uraian50', res?.uraian50)
-//       store.setForm('uraian108', res?.uraian108)
-//       store.setForm('uraianinacbg', val?.uraianinacbg)
+function copyResep (val, indexlist) {
+  console.log('payload form', val)
+  const resep = val?.rincian
 
-//       const form = store.form
-//       await store.simpanObat(form)
-//     })
-//   }
-// }
+  if (resep?.length) {
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+    const processResep = async () => {
+      for (const [indexform, res] of resep.entries()) {
+        try {
+          store.setForm('aturan', res?.aturan)
+          store.setForm('diagnosa', val?.diagnosa)
+          store.setForm('dokter', val?.dokter?.kdpegsimrs)
+          store.setForm('forkit', res?.forkit)
+          store.setForm('fornas', res?.fornas)
+          store.setForm('generik', res?.generik)
+          store.setForm('groupsistembayar', val?.sistembayar?.groups)
+          store.setForm('jumlah_diminta', res?.jumlah)
+          store.setForm('jumlahdosis', res?.jumlah)
+          store.setForm('kandungan', res?.kandungan)
+          store.setForm('kdruangan', val?.ruangan)
+          store.setForm('keterangan', res?.keterangan)
+          store.setForm('kode50', res?.kode50)
+          store.setForm('kode108', res?.kode108)
+          store.setForm('kodedepo', val?.depo)
+          store.setForm('kodeincbg', val?.diagnosa)
+          store.setForm('kodeobat', res?.kdobat)
+          store.setForm('konsumsi', res?.konsumsi)
+          store.setForm('noreg', res?.noreg)
+          store.setForm('norm', val?.norm)
+          store.setForm('satuan_kcl', res?.mobat?.satuan_k)
+          store.setForm('sistembayar', val?.sistembayar?.rs1)
+          store.setForm('stokalokasi', val?.norm)
+          store.setForm('tagihanrs', val?.tagihanrs)
+          store.setForm('tarifina', val?.tarifina)
+          store.setForm('uraian50', res?.uraian50)
+          store.setForm('uraian108', res?.uraian108)
+          store.setForm('uraianinacbg', val?.uraianinacbg)
+
+          if (store.form.tiperesep === 'iter') {
+            store.setForm('iter_jml', val?.iter_jml)
+          }
+
+          if (val?.tiperesep !== store.form.tiperesep) {
+            store.setForm('tiperesep', store.form.tiperesep)
+            notifErrVue('Maaf tipe resep berbeda...!')
+          }
+          else {
+            store.setForm('tiperesep', val?.tiperesep)
+            const form = store.form
+            await store.simpanCopyResep(form, indexform, indexlist)
+          }
+        }
+        catch (error) {
+          console.log(`Error saving form data for res index ${indexform}:`, res, error)
+        }
+
+        // Add delay between API calls
+        await delay(100) // Delay in milliseconds, here it's set to 500 milliseconds (0.5 seconds)
+      }
+    }
+
+    processResep()
+  }
+  else {
+    console.log('No resep data available.')
+  }
+}
 
 onMounted(() => {
   // console.log('onMounted')
