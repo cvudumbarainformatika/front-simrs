@@ -231,6 +231,6 @@ function color (val) {
 // }
 onUnmounted(() => {
   store.noresep = ''
-  this.indexRacikan = -1
+  store.indexRacikan = -1
 })
 </script>
