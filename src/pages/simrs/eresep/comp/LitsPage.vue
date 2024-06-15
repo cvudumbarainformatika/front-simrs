@@ -30,7 +30,7 @@
         class=""
       >
         <div class="row items-center  q-mt-md q-mx-md justify-between">
-          <div class="f-10">
+          <div v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama" class="f-10">
             {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama }}
           </div>
           <div class="text-italic f-10">
