@@ -10,6 +10,7 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
     loading: false,
     loadingSimpan: false,
     loadingDistribusi: false,
+    loadingBatalOperasi: false,
     items: [],
     meta: {},
     params: {
@@ -136,6 +137,28 @@ export const useDistribusiPersiapanOperasiStore = defineStore('distribusi_persia
           })
           .catch(() => {
             this.loadingSimpan = false
+            val.loading = false
+          })
+      })
+    },
+    batalOperasi (val) {
+      this.loadingBatalOperasi = true
+      val.loading = true
+      const form = {
+        id: val?.id
+      }
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/obatoperasi/batal-operasi', form)
+          .then(resp => {
+            this.loadingBatalOperasi = false
+            val.loading = false
+            console.log('batal', resp)
+            notifSuccess(resp)
+            this.getPermintaan()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingBatalOperasi = false
             val.loading = false
           })
       })

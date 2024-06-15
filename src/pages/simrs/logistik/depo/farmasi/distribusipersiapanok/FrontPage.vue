@@ -181,7 +181,8 @@
       </template>
       <template #cell-act="{ row }">
         <div class="row">
-          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center">
+          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center justify-between" style="min-width: 200px;">
+            <!-- print -->
             <div class="col-auto">
               <q-btn
                 round
@@ -199,7 +200,8 @@
                 </q-tooltip>
               </q-btn>
             </div>
-            <div v-if="row.flag==='2'" class="col-auto q-ml-sm">
+            <!-- tambah -->
+            <div v-if="row.flag==='2'" class="col-auto">
               <q-btn
                 round
                 icon="icon-mat-add"
@@ -216,24 +218,68 @@
                 </q-tooltip>
               </q-btn>
             </div>
+            <!-- batal -->
+            <div v-if="row.flag==='2'" class="col-auto">
+              <!-- batal -->
+              <q-btn
+                flat
+                icon="icon-mat-hand-front-left"
+                dense
+                color="negative"
+                :loading="store.batalOperasi && row.loading"
+                :disable="store.batalOperasi && row.loading"
+                @click="batalOperasi(row)"
+              >
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Batal Operasi
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
           <div v-if="row.flag==='1'">
-            <q-btn
-              flat
-              icon="icon-mat-send"
-              dense
-              color="primary"
-              :loading="store.loadingDistribusi && row.loading"
-              :disable="store.loadingDistribusi && row.loading"
-              @click="distribusi(row)"
-            >
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
-              >
-                Distribusikan
-              </q-tooltip>
-            </q-btn>
+            <div class="row justify-between" style="min-width: 150px;">
+              <div class="col-auto">
+                <!-- kirim -->
+                <q-btn
+                  flat
+                  icon="icon-mat-send"
+                  dense
+                  color="primary"
+                  :loading="store.loadingDistribusi && row.loading"
+                  :disable="store.loadingDistribusi && row.loading"
+                  @click="distribusi(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Distribusikan
+                  </q-tooltip>
+                </q-btn>
+              </div>
+              <div class="col-auto">
+                <!-- batal -->
+                <q-btn
+                  flat
+                  icon="icon-mat-hand-front-left"
+                  dense
+                  color="negative"
+                  :loading="store.loadingBatalOperasi && row.loading"
+                  :disable="store.loadingBatalOperasi && row.loading"
+                  @click="batalOperasi(row)"
+                >
+                  <q-tooltip
+                    class="primary"
+                    :offset="[10, 10]"
+                  >
+                    Batal Operasi
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
           </div>
           <div v-if="row.flag==='4'">
             <q-btn
@@ -252,6 +298,7 @@
             </q-btn>
           </div>
           <div v-if="row.flag==='3'">
+            <!-- pengembalian -->
             <q-btn
               flat
               icon="icon-mat-move_to_inbox"
@@ -688,12 +735,37 @@ import { onMounted, ref, watch, defineAsyncComponent } from 'vue'
 import { useDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/distribusi'
 import { notifErrVue } from 'src/modules/utils'
 import { useTambahObatDistribusiPersiapanOperasiStore } from 'src/stores/simrs/farmasi/distribusipersiapanok/tambah'
+import { Dialog } from 'quasar'
 
 const store = useDistribusiPersiapanOperasiStore()
 const tambah = useTambahObatDistribusiPersiapanOperasiStore()
 const apps = useAplikasiStore()
 
 const addSurat = defineAsyncComponent(() => import('./comp/DialogAddObat.vue'))
+
+function batalOperasi (val) {
+  val.expand = !val.expand
+  val.highlight = !val.highlight
+  console.log('val', val)
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: val?.flag === '1' ? 'Apakah Operasi dibatalkan?' : 'Apakah Operasi dibatalkan, dan Obat akan dikembalikan ke depo?',
+    ok: {
+      'no-caps': true,
+      push: true,
+      color: 'negative',
+      label: 'Batal Operasi'
+    },
+    cancel: {
+      'no-caps': true,
+      push: true,
+      color: 'dark',
+      label: 'Tidak Batal Operasi'
+    }
+  }).onOk(() => {
+    store.batalOperasi(val)
+  })
+}
 function gantiFlag () {
   store.setParams('page', 1)
   store.getPermintaan()
@@ -773,7 +845,8 @@ const flagOptions = ref([
   { label: 'Dikirm', value: '1' },
   { label: 'Didistribusikan', value: '2' },
   { label: 'Ada Resep', value: '3' },
-  { label: 'Selesai', value: '4' }
+  { label: 'Selesai', value: '4' },
+  { label: 'Batal', value: '5' }
 ])
 
 const refDistribusi = ref(null)
@@ -879,6 +952,10 @@ const color = val => {
       return 'grey'
       // eslint-disable-next-line no-unreachable
       break
+    case '5':
+      return 'negative'
+      // eslint-disable-next-line no-unreachable
+      break
 
     default:
       return 'red'
@@ -907,6 +984,10 @@ const label = (status) => {
       break
     case '4':
       return 'Selesai'
+      // eslint-disable-next-line no-unreachable
+      break
+    case '5':
+      return 'Batal'
       // eslint-disable-next-line no-unreachable
       break
     case 99:
