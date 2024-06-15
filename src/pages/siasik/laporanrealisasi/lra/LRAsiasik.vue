@@ -161,22 +161,21 @@
                   <th>(%)</th>
                 </tr>
               </thead>
-              <tbody class="align-middle">
+              <tbody class="align-middle q-pl-sm">
                 <tr v-for="item in store.items" :key="item">
-                  <td class="text-center">
-                    <div> {{ item.kodeakun }} </div>
+                  <td class="text-left q-pl-sm q-pr-sm">
                     <div> {{ item.kodeall3 }} </div>
                   </td>
-                  <td>
+                  <td class="text-left q-pl-sm q-pr-sm">
                     <div> {{ item.uraian }} </div>
                   </td>
-                  <td class="text-right">
+                  <td class="text-right q-pl-sm q-pr-sm">
                     <div>{{ formattanpaRp(item.totalPagu) }} </div>
                   </td>
-                  <td class="text-right">
+                  <td class="text-right q-pl-sm q-pr-sm">
                     <div>Belum Dicari</div>
                   </td>
-                  <td class="text-right">
+                  <td class="text-right q-pl-sm q-pr-sm">
                     <div>
                       {{ formattanpaRp(item.totalRealisasi) }}
                     </div>

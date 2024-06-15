@@ -73,7 +73,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           if (resp.status === 200) {
             this.items = []
             // this.items = resp.data
-            this.paguAnggaran(resp.data.data)
+            this.paguAnggaran(resp.data)
             this.mapRekening(resp.data)
             this.loading = false
             resolve(resp)
@@ -110,66 +110,153 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     mapRekening (val) {
       const pagu = this.items.map((x) => x.totalPagu)
       const real = this.items.map((x) => x.totalRealisasi)
-      const all = {
-        kodeall3: this.items?.map((x) => x.akun).reduce((a, b) => {
+
+      const k = this.items.map((x) => x.kode2.kodeall2)
+      const pagu2 = this.items?.filter(a => a.kodeall2 >= k)
+      console.log('filteeeer', pagu2)
+      const kode1 = {
+        kodeall3: val.map((x) => x.kode1.kodeall2).reduce((a, b) => {
           if (!a.includes(b)) {
             a.push(b)
           }
           return a
         }),
-        uraian: 'BELANJA DAERAH',
+        uraian: val.map((x) => x.kode1.uraian).reduce((a, b) => {
+          if (!a.includes(b)) {
+            a.push(b)
+          }
+          return a
+        }),
         totalPagu: pagu.reduce((a, b) => a + b, 0),
         totalRealisasi: real.reduce((a, b) => a + b, 0)
       }
+      // console.log('lo lo lo', kode1)
+      // KODE2
+      const kod2 = this.items.length
+        ? this.items.map((x) => {
+          return {
+            kodeall3: x.kode2.kodeall2,
+            uraian: x.kode2.uraian,
+            totalPagu: this.items?.filter(a => a.kodeall2.includes(a.kode2.kodeall2)).map((x) => x.anggaran.length
+              ? x.anggaran.map((c) => parseFloat(c.pagu))
+              : []).reduce((a, b) => a + b, 0)
+            // ? pagu2.anggaran?.map((x) => parseInt(x.pagu))
+            // : []
+          }
+        })
+        : []
+      const kode2 = kod2.reduce(
+        (acc, curr) =>
+          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+        []
+      )
+      // console.log('ksksk', kode2)
+      // const kode2 = {}
+      // for (let i = 0; i < kode.length; i++) {
+      //   const el = kode.reduce(
+      //     (acc, curr) =>
+      //       acc.find((v) => v.kodeall2 === curr.kodeall2) ? acc : [...acc, curr],
+      //     []
+      //   )
 
-      // const kode2 = {
-      //   kodeall3: this.items?.map((x) => x.akun + '.' + x.kelompok).reduce((a, b) => {
-      //     if (!a.includes(b)) {
-      //       a.push(b)
-      //     }
-      //     return a
-      //   }),
-      //   uraian: 'BELANJA gg',
-      //   totalPagu: 0,
-      //   totalRealisasi: 0
+      //   kode2.push(el)
       // }
 
-      const kode = this.items?.map((x) => x.akun + '.' + x.kelompok)
-      const kelm = kode.reduce((a, b) => {
-        if (!a.includes(b)) {
-          a.push(b)
-        }
-        return a
-      }, [])
-      const kode2 = []
-      for (let i = 0; i < kelm?.length; i++) {
-        const kodkelompok = {
-          kodeall3: kelm[i],
-          totalPagu: 0,
-          totalRealisasi: 0
-        }
-        kode2.push(kodkelompok)
-      }
+      // KODE 3
+      const kod3 = this.items.length
+        ? this.items.map((x) => {
+          return {
+            kodeall3: x.kode3.kodeall2,
+            uraian: x.kode3.uraian
+          }
+        })
+        : []
+      const kode3 = kod3.reduce(
+        (acc, curr) =>
+          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+        []
+      )
+      // console.log('ksksk', kode3)
+      // KODE4
+      const kod4 = this.items.length
+        ? this.items.map((x) => {
+          return {
+            kodeall3: x.kode4.kodeall2,
+            uraian: x.kode4.uraian
+          }
+        })
+        : []
+      const kode4 = kod4.reduce(
+        (acc, curr) =>
+          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+        []
+      )
+      // console.log('ksksk', kode4)
+      // KODE4
+      const kod5 = this.items.length
+        ? this.items.map((x) => {
+          return {
+            kodeall3: x.kode5.kodeall2,
+            uraian: x.kode5.uraian
+          }
+        })
+        : []
+      const kode5 = kod5.reduce(
+        (acc, curr) =>
+          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+        []
+      )
+      // console.log('ksksk', kode5)
+      // const kode2 = []
+      // for (let i = 0; i < kode?.length; i++) {
+      //   const kodkelompok = {
+      //     kodeall3: kode[i]
+      //   }
 
-      const kod = this.items?.map((x) => x.akun + '.' + x.kelompok + '.' + x.jenis)
-      const jns = kod.reduce((a, b) => {
-        if (!a.includes(b)) {
-          a.push(b)
-        }
-        return a
-      }, [])
-      const kode3 = []
-      for (let i = 0; i < jns?.length; i++) {
-        const kodkelompok = {
-          kodeall3: jns[i],
-          totalPagu: 0,
-          totalRealisasi: 0
-        }
-        kode3.push(kodkelompok)
-      }
-      this.items?.push(all, kode2, kode3)
+      //   console.log('jj', kodkelompok)
+      //   kode2.push(kodkelompok)
+      // }
+
+      // const kode = this.items?.map((x) => x.akun + '.' + x.kelompok)
+      // const kelm = kode.reduce((a, b) => {
+      //   if (!a.includes(b)) {
+      //     a.push(b)
+      //   }
+      //   return a
+      // }, [])
+      // const kode2 = []
+      // for (let i = 0; i < kelm?.length; i++) {
+      //   const kodkelompok = {
+      //     kodeall3: kelm[i],
+      //     totalPagu: 0,
+      //     totalRealisasi: 0
+      //   }
+      //   kode2.push(kodkelompok)
+      // }
+
+      // console.log('ksksk', kode2)
+
+      // const join = this.items?.concat(kode1, kode2, kode3, kode4, kode5)
+      // console.log('allll', join)
+      // const join = kode1?.concat(kode2, kode3, kode4, kode5)
+      // console.log('al al', join)
+      this.items.push(kode1, ...kode2, ...kode3, ...kode4, ...kode5)
+      const sort = this.items.sort(({ kodeall3: a }, { kodeall3: b }) =>
+        a < b ? -1 : a > b ? 1 : 0
+      )
+      return sort
     },
 
+    dataUnik(x) {
+      const unik = Object.values(x.reduce((a, b) => {
+        if (!a.includes(b)) {
+          a.push(b)
+        }
+        return a
+      })
+      )
+      return unik
+    },
     ambilDataUnik (x, f) {
       // eslint-disable-next-line no-sequences
       const unique = Object.values(x.reduce((a, b) => ((a[f(b)] = b), a), {}))
