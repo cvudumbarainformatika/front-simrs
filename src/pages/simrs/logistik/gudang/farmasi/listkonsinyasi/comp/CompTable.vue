@@ -47,9 +47,9 @@
           <div class="row">
             {{ item?.obat?.nama_obat }}
           </div>
-          <div class="row text-italic f-10">
+          <!-- <div class="row text-italic f-10">
             ({{ item?.obat?.satuan_k }})
-          </div>
+          </div> -->
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
           <div class="row">
@@ -70,7 +70,7 @@
             {{ item?.header?.resep?.datapasien?.rs2 }}
           </div>
           <div class="row justify-end">
-            {{ item?.jumlah_resep }}
+            {{ item?.jumlah_resep }} ({{ item?.obat?.satuan_k }})
           </div>
           <div class="row justify-end">
             {{ formatDouble( item?.reseprinci?.harga_beli,2) }}
