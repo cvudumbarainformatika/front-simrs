@@ -1,30 +1,43 @@
 <template>
-  <div class="bg-white full-height column">
-    <q-bar class="col-auto bg-teal text-white">
-      <div class="q-py-sm f-14 ">
-        List Nomor Resep
-      </div>
-      <q-space />
-      <div class="q-py-xs">
-        <q-select
-          v-model="store.noresep"
-          outlined
-          standout="bg-yellow-3"
-          bg-color="white"
-          dense
-          :options="store.noreseps"
-          :display-value="`${store.noresep === null || store.noresep === '' || store.noresep === 'BARU' ? 'BARU' : store.noresep}`"
-          style="min-width: 200px;"
-          @update:model-value="store.setResep"
-        />
-      </div>
-    </q-bar>
+  <div
+    class="bg-white full-height"
+    style="overflow: scroll;"
+  >
+    <div class="row bg-teal text-white">
+      <q-bar class=" col-12 bg-teal text-white">
+        <div class="q-py-sm f-14 ">
+          List Nomor Resep
+        </div>
+        <q-space />
+        <div class="q-py-xs">
+          <q-select
+            v-model="store.noresep"
+            outlined
+            standout="bg-yellow-3"
+            bg-color="white"
+            dense
+            :options="store.noreseps"
+            :display-value="`${store.noresep === null || store.noresep === '' || store.noresep === 'BARU' ? 'BARU' : store.noresep}`"
+            style="min-width: 200px;"
+            @update:model-value="store.setResep"
+          />
+        </div>
+      </q-bar>
+    </div>
     <template v-if="store?.indexRacikan>=0 && store?.pasien?.newapotekrajal">
       <div
         v-if="parseInt(store?.pasien?.newapotekrajal[store?.indexRacikan]?.flag)>=1"
         class=""
       >
-        <div class="row items-center q-my-md q-ml-md">
+        <div class="row items-center  q-mt-md q-mx-md justify-between">
+          <div v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama" class="f-10">
+            {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.dokter?.nama }}
+          </div>
+          <div class="text-italic f-10">
+            {{ dateFull(store?.pasien?.newapotekrajal[store.indexRacikan]?.tgl_kirim) }}
+          </div>
+        </div>
+        <div class="row items-center q-mb-md q-ml-md">
           <div>
             <q-chip
               square
@@ -40,6 +53,7 @@
             Iter s/d : {{ dateFullFormat( store?.pasien?.newapotekrajal[store.indexRacikan]?.iter_expired) }}
           </div>
         </div>
+
         <!-- {{ store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length }} -->
         <template v-if="store?.pasien?.newapotekrajal[store.indexRacikan]?.permintaanresep?.length">
           <q-item
@@ -160,11 +174,11 @@
 </template>
 
 <script setup>
-import { formatDouble, dateFullFormat } from 'src/modules/formatter'
+import { formatDouble, dateFullFormat, dateFull } from 'src/modules/formatter'
 // import { laravelEcho } from 'src/modules/newsockets'
 import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
-import { onMounted } from 'vue'
+import { onUnmounted } from 'vue'
 const store = usePermintaanEResepStore()
 function status (val) {
   let balik = ' Belum ada status'
@@ -216,7 +230,8 @@ function color (val) {
 //     console.log('listen notif', e)
 //   })
 // }
-onMounted(() => {
-  // subscribedChannel()
+onUnmounted(() => {
+  store.noresep = ''
+  store.indexRacikan = -1
 })
 </script>

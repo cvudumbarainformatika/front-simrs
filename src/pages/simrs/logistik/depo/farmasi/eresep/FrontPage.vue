@@ -30,7 +30,11 @@
       <q-scroll-area
         style="height:calc( 100% - 40px)"
       >
-        <ListPage />
+        <ListPage
+          :loading-call="speech.isLoading"
+          :ruangan="kdruangansim"
+          @panggilan="panggil"
+        />
       </q-scroll-area>
       <div
         v-if="Object.keys(store.meta).length"
@@ -68,10 +72,11 @@
 
 <script setup>
 import { useStyledStore } from 'src/stores/app/styled'
-import { defineAsyncComponent, watch, onMounted, computed } from 'vue'
+import { defineAsyncComponent, watch, onMounted, computed, ref } from 'vue'
 import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/eresep'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { laravelEcho } from 'src/modules/newsockets'
+import { useSpeechStore } from 'src/stores/antrian/speech'
 
 const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
@@ -102,6 +107,82 @@ function subscribedChannel () {
 const kdruangansim = computed(() => {
   return apps?.user?.kdruangansim
 })
+
+// panggilan
+
+const speech = useSpeechStore()
+
+const indexVoices = ref(0)
+function setSpeech (txt) {
+  console.log(speech.voiceList)
+  const voice = speech.utterance
+  voice.text = txt
+  voice.voice = speech.voiceList[indexVoices.value]
+
+  voice.volume = 1
+  voice.pitch = 1
+  voice.rate = 1
+
+  return voice
+}
+function panggil (row) {
+  console.log('row', row)
+  const nama = (row?.datapasien?.nama_panggil) ? (row?.datapasien?.nama_panggil)?.toLowerCase() : ''
+  const unit = 'Apotek  Rawat  Jalan'
+  const noAntrean = row?.antrian?.nomor ? row?.antrian?.nomor.toUpperCase() : ''
+  // eslint-disable-next-line no-unused-vars
+  const txt1 = 'pasien ? . ' + nama + '? ...Harap menujuu  ' + unit
+  // eslint-disable-next-line no-unused-vars
+  const txt2 = 'Nomor Antrian ... ' + noAntrean + '? ...Harap menujuu' + unit
+
+  const txt3 = 'Nomor Antrian ... ' + noAntrean + '... nama!  ' + nama + '! ...Harap menujuu  ' + unit
+  // const txt = jns === 'nama' ? txt1 : txt2
+  speech.synth.speak(setSpeech(txt3))
+  // console.log(row)
+  // store.sendPanggil(row, `display${kdDisplay.value}`)
+}
+function getListVoices () {
+  return new Promise(
+    function (resolve, reject) {
+      const synth = speech.synth
+      let id = 0
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          speech.voiceList = synth.getVoices()
+          resolve(synth.getVoices())
+          clearInterval(id)
+        }
+      }, 10)
+    }
+  )
+}
+function settingsVoice () {
+  const voices = speech.voiceList
+  if (voices.length) {
+    const lang = voices?.map(x => x.lang)
+    const ind = lang.findIndex(x => x === 'id-ID') ?? 0
+    indexVoices.value = ind
+  }
+
+  // const synth = window.speechSynthesis
+  speech.synth.onvoiceschanged = () => {
+    speech.synth.setVoiceList(voices)
+  }
+  // console.log('voices', voices)
+  // console.log('speech', speech)
+  listenForSpeechEvents()
+}
+function listenForSpeechEvents () {
+  speech.utterance.onstart = () => {
+    console.log('start...')
+    speech.isLoading = true
+  }
+  speech.utterance.onend = () => {
+    console.log('end...')
+    speech.isLoading = false
+  }
+}
 onMounted(() => {
   store.getApoteker()
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
@@ -110,6 +191,9 @@ onMounted(() => {
     store.getDataTable()
   }
   subscribedChannel()
+  getListVoices().then((x) => {
+    settingsVoice()
+  })
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.setParams('kddepo', obj)

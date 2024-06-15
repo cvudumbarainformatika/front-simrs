@@ -25,7 +25,6 @@
     <div
       class="col-12"
     >
-      <!-- {{ store.listSudah }} -->
       <div
         v-if="store.listSudah "
         class="q-my-md q-ml-md"
@@ -95,7 +94,7 @@
 import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/resepsemntara'
 // import { laravelEcho } from 'src/modules/newsockets'
 
-import { onMounted } from 'vue'
+import { onUnmounted } from 'vue'
 const store = usePersiapanOperasiStore()
 function status (val) {
   let balik = ' Belum ada status'
@@ -153,7 +152,9 @@ function color (val) {
 //     console.log('listen notif', e)
 //   })
 // }
-onMounted(() => {
+onUnmounted(() => {
+  store.nopermintaan = ''
+  store.listSudah = null
   // subscribedChannel()
 })
 </script>

@@ -1,9 +1,27 @@
 <template>
   <div class="bg-white full-height column">
     <div class="col-auto bg-primary text-white">
-      <div class="q-pa-sm">
-        <span>Form Resep Dokter</span>
-        <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
+      <!-- <div class="q-pa-sm">
+        <span>Form Resep Dokter</span> -->
+      <!-- -> <span class="text-yellow-3 text-weight-bold">{{ depo === 'rjl' ? 'Depo Rawat Jalan' : 'Depo Rawat Inap' }}</span> -->
+      <!-- </div> -->
+      <div class="q-pa-sm row items-center justify-between">
+        <div class="f-12">
+          Form Resep Dokter
+        </div>
+        <div>
+          <q-btn
+            flat
+            dense
+            size="md"
+            icon="icon-mat-history"
+            @click="historyOpen"
+          >
+            <q-tooltip class="bg-dark text-white">
+              {{ tooltip }}
+            </q-tooltip>
+          </q-btn>
+        </div>
       </div>
     </div>
     <div class="col full-height relative-position">
@@ -100,76 +118,6 @@
                 <div class="col-11">
                   <div class="row  q-col-gutter-sm">
                     <div class="col-6">
-                      <!-- <q-select
-                        ref="refObat"
-                        v-model="store.namaObat"
-                        use-input
-                        label="Cari Obat / tekan Alt + Enter untuk racikan"
-                        dense
-                        option-label="namaobat"
-                        option-value="kodeobat"
-                        standout="bg-yellow-3"
-                        outlined
-                        clearable
-                        input-debounce="800"
-                        class="full-width"
-                        hide-dropdown-icon
-                        :rules="[obatValid]"
-                        lazy-rules
-                        hide-bottom-space
-                        no-error-icon
-                        :options="store.Obats"
-                        @keyup.alt.enter="racikan"
-                        @input-value="inputObat"
-                        @focus="inputObat"
-                        @update:model-value="obatSelected"
-                        @keyup.enter.stop="obatEnter"
-                      >
-                        <template #prepend>
-                          <q-icon name="icon-mat-search" />
-                        </template>
-                        <template #option="scope">
-                          <q-item v-bind="scope.itemProps" class="row items-end">
-                            <div
-                              v-if="scope.opt.namaobat"
-                              :class="scope.opt.alokasi<=0?'line-through text-negative text-italic f-10':''"
-                            >
-                              {{ scope.opt.namaobat }}
-                            </div>
-                            <div
-                              v-if="scope.opt.kandungan"
-                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs q-mr-xs':'q-ml-xs q-mr-xs text-deep-orange'"
-                            >
-                              ({{ scope.opt.kandungan }})
-                            </div>
-                            <div
-                              v-if="scope.opt.alokasi >0"
-                              class="q-ml-xs text-weight-bold text-green"
-                            >
-                              {{ scope.opt.alokasi }} <span class="f-8">(tersedia)</span>
-                            </div>
-                            <div
-                              v-if="scope.opt.alokasi <=0"
-                              class="q-ml-xs text-weight-bold text-negative f-14"
-                            >
-                              {{ scope.opt.alokasi }} <span class="f-8">(habis)</span>
-                            </div>
-                            <div
-                              v-if="scope.opt.satuankecil"
-                              :class="scope.opt.alokasi<=0?'f-10 q-ml-xs':'q-ml-xs text-primary'"
-                            >
-                              {{ scope.opt.satuankecil }}
-                            </div>
-                          </q-item>
-                        </template>
-                        <template #no-option>
-                          <q-item>
-                            <q-item-section class="text-grey">
-                              No results
-                            </q-item-section>
-                          </q-item>
-                        </template>
-                      </q-select> -->
                       <nyobak-select v-model="store.namaObat" />
                     </div>
                     <div class="col-3">
@@ -186,6 +134,7 @@
                         outlined
                         @update:model-value="setJumlah"
                         @keyup.enter.stop="qtyEnter"
+                        @focus="focusJumlah()"
                       />
                     </div>
                     <div class="col-3">
@@ -257,173 +206,6 @@
               </div>
             </q-item-section>
           </q-item>
-          <!-- <q-item>
-            <q-item-section
-              style="width: 50%;"
-              class="relative-position full-height"
-            >
-              <div class="row q-mb-xs">
-                <q-select
-                  ref="refObat"
-                  v-model="store.namaObat"
-                  use-input
-                  label="Cari Obat / tekan Alt + Enter untuk racikan"
-                  dense
-                  option-label="namaobat"
-                  option-value="kodeobat"
-                  standout="bg-yellow-3"
-                  outlined
-                  input-debounce="800"
-                  class="full-width"
-                  hide-dropdown-icon
-                  :rules="[obatValid]"
-                  lazy-rules
-                  hide-bottom-space
-                  no-error-icon
-                  :options="store.Obats"
-                  @keyup.alt.enter="racikan"
-                  @input-value="inputObat"
-                  @focus="inputObat"
-                  @update:model-value="obatSelected"
-                  @keyup.enter.stop="obatEnter"
-                >
-                  <template #prepend>
-                    <q-icon name="icon-mat-search" />
-                  </template>
-                  <template #option="scope">
-                    <q-item v-bind="scope.itemProps">
-                      <div
-                        v-if="scope.opt.namaobat"
-                      >
-                        {{ scope.opt.namaobat }}
-                      </div>
-                      <div
-                        v-if="scope.opt.kandungan"
-                        class="q-ml-xs q-mr-xs text-deep-orange"
-                      >
-                        ({{ scope.opt.kandungan }})
-                      </div>
-                      <div
-                        v-if="scope.opt.alokasi"
-                        class="q-ml-xs text-weight-bold tetx-green"
-                      >
-                        {{ scope.opt.alokasi }}
-                      </div>
-                      <div
-                        v-if="scope.opt.satuankecil"
-                        class="q-ml-xs text-primary"
-                      >
-                        {{ scope.opt.satuankecil }}
-                      </div>
-                    </q-item>
-                  </template>
-                  <template #no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
-              </div>
-              <div class="row">
-                <div
-                  class="col-4 text-right"
-                >
-                  <q-select
-                    ref="refSigna"
-                    v-model="signa"
-                    label="Aturan Pakai"
-                    use-input
-                    dense
-                    standout="bg-yellow-3"
-                    option-label="signa"
-                    outlined
-                    :rules="[sigaValid]"
-                    lazy-rules
-                    no-error-icon
-                    hide-bottom-space
-                    hide-dropdown-icon
-                    :options="store.signas"
-                    @new-value="signaCreateValue"
-                    @update:model-value="signaSelected"
-                    @keyup.enter.stop="signaEnter"
-                  />
-                </div>
-                <div
-                  class="text-right col-3"
-                >
-                  <q-input
-                    ref="refKonsumsi"
-                    v-model="store.form.konsumsi"
-                    label="Konsumsi per hari"
-                    dense
-                    lazy-rules
-                    no-error-icon
-                    hide-bottom-space
-                    standout="bg-yellow-3"
-                    outlined
-                  />
-                </div>
-              </div>
-            </q-item-section>
-            <q-item-section
-              side
-              style="width:50%"
-            >
-              <div class="text-white row items-center q-col-gutter-sm full-width">
-                <div
-                  class="text-right col-3"
-                >
-                  <q-input
-                    ref="refQty"
-                    v-model="store.form.jumlah_diminta"
-                    label="Qty"
-                    dense
-                    :rules="[val=> parseFloat(val) >= 1 || '']"
-                    lazy-rules
-                    no-error-icon
-                    hide-bottom-space
-                    standout="bg-yellow-3"
-                    outlined
-                    @update:model-value="setJumlah"
-                    @keyup.enter.stop="qtyEnter"
-                  />
-                </div>
-                <div
-                  class="col text-right"
-                >
-                  <q-input
-                    ref="refKet"
-                    v-model="store.form.keterangan"
-                    label="Keterangan"
-                    dense
-                    standout="bg-yellow-3"
-                    outlined
-                    class="full-width"
-                    @keyup.enter="ketEnter"
-                  />
-                </div>
-                <div
-                  class="col-shrink text-right"
-                >
-                  <q-btn
-                    color="dark"
-                    dense
-                    flat
-                    icon="icon-mat-save"
-                    :disable="store.loading || store.loadingkirim"
-                    :loading="store.loading"
-                    @click="simpanObat"
-                  >
-                    <q-tooltip class="bg-white text-primary">
-                      Simpan Obat
-                    </q-tooltip>
-                  </q-btn>
-                </div>
-              </div>
-            </q-item-section>
-          </q-item> -->
 
           <!-- hasil Inputan -->
           <template v-if="store.listPemintaanSementara.length">
@@ -487,7 +269,6 @@
             </q-item>
           </template>
           <!-- {{ store.listRacikan }} -->
-          <!-- {{ store.listRacikan }} -->
           <template v-if="store.listRacikan.length">
             <q-expansion-item
               v-for="(item, i) in store.listRacikan"
@@ -549,22 +330,7 @@
                   </div>
                 </q-item-section>
               </template>
-              <!-- <q-item>
-                <q-item-section />
-                <q-item-section>
-                  <div class="text-right q-mr-sm">
-                    <q-btn
-                      color="primary"
-                      dense
-                      no-caps
-                      :disable="store.loading || store.loadingkirim"
-                      @click="racikanTambah(item)"
-                    >
-                      Tambah
-                    </q-btn>
-                  </div>
-                </q-item-section>
-              </q-item> -->
+
               <div class="bg-white">
                 <q-item
                   v-for="(obat, j) in item?.rincian"
@@ -642,9 +408,9 @@
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
-          <!-- <q-btn color="negative">
-            Reset Resep
-          </q-btn> -->
+          <q-btn color="teal" @click="emits('openTemplate')">
+            Pembuatan Template
+          </q-btn>
         </div>
         <div>
           <q-btn
@@ -744,11 +510,17 @@ import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
 
+const emits = defineEmits(['openHistory', 'openTemplate'])
+
 const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
 
 const props = defineProps({
   pasien: { type: Object, default: null },
-  depo: { type: String, default: '' }
+  depo: { type: String, default: '' },
+  tooltip: {
+    type: String,
+    default: 'History EResep'
+  }
 })
 const store = usePermintaanEResepStore()
 const permintaan = useResepPermintaanOperasiStore()
@@ -758,6 +530,10 @@ const refQty = ref(null)
 const refSigna = ref(null)
 const refKet = ref(null)
 
+function focusJumlah () {
+  console.log('focus hy')
+  refQty.value.select()
+}
 function setTipe (val) {
   console.log('tipe resep', val)
   store.cariObat('')
@@ -1071,6 +847,13 @@ function simpanObat () {
     })
   }
 }
+
+// add history eresep
+function historyOpen () {
+  emits('openHistory')
+  // store.getHistory(props.pasien?.norm)
+}
+
 onMounted(() => {
   // console.log('depo', props?.depo, props.pasien)
   // console.log('ref Obat', refObat.value)

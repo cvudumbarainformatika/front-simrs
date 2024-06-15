@@ -10,8 +10,9 @@
         :key="i"
         v-close-popup
         clickable
+        @click="emit('setGudang',opt?.kode)"
       >
-        <q-item-section @click="emit('setGudang',opt?.kode)">
+        <q-item-section>
           {{ opt?.nama ?? opt?.uraian }}
         </q-item-section>
       </q-item>

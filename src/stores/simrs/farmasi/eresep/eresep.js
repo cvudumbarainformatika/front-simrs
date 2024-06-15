@@ -24,6 +24,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
     loadingTolak: false,
     loadingAlasan: false,
     toAlasan: {},
+    noreg: '',
     items: [],
     meta: {},
     params: {
@@ -461,7 +462,7 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       })
     },
     async getDataTable (val) {
-      this.items = []
+      // this.items = []
       if (!val) this.loading = true
       const param = { params: this.params }
       // console.log('loading', val, this.loading)
@@ -470,16 +471,20 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           console.log('get data table', resp?.data)
           this.loading = false
           const data = resp?.data?.data ?? resp?.data
-          if (this.removedItemId.length) {
-            this.items = data.filter(x => !this.removedItemId.includes(x.id))
-          }
-          else {
-            this.items = data
-          }
+          this.items = data
+          // if (this.removedItemId.length) {
+          //   this.items = data.filter(x => !this.removedItemId.includes(x.id))
+          // }
+          // else {
+          //   this.items = data
+          // }
+          if (!data.length) this.items = []
           this.meta = resp?.data?.data ? resp?.data : {}
           this.metanirinci()
         })
-        .catch(() => { this.loading = false })
+        .catch(() => {
+          this.loading = false
+        })
     },
     async getSatuResep (val) {
       const param = {
@@ -508,6 +513,12 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
                 const adaKronisR = item?.permintaanracikan.filter(f => f.kronis === '1')
                 if (adaKronisR.length) item.adaKronis = 'kronis'
               })
+              if (this.removedItemId.length) {
+                this.items = data.filter(x => !this.removedItemId.includes(x.id))
+              }
+              else {
+                this.items = data
+              }
             }
             const index = this.items.findIndex(it => it.noresep === resp.data.noresep)
             if (index < 0) this.items.push(resp.data)
