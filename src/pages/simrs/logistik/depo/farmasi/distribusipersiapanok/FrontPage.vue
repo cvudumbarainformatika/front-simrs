@@ -90,6 +90,18 @@
                 </q-card>
               </q-menu>
             </div>
+
+            <div class="q-mr-sm">
+              <q-input
+                v-model="store.params.q"
+                label="cari ..."
+                dense
+                outlined
+                dark
+                debounce="500"
+                @update:model-value="cariByQ"
+              />
+            </div>
             <div class="q-mr-sm">
               <q-option-group
                 v-model="store.params.flag"
@@ -181,7 +193,7 @@
       </template>
       <template #cell-act="{ row }">
         <div class="row">
-          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center justify-between" style="min-width: 200px;">
+          <div v-if="row.flag==='2' || row.flag==='4'" class="row items-center justify-between" :style="row.flag==='2'?'min-width: 200px;':'min-width: 100px;'">
             <!-- print -->
             <div class="col-auto">
               <q-btn
@@ -238,6 +250,22 @@
                 </q-tooltip>
               </q-btn>
             </div>
+            <div v-if="row.flag==='4'" class="col-auto">
+              <q-btn
+                flat
+                icon="icon-mat-lock"
+                dense
+                color="negative"
+              >
+                <!-- @click="kunci(row)" -->
+                <q-tooltip
+                  class="primary"
+                  :offset="[10, 10]"
+                >
+                  Sudah diterima
+                </q-tooltip>
+              </q-btn>
+            </div>
           </div>
           <div v-if="row.flag==='1'">
             <div class="row justify-between" style="min-width: 150px;">
@@ -281,22 +309,7 @@
               </div>
             </div>
           </div>
-          <div v-if="row.flag==='4'">
-            <q-btn
-              flat
-              icon="icon-mat-lock"
-              dense
-              color="negative"
-            >
-              <!-- @click="kunci(row)" -->
-              <q-tooltip
-                class="primary"
-                :offset="[10, 10]"
-              >
-                Sudah diterima
-              </q-tooltip>
-            </q-btn>
-          </div>
+
           <div v-if="row.flag==='3'">
             <!-- pengembalian -->
             <q-btn
@@ -766,6 +779,11 @@ function batalOperasi (val) {
     store.batalOperasi(val)
   })
 }
+function cariByQ (val) {
+  store.setParams('q', val)
+  store.setParams('page', 1)
+  store.getPermintaan()
+}
 function gantiFlag () {
   store.setParams('page', 1)
   store.getPermintaan()
@@ -842,7 +860,7 @@ function depo (val) {
 }
 // flag
 const flagOptions = ref([
-  { label: 'Dikirm', value: '1' },
+  { label: 'Dikirim', value: '1' },
   { label: 'Didistribusikan', value: '2' },
   { label: 'Ada Resep', value: '3' },
   { label: 'Selesai', value: '4' },
