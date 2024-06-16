@@ -198,8 +198,9 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
       // Pisahkan bagian integer dan bagian desimal
       const integerPart = Math.floor(num)
       const decimalPart = num - integerPart
+      console.log('deimal', decimalPart)
 
-      if (decimalPart <= 0.5) {
+      if (decimalPart <= 0.5 && decimalPart > 0) {
         // Jika bagian desimal kurang dari atau sama dengan 0.5
         return integerPart + 0.5
       }

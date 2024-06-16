@@ -848,10 +848,42 @@ function simpanObat () {
   // console.log('simpan', form)
   console.log('form', store.form)
   // console.log('racikan', store.form)
-  store.simpanObat().then(() => {
-    // store.resetRacikan()
-    refObat.value.focus()
-    // refObat.value.showPopup()
-  })
+  if (parseFloat(store.form.jumlahdibutuhkan) === 1) {
+    Dialog.create({
+      title: 'Konfirmasi',
+      message: 'Apakah Jumlah Racikan hanya 1?',
+      ok: {
+        push: true,
+        'no-caps': true,
+        color: 'primary',
+        label: 'Jumlah Racikan Hanya 1'
+      },
+      cancel: {
+        push: true,
+        'no-caps': true,
+        color: 'dark',
+        label: 'Jumlah Racikan lebih dari 1'
+      },
+      style: 'min-width: 50%;'
+    })
+      .onOk(() => {
+        store.simpanObat().then(() => {
+          // store.resetRacikan()
+          refObat.value.focus()
+          // refObat.value.showPopup()
+        })
+      })
+      .onCancel(() => {
+        // console.log(refJmlButuh.value)
+        refJmlButuh.value.focus()
+      })
+  }
+  else {
+    store.simpanObat().then(() => {
+      // store.resetRacikan()
+      refObat.value.focus()
+      // refObat.value.showPopup()
+    })
+  }
 }
 </script>
