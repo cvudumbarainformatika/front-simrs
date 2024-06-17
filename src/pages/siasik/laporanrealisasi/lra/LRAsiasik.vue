@@ -173,12 +173,34 @@
                     <div>{{ formattanpaRp(item.totalPagu) }} </div>
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
-                    <div>Belum Dicari</div>
+                    <div>{{ formattanpaRp(0) }}</div>
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
                     <div>
                       {{ formattanpaRp(item.totalRealisasi) }}
                     </div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>
+                      {{ formattanpaRp(item.selisih) }}
+                    </div>
+                  </td>
+                </tr>
+                <tr class="text-bold">
+                  <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                    TOTAL
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    {{ formattanpaRp(totalPagu ()) }}
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    {{ formattanpaRp(0) }}
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    {{ formattanpaRp(totalRealisasi ()) }}
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    {{ formattanpaRp(totalSelisih ()) }}
                   </td>
                 </tr>
               </tbody>
@@ -206,16 +228,29 @@ onMounted(() => {
   // store.getBidang()
 })
 
-// function anggaran (val) {
-//   const Anggaran = []
-//   for (let i = 0; i < store.items?.length; i++) {
-//     const el = store.items[i].anggaran
-//     const pagu = el.map((x) => parseInt(x.pagu)).reduce((a, b) => a + b, 0)
-//     console.log('gogoggo', pagu)
-//     Anggaran.push(pagu)
-//   }
-// }
+function totalPagu () {
+  const saldo = store.items
+  // console.log('njaaias', saldo)
+  const totalpagu = saldo[0].totalPagu
+  // console.log("debit", totaldebit);
+  return totalpagu
+}
 
+function totalRealisasi () {
+  const saldo = store.items
+  // console.log('njaaias', saldo)
+  const totalpagu = saldo[0].totalRealisasi
+  // console.log("debit", totaldebit);
+  return totalpagu
+}
+
+function totalSelisih () {
+  const saldo = store.items
+  // console.log('njaaias', saldo)
+  const totalpagu = saldo[0].selisih
+  // console.log("debit", totaldebit);
+  return totalpagu
+}
 function ambilData () {
   // store.hitungharidalamBulan();
   store.getDataRealisasi().then(() => {
