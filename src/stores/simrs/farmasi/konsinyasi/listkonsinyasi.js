@@ -49,6 +49,7 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
       })
     },
     async getData () {
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/gudang/list-pemakaian-konsinyasi', param)
@@ -84,6 +85,9 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
             console.log('simpn konsi', resp)
             this.form.notranskonsi = resp?.data?.notranskonsi
             notifSuccess(resp)
+            this.form.items = []
+            this.getPenyedia()
+            this.getData()
             resolve(resp)
           })
           .catch(() => {

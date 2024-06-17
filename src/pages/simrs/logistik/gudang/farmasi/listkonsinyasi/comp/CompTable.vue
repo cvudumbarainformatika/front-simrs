@@ -114,6 +114,8 @@ import { date } from 'quasar'
 import { computed } from 'vue'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPemakaianObatKonsinyasiStore } from 'src/stores/simrs/farmasi/konsinyasi/listkonsinyasi'
+// eslint-disable-next-line no-unused-vars
+import { notifErrVue } from 'src/modules/utils'
 const store = useListPemakaianObatKonsinyasiStore()
 const allChecked = computed({
   get () {
@@ -145,21 +147,45 @@ function setCheck (evt, item) {
   // console.log('item', item)
   if (item.checked) {
     // item.dipakai = item.dipakai ?? 0
-    store.form.items.push(item)
+    const temp = {
+      nopermintaan: item?.nopermintaan,
+      nopenerimaan: item?.nopenerimaan,
+      kdobat: item?.kd_obat,
+      tgl_pakai: item?.header?.resep?.tgl_permintaan,
+      tgl_penerimaan: item?.penerimaan?.header?.tglpenerimaan,
+      noresep: item?.noresep,
+      dokter: item?.header?.resep?.dokter?.kdpegsimrs,
+      noreg: item?.header?.noreg,
+      norm: item?.header?.norm,
+      jumlah: item?.reseprinci?.jumlah,
+      harga: item?.penerimaan?.harga_kcl,
+      diskon: item?.penerimaan?.diskon,
+      ppn: item?.penerimaan?.ppn,
+      diskon_rp: item?.penerimaan?.diskon_rp_kecil,
+      ppn_rp: item?.penerimaan?.ppn_rp_kecil,
+      harga_net: item?.penerimaan?.harga_netto_kecil,
+      subtotal: item?.subtotal
+
+    }
+
+    store.form.items.push(temp)
   }
   else {
     // console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.kd_obat === item.kd_obat && a.noresep === item.noresep)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kdobat && a.noresep === item.noresep)
     // console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
   }
 }
 function simpan () {
+  if (store.form.items.length <= 0) return notifErrVue('Belum Ada Barang yang dipilih')
   const tlg = store.form.tgl
   const hrs = date.formatDate(Date.now(), ' HH:mm:ss')
+  const jumlahKonsi = store.form?.items?.map(m => m.subtotal)?.reduce((a, b) => a + b, 0)
   store.setForm('tgl_trans', tlg + hrs)
+  store.setForm('jumlah_konsi', jumlahKonsi)
   console.log('simpan', store.form)
-  // store.simpanList()
+  store.simpanList()
 }
 </script>
 <style lang="scss" scoped>

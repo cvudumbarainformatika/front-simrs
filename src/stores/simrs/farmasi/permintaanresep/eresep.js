@@ -53,7 +53,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       namaracikan: '-',
       keteranganx: '-',
       jumlah: 1,
-      tiperacikan: 'DTD',
+      tiperacikan: 'non-DTD',
       dosisobat: 1,
       dosismaksimum: 1 // dosis resep
     },

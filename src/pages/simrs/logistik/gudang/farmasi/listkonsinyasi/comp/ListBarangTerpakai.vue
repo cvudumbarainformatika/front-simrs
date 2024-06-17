@@ -22,6 +22,7 @@
             option-label="nama"
             option-value="kode"
             :loading="store.loadingPenyedia"
+            :disable="store.loadingPenyedia || store.loading"
             :source="store.penyedias"
             @on-select="penyediaSelected"
           />
@@ -61,6 +62,7 @@ const store = useListPemakaianObatKonsinyasiStore()
 store.getInitialData()
 const TableComp = defineAsyncComponent(() => import('./CompTable.vue'))
 function penyediaSelected (val) {
+  if (store.form.notranskonsi !== '') store.setForm('notranskonsi', '')
   store.setForm('penyedia', val)
   store.setParams('penyedia', val)
   store.getData()

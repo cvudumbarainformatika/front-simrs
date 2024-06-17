@@ -598,7 +598,7 @@ onMounted(() => {
   store.setForm('dosisobat', 1)
   store.setForm('dosismaksimum', 1)
   if (!store.racikanTambah) {
-    store.setForm('tiperacikan', 'DTD')
+    store.setForm('tiperacikan', 'non-DTD')
     store.setForm('jumlahdibutuhkan', 1)
     store.setForm('keterangan', '-')
     store.getNomor()
