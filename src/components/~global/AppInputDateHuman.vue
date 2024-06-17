@@ -124,23 +124,32 @@ const modelProp = computed({
     let newTgl = ''
     if (temp[1] === 'Mei') {
       newTgl = temp[0] + ' May ' + temp[2]
-    } else if (temp[1] === 'Oktober') {
+    }
+    else if (temp[1] === 'Oktober') {
       newTgl = temp[0] + ' October ' + temp[2]
-    } else if (temp[1] === 'Agustus') {
+    }
+    else if (temp[1] === 'Agustus') {
       newTgl = temp[0] + ' August ' + temp[2]
-    } else if (temp[1] === 'Desember') {
+    }
+    else if (temp[1] === 'Desember') {
       newTgl = temp[0] + ' December ' + temp[2]
-    } else if (temp[1] === 'Juli') {
+    }
+    else if (temp[1] === 'Juli') {
       newTgl = temp[0] + ' July ' + temp[2]
-    } else if (temp[1] === 'Juni') {
+    }
+    else if (temp[1] === 'Juni') {
       newTgl = temp[0] + ' June ' + temp[2]
-    } else if (temp[1] === 'Januari') {
+    }
+    else if (temp[1] === 'Januari') {
       newTgl = temp[0] + ' January ' + temp[2]
-    } else if (temp[1] === 'Februari') {
+    }
+    else if (temp[1] === 'Februari') {
       newTgl = temp[0] + ' February ' + temp[2]
-    } else if (temp[1] === 'Maret') {
+    }
+    else if (temp[1] === 'Maret') {
       newTgl = temp[0] + ' March ' + temp[2]
-    } else {
+    }
+    else {
       newTgl = val
     }
     emits('setModel', newTgl)

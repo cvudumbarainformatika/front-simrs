@@ -69,14 +69,17 @@ function filterFn (val, update) {
       if (!props.filterred) {
         emits('setSearch', val)
         optionx.value = props.source
-      } else {
+      }
+      else {
         optionx.value = props.source
       }
-    } else {
+    }
+    else {
       if (!props.filterred) {
         emits('setSearch', val)
         optionx.value = props.source
-      } else {
+      }
+      else {
         const needle = val.toLowerCase()
         optionx.value = props.source.filter(v => v[refAuto.value.optionLabel].toLowerCase().indexOf(needle) > -1)
       }

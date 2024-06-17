@@ -24,7 +24,17 @@
       </div>
       <div class="col-auto text-right" style="width: 5%;">
         <div class="q-mr-sm">
-          #
+          <q-checkbox
+            v-model="allChecked"
+            size="xs"
+          >
+            <q-tooltip
+              anchor="top middle"
+              self="center middle"
+            >
+              {{ allChecked===true?'Tidak Pilih Semua':'Pilih Semua' }}
+            </q-tooltip>
+          </q-checkbox>
         </div>
       </div>
     </div>
@@ -94,15 +104,41 @@
         </div>
       </div>
     </div>
-    <div class="row justify-end q-mr-md q-mt-md">
+    <div class="row justify-end q-mr-md q-mt-md q-mb-xl">
       <q-btn label="Simpan" no-caps dense color="primary" @click="simpan" />
     </div>
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
+import { computed } from 'vue'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPemakaianObatKonsinyasiStore } from 'src/stores/simrs/farmasi/konsinyasi/listkonsinyasi'
 const store = useListPemakaianObatKonsinyasiStore()
+const allChecked = computed({
+  get () {
+    const check = store.items.filter(it => it.checked)
+    // console.log(check.length)
+    if (check.length === store.items.length) return true
+    else if (check.length <= 0) return false
+    else return null
+  },
+  set (val) {
+    if (val === true) {
+      store.items.forEach(it => {
+        it.checked = true
+        setCheck(true, it)
+      })
+    }
+    else {
+      store.items.forEach(it => {
+        it.checked = false
+        setCheck(false, it)
+      })
+    }
+    // console.log('set', val)
+  }
+})
 function setCheck (evt, item) {
   // console.log('ref')
   // console.log('evt', evt)
@@ -112,13 +148,18 @@ function setCheck (evt, item) {
     store.form.items.push(item)
   }
   else {
-    console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.id === item.id)
+    // console.log('not checked', store.form)
+    const index = store.form.items.findIndex(a => a.kd_obat === item.kd_obat && a.noresep === item.noresep)
+    // console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
   }
 }
 function simpan () {
+  const tlg = store.form.tgl
+  const hrs = date.formatDate(Date.now(), ' HH:mm:ss')
+  store.setForm('tgl_trans', tlg + hrs)
   console.log('simpan', store.form)
+  // store.simpanList()
 }
 </script>
 <style lang="scss" scoped>
