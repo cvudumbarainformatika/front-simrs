@@ -50,6 +50,9 @@
             {{ item?.header?.resep?.noresep }}
           </div>
           <div class="row text-italic f-10">
+            {{ item?.header?.nopermintaan }}
+          </div>
+          <div class="row text-italic f-10">
             {{ item?.header?.resep?.dokter?.nama }}
           </div>
         </div>
@@ -76,8 +79,8 @@
           </div>
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
-          <div class="row">
-            {{ item?.header?.resep?.datapasien?.rs2 }}
+          <div class="row items-end">
+            {{ item?.header?.resep?.datapasien?.rs2 }} <span class="text-italic f-10 q-ml-sm">  ({{ item?.header?.noreg }})</span>
           </div>
           <div class="row justify-end">
             {{ item?.jumlah_resep }} ({{ item?.obat?.satuan_k }})
