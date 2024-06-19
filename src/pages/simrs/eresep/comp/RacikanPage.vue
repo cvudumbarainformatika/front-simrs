@@ -647,7 +647,7 @@ function enterSigna () {
   }
 }
 function enterKet () {
-  refObat.value.focus()
+  // refObat.value.focus()
   // refObat.value.showPopup()
 }
 // function enterObat () {
