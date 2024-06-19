@@ -45,7 +45,7 @@ defineProps({
 })
 const hoverred = ref(false)
 
-function goToQr() {
+function goToQr () {
   router.push({ name: 'login-mode', params: { mode: 'login-model-jadul' }, replace: true })
   // location.reload()
 }

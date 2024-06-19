@@ -21,7 +21,7 @@
     :options="options"
     @new-value="signaCreateValue"
     @update:model-value="signaSelected"
-    @focus="showTooltip = true"
+    @focus="focused()"
     @blur="showTooltip = false"
   >
     <!-- <q-tooltip v-model="showTooltip" anchor="center right" self="center left" :offset="[10, 10]">
@@ -32,7 +32,7 @@
         <div>setelah mengisi inputan </div>
       </div>
     </q-tooltip> -->
-    <app-tooltip v-model="showTooltip" arrow="left" anchor="center right" self="center left">
+    <app-tooltip v-model="showTooltip" no-parent-event arrow="left" anchor="center right" self="center left">
       <div><strong>Informasi Pencarian SIGNA</strong></div>
       <div><em>Jika ... pada pencarian <strong>tidak</strong> di temukan</em></div>
       <div><strong>Tekan Enter</strong> untuk <strong>simpan data SIGNA BARU</strong></div>
@@ -55,6 +55,13 @@ const showTooltip = ref(false)
 const emits = defineEmits(['done'])
 defineExpose({
   refSigna
+})
+
+const props = defineProps({
+  edited: {
+    type: Boolean,
+    default: false
+  }
 })
 
 onMounted(async () => {
@@ -129,5 +136,9 @@ async function getSigna (val) {
 
   const resp = await api.get('v1/simrs/master/signa/get-signa-autocomplete', params)
   return resp.data ?? []
+}
+
+function focused () {
+  props.edited ? showTooltip.value = false : showTooltip.value = true
 }
 </script>

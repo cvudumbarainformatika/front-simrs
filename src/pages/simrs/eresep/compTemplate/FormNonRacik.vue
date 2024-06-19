@@ -42,15 +42,15 @@
 
     <q-separator class="q-my-sm" />
 
-    <cari-obat v-model="store.namaObat" ref="compCariObat" @enter="obatSelected" />
+    <cari-obat v-model="store.namaObat" ref="compCariObat" @enter="obatEnter" @selected="obatSelected" />
     <div class="row q-my-xs q-col-gutter-sm">
-      <div class="col-3">
+      <div class="col-4">
         <q-input
           ref="refQty"
           v-model="store.form.jumlah_diminta"
-          label="Jumlah"
+          :label="`QTY / ${store.form.satuan_kcl}`"
           dense
-          :rules="[val=> parseFloat(val) >= 1 || '']"
+          :rules="[numberValidationRule]"
           lazy-rules
           no-error-icon
           hide-bottom-space
@@ -60,7 +60,7 @@
           @keyup.enter="qtyEnter"
         />
       </div>
-      <div class="col-9">
+      <div class="col-8">
         <autocomplete-input v-model="store.signa" @done="signaEnter" ref="compSigna" />
       </div>
       <div class="col-12">
@@ -74,7 +74,7 @@
           hide-bottom-space
           standout="bg-yellow-3"
           outlined
-          @keyup.enter.stop="konsumsiEnter"
+          @keyup.enter="konsumsiEnter"
         />
       </div>
       <div class="col-12">
@@ -86,7 +86,6 @@
           standout="bg-yellow-3"
           outlined
           class="full-width"
-          autocomplete
         />
       </div>
     </div>
@@ -129,19 +128,47 @@ const props = defineProps({
   }
 })
 
+function numberValidationRule (val) {
+  if (val === '' || val === null) {
+    return 'Harap diisi'
+  }
+  if (isNaN(val)) {
+    return 'Input must be a valid number.'
+  }
+
+  if (val <= 0) {
+    return 'Input must be a positive number.'
+  }
+  return true
+}
+
 function setTipe (val) {
   console.log('tipe resep', val)
   store.cariObat('')
 }
 
-function obatSelected () {
+function obatSelected (val) {
+  store.setForm('racikan', val?.racikan ?? false)
+
+  store.setForm('satuan_kcl', val?.satuankecil ?? null)
+  store.setForm('kodeobat', val?.kd_obat ?? null)
+  store.setForm('namaobat', val?.namaobat ?? null)
+  store.setForm('kandungan', val?.kandungan ?? null)
+  store.setForm('kekuatandosis', val?.kekuatandosis ?? null)
+  store.setForm('fornas', val?.fornas ?? null)
+  store.setForm('forkit', val?.forkit ?? null)
+  store.setForm('generik', val?.generik ?? null)
+  store.setForm('kode108', val?.kode108 ?? null)
+  store.setForm('kode50', val?.kode50 ?? null)
+  store.setForm('kodedepo', store.dpPar)
+  // refQty.value?.focus()
+  // refQty.value?.select()
+}
+
+function obatEnter (val) {
   refQty.value?.focus()
   refQty.value?.select()
 }
-
-// function updateSelectedObat (val) {
-//   console.log('update selected', val)
-// }
 
 function qtyEnter () {
   // if (parseFloat(store.form.jumlah_diminta) > 1)
@@ -151,12 +178,12 @@ function qtyEnter () {
 
 function signaEnter () {
   refKonsumsi.value.focus()
-  refKonsumsi.value.select()
+  // refKonsumsi.value.select()
 }
 
 function konsumsiEnter () {
   refKet.value.focus()
-  refKet.value.select()
+  // refKet.value.select()
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -180,21 +207,23 @@ onMounted(() => {
 function resetChild () {
   store.form = {
     racikan: false,
+    tiperacikan: null,
     tiperesep: store.items.length ? store.items[0].tiperesep : 'normal',
     forkit: null,
     fornas: null,
     generik: null,
     jumlah_diminta: 1,
     konsumsi: null,
-    kodedepo: null,
     kodeobat: null,
     namaobat: null,
     kandungan: null,
+    kekuatandosis: null,
     keterangan: null,
     kode108: null,
     kode50: null,
     satuan_kcl: null,
-    signa: null
+    signa: null,
+    kodedepo: store.dpPar
   }
   store.namaObat = null
   store.signa = null

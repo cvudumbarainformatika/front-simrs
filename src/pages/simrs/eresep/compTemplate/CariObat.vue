@@ -21,7 +21,7 @@
     no-error-icon
     @update:model-value="obatSelected"
     @keyup.enter.stop="emits('enter')"
-    @focus="showTooltip = true"
+    @focus="focused()"
     @blur="showTooltip = false"
     @input-value="inputCari"
   >
@@ -81,7 +81,7 @@
         <div><em>Minimal 3 karakter untuk pencarian OBAT</em></div>
       </div>
     </q-tooltip> -->
-    <app-tooltip v-model="showTooltip" arrow="left" anchor="center right" self="center left">
+    <app-tooltip v-model="showTooltip" no-parent-event arrow="left" anchor="center right" self="center left">
       <div><strong>Informasi Pencarian OBAT</strong></div>
       <div><em>pemilihan obat untuk <strong>TEMPLATE</strong> tidak berdasarkan <strong>ALOKASI STOK</strong></em></div>
     </app-tooltip>
@@ -104,6 +104,13 @@ const modVal = ref(null)
 
 defineExpose({ refObat })
 
+const props = defineProps({
+  edited: {
+    type: Boolean,
+    default: false
+  }
+})
+
 onMounted(() => {
   console.log('ref obat', refObat.value?.$el?.clientWidth)
   width.value = refObat.value?.$el?.clientWidth
@@ -115,31 +122,8 @@ watchEffect(() => {
 
 const emits = defineEmits(['enter', 'focus', 'blur', 'selected'])
 function obatSelected (val) {
-  if (store.form.racikan === false) {
-    console.log('select obat', val)
-    // if (val?.alokasi <= 0) {
-    //   store.namaObat = null
-    //   notifErrVue('Stok Alokasi sudah habis, silahkan pilih obat yang lain')
-    // }
-    refObat.value.validate()
-    // console.log('obat selected', val)
-    store.setForm('satuan_kcl', val?.satuankecil ?? null)
-    store.setForm('kodeobat', val?.kd_obat ?? null)
-    store.setForm('namaobat', val?.namaobat ?? null)
-    store.setForm('kandungan', val?.kandungan ?? null)
-    store.setForm('fornas', val?.fornas ?? null)
-    store.setForm('forkit', val?.forkit ?? null)
-    store.setForm('generik', val?.generik ?? null)
-    store.setForm('kode108', val?.kode108 ?? null)
-    store.setForm('uraian108', val?.uraian108 ?? null)
-    store.setForm('kode50', val?.kode50 ?? null)
-    store.setForm('uraian50', val?.uraian50 ?? null)
-    // store.setForm('stokalokasi', val?.alokasi ?? 0)
-    store.setForm('kodedepo', store.dpPar)
-  }
-  else {
-    emits('selected', val)
-  }
+  refObat.value.validate()
+  emits('selected', val)
 }
 function obatValid (val) {
   return (val !== null && val !== '') || ''
@@ -198,6 +182,10 @@ function highlightSearchTerm (label) {
   const regex = new RegExp(txt, 'ig')
   console.log('regex', label)
   return label?.replace(regex, '<span class="bg-yellow text-black">$&</span>')
+}
+
+function focused () {
+  props.edited ? showTooltip.value = false : showTooltip.value = true
 }
 
 </script>

@@ -17,14 +17,14 @@
       <q-form @submit="onSubmit">
         <q-card-section>
           <div class="text-weight-bold q-mb-sm">
-            <em>Bahan Obat </em>{{ store.form.jumlahracikan }} {{ store.form.satuan_racik }} Racikan
+            <em>Bahan Obat </em>{{ store.form.jumlah_diminta }} {{ store.form.satuan_kcl }} Racikan
           </div>
           <cari-obat v-model="store.namaObat" ref="compCariObat" @enter="obatEnter" @selected="obatSelected" />
         </q-card-section>
 
-        <q-card-section v-if="store.form.tiperacikan === 'non-DTD' " class="q-pt-none">
+        <q-card-section class="q-pt-none">
           <div class="row q-col-gutter-sm items-center">
-            <div class="col-6">
+            <div v-if="store.form.tiperacikan === 'DTD'" class="col-6">
               <q-input
                 ref="refJml"
                 v-model="store.formRacik.dosis"
@@ -32,12 +32,13 @@
                 standout="bg-yellow-3"
                 dense
                 outlined
+                :rules="[dosisValid]"
                 @focus="showTooltipDosis = true"
                 @blur="showTooltipDosis = false"
                 @update:model-value="updateDosis"
                 :hint="`Dosis : ${dosisNonDtd() ?? '-'}`"
               >
-                <app-tooltip v-model="showTooltipDosis" arrow="bottom" anchor="top middle" self="bottom middle">
+                <app-tooltip v-model="showTooltipDosis" no-parent-event arrow="top" anchor="bottom middle" self="top middle">
                   <div><strong>Masukkan Jumlah Obat yang diinginkan</strong></div>
                   <!-- <div><em>Kekuatan Dosis Obat adalah <strong>{{ store?.formRacik?.kekuatandosis }}</strong></em></div> -->
                   <div>jumlah obat boleh <strong>bilangan bulat</strong> atau <strong>desimal</strong></div>
@@ -49,13 +50,23 @@
               <q-input
                 ref="refDiminta"
                 v-model="store.formRacik.jumlah_diminta"
-                label="Jumlah Diminta"
+                label="Jumlah Obat"
                 standout="bg-yellow-3"
+                :rules="[numberValidationRule]"
                 dense
                 outlined
-                readonly
+                @focus="showTooltipJumlah = true"
+                @blur="showTooltipJumlah = false"
+                :readonly="store.formRacik?.tiperacikan === 'non-DTD'"
                 :hint="`Satuan : ${store.formRacik?.satuan_kcl ?? '-'}`"
-              />
+              >
+                <app-tooltip v-model="showTooltipJumlah" no-parent-event arrow="top" anchor="bottom middle" self="top middle">
+                  <div><strong>Masukkan Jumlah Obat</strong></div>
+                  <div><strong>untuk {{ store.form.jumlah_diminta }} {{ store.form.satuan_kcl }}</strong> Obat Racikan</div>
+                  <div><em>Masukkan Bilangan BULAT atau DESIMAL</em></div>
+                  <div>Misal : <strong>1 </strong> atau <strong>1.5</strong> atau <strong>0.25</strong></div>
+                </app-tooltip>
+              </q-input>
             </div>
             <div class="col-12">
               <!-- <div v-if="store.formRacik.dosis">
@@ -95,7 +106,9 @@ const store = useTemplateEResepStore()
 
 const compCariObat = ref(null)
 const refJml = ref(null)
+const refDiminta = ref(null)
 const showTooltipDosis = ref(false)
+const showTooltipJumlah = ref(false)
 
 const emits = defineEmits(['simpan'])
 
@@ -116,16 +129,23 @@ function obatSelected (val) {
     kode50: val?.kode50 ?? null,
     keterangan: val?.keterangan ?? null
   }
-  store.formRacik.dosis = null
+  // store.formRacik.dosis = null
 }
 
 function obatEnter () {
   console.log('obat enter')
-  refJml.value.focus()
-  refJml.value.select()
+  if (store.form.tiperacikan === 'DTD') {
+    refJml.value.focus()
+    refJml.value.select()
+  }
+  else {
+    refDiminta.value.focus()
+    refDiminta.value.select()
+  }
 }
 
 function initShow () {
+  showTooltipDosis.value = false
   store.formRacik = {
     dosis: null,
     forkit: null,
@@ -146,14 +166,32 @@ function initShow () {
 
 function dosisNonDtd () {
   // console.log('dosis non dtd')
-  const hitung = parseFloat(store.form?.jumlahracikan) * parseFloat(store.formRacik?.dosis)
-  const input = (store.form?.jumlahracikan) + ' x ' + (store.formRacik?.dosis ?? '') + ' = ' + (hitung ?? '0') + ' ' + (store.formRacik?.satuan_kcl ?? '')
+  const hitung = parseFloat(store.form?.jumlah_diminta) * parseFloat(store.formRacik?.dosis)
+  const input = (store.form?.jumlah_diminta) + ' x ' + (store.formRacik?.dosis ?? '') + ' = ' + (hitung ?? '0') + ' ' + (store.formRacik?.satuan_kcl ?? '')
   return input
 }
 
 function updateDosis () {
-  const hitung = parseFloat(store.form?.jumlahracikan) * parseFloat(store.formRacik?.dosis)
+  const hitung = parseFloat(store.form?.jumlah_diminta) * parseFloat(store.formRacik?.dosis)
   store.formRacik.jumlah_diminta = hitung
+}
+
+function dosisValid (val) {
+  return (val !== null && val !== '') || ''
+}
+
+function numberValidationRule (val) {
+  if (val === '' || val === null) {
+    return 'Harap diisi'
+  }
+  if (isNaN(val)) {
+    return 'Input must be a valid number.'
+  }
+
+  if (val <= 0) {
+    return 'Input must be a positive number.'
+  }
+  return true
 }
 
 function onSubmit () {
