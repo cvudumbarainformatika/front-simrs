@@ -128,7 +128,7 @@
           <div class="q-mr-sm">
             Trans Konsi
           </div>
-          <div class="">
+          <div :class="parseFloat(row?.jumlah_konsi)>0?'text-weight-bold':''">
             {{ formatDouble(row?.jumlah_konsi,2)??0 }}
           </div>
         </div>
@@ -136,7 +136,7 @@
           <div class="q-mr-sm">
             BAST
           </div>
-          <div class="">
+          <div :class="parseFloat(row?.jumlah_bast)>0?'text-weight-bold':''">
             {{ formatDouble(row?.jumlah_bast,2)??0 }}
           </div>
         </div>
@@ -144,7 +144,7 @@
           <div class="q-mr-sm">
             Pembayaran
           </div>
-          <div class="">
+          <div :class="parseFloat(row?.nilai_pembayaran)>0?'text-weight-bold':''">
             {{ formatDouble(row?.nilai_pembayaran,2)??0 }}
           </div>
         </div>
@@ -238,7 +238,7 @@
                   <div class="q-mr-sm">
                     Penerimaan
                   </div>
-                  <div class="">
+                  <div class="text-weight-bold text-primary">
                     {{ rin?.nopenerimaan }}
                   </div>
                 </div>
@@ -246,7 +246,7 @@
                   <div class="q-mr-sm">
                     Permintaan OP
                   </div>
-                  <div class="">
+                  <div class="text-weight-bold text-orange">
                     {{ rin?.nopermintaan }}
                   </div>
                 </div>
@@ -254,7 +254,7 @@
                   <div class="q-mr-sm">
                     Resep
                   </div>
-                  <div class="">
+                  <div class="text-weight-bold text-green">
                     {{ rin?.noresep }}
                   </div>
                 </div>
@@ -280,7 +280,7 @@
                   <div class="q-mr-sm">
                     subtotal
                   </div>
-                  <div class="">
+                  <div class="text-weight-bold">
                     {{ formatDouble(rin?.subtotal,2) }}
                   </div>
                 </div>

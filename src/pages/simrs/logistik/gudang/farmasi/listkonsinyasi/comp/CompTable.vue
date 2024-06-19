@@ -170,13 +170,14 @@ function setCheck (evt, item) {
       subtotal: item?.subtotal
 
     }
-
-    store.form.items.push(temp)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
+    if (index < 0) store.form.items.push(temp)
   }
   else {
     // console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.kdobat === item.kdobat && a.noresep === item.noresep)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
     // console.log('not checked', index)
+    console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
   }
 }
