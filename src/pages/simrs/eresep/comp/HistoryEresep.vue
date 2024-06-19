@@ -62,7 +62,7 @@
                     </div>
                   </div>
                   <div class="col-auto">
-                    <q-btn
+                    <!-- <q-btn
                       rounded
                       push
                       label="Copy resep"
@@ -80,7 +80,7 @@
                       >
                         Copy resep
                       </q-tooltip>
-                    </q-btn>
+                    </q-btn> -->
                   </div>
                 </div>
                 <q-list
@@ -183,7 +183,7 @@
                     </div>
                   </div>
                   <div class="col-auto">
-                    <q-btn
+                    <!-- <q-btn
                       rounded
                       push
                       label="Copy resep"
@@ -201,7 +201,7 @@
                       >
                         Copy resep
                       </q-tooltip>
-                    </q-btn>
+                    </q-btn> -->
                   </div>
                 </div>
                 <div
@@ -393,6 +393,7 @@ function pilihData (row) {
   store.pilihHistory(row)
 }
 
+// eslint-disable-next-line no-unused-vars
 function copyResep (val, indexlist, tipe) {
   console.log('payload form', tipe)
   const resep = val?.rincian
