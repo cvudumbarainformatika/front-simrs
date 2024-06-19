@@ -318,12 +318,20 @@ export const usePersiapanOperasiStore = defineStore('resep_sementara', {
                 this.nopermintaan = resp?.data?.nota
                 this.listBelum = resp?.data?.heder
                 this.listBelum.rinci = []
+                this.listSudah = null
               }
               this.resetForm()
               this.setForm('nopermintaan', resp?.data?.nota)
 
               if (resp?.data?.rinci) {
                 this.setList(resp?.data?.rinci)
+              }
+              const ada = this.pasien?.permintaanobatoperasi.findIndex(x => x.nopermintaan === resp.data?.all?.nopermintaan)
+              if (ada >= 0) {
+                this.pasien.permintaanobatoperasi[ada] = resp.data?.all
+              }
+              else {
+                this.pasien.permintaanobatoperasi.push(resp.data?.all)
               }
               this.setForm('lanjuTr', '')
               resolve(resp)
