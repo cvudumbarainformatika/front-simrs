@@ -101,7 +101,7 @@
           :key="n"
         >
           <tr
-            :class="item?.flag===''?'bg-red-2 cursor-pointer':(item?.flag==='1'?'bg-light-blue-2 cursor-pointer':'cursor-pointer')"
+            :class="item?.flag===''?'bg-red-1 cursor-pointer':(item?.flag==='1'?'bg-light-blue-2 cursor-pointer':'cursor-pointer')"
             @click="expand(item)"
           >
             <td width="5%">
@@ -182,14 +182,48 @@
               </div>
             </td>
             <td>
-              <q-chip
-                square
-                class="f-10"
-                :color="color(item?.flag)"
-                text-color="white"
-              >
-                {{ status(item?.flag) }}
-              </q-chip>
+              <div class="row">
+                <q-chip
+                  square
+                  class="f-10"
+                  :color="color(item?.flag)"
+                  text-color="white"
+                >
+                  {{ status(item?.flag) }}
+                </q-chip>
+              </div>
+              <div v-if="item?.flag===''" class="row justify-between">
+                <div class="col-auto q-mr-md">
+                  <q-btn
+                    dense
+                    flat
+                    color="negative"
+                    icon="icon-mat-delete"
+                    :loading="item?.loadingHapus"
+                    :disable="item?.loadingHapus"
+                    @click="hapusResep(item)"
+                  >
+                    <q-tooltip>
+                      Hapus Resep
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+                <div class="col-auto q-mr-md">
+                  <q-btn
+                    dense
+                    flat
+                    color="primary"
+                    icon="icon-mat-send"
+                    :loading="item?.loadingKirim"
+                    :disable="item?.loadingKirim"
+                    @click="kirimResep(item)"
+                  >
+                    <q-tooltip>
+                      Kirim Resep
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+              </div>
             </td>
           </tr>
           <tr v-if="item.expand">
@@ -556,8 +590,12 @@
 </template>
 
 <script setup>
+import { Dialog } from 'quasar'
+// eslint-disable-next-line no-unused-vars
+import { api } from 'src/boot/axios'
 // eslint-disable-next-line no-unused-vars
 import { dateFullFormat, dateFull, formatDouble, formatRpDouble } from 'src/modules/formatter'
+import { notifSuccess } from 'src/modules/utils'
 import { useListResepDokterToDepoStore } from 'src/stores/simrs/pelayanan/resep/listresep'
 
 const store = useListResepDokterToDepoStore()
@@ -571,6 +609,85 @@ const store = useListResepDokterToDepoStore()
 // }
 function expand (item) {
   item.expand = !item.expand
+}
+function kirimResep (item) {
+  item.expand = !item.expand
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Resep Akan Dikirim Ke Depo ?',
+    ok: {
+      push: true,
+      label: 'Kirimkan',
+      'no-caps': true,
+      color: 'primary'
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      'no-caps': true,
+      color: 'dark'
+    }
+  })
+    .onOk(() => {
+      item.loadingKirim = true
+      const form = {
+        noresep: item?.noresep
+      }
+      console.log('ok', form)
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/kirimresep', form)
+          .then(resp => {
+            item.flag = '1'
+            delete item.loadingKirim
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingKirim
+          })
+      })
+    })
+}
+function hapusResep (item) {
+  item.expand = !item.expand
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Apakah Draft Resep Akan Di Hapus ?',
+    ok: {
+      push: true,
+      label: 'Hapus',
+      'no-caps': true,
+      color: 'negative'
+    },
+    cancel: {
+      push: true,
+      label: 'Batal',
+      'no-caps': true,
+      color: 'dark'
+    }
+  })
+    .onOk(() => {
+      item.loadingHapus = true
+      const form = {
+        noresep: item?.noresep
+      }
+      console.log('belum', item)
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/depo/hapus-permintaan-resep', form)
+          .then(resp => {
+            notifSuccess(resp)
+            const index = store.items.findIndex(x => x.noresep === item.noresep)
+            console.log('ok', index, item)
+            if (index >= 0) store.items.splice(index, 1)
+            store.getData(true)
+            delete item.loadingHapus
+            resolve(resp)
+          })
+          .catch(() => {
+            delete item.loadingHapus
+          })
+      })
+    })
 }
 
 // const indexId = ref(0)

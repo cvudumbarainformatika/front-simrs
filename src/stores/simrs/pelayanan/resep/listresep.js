@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 // import { dateDbFormat } from 'src/modules/formatter'
-import { notifSuccess } from 'src/modules/utils'
 
 export const useListResepDokterToDepoStore = defineStore('list_resep_dokter_to_depo', {
   state: () => ({
@@ -176,9 +175,9 @@ export const useListResepDokterToDepoStore = defineStore('list_resep_dokter_to_d
       // item.semuaracik = item?.permintaanracikan.length ? item?.permintaanracikan.length && item?.permintaanracikan.filter(x => x.done === true).length === item?.permintaanracikan?.length : true
       // console.log('item', item)
     },
-    async getData () {
+    async getData (val) {
       const param = { params: this.params }
-      this.loading = true
+      this.loading = !val
       await api.get('v1/simrs/farmasinew/depo/ambil-resep-dokter', param)
         .then(resp => {
           this.loading = false
@@ -188,76 +187,6 @@ export const useListResepDokterToDepoStore = defineStore('list_resep_dokter_to_d
           this.metanidata()
         })
         .catch(() => { this.loading = false })
-    },
-    selesaiPemakaian (val) {
-      const formData = new FormData()
-      formData.append('nopemakaian', val?.nopemakaian)
-      val.loading = true
-      this.loadingSelesai = true
-      return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/ruangan/selesai', formData)
-          .then(resp => {
-            this.loadingSelesai = false
-            val.loading = false
-            console.log('selesai pemakaian ', resp?.data)
-            notifSuccess(resp)
-            this.getData()
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loadingSelesai = false
-            val.loading = false
-          })
-      })
-    },
-    hapusHead (item) {
-      this.loadingHead = true
-      item.loading = true
-      return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/ruangan/hapus-header', item)
-          .then(resp => {
-            this.loadingHead = false
-            item.loading = false
-            console.log('hapus head', resp?.data)
-            this.getData()
-            notifSuccess(resp)
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loadingHead = false
-            item.loading = false
-          })
-      })
-    },
-    hapusRinci (item) {
-      console.log('hapus rinci', item)
-      this.loadingRinci = true
-      item.loading = true
-      return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/ruangan/hapus-rinci', item)
-          .then(resp => {
-            this.loadingRinci = false
-            item.loading = false
-            console.log('hapus rinci', resp?.data)
-            const head = this.items.find(it => it.nopemakaian === item.nopemakaian)
-            if (head && resp?.data?.adaRinci?.length > 0) {
-              const index = head?.rinci.findIndex(a => a.kd_obat === item.kd_obat)
-              console.log('index', index)
-              if (index >= 0) {
-                head.rinci.splice(index, 1)
-              }
-            }
-            if (resp?.data?.adaRinci?.length <= 0) {
-              this.getData()
-            }
-            notifSuccess(resp)
-            resolve(resp)
-          })
-          .catch(() => {
-            this.loadingRinci = false
-            item.loading = false
-          })
-      })
     }
   }
 })
