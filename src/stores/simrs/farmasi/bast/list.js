@@ -21,32 +21,32 @@ export const useListBastPenerimaanFarmasiStore = defineStore('list_bast_penerima
     columnHide: []
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.param[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParam('q', payload)
       this.setParam('page', 1)
       this.getListBast()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParam('page', payload)
       this.getListBast()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParam('per_page', payload)
       this.setParam('page', 1)
       this.getListBast()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParam('page', 1)
       this.getListBast()
     },
 
-    getInitialData() {
+    getInitialData () {
       this.getListBast()
     },
-    getListBast() {
+    getListBast () {
       this.loading = true
       const param = { params: this.param }
       return new Promise(resolve => {

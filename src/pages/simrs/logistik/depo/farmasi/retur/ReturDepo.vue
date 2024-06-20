@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { useStyledStore } from 'src/stores/app/styled'
 import { useReturDepoStore } from 'src/stores/simrs/farmasi/retur/depo/returdepo'
@@ -72,27 +73,25 @@ const ListComp = defineAsyncComponent(() => import('./comp/ListComp.vue'))
 const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 
 onMounted(() => {
-  store.setParams('kddepo', apps?.user?.kdruangansim)
   store.getDataTable()
-  // const depoRet = ['Gd-04010102']
-  // const depos = apps.depos.filter(a => depoRet.includes(a.value))
-  // const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
-  // if (depo.length) {
-  // }
+  const depoRet = ['Gd-04010102', 'Gd-02010104']
+  const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
+  if (depo.length) store.setParams('kddepo', apps?.user?.kdruangansim)
+  else notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap dan Depo IGD sesuai SPO Retur Farmasi.')
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  store.setParams('kddepo', obj)
   store.getDataTable()
-  // const depoRet = [apps?.user?.kdruangansim]
-  // const depos = apps.depos.filter(a => depoRet.includes(a.value))
-  // const depo = depos.filter(a => a.value === obj)
-  // console.log('depos', depos)
-  // if (depo.length)
-  // else {
-  //   notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap')
-  //   store.items = []
-  //   store.meta = {}
-  // }
+  const depoRet = ['Gd-04010102', 'Gd-02010104']
+  const depos = apps.depos.filter(a => depoRet.includes(a.value))
+  const depo = depos.filter(a => a.value === obj)
+  console.log('depos', depos)
+  if (depo.length) store.setParams('kddepo', obj)
+  else {
+    notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap dan Depo IGD sesuai SPO Retur Farmasi.')
+    store.items = []
+    store.meta = {}
+  }
 })
 </script>
 

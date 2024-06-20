@@ -276,7 +276,7 @@
             </q-item>
           </q-list>
         </div>
-        <div
+        <!-- <div
           v-if="store?.resep?.listRacikan?.length"
           class="q-mt-sm"
         >
@@ -387,39 +387,14 @@
                           {{ rinc.jumlah_keluar }}
                         </div>
                       </div>
-                      <!--
-                      <div class="row">
-                        <div class="col-4">
-                          Harga
-                        </div>
-                        <div class="col-8">
-                          {{ formatDouble(parseFloat(rinc?.harga_jual),2) }}
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4">
-                          Subtotal
-                        </div>
-                        <div class="col-8">
-                          {{ formatDouble(parseFloat(rinc?.harga),2) }}
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4">
-                          Keterangan
-                        </div>
-                        <div class="col-8">
-                          {{ rinc?.keteranganx }}
-                        </div>
-                      </div>
-                    -->
+
                     </div>
                   </div>
                 </q-item-section>
               </q-item>
             </q-list>
           </div>
-        </div>
+        </div> -->
       </q-scroll-area>
     </div>
   </div>
@@ -459,23 +434,23 @@ function reguler (evt, det, key) {
   det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
   // console.log(evt, det, key)
 }
-function racik (evt, det, key) {
-  const inc = evt.includes('.')
-  const ind = evt.indexOf('.')
-  const panj = evt.length
-  const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
-  det[key] = nilai
+// function racik (evt, det, key) {
+//   const inc = evt.includes('.')
+//   const ind = evt.indexOf('.')
+//   const panj = evt.length
+//   const nilai = isNaN(parseFloat(evt)) ? 0 : (inc && (ind === (panj - 1)) ? evt : parseFloat(evt))
+//   det[key] = nilai
 
-  det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
+//   det.harga = (parseFloat(det.harga_jual) * parseFloat(det.jumlah_retur)) + parseFloat(det?.nilai_r)
 
-  const index = store?.resep?.rincianracik.findIndex(x => x.id === det.id)
-  if (key === 'jumlah_retur' && nilai > det.jumlah_keluar) {
-    det.jumlah_retur = det.jumlah_keluar
-    notifErrVue('jumlah retur tidak boleh melebihi jumlah obat')
-  }
-  if (index >= 0) store.resep.rincianracik[index] = det
-  // console.log(evt, det, key)
-}
+//   const index = store?.resep?.rincianracik.findIndex(x => x.id === det.id)
+//   if (key === 'jumlah_retur' && nilai > det.jumlah_keluar) {
+//     det.jumlah_retur = det.jumlah_keluar
+//     notifErrVue('jumlah retur tidak boleh melebihi jumlah obat')
+//   }
+//   if (index >= 0) store.resep.rincianracik[index] = det
+//   // console.log(evt, det, key)
+// }
 onMounted(() => {
   h.value = pageRef.value?.clientHeight
   console.log('h on moun', pageRef.value?.clientHeight)

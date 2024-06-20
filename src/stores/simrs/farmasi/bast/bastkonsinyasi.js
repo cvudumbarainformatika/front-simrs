@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { api } from 'src/boot/axios'
 import { notifSuccess } from 'src/modules/utils'
 
-export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi', {
+export const useTransaksiBastKonsinyasiFarmasiStore = defineStore('transaksi_bast_konsinyasi_farmasi', {
   state: () => ({
     loading: false,
     loadingNomor: false,
@@ -45,9 +45,9 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       this.newPenerimaans = []
       this.penerimaans = []
       this.tampilPenerimaans = []
-      // console.log('kontrak selected', val)
-      this.setParam('nopemesanan', val)
-
+      console.log('kontrak selected', val)
+      this.setParam('notranskonsi', val)
+      this.penerimaan = this.kontraks.find(x => x.notranskonsi === val) ?? {}
       this.getDataPenerimaan()
     },
     pemesananSelected (val) {
@@ -75,7 +75,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
     getPerusahaan () {
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/penunjang/farmasinew/bast/perusahaan')
+        api.get('v1/simrs/penunjang/farmasinew/bast-konsi/perusahaan')
           .then(resp => {
             // console.log('resp perusahaan', resp.data)
             this.loading = false
@@ -90,7 +90,7 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       const param = { params: this.params }
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/penunjang/farmasinew/bast/pemesanan', param)
+        api.get('v1/simrs/penunjang/farmasinew/bast-konsi/notrans', param)
           .then(resp => {
             this.loading = false
             this.kontraks = resp.data
@@ -104,13 +104,13 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
       const param = { params: this.params }
       this.loading = true
       return new Promise(resolve => {
-        api.get('v1/simrs/penunjang/farmasinew/bast/penerimaan', param)
+        api.get('v1/simrs/penunjang/farmasinew/bast-konsi/transaksi', param)
           .then(resp => {
             this.loading = false
             const temp = resp.data
             temp.forEach(anu => {
               anu.checked = false
-              anu.penerimaanrinci.forEach(det => {
+              anu.rinci.forEach(det => {
                 det.adaPPN = false
                 if (parseFloat(det.ppn) > 0) det.adaPPN = true
                 det.checked = false
@@ -118,8 +118,8 @@ export const useTransaksiBastFarmasiStore = defineStore('transaksi_bast_farmasi'
                 det.afterRetur = parseFloat(det.subtotal) - nilaiRetur
                 det.nilai_retur = nilaiRetur
               })
-              anu.subtotal_bast = anu.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
-              anu.subtotal_retur = anu.penerimaanrinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
+              anu.subtotal_bast = anu.rinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
+              anu.subtotal_retur = anu.rinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
             })
 
             this.newPenerimaans = temp

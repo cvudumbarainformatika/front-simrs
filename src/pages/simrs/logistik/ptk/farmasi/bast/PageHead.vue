@@ -29,6 +29,15 @@
           @click="emits('ganti','bast')"
         />
         <q-btn
+          :outline="path !== 'bastkonsi'"
+          glossy
+          push
+          color="primary"
+          label="BAST KONSINYASI"
+          size="md"
+          @click="emits('ganti','bastkonsi')"
+        />
+        <q-btn
           :outline="path !== 'list'"
           glossy
           push
@@ -36,6 +45,15 @@
           label="LIST BAST"
           size="md"
           @click="emits('ganti','list')"
+        />
+        <q-btn
+          :outline="path !== 'listkonsi'"
+          glossy
+          push
+          color="teal"
+          label="LIST BAST KONSINYASI"
+          size="md"
+          @click="emits('ganti','listkonsi')"
         />
       </q-btn-group>
     </div>
