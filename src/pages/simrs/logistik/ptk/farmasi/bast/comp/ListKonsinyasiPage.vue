@@ -97,7 +97,7 @@
             Bast
           </div>
           <div class=" text-weight-bold">
-            {{ row.bast??'-' }}
+            {{ row.nobast??'-' }}
           </div>
         </div>
         <div class="row justify-between no-wrap q-mt-xs">

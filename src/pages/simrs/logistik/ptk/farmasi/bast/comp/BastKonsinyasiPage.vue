@@ -115,22 +115,15 @@
           />
 
           <div class="anak">
-            Nomor Pemesanan
+            Nomor Trans Konsinyasi
           </div>
+
           <div class="anak">
-            Nomor Penerimaan
+            Tanggal Trans
           </div>
+
           <div class="anak">
-            Tanggal Penerimaan
-          </div>
-          <div class="anak">
-            Nomor Faktur
-          </div>
-          <div class="anak">
-            Tanggal Faktur
-          </div>
-          <div class="anak">
-            Nilai faktur
+            Nilai Konsinyasi
           </div>
 
           <!-- <div class="col-3">
@@ -160,43 +153,20 @@
             </div>
 
             <div class="anak">
-              {{ pesan.nopemesanan }}
+              {{ pesan?.notranskonsi }}
             </div>
             <div class="anak">
-              {{ pesan.nopenerimaan }}
+              {{ dateFullFormat(pesan?.tgl_trans) }}
             </div>
+
             <div class="anak">
-              {{ dateFullFormat(pesan.tglpenerimaan) }}
-            </div>
-            <div class="anak">
-              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ pesan?.nomorsurat }}
-              </div>
-              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ pesan?.faktur?.no_faktur }}
-              </div>
-            </div>
-            <div class="anak">
-              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ dateFullFormat(pesan?.tglsurat) }}
-              </div>
-              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ dateFullFormat(pesan?.faktur?.tgl_faktur) }}
-              </div>
-            </div>
-            <div class="anak">
-              <div v-if="pesan?.jenissurat==='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ formatRpDouble(pesan.total_faktur_pbf) }}
-              </div>
-              <div v-if="pesan?.jenissurat!=='Faktur' && pesan?.jenis_penerimaan==='Pesanan'">
-                {{ formatRpDouble(pesan?.faktur?.total_faktur) }}
-              </div>
+              {{ formatRpDouble(pesan?.subtotal_bast) }}
             </div>
           </div>
-          <div v-if="pesan?.checked && pesan.penerimaanrinci.length">
+          <div v-if="pesan?.checked && pesan.rinci.length">
             <div class="row q-mt-sm bb">
               <div class="q-mb-md">
-                Daftar Barang Penerimaan <span class="text-weight-bold">{{ pesan?.nopenerimaan }}</span>
+                Daftar Barang Konsinyasi Terpakai
               </div>
               <div class="row fit no-wrap items-center q-mb-sm">
                 <div class="deta text-weight-bold">
@@ -228,14 +198,11 @@
                   Harga Netto
                 </div>
                 <div class="deta text-weight-bold">
-                  Nilai Retur
-                </div>
-                <div class="deta text-weight-bold">
                   Jumlah
                 </div>
               </div>
               <div
-                v-for="(det, j) in pesan?.penerimaanrinci"
+                v-for="(det, j) in pesan?.rinci"
                 ref="refDetails"
                 :key="j"
                 class="row fit no-wrap items-center q-mb-xs"
@@ -246,15 +213,15 @@
                       {{ j+1 }}
                     </div>
                     <div class="col-10">
-                      {{ det?.masterobat?.nama_obat }}
+                      {{ det?.obat?.nama_obat }}
                     </div>
                   </div>
                 </div>
                 <div class="deta">
-                  {{ det?.masterobat?.satuan_b }}
+                  {{ det?.obat?.satuan_k }}
                 </div>
                 <div class="deta">
-                  {{ det.jml_terima_b }}
+                  {{ det.jumlah }}
                 </div>
                 <div class="deta">
                   <!-- {{ formatRpDouble(det.harga,2) }} -->
@@ -295,11 +262,7 @@
                   />
                 </div>
                 <div class="deta">
-                  {{ formatRpDouble(det?.harga_netto,2) }}
-                </div>
-                <!-- nilai retur -->
-                <div class="deta">
-                  {{ formatRpDouble(det?.nilai_retur,2) }}
+                  {{ formatRpDouble(det?.harga_net,2) }}
                 </div>
                 <!-- nilai faktur dikurangi nilai retur -->
                 <div class="deta">
@@ -307,7 +270,6 @@
                 </div>
               </div>
               <div class="row fit no-wrap items-center q-mb-sm">
-                <div class="deta text-weight-bold" />
                 <div class="deta text-weight-bold" />
                 <div class="deta text-weight-bold" />
                 <div class="deta text-weight-bold" />
@@ -365,42 +327,28 @@ function updateHargaAll (evt, det, trm, key) {
   console.log('nilai', parseFloat(evt), isNaN(parseFloat(evt)))
   det[key] = nilai
 
-  const isi = det.isi
   const harga = det.harga ?? 0
-  let hargaKcl = det.harga_kcl
   const diskon = det.diskon ?? 0
   const ppn = det.ppn ?? 0
-  const jmlTerimaB = det.jml_terima_b
-  const jmlTerimaK = det.jml_terima_k
+  const jmlTerimaK = det.jumlah
 
   const diskonRp = harga * (diskon / 100)
   const hargaSetelahDiskon = harga - diskonRp
   const ppnRp = isNaN(hargaSetelahDiskon * (ppn / 100)) ? 0 : hargaSetelahDiskon * (ppn / 100)
   const hargaPembelian = hargaSetelahDiskon + ppnRp
-  const subtotal = hargaPembelian * jmlTerimaB
+  const subtotal = hargaPembelian * jmlTerimaK
 
-  if (key === 'harga' || key === 'isi') hargaKcl = harga / isi
-
-  det.isi = isi
   det.harga = harga
-  det.harga_kcl = hargaKcl
   det.diskon = diskon
   det.ppn = ppn
-  det.jml_terima_b = jmlTerimaB
-  det.jml_terima_k = jmlTerimaK
+  det.jumlah = jmlTerimaK
   det.diskon_rp = diskonRp
-  det.diskon_rp_kecil = diskonRp / isi
   det.ppn_rp = ppnRp
-  det.ppn_rp_kecil = ppnRp / isi
-  det.harga_netto = hargaPembelian
-  det.harga_netto_kecil = hargaPembelian / isi
-  det.nilai_retur = det.jumlah_retur * det.harga_netto_kecil
+  det.harga_net = hargaPembelian
   det.subtotal = subtotal
 
-  det.afterRetur = parseFloat(det.subtotal) - parseFloat(det.nilai_retur)
-
   // jumlahkan semua nilai bast
-  trm.subtotal_bast = trm.penerimaanrinci.map(a => parseFloat(a.afterRetur)).reduce((a, b) => a + b, 0)
+  trm.subtotal_bast = trm.rinci.map(a => parseFloat(a.subtotal)).reduce((a, b) => a + b, 0)
   if (store.tampilPenerimaans.length > 0) store.form.jumlah_bast = store.tampilPenerimaans.map(a => parseFloat(a.subtotal_bast)).reduce((a, b) => a + b, 0)
 }
 
@@ -433,17 +381,14 @@ const refTaBast = ref(null)
 const refPemesanans = ref(null)
 const refDetails = ref(null)
 function simpanBast () {
-  store.newPenerimaans?.forEach(ter => {
-    ter.subtotal_retur = ter.penerimaanrinci.map(a => parseFloat(a.nilai_retur)).reduce((a, b) => a + b, 0)
-  })
   const temp = store.newPenerimaans
   console.log('temp', temp)
-  store.form.penerimaans = temp.filter(x => x !== false)
+  store.form.list = temp.filter(x => x !== false)
 
-  if (!store.form.penerimaans.length) notifErrVue('Belum ada Penerimaan dipilih')
+  if (!store.form.list.length) notifErrVue('Belum ada transaksi yang dipilih')
   console.log('form', store.form)
   if (refTaBast.value.$refs.refInputDate.validate()) {
-    // console.log('form', store.form)
+    console.log('form', store.form)
     console.log('pemesanan', store.newPenerimaans)
     store.simpanBast().then(() => {
       refTaBast.value.$refs.refInputDate.resetValidation()
@@ -457,7 +402,7 @@ function simpanBast () {
 </script>
 <style lang="scss" scoped>
 .anak{
-  width:calc(100vw/7);
+  width:calc(100vw/3);
   margin-right: .5em;
   overflow-wrap: anywhere;
 }
@@ -466,7 +411,7 @@ function simpanBast () {
   overflow-wrap: anywhere;
 }
 .deta{
-  width:calc(100vw/10);
+  width:calc(100vw/9);
   margin-right: .5em;
   overflow-wrap: anywhere;
 }

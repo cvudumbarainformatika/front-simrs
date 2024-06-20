@@ -97,7 +97,7 @@
             Bast
           </div>
           <div class=" text-weight-bold">
-            {{ row.bast??'-' }}
+            {{ row.nobast??'-' }}
           </div>
         </div>
         <div class="row justify-between no-wrap q-mt-xs">
@@ -205,7 +205,7 @@
                 {{ i+1 }}
               </div>
               <div class="col-3">
-                <div class="row">
+                <div class="row wrap" style="white-space: normal;">
                   {{ rin?.obat?.nama_obat }}
                 </div>
                 <div class="row f-10 text-italic">

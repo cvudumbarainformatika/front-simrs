@@ -138,7 +138,7 @@ export const useTransaksiBastKonsinyasiFarmasiStore = defineStore('transaksi_bas
       console.log('simpan', this.form)
       this.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/penunjang/farmasinew/bast/simpan', this.form)
+        api.post('v1/simrs/penunjang/farmasinew/bast-konsi/simpan-bast', this.form)
           .then(resp => {
             this.loading = false
             notifSuccess(resp)
