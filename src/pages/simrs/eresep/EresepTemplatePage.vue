@@ -136,7 +136,7 @@
     </div>
     <q-card class="col fit q-ml-xs">
       <div class="column fit">
-        <ListDetilObatTemplate @back="emits('back')" @row-click="onRowClick" />
+        <ListDetilObatTemplate @back="emits('back')" @row-click="onRowClick" @kirim-order="kirimOrder" />
       </div>
     </q-card>
   </div>
@@ -157,7 +157,7 @@ const formRef = ref(null)
 const formRefRacikan = ref(null)
 const isReset = ref(false)
 
-defineProps({
+const props = defineProps({
   pasien: {
     type: Object,
     default: null
@@ -174,8 +174,9 @@ const emits = defineEmits(['back'])
 const tab = ref('nonracikan')
 
 onMounted(() => {
-  store.initItems()
+  // store.initItems()
   // console.log(store.items)
+  templateBaru()
 })
 
 const onRowClick = (val) => {
@@ -232,6 +233,25 @@ function templateBaru () {
   store.items = []
   store.updateListItems()
   tab.value = 'nonracikan'
+}
+
+function kirimOrder () {
+  // console.log('kirim order', props.pasien)
+  if (!props.pasien) return notifErrVue('Pasien Belum Terdaftar')
+  if (store.dpPar === '' || store.dpPar === null) return notifErrVue('tidak ada depo tujuan')
+  if (store.selectTemplate === null) return notifErrVue('pilih template terlebih dahulu')
+  if (props?.pasien?.groups === '' || props?.pasien?.groups === null) return notifErrVue('Sistem Bayar Pasien Belum Jelas')
+  if (props?.pasien?.noreg === '' || props?.pasien?.noreg === null) return notifErrVue('NOREG PASIEN BELUM TERDAFTAR')
+  if (props?.pasien?.norm === '' || props?.pasien?.norm === null) return notifErrVue('NORM PASIEN BELUM TERDAFTAR')
+
+  const payload = {
+    template_id: store?.templateSelected?.id,
+    kodedepo: store?.dpPar,
+    groupsistembayar: store?.pasien?.groups,
+    noreg: store?.pasien?.noreg,
+    norm: store?.pasien?.norm
+  }
+  store.kirimOrder(payload)
 }
 
 watch(() => store.dpPar, (old, val) => {

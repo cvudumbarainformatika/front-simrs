@@ -189,8 +189,14 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
       this.racikan[key] = val
     },
 
-    kirimOrder () {
-      if (this.items.length === 0) return notifErrVue('Tidak ada List Obat')
+    kirimOrder (payload) {
+      return new Promise((resolve, reject) => {
+        api.post('v1/simrs/farmasinew/depo/cek-template-resep', payload)
+          .then(resp => {
+            console.log('kirim order', resp)
+            resolve(resp)
+          })
+      }).catch((err) => { console.log('err', err) })
     },
     setPasien () {
       // this.cariSimulasi(val?.noreg)

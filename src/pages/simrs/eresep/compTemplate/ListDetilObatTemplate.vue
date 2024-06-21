@@ -16,9 +16,10 @@
           List Detil Obat Template {{ store.templateSelected ? store.templateSelected?.nama : '(Baru)' }}
         </div>
         <q-btn
+          v-if="store.templateSelected"
           dense color="white" text-color="dark" class="q-px-md"
           :loading="store.loadingTemplate"
-          @click="store.kirimOrder"
+          @click="emits('kirimOrder')"
         >
           Kirim Order
         </q-btn>
@@ -165,7 +166,7 @@ const columns = ref([
   { name: 'signa', align: 'right', label: 'Aturan Pakai', field: 'signa', sortable: false }
 ])
 
-const emits = defineEmits(['back', 'rowClick'])
+const emits = defineEmits(['back', 'rowClick', 'kirimOrder'])
 
 function onRowClick (row) {
   // console.log('row', row)
