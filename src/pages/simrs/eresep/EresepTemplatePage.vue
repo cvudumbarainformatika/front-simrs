@@ -117,7 +117,16 @@
                       @click="emits('back')"
                     />
                   </div>
-                  <div>.</div>
+                  <div>
+                    <q-btn
+                      label="Template Baru"
+                      type="button"
+                      color="dark"
+                      class="q-px-md"
+                      dense
+                      @click="templateBaru"
+                    />
+                  </div>
                 </div>
               </q-tab-panel>
             </q-tab-panels>
@@ -216,6 +225,13 @@ function simpanRacikan () {
     .then(() => {
       resetChildRacikan()
     })
+}
+
+function templateBaru () {
+  store.templateSelected = null
+  store.items = []
+  store.updateListItems()
+  tab.value = 'nonracikan'
 }
 
 watch(() => store.dpPar, (old, val) => {

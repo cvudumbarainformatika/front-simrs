@@ -6,14 +6,22 @@
     :rows="store.items"
     :columns="columns"
     row-key="kodeobat"
-    table-header-class="bg-dark text-white"
     :rows-per-page-options="[0]"
     :loading="store.loadingTemplate"
     hide-pagination
   >
     <template #top>
-      <div class="text-weight-bold">
-        List Detil Obat Template (Baru)
+      <div class=" full-width row items-center justify-between">
+        <div class="text-weight-bold">
+          List Detil Obat Template {{ store.templateSelected ? store.templateSelected?.nama : '(Baru)' }}
+        </div>
+        <q-btn
+          dense color="white" text-color="dark" class="q-px-md"
+          :loading="store.loadingTemplate"
+          @click="store.kirimOrder"
+        >
+          Kirim Order
+        </q-btn>
       </div>
     </template>
     <template #loading>
@@ -56,7 +64,10 @@
         </div>
         <div class="kanan">
           <q-btn
-            dense color="white" text-color="dark" size="md" class="q-px-md" @click="simpanTemplate"
+            dense color="white"
+            text-color="dark" size="md" class="q-px-md"
+            :loading="store.loadingTemplate"
+            @click="simpanTemplate"
           >
             Simpan Template
           </q-btn>
@@ -122,9 +133,9 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
+import { getCssVar, useQuasar } from 'quasar'
 import { useTemplateEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/templateeresep'
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, watchEffect } from 'vue'
 
 const ListSubRincian = defineAsyncComponent(() => import('./ListSubRincian.vue'))
 const DialogEdit = defineAsyncComponent(() => import('./DialogEdit.vue'))
@@ -132,6 +143,12 @@ const store = useTemplateEResepStore()
 const $q = useQuasar()
 // const showDialogEdit = ref(false)
 // const selected = ref(null)
+
+const bg = ref({
+  head: getCssVar('primary'),
+  rowHead: getCssVar('dark')
+})
+
 const refProxy = ref(null)
 const indexRow = ref(-1)
 const columns = ref([
@@ -211,17 +228,27 @@ function simpanTemplate () {
   })
 }
 
+watchEffect(() => {
+  if (store.templateSelected) {
+    bg.value.head = getCssVar('dark-page')
+  }
+  else {
+    bg.value.head = getCssVar('primary')
+  }
+})
+
 </script>
 
 <style lang="scss">
+
 .my-sticky-header {
   /* height or max-height is important */
   height: 100%;
 
   div.q-table__top ,
-  .q-table__bottom,
-  thead tr:first-child th {
-    background-color: $primary;
+  .q-table__bottom
+   {
+    background-color: v-bind('bg.head');
     color: $white;
     border-collapse: separate !important;
     border-spacing: 0 !important;
@@ -235,36 +262,16 @@ function simpanTemplate () {
   }
   thead tr:first-child th {
     // border-top: 1px solid $white;
-    background-color: $dark;
+    background-color: v-bind('bg.rowHead');
     color: $white;
     top:0
   }
 
-  // thead tr:first-child th{
-  //   top: 0;
-  // }
-
-  // tr:nth-child(even) th[scope=row] {
-  //   background-color: $dark;
-  // }
-
-  // tr:nth-child(odd) th[scope=row] {
-  //   background-color: $white;
-  // }
-
-  // tr:nth-child(even) {
-  //   background-color: $white;
-  // }
-
-  // tr:nth-child(odd) {
-  //   background-color: $grey-3;
-  // }
-
   // /* this is when the loading indicator appears */
-  &.q-table--loading thead tr:last-child th{
-    /* height of all previous header rows */
-    top: 48px
-  }
+  // &.q-table--loading thead tr:last-child th{
+  //   /* height of all previous header rows */
+  //   top: 48px
+  // }
   // /* prevent scrolling behind sticky top row on focus */
   tbody{
     /* height of all previous header rows */

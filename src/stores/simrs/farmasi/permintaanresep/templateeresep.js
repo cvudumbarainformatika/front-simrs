@@ -71,6 +71,7 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
 
     // section save to local storage
     items: [],
+    templateSelected: null,
     templates: []
   }),
   actions: {
@@ -177,6 +178,8 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
 
     selectTemplate (val) {
       console.log('select template', val)
+      this.templateSelected = null
+      this.templateSelected = val
       this.items = []
       this.items = val?.rincian
       this.updateListItems()
@@ -184,6 +187,10 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
 
     setRacikan (key, val) {
       this.racikan[key] = val
+    },
+
+    kirimOrder () {
+      if (this.items.length === 0) return notifErrVue('Tidak ada List Obat')
     },
     setPasien () {
       // this.cariSimulasi(val?.noreg)
