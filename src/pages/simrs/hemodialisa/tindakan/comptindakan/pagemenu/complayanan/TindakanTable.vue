@@ -31,7 +31,7 @@
     <div class="col-grow">
       <div class="full-height bg-grey">
         <q-scroll-area
-          v-if="filterredTable.length"
+          v-if="filterredTable?.length"
           style="height:calc(100% - 1px)"
         >
           <q-list
@@ -188,7 +188,7 @@ const filterredTable = computed(() => {
   return arr?.filter(x => x.rs2 === val)
 })
 
-function hapusItem(id) {
+function hapusItem (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -205,17 +205,17 @@ function hapusItem(id) {
   })
 }
 
-function bukaUploadan(id) {
+function bukaUploadan (id) {
   idTindakan.value = id
   modalUpload.value = !modalUpload.value
 }
 
-function lihatDokumen(item) {
+function lihatDokumen (item) {
   dokumen.value = null
   dokumen.value = item
   drawerRight.value = !drawerRight.value
 }
-function hapusDokumen(id) {
+function hapusDokumen (id) {
   $q.dialog({
     dark: true,
     title: 'Peringatan',
@@ -237,7 +237,7 @@ function hapusDokumen(id) {
   })
 }
 
-function setPelaksana(item) {
+function setPelaksana (item) {
   const nota = item?.rs2
   const notaDariSimrsBaru = nota.includes('RJ')
 
@@ -246,7 +246,8 @@ function setPelaksana(item) {
   let pelaksana = null
   if (!notaDariSimrsBaru) {
     pelaksana = item?.pelaksanalamasimrs?.nama
-  } else {
+  }
+  else {
     // INI DARI SIMRS BARU
     pelaksana = item?.pegawai?.nama
   }

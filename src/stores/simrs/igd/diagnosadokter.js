@@ -55,20 +55,20 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
   // },
   actions: {
 
-    async getDiagnosaDropdown() {
+    async getDiagnosaDropdown () {
       const resp = await api.get('v1/simrs/pelayanan/listdiagnosa')
       if (resp.status === 200) {
         this.listDiagnosa = resp.data
       }
     },
-    async getTindakanDropdown() {
+    async getTindakanDropdown () {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
       // console.log('list tindakan', resp)
       if (resp.status === 200) {
         this.listTindakan = resp.data
       }
     },
-    async jeniskasus() {
+    async jeniskasus () {
       const resp = await api.get('v1/simrs/pelayanan/dialogtindakanpoli')
       if (resp.status === 200) {
         this.listjeniskasus = resp.data
@@ -76,7 +76,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
     },
 
     //= ===
-    async cariIcd9(val) {
+    async cariIcd9 (val) {
       if (val.length < 3) {
         return
       }
@@ -98,11 +98,11 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           this.loadingIcd = false
         })
     },
-    setFormTindakan(key, val) {
+    setFormTindakan (key, val) {
       this.formtindakan[key] = val
     },
     //= ===
-    setKode(val) {
+    setKode (val) {
       this.formdiagnosa.kddiagnosa = val
       const ada = this.listDiagnosa.length > 0
       if (ada) {
@@ -116,11 +116,11 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       }
     },
 
-    setFormDianosa(key, val) {
+    setFormDianosa (key, val) {
       this.formdiagnosa[key] = val
     },
 
-    setKdTindakan(val) {
+    setKdTindakan (val) {
       this.formtindakan.kdtindakan = val
       const ada = this.listTindakan.length > 0
       if (ada) {
@@ -151,7 +151,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       })
     },
 
-    async simpanDiagnosa(pasien) {
+    async simpanDiagnosa (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -196,13 +196,14 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           })
         }
         this.loadingFormDiagnosa = false
-      } catch (error) {
+      }
+      catch (error) {
         // console.log(error)
         this.loadingFormDiagnosa = false
       }
     },
 
-    async deleteDiagnosa(pasien, id) {
+    async deleteDiagnosa (pasien, id) {
       const payload = { id }
       const resp = await api.post('v1/simrs/pelayanan/hapusdiagnosa', payload)
       if (resp.status === 200) {
@@ -214,7 +215,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       }
     },
 
-    editFormDiagnosa(val) {
+    editFormDiagnosa (val) {
       this.formdiagnosa = {
         id: val.id,
         kddiagnosa: val.rs3,
@@ -230,7 +231,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
 
     // ==================================================================================== TINDAKAN =========================================================================
 
-    async saveTindakan(pasien) {
+    async saveTindakan (pasien) {
       if (!pasien?.kodedokter) {
         return notifErrVue('kode Dokter masih kosong, silahkan tutup dulu pasien ini kemudian tekan tombol refresh di pojok kanan atas')
       }
@@ -257,12 +258,13 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           this.initReset('Tindakan Medik')
         }
         this.loadingFormTindakan = false
-      } catch (error) {
+      }
+      catch (error) {
         this.loadingFormTindakan = false
       }
     },
 
-    async getNota(pasien) {
+    async getNota (pasien) {
       const params = {
         params: {
           noreg: pasien?.noreg
@@ -280,7 +282,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       }
     },
 
-    uploadImages(file, id, pasien) {
+    uploadImages (file, id, pasien) {
       const files = file
       // console.log('store upload image', id)
       const data = new FormData()
@@ -314,7 +316,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       })
     },
 
-    hapusDokumen(pasien, id) {
+    hapusDokumen (pasien, id) {
       // hapusdokumentindakan
       const payload = { id }
 
@@ -348,7 +350,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       // }
     },
 
-    async hapusTindakan(pasien, id) {
+    async hapusTindakan (pasien, id) {
       const payload = { id, noreg: pasien?.noreg }
 
       try {
@@ -360,19 +362,20 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           this.setNotas(resp?.data?.nota)
           notifSuccess(resp)
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.log('hapus tindakan poli', error)
       }
     },
 
-    setNotas(array) {
+    setNotas (array) {
       const arr = array.map(x => x.nota)
       this.notaTindakans = arr.length ? arr : []
       this.notaTindakans.push('BARU')
       this.notaTindakan = this.notaTindakans[0]
     },
 
-    initReset(x) {
+    initReset (x) {
       const tabbed = x ?? 'Diagnosa Medik'
       return new Promise((resolve, reject) => {
         this.tab = tabbed
@@ -410,10 +413,10 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
       })
     },
     // =====
-    setFormIcd(key, val) {
+    setFormIcd (key, val) {
       this.formicd[key] = val
     },
-    saveIcd(pasien) {
+    saveIcd (pasien) {
       this.loadingSaveIcd = true
       // this.setFormIcd('noreg', pasien?.noreg)
       // console.log('form icd', this.formicd)
@@ -436,7 +439,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           })
       })
     },
-    getListProsedur(pasien) {
+    getListProsedur (pasien) {
       const payload = {
         params: { noreg: pasien?.noreg }
       }
@@ -448,7 +451,7 @@ export const useDiagnosaDokter = defineStore('diagnosa-dokter', {
           })
       })
     },
-    hapusProsedur(pasien, id) {
+    hapusProsedur (pasien, id) {
       this.loadingSaveIcd = true
       const payload = { id, noreg: pasien?.noreg }
       return new Promise(resolve => {

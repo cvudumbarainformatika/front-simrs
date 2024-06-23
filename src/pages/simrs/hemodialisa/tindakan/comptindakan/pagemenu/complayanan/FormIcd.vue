@@ -278,7 +278,7 @@ onMounted(() => {
   // formmRef.value?.resetValidation()
 })
 
-function setIcd(val) {
+function setIcd (val) {
   store.setFormIcd('kdprocedure', val)
   const icd = store.optionsIcd9.filter(a => a.kd_prosedur === val)
   if (icd.length) {
@@ -286,7 +286,7 @@ function setIcd(val) {
   }
 }
 
-function onSubmit() {
+function onSubmit () {
   store.saveIcd(props.pasien).then(() => {
     formmRef.value.resetValidation()
   })
@@ -317,7 +317,7 @@ function onSubmit() {
 const refIcd = ref(null)
 const optionIcds = ref([])
 
-function filterIcd(val, update) {
+function filterIcd (val, update) {
   if (val === '') {
     update(() => {
       optionIcds.value = store.optionsIcd9
@@ -351,7 +351,8 @@ function filterIcd(val, update) {
           optionIcds.value = filteredData
         })
       }
-    } else {
+    }
+    else {
       optionIcds.value = filteredData
     }
   })
