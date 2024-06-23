@@ -462,6 +462,32 @@ export const useEResepDepoFarmasiStore = defineStore('e_resep_depo_farmasi', {
           })
       })
     },
+    async sendPanggil (pasien, channel) {
+      console.log('pasien', pasien)
+      this.loadingCall = true
+      const params = {
+        noreg: pasien?.noreg,
+        noantrian: pasien?.nomor,
+        // kdpoli: pasien?.kodepoli,
+        kdpoli: 'APT001',
+        tglkunjungan: pasien?.tgl_kirim,
+        channel
+      }
+      this.noreg = pasien?.noreg
+      await api.post('v1/fordisplay/send_panggilan', params)
+        .then((resp) => {
+          // console.log('call', resp)
+          this.loadingCall = false
+          if (resp.status === 200) {
+            // this.meta = resp.data
+            // this.items = resp.data.data
+            // coba
+          }
+        }).catch((err) => {
+          console.log('call', err)
+          this.loadingCall = false
+        })
+    },
     async getDataTable (val) {
       // this.items = []
       if (!val) this.loading = true

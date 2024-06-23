@@ -77,6 +77,7 @@ import { useEResepDepoFarmasiStore } from 'src/stores/simrs/farmasi/eresep/erese
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { laravelEcho } from 'src/modules/newsockets'
 import { useSpeechStore } from 'src/stores/antrian/speech'
+import { useSettingsAplikasi } from 'src/stores/simrs/settings'
 
 const HeaderComp = defineAsyncComponent(() => import('./comp/HeaderComp.vue'))
 const BottomComp = defineAsyncComponent(() => import('./comp/BottomComp.vue'))
@@ -110,6 +111,7 @@ const kdruangansim = computed(() => {
 
 // panggilan
 
+const setting = useSettingsAplikasi()
 const speech = useSpeechStore()
 
 const indexVoices = ref(0)
@@ -125,6 +127,16 @@ function setSpeech (txt) {
 
   return voice
 }
+const kdDisplay = computed(() => {
+  const poli = setting.penunjangs
+  const kdpoli = 'APT001'
+
+  const target = poli.filter(x => x.kodepoli === kdpoli)
+  if (target.length) {
+    return target[0].displaykode
+  }
+  return null
+})
 function panggil (row) {
   console.log('row', row)
   const nama = (row?.datapasien?.nama_panggil) ? (row?.datapasien?.nama_panggil)?.toLowerCase() : ''
@@ -140,6 +152,7 @@ function panggil (row) {
   speech.synth.speak(setSpeech(txt3))
   // console.log(row)
   // store.sendPanggil(row, `display${kdDisplay.value}`)
+  store.sendPanggil(row, `display${kdDisplay.value}`)
 }
 function getListVoices () {
   return new Promise(
@@ -184,6 +197,7 @@ function listenForSpeechEvents () {
   }
 }
 onMounted(() => {
+  setting.getPenunjang()
   store.getApoteker()
   const depo = store.depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) {

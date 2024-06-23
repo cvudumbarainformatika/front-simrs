@@ -16,6 +16,7 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
     currentApp: '',
     roles: [],
     polis: [],
+    penunjangs: [],
     ruangs: [],
     ruangansims: [],
     gudangs: [],
@@ -160,6 +161,14 @@ export const useSettingsAplikasi = defineStore('settings_aplikasi', {
         .then(resp => {
           // console.log('Poli', resp.data)
           this.polis = resp.data
+          return Promise.resolve(resp.data)
+        })
+    },
+    async getPenunjang () {
+      await api.get('v1/settings/appakses/penunjang')
+        .then(resp => {
+          // console.log('Poli', resp.data)
+          this.penunjangs = resp.data
           return Promise.resolve(resp.data)
         })
     },
