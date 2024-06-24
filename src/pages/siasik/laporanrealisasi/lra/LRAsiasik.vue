@@ -52,7 +52,7 @@
 
             <div class="col-12 q-pt-md">
               <div class="row justify-center text-weight-bold">
-                Laporan Realisasi Anggaran Tahun {{ store.params.tahun }}
+                Laporan Realisasi Anggaran Periode {{ store.display.dari + ' - ' + store.display.sampai }}
               </div>
               <!-- <div class="row justify-center text-weight-bold">
                 Periode Bulan {{ bulan(store.params.bulan) }} {{ store.params.tahun }}
@@ -64,24 +64,26 @@
 
         <div class="row q-col-gutter-sm q-my-sm q-pl-lg">
           <div class="col-2">
-            <app-input-date
-              :model="store.params.tgl"
+            <app-input-date-human
+              :model="store.display.dari"
               label="dari tangal"
               outlined
               :disable="store.loading"
               :loading="store.loading"
-              @set-model="val => { store.params.tgl = val }"
+              @db-model="tglDari"
+              @set-display="setDari"
             />
           </div>
           <div class="col-2">
-            <app-input-date
+            <app-input-date-human
               class="q-ml-md"
-              :model="store.params.tglx"
+              :model="store.display.sampai"
               label="sampai tangal"
               outlined
               :disable="store.loading"
               :loading="store.loading"
-              @set-model="val => { store.params.tglx = val }"
+              @db-model="tglSampai"
+              @set-display="setSampai"
             />
           </div>
           <div class="col-2">
@@ -191,7 +193,7 @@
                     TOTAL
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(totalPagu ()) }}
+                    {{ formattanpaRp(totalPagux ()) }}
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
                     {{ formattanpaRp(0) }}
@@ -227,19 +229,31 @@ onMounted(() => {
   // store.realisasiAnggaran()
   // store.getBidang()
 })
+function tglDari (val) {
+  store.setParameter('tgl', val)
+}
+function setDari (val) {
+  store.display.dari = val
+}
+function tglSampai (val) {
+  store.setParameter('tglx', val)
+}
+function setSampai (val) {
+  store.display.sampai = val
+}
 
-function totalPagu () {
+function totalPagux () {
   const saldo = store.items
   // console.log('njaaias', saldo)
-  const totalpagu = saldo[0].totalPagu
+  const totalanggaran = saldo[0]?.totalPagu
   // console.log("debit", totaldebit);
-  return totalpagu
+  return totalanggaran
 }
 
 function totalRealisasi () {
   const saldo = store.items
   // console.log('njaaias', saldo)
-  const totalpagu = saldo[0].totalRealisasi
+  const totalpagu = saldo[0]?.totalRealisasi
   // console.log("debit", totaldebit);
   return totalpagu
 }
@@ -247,7 +261,7 @@ function totalRealisasi () {
 function totalSelisih () {
   const saldo = store.items
   // console.log('njaaias', saldo)
-  const totalpagu = saldo[0].selisih
+  const totalpagu = saldo[0]?.selisih
   // console.log("debit", totaldebit);
   return totalpagu
 }
