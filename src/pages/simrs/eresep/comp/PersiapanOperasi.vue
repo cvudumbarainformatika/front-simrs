@@ -107,8 +107,10 @@
 <script setup>
 import { defineAsyncComponent, shallowRef, watch, onMounted, onUnmounted } from 'vue'
 import { useResepPermintaanOperasiStore } from 'src/stores/simrs/farmasi/permintaanresep/permintaanoperasi'
+import { usePermintaanEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/eresep'
 
 const store = useResepPermintaanOperasiStore()
+const eresep = usePermintaanEResepStore()
 
 // define the components
 const HeaderPage = shallowRef(defineAsyncComponent(() => import('./comppersiapan/HeaderPage.vue')))
@@ -118,7 +120,8 @@ const SudahPage = shallowRef(defineAsyncComponent(() => import('./comppersiapan/
 
 // define the functions
 function simpan () {
-  console.log('form', store.form)
+  // console.log('form', store.form, eresep?.pasien)
+  store.setForm('ruangan', eresep.pasien?.rs10)
   setTimeout(() => {
     store.simpan()
   }, 100)
