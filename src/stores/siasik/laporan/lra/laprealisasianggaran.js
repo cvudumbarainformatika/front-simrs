@@ -11,11 +11,15 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     params: {
       q: '',
       page: 1,
-      tgl: date.formatDate(Date.now(), 'YYYY-01-01'),
+      tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
       bidang: '',
       kegiatan: ''
+    },
+    display: {
+      dari: date.formatDate(Date.now(), '01 MMMM YYYY'),
+      sampai: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
     bidangs: [],
     paguAnggaran: [],
@@ -24,22 +28,23 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
 
   }),
   actions: {
-    setParam (key, val) {
+    setParameter (key, val) {
       this.params[key] = val
     },
-    setForm(key, val) {
-      this.params[key] = val
-    },
-    emptyForm() {
-      this.params.bidang = {}
-      this.params.kegiatan = {}
-    },
+    // setForm(key, val) {
+    //   this.params[key] = val
+    // },
+    // emptyForm() {
+    //   this.params.bidang = {}
+    //   this.params.kegiatan = {}
+    // },
 
     // eslint-disable-next-line space-before-function-paren
     getDataBidang() {
       this.loading = true
+      const params = { params: this.params }
       return new Promise((resolve) => {
-        api.get('v1/laporan/lra/bidang').then((resp) => {
+        api.get('v1/laporan/lra/bidang', params).then((resp) => {
           console.log('bidang', resp)
           if (resp.status === 200) {
             this.bidangs = resp.data
@@ -78,7 +83,10 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
             this.loading = false
             resolve(resp)
           }
-        }).catch(() => { this.loading = false })
+        }).catch(() => {
+          this.loading = false
+          this.items = []
+        })
       })
     },
 
@@ -93,10 +101,10 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         // const pagu = {
         //   totalPagu: el.map((x) => parseInt(x.pagu)).reduce((a, b) => a + b, 0)
         // }
-        val[i].totalPagu = el.map((x) => parseInt(x.pagu)).reduce((a, b) => a + b, 0)
-        val[i].sumLS = ls.map((x) => parseInt(x.nominalpembayaran)).reduce((a, b) => a + b, 0)
-        val[i].sumPanjar = pjr.map((x) => parseInt(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0)
-        val[i].sumCP = cp.map((x) => parseInt(x.nominalcontrapost)).reduce((a, b) => a + b, 0)
+        val[i].totalPagu = el?.map((x) => parseInt(x.pagu)).reduce((a, b) => a + b, 0)
+        val[i].sumLS = ls?.map((x) => parseInt(x.nominalpembayaran)).reduce((a, b) => a + b, 0)
+        val[i].sumPanjar = pjr?.map((x) => parseInt(x.jumlahbelanjapanjar)).reduce((a, b) => a + b, 0)
+        val[i].sumCP = cp?.map((x) => parseInt(x.nominalcontrapost)).reduce((a, b) => a + b, 0)
         val[i].totalRealisasi = val[i].sumLS + val[i].sumPanjar - val[i].sumCP
         val[i].selisih = val[i].totalPagu - val[i].totalRealisasi
         // console.log('xxxx', pagu)
@@ -109,16 +117,16 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       // return this.items
     },
     mapRekening (val) {
-      const pagu = this.items.map((x) => x.totalPagu)
-      const real = this.items.map((x) => x.totalRealisasi)
+      const pagu = this.items?.map((x) => x.totalPagu)
+      const real = this.items?.map((x) => x.totalRealisasi)
       const kode1 = {
-        kodeall3: val.map((x) => x.kode1.kodeall2).reduce((a, b) => {
+        kodeall3: val.map((x) => x.kode1?.kodeall2).reduce((a, b) => {
           if (!a.includes(b)) {
             a.push(b)
           }
           return a
         }),
-        uraian: val.map((x) => x.kode1.uraian).reduce((a, b) => {
+        uraian: val.map((x) => x.kode1?.uraian).reduce((a, b) => {
           if (!a.includes(b)) {
             a.push(b)
           }
@@ -134,31 +142,31 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         ? this.items.map((x) => {
           const a = x?.kode2?.kodeall2
           return {
-            kodeall3: x.kode2.kodeall2,
-            uraian: x.kode2.uraian,
-            totalPagu: this.items?.filter((s) => s.kode2.kodeall2 === a)
+            kodeall3: x?.kode2?.kodeall2,
+            uraian: x?.kode2?.uraian,
+            totalPagu: this.items?.filter((s) => s?.kode2?.kodeall2 === a)
               .map((x) => {
                 return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
               }).reduce((x, y) => x + y, 0),
-            totalRealisasi: this.items?.filter((s) => s.kode2.kodeall2 === a)
+            totalRealisasi: this.items?.filter((s) => s?.kode2?.kodeall2 === a)
               .map((x) => {
-                return (x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0))
+                return (x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
               }).reduce((x, y) => x + y, 0),
             selisih: this.items?.filter((s) => s.kode2.kodeall2 === a)
               .map((x) => {
-                return ((x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0))) -
-                ((x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0)))
+                return ((x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0))) -
+                ((x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0)))
               }).reduce((x, y) => x + y, 0)
           }
         })
         : []
       const kode2 = kod2.reduce(
         (acc, curr) =>
-          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+          acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
       // console.log('ksksk', kode2)
@@ -178,31 +186,31 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         ? this.items.map((x) => {
           const a = x?.kode3?.kodeall2
           return {
-            kodeall3: x.kode3.kodeall2,
-            uraian: x.kode3.uraian,
-            totalPagu: this.items?.filter((s) => s.kode3.kodeall2 === a)
+            kodeall3: x?.kode3?.kodeall2,
+            uraian: x?.kode3?.uraian,
+            totalPagu: this.items?.filter((s) => s?.kode3?.kodeall2 === a)
               .map((x) => {
-                return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
+                return x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0)
               }).reduce((x, y) => x + y, 0),
-            totalRealisasi: this.items?.filter((s) => s.kode3.kodeall2 === a)
+            totalRealisasi: this.items?.filter((s) => s?.kode3?.kodeall2 === a)
               .map((x) => {
-                return (x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0))
+                return (x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
               }).reduce((x, y) => x + y, 0),
-            selisih: this.items?.filter((s) => s.kode3.kodeall2 === a)
+            selisih: this.items?.filter((s) => s?.kode3?.kodeall2 === a)
               .map((x) => {
-                return ((x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0))) -
-                ((x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0)))
+                return ((x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0))) -
+                ((x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0)))
               }).reduce((x, y) => x + y, 0)
           }
         })
         : []
       const kode3 = kod3.reduce(
         (acc, curr) =>
-          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+          acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
       // console.log('ksksk', kode3)
@@ -211,64 +219,64 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         ? this.items.map((x) => {
           const a = x?.kode4?.kodeall2
           return {
-            kodeall3: x.kode4.kodeall2,
-            uraian: x.kode4.uraian,
-            totalPagu: this.items?.filter((s) => s.kode4.kodeall2 === a)
+            kodeall3: x?.kode4?.kodeall2,
+            uraian: x?.kode4?.uraian,
+            totalPagu: this.items?.filter((s) => s?.kode4?.kodeall2 === a)
               .map((x) => {
-                return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
+                return x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
               }).reduce((x, y) => x + y, 0),
-            totalRealisasi: this.items?.filter((s) => s.kode4.kodeall2 === a)
+            totalRealisasi: this.items?.filter((s) => s?.kode4?.kodeall2 === a)
               .map((x) => {
-                return (x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0))
+                return (x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
               }).reduce((x, y) => x + y, 0),
-            selisih: this.items?.filter((s) => s.kode4.kodeall2 === a)
+            selisih: this.items?.filter((s) => s?.kode4?.kodeall2 === a)
               .map((x) => {
-                return ((x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0))) -
-                ((x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0)))
+                return ((x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0))) -
+                ((x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0)))
               }).reduce((x, y) => x + y, 0)
           }
         })
         : []
       const kode4 = kod4.reduce(
         (acc, curr) =>
-          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+          acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
       // console.log('ksksk', kode4)
       // KODE4
-      const kod5 = this.items.length
-        ? this.items.map((x) => {
+      const kod5 = this.items?.length
+        ? this.items?.map((x) => {
           const a = x?.kode5?.kodeall2
           return {
-            kodeall3: x.kode5.kodeall2,
-            uraian: x.kode5.uraian,
-            totalPagu: this.items?.filter((s) => s.kode5.kodeall2 === a)
+            kodeall3: x?.kode5?.kodeall2,
+            uraian: x?.kode5?.uraian,
+            totalPagu: this.items?.filter((s) => s?.kode5?.kodeall2 === a)
               .map((x) => {
-                return x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0)
+                return x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0)
               }).reduce((x, y) => x + y, 0),
-            totalRealisasi: this.items?.filter((s) => s.kode5.kodeall2 === a)
+            totalRealisasi: this.items?.filter((s) => s?.kode5?.kodeall2 === a)
               .map((x) => {
-                return (x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0))
+                return (x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0))
               }).reduce((x, y) => x + y, 0),
-            selisih: this.items?.filter((s) => s.kode5.kodeall2 === a)
+            selisih: this.items?.filter((s) => s?.kode5?.kodeall2 === a)
               .map((x) => {
-                return ((x?.anggaran.reduce((a, b) => parseFloat(a) + parseFloat(b.pagu), 0))) -
-                ((x?.npdls_rinci.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalpembayaran), 0)) +
-                (x?.spjpanjar.reduce((a, b) => parseFloat(a) + parseFloat(b.jumlahbelanjapanjar), 0)) -
-                (x?.cp.reduce((a, b) => parseFloat(a) + parseFloat(b.nominalcontrapost), 0)))
+                return ((x?.anggaran?.reduce((a, b) => parseFloat(a) + parseFloat(b?.pagu), 0))) -
+                ((x?.npdls_rinci?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalpembayaran), 0)) +
+                (x?.spjpanjar?.reduce((a, b) => parseFloat(a) + parseFloat(b?.jumlahbelanjapanjar), 0)) -
+                (x?.cp?.reduce((a, b) => parseFloat(a) + parseFloat(b?.nominalcontrapost), 0)))
               }).reduce((x, y) => x + y, 0)
           }
         })
         : []
       const kode5 = kod5.reduce(
         (acc, curr) =>
-          acc.find((v) => v.kodeall3 === curr.kodeall3) ? acc : [...acc, curr],
+          acc.find((v) => v?.kodeall3 === curr?.kodeall3) ? acc : [...acc, curr],
         []
       )
       // console.log('ksksk', kode5)
