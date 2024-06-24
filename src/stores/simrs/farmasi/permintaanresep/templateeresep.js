@@ -72,7 +72,8 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     // section save to local storage
     items: [],
     templateSelected: null,
-    templates: []
+    templates: [],
+    errorsOrder: []
   }),
   actions: {
 
@@ -155,7 +156,16 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
             this.items = []
             this.updateListItems()
             const templates = [...this.templates]
-            templates.push(resp?.data)
+            const cek = templates.find(x => x?.kodedepo === this.dpPar && x?.nama === val)
+            if (!cek) {
+              templates.push(resp?.data)
+            }
+            else {
+              const index = templates.findIndex(x => x?.kodedepo === this.dpPar && x?.nama === val)
+              templates[index] = resp?.data
+            }
+            this.templates = templates
+            this.selectTemplate(resp?.data)
             resolve(resp)
           })
           .catch((err) => {
@@ -190,13 +200,22 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     },
 
     kirimOrder (payload) {
+      this.errorsOrder = []
+      this.loadingTemplate = true
       return new Promise((resolve, reject) => {
-        api.post('v1/simrs/farmasinew/depo/cek-template-resep', payload)
+        // api.post('v1/simrs/farmasinew/depo/cek-template-resep', payload)
+        api.post('v1/simrs/penunjang/farmasinew/templateeresep/order', payload)
           .then(resp => {
             console.log('kirim order', resp)
+            this.loadingTemplate = false
             resolve(resp)
           })
-      }).catch((err) => { console.log('err', err) })
+          .catch((err) => {
+            console.log('err', err.response.data)
+            this.errorsOrder = err.response.data
+            this.loadingTemplate = false
+          })
+      })
     },
     setPasien () {
       // this.cariSimulasi(val?.noreg)
