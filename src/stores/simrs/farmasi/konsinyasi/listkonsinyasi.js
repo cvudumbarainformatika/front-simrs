@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_obat_konsinyasi', {
   state: () => ({
@@ -12,9 +14,12 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
       per_page: 50
     },
     form: {
-      notrans: '',
+      notranskonsi: '',
+      tgl_trans: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       items: []
     },
+    tglTrans: date.formatDate(Date.now(), 'DD MMMM YYYY'),
     penyedias: []
   }),
   actions: {
@@ -44,6 +49,7 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
       })
     },
     async getData () {
+      this.items = []
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/penunjang/farmasinew/gudang/list-pemakaian-konsinyasi', param)
@@ -69,6 +75,25 @@ export const useListPemakaianObatKonsinyasiStore = defineStore('list_pemakaian_o
         .catch(() => {
           this.loadingPenyedia = false
         })
+    },
+    simpanList () {
+      this.loading = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/penunjang/farmasinew/bast-konsi/simpan-list', this.form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpn konsi', resp)
+            this.form.notranskonsi = resp?.data?.notranskonsi
+            notifSuccess(resp)
+            this.form.items = []
+            this.getPenyedia()
+            this.getData()
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loading = false
+          })
+      })
     }
   }
 })

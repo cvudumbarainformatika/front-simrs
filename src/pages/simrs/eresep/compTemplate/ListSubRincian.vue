@@ -1,0 +1,112 @@
+<template>
+  <q-table
+    flat
+    :rows="items"
+    :columns="columns"
+    row-key="kodeobat"
+    table-header-class="bg-primary text-dark"
+    :rows-per-page-options="[0]"
+    hide-pagination
+    dense
+  >
+    <template #body="props">
+      <q-tr :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1">
+        <q-td key="namaobat" :props="props">
+          {{ props.row.namaobat }}
+          <q-popup-proxy ref="refProxyc">
+            <DialogEdit :item="props" :racikan="true" :index-item="sub.rowIndex" @close="closeEdit" />
+          </q-popup-proxy>
+        </q-td>
+        <q-td key="jumlah" :props="props">
+          <Transition
+            appear
+            enter-active-class="animated fast slideInRight"
+            leave-active-class="animated fast slideOutRight"
+          >
+            <div v-if="indexRow === props.rowIndex" class="absolute-top fit bg-grey-4">
+              <div class="column full-height flex-center content-end q-pa-sm">
+                <q-btn round color="negative" icon="icon-mat-delete" size="xs" @click="hapusItem(props)" />
+              </div>
+            </div>
+          </Transition>
+          <em>{{ props.row.jumlah_diminta }} X {{ sub?.jumlah_diminta }} {{ props?.row.satuan_kcl }}</em>
+        </q-td>
+      </q-tr>
+    </template>
+  </q-table>
+</template>
+
+<script setup>
+import { useQuasar } from 'quasar'
+import { useTemplateEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/templateeresep'
+import { ref, defineAsyncComponent } from 'vue'
+
+const $q = useQuasar()
+const store = useTemplateEResepStore()
+
+const DialogEdit = defineAsyncComponent(() => import('../compTemplate/DialogEdit.vue'))
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => []
+  },
+  sub: {
+    type: Object,
+    default: null
+  }
+})
+
+const indexRow = ref(-1)
+
+const refProxyc = ref(null)
+
+const columns = ref(
+
+  [
+    {
+      name: 'namaobat',
+      required: true,
+      label: 'Nama Obat',
+      align: 'left',
+      field: row => row.namaobat,
+      sortable: true
+    },
+    { name: 'jumlah', align: 'right', label: 'Jumlah', field: 'jumlah_diminta', sortable: true }
+  ]
+
+)
+
+function onRowClick (row) {
+  console.log('sub', row)
+  store.formRacik = row
+}
+
+function closeEdit () {
+  console.log('close edit', refProxyc.value)
+  refProxyc.value.hide()
+  // refProxy.value.hide()
+}
+
+function hapusItem (val) {
+  const namaobat = val.row?.namaobat
+  const arr = store.items[props.sub.rowIndex].rincian
+  console.log('val', arr[val.rowIndex])
+  $q.dialog({
+    title: 'Pemberitahuan',
+    message: `Apakah Obat <strong>${namaobat}</strong>  ini akan dihapus?`,
+    cancel: true,
+    html: true
+    // persistent: true
+  }).onOk(() => {
+    // const params = { id: selected.value }
+    // store.items?.splice(val.rowIndex, 1)
+    store.items[props.sub.rowIndex].rincian?.splice(val.rowIndex, 1)
+    store.updateListItems()
+  }).onCancel(() => {
+    console.log('Cancel')
+    // selected.value = []
+  }).onDismiss(() => {
+    // console.log('I am triggered on both OK and Cancel')
+  })
+}
+</script>

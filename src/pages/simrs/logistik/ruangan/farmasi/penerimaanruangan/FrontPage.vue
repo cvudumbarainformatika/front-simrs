@@ -307,7 +307,8 @@ function depo (val) {
   // console.log('temp', temp)
   if (temp.length) {
     return temp[0].uraian
-  } else {
+  }
+  else {
     return val
   }
 }

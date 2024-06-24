@@ -24,7 +24,17 @@
       </div>
       <div class="col-auto text-right" style="width: 5%;">
         <div class="q-mr-sm">
-          #
+          <q-checkbox
+            v-model="allChecked"
+            size="xs"
+          >
+            <q-tooltip
+              anchor="top middle"
+              self="center middle"
+            >
+              {{ allChecked===true?'Tidak Pilih Semua':'Pilih Semua' }}
+            </q-tooltip>
+          </q-checkbox>
         </div>
       </div>
     </div>
@@ -38,6 +48,9 @@
         <div class="col-auto" :style="`width: calc(90% / 5);`">
           <div class="row">
             {{ item?.header?.resep?.noresep }}
+          </div>
+          <div class="row text-italic f-10">
+            {{ item?.header?.nopermintaan }}
           </div>
           <div class="row text-italic f-10">
             {{ item?.header?.resep?.dokter?.nama }}
@@ -66,8 +79,8 @@
           </div>
         </div>
         <div class="col-auto" :style="`width: calc(90% / 5);`">
-          <div class="row">
-            {{ item?.header?.resep?.datapasien?.rs2 }}
+          <div class="row items-end">
+            {{ item?.header?.resep?.datapasien?.rs2 }} <span class="text-italic f-10 q-ml-sm">  ({{ item?.header?.noreg }})</span>
           </div>
           <div class="row justify-end">
             {{ item?.jumlah_resep }} ({{ item?.obat?.satuan_k }})
@@ -94,31 +107,89 @@
         </div>
       </div>
     </div>
-    <div class="row justify-end q-mr-md q-mt-md">
+    <div class="row justify-end q-mr-md q-mt-md q-mb-xl">
       <q-btn label="Simpan" no-caps dense color="primary" @click="simpan" />
     </div>
   </div>
 </template>
 <script setup>
+import { date } from 'quasar'
+import { computed } from 'vue'
 import { dateFullFormat, formatDouble } from 'src/modules/formatter'
 import { useListPemakaianObatKonsinyasiStore } from 'src/stores/simrs/farmasi/konsinyasi/listkonsinyasi'
+// eslint-disable-next-line no-unused-vars
+import { notifErrVue } from 'src/modules/utils'
 const store = useListPemakaianObatKonsinyasiStore()
+const allChecked = computed({
+  get () {
+    const check = store.items.filter(it => it.checked)
+    // console.log(check.length)
+    if (check.length === store.items.length) return true
+    else if (check.length <= 0) return false
+    else return null
+  },
+  set (val) {
+    if (val === true) {
+      store.items.forEach(it => {
+        it.checked = true
+        setCheck(true, it)
+      })
+    }
+    else {
+      store.items.forEach(it => {
+        it.checked = false
+        setCheck(false, it)
+      })
+    }
+    // console.log('set', val)
+  }
+})
 function setCheck (evt, item) {
   // console.log('ref')
   // console.log('evt', evt)
   // console.log('item', item)
   if (item.checked) {
     // item.dipakai = item.dipakai ?? 0
-    store.form.items.push(item)
+    const temp = {
+      nopermintaan: item?.nopermintaan,
+      nopenerimaan: item?.nopenerimaan,
+      kdobat: item?.kd_obat,
+      tgl_pakai: item?.header?.resep?.tgl_permintaan,
+      tgl_penerimaan: item?.penerimaan?.header?.tglpenerimaan,
+      noresep: item?.noresep,
+      dokter: item?.header?.resep?.dokter?.kdpegsimrs,
+      noreg: item?.header?.noreg,
+      norm: item?.header?.norm,
+      jumlah: item?.reseprinci?.jumlah,
+      harga: item?.penerimaan?.harga_kcl,
+      diskon: item?.penerimaan?.diskon,
+      ppn: item?.penerimaan?.ppn,
+      diskon_rp: item?.penerimaan?.diskon_rp_kecil,
+      ppn_rp: item?.penerimaan?.ppn_rp_kecil,
+      harga_net: item?.penerimaan?.harga_netto_kecil,
+      subtotal: item?.subtotal
+
+    }
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
+    if (index < 0) store.form.items.push(temp)
   }
   else {
-    console.log('not checked', store.form)
-    const index = store.form.items.findIndex(a => a.id === item.id)
+    // console.log('not checked', store.form)
+    const index = store.form.items.findIndex(a => a.kdobat === item.kd_obat && a.noresep === item.noresep)
+    // console.log('not checked', index)
+    console.log('not checked', index)
     if (index >= 0) store.form.items.splice(index, 1)
   }
 }
 function simpan () {
+  if (store.form.items.length <= 0) return notifErrVue('Belum Ada Barang yang dipilih')
+  const tlg = store.form.tgl
+  const hrs = date.formatDate(Date.now(), ' HH:mm:ss')
+  const jumlahKonsi = store.form?.items?.map(m => m.subtotal)?.reduce((a, b) => a + b, 0)
+  store.setForm('tgl_trans', tlg + hrs)
+  store.setForm('jumlah_konsi', jumlahKonsi)
   console.log('simpan', store.form)
+  store.simpanList()
 }
 </script>
 <style lang="scss" scoped>

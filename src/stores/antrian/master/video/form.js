@@ -23,7 +23,7 @@ export const useVideoFormStore = defineStore('video_form', {
   },
 
   actions: {
-    resetFORM() {
+    resetFORM () {
       this.tempImg = null
       this.form = {}
       const columns = [
@@ -35,15 +35,15 @@ export const useVideoFormStore = defineStore('video_form', {
         this.setForm(columns[i], null)
       }
     },
-    setForm(name, val) {
+    setForm (name, val) {
       this.form[name] = val
     },
-    addNew() {
+    addNew () {
       this.resetFORM()
       this.edited = false
       this.dialog = true
     },
-    editData(item) {
+    editData (item) {
       console.log(item)
       this.edited = true
       // const keys = Object.keys(item)
@@ -56,7 +56,7 @@ export const useVideoFormStore = defineStore('video_form', {
       this.dialog = true
     },
 
-    async saveForm() {
+    async saveForm () {
       this.loading = true
       // this.setForm('details', arr)
       const formData = new FormData()
@@ -75,7 +75,8 @@ export const useVideoFormStore = defineStore('video_form', {
           this.resetFORM()
           resolve(resp)
         })
-      } catch (error) {
+      }
+      catch (error) {
         console.log('error upload', error)
         this.loading = false
       }

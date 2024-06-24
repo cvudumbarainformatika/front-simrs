@@ -20,47 +20,46 @@
     <div class="row items-center bg-grey-3">
       <q-btn-group outline>
         <q-btn
-          :outline="path !== 'bast'"
+          v-for="(item,i) in heads"
+          :key="i"
+          :outline="head !== item.page"
           glossy
           push
-          color="deep-orange"
-          label="BAST"
+          :color="item?.color??'primary'"
+          :label="item.label"
           size="md"
-          @click="emits('ganti','bast')"
+          @click="emits('ganti',item.page)"
         />
-        <q-btn
-          :outline="path !== 'bastkonsi'"
-          glossy
-          push
-          color="primary"
-          label="BAST KONSINYASI"
-          size="md"
-          @click="emits('ganti','bastkonsi')"
-        />
-        <q-btn
-          :outline="path !== 'list'"
+        <!-- <div
+        >
+        </div> -->
+        <!-- <q-btn
+          :outline="head !== 'list'"
           glossy
           push
           color="green"
-          label="LIST BAST"
+          label="List Resep"
           size="md"
           @click="emits('ganti','list')"
         />
         <q-btn
-          :outline="path !== 'listkonsi'"
+          :outline="head !== 'list'"
           glossy
           push
-          color="teal"
-          label="LIST BAST KONSINYASI"
+          color="green"
+          label="List Resep"
           size="md"
-          @click="emits('ganti','listkonsi')"
-        />
+          @click="emits('ganti','list')"
+        /> -->
       </q-btn-group>
     </div>
   </div>
 </template>
 
 <script setup>
+// import { useRouter } from 'vue-router'
+
+// const router = useRouter()
 
 // const emits = defineEmits(['togleDraw'])
 defineProps({
@@ -72,9 +71,13 @@ defineProps({
     type: String,
     default: null
   },
-  path: {
+  head: {
     type: String,
     default: null
+  },
+  heads: {
+    type: Array,
+    default: () => []
   }
 })
 const emits = defineEmits(['ganti'])

@@ -9,7 +9,7 @@
           :pasien="props.pasien"
         />
       </div>
-      <div class="col-6 full-height">
+      <div class="col-6 full-height bg-white" style="overflow: scroll;">
         <ListPersiapan
           :key="props.pasien"
           :pasien="props.pasien"

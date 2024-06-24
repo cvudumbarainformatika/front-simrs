@@ -48,6 +48,16 @@ const menus = ref([
     name: 'list',
     label: 'List Bast',
     comp: shallowRef(defineAsyncComponent(() => import('./comp/ListPage.vue')))
+  },
+  {
+    name: 'bastkonsi',
+    label: 'Bast Konsinyasi',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/BastKonsinyasiPage.vue')))
+  },
+  {
+    name: 'listkonsi',
+    label: 'List Bast Konsinyasi',
+    comp: shallowRef(defineAsyncComponent(() => import('./comp/ListKonsinyasiPage.vue')))
   }
 ])
 const menu = ref(menus.value[0])
@@ -67,7 +77,7 @@ const barStyle = ref({
   opacity: 0.2
 })
 
-function gantiHalaman(val) {
+function gantiHalaman (val) {
   if (menu.value.name !== val) {
     const anu = menus.value.find(a => a.name === val)
     if (anu) menu.value = anu
@@ -76,18 +86,22 @@ function gantiHalaman(val) {
 const title = computed(() => {
   if (menu.value.name === 'bast') {
     return 'HALAMAN BAST'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'LIST BAST'
-  } else {
+  }
+  else {
     return 'BAST'
   }
 })
 const subtitle = computed(() => {
   if (menu.value.name === 'bast') {
     return 'Bast Penerimaan'
-  } else if (menu.value.name === 'list') {
+  }
+  else if (menu.value.name === 'list') {
     return 'List Bast Penerimaan'
-  } else {
+  }
+  else {
     return 'Bast Penerimaan'
   }
 })

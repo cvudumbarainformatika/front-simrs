@@ -53,7 +53,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
       namaracikan: '-',
       keteranganx: '-',
       jumlah: 1,
-      tiperacikan: 'DTD',
+      tiperacikan: 'non-DTD',
       dosisobat: 1,
       dosismaksimum: 1 // dosis resep
     },
@@ -72,6 +72,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     resepPasien: [],
     historys: [],
     statusCopied: [],
+    statusCopiedRacik: [],
     messageCopied: []
     // section racikan end---
   }),
@@ -940,8 +941,12 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             const arr = resp.data
             this.historyMeta = null
             this.historys = arr
+            this.statusCopiedRacik = []
+            this.statusCopied = []
           }
           else {
+            this.statusCopiedRacik = []
+            this.statusCopied = []
             this.historys = []
           }
         }
@@ -954,7 +959,7 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
     },
 
     // BARU
-    simpanCopyResep (payload, indexform, indexlist) {
+    simpanCopyResep (payload, indexform, indexlist, tipe) {
       const resep = this?.pasien?.newapotekrajal?.find(val => val.noresep === this.form?.noresep)
       if (resep) {
         if (resep?.flag !== '') this.form.noresep = ''
@@ -984,28 +989,28 @@ export const usePermintaanEResepStore = defineStore('permintaan_e_resep', {
             resolve(resp)
             this.cariObat()
             const key = `${indexlist}-${indexform}`
-            // Update the status for each combination of index and j
-            this.statusCopied[key] = true //
-            setTimeout(() => {
-              // Delete the status after timeout
-              delete this.statusCopied[key]
-              // To trigger reactivity in Vue 2, you might also need to force an update
-              // this.$forceUpdate(); // Uncomment this line if necessary
-            }, 30000)
+
+            if (tipe === 'racik') {
+              this.statusCopiedRacik[key] = true
+            }
+            else {
+              this.statusCopied[key] = true
+            }
           })
           .catch(error => {
+            this.resetForm()
             console.error('Error in simpanCopyResep:', error)
             this.loading = false
             const key = `${indexlist}-${indexform}`
-            // Update the status for each combination of index and j
-            this.statusCopied[key] = false //
+
+            if (tipe === 'racik') {
+              this.statusCopiedRacik[key] = false
+            }
+            else {
+              this.statusCopied[key] = false
+            }
+
             this.messageCopied[key] = error?.response?.data?.message
-            setTimeout(() => {
-              // Delete the status after timeout
-              delete this.statusCopied[key]
-              // To trigger reactivity in Vue 2, you might also need to force an update
-              // this.$forceUpdate(); // Uncomment this line if necessary
-            }, 30000)
             reject(error)
           })
       })

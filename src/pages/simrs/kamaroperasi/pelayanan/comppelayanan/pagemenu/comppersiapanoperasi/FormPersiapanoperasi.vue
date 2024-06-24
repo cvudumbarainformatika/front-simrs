@@ -432,7 +432,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+// eslint-disable-next-line no-unused-vars
+import { onMounted, ref, onUnmounted } from 'vue'
 import { usePersiapanOperasiStore } from 'src/stores/simrs/farmasi/kamaroperasi/resepsemntara'
 import { formatDouble } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
@@ -677,5 +678,8 @@ onMounted(() => {
   refObat.value.focus()
   // refObat.value.showPopup()
 })
-
+onUnmounted(() => {
+  // store.setForm('nopermintaan', '')
+  store.resetForm()
+})
 </script>
