@@ -137,33 +137,34 @@ const style = useStyledStore()
 // function loadingCek() {
 //   loadingRes('show')
 // }
-function clearAllRegistrasi() {
+function clearAllRegistrasi () {
   registrasi.clearForm()
   refDataPasien.value.clearForm()
 }
 // function clearFormRegistrasi() {
 //   registrasi.clearForm()
 // }
-function assignSurat(val) {
+function assignSurat (val) {
   refRegistrasi.value.assignSuratKontrol(val)
 }
 
 const dialog = ref(false)
 const bisaBuatSep = ref(false)
 const pesanBPJS = ref('')
-function preSEP() {
+function preSEP () {
   // refDataPasien.value.set()
   // refRegistrasi.value.set()
   if (refDataPasien.value.set() && refRegistrasi.value.set()) {
     if (!registrasi.form.noreg) {
       notifNegativeCenterVue('Nomor Registrasi belum ada')
       dialogTidakAdaReg()
-    } else {
+    }
+    else {
       buatSEP()
     }
   }
 }
-function buatSEP() {
+function buatSEP () {
   console.log('form registrasi ', registrasi.form)
   registrasi.buatSep().then(resp => {
     console.log('resp bpjs', resp)
@@ -181,7 +182,7 @@ function buatSEP() {
 }
 
 const router = useRouter()
-function simpanData() {
+function simpanData () {
   const dataPasien = refDataPasien.value.set()
   const dataRegis = refRegistrasi.value.set()
   const form = { noka: pasien.form.noka, tglsep: registrasi.form.tglsep }
@@ -211,7 +212,7 @@ function simpanData() {
   }
 }
 const loadingFinger = ref(false)
-function cekFingerPasien(form) {
+function cekFingerPasien (form) {
   dialog.value = true
   loadingFinger.value = true
   pesanBPJS.value = 'Mengambil Data Finger Print dari BPJS'
@@ -223,14 +224,17 @@ function cekFingerPasien(form) {
     if (finger === '1') {
       // toSimpan(dataPasien)
       dialogCetak()
-    } else if (finger === '0') {
+    }
+    else if (finger === '0') {
       // cek umur
       // jika  < 17 thn pas cetak sep, jika tidak muncul popup pengajuan
       if (registrasi.form.umurthn < 17) {
         dialogCetak()
-      } else if (registrasi.form.umurthn === 17 && registrasi.form.umurbln === 0 && registrasi.form.umurhari === 0) {
+      }
+      else if (registrasi.form.umurthn === 17 && registrasi.form.umurbln === 0 && registrasi.form.umurhari === 0) {
         dialogCetak()
-      } else {
+      }
+      else {
         // pasien.alert = true
         // pasien.alertMsg = resp.result
         pesanBPJS.value = resp.result.status
@@ -247,7 +251,7 @@ function cekFingerPasien(form) {
 // const jenisPengajuan = ref('2')
 const keterangan = ref('')
 const loadingP = ref(false)
-function simpanPengajuan() {
+function simpanPengajuan () {
   const data = {
     noka: registrasi.form.noka,
     jenispengajuan: '2',
@@ -318,11 +322,11 @@ function simpanPengajuan() {
 //     dialogCetak()
 //   })
 // }
-function validasiSuratKontrol() {
+function validasiSuratKontrol () {
   console.log('validasi surat kontrol')
   refRegistrasi.value.validasiSuratKontrol()
 }
-function jenisKunjungan(val) {
+function jenisKunjungan (val) {
   console.log('jenis kunjungan ', val)
   refRegistrasi.value.setJenisKunjungan(val)
 }
@@ -334,7 +338,7 @@ function jenisKunjungan(val) {
 // }
 
 // cek surat Kontrol
-function getListSuratKontrol() {
+function getListSuratKontrol () {
   const data = refDataPasien.value.validateNokaAndNorm()
   data.bulan = date.formatDate(registrasi.form.tglsep, 'MM')
   data.tahun = date.formatDate(registrasi.form.tglsep, 'YYYY')
@@ -348,7 +352,7 @@ function getListSuratKontrol() {
   }
 }
 // cek supplesi
-function cekSuplesi() {
+function cekSuplesi () {
   const data = refDataPasien.value.validateNoka()
   if (data) {
     console.log('noka', data)
@@ -356,13 +360,13 @@ function cekSuplesi() {
   }
 }
 // setkodePoli
-function setKodepoli(val) {
+function setKodepoli (val) {
   console.log('poli ditemukan', val, refRegistrasi.value)
   registrasi.form.kodepoli = val
   refRegistrasi.value.setPoliTujuan(val)
 }
 // cek list rujukan
-function getListRujukan() {
+function getListRujukan () {
   console.log('validasi ', refDataPasien.value.validateNokaAndNorm())
   const data = refDataPasien.value.validateNokaAndNorm()
 
@@ -381,7 +385,7 @@ function getListRujukan() {
   }
 }
 
-function dialogCetak() {
+function dialogCetak () {
   dialog.value = false
   Dialog.create({
     title: 'Konfirmasi.',
@@ -405,7 +409,7 @@ function dialogCetak() {
     console.log('tidak Cetak')
   })
 }
-function dialogTidakAdaReg() {
+function dialogTidakAdaReg () {
   Dialog.create({
     title: 'Konfirmasi.',
     message: 'Nomor Registrasi tidak ada, apakah akan dilanjutkan?',

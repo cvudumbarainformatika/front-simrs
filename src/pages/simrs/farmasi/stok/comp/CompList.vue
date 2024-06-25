@@ -31,6 +31,9 @@
       <template #col-stok>
         <div>Stok</div>
       </template>
+      <template #col-fisik>
+        <div>Fisik</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -99,40 +102,70 @@
           exp : {{ dateFullFormat( row.tglexp ) }}
         </div>
       </template>
-      <!-- <template #left-acttion="{row}">
+      <template #cell-fisik="{row}">
+        <q-input
+          v-model="row.fisik"
+          label="Jumlah Fisik Obat"
+          outlined
+          dense
+          standout="bg-yellow-3"
+          :loading="row.loadingSimpan"
+          :disable="row.loadingSimpan"
+          valid
+          @keyup.enter.stop="simpanFisik(row)"
+        >
+          <q-tooltip class="bg-white text-weight-bold" anchor="center right" self="center left" :offset="[15,0]">
+            <div class="row text-orange f-12">
+              Di Isi Jumlah Stok Fisik
+            </div>
+            <div class="row text-primary f-12">
+              Tekan Enter Untuk Simpan
+            </div>
+          </q-tooltip>
+        </q-input>
+      </template>
+      <template #left-acttion="{row}">
         <div class="q-mr-md">
+          <!-- {{ role }} -->
           <q-btn
-            flat
+            v-if="role===1"
             class=""
             size="sm"
-            round
-            color="grey"
-            icon="icon-mat-edit"
+            color="blue"
+            label="Re-Stok Opname"
+            no-caps
+            :loading="row?.loadingRe"
+            :disable="row?.loadingRe"
             @click="editData(row)"
           >
             <q-tooltip
               anchor="top middle"
               self="center middle"
             >
-              Edit Data
+              Re-stok
             </q-tooltip>
           </q-btn>
         </div>
-      </template> -->
+      </template>
     </app-table>
   </div>
 </template>
 <script setup>
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
+import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
+import { computed } from 'vue'
 
 const table = UseFarmasiStokTable()
 const store = UseFarmasiStokStore()
 const apps = useAplikasiStore()
-
+const role = computed(() => {
+  return apps?.user?.pegawai?.role_id
+})
 function cariGudang (val) {
+  // console.log('user', apps?.user?.pegawai?.role_id)
   if (table.gudangs.length) {
     const gudang = table.gudangs.filter(gud => gud.kode === val)
     if (apps?.user?.kdruangansim !== '') {
@@ -152,8 +185,12 @@ function cariGudang (val) {
 // watch(() => apps?.user?.kdruangansim, (obj) => {
 
 // })
-// function editData(val) {
-//   store.editData(val)
-//   console.log('edit', val)
-// }
+function simpanFisik (row) {
+  console.log('simpan fisik', row, parseFloat(row?.fisik))
+  if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Di Isi Nomor')
+}
+function editData (val) {
+  // store.editData(val)
+  console.log('edit', val)
+}
 </script>

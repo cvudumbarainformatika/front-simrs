@@ -15,50 +15,51 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
     columns: [
       'obat',
       // 'penerimaan',
-      'stok'
+      'stok',
+      'fisik'
     ],
     columnHide: [],
     keterangan: 'keterangan'
   }),
   actions: {
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    setQ(payload) {
+    setQ (payload) {
       this.params.page = 1
       this.params.q = payload
       this.getLists()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.params.page = 1
       this.params.per_page = payload
       this.getLists()
     },
-    setPeriodik(val) {
+    setPeriodik (val) {
       const { to, from } = val
       this.params.to = to
       this.params.from = from
       console.log('periodik', to)
       this.getLists()
     },
-    setPeriode(val) {
+    setPeriode (val) {
       this.params.to = val
       this.params.from = val
       console.log('periodik', val)
       this.getLists()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.params.page = payload
       this.getLists()
     },
-    getLists() {
+    getLists () {
       this.getDataTable()
     },
-    getInitialData() {
-      this.getDataTable()
+    getInitialData () {
+      // this.getDataTable()
       this.getDataGudang()
     },
-    async getDataGudang() {
+    async getDataGudang () {
       this.loading = true
       const param = { params: { q: '' } }
       await api.get('v1/gudang/gudang', param)
@@ -69,7 +70,7 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
         })
         .catch(() => { this.loading = false })
     },
-    getDataTable() {
+    getDataTable () {
       this.loading = true
       const param = { params: this.params }
       return new Promise(resolve => {

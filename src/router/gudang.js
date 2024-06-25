@@ -151,6 +151,19 @@ const gudang = {
           path: '/gudang/farmasi/barangrusak',
           component: () => import('pages/simrs/logistik/gudang/farmasi/barangrusak/IndexPage.vue')
         },
+        {
+          path: '/gudang/farmasi/stokopname',
+          component: () => import('pages/simrs/farmasi/stok/IndexPage.vue')
+        },
+        {
+          path: '/gudang/farmasi/sekarang',
+          component: () => import('pages/simrs/farmasi/stoksekarang/IndexPage.vue')
+        },
+        {
+          path: '/gudang/farmasi/stokmingudang',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/farmasi/stokmindepo/IndexPage.vue')
+        },
         // {
         //   path: '/gudang/farmasi/bast',
         //   component: () => import('pages/simrs/logistik/gudang/farmasi/bast/IndexPage.vue')

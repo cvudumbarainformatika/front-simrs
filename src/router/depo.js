@@ -94,6 +94,11 @@ const depo = {
           path: '/depo/farmasi/stokmindepo',
           // name: 'farmasi.stokmindepo',
           component: () => import('pages/simrs/farmasi/stokmindepo/IndexPage.vue')
+        },
+        {
+          path: '/depo/farmasi/stokopname',
+          // name: 'farmasi.stokmindepo',
+          component: () => import('pages/simrs/farmasi/stok/IndexPage.vue')
         }
       ]
     },

@@ -91,7 +91,7 @@
         </q-menu>
       </q-btn>
       <!-- add -->
-      <!-- <q-btn
+      <q-btn
         push
         color="green"
         icon="icon-mat-add"
@@ -105,7 +105,7 @@
         >
           Tambah Data
         </q-tooltip>
-      </q-btn> -->
+      </q-btn>
       <!-- refresh -->
       <q-btn
         class="q-ml-sm"
@@ -165,6 +165,23 @@
             </q-item>
           </q-list>
         </q-menu>
+      </q-btn>
+      <!-- Print stok -->
+      <q-btn
+        class="q-mx-sm"
+        round
+        color="dark"
+        icon="icon-mat-print"
+        size="sm"
+        padding="xs"
+        @click="emits('print')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Print
+        </q-tooltip>
       </q-btn>
       <!-- fullscreen -->
       <q-btn
@@ -229,7 +246,7 @@ const props = defineProps({
 
 const popup = ref()
 
-function lihatRef() {
+function lihatRef () {
   console.log(popup.value)
   popup.value.hide()
 }
@@ -238,18 +255,18 @@ const selectPerPage = computed({
   set (val) { emits('setRow', val) }
 })
 const tgl = computed({
-  get() {
+  get () {
     return props.tanggal
   },
-  set(newVal) {
+  set (newVal) {
     emits('setTanggal', newVal)
   }
 })
 const q = computed({
-  get() {
+  get () {
     return props.search
   },
-  set(newVal) {
+  set (newVal) {
     emits('setSearch', newVal)
   }
 })
@@ -258,7 +275,7 @@ const years = ref([])
 const yearSelected = ref(date.formatDate(Date.now(), 'YYYY'))
 const periode = ref()
 const periods = ref([])
-function gantiPeriode(val) {
+function gantiPeriode (val) {
   console.log('ganti', val)
   // if (val === 1) {
   //   hariIni()
@@ -274,7 +291,7 @@ function gantiPeriode(val) {
   // }
   emits('setPeriode', val?.eom)
 }
-function gantiTahun() {
+function gantiTahun () {
   const bu = [
     { mth: 1, val: 0, label: 'Januari', eom: '' },
     { mth: 2, val: 1, label: 'Pebruari', eom: '' },

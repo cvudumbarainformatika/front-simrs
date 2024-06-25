@@ -14,6 +14,7 @@
         @refresh="table.getLists"
         @filter="table.setFilters"
         @add="openDialog"
+        @print="print"
       />
     </div>
     <div
@@ -33,7 +34,7 @@
   </div>
   <app-dialog-not-full
     v-model="store.isOpen"
-    label="Form Stok"
+    label="Form Tambah Item Stok Opname"
     label-btn-ok="Simpan"
     label-btn-close="Batal"
     :loading="store.loading"
@@ -52,6 +53,7 @@ import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { defineAsyncComponent, onMounted, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useRouter } from 'vue-router'
 
 const style = useStyledStore()
 
@@ -66,7 +68,13 @@ const listForm = defineAsyncComponent(() => import('./comp/CompList.vue'))
 
 function openDialog () {
   store.edit = false
+  store.setForm('tglopname', table.params.to + ' 23:59:58')
   store.setOpen()
+}
+const router = useRouter()
+function print () {
+  const routeData = router.resolve({ path: '/print/opname', query: { kdruang: apps?.user?.kdruangansim } })
+  window.open(routeData.href, '_blank')
 }
 
 onMounted(() => {
