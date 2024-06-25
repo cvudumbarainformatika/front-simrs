@@ -246,13 +246,81 @@ function kirimOrder () {
   if (props?.pasien?.norm === '' || props?.pasien?.norm === null) return notifErrVue('NORM PASIEN BELUM TERDAFTAR')
   if (store.items.length === 0) return notifErrVue('Tidak Ada obat terpilih')
 
+  const non = store.items?.filter(item => !item.racikan)
+  // eslint-disable-next-line no-unused-vars
+  const nonObat = non?.length
+    ? non.map(x => {
+      return {
+        kodeobat: x.kodeobat,
+        jumlah_diminta: x.jumlah_diminta,
+        konsumsi: x.konsumsi,
+        racikan: false,
+        tiperacikan: false,
+        tiperesep: x.tiperesep,
+        dosis: 0
+      }
+    })
+    : []
+  const racikan = store.items?.filter(item => item.racikan)
+  const obatRacikan = []
+  for (let i = 0; i < racikan.length; i++) {
+    const el = racikan[i]
+    const rincian = el?.rincian
+    for (let n = 0; n < rincian.length; n++) {
+      const sub = rincian[n]
+      obatRacikan.push({
+        kodeobat: sub?.kodeobat,
+        jumlah_diminta: sub?.jumlah_diminta,
+        konsumsi: sub?.konsumsi,
+        racikan: true,
+        tiperacikan: el?.tiperacikan,
+        tiperesep: el?.tiperesep,
+        dosis: el.tiperacikan === 'non-DTD' ? 0 : sub?.dosis
+      })
+    }
+  }
+
+  const merged = nonObat.concat(obatRacikan)
+
+  // jika ada obat yangsama
+  const array = merged.map(obj => {
+    return { kodeobat: obj.kodeobat, jumlah_diminta: obj.jumlah_diminta }
+  })
+
+  const sumMap = {}
+
+  array.forEach(obj => {
+    if (sumMap[obj?.kodeobat]) {
+      sumMap[obj?.kodeobat] += obj?.jumlah_diminta
+    }
+    else {
+      sumMap[obj?.kodeobat] = obj?.jumlah_diminta
+    }
+  })
+
+  const thumb = []
+  for (let i = 0; i < Object.entries(sumMap).length; i++) {
+    const el = Object.entries(sumMap)[i]
+    const obj = {
+      kodeobat: el[0],
+      jumlah_diminta: el[1]
+    }
+    // console.log('el', el[0])
+    thumb.push(obj)
+  }
+
+  console.log('kirim order', thumb)
+  // console.log('kirim order racikan', obatRacikan)
+  // console.log('kirim order', merged)
+
   const payload = {
     template_id: store?.templateSelected?.id,
     kodedepo: store?.dpPar,
     groupsistembayar: props?.pasien?.groups,
     noreg: props?.pasien?.noreg,
     norm: props?.pasien?.norm,
-    items: store.items
+    items: merged,
+    merged: thumb
   }
   store.kirimOrder(payload)
   // console.log('payload', payload)
