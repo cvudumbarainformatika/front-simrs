@@ -232,6 +232,7 @@ function templateBaru () {
   store.templateSelected = null
   store.items = []
   store.updateListItems()
+  store.errorsOrder = []
   tab.value = 'nonracikan'
 }
 
@@ -239,19 +240,22 @@ function kirimOrder () {
   // console.log('kirim order', props.pasien)
   if (!props.pasien) return notifErrVue('Pasien Belum Terdaftar')
   if (store.dpPar === '' || store.dpPar === null) return notifErrVue('tidak ada depo tujuan')
-  if (store.selectTemplate === null) return notifErrVue('pilih template terlebih dahulu')
+  // if (store.selectTemplate === null) return notifErrVue('pilih template terlebih dahulu')
   if (props?.pasien?.groups === '' || props?.pasien?.groups === null) return notifErrVue('Sistem Bayar Pasien Belum Jelas')
   if (props?.pasien?.noreg === '' || props?.pasien?.noreg === null) return notifErrVue('NOREG PASIEN BELUM TERDAFTAR')
   if (props?.pasien?.norm === '' || props?.pasien?.norm === null) return notifErrVue('NORM PASIEN BELUM TERDAFTAR')
+  if (store.items.length === 0) return notifErrVue('Tidak Ada obat terpilih')
 
   const payload = {
     template_id: store?.templateSelected?.id,
     kodedepo: store?.dpPar,
-    groupsistembayar: store?.pasien?.groups,
-    noreg: store?.pasien?.noreg,
-    norm: store?.pasien?.norm
+    groupsistembayar: props?.pasien?.groups,
+    noreg: props?.pasien?.noreg,
+    norm: props?.pasien?.norm,
+    items: store.items
   }
   store.kirimOrder(payload)
+  // console.log('payload', payload)
 }
 
 watch(() => store.dpPar, (old, val) => {
