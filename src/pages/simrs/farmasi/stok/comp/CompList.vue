@@ -124,7 +124,7 @@
         </div>
       </template>
       <template #cell-fisik="{row}">
-        <div class="row q-col-gutter-sm items-center " style="min-width: 200px;">
+        <div v-if="!table.tutup" class="row q-col-gutter-sm items-center " style="min-width: 200px;">
           <div class="col-auto">
             <app-input-date-human
               :model="row.tglInputFisik"
@@ -167,6 +167,9 @@
               </q-tooltip>
             </q-input>
           </div>
+        </div>
+        <div v-else>
+          {{ row?.totalFisik }}
         </div>
       </template>
       <template #cell-selisih="{row}">

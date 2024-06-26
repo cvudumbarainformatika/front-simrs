@@ -7,6 +7,8 @@
       <HeaderComp
         :search="table.params.q"
         :per-page="table.params.per_page"
+        :tutup="table.tutup"
+        :loading-tutup="table.loadingTutup"
         @fullscreen="style.setComponentFull"
         @set-search="table.setQ"
         @set-row="table.setPerPage"
@@ -79,6 +81,10 @@ function print () {
 }
 function tutupOpname () {
   console.log('tutup Opname')
+  const form = {
+    tglopname: table.params.to + ' 23:59:58'
+  }
+  table.tutupOpname(form)
 }
 onMounted(() => {
   if (apps?.user?.kdruangansim !== '') {

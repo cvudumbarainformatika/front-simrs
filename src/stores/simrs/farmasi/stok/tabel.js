@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import { date } from 'quasar'
 import { api } from 'src/boot/axios'
+import { notifSuccess } from 'src/modules/utils'
 
 export const UseFarmasiStokTable = defineStore('tabel_stok', {
   state: () => ({
     loading: false,
+    loadingTutup: false,
+    tutup: false,
     params: {
       per_page: 10,
       q: '',
@@ -83,6 +86,7 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
             if (this.items.length) {
+              if (this.items[0]?.tutup?.status === '1') this.tutup = true
               this.items.forEach(it => {
                 const tglInputFisik = it.tgl_input_fisik
                 if (it.tgl_input_fisik) {
@@ -100,6 +104,21 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    tutupOpname (val) {
+      this.loadingTutup = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/tutup-opname', val)
+          .then(resp => {
+            this.loadingTutup = false
+            notifSuccess(resp)
+            this.tutup = true
+            resolve(resp)
+          })
+          .catch(() => {
+            this.loadingTutup = false
+          })
       })
     }
   }
