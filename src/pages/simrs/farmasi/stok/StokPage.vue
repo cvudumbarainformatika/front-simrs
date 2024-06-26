@@ -76,7 +76,7 @@ function openDialog () {
 }
 const router = useRouter()
 function print () {
-  const routeData = router.resolve({ path: '/print/opname', query: { kdruang: apps?.user?.kdruangansim } })
+  const routeData = router.resolve({ path: '/print/opname', query: { kdruang: apps?.user?.kdruangansim, from: table.params.from, to: table.params.to } })
   window.open(routeData.href, '_blank')
 }
 function tutupOpname () {

@@ -309,7 +309,7 @@
     >
       <q-scroll-area style="height: 100%;">
         <div
-          v-if="store?.resep?.permintaanresep?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=5) || parseInt(store?.resep?.flag)<=3"
+          v-if="store?.resep?.permintaanresep?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=5) || parseInt(store?.resep?.flag)<=3 ||store?.resep?.flag===''"
           class="q-mt-sm"
         >
           <div class="row items-center">
@@ -549,7 +549,7 @@
           </q-list>
         </div>
         <div
-          v-if="store?.resep?.listRacikan?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=3) || parseInt(store?.resep?.flag)<=3"
+          v-if="store?.resep?.listRacikan?.length && (store?.resep?.tiperesep !== 'iter' && parseInt(store?.resep?.flag)<=3) || parseInt(store?.resep?.flag)<=3 || store?.resep?.flag===''"
           class="q-mt-sm"
         >
           <div class="row items-center">
