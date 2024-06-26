@@ -92,6 +92,7 @@
       </q-btn>
       <!-- Tutup -->
       <q-btn
+        v-if="!tutup"
         class="q-mx-md"
         push
         color="orange"
@@ -99,6 +100,7 @@
         padding="xs"
         no-caps
         label="Tutup Opname"
+        :loading="loadingTutup"
         @click="emits('tutupOpname')"
       >
         <q-tooltip
@@ -259,7 +261,9 @@ const props = defineProps({
     type: String,
     default: dateDbFormat(new Date())
   },
-  fullscreen: { type: Boolean, default: false }
+  fullscreen: { type: Boolean, default: false },
+  tutup: { type: Boolean, default: false },
+  loadingTutup: { type: Boolean, default: false }
 })
 
 const popup = ref()
