@@ -14,6 +14,7 @@
         >
           <div class="col-12 q-mb-sm">
             <q-select
+              ref="refTujuan"
               v-model="store.form.tujuan"
               fill-input
               outlined
@@ -25,6 +26,10 @@
               option-label="rs2"
               :options="props.tujuanambulan"
               label="Pilih Tujuan"
+              clearable
+              :rules="[
+                val => !!val || 'Harus diisi'
+              ]"
             />
           </div>
           <div class="col-6 q-mb-sm">
@@ -161,6 +166,7 @@ const options = ref([])
 const listperawat = ref([])
 const pelsupir = ref(['Rujukan', 'Jenazah', 'Emergency'])
 const pelperawat = ref(['Rujukan', 'Emergency', 'Privat'])
+const refTujuan = ref(null)
 
 function filterFn (val, update, abort) {
   if (val.length < 1) {
@@ -187,9 +193,10 @@ function filterFn (val, update, abort) {
 }
 
 function saveOrder () {
-  store.saveOrder(props.pasien).then(() => {
-    formRef.value.resetValidation()
-  })
+  console.log('wew', refTujuan.value.validate())
+  // store.saveOrder(props.pasien).then(() => {
+  //   formRef.value.resetValidation()
+  // })
 }
 onMounted(() => {
   listperawat.value = store.listperawat

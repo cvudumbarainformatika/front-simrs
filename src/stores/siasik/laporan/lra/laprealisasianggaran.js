@@ -14,6 +14,7 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
+      // tglseblum: date.dateFormat(this.params.tgl, 'YYYY-MM-DD'),
       bidang: '',
       kegiatan: ''
     },
@@ -21,6 +22,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       dari: date.formatDate(Date.now(), '01 MMMM YYYY'),
       sampai: date.formatDate(Date.now(), 'DD MMMM YYYY')
     },
+    pendapatans: [],
+    nilaipends: [],
+    realisasipends: [],
     bidangs: [],
     paguAnggaran: [],
     mapRekening: []
@@ -37,6 +41,11 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     // emptyForm() {
     //   this.params.bidang = {}
     //   this.params.kegiatan = {}
+    // },
+    // getSebelumnya () {
+    //   const tglse = this.params.tgl
+    //   const tglsebelum = new Date() - 1
+    //   console.log('sebelum', tglsebelum)
     // },
 
     // eslint-disable-next-line space-before-function-paren
@@ -77,9 +86,14 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           console.log('realisasi', resp)
           if (resp.status === 200) {
             this.items = []
-            // this.items = resp.data
-            this.paguAnggaran(resp.data)
-            this.mapRekening(resp.data)
+            this.realisasipends = resp.data.realisasipendapatan
+            this.nilaipends = resp.data.nilaipendapatan
+            this.items = resp.data
+            this.paguAnggaran(resp.data.belanja)
+            this.mapRekening(resp.data.belanja)
+            this.mapPendapatan(resp.data.pendapatan)
+            this.nilaiPendapatan(resp.data.nilaipendapatan)
+            this.realisasiPendapatan(resp.data.realisasipendapatan)
             this.loading = false
             resolve(resp)
           }
@@ -89,7 +103,65 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         })
       })
     },
+    // getDataPendapatan() {
+    //   this.loading = true
+    //   const params = { params: this.params }
+    //   return new Promise(resolve => {
+    //     api.get('v1/laporan/lra/pendapatan', params).then(resp => {
+    //       console.log('pendapatan', resp)
+    //       if (resp.status === 200) {
+    //         // this.items = []
+    //         this.rekpendapatans = []
+    //         this.rekpendapatans = resp.data
+    //         // this.items = resp.data.pendapatan
+    //         // this.paguAnggaran(resp.data.belanja)
+    //         // this.mapRekening(resp.data.belanja)
+    //         this.mapPendapatan(resp.data)
+    //         this.loading = false
+    //         resolve(resp)
+    //       }
+    //     }).catch(() => {
+    //       this.loading = false
+    //       this.rekpendapatans = []
+    //     })
+    //   })
+    // },
+    mapPendapatan(val) {
+      // for (let i = 0; i < val?.length; i++) {
+      //   const element = val[i]
 
+      //   console.log('ele', element)
+      this.pendapatans = val
+      // }
+    },
+    nilaiPendapatan(val) {
+      const real = this.nilaipends?.map((x) => parseInt(x.nilai))
+      const total = {
+        totalPagu: real.reduce((a, b) => a + b, 0)
+      }
+      console.log('real', total)
+      this.nilaipends.push(total)
+      // for (let i = 0; i < val?.length; i++) {
+      //   val.nilaipends =
+      //     val?.map((x) => parseInt(x.nilai)).reduce((a, b) => a + b, 0)
+
+      //   console.log('nilai', val.nilaipends)
+
+      //   this.nilaipends.push(val.nilaipends)
+      // }
+    },
+    realisasiPendapatan(val) {
+      const real = this.realisasipends?.map((x) => parseInt(x.nilai))
+      const total = {
+        totalReal: real.reduce((a, b) => a + b, 0)
+      }
+      console.log('real', total)
+      this.realisasipends.push(total)
+      // for (let i = 0; i < val?.length; i++) {
+      //   val[i].realpendapatan = val?.map((x) => parseInt(x.nilai)).reduce((a, b) => a + b, 0)
+      //   console.log('real', val[i].realpendapatan)
+      // }
+    },
     paguAnggaran (val) {
       // this.items = []
       // const Anggaran = []
