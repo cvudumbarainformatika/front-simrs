@@ -146,19 +146,19 @@ onMounted(() => {
   // formmRef.value?.resetValidation()
 })
 
-function updateSearchTindakan(val) {
+function updateSearchTindakan (val) {
   store.setKdTindakan(val).then(() => {
     inpQtyRef.value.focus()
   })
 }
 
-function onSubmit() {
+function onSubmit () {
   store.saveTindakan(props.pasien).then(() => {
     formmRef.value.resetValidation()
   })
 }
 
-function filterFn(val, update, abort) {
+function filterFn (val, update, abort) {
   if (val.length < 1) {
     abort()
     return
@@ -167,6 +167,7 @@ function filterFn(val, update, abort) {
   update(() => {
     const needle = val.toLowerCase()
     const arr = store.listTindakan?.filter(x => x.kdpoli?.includes(props.pasien?.kodepoli))
+    // console.log('sasa', arr)
     const filter = ['kdtindakan', 'tindakan', 'icd9']
     const multiFilter = (data = [], filterKeys = [], value = '') =>
       data.filter((item) => filterKeys.some(

@@ -18,17 +18,20 @@ export const useAmbulanStore = defineStore('ambulan-store', {
     }
   }),
   actions: {
-    async getTujuanAmbulan() {
+    async getTujuanAmbulan () {
       const resp = await api.get('v1/simrs/penunjang/ambulan/gettujuanambulan')
       if (resp.status === 200) {
         this.tujuanambulan = resp.data
       }
     },
-    async getperawatpedamping() {
+    async getperawatpedamping () {
       const resp = await api.get('v1/simrs/master/nakes/selaindokter')
       if (resp.status === 200) {
         this.listperawat = resp.data
       }
+    },
+    async saveOrderAmbulan (pasien) {
+
     }
   }
 })
