@@ -35,6 +35,7 @@
         >
           <span v-html="highlightText(scope.opt?.namaobat)" />
           <span class="text-teal q-ml-sm">{{ scope.opt.satuankecil ?? '-' }}</span>
+          <span class="q-ml-sm"> ({{ scope.opt.alokasi ?? 0 }})</span>
         </div>
         <div>
           Kandungan : <span class="text-deep-orange" v-html="highlightText(scope.opt?.kandungan)" />
@@ -56,7 +57,7 @@
         >
           satuan kecil : <span class="text-teal">{{ scope.opt.satuankecil }}</span>
         </div> -->
-        <div>
+        <div class="f-10">
           category : <span class="text-primary">{{ scope.opt.forkit==='1' ? 'Forkit, ' : ' ' }}</span>
           <span class="text-teal">{{ scope.opt.fornas==='1' ? 'Fornas, ' : ' ' }}</span>
           <span class="text-deep-orange">{{ scope.opt.generik==='1' ? 'Generik, ' : ' ' }}</span>
@@ -113,6 +114,7 @@ const props = defineProps({
 
 onMounted(() => {
   console.log('ref obat', refObat.value?.$el?.clientWidth)
+  showTooltip.value = false
   width.value = refObat.value?.$el?.clientWidth
 })
 
@@ -143,15 +145,15 @@ async function filterFn (val, update, abort) {
   else return notifErrVue('depo tujuan tidak ditemukan')
 
   const param = {
-    // groups: store?.pasien?.groups,
-    // kdruang: store.dpPar,
+    groups: store?.pasien?.groups,
+    kdruang: store.dpPar,
     q: val,
     tiperesep: store.form.tiperesep
   }
 
   const params = { params: param }
 
-  const resp = await api.get('v1/simrs/penunjang/farmasinew/templateeresep/cariobat', params)
+  const resp = await api.get('v1/simrs/farmasinew/depo/lihatstokobateresepBydokter', params)
   console.log('resp', resp)
   const data = resp.data?.dataobat ?? []
 

@@ -8,8 +8,9 @@
     row-key="kodeobat"
     :rows-per-page-options="[0]"
     :loading="store.loadingTemplate"
-    v-model:expanded="expanded"
+    v-model:expanded="store.expandedList"
     hide-pagination
+    wrap-cells
   >
     <template #top>
       <div class=" full-width row items-center justify-between">
@@ -93,21 +94,24 @@
     <template #body="props">
       <q-tr
         :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1"
-        :class="{'bg-negative text-grey-4': adaError(props.row) || adaErrorRacikan(props.row)}"
+        :class="{'bg-grey text-white': adaError(props.row) || adaErrorRacikan(props.row)}"
       >
         <!-- <q-td auto-width>
           <q-btn v-if="props.row.racikan" size="xs" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'icon-mat-remove' : 'icon-mat-add'" />
         </q-td> -->
         <q-td
           key="namaobat" :props="props"
-          class="flex items-center"
+          class="flex items-center full-width"
         >
           <q-toggle v-if="props.row.racikan" size="xs" v-model="props.expand" />
-          <div class="q-ml-sm">
+          <div class="q-ml-sm flex wrap">
             {{ props.row.namaobat }}
             <q-popup-proxy ref="refProxy" v-if="!props.row.racikan">
               <dialog-edit :item="props" @close="closeEdit" :index-item="props.rowIndex" />
             </q-popup-proxy>
+            <!-- <div v-if="store.errorsOrder?.items?.filter(x => x?.kodeobat === props.row.kodeobat)">
+              ooi
+            </div> -->
           </div>
         </q-td>
         <q-td key="jumlah" :props="props">
@@ -241,20 +245,14 @@ function simpanTemplate () {
 
 function adaError (row) {
   // console.log('ada error', store.errorsOrder)
-  const errs = store.errorsOrder?.nonRacikan?.filter(x => x?.isError === true)
-  const obats = errs?.length ? errs.filter(x => x?.kdobat === row?.kodeobat) : []
-  // console.log('obats', obats.length)
-  return obats.length
-  // const errTdkAdaAlokasiNonRacikan = store.errorsOrder?.tidakAdaAlokasi?.filter(x => x?.kodeobat === row?.kodeobat)
-  // return errTdkAdaAlokasiNonRacikan?.length
+  const errs = store.errorsOrder?.nonRacikan?.filter(x => x?.kodeobat === row?.kodeobat)
+  return errs?.length
 }
 function adaErrorRacikan (row) {
-  const errs = store.errorsOrder?.racikan?.filter(x => x?.isError === true)
-  const obats = errs?.length ? errs.filter(x => x?.kdobat === row?.kodeobat) : []
-  // console.log('obats', obats.length)
-  // if (obats.length) expanded.value?.push(obats[0]?.kdobat)
-  // console.log('expanded', expanded.value)
-  return obats.length
+  // console.log('ada error', store.errorsOrder)
+  const errs = store.errorsOrder?.racikan?.filter(x => x?.koderacikan === row?.kodeobat)
+
+  return errs?.length
 }
 
 watchEffect(() => {
@@ -265,11 +263,11 @@ watchEffect(() => {
     bg.value.head = getCssVar('primary')
   }
 
-  if (store.errorsOrder?.racikan?.length) {
-    const exp = store.errorsOrder?.racikan?.filter(x => x?.isError === true).map(x => x?.kdobat)
-    expanded.value = exp
-    // console.log('exp', exp)
-  }
+  // if (store.errorsOrder?.racikan?.length) {
+  //   const exp = store.errorsOrder?.racikan?.map(x => x?.koderacikan)
+  //   expanded.value = exp
+  //   // console.log('exp', exp)
+  // }
   console.log('expanded', expanded.value)
   // console.log('storeErr', store.errorsOrder)
 })
@@ -281,6 +279,7 @@ watchEffect(() => {
 .my-sticky-header {
   /* height or max-height is important */
   height: 100%;
+  width: 100%;
 
   div.q-table__top ,
   .q-table__bottom

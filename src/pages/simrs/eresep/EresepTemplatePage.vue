@@ -171,12 +171,12 @@ const props = defineProps({
 // eslint-disable-next-line no-unused-vars
 const emits = defineEmits(['back'])
 
-const tab = ref('nonracikan')
+const tab = ref('template')
 
 onMounted(() => {
   // store.initItems()
-  // console.log(store.items)
-  templateBaru()
+  // console.log('dpPar', store.dpPar)
+  awal()
 })
 
 const onRowClick = (val) => {
@@ -236,6 +236,15 @@ function templateBaru () {
   tab.value = 'nonracikan'
 }
 
+// eslint-disable-next-line no-unused-vars
+function awal () {
+  store.templateSelected = null
+  store.items = []
+  store.updateListItems()
+  store.errorsOrder = []
+  tab.value = 'template'
+}
+
 function kirimOrder () {
   // console.log('kirim order', props.pasien)
   if (!props.pasien) return notifErrVue('Pasien Belum Terdaftar')
@@ -247,16 +256,22 @@ function kirimOrder () {
   if (store.items.length === 0) return notifErrVue('Tidak Ada obat terpilih')
 
   const non = store.items?.filter(item => !item.racikan)
+  // console.log('non', non)
   // eslint-disable-next-line no-unused-vars
   const nonObat = non?.length
     ? non.map(x => {
       return {
-        kodeobat: x.kodeobat,
-        jumlah_diminta: x.jumlah_diminta,
-        konsumsi: x.konsumsi,
+        kodeobat: x?.kodeobat,
+        jumlah_diminta: x?.jumlah_diminta,
+        konsumsi: x?.konsumsi,
         racikan: false,
         tiperacikan: false,
-        tiperesep: x.tiperesep,
+        namaracikan: false,
+        keteranganx: false,
+        kemasan: false,
+        tiperesep: x?.tiperesep,
+        signa: x?.signa,
+        keterangan: x?.keterangan,
         dosis: 0
       }
     })
@@ -271,14 +286,21 @@ function kirimOrder () {
       obatRacikan.push({
         kodeobat: sub?.kodeobat,
         jumlah_diminta: sub?.jumlah_diminta,
-        konsumsi: sub?.konsumsi,
-        racikan: true,
+        konsumsi: el?.konsumsi,
+        racikan: el?.kodeobat,
         tiperacikan: el?.tiperacikan,
+        namaracikan: el?.namaobat,
+        keteranganx: sub?.keterangan,
+        kemasan: el?.satuan_kcl,
         tiperesep: el?.tiperesep,
-        dosis: el.tiperacikan === 'non-DTD' ? 0 : sub?.dosis
+        dosis: el.tiperacikan === 'non-DTD' ? 0 : sub?.dosis,
+        signa: el?.signa,
+        keterangan: el?.keterangan
       })
     }
   }
+
+  // console.log('racikan', store.items)
 
   const merged = nonObat.concat(obatRacikan)
 
@@ -309,7 +331,7 @@ function kirimOrder () {
     thumb.push(obj)
   }
 
-  console.log('kirim order', thumb)
+  // console.log('kirim order', props?.pasien)
   // console.log('kirim order racikan', obatRacikan)
   // console.log('kirim order', merged)
 
@@ -319,18 +341,34 @@ function kirimOrder () {
     groupsistembayar: props?.pasien?.groups,
     noreg: props?.pasien?.noreg,
     norm: props?.pasien?.norm,
+    kdruangan: props?.pasien?.kodepoli,
+    diagnosa: props?.pasien?.diagnosa[0]?.masterdiagnosa?.rs1 + ' - ' + props?.pasien?.diagnosa[0]?.masterdiagnosa?.rs4,
+    kodeincbg: '',
+    uraianinacbg: '',
+    tarifina: '',
+    tiperesep: store?.items[0]?.tiperesep,
+    tagihanrs: '',
+    sistembayar: props?.pasien?.kodesistembayar,
+
     items: merged,
     merged: thumb
   }
   store.kirimOrder(payload)
+    .then(() => {
+      emits('back')
+    })
   // console.log('payload', payload)
+  // console.log('pasian', props.pasien)
 }
 
-watch(() => store.dpPar, (old, val) => {
-  console.log('watch old', old)
-  console.log('watch new', val)
+watch(() => props.depo, (old, val) => {
+  // console.log('watch old', old)
+  // console.log('watch new', val)
   if (old !== val) {
-    store.getTemplates(old)
+    // store.getTemplates(old)
+    const cariDepo = store.depos?.find(x => x.jenis === old)?.value
+    store.dpPar = cariDepo
+    store.getTemplates(cariDepo)
   }
 }, { immediate: true })
 </script>
