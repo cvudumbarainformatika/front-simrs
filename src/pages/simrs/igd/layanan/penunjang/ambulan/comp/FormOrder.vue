@@ -34,6 +34,7 @@
           </div>
           <div class="col-6 q-mb-sm">
             <q-select
+              ref="refPelayananSupir"
               v-model="store.form.pelsupir"
               fill-input
               outlined
@@ -41,10 +42,15 @@
               dense
               :options="pelsupir"
               label="Pelayanan Supir"
+              clearable
+              :rules="[
+                val => !!val || 'Harus diisi'
+              ]"
             />
           </div>
           <div class="col-6 q-mb-sm">
             <q-select
+              ref="refPelayananperawat"
               v-model="store.form.pelperawat"
               fill-input
               outlined
@@ -54,10 +60,12 @@
               map-options
               :options="pelperawat"
               label="Pelayanan Perawat"
+              clearable
             />
           </div>
           <div class="col-6 q-mb-sm">
             <q-select
+              ref="refperawatPendamping1"
               v-model="store.form.perawatpendamping1"
               use-input
               hide-selected
@@ -69,7 +77,7 @@
               map-options
               option-value="rs1"
               option-label="rs2"
-              input-debounce="0"
+              clearable
               :options="options"
               label="Perawat Pedamping 1"
               @filter="filterFn"
@@ -111,7 +119,7 @@
           </div>
           <div class="col-12">
             <q-input
-              v-model="store.form.permintaan"
+              v-model="store.form.keterangan"
               label="Keterangan"
               autogrow
               outlined
@@ -167,6 +175,9 @@ const listperawat = ref([])
 const pelsupir = ref(['Rujukan', 'Jenazah', 'Emergency'])
 const pelperawat = ref(['Rujukan', 'Emergency', 'Privat'])
 const refTujuan = ref(null)
+const refPelayananSupir = ref(null)
+const refPelayananperawat = ref(null)
+const refperawatPendamping1 = ref(null)
 
 function filterFn (val, update, abort) {
   if (val.length < 1) {
@@ -193,14 +204,15 @@ function filterFn (val, update, abort) {
 }
 
 function saveOrder () {
-  console.log('wew', refTujuan.value.validate())
-  // store.saveOrder(props.pasien).then(() => {
-  //   formRef.value.resetValidation()
-  // })
+  formRef.value.reset()
+  store.saveOrderAmbulan(props.pasien).then(() => {
+    formRef.value.resetValidation()
+  })
 }
 onMounted(() => {
   listperawat.value = store.listperawat
   formRef.value.resetValidation()
+  console.log('wewew', formRef.value.resetValidation())
 })
 
 </script>
