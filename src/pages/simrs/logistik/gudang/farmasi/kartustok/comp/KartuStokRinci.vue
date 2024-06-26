@@ -91,20 +91,20 @@
                 </tr>
                 <template v-if="bentukArrBaru.length">
                   <tr
-                    v-for="(item, n) in bentukArrBaru"
-                    :key="item"
+                    v-for="(rinci, n) in bentukArrBaru"
+                    :key="rinci"
                   >
-                    <td :class="item?.masuk === 0 ? item?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
-                      {{ item?.tanggal }} <span class="">  {{ item?.jam }}</span>
+                    <td :class="rinci?.masuk === 0 ? rinci?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
+                      {{ rinci?.tanggal }} <span class="">  {{ rinci?.jam }}</span>
                     </td>
-                    <td :class="item?.masuk === 0 ? item?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
-                      {{ item?.keterangan }}
-                    </td>
-                    <td class="text-end">
-                      {{ formatDouble((item?.masuk ?? 0), 1) }}
+                    <td :class="rinci?.masuk === 0 ? rinci?.keluar===0 ?'text-yellow-9': 'text-negative' : 'text-primary'">
+                      {{ rinci?.keterangan }}
                     </td>
                     <td class="text-end">
-                      {{ formatDouble((item?.keluar ?? 0),1) }}
+                      {{ formatDouble((rinci?.masuk ?? 0), 1) }}
+                    </td>
+                    <td class="text-end">
+                      {{ formatDouble((rinci?.keluar ?? 0),1) }}
                     </td>
                     <td class="text-end">
                       {{ formatDouble((cariHasilAkhirArray(n) ?? 0), 1) }}
@@ -154,24 +154,24 @@ const props = defineProps({
 const bulans = ref(['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Novermber', 'Desember'])
 
 const bentukArrBaru = computed(() => {
-  const terimalangsung = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')?.map(x => {
+  const terimalangsung = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan !== 'Pesanan' && x.kunci === '1')?.map(x => {
     return {
       tgl: x?.tglpenerimaan,
       tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
-      keterangan: 'Penerimaan Langsung',
+      keterangan: 'Penerimaan Langsung Jenis ' + x.jenis_penerimaan + ' nomor ' + x?.nopenerimaan,
       masuk: parseFloat(x?.jml_terima_k),
       keluar: 0,
       total: 0
     }
   })
 
-  const terimapesan = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')?.map(x => {
+  const terimapesan = props?.item?.penerimaanrinci?.filter((x) => x.jenis_penerimaan === 'Pesanan' && x.kunci === '1' && x.jenissurat === 'Faktur')?.map(x => {
     return {
       tgl: x?.tglpenerimaan,
       tanggal: date.formatDate(x?.tglpenerimaan, 'DD, MMM YYYY'),
       jam: date.formatDate(x?.tglpenerimaan, 'HH:mm'),
-      keterangan: x?.jenis_penerimaan === 'Pembelian langsung' ? 'Penerimaan langsung' : 'Penerimaan By Pesan',
+      keterangan: 'Penerimaan Nomor ' + x?.nopenerimaan,
       masuk: parseFloat(x?.jml_terima_k),
       keluar: 0,
       total: 0

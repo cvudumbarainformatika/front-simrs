@@ -22,60 +22,67 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
       kdruang: '',
       harga: '',
       tglexp: null,
-      nobatch: ''
+      nobatch: '',
+      tgl_input_fisik: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+      jamInput: date.formatDate(Date.now(), 'HH:mm:ss')
     },
     disp: {
       tglpenerimaan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
       tglexp: null,
-      kdruang: ''
+      kdruang: '',
+      tglInputFisik: date.formatDate(Date.now(), 'DD MMMM YYYY')
 
     },
     obats: [],
     allObats: []
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setDisp(key, val) {
+    setDisp (key, val) {
       this.disp[key] = val
     },
-    resetForm() {
+    resetForm () {
       const ruang = this.form.kdruang
       const ruang2 = this.disp.kdruang
       this.disp = {
         tglpenerimaan: date.formatDate(Date.now(), 'DD MMMM YYYY'),
         tglexp: null,
-        kdruang: ruang2
+        kdruang: ruang2,
+        tglInputFisik: date.formatDate(Date.now(), 'DD MMMM YYYY')
 
       }
       this.form = {
-        tglpenerimaan: date.formatDate(Date.now(), 'DD-MM-YYYY'),
+        tglpenerimaan: date.formatDate(Date.now(), 'YYYY-MM-DD'),
         kdobat: '',
         jumlah: '',
         kdruang: ruang,
         harga: '',
         tglexp: '',
-        nobatch: ''
+        nobatch: '',
+        tgl_input_fisik: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+        jamInput: date.formatDate(Date.now(), 'HH:mm:ss')
       }
     },
-    setOpen() {
+    setOpen () {
       this.isOpen = true
     },
-    setClose() {
+    setClose () {
       this.isOpen = false
     },
-    cariObat(val) {
+    cariObat (val) {
       const obat = this.allObats.filter(ob => ob.namaobat.toLowerCase().includes(val.toLowerCase()))
       console.log('filter obat', obat)
       if (obat.length) {
         this.obats = obat
-      } else {
+      }
+      else {
         this.params.q = val
         this.getDataObat()
       }
     },
-    editData(val) {
+    editData (val) {
       this.edit = true
       this.cariObat(val.nama_obat)
       if (this.form.kdruang !== val.kdruang) return notifErrVue('Tidak bisa melakukan edit karena bukan stok milik Ruangan Anda')
@@ -91,10 +98,10 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
       this.setForm('id', val?.idx)
       this.setOpen()
     },
-    getInitialData() {
+    getInitialData () {
       this.getDataObat()
     },
-    async getDataObat() {
+    async getDataObat () {
       this.loadingObat = true
       const param = { params: this.params }
       await api.get('v1/simrs/master/cariObat', param)
@@ -106,7 +113,7 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
         })
         .catch(() => { this.loadingObat = false })
     },
-    simpanForm() {
+    simpanForm () {
       this.loading = true
       const form = this.form
       form.tglpenerimaan = this.form.tglpenerimaan + date.formatDate(Date.now(), ' HH:mm:ss')
@@ -119,11 +126,46 @@ export const UseFarmasiStokStore = defineStore('form_stok', {
             this.resetForm()
             this.setClose()
             const table = UseFarmasiStokTable()
+            table.getDataTable(true)
+            notifSuccess(resp)
+            resolve(resp)
+          })
+          .catch(() => { this.loading = false })
+      })
+    },
+    simpanFormNew () {
+      this.loading = true
+      const form = this.form
+      form.tglpenerimaan = this.form.tglpenerimaan + date.formatDate(Date.now(), ' HH:mm:ss')
+      // const url = this.edit ? 'v1/simrs/farmasinew/penerimaan/updatestoksementara' : 'v1/simrs/farmasinew/penerimaan/insertsementara'
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/simpan-baru', form)
+          .then(resp => {
+            this.loading = false
+            console.log('simpan', resp.data)
+            this.resetForm()
+            this.setClose()
+            const table = UseFarmasiStokTable()
             table.getDataTable()
             notifSuccess(resp)
             resolve(resp)
           })
           .catch(() => { this.loading = false })
+      })
+    },
+    simpanFisik (val) {
+      val.loadingSimpan = true
+      return new Promise(resolve => {
+        api.post('v1/simrs/farmasinew/penerimaan/simpan-fisik', val)
+          .then(resp => {
+            val.loadingSimpan = false
+            console.log('simpan', resp.data)
+            notifSuccess(resp)
+            const table = UseFarmasiStokTable()
+            table.getDataTable()
+            resolve(resp)
+          })
+          .catch(() => { val.loadingSimpan = false })
       })
     }
 

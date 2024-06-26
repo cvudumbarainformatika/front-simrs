@@ -8,6 +8,7 @@
     row-key="kodeobat"
     :rows-per-page-options="[0]"
     :loading="store.loadingTemplate"
+    v-model:expanded="expanded"
     hide-pagination
   >
     <template #top>
@@ -90,12 +91,18 @@
     </template>
 
     <template #body="props">
-      <q-tr :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1">
+      <q-tr
+        :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1"
+        :class="{'bg-negative text-grey-4': adaError(props.row) || adaErrorRacikan(props.row)}"
+      >
         <!-- <q-td auto-width>
           <q-btn v-if="props.row.racikan" size="xs" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'icon-mat-remove' : 'icon-mat-add'" />
         </q-td> -->
-        <q-td key="namaobat" :props="props" :class="props.row.racikan? 'text-info flex items-center':'flex items-center'">
-          <q-btn v-if="props.row.racikan" size="xs" color="accent" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'icon-mat-remove' : 'icon-mat-add'" />
+        <q-td
+          key="namaobat" :props="props"
+          class="flex items-center"
+        >
+          <q-toggle v-if="props.row.racikan" size="xs" v-model="props.expand" />
           <div class="q-ml-sm">
             {{ props.row.namaobat }}
             <q-popup-proxy ref="refProxy" v-if="!props.row.racikan">
@@ -144,6 +151,8 @@ const store = useTemplateEResepStore()
 const $q = useQuasar()
 // const showDialogEdit = ref(false)
 // const selected = ref(null)
+
+const expanded = ref([])
 
 const bg = ref({
   head: getCssVar('primary'),
@@ -210,12 +219,13 @@ function hapusItem (val) {
 
 function simpanTemplate () {
   $q.dialog({
-    title: 'Simpan Temlate',
-    message: 'Silahkan Isi Nama Template sebelum disimpan',
+    title: `${store.templateSelected?.nama ? 'Update Template' : 'Simpan Template'}`,
+    message: `${store.templateSelected?.nama ? 'Apakah Template ini akan diperbarui?' : 'Silahkan masukkan nama Template terlebih dahulu'}`,
     prompt: {
-      model: '',
+      model: store.templateSelected?.nama ?? '',
       isValid: val => val.length > 2,
-      type: 'text' // optional
+      type: 'text', // optional
+      readonly: store.templateSelected !== null
     },
     cancel: true,
     persistent: true
@@ -229,6 +239,24 @@ function simpanTemplate () {
   })
 }
 
+function adaError (row) {
+  // console.log('ada error', store.errorsOrder)
+  const errs = store.errorsOrder?.nonRacikan?.filter(x => x?.isError === true)
+  const obats = errs?.length ? errs.filter(x => x?.kdobat === row?.kodeobat) : []
+  // console.log('obats', obats.length)
+  return obats.length
+  // const errTdkAdaAlokasiNonRacikan = store.errorsOrder?.tidakAdaAlokasi?.filter(x => x?.kodeobat === row?.kodeobat)
+  // return errTdkAdaAlokasiNonRacikan?.length
+}
+function adaErrorRacikan (row) {
+  const errs = store.errorsOrder?.racikan?.filter(x => x?.isError === true)
+  const obats = errs?.length ? errs.filter(x => x?.kdobat === row?.kodeobat) : []
+  // console.log('obats', obats.length)
+  // if (obats.length) expanded.value?.push(obats[0]?.kdobat)
+  // console.log('expanded', expanded.value)
+  return obats.length
+}
+
 watchEffect(() => {
   if (store.templateSelected) {
     bg.value.head = getCssVar('dark-page')
@@ -236,6 +264,14 @@ watchEffect(() => {
   else {
     bg.value.head = getCssVar('primary')
   }
+
+  if (store.errorsOrder?.racikan?.length) {
+    const exp = store.errorsOrder?.racikan?.filter(x => x?.isError === true).map(x => x?.kdobat)
+    expanded.value = exp
+    // console.log('exp', exp)
+  }
+  console.log('expanded', expanded.value)
+  // console.log('storeErr', store.errorsOrder)
 })
 
 </script>

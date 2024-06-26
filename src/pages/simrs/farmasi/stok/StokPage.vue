@@ -7,6 +7,8 @@
       <HeaderComp
         :search="table.params.q"
         :per-page="table.params.per_page"
+        :tutup="table.tutup"
+        :loading-tutup="table.loadingTutup"
         @fullscreen="style.setComponentFull"
         @set-search="table.setQ"
         @set-row="table.setPerPage"
@@ -14,6 +16,8 @@
         @refresh="table.getLists"
         @filter="table.setFilters"
         @add="openDialog"
+        @print="print"
+        @tutup-opname="tutupOpname"
       />
     </div>
     <div
@@ -33,7 +37,7 @@
   </div>
   <app-dialog-not-full
     v-model="store.isOpen"
-    label="Form Stok"
+    label="Form Tambah Item Stok Opname"
     label-btn-ok="Simpan"
     label-btn-close="Batal"
     :loading="store.loading"
@@ -52,6 +56,7 @@ import { UseFarmasiStokTable } from 'src/stores/simrs/farmasi/stok/tabel'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { defineAsyncComponent, onMounted, watch } from 'vue'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
+import { useRouter } from 'vue-router'
 
 const style = useStyledStore()
 
@@ -66,9 +71,21 @@ const listForm = defineAsyncComponent(() => import('./comp/CompList.vue'))
 
 function openDialog () {
   store.edit = false
+  store.setForm('tglopname', table.params.to + ' 23:59:58')
   store.setOpen()
 }
-
+const router = useRouter()
+function print () {
+  const routeData = router.resolve({ path: '/print/opname', query: { kdruang: apps?.user?.kdruangansim } })
+  window.open(routeData.href, '_blank')
+}
+function tutupOpname () {
+  console.log('tutup Opname')
+  const form = {
+    tglopname: table.params.to + ' 23:59:58'
+  }
+  table.tutupOpname(form)
+}
 onMounted(() => {
   if (apps?.user?.kdruangansim !== '') {
     store.setForm('kdruang', apps?.user?.kdruangansim)
@@ -91,7 +108,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 })
 function simpan () {
   console.log('form', store.form)
-  store.simpanForm()
+  store.simpanFormNew()
 }
 function batal () {
   store.resetForm()

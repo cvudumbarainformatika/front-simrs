@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th width="5%">
-          No
+          No.
         </th>
         <th>
           Resep
@@ -193,6 +193,9 @@
               </div>
               <div v-if="item?.ruanganranap">
                 {{ item?.ruanganranap?.rs2 }}
+                <div v-if!="item?.kunjunganranap?.ruangtitipan?.rs1" class="text-negative">
+                  Di Titipkan Di  {{ item?.kunjunganranap?.ruangtitipan?.rs2 }}
+                </div>
               </div>
             </td>
             <td>

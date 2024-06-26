@@ -90,8 +90,28 @@
           </q-list>
         </q-menu>
       </q-btn>
+      <!-- Tutup -->
+      <q-btn
+        v-if="!tutup"
+        class="q-mx-md"
+        push
+        color="orange"
+        size="sm"
+        padding="xs"
+        no-caps
+        label="Tutup Opname"
+        :loading="loadingTutup"
+        @click="emits('tutupOpname')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Tutup Stok Opname
+        </q-tooltip>
+      </q-btn>
       <!-- add -->
-      <!-- <q-btn
+      <q-btn
         push
         color="green"
         icon="icon-mat-add"
@@ -105,7 +125,7 @@
         >
           Tambah Data
         </q-tooltip>
-      </q-btn> -->
+      </q-btn>
       <!-- refresh -->
       <q-btn
         class="q-ml-sm"
@@ -166,6 +186,23 @@
           </q-list>
         </q-menu>
       </q-btn>
+      <!-- Print stok -->
+      <q-btn
+        class="q-mx-sm"
+        round
+        color="dark"
+        icon="icon-mat-print"
+        size="sm"
+        padding="xs"
+        @click="emits('print')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Print
+        </q-tooltip>
+      </q-btn>
       <!-- fullscreen -->
       <q-btn
         flat
@@ -192,7 +229,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add', 'setPeriode'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add', 'setPeriode', 'tutupOpname', 'print'])
 const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   adaTanggal: {
@@ -224,12 +261,14 @@ const props = defineProps({
     type: String,
     default: dateDbFormat(new Date())
   },
-  fullscreen: { type: Boolean, default: false }
+  fullscreen: { type: Boolean, default: false },
+  tutup: { type: Boolean, default: false },
+  loadingTutup: { type: Boolean, default: false }
 })
 
 const popup = ref()
 
-function lihatRef() {
+function lihatRef () {
   console.log(popup.value)
   popup.value.hide()
 }
@@ -238,18 +277,18 @@ const selectPerPage = computed({
   set (val) { emits('setRow', val) }
 })
 const tgl = computed({
-  get() {
+  get () {
     return props.tanggal
   },
-  set(newVal) {
+  set (newVal) {
     emits('setTanggal', newVal)
   }
 })
 const q = computed({
-  get() {
+  get () {
     return props.search
   },
-  set(newVal) {
+  set (newVal) {
     emits('setSearch', newVal)
   }
 })
@@ -258,7 +297,7 @@ const years = ref([])
 const yearSelected = ref(date.formatDate(Date.now(), 'YYYY'))
 const periode = ref()
 const periods = ref([])
-function gantiPeriode(val) {
+function gantiPeriode (val) {
   console.log('ganti', val)
   // if (val === 1) {
   //   hariIni()
@@ -274,7 +313,7 @@ function gantiPeriode(val) {
   // }
   emits('setPeriode', val?.eom)
 }
-function gantiTahun() {
+function gantiTahun () {
   const bu = [
     { mth: 1, val: 0, label: 'Januari', eom: '' },
     { mth: 2, val: 1, label: 'Pebruari', eom: '' },

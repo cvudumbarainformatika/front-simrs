@@ -2,12 +2,51 @@
   <div class="q-ma-sm">
     <div class="row items-center q-col-gutter-sm">
       <div class="col-6">
+        <div class="row">
+          <div class="col-5">
+            Tgl Opname
+          </div>
+          <div class="col-7">
+            {{ dateFull( store.form?.tglopname) }}
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
         <app-input-date-human
           :model="store.disp.tglpenerimaan"
           label="Tanggal Penerimaan"
           outlined
           @set-display="store.setDisp('tglpenerimaan',$event)"
           @db-model="store.setForm('tglpenerimaan',$event)"
+        />
+      </div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            <app-input-date-human
+              :model="store.disp.tglInputFisik"
+              label="Tanggal Input Fisik"
+              outlined
+              @set-display="store.setDisp('tglInputFisik',$event)"
+              @db-model="store.setForm('tgl_input_fisik',$event)"
+            />
+          </div>
+          <div class="col-6">
+            <app-input-date-human
+              :model="store.form.jamInput"
+              label="Jam Input Fisik"
+              outlined
+              :type-date="false"
+              @set-model="store.setForm('jamInput',$event)"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <app-input
+          v-model="store.form.nopenerimaan"
+          label="Nomor Penerimaan"
+          outlined
         />
       </div>
       <div class="col-6">
@@ -43,12 +82,24 @@
         />
       </div>
       <div class="col-6">
-        <app-input
-          v-model="store.form.jumlah"
-          outlined
-          :label="'Jumlah '+ satuan"
-          @update:model-value="numberOnly($event,'jumlah')"
-        />
+        <div class="row">
+          <div class="col-6">
+            <app-input
+              v-model="store.form.jumlah"
+              outlined
+              :label="'Jumlah '+ satuan"
+              @update:model-value="numberOnly($event,'jumlah')"
+            />
+          </div>
+          <div class="col-6">
+            <app-input
+              v-model="store.form.fisik"
+              outlined
+              :label="'Jumlah Fisik '+ satuan"
+              @update:model-value="numberOnly($event,'fisik')"
+            />
+          </div>
+        </div>
       </div>
       <div class="col-6">
         <app-input
@@ -75,12 +126,13 @@
   </div>
 </template>
 <script setup>
+import { dateFull } from 'src/modules/formatter'
 import { UseFarmasiStokStore } from 'src/stores/simrs/farmasi/stok/form'
 import { computed } from 'vue'
 
 const store = UseFarmasiStokStore()
 
-function numberOnly(evt, key) {
+function numberOnly (evt, key) {
   const inc = evt.includes('.')
   const ind = evt.indexOf('.')
   const panj = evt.length

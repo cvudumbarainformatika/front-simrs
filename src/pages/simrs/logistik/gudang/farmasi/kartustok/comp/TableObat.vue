@@ -176,14 +176,14 @@ function hitungSaldoAwal (arr) {
 }
 
 function hitungPenerimaan (arr) {
-  // jika jenis penerimaan = 'Pembelian Langsung' maka langsung jadi stok .... asal kunci =1
-  // jika jenis penerimaan bukan 'Pembelian Langsung' maka harus jadi Faktur dulu,  jadi stok .... asal kunci = 1
+  // jika jenis penerimaan bukan 'Pesanan' maka langsung jadi stok .... asal kunci =1
+  // jika jenis penerimaan = 'Pesanan' maka harus jadi Faktur dulu,  jadi stok .... asal kunci = 1
   // const filt = arr?.filter((x) => x.jenissurat !== 'Surat Jalan')
 
-  const terimalangsung = arr?.filter((x) => x.jenis_penerimaan === 'Pembelian langsung' && x.kunci === '1')
+  const terimalangsung = arr?.filter((x) => x.jenis_penerimaan !== 'Pesanan' && x.kunci === '1')
   const jmlterimalangsung = terimalangsung?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
 
-  const terimafaktur = arr?.filter((x) => x.jenis_penerimaan !== 'Pembelian langsung' && x.kunci === '1' && x.jenissurat === 'Faktur')
+  const terimafaktur = arr?.filter((x) => x.jenis_penerimaan === 'Pesanan' && x.kunci === '1' && x.jenissurat === 'Faktur')
   const jmlterimafaktur = terimafaktur?.reduce((x, y) => parseFloat(x) + parseFloat(y.jml_terima_k), 0)
 
   // eslint-disable-next-line no-unused-vars
