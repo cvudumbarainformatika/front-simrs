@@ -408,7 +408,7 @@
       </q-scroll-area>
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
-          <q-btn color="teal" @click="emits('openTemplate')">
+          <q-btn v-if="depo !== 'ok'" color="teal" @click="emits('openTemplate')">
             Pembuatan Template
           </q-btn>
         </div>
