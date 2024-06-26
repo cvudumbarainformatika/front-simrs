@@ -3,6 +3,7 @@ import { api } from 'src/boot/axios'
 // import { useKasirRajalListKunjunganStore } from '../../kasir/rajal/kunjungan'
 import { notifSuccess, notifErrVue } from 'src/modules/utils'
 import { LocalStorage } from 'quasar'
+import { usePermintaanEResepStore } from './eresep'
 // import { dateFullFormat } from 'src/modules/formatter'
 
 export const useTemplateEResepStore = defineStore('template_e_resep', {
@@ -73,7 +74,8 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     items: [],
     templateSelected: null,
     templates: [],
-    errorsOrder: []
+    errorsOrder: [],
+    expandedList: []
   }),
   actions: {
 
@@ -187,11 +189,13 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     },
 
     selectTemplate (val) {
-      console.log('select template', val)
+      // console.log('select template', val)
       this.templateSelected = null
       this.templateSelected = val
       this.items = []
       this.items = val?.rincian
+      this.errorsOrder = []
+      this.expandedList = []
       this.updateListItems()
     },
 
@@ -199,7 +203,7 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
       this.racikan[key] = val
     },
 
-    kirimOrder (payload) {
+    kirimOrder (payload, pasien) {
       this.errorsOrder = []
       this.loadingTemplate = true
       return new Promise((resolve, reject) => {
@@ -207,16 +211,54 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
         api.post('v1/simrs/penunjang/farmasinew/templateeresep/order', payload)
           .then(resp => {
             console.log('kirim order', resp)
+            notifSuccess(resp)
+            const res = resp?.data?.data
+            const eresep = usePermintaanEResepStore()
+            eresep?.setListResep(res)
+            eresep.pasien.newapotekrajal.push(res)
             this.loadingTemplate = false
             resolve(resp)
           })
           .catch((err) => {
-            console.log('err', err.response.data)
-            this.errorsOrder = err.response.data
             this.loadingTemplate = false
+            console.log('err response', err)
+            const items = err.response.data.items
+            const racikan = items?.filter(x => x?.racikan !== false && x?.isError === true)
+            const nonRacikan = items?.filter(x => x?.racikan === false && x?.isError === true)
+
+            const grouped = racikan.length ? this.groupByx(racikan, x => x?.racikan) : []
+            // const groupArr = Array.from(grouped, ([name, value]) => ({ name, value }))
+            // console.log('racikan', grouped)
+            // console.log('non racikan', nonRacikan)
+            // const errors = [...grouped, ...nonRacikan]
+            const errors = {
+              racikan: grouped,
+              nonRacikan
+            }
+            console.log('err', errors)
+            this.expandedList = errors?.racikan?.length ? errors.racikan.map(x => x?.koderacikan) : []
+            this.errorsOrder = errors
+            reject(err)
           })
       })
     },
+
+    groupByx (list, keyGetter) {
+      const map = new Map()
+      list.forEach((item) => {
+        const key = keyGetter(item)
+        const collection = map.get(key)
+        if (!collection) {
+          map.set(key, [item])
+        }
+        else {
+          collection.push(item)
+        }
+      })
+      const arr = Array.from(map, ([koderacikan, rincian]) => ({ koderacikan, rincian }))
+      return arr
+    },
+
     setPasien () {
       // this.cariSimulasi(val?.noreg)
       // if (this?.depo === 'rjl') this.getBillRajal(val)

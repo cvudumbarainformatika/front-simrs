@@ -164,6 +164,30 @@
                 </tr>
               </thead>
               <tbody class="align-middle q-pl-sm">
+                <tr v-for="item in store.pendapatans" :key="item">
+                  <td class="text-left q-pl-sm q-pr-sm">
+                    <div> {{ item.kodeall3 }}  </div>
+                  </td>
+                  <td class="text-left q-pl-sm q-pr-sm">
+                    <div> {{ item.uraian }}  </div>
+                  </td>
+                  <td>
+                    <div v-for="rr in store.nilaipends" :key="rr">
+                      {{ rr.totalPagu }}
+                    </div>
+                  </td>
+                  <td>
+                    <div v-for="rr in store.realisasipends" :key="rr">
+                      {{ rr.totalReal }}
+                    </div>
+                  </td>
+                </tr>
+                <tr class="total text-bold">
+                  <td class="text-right q-pl-sm q-pr-sm" colspan="2">
+                    TOTAL PENDAPATAN
+                  </td>
+                </tr>
+
                 <tr v-for="item in store.items" :key="item">
                   <td class="text-left q-pl-sm q-pr-sm">
                     <div> {{ item.kodeall3 }} </div>
@@ -188,9 +212,9 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="text-bold">
+                <tr class="total text-bold">
                   <td class="text-right q-pl-sm q-pr-sm" colspan="2">
-                    TOTAL
+                    TOTAL BELANJA
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
                     {{ formattanpaRp(totalPagux ()) }}
@@ -223,8 +247,11 @@ import { onMounted } from 'vue'
 // import { ref } from 'vue'
 const store = useLaporanLraLaprealisasianggaranStore()
 store.getDataRealisasi()
+store.realisasiPendapatan()
+// store.getDataPendapatan()
 onMounted(() => {
   store.getDataBidang()
+  // store.getSebelumnya()
   // store.paguAnggaran()
   // store.realisasiAnggaran()
   // store.getBidang()
@@ -295,6 +322,9 @@ tbody tr td{
   border-collapse: collapse;
   border-radius: 6px;
   border: 1px solid rgb(163, 163, 163);
+}
+.total{
+  background: #e6efff;
 }
 
 </style>

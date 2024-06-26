@@ -29,7 +29,7 @@
       <!-- <div class="row justify-between items-center">
         sistem bayar
       </div> -->
-      <div class="row justify-between items-center">
+      <div class="row justify-between items-center q-px-md q-py-xs">
         <div v-if="depo==='rjl'" class="q-px-xs">
           <div
             v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "

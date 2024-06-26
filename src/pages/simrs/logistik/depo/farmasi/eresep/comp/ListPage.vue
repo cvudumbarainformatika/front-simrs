@@ -363,8 +363,9 @@
                   </q-tooltip>
                 </q-btn>
                 <!-- tolak -->
+
                 <q-btn
-                  v-if="parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)"
+                  v-if="(parseInt(item?.flag)<= 2 && (!item?.doneresep && !item?.doneracik)) || item?.flag===''"
                   round
                   class="f-10 q-mx-sm"
                   color="negative"
