@@ -34,6 +34,9 @@
       <template #col-fisik>
         <div>Fisik</div>
       </template>
+      <template #col-selisih>
+        <div>Selisih</div>
+      </template>
 
       <template #cell-obat="{row}">
         <div class="row no-wrap text-weight-bold text-green">
@@ -121,48 +124,97 @@
         </div>
       </template>
       <template #cell-fisik="{row}">
-        <q-input
-          v-model="row.fisik"
-          label="Jumlah Fisik Obat"
-          outlined
-          dense
-          standout="bg-yellow-3"
-          :loading="row.loadingSimpan"
-          :disable="row.loadingSimpan"
-          valid
-          @keyup.enter.stop="simpanFisik(row)"
-        >
-          <q-tooltip class="bg-white text-weight-bold" anchor="center right" self="center left" :offset="[15,0]">
-            <div class="row text-orange f-12">
-              Di Isi Jumlah Stok Fisik
-            </div>
-            <div class="row text-primary f-12">
-              Tekan Enter Untuk Simpan
-            </div>
-          </q-tooltip>
-        </q-input>
+        <div class="row q-col-gutter-sm items-center " style="min-width: 200px;">
+          <div class="col-auto">
+            <app-input-date-human
+              :model="row.tglInputFisik"
+              label="Tanggal Input fisik"
+              outlined
+              valid
+              @set-display="setData('tglInputFisik',$event,row)"
+              @db-model="setData('tgl_input_fisik',$event,row)"
+            />
+          </div>
+          <div class="col-auto">
+            <app-input-date-human
+              :model="row.jamInput"
+              label="Jam Input fisik"
+              outlined
+              valid
+              :type-date="false"
+              @set-model="setData('jamInput',$event,row)"
+            />
+          </div>
+          <div class="col-auto">
+            <q-input
+              v-model="row.totalFisik"
+              label="Jumlah Fisik Obat"
+              outlined
+              dense
+              standout="bg-yellow-3"
+              :loading="row.loadingSimpan"
+              :disable="row.loadingSimpan"
+              valid
+              @keyup.enter.stop="simpanFisik(row)"
+            >
+              <q-tooltip class="bg-white text-weight-bold" anchor="center right" self="center left" :offset="[15,0]">
+                <div class="row text-orange f-12">
+                  Di Isi Jumlah Stok Fisik
+                </div>
+                <div class="row text-primary f-12">
+                  Tekan Enter Untuk Simpan
+                </div>
+              </q-tooltip>
+            </q-input>
+          </div>
+        </div>
+      </template>
+      <template #cell-selisih="{row}">
+        <div class="row text-weight-bold" :class="getSelisih(row)===0?'':(getSelisih(row)>0?'text-orange':'text-negative')">
+          {{ getSelisih(row) }}
+        </div>
       </template>
       <template #left-acttion="{row}">
-        <div class="q-mr-md">
-          <!-- {{ role }} -->
-          <q-btn
-            v-if="role===1"
-            class=""
-            size="sm"
-            color="blue"
-            label="Re-Stok Opname"
-            no-caps
-            :loading="row?.loadingRe"
-            :disable="row?.loadingRe"
-            @click="editData(row)"
-          >
-            <q-tooltip
-              anchor="top middle"
-              self="center middle"
+        <div>
+          <div class="row q-mr-md q-my-sm">
+            <q-btn
+              class=""
+              size="sm"
+              color="primary"
+              label="Simpan"
+              no-caps
+              :loading="row?.loadingSimpan"
+              :disable="row?.loadingSimpan"
+              @click="simpanFisik(row)"
             >
-              Re-stok
-            </q-tooltip>
-          </q-btn>
+              <q-tooltip
+                anchor="top middle"
+                self="center middle"
+              >
+                Re-stok
+              </q-tooltip>
+            </q-btn>
+          </div>
+          <div class="row q-mr-md q-my-sm">
+            <q-btn
+              v-if="role===1"
+              class=""
+              size="sm"
+              color="dark"
+              label="Re-Stok Opname"
+              no-caps
+              :loading="row?.loadingRe"
+              :disable="row?.loadingRe"
+              @click="editData(row)"
+            >
+              <q-tooltip
+                anchor="top middle"
+                self="center middle"
+              >
+                Re-stok
+              </q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
     </app-table>
@@ -206,9 +258,18 @@ function cariGudang (val) {
 function simpanFisik (row) {
   console.log('simpan fisik', row, parseFloat(row?.fisik))
   if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Di Isi Nomor')
+  store.simpanFisik(row)
 }
 function editData (val) {
   // store.editData(val)
   console.log('edit', val)
+}
+function setData (key, evt, row) {
+  row[key] = evt
+}
+function getSelisih (row) {
+  const jumlah = parseFloat(row?.total)
+  const fisik = !isNaN(parseFloat(row?.totalFisik)) ? parseFloat(row?.totalFisik) : 0
+  return jumlah - fisik
 }
 </script>

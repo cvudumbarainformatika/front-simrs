@@ -21,6 +21,28 @@
         />
       </div>
       <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            <app-input-date-human
+              :model="store.disp.tglInputFisik"
+              label="Tanggal Input Fisik"
+              outlined
+              @set-display="store.setDisp('tglInputFisik',$event)"
+              @db-model="store.setForm('tgl_input_fisik',$event)"
+            />
+          </div>
+          <div class="col-6">
+            <app-input-date-human
+              :model="store.form.jamInput"
+              label="Jam Input Fisik"
+              outlined
+              :type-date="false"
+              @set-model="store.setForm('jamInput',$event)"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
         <app-input
           v-model="store.form.nopenerimaan"
           label="Nomor Penerimaan"
@@ -60,12 +82,24 @@
         />
       </div>
       <div class="col-6">
-        <app-input
-          v-model="store.form.jumlah"
-          outlined
-          :label="'Jumlah '+ satuan"
-          @update:model-value="numberOnly($event,'jumlah')"
-        />
+        <div class="row">
+          <div class="col-6">
+            <app-input
+              v-model="store.form.jumlah"
+              outlined
+              :label="'Jumlah '+ satuan"
+              @update:model-value="numberOnly($event,'jumlah')"
+            />
+          </div>
+          <div class="col-6">
+            <app-input
+              v-model="store.form.fisik"
+              outlined
+              :label="'Jumlah Fisik '+ satuan"
+              @update:model-value="numberOnly($event,'fisik')"
+            />
+          </div>
+        </div>
       </div>
       <div class="col-6">
         <app-input

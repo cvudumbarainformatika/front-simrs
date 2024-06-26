@@ -102,7 +102,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
 })
 function simpan () {
   console.log('form', store.form)
-  store.simpanForm()
+  store.simpanFormNew()
 }
 function batal () {
   store.resetForm()

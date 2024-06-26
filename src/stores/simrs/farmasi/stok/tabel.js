@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { date } from 'quasar'
 import { api } from 'src/boot/axios'
 
 export const UseFarmasiStokTable = defineStore('tabel_stok', {
@@ -16,7 +17,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
       'obat',
       // 'penerimaan',
       'stok',
-      'fisik'
+      'fisik',
+      'selisih'
     ],
     columnHide: [],
     keterangan: 'keterangan'
@@ -70,8 +72,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
         })
         .catch(() => { this.loading = false })
     },
-    getDataTable () {
-      this.loading = true
+    getDataTable (val) {
+      this.loading = !val
       const param = { params: this.params }
       return new Promise(resolve => {
         api.get('v1/simrs/farmasinew/penerimaan/liststokreal', param)
@@ -80,6 +82,21 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             console.log('setok ', resp.data)
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
+            if (this.items.length) {
+              this.items.forEach(it => {
+                const tglInputFisik = it.tgl_input_fisik
+                if (it.tgl_input_fisik) {
+                  it.jamInput = date.formatDate(tglInputFisik, 'HH:mm:ss')
+                  it.tglInputFisik = date.formatDate(tglInputFisik, 'DD MMMM YYYY')
+                  it.tgl_input_fisik = date.formatDate(tglInputFisik, 'YYYY-MM-DD')
+                }
+                else {
+                  it.jamInput = date.formatDate(Date.now(), 'HH:mm:ss')
+                  it.tglInputFisik = date.formatDate(Date.now(), 'DD MMMM YYYY')
+                  it.tgl_input_fisik = date.formatDate(Date.now(), 'YYYY-MM-DD')
+                }
+              })
+            }
             resolve(resp)
           })
           .catch(() => { this.loading = false })
