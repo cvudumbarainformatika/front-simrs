@@ -47,22 +47,40 @@
         </div> -->
         <div class="row justify-start no-wrap q-my-xs">
           <div
-            class="text-weight-bold"
-            :class="row.status_fornas === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_fornas === '1'"
           >
-            {{ row.status_fornas==='1' ?'Fornas':'' }}
+            Fornas
           </div>
           <div
-            class="text-weight-bold q-ml-sm"
-            :class="row.status_forkid === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_forkid === '1'"
           >
-            {{ row.status_forkid==='1' ?'Forkit':'' }}
+            Forkit
           </div>
           <div
-            class="text-weight-bold q-ml-sm"
-            :class="row.status_generik === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_generik === '1'"
           >
-            {{ row.status_generik==='1' ?'Generik':'' }}
+            Generik
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-negative"
+            v-if="row.status_kronis === '1'"
+          >
+            Kronis
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-negative"
+            v-if="row.kelompok_psikotropika === '1'"
+          >
+            Psikotropika
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-primary"
+            v-if="row.status_konsinyasi === '1'"
+          >
+            Konsinyasi
           </div>
         </div>
         <div class="row justify-start no-wrap q-my-xs">
@@ -71,6 +89,14 @@
             :class="row.gudang === 'Gd-03010100'?'text-blue':(row.gudang === 'Gd-05010100'?'text-primary':'text-green')"
           >
             {{ row.gudang==='Gd-03010100' ?'Gudang Floor Stok':(row.gudang === 'Gd-05010100'?'Gudang Kamar Obat':'Semua gudang') }}
+          </div>
+        </div>
+        <div class="row justify-start no-wrap q-my-xs">
+          <div
+            class="text-weight-bold"
+            :class="row.sistembayar === 'SEMUA'?'':(row.sistembayar === 'UMUM'?'text-primary':'text-deep-purple')"
+          >
+            sistem bayar : {{ row.sistembayar==='SEMUA' ?'Semua':(row.sistembayar === 'UMUM'?'UMUM':'BPJS') }}
           </div>
         </div>
       </template>

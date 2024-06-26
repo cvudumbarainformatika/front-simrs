@@ -15,6 +15,7 @@
         @filter="table.setFilters"
         @add="openDialog"
         @print="print"
+        @tutup-opname="tutupOpname"
       />
     </div>
     <div
@@ -76,7 +77,9 @@ function print () {
   const routeData = router.resolve({ path: '/print/opname', query: { kdruang: apps?.user?.kdruangansim } })
   window.open(routeData.href, '_blank')
 }
-
+function tutupOpname () {
+  console.log('tutup Opname')
+}
 onMounted(() => {
   if (apps?.user?.kdruangansim !== '') {
     store.setForm('kdruang', apps?.user?.kdruangansim)

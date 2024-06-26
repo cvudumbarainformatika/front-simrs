@@ -47,22 +47,40 @@
         </div>
         <div class="row justify-start no-wrap q-my-xs">
           <div
-            class="text-weight-bold"
-            :class="row.status_fornas === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_fornas === '1'"
           >
-            {{ row.status_fornas==='1' ?'Fornas':'Non-Fornas' }}
+            Fornas
           </div>
           <div
-            class="text-weight-bold q-ml-sm"
-            :class="row.status_forkid === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_forkid === '1'"
           >
-            {{ row.status_forkid==='1' ?'Forkit':'Non-Forkit' }}
+            Forkit
           </div>
           <div
-            class="text-weight-bold q-ml-sm"
-            :class="row.status_generik === '1'?'text-green':'text-negative'"
+            class="text-weight-bold q-mr-sm text-green"
+            v-if="row.status_generik === '1'"
           >
-            {{ row.status_generik==='1' ?'Generik':'Non-Generik' }}
+            Generik
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-negative"
+            v-if="row.status_kronis === '1'"
+          >
+            Kronis
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-negative"
+            v-if="row.kelompok_psikotropika === '1'"
+          >
+            Psikotropika
+          </div>
+          <div
+            class="text-weight-bold q-mr-sm text-primary"
+            v-if="row.status_konsinyasi === '1'"
+          >
+            Konsinyasi
           </div>
         </div>
         <div class="row justify-start no-wrap q-my-xs">

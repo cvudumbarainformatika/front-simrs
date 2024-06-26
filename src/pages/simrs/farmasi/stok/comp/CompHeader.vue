@@ -90,6 +90,24 @@
           </q-list>
         </q-menu>
       </q-btn>
+      <!-- Tutup -->
+      <q-btn
+        class="q-mx-md"
+        push
+        color="orange"
+        size="sm"
+        padding="xs"
+        no-caps
+        label="Tutup Opname"
+        @click="emits('tutupOpname')"
+      >
+        <q-tooltip
+          class="primary"
+          :offset="[10, 10]"
+        >
+          Tutup Stok Opname
+        </q-tooltip>
+      </q-btn>
       <!-- add -->
       <q-btn
         push
@@ -209,7 +227,7 @@ import { dateDbFormat } from 'src/modules/formatter'
 import { computed, onMounted, ref } from 'vue'
 const txt = ref('SEMUA')
 const txts = ref(['SEMUA', 'TERLAYANI', 'BELUM TERLAYANI'])
-const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add', 'setPeriode'])
+const emits = defineEmits(['fullscreen', 'setTanggal', 'setSearch', 'setRow', 'refresh', 'add', 'setPeriode', 'tutupOpname', 'print'])
 const options = ref([5, 10, 20, 50, 100])
 const props = defineProps({
   adaTanggal: {
