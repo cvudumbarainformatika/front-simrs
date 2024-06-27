@@ -65,7 +65,7 @@
         <div class="row q-col-gutter-sm q-my-sm q-pl-lg">
           <div class="col-2">
             <app-input-date-human
-              :model="store.display.dari"
+              :model="store.params.tgl"
               label="dari tangal"
               outlined
               :disable="store.loading"
@@ -77,7 +77,7 @@
           <div class="col-2">
             <app-input-date-human
               class="q-ml-md"
-              :model="store.display.sampai"
+              :model="store.params.tglx"
               label="sampai tangal"
               outlined
               :disable="store.loading"
@@ -171,20 +171,37 @@
                   <td class="text-left q-pl-sm q-pr-sm">
                     <div> {{ item.uraian }}  </div>
                   </td>
-                  <td>
-                    <div v-for="rr in store.nilaipends" :key="rr">
-                      {{ rr.totalPagu }}
-                    </div>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
                   </td>
-                  <td>
-                    <div v-for="rr in store.realisasipends" :key="rr">
-                      {{ rr.totalReal }}
-                    </div>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>{{ formattanpaRp(store.realisasipends?.totalSebelumnya) }}</div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>{{ formattanpaRp(store.realisasipends?.totalSekarang) }}</div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
                   </td>
                 </tr>
                 <tr class="total text-bold">
                   <td class="text-right q-pl-sm q-pr-sm" colspan="2">
                     TOTAL PENDAPATAN
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>{{ formattanpaRp(store.realisasipends?.totalPaguPendapatan) }}</div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.totalSebelumnya) }} </div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.totalSekarang) }} </div>
+                  </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
                   </td>
                 </tr>
 
@@ -199,7 +216,7 @@
                     <div>{{ formattanpaRp(item.totalPagu) }} </div>
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
-                    <div>{{ formattanpaRp(0) }}</div>
+                    <div>{{ formattanpaRp(item.totalRealisasiSebelumnya) }}</div>
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
                     <div>
@@ -211,6 +228,11 @@
                       {{ formattanpaRp(item.selisih) }}
                     </div>
                   </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div>
+                      {{ item.persen }}
+                    </div>
+                  </td>
                 </tr>
                 <tr class="total text-bold">
                   <td class="text-right q-pl-sm q-pr-sm" colspan="2">
@@ -220,7 +242,7 @@
                     {{ formattanpaRp(totalPagux ()) }}
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
-                    {{ formattanpaRp(0) }}
+                    {{ formattanpaRp(totalRealisasiSebelumnya ()) }}
                   </td>
                   <td class="text-right q-pl-sm q-pr-sm">
                     {{ formattanpaRp(totalRealisasi ()) }}
@@ -275,6 +297,13 @@ function totalPagux () {
   const totalanggaran = saldo[0]?.totalPagu
   // console.log("debit", totaldebit);
   return totalanggaran
+}
+function totalRealisasiSebelumnya () {
+  const saldo = store.items
+  // console.log('njaaias', saldo)
+  const totalpagu = saldo[0]?.totalRealisasiSebelumnya
+  // console.log("debit", totaldebit);
+  return totalpagu
 }
 
 function totalRealisasi () {
