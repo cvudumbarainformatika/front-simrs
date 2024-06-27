@@ -2,7 +2,10 @@
   <div
     class="row full-height full-width bg-grey-4 shadow-1"
   >
-    <Transition>
+    <Transition
+      enter-active-class="animated fadeIn faster"
+      leave-active-class="animated fadeOut faster"
+    >
       <div v-if="!temp" class="fit row">
         <div class="col-8 full-height q-pa-xs">
           <form-resep

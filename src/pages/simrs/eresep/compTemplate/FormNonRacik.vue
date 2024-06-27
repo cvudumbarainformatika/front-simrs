@@ -69,6 +69,7 @@
           v-model="store.form.konsumsi"
           label="Dikonsumsi selama (hari)"
           dense
+          :rules="[numberValidationRule]"
           lazy-rules
           no-error-icon
           hide-bottom-space
