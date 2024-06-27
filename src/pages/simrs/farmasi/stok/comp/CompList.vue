@@ -104,28 +104,33 @@
         </div>
       </template>
       <template #cell-stok="{row}">
-        <div class="row no-wrap text-italic">
-          {{ cariGudang(row.kdruang) }}
-          <!-- {{ store?.disp?.kdruang }} -->
-        </div>
-        <div class="row no-wrap text-weight-bold  items-end">
-          <div>
-            {{ row.total }}
+        <div v-if="row?.oneopname || row?.onestok">
+          <div class="row no-wrap text-italic">
+            {{ cariGudang(row.kdruang) }}
+            <!-- {{ store?.disp?.kdruang }} -->
           </div>
-          <div class="q-ml-sm f-10 text-italic">
-            ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+          <div class="row no-wrap text-weight-bold  items-end">
+            <div>
+              {{ row.total }}
+            </div>
+            <div class="q-ml-sm f-10 text-italic">
+              ( {{ row.satuan_k ? row.satuan_k :'-' }} )
+            </div>
+          </div>
+          <div class="row no-wrap text-italic f-10">
+            Rp  {{ formatRp( row.harga ) }}
+          </div>
+          <div class="row no-wrap text-italic f-10">
+            exp : {{ dateFullFormat( row.tglexp ) }}
           </div>
         </div>
-        <div class="row no-wrap text-italic f-10">
-          Rp  {{ formatRp( row.harga ) }}
-        </div>
-        <div class="row no-wrap text-italic f-10">
-          exp : {{ dateFullFormat( row.tglexp ) }}
+        <div v-else>
+          Tidak Ada stok
         </div>
       </template>
       <template #cell-fisik="{row}">
-        <div v-if="!table.tutup" class="row q-col-gutter-sm items-center " style="min-width: 200px;">
-          <div class="col-auto">
+        <div v-if="tutup(row)" class="row q-col-gutter-sm items-center " style="min-width: 200px;">
+          <!-- <div class="col-auto">
             <app-input-date-human
               :model="row.tglInputFisik"
               label="Tanggal Input fisik"
@@ -144,10 +149,10 @@
               :type-date="false"
               @set-model="setData('jamInput',$event,row)"
             />
-          </div>
+          </div> -->
           <div class="col-auto">
             <q-input
-              v-model="row.totalFisik"
+              v-model="row.fisik"
               label="Jumlah Fisik Obat"
               outlined
               dense
@@ -169,7 +174,7 @@
           </div>
         </div>
         <div v-else>
-          {{ row?.totalFisik }}
+          {{ row?.fisik }}
         </div>
       </template>
       <template #cell-selisih="{row}">
@@ -181,7 +186,7 @@
         <div>
           <div class="row q-mr-md q-my-sm">
             <q-btn
-              v-if="!table.tutup"
+              v-if="tutup(row)"
               class=""
               size="sm"
               color="primary"
@@ -225,6 +230,8 @@
   </div>
 </template>
 <script setup>
+// eslint-disable-next-line no-unused-vars
+import { date } from 'quasar'
 import { dateFullFormat, formatRp } from 'src/modules/formatter'
 import { notifErrVue } from 'src/modules/utils'
 import { useAplikasiStore } from 'src/stores/app/aplikasi'
@@ -262,18 +269,26 @@ function cariGudang (val) {
 function simpanFisik (row) {
   console.log('simpan fisik', row, parseFloat(row?.fisik))
   if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Di Isi Nomor')
+  row.tglopname = table.params.to + ' 23:59:58'
   store.simpanFisik(row)
 }
 function editData (val) {
   // store.editData(val)
   console.log('edit', val)
 }
-function setData (key, evt, row) {
-  row[key] = evt
-}
+// function setData (key, evt, row) {
+//   row[key] = evt
+// }
 function getSelisih (row) {
-  const jumlah = parseFloat(row?.total)
-  const fisik = !isNaN(parseFloat(row?.totalFisik)) ? parseFloat(row?.totalFisik) : 0
+  const jumlah = !isNaN(parseFloat(row?.total)) ? parseFloat(row?.total) : 0
+  const fisik = !isNaN(parseFloat(row?.fisik)) ? parseFloat(row?.fisik) : 0
   return jumlah - fisik
+}
+function tutup (val) {
+  const date1 = new Date(Date.now())
+  const date2 = new Date(table.params.to)
+  const diff = date.getDateDiff(date1, date2, 'days')
+  console.log('table param', table.params.to, diff)
+  return !(diff > 0)
 }
 </script>

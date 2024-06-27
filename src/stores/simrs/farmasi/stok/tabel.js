@@ -86,7 +86,6 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
             if (this.items.length) {
-              if (this.items[0]?.tutup?.status === '1') this.tutup = true
               this.items.forEach(it => {
                 const tglInputFisik = it.tgl_input_fisik
                 if (it.tgl_input_fisik) {
@@ -99,6 +98,12 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
                   it.tglInputFisik = date.formatDate(Date.now(), 'DD MMMM YYYY')
                   it.tgl_input_fisik = date.formatDate(Date.now(), 'YYYY-MM-DD')
                 }
+                it.total = 0
+                it.total = it?.oneopname?.total ?? it?.onestok?.total
+                it.kdruang = it?.oneopname?.kdruang ?? it?.onestok?.kdruang
+                it.harga = it?.oneopname?.harga ?? it?.onestok?.harga
+                it.tglexp = it?.oneopname?.tglexp ?? it?.onestok?.tglexp
+                it.fisik = it?.onefisik?.jumlah ?? null
               })
             }
             resolve(resp)
