@@ -24,7 +24,8 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
       'selisih'
     ],
     columnHide: [],
-    keterangan: 'keterangan'
+    keterangan: 'keterangan',
+    now: null
   }),
   actions: {
     setParam (key, val) {
@@ -85,6 +86,7 @@ export const UseFarmasiStokTable = defineStore('tabel_stok', {
             console.log('setok ', resp.data)
             this.items = resp?.data?.data ?? resp?.data
             this.meta = resp.data?.meta
+            this.now = resp.data?.now
             if (this.items.length) {
               this.items.forEach(it => {
                 const tglInputFisik = it.tgl_input_fisik

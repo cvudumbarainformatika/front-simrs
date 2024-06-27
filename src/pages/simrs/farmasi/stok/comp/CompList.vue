@@ -269,8 +269,13 @@ function cariGudang (val) {
 function simpanFisik (row) {
   console.log('simpan fisik', row, parseFloat(row?.fisik))
   if (isNaN(parseFloat(row?.fisik))) return notifErrVue('Di Isi Nomor')
+  const date1 = new Date(table.now)
+  const date2 = new Date(table.params.to + ' 23:59:59')
+  const diff = date.getDateDiff(date1, date2, 'days')
+  console.log('table param', date1, date2, table.params.to, diff)
   row.tglopname = table.params.to + ' 23:59:58'
-  store.simpanFisik(row)
+  if (diff < -10) return notifErrVue('Stok Opname dapat di isi dari h-10')
+  // store.simpanFisik(row)
 }
 function editData (val) {
   // store.editData(val)
@@ -285,10 +290,10 @@ function getSelisih (row) {
   return jumlah - fisik
 }
 function tutup (val) {
-  const date1 = new Date(Date.now())
-  const date2 = new Date(table.params.to)
-  const diff = date.getDateDiff(date1, date2, 'days')
-  console.log('table param', table.params.to, diff)
+  const date1 = new Date(table.now)
+  const date2 = new Date(table.params.to + ' 23:59:59')
+  const diff = date.getDateDiff(date1, date2, 'minutes')
+  // console.log('table param', date1, date2, table.params.to, diff)
   return !(diff > 0)
 }
 </script>
