@@ -201,7 +201,7 @@ const setJumlah = (val) => {
 onMounted(() => {
   resetChild()
   compCariObat?.value?.refObat?.value?.focus()
-  store.cariObat()
+  // store.cariObat()
 })
 
 function resetChild () {

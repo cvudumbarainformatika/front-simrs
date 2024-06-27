@@ -39,31 +39,31 @@ export const useLaporanSigarangPenerimaanGudangStore = defineStore('laporan_siga
     total: 0
   }),
   actions: {
-    setParams(key, val) {
+    setParams (key, val) {
       this.params[key] = val
     },
-    setSearch(payload) {
+    setSearch (payload) {
       this.setParams('q', payload)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    setPage(payload) {
+    setPage (payload) {
       this.setParams('page', payload)
       this.getDataTable()
     },
-    setPerPage(payload) {
+    setPerPage (payload) {
       this.setParams('per_page', payload)
       this.setParams('page', 1)
       this.getDataTable()
     },
-    refreshTable() {
+    refreshTable () {
       this.setParams('page', 1)
       this.getDataTable()
     },
-    getInitialData() {
+    getInitialData () {
       this.getDataTable()
     },
-    async getDataTable() {
+    async getDataTable () {
       this.loading = true
       const param = { params: this.params }
       await api.get('v1/simrs/laporan/sigarang/lappenerimaan-gudang', param)

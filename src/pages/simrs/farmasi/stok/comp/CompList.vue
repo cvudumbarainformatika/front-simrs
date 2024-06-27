@@ -181,6 +181,7 @@
         <div>
           <div class="row q-mr-md q-my-sm">
             <q-btn
+              v-if="!table.tutup"
               class=""
               size="sm"
               color="primary"

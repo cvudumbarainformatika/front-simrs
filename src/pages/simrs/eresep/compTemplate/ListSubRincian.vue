@@ -8,9 +8,13 @@
     :rows-per-page-options="[0]"
     hide-pagination
     dense
+    wrap-cells
   >
     <template #body="props">
-      <q-tr :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1">
+      <q-tr
+        :props="props" @click="onRowClick(props.row)" @mouseover="indexRow = props.rowIndex" @mouseleave="indexRow = -1"
+        :class="{'bg-grey text-white': adaError(props.row)}"
+      >
         <q-td key="namaobat" :props="props">
           {{ props.row.namaobat }}
           <q-popup-proxy ref="refProxyc">
@@ -108,5 +112,14 @@ function hapusItem (val) {
   }).onDismiss(() => {
     // console.log('I am triggered on both OK and Cancel')
   })
+}
+
+function adaError (row) {
+  // console.log('ada error', row)
+  const errs = store.errorsOrder?.racikan?.filter(x => x?.koderacikan === props.sub?.key)
+  // const obats = errs?.length ? errs.rincian?.filter(x => x?.kodeobat?.includes(row?.kodeobat)) : []
+  const obats = errs?.length ? errs[0].rincian?.filter(x => x?.kodeobat?.includes(row?.kodeobat)) : []
+  // console.log('ada error sub', obats)
+  return obats?.length
 }
 </script>
