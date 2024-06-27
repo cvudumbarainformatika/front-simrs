@@ -203,6 +203,9 @@
                   <td class="text-right q-pl-sm q-pr-sm">
                     <div> {{ formattanpaRp(store.realisasipends?.selisih) }} </div>
                   </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    <div> {{ formattanpaRp(store.realisasipends?.persen) }} </div>
+                  </td>
                 </tr>
 
                 <tr v-for="item in store.items" :key="item">
@@ -250,6 +253,9 @@
                   <td class="text-right q-pl-sm q-pr-sm">
                     {{ formattanpaRp(totalSelisih ()) }}
                   </td>
+                  <td class="text-right q-pl-sm q-pr-sm">
+                    {{ formattanpaRp(totalPersen ()) }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -293,32 +299,29 @@ function setSampai (val) {
 
 function totalPagux () {
   const saldo = store.items
-  // console.log('njaaias', saldo)
   const totalanggaran = saldo[0]?.totalPagu
-  // console.log("debit", totaldebit);
   return totalanggaran
 }
 function totalRealisasiSebelumnya () {
   const saldo = store.items
-  // console.log('njaaias', saldo)
   const totalpagu = saldo[0]?.totalRealisasiSebelumnya
-  // console.log("debit", totaldebit);
   return totalpagu
 }
 
 function totalRealisasi () {
   const saldo = store.items
-  // console.log('njaaias', saldo)
   const totalpagu = saldo[0]?.totalRealisasi
-  // console.log("debit", totaldebit);
   return totalpagu
 }
 
 function totalSelisih () {
   const saldo = store.items
-  // console.log('njaaias', saldo)
   const totalpagu = saldo[0]?.selisih
-  // console.log("debit", totaldebit);
+  return totalpagu
+}
+function totalPersen () {
+  const saldo = store.items
+  const totalpagu = saldo[0]?.persen
   return totalpagu
 }
 function ambilData () {
