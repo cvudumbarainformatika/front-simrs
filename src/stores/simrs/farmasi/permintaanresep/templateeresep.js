@@ -75,7 +75,8 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
     templateSelected: null,
     templates: [],
     errorsOrder: [],
-    expandedList: []
+    expandedList: [],
+    cariTemplate: null
   }),
   actions: {
 
@@ -193,7 +194,7 @@ export const useTemplateEResepStore = defineStore('template_e_resep', {
       this.templateSelected = null
       this.templateSelected = val
       this.items = []
-      this.items = val?.rincian
+      this.items = val?.rincian ?? []
       this.errorsOrder = []
       this.expandedList = []
       this.updateListItems()

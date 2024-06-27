@@ -165,6 +165,10 @@ const props = defineProps({
   depo: {
     type: String,
     default: ''
+  },
+  isCari: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -238,9 +242,11 @@ function templateBaru () {
 
 // eslint-disable-next-line no-unused-vars
 function awal () {
-  store.templateSelected = null
-  store.items = []
-  store.updateListItems()
+  if (!props.isCari) {
+    store.templateSelected = null
+    store.items = []
+    store.updateListItems()
+  }
   store.errorsOrder = []
   tab.value = 'template'
 }
