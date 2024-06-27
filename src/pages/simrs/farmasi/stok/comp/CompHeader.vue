@@ -112,6 +112,7 @@
       </q-btn>
       <!-- add -->
       <q-btn
+        v-if="!tutup"
         push
         color="green"
         icon="icon-mat-add"
