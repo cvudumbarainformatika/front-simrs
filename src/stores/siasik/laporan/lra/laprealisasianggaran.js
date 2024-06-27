@@ -14,7 +14,6 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
       tgl: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tglx: date.formatDate(Date.now(), 'YYYY-MM-DD'),
       tahun: date.formatDate(Date.now(), 'YYYY'),
-      // tglseblum: date.dateFormat(this.params.tgl, 'YYYY-MM-DD'),
       bidang: '',
       kegiatan: ''
     },
@@ -28,7 +27,6 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
     bidangs: [],
     paguAnggaran: [],
     mapRekening: []
-    // kegiatans: []
 
   }),
   actions: {
@@ -69,9 +67,6 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         }).catch(() => { this.loading = false })
       })
     },
-    // getBidang() {
-    //   this.getDataBidang()
-    // },
 
     getDataRealisasi() {
       this.loading = true
@@ -81,7 +76,6 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
           console.log('realisasi', resp)
           if (resp.status === 200) {
             this.items = []
-            // this.paguPendapatan = []
             this.realisasipends = resp.data.realisasipendapatan
             this.nilaipends = resp.data.nilaipendapatan
             this.items = resp.data
@@ -99,36 +93,9 @@ export const useLaporanLraLaprealisasianggaranStore = defineStore('laporan_reali
         })
       })
     },
-    // getDataPendapatan() {
-    //   this.loading = true
-    //   const params = { params: this.params }
-    //   return new Promise(resolve => {
-    //     api.get('v1/laporan/lra/pendapatan', params).then(resp => {
-    //       console.log('pendapatan', resp)
-    //       if (resp.status === 200) {
-    //         // this.items = []
-    //         this.rekpendapatans = []
-    //         this.rekpendapatans = resp.data
-    //         // this.items = resp.data.pendapatan
-    //         // this.paguAnggaran(resp.data.belanja)
-    //         // this.mapRekening(resp.data.belanja)
-    //         this.mapPendapatan(resp.data)
-    //         this.loading = false
-    //         resolve(resp)
-    //       }
-    //     }).catch(() => {
-    //       this.loading = false
-    //       this.rekpendapatans = []
-    //     })
-    //   })
-    // },
-    mapPendapatan(val) {
-      // for (let i = 0; i < val?.length; i++) {
-      //   const element = val[i]
 
-      //   console.log('ele', element)
+    mapPendapatan(val) {
       this.pendapatans = val
-      // }
     },
 
     // NILAI PAGU PENDAPATAN
