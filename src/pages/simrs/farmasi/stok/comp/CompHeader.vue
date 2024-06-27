@@ -91,7 +91,7 @@
         </q-menu>
       </q-btn>
       <!-- Tutup -->
-      <q-btn
+      <!-- <q-btn
         v-if="!tutup"
         class="q-mx-md"
         push
@@ -109,9 +109,9 @@
         >
           Tutup Stok Opname
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
       <!-- add -->
-      <q-btn
+      <!-- <q-btn
         v-if="!tutup"
         push
         color="green"
@@ -126,7 +126,7 @@
         >
           Tambah Data
         </q-tooltip>
-      </q-btn>
+      </q-btn> -->
       <!-- refresh -->
       <q-btn
         class="q-ml-sm"
