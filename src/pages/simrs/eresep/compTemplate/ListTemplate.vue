@@ -3,8 +3,8 @@
     <q-card
       v-ripple
       flat borderred v-for="(item, n) in items" :key="n"
-      :class="classHover === n ? 'bg-grey-3 text-orange' : 'bg-white'"
       class="q-mb-sm cursor-pointer"
+      :class="{ 'bg-yellow-3 text-dark': store.templateSelected?.nama === item?.nama, 'bg-grey-3 text-orange': classHover === n, 'bg-white text-black': classHover !== n }"
       @mouseover="onMouseOver(n)"
       @mouseleave="onMouseOver(-1)"
     >
@@ -28,7 +28,9 @@
 </template>
 
 <script setup>
+import { useTemplateEResepStore } from 'src/stores/simrs/farmasi/permintaanresep/templateeresep'
 import { ref } from 'vue'
+const store = useTemplateEResepStore()
 
 const classHover = ref(-1)
 

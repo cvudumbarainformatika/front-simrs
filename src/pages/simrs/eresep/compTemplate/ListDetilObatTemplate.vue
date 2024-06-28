@@ -18,7 +18,7 @@
           List Detil Obat Template {{ store.templateSelected ? store.templateSelected?.nama : '(Baru)' }}
         </div>
         <q-btn
-          v-if="store.templateSelected"
+          v-if="store.items.length"
           dense color="white" text-color="dark" class="q-px-md"
           :loading="store.loadingTemplate"
           @click="emits('kirimOrder')"

@@ -29,7 +29,7 @@
       <!-- <div class="row justify-between items-center">
         sistem bayar
       </div> -->
-      <div class="row justify-between items-center q-px-md q-py-xs">
+      <div class="row justify-between items-center q-px-xs q-py-xs">
         <div v-if="depo==='rjl'" class="q-px-xs">
           <div
             v-if="!store.listPemintaanSementara.length && !store.listRacikan.length "
@@ -81,7 +81,20 @@
           />
         </div>
         <div v-else />
-        <div class="q-mr-sm">
+        <div class="q-gutter-sm">
+          <q-btn
+            push
+            dense
+            color="dark"
+            label="Cari Template"
+            no-caps
+            @click="emits('openCariTemplate')"
+            class="q-px-md"
+          >
+            <q-tooltip class="bg-white text-primary">
+              Cari Template tersimpan
+            </q-tooltip>
+          </q-btn>
           <q-btn
             push
             dense
@@ -89,6 +102,7 @@
             label="Racikan"
             no-caps
             @click="racikan"
+            class="q-px-sm"
           >
             <q-tooltip class="bg-white text-primary">
               Buka Racikan
@@ -409,7 +423,7 @@
       <div class="absolute-bottom q-pa-sm bg-yellow-3 row items-center justify-between">
         <div class="q-gutter-sm">
           <q-btn v-if="depo !== 'ok'" color="teal" @click="emits('openTemplate')">
-            Pembuatan Template
+            Buat Template
           </q-btn>
         </div>
         <div>
@@ -510,7 +524,7 @@ import { formatDouble } from 'src/modules/formatter'
 import { notifCenterVue, notifErrVue } from 'src/modules/utils'
 import { Dialog, date } from 'quasar'
 
-const emits = defineEmits(['openHistory', 'openTemplate'])
+const emits = defineEmits(['openHistory', 'openTemplate', 'openCariTemplate'])
 
 const NyobakSelect = defineAsyncComponent(() => import('./NyobakSelect.vue'))
 
