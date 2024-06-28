@@ -126,29 +126,31 @@ function getData () {
       .then(resp => {
         loading.value = false
         console.log('data', resp?.data)
-        items.value = resp?.data?.data
-        if (items.value.length) {
-          const ada = items.value.filter(a => a.oneopname)
+        const itemnya = resp?.data?.data
+        if (itemnya.length) {
+          const ada = itemnya.filter(a => a.oneopname)
+          console.log('ada', ada)
           if (ada.length) {
             keterangan.value = 'Stok Opname '
             tanggal.value = date.formatDate(ada[0]?.oneopname?.tglopname, 'DD MMMM YYYY')
             // console.log('ada', ada[0?.oneopname])
-            items.value.forEach(it => {
+            ada.forEach(it => {
               it.stok = it?.oneopname?.total ?? 0
             })
+            items.value = ada
           }
           else {
+            const skr = itemnya.filter(a => a.onestok)
             keterangan.value = 'Stok Sekarang '
             tanggal.value = date.formatDate(Date.now(), 'DD MMMM YYYY HH:mm:ss')
-            // console.log('ada', ada[0?.oneopname])
-            items.value.forEach(it => {
+            // console.log('ada', skr)
+            skr.forEach(it => {
               it.stok = it?.onestok?.total ?? 0
             })
+            items.value = skr
           }
         }
-        myPrinting()
-        // setTimeout(() => {
-        // }, 100)
+
         resolve(resp)
       })
       .catch(() => {
@@ -182,7 +184,11 @@ function afterPrint () {
   // }
 }
 onMounted(() => {
-  getData()
+  getData().then(() => {
+    setTimeout(() => {
+      myPrinting()
+    }, 100)
+  })
 })
 </script>
 <style lang="scss" scoped>
