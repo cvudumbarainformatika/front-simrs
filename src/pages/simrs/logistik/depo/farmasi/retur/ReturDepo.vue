@@ -73,15 +73,14 @@ const ListComp = defineAsyncComponent(() => import('./comp/ListComp.vue'))
 const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 
 onMounted(() => {
-  store.getDataTable()
   const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) store.setParams('kddepo', apps?.user?.kdruangansim)
   else notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap, Depo IGD dan Depo Rawat Jalan.')
+  store.getDataTable()
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
-  store.getDataTable()
   const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === obj)
@@ -92,6 +91,7 @@ watch(() => apps?.user?.kdruangansim, (obj) => {
     store.items = []
     store.meta = {}
   }
+  store.getDataTable()
 })
 </script>
 

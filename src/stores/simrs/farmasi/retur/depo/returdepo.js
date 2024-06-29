@@ -149,10 +149,19 @@ export const useReturDepoStore = defineStore('retur_dari_depo', {
     },
     kirim () {
       console.log('kirim', this.resep)
+      const form = {
+        listObat: this.resep.listObat,
+        noresep: this.resep.noresep,
+        noreg: this.resep.noreg,
+        norm: this.resep.norm,
+        kddokter: this.resep.kddokter,
+        ruangan: this.resep.ruangan,
+        depo: this.resep.depo
+      }
       this.loadingKirim = true
       this.resep.loading = true
       return new Promise(resolve => {
-        api.post('v1/simrs/farmasinew/depo/returpenjualan', this.resep)
+        api.post('v1/simrs/farmasinew/depo/returpenjualan', form)
           .then(resp => {
             this.loadingKirim = false
             this.resep.loading = false
