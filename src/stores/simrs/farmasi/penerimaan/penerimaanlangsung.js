@@ -69,16 +69,16 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
     allPihakTigas: []
   }),
   actions: {
-    setForm(key, val) {
+    setForm (key, val) {
       this.form[key] = val
     },
-    setParam(key, val) {
+    setParam (key, val) {
       this.params[key] = val
     },
-    setDisp(key, val) {
+    setDisp (key, val) {
       this.disp[key] = val
     },
-    resetRinci() {
+    resetRinci () {
       this.setForm('kdobat', '')
       this.setForm('isi', 1)
       this.setForm('jml_terima_b', 0)
@@ -94,7 +94,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       this.setDisp('tgl_exp', null)
       this.setForm('no_retur_rs', '')
     },
-    resetForm() {
+    resetForm () {
       const gudang = this.form.gudang
       this.form = {
         nopenerimaan: '',
@@ -117,15 +117,16 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
       this.setForm('kdruang', gudang)
       this.rincis = []
     },
-    setNexMonth() {
+    setNexMonth () {
       const now = new Date()
       if (now.getMonth() === 11) {
         return (new Date(now.getFullYear() + 1, 0, now.getDate()))
-      } else {
+      }
+      else {
         return (new Date(now.getFullYear(), now.getMonth() + 1, now.getDate()))
       }
     },
-    pemesananSelected(val) {
+    pemesananSelected (val) {
       this.items = []
       this.details = null
       this.namaPenyedia = null
@@ -158,19 +159,20 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
         this.metanirinci(terRi)
         if (this.namaPenyedia) {
           this.setForm('kdpbf', this.namaPenyedia.kode)
-        } else {
+        }
+        else {
           notifErrVue('Penyedia tidak ada, tidak bisa dilanjutkan melakukan penerimaan')
         }
       }
       this.setForm('nopemesanan', val)
     },
-    clearPemesanan() {
+    clearPemesanan () {
       this.setForm('nopemesanan', null)
       this.items = []
       this.details = []
       this.namaPenyedia = null
     },
-    metanirinci(pen) {
+    metanirinci (pen) {
       if (this.details.length) {
         const kod = this.details.map(a => a.kdobat) // ambil kode obat
         const ter = []
@@ -210,19 +212,21 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
             const temp = ter.filter(b => b.kode === a.kdobat)
             if (temp.length) {
               a.jml_terima_lalu = temp[0].jml
-            } else {
+            }
+            else {
               a.jml_terima_lalu = 0
             }
             a.jml_all_penerimaan = a.jml_terima_lalu
             // console.log('det temp', temp)
-          } else {
+          }
+          else {
             if (!a.jml_terima_lalu) a.jml_terima_lalu = 0
             a.jml_all_penerimaan = a.jml_terima_lalu
           }
         })
       }
     },
-    obatSelected(val) {
+    obatSelected (val) {
       this.setForm('kdobat', val)
       const obat = this.obats.filter(a => a.kd_obat === val)
       console.log('obat selected', obat, val)
@@ -233,51 +237,52 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
         this.setForm('harga', obat[0].harga)
       }
     },
-    clearObat() {
+    clearObat () {
       this.setForm('kdobat', null)
       this.obatTerpilih = null
     },
-    gudangSelected(val) {
+    gudangSelected (val) {
       this.setForm('gudang', val)
       this.setForm('kdruang', val)
     },
-    clearGudang() {
+    clearGudang () {
       this.setForm('gudang', null)
       this.setForm('kdruang', null)
     },
-    jenisPenerimaanSelected(val) {
+    jenisPenerimaanSelected (val) {
       this.setForm('jenispenerimaan', val)
       if (val === 'Konsinyasi') {
         this.setParam('konsinyasi', '1')
         this.getDataObat()
-      } else {
+      }
+      else {
         this.setParam('konsinyasi', '')
         this.getDataObat()
       }
     },
-    clearJenisPenerimaan() {
+    clearJenisPenerimaan () {
       this.setForm('jenispenerimaan', null)
     },
-    jenisSuratSelected(val) {
+    jenisSuratSelected (val) {
       this.setForm('jenissurat', val)
     },
-    clearJenisSurat() {
+    clearJenisSurat () {
       this.setForm('jenissurat', null)
     },
-    getInitialData() {
+    getInitialData () {
       this.setForm('batasbayar', date.formatDate(this.setNexMonth(), 'YYYY-MM-DD'))
       this.setDisp('batasbayar', date.formatDate(this.setNexMonth(), 'DD MMMM YYYY'))
 
       this.getPihakKetiga()
       this.getDataObat()
     },
-    cariPihatTiga(val) {
+    cariPihatTiga (val) {
       const pihaktiga = this.allPihakTigas.filter(pht => pht?.nama?.toLowerCase().includes(val.toLowerCase))
       if (pihaktiga.length) this.pihakTigas = pihaktiga
       else this.getPihakKetiga()
     },
     // cari obat
-    getDataObat(val) {
+    getDataObat (val) {
       this.loadingCari = true
       this.setParam('q', val)
       const params = { params: this.params }
@@ -297,7 +302,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
           .catch(() => { this.loadingCari = false })
       })
     },
-    getPihakKetiga() {
+    getPihakKetiga () {
       const param = { params: { nama: this.namaPihakKetiga } }
       this.loadingPihakTiga = true
       return new Promise(resolve => {
@@ -312,10 +317,10 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
           .catch(() => { this.loadingPihakTiga = false })
       })
     },
-    selesaiDanKunci() {
+    selesaiDanKunci () {
       this.kunci(this.form.nopenerimaan)
     },
-    kunci(val) {
+    kunci (val) {
       const data = {
         nopenerimaan: val
       }
@@ -334,7 +339,7 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
           .catch(() => { this.loadingKunci = false })
       })
     },
-    simpanPenerimaan() {
+    simpanPenerimaan () {
       this.loading = true
       return new Promise(resolve => {
         api.post('v1/simrs/farmasinew/penerimaan/simpanpenerimaanlangsung', this.form)
@@ -354,7 +359,8 @@ export const usePenerimaanLangsungFarmasiStore = defineStore('farmasi_penerimaan
               const index = findWithAttr(this.rincis, 'kdobat', rin.kdobat)
               if (index > 0) {
                 this.rincis[index] = rin
-              } else {
+              }
+              else {
                 this.rincis.push(rin)
               }
             }
