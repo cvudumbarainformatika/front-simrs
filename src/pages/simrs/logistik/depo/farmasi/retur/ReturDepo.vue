@@ -74,21 +74,21 @@ const DialogPage = defineAsyncComponent(() => import('./comp/DialogPage.vue'))
 
 onMounted(() => {
   store.getDataTable()
-  const depoRet = ['Gd-04010102', 'Gd-02010104']
+  const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === apps?.user?.kdruangansim)
   if (depo.length) store.setParams('kddepo', apps?.user?.kdruangansim)
-  else notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap dan Depo IGD sesuai SPO Retur Farmasi.')
+  else notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap, Depo IGD dan Depo Rawat Jalan.')
 })
 watch(() => apps?.user?.kdruangansim, (obj) => {
   store.getDataTable()
-  const depoRet = ['Gd-04010102', 'Gd-02010104']
+  const depoRet = ['Gd-04010102', 'Gd-02010104', 'Gd-05010101']
   const depos = apps.depos.filter(a => depoRet.includes(a.value))
   const depo = depos.filter(a => a.value === obj)
   console.log('depos', depos)
   if (depo.length) store.setParams('kddepo', obj)
   else {
-    notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap dan Depo IGD sesuai SPO Retur Farmasi.')
+    notifErrVue('Yang bisa Melakukan retur hanya Depo Rawat Inap, Depo IGD dan Depo Rawat Jalan.')
     store.items = []
     store.meta = {}
   }
